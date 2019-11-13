@@ -196,7 +196,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         const $items = this.wrapper.getContextMenuItems(true);
         assert.equal($items.length, 3, "context menu is shown");
 
-        assert.ok($items.eq(0).text().indexOf("New folder") > -1, "create folder item shown");
+        assert.ok($items.eq(0).text().indexOf("New directory") > -1, "create folder item shown");
         assert.ok($items.eq(1).text().indexOf("Upload files") > -1, "upload files item shown");
         assert.ok($items.eq(2).text().indexOf("Refresh") > -1, "refresh item shown");
     });
@@ -211,7 +211,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         const $items = this.wrapper.getContextMenuItems(true);
         assert.equal($items.length, 3, "context menu is shown");
 
-        assert.ok($items.eq(0).text().indexOf("New folder") > -1, "create folder item shown");
+        assert.ok($items.eq(0).text().indexOf("New directory") > -1, "create folder item shown");
         assert.ok($items.eq(1).text().indexOf("Upload files") > -1, "upload files item shown");
         assert.ok($items.eq(2).text().indexOf("Refresh") > -1, "refresh item shown");
     });
@@ -251,7 +251,7 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
         assert.equal($items.length, 8, "all of items are visible");
 
         assert.ok($items.eq(0).text().indexOf("Move") > -1, "move item is rendered in new position");
-        assert.ok($items.eq(1).text().indexOf("New folder") > -1, "create folder is rendered");
+        assert.ok($items.eq(1).text().indexOf("New directory") > -1, "create folder is rendered");
         assert.ok($items.eq(1).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "create folder item is rendered with new icon");
         assert.ok($items.eq(2).text().indexOf("Rename") > -1, "rename item is rendered twice");
         assert.ok($items.eq(3).text().indexOf("Upload files") > -1, "upload files item is rendered below its original position");

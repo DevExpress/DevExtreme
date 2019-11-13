@@ -510,18 +510,3 @@ QUnit.test("scroll args are correct", function(assert) {
     $container.trigger("scroll");
     checkLastScrollEvent();
 });
-
-QUnit.test("scroll arguments", function(assert) {
-    var $scrollable = $("#scrollable").dxScrollable({
-        useNative: true,
-        onScroll: function(e) {
-            assert.equal(e.reachedLeft, undefined, "reached left is not defined");
-            assert.equal(e.reachedRight, undefined, "reached right is not defined");
-            assert.equal(e.reachedTop, true, "reached top is true");
-            assert.equal(e.reachedBottom, false, "reached bottom is false");
-        }
-    });
-
-    var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
-    $container.trigger("scroll");
-});

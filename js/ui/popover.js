@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
     extend = require("../core/utils/extend").extend,
+    browser = require("../core/utils/browser"),
     translator = require("../animation/translator"),
     positionUtils = require("../animation/position"),
     typeUtils = require("../core/utils/type"),
@@ -49,6 +50,8 @@ var POPOVER_CLASS = "dx-popover",
         "right": "borderRightWidth",
         "bottom": "borderBottomWidth"
     },
+
+    isFirefox = browser.mozilla,
 
     getEventName = function(that, optionName) {
         var optionValue = that.option(optionName);
@@ -570,6 +573,15 @@ var Popover = Popup.inherit({
             verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
 
         return horizontalWeight > verticalWeight ? at.h : at.v;
+    },
+
+    _resetContentHeight: function() {
+        this.callBase();
+        if(isFirefox) { // T655040
+            var originalOverflow = this._$popupContent.css("overflow");
+            this._$popupContent.css("overflow", "visible");
+            this._$popupContent.css("overflow", originalOverflow);
+        }
     },
 
     _isVerticalSide: function(side) {

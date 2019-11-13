@@ -185,6 +185,26 @@ QUnit.module("Editor", {
         $($editor).trigger(hoverEvents.start);
         assert.ok($editor.hasClass("dx-state-hover"), "there is hover class");
     });
+
+    [false, true].forEach((readOnly) => {
+        const substring = readOnly ? "" : "not";
+        QUnit.test(`"backspace" key press event should ${substring} be prevented when editor is ${substring} read only`, (assert) => {
+            const editor = this.fixture.createEditor({
+                readOnly
+            });
+            const $eventTarget = $(editor._keyboardEventBindingTarget());
+            let e = $.Event("keydown", { key: "Backspace" });
+
+            $eventTarget.trigger(e);
+            assert.strictEqual(e.isDefaultPrevented(), readOnly);
+
+            editor.option("readOnly", !readOnly);
+            e = $.Event("keydown", { key: "Backspace" });
+
+            $eventTarget.trigger(e);
+            assert.strictEqual(e.isDefaultPrevented(), !readOnly);
+        });
+    });
 });
 
 QUnit.module("the 'name' option", {

@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} är nödvändigt",
 
         "dxNumberBox-invalidValueMessage": "Värdet måste vara ett nummer",
+        "dxNumberBox-noDataText": "Inget data",
 
         "dxDataGrid-columnChooserTitle": "Kolumnväljare",
         "dxDataGrid-columnChooserEmptyText": "Dra en kolumn hit för att dölja den",
@@ -289,8 +290,8 @@
         "dxHtmlEditor-heading": "!TODO!",
         "dxHtmlEditor-normalText": "!TODO!",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-newDirectoryName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",

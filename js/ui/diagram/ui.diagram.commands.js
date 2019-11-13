@@ -60,6 +60,39 @@ const DiagramCommands = {
                     text: messageLocalization.format("dxDiagram-commandRedo"),
                     icon: "redo",
                 },
+                cut: {
+                    command: DiagramCommand.Cut,
+                    hint: messageLocalization.format("dxDiagram-commandCut"),
+                    text: messageLocalization.format("dxDiagram-commandCut"),
+                    icon: "cut",
+                },
+                copy: {
+                    command: DiagramCommand.Copy,
+                    hint: messageLocalization.format("dxDiagram-commandCopy"),
+                    text: messageLocalization.format("dxDiagram-commandCopy"),
+                    icon: "copy"
+                },
+                paste: {
+                    command: DiagramCommand.PasteInPosition,
+                    hint: messageLocalization.format("dxDiagram-commandPaste"),
+                    text: messageLocalization.format("dxDiagram-commandPaste"),
+                    icon: "paste",
+                    getParameter: (diagramContextMenu) => {
+                        return diagramContextMenu.clickPosition;
+                    }
+                },
+                selectAll: {
+                    command: DiagramCommand.SelectAll,
+                    hint: messageLocalization.format("dxDiagram-commandSelectAll"),
+                    text: messageLocalization.format("dxDiagram-commandSelectAll"),
+                    icon: "dx-diagram-i-button-select-all dx-diagram-i"
+                },
+                delete: {
+                    command: DiagramCommand.Delete,
+                    hint: messageLocalization.format("dxDiagram-commandDelete"),
+                    text: messageLocalization.format("dxDiagram-commandDelete"),
+                    icon: "remove"
+                },
                 fontName: {
                     command: DiagramCommand.FontName,
                     hint: messageLocalization.format("dxDiagram-commandFontName"),
@@ -132,6 +165,45 @@ const DiagramCommands = {
                     hint: messageLocalization.format("dxDiagram-commandAlignRight"),
                     text: messageLocalization.format("dxDiagram-commandAlignRight"),
                     icon: "alignright"
+                },
+                lock: {
+                    command: DiagramCommand.Lock,
+                    hint: messageLocalization.format("dxDiagram-commandLock"),
+                    text: messageLocalization.format("dxDiagram-commandLock"),
+                    icon: "dx-diagram-i-button-lock dx-diagram-i"
+                },
+                unlock: {
+                    command: DiagramCommand.Unlock,
+                    hint: messageLocalization.format("dxDiagram-commandUnlock"),
+                    text: messageLocalization.format("dxDiagram-commandUnlock"),
+                    icon: "dx-diagram-i-button-unlock dx-diagram-i"
+                },
+                bringToFront: {
+                    command: DiagramCommand.BringToFront,
+                    hint: messageLocalization.format("dxDiagram-commandBringToFront"),
+                    text: messageLocalization.format("dxDiagram-commandBringToFront"),
+                    icon: "dx-diagram-i-button-bring-to-front dx-diagram-i"
+                },
+                sendToBack: {
+                    command: DiagramCommand.SendToBack,
+                    hint: messageLocalization.format("dxDiagram-commandSendToBack"),
+                    text: messageLocalization.format("dxDiagram-commandSendToBack"),
+                    icon: "dx-diagram-i-button-send-to-back dx-diagram-i"
+                },
+                insertShapeImage: {
+                    command: DiagramCommand.InsertShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandInsertShapeImage"),
+                    icon: "dx-diagram-i-button-image-insert dx-diagram-i"
+                },
+                editShapeImage: {
+                    command: DiagramCommand.EditShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandEditShapeImage"),
+                    icon: "dx-diagram-i-button-image-edit dx-diagram-i"
+                },
+                deleteShapeImage: {
+                    command: DiagramCommand.DeleteShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandDeleteShapeImage"),
+                    icon: "dx-diagram-i-button-image-delete dx-diagram-i"
                 },
                 connectorLineType: {
                     command: DiagramCommand.ConnectorLineOption,
@@ -366,54 +438,66 @@ const DiagramCommands = {
 
                 cut: {
                     command: DiagramCommand.Cut,
-                    text: messageLocalization.format("dxDiagram-commandCut")
+                    text: messageLocalization.format("dxDiagram-commandCut"),
+                    icon: "cut"
                 },
                 copy: {
                     command: DiagramCommand.Copy,
-                    text: messageLocalization.format("dxDiagram-commandCopy")
+                    text: messageLocalization.format("dxDiagram-commandCopy"),
+                    icon: "copy"
                 },
                 paste: {
                     command: DiagramCommand.PasteInPosition,
                     text: messageLocalization.format("dxDiagram-commandPaste"),
                     getParameter: (diagramContextMenu) => {
                         return diagramContextMenu.clickPosition;
-                    }
+                    },
+                    icon: "paste"
                 },
                 selectAll: {
                     command: DiagramCommand.SelectAll,
-                    text: messageLocalization.format("dxDiagram-commandSelectAll")
+                    text: messageLocalization.format("dxDiagram-commandSelectAll"),
+                    icon: "dx-diagram-i-button-select-all dx-diagram-i"
                 },
                 delete: {
                     command: DiagramCommand.Delete,
-                    text: messageLocalization.format("dxDiagram-commandDelete")
+                    text: messageLocalization.format("dxDiagram-commandDelete"),
+                    icon: "remove"
                 },
                 bringToFront: {
                     command: DiagramCommand.BringToFront,
-                    text: messageLocalization.format("dxDiagram-commandBringToFront")
+                    text: messageLocalization.format("dxDiagram-commandBringToFront"),
+                    icon: "dx-diagram-i-button-bring-to-front dx-diagram-i"
                 },
                 sendToBack: {
                     command: DiagramCommand.SendToBack,
-                    text: messageLocalization.format("dxDiagram-commandSendToBack")
+                    text: messageLocalization.format("dxDiagram-commandSendToBack"),
+                    icon: "dx-diagram-i-button-send-to-back dx-diagram-i"
                 },
                 lock: {
                     command: DiagramCommand.Lock,
-                    text: messageLocalization.format("dxDiagram-commandLock")
+                    text: messageLocalization.format("dxDiagram-commandLock"),
+                    icon: "dx-diagram-i-button-lock dx-diagram-i"
                 },
                 unlock: {
                     command: DiagramCommand.Unlock,
-                    text: messageLocalization.format("dxDiagram-commandUnlock")
+                    text: messageLocalization.format("dxDiagram-commandUnlock"),
+                    icon: "dx-diagram-i-button-unlock dx-diagram-i"
                 },
                 insertShapeImage: {
                     command: DiagramCommand.InsertShapeImage,
-                    text: messageLocalization.format("dxDiagram-commandInsertShapeImage")
+                    text: messageLocalization.format("dxDiagram-commandInsertShapeImage"),
+                    icon: "dx-diagram-i-button-image-insert dx-diagram-i"
                 },
                 editShapeImage: {
                     command: DiagramCommand.EditShapeImage,
-                    text: messageLocalization.format("dxDiagram-commandEditShapeImage")
+                    text: messageLocalization.format("dxDiagram-commandEditShapeImage"),
+                    icon: "dx-diagram-i-button-image-edit dx-diagram-i"
                 },
                 deleteShapeImage: {
                     command: DiagramCommand.DeleteShapeImage,
-                    text: messageLocalization.format("dxDiagram-commandDeleteShapeImage")
+                    text: messageLocalization.format("dxDiagram-commandDeleteShapeImage"),
+                    icon: "dx-diagram-i-button-image-delete dx-diagram-i"
                 }
             });
     },
@@ -426,16 +510,16 @@ const DiagramCommands = {
             commands["cut"],
             commands["copy"],
             commands["paste"],
+            commands["delete"],
             commands["separator"],
             commands["selectAll"],
-            commands["separator"],
-            commands["delete"],
             commands["separator"],
             commands["bringToFront"],
             commands["sendToBack"],
             commands["separator"],
             commands["lock"],
             commands["unlock"],
+            commands["separator"],
             commands["insertShapeImage"],
             commands["editShapeImage"],
             commands["deleteShapeImage"]

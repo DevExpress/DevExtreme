@@ -1,5 +1,6 @@
 import $ from "../../core/renderer";
 import typeUtils from "../../core/utils/type";
+import messageLocalization from "../../localization/message";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
@@ -64,18 +65,18 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             },
             {
                 dataField: "name",
-                caption: "Name",
+                caption: messageLocalization.format("dxFileManager-listDetailsColumnCaptionName"),
                 cellTemplate: this._createNameColumnCell.bind(this)
             },
             {
                 dataField: "dateModified",
-                caption: "Date Modified",
+                caption: messageLocalization.format("dxFileManager-listDetailsColumnCaptionDateModified"),
                 width: 110,
                 hidingPriority: 1,
             },
             {
                 dataField: "size",
-                caption: "File Size",
+                caption: messageLocalization.format("dxFileManager-listDetailsColumnCaptionFileSize"),
                 width: 90,
                 alignment: "right",
                 hidingPriority: 0,

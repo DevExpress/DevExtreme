@@ -164,6 +164,26 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
+    sinon.stub(prototype, "createLinearGradient", function(x0, y0, x1, y1) {
+        const addColorStop = sinon.spy();
+        drawnElements.push({
+            type: "linearGradient",
+            args: {
+                x0,
+                y0,
+                x1,
+                y1
+            },
+            addColorStop
+        });
+        return {
+            addColorStop,
+            toString() {
+                return "#aaa";
+            }
+        };
+    });
+
     function getFontParam(fontString, paramType) {
         var patterns = {
                 weight: "(bold|bolder)",
@@ -313,6 +333,9 @@ function teardownCanvasStub() {
     prototype.setLineDash.restore();
 
     prototype.measureText.restore();
+
+    // createLinearGradient
+    prototype.createLinearGradient.restore();
 }
 
 function getData(markup, isFullMode) {
@@ -1031,6 +1054,41 @@ QUnit.test("Filter shadow", function(assert) {
                 offsetY: 1
             }, "Second element has shadow filter");
             assert.deepEqual(that.drawnElements[7].style.shadow, undefined, "Last element has no shadow filter(filter not exists)");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("lineargradient", function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<linearGradient id="testlineargradient1">' +
+        '<stop offset="0%" stop-color="red"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</linearGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient1)" opacity="0.3"></path>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient2)" opacity="0.3"></path>' +
+        testingMarkupEnd;
+
+    const imageBlob = getData(markup);
+
+    $.when(imageBlob).done(() => {
+        try {
+            assert.strictEqual(this.drawnElements.length, 3, "Canvas elements count");
+            assert.strictEqual(this.drawnElements[1].type, "linearGradient", "First element has no shadow filter");
+            assert.deepEqual(this.drawnElements[1].args, { x0: 0, y0: 0, x1: 30, y1: 0 });
+            assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, "red"]);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, "blue"]);
+
+            assert.roughEqual(this.drawnElements[2].style.globalAlpha, 0.3, 0.1);
+            assert.strictEqual(this.drawnElements[2].style.fillStyle, "#aaaaaa");
+            assert.deepEqual(this.drawnElements[2].args, { x: 0, y: 0, width: 30, height: 20 });
         } finally {
             done();
         }

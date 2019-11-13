@@ -271,6 +271,7 @@ class Diagram extends Widget {
     _showDialog(dialogParameters) {
         if(this._dialogInstance) {
             this._dialogInstance.option("onGetContent", dialogParameters.onGetContent);
+            this._dialogInstance.option("onHidden", function() { this._diagramInstance.captureFocus(); }.bind(this));
             this._dialogInstance.option("command", this._diagramInstance.commandManager.getCommand(dialogParameters.command));
             this._dialogInstance.option("title", dialogParameters.title);
             this._dialogInstance._show();
@@ -721,8 +722,8 @@ class Diagram extends Widget {
             this._onToggleFullScreen(false);
         }
     }
-    _onShowContextMenu(x, y, isTouch) {
-        this._contextMenu._show(x, y, isTouch);
+    _onShowContextMenu(x, y, selection) {
+        this._contextMenu._show(x, y, selection);
     }
     _onHideContextMenu() {
         this._contextMenu._hide();
@@ -879,7 +880,7 @@ class Diagram extends Widget {
     * @name dxDiagramMethods.import
     * @publicName import(data, updateExistingItemsOnly)
     * @param1 data:string
-    * @param2 updateExistingItemsOnly:boolean
+    * @param2 updateExistingItemsOnly?:boolean
     */
     import(data, updateExistingItemsOnly) {
         this._setDiagramData(data, updateExistingItemsOnly);

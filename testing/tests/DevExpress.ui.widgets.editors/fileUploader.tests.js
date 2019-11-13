@@ -1301,6 +1301,42 @@ QUnit.test("value should contain only file name (ie9 fix)", function(assert) {
     assert.deepEqual($fileUploader.dxFileUploader("option", "value"), [{ name: "fakefile.txt" }], "value contain file name");
 });
 
+QUnit.test("T823593 file list shoud be rerendered if widget invalidated", function(assert) {
+    let fileUploader;
+    let eventHandled = false;
+
+    const onValueChanged = e => {
+        if(eventHandled) {
+            return;
+        } else {
+            eventHandled = true;
+        }
+
+        fileUploader.beginUpdate();
+        fileUploader.option("value", e.value);
+        fileUploader.option("allowedFileExtensions", [".png", ".gif"]);
+        fileUploader.endUpdate();
+    };
+
+    const $fileUploader = $("#fileuploader").dxFileUploader({
+        multiple: true,
+        uploadMode: "useForm",
+        allowedFileExtensions: [".png", ".gif"],
+        onValueChanged: onValueChanged
+    });
+    fileUploader = $fileUploader.dxFileUploader("instance");
+
+    simulateFileChoose($fileUploader, fakeFile);
+
+    const $file = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_FILE_CLASS}`);
+    const $fileName = $file.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`);
+    const $fileStatus = $file.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+
+    assert.strictEqual($file.length, 1, "file rendered");
+    assert.strictEqual($fileName.text(), "fakefile.png", "file name rendered");
+    assert.strictEqual($fileStatus.text(), "Ready to upload", "file status message rendered");
+});
+
 QUnit.module("multiple option", moduleConfig);
 
 QUnit.test("field multiple attr should be set correctly", function(assert) {

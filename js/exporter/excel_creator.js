@@ -34,6 +34,7 @@ var Class = require("../core/class"),
         "number": "n",
         "string": "s"
     },
+    Deferred = require("../core/utils/deferred").Deferred,
     EXCEL_START_TIME = Date.UTC(1899, 11, 30),
     DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
 
@@ -673,17 +674,22 @@ var ExcelCreator = Class.inherit({
     },
 
     getData: function(isBlob) {
-        var options = {
+        const options = {
             type: isBlob ? "blob" : "base64",
             compression: "DEFLATE",
             mimeType: fileSaver.MIME_TYPES["EXCEL"]
         };
+        const deferred = new Deferred();
 
         this._checkZipState();
         this._generateContent();
-        return this._zip.generateAsync ?
-            this._zip.generateAsync(options) :
-            this._zip.generate(options);
+
+        if(this._zip.generateAsync) {
+            this._zip.generateAsync(options).then(deferred.resolve);
+        } else {
+            deferred.resolve(this._zip.generate(options));
+        }
+        return deferred;
     }
 });
 
