@@ -87,6 +87,8 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
 
                         dragBehavior.initialPosition = translator.locate($(dragElement));
+                        translator.resetPosition($(dragElement));
+
                         this.scheduler.hideAppointmentTooltip();
                     }
                 }

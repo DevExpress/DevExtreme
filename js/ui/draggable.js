@@ -534,11 +534,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix(CLONE_CLASS));
     },
 
-    _getDragTemplateArgs: function($element) {
-        let container = this._getContainer();
-
+    _getDragTemplateArgs: function($element, $container) {
         return {
-            container: getPublicElement($(container)),
+            container: getPublicElement($container),
             model: {
                 itemData: this.option("itemData"),
                 itemElement: getPublicElement($element)
@@ -549,17 +547,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _createDragElement: function($element) {
         let result = $element,
             clone = this.option("clone"),
-            container = this._getContainer(),
+            $container = this._getContainer(),
             template = this.option("dragTemplate");
 
         if(template) {
             template = this._getTemplate(template);
-            result = $(template.render(this._getDragTemplateArgs($element)));
+            result = $("<div>").appendTo($container);
+            template.render(this._getDragTemplateArgs($element, result));
         } else if(clone) {
-            result = $element.clone().css({
+            result = $("<div>").appendTo($container);
+            $element.clone().css({
                 width: $element.css("width"),
                 height: $element.css("height")
-            }).appendTo(container);
+            }).appendTo(result);
         }
 
         return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
