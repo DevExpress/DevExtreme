@@ -643,6 +643,31 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple
     assert.equal(dataSource.items()[1].name, "Dan", "Item3");
 });
 
+QUnit.test("Using focusedRowEnabled should not set sorting by key if remoteOperations is true and autoNavigateToFocusedRow is false", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }
+    ], { key: "name" });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true,
+        autoNavigateToFocusedRow: false,
+        remoteOperations: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+
+    // assert
+    assert.strictEqual(dataSource.sort(), null, "sort is not defined");
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+});
+
 QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted simple key column if remoteOperations disabled", function(assert) {
     // arrange
     var dataSource = createDataSource([
@@ -709,6 +734,33 @@ QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted co
     assert.equal(dataSource.items()[1].name, "Alice", "Item3");
 });
 
+// T829761
+QUnit.test("Refresh after reordering should update rows if focusedRowEnabled is enabled", function(assert) {
+    // arrange
+    var items = [
+        { name: "Alex", age: 30 },
+        { name: "Dan", age: 25 }
+    ];
+
+    var dataSource = createDataSource(items, { key: "name" });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true
+    });
+
+    this.dataController._refreshDataSource();
+
+    // act
+    var item0 = items.splice(0, 1)[0];
+    items.splice(1, 0, item0);
+    this.dataController.refresh();
+
+    // assert
+    assert.equal(dataSource.items()[0].name, "Dan", "second item became first");
+    assert.equal(dataSource.items()[1].name, "Alex", "first item became second");
+});
+
 QUnit.test("Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present", function(assert) {
     // arrange
     var data = [
@@ -763,7 +815,7 @@ QUnit.test("Check the filter generator for the boolean field", function(assert) 
     assert.strictEqual(JSON.stringify(filter), undefined, "filter");
 });
 
-QUnit.test("Get page index by simple key", function(assert) {
+QUnit.test("Get page index by simple key if remoteOperations is false", function(assert) {
     // arrange
     var count = 0,
         dataSource = createDataSource([
@@ -775,6 +827,31 @@ QUnit.test("Get page index by simple key", function(assert) {
         { pageSize: 1, asyncLoadEnabled: false });
 
     this.applyOptions({
+        dataSource: dataSource
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    this.dataController.getPageIndexByKey("Alice").done(function(pageIndex) {
+        ++count;
+        assert.equal(pageIndex, 3);
+    });
+    assert.equal(count, 1, "Count");
+});
+
+QUnit.test("Get page index by simple key if remoteOperations is true", function(assert) {
+    // arrange
+    var count = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: "name" },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+    this.applyOptions({
+        remoteOperations: true,
         dataSource: dataSource
     });
 
@@ -1024,7 +1101,7 @@ QUnit.test("Get row index if group by one column and simple key (group sizes are
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
         { key: 'name' },
-        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: "team", sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1088,7 +1165,7 @@ QUnit.test("Get row index if group by one column and simple key", function(asser
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
         { key: 'name' },
-        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: "team", sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1294,7 +1371,7 @@ QUnit.test("Get row index if group by two columns and simple key", function(asse
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
         { key: 'name' },
-        { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        { group: ["team", "g0"], sort: "name", pageSize: 5, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1504,7 +1581,7 @@ QUnit.test("Get row index if group by one column, simple key and virtual scrolli
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
         { key: 'name' },
-        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: "team", sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1572,7 +1649,7 @@ QUnit.test("Get row index if group by two columns, simple key and virtual scroll
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
         { key: 'name' },
-        { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: ["team", "g0"], sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1640,7 +1717,7 @@ QUnit.test("Get row index if group by two columns, simple key and virtual scroll
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
         { key: 'name' },
-        { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: ["team", "g0"], sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
