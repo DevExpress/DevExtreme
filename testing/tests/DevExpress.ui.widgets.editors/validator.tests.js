@@ -5,7 +5,6 @@ import DefaultAdapter from "ui/validation/default_adapter";
 import ValidationEngine from "ui/validation_engine";
 import { Deferred } from "core/utils/deferred";
 import { isPromise } from "core/utils/type";
-import Promise from "core/polyfills/promise";
 
 import "ui/validator";
 
@@ -682,13 +681,11 @@ QUnit.test("Validator should resolve result.complete with the last value", funct
     assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
     assert.notOk(result1 === result2, "Results should be different");
     assert.ok(result1.complete === result2.complete, "result1.complete === result2.complete");
-    Promise.all([result1.complete, result2.complete]).then(function(values) {
-        assert.ok(values.length === 2, "Results should be resolved twice");
-        assert.notOk(values[0].id === result1.id, "The first result should not equal resolved result");
-        assert.strictEqual(result2.id, values[1].id, "The second result should equal resolved result");
-        assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
-        assert.strictEqual(values[0].id, values[1].id, "Resolved results should be the same");
-        assert.strictEqual(values[0].value, values[1].value, "Values of resolved results should be the same");
+    result2.complete.then(function(resolvedResult) {
+        assert.notOk(resolvedResult.id === result1.id, "result1 should not equal resolved result");
+        assert.strictEqual(result2.id, resolvedResult.id, "result2 should equal resolved result");
+        assert.ok(validatedHandler.calledOnce, "Validated handler should be called once");
+        assert.strictEqual(result2.value, resolvedResult.value, "result2.value === resolvedResult.value");
         done();
     });
 });
