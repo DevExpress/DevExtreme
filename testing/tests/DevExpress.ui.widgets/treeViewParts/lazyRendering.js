@@ -24,6 +24,24 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
     assert.equal(items.length, 2);
 });
 
+QUnit.test("Expanding nodes should work with special charactes in id", function(assert) {
+    var testParentId = '!/#$%&\'()"+,./:;<=>?@[]^`{|}~';
+
+    var $treeView = initTree({
+        dataSource: [
+            { id: testParentId, text: "item1", selected: false, expanded: false },
+            { id: 'aaaa', parentId: testParentId, text: "item2", selected: false, expanded: false }
+        ],
+        dataStructure: "plain",
+        height: 500
+    });
+
+    assert.equal(false, $treeView.find('[aria-level="2"]').is(':visible'));
+
+    $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').click();
+    assert.equal(true, $treeView.find('[aria-level="2"]').is(':visible'));
+});
+
 QUnit.test("Nested item should be rendered after click on toggle visibility icon", function(assert) {
     var $treeView = initTree({
         items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }]
