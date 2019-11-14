@@ -180,12 +180,26 @@ const splitPair = function(raw) {
 
 const normalizeKey = function(id) {
     let key = isString(id) ? id : id.toString();
-    return encodeURIComponent(key);
+    const arr = key.match(/[^a-zA-Z0-9_]/g);
+
+    arr && each(arr, (_, sign) => {
+        key = key.replace(sign, "__" + sign.charCodeAt() + "__");
+    });
+    return key;
 };
 
 const denormalizeKey = function(key) {
-    return decodeURIComponent(key);
+    const arr = key.match(/__\d+__/g);
+
+    arr && arr.forEach((char) => {
+        const charCode = parseInt(char.replace("__", ""));
+
+        key = key.replace(char, String.fromCharCode(charCode));
+    });
+
+    return key;
 };
+
 
 const pairToObject = function(raw, preventRound) {
     const pair = splitPair(raw);
@@ -200,6 +214,10 @@ const pairToObject = function(raw, preventRound) {
     }
 
     return { h, v };
+};
+
+const escapeCssQuery = function(query) {
+    return query.split('\\').join('\\\\');
 };
 
 const getKeyHash = function(key) {
@@ -328,3 +346,4 @@ exports.noop = noop;
 exports.asyncNoop = asyncNoop;
 exports.grep = grep;
 exports.equalByValue = equalByValue;
+exports.escapeCssQuery = escapeCssQuery;

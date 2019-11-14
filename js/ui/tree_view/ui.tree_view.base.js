@@ -119,7 +119,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getNodeElement: function(node, cache) {
-        const normalizedKey = commonUtils.normalizeKey(node.internalFields.key);
+        const key = node.internalFields.key;
         if(cache) {
             if(!cache.$nodeByKey) {
                 cache.$nodeByKey = {};
@@ -130,9 +130,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                     cache.$nodeByKey[key] = $node;
                 });
             }
-            return cache.$nodeByKey[normalizedKey] || $();
+            return cache.$nodeByKey[key] || $();
         }
-        return this.$element().find(`[${DATA_ITEM_ID}='${normalizedKey}']`);
+        return this.$element().find(`[${DATA_ITEM_ID}='${commonUtils.escapeCssQuery(key)}']`);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -839,7 +839,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _createDOMElement: function($nodeContainer, node) {
         const $node = $("<li>")
             .addClass(NODE_CLASS)
-            .attr(DATA_ITEM_ID, commonUtils.normalizeKey(node.internalFields.key))
+            .attr(DATA_ITEM_ID, node.internalFields.key)
             .prependTo($nodeContainer);
 
         this.setAria({
@@ -1018,7 +1018,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getNodeByElement: function(itemElement) {
         const $node = $(itemElement).closest("." + NODE_CLASS);
-        const key = commonUtils.denormalizeKey($node.attr(DATA_ITEM_ID));
+        const key = $node.attr(DATA_ITEM_ID);
 
         return this._dataAdapter.getNodeByKey(key);
     },
