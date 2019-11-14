@@ -5,6 +5,7 @@ import windowUtils from "../core/utils/window";
 import eventsEngine from "../events/core/events_engine";
 import errors from "../ui/widget/ui.errors";
 import typeUtils from "../core/utils/type";
+import { logger } from "../core/utils/console";
 
 const window = windowUtils.getWindow();
 const navigator = windowUtils.getNavigator();
@@ -42,7 +43,6 @@ exports.fileSaver = {
         var exportLinkElement = domAdapter.createElement('a');
         exportLinkElement.download = fileName;
         exportLinkElement.href = href;
-
         exportLinkElement.target = "_blank"; // cors policy
 
         return exportLinkElement;
@@ -124,6 +124,8 @@ exports.fileSaver = {
                 }, this._revokeObjectURLTimeout);
 
                 this._click(downloadLink);
+            } else {
+                logger.warn("window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL is not defined");
             }
         }
     },

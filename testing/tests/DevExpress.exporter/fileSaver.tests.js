@@ -22,28 +22,26 @@ QUnit.test("exportLinkElement generate", function(assert) {
 
     var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
-    if(URL) {
-        var helper = new ariaAccessibilityTestHelper(() => {});
+    var helper = new ariaAccessibilityTestHelper(() => {});
 
-        var href = URL.createObjectURL(new Blob([], { type: "test/plain" }));
+    var href = URL.createObjectURL(new Blob([], { type: "test/plain" }));
 
-        var testExportLink = fileSaver._linkDownloader("test.xlsx", href);
-        testExportLink.id = "link";
+    var testExportLink = fileSaver._linkDownloader("test.xlsx", href);
+    testExportLink.id = "link";
 
-        helper.checkAttributes($(testExportLink), { id: "link", target: "_blank", download: "test.xlsx", href: href }, "downloadLink");
-        assert.equal(domAdapter.getDocument().getElementById("link"), null, "download link not attached to a document");
+    helper.checkAttributes($(testExportLink), { id: "link", target: "_blank", download: "test.xlsx", href: href }, "downloadLink");
+    assert.equal(domAdapter.getDocument().getElementById("link"), null, "download link not attached to a document");
 
-        var clickHandler = sinon.spy();
-        testExportLink.addEventListener("click", function(e) {
-            clickHandler(e);
-            e.preventDefault();
-        });
+    var clickHandler = sinon.spy();
+    testExportLink.addEventListener("click", function(e) {
+        clickHandler(e);
+        e.preventDefault();
+    });
 
-        fileSaver._click(testExportLink);
+    fileSaver._click(testExportLink);
 
-        assert.equal(clickHandler.callCount, 1, "'click' event dispatched");
-        URL.revokeObjectURL(href);
-    }
+    assert.equal(clickHandler.callCount, 1, "'click' event dispatched");
+    URL.revokeObjectURL(href);
 });
 
 QUnit.test("saveAs - check revokeObjectURL", function(assert) {
