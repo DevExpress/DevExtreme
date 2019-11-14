@@ -4,7 +4,8 @@ import Sortable from "../sortable";
 
 let COMMAND_HANDLE_CLASS = "dx-command-drag",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    HANDLE_ICON_CLASS = "drag-icon";
+    HANDLE_ICON_CLASS = "drag-icon",
+    ROWS_VIEW = "rowsview";
 
 var RowDraggingExtender = {
     init: function() {
@@ -112,6 +113,7 @@ var RowDraggingExtender = {
                 gridOptions = this._getDraggableGridOptions(row);
 
             this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
+            $dataGridContainer.find(".dx-gridbase-container").children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();
 
             return $dataGridContainer;
         };
