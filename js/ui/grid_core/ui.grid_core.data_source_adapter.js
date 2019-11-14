@@ -174,11 +174,14 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         getDataIndexGetter: function() {
             if(!this._dataIndexGetter) {
-                var indexByKey;
-                var store = this.store();
+                let indexByKey,
+                    storeData;
+                const store = this.store();
+
                 this._dataIndexGetter = data => {
-                    var storeData = this._cachedStoreData || [];
-                    if(!indexByKey) {
+                    const isCacheUpdated = storeData && storeData !== this._cachedStoreData;
+                    if(!indexByKey || isCacheUpdated) {
+                        storeData = this._cachedStoreData || [];
                         indexByKey = {};
                         for(var i = 0; i < storeData.length; i++) {
                             indexByKey[getKeyHash(store.keyOf(storeData[i]))] = i;
