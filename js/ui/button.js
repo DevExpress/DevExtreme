@@ -294,6 +294,9 @@ class Button extends Widget {
         const $element = this.$element();
         const eventName = addNamespace(clickEventName, this.NAME);
 
+        // TODO: Remove this line in the future of beauty
+        eventsEngine.off($element, eventName);
+
         eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
         this._updateClick();
     }
