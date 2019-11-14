@@ -3,14 +3,16 @@
 QUnit.module("Lazy rendering");
 
 QUnit.test("Render treeView with special symbols in id", function(assert) {
+    const sampleId = "!/#$%&'()*+,./:;<=>?@[\\]^`{|}~__";
     var $treeView = initTree({
-            items: [{ id: "!/#$%&'()*+,./:;<=>?@[\\]^`{|}~", text: "Item 1" }]
+            items: [{ id: sampleId, text: "Item 1" }]
         }),
         $item = $treeView.find("." + internals.NODE_CLASS),
         item = $treeView.dxTreeView("option", "items")[0];
 
-    assert.ok($item.attr("data-item-id").length > item.id.length * 4);
-
+    assert.ok($item.attr("data-item-id").length);
+    assert.equal(sampleId, $treeView.dxTreeView('instance')._getNodeByElement($item).id);
+    assert.equal(sampleId, item.id);
 });
 
 QUnit.test("Only root nodes should be rendered by default", function(assert) {
