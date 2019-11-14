@@ -25,7 +25,14 @@
     <div id="button"></div>
     <script>
         $(function() {
-            $("#button").dxButton({
+            $("#button").dxList({
+                items: [{
+                    text: '123',
+                    disabled: true
+                },
+                {
+                    text: '1qwe23'
+                }],
                 text: 'Click me!',
                 onClick: function() { alert("clicked"); }
             });

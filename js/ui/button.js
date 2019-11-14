@@ -246,7 +246,7 @@ class Button extends Widget {
     }
 
     _optionChanged(args) {
-        const { name } = args;
+        const { name, previousValue } = args;
 
         switch(name) {
             case 'onClick':
@@ -258,7 +258,7 @@ class Button extends Widget {
                 this._updateAriaLabel();
                 break;
             case 'type':
-                this._updateType();
+                this._updateType(previousValue);
                 this._updateContent();
                 break;
             case '_templateData':
@@ -366,9 +366,12 @@ class Button extends Widget {
         const ariaTarget = this._getAriaTarget();
         let { icon, text } = this.option();
 
+        if(!text) {
+            if(getImageSourceType(icon) === 'image') {
+                icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+            }
 
-        if(!text && getImageSourceType(icon) === 'image') {
-            text = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+            text = icon || '';
         }
 
         ariaTarget.attr('aria-label', text.trim() || null);
@@ -433,10 +436,11 @@ class Button extends Widget {
         this._renderStylingMode();
     }
 
-    _updateType() {
+    _updateType(previous) {
         const $element = this.$element();
 
-        ['back', 'danger', 'default', 'normal', 'success'].map(type => `dx-button-${type}`)
+        // TODO: temporary solution
+        [previous, 'back', 'danger', 'default', 'normal', 'success'].map(type => `dx-button-${type}`)
             .forEach($element.removeClass.bind($element));
 
         this._renderType();
