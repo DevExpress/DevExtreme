@@ -1,24 +1,26 @@
 /* global Windows */
-var $ = require("../core/renderer"),
-    domAdapter = require("../core/dom_adapter"),
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    navigator = windowUtils.getNavigator(),
-    eventsEngine = require("../events/core/events_engine"),
-    errors = require("../ui/widget/ui.errors"),
-    typeUtils = require("../core/utils/type"),
+import $ from "../core/renderer";
+import domAdapter from "../core/dom_adapter";
+import windowUtils from "../core/utils/window";
+import eventsEngine from "../events/core/events_engine";
+import errors from "../ui/widget/ui.errors";
+import typeUtils from "../core/utils/type";
+import { logger } from "../core/utils/console";
 
-    FILE_EXTESIONS = {
-        EXCEL: "xlsx",
-        CSS: "css",
-        PNG: "png",
-        JPEG: "jpeg",
-        GIF: "gif",
-        SVG: "svg",
-        PDF: "pdf"
-    };
+const window = windowUtils.getWindow();
+const navigator = windowUtils.getNavigator();
 
-var MIME_TYPES = exports.MIME_TYPES = {
+const FILE_EXTESIONS = {
+    EXCEL: "xlsx",
+    CSS: "css",
+    PNG: "png",
+    JPEG: "jpeg",
+    GIF: "gif",
+    SVG: "svg",
+    PDF: "pdf"
+};
+
+const MIME_TYPES = exports.MIME_TYPES = {
     CSS: "text/css",
     EXCEL: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     PNG: "image/png",
@@ -37,29 +39,11 @@ exports.fileSaver = {
         return "data:" + MIME_TYPES[format] + ";base64," + data;
     },
 
-    /* _cordovaDownloader: function(fileName, href, callback) {
-        var transfer = new FileTransfer(),
-            fileAlert = function(res) {
-                navigator.notification.alert(res.nativeURL, null, DX.localization.message.format("dxFileSaver-fileExported"));
-            };
-
-        transfer.download(href, window.cordova.file.externalRootDirectory + fileName, fileAlert, fileAlert);
-    }, */
-
-    _linkDownloader: function(fileName, href, clickHandler) {
-        var exportLinkElement = domAdapter.createElement('a'),
-            attributes = {
-                "download": fileName,
-                "href": href,
-                "target": "_blank"
-            };
-
-        eventsEngine.on($(exportLinkElement), "click", function() {
-            $(exportLinkElement).remove();
-            clickHandler && clickHandler.apply(this, arguments);
-        });
-        domAdapter.getBody().appendChild(exportLinkElement);
-        $(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0].click();
+    _linkDownloader: function(fileName, href) {
+        var exportLinkElement = domAdapter.createElement('a');
+        exportLinkElement.download = fileName;
+        exportLinkElement.href = href;
+        exportLinkElement.target = "_blank"; // cors policy
 
         return exportLinkElement;
     },
@@ -105,7 +89,18 @@ exports.fileSaver = {
         });
     },
 
-    _saveBlobAs: function(fileName, format, data, linkClick) {
+    _click: function(link) {
+        try {
+            // eslint-disable-next-line no-undef
+            link.dispatchEvent(new MouseEvent('click', { cancelable: true }));
+        } catch(e) {
+            var event = domAdapter.getDocument().createEvent('MouseEvents');
+            event.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+            link.dispatchEvent(event);
+        }
+    },
+
+    _saveBlobAs: function(fileName, format, data) {
         var that = this;
 
         that._blobSaved = false;
@@ -120,31 +115,24 @@ exports.fileSaver = {
             var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
             if(typeUtils.isDefined(URL)) {
-                var objectURL = URL.createObjectURL(data),
-                    revokeObjectURLTimeout = that._revokeObjectURLTimeout,
-                    clickHandler = function(e) {
-                        setTimeout(function() {
-                            URL.revokeObjectURL(objectURL);
-                            ///#DEBUG
-                            that._objectUrlRevoked = true;
-                            ///#ENDDEBUG
-                        }, revokeObjectURLTimeout);
-                        ///#DEBUG
-                        typeUtils.isFunction(linkClick) && linkClick.apply(this, arguments);
-                        ///#ENDDEBUG
-                    };
+                var objectURL = URL.createObjectURL(data);
+                var downloadLink = that._linkDownloader(fileName, objectURL);
 
-                return that._linkDownloader(fileName, objectURL, clickHandler);
+                setTimeout(() => {
+                    URL.revokeObjectURL(objectURL);
+                    that._objectUrlRevoked = true;
+                }, this._revokeObjectURLTimeout);
+
+                this._click(downloadLink);
+            } else {
+                logger.warn("window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL is not defined");
             }
         }
     },
 
-    saveAs: function(fileName, format, data, proxyURL, linkClick, forceProxy) {
+    saveAs: function(fileName, format, data, proxyURL, forceProxy) {
         fileName += "." + FILE_EXTESIONS[format];
 
-        /* if(commonUtils.isDefined(window.cordova)) {
-            return this._cordovaDownloader(fileName, this._getDataUri(format, data), linkClick);
-        } */
         if(typeUtils.isDefined(proxyURL)) {
             errors.log("W0001", "Export", "proxyURL", "19.2", "This option is no longer required");
         }
@@ -152,14 +140,15 @@ exports.fileSaver = {
         if(forceProxy) {
             this._saveByProxy(proxyURL, fileName, format, data);
         } else if(typeUtils.isFunction(window.Blob)) {
-            this._saveBlobAs(fileName, format, data, linkClick);
+            this._saveBlobAs(fileName, format, data);
         } else {
             if(typeUtils.isDefined(proxyURL) && !typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
                 this._saveByProxy(proxyURL, fileName, format, data);
             } else {
                 if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log("E1034");
 
-                this._linkDownloader(fileName, this._getDataUri(format, data), linkClick);
+                var downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
+                this._click(downloadLink);
             }
         }
     }
