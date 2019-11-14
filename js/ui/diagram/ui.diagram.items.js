@@ -114,11 +114,11 @@ class ItemsOption extends Component {
         if(!this._items) {
             return [];
         }
-        const keyOf = this._getKeyOf();
-        return keyOf && this._items && this._items.map(item => keyOf(item));
+        const keyExpr = this._getKeyExpr();
+        return keyExpr && this._items && this._items.map(item => keyExpr(item));
     }
 
-    _getKeyOf() {
+    _getKeyExpr() {
         throw "Not Implemented";
     }
 
