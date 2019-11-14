@@ -62,10 +62,10 @@ class Button extends Widget {
 
     _findGroup() {
         const $element = this.$element();
+        const model = this._modelByElement($element);
+        const { validationGroup } = this.option('validationGroup');
 
-        return this.option('validationGroup') ||
-            ValidationEngine.findGroup($element, this._modelByElement($element));
-
+        return validationGroup || ValidationEngine.findGroup($element, model);
     }
 
     _getAnonymousTemplateName() {
@@ -185,25 +185,33 @@ class Button extends Widget {
     }
 
     _getSubmitAction() {
+        let needValidate = true;
+        let validationStatus = 'valid';
+
         return this._createAction(({ event: e }) => {
-            if(this._needValidate) {
+            if(needValidate) {
                 const validationGroup = this._validationGroupConfig;
 
                 if(validationGroup) {
                     const { status, complete } = validationGroup.validate();
 
-                    this._validationStatus = status;
+                    validationStatus = status;
 
                     if(status === 'pending') {
-                        this._needValidate = false;
+                        needValidate = false;
                         this._setDisabled(true);
-                        this._waitForValidationCompleting(complete);
+                        complete.then(({ status }) =>{
+                            validationStatus = status;
+                            this._setDisabled(false);
+                            validationStatus === 'valid' && this._$submitInput.get(0).click();
+                        });
                     }
                 }
             } else {
-                this._needValidate = true;
+                needValidate = true;
             }
-            this._validationStatus !== 'valid' && e.preventDefault();
+
+            validationStatus !== 'valid' && e.preventDefault();
             e.stopPropagation();
         });
     }
@@ -230,13 +238,14 @@ class Button extends Widget {
 
         this._defaultTemplates['content'] = new FunctionTemplate(({ model = {}, container }) => {
             const { text, icon } = model;
+            const { iconPosition } = this.option();
             const $icon = getImageContainer(icon);
             const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
             const $container = $(container);
 
             $container.append($textContainer);
 
-            if(this.option('iconPosition') === 'left') {
+            if(iconPosition === 'left') {
                 $container.prepend($icon);
             } else {
                 $icon.addClass('dx-icon-right');
@@ -320,8 +329,6 @@ class Button extends Widget {
         if(useSubmitBehavior) {
             const submitAction = this._getSubmitAction();
 
-            this._needValidate = true;
-            this._validationStatus = 'valid';
             this._$submitInput = $('<input>')
                 .attr('type', 'submit')
                 .attr('tabindex', -1)
@@ -448,16 +455,6 @@ class Button extends Widget {
 
     get _validationGroupConfig() {
         return ValidationEngine.getGroupConfig(this._findGroup());
-    }
-
-    _waitForValidationCompleting(complete) {
-        complete.then(result => {
-            this._validationStatus = result.status;
-            this._setDisabled(false);
-            this._validationStatus === 'valid' && this._$submitInput.get(0).click();
-
-            return result;
-        });
     }
 }
 
