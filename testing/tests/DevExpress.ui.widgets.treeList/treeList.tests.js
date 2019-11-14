@@ -21,6 +21,8 @@ import pointerEvents from "events/pointer";
 import { DataSource } from "data/data_source/data_source";
 import { TreeListWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import ArrayStore from 'data/array_store';
+import TreeList from "ui/tree_list/ui.tree_list";
+import pointerMock from "../../helpers/pointerMock.js";
 
 fx.off = true;
 
@@ -1590,4 +1592,73 @@ QUnit.test("TreeList should filter data with unreachable items (T816921)", funct
 
     // assert
     assert.equal(treeList.getVisibleRows().length, 2, "filtered row count");
+});
+
+
+QUnit.module("Row dragging", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T831020
+QUnit.test("The draggable row should have correct markup when defaultOptions is specified", function(assert) {
+    // arrange
+    TreeList.defaultOptions({
+        options: {
+            filterRow: {
+                visible: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            filterPanel: {
+                visible: true
+            }
+        }
+    });
+
+    try {
+        const treeList = createTreeList({
+            dataSource: [
+                { ID: 1, Head_ID: 0, Name: "John" },
+                { ID: 2, Head_ID: 0, Name: "Alex" }
+            ],
+            keyExpr: "ID",
+            parentIdExpr: "Head_ID",
+            rowDragging: {
+                allowReordering: true
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        pointerMock(treeList.getCellElement(0, 0)).start().down().move(100, 100);
+
+        // assert
+        const $draggableRow = $("body").children(".dx-sortable-dragging");
+        assert.strictEqual($draggableRow.length, 1, "has draggable row");
+
+        const $visibleView = $draggableRow.find(".dx-gridbase-container").children(":visible");
+        assert.strictEqual($visibleView.length, 1, "markup of the draggable row is correct");
+        assert.ok($visibleView.hasClass("dx-treelist-rowsview"), "rowsview is visible");
+    } finally {
+        TreeList.defaultOptions({
+            options: {
+                filterRow: {
+                    visible: false
+                },
+                groupPanel: {
+                    visible: false
+                },
+                filterPanel: {
+                    visible: false
+                }
+            }
+        });
+    }
 });
