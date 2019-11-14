@@ -386,7 +386,7 @@ class Button extends Widget {
     _updateClick() {
         this._clickAction = this._createActionByOption('onClick', {
             excludeValidators: ['readOnly'],
-            afterExecute: ({ _$submitInput }) => {
+            afterExecute: () => {
                 const { useSubmitBehavior } = this.option();
 
                 useSubmitBehavior && setTimeout(() => this._$submitInput.get(0).click());
