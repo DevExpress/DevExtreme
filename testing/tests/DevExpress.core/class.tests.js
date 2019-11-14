@@ -1,4 +1,4 @@
-var Class = require("core/class");
+import Class from 'core/class';
 
 QUnit.module("inheritance");
 
