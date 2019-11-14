@@ -122,7 +122,7 @@ QUnit.test("Second recurring appointment wich started in STD and ended in DST ti
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
         deltaTzStart = getDeltaTz(-5, startDate),
-        deltaTzEnd = getDeltaTz(-4, endDate),
+        deltaTzEnd = getDeltaTz(-5, endDate),
         startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / 3600000)),
         endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / 3600000));
 

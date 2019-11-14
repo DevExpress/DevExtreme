@@ -473,7 +473,10 @@ class BaseRenderingStrategy {
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
                 recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate,
-                fullDuration = endDate.getTime() - realStartDate.getTime();
+                fullDuration =
+                viewStartDate.getTime() > endDate.getTime() ?
+                    this.instance.fire("getField", "endDate", appointment).getTime() - this.instance.fire("getField", "startDate", appointment).getTime() :
+                    endDate.getTime() - realStartDate.getTime();
 
             fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
 

@@ -2,6 +2,7 @@ var errors = require("../../core/errors"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
+    isDefined = require("../../core/utils/type").isDefined,
     dateUtils = require("../../core/utils/date");
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -357,6 +358,10 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
         needCorrect = true;
 
     date = dateUtils.addInterval(date, rule.interval);
+
+    if(rule.freq === "DAILY" && !isDefined(rule["byhour"]) && originalStartDate.getHours() !== date.getHours()) {
+        date = new Date(date.getTime() - (initialDate.getHours() - originalStartDate.getHours()) * toMs("hour"));
+    }
 
     if(rule.freq === "MONTHLY" && !rule["byday"]) {
         var expectedDate = originalStartDate.getDate();
