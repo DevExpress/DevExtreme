@@ -843,7 +843,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 store = dataController.store(),
                 key = store && store.key(),
                 param = { data: {} },
-                editMode = getEditMode(that);
+                editMode = getEditMode(that),
+                oldEditRowIndex = that._getVisibleEditRowIndex();
 
             if(!store) {
                 dataController.fireError("E1052", this.component.NAME);
@@ -872,7 +873,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             when(that._initNewRow(param, parentKey)).done(() => {
                 if(that._allowRowAdding()) {
-                    that._addRowCore(param.data, parentKey);
+                    that._addRowCore(param.data, parentKey, oldEditRowIndex);
                 }
             });
         },
@@ -889,10 +890,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return true;
         },
 
-        _addRowCore: function(data, parentKey) {
+        _addRowCore: function(data, parentKey, oldEditRowIndex) {
             var that = this,
                 insertKey = that._getInsertKey(parentKey),
-                oldEditRowIndex = that._getVisibleEditRowIndex(),
                 editMode = getEditMode(that);
 
             that._addEditData({ key: insertKey, data: data, type: DATA_EDIT_DATA_INSERT_TYPE });
