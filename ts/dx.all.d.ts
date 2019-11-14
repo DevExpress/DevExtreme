@@ -9223,7 +9223,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.sliderHandle */
         sliderHandle?: { color?: string, opacity?: number, width?: number };
         /** @name dxRangeSelector.Options.sliderMarker */
-        sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
+        sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
         /** @name dxRangeSelector.Options.value */
         value?: Array<number | string | Date> | VizRange;
     }
