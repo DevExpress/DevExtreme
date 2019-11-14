@@ -216,7 +216,7 @@ const pairToObject = function(raw, preventRound) {
 };
 
 const escapeCssQuery = function(query) {
-    return query.split('\\').join('\\\\');
+    return isString(query) ? query.split('\\').join('\\\\') : query;
 };
 
 const getKeyHash = function(key) {
