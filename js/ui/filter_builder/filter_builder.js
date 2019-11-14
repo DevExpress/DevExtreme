@@ -218,7 +218,7 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderField.lookup.dataSource
-             * @type Array<any>|DataSourceOptions
+             * @type Array<any>|DataSourceOptions|Store
              * @default undefined
              */
 
