@@ -117,7 +117,7 @@ var baseFixedColumns = {
 
             that._isFixedTableRendering = false;
         } else {
-            that._fixedTableElement && that._fixedTableElement.remove();
+            that._fixedTableElement && that._fixedTableElement.parent().remove();
             that._fixedTableElement = null;
         }
 
