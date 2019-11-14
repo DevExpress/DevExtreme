@@ -315,7 +315,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(5).trigger("dxclick");
+        $folderNodes.eq(3).trigger("dxclick");
 
         const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Select')`);
         $okButton.trigger("dxclick");
@@ -354,7 +354,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(5).trigger("dxclick");
+        $folderNodes.eq(3).trigger("dxclick");
 
         const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Select')`);
         $okButton.trigger("dxclick");

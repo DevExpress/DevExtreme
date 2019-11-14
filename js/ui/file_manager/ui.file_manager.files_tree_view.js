@@ -197,10 +197,13 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     expandDirectory(directoryInfo) {
-        if(!directoryInfo) {
+        if(!directoryInfo || directoryInfo.items.length === 0) {
             return new Deferred().reject().promise();
         }
         const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.fileItem.key);
+        if(!treeViewNode) {
+            return new Deferred().reject().promise();
+        }
         if(treeViewNode.expanded) {
             return new Deferred().resolve().promise();
         }
