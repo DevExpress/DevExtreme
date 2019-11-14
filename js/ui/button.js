@@ -199,10 +199,10 @@ class Button extends Widget {
 
                     if(status === 'pending') {
                         needValidate = false;
-                        this._setDisabled(true);
+                        this.option('disabled', true);
                         complete.then(({ status }) =>{
                             validationStatus = status;
-                            this._setDisabled(false);
+                            this.option('disabled', false);
                             validationStatus === 'valid' && this._$submitInput.get(0).click();
                         });
                     }
@@ -349,10 +349,6 @@ class Button extends Widget {
         type && $element.addClass(`dx-button-${type}`);
     }
 
-    _setDisabled(value) {
-        this.option('disabled', value);
-    }
-
     _supportedKeys() {
         const click = e => {
             e.preventDefault();
@@ -393,7 +389,7 @@ class Button extends Widget {
             afterExecute: ({ _$submitInput }) => {
                 const { useSubmitBehavior } = this.option();
 
-                useSubmitBehavior && setTimeout(() => _$submitInput.get(0).click());
+                useSubmitBehavior && setTimeout(() => this._$submitInput.get(0).click());
             }
         });
     }
