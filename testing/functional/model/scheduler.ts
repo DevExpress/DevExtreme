@@ -29,16 +29,33 @@ const CLASS = {
     tooltipWrapper: 'dx-tooltip-wrapper'
 };
 
-class Appointment {
+abstract class AppointmentBase {
+    scheduler: Selector;
     element: Selector;
+
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        this.scheduler = scheduler;
+        this.element = this.getElement(title).nth(index);
+    }
+
+    getElement(title?: string) {
+        return title ? this.scheduler.find(this.getElementClass()).withAttribute('title', title) :
+            this.scheduler.find(this.getElementClass());
+    }
+
+    getElementClass() {
+        return '';
+    }
+}
+
+class Appointment extends AppointmentBase {
     date: { startTime: Promise<string>, endTime: Promise<string> };
     resizableHandle: { left: Selector, right: Selector, top: Selector, bottom: Selector };
     size: { width: Promise<string>, height: Promise<string> };
     isFocused: Promise<boolean>;
 
-    constructor(scheduler: Selector, title: string, index: number = 0) {
-        this.element = scheduler.find(`.${CLASS.appointment}`).withAttribute('title', title).nth(index);
-
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        super(scheduler, index, title);
         const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
         this.date = {
@@ -60,15 +77,22 @@ class Appointment {
 
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
     }
+
+    getElementClass() {
+        return `.${CLASS.appointment}`;
+    }
 }
 
-class AppointmentCollector {
-    element: Selector;
+class AppointmentCollector extends AppointmentBase {
     isFocused: Promise<boolean>;
 
-    constructor(scheduler: Selector, title: string, index: number = 0) {
-        this.element = scheduler.find(`.${CLASS.appointmentCollector}`).withText(title).nth(index);
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        super(scheduler, index, title);
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
+    }
+
+    getElementClass() {
+        return `.${CLASS.appointmentCollector}`;
     }
 }
 
@@ -184,10 +208,26 @@ export default class Scheduler extends Widget {
     }
 
     getAppointment(title: string, index: number = 0): Appointment {
-        return new Appointment(this.element, title, index);
+        return new Appointment(this.element, index, title);
     }
 
     getAppointmentCollector(title: string, index: number = 0): AppointmentCollector {
-        return new AppointmentCollector(this.element, title, index);
+        return new AppointmentCollector(this.element, index, title);
+    }
+
+    getAppointmentByIndex(index: number = 0): Appointment {
+        return new Appointment(this.element, index);
+    }
+
+    getAppointmentCollectorByIndex(index: number = 0): AppointmentCollector {
+        return new AppointmentCollector(this.element, index);
+    }
+
+    getAppointmentCount() {
+        return this.element.find(`.${CLASS.appointment}`).count;
+    }
+
+    getAppointmentCollectorCount() {
+        return this.element.find(`.${CLASS.appointmentCollector}`).count;
     }
 };
