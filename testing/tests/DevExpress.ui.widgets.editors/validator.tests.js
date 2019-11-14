@@ -680,7 +680,7 @@ QUnit.test("Validator should resolve result.complete with the last value", funct
 
     assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
     assert.notOk(result1 === result2, "Results should be different");
-    assert.ok(result1.complete === result2.complete, "result1.complete === result2.complete");
+    assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
     result2.complete.then(function(resolvedResult) {
         assert.notOk(resolvedResult.id === result1.id, "result1 should not equal resolved result");
         assert.strictEqual(result2.id, resolvedResult.id, "result2 should equal resolved result");
