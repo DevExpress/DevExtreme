@@ -162,8 +162,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var $cell = $(cell);
 
-        if(options.rowType === "data") {
-            column.headerId && this.setAria("describedby", column.headerId, $cell);
+        if(options.rowType === "data" && column.headerId && !column.command) {
+            this.setAria("describedby", column.headerId, $cell);
         }
 
         if(column.cssClass) {
