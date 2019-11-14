@@ -486,4 +486,20 @@ QUnit.module("Editing operations", moduleConfig, () => {
         fileProvider.downloadItems.restore();
     });
 
+    test("destination directory in folder chooser must be clickable without jQuery", function(assert) {
+        this.wrapper.getColumnCellsInDetailsView(2).eq(0).trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton("Copy").trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getDialogButton("Select").trigger("dxclick");
+        this.clock.tick(1200);
+
+        this.wrapper.getFolderNodes(true).eq(1).trigger('dxclick');
+
+        assert.equal(this.wrapper.getFocusedItemText(true), "Folder 1", "Target folder selected");
+    });
+
 });

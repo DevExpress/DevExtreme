@@ -197,6 +197,7 @@ class FileManager extends Widget {
     }
 
     _onFilesTreeViewDirectoryClick({ itemData }) {
+        // console.log('_onFilesTreeViewDirectoryClick in FILE MANAGER')
         this._setCurrentDirectory(itemData);
         this._setItemsViewAreaActive(false);
     }

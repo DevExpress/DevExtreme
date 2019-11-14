@@ -84,7 +84,10 @@ export class FileManagerWrapper {
         return this.getFolderToggles(inDialog).eq(index);
     }
 
-    getFocusedItemText() {
+    getFocusedItemText(inDialog) {
+        if(inDialog) {
+            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOCUSED_ITEM_CLASS} span`).text();
+        }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOCUSED_ITEM_CLASS} span`).text();
     }
 
