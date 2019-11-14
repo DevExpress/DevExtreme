@@ -18014,3 +18014,29 @@ QUnit.test("An item in edit form should change value without exceptions if setCe
     // assert
     assert.equal(dataGrid.cellValue(0, "name"), "100", "value is applied");
 });
+
+QUnit.test("LoadPanel setting should not clear rowsView._tableElement if component is not ready (T827960)", function(assert) {
+    // arrange
+    let onFocusedRowChangedCount = 0;
+    createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowKey: "not_existed_key",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: function() {
+            onFocusedRowChangedCount++;
+        },
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+            e.component.option("loadPanel", { enabled: true });
+
+            // assert
+            assert.ok(e.component.getView("rowsView")._tableElement, "tableElement exists");
+        }
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedCount, 1, "onFocusedRowChanged is fired");
+});

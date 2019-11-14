@@ -7369,7 +7369,7 @@ QUnit.test('Remove load panel when changing option loadPanel visible false', fun
     rowsView.render(container);
 
     // assert
-    assert.ok(container.find('.dx-loadpanel').length);
+    assert.ok(rowsView._loadPanel);
 
     // arrange
     this.options.loadPanel = {
@@ -7382,7 +7382,7 @@ QUnit.test('Remove load panel when changing option loadPanel visible false', fun
     rowsView.endUpdate();
 
     // assert
-    assert.ok(!container.find('.dx-loadpanel').length);
+    assert.notOk(rowsView._loadPanel);
 });
 
 QUnit.test('Change option loadPanel', function(assert) {

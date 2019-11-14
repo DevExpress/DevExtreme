@@ -1487,15 +1487,15 @@ module.exports = {
                             break;
                         case "scrolling":
                             that._rowHeight = null;
-                            that._tableElement = null;
+                            that._resetTableElement();
                             args.handled = true;
                             break;
                         case "rtlEnabled":
                             that._rowHeight = null;
-                            that._tableElement = null;
+                            that._resetTableElement();
                             break;
                         case "loadPanel":
-                            that._tableElement = null;
+                            that._loadPanel = null;
                             that._invalidate(true, args.fullName !== "loadPanel.enabled");
                             args.handled = true;
                             break;
@@ -1503,6 +1503,12 @@ module.exports = {
                             that.renderNoDataText();
                             args.handled = true;
                             break;
+                    }
+                },
+
+                _resetTableElement: function() {
+                    if(this._isReady()) {
+                        this._tableElement = null;
                     }
                 },
 
