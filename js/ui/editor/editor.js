@@ -36,19 +36,18 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 var Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
+        this.validationRequest = Callbacks();
         this.callBase.apply(this, arguments);
+        const $element = this.$element();
+        if($element) {
+            dataUtils.data($element[0], VALIDATION_TARGET, this);
+        }
+
     },
 
     _init: function() {
         this.callBase();
-        this.validationRequest = Callbacks();
         this._initInnerOptionCache("validationTooltipOptions");
-
-        var $element = this.$element();
-
-        if($element) {
-            dataUtils.data($element[0], VALIDATION_TARGET, this);
-        }
     },
 
     _getDefaultOptions: function() {
