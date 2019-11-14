@@ -29,33 +29,17 @@ const CLASS = {
     tooltipWrapper: 'dx-tooltip-wrapper'
 };
 
-abstract class AppointmentBase {
-    scheduler: Selector;
+class Appointment {
     element: Selector;
-
-    constructor(scheduler: Selector, index: number = 0, title?: string) {
-        this.scheduler = scheduler;
-        this.element = this.getElement(title).nth(index);
-    }
-
-    getElement(title?: string) {
-        return title ? this.scheduler.find(this.getElementClass()).withAttribute('title', title) :
-            this.scheduler.find(this.getElementClass());
-    }
-
-    getElementClass() {
-        return '';
-    }
-}
-
-class Appointment extends AppointmentBase {
     date: { startTime: Promise<string>, endTime: Promise<string> };
     resizableHandle: { left: Selector, right: Selector, top: Selector, bottom: Selector };
     size: { width: Promise<string>, height: Promise<string> };
     isFocused: Promise<boolean>;
 
     constructor(scheduler: Selector, index: number = 0, title?: string) {
-        super(scheduler, index, title);
+        const element = scheduler.find(`.${CLASS.appointment}`);
+        this.element = (title ? element.withAttribute('title', title) : element).nth(index);
+
         const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
         this.date = {
@@ -77,22 +61,17 @@ class Appointment extends AppointmentBase {
 
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
     }
-
-    getElementClass() {
-        return `.${CLASS.appointment}`;
-    }
 }
 
-class AppointmentCollector extends AppointmentBase {
+class AppointmentCollector{
+    element: Selector;
     isFocused: Promise<boolean>;
 
     constructor(scheduler: Selector, index: number = 0, title?: string) {
-        super(scheduler, index, title);
-        this.isFocused = this.element.hasClass(CLASS.stateFocused);
-    }
+        const element = scheduler.find(`.${CLASS.appointmentCollector}`);
+        this.element = (title ? element.withText(title) : element).nth(index);
 
-    getElementClass() {
-        return `.${CLASS.appointmentCollector}`;
+        this.isFocused = this.element.hasClass(CLASS.stateFocused);
     }
 }
 
