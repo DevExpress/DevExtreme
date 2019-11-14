@@ -306,6 +306,11 @@ class Diagram extends Widget {
         this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
         this._diagramInstance.onShowContextMenu = this._onShowContextMenu.bind(this);
         this._diagramInstance.onHideContextMenu = this._onHideContextMenu.bind(this);
+        this._diagramInstance.onNativeAction.add({
+            notifyItemClick: this._raiseItemClickAction.bind(this),
+            notifyItemDblClick: this._raiseItemDblClickAction.bind(this),
+            notifySelectionChanged: this._raiseSelectionChanged.bind(this)
+        });
 
         this._updateUnitItems();
         this._updateFormatUnitsMethod();
@@ -369,7 +374,6 @@ class Diagram extends Widget {
         if(this._nodesOption) {
             this._nodesOption._disposeDataSource();
             delete this._nodesOption;
-            delete this._nodes;
         }
         if(this.option("nodes.dataSource")) {
             this._nodesOption = new NodesOption(this);
@@ -381,7 +385,6 @@ class Diagram extends Widget {
         if(this._edgesOption) {
             this._edgesOption._disposeDataSource();
             delete this._edgesOption;
-            delete this._edges;
         }
         if(this.option("edges.dataSource")) {
             this._edgesOption = new EdgesOptions(this);
@@ -400,12 +403,7 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.Import, { data, keepExistingItems });
     }
 
-    _nodesDataSourceChanged(nodes) {
-        this._nodes = nodes;
-        this._bindDiagramData();
-    }
-    _edgesDataSourceChanged(edges) {
-        this._edges = edges;
+    _onDataSourceChanged() {
         this._bindDiagramData();
     }
     _createOptionGetter(optionName) {
@@ -425,8 +423,8 @@ class Diagram extends Widget {
         const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
         let lineOptionGetter, lineOptionSetter, startLineEndingGetter, startLineEndingSetter, endLineEndingGetter, endLineEndingSetter;
         const data = {
-            nodeDataSource: this._nodes,
-            edgeDataSource: this._edges,
+            nodeDataSource: this._nodesOption && this._nodesOption.getItems(),
+            edgeDataSource: this._edgesOption && this._edgesOption.getItems(),
             nodeDataImporter: {
                 getKey: this._createOptionGetter("nodes.keyExpr"),
                 setKey: this._createOptionSetter("nodes.keyExpr"),
@@ -591,7 +589,8 @@ class Diagram extends Widget {
         }
     }
     _isBindingMode() {
-        return this._nodes || this._edges;
+        return (this._nodesOption && this._nodesOption.hasItems()) ||
+            (this._edgesOption && this._nodesOption.hasItems());
     }
     _beginUpdateDiagram() {
         this._updateDiagramLockCount++;
@@ -1499,7 +1498,37 @@ class Diagram extends Widget {
                  * @deprecated
                  */
                 proxyUrl: undefined
-            }
+            },
+
+            /**
+             * @name dxDiagramOptions.onItemClick
+             * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 item:dxDiagramItem
+             * @action
+             */
+            onItemClick: null,
+
+            /**
+             * @name dxDiagramOptions.onItemDblClick
+             * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 item:dxDiagramItem
+             * @action
+             */
+            onItemDblClick: null,
+
+            /**
+             * @name dxDiagramOptions.onSelectionChanged
+             * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 items:Array<dxDiagramItem>
+             * @action
+             */
+            onSelectionChanged: null
         });
     }
 
@@ -1553,6 +1582,57 @@ class Diagram extends Widget {
         }
     }
 
+    _createItemClickAction() {
+        this._itemClickAction = this._createActionByOption("onItemClick");
+    }
+    _createItemDblClickAction() {
+        this._itemDblClickAction = this._createActionByOption("onItemDblClick");
+    }
+    _createSelectionChangedAction() {
+        this._selectionChangedAction = this._createActionByOption("onSelectionChanged");
+    }
+    _raiseItemClickAction(nativeItem) {
+        if(!this._itemClickAction) {
+            this._createItemClickAction();
+        }
+        this._itemClickAction({ item: this._nativeItemToDiagramItem(nativeItem) });
+    }
+    _raiseItemDblClickAction(nativeItem) {
+        if(!this._itemDblClickAction) {
+            this._createItemDblClickAction();
+        }
+        this._itemDblClickAction({ item: this._nativeItemToDiagramItem(nativeItem) });
+    }
+    _raiseSelectionChanged(nativeItems) {
+        if(!this._selectionChangedAction) {
+            this._createSelectionChangedAction();
+        }
+        this._selectionChangedAction({ items: nativeItems.map(this._nativeItemToDiagramItem.bind(this)) });
+    }
+    _nativeItemToDiagramItem(nativeItem) {
+        const { NativeShape } = getDiagram();
+        const createMethod = nativeItem instanceof NativeShape ?
+            this._nativeShapeToDiagramShape.bind(this) :
+            this._nativeConnectorToDiagramConnector.bind(this);
+        return extend({
+            id: nativeItem.id
+        }, createMethod(nativeItem));
+    }
+    _nativeShapeToDiagramShape(nativeShape) {
+        return {
+            dataItem: this._nodesOption && this._nodesOption.findItem(nativeShape.key),
+            text: nativeShape.text,
+            type: nativeShape.type
+        };
+    }
+    _nativeConnectorToDiagramConnector(nativeConnector) {
+        return {
+            dataItem: this._edgesOption && this._edgesOption.findItem(nativeConnector.key),
+            texts: nativeConnector.texts,
+            fromKey: nativeConnector.fromKey,
+            toKey: nativeConnector.toKey
+        };
+    }
     _optionChanged(args) {
         if(this.optionsUpdateBar.isUpdateLocked()) return;
 
@@ -1664,6 +1744,15 @@ class Diagram extends Widget {
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
+                break;
+            case "onItemClick":
+                this._createItemClickAction();
+                break;
+            case "onItemDblClick":
+                this._createItemDblClickAction();
+                break;
+            case "onSelectionChanged":
+                this._createSelectionChangedAction();
                 break;
             case "export":
                 if(this._toolbarInstance) {
