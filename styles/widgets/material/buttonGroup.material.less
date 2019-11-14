@@ -45,6 +45,7 @@
 
 .dx-buttongroup-item {
     &.dx-button {
+        &.dx-button-mode-contained,
         &.dx-button-mode-outlined {
             &.dx-state-disabled {
                 opacity: 1;
@@ -53,7 +54,49 @@
                     opacity: @button-disabled-icon-opacity;
                 }
             }
+        }
 
+        &.dx-button-mode-contained {
+            &.dx-state-focused {
+                background-color: @button-normal-focused-bg;
+            }
+
+            &.dx-state-hover {
+                background-color: @button-normal-hover-bg;
+            }
+
+            &.dx-button-success {
+                &.dx-state-focused {
+                    background-color: @button-success-focused-bg;
+                }
+
+                &.dx-state-hover {
+                    background-color: @button-success-hover-bg;
+                }
+            }
+
+            &.dx-button-default {
+                &.dx-state-focused {
+                    background-color: @button-default-focused-bg;
+                }
+
+                &.dx-state-hover {
+                    background-color: @button-default-hover-bg;
+                }
+            }
+
+            &.dx-button-danger {
+                &.dx-state-focused {
+                    background-color: @button-danger-focused-bg;
+                }
+
+                &.dx-state-hover {
+                    background-color: @button-danger-hover-bg;
+                }
+            }
+        }
+
+        &.dx-button-mode-outlined {
             &.dx-state-focused {
                 background-color: @button-normal-outlined-focused-bg;
             }
