@@ -439,6 +439,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
+
     _syncSelectionOptions: function(option) {
         this._updateSelectionOptions();
         return new Deferred().resolve().promise();
@@ -566,6 +567,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.callBase(args);
         }
     },
+
+    _normalizeSelectedItems: commonUtils.noop,
 
     _initDataSource: function() {
         if(this._useCustomChildrenLoader()) {
@@ -1426,8 +1429,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateSelectionOptions: function() {
-        this._setOptionSilent("selectedItemKeys", this.getSelectedNodesKeys());
-        this._setOptionSilent("selectedItems", this.getSelectedNodes());
+        const selectedNodes = this.getSelectedNodesKeys();
+        this._setOptionSilent("selectedItemKeys", selectedNodes);
+
+        let items = [];
+        each(selectedNodes, (index, key) => {
+            let node = this._dataAdapter.getNodeByKey(key);
+            let itemData = this._dataAdapter.getPublicNode(node).itemData;
+            items.push(itemData);
+        });
+
+        this._setOptionSilent("selectedItems", items);
     },
 
     _getCheckBoxInstance: function($node) {
