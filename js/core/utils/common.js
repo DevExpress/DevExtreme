@@ -200,7 +200,6 @@ const denormalizeKey = function(key) {
     return key;
 };
 
-
 const pairToObject = function(raw, preventRound) {
     const pair = splitPair(raw);
     let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
