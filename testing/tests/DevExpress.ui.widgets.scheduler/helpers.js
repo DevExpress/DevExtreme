@@ -124,7 +124,8 @@ export class SchedulerTestWrapper {
 
             dialog: {
                 clickEditSeries: () => $(".dx-dialog").find(".dx-dialog-button").eq(0).trigger("dxclick"),
-                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick")
+                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick"),
+                hide: () => $(".dx-dialog").find(".dx-closebutton.dx-button").trigger("dxclick")
             },
 
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),

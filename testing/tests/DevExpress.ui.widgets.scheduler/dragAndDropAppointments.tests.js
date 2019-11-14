@@ -451,7 +451,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 top: positionBeforeDrag.top
             });
         } finally {
-            $(".dx-dialog-wrapper .dx-closebutton").trigger("dxclick");
+            scheduler.appointmentPopup.dialog.hide();
         }
     });
 
