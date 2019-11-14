@@ -132,7 +132,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
             return cache.$nodeByKey[key] || $();
         }
-        return this.$element().find(`[${DATA_ITEM_ID}='${commonUtils.escapeCssQuery(key)}']`);
+        return this.$element().find(`[${DATA_ITEM_ID}='${commonUtils.escapeCssSearchQuery(key)}']`);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,

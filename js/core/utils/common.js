@@ -215,8 +215,14 @@ const pairToObject = function(raw, preventRound) {
     return { h, v };
 };
 
-const escapeCssQuery = function(query) {
-    return isString(query) ? query.split('\\').join('\\\\') : query;
+const escapeCssSearchQuery = function(query) {
+    if(isString(query)) {
+        const replacements = ['\\', '\'', "\""];
+        each(replacements, (_, replacement) => {
+            query = query.split(replacement).join('\\' + replacement);
+        });
+    }
+    return query;
 };
 
 const getKeyHash = function(key) {
@@ -345,4 +351,4 @@ exports.noop = noop;
 exports.asyncNoop = asyncNoop;
 exports.grep = grep;
 exports.equalByValue = equalByValue;
-exports.escapeCssQuery = escapeCssQuery;
+exports.escapeCssSearchQuery = escapeCssSearchQuery;
