@@ -80,13 +80,24 @@ var include = function() {
 };
 
 var subclassOf = function(parentClass) {
-    if(this.parent === parentClass) {
-        return true;
+    const hasParentProperty = Object.prototype.hasOwnProperty.bind(this)('parent');
+    const isES6Class = !hasParentProperty && this.parent;
+
+    if(isES6Class) {
+        const baseClass = Object.getPrototypeOf(this);
+
+        return baseClass === parentClass || baseClass.subclassOf(parentClass);
+    } else {
+        if(this.parent === parentClass) {
+            return true;
+        }
+
+        if(!this.parent || !this.parent.subclassOf) {
+            return false;
+        }
+
+        return this.parent.subclassOf(parentClass);
     }
-    if(!this.parent || !this.parent.subclassOf) {
-        return false;
-    }
-    return this.parent.subclassOf(parentClass);
 };
 
 var abstract = function() {
