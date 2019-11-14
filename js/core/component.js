@@ -6,12 +6,10 @@ var Config = require("./config"),
     errors = require("./errors"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
-    deferredUtils = require("../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
     Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
+    PostponedOperations = require("./postponed_operations").PostponedOperations,
 
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
@@ -25,43 +23,6 @@ var Config = require("./config"),
 * @namespace DevExpress
 * @hidden
 */
-
-class PostponedOperations {
-    constructor() {
-        this._postponedOperations = {};
-    }
-
-    add(key, fn, postponedPromise) {
-        if(key in this._postponedOperations) {
-            postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
-        } else {
-            var completePromise = new Deferred();
-            this._postponedOperations[key] = {
-                fn: fn,
-                completePromise: completePromise,
-                promises: postponedPromise ? [postponedPromise] : []
-            };
-        }
-
-        return this._postponedOperations[key].completePromise.promise();
-    }
-
-    callPostponedOperations() {
-        for(var key in this._postponedOperations) {
-            var operation = this._postponedOperations[key];
-
-            if(typeUtils.isDefined(operation)) {
-                if(operation.promises && operation.promises.length) {
-                    when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
-                } else {
-                    operation.fn().done(operation.completePromise.resolve);
-                }
-            }
-        }
-        this._postponedOperations = {};
-    }
-}
-
 var Component = Class.inherit({
     _setDeprecatedOptions: function() {
         this._deprecatedOptions = {};
@@ -477,4 +438,3 @@ var Component = Class.inherit({
 }).include(EventsMixin);
 
 module.exports = Component;
-module.exports.PostponedOperations = PostponedOperations;
