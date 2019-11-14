@@ -32,7 +32,7 @@ exports.export = function(data, options, getData) {
             }
 
             if(!eventArgs.cancel) {
-                fileSaver.saveAs(eventArgs.fileName, options.format, blob, options.proxyUrl, undefined, options.forceProxy);
+                fileSaver.saveAs(eventArgs.fileName, options.format, blob, options.proxyUrl, options.forceProxy);
             }
         });
     }
