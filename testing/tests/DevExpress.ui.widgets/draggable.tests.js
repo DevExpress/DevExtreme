@@ -535,6 +535,102 @@ QUnit.test("The onDrop event should be called regardless of the order to subscri
     assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
 });
 
+QUnit.test("onDragEnd - eventArgs.cancel as a promise that is resolved with false", function(assert) {
+    // arrange
+    let d = $.Deferred(),
+        onDragEndSpy = sinon.spy((e) => { e.cancel = d.promise(); });
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    let initialOffset = this.$element.offset();
+
+    // act
+    this.pointer.down().move(0, 40).up();
+
+    // assert
+    assert.ok(this.$element.hasClass("dx-draggable-dragging"), "element is dragged");
+    assert.deepEqual(this.$element.offset(), {
+        left: initialOffset.left,
+        top: initialOffset.top + 40
+    }, "element position");
+
+    // act
+    d.resolve(false);
+
+    // assert
+    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "element isn't dragged");
+    assert.deepEqual(this.$element.offset(), {
+        left: initialOffset.left,
+        top: initialOffset.top + 40
+    }, "element position");
+});
+
+QUnit.test("onDragEnd - eventArgs.cancel as a promise that is resolved with true", function(assert) {
+    // arrange
+    let d = $.Deferred(),
+        onDragEndSpy = sinon.spy((e) => { e.cancel = d.promise(); });
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    let initialOffset = this.$element.offset();
+
+    // act
+    this.pointer.down().move(0, 40).up();
+
+    // assert
+    assert.ok(this.$element.hasClass("dx-draggable-dragging"), "element is dragged");
+    assert.deepEqual(this.$element.offset(), {
+        left: initialOffset.left,
+        top: initialOffset.top + 40
+    }, "element position");
+
+    // act
+    d.resolve(true);
+
+    // assert
+    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "element isn't dragged");
+    assert.deepEqual(this.$element.offset(), {
+        left: initialOffset.left,
+        top: initialOffset.top
+    }, "element position");
+});
+
+QUnit.test("onDragEnd - eventArgs.cancel as a promise that is rejected", function(assert) {
+    // arrange
+    let d = $.Deferred(),
+        onDragEndSpy = sinon.spy((e) => { e.cancel = d.promise(); });
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    let initialOffset = this.$element.offset();
+
+    // act
+    this.pointer.down().move(0, 40).up();
+
+    // assert
+    assert.ok(this.$element.hasClass("dx-draggable-dragging"), "element is dragged");
+    assert.deepEqual(this.$element.offset(), {
+        left: initialOffset.left,
+        top: initialOffset.top + 40
+    }, "element position");
+
+    // act
+    d.reject();
+
+    // assert
+    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "element isn't dragged");
+    assert.deepEqual(this.$element.offset(), {
+        left: initialOffset.left,
+        top: initialOffset.top
+    }, "element position");
+});
+
 
 QUnit.module("'dragDirection' option", moduleConfig);
 
