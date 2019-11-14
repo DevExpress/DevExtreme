@@ -63,7 +63,7 @@ class Button extends Widget {
     _findGroup() {
         const $element = this.$element();
         const model = this._modelByElement($element);
-        const { validationGroup } = this.option('validationGroup');
+        const { validationGroup } = this.option();
 
         return validationGroup || ValidationEngine.findGroup($element, model);
     }
