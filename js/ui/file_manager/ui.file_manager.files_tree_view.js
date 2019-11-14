@@ -197,18 +197,18 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     expandDirectory(directoryInfo) {
+        const deferred = new Deferred();
         if(!directoryInfo || directoryInfo.items.length === 0) {
-            return new Deferred().reject().promise();
+            return deferred.reject().promise();
         }
         const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.fileItem.key);
         if(!treeViewNode) {
-            return new Deferred().reject().promise();
+            return deferred.reject().promise();
         }
         if(treeViewNode.expanded) {
-            return new Deferred().resolve().promise();
+            return deferred.resolve().promise();
         }
 
-        const deferred = new Deferred();
         treeViewNode.expandedDeferred = deferred;
         this._filesTreeView.expandItem(directoryInfo.fileItem.key);
         return deferred.promise();

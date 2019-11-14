@@ -491,7 +491,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         const longPath = "Files/Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1";
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, "there is no operations");
 
-        let $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
+        let $cells = this.wrapper.getColumnCellsInDetailsView(2);
         const initialCount = $cells.length;
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
@@ -531,7 +531,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.wrapper.getFolderNode(0).trigger("dxclick");
         this.clock.tick(400);
 
-        $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
+        $cells = this.wrapper.getColumnCellsInDetailsView(2);
         assert.equal($cells.length, initialCount, "file count not changed");
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "first file is the target file");
         assert.equal(this.wrapper.getDetailsItemName(1), "File 2.jpg", "second file is not target file");

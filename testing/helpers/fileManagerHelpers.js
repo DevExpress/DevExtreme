@@ -195,6 +195,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
     }
 
+    getColumnCellsInDetailsView(index) {
+        return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(${index})`);
+    }
+
     getContextMenuItems(visible) {
         let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
         if(visible) {
