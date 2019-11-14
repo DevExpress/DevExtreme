@@ -366,7 +366,7 @@ var dxRangeSelector = {
         * @name dxRangeSelectorOptions.sliderMarker.customizeText
         * @type function(scaleValue)
         * @type_function_param1 scaleValue:object
-        * @type_function_param1_field1 value:Date|Number
+        * @type_function_param1_field1 value:Date|Number|string
         * @type_function_param1_field2 valueText:string
         * @type_function_return string
         * @notUsedInTheme
