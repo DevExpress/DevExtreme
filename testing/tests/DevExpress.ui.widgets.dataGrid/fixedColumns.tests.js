@@ -3040,7 +3040,7 @@ QUnit.module("Fixed columns with real dataController and columnController", {
         };
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ["data", "columns", "rows", "columnFixing", "masterDetail", "editorFactory", "grouping"], {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnFixing", "masterDetail", "editorFactory", "grouping", "virtualScrolling"], {
                 initViews: true
             });
         };
@@ -3218,4 +3218,47 @@ QUnit.test("The vertical position of the fixed table should be correct after scr
     // assert
     $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
+});
+
+// T829901
+QUnit.test("The load panel should not be displayed when fixing and unfixing the column", function(assert) {
+    // arrange
+    let that = this,
+        $testElement = $("#container").width(400),
+        generateData = () => {
+            let data = [];
+            for(let i = 0; i < 40; i++) {
+                data.push({ field1: "test" + i, field2: "test" + (i + 1), field3: "test" + (i + 2) });
+            }
+            return data;
+        };
+
+    that.options.loadPanel = { visible: true };
+    that.options.scrolling = {
+        mode: "infinite"
+    };
+    that.options.dataSource = generateData();
+    that.options.columns = ["field1", "field2", "field3"];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    // assert
+    assert.strictEqual($testElement.find(".dx-datagrid-bottom-load-panel").length, 1, "load panel count");
+
+    // act
+    that.columnOption(0, "fixed", true);
+
+    // assert
+    assert.strictEqual($testElement.find(".dx-datagrid-bottom-load-panel").length, 2, "load panel count");
+
+    // act
+    that.columnOption(0, "fixed", false);
+
+    // assert
+    const $fixedContent = $testElement.find(".dx-datagrid-content-fixed");
+    assert.strictEqual($fixedContent.length, 0, "no fixed content");
+    assert.strictEqual($testElement.find(".dx-datagrid-bottom-load-panel").length, 1, "load panel count");
 });
