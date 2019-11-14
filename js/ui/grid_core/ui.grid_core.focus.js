@@ -489,7 +489,7 @@ module.exports = {
             },
 
             columns: {
-                getSortDataSourceParameters: function() {
+                getSortDataSourceParameters: function(_, sortByKey) {
                     var result = this.callBase.apply(this, arguments),
                         dataController = this.getController("data"),
                         dataSource = dataController._dataSource,
@@ -498,7 +498,7 @@ module.exports = {
                         remoteOperations = dataSource && dataSource.remoteOperations() || {},
                         isLocalOperations = Object.keys(remoteOperations).every(operationName => !remoteOperations[operationName]);
 
-                    if(this.option("focusedRowEnabled") && key) {
+                    if(key && (this.option("focusedRowEnabled") && this.option("autoNavigateToFocusedRow") !== false || sortByKey)) {
                         key = Array.isArray(key) ? key : [key];
                         var notSortedKeys = key.filter(key => !this.columnOption(key, "sortOrder"));
 
@@ -640,7 +640,7 @@ module.exports = {
                         booleanFilter,
                         dataSource = that._dataSource,
                         filter = that._generateFilterByKey(key, "<"),
-                        sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering);
+                        sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering, true);
 
                     if(useGroup) {
                         var group = that._columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().filtering);
