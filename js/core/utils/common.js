@@ -180,24 +180,11 @@ const splitPair = function(raw) {
 
 const normalizeKey = function(id) {
     let key = isString(id) ? id : id.toString();
-    const arr = key.match(/[^a-zA-Z0-9_]/g);
-
-    arr && each(arr, (_, sign) => {
-        key = key.replace(sign, "__" + sign.charCodeAt() + "__");
-    });
-    return key;
+    return encodeURIComponent(key);
 };
 
 const denormalizeKey = function(key) {
-    const arr = key.match(/__\d+__/g);
-
-    arr && arr.forEach((char) => {
-        const charCode = parseInt(char.replace("__", ""));
-
-        key = key.replace(char, String.fromCharCode(charCode));
-    });
-
-    return key;
+    return decodeURIComponent(key);
 };
 
 const pairToObject = function(raw, preventRound) {
