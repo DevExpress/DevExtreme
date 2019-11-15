@@ -324,29 +324,29 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.ok(this.wrapper.isSplitterActive(), "Splitter is active");
 
         let oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        let oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        let oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(100);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, oldItemViewWidth - 100, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth - 100, "Item view has correct width");
 
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(-200);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth - 200, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, oldItemViewWidth + 200, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth + 200, "Item view has correct width");
 
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(-oldTreeViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, 0, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, fileManagerWidth, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, fileManagerWidth, "Item view has correct width");
 
         const splitterWidth = this.wrapper.getSplitter().get(0).clientWidth;
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(oldItemViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, splitterWidth, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, splitterWidth, "Item view has correct width");
 
         renderer.fn.width = originalFunc;
     });
@@ -509,6 +509,16 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectPartialName + "/About", "breadcrumbs refrers to the target folder");
         assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
+    });
+
+    test("navigating deep via 'currentPath' option must be processed correctly", function(assert) {
+        const longPath = "Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1";
+        this.wrapper.getInstance().option("itemView.mode", "details");
+        this.wrapper.getInstance().option("currentPath", longPath);
+        this.clock.tick(1200);
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1.1.1.1", "Target folder is selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + longPath, "breadcrumbs refrers to the target folder");
+        assert.equal(this.wrapper.getDetailsItemName(1), "Special deep file.txt", "has specail file");
     });
 
 });

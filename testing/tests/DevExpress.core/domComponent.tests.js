@@ -1081,4 +1081,46 @@ QUnit.module("default", {
         assert.strictEqual(AnotherComponent.getInstance($element), undefined);
         assert.strictEqual(AnotherComponent.getInstance($element.get(0)), undefined);
     });
+
+    QUnit.test("reset dimensions", (assert) => {
+        const $element = $("#component").TestComponent({ width: 200, height: 100 });
+        const element = $element.get(0);
+        const instance = $element.TestComponent("instance");
+
+        instance.resetOption("height");
+        instance.resetOption("width");
+
+        assert.strictEqual(instance.option("height"), undefined);
+        assert.strictEqual(instance.option("width"), undefined);
+        assert.equal(element.style.width, "", "width is correct");
+        assert.equal(element.style.height, "", "height is correct");
+    });
+
+    QUnit.test("reset dimensions with custom default value", (assert) => {
+        const TestComponentCustomDefault = DOMComponent.inherit({
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        width: 20,
+                        height: 10
+                    }
+                );
+            },
+        });
+
+        registerComponent("TestComponentCustomDefault", nameSpace, TestComponentCustomDefault);
+
+        const $element = $("#component").TestComponentCustomDefault({ width: 200, height: 100 });
+        const element = $element.get(0);
+        const instance = $element.TestComponentCustomDefault("instance");
+
+        instance.resetOption("height");
+        instance.resetOption("width");
+
+        assert.strictEqual(instance.option("height"), 10);
+        assert.strictEqual(instance.option("width"), 20);
+        assert.equal(element.style.width, "20px", "width is correct");
+        assert.equal(element.style.height, "10px", "height is correct");
+    });
 });
