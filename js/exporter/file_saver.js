@@ -101,26 +101,24 @@ exports.fileSaver = {
     },
 
     _saveBlobAs: function(fileName, format, data) {
-        var that = this;
-
-        that._blobSaved = false;
+        this._blobSaved = false;
 
         if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
             navigator.msSaveOrOpenBlob(data, fileName);
-            that._blobSaved = true;
+            this._blobSaved = true;
         } else if(typeUtils.isDefined(window.WinJS)) {
-            that._winJSBlobSave(data, fileName, format);
-            that._blobSaved = true;
+            this._winJSBlobSave(data, fileName, format);
+            this._blobSaved = true;
         } else {
             var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
             if(typeUtils.isDefined(URL)) {
                 var objectURL = URL.createObjectURL(data);
-                var downloadLink = that._linkDownloader(fileName, objectURL);
+                var downloadLink = this._linkDownloader(fileName, objectURL);
 
                 setTimeout(() => {
                     URL.revokeObjectURL(objectURL);
-                    that._objectUrlRevoked = true;
+                    this._objectUrlRevoked = true;
                 }, this._revokeObjectURLTimeout);
 
                 this._click(downloadLink);
