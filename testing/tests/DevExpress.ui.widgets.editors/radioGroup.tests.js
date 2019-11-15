@@ -242,7 +242,7 @@ module("value", moduleConfig, () => {
 
         instance.option("value", null);
 
-        assert.notOk(errorLogStub.called, "error was not thrown");
+        assert.ok(errorLogStub.notCalled, "error was not thrown");
         errorLogStub.restore();
     });
 
