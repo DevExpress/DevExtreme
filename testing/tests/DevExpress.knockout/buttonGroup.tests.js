@@ -7,12 +7,12 @@ import "integration/knockout";
 QUnit.module("Render", () => {
     // T831205
     QUnit.test("Widget rendering when buttonTemplate is used", function(assert) {
-        var items = [
+        const items = [
             { text: "Item_1" },
             { text: "Item_2" }
         ];
 
-        var markup =
+        const markup =
         '<div id="buttongroup-with-template" data-bind="dxButtonGroup: { items: items, buttonTemplate: \'testTemplate\' }">\
             <div data-options="dxTemplate: { name: \'testTemplate\' }">\
                 <div data-bind="text: text"></div>\
@@ -21,11 +21,11 @@ QUnit.module("Render", () => {
 
         $(markup).appendTo($("#qunit-fixture"));
 
-        var $element = $("#buttongroup-with-template");
+        const $element = $("#buttongroup-with-template");
 
         ko.applyBindings({ items: items }, $element[0]);
 
-        var itemElements = $element.find(".dx-item");
+        const itemElements = $element.find(".dx-item");
 
         assert.equal(itemElements.length, 2);
         assert.equal(itemElements.eq(0).text().trim(), "Item_1", "item[0].text");
