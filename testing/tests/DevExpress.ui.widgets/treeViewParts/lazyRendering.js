@@ -38,7 +38,7 @@ QUnit.test("Nodes expanding should work with special charactes in id", function(
         });
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), false);
 
-        $treeView.find('[aria-level="1"]').find(internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick.dxTreeView');
+        $treeView.find('[aria-level="1"]').find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick.dxTreeView');
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), true);
         $treeView.dxTreeView('instance').dispose();
     });
