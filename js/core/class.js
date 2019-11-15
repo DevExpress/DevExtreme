@@ -80,7 +80,7 @@ var include = function() {
 };
 
 var subclassOf = function(parentClass) {
-    const hasParentProperty = Object.prototype.hasOwnProperty.bind(this)('parent');
+    const hasParentProperty = Object.prototype.hasOwnProperty.bind(this)("parent");
     const isES6Class = !hasParentProperty && this.parent;
 
     if(isES6Class) {
