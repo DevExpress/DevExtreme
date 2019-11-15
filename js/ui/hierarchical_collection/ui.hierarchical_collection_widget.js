@@ -11,7 +11,6 @@ import { isFunction } from "../../core/utils/type";
 import { noop } from "../../core/utils/common";
 
 const DISABLED_STATE_CLASS = "dx-state-disabled";
-const SELECTED_KEYS_OPTION_NAME = "selectedItemKeys";
 
 /**
 * @name HierarchicalCollectionWidget
@@ -213,13 +212,9 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         });
 
         accessors.getters["display"] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
-        let selectedItemKeysOption = this.option(SELECTED_KEYS_OPTION_NAME);
-        if(selectedItemKeysOption) {
-            accessors.getters["selected"] = (item, defValue) => {
-                return selectedItemKeysOption.includes(accessors.getters["key"](item));
-            };
+        if(this._customSelectedGetterBuilder) {
+            this._customSelectedGetterBuilder(accessors);
         }
-
 
         return accessors;
     },

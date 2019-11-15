@@ -818,6 +818,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("dataStructure") === "plain";
     },
 
+    _customSelectedGetterBuilder: function(accessors) {
+        const selectedItemKeysOption = this.option('selectedItemKeys');
+        if(selectedItemKeysOption) {
+            accessors.getters["selected"] = (item) => {
+                return selectedItemKeysOption.includes(accessors.getters["key"](item));
+            };
+        }
+    },
+
     _fireContentReadyAction: function() {
         var dataSource = this.getDataSource();
         var skipContentReadyAction = dataSource && !dataSource.isLoaded();
