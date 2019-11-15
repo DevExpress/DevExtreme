@@ -214,7 +214,7 @@ module("value", moduleConfig, () => {
             value: "3"
         });
 
-        assert.ok(errorLogStub.calledOnce, "error was not thrown");
+        assert.ok(errorLogStub.calledOnce, "error was thrown");
         errorLogStub.restore();
     });
 
