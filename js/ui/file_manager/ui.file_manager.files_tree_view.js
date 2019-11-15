@@ -50,7 +50,7 @@ class FileManagerFilesTreeView extends Widget {
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
 
-        eventsEngine.on($treeView, "click", treeViewOptions.onItemClick);
+        eventsEngine.on($treeView, "click", this._createActionByOption("onClick"));
     }
 
     _render() {
