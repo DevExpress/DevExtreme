@@ -7,6 +7,9 @@ import {
     MockColumnsController,
     MockSelectionController } from "../dataGridMocks.js";
 import pointerEvents from "events/pointer";
+import DataGridWrapper from "../wrappers/dataGridWrappers.js";
+
+export const dataGridWrapper = new DataGridWrapper("#container");
 
 export function setupModules(that, modulesOptions, gridModules) {
     var defaultSetCellValue = function(data, value) {

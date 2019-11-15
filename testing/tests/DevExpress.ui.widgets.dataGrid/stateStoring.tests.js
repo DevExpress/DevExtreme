@@ -1706,3 +1706,233 @@ QUnit.test("customSave should not fired after refresh (T807890)", function(asser
     // assert
     assert.strictEqual(customSaveCallCount, 0, "customSave is not fired");
 });
+
+QUnit.module('State Storing for filterPanel', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.setupDataGridModules = function(options) {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation', 'filterSync'], {
+                initDefaultOptions: true,
+                initViews: true,
+                options: $.extend({
+                    filterPanel: {
+                        visible: true
+                    }
+                }, options)
+            });
+
+            this.clock.tick();
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.dispose();
+    }
+}, function() {
+    const getStateStoringConfig = (state) => {
+        return {
+            enabled: true,
+            type: 'custom',
+            customLoad: () => {
+                return state || {};
+            },
+            customSave: function() {
+            }
+        };
+    };
+
+    const getStateStoringWithEmptyState = () => {
+        return getStateStoringConfig({});
+    };
+
+    // T820149
+    QUnit.test('apply default filterValue if state is empty', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringWithEmptyState(),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            filterValue: ["id", "=", 2],
+            columns: [{ dataField: "id", dataType: "number" }]
+        });
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 2, "default filterValue is not changed");
+    });
+
+    QUnit.test('apply default columns.filterValue if state is empty', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringWithEmptyState(),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            columns: [{
+                dataField: "id",
+                dataType: "number",
+                filterValue: 1
+            }]
+        });
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 1, "default filterValue is not changed");
+        assert.deepEqual(this.option("filterValue"), ["id", "=", 1]);
+    });
+
+    QUnit.test('apply filterValue from state', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringConfig({
+                columns: [{
+                    dataField: "id",
+                    dataType: "number",
+                    visibleIndex: 0
+                }],
+                filterValue: ["id", "=", 2]
+            }),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            columns: [{
+                dataField: "id",
+                dataType: "number",
+                filterValue: 1
+            }]
+        });
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 2, "filterValue is applied");
+    });
+
+    QUnit.test('apply filterValue null from state if columns.filterValue is defined', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringConfig({
+                columns: [{
+                    dataField: "id",
+                    dataType: "number",
+                    visibleIndex: 0
+                }],
+                filterValue: null
+            }),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            columns: [{
+                dataField: "id",
+                dataType: "number",
+                filterValue: 2
+            }]
+        });
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 2, "items are not filtered");
+    });
+
+    QUnit.test('apply columns.filterValue from state', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringConfig({
+                columns: [{
+                    dataField: "id",
+                    visibleIndex: 0,
+                    filterValue: 2
+                }]
+            }),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            columns: [{
+                dataField: "id",
+                dataType: "number",
+                filterValue: 1
+            }]
+        });
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 2, "filterValue is applied");
+    });
+
+    QUnit.test('reset state if columns.filterValue is defined', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringConfig({
+                columns: [{
+                    dataField: "id",
+                    visibleIndex: 0
+                }],
+                filterValue: ["id", "=", 2]
+            }),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            columns: [{
+                dataField: "id",
+                dataType: "number",
+                filterValue: 1
+            }]
+        });
+
+        this.state({});
+        this.clock.tick();
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 1, "default filterValue is applied");
+    });
+
+    QUnit.test('reset state if filterValue is defined', function(assert) {
+        // arrange
+        // act
+        this.setupDataGridModules({
+            stateStoring: getStateStoringConfig({
+                columns: [{
+                    dataField: "id",
+                    visibleIndex: 0
+                }],
+                filterValue: ["id", "=", 2]
+            }),
+            dataSource: [{ id: 1 }, { id: 2 }],
+            filterValue: ["id", "=", 1],
+            columns: [{
+                dataField: "id",
+                dataType: "number"
+            }]
+        });
+
+        this.state({});
+        this.clock.tick();
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 1, "default filterValue is applied");
+    });
+
+    QUnit.test('apply state with filterValue', function(assert) {
+        // arrange
+        this.setupDataGridModules({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            columns: [{
+                dataField: "id",
+                dataType: "number",
+                filterValue: 1
+            }]
+        });
+
+        // act
+        this.state({ filterValue: ["id", "=", 2] });
+        this.clock.tick();
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, "count item");
+        assert.deepEqual(items[0].data.id, 2, "filterValue is applied");
+    });
+});
+

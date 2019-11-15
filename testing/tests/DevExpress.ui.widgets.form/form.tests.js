@@ -1333,6 +1333,49 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
     assert.equal($("." + internals.HIDDEN_LABEL_CLASS).length, 0, "hidden labels count");
 });
 
+QUnit.test("Labels are not aligned when labelLocation is top", function(assert) {
+    $("#form").dxForm({
+        labelLocation: "top",
+        formData: {
+            dataField: "Data field",
+            bigDataField: "Big Data field"
+        },
+    }).dxForm("instance");
+
+    const $labelTexts = $(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
+});
+
+QUnit.test("Labels are not aligned when labelLocation is top with the groups", function(assert) {
+    $("#form").dxForm({
+        labelLocation: "top",
+        formData: {
+            isActive: true,
+            ShipName: "Test",
+            Name: "John",
+            LastName: "Smith"
+        },
+        items: [
+            {
+                itemType: "group",
+                items: ["isActive", "ShipName"]
+            },
+            {
+                itemType: "group",
+                items: ["Name", "LastName"]
+            }
+        ]
+    }).dxForm("instance");
+
+    const $groups = $(`.${internals.FORM_GROUP_CLASS}`);
+    let $labelTexts = $groups.eq(0).find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+
+    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), "group 1");
+
+    $labelTexts = $groups.eq(1).find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), "group 2");
+});
+
 QUnit.test("required mark aligned", (assert) => {
     let $testContainer = $("#form").dxForm({
         requiredMark: "!",
@@ -2003,6 +2046,18 @@ QUnit.test("'itemOption' should get a group item by the name option", function(a
     }], "has correct items");
 });
 
+QUnit.test("The exception is not thrown when option of an unknown item is changed", function(assert) {
+    const form = $("#form").dxForm({
+        formData: {
+            name: "Name"
+        }
+    }).dxForm("instance");
+
+    form.itemOption("lastName", "cssClass", "custom-class");
+
+    assert.equal(form.$element().find(".custom-class").length, 0, "custom css class is not found");
+});
+
 [false, true].forEach(useItemOption => {
     const optionWay = useItemOption ? "itemOption" : "option";
     QUnit.test(`Changing an editor/button options without re-render Form when use the ${optionWay} method (T311892, T681241)`, function(assert) {
@@ -2132,6 +2187,37 @@ QUnit.test("'itemOption' should get a group item by the name option", function(a
         assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
         assert.equal(secondEditor.option("width"), 80, "Correct width");
         assert.equal(secondEditor.option("height"), 40, "Correct height");
+    });
+
+    QUnit.test(`Change editor/button options when item is hidden via api`, function(assert) {
+        const form = $("#form").dxForm({
+            items: [{
+                itemType: "simple",
+                editorType: "dxTextBox",
+                name: "item0"
+            }, {
+                itemType: "button",
+                name: "item1"
+            }]
+        }).dxForm("instance");
+
+        const setItemOption = (index, optionName, value) => {
+            if(useItemOption) {
+                form.itemOption(`item${index}`, optionName, value);
+            } else {
+                form.option(`items[${index}].${optionName}`, value);
+            }
+        };
+
+        setItemOption(0, "visible", false);
+        setItemOption(0, "editorOptions", { width: 200 });
+        setItemOption(1, "visible", false);
+        setItemOption(1, "buttonOptions", { width: 100 });
+
+        assert.equal(form.getEditor("item1"), undefined, "editor of first item");
+        assert.equal(form.getButton("item2"), undefined, "button of second item");
+        assert.deepEqual(form.option("items[0].editorOptions"), { width: 200 }, "editor options of first item");
+        assert.deepEqual(form.option("items[1].buttonOptions"), { width: 100 }, "button options of second item");
     });
 });
 
@@ -2329,6 +2415,197 @@ const formatTestValue = value => Array.isArray(value) ? "[]" : value;
         assert.equal($layoutManager.length, 1, "layout manager is rendered");
         assert.notOk($layoutManager.children().length, "layout manager content is empty");
         assert.notOk(form.getEditor("field"), "editor is not created");
+    });
+});
+
+[false, true].forEach(useItemOption => {
+    QUnit.module(`Public API: Tab options are changed via ${useItemOption ? "itemOption" : "option"} method`, () => {
+        class FormTestWrapper {
+            constructor(useItemOption, onInitializedHandler) {
+                this._useItemOption = useItemOption;
+                this._form = $("#form").dxForm({
+                    onInitialized: onInitializedHandler,
+                    items: [{
+                        itemType: "tabbed",
+                        name: "tabbedItem",
+                        tabs: [{
+                            title: "title0",
+                            items: ["name"]
+                        }, {
+                            title: "title1",
+                            items: ["lastName"]
+                        }]
+                    }]
+                }).dxForm("instance");
+                this._contentReadyStub = sinon.stub();
+                this._form.on("contentReady", this._contentReadyStub);
+            }
+
+            setTabbedItemOption(optionName, value) {
+                if(this._useItemOption) {
+                    this._form.itemOption("tabbedItem", optionName, value);
+                } else {
+                    this._form.option(`items[0].${optionName}`, value);
+                }
+            }
+
+            setTabOption(tabIndex, optionName, value) {
+                if(this._useItemOption) {
+                    this._form.itemOption(`tabbedItem.title${tabIndex}`, optionName, value);
+                } else {
+                    this._form.option(`items[0].tabs[${tabIndex}].${optionName}`, value);
+                }
+            }
+
+            selectTab(tabIndex) {
+                $(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", tabIndex);
+            }
+
+            checkFormsReRender() {
+                QUnit.assert.equal(this._contentReadyStub.callCount, 0, "form is rendered once");
+                this._contentReadyStub.reset();
+            }
+
+            checkTabBadge(tabIndex, expectedText) {
+                QUnit.assert.equal($(".dx-tabs-item-badge").eq(tabIndex).text(), expectedText, `${tabIndex} tab badge`);
+            }
+
+            checkTabDisabled(tabIndex, expectedValue) {
+                const $tabItems = $(".dx-tab");
+                QUnit.assert.equal($tabItems.eq(tabIndex).hasClass("dx-state-disabled"), expectedValue, `${tabIndex} tab disabled`);
+            }
+
+            checkTabIcon(tabIndex, expectedIcon) {
+                const $icon = $(".dx-tab .dx-icon").eq(tabIndex);
+                QUnit.assert.ok($icon.hasClass(`dx-icon-${expectedIcon}`), `${tabIndex} tab icon`);
+            }
+
+            checkTabContentTemplate(tabIndex, $expectedTemplate) {
+                const $multiViewItemContent = $(".dx-multiview-item-content").eq(tabIndex);
+                QUnit.assert.equal($multiViewItemContent.html(), $("<div>").append($expectedTemplate).html(), `${tabIndex} tab template`);
+            }
+
+            checkTabTemplate(tabIndex, $expectedTemplate) {
+                const $multiViewItemContent = $(".dx-tab-content").eq(tabIndex);
+                QUnit.assert.equal($multiViewItemContent.html(), $("<div>").append($expectedTemplate).html(), `${tabIndex} tab template`);
+            }
+
+            checkTabTitle(tabIndex, expectedText) {
+                const $title = $(".dx-tab-content .dx-tab-text").eq(tabIndex);
+                QUnit.assert.strictEqual($title.text(), expectedText, `${tabIndex} tab title`);
+            }
+
+            checkTabOption(tabIndex, optionName, expected) {
+                const value = this._form.option(`items[0].tabs[${tabIndex}].${optionName}`);
+                QUnit.assert.strictEqual(value, expected, `${optionName} of ${tabIndex} tab`);
+            }
+        }
+
+        QUnit.test("Change the badge option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+            testWrapper.setTabOption(0, "badge", "TestBadge1");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabBadge(0, "TestBadge1");
+
+            testWrapper.setTabOption(1, "badge", "TestBadge2");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabBadge(1, "TestBadge2");
+        });
+
+        QUnit.test("Change the disabled option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+            testWrapper.setTabOption(0, "disabled", true);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(0, true);
+
+            testWrapper.setTabOption(1, "disabled", true);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(1, true);
+
+            testWrapper.setTabOption(0, "disabled", false);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(0, false);
+
+            testWrapper.setTabOption(1, "disabled", false);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(1, false);
+        });
+
+        QUnit.test("Change the icon option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+
+            testWrapper.setTabOption(0, "icon", "plus");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabIcon(0, "plus");
+
+            testWrapper.setTabOption(1, "icon", "trash");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabIcon(1, "trash");
+        });
+
+        QUnit.test("Change the template option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+
+            const template1 = "<div class='custom-template-1'></div>";
+            testWrapper.setTabOption(0, "template", template1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabContentTemplate(0, $(template1));
+
+            const template2 = "<div class='custom-template-2'></div>";
+            testWrapper.setTabOption(1, "template", template2);
+            testWrapper.selectTab(1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabContentTemplate(1, $(template2));
+        });
+
+        QUnit.test("Change the tab template option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+
+            const template1 = "<div class='custom-tab-template-1'></div>";
+            testWrapper.setTabOption(0, "tabTemplate", template1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTemplate(0, $(template1));
+
+            const template2 = "<div class='custom-tab-template-2'></div>";
+            testWrapper.setTabOption(1, "tabTemplate", template2);
+            testWrapper.selectTab(1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTemplate(1, $(template2));
+        });
+
+        QUnit.test("Change the title option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+            testWrapper.setTabOption(0, "title", "TestTitle1");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(0, "TestTitle1");
+
+            testWrapper.setTabOption(1, "title", "TestTitle2");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(1, "TestTitle2");
+        });
+
+        QUnit.test("Title is set correctly when it is changed on the onInitialized event", () => {
+            const testWrapper = new FormTestWrapper(useItemOption, ({ component }) => {
+                if(useItemOption) {
+                    component.itemOption("tabbedItem.title0", "title", "New Title");
+                } else {
+                    component.option("items[0].tabs[0].title", "New Title");
+                }
+            });
+
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(0, "New Title");
+        });
+
+        ["badge", "icon", "template", "tabTemplate", "title"].forEach(optionName => {
+            QUnit.test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, () => {
+                const testWrapper = new FormTestWrapper(useItemOption);
+
+                testWrapper.setTabbedItemOption("visible", false);
+                testWrapper.setTabOption(0, optionName, "test");
+                testWrapper.checkTabOption(0, optionName, "test");
+            });
+        });
     });
 });
 

@@ -77,6 +77,7 @@
         "dxForm-requiredMessage": "Podatek {0} je obvezen",
 
         "dxNumberBox-invalidValueMessage": "Vrednost mora biti število",
+        "dxNumberBox-noDataText": "Ni podatkov",
 
         "dxDataGrid-columnChooserTitle": "Izbirnik stolpcev",
         "dxDataGrid-columnChooserEmptyText": "Povlecite stolpec sem, da ga skrijete",
@@ -287,16 +288,17 @@
         "dxHtmlEditor-heading": "Naslov",
         "dxHtmlEditor-normalText": "Običajno besedilo",
 
-        "dxFileManager-newFolderName": "Neimenovana mapa",
+        "dxFileManager-newDirectoryName": "Neimenovana mapa",
         "dxFileManager-errorNoAccess": "Dostop zavrnjen. Operacija ne more biti končana.",
         "dxFileManager-errorDirectoryExistsFormat": "Mapa '{0}' že obstaja.",
         "dxFileManager-errorFileExistsFormat": "Datoteka '{0}' že obstaja.",
         "dxFileManager-errorFileNotFoundFormat": "Datoteka '{0}' ni bila najdena",
         "dxFileManager-errorDefault": "Neznana napaka.",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorWrongFileExtension": "TODO",
         "dxFileManager-errorMaxFileSizeExceeded": "TODO",
+        "dxFileManager-errorInvalidSymbols": "TODO",
     
         "dxDiagram-categoryGeneral": "TODO",
         "dxDiagram-categoryFlowchart": "TODO",

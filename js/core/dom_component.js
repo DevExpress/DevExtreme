@@ -8,7 +8,7 @@ import { getPublicElement } from "../core/utils/dom";
 import windowResizeCallbacks from "../core/utils/resize_callbacks";
 import commonUtils from "./utils/common";
 import { each } from "./utils/iterator";
-import { isString } from "./utils/type";
+import { isString, isDefined } from "./utils/type";
 import { inArray } from "./utils/array";
 import publicComponentUtils from "./utils/public_component";
 import dataUtils from "./element_data";
@@ -182,14 +182,14 @@ var DOMComponent = Component.inherit({
 
         if(this._isCssUpdateRequired(element, height, width)) {
             $element.css({
-                width: width,
-                height: height
+                width: width === null ? "" : width,
+                height: height === null ? "" : height
             });
         }
     },
 
     _isCssUpdateRequired: function(element, height, width) {
-        return !!(width || height || element.style.width || element.style.height);
+        return !!(isDefined(width) || isDefined(height) || element.style.width || element.style.height);
     },
 
     _attachDimensionChangeHandlers: function() {
@@ -443,6 +443,14 @@ var DOMComponent = Component.inherit({
         element.textContent = "";
         this._removeAttributes(element);
         this._removeClasses(element);
+    },
+
+    resetOption(optionName) {
+        this.callBase(optionName);
+
+        if((optionName === "width" || optionName === "height") && !isDefined(this.initialOption(optionName))) {
+            this.$element().css(optionName, "");
+        }
     }
 
 });

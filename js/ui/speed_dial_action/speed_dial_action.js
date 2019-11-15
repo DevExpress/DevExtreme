@@ -3,14 +3,15 @@ import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import readyCallbacks from "../../core/utils/ready_callbacks";
 import Widget from "../widget/ui.widget";
+import { noop } from "../../core/utils/common";
 import { initAction, disposeAction } from "./speed_dial_main_item";
 import { getSwatchContainer } from "../widget/swatch_container";
 
 const ready = readyCallbacks.add;
 
-const SpeedDialAction = Widget.inherit({
+class SpeedDialAction extends Widget {
     _getDefaultOptions() {
-        return extend(this.callBase(), {
+        return extend(super._getDefaultOptions(), {
             /**
             * @name dxSpeedDialActionOptions.icon
             * @type string
@@ -25,6 +26,7 @@ const SpeedDialAction = Widget.inherit({
             * @type_function_param1_field1 event:event
             * @type_function_param1_field2 component:this
             * @type_function_param1_field3 element:dxElement
+            * @type_function_param1_field4 actionElement:dxElement
             * @action
             */
 
@@ -64,6 +66,37 @@ const SpeedDialAction = Widget.inherit({
             * @hidden
             */
 
+
+            /**
+            * @name dxSpeedDialActionOptions.onContentReady
+            * @type function
+            * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 actionElement:dxElement
+            * @action
+            */
+            onContentReady: null,
+
+            /**
+            * @name dxSpeedDialActionOptions.onInitialized
+            * @type function
+            * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 actionElement:dxElement
+            * @action
+            */
+            onInitialized: null,
+
+            /**
+            * @name dxSpeedDialActionOptions.onDisposing
+            * @type function
+            * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 actionElement:dxElement
+            * @action
+            */
+            onDisposing: null,
+
             activeStateEnabled: true,
             hoverStateEnabled: true,
             animation: {
@@ -96,8 +129,7 @@ const SpeedDialAction = Widget.inherit({
             },
             id: new Guid()
         });
-    },
-
+    }
     _optionChanged(args) {
         switch(args.name) {
             case "onClick":
@@ -111,10 +143,12 @@ const SpeedDialAction = Widget.inherit({
             case "id":
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
-
+    }
+    _createActionByOption(optionName, config, isExecute) {
+        return !!isExecute || (optionName !== "onInitialized" && optionName !== "onDisposing") ? super._createActionByOption(optionName, config) : noop;
+    }
     _render() {
         this._toggleVisibility(false);
 
@@ -123,13 +157,12 @@ const SpeedDialAction = Widget.inherit({
         } else {
             initAction(this);
         }
-    },
-
+    }
     _dispose() {
         disposeAction(this._options.id);
-        this.callBase();
+        super._dispose();
     }
-});
+}
 
 registerComponent("dxSpeedDialAction", SpeedDialAction);
 

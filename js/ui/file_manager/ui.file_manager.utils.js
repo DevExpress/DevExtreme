@@ -18,10 +18,31 @@ const getParentPath = path => {
 };
 
 const getPathParts = (path, includeFullPath) => {
-    const result = (path || "")
-        .split(PATH_SEPARATOR)
-        .map(p => p.trim())
-        .filter(p => p);
+    if(!path || path === "/") {
+        return [];
+    }
+    const result = [];
+    let pathPart = "";
+
+    for(let i = 0; i < path.length; i++) {
+        let char = path.charAt(i);
+        if(char === PATH_SEPARATOR) {
+            const nextChar = path.charAt(i + 1);
+            if(nextChar !== PATH_SEPARATOR) {
+                if(pathPart) {
+                    result.push(pathPart);
+                    pathPart = "";
+                }
+                char = nextChar;
+            }
+            i++;
+        }
+        pathPart += char;
+    }
+
+    if(pathPart) {
+        result.push(pathPart);
+    }
 
     if(includeFullPath) {
         for(let i = 0; i < result.length; i++) {
@@ -30,6 +51,10 @@ const getPathParts = (path, includeFullPath) => {
     }
 
     return result;
+};
+
+const getEscapedFileName = function(fileName) {
+    return fileName.replace(/\//g, "//");
 };
 
 const pathCombine = function() {
@@ -64,6 +89,7 @@ module.exports.getFileExtension = getFileExtension;
 module.exports.getName = getName;
 module.exports.getParentPath = getParentPath;
 module.exports.getPathParts = getPathParts;
+module.exports.getEscapedFileName = getEscapedFileName;
 module.exports.pathCombine = pathCombine;
 module.exports.getDisplayFileSize = getDisplayFileSize;
 module.exports.PATH_SEPARATOR = PATH_SEPARATOR;

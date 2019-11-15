@@ -26,8 +26,10 @@ import {
     createItemPathByIndex,
     getFullOptionName,
     getOptionNameFromFullName,
+    tryGetTabPath,
     getTextWithoutSpaces,
-    isExpectedItem
+    isExpectedItem,
+    isFullPathContainsTabs
 } from "./ui.form.utils";
 
 import "../validation_summary";
@@ -684,7 +686,7 @@ const Form = Widget.inherit({
 
         var $hiddenLabel = rootLayoutManager._renderLabel({
             text: " ",
-            location: this.option("labelLocation")
+            location: this._labelLocation()
         }).appendTo(this._$hiddenElement);
 
         this._hiddenLabelText = $hiddenLabel.find("." + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
@@ -799,19 +801,23 @@ const Form = Widget.inherit({
         }
     },
 
-    _alignLabelsInColumn: function(options) {
-        if(!hasWindow()) {
+    _labelLocation: function() {
+        return this.option("labelLocation");
+    },
+
+    _alignLabelsInColumn: function({ layoutManager, inOneColumn, $container, excludeTabbed, items }) {
+        if(!hasWindow() || this._labelLocation() === "top") {
             return;
         }
 
-        this._createHiddenElement(options.layoutManager);
-        if(options.inOneColumn) {
-            this._applyLabelsWidth(options.$container, options.excludeTabbed, true);
+        this._createHiddenElement(layoutManager);
+        if(inOneColumn) {
+            this._applyLabelsWidth($container, excludeTabbed, true);
         } else {
-            if(this._checkGrouping(options.items)) {
-                this._applyLabelsWidthWithGroups(options.$container, options.layoutManager._getColCount(), options.excludeTabbed);
+            if(this._checkGrouping(items)) {
+                this._applyLabelsWidthWithGroups($container, layoutManager._getColCount(), excludeTabbed);
             } else {
-                this._applyLabelsWidth(options.$container, options.excludeTabbed, false, options.layoutManager._getColCount());
+                this._applyLabelsWidth($container, excludeTabbed, false, layoutManager._getColCount());
             }
         }
         this._removeHiddenElement();
@@ -855,10 +861,10 @@ const Form = Widget.inherit({
     _alignLabels: function(layoutManager, inOneColumn) {
         this._alignLabelsInColumn({
             $container: this.$element(),
-            layoutManager: layoutManager,
+            layoutManager,
             excludeTabbed: true,
             items: this.option("items"),
-            inOneColumn: inOneColumn
+            inOneColumn
         });
     },
 
@@ -908,7 +914,7 @@ const Form = Widget.inherit({
             for(let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
-                const guid = this._itemsRunTimeInfo.add({ item, path });
+                const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
 
                 if(isObject(item)) {
                     const itemCopy = extend({}, item);
@@ -1015,21 +1021,23 @@ const Form = Widget.inherit({
                     colCountByScreen: itemData.colCountByScreen,
                     cssItemClass: itemData.cssItemClass,
                     onLayoutChanged: inOneColumn => {
-                        this._alignLabelsInColumn.bind(this)({
-                            $container: $container,
-                            layoutManager: layoutManager,
+                        this._alignLabelsInColumn({
+                            $container,
+                            layoutManager,
                             items: itemData.items,
-                            inOneColumn: inOneColumn
+                            inOneColumn
                         });
                     }
                 });
 
-                this._itemsRunTimeInfo && this._itemsRunTimeInfo.addLayoutManagerToItemByKey(layoutManager, itemData.guid);
+                if(this._itemsRunTimeInfo) {
+                    this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(itemData.guid, { layoutManager });
+                }
 
                 if(alignItemLabels) {
-                    this._alignLabelsInColumn.bind(this)({
-                        $container: $container,
-                        layoutManager: layoutManager,
+                    this._alignLabelsInColumn({
+                        $container,
+                        layoutManager,
                         items: itemData.items,
                         inOneColumn: layoutManager.isSingleColumnMode()
                     });
@@ -1037,7 +1045,10 @@ const Form = Widget.inherit({
             }
         });
 
-        this._createComponent($tabPanel, TabPanel, tabPanelOptions);
+        const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
+        if(item.tabs) {
+            item.tabs.forEach(tab => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(tab.guid, { widgetInstance: tabPanel }));
+        }
     },
 
     _itemGroupTemplate: function(item, e, $container) {
@@ -1077,7 +1088,7 @@ const Form = Widget.inherit({
                 cssItemClass: item.cssItemClass
             });
 
-            this._itemsRunTimeInfo && this._itemsRunTimeInfo.addLayoutManagerToItemByKey(layoutManager, item.guid);
+            this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
             colCount = layoutManager._getColCount();
             if(inArray(colCount, this._groupsColCount) === -1) {
@@ -1310,6 +1321,22 @@ const Form = Widget.inherit({
                 return new Deferred().resolve();
             });
         }
+        const contentReadyHandler = e => {
+            e.component.off("contentReady", contentReadyHandler);
+            if(isFullPathContainsTabs(path)) {
+                const tabPath = tryGetTabPath(path);
+                const tabLayoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(tabPath);
+                this._alignLabelsInColumn({
+                    items: tabLayoutManager.option("items"),
+                    layoutManager: tabLayoutManager,
+                    $container: tabLayoutManager.$element(),
+                    inOneColumn: tabLayoutManager.isSingleColumnMode()
+                });
+            } else {
+                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
+            }
+        };
+        layoutManager.on("contentReady", contentReadyHandler);
         layoutManager.option(optionName, value);
         this._updateValidationGroupAndSummaryIfNeeded(optionName);
     },
@@ -1747,6 +1774,10 @@ const Form = Widget.inherit({
         const items = this._generateItemsFromData(this.option("items"));
         const item = this._getItemByField(id, items);
         const path = this._itemsRunTimeInfo.getPathFromItem(item);
+
+        if(!item) {
+            return;
+        }
 
         switch(arguments.length) {
             case 1:

@@ -133,7 +133,7 @@ QUnit.test('FilterRow with cssClass', function(assert) {
     var testElement = $('#container'),
         filterCell;
 
-    $.extend(this.columns, [{ caption: 'Column 1', cssClass: 'customCssClass' }, { caption: 'Column 2', cssClass: 'customCssClass', groupIndex: 0 }, { caption: 'Column 3' }]);
+    $.extend(this.columns, [{ caption: 'Column 1', cssClass: 'customCssClass' }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
 
     // act
     this.columnHeadersView.render(testElement);

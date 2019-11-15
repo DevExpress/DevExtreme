@@ -362,7 +362,7 @@ QUnit.module("Events", moduleConfig, () => {
 });
 
 QUnit.module("Actions", moduleConfig, () => {
-    test("expand/collapse", (assert) => {
+    test("expand", (assert) => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
@@ -370,6 +370,11 @@ QUnit.module("Actions", moduleConfig, () => {
         expandedElement.trigger("dxclick");
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 1);
+    });
+    test("collapse", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
         const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger("dxclick");
         this.clock.tick();
@@ -467,7 +472,7 @@ QUnit.module("Dialogs", moduleConfig, () => {
         assert.equal($inputs.eq(0).val(), tasks[0].title, "title text is shown");
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), "start task text is shown");
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), "end task text is shown");
-        assert.equal($inputs.eq(3).val(), tasks[0].progress, "progress text is shown");
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + "%", "progress text is shown");
 
         const testTitle = "text";
         const titleTextBox = $dialog.find(".dx-textbox").eq(0).dxTextBox("instance");
@@ -585,5 +590,17 @@ QUnit.module("Context Menu", moduleConfig, () => {
         assert.equal(getContextMenuElement().length, 0, "menu is hidden on create");
         this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
         assert.equal(getContextMenuElement().length, 1, "menu is visible after right click");
+    });
+    test("tree list context menu", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $("body").find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        assert.equal(getContextMenuElement().length, 0, "menu is hidden on create");
+        var $cellElement = $(this.instance._treeList.getCellElement(0, 0));
+        $cellElement.trigger("contextmenu");
+        assert.equal(getContextMenuElement().length, 2, "menu is visible after right click in tree list");
     });
 });

@@ -588,9 +588,10 @@ module.exports = {
                 getRowIndexDelta: function() {
                     return 0;
                 },
-                _processItems: function(items, changeType) {
+                _processItems: function(items, change) {
                     var that = this,
                         rowIndexDelta = that.getRowIndexDelta(),
+                        changeType = change.changeType,
                         visibleColumns = that._columnsController.getVisibleColumns(null, changeType === "loadingAll"),
                         visibleItems = that._items,
                         dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
@@ -763,7 +764,7 @@ module.exports = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
+                    if(oldItem.rowType === newItem.rowType && ["group", "groupFooter", "detail"].every(x => x !== newItem.rowType)) {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -800,7 +801,8 @@ module.exports = {
                             return false;
                         }
 
-                        if(item1.modified !== item2.modified || item1.isNewRow !== item2.isNewRow || item1.removed !== item2.removed) {
+                        const compareFields = ["modified", "isNewRow", "removed", "isEditing"];
+                        if(compareFields.some(field => item1[field] !== item2[field])) {
                             return false;
                         }
 
@@ -901,7 +903,7 @@ module.exports = {
                     if(dataSource) {
                         items = change.items || dataSource.items();
                         items = that._beforeProcessItems(items);
-                        items = that._processItems(items, changeType);
+                        items = that._processItems(items, change);
 
                         change.items = items;
                         oldItems = that._items.length === items.length && that._items;
@@ -1192,14 +1194,14 @@ module.exports = {
                             dataSource._handleDataLoaded(options);
                             when(options.data).done(function(data) {
                                 data = that._beforeProcessItems(data);
-                                d.resolve(that._processItems(data, "loadingAll"), options.extra && options.extra.summary);
+                                d.resolve(that._processItems(data, { changeType: "loadingAll" }), options.extra && options.extra.summary);
                             }).fail(d.reject);
                         } else {
                             if(!dataSource.isLoading()) {
                                 var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
                                     items = that._beforeProcessItems(items);
-                                    items = that._processItems(items, "loadingAll");
+                                    items = that._processItems(items, { changeType: "loadingAll" });
                                     d.resolve(items, extra && extra.summary);
                                 }).fail(d.reject);
                             } else {

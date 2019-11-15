@@ -18,6 +18,8 @@ export const FileManagerMessages = {
                 return messageLocalization.format("dxFileManager-errorWrongFileExtension");
             case ErrorCode.MaxFileSizeExceeded:
                 return messageLocalization.format("dxFileManager-errorMaxFileSizeExceeded");
+            case ErrorCode.InvalidSymbols:
+                return messageLocalization.format("dxFileManager-errorInvalidSymbols");
         }
 
         return messageLocalization.format("dxFileManager-errorDefault");

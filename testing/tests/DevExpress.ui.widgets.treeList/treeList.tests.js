@@ -17,8 +17,12 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
+import pointerEvents from "events/pointer";
 import { DataSource } from "data/data_source/data_source";
-import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { TreeListWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import ArrayStore from 'data/array_store';
+import TreeList from "ui/tree_list/ui.tree_list";
+import pointerMock from "../../helpers/pointerMock.js";
 
 fx.off = true;
 
@@ -30,6 +34,8 @@ QUnit.module("Initialization", {
         this.clock.restore();
     }
 });
+
+const treeListWrapper = new TreeListWrapper("#container");
 
 var createTreeList = function(options) {
     var treeList,
@@ -275,14 +281,14 @@ QUnit.testInActiveWindow("Ctrl + left/right keys should collapse/expand row", fu
     this.clock.tick();
 
     // act
-    navigationController._keyDownHandler({ keyName: "rightArrow", key: "ArrowRight", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0) }) });
+    navigationController._keyDownHandler({ keyName: "rightArrow", key: "ArrowRight", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
     this.clock.tick();
 
     // assert
     assert.ok(treeList.isRowExpanded(2), "second row is expanded");
 
     // act
-    navigationController._keyDownHandler({ keyName: "leftArrow", key: "ArrowLeft", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrl: true }) });
+    navigationController._keyDownHandler({ keyName: "leftArrow", key: "ArrowLeft", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
     this.clock.tick();
 
     // assert
@@ -573,7 +579,7 @@ QUnit.test("Aria accessibility", function(assert) {
 
 QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-treelist"),
+    var columnsWrapper = treeListWrapper.columns,
         clock = sinon.useFakeTimers(),
         treeList = createTreeList({
             dataSource: [
@@ -597,7 +603,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     clock.tick();
 
     // assert
-    wrapper.getCommandButtons().each((_, button) => {
+    columnsWrapper.getCommandButtons().each((_, button) => {
         var ariaLabel = $(button).attr("aria-label");
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
@@ -605,7 +611,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     // act
     treeList.editRow(0);
     // assert
-    wrapper.getCommandButtons().each((_, button) => {
+    columnsWrapper.getCommandButtons().each((_, button) => {
         var ariaLabel = $(button).attr("aria-label");
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
@@ -1192,7 +1198,7 @@ QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and foc
     assert.equal(childrenNodes[0].key, 3, "children node key");
 });
 
-QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
+QUnit.testInActiveWindow("TreeList should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
     // arrange
     var treeList = createTreeList({
         keyExpr: "id",
@@ -1212,6 +1218,27 @@ QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if g
     // assert
     assert.equal(treeList.isRowExpanded(3), false, "parent node collapsed");
     assert.equal(treeList.option("focusedRowKey"), 3, "parent node focused");
+});
+
+QUnit.test("TreeList should focus only one focused row (T827201)", function(assert) {
+    // arrange
+    const rowsViewWrapper = treeListWrapper.rowsView;
+    const treeList = createTreeList({
+        keyExpr: "id",
+        dataSource: generateData(10),
+        focusedRowEnabled: true,
+        focusedRowKey: 3
+    });
+
+    this.clock.tick();
+
+    // act
+    $(treeList.getCellElement(4, 1)).trigger(pointerEvents.up);
+    this.clock.tick();
+
+    // assert
+    assert.equal(rowsViewWrapper.getFocusedRow().length, 1, "Only one row is focused");
+    assert.ok(rowsViewWrapper.isFocusedRow(treeList.getRowIndexByKey(9)), "Row with key 9 is focused");
 });
 
 QUnit.test("TreeList navigateTo", function(assert) {
@@ -1514,4 +1541,124 @@ QUnit.test("TreeList should not reshape data after expand row (T815367)", functi
 
     // assert
     assert.equal(onNodesInitializedSpy.callCount, 1, "data did not reshape");
+});
+
+QUnit.test("TreeList should not occur an exception on an attempt to remove the non-existing key from the store (T827142)", function(assert) {
+    // arrange
+    var store = new ArrayStore({
+        data: [
+            { id: 1, parentId: 0, age: 19 },
+            { id: 2, parentId: 1, age: 16 }
+        ],
+        key: "id",
+        reshapeOnPush: true
+    });
+
+    createTreeList({
+        dataSource: {
+            store: store
+        },
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+    });
+    this.clock.tick();
+
+    // act
+    store.push([{ type: 'remove', key: 100 }]);
+    this.clock.tick();
+
+    // assert
+    assert.ok(true, "exception does not occur");
+});
+
+QUnit.test("TreeList should filter data with unreachable items (T816921)", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        dataSource: [
+            { ID: 1, Head_ID: 0, Name: "John" },
+            { ID: 2, Head_ID: 1, Name: "Alex" },
+            { ID: 3, Head_ID: 100, Name: "Alex" }
+        ],
+        keyExpr: "ID",
+        parentIdExpr: "Head_ID",
+        loadingTimeout: undefined,
+        searchPanel: {
+            visible: true,
+
+            // act
+            text: "Alex"
+        }
+    });
+
+    // assert
+    assert.equal(treeList.getVisibleRows().length, 2, "filtered row count");
+});
+
+
+QUnit.module("Row dragging", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T831020
+QUnit.test("The draggable row should have correct markup when defaultOptions is specified", function(assert) {
+    // arrange
+    TreeList.defaultOptions({
+        options: {
+            filterRow: {
+                visible: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            filterPanel: {
+                visible: true
+            }
+        }
+    });
+
+    try {
+        const treeList = createTreeList({
+            dataSource: [
+                { ID: 1, Head_ID: 0, Name: "John" },
+                { ID: 2, Head_ID: 0, Name: "Alex" }
+            ],
+            keyExpr: "ID",
+            parentIdExpr: "Head_ID",
+            rowDragging: {
+                allowReordering: true
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        pointerMock(treeList.getCellElement(0, 0)).start().down().move(100, 100);
+
+        // assert
+        const $draggableRow = $("body").children(".dx-sortable-dragging");
+        assert.strictEqual($draggableRow.length, 1, "has draggable row");
+
+        const $visibleView = $draggableRow.find(".dx-gridbase-container").children(":visible");
+        assert.strictEqual($visibleView.length, 1, "markup of the draggable row is correct");
+        assert.ok($visibleView.hasClass("dx-treelist-rowsview"), "rowsview is visible");
+    } finally {
+        TreeList.defaultOptions({
+            options: {
+                filterRow: {
+                    visible: false
+                },
+                groupPanel: {
+                    visible: false
+                },
+                filterPanel: {
+                    visible: false
+                }
+            }
+        });
+    }
 });

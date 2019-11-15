@@ -314,8 +314,9 @@ const ButtonGroup = Widget.inherit({
                 break;
             case "width":
                 this.callBase(args);
-                this.$element()
-                    .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
+                this
+                    ._buttonsCollection
+                    .itemElements()
                     .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
                 break;
             default:

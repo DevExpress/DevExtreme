@@ -2168,7 +2168,8 @@ function getEvent(options) {
         var resizeController = this.createColumnsResizerViewController(),
             posX,
             testPosX,
-            $container = $("#container").width('300px');
+            $container = $("#container").width('300px'),
+            columnWidths;
 
         // act
         this.renderViews($container);
@@ -2179,7 +2180,8 @@ function getEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { x: -9850, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9847, currentColumnIndex: 0 };
-        resizeController._columnHeadersView.setColumnWidths([this.options.columns[0].width + 7, this.options.columns[1].width - 7]);
+        columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
+        resizeController._columnHeadersView.setColumnWidths({ widths: columnWidths });
         resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
@@ -3035,6 +3037,62 @@ function getEvent(options) {
         separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row")[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, "width"), 75, "width of the first banded column");
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, "separator offset top");
+    });
+
+    // T815002
+    QUnit.test("Resizing of the column should work correctly when rtlEnabled is true and columnResizingMode is set to 'widget'", function(assert) {
+        // arrange
+        this.options.rtlEnabled = true;
+        this.options.columnResizingMode = "widget";
+        this.options.columns = [
+            { caption: "Field 1" },
+            { caption: "Field 2", width: 125 },
+            { caption: "Field 3", width: 125 },
+        ];
+
+        this.component._notifyOptionChanged = noop;
+        this.component._controllers.columns = new ColumnsController(this.component);
+        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+
+        this.component._controllers.columns.init();
+        this.component._controllers.tablePosition.init();
+
+        const $testElement = $("#container").css({
+                "width": "600px",
+                "direction": "rtl"
+            }).addClass("dx-rtl"),
+            resizeController = this.createColumnsResizerViewController();
+
+        this.initViews();
+        this.renderViews($testElement);
+        this.component._controllers.tablePosition.update();
+
+        // assert
+        assert.notOk($(resizeController._rowsView.element()).hasClass("dx-scrollable"), "no scrolling");
+
+        // act
+        resizeController._isResizing = true;
+        resizeController._targetPoint = { columnIndex: 1 };
+        resizeController._setupResizingInfo(-9750);
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                type: "mousemove",
+                pageX: -9650,
+                preventDefault: function() {}
+            }
+        });
+
+        // assert
+        const $headers = resizeController._columnHeadersView.getColumnElements();
+        const $dataCells = resizeController._rowsView.getCellElements(0);
+
+        assert.strictEqual($headers.length, 3, "header count");
+
+        $headers.each((index, header) => {
+            let $dataCell = $dataCells.eq(index);
+            assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+        });
     });
 }());
 

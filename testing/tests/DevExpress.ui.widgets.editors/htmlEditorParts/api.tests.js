@@ -184,11 +184,14 @@ QUnit.module("API", moduleConfig, () => {
         }
 
         this.createEditor();
+
+        const repaintSpy = sinon.spy(this.instance, "repaint");
         this.instance.register({ "modules/test": Test });
 
         const testModule = this.instance.getQuillInstance().getModule("test");
 
         assert.ok(testModule);
+        assert.ok(repaintSpy.calledOnce, "repaint is called when the module is registered after creating the quill instance");
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
@@ -203,7 +206,10 @@ QUnit.module("API", moduleConfig, () => {
             }
         }
 
+        let repaintSpy;
+
         this.options.onInitialized = ({ component }) => {
+            repaintSpy = sinon.spy(component, "repaint");
             component.register({ "modules/testInit": Test });
         };
         this.createEditor();
@@ -211,6 +217,7 @@ QUnit.module("API", moduleConfig, () => {
         const testModule = this.instance.getQuillInstance().getModule("testInit");
 
         assert.ok(testModule);
+        assert.ok(repaintSpy.notCalled, "repaint isn't called when the module is registered at the initialization");
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 

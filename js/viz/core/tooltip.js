@@ -232,7 +232,7 @@ Tooltip.prototype = {
 
         that._wrapper.appendTo(that._getContainer());
 
-        that._textHtml.html("");
+        that._clear();
 
         this.plaque.clear().draw(extend({}, that._options, {
             canvas: that._getCanvas()
@@ -260,10 +260,16 @@ Tooltip.prototype = {
         var that = this;
         hideElement(that._wrapper);
         // trigger event
-        that._eventData && that._eventTrigger("tooltipHidden", that._eventData);
-        that._eventData = null;
+        if(that._eventData) {
+            that._eventTrigger("tooltipHidden", that._eventData);
+            that._clear();
+            that._eventData = null;
+        }
     },
 
+    _clear() {
+        this._textHtml.empty();
+    },
 
     move: function(x, y, offset) {
         this.plaque.draw({ x, y, offset, canvas: this._getCanvas() });

@@ -54,13 +54,22 @@ export default class AppointmentPopup {
             showCloseButton: showButtons ? this._popup.initialOption("showCloseButton") : true
         });
 
-        this._popup.option("onShowing", () => {
+        this._popup.option("onShowing", e => {
             this._updateForm(data, processTimeZone);
-            this.updatePopupFullScreenMode();
 
-            this.scheduler._actions["onAppointmentFormOpening"]({
+            const arg = {
                 form: this._appointmentForm,
-                appointmentData: data
+                appointmentData: data,
+                cancel: false
+            };
+
+            this.scheduler._actions["onAppointmentFormOpening"](arg);
+            this.scheduler._processActionResult(arg, canceled => {
+                if(canceled) {
+                    e.cancel = true;
+                } else {
+                    this.updatePopupFullScreenMode();
+                }
             });
         });
 

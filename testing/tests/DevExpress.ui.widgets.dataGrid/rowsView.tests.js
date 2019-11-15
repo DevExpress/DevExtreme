@@ -99,12 +99,12 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         initDefaultOptions: initDefaultOptions
     });
 
-    this.setColumnWidths = function(widths) {
+    this.setColumnWidths = function({ widths }) {
         var i;
         for(i = 0; i < columns.length; i++) {
             columns[i].visibleWidth = widths[i];
         }
-        this.dataGrid.rowsView.setColumnWidths(widths);
+        this.dataGrid.rowsView.setColumnWidths({ widths });
     };
 
     if(this.dataGrid) {
@@ -363,7 +363,7 @@ QUnit.test('Resized event not raised for grouped column', function(assert) {
         testElement = $('#container');
 
     rowsView.render(testElement);
-    this.setColumnWidths([100, 100, 100]);
+    this.setColumnWidths({ widths: [100, 100, 100] });
     // act
     rowsView.resize();
 
@@ -387,7 +387,7 @@ QUnit.test('Resized event on resize after second render', function(assert) {
         testElement = $('#container');
 
     rowsView.render(testElement);
-    this.setColumnWidths([100, 100, 100]);
+    this.setColumnWidths({ widths: [100, 100, 100] });
     rowsView.resize();
 
     // act
@@ -411,7 +411,7 @@ QUnit.test('Resized event on second resize not raised', function(assert) {
         testElement = $('#container');
 
     rowsView.render(testElement);
-    rowsView.setColumnWidths();
+    rowsView.setColumnWidths({});
     rowsView.resize();
     resizedColumns = [];
     // act
@@ -432,10 +432,10 @@ QUnit.test('Resized event on second resize when container resized and columns wi
         testElement = $('#container');
 
     rowsView.render(testElement);
-    this.setColumnWidths([100, 100, 100]);
+    this.setColumnWidths({ widths: [100, 100, 100] });
     rowsView.resize();
     resizedColumns = [];
-    this.setColumnWidths([100, 50, 50]);
+    this.setColumnWidths({ widths: [100, 50, 50] });
     // act
     rowsView.resize();
     getCells(testElement);
@@ -2112,7 +2112,7 @@ QUnit.test('Render additional row for free space after resize', function(assert)
     $testElement.height(300);
 
     rowsView.render($testElement);
-    this.setColumnWidths([100]);
+    this.setColumnWidths({ widths: [100] });
     // act
     rowsView.resize();
 
@@ -3859,7 +3859,7 @@ QUnit.test("Width of column in master detail are not changed when it is changed 
 
     // act
     rowsView.render(testElement);
-    rowsView.setColumnWidths([100, 100]);
+    rowsView.setColumnWidths({ widths: [100, 100] });
     $colgroup = $(rowsView.element().find("colgroup"));
     $cols1 = $colgroup.eq(0).children();
     $cols2 = $colgroup.eq(1).children();
@@ -4716,6 +4716,38 @@ QUnit.test('Rows with cssClass', function(assert) {
     assert.ok(freeSpaceRow.length, "free space row");
     assert.ok(freeSpaceRow.find("td").first().hasClass("customCssClass"), "has class customCssClass");
     assert.ok(!freeSpaceRow.find("td").last().hasClass("customCssClass"), "not has class customCssClass");
+});
+
+// T821255
+QUnit.test('Rows with cssClass for grouped column with showWhenGrouped', function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.options.columns = [{ dataField: "name", cssClass: "customCssClass", groupIndex: 0, showWhenGrouped: true }, "age"];
+
+    that.options.grouping = { autoExpandAll: true };
+    that.options.dataSource.store = [
+        { name: "Alex", age: 15 },
+        { name: "Dan", age: 16 },
+        { name: "Vadim", age: 17 }
+    ];
+
+    this.setupDataGridModules();
+
+    // act
+    that.rowsView.render(testElement);
+
+    var rows = that.rowsView._getRowElements();
+
+    // assert
+    assert.equal(rows.eq(0).find("td").length, 2, "cell count in group row");
+    assert.strictEqual(rows.eq(0).find(".customCssClass").length, 0, "no cells with customCssClass in group row");
+
+    assert.equal(rows.eq(1).find("td").length, 3, "cell count in data row");
+    assert.ok(!rows.eq(1).find("td").eq(0).hasClass("customCssClass"), "groupExpand column not has class customCssClass");
+    assert.ok(rows.eq(1).find("td").eq(1).hasClass("customCssClass"), "first data column has class customCssClass");
+    assert.ok(!rows.eq(1).find("td").eq(2).hasClass("customCssClass"), "second data column not has class customCssClass");
 });
 
 QUnit.test('Add class dx-data-row on rows with type data', function(assert) {
@@ -6521,7 +6553,7 @@ QUnit.test("Set column widths for virtual table", function(assert) {
     rowsView.resize();
 
     // act
-    rowsView.setColumnWidths([10, 20, 30]);
+    rowsView.setColumnWidths({ widths: [10, 20, 30] });
 
     // assert
     $colElements = $testElement.find('table:not(.dx-datagrid-table-content)').find("col");
@@ -6873,8 +6905,8 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
-    if(browser.msie && browser.version === "18.18362") {
-        assert.ok(true);
+    if(browser.msie && parseInt(browser.version) > 11) {
+        assert.ok(true, "The issue is not fixed for Edge");
         return;
     }
 

@@ -218,7 +218,7 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderField.lookup.dataSource
-             * @type Array<any>|DataSourceOptions
+             * @type Array<any>|DataSourceOptions|Store
              * @default undefined
              */
 
@@ -351,6 +351,8 @@ var FilterBuilder = Widget.inherit({
              * @default []
              */
             customOperations: [],
+
+            closePopupOnTargetScroll: true,
 
             /**
              * @name dxFilterBuilderCustomOperation
@@ -505,6 +507,8 @@ var FilterBuilder = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case "closePopupOnTargetScroll":
+                break;
             case "onEditorPreparing":
             case "onEditorPrepared":
             case "onValueChanged":
@@ -1152,6 +1156,7 @@ var FilterBuilder = Widget.inherit({
             },
             visible: true,
             focusStateEnabled: false,
+            closeOnTargetScroll: this.option("closePopupOnTargetScroll"),
             closeOnOutsideClick: true,
             onShown: options.popup.onShown,
             shading: false,

@@ -68,6 +68,7 @@
         "dxForm-optionalMark": "opcional",
         "dxForm-requiredMessage": "{0} é de preenchimento obrigatório",
         "dxNumberBox-invalidValueMessage": "Valor deve ser um número",
+        "dxNumberBox-noDataText": "Sem dados",
         "dxDataGrid-columnChooserTitle": "Seletor de Colunas",
         "dxDataGrid-columnChooserEmptyText": "Arraste uma coluna para até aqui para escondê-la",
         "dxDataGrid-groupContinuesMessage": "Continua na página seguinte",
@@ -256,8 +257,8 @@
         "dxHtmlEditor-heading": "Cabeçalho",
         "dxHtmlEditor-normalText": "Texto normal",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-newDirectoryName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",
@@ -265,6 +266,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorWrongFileExtension": "TODO",
         "dxFileManager-errorMaxFileSizeExceeded": "TODO",
+        "dxFileManager-errorInvalidSymbols": "TODO",
         "dxFileManager-errorDefault": "TODO",
     
         "dxDiagram-categoryGeneral": "TODO",

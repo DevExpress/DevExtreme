@@ -14,6 +14,7 @@ import List from "ui/list";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 const ITEM_CLASS = "dx-item";
 const ITEM_CONTENT_CLASS = `${ITEM_CLASS}-content`;
@@ -1907,91 +1908,6 @@ module("Data layer integration", {
         assert.ok(Array.isArray(filteredItems), "receive array");
         assert.deepEqual(filteredItems, [{ id: 3, text: "test3" }], "correct data");
     });
-});
-
-module("aria accessibility", {
-    beforeEach: () => {
-        this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
-    }
-}, () => {
-    test("aria-activedescendant should be refreshed when focused item changed", assert => {
-        assert.expect(1);
-
-        const widget = new TestWidget("#cmp", {
-            items: this.items
-        });
-
-        const $item = widget.itemElements().eq(1);
-
-        const spy = widget._refreshActiveDescendant;
-
-        widget._refreshActiveDescendant = () => {
-            assert.ok(true, "aria-activedescendant was refreshed");
-        };
-
-        try {
-            widget.option("focusedElement", $item);
-        } finally {
-            widget._refreshActiveDescendant = spy;
-        }
-    });
-
-    test("aria-selected property", assert => {
-        const $element = $("#cmp");
-
-        new TestWidget($element, {
-            items: this.items,
-            selectedIndex: 1,
-            selectionMode: 'single'
-        });
-
-        const $item0 = $($element).find(".dx-item:eq(0)");
-        const $item1 = $($element).find(".dx-item:eq(1)");
-
-        assert.equal($item0.attr("aria-selected"), "false", "selected item has aria-selected property as true");
-        assert.equal($item1.attr("aria-selected"), "true", "selected item has aria-selected property as false");
-    });
-
-    test("aria-label for empty collection", assert => {
-        const $element = $("#cmp");
-
-        const instance = new TestWidget($element, {
-            items: []
-        });
-
-        assert.equal($element.attr("aria-label"), "No data to display", "aria-label for empty collection is correct");
-
-        instance.option("items", this.items);
-        assert.equal($element.attr("aria-label"), undefined, "aria-label for not empty collection is correct");
-    });
-
-    test("onFocusedItemChanged option on init", assert => {
-        assert.expect(3);
-
-        const $element = $("#cmp");
-
-        const instance = new TestWidget($element, {
-            items: this.items,
-            selectedIndex: 1,
-            useNative: false,
-            selectionMode: 'single',
-            onFocusedItemChanged(e) {
-                assert.ok(true, "onFocusedItemChanged, defined on init, was triggered");
-                assert.ok(e.actionValue, "onFocusedItemChanged, defined on init, gets id as a parameter");
-            }
-        });
-
-        const $item0 = $($element).find(".dx-item:eq(0)");
-        const $item1 = $($element).find(".dx-item:eq(1)");
-
-        instance.option("focusedElement", $item0);
-
-        instance.option("onFocusedItemChanged", () => {
-            assert.ok(true, "onFocusedItemChanged, defined on option change was triggered");
-        });
-
-        instance.option("focusedElement", $item1);
-    });
 
     test("getDataSource. dataSource is not defined", assert => {
         const $element = $("#cmp");
@@ -2013,6 +1929,128 @@ module("aria accessibility", {
         assert.ok(instance.getDataSource() instanceof DataSource);
     });
 });
+
+var helper;
+QUnit.module(`Aria accessibility`, {
+    beforeEach: () => {
+        this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
+        helper = new ariaAccessibilityTestHelper({
+            createWidget: ($element, options) => new TestWidget($element,
+                $.extend({
+                    focusStateEnabled: true
+                }, options))
+        });
+    },
+    afterEach: () => {
+        helper.$widget.remove();
+    }
+}, () => {
+    test(`Attributes on initialize`, () => {
+        helper.createWidget({ items: [] });
+
+        helper.checkAttributes(helper.$widget, { tabindex: "0", "aria-label": "No data to display" });
+        helper.checkItemsAttributes([], { });
+    });
+
+    test("Items[] -> Items['Item_1', 'Item_2', 'Item_3' ]", assert => {
+        helper.createWidget({ items: [] });
+
+        helper.checkAttributes(helper.$widget, { tabindex: "0", "aria-label": "No data to display" });
+        helper.checkItemsAttributes([], { });
+
+        helper.widget.option("items", this.items);
+        helper.checkAttributes(helper.$widget, { tabindex: "0" });
+        helper.checkItemsAttributes([], { });
+    });
+
+    test(`Set focusedElement: item[1] -> clean focusedElement`, () => {
+        helper.createWidget({ items: this.items });
+
+        const $focusedItem = helper.$widget.find(`.${ITEM_CLASS}`).eq(1);
+        helper.widget.option("focusedElement", $focusedItem);
+
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkItemsAttributes([], { focusedItemIndex: 1 });
+
+        helper.widget.option("focusedElement", null);
+        helper.checkAttributes(helper.$widget, { tabindex: "0" });
+        helper.checkItemsAttributes([], { });
+    });
+
+    test(`Select item[0] on focus -> focusout`, () => {
+        helper.createWidget({ items: this.items });
+
+        helper.$widget.focusin();
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkItemsAttributes([], { focusedItemIndex: 0 });
+
+        helper.$widget.focusout();
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkItemsAttributes([], { focusedItemIndex: 0 });
+    });
+
+    test(`SelectionMode: single, selectedIndex: 1`, () => {
+        helper.createWidget({ items: this.items, selectedIndex: 1, selectionMode: "single" });
+
+        helper.checkAttributes(helper.$widget, { tabindex: "0" });
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"] });
+    });
+
+    test("Refresh aria-activedescendant when focused item changed", assert => {
+        let refreshActiveDescendantCallCount = 0;
+        helper.createWidget({ items: this.items });
+
+        const $item = helper.$widget.find(`.${ITEM_CLASS}`).eq(1);
+        const spy = helper.widget._refreshActiveDescendant;
+
+        helper.widget._refreshActiveDescendant = () => {
+            refreshActiveDescendantCallCount++;
+        };
+
+        try {
+            helper.widget.option("focusedElement", $item);
+
+            helper.checkAttributes(helper.$widget, { tabindex: "0" });
+            helper.checkItemsAttributes([], { focusedItemIndex: 1 });
+            assert.strictEqual(refreshActiveDescendantCallCount, 1, `activedescendant was refreshed ${refreshActiveDescendantCallCount} time`);
+        } finally {
+            helper.widget._refreshActiveDescendant = spy;
+        }
+    });
+
+    test("onFocusedItemChanged option on init", assert => {
+        let focusedItemChangedCallCount = 0;
+
+        helper.createWidget({
+            items: this.items,
+            selectedIndex: 1,
+            useNative: false,
+            selectionMode: 'single',
+            onFocusedItemChanged: (e) => {
+                focusedItemChangedCallCount++;
+                assert.ok(e.actionValue, "onFocusedItemChanged, defined on init, gets id as a parameter");
+            }
+        });
+
+        const $items = helper.$widget.find(".dx-item");
+
+        helper.widget.option("focusedElement", $items.eq(0));
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"], focusedItemIndex: 0 });
+        assert.strictEqual(focusedItemChangedCallCount, 1, "onFocusedItemChanged.callCount");
+
+        focusedItemChangedCallCount = 0;
+        helper.widget.option("onFocusedItemChanged", () => {
+            focusedItemChangedCallCount++;
+        });
+
+        helper.widget.option("focusedElement", $items.eq(1));
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"], focusedItemIndex: 1 });
+        assert.strictEqual(focusedItemChangedCallCount, 1, "onFocusedItemChanged.callCount");
+    });
+});
+
 
 module("default template", {
     beforeEach: () => {
@@ -2049,12 +2087,24 @@ module("default template", {
         assert.equal($.trim($content.text()), "custom");
     });
 
+    test("template should be rendered correctly with text equals to zero", assert => {
+        const $content = this.prepareItemTest({ text: 0 });
+
+        assert.strictEqual($.trim($content.text()), "0");
+    });
+
     test("template should be rendered correctly with html", assert => {
         const $content = this.prepareItemTest({ html: "<span>test</span>" });
 
         const $span = $content.is("span") ? $content : $content.children();
         assert.ok($span.length);
         assert.equal($span.text(), "test");
+    });
+
+    test("template should be rendered correctly with html equals to an empty string", assert => {
+        const $content = this.prepareItemTest({ text: "test", html: "" });
+
+        assert.strictEqual($.trim($content.text()), "");
     });
 
     test("template should be rendered correctly with htmlstring", assert => {

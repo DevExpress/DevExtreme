@@ -124,7 +124,8 @@ export class SchedulerTestWrapper {
 
             dialog: {
                 clickEditSeries: () => $(".dx-dialog").find(".dx-dialog-button").eq(0).trigger("dxclick"),
-                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick")
+                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick"),
+                hide: () => $(".dx-dialog").find(".dx-closebutton.dx-button").trigger("dxclick")
             },
 
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
@@ -181,8 +182,16 @@ export class SchedulerTestWrapper {
 
             getDateTable: () => $(".dx-scheduler-date-table"),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),
+
+            getRows: (index = 0) => $(".dx-scheduler-date-table-row").eq(index),
             getCells: () => $(".dx-scheduler-date-table-cell"),
-            getCell: (index) => this.workSpace.getCells().eq(index),
+            getCell: (rowIndex, cellIndex) => {
+                if(cellIndex !== undefined) {
+                    return $(".dx-scheduler-date-table-row").eq(rowIndex).find(".dx-scheduler-date-table-cell").eq(cellIndex);
+                }
+                return this.workSpace.getCells().eq(rowIndex);
+            },
+
             getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),

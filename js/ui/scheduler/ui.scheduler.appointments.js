@@ -942,10 +942,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return obj;
     },
 
-    moveAppointmentBack: function() {
+    moveAppointmentBack: function(dragEvent) {
         var $appointment = this._$currentAppointment,
             size = this._initialSize,
             coords = this._initialCoordinates;
+
+        if(dragEvent) {
+            if(typeUtils.isDeferred(dragEvent.cancel)) {
+                dragEvent.cancel.resolve(true);
+            } else {
+                dragEvent.cancel = true;
+            }
+        }
 
         this.notifyObserver("moveBack");
 

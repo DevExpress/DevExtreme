@@ -2,7 +2,7 @@ import $ from "../core/renderer";
 import Color from "../color";
 import { isFunction, isPromise } from "../core/utils/type";
 import svgUtils from "../core/utils/svg";
-import iteratorUtils from "../core/utils/iterator";
+import { each as _each, map as _map } from "../core/utils/iterator";
 import { extend } from "../core/utils/extend";
 import domAdapter from "../core/dom_adapter";
 import domUtils from "../core/utils/dom";
@@ -20,7 +20,6 @@ const _pow = _math.pow;
 const _atan2 = _math.atan2;
 const _cos = _math.cos;
 const _sin = _math.sin;
-const _each = iteratorUtils.each;
 const _number = Number;
 
 const IMAGE_QUALITY = 1;
@@ -72,7 +71,7 @@ function arcTo(x1, y1, x2, y2, radius, largeArcFlag, clockwise, context) {
     context.arc(centerX, centerY, radius, startAngle, endAngle, !clockwise);
 }
 
-function getElementOptions(element) {
+function getElementOptions(element, rootAppended) {
     var attr = parseAttributes(element.attributes || {}),
         options = extend({}, attr, {
             text: element.textContent.replace(/\s+/g, " "),
@@ -96,9 +95,20 @@ function getElementOptions(element) {
             options.rotationX = coords[1] && _number(coords[1]);
             options.rotationY = coords[2] && _number(coords[2]);
         }
+
+        coords = transform.match(/scale\(-*\d+([.]\d+)*(,*\s*-*\d+([.]\d+)*)*/);
+        if(coords) {
+            coords = coords[0].match(/-*\d+([.]\d+)*/g);
+            options.scaleX = _number(coords[0]);
+            if(coords.length > 1) {
+                options.scaleY = _number(coords[1]);
+            } else {
+                options.scaleY = options.scaleX;
+            }
+        }
     }
 
-    parseStyles(element, options);
+    parseStyles(element, options, rootAppended);
 
     return options;
 }
@@ -199,7 +209,7 @@ function drawPath(context, dAttr) {
     } while(i < dArray.length);
 }
 
-function parseStyles(element, options) {
+function parseStyles(element, options, rootAppended) {
     var style = element.style || {},
         field;
 
@@ -208,9 +218,9 @@ function parseStyles(element, options) {
             options[camelize(field)] = style[field];
         }
     }
-    if(domAdapter.isElementNode(element) && domUtils.contains(domAdapter.getBody(), element)) {
+    if(rootAppended && domAdapter.isElementNode(element)) {
         style = window.getComputedStyle(element);
-        ["fill", "stroke", "stroke-width", "font-family", "font-size", "font-style", "font-weight" ].forEach(function(prop) {
+        ["fill", "stroke", "stroke-width", "font-family", "font-size", "font-style", "font-weight"].forEach(function(prop) {
             if(prop in style && style[prop] !== "") {
                 options[camelize(prop)] = style[prop];
             }
@@ -317,7 +327,7 @@ function drawTextElement(childNodes, context, options, shared) {
         if(element.tagName === undefined) {
             drawElement(element, context, options, shared);
         } else if(element.tagName === "tspan" || element.tagName === "text") {
-            var elementOptions = getElementOptions(element),
+            var elementOptions = getElementOptions(element, shared.rootAppended),
                 mergedOptions = extend({}, options, elementOptions);
 
             if(element.tagName === "tspan" && hasTspan(element)) {
@@ -384,7 +394,7 @@ function drawElement(element, context, parentOptions, shared) {
     var tagName = element.tagName,
         isText = tagName === "text" || tagName === "tspan" || tagName === undefined,
         isImage = tagName === "image",
-        options = extend({}, parentOptions, getElementOptions(element));
+        options = extend({}, parentOptions, getElementOptions(element, shared.rootAppended));
 
     if(options.visibility === "hidden" || options["hidden-for-export"]) {
         return;
@@ -427,9 +437,31 @@ function drawElement(element, context, parentOptions, shared) {
         strokeElement(context, options);
     }
 
+    applyGradient(context, options, shared, element);
+
     context.restore();
 
     return promise;
+}
+
+function applyGradient(context, options, { gradients }, element) {
+    if(gradients.length === 0) {
+        return;
+    }
+    const id = parseUrl(options.fill);
+    if(id && gradients[id]) {
+        const box = element.getBBox();
+        const gradient = context.createLinearGradient(box.x, 0, box.x + box.width, 0);
+
+        gradients[id].forEach(opt => {
+            const offset = parseInt(opt.offset.replace(/%/, ""));
+            gradient.addColorStop(offset / 100, opt.stopColor);
+        });
+
+        context.globalAlpha = options.opacity;
+        context.fillStyle = gradient;
+        context.fillRect(box.x, box.y, box.width, box.height);
+    }
 }
 
 function applyFilter(context, options, shared) {
@@ -458,16 +490,22 @@ function applyFilter(context, options, shared) {
 // translate and clip are the special attributtes, they should not be inherited by child nodes
 function transformElement(context, options) {
     context.translate(options.translateX || 0, options.translateY || 0);
-    delete options.translateX;
-    delete options.translateY;
+    options.translateX = undefined;
+    options.translateY = undefined;
 
     if(options.rotationAngle) {
         context.translate(options.rotationX || 0, options.rotationY || 0);
         context.rotate(options.rotationAngle * PI / 180);
         context.translate(-(options.rotationX || 0), -(options.rotationY || 0));
-        delete options.rotationAngle;
-        delete options.rotationX;
-        delete options.rotationY;
+        options.rotationAngle = undefined;
+        options.rotationX = undefined;
+        options.rotationY = undefined;
+    }
+
+    if(isFinite(options.scaleX)) {
+        context.scale(options.scaleX, options.scaleY);
+        options.scaleX = undefined;
+        options.scaleY = undefined;
     }
 }
 
@@ -475,7 +513,7 @@ function clipElement(context, options, shared) {
     if(options["clip-path"]) {
         drawElement(shared.clipPaths[parseUrl(options["clip-path"])], context, {}, shared);
         context.clip();
-        delete options["clip-path"];
+        options["clip-path"] = undefined;
     }
 }
 
@@ -483,6 +521,18 @@ function hex2rgba(hexColor, alpha) {
     var color = new Color(hexColor);
 
     return 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + alpha + ')';
+}
+
+function createGradient(element) {
+    const options = [];
+
+    _each(element.childNodes, (_, { attributes }) => {
+        options.push({
+            offset: attributes.offset.value,
+            stopColor: attributes["stop-color"].value
+        });
+    });
+    return options;
 }
 
 function createFilter(element) {
@@ -539,7 +589,7 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
         switch(element.tagName && element.tagName.toLowerCase()) {
             case "g":
             case "svg": {
-                const options = extend({}, parentOptions, getElementOptions(element));
+                const options = extend({}, parentOptions, getElementOptions(element, shared.rootAppended));
 
                 context.save();
 
@@ -569,6 +619,9 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
             case "filter":
                 shared.filters[element.id] = createFilter(element);
                 break;
+            case "lineargradient":
+                shared.gradients[element.attributes.id.textContent] = createGradient(element);
+                break;
             default:
                 return drawElement(element, context, parentOptions, shared);
         }
@@ -579,7 +632,7 @@ function setLineDash(context, options) {
     var matches = options["stroke-dasharray"] && options["stroke-dasharray"].match(/(\d+)/g);
 
     if(matches && matches.length) {
-        matches = iteratorUtils.map(matches, function(item) {
+        matches = _map(matches, function(item) {
             return _number(item);
         });
         context.setLineDash(matches);
@@ -600,9 +653,8 @@ function strokeElement(context, options, isText) {
     }
 }
 
-function getPattern(context, fill, shared) {
-    var pattern = shared.patterns[parseUrl(fill)],
-        options = getElementOptions(pattern),
+function getPattern(context, pattern, shared) {
+    var options = getElementOptions(pattern, shared.rootAppended),
         patternCanvas = createCanvas(options.width, options.height, 0),
         patternContext = patternCanvas.getContext("2d");
 
@@ -612,10 +664,18 @@ function getPattern(context, fill, shared) {
 }
 
 function fillElement(context, options, shared) {
-    var fill = options.fill;
+    const fill = options.fill;
 
     if(fill && fill !== "none") {
-        context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill, shared);
+        if(fill.search(/url/) === -1) {
+            context.fillStyle = fill;
+        } else {
+            const pattern = shared.patterns[parseUrl(fill)];
+            if(!pattern) {
+                return;
+            }
+            context.fillStyle = getPattern(context, pattern, shared);
+        }
         context.globalAlpha = options.fillOpacity;
         context.fill();
         context.globalAlpha = 1;
@@ -626,7 +686,7 @@ var parseAttributes = function(attributes) {
     var newAttributes = {},
         attr;
 
-    iteratorUtils.each(attributes, function(index, item) {
+    _each(attributes, function(index, item) {
         attr = item.textContent;
         if(isFinite(attr)) {
             attr = _number(attr);
@@ -642,30 +702,45 @@ function drawBackground(context, width, height, backgroundColor, margin) {
     context.fillRect(-margin, -margin, width + margin * 2, height + margin * 2);
 }
 
-function convertSvgToCanvas(svg, canvas) {
+function createInvisibleDiv() {
+    const invisibleDiv = domAdapter.createElement("div");
+    invisibleDiv.style.left = "-9999px";
+    invisibleDiv.style.position = "absolute";
+    return invisibleDiv;
+}
+
+function convertSvgToCanvas(svg, canvas, rootAppended) {
     return drawCanvasElements(svg.childNodes, canvas.getContext("2d"), {}, {
         clipPaths: {},
         patterns: {},
-        filters: {}
+        filters: {},
+        gradients: {},
+        rootAppended
     });
 }
 
 function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas = convertSvgToCanvas) {
-    var canvas = createCanvas(width, height, margin),
-        context = canvas.getContext("2d"),
-        svgElem = svgUtils.getSvgElement(markup);
+    const canvas = createCanvas(width, height, margin);
+    const context = canvas.getContext("2d");
+    const svgElem = svgUtils.getSvgElement(markup);
+    const invisibleDiv = createInvisibleDiv();
     context.translate(margin, margin);
 
     domAdapter.getBody().appendChild(canvas);
+    invisibleDiv.appendChild(svgElem);
+    domAdapter.getBody().appendChild(invisibleDiv);
     // for rtl mode
     if(svgElem.attributes.direction) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
     drawBackground(context, width, height, backgroundColor, margin);
 
-    return fromPromise(svgToCanvas(svgElem, canvas))
+    return fromPromise(svgToCanvas(svgElem, canvas, domAdapter.isElementNode(markup) && domUtils.contains(domAdapter.getBody(), markup)))
         .then(() => canvas)
-        .always(() => domAdapter.getBody().removeChild(canvas));
+        .always(() => {
+            domAdapter.getBody().removeChild(invisibleDiv);
+            domAdapter.getBody().removeChild(canvas);
+        });
 }
 
 exports.imageCreator = {

@@ -17,11 +17,10 @@ import {
     setupModules,
     triggerKeyDown,
     focusCell,
-    callViewsRenderCompleted } from "../../../helpers/grid/keyboardNavigationHelper.js";
-import { DataGridWrapper } from "../../../helpers/wrappers/dataGridWrappers.js";
+    callViewsRenderCompleted,
+    dataGridWrapper } from "../../../helpers/grid/keyboardNavigationHelper.js";
 
 const device = devices.real();
-const dataGridWrapper = new DataGridWrapper("#container");
 
 function generateItems(itemCount) {
     var items = [];
@@ -1609,6 +1608,28 @@ QUnit.module("Keyboard keys", {
         });
 
         assert.ok(isLeftArrow, "default behaviour is worked");
+    });
+
+    QUnit.test("onKeyDown event customization (T824764)", function(assert) {
+        // arrange
+        this.options = {
+            onKeyDown: function(e) {
+                e.event.ctrlKey = false;
+                e.event.altKey = false;
+                e.event.shiftKey = false;
+            }
+        };
+        setupModules(this);
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+        this.triggerKeyDown("ArrowDown", true, true, true);
+
+        // assert
+        const cellPosition = this.keyboardNavigationController._focusedCellPosition;
+        assert.deepEqual(cellPosition, { rowIndex: 1, columnIndex: 1 }, "Cell was navigate by default key handler");
     });
 
     QUnit.test("Get a valid index of cell on tab key_T259896", function(assert) {

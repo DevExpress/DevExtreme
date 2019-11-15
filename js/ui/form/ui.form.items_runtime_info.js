@@ -1,5 +1,6 @@
 import Guid from "../../core/guid";
 import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
 
 export default class FormItemsRunTimeInfo {
     constructor() {
@@ -20,11 +21,11 @@ export default class FormItemsRunTimeInfo {
         return result;
     }
 
-    _findFieldByCondition(callback, field) {
+    _findFieldByCondition(callback, valueExpr) {
         let result;
         each(this._map, function(key, value) {
             if(callback(value)) {
-                result = field === "guid" ? key : value[field];
+                result = valueExpr === "guid" ? key : value[valueExpr];
                 return false;
             }
         });
@@ -47,13 +48,6 @@ export default class FormItemsRunTimeInfo {
         return key;
     }
 
-    addLayoutManagerToItemByKey(layoutManager, key) {
-        const item = this._map[key];
-        if(item) {
-            item.layoutManager = layoutManager;
-        }
-    }
-
     addItemsOrExtendFrom(itemsRunTimeInfo) {
         itemsRunTimeInfo.each((key, itemRunTimeInfo) => {
             if(this._map[key]) {
@@ -70,20 +64,24 @@ export default class FormItemsRunTimeInfo {
         });
     }
 
+    extendRunTimeItemInfoByKey(key, options) {
+        this._map[key] = extend(this._map[key], options);
+    }
+
     findWidgetInstanceByItem(item) {
         return this._findWidgetInstance(storedItem => storedItem === item);
     }
 
-    getGroupOrTabLayoutManagerByPath(path) {
-        return this._findFieldByCondition(value => value.path === path, "layoutManager");
+    getGroupOrTabLayoutManagerByPath(targetPath) {
+        return this._findFieldByCondition(({ path }) => path === targetPath, "layoutManager");
     }
 
-    getKeyByPath(path) {
-        return this._findFieldByCondition(value => value.path === path, "guid");
+    getKeyByPath(targetPath) {
+        return this._findFieldByCondition(({ path }) => path === targetPath, "guid");
     }
 
     getPathFromItem(targetItem) {
-        return this._findFieldByCondition(value => value.item === targetItem, "path");
+        return this._findFieldByCondition(({ item }) => item === targetItem, "path");
     }
 
     findWidgetInstanceByName(name) {
@@ -101,6 +99,10 @@ export default class FormItemsRunTimeInfo {
             }
         }
         return null;
+    }
+
+    findItemIndexByItem(targetItem) {
+        return this._findFieldByCondition(({ item }) => item === targetItem, "itemIndex");
     }
 
     getItems() {

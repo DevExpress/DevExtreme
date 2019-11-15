@@ -450,9 +450,7 @@ let DropDownButton = Widget.inherit({
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: function() {
-                return this.$element().outerWidth();
-            }.bind(this),
+            width: "auto",
             height: "auto",
             shading: false,
             visible: this.option("opened"),
@@ -686,6 +684,7 @@ let DropDownButton = Widget.inherit({
                 this._popup && this._popup.repaint();
                 break;
             case "width":
+            case "height":
                 this.callBase(args);
                 this._popup && this._popup.repaint();
                 break;

@@ -66,6 +66,11 @@ var DateBox = DropDownEditor.inherit({
         });
     },
 
+    _renderButtonContainers: function() {
+        this.callBase.apply(this, arguments);
+        this._strategy.customizeButtons();
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -422,7 +427,7 @@ var DateBox = DropDownEditor.inherit({
         $longestValueElement.remove();
 
         var clearButtonWidth = 0;
-        if(this.option("showClearButton") && $input.val() === "") {
+        if(this.option("showClearButton") && $input.val() === "" && !this.option("readOnly")) {
             var clearButtonElement = $dateBox.find("." + DX_CLEAR_BUTTON_CLASS).get(0);
             clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
         }
@@ -718,7 +723,7 @@ var DateBox = DropDownEditor.inherit({
 
     _applyButtonHandler: function(e) {
         var value = this._strategy.getValue();
-        if(this._validateValue(value)) {
+        if(this._applyInternalValidation(value)) {
             this.dateValue(value, e.event);
         }
         this.callBase();

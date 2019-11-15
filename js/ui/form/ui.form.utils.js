@@ -21,9 +21,26 @@ const getOptionNameFromFullName = fullName => {
     return parts[parts.length - 1].replace(/\[\d+]/, "");
 };
 
+const tryGetTabPath = fullPath => {
+    const pathParts = fullPath.split(".");
+    const resultPathParts = [...pathParts];
+
+    for(let i = pathParts.length - 1; i >= 0; i--) {
+        if(isFullPathContainsTabs(pathParts[i])) {
+            return resultPathParts.join(".");
+        }
+        resultPathParts.splice(i, 1);
+    }
+    return "";
+};
+
+const isFullPathContainsTabs = fullPath => fullPath.indexOf("tabs") > -1;
+
 exports.getOptionNameFromFullName = getOptionNameFromFullName;
 exports.getFullOptionName = getFullOptionName;
 exports.getTextWithoutSpaces = getTextWithoutSpaces;
 exports.isExpectedItem = isExpectedItem;
 exports.createItemPathByIndex = createItemPathByIndex;
 exports.concatPaths = concatPaths;
+exports.tryGetTabPath = tryGetTabPath;
+exports.isFullPathContainsTabs = isFullPathContainsTabs;

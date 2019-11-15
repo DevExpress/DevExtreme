@@ -11,13 +11,14 @@ const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = "dx-dropdownbutton-popup-wrapper";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
+const BUTTON_GROUP_WRAPPER = "dx-buttongroup-wrapper";
 
 QUnit.testStart(() => {
-    const markup = '' +
-        '<div id="container">' +
-            '<div id="dropDownButton"></div>' +
-            '<div id="dropDownButton2"></div>' +
-        '</div>';
+    const markup =
+        `<div id="container">
+            <div id="dropDownButton"></div>
+            <div id="dropDownButton2"></div>
+        </div>`;
     $("#qunit-fixture").html(markup);
 });
 
@@ -91,6 +92,33 @@ QUnit.module("markup", {
         assert.strictEqual(dropDownButton.option("width"), 235, "width is right");
         dropDownButton.option("width", 135);
         assert.strictEqual(dropDownButton.option("width"), 135, "width was successfully changed");
+    });
+
+    QUnit.test("height option should change buttonGroup wrapper height", (assert) => {
+        const dropDownButton = $("#dropDownButton").dxDropDownButton({
+            height: "300px"
+        }).dxDropDownButton("instance");
+
+        const buttonGroup = getButtonGroup(dropDownButton);
+        const buttonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
+        assert.strictEqual(buttonGroupWrapper.eq(0).height(), 300, "height is right");
+
+        $("#container").css("height", "900px");
+        dropDownButton.option("height", "50%");
+
+        const newButtonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
+        assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, "height after option change in runtime is right");
+    });
+
+    QUnit.test("splitButton height should be equal to main button height when height depends on content", (assert) => {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            splitButton: true,
+            icon: "icon.png"
+        });
+        $dropDownButton.find("img.dx-icon").css("height", "50px");
+
+        const dropDownButtonHeight = $dropDownButton.find(".dx-dropdownbutton-toggle").height();
+        assert.strictEqual(dropDownButtonHeight, 50, "height is right");
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
@@ -224,7 +252,7 @@ QUnit.module("popup integration", {
         assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
-    QUnit.test("popup width shoud be equal to dropDownButton width", (assert) => {
+    QUnit.test("popup width should be equal to dropDownButton width", (assert) => {
         const $dropDownButton = $("#dropDownButton").dxDropDownButton({
             opened: true,
             items: ["1", "2", "3"],
@@ -247,6 +275,25 @@ QUnit.module("popup integration", {
         assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
         assert.equal($popupContent.outerWidth(), 810, "width are equal after option change");
 
+    });
+
+    QUnit.test("popup width should change if content is truncated", (assert) => {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            icon: "square",
+            opened: true,
+            dropDownContentTemplate: function(data, $container) {
+                $("<div>")
+                    .addClass("custom-color-picker")
+                    .appendTo($container);
+            }
+        });
+
+        const colorPicker = $(".custom-color-picker");
+        colorPicker.css("width:82px; padding:5px;");
+
+        const instance = $dropDownButton.dxDropDownButton("instance");
+        const $popupContent = $(getPopup(instance).content());
+        assert.equal(`${$popupContent.outerWidth()}px`, colorPicker.css("width"), "width is right");
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {

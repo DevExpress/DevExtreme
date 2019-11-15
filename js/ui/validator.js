@@ -4,7 +4,6 @@ import errors from "./widget/ui.errors";
 import DOMComponent from "../core/dom_component";
 import { extend } from "../core/utils/extend";
 import { map } from "../core/utils/iterator";
-import ValidationMixin from "./validation/validation_mixin";
 import ValidationEngine from "./validation_engine";
 import DefaultAdapter from "./validation/default_adapter";
 import registerComponent from "../core/component_registrator";
@@ -26,7 +25,7 @@ const VALIDATOR_CLASS = "dx-validator",
 const Validator = DOMComponent.inherit({
     _initOptions: function(options) {
         this.callBase.apply(this, arguments);
-        this._initValidationOptions(options);
+        this.option(ValidationEngine.initValidationOptions(options));
     },
 
     _getDefaultOptions() {
@@ -204,7 +203,7 @@ const Validator = DOMComponent.inherit({
                 break;
             case "isValid":
             case "validationStatus":
-                this._synchronizeValidationOptions(args);
+                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
                 break;
             default:
                 this.callBase(args);
@@ -221,6 +220,13 @@ const Validator = DOMComponent.inherit({
             });
         }
         return this._validationRules;
+    },
+
+    _findGroup() {
+        const $element = this.$element();
+
+        return this.option('validationGroup') ||
+            ValidationEngine.findGroup($element, this._modelByElement($element));
     },
 
     _resetValidationRules() {
@@ -287,7 +293,8 @@ const Validator = DOMComponent.inherit({
 
     _updateValidationResult(result) {
         if(!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
-            this._validationInfo.result = extend({}, result);
+            const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
+            this._validationInfo.result = extend({}, result, { complete });
         } else {
             for(let prop in result) {
                 if(prop !== "id" && prop !== "complete") {
@@ -329,7 +336,7 @@ const Validator = DOMComponent.inherit({
         const adapter = this.option("adapter");
         adapter && adapter.focus && adapter.focus();
     }
-}).include(ValidationMixin);
+});
 
 registerComponent("dxValidator", Validator);
 

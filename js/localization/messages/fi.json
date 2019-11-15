@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} on valinnainen",
 
         "dxNumberBox-invalidValueMessage": "Arvon on oltava numero",
+        "dxNumberBox-noDataText": "Ei dataa",
 
         "dxDataGrid-columnChooserTitle": "Sarakkeenvalitsin",
         "dxDataGrid-columnChooserEmptyText": "Vedä sarake täällä piilottaa sen",
@@ -289,8 +290,8 @@
         "dxHtmlEditor-heading": "!TODO!",
         "dxHtmlEditor-normalText": "!TODO!",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-newDirectoryName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",
@@ -298,6 +299,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorWrongFileExtension": "TODO",
         "dxFileManager-errorMaxFileSizeExceeded": "TODO",
+        "dxFileManager-errorInvalidSymbols": "TODO",
         "dxFileManager-errorDefault": "TODO",
     
         "dxDiagram-categoryGeneral": "TODO",

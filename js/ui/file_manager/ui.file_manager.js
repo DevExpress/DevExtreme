@@ -357,7 +357,7 @@ class FileManager extends Widget {
             * @type string
             * @default "Files"
             */
-            rootFolderName: messageLocalization.format("dxFileManager-rootFolderName"),
+            rootFolderName: messageLocalization.format("dxFileManager-rootDirectoryName"),
 
             /**
             * @name dxFileManagerOptions.selectionMode
@@ -368,16 +368,20 @@ class FileManager extends Widget {
 
             /**
             * @name dxFileManagerOptions.toolbar
-            * @type object
+            * @type dxFileManagerToolbar
             */
 
             /**
-            * @name dxFileManagerOptions.toolbar.items
+            * @name dxFileManagerToolbar
+            * @type object
+            */
+            /**
+            * @name dxFileManagerToolbar.items
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
             * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
             */
             /**
-            * @name dxFileManagerOptions.toolbar.fileSelectionItems
+            * @name dxFileManagerToolbar.fileSelectionItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
             * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
             */
@@ -416,11 +420,15 @@ class FileManager extends Widget {
 
             /**
             * @name dxFileManagerOptions.contextMenu
-            * @type object
+            * @type dxFileManagerContextMenu
             */
 
             /**
-            * @name dxFileManagerOptions.contextMenu.items
+            * @name dxFileManagerContextMenu
+            * @type object
+            */
+            /**
+            * @name dxFileManagerContextMenu.items
             * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
             * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
             */
@@ -436,6 +444,10 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerContextMenuItem.visible
             * @default undefined
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.items
+            * @type Array<dxFileManagerContextMenuItem>
             */
 
             contextMenu: {

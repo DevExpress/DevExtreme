@@ -19,6 +19,8 @@ import DOMComponent from "core/dom_component";
 import KeyboardProcessor from "ui/widget/ui.keyboard_processor";
 import List from "ui/list";
 import ScrollView from "ui/scroll_view";
+import eventsEngine from "events/core/events_engine";
+import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 
 const LIST_ITEM_CLASS = "dx-list-item";
 const LIST_GROUP_CLASS = "dx-list-group";
@@ -2884,3 +2886,80 @@ QUnit.module("Search", () => {
         clock.restore();
     });
 });
+
+var helper;
+if(devices.real().deviceType === "desktop") {
+    [true, false].forEach((searchEnabled) => {
+        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
+            beforeEach: () => {
+                helper = new ariaAccessibilityTestHelper({
+                    createWidget: ($element, options) => new List($element,
+                        $.extend({
+                            items: [{ text: "Item_1" }, { text: "Item_2" }, { text: "Item_3" }],
+                            searchEnabled: searchEnabled
+                        }, options))
+                });
+                this.clock = sinon.useFakeTimers();
+            },
+            afterEach: () => {
+                this.clock.restore();
+                helper.$widget.remove();
+            }
+        }, () => {
+            QUnit.test(`Selected: ["Item_3"] -> focusin -> focusout`, () => {
+                helper.createWidget({ selectedItemKeys: ["Item_3"], keyExpr: "text", selectionMode: "single" });
+
+                if(searchEnabled) {
+                    $(helper.$itemContainer).focusin();
+                } else {
+                    helper.$widget.focusin();
+                }
+
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], focusedItemIndex: 2, role: "option" });
+
+                helper.$widget.focusout();
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], focusedItemIndex: 2, role: "option" });
+            });
+
+
+            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> change by click`, () => {
+                helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
+
+                if(searchEnabled) {
+                    $(helper.$itemContainer).focusin();
+                } else {
+                    helper.$widget.focusin();
+                }
+
+                const $item_2 = $(helper.getItems().eq(2));
+                eventsEngine.trigger($item_2, "dxclick");
+                eventsEngine.trigger($item_2, "dxpointerdown");
+                this.clock.tick();
+
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], focusedItemIndex: 2, role: "option" });
+
+                helper.widget.option("focusedElement", null);
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], role: "option" });
+            });
+
+            QUnit.test(`Selected: ["Item_1", "Item_3"] -> select "Item_2" by click`, () => {
+                helper.createWidget({ selectedItemKeys: ["Item_1", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
+
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
+                helper.checkItemsAttributes([0, 2], { attributes: ["aria-selected"], role: "option" });
+
+                const $item_1 = $(helper.getItems().eq(1));
+                eventsEngine.trigger($item_1, "dxclick");
+                eventsEngine.trigger($item_1, "dxpointerdown");
+                this.clock.tick();
+
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([0, 1, 2], { attributes: ["aria-selected"], focusedItemIndex: 1, role: "option" });
+            });
+        });
+    });
+}

@@ -8,10 +8,11 @@ import browser from "core/utils/browser";
 import commonUtils from "core/utils/common";
 import pointerEvents from "events/pointer";
 import { setupDataGridModules } from "../../../helpers/dataGridMocks.js";
-import { DataGridWrapper } from "../../../helpers/wrappers/dataGridWrappers.js";
-import { CLICK_EVENT, triggerKeyDown, focusCell } from "../../../helpers/grid/keyboardNavigationHelper.js";
-
-const gridWrapper = new DataGridWrapper('#container');
+import {
+    CLICK_EVENT,
+    triggerKeyDown,
+    focusCell,
+    dataGridWrapper } from "../../../helpers/grid/keyboardNavigationHelper.js";
 
 QUnit.module("Real DataController and ColumnsController", {
     setupModule: function() {
@@ -234,7 +235,7 @@ QUnit.module("Real DataController and ColumnsController", {
         this.clock.tick();
 
         assert.deepEqual(navigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
-        assert.ok(gridWrapper.rowsView.cellHasFocusedClass(1, 1));
+        assert.ok(dataGridWrapper.rowsView.cellHasFocusedClass(1, 1));
         assert.ok($(":focus").hasClass("input2"));
     });
 

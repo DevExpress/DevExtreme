@@ -43,8 +43,10 @@ import commonUtils from "core/utils/common";
 import config from "core/config";
 import errors from "ui/widget/ui.errors";
 import devices from "core/devices";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 const device = devices.real();
+const dataGridWrapper = new DataGridWrapper("#container");
 
 function getInputElements($container) {
     return $container.find("input:not([type='hidden'])");
@@ -8552,6 +8554,45 @@ QUnit.test("Save edit data for inserted row when set validate in column and edit
     assert.ok(!cells.eq(11).children().first().hasClass("dx-highlight-outline"), "not has highlight");
 });
 
+// T823583
+QUnit.test("Insert row when grouped column is required", function(assert) {
+    // arrange
+    var that = this;
+
+    that.rowsView.render($('#container'));
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: "some",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "group",
+            validationRules: [{ type: "required" }],
+            groupIndex: 1
+        }, {
+            dataField: "hiddenGroup",
+            validationRules: [{ type: "required" }],
+            visible: false,
+            groupIndex: 0
+        }, {
+            dataField: "showWhenGrouped",
+            groupIndex: 2,
+            showWhenGrouped: true,
+            validationRules: [{ type: "required" }]
+        }]
+    });
+
+    // act
+    that.addRow();
+    that.saveEditData();
+
+    // assert
+    assert.equal($(".dx-error-message").text(), "Hidden Group is required, Group is required", "error text");
+});
+
 // T420231
 QUnit.test("Invalid date cell must be highlighted in batch editing mode for inserted row", function(assert) {
     // arrange
@@ -12946,6 +12987,184 @@ QUnit.test("cancelEditData after scrolling if scrolling mode is editing", functi
     assert.equal(testElement.find(".dx-edit-row").length, 0, "edit row is closed");
 });
 
+QUnit.test("Add new row items on 'append' if virtual scrolling (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(4);
+    this.pageIndex(3);
+    this.pageIndex(2);
+    this.pageIndex(3);
+    this.pageIndex(4);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[11].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(9), "Row 9 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(10), "Row 10 is new in view");
+});
+
+QUnit.test("Add new row items on 'prepend' if virtual scrolling (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(6);
+    this.pageIndex(7);
+    this.pageIndex(8);
+    this.pageIndex(7);
+    this.pageIndex(6);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[2].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(0), "Row 0 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(1), "Row 1 is new in view");
+});
+
+QUnit.test("Add new row items on 'append' if virtual scrolling and rowRenderingMode is virtual (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(4);
+    this.pageIndex(3);
+    this.pageIndex(2);
+    this.pageIndex(3);
+    this.pageIndex(4);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[11].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(9), "Row 9 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(10), "Row 10 is new in view");
+});
+
+QUnit.test("Add new row items on 'prepend' if virtual scrolling and rowRenderingMode is virtual (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(6);
+    this.pageIndex(7);
+    this.pageIndex(8);
+    this.pageIndex(7);
+    this.pageIndex(6);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[2].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(0), "Row 0 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(1), "Row 1 is new in view");
+});
+
 QUnit.test("DataGrid should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
     // arrange
     var errorCode,
@@ -14263,6 +14482,7 @@ QUnit.module('Editing - "popup" mode', {
         this.$testElement = $("#container");
 
         this.setupModules = function(that) {
+
             setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
                 initViews: true
             });
@@ -15088,6 +15308,29 @@ QUnit.test("The editCellTemplate should be called once for the form when adding 
     assert.strictEqual(editCellTemplate.callCount, 1, "editCellTemplate call count");
     assert.strictEqual($(this.getRowElement(0)).find(".myEditor").length, 0, "row hasn't custom editor");
     assert.strictEqual($(this.getEditPopupContent()).find(".myEditor").length, 1, "form has custom editor");
+});
+
+QUnit.test("Popup edit form repainting should be affected by beginUpdate / endUpdate (T819475)", function(assert) {
+    const spy = sinon.spy();
+
+    this.setupModules(this);
+    this.renderRowsView();
+
+    // act
+    this.editRow(1);
+    this.clock.tick();
+
+    // arrange
+    this.editingController._editForm.repaint = spy;
+
+    // act
+    this.editingController.beginUpdate();
+    this.cellValue(1, "name", "test_name");
+    this.cellValue(1, "lastName", "test_lastName");
+    this.editingController.endUpdate();
+
+    // assert
+    assert.equal(spy.callCount, 1, "Edit form has repainted only once");
 });
 
 QUnit.module("Promises in callbacks and events", {

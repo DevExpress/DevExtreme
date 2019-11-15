@@ -3,7 +3,6 @@ import eventsEngine from "../events/core/events_engine";
 import { grep } from "../core/utils/common";
 import { extend } from "../core/utils/extend";
 import iteratorUtils from "../core/utils/iterator";
-import ValidationMixin from "./validation/validation_mixin";
 import ValidationEngine from "./validation_engine";
 import CollectionWidget from "./collection/ui.collection_widget.edit";
 
@@ -157,8 +156,10 @@ const ValidationSummary = CollectionWidget.inherit({
     },
 
     _initGroupRegistration() {
-        const group = this._findGroup(),
-            groupConfig = ValidationEngine.addGroup(group);
+        const $element = this.$element();
+        const group = this.option('validationGroup') ||
+            ValidationEngine.findGroup($element, this._modelByElement($element));
+        const groupConfig = ValidationEngine.addGroup(group);
 
         this._unsubscribeGroup();
 
@@ -315,7 +316,7 @@ const ValidationSummary = CollectionWidget.inherit({
     * @hidden
     */
 
-}).include(ValidationMixin);
+});
 
 registerComponent("dxValidationSummary", ValidationSummary);
 

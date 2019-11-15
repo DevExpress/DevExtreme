@@ -1,7 +1,7 @@
 import $ from "jquery";
 import "ui/file_manager";
 import fx from "animation/fx";
-import { Consts, FileManagerWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
+import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
 
 const { test } = QUnit;
 
@@ -31,6 +31,7 @@ const moduleConfig = {
         });
 
         this.wrapper = new FileManagerWrapper(this.$element);
+        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
 
         this.clock.tick(400);
     },
@@ -132,13 +133,13 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.ok($row.hasClass(Consts.SELECTION_CLASS), "file selected");
 
-        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New folder')`);
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New directory')`);
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
         assert.ok($input.has(":focus"), "dialog's input element should be focused");
-        assert.equal("Untitled folder", $input.val(), "input has default value");
+        assert.equal("Untitled directory", $input.val(), "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");
@@ -158,13 +159,13 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.ok($row.hasClass(Consts.SELECTION_CLASS), "file selected");
 
-        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New folder')`);
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New directory')`);
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
         assert.ok($input.has(":focus"), "dialog's input element should be focused");
-        assert.equal("Untitled folder", $input.val(), "input has default value");
+        assert.equal("Untitled directory", $input.val(), "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");
@@ -192,7 +193,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Folder 2", "sub folder selected");
         assert.ok(togglesCount >= 2, "specfied toggles shown");
 
-        this.wrapper.getToolbarButton("New folder").trigger("dxclick");
+        this.wrapper.getToolbarButton("New directory").trigger("dxclick");
         this.clock.tick(400);
 
         $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`).val("test 111").trigger("change");
@@ -209,7 +210,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "test 111", "new folder selected");
         assert.equal(this.wrapper.getFolderToggles().length, togglesCount, "toggle count is not changed");
 
-        this.wrapper.getToolbarButton("New folder").trigger("dxclick");
+        this.wrapper.getToolbarButton("New directory").trigger("dxclick");
         this.clock.tick(400);
 
         $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`).val("test 222").trigger("change");
@@ -484,6 +485,57 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.strictEqual(items[0].name, "File 1.txt", "downloadItems args is valid");
 
         fileProvider.downloadItems.restore();
+    });
+
+    test("copying file must be completed in progress panel and current directory must be changed to the destination", function(assert) {
+        const longPath = "Files/Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1";
+        assert.equal(this.progressPanelWrapper.getInfos().length, 0, "there is no operations");
+
+        let $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        const initialCount = $cells.length;
+        const $cell = $cells.eq(0);
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
+
+        $cell.trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton("Copy").trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getFolderToggle(1, true).trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getFolderToggle(2, true).trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getFolderToggle(3, true).trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getFolderToggle(4, true).trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getFolderNode(5, true).trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getDialogButton("Select").trigger("dxclick");
+        this.clock.tick(1200);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "Special deep file.txt", "has specail file");
+        assert.equal(this.wrapper.getDetailsItemName(1), "File 1.txt", "file copied to another folder");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1.1.1.1", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), longPath, "breadcrumbs refrers to the target folder");
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, "one operation is present");
+
+        const common = infos[0].common;
+        assert.equal(common.commonText, "Copied an item to Folder 1.1.1.1.1", "common text is correct");
+        assert.equal(common.progressBarValue, 100, "task is completed");
+
+        this.wrapper.getFolderNode(0).trigger("dxclick");
+        this.clock.tick(400);
+
+        $cells = this.wrapper.getColumnCellsInDetailsView(2);
+        assert.equal($cells.length, initialCount, "file count not changed");
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "first file is the target file");
+        assert.equal(this.wrapper.getDetailsItemName(1), "File 2.jpg", "second file is not target file");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
 });

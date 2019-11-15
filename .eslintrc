@@ -146,6 +146,7 @@
                     "firefox",
                     "msie",
                     "odata",      // OData
+                    "readonly",
                     "rtl",        // Right-to-Left
                     "scss",
                     "semver",     // The semantic versioner for npm
@@ -168,6 +169,7 @@
                     "accessor",
                     "accessors",
                     "acos",
+                    "activedescendant",
                     "adaptivity",
                     "addons",
                     "affine",
@@ -305,6 +307,7 @@
                     "gregorian",
                     "guid",
                     "gte",
+                    "haspopup",
                     "hideable",
                     "historyless",
                     "hor",

@@ -2,7 +2,7 @@ import $ from "jquery";
 const { test } = QUnit;
 import "common.css!";
 import "ui/diagram";
-import { DiagramCommand } from "devexpress-diagram";
+import { DiagramCommand, Browser } from "devexpress-diagram";
 
 QUnit.testStart(() => {
     const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
@@ -96,7 +96,16 @@ QUnit.module("Diagram DOM Layout", {
     }
 });
 
-QUnit.module("Diagram Toolbar", moduleConfig, () => {
+QUnit.module("Diagram Toolbar", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test("should not render if toolbar.visible is false", (assert) => {
         this.instance.option("toolbar.visible", false);
         let $toolbar = this.$element.find(TOOLBAR_SELECTOR);
@@ -218,7 +227,11 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
-        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        if(Browser.TouchUI) {
+            contextMenu.show();
+        } else {
+            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        }
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick"); // Select All
         const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
         assert.notOk(button.option("disabled"));
@@ -261,7 +274,16 @@ QUnit.module("Diagram Properties Panel", moduleConfig, () => {
     });
 });
 
-QUnit.module("Context Menu", moduleConfig, () => {
+QUnit.module("Context Menu", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test("should not render if contextMenu.enabled is false", (assert) => {
         let $contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR);
         assert.equal($contextMenu.length, 1);
@@ -283,7 +305,11 @@ QUnit.module("Context Menu", moduleConfig, () => {
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.notOk(contextMenu.option("visible"));
         assert.ok(contextMenu.option("items")[0].text.indexOf("Copy") > -1);
-        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        if(Browser.TouchUI) {
+            contextMenu.show();
+        } else {
+            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        }
         assert.ok(contextMenu.option("visible"));
         assert.ok(contextMenu.option("items")[0].text.indexOf("Select All") > -1);
     });
@@ -291,7 +317,11 @@ QUnit.module("Context Menu", moduleConfig, () => {
         this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
-        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        if(Browser.TouchUI) {
+            contextMenu.show();
+        } else {
+            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        }
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
@@ -498,6 +528,75 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance.option("simpleView"), false);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleSimpleView).execute(true);
         assert.equal(this.instance.option("simpleView"), true);
+    });
+});
+
+QUnit.module("ClientSideEvents", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
+    test("click on unbound diagram", (assert) => {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        var clickedItem;
+        this.instance.option("onItemClick", function(e) {
+            clickedItem = e.item;
+        });
+        this.instance._diagramInstance.onNativeAction.raise("notifyItemClick", this.instance._diagramInstance.model.findShape("107").toNative());
+        assert.equal(clickedItem.id, "107");
+        assert.equal(clickedItem.text, "A new ticket");
+    });
+    test("selectionchanged on unbound diagram", (assert) => {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        var selectedItems;
+        this.instance.option("onSelectionChanged", function(e) {
+            selectedItems = e.items;
+        });
+        this.instance._diagramInstance.selection.set([this.instance._diagramInstance.model.findShape("107").key]);
+        assert.equal(selectedItems.length, 1);
+        assert.equal(selectedItems[0].id, "107");
+        assert.equal(selectedItems[0].text, "A new ticket");
+    });
+    test("click on bound diagram", (assert) => {
+        this.instance.option("nodes.keyExpr", "key");
+        this.instance.option("nodes.textExpr", "text");
+        this.instance.option("edges.keyExpr", "key");
+        this.instance.option("edges.fromKey", "from");
+        this.instance.option("edges.toKey", "to");
+        this.instance.option("nodes.dataSource", [
+            { key: "123", text: "mytext", foo: "bar" },
+            { key: "345", text: "myconnector" }
+        ]);
+        this.instance.option("edges.dataSource", [
+            { key: "1", from: "123", to: "345" }
+        ]);
+        var clickedItem, dblClickedItem;
+        this.instance.option("onItemClick", function(e) {
+            clickedItem = e.item;
+        });
+        this.instance.option("onItemDblClick", function(e) {
+            dblClickedItem = e.item;
+        });
+        this.instance._diagramInstance.onNativeAction.raise("notifyItemClick", this.instance._diagramInstance.model.findShapeByDataKey("123").toNative());
+        assert.equal(clickedItem.dataItem.key, "123");
+        assert.equal(clickedItem.dataItem.foo, "bar");
+        assert.equal(clickedItem.text, "mytext");
+        assert.equal(dblClickedItem, undefined);
+
+        this.instance._diagramInstance.onNativeAction.raise("notifyItemDblClick", this.instance._diagramInstance.model.findShapeByDataKey("123").toNative());
+        assert.equal(dblClickedItem.dataItem.key, "123");
+        assert.equal(dblClickedItem.dataItem.foo, "bar");
+        assert.equal(dblClickedItem.text, "mytext");
+
+        this.instance._diagramInstance.onNativeAction.raise("notifyItemClick", this.instance._diagramInstance.model.findConnectorByDataKey("1").toNative());
+        assert.equal(clickedItem.dataItem.key, "1");
+        assert.equal(clickedItem.fromKey, "123");
+        assert.equal(clickedItem.toKey, "345");
     });
 });
 

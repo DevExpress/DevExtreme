@@ -11,6 +11,7 @@ class DiagramDialog extends Widget {
         this._command = undefined;
         this._isShown = false;
         this._createOnGetContentOption();
+        this._createOnHiddenOption();
     }
     _initMarkup() {
         super._initMarkup();
@@ -23,7 +24,8 @@ class DiagramDialog extends Widget {
             title: this.option("title"),
             maxWidth: this.option("maxWidth"),
             height: this.option("height"),
-            toolbarItems: this.option("toolbarItems")
+            toolbarItems: this.option("toolbarItems"),
+            onHidden: this._onHiddenAction
         });
     }
     _clean() {
@@ -80,12 +82,18 @@ class DiagramDialog extends Widget {
             case "onGetContent":
                 this._createOnGetContentOption();
                 break;
+            case "onHidden":
+                this._createOnHiddenOption();
+                break;
             default:
                 super._optionChanged(args);
         }
     }
     _createOnGetContentOption() {
         this._onGetContentAction = this._createActionByOption("onGetContent");
+    }
+    _createOnHiddenOption() {
+        this._onHiddenAction = this._createActionByOption("onHidden");
     }
     _hide() {
         this._popupInstance.hide();
