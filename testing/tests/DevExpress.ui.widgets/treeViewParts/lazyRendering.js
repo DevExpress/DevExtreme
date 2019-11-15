@@ -1,6 +1,5 @@
 /* global internals, initTree */
 
-import { each } from "../../../../js/core/utils/iterator.js";
 
 QUnit.module("Lazy rendering");
 
