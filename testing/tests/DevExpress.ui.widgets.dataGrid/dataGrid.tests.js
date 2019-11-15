@@ -118,11 +118,6 @@ var createDataGrid = function(options, $container) {
     return dataGrid;
 };
 
-var getFirstAccessibilityColumnIndex = function() {
-    var $headers = $(".dx-datagrid-headers");
-    return parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
-};
-
 QUnit.test("Empty options", function(assert) {
     var dataGrid = createDataGrid({});
     assert.ok(dataGrid);
@@ -257,22 +252,21 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     assert.equal(scrollLeft, 100);
 });
 
-QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(assert) {
-    var firstColumnIndex,
-        $headers,
-        getGlobalColumnIdSelector = function(index) {
-            return "[id=dx-col-" + index + "]";
-        },
-        filterPanel = dataGridWrapper.filterPanel,
+QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", function(assert) {
+    var headersWrapper = dataGridWrapper.headers,
+        rowsViewWrapper = dataGridWrapper.rowsView,
+        filterPanelWrapper = dataGridWrapper.filterPanel,
         pagerWrapper = dataGridWrapper.pager;
 
     createDataGrid({
-        columns: ["field1", "field2"],
-        dataSource: {
-            store: [{ field1: "1", field2: "2" }]
-        },
+        dataSource: [
+            { field1: "1", field2: "2", g0: 0 }
+        ],
         filterPanel: {
             visible: true
+        },
+        filterRow: {
+            enabled: true
         },
         filterValue: ["field1", "=", "1"],
         pager: {
@@ -281,68 +275,84 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
             showPageSizeSelector: true,
             showNavigationButtons: true
         },
+        masterDetail: {
+            enabled: true
+        },
         paging: {
             pageSize: 2,
         },
+        columns: [
+            { type: "selection" },
+            "field1",
+            "field2",
+            { dataField: "g0", groupIndex: 0, showWhenGrouped: true }
+        ]
     });
 
     this.clock.tick();
 
-    $headers = $(".dx-datagrid-headers");
+    assert.equal($(".dx-widget").attr("role"), "presentation", "Widget role");
 
-    firstColumnIndex = getFirstAccessibilityColumnIndex();
-
-    assert.equal($(".dx-widget").attr("role"), "presentation");
-
-    assert.equal($(".dx-datagrid").attr("role"), "grid");
-
-    assert.equal($headers.attr("role"), "presentation");
-    assert.equal($headers.find(".dx-column-indicators").attr("role"), "presentation");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
-
-    assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
-
-    assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
-    assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
-
-    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(1)").attr("aria-describedby"), "dx-col-" + firstColumnIndex);
-    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(2)").attr("aria-describedby"), "dx-col-" + (firstColumnIndex + 1));
-
-    assert.equal($(".dx-datagrid-rowsview .dx-freespace-row").attr("role"), "presentation");
-
-    assert.equal($(".dx-context-menu").attr("role"), "presentation");
+    assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr("role"), "grid", "Grid role");
+    assert.equal(headersWrapper.getElement().attr("role"), "presentation", 'Headers role');
+    assert.equal(headersWrapper.getColumnsIndicators().attr("role"), "presentation", 'Headers columns indicators role');
+    assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation", "Scroll container role");
+    assert.equal($(".dx-context-menu").attr("role"), "presentation", "Context menu role");
 
     // assert
-    assert.equal(filterPanel.getIconFilter().attr("tabindex"), 0, "Filter panel icon tabindex");
-    assert.equal(filterPanel.getPanelText().attr("tabindex"), 0, "Filter panel text tabindex");
-    assert.equal(filterPanel.getClearFilterButton().attr("tabindex"), 0, "Filter panel clear button tabindex");
+    assert.notOk(headersWrapper.getHeaderItem(0, 0).attr('id'), 'Group header indent has no ID attribute');
+    assert.notOk(headersWrapper.getHeaderItem(0, 1).attr('id'), 'MasterDetail header indent has no ID attribute');
+    assert.notOk(headersWrapper.getHeaderItem(0, 2).attr('id'), 'SelectAll header cell has no ID attribute');
+    assert.notOk(rowsViewWrapper.getCellElement(0, 0).attr('aria-describedby'), 'Group cell[0, 0] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(0, 1).attr('aria-describedby'), 'Group cell[0, 1] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(1, 0).attr('aria-describedby'), 'Group indent cell[1, 0] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(1, 1).attr('aria-describedby'), 'MasterDetail expand cell[1, 1] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(1, 2).attr('aria-describedby'), 'Select cell[1, 2] has no aria-describedby');
 
     // arrange, assert
-    var $pageSizes = pagerWrapper.getPagerPageSizeElements();
+    let headerId = headersWrapper.getHeaderItem(0, 3).attr('id');
+    assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 3] ID is valid');
+    assert.equal(rowsViewWrapper.getCellElement(1, 3).attr('aria-describedby'), headerId, 'Data cell[1, 3] aria-describedby is valid');
+
+    // arrange, assert
+    headerId = headersWrapper.getHeaderItem(0, 4).attr('id');
+    assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 4] ID is valid');
+    assert.equal(rowsViewWrapper.getCellElement(1, 4).attr('aria-describedby'), headerId, 'Cell[1, 4] aria-describedby is valid');
+
+    // arrange, assert
+    headerId = headersWrapper.getHeaderItem(0, 5).attr('id');
+    assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 5] ID is valid (ShowWhenGrouped)');
+    assert.equal(rowsViewWrapper.getCellElement(1, 5).attr('aria-describedby'), headerId, 'Cell[1, 5] aria-describedby is valid');
+
+    assert.equal(headersWrapper.getTable().attr("role"), "presentation", "Headers table role");
+    assert.equal(rowsViewWrapper.getTable().attr("role"), "presentation", "RowsView table role");
+
+    assert.equal(rowsViewWrapper.getFreeSpaceRow().attr("role"), "presentation");
+
+    // assert
+    assert.equal(filterPanelWrapper.getIconFilter().attr("tabindex"), 0, "Filter panel icon tabindex");
+    assert.equal(filterPanelWrapper.getPanelText().attr("tabindex"), 0, "Filter panel text tabindex");
+    assert.equal(filterPanelWrapper.getClearFilterButton().attr("tabindex"), 0, "Filter panel clear button tabindex");
+
+    // arrange, assert
+    const $pageSizes = pagerWrapper.getPagerPageSizeElements();
     assert.equal($pageSizes.length, 5, "pageSize count");
-    $pageSizes.each((_, pageSize) => assert.equal($(pageSize).attr("tabindex"), 0, "pagesize tabindex"));
+    $pageSizes.each((index, pageSize) => assert.equal($(pageSize).attr("tabindex"), 0, `pagesize ${index} tabindex`));
 
     // arrange, assert
-    var $pages = pagerWrapper.getPagerPagesElements();
+    const $pages = pagerWrapper.getPagerPagesElements();
     assert.equal($pages.length, 1, "pages count");
     assert.equal($pages.attr("tabindex"), 0, "page tabindex");
 
     // arrange, assert
-    var $buttons = pagerWrapper.getPagerButtonsElements();
+    const $buttons = pagerWrapper.getPagerButtonsElements();
     assert.equal($buttons.length, 2, "buttons count");
-    $buttons.each((_, button) => assert.equal($(button).attr("tabindex"), 0, "button tabindex"));
+    $buttons.each((index, button) => assert.equal($(button).attr("tabindex"), 0, `button ${index} tabindex`));
 });
 
 QUnit.testInActiveWindow("Global column index should be unique for the different grids", function(assert) {
-    var $headers,
-        $detailGridHeaders,
-        firstColumnIndex,
-        getGlobalColumnIdSelector = function(index) {
-            return "[id=dx-col-" + index + "]";
-        },
+    let testObj = { },
+        id,
         dataGrid = createDataGrid({
             columns: ["field1", "field2"],
             dataSource: [{ field1: "1", field2: "2" }],
@@ -359,28 +369,17 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
             },
         });
 
-    this.clock.tick();
-
-    $headers = $(".dx-datagrid-headers");
-
-    firstColumnIndex = getFirstAccessibilityColumnIndex();
-
+    // act
     dataGrid.expandRow("1");
-
     this.clock.tick();
 
-    $headers = dataGrid.$element().find(".dx-datagrid-headers").eq(0);
-    $detailGridHeaders = dataGrid.$element().find(".dx-datagrid-headers").eq(1);
-
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
-
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).attr("aria-label"), "Column Field 3");
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).text(), "Field 3");
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).attr("aria-label"), "Column Field 4");
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).text(), "Field 4");
+    $(`[id*='dx-col']`).each((_, element) => {
+        id = $(element).attr("id");
+        // assert
+        assert.notOk(testObj[id], `ID '${id}' is uniq`);
+        // arrange
+        testObj[id] = true;
+    });
 });
 
 QUnit.testInActiveWindow("DataGrid - focused row changing should not affect on focused row in master detail (T818808)", function(assert) {
