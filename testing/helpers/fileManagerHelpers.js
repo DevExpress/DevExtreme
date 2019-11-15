@@ -10,6 +10,9 @@ export const Consts = {
     CONTAINER_CLASS: "dx-filemanager-container",
     DRAWER_PANEL_CONTENT_CLASS: "dx-drawer-panel-content",
     DRAWER_CONTENT_CLASS: "dx-drawer-content",
+    DIRS_PANEL_CLASS: "dx-filemanager-dirs-panel",
+    DIRS_TREE_CLASS: "dx-filemanager-dirs-tree",
+    FILES_VIEW_CLASS: "dx-filemanager-files-view",
     DIALOG_CLASS: "dx-filemanager-dialog",
     THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
     THUMBNAILS_ITEM_NAME_CLASS: "dx-filemanager-thumbnails-item-name",
@@ -21,6 +24,7 @@ export const Consts = {
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: "dx-filemanager-breadcrumbs-parent-folder-item",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
+    INACTIVE_AREA_CLASS: "dx-filemanager-inactive-area",
     CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
     TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
     DETAILS_ITEM_NAME_CLASS: "dx-filemanager-details-item-name",
@@ -55,6 +59,18 @@ export class FileManagerWrapper {
 
     getInstance() {
         return this._$element.dxFileManager("instance");
+    }
+
+    getDirsPanel() {
+        return this._$element.find(`.${Consts.DIRS_PANEL_CLASS}`);
+    }
+
+    getDirsTree() {
+        return this.getDirsPanel().find(` .${Consts.DIRS_TREE_CLASS}`);
+    }
+
+    getFilesView() {
+        return this._$element.find(`.${Consts.FILES_VIEW_CLASS}`);
     }
 
     getFolderNodes(inDialog) {

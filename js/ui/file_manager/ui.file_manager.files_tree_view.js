@@ -1,4 +1,5 @@
 import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
 import { extend } from "../../core/utils/extend";
 import { getImageContainer } from "../../core/utils/icon";
 import { noop } from "../../core/utils/common";
@@ -47,6 +48,8 @@ class FileManagerFilesTreeView extends Widget {
         }
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
+
+        eventsEngine.on($treeView, "click", this._createActionByOption("onClick"));
     }
 
     _render() {

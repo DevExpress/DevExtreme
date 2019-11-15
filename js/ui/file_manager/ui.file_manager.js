@@ -140,7 +140,8 @@ class FileManager extends Widget {
             contextMenu: this._createContextMenu(),
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
-            onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this)
+            onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
+            onClick: () => this._setItemsViewAreaActive(false)
         });
     }
 
