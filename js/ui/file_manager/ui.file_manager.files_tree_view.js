@@ -8,6 +8,7 @@ import Widget from "../widget/ui.widget";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
+import { Deferred } from "../../core/utils/deferred";
 
 const FILE_MANAGER_DIRS_TREE_CLASS = "dx-filemanager-dirs-tree";
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = "dx-filemanager-focused-item";
@@ -74,9 +75,14 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
-    _onFilesTreeViewItemExpanded({ itemData }) {
+    _onFilesTreeViewItemExpanded({ itemData, node }) {
         if(this._storeExpandedState) {
             itemData.expanded = true;
+        }
+
+        if(node.expandedDeferred) {
+            node.expandedDeferred.resolve();
+            delete node.expandedDeferred;
         }
     }
 
@@ -191,7 +197,21 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     expandDirectory(directoryInfo) {
-        directoryInfo && this._filesTreeView.expandItem(directoryInfo.fileItem.key);
+        const deferred = new Deferred();
+        if(!directoryInfo || directoryInfo.items.length === 0) {
+            return deferred.reject().promise();
+        }
+        const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.fileItem.key);
+        if(!treeViewNode) {
+            return deferred.reject().promise();
+        }
+        if(treeViewNode.expanded) {
+            return deferred.resolve().promise();
+        }
+
+        treeViewNode.expandedDeferred = deferred;
+        this._filesTreeView.expandItem(directoryInfo.fileItem.key);
+        return deferred.promise();
     }
 
     refresh() {
@@ -201,18 +221,23 @@ class FileManagerFilesTreeView extends Widget {
 
     updateCurrentDirectory() {
         this._updateFocusedElement();
-        this._updateExpandedStateToCurrentDirectory();
+        this._storeExpandedState && this._updateExpandedStateToCurrentDirectory();
     }
     _updateExpandedStateToCurrentDirectory() {
         const dirLine = [ ];
         for(let dirInfo = this._getCurrentDirectory(); dirInfo; dirInfo = dirInfo.parentDirectory) {
             dirLine.unshift(dirInfo);
         }
-        for(let i = 0; i < dirLine.length; i++) {
-            if(dirLine[i].items.length > 0) {
-                this.expandDirectory(dirLine[i]);
-            }
+
+        this.expandDirectoryLineRecursive(dirLine);
+    }
+
+    expandDirectoryLineRecursive(dirLine) {
+        if(!dirLine.length) {
+            return new Deferred().resolve().promise();
         }
+        return this.expandDirectory(dirLine.shift())
+            .then(() => this.expandDirectoryLineRecursive(dirLine));
     }
 
 }
