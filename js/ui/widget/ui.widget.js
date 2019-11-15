@@ -585,22 +585,27 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     // NOTE: Static method
-    _detachFeedbackEvents($el, selector) {
-        eventsEngine.off($el, EVENT_NAME.active, selector);
-        eventsEngine.off($el, EVENT_NAME.inactive, selector);
+    _detachFeedbackEvents($el, selector, { namespace } = {}) {
+        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
+        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
+
+        eventsEngine.off($el, activeEvent, selector);
+        eventsEngine.off($el, inactiveEvent, selector);
     },
 
     // NOTE: Static method
     _attachFeedbackEventsCore($el, active, inactive, opts) {
-        const { selector, showTimeout, hideTimeout } = opts;
+        const { selector, showTimeout, hideTimeout, namespace } = opts;
+        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
+        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
         const feedbackAction = new Action(({ event, element }) => active(element, event));
         const feedbackActionDisabled = new Action(({ event, element }) => inactive(element, event),
             { excludeValidators: ['disabled', 'readOnly'] });
 
-        eventsEngine.on($el, EVENT_NAME.active, selector, { timeout: showTimeout },
+        eventsEngine.on($el, activeEvent, selector, { timeout: showTimeout },
             event => feedbackAction.execute({ event, element: $(event.currentTarget) })
         );
-        eventsEngine.on($el, EVENT_NAME.inactive, selector, { timeout: hideTimeout },
+        eventsEngine.on($el, inactiveEvent, selector, { timeout: hideTimeout },
             event => feedbackActionDisabled.execute({ event, element: $(event.currentTarget) })
         );
     },
