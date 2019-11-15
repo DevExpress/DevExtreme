@@ -1,6 +1,6 @@
 /* global internals, initTree */
 
-import { each } from "../../../../js/core/utils/iterator";
+import { each } from "../../../../js/core/utils/iterator.js";
 
 QUnit.module("Lazy rendering");
 
@@ -39,8 +39,9 @@ QUnit.test("Expanding nodes should work with special charactes in id", function(
         });
         assert.equal(false, $treeView.find('[aria-level="2"]').is(':visible'));
 
-        $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').click();
+        $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').trigger('dxclick.dxTreeView');
         assert.equal(true, $treeView.find('[aria-level="2"]').is(':visible'));
+        $treeView.dxTreeView('instance').dispose();
     });
 });
 
