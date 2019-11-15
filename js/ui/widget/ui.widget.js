@@ -26,8 +26,8 @@ var UI_FEEDBACK = "UIFeedback",
     FEEDBACK_HIDE_TIMEOUT = 400;
 
 const EVENT_NAME = {
-    active: eventUtils.addNamespace(feedbackEvents.active, UI_FEEDBACK),
-    inactive: eventUtils.addNamespace(feedbackEvents.inactive, UI_FEEDBACK),
+    active: feedbackEvents.active,
+    inactive: feedbackEvents.inactive,
     hoverStart: eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
     hoverEnd: eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK),
     focusIn: owner => eventUtils.addNamespace('focusin', `${owner}Focus`),
@@ -569,7 +569,7 @@ var Widget = DOMComponentWithTemplate.inherit({
         const { activeStateEnabled } = this.option();
         const eventBindingTarget = this._eventBindingTarget();
 
-        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit);
+        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit, { namespace: UI_FEEDBACK });
 
         if(activeStateEnabled) {
             this._attachFeedbackEventsCore(
@@ -578,7 +578,8 @@ var Widget = DOMComponentWithTemplate.inherit({
                 ($el, event) => this._toggleActiveState($el, false, event), {
                     selector: this._activeStateUnit,
                     showTimeout: this._feedbackShowTimeout,
-                    hideTimeout: this._feedbackHideTimeout
+                    hideTimeout: this._feedbackHideTimeout,
+                    namespace: UI_FEEDBACK
                 }
             );
         }
