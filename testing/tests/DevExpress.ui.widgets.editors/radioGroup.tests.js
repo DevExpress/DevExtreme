@@ -205,7 +205,20 @@ module("hidden input", () => {
 
 module("value", moduleConfig, () => {
 
-    test("should not throw an error when the value is 'null'", assert => {
+    test("should throw the W1002 error when the value is unknown key", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        createRadioGroup({
+            items: [{ value: "1" }, { value: "2" }],
+            valueExpr: "value",
+            value: "3"
+        });
+
+        assert.ok(errorLogStub.calledOnce, "error was not thrown");
+        errorLogStub.restore();
+    });
+
+    test("should not throw the W1002 error when the value is 'null' (T823478)", assert => {
         const errorLogStub = sinon.stub(errors, "log");
 
         createRadioGroup({
@@ -217,7 +230,23 @@ module("value", moduleConfig, () => {
         errorLogStub.restore();
     });
 
-    test("should not throw an error when the reset method is called (T823478)", assert => {
+    test("should not throw the W1002 error when the value is changed to 'null' (T823478)", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        const instance = getInstance(
+            createRadioGroup({
+                items: ["1", "2", "3"],
+                value: "2"
+            })
+        );
+
+        instance.option("value", null);
+
+        assert.notOk(errorLogStub.called, "error was not thrown");
+        errorLogStub.restore();
+    });
+
+    test("should not throw the W1002 error when the reset method is called (T823478)", assert => {
         const errorLogStub = sinon.stub(errors, "log");
 
         createRadioGroup({
