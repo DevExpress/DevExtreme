@@ -101,6 +101,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                     return rowData.fileItem[`${this.dataField.replace("fileItem.", "")}`];
                 }
             };
+
+            if(columns[i].dataField === "fileItem.dateModified" || columns[i].dataField === "fileItem.size") {
+                columns[i].calculateCellValue = function(rowData) {
+                    if(rowData.fileItem.key === "..") {
+                        return "";
+                    } else {
+                        return rowData.fileItem[`${this.dataField.replace("fileItem.", "")}`];
+                    }
+                };
+            }
         }
         return columns;
     }
