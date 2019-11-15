@@ -338,3 +338,18 @@ QUnit.test("shouldn insert number value", function(assert) {
 
     assert.equal(element[0].textContent, "1", "number value");
 });
+
+QUnit.module("replaceWith method");
+
+QUnit.test("Should not remove content when replacing the same content", function(assert) {
+    var $element = renderer("<div>");
+
+    var fixture = document.getElementById("qunit-fixture");
+
+    fixture.appendChild($element.get(0));
+    assert.equal(fixture.childElementCount, 1, "element attached to the DOM");
+
+    var $result = $element.replaceWith($element);
+    assert.equal(fixture.childElementCount, 1, "element still exist");
+    assert.equal($element.is($result), true, "returned value the same element");
+});
