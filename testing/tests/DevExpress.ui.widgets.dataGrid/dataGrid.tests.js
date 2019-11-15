@@ -9282,7 +9282,7 @@ QUnit.test("Freespace row should not have huge height if rowRenderingMode is vir
     });
 
     // assert
-    assert.equal($(".dx-freespace-row").height(), 1, "freespace height");
+    assert.roughEqual($(".dx-freespace-row").height(), 0.5, 0.51, "freespace height");
 });
 
 QUnit.module("Rendered on server", baseModuleConfig);
