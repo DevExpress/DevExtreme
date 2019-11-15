@@ -1297,3 +1297,36 @@ QUnit.test("Prerender filter by recurrence rule determines renderable appointmen
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appt is filtered on prerender and not rendered");
 });
+
+QUnit.test("Recurrence appointment occurrences should have correct start date with timezone changing (T818393)", function(assert) {
+    this.createInstance({
+        views: ["day", "week", "workWeek", "month"],
+        currentView: "week",
+        startDayHour: 1,
+        firstDayOfWeek: 2,
+        height: 600,
+        dataSource: [{
+            text: "Recurrence",
+            startDate: new Date(2019, 2, 30, 2, 0),
+            startDateTimeZone: 'Europe/Copenhagen',
+            endDate: new Date(2019, 2, 30, 10, 0),
+            endDateTimeZone: 'Europe/Copenhagen',
+            recurrenceException: "",
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        timeZone: 'Europe/Copenhagen',
+        currentDate: new Date(2019, 2, 30)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, "Appointment has right count of occurrences");
+
+    var $firstAppointment = $(this.scheduler.appointments.getAppointment(0)),
+        firstAppointmentCoords = translator.locate($firstAppointment),
+        $thirdAppointment = $(this.scheduler.appointments.getAppointment(2)),
+        thirdAppointmentCoords = translator.locate($thirdAppointment);
+
+    assert.equal(firstAppointmentCoords.top, thirdAppointmentCoords.top, "Appointment first and third occurrences have same top coordinate");
+
+    assert.equal($firstAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), $thirdAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "Appointment first and third occurrences have same start date text");
+    assert.equal($firstAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), $thirdAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "Appointment first and third occurrences have same end date text");
+});
