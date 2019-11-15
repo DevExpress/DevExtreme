@@ -511,4 +511,14 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
     });
 
+    test("navigating deep via 'currentPath' option must be processed correctly", function(assert) {
+        const longPath = "Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1";
+        this.wrapper.getInstance().option("itemView.mode", "details");
+        this.wrapper.getInstance().option("currentPath", longPath);
+        this.clock.tick(1200);
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1.1.1.1", "Target folder is selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + longPath, "breadcrumbs refrers to the target folder");
+        assert.equal(this.wrapper.getDetailsItemName(1), "Special deep file.txt", "has specail file");
+    });
+
 });
