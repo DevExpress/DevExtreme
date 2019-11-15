@@ -209,7 +209,8 @@ module("value", moduleConfig, () => {
         const errorLogStub = sinon.stub(errors, "log");
 
         createRadioGroup({
-            items: ["1", "2", "3"]
+            items: ["1", "2", "3"],
+            value: null
         });
 
         assert.notOk(errorLogStub.called, "error was not thrown");
