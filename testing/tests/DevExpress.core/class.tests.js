@@ -1,4 +1,4 @@
-var Class = require("core/class");
+import Class from "core/class";
 
 QUnit.module("inheritance");
 
@@ -351,6 +351,22 @@ QUnit.test("static methods should be inherited", function(assert) {
 
 
 QUnit.module("API");
+
+
+QUnit.test("subclassOf method for es6 inheritors", assert => {
+    const Base = Class.inherit({});
+
+    class ES6Inheritor extends Base {}
+    class ES6InheritorInheritor extends ES6Inheritor {}
+
+    assert.ok(ES6Inheritor.subclassOf(Class));
+    assert.ok(ES6Inheritor.subclassOf(Base));
+    assert.notOk(ES6Inheritor.subclassOf(ES6Inheritor));
+    assert.ok(ES6InheritorInheritor.subclassOf(Class));
+    assert.ok(ES6InheritorInheritor.subclassOf(Base));
+    assert.ok(ES6InheritorInheritor.subclassOf(ES6Inheritor));
+    assert.notOk(ES6InheritorInheritor.subclassOf(ES6InheritorInheritor));
+});
 
 QUnit.test("subclassOf method", function(assert) {
     var A = Class.inherit({ }),
