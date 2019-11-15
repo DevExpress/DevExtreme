@@ -399,6 +399,7 @@ initRender.prototype.wrapInner = function(wrapper) {
 
 initRender.prototype.replaceWith = function(element) {
     if(!(element && element[0])) return;
+    if(element.is(this)) return this;
 
     element.insertBefore(this);
     this.remove();
