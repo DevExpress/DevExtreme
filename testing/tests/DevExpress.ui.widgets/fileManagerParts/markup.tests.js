@@ -88,22 +88,22 @@ QUnit.module("Markup rendering", moduleConfig, () => {
             fileProvider: createTestFileSystem()
         });
         const dirsPanel = this.wrapper.getDirsPanel();
-        const filesView = this.wrapper.getFilesView();
+        const itemsView = this.wrapper.getItemsView();
 
         assert.notOk(dirsPanel.hasClass(Consts.INACTIVE_AREA_CLASS), "dirsPanel is active");
-        assert.ok(filesView.hasClass(Consts.INACTIVE_AREA_CLASS), "filesView is inactive");
+        assert.ok(itemsView.hasClass(Consts.INACTIVE_AREA_CLASS), "itemsView is inactive");
 
-        filesView.trigger("click");
+        itemsView.trigger("click");
         this.clock.tick(400);
 
         assert.ok(dirsPanel.hasClass(Consts.INACTIVE_AREA_CLASS), "dirsPanel is inactive");
-        assert.notOk(filesView.hasClass(Consts.INACTIVE_AREA_CLASS), "filesView is active");
+        assert.notOk(itemsView.hasClass(Consts.INACTIVE_AREA_CLASS), "itemsView is active");
 
         this.wrapper.getDirsTree().trigger("click");
         this.clock.tick(400);
 
         assert.notOk(dirsPanel.hasClass(Consts.INACTIVE_AREA_CLASS), "dirsPanel is active");
-        assert.ok(filesView.hasClass(Consts.INACTIVE_AREA_CLASS), "filesView is inactive");
+        assert.ok(itemsView.hasClass(Consts.INACTIVE_AREA_CLASS), "itemsView is inactive");
     });
 
 });

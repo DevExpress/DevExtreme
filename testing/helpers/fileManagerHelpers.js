@@ -12,7 +12,7 @@ export const Consts = {
     DRAWER_CONTENT_CLASS: "dx-drawer-content",
     DIRS_PANEL_CLASS: "dx-filemanager-dirs-panel",
     DIRS_TREE_CLASS: "dx-filemanager-dirs-tree",
-    FILES_VIEW_CLASS: "dx-filemanager-files-view",
+    ITEMS_VIEW_CLASS: "dx-filemanager-files-view",
     DIALOG_CLASS: "dx-filemanager-dialog",
     THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
     THUMBNAILS_ITEM_NAME_CLASS: "dx-filemanager-thumbnails-item-name",
@@ -69,8 +69,8 @@ export class FileManagerWrapper {
         return this.getDirsPanel().find(` .${Consts.DIRS_TREE_CLASS}`);
     }
 
-    getFilesView() {
-        return this._$element.find(`.${Consts.FILES_VIEW_CLASS}`);
+    getItemsView() {
+        return this._$element.find(`.${Consts.ITEMS_VIEW_CLASS}`);
     }
 
     getFolderNodes(inDialog) {
@@ -235,7 +235,7 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
     }
 
-    getItemsView() {
+    getItemsPanel() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_CONTENT_CLASS}`);
     }
 
