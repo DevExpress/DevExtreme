@@ -137,11 +137,7 @@ module.exports = SelectionStrategy.inherit({
         for(var i = 0; i < keys.length; i++) {
             var key = keys[i];
 
-            if(key === null && allowNullValue) {
-                continue;
-            }
-
-            if(!this.isItemKeySelected(key)) {
+            if((!allowNullValue || key !== null) && !this.isItemKeySelected(key)) {
                 errors.log("W1002", key);
             }
         }
