@@ -162,23 +162,30 @@ QUnit.test("No E1034 on iPad", function(assert) {
         assert.ok(true, "This test for iPad devices");
         return;
     }
-    // arrange
-    var warningSend = null,
-        _devExpressLog = errors.log,
-        _linkDownloader = fileSaver._linkDownloader;
 
-    // act
-    fileSaver._linkDownloader = function() { return; };
-    errors.log = function(errorCode) { warningSend = errorCode; return; };
+    var done = assert.async();
+    var warningSend = null;
+    var _devExpressLog = errors.log;
+    var _fileSaverClick = fileSaver._click;
+    var oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
 
-    fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
+    try {
+        fileSaver._click = () => { };
+        fileSaver._revokeObjectURLTimeout = 100;
 
-    // assert
-    assert.ok(warningSend !== "E1034", "Warning E1034 wasn't sent");
+        errors.log = function(errorCode) { warningSend = errorCode; return; };
 
-    errors.log = _devExpressLog;
-    fileSaver._linkDownloader = _linkDownloader;
+        fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
+        setTimeout(() => {
+            assert.ok(warningSend !== "E1034", "Warning E1034 wasn't sent");
+            done();
+        }, 150);
+    } finally {
+        errors.log = _devExpressLog;
+        fileSaver._click = _fileSaverClick;
+        fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
+    }
 });
 
 QUnit.test("Blob is saved via msSaveOrOpenBlob method", function(assert) {
