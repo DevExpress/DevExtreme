@@ -36,11 +36,33 @@ QUnit.test("Expanding nodes should work with special charactes in id", function(
             dataStructure: "plain",
             height: 500
         });
-        assert.equal(false, $treeView.find('[aria-level="2"]').is(':visible'));
+        assert.equal($treeView.find('[aria-level="2"]').is(':visible'), false);
 
         $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').trigger('dxclick.dxTreeView');
-        assert.equal(true, $treeView.find('[aria-level="2"]').is(':visible'));
+        assert.equal($treeView.find('[aria-level="2"]').is(':visible'), true);
         $treeView.dxTreeView('instance').dispose();
+    });
+});
+
+QUnit.test("Nodes selection should work with special charactes in id", function(assert) {
+    const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
+    testIds.forEach(testId => {
+        var $treeView = initTree({
+            dataSource: [
+                { id: testId, text: "item1", selected: false, expanded: true },
+                { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: true }
+            ],
+            dataStructure: "plain",
+            showCheckBoxesMode: "normal",
+            height: 500
+        });
+
+        assert.equal($treeView.find('[aria-level="1"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), false);
+        assert.equal($treeView.find('[aria-level="2"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), false);
+
+        $treeView.find('[aria-level="1"]').find('.dx-checkbox').first().trigger('dxclick.dxCheckBox');
+        assert.equal($treeView.find('[aria-level="1"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
+        assert.equal($treeView.find('[aria-level="2"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
     });
 });
 
