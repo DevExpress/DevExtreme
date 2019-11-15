@@ -40,19 +40,22 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, element, owner) {
-        this._tempTemplates = [];
-        this._defaultTemplates = {};
+    constructor(option, element, owner, getDefaultTemplates, getAnonymousTemplateName) {
+        this._tempTemplates = []; // should be defined by control
+        this._defaultTemplates = {}; // should be defined by control
+        this.ownerDefaultTemplates = owner._defaultTemplates;
+        this.owner = owner;
 
         this.__option = (optionName) => owner.option(optionName);
         this.__element = () => owner.$element();
-        this.__getAnonymousTemplateName = () => owner._getAnonymousTemplateName();
+        this.__getDefaultTemplates = getDefaultTemplates;
+        this.__getAnonymousTemplateName = getAnonymousTemplateName;
 
         this.initTemplates();
     }
 
     static getAnonymousTemplateName() { // ???
-        return ANONYMOUS_TEMPLATE_NAME;
+        return ANONYMOUS_TEMPLATE_NAME; // should be defined by control
     }
 
     static getDefaultOptions() {
@@ -118,7 +121,9 @@ export default class TemplateManager {
         this._tempTemplates = [];
     }
 
-    initTemplates() {
+    initTemplates(defaultTemplates) {
+        this._defaultTemplates = this.ownerDefaultTemplates || defaultTemplates || this._defaultTemplates;
+
         this._extractTemplates();
         this._extractAnonymousTemplate();
     }
@@ -149,14 +154,14 @@ export default class TemplateManager {
         }
     }
 
-    saveTemplate(name, template) {
-        // const templates = this.__option('integrationOptions.templates'); // why ???
-        // templates[name] = this.createTemplate(template); // why ???
+    saveTemplate(name, template) { // we change arguments!!!
+        const templates = this.__option('integrationOptions.templates'); // why ???
+        templates[name] = this.createTemplate(template); // why ??? we change it by reference
         this.createTemplate(template);
     }
 
     _extractAnonymousTemplate() {
-        const templates = this.__option('integrationOptions.templates');
+        const templates = this.__option('integrationOptions.templates'); // we change it
         const anonymousTemplateName = this.__getAnonymousTemplateName();
         const $anonymousTemplate = this.__element().contents().detach();
 
@@ -169,7 +174,7 @@ export default class TemplateManager {
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
-            // templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate); // why ???
+            templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate); // why ??? we change it by reference !!!!
             this.createTemplate($anonymousTemplate);
         }
     }
@@ -194,6 +199,8 @@ export default class TemplateManager {
     }
 
     getTemplate(templateSource) {
+        this._defaultTemplates = this.__getDefaultTemplates() || this.ownerDefaultTemplates || this._defaultTemplates;
+
         if(isFunction(templateSource)) {
             return new FunctionTemplate(function(options) {
                 const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
