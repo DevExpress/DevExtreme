@@ -26,8 +26,8 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
 });
 
 QUnit.test("Expanding nodes should work with special charactes in id", function(assert) {
-    const testIDs = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
-    testIDs.forEach(testId => {
+    const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
+    testIds.forEach(testId => {
         var $treeView = initTree({
             dataSource: [
                 { id: testId, text: "item1", selected: false, expanded: false },
