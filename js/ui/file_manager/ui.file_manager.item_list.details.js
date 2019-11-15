@@ -88,10 +88,19 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         if(typeUtils.isFunction(customizeDetailColumns)) {
             columns = customizeDetailColumns(columns);
         }
+        const that = this;
 
         for(let i = 0; i < columns.length; i++) {
             const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(columns[i].dataField) < 0 ? "dataItem." : "";
             columns[i].dataField = "fileItem." + dataItemSuffix + columns[i].dataField;
+
+            columns[i].calculateSortValue = function(rowData) {
+                if(rowData.fileItem.key === "..") {
+                    return that._filesView.columnOption(`${this.dataField}`, "sortOrder") === "asc" ? "\u0000" : "\u10FFFF";
+                } else {
+                    return rowData.fileItem[`${this.dataField.replace("fileItem.", "")}`];
+                }
+            };
         }
         return columns;
     }
