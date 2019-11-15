@@ -230,7 +230,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             itemsGetter = that._editStrategy.itemsGetter;
 
         this._selection = new Selection({
-            allowNullValueSelection: this._nullValueSelectionSupported(),
+            allowNullValue: this._nullValueSelectionSupported(),
             mode: this.option("selectionMode"),
             maxFilterLengthInRequest: this.option("maxFilterLengthInRequest"),
             equalByReference: !this._isKeySpecified(),
