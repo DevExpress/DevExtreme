@@ -797,7 +797,7 @@ module.exports = {
                         };
                     }
 
-                    let result;
+                    let result = { };
                     if(columnOptions.command) {
                         result = deepExtendArraySafe(commonColumnOptions, columnOptions);
                     } else {
@@ -806,8 +806,10 @@ module.exports = {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-
-                        result = deepExtendArraySafe({ headerId: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
+                        if(columnOptions.dataField && !columnOptions.type) {
+                            result = { headerId: `dx-col-${globalColumnId++}` };
+                        }
+                        result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
                         deepExtendArraySafe(result, commonColumnOptions);
                         deepExtendArraySafe(result, calculatedColumnOptions);
                         deepExtendArraySafe(result, columnOptions);
