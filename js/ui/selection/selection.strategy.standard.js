@@ -137,7 +137,7 @@ module.exports = SelectionStrategy.inherit({
         for(var i = 0; i < keys.length; i++) {
             var key = keys[i];
 
-            if(key === null && allowNullValueSelection) {
+            if(key === null && allowNullValue) {
                 continue;
             }
 
