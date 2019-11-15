@@ -1,33 +1,33 @@
-import $ from "./renderer";
-import { isDefined, isFunction, isRenderer } from "./utils/type";
-import { findBestMatches, noop } from "./utils/common";
-import { extend } from "./utils/extend";
-import { Error, log } from "./errors";
-import { getElementOptions, normalizeTemplateElement } from "./utils/dom";
-import devices from "./devices";
-import { Template } from "./templates/template";
-import { TemplateBase } from "./templates/template_base";
-import { FunctionTemplate } from "./templates/function_template";
-import { EmptyTemplate } from "./templates/empty_template";
-import { ChildDefaultTemplate } from "./templates/child_default_template";
-import { camelize } from "./utils/inflector";
+import $ from './renderer';
+import { isDefined, isFunction, isRenderer } from './utils/type';
+import { findBestMatches, noop } from './utils/common';
+import { extend } from './utils/extend';
+import { Error, log } from './errors';
+import { getElementOptions, normalizeTemplateElement } from './utils/dom';
+import devices from './devices';
+import { Template } from './templates/template';
+import { TemplateBase } from './templates/template_base';
+import { FunctionTemplate } from './templates/function_template';
+import { EmptyTemplate } from './templates/empty_template';
+import { ChildDefaultTemplate } from './templates/child_default_template';
+import { camelize } from './utils/inflector';
 
 const TEXT_NODE = 3;
-const ANONYMOUS_TEMPLATE_NAME = "template";
-const TEMPLATE_SELECTOR = "[data-options*='dxTemplate']";
-const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
+const ANONYMOUS_TEMPLATE_NAME = 'template';
+const TEMPLATE_SELECTOR = '[data-options*="dxTemplate"]';
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const DEPRECATED_WIDGET_NAMES = ['button', 'tabs', 'dropDownMenu'];
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {
     let widgetName = model.widget;
     if(!widgetName) return $();
 
-    const widgetElement = $("<div>");
+    const widgetElement = $('<div>');
     const widgetOptions = model.options || {};
 
     if(DEPRECATED_WIDGET_NAMES.some(deprecatedWidgetName => deprecatedWidgetName === widgetName)) {
         const deprecatedName = widgetName;
-        widgetName = camelize("dx-" + widgetName);
-        log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
+        widgetName = camelize('dx-' + widgetName);
+        log('W0001', 'dxToolbar - "widget" item field', deprecatedName, '16.1', 'Use: ' + widgetName + 'instead');
     }
 
     if(parent) {
@@ -40,16 +40,22 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, element) {
-        debugger
-        this.option = option;
-        this.element = element;
+    constructor(option, element, owner) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
+
+        this.__option = (optionName) => owner.option(optionName);
+        this.__element = () => owner.$element();
+        this.__getAnonymousTemplateName = () => owner._getAnonymousTemplateName();
+
         this.initTemplates();
     }
 
-    getDefaultOptions() {
+    static getAnonymousTemplateName() { // ???
+        return ANONYMOUS_TEMPLATE_NAME;
+    }
+
+    static getDefaultOptions() {
         return {
             integrationOptions: {
                 watchMethod: (fn, callback, options = {}) => {
@@ -58,74 +64,18 @@ export default class TemplateManager {
                     }
                     return noop;
                 },
-                templates: { "dx-polymorph-widget": DX_POLYMORPH_WIDGET_TEMPLATE },
+                templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
                 createTemplate: element => new Template(element),
             }
         };
     }
 
-    // init() {
-    //     // this.callBase();
-
-    //     this._tempTemplates = [];
-    //     this._defaultTemplates = {};
-    //     this.initTemplates();
-    // }
-
-    dispose() {
-        this._cleanTemplates();
-        // this.callBase();
-    }
-
-    _cleanTemplates() {
-        this._tempTemplates.forEach(function(t) {
-            t.template.dispose && t.template.dispose();
-        });
-        this._tempTemplates = [];
-    }
-
-    initTemplates() {
-        this._extractTemplates();
-        this._extractAnonymousTemplate();
-    }
-
-    _extractTemplates() {
-        var templateElements = this.element().contents().filter(TEMPLATE_SELECTOR);
-        var templatesMap = {};
-
-        templateElements.each(function(_, template) {
-            var templateOptions = getElementOptions(template).dxTemplate;
-
-            if(!templateOptions) {
-                return;
-            }
-
-            if(!templateOptions.name) {
-                throw Error("E0023");
-            }
-
-            $(template).addClass(TEMPLATE_WRAPPER_CLASS).detach();
-            templatesMap[templateOptions.name] = templatesMap[templateOptions.name] || [];
-            templatesMap[templateOptions.name].push(template);
-        });
-
-        for(let templateName in templatesMap) {
-            var deviceTemplate = this._findTemplateByDevice(templatesMap[templateName]);
-            if(deviceTemplate) {
-                this.saveTemplate(templateName, deviceTemplate);
-            }
-        }
-    }
-
-    saveTemplate(name, template) { // ???
-        var templates = this.option("integrationOptions.templates");
-        templates[name] = this.createTemplate(template);
-    }
-
-    _findTemplateByDevice(templates) {
-        var suitableTemplate = findBestMatches(devices.current(), templates, function(template) {
-            return getElementOptions(template).dxTemplate;
-        })[0];
+    static _findTemplateByDevice(templates) {
+        const suitableTemplate = findBestMatches(
+            devices.current(),
+            templates,
+            template => getElementOptions(template).dxTemplate
+        )[0];
 
         templates.forEach((template) => {
             if(template !== suitableTemplate) {
@@ -136,65 +86,125 @@ export default class TemplateManager {
         return suitableTemplate;
     }
 
-    _extractAnonymousTemplate() {
-        var templates = this.option("integrationOptions.templates"),
-            anonymousTemplateName = this._getAnonymousTemplateName(),
-            $anonymousTemplate = this.$element().contents().detach();
+    static _addOneRenderedCall(template) {
+        const render = template.render.bind(template);
+        return extend({}, template, {
+            render(options) {
+                const templateResult = render(options);
+                options && options.onRendered && options.onRendered();
+                return templateResult;
+            }
+        });
+    }
 
-        var $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
-                var isTextNode = element.nodeType === TEXT_NODE,
-                    isEmptyText = $(element).text().trim().length < 1;
+    static _getNormalizedTemplateArgs(options) {
+        const args = [];
 
-                return !(isTextNode && isEmptyText);
-            }),
-            onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
+        if('model' in options) {
+            args.push(options.model);
+        }
+        if('index' in options) {
+            args.push(options.index);
+        }
+        args.push(options.container);
 
-        if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
-            templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate);
+        return args;
+    }
+
+    dispose() {
+        this._tempTemplates.forEach(tempTemplate => {
+            tempTemplate.template.dispose && tempTemplate.template.dispose();
+        });
+        this._tempTemplates = [];
+    }
+
+    initTemplates() {
+        this._extractTemplates();
+        this._extractAnonymousTemplate();
+    }
+
+    _extractTemplates() {
+        const templateElements = this.__element().contents().filter(TEMPLATE_SELECTOR);
+        const templatesMap = {};
+
+        templateElements.each((_, template) => {
+            const templateOptions = getElementOptions(template).dxTemplate;
+
+            if(!templateOptions) {
+                return;
+            }
+
+            if(!templateOptions.name) {
+                throw Error('E0023');
+            }
+
+            $(template).addClass(TEMPLATE_WRAPPER_CLASS).detach();
+            templatesMap[templateOptions.name] = templatesMap[templateOptions.name] || [];
+            templatesMap[templateOptions.name].push(template);
+        });
+
+        for(let templateName in templatesMap) {
+            const deviceTemplate = TemplateManager._findTemplateByDevice(templatesMap[templateName]);
+            deviceTemplate && this.saveTemplate(templateName, deviceTemplate);
         }
     }
 
-    static getAnonymousTemplateName() {
-        return ANONYMOUS_TEMPLATE_NAME;
+    saveTemplate(name, template) {
+        // const templates = this.__option('integrationOptions.templates'); // why ???
+        // templates[name] = this.createTemplate(template); // why ???
+        this.createTemplate(template);
+    }
+
+    _extractAnonymousTemplate() {
+        const templates = this.__option('integrationOptions.templates');
+        const anonymousTemplateName = this.__getAnonymousTemplateName();
+        const $anonymousTemplate = this.__element().contents().detach();
+
+        const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
+            const isTextNode = element.nodeType === TEXT_NODE;
+            const isEmptyText = $(element).text().trim().length < 1;
+
+            return !(isTextNode && isEmptyText);
+        });
+        const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
+
+        if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
+            // templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate); // why ???
+            this.createTemplate($anonymousTemplate);
+        }
     }
 
     _createTemplateIfNeeded(templateSource) {
-        var templateKey = function(templateSource) {
-            return (isRenderer(templateSource) && templateSource[0]) || templateSource;
-        };
+        const templateKey = tSource => (isRenderer(tSource) && tSource[0]) || tSource;
 
-        var cachedTemplate = this._tempTemplates.filter(function(t) {
+        const cachedTemplate = this._tempTemplates.filter((tempTemplate) => {
             templateSource = templateKey(templateSource);
-            return t.source === templateSource;
+            return tempTemplate.source === templateSource;
         })[0];
         if(cachedTemplate) return cachedTemplate.template;
 
-        var template = this.createTemplate(templateSource);
-        this._tempTemplates.push({ template: template, source: templateKey(templateSource) });
+        const template = this.createTemplate(templateSource);
+        this._tempTemplates.push({ template, source: templateKey(templateSource) });
         return template;
     }
 
     createTemplate(templateSource) {
-        templateSource = typeof templateSource === "string" ? normalizeTemplateElement(templateSource) : templateSource;
-        return this.option("integrationOptions.createTemplate")(templateSource);
-    }
-
-    getTemplateByOption(optionName) {
-        return this.getTemplate(this.option(optionName));
+        templateSource = typeof templateSource === 'string' ? normalizeTemplateElement(templateSource) : templateSource;
+        return this.__option('integrationOptions.createTemplate')(templateSource);
     }
 
     getTemplate(templateSource) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate(function(options) {
-                var templateSourceResult = templateSource.apply(this, this._getNormalizedTemplateArgs(options));
+                const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
 
                 if(!isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
                 }
 
-                var dispose = false;
-                var template = this._acquireTemplate(templateSourceResult, function(templateSource) {
-                    if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is("script")) {
+                let dispose = false;
+                const template = this._acquireTemplate(templateSourceResult, function(templateSource) {
+                    if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
                         return new FunctionTemplate(function() {
                             return templateSource;
                         });
@@ -203,7 +213,7 @@ export default class TemplateManager {
                     return this.createTemplate(templateSource);
                 }.bind(this));
 
-                var result = template.render(options);
+                const result = template.render(options);
                 dispose && template.dispose && template.dispose();
                 return result;
             }.bind(this));
@@ -227,15 +237,15 @@ export default class TemplateManager {
 
         // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
         if(isFunction(templateSource.render) && !isRenderer(templateSource)) {
-            return this._addOneRenderedCall(templateSource);
+            return TemplateManager._addOneRenderedCall(templateSource);
         }
 
         if(templateSource.nodeType || isRenderer(templateSource)) {
             return createTemplate($(templateSource));
         }
 
-        if(typeof templateSource === "string") {
-            var nonIntegrationTemplates = this.option("integrationOptions.skipTemplates") || [];
+        if(typeof templateSource === 'string') {
+            var nonIntegrationTemplates = this.__option('integrationOptions.skipTemplates') || [];
             var integrationTemplate = null;
 
             if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
@@ -250,38 +260,13 @@ export default class TemplateManager {
         return this._acquireTemplate(templateSource.toString(), createTemplate);
     }
 
-    _getNormalizedTemplateArgs(options) {
-        var args = [];
-
-        if("model" in options) {
-            args.push(options.model);
-        }
-        if("index" in options) {
-            args.push(options.index);
-        }
-        args.push(options.container);
-
-        return args;
-    }
-
-    _addOneRenderedCall(template) {
-        const render = template.render.bind(template);
-        return extend({}, template, {
-            render(options) {
-                const templateResult = render(options);
-                options && options.onRendered && options.onRendered();
-                return templateResult;
-            }
-        });
-    }
-
     _renderIntegrationTemplate(templateSource) {
-        let integrationTemplate = this.option("integrationOptions.templates")[templateSource];
+        const integrationTemplate = this.__option('integrationOptions.templates')[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            const isAsyncTemplate = this.option("templatesRenderAsynchronously");
+            const isAsyncTemplate = this.__option('templatesRenderAsynchronously');
             if(!isAsyncTemplate) {
-                return this._addOneRenderedCall(integrationTemplate);
+                return TemplateManager._addOneRenderedCall(integrationTemplate);
             }
         }
 
