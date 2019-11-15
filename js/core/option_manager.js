@@ -104,8 +104,8 @@ export class OptionManager {
 
     _normalizeName(name) {
         if(name) {
-            for(let deprecateName of this._deprecateNames) {
-                if(deprecateName === name) {
+            for(let i = 0; i < this._deprecateNames.length; i++) {
+                if(this._deprecateNames[i] === name) {
                     const deprecate = this._deprecated[name];
 
                     if(deprecate) {
