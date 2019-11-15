@@ -333,13 +333,13 @@ class Button extends Widget {
                 ($el, event) => {
                     const { activeStateEnabled } = this.option();
 
-                    activeStateEnabled &&
+                    activeStateEnabled && !this._disposed &&
                         _inkRipple.showWave({ element: this._$content(), event });
                 },
                 ($el, event) => {
                     const { activeStateEnabled } = this.option();
 
-                    activeStateEnabled &&
+                    activeStateEnabled && !this._disposed &&
                         _inkRipple.hideWave({ element: this._$content(), event });
                 }
             );
