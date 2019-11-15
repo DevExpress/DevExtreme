@@ -48,21 +48,10 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogSelectedDirectory() {
-        // console.log('_getDialogSelectedDirectory')
-        // console.log(this._selectedDirectoryInfo && this._selectedDirectoryInfo.fileItem.name)
-        // console.log('vs')
-        // console.log(this.option("getCurrentDirectory")() && this.option("getCurrentDirectory")().fileItem.name)
-        // console.log('_______________________________')
         return this._selectedDirectoryInfo || this.option("getCurrentDirectory")();
     }
 
     _onFilesTreeViewDirectoryClick({ itemData }) {
-        // console.log(`_onFilesTreeViewDirectoryClick()`)
-        // console.log(itemData && itemData.fileItem.name);
-        if(!itemData) {
-            // debugger
-            return;
-        }
         this._selectedDirectoryInfo = itemData;
         this._filesTreeView.updateCurrentDirectory();
     }
