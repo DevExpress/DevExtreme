@@ -5,7 +5,7 @@ import messageLocalization from "../../localization/message";
 import clickEvent from "../../events/click";
 import commonUtils from "../../core/utils/common";
 import windowUtils from "../../core/utils/window";
-import { isDefined, isPrimitive, isFunction } from "../../core/utils/type";
+import { isDefined, isPrimitive, isFunction, isString } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import { getPublicElement } from "../../core/utils/dom";
@@ -132,7 +132,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
             return cache.$nodeByKey[key] || $();
         }
-        return this.$element().find(`[${DATA_ITEM_ID}='${commonUtils.escapeCssSearchQuery(key)}']`);
+        return this.$element().find(`[${DATA_ITEM_ID}='${this._escapeCssSearchQuery(key)}']`);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -1698,6 +1698,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
             collapsedNode.length && this.option("focusedElement", getPublicElement(collapsedNode));
         }
+    },
+
+    _escapeCssSearchQuery: function(query) {
+        if(isString(query)) {
+            const replacements = ['\\', '\'', "\""];
+            each(replacements, (_, replacement) => {
+                query = query.split(replacement).join('\\' + replacement);
+            });
+        }
+        return query;
     },
 
     /**

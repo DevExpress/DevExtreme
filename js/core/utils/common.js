@@ -215,16 +215,6 @@ const pairToObject = function(raw, preventRound) {
     return { h, v };
 };
 
-const escapeCssSearchQuery = function(query) {
-    if(isString(query)) {
-        const replacements = ['\\', '\'', "\""];
-        each(replacements, (_, replacement) => {
-            query = query.split(replacement).join('\\' + replacement);
-        });
-    }
-    return query;
-};
-
 const getKeyHash = function(key) {
     if(key instanceof Guid) {
         return key.toString();
@@ -351,4 +341,3 @@ exports.noop = noop;
 exports.asyncNoop = asyncNoop;
 exports.grep = grep;
 exports.equalByValue = equalByValue;
-exports.escapeCssSearchQuery = escapeCssSearchQuery;
