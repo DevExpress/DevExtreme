@@ -1,5 +1,5 @@
 /* global internals, initTree */
-
+import keyboardMock from "../../../helpers/keyboardMock.js";
 
 QUnit.module("Lazy rendering");
 
@@ -25,7 +25,7 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
     assert.equal(items.length, 2);
 });
 
-QUnit.test("Expanding nodes should work with special charactes in id", function(assert) {
+QUnit.test("Nodes expanding should work with special charactes in id", function(assert) {
     const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
     testIds.forEach(testId => {
         var $treeView = initTree({
@@ -38,7 +38,7 @@ QUnit.test("Expanding nodes should work with special charactes in id", function(
         });
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), false);
 
-        $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').trigger('dxclick.dxTreeView');
+        $treeView.find('[aria-level="1"]').find(internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick.dxTreeView');
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), true);
         $treeView.dxTreeView('instance').dispose();
     });
@@ -63,6 +63,33 @@ QUnit.test("Nodes selection should work with special charactes in id", function(
         $treeView.find('[aria-level="1"]').find('.dx-checkbox').first().trigger('dxclick.dxCheckBox');
         assert.equal($treeView.find('[aria-level="1"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
         assert.equal($treeView.find('[aria-level="2"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
+        $treeView.dxTreeView('instance').dispose();
+    });
+});
+
+QUnit.test("Search should work with special charactes in the nodes ids", function(assert) {
+    const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
+    testIds.forEach(testId => {
+        var $treeView = initTree({
+            dataSource: [
+                { id: testId, text: "item1", selected: false, expanded: false },
+                { id: testId + '_child', parentId: testId, text: "item2", selected: false, expanded: false },
+                { id: 'bbb', text: "item3", selected: false, expanded: false }
+            ],
+            dataStructure: "plain",
+            searchEnabled: true,
+            height: 500
+        });
+        assert.equal($treeView.find('[aria-label="item2"]').is(':visible'), false);
+
+        const $input = $treeView.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input);
+        keyboard.type("2");
+
+        assert.equal($treeView.find('[aria-label="item1"]').is(':visible'), true);
+        assert.equal($treeView.find('[aria-label="item2"]').is(':visible'), true);
+        assert.equal($treeView.find('[aria-label="item3"]').is(':visible'), false);
+        $treeView.dxTreeView('instance').dispose();
     });
 });
 
