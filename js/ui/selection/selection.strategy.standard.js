@@ -132,9 +132,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _warnOnIncorrectKeys: function(keys) {
+        var allowNullValue = this.options.allowNullValue;
+
         for(var i = 0; i < keys.length; i++) {
-            if(!this.isItemKeySelected(keys[i])) {
-                errors.log("W1002", keys[i]);
+            var key = keys[i];
+
+            if((!allowNullValue || key !== null) && !this.isItemKeySelected(key)) {
+                errors.log("W1002", key);
             }
         }
     },
