@@ -17,9 +17,14 @@ const TREELIST_PREFIX = "dx-treelist";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const NEW_ROW_CLASS = "dx-row-inserted";
 const FIXED_CONTENT_CLASS = "dx-datagrid-content-fixed";
+const HEADER_COLUMN_INDICATORS_CLASS = "dx-column-indicators";
+const GRID_TABLE_CLASS = "dx-datagrid-table";
+const FREE_SPACE_ROW = "dx-freespace-row";
+const ROW_CLASS = "dx-row";
 
-class GridWrapper {
+class GridWrapper extends WrapperBase {
     constructor(containerSelector, widgetPrefix) {
+        super(containerSelector);
         this.pager = new PagerWrapper(containerSelector, widgetPrefix);
         this.filterPanel = new FilterPanelWrapper(containerSelector, widgetPrefix);
         this.headerPanel = new HeaderPanelWrapper(containerSelector, widgetPrefix);
@@ -28,6 +33,10 @@ class GridWrapper {
         this.rowsView = new RowsViewWrapper(containerSelector, widgetPrefix);
         this.filterBuilder = new FilterBuilderWrapper("BODY", widgetPrefix);
         this.columns = new ColumnWrapper(containerSelector, widgetPrefix);
+    }
+
+    getElement() {
+        return this.getContainer();
     }
 
     findFocusOverlay() {
@@ -54,13 +63,19 @@ class GridElement extends WrapperBase {
     }
 }
 
+class GridTableElement extends GridElement {
+    getTable() {
+        return this.getElement().find(`.${GRID_TABLE_CLASS}`);
+    }
+}
+
 export class ColumnWrapper extends GridElement {
     getCommandButtons() {
         return this.getContainer().find("td[class*='dx-command'] .dx-link");
     }
 }
 
-export class RowsViewWrapper extends GridElement {
+export class RowsViewWrapper extends GridTableElement {
     constructor(containerSelector, widgetPrefix) {
         super(containerSelector);
         this.widgetPrefix = widgetPrefix;
@@ -82,8 +97,16 @@ export class RowsViewWrapper extends GridElement {
         return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-row`).eq(rowIndex);
     }
 
+    getFreeSpaceRow() {
+        return this.getElement().find(`.${ROW_CLASS}.${FREE_SPACE_ROW}`);
+    }
+
     getFixedDataRowElement(rowIndex) {
         return this.getElement().find(`.${FIXED_CONTENT_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
+    }
+
+    getCellElement(rowIndex, columnIndex) {
+        return this.getRowElement(rowIndex).find("td").eq(columnIndex);
     }
 
     getDataRowElement(rowIndex) {
@@ -271,7 +294,7 @@ export class HeaderPanelWrapper extends GridElement {
     }
 }
 
-export class HeadersWrapper extends GridElement {
+export class HeadersWrapper extends GridTableElement {
     getElement() {
         return this.getContainer().find(`.${this.widgetPrefix}-headers`);
     }
@@ -286,6 +309,10 @@ export class HeadersWrapper extends GridElement {
 
     getHeaderFilterItem(rowIndex, columnIndex) {
         return this.getHeaderItem(rowIndex, columnIndex).find(".dx-header-filter");
+    }
+
+    getColumnsIndicators() {
+        return this.getElement().find(`.${HEADER_COLUMN_INDICATORS_CLASS}`);
     }
 }
 
