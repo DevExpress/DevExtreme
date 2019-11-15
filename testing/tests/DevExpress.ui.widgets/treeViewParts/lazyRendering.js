@@ -1,5 +1,7 @@
 /* global internals, initTree */
 
+import { each } from "../../../../js/core/utils/iterator";
+
 QUnit.module("Lazy rendering");
 
 QUnit.test("Render treeView with special symbols in id", function(assert) {
@@ -25,21 +27,21 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
 });
 
 QUnit.test("Expanding nodes should work with special charactes in id", function(assert) {
-    var testId = '!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,';
+    let testCases = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
+    each(testCases, (index, testId) => {
+        var $treeView = initTree({
+            dataSource: [
+                { id: testId, text: "item1", selected: false, expanded: false },
+                { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: false }
+            ],
+            dataStructure: "plain",
+            height: 500
+        });
+        assert.equal(false, $treeView.find('[aria-level="2"]').is(':visible'));
 
-    var $treeView = initTree({
-        dataSource: [
-            { id: testId, text: "item1", selected: false, expanded: false },
-            { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: false }
-        ],
-        dataStructure: "plain",
-        height: 500
+        $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').click();
+        assert.equal(true, $treeView.find('[aria-level="2"]').is(':visible'));
     });
-
-    assert.equal(false, $treeView.find('[aria-level="2"]').is(':visible'));
-
-    $treeView.find('[aria-level="1"]').find('.dx-treeview-toggle-item-visibility').click();
-    assert.equal(true, $treeView.find('[aria-level="2"]').is(':visible'));
 });
 
 QUnit.test("Nested item should be rendered after click on toggle visibility icon", function(assert) {
