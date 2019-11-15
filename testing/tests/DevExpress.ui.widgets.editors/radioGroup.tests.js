@@ -226,7 +226,7 @@ module("value", moduleConfig, () => {
             value: null
         });
 
-        assert.notOk(errorLogStub.called, "error was not thrown");
+        assert.ok(errorLogStub.notCalled, "error was not thrown");
         errorLogStub.restore();
     });
 
