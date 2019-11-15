@@ -27,10 +27,27 @@ class Button extends Widget {
         this._feedbackHideTimeout = 100;
     }
 
-    _clean() {
-        delete this._inkRipple;
-        delete this._$content;
-        super._clean();
+    _$content() {
+        return this.$element().find('.dx-button-content');
+    }
+
+    _$submitInput() {
+        return this.$element().find('.dx-button-submit-input');
+    }
+
+    _attachActiveEvents(active, inactive) {
+        const eventBindingTarget = this._eventBindingTarget();
+        const namespace = 'inkRipple';
+
+        // TODO: Remove this line in the future of beauty
+        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit, { namespace });
+
+        this._attachFeedbackEventsCore(eventBindingTarget, active, inactive, {
+            selector: this._activeStateUnit,
+            showTimeout: this._feedbackShowTimeout,
+            hideTimeout: this._feedbackHideTimeout,
+            namespace
+        });
     }
 
     _defaultOptionsRules() {
@@ -203,7 +220,7 @@ class Button extends Widget {
                         complete.then(({ status }) =>{
                             validationStatus = status;
                             this.option('disabled', false);
-                            validationStatus === 'valid' && this._$submitInput.get(0).click();
+                            validationStatus === 'valid' && this._submitInput().click();
                         });
                     }
                 }
@@ -306,12 +323,26 @@ class Button extends Widget {
 
         if(useInkRipple) {
             const isOnlyIconButton = !text && icon || type === 'back';
-
-            this._inkRipple = inkRipple.render(isOnlyIconButton ? {
+            const _inkRipple = inkRipple.render(isOnlyIconButton ? {
                 waveSizeCoefficient: 1,
                 useHoldAnimation: false,
                 isCentered: true
             } : {});
+
+            this._attachActiveEvents(
+                ($el, event) => {
+                    const { activeStateEnabled } = this.option();
+
+                    activeStateEnabled && !this._disposed &&
+                        _inkRipple.showWave({ element: this._$content(), event });
+                },
+                ($el, event) => {
+                    const { activeStateEnabled } = this.option();
+
+                    activeStateEnabled && !this._disposed &&
+                        _inkRipple.hideWave({ element: this._$content(), event });
+                }
+            );
         }
     }
 
@@ -331,14 +362,15 @@ class Button extends Widget {
 
         if(useSubmitBehavior) {
             const submitAction = this._getSubmitAction();
+            const $content = this._$content();
 
-            this._$submitInput = $('<input>')
+            $('<input>')
                 .attr('type', 'submit')
                 .attr('tabindex', -1)
                 .addClass('dx-button-submit-input')
-                .appendTo(this._$content);
+                .appendTo($content);
 
-            eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+            eventsEngine.on(this._$submitInput(), 'click', e => submitAction({ event: e }));
         }
     }
 
@@ -349,6 +381,10 @@ class Button extends Widget {
         type && $element.addClass(`dx-button-${type}`);
     }
 
+    _submitInput() {
+        return this._$submitInput().get(0);
+    }
+
     _supportedKeys() {
         const click = e => {
             e.preventDefault();
@@ -356,16 +392,6 @@ class Button extends Widget {
         };
 
         return extend(super._supportedKeys(), { space: click, enter: click });
-    }
-
-    _toggleActiveState($el, value, event) {
-        super._toggleActiveState($el, value, event);
-
-        if(this._inkRipple) {
-            const config = { element: this._$content, event };
-
-            value ? this._inkRipple.showWave(config) : this._inkRipple.hideWave(config);
-        }
     }
 
     _updateAriaLabel() {
@@ -389,18 +415,19 @@ class Button extends Widget {
             afterExecute: () => {
                 const { useSubmitBehavior } = this.option();
 
-                useSubmitBehavior && setTimeout(() => this._$submitInput.get(0).click());
+                useSubmitBehavior && setTimeout(() => this._submitInput().click());
             }
         });
     }
 
     _updateContent() {
         const $element = this.$element();
+        let $content = this._$content();
         const data = this._getContentData();
         const { template, iconPosition } = this.option();
         const { icon, text } = data;
 
-        this._$content ? this._$content.empty() : this._$content = $('<div>')
+        $content.length ? $content.empty() : $content = $('<div>')
             .addClass('dx-button-content')
             .appendTo($element);
 
@@ -411,24 +438,23 @@ class Button extends Widget {
 
         const $template = $(this._getTemplateByOption('template').render({
             model: data,
-            container: getPublicElement(this._$content),
+            container: getPublicElement($content),
             transclude: this._getAnonymousTemplateName() === template
         }));
 
         if($template.hasClass('dx-template-wrapper')) {
-            this._$content.replaceWith($template);
-            this._$content = $template;
-            this._$content.addClass('dx-button-content');
+            $template.addClass('dx-button-content');
+            $content.replaceWith($template);
         }
     }
 
     _updateSubmitInput() {
         const { useSubmitBehavior } = this.option();
+        const $submitInput = this._$submitInput();
 
         if(!useSubmitBehavior && this._$submitInput) {
-            this._$submitInput.remove();
-            this._$submitInput = null;
-        } else {
+            $submitInput.remove();
+        } else if(useSubmitBehavior && !this._$submitInput) {
             this._renderSubmitInput();
         }
     }
