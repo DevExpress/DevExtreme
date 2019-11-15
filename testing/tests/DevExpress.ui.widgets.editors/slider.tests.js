@@ -312,6 +312,33 @@ module("render", moduleOptions, () => {
         pointer.start("touch").move($element.offset().left + 300).click();
         assert.equal(instance.option("value"), 300, "value set after dxclick");
     });
+
+    test("value should be correctly updated on swipestart with the step that exceeds the maximum (T831727)", assert => {
+        const $element = $("#slider").dxSlider({
+            max: 500,
+            min: 0,
+            value: 0,
+            width: 500,
+            useInkRipple: false,
+            onOptionChanged: ({ component }) => {
+                component.option("step", 2000);
+            }
+        });
+        const { left: offsetX } = $element.offset();
+        const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
+        const $range = $element.find(`.${SLIDER_RANGE_CLASS}`);
+        const $bar = $element.find(`.${SLIDER_BAR_CLASS}`);
+
+        pointerMock($bar)
+            .start()
+            .move(offsetX)
+            .down()
+            .move(100)
+            .move(100);
+
+        assert.equal($handle.position().left, 500, "handle is positioned at the max");
+        assert.equal($range.width(), 500, "the width of the range doesn't exceed the maximum");
+    });
 });
 
 module("hidden input", () => {
