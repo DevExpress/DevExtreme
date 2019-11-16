@@ -426,8 +426,14 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-normal-selected-color: @base-inverted-text-color;
+@button-group-normal-selected-color: @button-normal-color;
+
+/**
+* @name 20. Selected item background color
+* @type color
+*/
 @button-group-normal-selected-bg: fade(darken(@button-normal-bg, 100%), 18%);
+
 @button-group-normal-selected-bg-hover: fade(@button-group-normal-selected-bg, 12%);
 @button-group-normal-selected-bg-focused: fade(@button-group-normal-selected-bg, 12%);
 
@@ -437,7 +443,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-default-selected-color: @base-inverted-text-color;
+@button-group-default-selected-color: @button-default-bg;
 
 /**
 * @name 20. Selected item background color
@@ -454,7 +460,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-danger-selected-color: @base-inverted-text-color;
+@button-group-danger-selected-color: @button-danger-bg;
 
 /**
 * @name 20. Selected item background color
@@ -471,7 +477,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-success-selected-color: @base-inverted-text-color;
+@button-group-success-selected-color: @button-success-bg;
 
 /**
 * @name 20. Selected item background color
