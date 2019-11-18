@@ -9,7 +9,6 @@ import { Options } from './options';
 
 const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
 const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
-const normalizeOptions = (options, value) => typeof options !== 'string' ? options : { [options]: value };
 
 export class OptionManager {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
@@ -118,7 +117,7 @@ export class OptionManager {
     }
 
     _set(options, value, merge, silent) {
-        options = normalizeOptions(options, value);
+        options = Options.normalizeOptions(options, value);
 
         if(silent) {
             this._setByReference(this._options, options);

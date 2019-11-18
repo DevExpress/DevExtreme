@@ -28,4 +28,8 @@ export class Options {
             return options;
         }, {});
     }
+
+    static normalizeOptions(options, value) {
+        return typeof options !== 'string' ? options : { [options]: value };
+    }
 }
