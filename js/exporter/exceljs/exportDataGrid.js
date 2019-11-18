@@ -90,15 +90,11 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         if(isDefined(excelCell.value)) {
             const { bold, alignment, wrapText, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
-            // format
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
                 numberFormat = numberFormat.replace(/&quot;/g, '"');
             }
-            // console.log('gridCell :', gridCell);
-            // console.log('format :', format);
-            // console.log('format :', dataType);
-            // console.log('numberFormat :', numberFormat);
+
             _setNumberFormat(excelCell, numberFormat);
             _setFont(excelCell, bold);
             _setAlignment(excelCell, wrapText, alignment);
