@@ -1,11 +1,17 @@
-import typeUtils from "../core/utils/type";
 import stringUtils from "../core/utils/string";
 import numberFormatter from "../localization/number";
 import dateLocalization from "../localization/date";
+import { isDefined, isString } from "../core/utils/type";
 import { getFormat } from "../localization/ldml/date.format";
 import { getLanguageId } from "../localization/language_codes";
 import "../localization/currency";
 
+const UNSUPPORTED_FORMAT_MAPPING = {
+    quarter: "shortDate",
+    quarterAndYear: "shortDate",
+    minute: "longTime",
+    millisecond: "longTime"
+};
 const ARABIC_ZERO_CODE = 1632;
 const DEFINED_NUMBER_FORMTATS = {
     thousands: "#,##0{0},&quot;K&quot;",
@@ -18,7 +24,6 @@ const DEFINED_NUMBER_FORMTATS = {
     exponential: "0{0}E+00",
     currency: " "
 };
-
 const PERIOD_REGEXP = /a+/g;
 const DAY_REGEXP = /E/g;
 const DO_REGEXP = /dE+/g;
@@ -75,16 +80,17 @@ var excelFormatConverter = module.exports = {
         }).join("");
     },
 
-    _convertDateFormat: function(format) {
-        var that = this,
-            formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
-            result = getFormat(function(value) {
-                return dateLocalization.format(value, format);
-            });
+    _convertDateFormat: function(format, isExcelJS) {
+        if(!isExcelJS) {
+            format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
+        }
+
+        const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString();
+        let result = getFormat(value => dateLocalization.format(value, format));
 
         if(result) {
-            result = that._convertDateFormatToOpenXml(result);
-            result = that._getLanguageInfo(formattedValue) + result;
+            result = this._convertDateFormatToOpenXml(result);
+            result = this._getLanguageInfo(formattedValue) + result;
         }
 
         return result;
@@ -124,12 +130,12 @@ var excelFormatConverter = module.exports = {
         return result;
     },
 
-    convertFormat: function(format, precision, type, currency) {
-        if(typeUtils.isDefined(format)) {
+    convertFormat: function(format, precision, type, currency, isExcelJS) {
+        if(isDefined(format)) {
             if(type === "date") {
-                return excelFormatConverter._convertDateFormat(format);
+                return excelFormatConverter._convertDateFormat(format, isExcelJS);
             } else {
-                if(typeUtils.isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
+                if(isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
                     return excelFormatConverter._convertNumberFormat(format, precision, currency);
                 }
             }

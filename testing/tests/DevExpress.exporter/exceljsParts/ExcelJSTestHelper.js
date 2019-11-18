@@ -30,7 +30,7 @@ class ExcelJSTestHelper {
 
         for(const propertyName in gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                if(propertyName === "groupSummaryItems") {
+                if(propertyName === "groupSummaryItems" || propertyName === "value") {
                     assert.deepEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 } else {
                     assert.strictEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
@@ -45,7 +45,7 @@ class ExcelJSTestHelper {
             assert.deepEqual(this.worksheet.autoFilter.to, to, "worksheet.autoFilter.to");
             assert.deepEqual(this.worksheet.views, [ { state: "frozen", ySplit: frozenArea.y } ], "worksheet.views");
         } else {
-            assert.equal(this.worksheet.autoFilter, undefined, "worksheet.autoFilter");
+            assert.deepEqual(this.worksheet.autoFilter, null, "worksheet.autoFilter");
         }
     }
 
@@ -54,7 +54,7 @@ class ExcelJSTestHelper {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
-            assert.equal(this.worksheet.getCell(row, column).value, excelCell.value, `this.worksheet.getCell(${row}, ${column}).value`);
+            assert.deepEqual(this.worksheet.getCell(row, column).value, excelCell.value, `this.worksheet.getCell(${row}, ${column}).value`);
         });
     }
 

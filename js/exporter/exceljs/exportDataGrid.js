@@ -92,7 +92,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
-                numberFormat = numberFormat.replace(/&quot;/g, '"');
+                numberFormat = numberFormat.replace(/&quot;/g, '');
             }
 
             _setNumberFormat(excelCell, numberFormat);
@@ -122,14 +122,13 @@ function _setNumberFormat(excelCell, numberFormat) {
 }
 
 function _tryConvertToExcelNumberFormat(format, dataType) {
-    var currency,
-        newFormat = _formatObjectConverter(format, dataType);
+    const newFormat = _formatObjectConverter(format, dataType);
+    const currency = newFormat.currency;
 
     format = newFormat.format;
-    currency = newFormat.currency;
     dataType = newFormat.dataType;
 
-    return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
+    return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency, true);
 }
 
 function _formatObjectConverter(format, dataType) {
