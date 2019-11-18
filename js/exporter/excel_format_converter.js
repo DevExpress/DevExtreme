@@ -6,12 +6,6 @@ import { getFormat } from "../localization/ldml/date.format";
 import { getLanguageId } from "../localization/language_codes";
 import "../localization/currency";
 
-// const UNSUPPORTED_FORMAT_MAPPING = {
-//     quarter: "shortDate",
-//     quarterAndYear: "shortDate",
-//     minute: "longTime",
-//     millisecond: "longTime"
-// };
 const ARABIC_ZERO_CODE = 1632;
 const DEFINED_NUMBER_FORMTATS = {
     thousands: "#,##0{0},&quot;K&quot;",
@@ -82,8 +76,6 @@ var excelFormatConverter = module.exports = {
     },
 
     _convertDateFormat: function(format) {
-        // format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
-
         var that = this,
             formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
             result = getFormat(function(value) {
