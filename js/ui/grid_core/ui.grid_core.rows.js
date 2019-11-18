@@ -1149,12 +1149,11 @@ module.exports = {
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
                         dataController = that._dataController,
-                        itemCount = dataController.items().length,
+                        itemCount = dataController.items(true).length,
                         contentElement = that._findContentElement(),
                         freeSpaceRowElements = that._getFreeSpaceRowElements($table),
                         freeSpaceRowCount,
-                        scrollingMode,
-                        rowRenderingMode;
+                        scrollingMode;
 
                     if(freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
                         var isFreeSpaceRowVisible = false;
@@ -1163,9 +1162,8 @@ module.exports = {
                             if(!that._hasHeight) {
                                 freeSpaceRowCount = dataController.pageSize() - itemCount;
                                 scrollingMode = that.option("scrolling.mode");
-                                rowRenderingMode = that.option("scrolling.rowRenderingMode");
 
-                                if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite" && rowRenderingMode !== "virtual") {
+                                if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
                                     styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
