@@ -237,7 +237,7 @@
 
 // Button
 
-@button-icon-color: @base-text-color;
+@button-icon-color: @base-icon-color;
 @button-inverted-icon-color: @base-inverted-icon-color;
 
 @button-border-radius: @base-border-radius;
@@ -284,7 +284,7 @@
 */
 @button-normal-active-bg: lighten(@button-normal-bg, 30%);
 
-@button-normal-icon-color: @button-icon-color;
+@button-normal-icon-color: @button-normal-color;
 
 @button-normal-bg-inverted: lighten(@button-normal-bg, 100%);
 
@@ -314,20 +314,20 @@
 * @name 30. Hovered state background color
 * @type color
 */
-@button-default-hover-bg: lighten(@button-default-bg, 18%);
+@button-default-hover-bg: lighten(@button-default-bg, 8.5%);
 
 /**
 * @name 40. Focused state background color
 * @type color
 */
-@button-default-focused-bg: lighten(@button-default-bg, 18%);
+@button-default-focused-bg: lighten(@button-default-bg, 8.5%);
 
 /**
 * @name 60. Active state background color
 * @type color
 */
-@button-default-active-bg: lighten(@button-default-focused-bg, 40%);
-@button-default-icon-color: @button-inverted-icon-color;
+@button-default-active-bg: lighten(@button-default-focused-bg, 19.5%);
+@button-default-icon-color: @button-default-color;
 
 @button-default-outlined-hover-bg: fade(@button-default-bg, 8%);
 @button-default-outlined-focused-bg: fade(@button-default-bg, 8%);
@@ -355,20 +355,20 @@
 * @name 40. Hovered state background color
 * @type color
 */
-@button-danger-hover-bg: lighten(@button-danger-bg, 18%);
+@button-danger-hover-bg: lighten(@button-danger-bg, 8.5%);
 
 /**
 * @name 60. Focused state background color
 * @type color
 */
-@button-danger-focused-bg: lighten(@button-danger-bg, 18%);
+@button-danger-focused-bg: lighten(@button-danger-bg, 8.5%);
 
 /**
 * @name 80. Active state background color
 * @type color
 */
-@button-danger-active-bg: lighten(@button-danger-bg, 40%);
-@button-danger-icon-color: @button-inverted-icon-color;
+@button-danger-active-bg: lighten(@button-danger-bg, 19.5%);
+@button-danger-icon-color: @button-danger-color;
 
 @button-danger-outlined-hover-bg: fade(@button-danger-bg, 8%);
 @button-danger-outlined-focused-bg: fade(@button-danger-bg, 8%);
@@ -396,20 +396,20 @@
 * @name 40. Hovered state background color
 * @type color
 */
-@button-success-hover-bg: lighten(@button-success-bg, 18%);
+@button-success-hover-bg: lighten(@button-success-bg, 8.5%);
 
 /**
 * @name 60. Focused state background color
 * @type color
 */
-@button-success-focused-bg: lighten(@button-success-bg, 18%);
+@button-success-focused-bg: lighten(@button-success-bg, 8.5%);
 
 /**
 * @name 80. Active state background color
 * @type color
 */
-@button-success-active-bg: lighten(@button-success-bg, 40%);
-@button-success-icon-color: @button-inverted-icon-color;
+@button-success-active-bg: lighten(@button-success-bg, 19.5%);
+@button-success-icon-color: @button-success-color;
 
 @button-success-outlined-hover-bg: fade(@button-success-bg, 8%);
 @button-success-outlined-focused-bg: fade(@button-success-bg, 8%);
@@ -419,13 +419,6 @@
 @button-success-text-focused-bg: fade(@button-success-bg, 8%);
 @button-success-text-active-bg: fade(@button-success-bg, 36%);
 
-// Flat button
-
-/**
-* @name 10. Text color
-* @type color
-*/
-@button-flat-color: @base-text-color;
 
 // ButtonGroup
 
@@ -435,7 +428,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-normal-selected-color: @base-inverted-text-color;
+@button-group-normal-selected-color: @base-text-color;
 
 /**
 * @name 20. Selected item background color
@@ -452,7 +445,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-default-selected-color: @base-inverted-text-color;
+@button-group-default-selected-color: @button-default-bg;
 
 /**
 * @name 20. Selected item background color
@@ -469,7 +462,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-danger-selected-color: @base-inverted-text-color;
+@button-group-danger-selected-color: @button-danger-bg;
 
 /**
 * @name 20. Selected item background color
@@ -486,7 +479,7 @@
 * @name 10. Selected item text color
 * @type color
 */
-@button-group-success-selected-color: @base-inverted-text-color;
+@button-group-success-selected-color: @button-success-bg;
 
 /**
 * @name 20. Selected item background color
