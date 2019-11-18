@@ -27,41 +27,48 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
 
 ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'].forEach((testId) => {
     QUnit.test(`Nodes expanding should work with special charactes in id - ${testId}`, function(assert) {
-        var $treeView = initTree({
-            dataSource: [
-                { id: testId, text: "item1", selected: false, expanded: false },
-                { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: false }
-            ],
-            dataStructure: "plain",
-            height: 500
-        });
+        let $treeView = initTree({
+                dataSource: [
+                    { id: testId, text: "item1", selected: false, expanded: false },
+                    { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: false }
+                ],
+                dataStructure: "plain",
+                height: 500
+            }),
+            treeView = $treeView.dxTreeView('instance');
+
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), false);
 
-        $treeView.find('[aria-level="1"]').find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick.dxTreeView');
+        const elem = $treeView.find('[aria-level="1"]');
+        treeView.expandItem(elem);
+
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), true);
     });
 
     QUnit.test(`Nodes selection should work with special charactes in id - ${testId}`, function(assert) {
-        var $treeView = initTree({
-            dataSource: [
-                { id: testId, text: "item1", selected: false, expanded: true },
-                { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: true }
-            ],
-            dataStructure: "plain",
-            showCheckBoxesMode: "normal",
-            height: 500
-        });
+        let $treeView = initTree({
+                dataSource: [
+                    { id: testId, text: "item1", selected: false, expanded: true },
+                    { id: 'aaaa', parentId: testId, text: "item2", selected: false, expanded: true }
+                ],
+                dataStructure: "plain",
+                showCheckBoxesMode: "normal",
+                height: 500
+            }),
+            treeView = $treeView.dxTreeView('instance');
 
         assert.equal($treeView.find('[aria-level="1"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), false);
         assert.equal($treeView.find('[aria-level="2"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), false);
 
-        $treeView.find('[aria-level="1"]').find('.dx-checkbox').first().trigger('dxclick.dxCheckBox');
+        let elem = $treeView.find('[aria-level="1"]');
+        treeView.selectItem(elem);
+
         assert.equal($treeView.find('[aria-level="1"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
         assert.equal($treeView.find('[aria-level="2"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
     });
 
     QUnit.test(`Search should work with special charactes in the nodes ids - ${testId}`, function(assert) {
-        var $treeView = initTree({
+        let $treeView = initTree({
             dataSource: [
                 { id: testId, text: "item1", selected: false, expanded: false },
                 { id: testId + '_child', parentId: testId, text: "item2", selected: false, expanded: false },
