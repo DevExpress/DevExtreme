@@ -2503,6 +2503,24 @@ QUnit.module("keyboard navigation", {
         assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
     });
 
+    QUnit.test("Select all when disabled item is null (T832581)", assert => {
+        try {
+            const instance = $("#list").dxList({
+                dataSource: [null],
+                searchEnabled: true,
+                selectionMode: "all",
+                showSelectionControls: true,
+                selectAllMode: "allPages"
+            }).dxList("instance");
+
+            instance.selectAll();
+        } catch(e) {
+            assert.ok(0, "Error is thrown: " + e.message);
+        }
+
+        assert.ok(1);
+    });
+
     QUnit.test("list does not scroll to item after click on it", assert => {
         assert.expect(2);
 
