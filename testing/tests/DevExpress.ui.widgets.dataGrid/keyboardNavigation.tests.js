@@ -3050,7 +3050,7 @@ QUnit.testInActiveWindow("Edit cell should not lose focus after enter key", func
     this.clock.tick();
 
     // arrange
-    $input = dataGridWrapper.rowsView.getEditorInputElement(0, 0);
+    $input = dataGridWrapper.rowsView.getEditorInput(0, 0);
 
     // assert
     assert.ok($input.is(":focus"), "input is focused");
@@ -8279,7 +8279,7 @@ QUnit.module("Customize keyboard navigation", {
         this.triggerKeyDown("1");
 
         // arrange, assert
-        $input = rowsViewWrapper.getEditorInputElement(0, 0);
+        $input = rowsViewWrapper.getEditorInput(0, 0);
         assert.equal($input.val(), "Alex", "input value has not changed");
 
         this.clock.tick();
