@@ -95,11 +95,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             columns[i].dataField = "fileItem." + dataItemSuffix + columns[i].dataField;
 
             columns[i].calculateSortValue = function(rowData) {
-                if(rowData.fileItem.key === "..") {
+                if(rowData.fileItem.isParentFolder) {
                     return that._filesView.columnOption(`${this.dataField}`, "sortOrder") === "asc" ? "\u0000" : "\uFFFF";
-                } else {
-                    return rowData.fileItem[`${this.dataField.replace("fileItem.", "")}`];
                 }
+                return rowData.fileItem[`${this.dataField.replace("fileItem.", "")}`];
             };
         }
         return columns;
