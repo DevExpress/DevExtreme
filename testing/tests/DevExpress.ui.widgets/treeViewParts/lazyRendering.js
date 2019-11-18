@@ -30,7 +30,7 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
 
 ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'].forEach((testId) => {
     QUnit.test(`Nodes expanding should work with special charactes in id - ${testId}`, function(assert) {
-        const treeView = createInstance({
+        let treeView = createInstance({
                 dataSource: [
                     { id: testId, text: "item1", selected: false, expanded: false },
                     { id: testId + 'item1_1', parentId: testId, text: "item1_1", selected: false, expanded: false }
@@ -44,6 +44,8 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
         assert.equal(childItem.length, 0);
 
         treeView.instance.expandItem(parentItem);
+        childItem = treeView.getElement().find('[aria-level="2"]');
+        assert.equal(childItem.length, 1);
         assert.equal(treeView.hasInvisibleClass(childItem), false);
     });
 
@@ -67,7 +69,7 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
     });
 
     QUnit.test(`Search should work with special charactes in the nodes ids - ${testId}`, function(assert) {
-        const treeView = createInstance({
+        let treeView = createInstance({
                 dataSource: [
                     { id: testId, text: "item1", selected: false, expanded: false },
                     { id: testId + 'item1_1', parentId: testId, text: "item1_1", selected: false, expanded: false },
@@ -77,19 +79,27 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
                 searchEnabled: true,
                 height: 500
             }),
-            parentItem = treeView.getElement().find('[aria-label="1"]'),
+            parentItem = treeView.getElement().find('[aria-label="item1"]'),
             childItem = treeView.getElement().find('[aria-label="item1_1"]'),
             anotherItem = treeView.getElement().find('[aria-label="item2"]');
 
+        assert.equal(parentItem.length, 1);
         assert.equal(childItem.length, 0);
         assert.equal(anotherItem.length, 1);
 
         const $input = treeView.getElement().find('.dx-texteditor-input');
         keyboardMock($input).type("1_1");
 
+        parentItem = treeView.getElement().find('[aria-label="item1"]');
+        assert.equal(parentItem.length, 1);
         assert.equal(treeView.hasInvisibleClass(parentItem), false);
+
+        childItem = treeView.getElement().find('[aria-label="item1_1"]');
+        assert.equal(childItem.length, 1);
         assert.equal(treeView.hasInvisibleClass(childItem), false);
-        assert.equal(anotherItem.length, 1);
+
+        anotherItem = treeView.getElement().find('[aria-label="item2"]');
+        assert.equal(anotherItem.length, 0);
     });
 });
 
