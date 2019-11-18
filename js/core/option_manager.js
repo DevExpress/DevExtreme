@@ -1,20 +1,19 @@
 import createCallBack from './utils/callbacks';
-import devices from './devices';
 import { clone } from './utils/object';
 import { compileGetter, compileSetter } from './utils/data';
 import { equals } from './utils/comparator';
-import { equalByValue, findBestMatches } from './utils/common';
+import { equalByValue } from './utils/common';
 import { extend } from './utils/extend';
-import { isDefined, isEmptyObject, isFunction, isObject, isPlainObject, type } from './utils/type';
+import { isDefined, isFunction, isObject, isPlainObject, type } from './utils/type';
+import { Options } from './options';
 
-const deviceMatch = (device, filter) => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
 const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
 const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 const normalizeOptions = (options, value) => typeof options !== 'string' ? options : { [options]: value };
 
 export class OptionManager {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
-        this._options = options;
+        this._options = new Options(options);
         this._default = defaultOptions;
         this._optionsByReference = optionsByReference;
         this._deprecated = deprecatedOptions;
@@ -30,22 +29,12 @@ export class OptionManager {
         this._rules = [];
     }
 
-    static convertRulesToOptions(rules) {
-        const opts = {};
-        const currentDevice = devices.current();
+    get _options() {
+        return this._internalOptions.get();
+    }
 
-        rules.forEach(({ device, options }) => {
-            const deviceFilter = device || {};
-            const match = isFunction(deviceFilter) ?
-                deviceFilter(currentDevice) :
-                deviceMatch(currentDevice, deviceFilter);
-
-            if(match) {
-                extend(opts, options);
-            }
-        });
-
-        return opts;
+    set _options(value) {
+        this._internalOptions = value;
     }
 
     get _deprecateNames() {
@@ -99,7 +88,7 @@ export class OptionManager {
     _getByRules(rules) {
         rules = Array.isArray(rules) ? this._rules.concat(rules) : this._rules;
 
-        return OptionManager.convertRulesToOptions(rules);
+        return Options.convertRulesToOptions(rules);
     }
 
     _normalizeName(name) {

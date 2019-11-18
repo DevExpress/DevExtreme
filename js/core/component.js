@@ -1,6 +1,7 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
     OptionManager = require("./option_manager").OptionManager,
+    Options = require("./options").Options,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -79,7 +80,7 @@ var Component = Class.inherit({
     },
 
     _convertRulesToOptions: function(rules) {
-        return OptionManager.convertRulesToOptions(rules);
+        return Options.convertRulesToOptions(rules);
     },
 
     _isInitialOptionValue: function(name) {
