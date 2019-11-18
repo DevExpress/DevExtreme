@@ -448,4 +448,16 @@ define(function(require, exports, module) {
         }
     });
 
+    var ExcelJSLocalizationFormatTests = require("../DevExpress.exporter/exceljsParts/exceljs.format.tests.js");
+
+    ExcelJSLocalizationFormatTests.default.runCurrencyTests([
+        { value: "USD", expected: "$#,##0_);\\($#,##0\\)" },
+        { value: "RUB", expected: "RUB#,##0_);\\(RUB#,##0\\)" },
+        { value: "JPY", expected: "¥#,##0_);\\(¥#,##0\\)" },
+        { value: "KPW", expected: "KPW#,##0_);\\(KPW#,##0\\)" },
+        { value: "LBP", expected: "LBP#,##0_);\\(LBP#,##0\\)" },
+        { value: "SEK", expected: "SEK#,##0_);\\(SEK#,##0\\)" }
+    ]);
 });
+
+

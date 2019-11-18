@@ -7,6 +7,7 @@ import { exportDataGrid } from "exporter/exceljs/excelExporter";
 import { MAX_EXCEL_COLUMN_WIDTH } from "exporter/exceljs/exportDataGrid";
 import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 import { initializeDxArrayFind, clearDxArrayFind } from "./arrayFindHelper.js";
+import ExcelJSLocalizationFormatTests from "./exceljs.format.tests.js";
 
 import typeUtils from "core/utils/type";
 
@@ -2297,86 +2298,14 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: number, columns.format.type: 'currency'" + testCaption, (assert) => {
-                const done = assert.async();
-                const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }];
-
-                const dataGrid = $("#dataGrid").dxDataGrid({
-                    dataSource: ds,
-                    columns: [
-                        { dataField: "f1", dataType: "number", format: { type: "currency" } },
-                        { dataField: "f2", dataType: "number", format: { type: "currency" } },
-                        { dataField: "f3", dataType: "number", format: { type: "currency" } },
-                        { dataField: "f4", dataType: "number", format: { type: "currency" } },
-                        { dataField: "f5", dataType: "number", format: { type: "currency" } },
-                        { dataField: "f6", dataType: "number", format: { type: "currency" } }
-                    ],
-                    showColumnHeaders: false,
-                    loadingTimeout: undefined
-                }).dxDataGrid("instance");
-
-                const expectedCells = [[
-                    { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
-                    { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
-                    { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
-                    helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 6 }, topLeft);
-                    helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells);
-                    helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
-                    done();
-                });
-            });
-
-            // TODO: Localization - NOT SUPPORTED in default
-            QUnit.test("Data - columns.dataType: number, columns.format: { type: 'currency', currency: 'EUR' } " + testCaption, (assert) => {
-                const done = assert.async();
-                const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }];
-
-                const dataGrid = $("#dataGrid").dxDataGrid({
-                    dataSource: ds,
-                    columns: [
-                        { dataField: "f1", dataType: "number", format: { type: "currency", currency: "RUB" } },
-                        { dataField: "f2", dataType: "number", format: { type: "currency", currency: "RUB" } },
-                        { dataField: "f3", dataType: "number", format: { type: "currency", currency: "RUB" } },
-                        { dataField: "f4", dataType: "number", format: { type: "currency", currency: "RUB" } },
-                        { dataField: "f5", dataType: "number", format: { type: "currency", currency: "RUB" } },
-                        { dataField: "f6", dataType: "number", format: { type: "currency", currency: "RUB" } }
-                    ],
-                    showColumnHeaders: false,
-                    loadingTimeout: undefined
-                }).dxDataGrid("instance");
-
-                const expectedCells = [[
-                    { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
-                    { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
-                    { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
-                    helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 6 }, topLeft);
-                    helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells);
-                    helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
-                    done();
-                });
-            });
+            ExcelJSLocalizationFormatTests.runCurrencyTests([
+                { value: "USD", expected: "$#,##0_);\\($#,##0\\)" },
+                { value: "RUB", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+                { value: "JPY", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+                { value: "KPW", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+                { value: "LBP", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+                { value: "SEK", expected: "$#,##0_);\\($#,##0\\)" } // NOT SUPPORTED in default
+            ]);
 
             QUnit.test("Data - columns.dataType: number, columns.format.type: 'currency' with presicion" + testCaption, (assert) => {
                 const done = assert.async();
