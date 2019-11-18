@@ -4782,8 +4782,8 @@ declare module DevExpress.ui {
         grandTotal(): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.grandTotal(direction) */
         grandTotal(direction: string): dxPivotGridSummaryCell;
-        /** @name dxPivotGridSummaryCell.isCalculated() */
-        isCalculated(): boolean;
+        /** @name dxPivotGridSummaryCell.isPostProcessed(field) */
+        isPostProcessed(field: DevExpress.data.PivotGridDataSourceField | string): boolean;
         /** @name dxPivotGridSummaryCell.next(direction) */
         next(direction: string): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.next(direction, allowCrossGroup) */
@@ -4800,10 +4800,10 @@ declare module DevExpress.ui {
         value(): any;
         /** @name dxPivotGridSummaryCell.value(field) */
         value(field: DevExpress.data.PivotGridDataSourceField | string): any;
-        /** @name dxPivotGridSummaryCell.value(field, isCalculatedValue) */
-        value(field: DevExpress.data.PivotGridDataSourceField | string, isCalculatedValue: boolean): any;
-        /** @name dxPivotGridSummaryCell.value(isCalculatedValue) */
-        value(isCalculatedValue: boolean): any;
+        /** @name dxPivotGridSummaryCell.value(field, postProcessed) */
+        value(field: DevExpress.data.PivotGridDataSourceField | string, postProcessed: boolean): any;
+        /** @name dxPivotGridSummaryCell.value(postProcessed) */
+        value(postProcessed: boolean): any;
     }
     /** @name dxPopover.Options */
     export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {

@@ -438,8 +438,8 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
    */
     /**
   * @name dxPivotGridSummaryCell.value
-  * @publicName value(isCalculatedValue)
-  * @param1 isCalculatedValue:boolean
+  * @publicName value(postProcessed)
+  * @param1 postProcessed:boolean
   * @return any
   */
     /**
@@ -450,9 +450,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
    */
     /**
   * @name dxPivotGridSummaryCell.value
-  * @publicName value(field, isCalculatedValue)
+  * @publicName value(field, postProcessed)
   * @param1 field:PivotGridDataSourceOptions.fields|string
-  * @param2 isCalculatedValue:boolean
+  * @param2 postProcessed:boolean
   * @return any
   */
     value: function(arg1, arg2) {
@@ -484,12 +484,22 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     /**
-    * @name dxPivotGridSummaryCell.isCalculated
-    * @publicName isCalculated()
+    * @name dxPivotGridSummaryCell.isPostProcessed
+    * @publicName isPostProcessed(field)
+    * @param1 field:PivotGridDataSourceOptions.fields|string
     * @return boolean
     */
-    isCalculated() {
-        return !!(this._cell && this._cell.calculatedFlags[this._fieldIndex]);
+    isPostProcessed(field) {
+        let fieldIndex = this._fieldIndex;
+        if(isDefined(field)) {
+            const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
+            fieldIndex = fieldPos.index;
+
+            if(fieldPos.area !== "data") {
+                return false;
+            }
+        }
+        return !!(this._cell && this._cell.calculatedFlags[fieldIndex]);
     }
 });
 
