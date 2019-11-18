@@ -187,18 +187,6 @@ export class RowsViewWrapper extends GridTableElement {
     hasFocusedRow() {
         return this.getFocusedRow().length > 0;
     }
-
-    getForm() {
-        return this.getElement().find(".dx-form");
-    }
-
-    getFormEditor(index) {
-        return this.getForm().find(".dx-texteditor").eq(index);
-    }
-
-    getFormEditorInput(index) {
-        return this.getFormEditor(index).find(".dx-texteditor-input").eq(0);
-    }
 }
 
 export class PagerWrapper extends GridElement {
