@@ -25,9 +25,8 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
     assert.equal(items.length, 2);
 });
 
-QUnit.test("Nodes expanding should work with special charactes in id", function(assert) {
-    const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
-    testIds.forEach(testId => {
+['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'].forEach((testId) => {
+    QUnit.test(`Nodes expanding should work with special charactes in id - ${testId}`, function(assert) {
         var $treeView = initTree({
             dataSource: [
                 { id: testId, text: "item1", selected: false, expanded: false },
@@ -40,13 +39,9 @@ QUnit.test("Nodes expanding should work with special charactes in id", function(
 
         $treeView.find('[aria-level="1"]').find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick.dxTreeView');
         assert.equal($treeView.find('[aria-level="2"]').is(':visible'), true);
-        $treeView.dxTreeView('instance').dispose();
     });
-});
 
-QUnit.test("Nodes selection should work with special charactes in id", function(assert) {
-    const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
-    testIds.forEach(testId => {
+    QUnit.test(`Nodes selection should work with special charactes in id - ${testId}`, function(assert) {
         var $treeView = initTree({
             dataSource: [
                 { id: testId, text: "item1", selected: false, expanded: true },
@@ -63,13 +58,9 @@ QUnit.test("Nodes selection should work with special charactes in id", function(
         $treeView.find('[aria-level="1"]').find('.dx-checkbox').first().trigger('dxclick.dxCheckBox');
         assert.equal($treeView.find('[aria-level="1"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
         assert.equal($treeView.find('[aria-level="2"]').find('.dx-checkbox').hasClass('dx-checkbox-checked'), true);
-        $treeView.dxTreeView('instance').dispose();
     });
-});
 
-QUnit.test("Search should work with special charactes in the nodes ids", function(assert) {
-    const testIds = ['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'];
-    testIds.forEach(testId => {
+    QUnit.test(`Search should work with special charactes in the nodes ids - ${testId}`, function(assert) {
         var $treeView = initTree({
             dataSource: [
                 { id: testId, text: "item1", selected: false, expanded: false },
@@ -89,7 +80,6 @@ QUnit.test("Search should work with special charactes in the nodes ids", functio
         assert.equal($treeView.find('[aria-label="item1"]').is(':visible'), true);
         assert.equal($treeView.find('[aria-label="item2"]').is(':visible'), true);
         assert.equal($treeView.find('[aria-label="item3"]').is(':visible'), false);
-        $treeView.dxTreeView('instance').dispose();
     });
 });
 
