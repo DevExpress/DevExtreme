@@ -121,8 +121,8 @@ export default class TemplateManager {
         this._tempTemplates = [];
     }
 
-    initTemplates(defaultTemplates) {
-        this._defaultTemplates = this.ownerDefaultTemplates || defaultTemplates || this._defaultTemplates;
+    initTemplates() {
+        this._defaultTemplates = this.ownerDefaultTemplates || this._defaultTemplates;
 
         this._extractTemplates();
         this._extractAnonymousTemplate();
@@ -150,14 +150,15 @@ export default class TemplateManager {
 
         for(let templateName in templatesMap) {
             const deviceTemplate = TemplateManager._findTemplateByDevice(templatesMap[templateName]);
-            deviceTemplate && this.saveTemplate(templateName, deviceTemplate);
+            if(deviceTemplate) {
+                this.saveTemplate(templateName, deviceTemplate);
+            }
         }
     }
 
     saveTemplate(name, template) { // we change arguments!!!
         const templates = this.option('integrationOptions.templates'); // why ???
         templates[name] = this.createTemplate(template); // why ??? we change it by reference
-        this.createTemplate(template);
     }
 
     _extractAnonymousTemplate() {
@@ -175,7 +176,6 @@ export default class TemplateManager {
 
         if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
             templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate); // why ??? we change it by reference !!!!
-            this.createTemplate($anonymousTemplate);
         }
     }
 
@@ -199,7 +199,7 @@ export default class TemplateManager {
     }
 
     getTemplate(templateSource) {
-        this._defaultTemplates = this.__getDefaultTemplates() || this.ownerDefaultTemplates || this._defaultTemplates;
+        this._defaultTemplates = this.ownerDefaultTemplates || this._defaultTemplates;
 
         if(isFunction(templateSource)) {
             return new FunctionTemplate(function(options) {
@@ -252,8 +252,8 @@ export default class TemplateManager {
         }
 
         if(typeof templateSource === 'string') {
-            var nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
-            var integrationTemplate = null;
+            const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
+            let integrationTemplate = null;
 
             if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
                 integrationTemplate = this._renderIntegrationTemplate(templateSource);
