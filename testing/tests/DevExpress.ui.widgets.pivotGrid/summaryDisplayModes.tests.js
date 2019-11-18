@@ -585,7 +585,7 @@ QUnit.test("Cell is calculated after runningTotal calculation", function(assert)
     this.descriptions.values[0].runningTotal = true;
     applyRunningTotal(this.descriptions, this.data);
 
-    assert.deepEqual(this.data.values[0][6].calculatedFlags, [true]);
+    assert.deepEqual(this.data.values[0][6].postProcessedFlags, [true]);
 });
 
 QUnit.test("Calculate cell value with empty data", function(assert) {

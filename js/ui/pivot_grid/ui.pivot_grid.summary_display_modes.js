@@ -157,7 +157,7 @@ var SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, 
 
     if(cell) {
         cell.originalCell = cell.originalCell || cell.slice();
-        cell.calculatedFlags = cell.calculatedFlags || [];
+        cell.postProcessedFlags = cell.postProcessedFlags || [];
         this._cell = cell;
     }
 
@@ -499,7 +499,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
                 return false;
             }
         }
-        return !!(this._cell && this._cell.calculatedFlags[fieldIndex]);
+        return !!(this._cell && this._cell.postProcessedFlags[fieldIndex]);
     }
 });
 
@@ -578,7 +578,7 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
                     expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
                     cell = expressionArg.cell();
                     value = cell[i] = expression(expressionArg);
-                    cell.calculatedFlags[i] = true;
+                    cell.postProcessedFlags[i] = true;
                     isEmptyCell = value === null || value === undefined;
                 }
                 if(columnItem.isEmpty[i] === undefined) {
@@ -628,7 +628,7 @@ exports.applyRunningTotal = function(descriptions, data) {
                     expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
                     cell = expressionArg.cell();
                     cell[i] = expression(expressionArg);
-                    cell.calculatedFlags[i] = true;
+                    cell.postProcessedFlags[i] = true;
                 }
             }
         }, false);
