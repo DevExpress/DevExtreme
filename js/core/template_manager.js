@@ -46,7 +46,7 @@ export default class TemplateManager {
         this.ownerDefaultTemplates = owner._defaultTemplates;
         this.owner = owner;
 
-        this.__option = (optionName) => owner.option(optionName);
+        this.option = (optionName) => owner.option(optionName);
         this.__element = () => owner.$element();
         this.__getDefaultTemplates = getDefaultTemplates;
         this.__getAnonymousTemplateName = getAnonymousTemplateName;
@@ -155,13 +155,13 @@ export default class TemplateManager {
     }
 
     saveTemplate(name, template) { // we change arguments!!!
-        const templates = this.__option('integrationOptions.templates'); // why ???
+        const templates = this.option('integrationOptions.templates'); // why ???
         templates[name] = this.createTemplate(template); // why ??? we change it by reference
         this.createTemplate(template);
     }
 
     _extractAnonymousTemplate() {
-        const templates = this.__option('integrationOptions.templates'); // we change it
+        const templates = this.option('integrationOptions.templates'); // we change it
         const anonymousTemplateName = this.__getAnonymousTemplateName();
         const $anonymousTemplate = this.__element().contents().detach();
 
@@ -195,7 +195,7 @@ export default class TemplateManager {
 
     createTemplate(templateSource) {
         templateSource = typeof templateSource === 'string' ? normalizeTemplateElement(templateSource) : templateSource;
-        return this.__option('integrationOptions.createTemplate')(templateSource);
+        return this.option('integrationOptions.createTemplate')(templateSource);
     }
 
     getTemplate(templateSource) {
@@ -252,7 +252,7 @@ export default class TemplateManager {
         }
 
         if(typeof templateSource === 'string') {
-            var nonIntegrationTemplates = this.__option('integrationOptions.skipTemplates') || [];
+            var nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
             var integrationTemplate = null;
 
             if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
@@ -268,10 +268,10 @@ export default class TemplateManager {
     }
 
     _renderIntegrationTemplate(templateSource) {
-        const integrationTemplate = this.__option('integrationOptions.templates')[templateSource];
+        const integrationTemplate = this.option('integrationOptions.templates')[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            const isAsyncTemplate = this.__option('templatesRenderAsynchronously');
+            const isAsyncTemplate = this.option('templatesRenderAsynchronously');
             if(!isAsyncTemplate) {
                 return TemplateManager._addOneRenderedCall(integrationTemplate);
             }

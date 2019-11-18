@@ -39,6 +39,11 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         this.callBase();
     },
 
+    // ????
+    _cleanTemplates: function() {
+        this._templateManager.dispose();
+    },
+
     _initTemplates: function() {
         this._templateManager.initTemplates();
     },
