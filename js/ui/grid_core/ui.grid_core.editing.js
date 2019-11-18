@@ -890,8 +890,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return true;
         },
 
-        _addRowCore: function(data, parentKey, oldEditRowIndex) {
+        _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             var that = this,
+                oldEditRowIndex = that._getVisibleEditRowIndex(),
                 insertKey = that._getInsertKey(parentKey),
                 editMode = getEditMode(that);
 
@@ -899,7 +900,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that._dataController.updateItems({
                 changeType: "update",
-                rowIndices: [oldEditRowIndex, insertKey.rowIndex]
+                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, insertKey.rowIndex]
             });
 
             if(editMode === EDIT_MODE_POPUP) {

@@ -16046,3 +16046,35 @@ QUnit.test("Adding multiple rows with async onInitNewRow (mixed failures and suc
     assert.equal(visibleRows.length, 8, "two rows were added");
     assert.deepEqual(visibleRows[7].data, { room: 9 }, "row #7 data");
 });
+
+QUnit.test("Adding row and editing another row when the onInitNewRow event is asynchronous and row mode is set", function(assert) {
+    // arrange
+    var $testElement = $("#container");
+
+    this.options.columns = ["room"];
+    this.options.editing = {
+        allowAdding: true,
+        mode: "row"
+    };
+    this.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.promise.resolve();
+        }, 500);
+    };
+
+    this.editingController.optionChanged({ name: "onInitNewRow" });
+    this.columnHeadersView.render($testElement);
+    this.rowsView.render($testElement);
+    this.headerPanel.render($testElement);
+    this.columnsController.init();
+
+    // act
+    this.addRow();
+    this.editRow(2);
+    this.clock.tick(500);
+
+    // assert
+    assert.ok($(this.rowsView.getRowElement(0)).hasClass("dx-edit-row dx-row-inserted"), "new row");
+    assert.notOk($(this.rowsView.getRowElement(3)).hasClass("dx-edit-row"), "row isn't edited");
+});
