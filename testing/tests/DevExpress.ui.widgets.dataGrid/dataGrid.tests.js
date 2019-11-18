@@ -18070,3 +18070,74 @@ QUnit.test("The draggable row should have correct markup when defaultOptions is 
         });
     }
 });
+
+// T827960
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+            e.component.option("loadPanel", { enabled: true });
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to value on the same page in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to another page in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        paging: {
+            pageSize: 1
+        },
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 2);
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 2, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
