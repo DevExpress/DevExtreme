@@ -158,7 +158,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         const getFakeAppointmentPosition = scheduler => {
             const fakeAppointment = scheduler.appointments.compact.getFakeAppointment();
-            const position = getAbsolutePosition(fakeAppointment);
+            const position = getAbsolutePosition(fakeAppointment.parent());
 
             return {
                 left: position.left + fakeAppointment.width() / 2,
@@ -407,6 +407,52 @@ module("Drag and drop appointments", moduleConfig, () => {
         const data = scheduler.instance.option("dataSource")[1];
         assert.deepEqual(data.startDate, new Date(2015, 1, 1, 1), "start date is correct");
         assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), "end date is correct");
+    });
+
+    QUnit.test("The recurring appointment should have correct position when dragging", function(assert) {
+        const scheduler = createWrapper({
+            editing: true,
+            height: 600,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            dataSource: [{
+                text: "Watercolor Landscape",
+                roomId: [1],
+                startDate: new Date(2017, 4, 1, 9, 30),
+                endDate: new Date(2017, 4, 1, 11),
+                recurrenceRule: "FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10"
+            }],
+            resources: [{
+                fieldExpr: "roomId",
+                dataSource: [{
+                    text: "Room 101",
+                    id: 1,
+                    color: "#bbd806"
+                }],
+                label: "Room"
+            }]
+        });
+
+        const $appointment = scheduler.appointments.find("Watercolor Landscape").first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+        const pointer = pointerMock($appointment).start();
+
+        try {
+            pointer
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(150, 0)
+                .up();
+
+            const positionAfterDrag = getAbsolutePosition($appointment);
+
+            assert.deepEqual(positionAfterDrag, {
+                left: positionBeforeDrag.left + 150,
+                top: positionBeforeDrag.top
+            });
+        } finally {
+            scheduler.appointmentPopup.dialog.hide();
+        }
     });
 
     module("appointmentDragging customization", () => {

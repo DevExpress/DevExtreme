@@ -3150,6 +3150,12 @@ declare module DevExpress.ui {
         nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: any) => any);
+        /** @name dxDiagram.Options.onItemClick */
+        onItemClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
+        /** @name dxDiagram.Options.onItemDblClick */
+        onItemDblClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
+        /** @name dxDiagram.Options.onSelectionChanged */
+        onSelectionChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
         /** @name dxDiagram.Options.pageColor */
         pageColor?: string;
         /** @name dxDiagram.Options.pageOrientation */
@@ -3187,6 +3193,27 @@ declare module DevExpress.ui {
         exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly?: boolean): void;
+    }
+    /** @name dxDiagramConnector */
+    export interface dxDiagramConnector extends dxDiagramItem {
+        /** @name dxDiagramConnector.fromKey */
+        fromKey?: any;
+        /** @name dxDiagramConnector.texts */
+        texts?: Array<string>;
+        /** @name dxDiagramConnector.toKey */
+        toKey?: any;
+    }
+    /** @name dxDiagramItem */
+    export interface dxDiagramItem {
+        /** @name dxDiagramItem.id */
+        id?: string;
+    }
+    /** @name dxDiagramShape */
+    export interface dxDiagramShape extends dxDiagramItem {
+        /** @name dxDiagramShape.text */
+        text?: string;
+        /** @name dxDiagramShape.type */
+        type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
     }
     /** @name dxDraggable.Options */
     export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
@@ -3466,7 +3493,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.allowedFileExtensions */
         allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.contextMenu */
-        contextMenu?: { items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'> };
+        contextMenu?: dxFileManagerContextMenu;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3488,7 +3515,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.toolbar */
-        toolbar?: { fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>, items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'> };
+        toolbar?: dxFileManagerToolbar;
         /** @name dxFileManager.Options.upload */
         upload?: { maxFileSize?: number };
     }
@@ -3503,12 +3530,26 @@ declare module DevExpress.ui {
         /** @name dxFileManager.refresh() */
         refresh(): Promise<any> & JQueryPromise<any>;
     }
+    /** @name dxFileManagerContextMenu */
+    export interface dxFileManagerContextMenu {
+        /** @name dxFileManagerContextMenu.items */
+        items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
+    }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+        /** @name dxFileManagerContextMenuItem.items */
+        items?: Array<dxFileManagerContextMenuItem>;
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
         visible?: boolean;
+    }
+    /** @name dxFileManagerToolbar */
+    export interface dxFileManagerToolbar {
+        /** @name dxFileManagerToolbar.fileSelectionItems */
+        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        /** @name dxFileManagerToolbar.items */
+        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -3669,7 +3710,7 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderField.format */
         format?: format;
         /** @name dxFilterBuilderField.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
         /** @name dxFilterBuilderField.name */
         name?: string;
         /** @name dxFilterBuilderField.trueText */
@@ -9577,7 +9618,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.onValueChanged */
         onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
         /** @name dxRangeSelector.Options.scale */
-        scale?: { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
+        scale?: { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
         /** @name dxRangeSelector.Options.selectedRangeColor */
         selectedRangeColor?: string;
         /** @name dxRangeSelector.Options.selectedRangeUpdateMode */
@@ -9587,7 +9628,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.sliderHandle */
         sliderHandle?: { color?: string, opacity?: number, width?: number };
         /** @name dxRangeSelector.Options.sliderMarker */
-        sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
+        sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
         /** @name dxRangeSelector.Options.value */
         value?: Array<number | string | Date> | VizRange;
     }

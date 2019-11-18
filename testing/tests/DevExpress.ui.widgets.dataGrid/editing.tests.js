@@ -7821,6 +7821,32 @@ QUnit.test("A dependent cascading editor should be updated when a master cell va
     assert.strictEqual($(rowsView.getCellElement(0, 1)).text(), "Dallas", "text of the second column of the first row");
 });
 
+// T832801
+QUnit.test("The current editable row should close when adding a new row in 'row' mode", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    this.options.editing = {
+        allowUpdating: true,
+        allowAdding: true
+    };
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(2);
+
+    // assert
+    assert.ok($(rowsView.getRowElement(2)).hasClass("dx-edit-row"), "row is edited");
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.ok($(rowsView.getRowElement(0)).hasClass("dx-edit-row dx-row-inserted"), "new row");
+    assert.notOk($(rowsView.getRowElement(3)).hasClass("dx-edit-row"), "row isn't edited");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {

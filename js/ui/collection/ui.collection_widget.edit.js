@@ -221,11 +221,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         return key;
     },
 
+    _nullValueSelectionSupported: function() {
+        return false;
+    },
+
     _initSelectionModule: function() {
         const that = this,
             itemsGetter = that._editStrategy.itemsGetter;
 
         this._selection = new Selection({
+            allowNullValue: this._nullValueSelectionSupported(),
             mode: this.option("selectionMode"),
             maxFilterLengthInRequest: this.option("maxFilterLengthInRequest"),
             equalByReference: !this._isKeySpecified(),

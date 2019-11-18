@@ -457,7 +457,7 @@ const DiagramCommands = {
                 selectAll: {
                     command: DiagramCommand.SelectAll,
                     text: messageLocalization.format("dxDiagram-commandSelectAll"),
-                    icon: "dx-diagram-i-button-select-all dx-diagram-i"
+                    icon: "dx-diagram-i-menu-select-all dx-diagram-i"
                 },
                 delete: {
                     command: DiagramCommand.Delete,
@@ -467,37 +467,37 @@ const DiagramCommands = {
                 bringToFront: {
                     command: DiagramCommand.BringToFront,
                     text: messageLocalization.format("dxDiagram-commandBringToFront"),
-                    icon: "dx-diagram-i-button-bring-to-front dx-diagram-i"
+                    icon: "dx-diagram-i-menu-bring-to-front dx-diagram-i"
                 },
                 sendToBack: {
                     command: DiagramCommand.SendToBack,
                     text: messageLocalization.format("dxDiagram-commandSendToBack"),
-                    icon: "dx-diagram-i-button-send-to-back dx-diagram-i"
+                    icon: "dx-diagram-i-menu-send-to-back dx-diagram-i"
                 },
                 lock: {
                     command: DiagramCommand.Lock,
                     text: messageLocalization.format("dxDiagram-commandLock"),
-                    icon: "dx-diagram-i-button-lock dx-diagram-i"
+                    icon: "dx-diagram-i-menu-lock dx-diagram-i"
                 },
                 unlock: {
                     command: DiagramCommand.Unlock,
                     text: messageLocalization.format("dxDiagram-commandUnlock"),
-                    icon: "dx-diagram-i-button-unlock dx-diagram-i"
+                    icon: "dx-diagram-i-menu-unlock dx-diagram-i"
                 },
                 insertShapeImage: {
                     command: DiagramCommand.InsertShapeImage,
                     text: messageLocalization.format("dxDiagram-commandInsertShapeImage"),
-                    icon: "dx-diagram-i-button-image-insert dx-diagram-i"
+                    icon: "dx-diagram-i-menu-image-insert dx-diagram-i"
                 },
                 editShapeImage: {
                     command: DiagramCommand.EditShapeImage,
                     text: messageLocalization.format("dxDiagram-commandEditShapeImage"),
-                    icon: "dx-diagram-i-button-image-edit dx-diagram-i"
+                    icon: "dx-diagram-i-menu-image-edit dx-diagram-i"
                 },
                 deleteShapeImage: {
                     command: DiagramCommand.DeleteShapeImage,
                     text: messageLocalization.format("dxDiagram-commandDeleteShapeImage"),
-                    icon: "dx-diagram-i-button-image-delete dx-diagram-i"
+                    icon: "dx-diagram-i-menu-image-delete dx-diagram-i"
                 }
             });
     },

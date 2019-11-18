@@ -26,8 +26,8 @@ var UI_FEEDBACK = "UIFeedback",
     FEEDBACK_HIDE_TIMEOUT = 400;
 
 const EVENT_NAME = {
-    active: eventUtils.addNamespace(feedbackEvents.active, UI_FEEDBACK),
-    inactive: eventUtils.addNamespace(feedbackEvents.inactive, UI_FEEDBACK),
+    active: feedbackEvents.active,
+    inactive: feedbackEvents.inactive,
     hoverStart: eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
     hoverEnd: eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK),
     focusIn: owner => eventUtils.addNamespace('focusin', `${owner}Focus`),
@@ -569,7 +569,7 @@ var Widget = DOMComponentWithTemplate.inherit({
         const { activeStateEnabled } = this.option();
         const eventBindingTarget = this._eventBindingTarget();
 
-        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit);
+        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit, { namespace: UI_FEEDBACK });
 
         if(activeStateEnabled) {
             this._attachFeedbackEventsCore(
@@ -578,29 +578,35 @@ var Widget = DOMComponentWithTemplate.inherit({
                 ($el, event) => this._toggleActiveState($el, false, event), {
                     selector: this._activeStateUnit,
                     showTimeout: this._feedbackShowTimeout,
-                    hideTimeout: this._feedbackHideTimeout
+                    hideTimeout: this._feedbackHideTimeout,
+                    namespace: UI_FEEDBACK
                 }
             );
         }
     },
 
     // NOTE: Static method
-    _detachFeedbackEvents($el, selector) {
-        eventsEngine.off($el, EVENT_NAME.active, selector);
-        eventsEngine.off($el, EVENT_NAME.inactive, selector);
+    _detachFeedbackEvents($el, selector, { namespace } = {}) {
+        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
+        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
+
+        eventsEngine.off($el, activeEvent, selector);
+        eventsEngine.off($el, inactiveEvent, selector);
     },
 
     // NOTE: Static method
     _attachFeedbackEventsCore($el, active, inactive, opts) {
-        const { selector, showTimeout, hideTimeout } = opts;
+        const { selector, showTimeout, hideTimeout, namespace } = opts;
+        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
+        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
         const feedbackAction = new Action(({ event, element }) => active(element, event));
         const feedbackActionDisabled = new Action(({ event, element }) => inactive(element, event),
             { excludeValidators: ['disabled', 'readOnly'] });
 
-        eventsEngine.on($el, EVENT_NAME.active, selector, { timeout: showTimeout },
+        eventsEngine.on($el, activeEvent, selector, { timeout: showTimeout },
             event => feedbackAction.execute({ event, element: $(event.currentTarget) })
         );
-        eventsEngine.on($el, EVENT_NAME.inactive, selector, { timeout: hideTimeout },
+        eventsEngine.on($el, inactiveEvent, selector, { timeout: hideTimeout },
             event => feedbackActionDisabled.execute({ event, element: $(event.currentTarget) })
         );
     },
