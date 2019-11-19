@@ -591,6 +591,7 @@ QUnit.module("Real DataController and ColumnsController", {
                 enabled: true
             },
             dataSource: [],
+            keyExpr: "name",
             editing: {
                 mode: 'row',
                 allowAdding: true
@@ -604,13 +605,18 @@ QUnit.module("Real DataController and ColumnsController", {
         this.gridView.render($("#container"));
         this.clock.tick();
 
+        this.optionCalled.add((name, value) => {
+            if(name === "focusedRowKey" && value) {
+                this.focusController.optionChanged({ name: name, value: value });
+            }
+        });
+
         // act
         this.addRow();
         this.cellValue(0, 0, "Test0");
         this.cellValue(0, 1, "Test1");
         this.cellValue(0, 2, "5");
         this.saveEditData();
-        this.refresh();
         // assert
         assert.equal(focusedRowChangedFiresCount, 1, "onFocusedRowChanged fires count");
 

@@ -1065,7 +1065,7 @@ QUnit.test("Focus next row if grouping and virtual scrolling mode", function(ass
     // assert
     assert.equal(this.option("focusedRowIndex"), 6, "FocusedRowIndex");
     assert.equal(this.option("focusedRowKey"), "Den", "FocusedRowKey");
-    assert.equal(this.pageIndex(), 3, "PageIndex");
+    assert.equal(this.pageIndex(), 2, "PageIndex");
     assert.equal($(rowsView.getCellElement(11, 1)).text(), "Alice");
     assert.ok(dataGridWrapper.rowsView.isRowVisible(11));
 });
