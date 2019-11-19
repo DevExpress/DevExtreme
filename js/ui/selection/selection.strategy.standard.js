@@ -1,5 +1,6 @@
 var commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    isDefined = typeUtils.isDefined,
     getKeyHash = commonUtils.getKeyHash,
     dataQuery = require("../../data/query"),
     deferredUtils = require("../../core/utils/deferred"),
@@ -180,7 +181,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key, itemData) {
-        if(itemData.disabled) {
+        if(isDefined(itemData) && itemData.disabled) {
             if(this.options.disabledItemKeys.indexOf(key) === -1) {
                 this.options.disabledItemKeys.push(key);
             }
