@@ -12,7 +12,6 @@ import { addNamespace } from "../../events/utils";
 import holdEvent from "../../events/hold";
 import Selection from "../selection/selection";
 import { Deferred } from "../../core/utils/deferred";
-import pointerEvents from "../../events/pointer";
 
 var EDITOR_CELL_CLASS = "dx-editor-cell",
     ROW_CLASS = "dx-row",
@@ -815,9 +814,7 @@ module.exports = {
                 },
 
                 _attachCheckBoxClickEvent: function($element) {
-                    const editingController = this._editingController;
-                    const eventName = editingController && editingController.isEditing() ? pointerEvents.down : clickEvent.name;
-                    eventsEngine.on($element, eventName, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var selectionController = this.getController("selection"),
                             event = e.event,
                             rowIndex = this.getRowIndex($(event.currentTarget).closest("." + ROW_CLASS));

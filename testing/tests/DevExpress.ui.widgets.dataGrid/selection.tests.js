@@ -18,7 +18,7 @@ import { DataSource } from "data/data_source/data_source";
 import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
-import pointerEvents from "events/pointer";
+import clickEvent from "events/click";
 
 const dataGridWrapper = new DataGridWrapper('#container');
 
@@ -3358,7 +3358,7 @@ QUnit.test("changeRowSelection for editing data (T654321)", function(assert) {
     // act
     that.editCell(0, 1);
     rowsViewWrapper.getEditorInput(0, 1).val("Test");
-    rowsViewWrapper.getSelectCheckBox(0, 0).trigger(pointerEvents.down);
+    rowsViewWrapper.getSelectCheckBox(0, 0).trigger(clickEvent.name);
 
     clock.tick();
 
@@ -3386,7 +3386,7 @@ QUnit.test("changeRowSelection for editing data if cell edit mode (T826197)", fu
     // act
     that.editCell(0, 1);
     rowsViewWrapper.getEditorInput(0, 1).val("Test");
-    rowsViewWrapper.getSelectCheckBox(0, 0).trigger(pointerEvents.down);
+    rowsViewWrapper.getSelectCheckBox(0, 0).trigger(clickEvent.name);
 
     clock.tick();
 
@@ -3458,7 +3458,7 @@ QUnit.test("Uncheck selectAll button call deselectAll", function(assert) {
 
     // act
     this.dataController.filter(['age', '>=', 17]);
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger(clickEvent.name);
 
     // assert
     assert.strictEqual($checkbox.dxCheckBox("option", "value"), false, "false state of checkbox");
@@ -3557,7 +3557,7 @@ QUnit.test("selecting of row when rowTemplate contains several tr tags", functio
     });
 
     var ACTIVE_ID = "#Dan";
-    testElement.find(ACTIVE_ID).trigger("dxclick");
+    testElement.find(ACTIVE_ID).trigger(clickEvent.name);
 
     // assert
     var selectedRows = testElement.find(".dx-selection");
@@ -3721,8 +3721,8 @@ QUnit.test("Click on selected selection checkbox with shift key", function(asser
 
     // act
     var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
-    $checkbox.trigger("dxclick");
-    $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
+    $checkbox.trigger(clickEvent.name);
+    $checkbox.trigger($.Event(clickEvent.name, { shiftKey: true }));
 
     // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
@@ -3740,9 +3740,9 @@ QUnit.test("Click on selected selection checkbox with shift key to select range"
 
     // act
     var $checkboxes = testElement.find(".dx-data-row .dx-select-checkbox");
-    $checkboxes.eq(1).trigger("dxclick");
-    $checkboxes.eq(0).trigger("dxclick");
-    $checkboxes.eq(1).trigger($.Event("dxclick", { shiftKey: true }));
+    $checkboxes.eq(1).trigger(clickEvent.name);
+    $checkboxes.eq(0).trigger(clickEvent.name);
+    $checkboxes.eq(1).trigger($.Event(clickEvent.name, { shiftKey: true }));
 
     // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 2, "two items are selected");
@@ -3761,9 +3761,9 @@ QUnit.test("Click on unselected selection checkbox with shift key", function(ass
 
     // act
     var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
-    $checkbox.trigger("dxclick");
-    $checkbox.trigger("dxclick");
-    $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
+    $checkbox.trigger(clickEvent.name);
+    $checkbox.trigger(clickEvent.name);
+    $checkbox.trigger($.Event(clickEvent.name, { shiftKey: true }));
 
     // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
