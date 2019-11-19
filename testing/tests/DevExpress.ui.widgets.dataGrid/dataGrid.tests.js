@@ -9152,6 +9152,31 @@ QUnit.test("scroll should works correctly if page size is small and totalCount a
     assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, "visible rows are in viewport");
 });
 
+// T830138
+QUnit.test("Freespace row should not have huge height if rowRenderingMode is virtual and pageSize is large", function(assert) {
+    // arrange
+    var store = [];
+    for(let i = 0; i < 60; i++) {
+        store.push({
+            value: i
+        });
+    }
+
+    $("#dataGrid").dxDataGrid({
+        dataSource: store,
+        loadingTimeout: undefined,
+        scrolling: {
+            rowRenderingMode: "virtual",
+        },
+        paging: {
+            pageSize: 40
+        }
+    });
+
+    // assert
+    assert.roughEqual($(".dx-freespace-row").height(), 0.5, 0.51, "freespace height");
+});
+
 QUnit.module("Rendered on server", baseModuleConfig);
 
 QUnit.test("Loading should be synchronously", function(assert) {
