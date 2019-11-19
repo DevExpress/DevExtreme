@@ -1277,7 +1277,7 @@ module.exports = {
                 }
             };
 
-            var columnOptionCore = function(that, column, optionName, value, notFireEvent, needUpdateIndexes) {
+            var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
