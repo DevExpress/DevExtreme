@@ -358,7 +358,7 @@ var TabPanel = MultiView.inherit({
     _focusOutHandler: function(e) {
         this.callBase.apply(this, arguments);
 
-        if(!$(e.relatedTarget).is(this.$element())) {
+        if($(e.target).is(this.$element())) {
             this._tabs.option("focusedElement", null);
         }
     },
