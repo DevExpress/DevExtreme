@@ -1793,7 +1793,7 @@ QUnit.test("Text decoration", function(assert) {
             assert.equal(overlineDecoration.args.x, 250, "Overline decoration line x");
             assert.roughEqual(overlineDecoration.args.y, 7.2, 0.5, "Overline decoration line y");
             assert.roughEqual(overlineDecoration.args.height, 1.2, 0.1, "Overline decoration line height");
-            assert.strictEqual(overlineDecoration.args.width, 100, 8, "Overline decoration line width");
+            assert.strictEqual(overlineDecoration.args.width, 100, "Overline decoration line width");
             assert.equal(that.drawnElements[7].style.fillStyle, "#aaff23", "Overline decoration line fill color");
 
             // Line-through decoration assert

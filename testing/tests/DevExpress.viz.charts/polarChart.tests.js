@@ -386,11 +386,11 @@ QUnit.test("Pass angles to axes. Process unnormalized angle", function(assert) {
     var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
         valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
-    assert.equal(argumentAxisOptions.startAngle, 194, "startAngle", "argumentAxis startAngle");
-    assert.equal(argumentAxisOptions.endAngle, 554, "endAngle", "argumentAxis endAngle");
+    assert.equal(argumentAxisOptions.startAngle, 194, "argumentAxis startAngle");
+    assert.equal(argumentAxisOptions.endAngle, 554, "argumentAxis endAngle");
 
-    assert.equal(valueAxisOptions.startAngle, 194, "startAngle", "valueAxis startAngle");
-    assert.equal(valueAxisOptions.endAngle, 554, "endAngle", "valueAxis end");
+    assert.equal(valueAxisOptions.startAngle, 194, "valueAxis startAngle");
+    assert.equal(valueAxisOptions.endAngle, 554, "valueAxis end");
 });
 
 QUnit.test("Pass angles to axes. Process incorrect angle", function(assert) {
@@ -403,11 +403,11 @@ QUnit.test("Pass angles to axes. Process incorrect angle", function(assert) {
     var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
         valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
-    assert.equal(argumentAxisOptions.startAngle, 0, "startAngle", "argumentAxis startAngle");
-    assert.equal(argumentAxisOptions.endAngle, 360, "endAngle", "argumentAxis endAngle");
+    assert.equal(argumentAxisOptions.startAngle, 0, "argumentAxis startAngle");
+    assert.equal(argumentAxisOptions.endAngle, 360, "argumentAxis endAngle");
 
-    assert.equal(valueAxisOptions.startAngle, 0, "startAngle", "valueAxis startAngle");
-    assert.equal(valueAxisOptions.endAngle, 360, "endAngle", "valueAxis end");
+    assert.equal(valueAxisOptions.startAngle, 0, "valueAxis startAngle");
+    assert.equal(valueAxisOptions.endAngle, 360, "valueAxis end");
 });
 
 QUnit.test("create axes", function(assert) {
