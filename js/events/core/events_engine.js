@@ -599,7 +599,7 @@ var beforeSetStrategy = Callbacks();
 var afterSetStrategy = Callbacks();
 
 function addNamespace(event, namespace) {
-    return namespace ? utils.addNamespace(event) : event;
+    return namespace ? utils.addNamespace(event, namespace) : event;
 }
 
 eventsEngine.hover = {
