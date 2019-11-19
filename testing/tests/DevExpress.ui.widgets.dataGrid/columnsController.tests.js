@@ -8681,6 +8681,25 @@ QUnit.module("onOptionChanged", {
         // assert
         assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[1].caption", "test", "Field 1"], "onOptionChanged args");
     });
+
+    QUnit.test("Should be correct value in onOptionChanged callback after moving some column to the last position", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2"
+            }, {
+                dataField: "field3"
+            }]
+        });
+
+        // act
+        this.columnsController.moveColumn(0, 3);
+
+        // assert
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[0].visibleIndex", 2, 0], "onOptionChanged args");
+    });
 });
 
 QUnit.module("Customization of the command columns", {
