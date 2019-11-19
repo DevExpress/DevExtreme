@@ -2506,7 +2506,7 @@ QUnit.module("keyboard navigation", {
     QUnit.test("Select all when disabled item is null (T832581)", assert => {
         try {
             const instance = $("#list").dxList({
-                dataSource: [null],
+                dataSource: [null, undefined],
                 searchEnabled: true,
                 selectionMode: "all",
                 showSelectionControls: true,
