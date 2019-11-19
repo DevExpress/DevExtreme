@@ -1919,7 +1919,7 @@ QUnit.test('Erase legend on update options', function(assert) {
     this.legend.update([]);
 
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
-    assert.ok(this.renderer.g.getCall(1).returnValue.remove.lastCall.calledAfter(titleGroup.linkRemove.lastCall), [], 'group is removed');
+    assert.ok(this.renderer.g.getCall(1).returnValue.remove.lastCall.calledAfter(titleGroup.linkRemove.lastCall), 'group is removed');
 });
 
 QUnit.test('Check groups order', function(assert) {
