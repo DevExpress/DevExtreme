@@ -1473,7 +1473,7 @@ QUnit.test("Layout 2", function(assert) {
     assert.roughEqual($areas.eq(2).outerHeight(true), $areas.eq(3).outerHeight(true), 1.1, "area 2=3 outerHeight");
     assert.roughEqual($areas.eq(3).outerHeight(true), $areas.eq(4).outerHeight(true), 1.1, "area 3=4 outerHeight");
 
-    assert.equal($areas.eq(0).width(), $areas.eq(1).width(), "area 0>1 width");
+    assert.ok($areas.eq(0).width() > $areas.eq(1).width(), "area 0>1 width");
     assert.equal($areas.eq(1).width(), $areas.eq(2).width(), "area 1=2 width");
     assert.equal($areas.eq(2).width(), $areas.eq(3).width(), "area 2=3 width");
     assert.equal($areas.eq(3).width(), $areas.eq(4).width(), "area 3=4 width");
