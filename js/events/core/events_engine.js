@@ -605,7 +605,7 @@ eventsEngine.hover = {
     on: ($el, start, end, { selector, namespace }) => {
         eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
         eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => {
-            isFunction(start) ? start(event.target, event) : start.execute({ element: event.target, event });
+            start.execute({ element: event.target, event });
         });
     },
 
@@ -634,6 +634,24 @@ eventsEngine.focus = {
         if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
             eventsEngine.off($el, addNamespace('beforeactivate', namespace));
         }
+    }
+};
+
+eventsEngine.active = {
+    on: ($el, active, inactive, opts) => {
+        const { selector, showTimeout, hideTimeout, namespace } = opts;
+
+        eventsEngine.on($el, addNamespace('dxactive', namespace), selector, { timeout: showTimeout },
+            event => active.execute({ event, element: event.currentTarget })
+        );
+        eventsEngine.on($el, addNamespace('dxinactive', namespace), selector, { timeout: hideTimeout },
+            event => inactive.execute({ event, element: event.currentTarget })
+        );
+    },
+
+    off: ($el, { namespace, selector }) => {
+        eventsEngine.off($el, addNamespace('dxactive', namespace), selector);
+        eventsEngine.off($el, addNamespace('dxinactive', namespace), selector);
     }
 };
 

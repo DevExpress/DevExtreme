@@ -10,10 +10,10 @@ var $ = require("../../core/renderer"),
     KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils"),
-    feedbackEvents = require("../../events/core/emitter.feedback"),
     clickEvent = require("../../events/click");
 
 require("../../events/hover");
+require("../../events/core/emitter.feedback");
 
 var UI_FEEDBACK = "UIFeedback",
     WIDGET_CLASS = "dx-widget",
@@ -24,11 +24,6 @@ var UI_FEEDBACK = "UIFeedback",
     FOCUSED_STATE_CLASS = "dx-state-focused",
     FEEDBACK_SHOW_TIMEOUT = 30,
     FEEDBACK_HIDE_TIMEOUT = 400;
-
-const EVENT_NAME = {
-    active: feedbackEvents.active,
-    inactive: feedbackEvents.inactive
-};
 
 /**
  * @name ui
@@ -511,10 +506,9 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _attachHoverEvents() {
         const { hoverStateEnabled } = this.option();
-        const hoverableSelector = this._activeStateUnit;
         const $el = this._eventBindingTarget();
 
-        eventsEngine.hover.off($el, { selector: hoverableSelector, namespace: UI_FEEDBACK });
+        eventsEngine.hover.off($el, { selector: this._activeStateUnit, namespace: UI_FEEDBACK });
 
         if(hoverStateEnabled) {
             eventsEngine.hover.on($el, new Action(({ event, element }) => {
@@ -523,7 +517,7 @@ var Widget = DOMComponentWithTemplate.inherit({
             }, { excludeValidators: ['readOnly'] }), event => {
                 this._hoverEndHandler(event);
                 this._forgetHoveredElement();
-            }, { selector: hoverableSelector, namespace: UI_FEEDBACK });
+            }, { selector: this._activeStateUnit, namespace: UI_FEEDBACK });
         } else {
             this._toggleHoverClass(false);
         }
@@ -531,15 +525,16 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _attachFeedbackEvents() {
         const { activeStateEnabled } = this.option();
-        const eventBindingTarget = this._eventBindingTarget();
+        const $el = this._eventBindingTarget();
 
-        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit, { namespace: UI_FEEDBACK });
+        this._detachFeedbackEvents($el, { namespace: UI_FEEDBACK, selector: this._activeStateUnit });
 
         if(activeStateEnabled) {
-            this._attachFeedbackEventsCore(
-                eventBindingTarget,
-                ($el, event) => this._toggleActiveState($el, true, event),
-                ($el, event) => this._toggleActiveState($el, false, event), {
+            eventsEngine.active.on($el,
+                new Action(({ event, element }) => this._toggleActiveState($(element), true, event)),
+                new Action(({ event, element }) => this._toggleActiveState($(element), false, event),
+                    { excludeValidators: ['disabled', 'readOnly'] }
+                ), {
                     selector: this._activeStateUnit,
                     showTimeout: this._feedbackShowTimeout,
                     hideTimeout: this._feedbackHideTimeout,
@@ -547,32 +542,6 @@ var Widget = DOMComponentWithTemplate.inherit({
                 }
             );
         }
-    },
-
-    // NOTE: Static method
-    _detachFeedbackEvents($el, selector, { namespace } = {}) {
-        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
-        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
-
-        eventsEngine.off($el, activeEvent, selector);
-        eventsEngine.off($el, inactiveEvent, selector);
-    },
-
-    // NOTE: Static method
-    _attachFeedbackEventsCore($el, active, inactive, opts) {
-        const { selector, showTimeout, hideTimeout, namespace } = opts;
-        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
-        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
-        const feedbackAction = new Action(({ event, element }) => active(element, event));
-        const feedbackActionDisabled = new Action(({ event, element }) => inactive(element, event),
-            { excludeValidators: ['disabled', 'readOnly'] });
-
-        eventsEngine.on($el, activeEvent, selector, { timeout: showTimeout },
-            event => feedbackAction.execute({ event, element: $(event.currentTarget) })
-        );
-        eventsEngine.on($el, inactiveEvent, selector, { timeout: hideTimeout },
-            event => feedbackActionDisabled.execute({ event, element: $(event.currentTarget) })
-        );
     },
 
     _hoverStartHandler: commonUtils.noop,
