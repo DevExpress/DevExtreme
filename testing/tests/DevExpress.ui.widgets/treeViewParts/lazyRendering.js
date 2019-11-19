@@ -1,6 +1,4 @@
 /* global internals, initTree */
-import keyboardMock from "../../../helpers/keyboardMock.js";
-
 import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
@@ -28,7 +26,7 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
     assert.equal(items.length, 2);
 });
 
-['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+'].forEach((testId) => {
+['!/#$%&\'()"+./:;<=>?@[]^`{|}~\\,', '____2______.jpg', 'E:\\test\\[gsdfgfd]  |  \'[some__file]', '!@#$%^&*()_+', 1, 2.18, Number(3), true, 0].forEach((testId) => {
     QUnit.test(`Nodes expanding should work with special charactes in id - ${testId}`, function(assert) {
         let treeView = createInstance({
                 dataSource: [
@@ -36,6 +34,8 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
                     { id: testId + 'item1_1', parentId: testId, text: "item1_1", selected: false, expanded: false }
                 ],
                 dataStructure: "plain",
+                rootValue: -1,
+                keyExpr: 'id',
                 height: 500
             }),
             parentItem = treeView.getElement().find('[aria-level="1"]'),
@@ -56,6 +56,8 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
                 { id: testId + 'item1_1', parentId: testId, text: "item1_1", selected: false, expanded: true }
             ],
             dataStructure: "plain",
+            rootValue: -1,
+            keyExpr: 'id',
             showCheckBoxesMode: "normal",
             height: 500
         });
@@ -76,6 +78,8 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
                     { id: 'item2', text: "item2", selected: false, expanded: false }
                 ],
                 dataStructure: "plain",
+                rootValue: -1,
+                keyExpr: 'id',
                 searchEnabled: true,
                 height: 500
             }),
@@ -87,8 +91,7 @@ QUnit.test("Only root nodes should be rendered by default", function(assert) {
         assert.equal(childItem.length, 0);
         assert.equal(anotherItem.length, 1);
 
-        const $input = treeView.getElement().find('.dx-texteditor-input');
-        keyboardMock($input).type("1_1");
+        treeView.instance.option('searchValue', "1_1");
 
         parentItem = treeView.getElement().find('[aria-label="item1"]');
         assert.equal(parentItem.length, 1);
