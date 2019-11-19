@@ -137,3 +137,19 @@ QUnit.test("'selectAll' should work correctly when nested items are rendered aft
     assert.strictEqual($selectAllItem.dxCheckBox("instance").option("value"), true);
     assert.equal(items.length, 3);
 });
+
+QUnit.test("Notify user about cycles in datasource", function(assert) {
+    assert.throws(
+        function() {
+            initTree({
+                dataStructure: "plain",
+                items: [
+                    { id: 1, text: "item1", parentId: 3 },
+                    { id: 2, text: "item2", parentId: 1 },
+                    { id: 3, text: "item3", parentId: 2 }],
+            });
+        },
+        function(error) {
+            return error.indexOf('The dataSource has a cycle') === 0;
+        });
+});
