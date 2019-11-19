@@ -44,7 +44,7 @@ export default class TemplateManager {
         this._tempTemplates = []; // should be defined by control
         this._defaultTemplates = getDefaultTemplates(); // should be defined by control
         this.ownerDefaultTemplates = owner._defaultTemplates;
-        this.owner = owner;
+        this.owner = owner; // used in tests =(
 
         this.option = (optionName) => owner.option(optionName);
         this.$element = () => owner.$element();

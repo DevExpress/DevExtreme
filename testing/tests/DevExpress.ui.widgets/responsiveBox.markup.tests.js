@@ -485,7 +485,7 @@ QUnit.module("templates", () => {
                 rows: [{}],
                 cols: [{}],
                 itemTemplate: function() {
-                    templateContext = this.NAME;
+                    templateContext = this.owner.NAME;
                     return $("<div>test</div>");
                 },
                 items: [{ location: { row: 0, col: 0 } }]
