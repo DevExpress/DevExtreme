@@ -18,12 +18,6 @@ const TIMEVIEW_FORMAT12_AM = -1;
 const TIMEVIEW_FORMAT12_PM = 1;
 const TIMEVIEW_MINUTEARROW_CLASS = "dx-timeview-minutearrow";
 
-const WIDGET_PART_NAMES = {
-    HOUR: "_hourBox",
-    MINUTE: "_minuteBox",
-    PERIOD_MARKER: "_format12"
-};
-
 const rotateArrow = function($arrow, angle, offset) {
     cssRotate($arrow, angle, offset);
 };
@@ -133,7 +127,7 @@ const TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: "auto",
-            template: () => this[WIDGET_PART_NAMES.HOUR].$element()
+            template: () => this._hourBox.$element()
         }, {
             ratio: 0,
             shrink: 0,
@@ -143,7 +137,7 @@ const TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: "auto",
-            template: () => this[WIDGET_PART_NAMES.MINUTE].$element()
+            template: () => this._minuteBox.$element()
         }];
 
         if(is12HourFormat) {
@@ -151,7 +145,7 @@ const TimeView = Editor.inherit({
                 ratio: 0,
                 shrink: 0,
                 baseSize: "auto",
-                template: () => this[WIDGET_PART_NAMES.PERIOD_MARKER].$element()
+                template: () => this._format12.$element()
             });
         }
 
@@ -187,7 +181,7 @@ const TimeView = Editor.inherit({
     },
 
     _createHourBox: function() {
-        const editor = this._createComponent($("<div>"), NumberBox, extend({
+        const editor = this._hourBox = this._createComponent($("<div>"), NumberBox, extend({
             min: -1,
             max: 24,
             value: this._getValue().getHours(),
@@ -196,12 +190,10 @@ const TimeView = Editor.inherit({
 
         editor.setAria("label", "hours");
         this._attachKeyboardProcessorToEditor(editor);
-
-        this[WIDGET_PART_NAMES.HOUR] = editor;
     },
 
     _isPM: function() {
-        return !this.option("use24HourFormat") && this[WIDGET_PART_NAMES.PERIOD_MARKER].option("value") === 1;
+        return !this.option("use24HourFormat") && this._format12.option("value") === 1;
     },
 
     _onHourBoxValueChanged: function(args) {
@@ -224,7 +216,7 @@ const TimeView = Editor.inherit({
     },
 
     _createMinuteBox: function() {
-        const editor = this._createComponent($("<div>"), NumberBox, extend({
+        const editor = this._minuteBox = this._createComponent($("<div>"), NumberBox, extend({
             min: -1,
             max: 60,
             value: this._getValue().getMinutes(),
@@ -241,13 +233,11 @@ const TimeView = Editor.inherit({
 
         editor.setAria("label", "minutes");
         this._attachKeyboardProcessorToEditor(editor);
-
-        this[WIDGET_PART_NAMES.MINUTE] = editor;
     },
 
     _createFormat12Box: function() {
         const periodNames = getPeriodNames();
-        const editor = this._createComponent($("<div>").addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, {
+        const editor = this._format12 = this._createComponent($("<div>").addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, {
             items: [
                 { value: TIMEVIEW_FORMAT12_AM, text: periodNames[0] },
                 { value: TIMEVIEW_FORMAT12_PM, text: periodNames[1] }
@@ -268,8 +258,6 @@ const TimeView = Editor.inherit({
 
         this._attachKeyboardProcessorToEditor(editor);
         editor.setAria("label", "type");
-
-        this[WIDGET_PART_NAMES.PERIOD_MARKER] = editor;
     },
 
     _refreshFormat12: function() {
@@ -280,7 +268,7 @@ const TimeView = Editor.inherit({
         const isPM = hours >= 12;
         const newValue = isPM ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM;
 
-        this._silentEditorValueUpdate(this[WIDGET_PART_NAMES.PERIOD_MARKER], newValue);
+        this._silentEditorValueUpdate(this._format12, newValue);
     },
 
     _silentEditorValueUpdate: function(editor, value) {
@@ -308,8 +296,8 @@ const TimeView = Editor.inherit({
     _updateField: function() {
         const hours = this._normalizeHours(this._getValue().getHours());
 
-        this._silentEditorValueUpdate(this[WIDGET_PART_NAMES.HOUR], hours);
-        this._silentEditorValueUpdate(this[WIDGET_PART_NAMES.MINUTE], this._getValue().getMinutes());
+        this._silentEditorValueUpdate(this._hourBox, hours);
+        this._silentEditorValueUpdate(this._minuteBox, this._getValue().getMinutes());
 
         this._refreshFormat12();
     },
