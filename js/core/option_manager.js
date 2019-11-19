@@ -8,55 +8,17 @@ const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
 const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 
 export class OptionManager {
-    constructor(options, defaultOptions, optionsByReference, deprecatedOptions, _changingCallbacks, _changedCallbacks, _deprecatedCallbacks) {
+    constructor(options, optionsByReference, _changingCallbacks, _changedCallbacks, _deprecatedCallbacks, owner) {
         this._options = options;
-        this._default = defaultOptions;
         this._optionsByReference = optionsByReference;
-        this._deprecated = deprecatedOptions;
+        this._owner = owner;
 
         this._changingCallbacks = _changingCallbacks;
         this._changedCallbacks = _changedCallbacks;
         this._deprecatedCallbacks = _deprecatedCallbacks;
 
-        this._cachedDeprecateNames = [];
-        this.cachedGetters = {}; // Untouchable
-        this.cachedSetters = {}; // Untouchable
-    }
-
-    get _deprecateNames() {
-        if(!this._cachedDeprecateNames.length) {
-            for(const optionName in this._deprecated) {
-                this._cachedDeprecateNames.push(optionName);
-            }
-        }
-
-        return this._cachedDeprecateNames;
-    }
-
-    _normalizeName(name) {
-        if(name) {
-            for(let i = 0; i < this._deprecateNames.length; i++) {
-                if(this._deprecateNames[i] === name) {
-                    const deprecate = this._deprecated[name];
-
-                    if(deprecate) {
-                        this._notifyDeprecated(name);
-
-                        return deprecate.alias || name;
-                    }
-                }
-            }
-        }
-
-        return name;
-    }
-
-    _notifyDeprecated(option) {
-        const info = this._deprecated[option];
-
-        if(info) {
-            this._deprecatedCallbacks.fire(option, info);
-        }
+        this.cachedGetters = {};
+        this.cachedSetters = {};
     }
 
     _setByReference(options, rulesOptions) {
@@ -69,36 +31,8 @@ export class OptionManager {
         }
     }
 
-    // Untouchable
-
-    _get(options, name, unwrapObservables, silent) {
-        if(silent) {
-            return this._options[name];
-        }
-
-        this.cachedGetters[name] = this.cachedGetters[name] || compileGetter(name);
-
-        return this.cachedGetters[name](options, { functionsAsIs: true, unwrapObservables });
-    }
-
-    _set(options, value, merge, silent) {
-        options = Options.normalizeOptions(options, value);
-
-        if(silent) {
-            this._setByReference(this._options, options);
-        } else {
-            for(const name in options) {
-                this._prepareRelevantNames(options, name, options[name]);
-            }
-
-            for(const name in options) {
-                this._setPreparedValue(name, options[name], merge);
-            }
-        }
-    }
-
     _setPreparedValue(name, value, merge) {
-        const previousValue = this._get(this._options, name, false);
+        const previousValue = this.get(this._options, name, false);
 
         if(!equals(previousValue, value)) {
             const path = name.split(/[.[]/);
@@ -116,7 +50,7 @@ export class OptionManager {
 
     _setRelevantNames(options, name, value) {
         if(name) {
-            const normalizedName = this._normalizeName(name);
+            const normalizedName = Options.normalizeName(this._owner, name);
 
             if(normalizedName && normalizedName !== name) {
                 this._setField(options, normalizedName, value);
@@ -143,7 +77,7 @@ export class OptionManager {
             fieldName = fieldName ? `.${fieldName}` : '';
             fieldName = getFieldName(fullName) + fieldName;
             fullName = getParentName(fullName);
-            fieldObject = fullName ? this._get(options, fullName, false) : options;
+            fieldObject = fullName ? this.get(options, fullName, false) : options;
         } while(!fieldObject);
 
         fieldObject[fieldName] = value;
@@ -154,11 +88,37 @@ export class OptionManager {
 
         const previousFieldName = getParentName(name);
         const fieldObject = previousFieldName ?
-            this._get(options, previousFieldName, false) :
+            this.get(options, previousFieldName, false) :
             options;
 
         if(fieldObject) {
             delete fieldObject[getFieldName(name)];
+        }
+    }
+
+    get(options, name, unwrapObservables, silent) {
+        if(silent) {
+            return this._options[name];
+        }
+
+        this.cachedGetters[name] = this.cachedGetters[name] || compileGetter(name);
+
+        return this.cachedGetters[name](options, { functionsAsIs: true, unwrapObservables });
+    }
+
+    set(options, value, merge, silent) {
+        options = Options.normalizeOptions(options, value);
+
+        if(silent) {
+            this._setByReference(this._options, options);
+        } else {
+            for(const name in options) {
+                this._prepareRelevantNames(options, name, options[name]);
+            }
+
+            for(const name in options) {
+                this._setPreparedValue(name, options[name], merge);
+            }
         }
     }
 }

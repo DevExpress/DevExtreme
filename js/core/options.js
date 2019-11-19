@@ -14,14 +14,18 @@ export class Options {
         this._changedCallbacks = createCallBack({ syncStrategy: true });
         this._deprecatedCallbacks = createCallBack({ syncStrategy: true });
 
+        this._default = defaultOptions;
+        this._deprecated = deprecatedOptions;
+
+        this._cachedDeprecateNames = [];
+
         this._optionManager = new OptionManager(
             options,
-            defaultOptions,
             optionsByReference,
-            deprecatedOptions,
             this._changingCallbacks,
             this._changedCallbacks,
-            this._deprecatedCallbacks
+            this._deprecatedCallbacks,
+            this
         );
 
         this._rules = [];
@@ -31,14 +35,43 @@ export class Options {
         return this._optionManager._options;
     }
 
+    get _deprecateNames() {
+        if(!this._cachedDeprecateNames.length) {
+            for(const optionName in this._deprecated) {
+                this._cachedDeprecateNames.push(optionName);
+            }
+        }
+
+        return this._cachedDeprecateNames;
+    }
+
     set _initial(value) {
         this._initialOptions = value;
+    }
+
+    get _initial() {
+        if(!this._initialOptions) {
+            const rulesOptions = this._getByRules(this.silent('defaultOptionsRules'));
+
+            this._initialOptions = this._default;
+            this._optionManager._setByReference(this._initialOptions, rulesOptions);
+        }
+
+        return this._initialOptions;
     }
 
     _getByRules(rules) {
         rules = Array.isArray(rules) ? this._rules.concat(rules) : this._rules;
 
         return Options.convertRulesToOptions(rules);
+    }
+
+    _notifyDeprecated(option) {
+        const info = this._deprecated[option];
+
+        if(info) {
+            this._deprecatedCallbacks.fire(option, info);
+        }
     }
 
     addRules(rules) {
@@ -88,34 +121,13 @@ export class Options {
         return isObject(value) ? clone(value) : value;
     }
 
-    reset(name) {
-        if(name) {
-            const defaultValue = this.initial(name);
-
-            this._optionManager._set(name, defaultValue, false);
-        }
-    }
-
-    // REFACTOR ME
-
-    get _initial() {
-        if(!this._initialOptions) {
-            const rulesOptions = this._getByRules(this.silent('defaultOptionsRules'));
-
-            this._initialOptions = this._optionManager._default;
-            this._optionManager._setByReference(this._initialOptions, rulesOptions);
-        }
-
-        return this._initialOptions;
-    }
-
     option(options, value) {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            return this._optionManager._get(this._options, this._optionManager._normalizeName(options));
+            return this._optionManager.get(this._options, Options.normalizeName(this, options));
         } else {
-            this._optionManager._set(options, value);
+            this._optionManager.set(options, value);
         }
     }
 
@@ -123,23 +135,29 @@ export class Options {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            return this._optionManager._get(this._options, options, true);
+            return this._optionManager.get(this._options, options, undefined, true);
         } else {
-            this._optionManager._set(options, value, undefined, true);
+            this._optionManager.set(options, value, undefined, true);
+        }
+    }
+
+    reset(name) {
+        if(name) {
+            const defaultValue = this.initial(name);
+
+            this._optionManager.set(name, defaultValue, false);
         }
     }
 
     getAliasesByName(name) {
-        return Object.keys(this._optionManager._deprecated).filter(
-            aliasName => name === this._optionManager._deprecated[aliasName].alias
+        return Object.keys(this._deprecated).filter(
+            aliasName => name === this._deprecated[aliasName].alias
         );
     }
 
     isDeprecated(name) {
-        return Object.prototype.hasOwnProperty.call(this._optionManager._deprecated, name);
+        return Object.prototype.hasOwnProperty.call(this._deprecated, name);
     }
-
-    // REFACTOR ME
 
     static convertRulesToOptions(rules) {
         const currentDevice = devices.current();
@@ -158,5 +176,23 @@ export class Options {
 
     static normalizeOptions(options, value) {
         return typeof options !== 'string' ? options : { [options]: value };
+    }
+
+    static normalizeName(owner, name) {
+        if(name) {
+            for(let i = 0; i < owner._deprecateNames.length; i++) {
+                if(owner._deprecateNames[i] === name) {
+                    const deprecate = owner._deprecated[name];
+
+                    if(deprecate) {
+                        owner._notifyDeprecated(name);
+
+                        return deprecate.alias || name;
+                    }
+                }
+            }
+        }
+
+        return name;
     }
 }
