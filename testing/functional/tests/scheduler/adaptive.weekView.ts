@@ -7,7 +7,7 @@ fixture `Week view in adaptive mode`
 
 const scheduler = new Scheduler("#container");
 
-const roughEqual = (value: number, expected: number) => value >= expected - 1 && value <= expected + 1;
+const roughEqual = (value: number, expected: number) => value >= expected - 1.5 && value <= expected + 1.5;
 
 test(`Compact appointment should be center by vertical alignment`, async t => {
     await t.resizeWindow(350, 600);
