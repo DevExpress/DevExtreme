@@ -8,7 +8,7 @@ fixture `Week view in adaptive mode`
 const scheduler = new Scheduler("#container");
 
 const roughEqual = (actual: number, expected: number) => {
-    const epsilon = 2;
+    const epsilon = 1.5;
     const delta = Math.abs(expected - actual);
 
     return delta <= epsilon;
@@ -52,17 +52,11 @@ test(`With a large browser width, should be visible common appointment instead o
         .expect(scheduler.getAppointmentCount()).eql(1)
         .expect(scheduler.getAppointmentCollectorCount()).eql(2)
 
-        .expect(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("top")).eql(138)
-        .expect(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("left")).eql(215)
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("top"), 137.5)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("left"), 215)).ok()
 
-        .expect(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("top")).eql(256)
-        .expect(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("left")).eql(236)
-
-        // .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("top"), 138)).ok()
-        // .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("left"), 215)).ok()
-
-        // .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("top"), 256)).ok()
-        // .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("left"), 236)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("top"), 256)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("left"), 236)).ok()
 
 }).before(async () => await createScheduler(sampleData));
 
