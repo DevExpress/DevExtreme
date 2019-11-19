@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { extend } from "core/utils/extend";
+import translator from "animation/translator";
 import devices from "core/devices";
 import "ui/scheduler/ui.scheduler";
 
@@ -69,6 +70,7 @@ export class SchedulerTestWrapper {
             getTitleText: (index = 0) => this.appointments.getAppointment(index).find(".dx-scheduler-appointment-title").text(),
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
+            getAppointmentPosition: (index = 0) => translator.locate($(this.appointments.getAppointment(index))),
 
             find: (text) => {
                 return this.appointments
