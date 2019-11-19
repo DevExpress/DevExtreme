@@ -827,8 +827,16 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
-                this._toggleSafariScrolling(!args.value);
+
+                var toggleFullScreenBeforeShown = this._useFixedPosition() && args.value && !this.isReady();
+                if(toggleFullScreenBeforeShown) {
+                    this._bodyScrollTop = args.value ? window.pageYOffset : undefined;
+                } else {
+                    this._toggleSafariScrolling(!args.value);
+                }
+
                 this._renderGeometry();
+
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "showCloseButton":
