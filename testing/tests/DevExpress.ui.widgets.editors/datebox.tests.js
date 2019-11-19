@@ -346,9 +346,10 @@ QUnit.module("datebox tests", moduleConfig, () => {
     });
 
     QUnit.test("type change should raise validation", assert => {
+        const now = new Date();
         const $dateBox = $("#widthRootStyle").dxDateBox({
             type: "date",
-            value: new Date()
+            value: now
         });
 
         const dateBox = $dateBox.dxDateBox("instance");
@@ -360,6 +361,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
 
         dateBox.option("type", "datetime");
         assert.ok(dateBox.option("isValid"), "widget is valid after type change");
+        assert.ok(dateBox.option("value"), now, "value has been reset");
     });
 
     QUnit.test("T252737 - the 'acceptCustomValue' option correct behavior", assert => {
