@@ -11,7 +11,6 @@ var $ = require("../../core/renderer"),
     KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils"),
-    hoverEvents = require("../../events/hover"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
     clickEvent = require("../../events/click");
 
@@ -28,8 +27,6 @@ var UI_FEEDBACK = "UIFeedback",
 const EVENT_NAME = {
     active: feedbackEvents.active,
     inactive: feedbackEvents.inactive,
-    hoverStart: eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
-    hoverEnd: eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK),
     focusIn: owner => eventUtils.addNamespace('focusin', `${owner}Focus`),
     focusOut: owner => eventUtils.addNamespace('focusout', `${owner}Focus`),
     beforeActivate: owner => eventUtils.addNamespace('beforeactivate', `${owner}Focus`)
@@ -533,36 +530,19 @@ var Widget = DOMComponentWithTemplate.inherit({
         const hoverableSelector = this._activeStateUnit;
         const $el = this._eventBindingTarget();
 
-        this._detachHoverEvents($el, hoverableSelector);
+        eventsEngine.hover.off($el, { selector: hoverableSelector, namespace: UI_FEEDBACK });
 
         if(hoverStateEnabled) {
-            this._attachHoverEventsCore($el, ($element, event) => {
+            eventsEngine.hover.on($el, (element, event) => {
                 this._hoverStartHandler(event);
-                this._refreshHoveredElement($element);
+                this._refreshHoveredElement($(element));
             }, event => {
                 this._hoverEndHandler(event);
                 this._forgetHoveredElement();
-            }, { selector: hoverableSelector });
+            }, { selector: hoverableSelector, namespace: UI_FEEDBACK });
         } else {
             this._toggleHoverClass(false);
         }
-    },
-
-    // NOTE: Static method
-    _attachHoverEventsCore($el, start, end, { selector }) {
-        const startAction = new Action(({ event, element }) => start($(element), event),
-            { excludeValidators: ['readOnly'] });
-
-        eventsEngine.on($el, EVENT_NAME.hoverEnd, selector, event => end(event));
-        eventsEngine.on($el, EVENT_NAME.hoverStart, selector, event => {
-            startAction.execute({ element: event.target, event });
-        });
-    },
-
-    // NOTE: Static method
-    _detachHoverEvents($el, selector) {
-        eventsEngine.off($el, EVENT_NAME.hoverStart, selector);
-        eventsEngine.off($el, EVENT_NAME.hoverEnd, selector);
     },
 
     _attachFeedbackEvents() {

@@ -1,4 +1,5 @@
 var registerEventCallbacks = require("./event_registrator_callbacks");
+var Action = require("../../core/action");
 var extend = require("../../core/utils/extend").extend;
 var domAdapter = require("../../core/dom_adapter");
 var windowUtils = require("../../core/utils/window");
@@ -13,6 +14,7 @@ var errors = require("../../core/errors");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 var callOnce = require("../../core/utils/call_once");
+var utils = require("../utils");
 
 var EMPTY_EVENT_NAME = "dxEmptyEventType";
 var NATIVE_EVENTS_TO_SUBSCRIBE = {
@@ -595,6 +597,27 @@ hookTouchProps(addProperty);
 
 var beforeSetStrategy = Callbacks();
 var afterSetStrategy = Callbacks();
+
+function addNamespace(event, namespace) {
+    return namespace ? utils.addNamespace(event) : event;
+}
+
+eventsEngine.hover = {
+    on: ($el, start, end, { selector, namespace }) => {
+        const startAction = new Action(({ event, element }) => start(element, event),
+            { excludeValidators: ['readOnly'] });
+
+        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => end(event));
+        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => {
+            startAction.execute({ element: event.target, event });
+        });
+    },
+
+    off: ($el, { selector, namespace }) => {
+        eventsEngine.off($el, addNamespace('dxhoverstart', namespace), selector);
+        eventsEngine.off($el, addNamespace('dxhoverend', namespace), selector);
+    }
+};
 
 eventsEngine.set = function(engine) {
     beforeSetStrategy.fire();
