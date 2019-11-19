@@ -13,7 +13,6 @@ var errors = require("../../core/errors");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 var callOnce = require("../../core/utils/call_once");
-var each = require("../../core/utils/iterator").each;
 
 var EMPTY_EVENT_NAME = "dxEmptyEventType";
 var NATIVE_EVENTS_TO_SUBSCRIBE = {
@@ -688,23 +687,20 @@ eventsEngine.elementDataMap = elementDataMap;
 eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;
 ///#ENDDEBUG
 
-eventsEngine.addNamespace = function(eventNames, namespace) {
+eventsEngine.addNamespace = (eventNames, namespace) => {
     if(!namespace) {
-        throw errors.Error("E0017");
+        throw errors.Error('E0017');
     }
 
-    if(typeof eventNames === "string") {
-        if(eventNames.indexOf(" ") === -1) {
-            return eventNames + "." + namespace;
-        }
-        return addNamespace(eventNames.split(/\s+/g), namespace);
+    if(typeof eventNames === 'string') {
+        return eventNames.indexOf(' ') === -1 ?
+            `${eventNames}.${namespace}` :
+            addNamespace(eventNames.split(/\s+/g), namespace);
     }
 
-    each(eventNames, function(index, eventName) {
-        eventNames[index] = eventName + "." + namespace;
-    });
-
-    return eventNames.join(" ");
+    return eventNames
+        .map(eventName => `${eventName}.${namespace}`)
+        .join(' ');
 };
 
 module.exports = eventsEngine;
