@@ -18,6 +18,12 @@ var TIMEVIEW_CLASS = "dx-timeview",
     TIMEVIEW_FORMAT12_PM = 1,
     TIMEVIEW_MINUTEARROW_CLASS = "dx-timeview-minutearrow";
 
+var WIDGET_PART_NAMES = {
+    HOUR: "_hourBox",
+    MINUTE: "_minuteBox",
+    PERIOD_MARKER: "_format12"
+};
+
 var rotateArrow = function($arrow, angle, offset) {
     cssRotate($arrow, angle, offset);
 };
@@ -127,7 +133,7 @@ var TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: "auto",
-            template: (function() { return this._hourBox.$element(); }).bind(this)
+            template: (function() { return this[WIDGET_PART_NAMES.HOUR].$element(); }).bind(this)
         }, {
             ratio: 0,
             shrink: 0,
@@ -137,7 +143,7 @@ var TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: "auto",
-            template: (function() { return this._minuteBox.$element(); }).bind(this)
+            template: (function() { return this[WIDGET_PART_NAMES.MINUTE].$element(); }).bind(this)
         }];
 
         if(is12HourFormat) {
@@ -145,7 +151,7 @@ var TimeView = Editor.inherit({
                 ratio: 0,
                 shrink: 0,
                 baseSize: "auto",
-                template: (function() { return this._format12.$element(); }).bind(this)
+                template: (function() { return this[WIDGET_PART_NAMES.PERIOD_MARKER].$element(); }).bind(this)
             });
         }
 
@@ -170,19 +176,32 @@ var TimeView = Editor.inherit({
         }).$element();
     },
 
+    _attachKeyboardProcessorToEditor: function(editor) {
+        var keyboardProcessor = editor._keyboardProcessor;
+
+        if(keyboardProcessor) {
+            keyboardProcessor
+                .attachChildProcessor()
+                .reinitialize(this._keyboardHandler, this);
+        }
+    },
+
     _createHourBox: function() {
-        this._hourBox = this._createComponent($("<div>"), NumberBox, extend({
+        var editor = this._createComponent($("<div>"), NumberBox, extend({
             min: -1,
             max: 24,
             value: this._getValue().getHours(),
             onValueChanged: this._onHourBoxValueChanged.bind(this),
         }, this._getNumberBoxConfig()));
 
-        this._hourBox.setAria("label", "hours");
+        editor.setAria("label", "hours");
+        this._attachKeyboardProcessorToEditor(editor);
+
+        this[WIDGET_PART_NAMES.HOUR] = editor;
     },
 
     _isPM: function() {
-        return !this.option("use24HourFormat") && this._format12.option("value") === 1;
+        return !this.option("use24HourFormat") && this[WIDGET_PART_NAMES.PERIOD_MARKER].option("value") === 1;
     },
 
     _onHourBoxValueChanged: function(args) {
@@ -205,13 +224,13 @@ var TimeView = Editor.inherit({
     },
 
     _createMinuteBox: function() {
-        this._minuteBox = this._createComponent($("<div>"), NumberBox, extend({
+        var editor = this._createComponent($("<div>"), NumberBox, extend({
             min: -1,
             max: 60,
             value: this._getValue().getMinutes(),
             onValueChanged: (function(args) {
                 var newMinutes = (60 + args.value) % 60;
-                this._minuteBox.option("value", newMinutes);
+                args.component.option("value", newMinutes);
 
                 var time = new Date(this._getValue());
                 time.setMinutes(newMinutes);
@@ -220,12 +239,15 @@ var TimeView = Editor.inherit({
             }).bind(this)
         }, this._getNumberBoxConfig()));
 
-        this._minuteBox.setAria("label", "minutes");
+        editor.setAria("label", "minutes");
+        this._attachKeyboardProcessorToEditor(editor);
+
+        this[WIDGET_PART_NAMES.MINUTE] = editor;
     },
 
     _createFormat12Box: function() {
         var periodNames = dateLocalization.getPeriodNames();
-        this._format12 = this._createComponent($("<div>").addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, extend({
+        var editor = this._createComponent($("<div>").addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, {
             items: [
                 { value: TIMEVIEW_FORMAT12_AM, text: periodNames[0] },
                 { value: TIMEVIEW_FORMAT12_PM, text: periodNames[1] }
@@ -240,12 +262,14 @@ var TimeView = Editor.inherit({
                 time.setHours(newHours);
                 this.option("value", time);
             }).bind(this),
-            value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM
-        }, {
+            value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
             stylingMode: this.option("stylingMode")
-        }));
+        });
 
-        this._format12.setAria("label", "type");
+        this._attachKeyboardProcessorToEditor(editor);
+        editor.setAria("label", "type");
+
+        this[WIDGET_PART_NAMES.PERIOD_MARKER] = editor;
     },
 
     _refreshFormat12: function() {
@@ -254,22 +278,27 @@ var TimeView = Editor.inherit({
         var value = this._getValue(),
             hours = value.getHours(),
             isPM = hours >= 12;
+        var newValue = isPM ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM;
 
-        this._format12._valueChangeActionSuppressed = true;
-        this._format12.option("value", isPM ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM);
-        this._format12._valueChangeActionSuppressed = false;
+        this._silentEditorValueUpdate(this[WIDGET_PART_NAMES.PERIOD_MARKER], newValue);
+    },
+
+    _silentEditorValueUpdate: function(editor, value) {
+        if(editor) {
+            editor._suppressValueChangeAction();
+            editor.option("value", value);
+            editor._resumeValueChangeAction();
+        }
     },
 
     _getNumberBoxConfig: function() {
-        return extend({
+        return {
             showSpinButtons: true,
-            disabled: this.option("disabled"),
             displayValueFormatter: function(value) {
                 return (value < 10 ? "0" : "") + value;
-            }
-        }, {
+            },
             stylingMode: this.option("stylingMode")
-        });
+        };
     },
 
     _normalizeHours: function(hours) {
@@ -277,17 +306,10 @@ var TimeView = Editor.inherit({
     },
 
     _updateField: function() {
-        if(this._hourBox) {
-            this._hourBox._valueChangeActionSuppressed = true;
-            this._hourBox.option("value", this._normalizeHours(this._getValue().getHours()));
-            this._hourBox._valueChangeActionSuppressed = false;
-        }
+        var hours = this._normalizeHours(this._getValue().getHours());
 
-        if(this._minuteBox) {
-            this._minuteBox._valueChangeActionSuppressed = true;
-            this._minuteBox.option("value", this._getValue().getMinutes());
-            this._minuteBox._valueChangeActionSuppressed = false;
-        }
+        this._silentEditorValueUpdate(this[WIDGET_PART_NAMES.HOUR], hours);
+        this._silentEditorValueUpdate(this[WIDGET_PART_NAMES.MINUTE], this._getValue().getMinutes());
 
         this._refreshFormat12();
     },
@@ -301,11 +323,6 @@ var TimeView = Editor.inherit({
         if(visible) {
             this._updateTime();
         }
-    },
-
-    _toggleDisabledState: function(value) {
-        this._hourBox && this._hourBox.option("disabled", value);
-        this._minuteBox && this._minuteBox.option("disabled", value);
     },
 
     _optionChanged: function(args) {
@@ -325,7 +342,6 @@ var TimeView = Editor.inherit({
                 this.callBase(args);
         }
     }
-
 });
 
 registerComponent("dxTimeView", TimeView);

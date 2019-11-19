@@ -100,8 +100,10 @@ var SelectBox = DropDownList.inherit({
                 parent.end && parent.end.apply(this, arguments);
             },
             escape: function() {
-                parent.escape && parent.escape.apply(this, arguments);
+                var result = parent.escape && parent.escape.apply(this, arguments);
                 this._cancelEditing();
+
+                return isDefined(result) ? result : true;
             },
             enter: function(e) {
                 var isOpened = this.option("opened");
