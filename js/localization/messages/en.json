@@ -361,7 +361,7 @@
         "dxFileManager-editingUploadMultipleItemsSuccessMessage": "Uploaded {0} items to {1}",
         "dxFileManager-editingUploadSingleItemErrorMessage": "Item wasn't uploaded",
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items weren't uploaded",
-        "dxFileManager-editingUploadCanceledMessage": "Canceled",        
+        "dxFileManager-editingUploadCanceledMessage": "Canceled",
 
         "dxFileManager-listDetailsColumnCaptionName": "Name",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Date Modified",

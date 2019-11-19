@@ -328,7 +328,7 @@
         "dxFileManager-editingUploadMultipleItemsSuccessMessage": "{0} элементов загружено в {1}",
         "dxFileManager-editingUploadSingleItemErrorMessage": "Не удалось загрузить элемент",
         "dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} элементов не были загружены",
-        "dxFileManager-editingUploadCanceledMessage": "Отменено",        
+        "dxFileManager-editingUploadCanceledMessage": "Отменено",
 
         "dxFileManager-listDetailsColumnCaptionName": "Название",
         "dxFileManager-listDetailsColumnCaptionDateModified": "Дата изменения",
