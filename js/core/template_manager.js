@@ -42,16 +42,14 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 export default class TemplateManager {
     constructor(option, element, owner, getDefaultTemplates, getAnonymousTemplateName) {
         this._tempTemplates = []; // should be defined by control
-        this._defaultTemplates = {}; // should be defined by control
+        this._defaultTemplates = getDefaultTemplates(); // should be defined by control
         this.ownerDefaultTemplates = owner._defaultTemplates;
         this.owner = owner;
 
         this.option = (optionName) => owner.option(optionName);
-        this.__element = () => owner.$element();
-        this.__getDefaultTemplates = getDefaultTemplates;
-        this.__getAnonymousTemplateName = getAnonymousTemplateName;
-
-        this.initTemplates();
+        this.$element = () => owner.$element();
+        // this.__getDefaultTemplates = getDefaultTemplates;
+        this.__getAnonymousTemplateName = getAnonymousTemplateName();
     }
 
     static getAnonymousTemplateName() { // ???
@@ -129,7 +127,7 @@ export default class TemplateManager {
     }
 
     _extractTemplates() {
-        const templateElements = this.__element().contents().filter(TEMPLATE_SELECTOR);
+        const templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
         const templatesMap = {};
 
         templateElements.each((_, template) => {
@@ -163,8 +161,8 @@ export default class TemplateManager {
 
     _extractAnonymousTemplate() {
         const templates = this.option('integrationOptions.templates'); // we change it
-        const anonymousTemplateName = this.__getAnonymousTemplateName();
-        const $anonymousTemplate = this.__element().contents().detach();
+        const anonymousTemplateName = this.__getAnonymousTemplateName;
+        const $anonymousTemplate = this.$element().contents().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
             const isTextNode = element.nodeType === TEXT_NODE;

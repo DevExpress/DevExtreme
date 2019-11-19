@@ -12,7 +12,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     __getElement: function() {
-        return this.$element();
+        return this.$element;
     },
 
     __getOption: function(optionName) {
@@ -24,11 +24,11 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         this._defaultTemplates = {};
 
         this._templateManager = new TemplateManager(
-            this.__getOption,
-            this.__getElement,
+            this.option.bind(this),
+            this.$element.bind(this),
             this,
-            this.__getDefaultTemplates,
-            this._getAnonymousTemplateName
+            this.__getDefaultTemplates.bind(this),
+            this._getAnonymousTemplateName.bind(this)
         );
 
         this._initTemplates();
@@ -62,7 +62,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
     _saveTemplate: function(name, template) {
         var templates = this.option("integrationOptions.templates");
-        templates[name] = TemplateManager.createTemplate(template);
+        templates[name] = this._templateManager.createTemplate(template);
     },
 
     _extractAnonymousTemplate: function() {
