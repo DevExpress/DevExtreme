@@ -155,7 +155,7 @@ QUnit.testStart(function() {
         var itemElements = this.fixture.$summaryContainer.find(".dx-validationsummary-item");
         assert.equal(itemElements.length, 1, "Single item element should be rendered");
         itemElements.trigger("click");
-        assert.ok(validator.focus.calledOnce, true, "Validator should be focused");
+        assert.ok(validator.focus.calledOnce, "Validator should be focused");
     });
 })("General");
 

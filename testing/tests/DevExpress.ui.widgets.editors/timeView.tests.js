@@ -416,7 +416,7 @@ QUnit.test("boundary hours should change correctly after day time changing", fun
     assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 0, 0), "time is correct");
 
     formatField.option("value", TIMEVIEW_FORMAT12_AM);
-    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 0, 0, 0, 0), 0, "time is correct");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 0, 0, 0, 0), "time is correct");
 });
 
 QUnit.test("midday part should not be changed when clock moves back through the boundary (T808116)", function(assert) {
