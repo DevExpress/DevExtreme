@@ -263,6 +263,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions = that._getEditorOptions($editor, column);
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
+
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
@@ -384,7 +385,8 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             if(getColumnSelectedFilterOperation(that, column) === "between") {
                 that._renderFilterRangeContent($cell, column);
             } else {
-                that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
+                const editorOptions = that._getEditorOptions($editorContainer, column);
+                that._renderEditor($editorContainer, editorOptions);
             }
 
             if(column.alignment) {
@@ -420,6 +422,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     showAllText: that.option("filterRow.showAllText"),
                     updateValueTimeout: that.option("filterRow.applyFilter") === "onClick" ? 0 : FILTERING_TIMEOUT,
                     width: null,
+                    editorOptions: {
+                        inputAttr: {
+                            "aria-label": messageLocalization.format("dxDataGrid-ariaFilterCellEditor")
+                        }
+                    },
                     setValue: function(value, notFireEvent) {
                         updateFilterValue(that, {
                             column: column,

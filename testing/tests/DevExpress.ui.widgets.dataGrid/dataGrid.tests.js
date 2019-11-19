@@ -256,6 +256,7 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
     var headersWrapper = dataGridWrapper.headers,
         rowsViewWrapper = dataGridWrapper.rowsView,
         filterPanelWrapper = dataGridWrapper.filterPanel,
+        filterRowWrapper = dataGridWrapper.filterRow,
         pagerWrapper = dataGridWrapper.pager;
 
     createDataGrid({
@@ -266,7 +267,7 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
             visible: true
         },
         filterRow: {
-            enabled: true
+            visible: true
         },
         filterValue: ["field1", "=", "1"],
         pager: {
@@ -292,6 +293,10 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
     this.clock.tick();
 
     assert.equal($(".dx-widget").attr("role"), "presentation", "Widget role");
+
+    // filter row
+    assert.equal(filterRowWrapper.getTextEditorInput(0).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCellEditor"));
+    assert.equal(filterRowWrapper.getTextEditorInput(1).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCellEditor"));
 
     assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr("role"), "grid", "Grid role");
     assert.equal(headersWrapper.getElement().attr("role"), "presentation", 'Headers role');
