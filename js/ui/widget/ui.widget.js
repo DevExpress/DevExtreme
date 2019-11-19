@@ -533,10 +533,10 @@ var Widget = DOMComponentWithTemplate.inherit({
         eventsEngine.hover.off($el, { selector: hoverableSelector, namespace: UI_FEEDBACK });
 
         if(hoverStateEnabled) {
-            eventsEngine.hover.on($el, (element, event) => {
+            eventsEngine.hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
                 this._refreshHoveredElement($(element));
-            }, event => {
+            }, { excludeValidators: ['readOnly'] }), event => {
                 this._hoverEndHandler(event);
                 this._forgetHoveredElement();
             }, { selector: hoverableSelector, namespace: UI_FEEDBACK });

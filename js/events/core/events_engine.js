@@ -1,5 +1,4 @@
 var registerEventCallbacks = require("./event_registrator_callbacks");
-var Action = require("../../core/action");
 var extend = require("../../core/utils/extend").extend;
 var domAdapter = require("../../core/dom_adapter");
 var windowUtils = require("../../core/utils/window");
@@ -14,7 +13,7 @@ var errors = require("../../core/errors");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 var callOnce = require("../../core/utils/call_once");
-var utils = require("../utils");
+var each = require("../../core/utils/iterator").each;
 
 var EMPTY_EVENT_NAME = "dxEmptyEventType";
 var NATIVE_EVENTS_TO_SUBSCRIBE = {
@@ -599,17 +598,14 @@ var beforeSetStrategy = Callbacks();
 var afterSetStrategy = Callbacks();
 
 function addNamespace(event, namespace) {
-    return namespace ? utils.addNamespace(event, namespace) : event;
+    return namespace ? eventsEngine.addNamespace(event, namespace) : event;
 }
 
 eventsEngine.hover = {
     on: ($el, start, end, { selector, namespace }) => {
-        const startAction = new Action(({ event, element }) => start(element, event),
-            { excludeValidators: ['readOnly'] });
-
         eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => end(event));
         eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => {
-            startAction.execute({ element: event.target, event });
+            isFunction(start) ? start(event.target, event) : start.execute({ element: event.target, event });
         });
     },
 
@@ -651,5 +647,24 @@ eventsEngine.passiveEventHandlersSupported = passiveEventHandlersSupported;
 eventsEngine.elementDataMap = elementDataMap;
 eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;
 ///#ENDDEBUG
+
+eventsEngine.addNamespace = function(eventNames, namespace) {
+    if(!namespace) {
+        throw errors.Error("E0017");
+    }
+
+    if(typeof eventNames === "string") {
+        if(eventNames.indexOf(" ") === -1) {
+            return eventNames + "." + namespace;
+        }
+        return addNamespace(eventNames.split(/\s+/g), namespace);
+    }
+
+    each(eventNames, function(index, eventName) {
+        eventNames[index] = eventName + "." + namespace;
+    });
+
+    return eventNames.join(" ");
+};
 
 module.exports = eventsEngine;
