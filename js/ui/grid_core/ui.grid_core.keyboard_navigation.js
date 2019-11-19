@@ -1497,10 +1497,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return args;
     },
 
-    _fireFocusedRowChanged: function($rowElement) {
+    _fireFocusedRowChanged: function($rowElement, focusedRowIndex) {
         var row,
-            dataController,
-            focusedRowIndex = this.option("focusedRowIndex");
+            dataController;
 
         if(this.option("focusedRowEnabled")) {
             if(focusedRowIndex >= 0) {
