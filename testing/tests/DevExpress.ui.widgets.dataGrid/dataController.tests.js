@@ -4630,7 +4630,7 @@ QUnit.test("selectAll should works correctly if item count less than pageSize", 
 
     // assert
     assert.equal(this.getVisibleRows().length, 50, "visible row count");
-    assert.ok(this.totalCount(), 50, "total count");
+    assert.strictEqual(this.totalCount(), 50, "total count");
     assert.ok(this.selectionController.isSelectAll(), "select all state");
 });
 
@@ -5550,7 +5550,7 @@ QUnit.test("clearFilter without argument", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // arrange
     that.dataController.changed.add(function() {
@@ -5603,7 +5603,7 @@ QUnit.test("clearFilter for dataSource", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob", "Bobbi"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("dataSource");
@@ -5618,7 +5618,7 @@ QUnit.test("clearFilter for dataSource", function(assert) {
     assert.deepEqual(that.dataController.filter(), null, "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob", "Bobbi"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5652,7 +5652,7 @@ QUnit.test("clearFilter for search", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("search");
@@ -5667,7 +5667,7 @@ QUnit.test("clearFilter for search", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5701,7 +5701,7 @@ QUnit.test("clearFilter for filter row", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("row");
@@ -5749,7 +5749,7 @@ QUnit.test("clearFilter for header filter", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("header");
@@ -5763,7 +5763,7 @@ QUnit.test("clearFilter for header filter", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, undefined, "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5797,7 +5797,7 @@ QUnit.test("clearFilter didn't apply by incorrect filter name", function(assert)
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("test");
@@ -5811,7 +5811,7 @@ QUnit.test("clearFilter didn't apply by incorrect filter name", function(assert)
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // B233043
@@ -11085,9 +11085,9 @@ QUnit.test("collapseRow", function(assert) {
 
     // assert
     assert.ok(collapseRowResult0 && collapseRowResult0.done, "collapseRow result 0 is deferred");
-    assert.ok(collapseRowResult0.state(), "resolved", "collapseRow result 0 state is resolved");
+    assert.strictEqual(collapseRowResult0.state(), "resolved", "collapseRow result 0 state is resolved");
     assert.ok(collapseRowResult1 && collapseRowResult1.done, "collapseRow result 1 is deferred");
-    assert.ok(collapseRowResult1.state(), "resolved", "collapseRow result state 1 is resolved");
+    assert.strictEqual(collapseRowResult1.state(), "resolved", "collapseRow result state 1 is resolved");
     assert.strictEqual(this.dataController.isRowExpanded(0), false);
     assert.strictEqual(this.dataController.isRowExpanded(1), false);
     assert.strictEqual(this.dataController.isRowExpanded(2), true);

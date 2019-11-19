@@ -6581,7 +6581,7 @@ QUnit.test("Total summary row should be rendered if row rendering mode is virtua
 
     var $footerView = $dataGrid.find(".dx-datagrid-total-footer");
     assert.ok($footerView.is(":visible"), "footer view is visible");
-    assert.ok($footerView.find(".dx-row").length, 1, "one footer row is rendered");
+    assert.strictEqual($footerView.find(".dx-row").length, 1, "one footer row is rendered");
 });
 
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
@@ -7800,7 +7800,7 @@ QUnit.test("updateDimensions during grouping when fixed to right column exists",
 
     // assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
-    assert.ok($(dataGrid.$element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
+    assert.strictEqual($(dataGrid.$element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
 });
 
 // T334530
@@ -15708,7 +15708,7 @@ QUnit.test("Using watch in masterDetail template if repaintChangesOnly", functio
 
     // assert
     assert.ok($(dataGrid.element()).find(".detail").is($detail), "detail element isn't updated");
-    assert.ok($detail.text(), "changed", "detail text is changed");
+    assert.strictEqual($detail.text(), "changed", "detail text is changed");
 });
 
 // T800483

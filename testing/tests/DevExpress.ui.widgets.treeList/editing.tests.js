@@ -254,7 +254,7 @@ QUnit.test("Add row to child should call addRow method with parentId", function(
 
     // assert
     assert.ok(this.editingController.addRow.calledOnce, "addRow is called");
-    assert.ok(this.editingController.addRow.args[0], [1], "addRow arg is row key");
+    assert.deepEqual(this.editingController.addRow.args[0], [1], "addRow arg is row key");
 });
 
 QUnit.test("AddRow method should expand row and add item after parent", function(assert) {

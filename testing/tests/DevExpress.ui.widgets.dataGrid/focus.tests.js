@@ -4706,7 +4706,7 @@ QUnit.test("Focused row should be visible if set focusedRowKey", function(assert
     rowsView = this.gridView.getView("rowsView");
     rowsView._scrollToElement = function($row) {
         ++counter;
-        assert.ok($row.find("td").eq(0).text(), "Smith", "Row");
+        assert.strictEqual($row.find("td").eq(0).text(), "Smith", "Row");
     };
     rowsView.height(100);
     this.gridView.component.updateDimensions();

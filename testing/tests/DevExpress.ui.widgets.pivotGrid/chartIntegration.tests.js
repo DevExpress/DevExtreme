@@ -297,7 +297,7 @@ QUnit.test("Pass grandTotal text", function(assert) {
     var series = chart.getAllSeries();
 
     assert.strictEqual(series[series.length - 1].name, "GT");
-    assert.strictEqual(series[series.length - 1].getPoints()[0].arg);
+    assert.ok(series[series.length - 1].getPoints()[0].arg);
 });
 
 QUnit.test("Not redraw chart during virtual scrolling", function(assert) {
