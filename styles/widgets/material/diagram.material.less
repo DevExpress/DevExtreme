@@ -13,6 +13,14 @@
 @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE: @MATERIAL_BASE_ICON_SIZE;
 @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
 
+.dx-size-default() {
+    @DIAGRAM_TOUCHBAR_ITEM_PADDING: 10px;
+}
+
+.dx-size-compact() {
+    @DIAGRAM_TOUCHBAR_ITEM_PADDING: 7px;
+}
+
 .dx-diagram {
     border-color: @diagram-border-color;
     // stylelint-disable selector-class-pattern
@@ -168,6 +176,18 @@
                 color: @base-text-color;
             }
         }
+    }
+}
+
+.dx-diagram-touchbar {
+    .dx-menu-item .dx-menu-item-content {
+        padding: @DIAGRAM_TOUCHBAR_ITEM_PADDING;
+    }
+
+    .dx-menu-separator {
+        width: 1px;
+        height: @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE + @DIAGRAM_TOUCHBAR_ITEM_PADDING + @DIAGRAM_TOUCHBAR_ITEM_PADDING + 2;
+        margin: 0;
     }
 }
 

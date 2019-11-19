@@ -3493,7 +3493,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.allowedFileExtensions */
         allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.contextMenu */
-        contextMenu?: dxFileManagerContextMenu;
+        contextMenu?: { items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'> };
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3515,7 +3515,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.toolbar */
-        toolbar?: dxFileManagerToolbar;
+        toolbar?: { fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>, items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'> };
         /** @name dxFileManager.Options.upload */
         upload?: { maxFileSize?: number };
     }
@@ -3530,11 +3530,6 @@ declare module DevExpress.ui {
         /** @name dxFileManager.refresh() */
         refresh(): Promise<any> & JQueryPromise<any>;
     }
-    /** @name dxFileManagerContextMenu */
-    export interface dxFileManagerContextMenu {
-        /** @name dxFileManagerContextMenu.items */
-        items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
-    }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
         /** @name dxFileManagerContextMenuItem.items */
@@ -3543,13 +3538,6 @@ declare module DevExpress.ui {
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
         visible?: boolean;
-    }
-    /** @name dxFileManagerToolbar */
-    export interface dxFileManagerToolbar {
-        /** @name dxFileManagerToolbar.fileSelectionItems */
-        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
-        /** @name dxFileManagerToolbar.items */
-        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -4819,6 +4807,8 @@ declare module DevExpress.ui {
         grandTotal(): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.grandTotal(direction) */
         grandTotal(direction: string): dxPivotGridSummaryCell;
+        /** @name dxPivotGridSummaryCell.isPostProcessed(field) */
+        isPostProcessed(field: DevExpress.data.PivotGridDataSourceField | string): boolean;
         /** @name dxPivotGridSummaryCell.next(direction) */
         next(direction: string): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.next(direction, allowCrossGroup) */
@@ -4835,10 +4825,10 @@ declare module DevExpress.ui {
         value(): any;
         /** @name dxPivotGridSummaryCell.value(field) */
         value(field: DevExpress.data.PivotGridDataSourceField | string): any;
-        /** @name dxPivotGridSummaryCell.value(field, isCalculatedValue) */
-        value(field: DevExpress.data.PivotGridDataSourceField | string, isCalculatedValue: boolean): any;
-        /** @name dxPivotGridSummaryCell.value(isCalculatedValue) */
-        value(isCalculatedValue: boolean): any;
+        /** @name dxPivotGridSummaryCell.value(field, postProcessed) */
+        value(field: DevExpress.data.PivotGridDataSourceField | string, postProcessed: boolean): any;
+        /** @name dxPivotGridSummaryCell.value(postProcessed) */
+        value(postProcessed: boolean): any;
     }
     /** @name dxPopover.Options */
     export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {

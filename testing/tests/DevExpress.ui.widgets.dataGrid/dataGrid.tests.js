@@ -2473,6 +2473,42 @@ QUnit.test("column width as string should works correctly", function(assert) {
     assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 200, "visibleWidth for first column is number");
 });
 
+// T833605
+QUnit.test("Indexes after option change should be normalized before onOptionChanged callback", function(assert) {
+    // arrange
+    var onOptionChangedCallCount = 0,
+        grid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            allowColumnReordering: true,
+            dataSource: [{}],
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2"
+            }, {
+                dataField: "field3"
+            }],
+            onOptionChanged: function(e) {
+                // act
+                onOptionChangedCallCount++;
+
+                // assert
+                assert.equal(grid.columnOption(0, "visibleIndex"), 1, "first column visible index");
+                assert.equal(grid.columnOption(1, "visibleIndex"), 2, "second column visible index");
+                assert.equal(grid.columnOption(2, "visibleIndex"), 0, "third column visible index");
+            }
+        }).dxDataGrid("instance");
+
+    // act
+    grid.columnOption(2, "visibleIndex", 0);
+
+    // assert
+    assert.equal(grid.columnOption(0, "visibleIndex"), 1, "first column visible index");
+    assert.equal(grid.columnOption(1, "visibleIndex"), 2, "second column visible index");
+    assert.equal(grid.columnOption(2, "visibleIndex"), 0, "third column visible index");
+    assert.equal(onOptionChangedCallCount, 1, "onOptionChanged call count");
+});
+
 function isColumnHidden($container, index) {
     var $colsHeadersView = $container.find(".dx-datagrid-headers col"),
         $colsRowsView = $container.find(".dx-datagrid-headers col"),
@@ -9258,6 +9294,31 @@ QUnit.test("scroll should works correctly if page size is small and totalCount a
 
     assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
     assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, "visible rows are in viewport");
+});
+
+// T830138
+QUnit.test("Freespace row should not have huge height if rowRenderingMode is virtual and pageSize is large", function(assert) {
+    // arrange
+    var store = [];
+    for(let i = 0; i < 60; i++) {
+        store.push({
+            value: i
+        });
+    }
+
+    $("#dataGrid").dxDataGrid({
+        dataSource: store,
+        loadingTimeout: undefined,
+        scrolling: {
+            rowRenderingMode: "virtual",
+        },
+        paging: {
+            pageSize: 40
+        }
+    });
+
+    // assert
+    assert.roughEqual($(".dx-freespace-row").height(), 0.5, 0.51, "freespace height");
 });
 
 QUnit.module("Rendered on server", baseModuleConfig);
@@ -17877,143 +17938,6 @@ QUnit.test("Filter builder custom operations should update filterValue immediate
     assert.equal(filterBuilder.getItemValueTextParts().length, 2, "IsAnyOf operation applyed");
 });
 
-QUnit.test("An item in edit form should not lose focus when it's value is changed in setCellValue (T822877)", function(assert) {
-    // arrange
-    var rowsViewWrapper = dataGridWrapper.rowsView;
-    var dataGrid = createDataGrid({
-        dataSource: [{ id: 0, name: "Alex", age: "26" }],
-        repaintChangesOnly: true,
-        selection: {
-            mode: "multiple"
-        },
-        editing: {
-            mode: "form",
-            allowUpdating: true
-        },
-        columns: [
-            {
-                dataField: "age",
-                name: "Age 1",
-                visible: false
-            },
-            {
-                dataField: "name",
-                setCellValue: function(data, value) {
-                    data.name = value;
-                }
-            },
-            {
-                dataField: "age_2",
-                name: "Age 2",
-                visible: true
-            },
-            {
-                type: "buttons",
-                allowHiding: false,
-                fixed: true,
-                buttons: [{ name: "edit" }]
-            }
-        ]
-    });
-    this.clock.tick();
-
-    // act
-    dataGrid.editRow(0);
-    this.clock.tick();
-
-    rowsViewWrapper.getFormEditorInput(1)
-        .focus()
-        .val("Sarah")
-        .trigger("change");
-    this.clock.tick();
-
-    // assert
-    assert.equal($(":focus")[0], rowsViewWrapper.getFormEditorInput(1)[0], "focus does not lose");
-});
-
-QUnit.test("An item in edit form should change value from setCellValue of another column (T822877)", function(assert) {
-    // arrange
-    var rowsViewWrapper = dataGridWrapper.rowsView;
-    var dataGrid = createDataGrid({
-        dataSource: [{ id: 0, name: "Alex", age: "26" }],
-        repaintChangesOnly: true,
-        editing: {
-            mode: "form",
-            allowUpdating: true
-        },
-        columns: [
-            "age",
-            {
-                dataField: "name",
-                setCellValue: function(data, value) {
-                    data.name = value;
-                    data.age = value;
-                }
-            }
-        ]
-    });
-    this.clock.tick();
-
-    // act
-    dataGrid.editRow(0);
-    this.clock.tick();
-
-    rowsViewWrapper.getFormEditorInput(1)
-        .focus()
-        .val("100")
-        .trigger("change");
-    this.clock.tick();
-
-    // assert
-    assert.equal(rowsViewWrapper.getFormEditorInput(0).val(), "100", "another column value");
-
-    // act
-    rowsViewWrapper.getFormEditorInput(1)
-        .focus()
-        .val("200")
-        .trigger("change");
-    this.clock.tick();
-
-    // assert
-    assert.equal(rowsViewWrapper.getFormEditorInput(0).val(), "200", "another column value");
-});
-
-QUnit.test("An item in edit form should change value without exceptions if setCellValue is set (T822877)", function(assert) {
-    // arrange
-    var rowsViewWrapper = dataGridWrapper.rowsView;
-    var dataGrid = createDataGrid({
-        dataSource: [{ name: "Alex", age: "26" }],
-        repaintChangesOnly: true,
-        editing: {
-            mode: "form",
-            allowUpdating: true
-        },
-        columns: [
-            {
-                dataField: "name",
-                setCellValue: function(data, value) {
-                    data.name = value;
-                }
-            },
-            "age"
-        ]
-    });
-    this.clock.tick();
-
-    // act
-    dataGrid.editRow(0);
-    this.clock.tick();
-
-    rowsViewWrapper.getFormEditorInput(0)
-        .focus()
-        .val("100")
-        .trigger("change");
-    this.clock.tick();
-
-    // assert
-    assert.equal(dataGrid.cellValue(0, "name"), "100", "value is applied");
-});
-
 
 QUnit.module("Row dragging", baseModuleConfig);
 
@@ -18069,4 +17993,75 @@ QUnit.test("The draggable row should have correct markup when defaultOptions is 
             }
         });
     }
+});
+
+// T827960
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+            e.component.option("loadPanel", { enabled: true });
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to value on the same page in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to another page in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        paging: {
+            pageSize: 1
+        },
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 2);
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 2, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
 });

@@ -14,7 +14,7 @@ const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-t
 const FILE_MANAGER_DETAILS_ITEM_NAME_CLASS = "dx-filemanager-details-item-name";
 const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = "dx-filemanager-details-item-name-wrapper";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
-const PREDEFINED_COLUMN_NAMES = [ "name", "isDirectory", "size", "thumbnail", "dateModified" ];
+const PREDEFINED_COLUMN_NAMES = [ "name", "isDirectory", "size", "thumbnail", "dateModified", "isParentFolder" ];
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -38,13 +38,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             scrolling: {
                 mode: "virtual"
             },
+            sorting: {
+                mode: "single",
+                showSortIndexes: false
+            },
             showColumnLines: false,
             showRowLines: false,
             columnHidingEnabled: true,
             columns: this._createColumns(),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
-            onSelectionChanged: this._raiseSelectionChanged.bind(this)
+            onSelectionChanged: this._raiseSelectionChanged.bind(this),
+            onOptionChanged: function(args) {
+                if(args.fullName.indexOf("sortOrder") > -1) {
+                    this.columnOption("isParentFolder", {
+                        sortOrder: "asc",
+                        sortIndex: 0
+                    });
+                }
+            }
         });
 
         this.$element()
@@ -81,6 +93,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 alignment: "right",
                 hidingPriority: 0,
                 calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
+            },
+            {
+                dataField: "isParentFolder",
+                caption: "isParentFolder",
+                visible: false,
+                sortIndex: 0,
+                sortOrder: "asc"
             }
         ];
 

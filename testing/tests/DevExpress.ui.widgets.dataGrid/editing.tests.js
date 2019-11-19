@@ -14464,6 +14464,37 @@ QUnit.test("Edit form when the editorType is specified in the column.formItem an
     assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
 });
 
+QUnit.test("The edit form should not be rerendered when setCellValue is set for the column and repaintChangesOnly is true", function(assert) {
+    // arrange
+    this.options.repaintChangesOnly = true;
+    this.columns[0] = { dataField: "name", setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); } };
+    this.setupModules(this);
+
+    let rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    let editFormInstance = this.editingController._editForm,
+        $editForm = $(editFormInstance.element()),
+        $editFormItem = $editForm.find(".dx-datagrid-edit-form-item").first();
+
+    // assert
+    assert.strictEqual($editForm.length, 1, "there is edit form");
+
+    // act
+    this.cellValue(0, "name", "Test");
+
+    // assert
+    assert.strictEqual($(this.getRowElement(0)).find(".dx-form").get(0), $editForm.get(0), "edit form is not re-rendered");
+    assert.strictEqual(this.editingController._editForm, editFormInstance, "edit form is not recreated");
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").get(0), $editFormItem.get(0), "first edit form item is not re-rendered");
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").first().find(".dx-texteditor-input").val(), "Test", "first cell value is changed");
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
@@ -16045,4 +16076,36 @@ QUnit.test("Adding multiple rows with async onInitNewRow (mixed failures and suc
     // assert
     assert.equal(visibleRows.length, 8, "two rows were added");
     assert.deepEqual(visibleRows[7].data, { room: 9 }, "row #7 data");
+});
+
+QUnit.test("Adding row and editing another row when the onInitNewRow event is asynchronous and row mode is set", function(assert) {
+    // arrange
+    var $testElement = $("#container");
+
+    this.options.columns = ["room"];
+    this.options.editing = {
+        allowAdding: true,
+        mode: "row"
+    };
+    this.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.promise.resolve();
+        }, 500);
+    };
+
+    this.editingController.optionChanged({ name: "onInitNewRow" });
+    this.columnHeadersView.render($testElement);
+    this.rowsView.render($testElement);
+    this.headerPanel.render($testElement);
+    this.columnsController.init();
+
+    // act
+    this.addRow();
+    this.editRow(2);
+    this.clock.tick(500);
+
+    // assert
+    assert.ok($(this.rowsView.getRowElement(0)).hasClass("dx-edit-row dx-row-inserted"), "new row");
+    assert.notOk($(this.rowsView.getRowElement(3)).hasClass("dx-edit-row"), "row isn't edited");
 });
