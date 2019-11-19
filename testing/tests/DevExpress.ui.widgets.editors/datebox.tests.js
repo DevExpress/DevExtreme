@@ -379,6 +379,22 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.equal($input.val(), "", "text is not rendered");
     });
 
+    QUnit.test("After typing while calendar is opened the typed data should be saved", assert => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            pickerType: "calendar",
+            openOnFieldClick: true
+        });
+
+        const instance = $dateBox.dxDateBox("instance");
+        const $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
+        const kb = keyboardMock($input);
+        const date = "10/6/2010";
+        $input.click();
+        kb.type(date).press("enter");
+
+        assert.deepEqual(instance.option("value"), Date(date), "typed value is set");
+    });
+
     QUnit.test("T278148 - picker type should be 'rollers' if the real device is phone in generic theme", assert => {
         const realDevice = devices.real();
         const currentDevice = devices.current();

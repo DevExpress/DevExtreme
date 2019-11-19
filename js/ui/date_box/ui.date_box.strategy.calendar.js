@@ -28,7 +28,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
                     if(this._widget.option("zoomLevel") === this._widget.option("maxZoomLevel")) {
                         var contouredDate = this._widget._view.option("contouredDate");
-                        contouredDate && this.dateBoxValue(contouredDate, e);
+                        contouredDate && contouredDate === this.dateBox.option("text") && this.dateBoxValue(contouredDate, e);
 
                         this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
