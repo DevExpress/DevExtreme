@@ -202,6 +202,42 @@ test(`[{0: selected}] -> focusin by press "tab" -> press "tab"`, async t => {
     });
 });
 
+fixture `Knockout T827626`
+    .page(url(__dirname, './pages/T827626.html'));
+
+test(`TabPanel should not switch the active tab after content click the if it contains another TabPanel`, async t => {
+    const tabPanel = new TabPanel('#tabPanel');
+
+    await appendElementTo("body", "button", { id: "focusoutButton", width: 150, height: 50, backgroundColor: 'steelblue' });
+
+    await t
+        .click(tabPanel.tabs.getItem(1).element)
+        .expect(tabPanel.isFocused).ok()
+        .expect(tabPanel.tabs.isFocused).ok()
+        .expect(tabPanel.tabs.getItem(1).isFocused).ok()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(3).isFocused).ok()
+
+    await t
+        .click(tabPanel.multiview.getItem(3).element)
+        .expect(tabPanel.isFocused).ok()
+        .expect(tabPanel.tabs.isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(3).isFocused).ok()
+
+    await t
+        .click(Selector("#focusoutButton"))
+        .expect(tabPanel.isFocused).notOk()
+        .expect(tabPanel.tabs.isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(3).isFocused).notOk()
+});
+
 
 
 
