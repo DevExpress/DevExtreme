@@ -14464,6 +14464,34 @@ QUnit.test("Edit form when the editorType is specified in the column.formItem an
     assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
 });
 
+QUnit.test("The edit form should not be rerendered when setCellValue is set for the column and repaintChangesOnly is true", function(assert) {
+    // arrange
+    this.options.repaintChangesOnly = true;
+    this.columns[0] = { dataField: "name", setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); } };
+    this.setupModules(this);
+
+    let rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    // assert
+    let editFormInstance = this.editingController._editForm,
+        $editForm = $(editFormInstance.element());
+    assert.strictEqual($editForm.length, 1, "there is edit form");
+
+    // act
+    this.cellValue(0, "name", "Test");
+
+    // assert
+    assert.deepEqual($(this.getRowElement(0)).find(".dx-form").get(0), $editForm.get(0));
+    assert.deepEqual(this.editingController._editForm, editFormInstance);
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").find(".dx-texteditor-input").val(), "Test");
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
