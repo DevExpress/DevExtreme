@@ -1,6 +1,5 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
-    OptionManager = require("./option_manager").OptionManager,
     Options = require("./options").Options,
     Class = require("./class"),
     Action = require("./action"),
@@ -122,7 +121,7 @@ var Component = Class.inherit({
             this._setOptionsByReference();
             this._setDeprecatedOptions();
             this._options = this._getDefaultOptions();
-            this._optionManager = new OptionManager(
+            this._optionManager = new Options(
                 this._options,
                 this._getDefaultOptions(),
                 this._getOptionsByReference(),
