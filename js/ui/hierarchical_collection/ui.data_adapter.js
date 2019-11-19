@@ -178,16 +178,22 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _iterateParents: function(node, callback) {
+    _iterateParents: function(node, callback, processedKeys) {
         if(node.internalFields.parentKey === this.options.rootValue) {
             return;
         }
+        processedKeys = processedKeys || [];
+        const key = node.internalFields.key;
+        if(processedKeys.includes(key)) {
+            throw `The dataSource has a cycle. Keys: ${processedKeys.join('->')}->${key}`;
+        }
 
+        processedKeys.push(key);
         var parent = this.options.dataConverter.getParentNode(node);
         if(parent) {
             typeUtils.isFunction(callback) && callback(parent);
             if(parent.internalFields.parentKey !== this.options.rootValue) {
-                this._iterateParents(parent, callback);
+                this._iterateParents(parent, callback, processedKeys);
             }
         }
     },
