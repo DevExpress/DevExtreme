@@ -1702,10 +1702,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _escapeSpecialCharacters: function(query) {
-        if(isString(query)) {
-            return query.replace(/('|"|\\)/g, '\\' + '$1');
-        }
-        return query;
+        return isString(query)
+            ? query.replace(/('|"|\\)/g, '\\' + '$1')
+            : query;
     },
 
     /**
