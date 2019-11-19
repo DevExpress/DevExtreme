@@ -132,7 +132,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
             return cache.$nodeByKey[key] || $();
         }
-        const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}='${this._escapeCssSearchQuery(key)}']`);
+        const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}='${this._escapeSpecialCharacters(key)}']`);
         return $(element);
     },
 
@@ -1701,7 +1701,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _escapeCssSearchQuery: function(query) {
+    _escapeSpecialCharacters: function(query) {
         if(isString(query)) {
             return query.replace(/('|"|\\)/g, '\\' + '$1');
         }
