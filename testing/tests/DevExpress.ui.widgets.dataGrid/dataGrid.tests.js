@@ -2538,6 +2538,37 @@ QUnit.test("column width as string should works correctly", function(assert) {
     assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 200, "visibleWidth for first column is number");
 });
 
+// T833605
+QUnit.test("Indexes after option change should be normalized before onOptionChanged callback", function(assert) {
+    // arrange
+    var grid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        allowColumnReordering: true,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            dataField: "field3"
+        }],
+        onOptionChanged: function(e) {
+            // assert
+            assert.equal(grid.columnOption(0, "visibleIndex"), 1);
+            assert.equal(grid.columnOption(1, "visibleIndex"), 2);
+            assert.equal(grid.columnOption(2, "visibleIndex"), 0);
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    grid.columnOption(2, "visibleIndex", 0);
+
+    // assert
+    assert.equal(grid.columnOption(0, "visibleIndex"), 1);
+    assert.equal(grid.columnOption(1, "visibleIndex"), 2);
+    assert.equal(grid.columnOption(2, "visibleIndex"), 0);
+});
+
 function isColumnHidden($container, index) {
     var $colsHeadersView = $container.find(".dx-datagrid-headers col"),
         $colsRowsView = $container.find(".dx-datagrid-headers col"),
