@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    domAdapter = require("../../core/dom_adapter"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
     KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
@@ -28,10 +27,7 @@ var UI_FEEDBACK = "UIFeedback",
 
 const EVENT_NAME = {
     active: feedbackEvents.active,
-    inactive: feedbackEvents.inactive,
-    focusIn: owner => eventUtils.addNamespace('focusin', `${owner}Focus`),
-    focusOut: owner => eventUtils.addNamespace('focusout', `${owner}Focus`),
-    beforeActivate: owner => eventUtils.addNamespace('beforeactivate', `${owner}Focus`)
+    inactive: feedbackEvents.inactive
 };
 
 /**
@@ -379,35 +375,21 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _detachFocusEvents() {
-        const $focusTarget = this._focusEventTarget();
-
-        eventsEngine.off($focusTarget, EVENT_NAME.focusIn(this.NAME));
-        eventsEngine.off($focusTarget, EVENT_NAME.focusOut(this.NAME));
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.off($focusTarget, EVENT_NAME.beforeActivate(this.NAME));
-        }
-    },
-
-    _attachFocusEvents() {
-        this._attachFocusEventsCore(
+        eventsEngine.focus.off(
             this._focusEventTarget(),
-            this._focusInHandler.bind(this),
-            this._focusOutHandler.bind(this),
-            { owner: this.NAME }
+            { namespace: `${this.NAME}Focus` }
         );
     },
 
-    // NOTE: Static method
-    _attachFocusEventsCore($el, focusIn, focusOut, { owner }) {
-        eventsEngine.on($el, EVENT_NAME.focusIn(owner), focusIn);
-        eventsEngine.on($el, EVENT_NAME.focusOut(owner), focusOut);
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.on($el, EVENT_NAME.beforeActivate(owner),
-                e => $(e.target).is(selectors.focusable) || e.preventDefault()
-            );
-        }
+    _attachFocusEvents() {
+        eventsEngine.focus.on(
+            this._focusEventTarget(),
+            this._focusInHandler.bind(this),
+            this._focusOutHandler.bind(this), {
+                namespace: `${this.NAME}Focus`,
+                isFocusable: el => $(el).is(selectors.focusable)
+            }
+        );
     },
 
     _refreshFocusEvent: function() {

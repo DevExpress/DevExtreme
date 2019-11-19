@@ -615,6 +615,28 @@ eventsEngine.hover = {
     }
 };
 
+eventsEngine.focus = {
+    on: ($el, focusIn, focusOut, { namespace, isFocusable }) => {
+        eventsEngine.on($el, addNamespace('focusin', namespace), focusIn);
+        eventsEngine.on($el, addNamespace('focusout', namespace), focusOut);
+
+        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
+            eventsEngine.on($el, addNamespace('beforeactivate', namespace),
+                e => isFocusable(e.target) || e.preventDefault()
+            );
+        }
+    },
+
+    off: ($el, { namespace }) => {
+        eventsEngine.off($el, addNamespace('focusin', namespace));
+        eventsEngine.off($el, addNamespace('focusout', namespace));
+
+        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
+            eventsEngine.off($el, addNamespace('beforeactivate', namespace));
+        }
+    }
+};
+
 eventsEngine.set = function(engine) {
     beforeSetStrategy.fire();
     eventsEngine.inject(engine);
