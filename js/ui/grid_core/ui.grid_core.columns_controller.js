@@ -1277,7 +1277,7 @@ module.exports = {
                 }
             };
 
-            var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
+            var columnOptionCore = function(that, column, optionName, value, notFireEvent, needUpdateIndexes) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
@@ -1304,6 +1304,12 @@ module.exports = {
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     fullOptionName = getColumnFullPath(that, column);
+
+                    if(COLUMN_INDEX_OPTIONS[optionName]) {
+                        updateIndexes(that, column);
+                        value = optionGetter(column);
+                    }
+
                     fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,
@@ -1380,7 +1386,7 @@ module.exports = {
                 return result;
             };
 
-            var getRowCount = function(that, level, bandColumnIndex) {
+            var getRowCount = function(that) {
                 var rowCount = 1,
                     bandColumnsCache = that.getBandColumnsCache(),
                     columnParentByIndex = bandColumnsCache.columnParentByIndex;
@@ -2659,7 +2665,6 @@ module.exports = {
                         i,
                         identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
                         columns = that._columns.concat(that._commandColumns),
-                        needUpdateIndexes,
                         column;
 
                     if(identifier === undefined) return;
@@ -2690,17 +2695,12 @@ module.exports = {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(isObject(option)) {
                             iteratorUtils.each(option, function(optionName, value) {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
-                        }
-                        if(needUpdateIndexes) {
-                            updateIndexes(that, column);
                         }
 
                         fireColumnsChanged(that);
