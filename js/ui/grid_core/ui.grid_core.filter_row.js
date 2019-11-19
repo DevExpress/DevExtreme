@@ -636,7 +636,7 @@ var DataControllerFilterRowExtender = {
         }
 
         var filters = [this.callBase()],
-            columns = this._columnsController.getVisibleColumns();
+            columns = this._columnsController.getVisibleColumns(null, true);
 
         iteratorUtils.each(columns, function() {
             var filter;
