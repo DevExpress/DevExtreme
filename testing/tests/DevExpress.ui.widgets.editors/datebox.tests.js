@@ -345,6 +345,25 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.ok(dateBox.option("isValid"), "widget is valid");
     });
 
+    QUnit.test("type change should raise validation", assert => {
+        const now = new Date();
+        const $dateBox = $("#widthRootStyle").dxDateBox({
+            type: "date",
+            value: now
+        });
+
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type("123").press("enter");
+        assert.notOk(dateBox.option("isValid"), "widget is invalid");
+
+        dateBox.option("type", "datetime");
+        assert.ok(dateBox.option("isValid"), "widget is valid after type change");
+        assert.ok(dateBox.option("value"), now, "value has been reset");
+    });
+
     QUnit.test("T252737 - the 'acceptCustomValue' option correct behavior", assert => {
         const $dateBox = $("#dateBox").dxDateBox({
             acceptCustomValue: false,
