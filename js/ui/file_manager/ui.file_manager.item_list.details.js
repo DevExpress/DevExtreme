@@ -50,7 +50,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._raiseSelectionChanged.bind(this),
             onOptionChanged: function(args) {
-                if(args.fullName.indexOf("sortOrder")) {
+                if(args.fullName.indexOf("sortOrder") > -1) {
                     this.columnOption("isParentFolder", {
                         sortOrder: "asc",
                         sortIndex: 0
