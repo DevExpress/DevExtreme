@@ -153,7 +153,6 @@ exports.FocusController = core.ViewController.inherit((function() {
         _navigateToRow: function(key, needFocusRow) {
             var that = this,
                 dataController = this.getController("data"),
-                rowIndex = this.option("focusedRowIndex"),
                 isAutoNavigate = that.option("autoNavigateToFocusedRow"),
                 d = new Deferred();
 
@@ -166,7 +165,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             let rowIndexByKey = that._getFocusedRowIndexByKey(key),
                 isPaginate = dataController.getDataSource().paginate();
 
-            if(!isAutoNavigate || !isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
+            if(!isAutoNavigate || !isPaginate || rowIndexByKey >= 0) {
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
