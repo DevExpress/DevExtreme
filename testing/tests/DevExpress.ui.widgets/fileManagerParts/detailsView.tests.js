@@ -184,4 +184,40 @@ QUnit.module("Details View", moduleConfig, () => {
         assert.ok(this.wrapper.getDetailsItemScrollable().length);
     });
 
+    test("'Back' directory must have attributes of the represented directory", function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        const itemsGetter = fileManager._itemView.option("getItems");
+        this.wrapper.getInstance().option({
+            fileProvider: [
+                {
+                    name: "Folder 1",
+                    isDirectory: true,
+                    items: [],
+                    dateModified: "16/06/2018"
+                }
+            ],
+            itemView: {
+                showParentFolder: true
+            }
+        });
+        this.clock.tick(400);
+
+        itemsGetter()
+            .then(fileInfos => {
+                const parentFolder = fileInfos[0];
+                const parentDate = parentFolder.fileItem.dateModified;
+                fileManager.option("currentPath", "Folder 1");
+                this.clock.tick(400);
+                itemsGetter()
+                    .then(fileInfos => {
+                        const targetFolder = fileInfos[0];
+                        assert.ok(targetFolder.fileItem.isParentFolder, "The target folder is 'back' directory");
+                        assert.notOk(parentFolder.fileItem.isParentFolder, "The parent folder regular directory");
+                        assert.equal(targetFolder.fileItem.dateModified, parentDate, "The date is correct");
+                    });
+
+            });
+
+    });
+
 });
