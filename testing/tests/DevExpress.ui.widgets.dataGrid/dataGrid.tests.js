@@ -7800,7 +7800,7 @@ QUnit.test("updateDimensions during grouping when fixed to right column exists",
 
     // assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
-    assert.strictEqual($(dataGrid.$element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
+    assert.strictEqual($(dataGrid.$element()).find(".dx-group-row").length, 2, "grouped rows are rendered");
 });
 
 // T334530
