@@ -1687,7 +1687,7 @@ QUnit.test("Simple group - can register validator in group", function(assert) {
     var groupConfig = ValidationEngine.getGroupConfig(group);
     assert.ok(groupConfig, "Group was registered in Validation Engine");
     assert.equal(groupConfig.validators.length, 1, "Single validator was registered in group Validation Engine");
-    assert.ok(groupConfig.validators[0], validator, "Validator was registered in correct group");
+    assert.strictEqual(groupConfig.validators[0], validator, "Validator was registered in correct group");
 });
 
 QUnit.test("Simple group - validator should not be duplicated in group", function(assert) {
@@ -1702,7 +1702,7 @@ QUnit.test("Simple group - validator should not be duplicated in group", functio
     var groupConfig = ValidationEngine.getGroupConfig(group);
     assert.ok(groupConfig, "Group was registered in Validation Engine");
     assert.equal(groupConfig.validators.length, 1, "Single validator was registered in group Validation Engine");
-    assert.ok(groupConfig.validators[0], validator, "Validator was registered in correct group");
+    assert.strictEqual(groupConfig.validators[0], validator, "Validator was registered in correct group");
 });
 
 QUnit.test("Simple group - can register validator in undefined group", function(assert) {
@@ -1715,7 +1715,7 @@ QUnit.test("Simple group - can register validator in undefined group", function(
     var groupConfig = ValidationEngine.getGroupConfig();
     assert.ok(groupConfig, "Group was registered in Validation Engine");
     assert.equal(groupConfig.validators.length, 1, "Single validator was registered in group Validation Engine");
-    assert.ok(groupConfig.validators[0], validator, "Validator was registered in correct group");
+    assert.strictEqual(groupConfig.validators[0], validator, "Validator was registered in correct group");
 });
 
 QUnit.test("Simple group - remove validator registration", function(assert) {
