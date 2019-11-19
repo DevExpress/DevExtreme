@@ -98,6 +98,9 @@ var CalendarStrategy = DateBoxStrategy.inherit({
                 toolbar: position[0],
                 location: position[1] === "after" ? "before" : position[1],
                 options: {
+                    onInitialized: function(e) {
+                        e.component.registerKeyHandler("escape", this._escapeHandler.bind(this));
+                    }.bind(this),
                     onClick: (function() { this._widget._toTodayView(); }).bind(this),
                     text: messageLocalization.format("dxCalendar-todayButtonText"),
                     type: "today"
@@ -111,6 +114,11 @@ var CalendarStrategy = DateBoxStrategy.inherit({
                 collision: "flipfit flip"
             }
         });
+    },
+
+    _escapeHandler: function() {
+        this.dateBox.close();
+        this.dateBox.focus();
     },
 
     _valueChangedHandler: function(e) {
