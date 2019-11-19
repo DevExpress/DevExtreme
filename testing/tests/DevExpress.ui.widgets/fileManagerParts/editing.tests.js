@@ -139,7 +139,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
         assert.ok($input.has(":focus"), "dialog's input element should be focused");
-        assert.equal("Untitled directory", $input.val(), "input has default value");
+        assert.equal($input.val(), "Untitled directory", "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");
@@ -165,7 +165,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
         assert.ok($input.has(":focus"), "dialog's input element should be focused");
-        assert.equal("Untitled directory", $input.val(), "input has default value");
+        assert.equal($input.val(), "Untitled directory", "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");
