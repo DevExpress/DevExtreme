@@ -566,7 +566,11 @@ var Sortable = Draggable.inherit({
             height = $item.outerHeight();
         }
 
-        $placeholderElement.css({ width, height });
+        if(!this.preventSetWidth) {
+            $placeholderElement.css("width", width);
+        }
+
+        $placeholderElement.css("height", height);
     },
 
     _moveItem: function($itemElement, index, cancelRemove) {
