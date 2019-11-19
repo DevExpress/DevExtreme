@@ -603,8 +603,8 @@ function addNamespace(event, namespace) {
 
 eventsEngine.hover = {
     on: ($el, start, end, { selector, namespace }) => {
-        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => end(event));
-        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => {
+        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
+        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => {
             isFunction(start) ? start(event.target, event) : start.execute({ element: event.target, event });
         });
     },
