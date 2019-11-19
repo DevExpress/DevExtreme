@@ -2311,15 +2311,6 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            ExcelJSLocalizationFormatTests.runCurrencyTests([
-                { value: "USD", expected: "$#,##0_);\\($#,##0\\)" },
-                { value: "RUB", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
-                { value: "JPY", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
-                { value: "KPW", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
-                { value: "LBP", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
-                { value: "SEK", expected: "$#,##0_);\\($#,##0\\)" } // NOT SUPPORTED in default
-            ]);
-
             QUnit.test("Data - columns.dataType: number, columns.format.type: 'currency' with presicion" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 1 }];
@@ -6113,4 +6104,13 @@ QUnit.module("API", moduleConfig, () => {
             });
         });
     });
+
+    ExcelJSLocalizationFormatTests.runCurrencyTests([
+        { value: "USD", expected: "$#,##0_);\\($#,##0\\)" },
+        { value: "RUB", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+        { value: "JPY", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+        { value: "KPW", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+        { value: "LBP", expected: "$#,##0_);\\($#,##0\\)" }, // NOT SUPPORTED in default
+        { value: "SEK", expected: "$#,##0_);\\($#,##0\\)" } // NOT SUPPORTED in default
+    ]);
 });
