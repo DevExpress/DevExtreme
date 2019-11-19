@@ -14,6 +14,8 @@ var $ = require("../../core/renderer"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
     clickEvent = require("../../events/click");
 
+require("../../events/hover");
+
 var UI_FEEDBACK = "UIFeedback",
     WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",
