@@ -1,12 +1,21 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    browser = require("core/utils/browser"),
-    domUtils = require("core/utils/dom"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    fx = require("animation/fx"),
-    translator = require("animation/translator"),
-    dateLocalization = require("localization/date");
+import $ from "jquery";
+import devices from "core/devices";
+import browser from "core/utils/browser";
+import domUtils from "core/utils/dom";
+import pointerMock from "../../helpers/pointerMock.js";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import fx from "animation/fx";
+import translator from "animation/translator";
+import dateLocalization from "localization/date";
+import "../../helpers/l10n/cldrNumberDataRu.js";
+import "../../helpers/l10n/cldrCalendarDataRu.js";
+
+import "common.css!";
+import "generic_light.css!";
+
+import "ui/date_box/ui.date_view";
+import "ui/date_box/ui.date_view_roller";
+
 
 QUnit.testStart(function() {
     var markup =
@@ -17,14 +26,6 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("../../helpers/l10n/cldrNumberDataRu.js");
-require("../../helpers/l10n/cldrCalendarDataRu.js");
-
-require("common.css!");
-require("generic_light.css!");
-
-require("ui/date_box/ui.date_view");
-require("ui/date_box/ui.date_view_roller");
 
 var DATEVIEW_CLASS = "dx-dateview",
     DATEVIEW_WRAPPER_CLASS = "dx-dateview-wrapper",
@@ -797,3 +798,58 @@ QUnit.test("time component should be preserved after value is changed by rollers
     }
 });
 
+[ "date", "datetime" ].forEach((type) => {
+
+    QUnit.test(`'type' = '${type}', use 'value' time component when changing 'value' > 'maxDate' (T823748)`, function(assert) {
+        this.instance.option({
+            type: type,
+            minDate: new Date(2020, 0, 30, 1, 2, 0),
+            value: new Date(2020, 0, 31, 3, 4, 0),
+            maxDate: new Date(2020, 1, 1, 5, 6, 0)
+        });
+
+        this.instance._rollers.month.option("selectedIndex", 1);
+
+        assert.deepEqual(this.instance.option("value"), new Date(2020, 1, 1, 3, 4, 0));
+    });
+
+    QUnit.test(`'type' = '${type}', use 'maxDate' time component when changing 'value' > 'maxDate'`, function(assert) {
+        this.instance.option({
+            type: type,
+            minDate: new Date(2020, 0, 30, 1, 2, 0),
+            value: new Date(2020, 0, 31, 5, 6, 0),
+            maxDate: new Date(2020, 1, 1, 3, 4, 0)
+        });
+
+        this.instance._rollers.month.option("selectedIndex", 1);
+
+        assert.deepEqual(this.instance.option("value"), new Date(2020, 1, 1, 3, 4, 0));
+    });
+
+    QUnit.test(`'type' = '${type}', use 'value' time component when changing 'value' < 'minDate'`, function(assert) {
+        this.instance.option({
+            type: type,
+            minDate: new Date(2020, 0, 30, 3, 4, 0),
+            value: new Date(2020, 1, 1, 1, 2, 0),
+            maxDate: new Date(2020, 1, 1, 5, 6, 0)
+        });
+
+        this.instance._rollers.month.option("selectedIndex", 0);
+
+        assert.deepEqual(this.instance.option("value"), new Date(2020, 0, 30, 3, 4, 0));
+    });
+
+    QUnit.test(`'type' = '${type}', use 'minDate' time component when changing 'value' < 'minDate'`, function(assert) {
+        this.instance.option({
+            type: type,
+            minDate: new Date(2020, 0, 30, 1, 2, 0),
+            value: new Date(2020, 1, 1, 0, 3, 4, 0),
+            maxDate: new Date(2020, 1, 1, 5, 6, 0)
+        });
+
+        this.instance._rollers.month.option("selectedIndex", 0);
+
+        assert.deepEqual(this.instance.option("value"), new Date(2020, 0, 30, 1, 2, 0));
+    });
+
+});

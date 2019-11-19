@@ -212,7 +212,9 @@ var DateView = Editor.inherit({
             var rollerValue = roller.valueItems[selectedIndex],
                 setValue = roller.setValue,
                 currentValue = new Date(this._getCurrentDate()),
-                currentDate = currentValue.getDate();
+                currentDate = currentValue.getDate(),
+                minDate = this.option("minDate"),
+                maxDate = this.option("maxDate");
 
             if(roller.type === ROLLER_TYPE.month) {
                 currentDate = Math.min(currentDate, uiDateUtils.getMaxMonthDay(currentValue.getFullYear(), rollerValue));
@@ -223,7 +225,9 @@ var DateView = Editor.inherit({
             currentValue.setDate(currentDate);
             currentValue[setValue](rollerValue);
 
-            currentValue = dateUtils.normalizeDate(currentValue, this.option("minDate"), this.option("maxDate"));
+            var normalizedDate = dateUtils.normalizeDate(currentValue, minDate, maxDate);
+            currentValue = uiDateUtils.mergeDates(normalizedDate, currentValue, "time");
+            currentValue = dateUtils.normalizeDate(currentValue, minDate, maxDate);
 
             this.option("value", currentValue);
 
@@ -260,13 +264,7 @@ var DateView = Editor.inherit({
             minDate = this.option("minDate"),
             maxDate = this.option("maxDate");
 
-        if(minDate && curDate.getTime() <= minDate.getTime()) {
-            curDate = minDate;
-        } else if(maxDate && curDate.getTime() >= maxDate.getTime()) {
-            curDate = maxDate;
-        }
-
-        return curDate;
+        return dateUtils.normalizeDate(curDate, minDate, maxDate);
     },
 
     _calculateRollerConfigValueRange: function(componentName) {
