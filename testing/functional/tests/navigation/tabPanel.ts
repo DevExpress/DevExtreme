@@ -203,7 +203,7 @@ test(`[{0: selected}] -> focusin by press "tab" -> press "tab"`, async t => {
 });
 
 fixture `Knockout T827626`
-    .page(url(__dirname, './pages/T827626.html'));
+    .page(url(__dirname, './pages/t827626.html'));
 
 test(`TabPanel should not switch the active tab after content click the if it contains another TabPanel`, async t => {
     const tabPanel = new TabPanel('#tabPanel');
