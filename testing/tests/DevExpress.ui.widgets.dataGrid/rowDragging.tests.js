@@ -538,6 +538,25 @@ QUnit.test("Dragging row when there are fixed columns", function(assert) {
     assert.strictEqual($fixTable.find(".dx-data-row").children(".dx-pointer-events-none").length, 1, "fixed table has transparent column");
 });
 
+// T830034
+QUnit.test("Placeholder should not be wider than grid if horizontal scroll exists", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    $testElement.css("width", "500px");
+    this.options.columnWidth = 300;
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 115).move(0, 5);
+
+    // assert
+    assert.ok($(".dx-sortable-placeholder").width() < 501, "placeholder width");
+});
+
 
 QUnit.module("Handle", $.extend({}, moduleConfig, {
     beforeEach: function() {

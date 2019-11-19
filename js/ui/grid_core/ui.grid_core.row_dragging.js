@@ -63,8 +63,21 @@ var RowDraggingExtender = {
 
                     const onDragStart = rowDragging.onDragStart;
                     onDragStart && onDragStart(e);
+                },
+                onDragMove: function(e) {
+                    var scrollable = e.component.getScrollable(),
+                        $scrollable = scrollable && scrollable._$element;
+
+                    if($scrollable) {
+                        $(".dx-sortable-placeholder").css("width", $scrollable.width());
+                    }
+
+                    const onDragMove = rowDragging.onDragMove;
+                    onDragMove && onDragMove(e);
                 }
             }));
+
+            that._sortable.preventSetWidth = true;
         }
 
         return $content;
