@@ -50,7 +50,7 @@ function getConfig(caption) {
         icon: "range",
         valueSeparator: SEPARATOR,
         dataTypes: ["number", "date", "datetime"],
-        editorTemplate: editorTemplate
+        editorTemplate: editorTemplate.bind(this)
     };
 }
 

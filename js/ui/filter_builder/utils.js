@@ -685,9 +685,9 @@ function getMergedOperations(customOperations, betweenCaption) {
         }
     });
     if(betweenIndex !== -1) {
-        result[betweenIndex] = extend(between.getConfig(betweenCaption), result[betweenIndex]);
+        result[betweenIndex] = extend(between.getConfig.bind(this)(betweenCaption), result[betweenIndex]);
     } else {
-        result.unshift(between.getConfig(betweenCaption));
+        result.unshift(between.getConfig.bind(this)(betweenCaption));
     }
     return result;
 }
