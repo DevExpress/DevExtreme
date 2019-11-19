@@ -1,8 +1,7 @@
-var $ = require("jquery");
+import $ from "jquery";
+import dateLocalization from "localization/date";
 
-require("ui/date_box/ui.time_view");
-
-var dateLocalization = require("localization/date");
+import "ui/date_box/ui.time_view";
 
 QUnit.testStart(function() {
     var markup =
@@ -22,7 +21,8 @@ var TIMEVIEW_CLASS = "dx-timeview",
     TIMEVIEW_FORMAT12_PM = 1,
 
     BOX_CLASS = "dx-box",
-    NUMBERBOX_CLASS = "dx-numberbox";
+    NUMBERBOX_CLASS = "dx-numberbox",
+    INPUT_CLASS = "dx-texteditor-input";
 
 QUnit.module("rendering");
 
@@ -486,6 +486,49 @@ QUnit.test("value changed should be raised on value change", function(assert) {
         instance = $element.dxTimeView("instance");
 
     instance.option("value", time);
+});
+
+QUnit.test("'registerKeyHandler' should attach handler to the each nested editor", function(assert) {
+    const handler = sinon.stub();
+    const $element = $("#timeView");
+    const instance = $element
+        .dxTimeView({ use24HourFormat: false })
+        .dxTimeView("instance");
+
+    instance.registerKeyHandler("escape", handler);
+
+    const $inputs = $element.find(`.${INPUT_CLASS}`);
+
+    $inputs.each((index, element) => {
+        const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+
+        $(element).trigger(escapeKeyDown);
+    });
+
+    assert.strictEqual($inputs.length, 3, "there are 3 editors");
+    assert.strictEqual(handler.callCount, 3, "each editor handle the keydown event");
+});
+
+QUnit.test("Custom keyboard handlers still works after option change", function(assert) {
+    const handler = sinon.stub();
+    const $element = $("#timeView");
+    const instance = $element
+        .dxTimeView({ use24HourFormat: false })
+        .dxTimeView("instance");
+
+    instance.registerKeyHandler("escape", handler);
+    instance.option("use24HourFormat", true);
+
+    const $inputs = $element.find(`.${INPUT_CLASS}`);
+
+    $inputs.each((index, element) => {
+        const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+
+        $(element).trigger(escapeKeyDown);
+    });
+
+    assert.strictEqual($inputs.length, 2, "there are 2 editors");
+    assert.strictEqual(handler.callCount, 2, "each editor handle the keydown event");
 });
 
 

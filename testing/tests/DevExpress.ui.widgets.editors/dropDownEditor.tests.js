@@ -654,6 +654,19 @@ QUnit.test("Enter and escape key press does not prevent default when popup in no
     assert.equal(prevented, 0, "defaults has not prevented on enter and escape keys");
 });
 
+QUnit.test("Escape key press should be handled by a children keyboard processor", function(assert) {
+    const handler = sinon.stub();
+
+    this.dropDownEditor
+        ._keyboardProcessor
+        .attachChildProcessor()
+        .reinitialize(handler, this.dropDownEditor);
+
+    this.keyboard.keyDown("esc");
+
+    assert.ok(handler.calledOnce, "Children keyboard processor can process the 'esc' key pressing");
+});
+
 QUnit.test("Home and end key press prevent default when popup in opened", function(assert) {
     assert.expect(1);
 
