@@ -14478,18 +14478,21 @@ QUnit.test("The edit form should not be rerendered when setCellValue is set for 
     // act
     this.editRow(0);
 
-    // assert
     let editFormInstance = this.editingController._editForm,
-        $editForm = $(editFormInstance.element());
+        $editForm = $(editFormInstance.element()),
+        $editFormItem = $editForm.find(".dx-datagrid-edit-form-item").first();
+
+    // assert
     assert.strictEqual($editForm.length, 1, "there is edit form");
 
     // act
     this.cellValue(0, "name", "Test");
 
     // assert
-    assert.deepEqual($(this.getRowElement(0)).find(".dx-form").get(0), $editForm.get(0));
-    assert.deepEqual(this.editingController._editForm, editFormInstance);
-    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").find(".dx-texteditor-input").val(), "Test");
+    assert.strictEqual($(this.getRowElement(0)).find(".dx-form").get(0), $editForm.get(0), "edit form is not re-rendered");
+    assert.strictEqual(this.editingController._editForm, editFormInstance, "edit form is not recreated");
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").get(0), $editFormItem.get(0), "first edit form item is not re-rendered");
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").first().find(".dx-texteditor-input").val(), "Test", "first cell value is changed");
 });
 
 
