@@ -15,6 +15,8 @@ var $ = require("../../core/renderer"),
 require("../../events/hover");
 require("../../events/core/emitter.feedback");
 
+const { hover, focus, active } = eventsEngine;
+
 var UI_FEEDBACK = "UIFeedback",
     WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",
@@ -369,24 +371,6 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._eventBindingTarget();
     },
 
-    _detachFocusEvents() {
-        eventsEngine.focus.off(
-            this._focusEventTarget(),
-            { namespace: `${this.NAME}Focus` }
-        );
-    },
-
-    _attachFocusEvents() {
-        eventsEngine.focus.on(
-            this._focusEventTarget(),
-            this._focusInHandler.bind(this),
-            this._focusOutHandler.bind(this), {
-                namespace: `${this.NAME}Focus`,
-                isFocusable: el => $(el).is(selectors.focusable)
-            }
-        );
-    },
-
     _refreshFocusEvent: function() {
         this._detachFocusEvents();
         this._attachFocusEvents();
@@ -506,18 +490,20 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _attachHoverEvents() {
         const { hoverStateEnabled } = this.option();
+        const selector = this._activeStateUnit;
+        const namespace = UI_FEEDBACK;
         const $el = this._eventBindingTarget();
 
-        eventsEngine.hover.off($el, { selector: this._activeStateUnit, namespace: UI_FEEDBACK });
+        hover.off($el, { selector, namespace });
 
         if(hoverStateEnabled) {
-            eventsEngine.hover.on($el, new Action(({ event, element }) => {
+            hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
                 this._refreshHoveredElement($(element));
             }, { excludeValidators: ['readOnly'] }), event => {
                 this._hoverEndHandler(event);
                 this._forgetHoveredElement();
-            }, { selector: this._activeStateUnit, namespace: UI_FEEDBACK });
+            }, { selector, namespace });
         } else {
             this._toggleHoverClass(false);
         }
@@ -525,23 +511,43 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _attachFeedbackEvents() {
         const { activeStateEnabled } = this.option();
+        const selector = this._activeStateUnit;
+        const namespace = UI_FEEDBACK;
         const $el = this._eventBindingTarget();
 
-        this._detachFeedbackEvents($el, { namespace: UI_FEEDBACK, selector: this._activeStateUnit });
+        active.off($el, { namespace, selector });
 
         if(activeStateEnabled) {
-            eventsEngine.active.on($el,
+            active.on($el,
                 new Action(({ event, element }) => this._toggleActiveState($(element), true, event)),
                 new Action(({ event, element }) => this._toggleActiveState($(element), false, event),
                     { excludeValidators: ['disabled', 'readOnly'] }
                 ), {
-                    selector: this._activeStateUnit,
                     showTimeout: this._feedbackShowTimeout,
                     hideTimeout: this._feedbackHideTimeout,
-                    namespace: UI_FEEDBACK
+                    selector,
+                    namespace
                 }
             );
         }
+    },
+
+    _detachFocusEvents() {
+        const $el = this._focusEventTarget();
+
+        focus.off($el, { namespace: `${this.NAME}Focus` });
+    },
+
+    _attachFocusEvents() {
+        const $el = this._focusEventTarget();
+
+        focus.on($el,
+            e => this._focusInHandler(e),
+            e => this._focusOutHandler(e), {
+                namespace: `${this.NAME}Focus`,
+                isFocusable: el => $(el).is(selectors.focusable)
+            }
+        );
     },
 
     _hoverStartHandler: commonUtils.noop,
