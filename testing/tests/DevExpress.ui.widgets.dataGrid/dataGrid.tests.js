@@ -2476,32 +2476,37 @@ QUnit.test("column width as string should works correctly", function(assert) {
 // T833605
 QUnit.test("Indexes after option change should be normalized before onOptionChanged callback", function(assert) {
     // arrange
-    var grid = $("#dataGrid").dxDataGrid({
-        loadingTimeout: undefined,
-        allowColumnReordering: true,
-        dataSource: [{}],
-        columns: [{
-            dataField: "field1"
-        }, {
-            dataField: "field2"
-        }, {
-            dataField: "field3"
-        }],
-        onOptionChanged: function(e) {
-            // assert
-            assert.equal(grid.columnOption(0, "visibleIndex"), 1);
-            assert.equal(grid.columnOption(1, "visibleIndex"), 2);
-            assert.equal(grid.columnOption(2, "visibleIndex"), 0);
-        }
-    }).dxDataGrid("instance");
+    var onOptionChangedCallCount = 0,
+        grid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            allowColumnReordering: true,
+            dataSource: [{}],
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2"
+            }, {
+                dataField: "field3"
+            }],
+            onOptionChanged: function(e) {
+                // act
+                onOptionChangedCallCount++;
+
+                // assert
+                assert.equal(grid.columnOption(0, "visibleIndex"), 1, "first column visible index");
+                assert.equal(grid.columnOption(1, "visibleIndex"), 2, "second column visible index");
+                assert.equal(grid.columnOption(2, "visibleIndex"), 0, "third column visible index");
+            }
+        }).dxDataGrid("instance");
 
     // act
     grid.columnOption(2, "visibleIndex", 0);
 
     // assert
-    assert.equal(grid.columnOption(0, "visibleIndex"), 1);
-    assert.equal(grid.columnOption(1, "visibleIndex"), 2);
-    assert.equal(grid.columnOption(2, "visibleIndex"), 0);
+    assert.equal(grid.columnOption(0, "visibleIndex"), 1, "first column visible index");
+    assert.equal(grid.columnOption(1, "visibleIndex"), 2, "second column visible index");
+    assert.equal(grid.columnOption(2, "visibleIndex"), 0, "third column visible index");
+    assert.equal(onOptionChangedCallCount, 1, "onOptionChanged call count");
 });
 
 function isColumnHidden($container, index) {
