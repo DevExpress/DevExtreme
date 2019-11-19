@@ -1820,11 +1820,13 @@ QUnit.module("API", moduleConfig, () => {
                 { format: "longTime", expectedFormat: "[$-9]H:mm:ss AM/PM" },
                 { format: "dayOfWeek", expectedFormat: "[$-9]dddd" },
             ].forEach((format)=> {
+                const dateTimeValue = new Date(2019, 9, 9, 9, 9, 9, 9);
+                const dateValue = new Date(2019, 9, 9);
                 [
-                    { value: new Date(2019, 9, 9, 9, 9, 9, 9) },
-                    { value: new Date(2019, 9, 9) },
-                    { value: "2019/10/9", expected: new Date(2019, 9, 9) },
-                    { value: 1570601349009, expected: new Date(2019, 9, 9, 9, 9, 9, 9) }
+                    { value: dateTimeValue },
+                    { value: dateValue },
+                    { value: "2019/10/9", expected: dateValue },
+                    { value: dateTimeValue.getTime(), expected: dateTimeValue }
                 ].forEach((date) => {
                     QUnit.test(`Data - columns.dataType: date, columns.format: ${format.format} ${testCaption}`, (assert) => {
                         const done = assert.async();
