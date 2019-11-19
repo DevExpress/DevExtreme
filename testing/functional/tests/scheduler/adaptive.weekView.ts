@@ -7,8 +7,11 @@ fixture `Week view in adaptive mode`
 
 const scheduler = new Scheduler("#container");
 
-const roughEqual = (value: number, expected: number) => {
-    return value >= expected - 1 && value <= expected + 1;
+const roughEqual = (actual: number, expected: number) => {
+    const epsilon = 1;
+    const delta = Math.abs(expected - actual);
+
+    return delta <= epsilon;
 };
 
 test(`Compact appointment should be center by vertical alignment`, async t => {
@@ -37,11 +40,11 @@ test(`With a large browser width, should be visible common appointment instead o
         .expect(scheduler.getAppointmentCount()).eql(0)
         .expect(scheduler.getAppointmentCollectorCount()).eql(2)
 
-        .expect(Math.round(await scheduler.getAppointmentCollector("1").element.getBoundingClientRectProperty("top"))).eql(138)
-        .expect(Math.round(await scheduler.getAppointmentCollector("1").element.getBoundingClientRectProperty("left"))).eql(101)
+        .expect(roughEqual(await scheduler.getAppointmentCollector("1").element.getBoundingClientRectProperty("top"), 138)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollector("1").element.getBoundingClientRectProperty("left"), 101)).ok()
 
-        .expect(Math.round(await scheduler.getAppointmentCollector("2").element.getBoundingClientRectProperty("top"))).eql(250)
-        .expect(Math.round(await scheduler.getAppointmentCollector("2").element.getBoundingClientRectProperty("left"))).eql(101);
+        .expect(roughEqual(await scheduler.getAppointmentCollector("2").element.getBoundingClientRectProperty("top"), 250)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollector("2").element.getBoundingClientRectProperty("left"), 101)).ok();
 
     await t.resizeWindow(700, 600);
 
@@ -49,11 +52,11 @@ test(`With a large browser width, should be visible common appointment instead o
         .expect(scheduler.getAppointmentCount()).eql(1)
         .expect(scheduler.getAppointmentCollectorCount()).eql(2)
 
-        .expect(Math.round(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("top"))).eql(138)
-        .expect(Math.round(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("left"))).eql(215)
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("top"), 138)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(0).element.getBoundingClientRectProperty("left"), 215)).ok()
 
-        .expect(Math.round(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("top"))).eql(256)
-        .expect(Math.round(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("left"))).eql(236);
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("top"), 256)).ok()
+        .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty("left"), 236)).ok()
 
 }).before(async () => await createScheduler(sampleData));
 
