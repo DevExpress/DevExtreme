@@ -99,7 +99,7 @@ QUnit.module("layouting", () => {
             items: [{ baseSize: 100 }],
             itemTemplate: function() {
                 if(this.option("_layoutStrategy") === "flex") {
-                    assert.equal(this._$element[0].style.flexDirection, "column");
+                    assert.equal(this.$element()[0].style.flexDirection, "column");
                 } else {
                     assert.ok(true);
                 }
