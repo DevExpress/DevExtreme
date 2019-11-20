@@ -38,9 +38,9 @@ QUnit.test("markup init", function(assert) {
 
     var items = element.children();
 
-    var buttonContent = $(items[0]).hasClass(BUTTON_CONTENT_CLASS);
+    var hasButtonContentClass = $(items[0]).hasClass(BUTTON_CONTENT_CLASS);
 
-    assert.equal(buttonContent, true);
+    assert.ok(hasButtonContentClass);
 });
 
 QUnit.test("init with options", function(assert) {
