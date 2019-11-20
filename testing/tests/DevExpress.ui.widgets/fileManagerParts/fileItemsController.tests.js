@@ -372,11 +372,11 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
         this.controller.setCurrentPath("F2/F2.1")
             .then(() => {
-                assert.equal("F2/F2.1", this.controller.getCurrentPath());
+                assert.equal(this.controller.getCurrentPath(), "F2/F2.1");
 
                 const currentDir = this.controller.getCurrentDirectory();
-                assert.equal("F2/F2.1", currentDir.fileItem.key);
-                assert.equal("F2.1", currentDir.fileItem.name);
+                assert.equal(currentDir.fileItem.key, "F2/F2.1");
+                assert.equal(currentDir.fileItem.name, "F2.1");
 
                 assert.notOk(currentDir.expanded);
 
