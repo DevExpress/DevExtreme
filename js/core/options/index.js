@@ -1,17 +1,12 @@
-import createCallBack from './utils/callbacks';
-import devices from './devices';
-import { isFunction, isEmptyObject, isObject, type } from './utils/type';
-import { findBestMatches, equalByValue } from './utils/common';
-import { extend } from './utils/extend';
+import createCallBack from '../utils/callbacks';
+import { isFunction, isObject, type } from '../utils/type';
+import { equalByValue } from '../utils/common';
 import { OptionManager } from './option_manager';
-import { clone } from './utils/object';
-
-const deviceMatch = (device, filter) => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
+import { clone } from '../utils/object';
+import { getFieldName, getParentName, convertRulesToOptions } from './utils';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
-        this._changingCallbacks = createCallBack({ syncStrategy: true });
-        this._changedCallbacks = createCallBack({ syncStrategy: true });
         this._deprecatedCallbacks = createCallBack({ syncStrategy: true });
 
         this._default = defaultOptions;
@@ -21,11 +16,9 @@ export class Options {
 
         this._optionManager = new OptionManager(
             options,
-            optionsByReference,
-            this._changingCallbacks,
-            this._changedCallbacks,
-            this
+            optionsByReference
         );
+        this._optionManager.onRelevantNamesPrepared((options, name, value) => this._setRelevantNames(options, name, value));
 
         this._rules = [];
     }
@@ -62,7 +55,7 @@ export class Options {
     _getByRules(rules) {
         rules = Array.isArray(rules) ? this._rules.concat(rules) : this._rules;
 
-        return Options.convertRulesToOptions(rules);
+        return convertRulesToOptions(rules);
     }
 
     _notifyDeprecated(option) {
@@ -71,6 +64,62 @@ export class Options {
         if(info) {
             this._deprecatedCallbacks.fire(option, info);
         }
+    }
+
+    _setRelevantNames(options, name, value) {
+        if(name) {
+            const normalizedName = this._normalizeName(name);
+
+            if(normalizedName && normalizedName !== name) {
+                this._setField(options, normalizedName, value);
+                this._clearField(options, name);
+            }
+        }
+    }
+
+    _setField(options, fullName, value) {
+        let fieldName = '';
+        let fieldObject = null;
+
+        do {
+            fieldName = fieldName ? `.${fieldName}` : '';
+            fieldName = getFieldName(fullName) + fieldName;
+            fullName = getParentName(fullName);
+            fieldObject = fullName ? this.get(options, fullName, false) : options;
+        } while(!fieldObject);
+
+        fieldObject[fieldName] = value;
+    }
+
+    _clearField(options, name) {
+        delete options[name];
+
+        const previousFieldName = getParentName(name);
+        const fieldObject = previousFieldName ?
+            this.get(options, previousFieldName, false) :
+            options;
+
+        if(fieldObject) {
+            delete fieldObject[getFieldName(name)];
+        }
+    }
+
+    _normalizeName(name) {
+        if(name) {
+            for(let i = 0; i < this._deprecateNames.length; i++) {
+                if(this._deprecateNames[i] === name) {
+                    const deprecate = this._deprecated[name];
+
+                    if(deprecate) {
+                        this._notifyDeprecated(name);
+
+                        return deprecate.alias || name;
+                    }
+                }
+            }
+        }
+
+        return name;
     }
 
     addRules(rules) {
@@ -84,17 +133,16 @@ export class Options {
     }
 
     dispose() {
-        this._changingCallbacks.empty();
-        this._changedCallbacks.empty();
         this._deprecatedCallbacks.empty();
+        this._optionManager.dispose();
     }
 
     onChanging(callBack) {
-        this._changingCallbacks.add(callBack);
+        this._optionManager.onChanging(callBack);
     }
 
     onChanged(callBack) {
-        this._changedCallbacks.add(callBack);
+        this._optionManager.onChanged(callBack);
     }
 
     onDeprecated(callBack) {
@@ -124,7 +172,7 @@ export class Options {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            return this._optionManager.get(this._options, Options.normalizeName(this, options));
+            return this._optionManager.get(this._options, this._normalizeName(options));
         } else {
             this._optionManager.set(options, value);
         }
@@ -158,40 +206,18 @@ export class Options {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
     }
 
-    static convertRulesToOptions(rules) {
-        const currentDevice = devices.current();
-        return rules.reduce((options, { device, options: ruleOptions }) => {
-            const deviceFilter = device || {};
-            const match = isFunction(deviceFilter) ?
-                deviceFilter(currentDevice) :
-                deviceMatch(currentDevice, deviceFilter);
+    // static convertRulesToOptions(rules) {
+    //     const currentDevice = devices.current();
+    //     return rules.reduce((options, { device, options: ruleOptions }) => {
+    //         const deviceFilter = device || {};
+    //         const match = isFunction(deviceFilter) ?
+    //             deviceFilter(currentDevice) :
+    //             deviceMatch(currentDevice, deviceFilter);
 
-            if(match) {
-                extend(options, ruleOptions);
-            }
-            return options;
-        }, {});
-    }
-
-    static normalizeOptions(options, value) {
-        return typeof options !== 'string' ? options : { [options]: value };
-    }
-
-    static normalizeName(owner, name) {
-        if(name) {
-            for(let i = 0; i < owner._deprecateNames.length; i++) {
-                if(owner._deprecateNames[i] === name) {
-                    const deprecate = owner._deprecated[name];
-
-                    if(deprecate) {
-                        owner._notifyDeprecated(name);
-
-                        return deprecate.alias || name;
-                    }
-                }
-            }
-        }
-
-        return name;
-    }
+    //         if(match) {
+    //             extend(options, ruleOptions);
+    //         }
+    //         return options;
+    //     }, {});
+    // }
 }

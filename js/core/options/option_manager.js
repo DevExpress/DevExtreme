@@ -1,20 +1,18 @@
-import { compileGetter, compileSetter } from './utils/data';
-import { equals } from './utils/comparator';
-import { extend } from './utils/extend';
-import { isDefined, isPlainObject } from './utils/type';
-import { Options } from './options';
-
-const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
-const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
+import createCallBack from '../utils/callbacks';
+import { compileGetter, compileSetter } from '../utils/data';
+import { equals } from '../utils/comparator';
+import { extend } from '../utils/extend';
+import { isDefined, isPlainObject } from '../utils/type';
+import { normalizeOptions } from './utils';
 
 export class OptionManager {
-    constructor(options, optionsByReference, _changingCallbacks, _changedCallbacks, owner) {
+    constructor(options, optionsByReference) {
         this._options = options;
         this._optionsByReference = optionsByReference;
-        this._owner = owner;
 
-        this._changingCallbacks = _changingCallbacks;
-        this._changedCallbacks = _changedCallbacks;
+        this._changingCallbacks = createCallBack({ syncStrategy: true });
+        this._changedCallbacks = createCallBack({ syncStrategy: true });
+        this._namePreparedCallbacks = createCallBack({ syncStrategy: true });
 
         this.cachedGetters = {};
         this.cachedSetters = {};
@@ -47,17 +45,6 @@ export class OptionManager {
         }
     }
 
-    _setRelevantNames(options, name, value) {
-        if(name) {
-            const normalizedName = Options.normalizeName(this._owner, name);
-
-            if(normalizedName && normalizedName !== name) {
-                this._setField(options, normalizedName, value);
-                this._clearField(options, name);
-            }
-        }
-    }
-
     _prepareRelevantNames(options, name, value) {
         if(isPlainObject(value)) {
             for(const valueName in value) {
@@ -65,34 +52,7 @@ export class OptionManager {
             }
         }
 
-        this._setRelevantNames(options, name, value);
-    }
-
-    _setField(options, fullName, value) {
-        let fieldName = '';
-        let fieldObject = null;
-
-        do {
-            fieldName = fieldName ? `.${fieldName}` : '';
-            fieldName = getFieldName(fullName) + fieldName;
-            fullName = getParentName(fullName);
-            fieldObject = fullName ? this.get(options, fullName, false) : options;
-        } while(!fieldObject);
-
-        fieldObject[fieldName] = value;
-    }
-
-    _clearField(options, name) {
-        delete options[name];
-
-        const previousFieldName = getParentName(name);
-        const fieldObject = previousFieldName ?
-            this.get(options, previousFieldName, false) :
-            options;
-
-        if(fieldObject) {
-            delete fieldObject[getFieldName(name)];
-        }
+        this._namePreparedCallbacks.fire(options, name, value);
     }
 
     get(options, name, unwrapObservables, silent) {
@@ -106,7 +66,7 @@ export class OptionManager {
     }
 
     set(options, value, merge, silent) {
-        options = Options.normalizeOptions(options, value);
+        options = normalizeOptions(options, value);
 
         if(silent) {
             this._setByReference(this._options, options);
@@ -119,5 +79,22 @@ export class OptionManager {
                 this._setPreparedValue(name, options[name], merge);
             }
         }
+    }
+
+    onRelevantNamesPrepared(callback) {
+        this._namePreparedCallbacks.add(callback);
+    }
+
+    onChanging(callBack) {
+        this._changingCallbacks.add(callBack);
+    }
+
+    onChanged(callBack) {
+        this._changedCallbacks.add(callBack);
+    }
+
+    dispose() {
+        this._changingCallbacks.empty();
+        this._changedCallbacks.empty();
     }
 }
