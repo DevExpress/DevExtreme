@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} je vyžadováno",
 
         "dxNumberBox-invalidValueMessage": "Hodnota musí být číslo",
+        "dxNumberBox-noDataText": "Žádná data",
 
         "dxDataGrid-columnChooserTitle": "Výběr sloupců",
         "dxDataGrid-columnChooserEmptyText": "Přesuňte sloupec zde pro skytí",
@@ -289,8 +290,8 @@
         "dxHtmlEditor-heading": "!TODO!",
         "dxHtmlEditor-normalText": "!TODO!",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-newDirectoryName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",

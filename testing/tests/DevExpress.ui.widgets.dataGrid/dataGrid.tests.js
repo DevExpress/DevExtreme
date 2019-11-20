@@ -72,7 +72,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import pointerEvents from "events/pointer";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -116,11 +116,6 @@ var createDataGrid = function(options, $container) {
     QUnit.assert.ok(dataGridElement);
     dataGrid = dataGridElement.dxDataGrid("instance");
     return dataGrid;
-};
-
-var getFirstAccessibilityColumnIndex = function() {
-    var $headers = $(".dx-datagrid-headers");
-    return parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
 };
 
 QUnit.test("Empty options", function(assert) {
@@ -257,22 +252,21 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     assert.equal(scrollLeft, 100);
 });
 
-QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(assert) {
-    var firstColumnIndex,
-        $headers,
-        getGlobalColumnIdSelector = function(index) {
-            return "[id=dx-col-" + index + "]";
-        },
+QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", function(assert) {
+    var headersWrapper = dataGridWrapper.headers,
+        rowsViewWrapper = dataGridWrapper.rowsView,
         filterPanelWrapper = dataGridWrapper.filterPanel,
         pagerWrapper = dataGridWrapper.pager;
 
     createDataGrid({
-        columns: ["field1", "field2"],
-        dataSource: {
-            store: [{ field1: "1", field2: "2" }]
-        },
+        dataSource: [
+            { field1: "1", field2: "2", g0: 0 }
+        ],
         filterPanel: {
             visible: true
+        },
+        filterRow: {
+            enabled: true
         },
         filterValue: ["field1", "=", "1"],
         pager: {
@@ -281,39 +275,59 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
             showPageSizeSelector: true,
             showNavigationButtons: true
         },
+        masterDetail: {
+            enabled: true
+        },
         paging: {
             pageSize: 2,
         },
+        columns: [
+            { type: "selection" },
+            "field1",
+            "field2",
+            { dataField: "g0", groupIndex: 0, showWhenGrouped: true }
+        ]
     });
 
     this.clock.tick();
 
-    $headers = $(".dx-datagrid-headers");
+    assert.equal($(".dx-widget").attr("role"), "presentation", "Widget role");
 
-    firstColumnIndex = getFirstAccessibilityColumnIndex();
+    assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr("role"), "grid", "Grid role");
+    assert.equal(headersWrapper.getElement().attr("role"), "presentation", 'Headers role');
+    assert.equal(headersWrapper.getColumnsIndicators().attr("role"), "presentation", 'Headers columns indicators role');
+    assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation", "Scroll container role");
+    assert.equal($(".dx-context-menu").attr("role"), "presentation", "Context menu role");
 
-    assert.equal($(".dx-widget").attr("role"), "presentation");
+    // assert
+    assert.notOk(headersWrapper.getHeaderItem(0, 0).attr('id'), 'Group header indent has no ID attribute');
+    assert.notOk(headersWrapper.getHeaderItem(0, 1).attr('id'), 'MasterDetail header indent has no ID attribute');
+    assert.notOk(headersWrapper.getHeaderItem(0, 2).attr('id'), 'SelectAll header cell has no ID attribute');
+    assert.notOk(rowsViewWrapper.getCellElement(0, 0).attr('aria-describedby'), 'Group cell[0, 0] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(0, 1).attr('aria-describedby'), 'Group cell[0, 1] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(1, 0).attr('aria-describedby'), 'Group indent cell[1, 0] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(1, 1).attr('aria-describedby'), 'MasterDetail expand cell[1, 1] has no aria-describedby');
+    assert.notOk(rowsViewWrapper.getCellElement(1, 2).attr('aria-describedby'), 'Select cell[1, 2] has no aria-describedby');
 
-    assert.equal($(".dx-datagrid").attr("role"), "grid");
+    // arrange, assert
+    let headerId = headersWrapper.getHeaderItem(0, 3).attr('id');
+    assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 3] ID is valid');
+    assert.equal(rowsViewWrapper.getCellElement(1, 3).attr('aria-describedby'), headerId, 'Data cell[1, 3] aria-describedby is valid');
 
-    assert.equal($headers.attr("role"), "presentation");
-    assert.equal($headers.find(".dx-column-indicators").attr("role"), "presentation");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
+    // arrange, assert
+    headerId = headersWrapper.getHeaderItem(0, 4).attr('id');
+    assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 4] ID is valid');
+    assert.equal(rowsViewWrapper.getCellElement(1, 4).attr('aria-describedby'), headerId, 'Cell[1, 4] aria-describedby is valid');
 
-    assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
+    // arrange, assert
+    headerId = headersWrapper.getHeaderItem(0, 5).attr('id');
+    assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 5] ID is valid (ShowWhenGrouped)');
+    assert.equal(rowsViewWrapper.getCellElement(1, 5).attr('aria-describedby'), headerId, 'Cell[1, 5] aria-describedby is valid');
 
-    assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
-    assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+    assert.equal(headersWrapper.getTable().attr("role"), "presentation", "Headers table role");
+    assert.equal(rowsViewWrapper.getTable().attr("role"), "presentation", "RowsView table role");
 
-    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(1)").attr("aria-describedby"), "dx-col-" + firstColumnIndex);
-    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(2)").attr("aria-describedby"), "dx-col-" + (firstColumnIndex + 1));
-
-    assert.equal($(".dx-datagrid-rowsview .dx-freespace-row").attr("role"), "presentation");
-
-    assert.equal($(".dx-context-menu").attr("role"), "presentation");
+    assert.equal(rowsViewWrapper.getFreeSpaceRow().attr("role"), "presentation");
 
     // assert
     assert.equal(filterPanelWrapper.getIconFilter().attr("tabindex"), 0, "Filter panel icon tabindex");
@@ -321,28 +335,24 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
     assert.equal(filterPanelWrapper.getClearFilterButton().attr("tabindex"), 0, "Filter panel clear button tabindex");
 
     // arrange, assert
-    var $pageSizes = pagerWrapper.getPagerPageSizeElements();
+    const $pageSizes = pagerWrapper.getPagerPageSizeElements();
     assert.equal($pageSizes.length, 5, "pageSize count");
-    $pageSizes.each((_, pageSize) => assert.equal($(pageSize).attr("tabindex"), 0, "pagesize tabindex"));
+    $pageSizes.each((index, pageSize) => assert.equal($(pageSize).attr("tabindex"), 0, `pagesize ${index} tabindex`));
 
     // arrange, assert
-    var $pages = pagerWrapper.getPagerPagesElements();
+    const $pages = pagerWrapper.getPagerPagesElements();
     assert.equal($pages.length, 1, "pages count");
     assert.equal($pages.attr("tabindex"), 0, "page tabindex");
 
     // arrange, assert
-    var $buttons = pagerWrapper.getPagerButtonsElements();
+    const $buttons = pagerWrapper.getPagerButtonsElements();
     assert.equal($buttons.length, 2, "buttons count");
-    $buttons.each((_, button) => assert.equal($(button).attr("tabindex"), 0, "button tabindex"));
+    $buttons.each((index, button) => assert.equal($(button).attr("tabindex"), 0, `button ${index} tabindex`));
 });
 
 QUnit.testInActiveWindow("Global column index should be unique for the different grids", function(assert) {
-    var $headers,
-        $detailGridHeaders,
-        firstColumnIndex,
-        getGlobalColumnIdSelector = function(index) {
-            return "[id=dx-col-" + index + "]";
-        },
+    let testObj = { },
+        id,
         dataGrid = createDataGrid({
             columns: ["field1", "field2"],
             dataSource: [{ field1: "1", field2: "2" }],
@@ -359,28 +369,17 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
             },
         });
 
-    this.clock.tick();
-
-    $headers = $(".dx-datagrid-headers");
-
-    firstColumnIndex = getFirstAccessibilityColumnIndex();
-
+    // act
     dataGrid.expandRow("1");
-
     this.clock.tick();
 
-    $headers = dataGrid.$element().find(".dx-datagrid-headers").eq(0);
-    $detailGridHeaders = dataGrid.$element().find(".dx-datagrid-headers").eq(1);
-
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
-    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
-
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).attr("aria-label"), "Column Field 3");
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).text(), "Field 3");
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).attr("aria-label"), "Column Field 4");
-    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).text(), "Field 4");
+    $(`[id*='dx-col']`).each((_, element) => {
+        id = $(element).attr("id");
+        // assert
+        assert.notOk(testObj[id], `ID '${id}' is uniq`);
+        // arrange
+        testObj[id] = true;
+    });
 });
 
 QUnit.testInActiveWindow("DataGrid - focused row changing should not affect on focused row in master detail (T818808)", function(assert) {
@@ -2536,6 +2535,42 @@ QUnit.test("column width as string should works correctly", function(assert) {
     // assert
     assert.strictEqual($(dataGrid.getCellElement(0, 1))[0].getBoundingClientRect().width, 800, "second column width is correct");
     assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 200, "visibleWidth for first column is number");
+});
+
+// T833605
+QUnit.test("Indexes after option change should be normalized before onOptionChanged callback", function(assert) {
+    // arrange
+    var onOptionChangedCallCount = 0,
+        grid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            allowColumnReordering: true,
+            dataSource: [{}],
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2"
+            }, {
+                dataField: "field3"
+            }],
+            onOptionChanged: function(e) {
+                // act
+                onOptionChangedCallCount++;
+
+                // assert
+                assert.equal(grid.columnOption(0, "visibleIndex"), 1, "first column visible index");
+                assert.equal(grid.columnOption(1, "visibleIndex"), 2, "second column visible index");
+                assert.equal(grid.columnOption(2, "visibleIndex"), 0, "third column visible index");
+            }
+        }).dxDataGrid("instance");
+
+    // act
+    grid.columnOption(2, "visibleIndex", 0);
+
+    // assert
+    assert.equal(grid.columnOption(0, "visibleIndex"), 1, "first column visible index");
+    assert.equal(grid.columnOption(1, "visibleIndex"), 2, "second column visible index");
+    assert.equal(grid.columnOption(2, "visibleIndex"), 0, "third column visible index");
+    assert.equal(onOptionChangedCallCount, 1, "onOptionChanged call count");
 });
 
 function isColumnHidden($container, index) {
@@ -6582,7 +6617,7 @@ QUnit.test("Total summary row should be rendered if row rendering mode is virtua
 
     var $footerView = $dataGrid.find(".dx-datagrid-total-footer");
     assert.ok($footerView.is(":visible"), "footer view is visible");
-    assert.ok($footerView.find(".dx-row").length, 1, "one footer row is rendered");
+    assert.strictEqual($footerView.find(".dx-row").length, 1, "one footer row is rendered");
 });
 
 QUnit.test("Keep horizontal scroller position after refresh with native scrolling", function(assert) {
@@ -7801,7 +7836,7 @@ QUnit.test("updateDimensions during grouping when fixed to right column exists",
 
     // assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
-    assert.ok($(dataGrid.$element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
+    assert.strictEqual($(dataGrid.$element()).find(".dx-group-row").length, 2, "grouped rows are rendered");
 });
 
 // T334530
@@ -9233,6 +9268,31 @@ QUnit.test("scroll should works correctly if page size is small and totalCount a
 
     assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
     assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 10, "visible rows are in viewport");
+});
+
+// T830138
+QUnit.test("Freespace row should not have huge height if rowRenderingMode is virtual and pageSize is large", function(assert) {
+    // arrange
+    var store = [];
+    for(let i = 0; i < 60; i++) {
+        store.push({
+            value: i
+        });
+    }
+
+    $("#dataGrid").dxDataGrid({
+        dataSource: store,
+        loadingTimeout: undefined,
+        scrolling: {
+            rowRenderingMode: "virtual",
+        },
+        paging: {
+            pageSize: 40
+        }
+    });
+
+    // assert
+    assert.roughEqual($(".dx-freespace-row").height(), 0.5, 0.51, "freespace height");
 });
 
 QUnit.module("Rendered on server", baseModuleConfig);
@@ -12039,6 +12099,40 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     // assert
     assert.ok(event.isDefaultPrevented(), "keydown event is prevented");
     assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
+});
+
+// T816039
+QUnit.testInActiveWindow("Focus should be correct after change value and click to another row if showEditorAlways is true", function(assert) {
+    // arrange
+    var dataSource = [{ id: 1, name: "name 1" }, { id: 2, name: "name 2" }];
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        keyExpr: "id",
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", showEditorAlways: true }]
+    });
+
+    this.clock.tick();
+    dataGrid.editCell(0, 0);
+    this.clock.tick();
+    $(":focus").on("focusout", function(e) {
+        // emulate browser behaviour
+        $(e.target).trigger("change");
+    });
+
+    // act
+    $(":focus").val("test");
+    var $secondRowEditor = $(dataGrid.getRowElement(1)).find(".dx-texteditor-input");
+    $secondRowEditor.trigger("dxpointerdown");
+    $secondRowEditor.trigger("focus");
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataSource[0].name, "test", "data is changed");
+    assert.equal($(dataGrid.getRowElement(1)).find(":focus").length, 1, "focus in second row");
 });
 
 // T819067
@@ -15650,7 +15744,7 @@ QUnit.test("Using watch in masterDetail template if repaintChangesOnly", functio
 
     // assert
     assert.ok($(dataGrid.element()).find(".detail").is($detail), "detail element isn't updated");
-    assert.ok($detail.text(), "changed", "detail text is changed");
+    assert.strictEqual($detail.text(), "changed", "detail text is changed");
 });
 
 // T800483
@@ -16174,6 +16268,25 @@ QUnit.test("Band columns should be displayed correctly after adding columns and 
     assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column in the second row");
     assert.strictEqual(visibleColumns[1].dataField, "field2", "dataField of the second column in the second row");
     assert.strictEqual(visibleColumns[2].dataField, "field3", "dataField of the third column in the second row");
+});
+
+// T829029
+QUnit.test("Change columnWidth via option method", function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+        columnWidth: 50,
+        loadingTimeout: undefined
+    });
+
+    // act
+    dataGrid.option("columnWidth", 200);
+
+    // assert
+    const columns = dataGrid.getVisibleColumns();
+    assert.strictEqual(columns[0].width, 200, "width of the first column");
+    assert.strictEqual(columns[1].width, 200, "width of the second column");
+    assert.strictEqual(columns[2].width, 200, "width of the third column");
 });
 
 QUnit.module("templates", baseModuleConfig);
@@ -17797,4 +17910,132 @@ QUnit.test("Filter builder custom operations should update filterValue immediate
 
     // assert
     assert.equal(filterBuilder.getItemValueTextParts().length, 2, "IsAnyOf operation applyed");
+});
+
+
+QUnit.module("Row dragging", baseModuleConfig);
+
+// T831020
+QUnit.test("The draggable row should have correct markup when defaultOptions is specified", function(assert) {
+    // arrange
+    DataGrid.defaultOptions({
+        options: {
+            filterRow: {
+                visible: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            filterPanel: {
+                visible: true
+            }
+        }
+    });
+
+    try {
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+            rowDragging: {
+                allowReordering: true
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        pointerMock(dataGrid.getCellElement(0, 0)).start().down().move(100, 100);
+
+        // assert
+        const $draggableRow = $("body").children(".dx-sortable-dragging");
+        assert.strictEqual($draggableRow.length, 1, "has draggable row");
+
+        const $visibleView = $draggableRow.find(".dx-gridbase-container").children(":visible");
+        assert.strictEqual($visibleView.length, 1, "markup of the draggable row is correct");
+        assert.ok($visibleView.hasClass("dx-datagrid-rowsview"), "rowsview is visible");
+    } finally {
+        DataGrid.defaultOptions({
+            options: {
+                filterRow: {
+                    visible: false
+                },
+                groupPanel: {
+                    visible: false
+                },
+                filterPanel: {
+                    visible: false
+                }
+            }
+        });
+    }
+});
+
+// T827960
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+            e.component.option("loadPanel", { enabled: true });
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to value on the same page in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 1);
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to another page in onContentReady", function(assert) {
+    // arrange
+    let onFocusedRowChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "foo" }, { id: 2, name: "bar" }],
+        keyExpr: "id",
+        paging: {
+            pageSize: 1
+        },
+        focusedRowEnabled: true,
+        onFocusedRowChanged: onFocusedRowChangedSpy,
+        onContentReady: function(e) {
+            // act
+            e.component.option("focusedRowKey", 2);
+        }
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
+    assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 2, "onFocusedRowChanged row.key parameter");
+    assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
 });

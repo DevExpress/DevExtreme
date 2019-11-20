@@ -252,7 +252,7 @@ QUnit.test("menu items should be rendered after change only one item", function(
 
     instance.option("items[0].text", "c");
     var $items = this.$element.find(".dx-list-item");
-    assert.ok($items.text(), "cb", "items rendered correctly");
+    assert.strictEqual($items.text(), "cb", "items rendered correctly");
 });
 
 QUnit.test("grouped options", function(assert) {

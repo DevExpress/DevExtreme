@@ -58,7 +58,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         let $elements = this.wrapper.getToolbarElements();
         assert.equal($elements.length, 3, "has buttons");
 
-        assert.ok($elements.eq(0).text().indexOf("New folder") !== -1, "create folder button displayed");
+        assert.ok($elements.eq(0).text().indexOf("New directory") !== -1, "create folder button displayed");
         assert.ok($elements.eq(1).text().indexOf("Upload files") !== -1, "upload files button displayed");
         assert.ok($elements.eq(2).val().indexOf("Thumbnails") !== -1, "view switcher displayed");
 
@@ -112,7 +112,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         let $elements = this.wrapper.getToolbarElements();
         assert.equal($elements.length, 3, "has buttons");
 
-        assert.ok($elements.eq(0).text().indexOf("New folder") !== -1, "create folder button displayed");
+        assert.ok($elements.eq(0).text().indexOf("New directory") !== -1, "create folder button displayed");
         assert.ok($elements.eq(1).text().indexOf("Upload files") !== -1, "upload files button displayed");
         assert.ok($elements.eq(2).val().indexOf("Details") !== -1, "view switcher displayed");
 
@@ -241,7 +241,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         $toolbarDropDownMenuButton.trigger("dxclick");
         this.clock.tick(400);
         const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
-        assert.ok($(toolbarDropDownMenuItem).find(".dx-button-text").text().indexOf("New folder") !== -1, "create folder button is rendered in the dropDown menu");
+        assert.ok($(toolbarDropDownMenuItem).find(".dx-button-text").text().indexOf("New directory") !== -1, "create folder button is rendered in the dropDown menu");
 
         assert.ok($elements.eq(2).val().indexOf("Details") !== -1, "view switcher is rendered in new location");
         assert.ok($elements.eq(3).text().indexOf("Reinvigorate") !== -1, "refresh button is rendered with new text");

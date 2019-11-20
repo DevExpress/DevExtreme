@@ -18,7 +18,10 @@ var $ = require("../core/renderer"),
     noop = require("../core/utils/common").noop,
     viewPortUtils = require("../core/utils/view_port"),
     commonUtils = require("../core/utils/common"),
-    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate;
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    fromPromise = deferredUtils.fromPromise;
 
 var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
@@ -531,11 +534,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix(CLONE_CLASS));
     },
 
-    _getDragTemplateArgs: function($element) {
-        let container = this._getContainer();
-
+    _getDragTemplateArgs: function($element, $container) {
         return {
-            container: getPublicElement($(container)),
+            container: getPublicElement($container),
             model: {
                 itemData: this.option("itemData"),
                 itemElement: getPublicElement($element)
@@ -546,17 +547,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _createDragElement: function($element) {
         let result = $element,
             clone = this.option("clone"),
-            container = this._getContainer(),
+            $container = this._getContainer(),
             template = this.option("dragTemplate");
 
         if(template) {
             template = this._getTemplate(template);
-            result = $(template.render(this._getDragTemplateArgs($element)));
+            result = $("<div>").appendTo($container);
+            template.render(this._getDragTemplateArgs($element, result));
         } else if(clone) {
-            result = $element.clone().css({
+            result = $("<div>").appendTo($container);
+            $element.clone().css({
                 width: $element.css("width"),
                 height: $element.css("height")
-            }).appendTo(container);
+            }).appendTo(result);
         }
 
         return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
@@ -864,32 +867,35 @@ var Draggable = DOMComponentWithTemplate.inherit({
         try {
             this._getAction("onDragEnd")(dragEndEventArgs);
         } finally {
-            if(!dragEndEventArgs.cancel) {
-                if(targetDraggable !== this) {
-                    targetDraggable._getAction("onDrop")(dropEventArgs);
-                }
+            when(fromPromise(dragEndEventArgs.cancel))
+                .done((cancel) => {
+                    if(!cancel) {
+                        if(targetDraggable !== this) {
+                            targetDraggable._getAction("onDrop")(dropEventArgs);
+                        }
 
-                if(!dropEventArgs.cancel) {
-                    targetDraggable.dragEnd(dragEndEventArgs);
-                    needRevertPosition = false;
-                }
-            }
+                        if(!dropEventArgs.cancel) {
+                            targetDraggable.dragEnd(dragEndEventArgs);
+                            needRevertPosition = false;
+                        }
+                    }
+                }).always(() => {
+                    if(needRevertPosition) {
+                        this._revertItemToInitialPosition();
+                    }
 
-            if(needRevertPosition) {
-                this._revertItemToInitialPosition();
-            }
+                    this.reset();
+                    targetDraggable.reset();
+                    this._stopAnimator();
+                    this.horizontalScrollHelper.reset();
+                    this.verticalScrollHelper.reset();
 
-            this.reset();
-            targetDraggable.reset();
-            this._stopAnimator();
-            this.horizontalScrollHelper.reset();
-            this.verticalScrollHelper.reset();
+                    this._resetDragElement();
+                    this._resetSourceElement();
 
-            this._resetDragElement();
-            this._resetSourceElement();
-
-            this._resetTargetDraggable();
-            this._resetSourceDraggable();
+                    this._resetTargetDraggable();
+                    this._resetSourceDraggable();
+                });
         }
     },
 

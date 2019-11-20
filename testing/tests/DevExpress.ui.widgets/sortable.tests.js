@@ -127,7 +127,31 @@ QUnit.test("Drag template - check args", function(assert) {
     assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
     assert.strictEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "itemElement arg");
     assert.strictEqual(dragTemplate.getCall(0).args[0].fromIndex, 0, "fromIndex arg");
-    assert.strictEqual($(dragTemplate.getCall(0).args[1]).get(0), $("body").get(0), "second arg");
+    assert.strictEqual($(dragTemplate.getCall(0).args[1]).get(0), $("body").children(".dx-sortable-dragging").get(0), "second arg");
+});
+
+// T826089
+QUnit.test("Asynchronous drag template (React)", function(assert) {
+    // arrange
+    let $dragContainer;
+
+    this.createSortable({
+        dragTemplate: function(options, $container) {
+            $dragContainer = $container;
+        }
+    });
+
+    let $items = this.$element.children();
+
+    // act
+    pointerMock($items.eq(0)).start().down().move(10, 0);
+    $("<div>").addClass("my-drag-item").appendTo($dragContainer);
+
+    // assert
+    let $sortableDragging = $("body").children(".dx-sortable-dragging");
+    assert.strictEqual($sortableDragging.length, 1, "body contains dx-sortable-dragging");
+    assert.strictEqual($sortableDragging.hasClass("dx-sortable-clone"), true, "dx-sortable-dragging has dx-sortable-clone class");
+    assert.strictEqual($sortableDragging.children(".my-drag-item").length, 1, "dx-sortable-dragging contains my-drag-item");
 });
 
 QUnit.test("Default drag template", function(assert) {
@@ -148,9 +172,9 @@ QUnit.test("Default drag template", function(assert) {
     assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
     assert.strictEqual($items.get(0).style.width, "", "width style does not exist in item");
-    assert.strictEqual($draggingElement.get(0).style.width, "300px", "width style exists in dragging item");
+    assert.strictEqual($draggingElement.children().get(0).style.width, "300px", "width style exists in dragging item");
     assert.strictEqual($items.get(0).style.height, "", "height style does not exist in item");
-    assert.strictEqual($draggingElement.get(0).style.height, "30px", "height style exists in dragging item");
+    assert.strictEqual($draggingElement.children().get(0).style.height, "30px", "height style exists in dragging item");
 });
 
 QUnit.module("allowReordering", moduleConfig);
@@ -1638,7 +1662,7 @@ QUnit.test("Dragging item to another the sortable widget with dropFeedbackMode i
     items2 = sortable2.$element().children();
     assert.strictEqual(items1.length, 3, "first list - item count");
     assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.ok($("body").children(".dx-sortable-placeholder").length, 1, "placeholder is in body");
+    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder is in body");
 });
 
 QUnit.test("Dropping item to another the sortable widget with dropFeedbackMode indicate", function(assert) {

@@ -124,8 +124,8 @@ QUnit.test("'shift+home' key pressing extends selection up to the top-most node"
     $firstItem.trigger("dxpointerdown");
     $treeView.trigger($.Event("keydown", { key: "Home", shiftKey: true }));
 
-    assert.ok($topNodeCheckBox.dxCheckBox("instance").option("value"), true, "top node was selected");
-    assert.ok($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
+    assert.strictEqual($topNodeCheckBox.dxCheckBox("instance").option("value"), true, "top node was selected");
+    assert.strictEqual($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
 }),
 
 QUnit.test("'shift+home' key pressing without checkBoxes", function(assert) {
@@ -181,8 +181,8 @@ QUnit.test("'shift+end' key pressing extends selection up to the last node", fun
     $firstItem.trigger("dxpointerdown");
     $treeView.trigger($.Event("keydown", { key: "End", shiftKey: true }));
 
-    assert.ok($lastNodeCheckBox.dxCheckBox("instance").option("value"), true, "last node was selected");
-    assert.ok($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
+    assert.strictEqual($lastNodeCheckBox.dxCheckBox("instance").option("value"), true, "last node was selected");
+    assert.strictEqual($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
 }),
 
 QUnit.test("'shift+end' key pressing without checkBoxes", function(assert) {
@@ -491,7 +491,7 @@ QUnit.test("'minus' key test", function(assert) {
     $parentItem.trigger("dxpointerdown");
     $treeView.trigger($.Event("keydown", { key: "-" }));
 
-    assert.ok(collapseFired, 2, "onItemCollapsed was fired desired number of times");
+    assert.strictEqual(collapseFired, 2, "onItemCollapsed was fired desired number of times");
 }),
 
 QUnit.test("right arrow should update 'expanded' field of item and node", function(assert) {

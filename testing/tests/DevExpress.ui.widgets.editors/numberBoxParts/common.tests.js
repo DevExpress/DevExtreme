@@ -2075,17 +2075,35 @@ QUnit.module("aria accessibility", {}, () => {
 
         assert.equal($input.attr("role"), "spinbutton", "aria role is correct");
         assert.equal($input.attr("aria-valuenow"), "0", "required 'aria-valuenow' attribute is defined");
+        assert.notOk(inputElement.hasAttribute("aria-valuetext"), "'aria-valuetext' attribute isn't defined");
         assert.ok(inputElement.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
         assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
     });
 
-    QUnit.test("aria valuenow is defined for numberBox with null value (T801129)", (assert) => {
+    QUnit.test("aria-valuenow is defined for numberBox with null value (T801129)", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: null
         });
 
         const $input = $element.find(`.${INPUT_CLASS}`);
         assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
+        assert.strictEqual($input.attr("aria-valuetext"), "No data", "'aria-valuetext' attribute is defined when the value isn't defined");
+    });
+
+    QUnit.test("'aria-valuetext' attribute must be correctly updated after changing the value", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({});
+        const instance = $element.dxNumberBox("instance");
+        const $input = $element.find(`.${INPUT_CLASS}`);
+
+        instance.option("value", null);
+
+        assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
+        assert.strictEqual($input.attr("aria-valuetext"), "No data", "'aria-valuetext' attribute is defined when the value isn't defined");
+
+        instance.option("value", 5);
+
+        assert.strictEqual($input.attr("aria-valuenow"), "5", "attribute is defined");
+        assert.notOk($input.get(0).hasAttribute("aria-valuetext"), "'aria-valuetext' attribute isn't defined");
     });
 
     QUnit.test("aria properties", (assert) => {

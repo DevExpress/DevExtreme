@@ -5,6 +5,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
 import { deferUpdate } from "core/utils/common";
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import errors from "ui/widget/ui.errors";
 
 import "ui/radio_group";
 
@@ -203,6 +204,60 @@ module("hidden input", () => {
 });
 
 module("value", moduleConfig, () => {
+
+    test("should throw the W1002 error when the value is unknown key", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        createRadioGroup({
+            items: [{ value: "1" }, { value: "2" }],
+            valueExpr: "value",
+            value: "3"
+        });
+
+        assert.ok(errorLogStub.calledOnce, "error was thrown");
+        errorLogStub.restore();
+    });
+
+    test("should not throw the W1002 error when the value is 'null' (T823478)", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        createRadioGroup({
+            items: ["1", "2", "3"],
+            value: null
+        });
+
+        assert.ok(errorLogStub.notCalled, "error was not thrown");
+        errorLogStub.restore();
+    });
+
+    test("should not throw the W1002 error when the value is changed to 'null' (T823478)", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        const instance = getInstance(
+            createRadioGroup({
+                items: ["1", "2", "3"],
+                value: "2"
+            })
+        );
+
+        instance.option("value", null);
+
+        assert.ok(errorLogStub.notCalled, "error was not thrown");
+        errorLogStub.restore();
+    });
+
+    test("should not throw the W1002 error when the reset method is called (T823478)", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        createRadioGroup({
+            items: ["1", "2", "3"],
+            value: "2"
+        }).dxRadioGroup("reset");
+
+        assert.ok(errorLogStub.notCalled, "error was not thrown");
+        errorLogStub.restore();
+    });
+
     test("should have correct initialized selection", assert => {
         let radioGroupInstance = null;
         const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);

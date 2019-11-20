@@ -79,6 +79,7 @@
     "dxForm-requiredMessage": "{0} 是必须的",
 
     "dxNumberBox-invalidValueMessage": "值必须是一个数字",
+    "dxNumberBox-noDataText": "无数据",
 
     "dxDataGrid-columnChooserTitle": "列选择器",
     "dxDataGrid-columnChooserEmptyText": "在这里拖动一列隐藏它",
@@ -289,8 +290,8 @@
     "dxHtmlEditor-heading": "标题",
     "dxHtmlEditor-normalText": "正文",
 
-    "dxFileManager-newFolderName": "TODO",
-    "dxFileManager-rootFolderName": "TODO",
+    "dxFileManager-newDirectoryName": "TODO",
+    "dxFileManager-rootDirectoryName": "TODO",
     "dxFileManager-errorNoAccess": "TODO",
     "dxFileManager-errorDirectoryExistsFormat": "TODO",
     "dxFileManager-errorFileExistsFormat": "TODO",

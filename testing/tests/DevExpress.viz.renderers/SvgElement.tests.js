@@ -2066,7 +2066,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         // act
         rect.animate({ translateY: 100, translateX: 200 });
 
-        assert.ok(rect.renderer.animateElement.callCount, 1, "renderer.animateElement is called");
+        assert.strictEqual(rect.renderer.animateElement.callCount, 1, "renderer.animateElement is called");
         assert.deepEqual(rect.renderer.animateElement.args[0][1].transform.from, { translateY: 100, translateX: 200 }, "renderer.animateElement's attrs param");
     });
 

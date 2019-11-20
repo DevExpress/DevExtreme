@@ -111,7 +111,9 @@ QUnit.module("Aria accessibility", {
     beforeEach: () => {
         this.items = [{ text: "Item_1" }, { text: "Item_2" }, { text: "Item_3" }];
         helper = new ariaAccessibilityTestHelper({
-            createWidget: ($element, options) => new Tabs($element, options)
+            createWidget: ($element, options) => new Tabs($element, $.extend({
+                focusStateEnabled: true
+            }, options))
         });
     },
     afterEach: () => {

@@ -71,6 +71,8 @@ var DropDownEditor = TextBox.inherit({
                     e.preventDefault();
                 }
                 this.close();
+
+                return true;
             },
             upArrow: function(e) {
                 e.preventDefault();
@@ -860,11 +862,6 @@ var DropDownEditor = TextBox.inherit({
     close: function() {
         this.option("opened", false);
     },
-
-    /**
-    * @name dxDropDownEditorMethods.reset
-    * @publicName reset()
-    */
 
     /**
     * @name dxDropDownEditorMethods.field

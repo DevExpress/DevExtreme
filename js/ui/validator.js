@@ -293,7 +293,8 @@ const Validator = DOMComponent.inherit({
 
     _updateValidationResult(result) {
         if(!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
-            this._validationInfo.result = extend({}, result);
+            const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
+            this._validationInfo.result = extend({}, result, { complete });
         } else {
             for(let prop in result) {
                 if(prop !== "id" && prop !== "complete") {

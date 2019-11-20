@@ -157,8 +157,9 @@ module.exports = {
                         }
                         return dataItem;
                     },
-                    _processItems: function(items, changeType) {
+                    _processItems: function(items, change) {
                         var that = this,
+                            changeType = change.changeType,
                             expandIndex,
                             result = [];
 
@@ -311,18 +312,20 @@ module.exports = {
                             visibleColumns = this._columnsController.getVisibleColumns();
 
                         if(row.rowType && this._isDetailRow(row)) {
-                            $detailCell = this._renderCell($row, {
-                                value: null,
-                                row: row,
-                                rowIndex: row.rowIndex,
-                                column: { command: "detail" },
-                                columnIndex: 0
-                            });
+                            if(this._needRenderCell(0, options.columnIndices)) {
+                                $detailCell = this._renderCell($row, {
+                                    value: null,
+                                    row: row,
+                                    rowIndex: row.rowIndex,
+                                    column: { command: "detail" },
+                                    columnIndex: 0
+                                });
 
-                            $detailCell
-                                .addClass(CELL_FOCUS_DISABLED_CLASS)
-                                .addClass(MASTER_DETAIL_CELL_CLASS)
-                                .attr("colSpan", visibleColumns.length);
+                                $detailCell
+                                    .addClass(CELL_FOCUS_DISABLED_CLASS)
+                                    .addClass(MASTER_DETAIL_CELL_CLASS)
+                                    .attr("colSpan", visibleColumns.length);
+                            }
                         } else {
                             this.callBase.apply(this, arguments);
                         }

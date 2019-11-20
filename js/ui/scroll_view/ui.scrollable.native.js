@@ -127,7 +127,9 @@ var NativeStrategy = Class.inherit({
     },
 
     _createActionArgs: function() {
-        var location = this.location();
+        const location = this.location();
+        const containerElement = this._$container.get(0);
+
         return {
             event: this._eventForUserAction,
             scrollOffset: {
@@ -135,9 +137,9 @@ var NativeStrategy = Class.inherit({
                 left: -location.left
             },
             reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
-            reachedRight: this._isDirection(HORIZONTAL) ? location.left <= this._containerSize.width - this._componentContentSize.width : undefined,
+            reachedRight: this._isDirection(HORIZONTAL) ? Math.abs(location.left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
             reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? location.top <= this._containerSize.height - this._componentContentSize.height : undefined
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(location.top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * this.option("pushBackValue") : undefined
         };
     },
 

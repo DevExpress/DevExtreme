@@ -48,7 +48,7 @@ function createRowsView() {
         }
     };
 
-    setupDataGridModules(mockDataGrid, ["data", "columns", "rows", "rowDragging", "columnFixing"], {
+    setupDataGridModules(mockDataGrid, ["data", "columns", "rows", "rowDragging", "columnFixing", "grouping", "masterDetail", "virtualScrolling"], {
         initViews: true
     });
 
@@ -109,7 +109,7 @@ QUnit.test("Dragging row", function(assert) {
     $placeholderElement = $("body").children(".dx-sortable-placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
 
@@ -233,7 +233,33 @@ QUnit.test("Dragging row when there is group column", function(assert) {
         $testElement = $("#container");
 
     $.extend(this.options, {
-        columns: [{ dataField: "field1", groupIndex: 0 }, "field2", "field3"]
+        columns: [{ dataField: "field1", groupIndex: 0 }, "field2", "field3"],
+        grouping: {
+            autoExpandAll: true
+        }
+    });
+
+    let rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(1)).start().down().move(0, 70);
+
+    // assert
+    $draggableElement = $("body").children(".dx-sortable-dragging");
+    assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "data row count");
+    assert.strictEqual($draggableElement.find(".dx-group-row").length, 0, "group row count");
+});
+
+QUnit.test("Dragging group row", function(assert) {
+    // arrange
+    let $testElement = $("#container");
+
+    $.extend(true, this.options, {
+        columns: [{ dataField: "field1", groupIndex: 0 }, "field2", "field3"],
+        rowDragging: {
+            onDragStart: sinon.spy()
+        }
     });
 
     let rowsView = this.createRowsView();
@@ -243,9 +269,10 @@ QUnit.test("Dragging row when there is group column", function(assert) {
     pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
 
     // assert
-    $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "data row count");
-    assert.strictEqual($draggableElement.find(".dx-group-row").length, 0, "group row count");
+    var dragStartArgs = this.options.rowDragging.onDragStart.getCall(0).args[0];
+    assert.strictEqual(dragStartArgs.fromIndex, 0, "onDragStart fromIndex");
+    assert.strictEqual(dragStartArgs.itemData.key, "test0", "onDragStart itemData");
+    assert.strictEqual(dragStartArgs.cancel, true, "onDragStart cancel is true");
 });
 
 QUnit.test("Dragging row when prepared events are specified", function(assert) {
@@ -340,6 +367,47 @@ QUnit.test("Dragging row to the last position - row should be before the freespa
     assert.ok($rowElements.eq(3).hasClass("dx-freespace-row"), "freespace row");
 });
 
+QUnit.test("Dragging row if masterDetail row is opened", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.rowDragging.onDragStart = sinon.spy();
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    this.dataGrid.expandRow(this.options.dataSource[0]);
+    pointerMock(rowsView.getRowElement(2)).start().down().move(0, 10);
+
+    // assert
+    var dragStartArgs = this.options.rowDragging.onDragStart.getCall(0).args[0];
+    assert.strictEqual(dragStartArgs.fromIndex, 2, "onDragStart fromIndex");
+    assert.strictEqual(dragStartArgs.itemData, this.options.dataSource[1], "onDragStart itemData");
+});
+
+QUnit.test("Dragging row if scrolling mode is virtual", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.scrolling = { mode: "virtual" };
+    this.options.paging = { pageSize: 2, pageIndex: 1 };
+    this.options.rowDragging.onDragStart = sinon.spy();
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 10);
+
+    // assert
+    var dragStartArgs = this.options.rowDragging.onDragStart.getCall(0).args[0];
+    assert.strictEqual(dragStartArgs.fromIndex, 0, "onDragStart fromIndex");
+    assert.strictEqual(dragStartArgs.itemData, this.options.dataSource[2], "onDragStart itemData");
+});
+
 QUnit.test("Sortable should have height if dataSource is empty", function(assert) {
     // arrange
     let rowsView,
@@ -395,7 +463,7 @@ QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {
     $placeholderElement = $("body").children(".dx-sortable-placeholder.dx-sortable-placeholder-inside");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
 
@@ -437,7 +505,7 @@ QUnit.test("Dragging row when the lookup column is specified with a remote sourc
 
     // assert
     $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
     clock.restore();
 });
@@ -463,7 +531,7 @@ QUnit.test("Dragging row when there are fixed columns", function(assert) {
         $table = $draggableElement.find(".dx-datagrid-rowsview").children(":not(.dx-datagrid-content-fixed)").find("table"),
         $fixTable = $draggableElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($table.find(".dx-data-row").length, 1, "row count in main table");
     assert.strictEqual($table.find(".dx-data-row").children(".dx-pointer-events-none").length, 0, "main table hasn't transparent column");
     assert.strictEqual($fixTable.find(".dx-data-row").length, 1, "row count in fixed table");
@@ -512,7 +580,7 @@ QUnit.test("Dragging row by the handle", function(assert) {
     $draggableElement = $("body").children(".dx-sortable-dragging");
     assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
 

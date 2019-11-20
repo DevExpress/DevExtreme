@@ -12,6 +12,7 @@
 
 @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE: 18px;
 @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
+@DIAGRAM_TOUCHBAR_ITEM_PADDING: 6px;
 
 .dx-diagram {
     .dx-diagram-toolbar-wrapper {
@@ -36,4 +37,16 @@
     }
 }
 
-.diagram-icons-mixin(@IOS7_BUTTON_TEXT, @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE);
+.dx-diagram-touchbar {
+    .dx-menu-item .dx-menu-item-content {
+        padding: @DIAGRAM_TOUCHBAR_ITEM_PADDING;
+    }
+
+    .dx-menu-separator {
+        width: 1px;
+        height: @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE + @DIAGRAM_TOUCHBAR_ITEM_PADDING + @DIAGRAM_TOUCHBAR_ITEM_PADDING + 2;
+        margin: 0;
+    }
+}
+
+.diagram-icons-mixin(@IOS7_BUTTON_TEXT, @IOS7_CONTEXT_MENU_TEXT_COLOR, @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE);

@@ -2168,7 +2168,8 @@ function getEvent(options) {
         var resizeController = this.createColumnsResizerViewController(),
             posX,
             testPosX,
-            $container = $("#container").width('300px');
+            $container = $("#container").width('300px'),
+            columnWidths;
 
         // act
         this.renderViews($container);
@@ -2179,7 +2180,8 @@ function getEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { x: -9850, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9847, currentColumnIndex: 0 };
-        resizeController._columnHeadersView.setColumnWidths([this.options.columns[0].width + 7, this.options.columns[1].width - 7]);
+        columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
+        resizeController._columnHeadersView.setColumnWidths({ widths: columnWidths });
         resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
@@ -3359,7 +3361,7 @@ function getEvent(options) {
 
         // assert
         assert.ok($draggingHeader.length === 1, 'draggingHeader element');
-        assert.ok($draggingHeader.css('display'), 'none', 'display is none');
+        assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
         assert.ok($draggingHeader.hasClass("dx-widget"), "Widget class");
     });
 
@@ -3383,7 +3385,7 @@ function getEvent(options) {
 
         // assert
         assert.ok($draggingHeader.length === 1, 'draggingHeader element');
-        assert.ok($draggingHeader.css('display'), 'none', 'display is none');
+        assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
     });
 
     QUnit.test('Init dragging header when allowReordering true and allowGrouping false', function(assert) {
@@ -3406,7 +3408,7 @@ function getEvent(options) {
 
         // assert
         assert.ok($draggingHeader.length === 1, 'draggingHeader element');
-        assert.ok($draggingHeader.css('display'), 'none', 'display is none');
+        assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
     });
 
     // T112084

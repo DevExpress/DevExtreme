@@ -42,7 +42,7 @@ const subscribes = {
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
             originalStartDate = options.originalStartDate || startDate,
             renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance(),
-            firstDayOfWeek = this.option("firstDayOfWeek");
+            firstDayOfWeek = this.getFirstDayOfWeek();
 
         let recurrenceOptions = {
             rule: recurrenceRule,
@@ -160,7 +160,8 @@ const subscribes = {
             newCellIndex = this._workSpace.getDroppableCellIndex(),
             oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates),
             becomeAllDay = this.fire("getField", "allDay", updatedData),
-            wasAllDay = this.fire("getField", "allDay", target);
+            wasAllDay = this.fire("getField", "allDay", target),
+            dragEvent = options.event;
 
         let appointment = extend({}, target, updatedData);
 
@@ -174,12 +175,11 @@ const subscribes = {
                 this._convertDatesByTimezoneBack(true, updatedData, appointment);
 
                 this._updateAppointment(target, appointment, function() {
-                    options.event.cancel = true;
-                    this._appointments.moveAppointmentBack();
-                });
-            }).bind(this));
+                    this._appointments.moveAppointmentBack(dragEvent);
+                }, dragEvent);
+            }).bind(this), undefined, undefined, dragEvent);
         } else {
-            this._appointments.moveAppointmentBack();
+            this._appointments.moveAppointmentBack(dragEvent);
         }
     },
 
@@ -337,6 +337,10 @@ const subscribes = {
         return this._getAppointmentsRenderingStrategy();
     },
 
+    getMaxAppointmentCountPerCellByType: function(isAllDay) {
+        return this.getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
+    },
+
     needCorrectAppointmentDates: function() {
         return this.getRenderingStrategyInstance().needCorrectAppointmentDates();
     },
@@ -442,6 +446,10 @@ const subscribes = {
 
     supportCompactDropDownAppointments: function() {
         return this._workSpace._supportCompactDropDownAppointments();
+    },
+
+    isApplyCompactAppointmentOffset: function() {
+        return this._workSpace._isApplyCompactAppointmentOffset();
     },
 
     getGroupCount: function() {
@@ -554,7 +562,7 @@ const subscribes = {
             max: dateRange[1],
             resources: resources,
             allDay: allDay,
-            firstDayOfWeek: this.option('firstDayOfWeek'),
+            firstDayOfWeek: this.getFirstDayOfWeek(),
             recurrenceException: this._getRecurrenceException.bind(this),
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },

@@ -23,7 +23,7 @@ import typeUtils from "core/utils/type";
 import config from "core/config";
 import renderer from "core/renderer";
 import themes from "ui/themes";
-import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 var device = devices.real();
 
@@ -2482,7 +2482,7 @@ QUnit.test("Check 'onAdaptiveDetailRowPreparing' action", function(assert) {
     $($itemContent).trigger("dxclick");
 
     // assert
-    assert.ok(form.option("colCount"), 5, "colCount of form");
+    assert.strictEqual(form.option("colCount"), 5, "colCount of form");
     assert.equal(form.option("items[0].label.text"), "LaLa", "text of item's label");
     assert.ok(isContentReadyCalled, "customer's content ready is called");
     assert.ok(isCustomizeItemCalled, "customer's customize item func is called");

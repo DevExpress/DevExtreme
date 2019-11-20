@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} is verplicht",
 
         "dxNumberBox-invalidValueMessage": "Waarde moet een nummer zijn",
+        "dxNumberBox-noDataText": "Geen gegevens",
 
         "dxDataGrid-columnChooserTitle": "Kolom Kiezer",
         "dxDataGrid-columnChooserEmptyText": "Sleep hier een kolomkop om hem te verbergen",
@@ -289,8 +290,8 @@
         "dxHtmlEditor-heading": "Titel",
         "dxHtmlEditor-normalText": "Normale tekst",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-newDirectoryName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",

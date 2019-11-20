@@ -1,34 +1,98 @@
-.diagram-icons-mixin(@new-color, @icon-size) {
+.diagram-icons-mixin(@toolbar-color, @menu-color, @icon-size) {
     .dx-diagram-i-connector-begin-none {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-none.svg'), @new-color, 1.46 * @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-none.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
 
     .dx-diagram-i-connector-begin-arrow {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-arrow.svg'), @new-color, 1.46 * @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-arrow.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
 
     .dx-diagram-i-connector-end-none {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-none.svg'), @new-color, 1.46 * @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-none.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
 
     .dx-diagram-i-connector-end-arrow {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-arrow.svg'), @new-color, 1.46 * @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-end-arrow.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
 
     .dx-diagram-i-connector-orthogonal {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-orthogonal.svg'), @new-color, 1.46 * @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-orthogonal.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
 
     .dx-diagram-i-connector-straight {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-straight.svg'), @new-color, 1.46 * @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-straight.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
 
     .dx-diagram-i-button-fill {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/button-fill.svg'), @new-color, @icon-size, @icon-size + @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/button-fill.svg'), @toolbar-color, @icon-size, @icon-size + @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH);
     }
 
     .dx-diagram-i-button-fullscreen {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/fullscreen.svg'), @new-color, @icon-size, @icon-size);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/fullscreen.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-lock {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/lock.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-unlock {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/unlock.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-send-to-back {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/send-to-back.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-bring-to-front {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/bring-to-front.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-select-all {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/select-all.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-image-delete {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-delete.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-image-edit {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-edit.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-button-image-insert {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-insert.svg'), @toolbar-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-lock {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/lock.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-unlock {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/unlock.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-send-to-back {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/send-to-back.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-bring-to-front {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/bring-to-front.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-select-all {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/select-all.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-image-delete {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-delete.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-image-edit {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-edit.svg'), @menu-color, @icon-size, @icon-size);
+    }
+
+    .dx-diagram-i-menu-image-insert {
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-insert.svg'), @menu-color, @icon-size, @icon-size);
     }
 }
 

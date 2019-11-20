@@ -448,3 +448,50 @@ QUnit.test("Context menu with option onContextMenuPreparing for detail row if te
     assert.strictEqual(contextMenuPreparingArg.columnIndex, 0, "columnIndex");
     assert.strictEqual(contextMenuPreparingArg.column.command, "detail", "column type");
 });
+
+// T827323
+QUnit.test("Context menu should works if rowTemplate is defined", function(assert) {
+    // arrange
+    var that = this,
+        contextMenuPreparingArg,
+        $testElement = $("#secondContainer");
+
+    that.options = {
+        onContextMenuPreparing: function(options) {
+            if(options.target === "content") {
+                contextMenuPreparingArg = options;
+            }
+        },
+        rowTemplate: function(container, options) {
+            var data = options.data;
+            $(container).append("<tbody class='employee dx-row'>" +
+                "<tr class='main-row'>" +
+                    "<td class='click-me'>CLICK ME</td>" +
+                "</tr>" +
+                "<tr class='notes-row'>" +
+                    "<td><div>" + data.id + "</div></td>" +
+                "</tr>" +
+            "</tbody>");
+        }
+    };
+
+    that.items = [
+        { data: { id: 1 }, values: [1], rowType: 'data', dataIndex: 0 },
+        { data: { id: 2 }, values: [2], rowType: 'data', dataIndex: 1 },
+    ];
+
+    that.columns = [{ dataField: "Column1" }];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.contextMenuView.render($testElement);
+
+    // act
+    $(".click-me").eq(1).trigger("contextmenu");
+
+    // assert
+    assert.ok(contextMenuPreparingArg, "onContextMenuPreparing is called");
+    assert.strictEqual(contextMenuPreparingArg.rowIndex, 1, "rowIndex");
+    assert.strictEqual(contextMenuPreparingArg.row.rowType, "data", "rowType");
+    assert.strictEqual(contextMenuPreparingArg.columnIndex, undefined, "columnIndex");
+});

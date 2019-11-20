@@ -27,17 +27,32 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return deltaTime;
     }
 
-    getAppointmentGeometry(coordinates) {
-        var result,
-            allDay = coordinates.allDay;
+    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+        if(isAllDay) {
+            super._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
+        } else if(this._getMaxAppointmentCountPerCellByType() === 0) {
+            const cellHeight = this.getDefaultCellHeight();
+            const cellWidth = this.getDefaultCellWidth();
 
-        if(allDay) {
-            result = this._getAllDayAppointmentGeometry(coordinates);
+            coordinates.top += (cellHeight - this.getDropDownButtonAdaptiveSize()) / 2;
+            coordinates.left += (cellWidth - this.getDropDownButtonAdaptiveSize()) / 2;
+        }
+    }
+
+    getAppointmentGeometry(coordinates) {
+        let geometry = null;
+        if(coordinates.allDay) {
+            geometry = this._getAllDayAppointmentGeometry(coordinates);
         } else {
-            result = this._getVerticalAppointmentGeometry(coordinates);
+            geometry = this._isAdaptive() && coordinates.isCompact ? this._getAdaptiveGeometry(coordinates) : this._getVerticalAppointmentGeometry(coordinates);
         }
 
-        return super.getAppointmentGeometry(result);
+        return super.getAppointmentGeometry(geometry);
+    }
+
+    _getAdaptiveGeometry(coordinates) {
+        const config = this._calculateGeometryConfig(coordinates);
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     }
 
     _getItemPosition(item) {

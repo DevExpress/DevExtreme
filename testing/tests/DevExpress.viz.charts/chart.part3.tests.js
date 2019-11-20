@@ -1015,7 +1015,7 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
     assert.strictEqual(legendCtorArgs.backgroundClass, "dxc-border", "background class");
     assert.strictEqual(legendCtorArgs.itemGroupClass, "dxc-item", "item group class");
     assert.strictEqual(legendCtorArgs.textField, "seriesName", "text field");
-    assert.ok($.isFunction(legendCtorArgs.getFormatObject), true, "getFormatObject is function");
+    assert.ok($.isFunction(legendCtorArgs.getFormatObject), "getFormatObject is function");
     assert.deepEqual(legendCtorArgs.getFormatObject({
         id: "id",
         text: "text",

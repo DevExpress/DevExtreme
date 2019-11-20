@@ -1477,6 +1477,31 @@ QUnit.test("Margins for one point (dateTime)", function(assert) {
     });
 });
 
+// T829705
+QUnit.test("Margins for one aggregated point (dateTime)", function(assert) {
+    var date = new Date('2018/05/02');
+    this.testMargins(assert, {
+        isArgumentAxis: true,
+        marginOptions: {
+            checkInterval: true
+        },
+        options: {
+            dataType: "datetime",
+            valueMarginsEnabled: true
+        },
+        ticks: [date],
+        range: {
+            interval: 1 * 24 * 60 * 60 * 1000, // aggregation emalation
+            min: date,
+            max: date
+        },
+        expectedRange: {
+            interval: 0
+        },
+        expectedVisibleArea: { min: 200, max: 500 }
+    });
+});
+
 QUnit.test("maxValueMargin - apply margins to the max", function(assert) {
     this.testMargins(assert, {
         options: {
