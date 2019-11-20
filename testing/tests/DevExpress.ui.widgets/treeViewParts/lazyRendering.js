@@ -136,4 +136,3 @@ QUnit.test("'selectAll' should work correctly when nested items are rendered aft
     assert.strictEqual($selectAllItem.dxCheckBox("instance").option("value"), true);
     assert.equal(items.length, 3);
 });
-
