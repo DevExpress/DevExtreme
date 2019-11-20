@@ -483,7 +483,7 @@ module.exports = Class.inherit((function() {
                 var args = deferreds.length > 1 ? arguments : [arguments];
 
                 each(args, function(index, argument) {
-                    parseResult(argument[0], argument[1], requestsData[index], result, index === 0);
+                    parseResult(argument[0], argument[1], requestsData[index], result);
                 });
 
                 d.resolve({
