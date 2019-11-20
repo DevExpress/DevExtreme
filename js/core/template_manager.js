@@ -40,20 +40,18 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, element, owner, getDefaultTemplates, getAnonymousTemplateName) {
-        this._tempTemplates = []; // should be defined by control
-        this._defaultTemplates = getDefaultTemplates(); // should be defined by control
-        this.ownerDefaultTemplates = owner._defaultTemplates;
-        this.owner = owner; // used in tests =(
+    constructor(option, element, getDefaultTemplates, getAnonymousTemplateName) {
+        this._tempTemplates = [];
+        this._defaultTemplates = getDefaultTemplates();
 
-        this.option = (optionName) => owner.option(optionName);
-        this.$element = () => owner.$element();
-        // this.__getDefaultTemplates = getDefaultTemplates;
-        this.__getAnonymousTemplateName = getAnonymousTemplateName();
+        this.option = option;
+        this.$element = element;
+        this._getDefaultTemplates = () => getDefaultTemplates();
+        this._anonymousTemplateName = getAnonymousTemplateName();
     }
 
-    static getAnonymousTemplateName() { // ???
-        return ANONYMOUS_TEMPLATE_NAME; // should be defined by control
+    static getAnonymousTemplateName() {
+        return ANONYMOUS_TEMPLATE_NAME;
     }
 
     static getDefaultOptions() {
@@ -120,7 +118,7 @@ export default class TemplateManager {
     }
 
     initTemplates() {
-        this._defaultTemplates = this.ownerDefaultTemplates || this._defaultTemplates;
+        this._defaultTemplates = this._getDefaultTemplates() || this._defaultTemplates;
 
         this._extractTemplates();
         this._extractAnonymousTemplate();
@@ -154,14 +152,14 @@ export default class TemplateManager {
         }
     }
 
-    saveTemplate(name, template) { // we change arguments!!!
-        const templates = this.option('integrationOptions.templates'); // why ???
-        templates[name] = this.createTemplate(template); // why ??? we change it by reference
+    saveTemplate(name, template) {
+        const templates = this.option('integrationOptions.templates');
+        templates[name] = this.createTemplate(template);
     }
 
     _extractAnonymousTemplate() {
-        const templates = this.option('integrationOptions.templates'); // we change it
-        const anonymousTemplateName = this.__getAnonymousTemplateName;
+        const templates = this.option('integrationOptions.templates');
+        const anonymousTemplateName = this._anonymousTemplateName;
         const $anonymousTemplate = this.$element().contents().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
@@ -173,7 +171,7 @@ export default class TemplateManager {
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
-            templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate); // why ??? we change it by reference !!!!
+            templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate);
         }
     }
 
@@ -197,10 +195,10 @@ export default class TemplateManager {
     }
 
     getTemplate(templateSource) {
-        this._defaultTemplates = this.ownerDefaultTemplates || this._defaultTemplates;
+        this._defaultTemplates = this._getDefaultTemplates() || this._defaultTemplates;
 
         if(isFunction(templateSource)) {
-            return new FunctionTemplate(function(options) {
+            return new FunctionTemplate((options) => {
                 const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
 
                 if(!isDefined(templateSourceResult)) {
@@ -208,20 +206,18 @@ export default class TemplateManager {
                 }
 
                 let dispose = false;
-                const template = this._acquireTemplate(templateSourceResult, function(templateSource) {
+                const template = this._acquireTemplate(templateSourceResult, (templateSource) => {
                     if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
-                        return new FunctionTemplate(function() {
-                            return templateSource;
-                        });
+                        return new FunctionTemplate(() => templateSource);
                     }
                     dispose = true;
                     return this.createTemplate(templateSource);
-                }.bind(this));
+                });
 
                 const result = template.render(options);
                 dispose && template.dispose && template.dispose();
                 return result;
-            }.bind(this));
+            });
         }
 
         return this._acquireTemplate(templateSource, this._createTemplateIfNeeded.bind(this));

@@ -7,16 +7,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         return extend(this.callBase(), TemplateManager.getDefaultOptions());
     },
 
-    __getDefaultTemplates: function() {
+    _getDefaultTemplates: function() {
         return this._defaultTemplates;
-    },
-
-    __getElement: function() {
-        return this.$element;
-    },
-
-    __getOption: function(optionName) {
-        return this.option(optionName);
     },
 
     _init: function() {
@@ -26,8 +18,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         this._templateManager = new TemplateManager(
             this.option.bind(this),
             this.$element.bind(this),
-            this,
-            this.__getDefaultTemplates.bind(this),
+            this._getDefaultTemplates.bind(this),
             this._getAnonymousTemplateName.bind(this)
         );
 
@@ -37,11 +28,6 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _dispose: function() {
         this._templateManager.dispose();
         this.callBase();
-    },
-
-    // ????
-    _cleanTemplates: function() {
-        this._templateManager.dispose();
     },
 
     _initTemplates: function() {
@@ -61,13 +47,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        var templates = this.option("integrationOptions.templates");
-        templates[name] = this._templateManager.createTemplate(template);
+        this._templateManager.saveTemplate(name, template);
     },
-
-    _extractAnonymousTemplate: function() {
-        // ????
-    }
 });
 
 module.exports = DOMComponentWithTemplate;
