@@ -23,6 +23,8 @@ import dragEvents from "events/drag";
 import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
 import viewPortUtils from "core/utils/view_port";
 import fx from "animation/fx";
+import messageLocalization from "localization/message";
+import { ListSearchBoxWrapper } from "../../helpers/wrappers/searchBoxWrappers.js";
 
 QUnit.module("Header Filter dataController", {
     beforeEach: function() {
@@ -1667,6 +1669,22 @@ QUnit.test("Show header filter with search bar", function(assert) {
     assert.ok($.isFunction(list.option("searchExpr")), "expr is correct");
     assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
     assert.equal(list.option("searchMode"), "", "search mode is default");
+});
+
+QUnit.test("Test aria-label in search-box input (T829760)", function(assert) {
+    // arrange
+    const searchBoxWrapper = new ListSearchBoxWrapper(".dx-header-filter-menu");
+    const testElement = $("#container");
+
+    this.options.headerFilter.allowSearch = true;
+
+    // act
+    this.setupDataGrid();
+    this.columnHeadersView.render(testElement);
+    this.headerFilterView.render(testElement);
+    this.headerFilterController.showHeaderFilterMenu(0);
+
+    assert.strictEqual(searchBoxWrapper.getEditorInput().attr("aria-label"), messageLocalization.format("Search"), "Search box input aria-label attribute");
 });
 
 QUnit.test("Show header filter with search bar with searchMode equals", function(assert) {

@@ -252,7 +252,7 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     assert.equal(scrollLeft, 100);
 });
 
-QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", function(assert) {
+QUnit.test("Grid accessibility structure (T640539, T831996)", function(assert) {
     var headersWrapper = dataGridWrapper.headers,
         rowsViewWrapper = dataGridWrapper.rowsView,
         filterPanelWrapper = dataGridWrapper.filterPanel,
@@ -295,8 +295,14 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
     assert.equal($(".dx-widget").attr("role"), "presentation", "Widget role");
 
     // filter row
-    assert.equal(filterRowWrapper.getTextEditorInput(0).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCellEditor"));
-    assert.equal(filterRowWrapper.getTextEditorInput(1).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCellEditor"));
+    assert.equal(filterRowWrapper.getEditorCell(0).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getEditorCell(1).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getEditorCell(0).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 3).attr("id"));
+    assert.equal(filterRowWrapper.getEditorCell(1).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 4).attr("id"));
+    assert.equal(filterRowWrapper.getTextEditorInput(0).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getTextEditorInput(1).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getTextEditorInput(0).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 3).attr("id"));
+    assert.equal(filterRowWrapper.getTextEditorInput(1).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 4).attr("id"));
 
     assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr("role"), "grid", "Grid role");
     assert.equal(headersWrapper.getElement().attr("role"), "presentation", 'Headers role');

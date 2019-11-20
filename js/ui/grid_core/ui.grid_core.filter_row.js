@@ -375,9 +375,9 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $container,
                 $editorContainer;
 
-            that.setAria("label",
-                messageLocalization.format("dxDataGrid-ariaColumn") + " " + column.caption + ", " + messageLocalization.format("dxDataGrid-ariaFilterCell"),
-                $cell);
+            that.setAria("describedby", column.headerId, $cell);
+            that.setAria("label", messageLocalization.format("dxDataGrid-ariaFilterCell"), $cell);
+
             $cell.addClass(EDITOR_CELL_CLASS);
             $container = $("<div>").appendTo($cell);
             $editorContainer = $("<div>").addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
@@ -424,7 +424,8 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     width: null,
                     editorOptions: {
                         inputAttr: {
-                            "aria-label": messageLocalization.format("dxDataGrid-ariaFilterCellEditor")
+                            "aria-label": messageLocalization.format("dxDataGrid-ariaFilterCell"),
+                            "aria-describedby": column.headerId
                         }
                     },
                     setValue: function(value, notFireEvent) {

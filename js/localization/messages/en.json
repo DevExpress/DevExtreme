@@ -147,7 +147,6 @@
         "dxDataGrid-ariaColumn": "Column",
         "dxDataGrid-ariaValue": "Value",
         "dxDataGrid-ariaFilterCell": "Filter cell",
-        "dxDataGrid-ariaFilterCellEditor": "Filter editor",
         "dxDataGrid-ariaCollapse": "Collapse",
         "dxDataGrid-ariaExpand": "Expand",
         "dxDataGrid-ariaDataGrid": "Data grid",
