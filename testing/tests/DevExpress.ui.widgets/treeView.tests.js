@@ -212,3 +212,4 @@ import "./treeViewParts/selectNodesRecursiveTrue.js";
 import "./treeViewParts/treeview.size.tests.js";
 import "./treeViewParts/usageWithoutKeys.js";
 import "./treeViewParts/virtualMode.js";
+import "./treeViewParts/cyclicKeyDependence.js";

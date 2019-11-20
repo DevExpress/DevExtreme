@@ -2,6 +2,7 @@ import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 QUnit.module("cyclic key dependence");
+
 ['dataSource', 'items'].forEach((optionName) => {
     QUnit.test(`Tree initialized even with redirect keys in ${optionName} option`, function(assert) {
         let options = { dataStructure: "plain" };
