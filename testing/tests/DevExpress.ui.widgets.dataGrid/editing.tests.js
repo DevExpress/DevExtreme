@@ -12005,14 +12005,29 @@ QUnit.test("No exceptions on editing a column with given setCellValue when repai
     this.editRow(0);
 
     // assert
+    let $cellElement = $(this.getCellElement(0, "name")),
+        validator = dataUtils.data($cellElement.find(".dx-texteditor").get(0), "dxValidator");
+
     assert.strictEqual($(this.getRowElement(0)).find(".dx-form").length, 1, "there is edit form");
+    assert.ok(validator, "editor has validator");
 
     try {
+        // arrange
+        const validatorOptions = validator.option();
+
         // act
-        this.cellValue(0, "name", "Test");
+        this.cellValue(0, "name", "");
 
         // assert
-        assert.ok(dataUtils.data($(this.getCellElement(0, "name")).find(".dx-texteditor").get(0), "dxValidator"), "editor has validator");
+        $cellElement = $(this.getCellElement(0, "name")),
+        validator = dataUtils.data($cellElement.find(".dx-texteditor").get(0), "dxValidator");
+        const validatorOptionsAfterEditing = validator.option();
+
+        assert.ok($cellElement.find(".dx-textbox").first().hasClass("dx-invalid"), "editor value isn't valid");
+        assert.ok(validator, "editor has validator");
+        assert.strictEqual(validatorOptionsAfterEditing.validationRules, validatorOptions.validationRules, "validationRules");
+        assert.strictEqual(validatorOptionsAfterEditing.validationGroup, validatorOptions.validationGroup, "validationGroup");
+        assert.strictEqual(validatorOptionsAfterEditing.dataGetter, validatorOptions.dataGetter, "dataGetter");
     } catch(e) {
         // assert
         assert.ok(false, "exception");
