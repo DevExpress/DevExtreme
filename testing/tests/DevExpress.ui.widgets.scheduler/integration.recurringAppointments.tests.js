@@ -1472,3 +1472,25 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
     assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, "Appointment's top are correct");
     assert.roughEqual(seventhPosition.top, eighthPosition.top, 0.5, "Appointment's occurrences after WKST are positioned correct on top");
 });
+
+QUnit.test("Recurrent appointment occurrence should be resized correctly, when startDayHour is changed on recurrent appointment (T832115)", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        views: ["week"],
+        currentView: "week",
+        startDayHour: 6,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 10),
+            endDate: new Date(2015, 1, 9, 11),
+            recurrenceRule: 'FREQ=DAILY',
+        }]
+    });
+
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-top").eq(1)).start();
+    pointer.dragStart().drag(0, -3 * this.scheduler.workSpace.getCellHeight()).dragEnd();
+
+    this.scheduler.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(1).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("dataSource")[1].startDate, new Date(2015, 1, 10, 8, 30), "Start date is OK");
+});
