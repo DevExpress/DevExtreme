@@ -1494,3 +1494,49 @@ QUnit.test("Recurrent appointment occurrence should be resized correctly, when s
 
     assert.deepEqual(this.instance.option("dataSource")[1].startDate, new Date(2015, 1, 10, 8, 30), "Start date is OK");
 });
+QUnit.test("Recurrence appointment occurrences should have correct start date with timezone changing (T818393)", function(assert) {
+    this.createInstance({
+        views: ["day", "week", "workWeek", "month"],
+        currentView: "week",
+        startDayHour: 1,
+        firstDayOfWeek: 2,
+        height: 600,
+        dataSource: [{
+            text: "Recurrence",
+            startDate: new Date(2019, 2, 30, 2, 0),
+            startDateTimeZone: 'Europe/Copenhagen',
+            endDate: new Date(2019, 2, 30, 10, 0),
+            endDateTimeZone: 'Europe/Copenhagen',
+            recurrenceException: "",
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        timeZone: 'Europe/Copenhagen',
+        currentDate: new Date(2019, 2, 30)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, "Appointment has right count of occurrences");
+    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, this.scheduler.appointments.getAppointmentPosition(2).top, "Appointment first and third occurrences have same top coordinate");
+});
+
+QUnit.test("Recurrence appointment occurences should have correct text (T818393)", function(assert) {
+    this.createInstance({
+        views: ["week"],
+        currentView: "week",
+        height: 600,
+        dataSource: [{
+            text: "Recurrence",
+            startDate: new Date(2019, 2, 30, 2, 0),
+            endDate: new Date(2019, 2, 30, 3, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=HOURLY;INTERVAL=1;COUNT=5"
+        }],
+        currentDate: new Date(2019, 2, 30)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 5, "Appointment has right count of occurrences");
+
+    const $thirdAppointment = this.scheduler.appointments.getAppointment(2);
+
+    assert.equal($thirdAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "4:00 AM", "Appointment third occurrences has correct start date text");
+    assert.equal($thirdAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "5:00 AM", "Appointment third occurrences has correct end date text");
+});

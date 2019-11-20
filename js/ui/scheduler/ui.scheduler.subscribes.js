@@ -89,7 +89,6 @@ const subscribes = {
 
         let itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
-
         options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
     },
 
