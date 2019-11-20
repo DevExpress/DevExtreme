@@ -357,6 +357,10 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
 
     date = dateUtils.addInterval(date, rule.interval);
 
+    if(rule.freq === "DAILY" && !isDefined(rule["byhour"]) && originalStartDate.getHours() !== date.getHours()) {
+        date = new Date(date.getTime() - (initialDate.getHours() - originalStartDate.getHours()) * toMs("hour"));
+    }
+
     if(rule.freq === "MONTHLY" && !rule["byday"]) {
         var expectedDate = originalStartDate.getDate();
 
