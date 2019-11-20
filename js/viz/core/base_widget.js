@@ -156,8 +156,6 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         });
     },
 
-    _extractAnonymousTemplate() {},
-
     _useLinks: true,
 
     _init: function() {
