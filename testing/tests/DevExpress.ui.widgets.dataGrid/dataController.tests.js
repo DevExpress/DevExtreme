@@ -16,7 +16,23 @@ var createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 var setupModule = function() {
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail', 'editorFactory', 'focus', 'keyboardNavigation', 'summary', 'selection']);
+    setupDataGridModules(this, [
+        'data',
+        'virtualScrolling',
+        'columns',
+        'filterRow',
+        'search',
+        'editing',
+        'grouping',
+        'headerFilter',
+        'masterDetail',
+        'editorFactory',
+        'focus',
+        'keyboardNavigation',
+        'summary',
+        'selection',
+        'virtualColumns'
+    ]);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -5194,6 +5210,70 @@ QUnit.test("get combinedFilter with remote filtering", function(assert) {
     this.dataSource.load();
 
     assert.deepEqual(this.getCombinedFilter(true), ["age", "=", 15]);
+});
+
+const generateColumns = (length) => {
+    const result = [];
+    for(let i = 0; i < length; i++) {
+        result.push({
+            dataField: "field" + (i + 1),
+            dataType: "string",
+            width: 100
+        });
+    }
+    return result;
+};
+
+QUnit.test("DataGrid should filter properly by filterRow value in virtual mode (T832948)", function(assert) {
+    // arrange
+    this.dataSource = new DataSource({
+        store: []
+    });
+
+    this.applyOptions({
+        width: 200,
+        columns: generateColumns(10),
+        scrolling: {
+            columnPageSize: 5,
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.columnOption("field10", "filterValue", "test");
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 6, "column rendering mode is applied");
+    assert.deepEqual(this.getCombinedFilter(true), ["field10", "contains", "test"], "combined filter");
+});
+
+QUnit.test("DataGrid should filter properly by headerFilter value in virtual mode (T832948)", function(assert) {
+    // arrange
+    this.dataSource = new DataSource({
+        store: []
+    });
+
+    this.applyOptions({
+        width: 200,
+        columns: generateColumns(10),
+        scrolling: {
+            columnPageSize: 5,
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.columnOption("field10", "filterValues", ["test"]);
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 6, "column rendering mode is applied");
+    assert.deepEqual(this.getCombinedFilter(true), ["field10", "=", "test"], "combined filter");
 });
 
 QUnit.test("get combinedFilter for search when allowSearch false", function(assert) {
