@@ -179,7 +179,7 @@ var DataAdapter = Class.inherit({
     },
 
     _iterateParents: function(node, callback, processedKeys) {
-        if(node.internalFields.parentKey === this.options.rootValue) {
+        if(node.internalFields.parentKey === this.options.rootValue || !typeUtils.isFunction(callback)) {
             return;
         }
         processedKeys = processedKeys || [];
@@ -189,7 +189,7 @@ var DataAdapter = Class.inherit({
             processedKeys.push(key);
             let parent = this.options.dataConverter.getParentNode(node);
             if(parent) {
-                typeUtils.isFunction(callback) && callback(parent);
+                callback(parent);
                 if(parent.internalFields.parentKey !== this.options.rootValue) {
                     this._iterateParents(parent, callback, processedKeys);
                 }
