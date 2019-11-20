@@ -40,14 +40,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     getAppointmentGeometry(coordinates) {
-        return super.getAppointmentGeometry(this._getAppointmentGeometryCore(coordinates));
-    }
-
-    _getAppointmentGeometryCore(coordinates) {
+        let geometry = null;
         if(coordinates.allDay) {
-            return this._getAllDayAppointmentGeometry(coordinates);
+            geometry = this._getAllDayAppointmentGeometry(coordinates);
+        } else {
+            geometry = this._isAdaptive() && coordinates.isCompact ? this._getAdaptiveGeometry(coordinates) : this._getVerticalAppointmentGeometry(coordinates);
         }
-        return this._isAdaptive() && coordinates.isCompact ? this._getAdaptiveGeometry(coordinates) : this._getVerticalAppointmentGeometry(coordinates);
+
+        return super.getAppointmentGeometry(geometry);
     }
 
     _getAdaptiveGeometry(coordinates) {
