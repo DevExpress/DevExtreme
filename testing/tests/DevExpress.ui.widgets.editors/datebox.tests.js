@@ -349,7 +349,9 @@ QUnit.module("datebox tests", moduleConfig, () => {
         const now = new Date();
         const $dateBox = $("#widthRootStyle").dxDateBox({
             type: "date",
-            value: now
+            value: now,
+            pickerType: "calendar",
+            focusStateEnabled: true
         });
 
         const dateBox = $dateBox.dxDateBox("instance");
