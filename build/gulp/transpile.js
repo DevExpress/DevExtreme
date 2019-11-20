@@ -4,6 +4,7 @@ var watch = require('gulp-watch');
 var replace = require('gulp-replace');
 var plumber = require('gulp-plumber');
 var path = require('path');
+var notify = require('gulp-notify');
 
 var context = require('./context.js');
 
@@ -28,7 +29,10 @@ gulp.task('version-replace', gulp.series('transpile', function() {
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {
     return watch(SRC)
-        .pipe(plumber())
+        .pipe(plumber({
+            errorHandler: notify.onError('Error: <%= error.message %>')
+                .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
+        }))
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));

@@ -944,8 +944,8 @@ QUnit.test("Light mode when re-render", function(assert) {
     $pagesCount = $(".dx-pages-count");
     $pageInfoText = $(".dx-info-text"),
 
-    assert.ok($pageSizeChooser.dxSelectBox("instance").option("value"), 10, "page size");
-    assert.ok($pageIndex.dxNumberBox("instance").option("value"), 1, "page index");
+    assert.strictEqual($pageSizeChooser.dxSelectBox("instance").option("value"), 10, "page size");
+    assert.strictEqual($pageIndex.dxNumberBox("instance").option("value"), 1, "page index");
     assert.equal($pageInfoText.text(), "of", "pages info text");
     assert.equal($pagesCount.text(), "10", "pages count");
 });

@@ -36,8 +36,9 @@ class Appointment {
     size: { width: Promise<string>, height: Promise<string> };
     isFocused: Promise<boolean>;
 
-    constructor(scheduler: Selector, title: string, index: number = 0) {
-        this.element = scheduler.find(`.${CLASS.appointment}`).withAttribute('title', title).nth(index);
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        const element = scheduler.find(`.${CLASS.appointment}`);
+        this.element = (title ? element.withAttribute('title', title) : element).nth(index);
 
         const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
@@ -62,12 +63,14 @@ class Appointment {
     }
 }
 
-class AppointmentCollector {
+class AppointmentCollector{
     element: Selector;
     isFocused: Promise<boolean>;
 
-    constructor(scheduler: Selector, title: string, index: number = 0) {
-        this.element = scheduler.find(`.${CLASS.appointmentCollector}`).withText(title).nth(index);
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        const element = scheduler.find(`.${CLASS.appointmentCollector}`);
+        this.element = (title ? element.withText(title) : element).nth(index);
+
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
     }
 }
@@ -184,10 +187,26 @@ export default class Scheduler extends Widget {
     }
 
     getAppointment(title: string, index: number = 0): Appointment {
-        return new Appointment(this.element, title, index);
+        return new Appointment(this.element, index, title);
     }
 
     getAppointmentCollector(title: string, index: number = 0): AppointmentCollector {
-        return new AppointmentCollector(this.element, title, index);
+        return new AppointmentCollector(this.element, index, title);
+    }
+
+    getAppointmentByIndex(index: number = 0): Appointment {
+        return new Appointment(this.element, index);
+    }
+
+    getAppointmentCollectorByIndex(index: number = 0): AppointmentCollector {
+        return new AppointmentCollector(this.element, index);
+    }
+
+    getAppointmentCount() {
+        return this.element.find(`.${CLASS.appointment}`).count;
+    }
+
+    getAppointmentCollectorCount() {
+        return this.element.find(`.${CLASS.appointmentCollector}`).count;
     }
 };

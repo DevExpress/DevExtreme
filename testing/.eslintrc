@@ -9,5 +9,11 @@
         "SystemJS": true,
         "DevExpress": true,
         "sinon": true
+    },
+    "plugins": [
+        "qunit"
+    ],
+    "rules": {
+        "qunit/assert-args": "error"
     }
 }

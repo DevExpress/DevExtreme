@@ -1,6 +1,5 @@
 import $ from "../core/renderer";
 import eventsEngine from "./core/events_engine";
-import errors from "../core/errors";
 import { focused } from "../ui/widget/selectors";
 import { extend } from "../core/utils/extend";
 import { each } from "../core/utils/iterator";
@@ -211,26 +210,6 @@ const fireEvent = function(props) {
     return event;
 };
 
-
-const addNamespace = function(eventNames, namespace) {
-    if(!namespace) {
-        throw errors.Error("E0017");
-    }
-
-    if(typeof eventNames === "string") {
-        if(eventNames.indexOf(" ") === -1) {
-            return eventNames + "." + namespace;
-        }
-        return addNamespace(eventNames.split(/\s+/g), namespace);
-    }
-
-    each(eventNames, function(index, eventName) {
-        eventNames[index] = eventName + "." + namespace;
-    });
-
-    return eventNames.join(" ");
-};
-
 const normalizeKeyName = (event) => {
     const isKeySupported = !!event.key;
     let key = isKeySupported ? event.key : event.which;
@@ -271,7 +250,7 @@ module.exports = {
     createEvent: createEvent,
     fireEvent: fireEvent,
 
-    addNamespace: addNamespace,
+    addNamespace: eventsEngine.addNamespace,
     setEventFixMethod: setEventFixMethod,
 
     normalizeKeyName: normalizeKeyName,

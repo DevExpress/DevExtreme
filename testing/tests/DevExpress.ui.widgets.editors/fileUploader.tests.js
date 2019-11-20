@@ -1443,7 +1443,7 @@ QUnit.test("upload of specific file should start after click on corresponding 'u
     const request = this.xhrMock.getInstanceAt();
 
     assert.ok(request.uploaded, "upload is done");
-    assert.ok(request.loadedSize, files[1].size, "correct file was uploaded");
+    assert.strictEqual(request.loadedSize, files[1].size, "correct file was uploaded");
 });
 
 QUnit.test("file upload buttons should be removed after upload started", function(assert) {

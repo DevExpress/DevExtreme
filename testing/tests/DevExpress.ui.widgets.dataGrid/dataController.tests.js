@@ -16,7 +16,23 @@ var createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 var setupModule = function() {
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail', 'editorFactory', 'focus', 'keyboardNavigation', 'summary', 'selection']);
+    setupDataGridModules(this, [
+        'data',
+        'virtualScrolling',
+        'columns',
+        'filterRow',
+        'search',
+        'editing',
+        'grouping',
+        'headerFilter',
+        'masterDetail',
+        'editorFactory',
+        'focus',
+        'keyboardNavigation',
+        'summary',
+        'selection',
+        'virtualColumns'
+    ]);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -643,6 +659,31 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple
     assert.equal(dataSource.items()[1].name, "Dan", "Item3");
 });
 
+QUnit.test("Using focusedRowEnabled should not set sorting by key if remoteOperations is true and autoNavigateToFocusedRow is false", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }
+    ], { key: "name" });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true,
+        autoNavigateToFocusedRow: false,
+        remoteOperations: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+
+    // assert
+    assert.strictEqual(dataSource.sort(), null, "sort is not defined");
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+});
+
 QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted simple key column if remoteOperations disabled", function(assert) {
     // arrange
     var dataSource = createDataSource([
@@ -709,6 +750,33 @@ QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted co
     assert.equal(dataSource.items()[1].name, "Alice", "Item3");
 });
 
+// T829761
+QUnit.test("Refresh after reordering should update rows if focusedRowEnabled is enabled", function(assert) {
+    // arrange
+    var items = [
+        { name: "Alex", age: 30 },
+        { name: "Dan", age: 25 }
+    ];
+
+    var dataSource = createDataSource(items, { key: "name" });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true
+    });
+
+    this.dataController._refreshDataSource();
+
+    // act
+    var item0 = items.splice(0, 1)[0];
+    items.splice(1, 0, item0);
+    this.dataController.refresh();
+
+    // assert
+    assert.equal(dataSource.items()[0].name, "Dan", "second item became first");
+    assert.equal(dataSource.items()[1].name, "Alex", "first item became second");
+});
+
 QUnit.test("Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present", function(assert) {
     // arrange
     var data = [
@@ -763,7 +831,7 @@ QUnit.test("Check the filter generator for the boolean field", function(assert) 
     assert.strictEqual(JSON.stringify(filter), undefined, "filter");
 });
 
-QUnit.test("Get page index by simple key", function(assert) {
+QUnit.test("Get page index by simple key if remoteOperations is false", function(assert) {
     // arrange
     var count = 0,
         dataSource = createDataSource([
@@ -775,6 +843,31 @@ QUnit.test("Get page index by simple key", function(assert) {
         { pageSize: 1, asyncLoadEnabled: false });
 
     this.applyOptions({
+        dataSource: dataSource
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    this.dataController.getPageIndexByKey("Alice").done(function(pageIndex) {
+        ++count;
+        assert.equal(pageIndex, 3);
+    });
+    assert.equal(count, 1, "Count");
+});
+
+QUnit.test("Get page index by simple key if remoteOperations is true", function(assert) {
+    // arrange
+    var count = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: "name" },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+    this.applyOptions({
+        remoteOperations: true,
         dataSource: dataSource
     });
 
@@ -1024,7 +1117,7 @@ QUnit.test("Get row index if group by one column and simple key (group sizes are
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
         { key: 'name' },
-        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: "team", sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1088,7 +1181,7 @@ QUnit.test("Get row index if group by one column and simple key", function(asser
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
         { key: 'name' },
-        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: "team", sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1294,7 +1387,7 @@ QUnit.test("Get row index if group by two columns and simple key", function(asse
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
         { key: 'name' },
-        { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        { group: ["team", "g0"], sort: "name", pageSize: 5, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1504,7 +1597,7 @@ QUnit.test("Get row index if group by one column, simple key and virtual scrolli
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
         { key: 'name' },
-        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: "team", sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1572,7 +1665,7 @@ QUnit.test("Get row index if group by two columns, simple key and virtual scroll
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
         { key: 'name' },
-        { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: ["team", "g0"], sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1640,7 +1733,7 @@ QUnit.test("Get row index if group by two columns, simple key and virtual scroll
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
         { key: 'name' },
-        { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { group: ["team", "g0"], sort: "name", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -4553,7 +4646,7 @@ QUnit.test("selectAll should works correctly if item count less than pageSize", 
 
     // assert
     assert.equal(this.getVisibleRows().length, 50, "visible row count");
-    assert.ok(this.totalCount(), 50, "total count");
+    assert.strictEqual(this.totalCount(), 50, "total count");
     assert.ok(this.selectionController.isSelectAll(), "select all state");
 });
 
@@ -5119,6 +5212,70 @@ QUnit.test("get combinedFilter with remote filtering", function(assert) {
     assert.deepEqual(this.getCombinedFilter(true), ["age", "=", 15]);
 });
 
+const generateColumns = (length) => {
+    const result = [];
+    for(let i = 0; i < length; i++) {
+        result.push({
+            dataField: "field" + (i + 1),
+            dataType: "string",
+            width: 100
+        });
+    }
+    return result;
+};
+
+QUnit.test("DataGrid should filter properly by filterRow value in virtual mode (T832948)", function(assert) {
+    // arrange
+    this.dataSource = new DataSource({
+        store: []
+    });
+
+    this.applyOptions({
+        width: 200,
+        columns: generateColumns(10),
+        scrolling: {
+            columnPageSize: 5,
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.columnOption("field10", "filterValue", "test");
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 6, "column rendering mode is applied");
+    assert.deepEqual(this.getCombinedFilter(true), ["field10", "contains", "test"], "combined filter");
+});
+
+QUnit.test("DataGrid should filter properly by headerFilter value in virtual mode (T832948)", function(assert) {
+    // arrange
+    this.dataSource = new DataSource({
+        store: []
+    });
+
+    this.applyOptions({
+        width: 200,
+        columns: generateColumns(10),
+        scrolling: {
+            columnPageSize: 5,
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.columnOption("field10", "filterValues", ["test"]);
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 6, "column rendering mode is applied");
+    assert.deepEqual(this.getCombinedFilter(true), ["field10", "=", "test"], "combined filter");
+});
+
 QUnit.test("get combinedFilter for search when allowSearch false", function(assert) {
     this.dataSource = new DataSource({
         load: function() {
@@ -5473,7 +5630,7 @@ QUnit.test("clearFilter without argument", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // arrange
     that.dataController.changed.add(function() {
@@ -5526,7 +5683,7 @@ QUnit.test("clearFilter for dataSource", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob", "Bobbi"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("dataSource");
@@ -5541,7 +5698,7 @@ QUnit.test("clearFilter for dataSource", function(assert) {
     assert.deepEqual(that.dataController.filter(), null, "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob", "Bobbi"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5575,7 +5732,7 @@ QUnit.test("clearFilter for search", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("search");
@@ -5590,7 +5747,7 @@ QUnit.test("clearFilter for search", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5624,7 +5781,7 @@ QUnit.test("clearFilter for filter row", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("row");
@@ -5672,7 +5829,7 @@ QUnit.test("clearFilter for header filter", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("header");
@@ -5686,7 +5843,7 @@ QUnit.test("clearFilter for header filter", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, undefined, "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5720,7 +5877,7 @@ QUnit.test("clearFilter didn't apply by incorrect filter name", function(assert)
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("test");
@@ -5734,7 +5891,7 @@ QUnit.test("clearFilter didn't apply by incorrect filter name", function(assert)
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // B233043
@@ -11008,9 +11165,9 @@ QUnit.test("collapseRow", function(assert) {
 
     // assert
     assert.ok(collapseRowResult0 && collapseRowResult0.done, "collapseRow result 0 is deferred");
-    assert.ok(collapseRowResult0.state(), "resolved", "collapseRow result 0 state is resolved");
+    assert.strictEqual(collapseRowResult0.state(), "resolved", "collapseRow result 0 state is resolved");
     assert.ok(collapseRowResult1 && collapseRowResult1.done, "collapseRow result 1 is deferred");
-    assert.ok(collapseRowResult1.state(), "resolved", "collapseRow result state 1 is resolved");
+    assert.strictEqual(collapseRowResult1.state(), "resolved", "collapseRow result state 1 is resolved");
     assert.strictEqual(this.dataController.isRowExpanded(0), false);
     assert.strictEqual(this.dataController.isRowExpanded(1), false);
     assert.strictEqual(this.dataController.isRowExpanded(2), true);

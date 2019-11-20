@@ -2679,10 +2679,10 @@ QUnit.test("ghost item should be moved by drag", (assert) => {
 
     this.clock.tick();
     const $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
-    const startPosition = topTranslation($ghostItem);
+    const startPosition = topTranslation($ghostItem.parent());
 
     pointer.drag(20);
-    assert.strictEqual(topTranslation($ghostItem), startPosition + 20, "ghost item was moved");
+    assert.strictEqual(topTranslation($ghostItem.parent()), startPosition + 20, "ghost item was moved");
 
     pointer.dragEnd();
 });

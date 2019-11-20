@@ -332,7 +332,7 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
 
         scheduler.appointments.click(1);
 
-        assert.ok(scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
+        assert.equal(scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
         assert.equal(scheduler.tooltip.getTitleText(), "Task 2", "tooltip title is correct");
         assert.equal(scheduler.tooltip.getDateElement().length, 1, "dates container was rendered");
         assert.equal(scheduler.tooltip.hasDeleteButton(), 1, "buttons container was rendered");

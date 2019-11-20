@@ -852,7 +852,7 @@ if(devices.real().deviceType === "desktop") {
         test("Typing a letter in the year section should not lead to an infinite loop", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
-            sinon.stub(this.instance, "_partIncrease").throws();
+            sinon.stub(this.instance, "_partIncrease").throws(new Error);
 
             try {
                 this.keyboard.type("s");

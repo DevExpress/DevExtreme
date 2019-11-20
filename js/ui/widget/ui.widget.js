@@ -6,14 +6,16 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    domAdapter = require("../../core/dom_adapter"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
     KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils"),
-    hoverEvents = require("../../events/hover"),
-    feedbackEvents = require("../../events/core/emitter.feedback"),
     clickEvent = require("../../events/click");
+
+require("../../events/hover");
+require("../../events/core/emitter.feedback");
+
+const { hover, focus, active } = eventsEngine;
 
 var UI_FEEDBACK = "UIFeedback",
     WIDGET_CLASS = "dx-widget",
@@ -23,8 +25,7 @@ var UI_FEEDBACK = "UIFeedback",
     HOVER_STATE_CLASS = "dx-state-hover",
     FOCUSED_STATE_CLASS = "dx-state-focused",
     FEEDBACK_SHOW_TIMEOUT = 30,
-    FEEDBACK_HIDE_TIMEOUT = 400,
-    FOCUS_NAMESPACE = "Focus";
+    FEEDBACK_HIDE_TIMEOUT = 400;
 
 /**
  * @name ui
@@ -370,40 +371,6 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._eventBindingTarget();
     },
 
-    _detachFocusEvents: function() {
-        var $element = this._focusEventTarget(),
-            namespace = this.NAME + FOCUS_NAMESPACE,
-            focusEvents = eventUtils.addNamespace("focusin", namespace);
-
-        focusEvents = focusEvents + " " + eventUtils.addNamespace("focusout", namespace);
-
-        if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
-            focusEvents = focusEvents + " " + eventUtils.addNamespace("beforeactivate", namespace);
-        }
-
-        eventsEngine.off($element, focusEvents);
-    },
-
-    _attachFocusEvents: function() {
-        var namespace = this.NAME + FOCUS_NAMESPACE,
-            focusInEvent = eventUtils.addNamespace("focusin", namespace),
-            focusOutEvent = eventUtils.addNamespace("focusout", namespace);
-
-        var $focusTarget = this._focusEventTarget();
-        eventsEngine.on($focusTarget, focusInEvent, this._focusInHandler.bind(this));
-        eventsEngine.on($focusTarget, focusOutEvent, this._focusOutHandler.bind(this));
-
-        if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
-            var beforeActivateEvent = eventUtils.addNamespace("beforeactivate", namespace);
-
-            eventsEngine.on(this._focusEventTarget(), beforeActivateEvent, function(e) {
-                if(!$(e.target).is(selectors.focusable)) {
-                    e.preventDefault();
-                }
-            });
-        }
-    },
-
     _refreshFocusEvent: function() {
         this._detachFocusEvents();
         this._attachFocusEvents();
@@ -521,82 +488,71 @@ var Widget = DOMComponentWithTemplate.inherit({
         }
     },
 
-    _attachHoverEvents: function() {
-        var that = this,
-            hoverableSelector = that._activeStateUnit,
-            nameStart = eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
-            nameEnd = eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK);
+    _attachHoverEvents() {
+        const { hoverStateEnabled } = this.option();
+        const selector = this._activeStateUnit;
+        const namespace = UI_FEEDBACK;
+        const $el = this._eventBindingTarget();
 
-        eventsEngine.off(that._eventBindingTarget(), nameStart, hoverableSelector);
-        eventsEngine.off(that._eventBindingTarget(), nameEnd, hoverableSelector);
+        hover.off($el, { selector, namespace });
 
-        if(that.option("hoverStateEnabled")) {
-            var startAction = new Action(function(args) {
-                that._hoverStartHandler(args.event);
-                that._refreshHoveredElement($(args.element));
-            }, {
-                excludeValidators: ["readOnly"]
-            });
-
-            var $eventBindingTarget = that._eventBindingTarget();
-
-            eventsEngine.on($eventBindingTarget, nameStart, hoverableSelector, function(e) {
-                startAction.execute({
-                    element: $(e.target),
-                    event: e
-                });
-            });
-            eventsEngine.on($eventBindingTarget, nameEnd, hoverableSelector, function(e) {
-                that._hoverEndHandler(e);
-                that._forgetHoveredElement();
-            });
+        if(hoverStateEnabled) {
+            hover.on($el, new Action(({ event, element }) => {
+                this._hoverStartHandler(event);
+                this._refreshHoveredElement($(element));
+            }, { excludeValidators: ['readOnly'] }), event => {
+                this._hoverEndHandler(event);
+                this._forgetHoveredElement();
+            }, { selector, namespace });
         } else {
-            that._toggleHoverClass(false);
+            this._toggleHoverClass(false);
         }
+    },
+
+    _attachFeedbackEvents() {
+        const { activeStateEnabled } = this.option();
+        const selector = this._activeStateUnit;
+        const namespace = UI_FEEDBACK;
+        const $el = this._eventBindingTarget();
+
+        active.off($el, { namespace, selector });
+
+        if(activeStateEnabled) {
+            active.on($el,
+                new Action(({ event, element }) => this._toggleActiveState($(element), true, event)),
+                new Action(({ event, element }) => this._toggleActiveState($(element), false, event),
+                    { excludeValidators: ['disabled', 'readOnly'] }
+                ), {
+                    showTimeout: this._feedbackShowTimeout,
+                    hideTimeout: this._feedbackHideTimeout,
+                    selector,
+                    namespace
+                }
+            );
+        }
+    },
+
+    _detachFocusEvents() {
+        const $el = this._focusEventTarget();
+
+        focus.off($el, { namespace: `${this.NAME}Focus` });
+    },
+
+    _attachFocusEvents() {
+        const $el = this._focusEventTarget();
+
+        focus.on($el,
+            e => this._focusInHandler(e),
+            e => this._focusOutHandler(e), {
+                namespace: `${this.NAME}Focus`,
+                isFocusable: el => $(el).is(selectors.focusable)
+            }
+        );
     },
 
     _hoverStartHandler: commonUtils.noop,
 
     _hoverEndHandler: commonUtils.noop,
-
-    _attachFeedbackEvents: function() {
-        var that = this,
-            feedbackSelector = that._activeStateUnit,
-            activeEventName = eventUtils.addNamespace(feedbackEvents.active, UI_FEEDBACK),
-            inactiveEventName = eventUtils.addNamespace(feedbackEvents.inactive, UI_FEEDBACK),
-            feedbackAction,
-            feedbackActionDisabled;
-
-        eventsEngine.off(that._eventBindingTarget(), activeEventName, feedbackSelector);
-        eventsEngine.off(that._eventBindingTarget(), inactiveEventName, feedbackSelector);
-
-        if(that.option("activeStateEnabled")) {
-            var feedbackActionHandler = function(args) {
-                var $element = $(args.element),
-                    value = args.value,
-                    dxEvent = args.event;
-
-                that._toggleActiveState($element, value, dxEvent);
-            };
-
-            eventsEngine.on(that._eventBindingTarget(), activeEventName, feedbackSelector, { timeout: that._feedbackShowTimeout }, function(e) {
-                feedbackAction = feedbackAction || new Action(feedbackActionHandler);
-                feedbackAction.execute({
-                    element: $(e.currentTarget),
-                    value: true,
-                    event: e
-                });
-            });
-            eventsEngine.on(that._eventBindingTarget(), inactiveEventName, feedbackSelector, { timeout: that._feedbackHideTimeout }, function(e) {
-                feedbackActionDisabled = feedbackActionDisabled || new Action(feedbackActionHandler, { excludeValidators: ["disabled", "readOnly"] });
-                feedbackActionDisabled.execute({
-                    element: $(e.currentTarget),
-                    value: false,
-                    event: e
-                });
-            });
-        }
-    },
 
     _toggleActiveState: function($element, value) {
         this._toggleHoverClass(!value);

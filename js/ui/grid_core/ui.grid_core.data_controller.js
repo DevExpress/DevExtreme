@@ -767,13 +767,15 @@ module.exports = {
                     if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
                         var columnIndices = [];
 
-                        for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-                            if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
-                                columnIndices.push(columnIndex);
-                            } else {
-                                var cell = oldItem.cells && oldItem.cells[columnIndex];
-                                if(cell && cell.update) {
-                                    cell.update(newItem);
+                        if(newItem.rowType !== "detail") {
+                            for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                                if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
+                                    columnIndices.push(columnIndex);
+                                } else {
+                                    var cell = oldItem.cells && oldItem.cells[columnIndex];
+                                    if(cell && cell.update) {
+                                        cell.update(newItem);
+                                    }
                                 }
                             }
                         }

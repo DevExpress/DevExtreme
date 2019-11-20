@@ -3148,7 +3148,7 @@ QUnit.test("update string lookup for calculated column", function(assert) {
     assert.strictEqual(this.columnsController.getColumns()[0].dataType, 'number');
     assert.strictEqual(this.columnsController.getColumns()[0].lookup.dataType, 'string');
     assert.ok(this.columnsController.getColumns()[0].lookup.calculateCellValue, 'calculateCellValue for lookup exists');
-    assert.ok(this.columnsController.getColumns()[0].lookup.calculateCellValue(2), '123-45-67', 'calculateCellValue for lookup works correctly');
+    assert.strictEqual(this.columnsController.getColumns()[0].lookup.calculateCellValue(2), '123-45-67', 'calculateCellValue for lookup works correctly');
 });
 
 // T200352
@@ -8680,6 +8680,25 @@ QUnit.module("onOptionChanged", {
 
         // assert
         assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[1].caption", "test", "Field 1"], "onOptionChanged args");
+    });
+
+    QUnit.test("Should be correct value in onOptionChanged callback after moving some column to the last position", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2"
+            }, {
+                dataField: "field3"
+            }]
+        });
+
+        // act
+        this.columnsController.moveColumn(0, 3);
+
+        // assert
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[0].visibleIndex", 2, 0], "onOptionChanged args");
     });
 });
 

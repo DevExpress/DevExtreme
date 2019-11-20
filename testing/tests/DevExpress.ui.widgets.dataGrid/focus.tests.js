@@ -1065,7 +1065,7 @@ QUnit.test("Focus next row if grouping and virtual scrolling mode", function(ass
     // assert
     assert.equal(this.option("focusedRowIndex"), 6, "FocusedRowIndex");
     assert.equal(this.option("focusedRowKey"), "Den", "FocusedRowKey");
-    assert.equal(this.pageIndex(), 3, "PageIndex");
+    assert.equal(this.pageIndex(), 2, "PageIndex");
     assert.equal($(rowsView.getCellElement(11, 1)).text(), "Alice");
     assert.ok(dataGridWrapper.rowsView.isRowVisible(11));
 });
@@ -4706,7 +4706,7 @@ QUnit.test("Focused row should be visible if set focusedRowKey", function(assert
     rowsView = this.gridView.getView("rowsView");
     rowsView._scrollToElement = function($row) {
         ++counter;
-        assert.ok($row.find("td").eq(0).text(), "Smith", "Row");
+        assert.strictEqual($row.find("td").eq(0).text(), "Smith", "Row");
     };
     rowsView.height(100);
     this.gridView.component.updateDimensions();

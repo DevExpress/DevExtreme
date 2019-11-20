@@ -162,8 +162,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var $cell = $(cell);
 
-        if(options.rowType === "data") {
-            column.headerId && this.setAria("describedby", column.headerId, $cell);
+        if(options.rowType === "data" && column.headerId && !column.type) {
+            this.setAria("describedby", column.headerId, $cell);
         }
 
         if(column.cssClass) {
@@ -556,6 +556,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         that._rowPrepared($wrappedRow, rowOptions, options.row);
     },
 
+    _needRenderCell: function(columnIndex, columnIndices) {
+        return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
+    },
+
     _renderCells: function($row, options) {
         var that = this,
             i,
@@ -564,7 +568,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columns = options.columns;
 
         for(i = 0; i < columns.length; i++) {
-            if(!options.columnIndices || options.columnIndices.indexOf(i) >= 0) {
+            if(this._needRenderCell(i, options.columnIndices)) {
                 that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex], oldValue: row.oldValues && row.oldValues[columnIndex] }, options));
             }
 

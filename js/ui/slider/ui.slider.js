@@ -553,8 +553,7 @@ var Slider = TrackBar.inherit({
 
     _updateHandlePosition: function(e) {
         var offsetDirection = this.option("rtlEnabled") ? -1 : 1;
-
-        var newRatio = this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio();
+        var newRatio = Math.min(this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio(), 1);
 
         this._$range.width(newRatio * 100 + "%");
 
