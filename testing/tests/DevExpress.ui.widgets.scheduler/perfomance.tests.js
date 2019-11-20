@@ -157,7 +157,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             { type: "update", key: 1, data: { text: "updated-2" } }
         ]);
         dataSource.load();
-        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered only two updated appointments");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 2, "Should rendered only two updated appointments");
 
         markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
@@ -167,12 +167,12 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: new Date(2017, 4, 27, 16, 30)
         } }]);
         dataSource.load();
-        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only inserted appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 0, "Should rendered only inserted appointment");
 
         markAppointments(scheduler);
         dataSource.store().remove(0);
         dataSource.load();
-        assert.equal(0, getUnmarkedAppointments(scheduler).length, "Html element should removed and should not redrawing another appointments");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 0, "Html element should removed and should not redrawing another appointments");
     });
 
     QUnit.test("Scheduler should render only necessary appointments in crossing appointments case", function(assert) {
@@ -187,7 +187,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: defaultData[0].endDate
         } }]);
         dataSource.load();
-        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered inserted appointment and update appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 2, "Should rendered inserted appointment and update appointment");
 
         markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
@@ -197,12 +197,12 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: defaultData[1].endDate
         } }]);
         dataSource.load();
-        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered inserted appointment and 2 updated appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 2, "Should rendered inserted appointment and 2 updated appointment");
 
         markAppointments(scheduler);
         dataSource.store().remove(15);
         dataSource.load();
-        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only two updated appointments");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 1, "Should rendered only two updated appointments");
     });
 
     QUnit.test("Scheduler should throw onAppointmentRendered event only for appointments that need redraw", function(assert) {
@@ -257,7 +257,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             { type: "update", key: 1, data: { text: "updated-2" } }
         ]);
         dataSource.load();
-        assert.equal(2, getUnmarkedAppointments(scheduler).length, "Should rendered only two updated appointments");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 2, "Should rendered only two updated appointments");
 
         markAppointments(scheduler);
         dataSource.store().push([{ type: "insert", data: {
@@ -267,14 +267,14 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: new Date(2017, 4, 28, 16, 30)
         } }]);
         dataSource.load();
-        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only inserted appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 1, "Should rendered only inserted appointment");
 
         markAppointments(scheduler);
         dataSource.store().remove(0);
         dataSource.load();
 
         // TODO: in future this case should be optimized - redraw in this case can escape
-        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only one appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 1, "Should rendered only one appointment");
     });
 
     QUnit.test("Scheduler should render appointments only for appointments that need redraw. Use scheduler API", function(assert) {
@@ -282,15 +282,15 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
 
         markAppointments(scheduler);
         scheduler.instance.updateAppointment(defaultData[0], { text: "updated" });
-        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only one appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 1, "Should rendered only one appointment");
 
         markAppointments(scheduler);
         scheduler.instance.updateAppointment(defaultData[9], { text: "updated" });
-        assert.equal(1, getUnmarkedAppointments(scheduler).length, "Should rendered only one appointment from intersecting appointments");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 1, "Should rendered only one appointment from intersecting appointments");
 
         markAppointments(scheduler);
         scheduler.instance.deleteAppointment(defaultData[0]);
-        assert.equal(0, getUnmarkedAppointments(scheduler).length, "Nothing should be redrawing");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 0, "Nothing should be redrawing");
     });
 
     QUnit.test("Scheduler should re-render all appointments in Agenda view case", function(assert) {
