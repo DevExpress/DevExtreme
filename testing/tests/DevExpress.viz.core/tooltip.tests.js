@@ -1031,7 +1031,7 @@ QUnit.test("Show. W/o params", function(assert) {
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
     this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
-    this.tooltip._textHtml.html = sinon.spy();
+    this.tooltip._textHtml.empty = sinon.spy();
     var eventData = { tag: "event-data" };
 
     const formatObject = { valueText: "some-text" };
@@ -1062,8 +1062,7 @@ QUnit.test("Show. W/o params", function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml styles");
     assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, "textGroupHtml width");
 
-    assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+    assert.equal(this.tooltip._textHtml.empty.callCount, 1, "textHtml empty");
 });
 
 QUnit.test("Show. W/o params. Html", function(assert) {
@@ -1080,6 +1079,7 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
     this.tooltip._textHtml.html = sinon.spy();
+    this.tooltip._textHtml.empty = sinon.spy();
 
     var textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
@@ -1109,9 +1109,10 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: 3000 }]);
 
-    assert.equal(this.tooltip._textHtml.html.callCount, 2, "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.lastCall.args, ["some-html"], "textHtml html");
+    assert.ok(this.tooltip._textHtml.html.calledOnce, "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ["some-html"], "textHtml html");
+
+    assert.ok(this.tooltip._textHtml.empty.calledOnce, "textHtml empty");
 
     assert.equal(this.tooltip._text.css.callCount, 0, "text styles");
     assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
@@ -1142,6 +1143,7 @@ QUnit.test("Show. W/o params. Template", function(assert) {
     this.tooltip._textGroupHtml.width = sinon.spy();
     this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, "html");
+    this.tooltip._textHtml.empty = sinon.spy();
 
     var textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
@@ -1172,9 +1174,10 @@ QUnit.test("Show. W/o params. Template", function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: 3000 }]);
 
-    assert.equal(this.tooltip._textHtml.html.callCount, 2, "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+    assert.ok(this.tooltip._textHtml.html.calledOnce, "textHtml html");
     assert.deepEqual(this.tooltip._textHtml.html(), "custom html", "textHtml html");
+
+    assert.ok(this.tooltip._textHtml.empty.calledOnce, "textHtml empty");
 
     assert.equal(this.tooltip._text.css.callCount, 0, "text styles");
     assert.equal(this.tooltip._text.stub("attr").callCount, 0, "text attrs");
@@ -1266,7 +1269,7 @@ QUnit.test("Show. W/o params. Do not call template if skipTemplate in formatObje
     this.tooltip._textGroupHtml.css = sinon.spy();
     this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
     this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
-    this.tooltip._textHtml.html = sinon.spy();
+    this.tooltip._textHtml.empty = sinon.spy();
     var eventData = { tag: "event-data" };
 
     const formatObject = { valueText: "some-text", skipTemplate: true };
@@ -1297,8 +1300,7 @@ QUnit.test("Show. W/o params. Do not call template if skipTemplate in formatObje
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml styles");
     assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, "textGroupHtml width");
 
-    assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+    assert.equal(this.tooltip._textHtml.empty.callCount, 1, "textHtml empty");
 
     assert.equal(this.options.contentTemplate.callCount, 0);
 });
@@ -1421,6 +1423,7 @@ QUnit.test("Hide.", function(assert) {
     this.resetTooltipMocks();
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._wrapper.detach = sinon.spy();
+    this.tooltip._textHtml.empty = sinon.spy();
 
     // act
     this.tooltip.hide();
@@ -1431,6 +1434,7 @@ QUnit.test("Hide.", function(assert) {
     assert.equal(this.tooltip._wrapper.detach.callCount, 1, "wrapper detached");
     assert.equal(this.eventTrigger.callCount, 1);
     assert.deepEqual(this.eventTrigger.firstCall.args, ["tooltipHidden", eventObject]);
+    assert.ok(this.tooltip._textHtml.empty.calledOnce, "textHtml empty");
 });
 
 // T244003

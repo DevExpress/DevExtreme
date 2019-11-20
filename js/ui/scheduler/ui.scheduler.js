@@ -18,6 +18,7 @@ import dataCoreUtils from "../../core/utils/data";
 import registerComponent from "../../core/component_registrator";
 import messageLocalization from "../../localization/message";
 import dateSerialization from "../../core/utils/date_serialization";
+import dateLocalization from "../../localization/date";
 import Widget from "../widget/ui.widget";
 import subscribes from "./ui.scheduler.subscribes";
 
@@ -2309,7 +2310,7 @@ const Scheduler = Widget.inherit({
         this.fire("setField", "endDate", targetAppointmentData, processedEndDate);
     },
 
-    _checkRecurringAppointment: function(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing) {
+    _checkRecurringAppointment: function(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
         delete this._updatedRecAppointment;
 
         var recurrenceRule = this.fire("getField", "recurrenceRule", targetAppointment);
@@ -2325,21 +2326,24 @@ const Scheduler = Widget.inherit({
                 callback();
                 break;
             case "occurrence":
-                this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing);
+                this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                 break;
             default:
+                if(dragEvent) {
+                    dragEvent.cancel = new Deferred();
+                }
                 this._showRecurrenceChangeConfirm(isDeleted)
                     .done((function(result) {
                         result && callback();
-                        !result && this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing);
+                        !result && this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                     }).bind(this))
                     .fail((function() {
-                        this._appointments.moveAppointmentBack();
+                        this._appointments.moveAppointmentBack(dragEvent);
                     }).bind(this));
         }
     },
 
-    _singleAppointmentChangesHandler: function(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing) {
+    _singleAppointmentChangesHandler: function(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
         exceptionDate = new Date(exceptionDate);
 
         function processAppointmentDates(appointment, commonTimezoneOffset) {
@@ -2396,8 +2400,8 @@ const Scheduler = Widget.inherit({
 
         } else {
             this._updateAppointment(targetAppointment, updatedAppointment, function() {
-                this._appointments.moveAppointmentBack();
-            });
+                this._appointments.moveAppointmentBack(dragEvent);
+            }, dragEvent);
         }
     },
 
@@ -2540,7 +2544,8 @@ const Scheduler = Widget.inherit({
 
                 if(this._isAppointmentRecurrence(appointmentData)) {
                     appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
-                    if(appointmentStartDate) {
+                    const isStartDateChanged = options.data && options.target && options.target.endDate && new Date(options.data.endDate).getTime() === new Date(options.target.endDate).getTime();
+                    if(appointmentStartDate && !isStartDateChanged) {
                         updatedStartDate = appointmentStartDate;
                     }
                 }
@@ -2590,7 +2595,7 @@ const Scheduler = Widget.inherit({
         return this._workSpace.getDataByDroppableCell();
     },
 
-    _updateAppointment: function(target, appointment, onUpdatePrevented) {
+    _updateAppointment: function(target, appointment, onUpdatePrevented, dragEvent) {
         var updatingOptions = {
             newData: appointment,
             oldData: extend({}, target),
@@ -2616,6 +2621,11 @@ const Scheduler = Widget.inherit({
                 try {
                     this._appointmentModel
                         .update(target, appointment)
+                        .done(() => {
+                            if(dragEvent && typeUtils.isDeferred(dragEvent.cancel)) {
+                                dragEvent.cancel.resolve(false);
+                            }
+                        })
                         .always((function(e) {
                             this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentUpdated"], appointment, e);
                         }).bind(this))
@@ -3015,7 +3025,11 @@ const Scheduler = Widget.inherit({
         } else {
             this._workSpace.focus();
         }
-    }
+    },
+
+    getFirstDayOfWeek: function() {
+        return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
+    },
 
     /**
         * @name dxSchedulerMethods.registerKeyHandler

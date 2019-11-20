@@ -588,9 +588,10 @@ module.exports = {
                 getRowIndexDelta: function() {
                     return 0;
                 },
-                _processItems: function(items, changeType) {
+                _processItems: function(items, change) {
                     var that = this,
                         rowIndexDelta = that.getRowIndexDelta(),
+                        changeType = change.changeType,
                         visibleColumns = that._columnsController.getVisibleColumns(null, changeType === "loadingAll"),
                         visibleItems = that._items,
                         dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
@@ -766,13 +767,15 @@ module.exports = {
                     if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
                         var columnIndices = [];
 
-                        for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-                            if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
-                                columnIndices.push(columnIndex);
-                            } else {
-                                var cell = oldItem.cells && oldItem.cells[columnIndex];
-                                if(cell && cell.update) {
-                                    cell.update(newItem);
+                        if(newItem.rowType !== "detail") {
+                            for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                                if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
+                                    columnIndices.push(columnIndex);
+                                } else {
+                                    var cell = oldItem.cells && oldItem.cells[columnIndex];
+                                    if(cell && cell.update) {
+                                        cell.update(newItem);
+                                    }
                                 }
                             }
                         }
@@ -902,7 +905,7 @@ module.exports = {
                     if(dataSource) {
                         items = change.items || dataSource.items();
                         items = that._beforeProcessItems(items);
-                        items = that._processItems(items, changeType);
+                        items = that._processItems(items, change);
 
                         change.items = items;
                         oldItems = that._items.length === items.length && that._items;
@@ -1193,14 +1196,14 @@ module.exports = {
                             dataSource._handleDataLoaded(options);
                             when(options.data).done(function(data) {
                                 data = that._beforeProcessItems(data);
-                                d.resolve(that._processItems(data, "loadingAll"), options.extra && options.extra.summary);
+                                d.resolve(that._processItems(data, { changeType: "loadingAll" }), options.extra && options.extra.summary);
                             }).fail(d.reject);
                         } else {
                             if(!dataSource.isLoading()) {
                                 var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
                                     items = that._beforeProcessItems(items);
-                                    items = that._processItems(items, "loadingAll");
+                                    items = that._processItems(items, { changeType: "loadingAll" });
                                     d.resolve(items, extra && extra.summary);
                                 }).fail(d.reject);
                             } else {

@@ -76,9 +76,14 @@ const ButtonCollection = CollectionWidget.inherit({
         $item.addClass(SHAPE_STANDARD_CLASS);
     },
 
-    _renderItemContent(options) {
-        options.container = $(options.container).parent();
-        this.callBase(options);
+    _renderItemContent(args) {
+        args.container = $(args.container).parent();
+        return this.callBase(args);
+    },
+
+    _renderItemContentByNode: function(args, $node) {
+        args.container = $(args.container.children().first());
+        return this.callBase(args, $node);
     },
 
     _focusTarget() {
@@ -314,8 +319,9 @@ const ButtonGroup = Widget.inherit({
                 break;
             case "width":
                 this.callBase(args);
-                this.$element()
-                    .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
+                this
+                    ._buttonsCollection
+                    .itemElements()
                     .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
                 break;
             default:

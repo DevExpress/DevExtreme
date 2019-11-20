@@ -12,7 +12,7 @@ QUnit.test("hideTopOverlayCallback", function(assert) {
     assert.ok(navCallback.hasCallback());
     assert.ok(navCallback.fire());
     assert.ok(!navCallback.hasCallback());
-    assert.equal("0", res);
+    assert.equal(res, "0");
 
     navCallback.add(function() {
         res += "1";
@@ -22,7 +22,7 @@ QUnit.test("hideTopOverlayCallback", function(assert) {
     });
     navCallback.fire();
     navCallback.fire();
-    assert.equal("021", res);
+    assert.equal(res, "021");
     var callback = function() {
         res += "3";
     };
@@ -33,7 +33,7 @@ QUnit.test("hideTopOverlayCallback", function(assert) {
     navCallback.remove(callback);
     assert.ok(navCallback.fire());
     assert.ok(!navCallback.fire());
-    assert.equal("0214", res);
+    assert.equal(res, "0214");
 });
 
 QUnit.test("hideTopOverlay", function(assert) {
@@ -43,8 +43,8 @@ QUnit.test("hideTopOverlay", function(assert) {
     callback.add(function() {
         eventFiredCount++;
     });
-    assert.equal(0, eventFiredCount);
+    assert.equal(eventFiredCount, 0);
 
     hideTopOverlay();
-    assert.equal(1, eventFiredCount);
+    assert.equal(eventFiredCount, 1);
 });

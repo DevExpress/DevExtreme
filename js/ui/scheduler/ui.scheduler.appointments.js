@@ -341,8 +341,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        var startDate = model.appointmentData.settings ? new Date(this.invoke("getField", "startDate", model.appointmentData.settings)) : data.startDate,
-            endDate = model.appointmentData.settings ? new Date(this.invoke("getField", "endDate", model.appointmentData.settings)) : data.endDate;
+        var startDate = model.appointmentData.settings ? new Date(this.invoke("getField", "startDate", model.appointmentData.settings)) : (data.recurrenceRule ? model.targetedAppointmentData.startDate : data.startDate),
+            endDate = model.appointmentData.settings ? new Date(this.invoke("getField", "endDate", model.appointmentData.settings)) : (data.recurrenceRule ? model.targetedAppointmentData.endDate : data.endDate);
 
         if(isNaN(startDate) || isNaN(endDate)) {
             startDate = data.startDate;
@@ -815,7 +815,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 height: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
                 isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
-                applyOffset: this._isGroupCompact(virtualGroup)
+                applyOffset: !virtualGroup.isAllDay && this.invoke("isApplyCompactAppointmentOffset")
             });
         }).bind(this));
     },
@@ -942,10 +942,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return obj;
     },
 
-    moveAppointmentBack: function() {
+    moveAppointmentBack: function(dragEvent) {
         var $appointment = this._$currentAppointment,
             size = this._initialSize,
             coords = this._initialCoordinates;
+
+        if(dragEvent) {
+            if(typeUtils.isDeferred(dragEvent.cancel)) {
+                dragEvent.cancel.resolve(true);
+            } else {
+                dragEvent.cancel = true;
+            }
+        }
 
         this.notifyObserver("moveBack");
 

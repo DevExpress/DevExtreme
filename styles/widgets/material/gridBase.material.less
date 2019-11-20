@@ -975,6 +975,19 @@
                     background-color: ~"@{@{widgetName}-base-background-color}";
                     color: ~"@{@{widgetName}-link-color}";
                 }
+
+                & > td,
+                & > tr:last-child > td {
+                    border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                }
+
+                &:not(.dx-row-lines) {
+                    & > td,
+                    & > tr:first-child > td {
+                        border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                        border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                    }
+                }
             }
 
             &.dx-data-row.dx-edit-row {

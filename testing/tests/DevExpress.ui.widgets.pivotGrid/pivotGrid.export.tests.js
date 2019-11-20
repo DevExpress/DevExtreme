@@ -1,5 +1,7 @@
 import $ from "jquery";
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
+import JSZipMock from "../../helpers/jszipMock.js";
+import excel_creator from "exporter/excel_creator";
 
 QUnit.testStart(function() {
     var markup = '<div id="pivotGrid" style="width: 700px"></div>';
@@ -34,6 +36,20 @@ QUnit.test("Export empty pivot", function(assert) {
         '</sst>';
 
     helper.runGeneralTest(assert, {}, { styles, worksheet, sharedStrings });
+});
+
+QUnit.test("Export with async jsZip", function(assert) {
+    const expectedData = { isZipData: true };
+    class AsyncJSZipMock extends JSZipMock {
+        constructor() {
+            super();
+            const promise = window.Promise ? new Promise(r => r(expectedData)) : $.Deferred().resolve(expectedData);
+            this.generateAsync = () => promise;
+        }
+    }
+
+    excel_creator.ExcelCreator.JSZip = AsyncJSZipMock;
+    helper.runGeneralTest(assert, {}, { data: { isZipData: true } });
 });
 
 QUnit.test("Check header/data/total cell style/data type", function(assert) { // column headers, row headers, showColumnGrandTotals, showRowGrandTotals, column totals, row totals

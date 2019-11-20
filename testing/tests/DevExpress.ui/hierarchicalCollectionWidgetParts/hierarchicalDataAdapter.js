@@ -955,15 +955,15 @@ module("Search operation", moduleConfig, () => {
 
         var result = dataAdapter.search("X");
 
-        assert.ok(result[0].internalFields.expanded, "Cars", "The entry is OK");
-        assert.ok(result[1].internalFields.expanded, "BMWX", "The entry is OK");
-        assert.ok(!result[2].internalFields.expanded, "X1", "The entry is OK");
-        assert.ok(!result[3].internalFields.expanded, "X5", "The entry is OK");
-        assert.ok(!result[4].internalFields.expanded, "X6", "The entry is OK");
-        assert.ok(result[5].internalFields.expanded, "Motobikes", "The entry is OK");
-        assert.ok(result[6].internalFields.expanded, "Yamaha", "The entry is OK");
-        assert.ok(!result[7].internalFields.expanded, "YX 1", "The entry is OK");
-        assert.ok(!result[8].internalFields.expanded, "YX 2", "The entry is OK");
+        assert.ok(result[0].internalFields.expanded, "The 'Cars' entry is expanded");
+        assert.ok(result[1].internalFields.expanded, "The 'BMWX' entry is expanded");
+        assert.ok(!result[2].internalFields.expanded, "The 'X1' entry is not expanded");
+        assert.ok(!result[3].internalFields.expanded, "The 'X5' entry is not expanded");
+        assert.ok(!result[4].internalFields.expanded, "The 'X6' entry is not expanded");
+        assert.ok(result[5].internalFields.expanded, "The 'Motobikes' entry expanded");
+        assert.ok(result[6].internalFields.expanded, "The 'Yamaha' entry not expanded");
+        assert.ok(!result[7].internalFields.expanded, "The 'YX 1' entry is not expanded");
+        assert.ok(!result[8].internalFields.expanded, "The 'YX' The entry is not expanded");
     });
 
     test("Search should work with warning when the parent node is lost", function(assert) {

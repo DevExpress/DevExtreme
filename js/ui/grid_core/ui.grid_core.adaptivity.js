@@ -1033,14 +1033,15 @@ module.exports = {
                 }
             },
             data: {
-                _processItems: function(items, changeType) {
+                _processItems: function(items, change) {
                     var that = this,
                         item,
-                        expandRowIndex;
+                        expandRowIndex,
+                        changeType = change.changeType;
 
                     items = that.callBase.apply(that, arguments);
 
-                    if((changeType === "loadingAll") || (!typeUtils.isDefined(that._adaptiveExpandedKey))) {
+                    if((changeType === "loadingAll") || !typeUtils.isDefined(that._adaptiveExpandedKey)) {
                         return items;
                     }
 

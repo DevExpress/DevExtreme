@@ -261,15 +261,21 @@
             setTemplateEngine("default");
         }
     }, function() {
-        var testTemplate = function(name, templateSource, expected) {
+        var testTemplate = function(name, templateSource, expected, enableAlternateTemplateTags) {
             QUnit.test(name, function(assert) {
                 var $template = $("#simpleTemplate");
 
                 $template.text(templateSource);
-                $("#button").dxButton({
-                    text: "Test button",
-                    template: $template
-                });
+
+                aspnet.enableAlternateTemplateTags(enableAlternateTemplateTags !== false);
+                try {
+                    $("#button").dxButton({
+                        text: "Test button",
+                        template: $template
+                    });
+                } finally {
+                    aspnet.enableAlternateTemplateTags(true);
+                }
 
                 assert.equal($(".dx-button-content").text(), expected);
             });
@@ -321,6 +327,11 @@
         );
 
         testTemplate("obj", "<%- obj.text %>", "Test button");
+
+        QUnit.module("Alternate syntax (T831170)", function() {
+            testTemplate("enabled", "a [%= 'b' %] c", "a b c");
+            testTemplate("disabled", "[%= 123 %]", "[%= 123 %]", false);
+        });
     });
 
     QUnit.test("Transcluded content (T691770, T693379)", function(assert) {

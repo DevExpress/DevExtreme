@@ -797,7 +797,7 @@ module.exports = {
                         };
                     }
 
-                    let result;
+                    let result = { };
                     if(columnOptions.command) {
                         result = deepExtendArraySafe(commonColumnOptions, columnOptions);
                     } else {
@@ -806,8 +806,10 @@ module.exports = {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-
-                        result = deepExtendArraySafe({ headerId: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
+                        if(columnOptions.dataField && !columnOptions.type) {
+                            result = { headerId: `dx-col-${globalColumnId++}` };
+                        }
+                        result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
                         deepExtendArraySafe(result, commonColumnOptions);
                         deepExtendArraySafe(result, calculatedColumnOptions);
                         deepExtendArraySafe(result, columnOptions);
@@ -1397,6 +1399,12 @@ module.exports = {
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     fullOptionName = getColumnFullPath(that, column);
+
+                    if(COLUMN_INDEX_OPTIONS[optionName]) {
+                        updateIndexes(that, column);
+                        value = optionGetter(column);
+                    }
+
                     fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,
@@ -1473,7 +1481,7 @@ module.exports = {
                 return result;
             };
 
-            var getRowCount = function(that, level, bandColumnIndex) {
+            var getRowCount = function(that) {
                 var rowCount = 1,
                     bandColumnsCache = that.getBandColumnsCache(),
                     columnParentByIndex = bandColumnsCache.columnParentByIndex;
@@ -1744,11 +1752,12 @@ module.exports = {
                         case "columnMinWidth":
                         case "columnWidth": {
                             args.handled = true;
-                            let isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
+                            let ignoreColumnOptionNames = args.fullName === "columnWidth" && ["width"],
+                                isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
                                 isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
 
                             if(!isEditingPopup && !isEditingForm) {
-                                this.reinit();
+                                this.reinit(ignoreColumnOptionNames);
                             }
                             break;
                         }
@@ -1826,10 +1835,14 @@ module.exports = {
                     that._rowCount = undefined;
                     resetBandColumnsCache(that);
                 },
-                reinit: function() {
+                reinit: function(ignoreColumnOptionNames) {
                     this._columnsUserState = this.getUserState();
-                    this._ignoreColumnOptionNames = null;
+                    this._ignoreColumnOptionNames = ignoreColumnOptionNames || null;
                     this.init();
+
+                    if(ignoreColumnOptionNames) {
+                        this._ignoreColumnOptionNames = null;
+                    }
                 },
                 isInitialized: function() {
                     return !!this._columns.length || !!this.option("columns");
@@ -2766,7 +2779,6 @@ module.exports = {
                         i,
                         identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
                         columns = that._columns.concat(that._commandColumns),
-                        needUpdateIndexes,
                         column;
 
                     if(identifier === undefined) return;
@@ -2797,17 +2809,12 @@ module.exports = {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(isObject(option)) {
                             iteratorUtils.each(option, function(optionName, value) {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
-                        }
-                        if(needUpdateIndexes) {
-                            updateIndexes(that, column);
                         }
 
                         fireColumnsChanged(that);

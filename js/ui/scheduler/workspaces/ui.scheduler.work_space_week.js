@@ -128,7 +128,25 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         }
 
         return $leftCell;
-    }
+    },
+
+    getPositionShift: function(timeShift, isAllDay) {
+        if(!isAllDay && this.invoke("isAdaptive") && this.invoke("getMaxAppointmentCountPerCellByType") === 0) {
+            return {
+                top: 0,
+                left: 0,
+                cellPosition: 0
+            };
+        }
+        return this.callBase(timeShift, isAllDay);
+    },
+
+    _isApplyCompactAppointmentOffset: function() {
+        if(this.invoke("isAdaptive") && this.invoke("getMaxAppointmentCountPerCellByType") === 0) {
+            return false;
+        }
+        return this.callBase();
+    },
 });
 
 registerComponent("dxSchedulerWorkSpaceWeek", SchedulerWorkSpaceWeek);

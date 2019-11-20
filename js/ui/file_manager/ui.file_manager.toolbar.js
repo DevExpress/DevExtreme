@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined, isString } from "../../core/utils/type";
 import { ensureDefined } from "../../core/utils/common";
+import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 import Toolbar from "../toolbar";
@@ -414,7 +415,7 @@ class FileManagerToolbar extends Widget {
             generalToolbarOptions = {
                 showText: "inMenu",
                 options: {
-                    text: "refresh",
+                    text: messageLocalization.format("dxFileManager-commandRefresh"),
                     icon: REFRESH_ICON_MAP.default
                 }
             };

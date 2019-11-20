@@ -230,7 +230,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when no scroll"
     that.columnHeadersView.render($testElement);
 
     // act
-    that.columnHeadersView.setColumnWidths([50, 50, 50, 50, "auto"]);
+    that.columnHeadersView.setColumnWidths({ widths: [50, 50, 50, 50, "auto"] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
@@ -269,7 +269,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when has scroll
     that.columnHeadersView.render($testElement);
 
     // act
-    that.columnHeadersView.setColumnWidths([100, 100, 100, 100, 100]);
+    that.columnHeadersView.setColumnWidths({ widths: [100, 100, 100, 100, 100] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
@@ -308,8 +308,8 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when has scroll
     that.columnHeadersView.render($testElement);
 
     // act
-    that.columnHeadersView.setColumnWidths([50, 50, 50, "auto", 50]);
-    that.columnHeadersView.setColumnWidths([50, 150, 50, 50, 50]);
+    that.columnHeadersView.setColumnWidths({ widths: [50, 50, 50, "auto", 50] });
+    that.columnHeadersView.setColumnWidths({ widths: [50, 150, 50, 50, 50] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
@@ -349,7 +349,7 @@ QUnit.test("RowsView - set column width for fixed table when no scroll", functio
     that.rowsView.render($testElement);
 
     // act
-    that.rowsView.setColumnWidths([50, 50, 50, 50, "auto"]);
+    that.rowsView.setColumnWidths({ widths: [50, 50, 50, 50, "auto"] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
@@ -388,7 +388,7 @@ QUnit.test("RowsView - set column width for fixed table when has scroll", functi
     that.rowsView.render($testElement);
 
     // act
-    that.rowsView.setColumnWidths([100, 100, 100, 100, 100]);
+    that.rowsView.setColumnWidths({ widths: [100, 100, 100, 100, 100] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
@@ -3040,7 +3040,7 @@ QUnit.module("Fixed columns with real dataController and columnController", {
         };
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ["data", "columns", "rows", "columnFixing", "masterDetail", "editorFactory", "grouping"], {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnFixing", "masterDetail", "editorFactory", "grouping", "virtualScrolling"], {
                 initViews: true
             });
         };
@@ -3122,7 +3122,7 @@ QUnit.test("Fixed column widths should be correct when the group cell position i
     this.rowsView.render($testElement);
 
     // act
-    this.rowsView.setColumnWidths([100, 30, 150, 100]);
+    this.rowsView.setColumnWidths({ widths: [100, 30, 150, 100] });
     this.rowsView.resize();
 
     // assert
@@ -3218,4 +3218,47 @@ QUnit.test("The vertical position of the fixed table should be correct after scr
     // assert
     $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
+});
+
+// T829901
+QUnit.test("The load panel should not be displayed when fixing and unfixing the column", function(assert) {
+    // arrange
+    let that = this,
+        $testElement = $("#container").width(400),
+        generateData = () => {
+            let data = [];
+            for(let i = 0; i < 40; i++) {
+                data.push({ field1: "test" + i, field2: "test" + (i + 1), field3: "test" + (i + 2) });
+            }
+            return data;
+        };
+
+    that.options.loadPanel = { visible: true };
+    that.options.scrolling = {
+        mode: "infinite"
+    };
+    that.options.dataSource = generateData();
+    that.options.columns = ["field1", "field2", "field3"];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    // assert
+    assert.strictEqual($testElement.find(".dx-datagrid-bottom-load-panel").length, 1, "load panel count");
+
+    // act
+    that.columnOption(0, "fixed", true);
+
+    // assert
+    assert.strictEqual($testElement.find(".dx-datagrid-bottom-load-panel").length, 2, "load panel count");
+
+    // act
+    that.columnOption(0, "fixed", false);
+
+    // assert
+    const $fixedContent = $testElement.find(".dx-datagrid-content-fixed");
+    assert.strictEqual($fixedContent.length, 0, "no fixed content");
+    assert.strictEqual($testElement.find(".dx-datagrid-bottom-load-panel").length, 1, "load panel count");
 });

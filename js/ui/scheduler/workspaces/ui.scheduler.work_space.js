@@ -2084,7 +2084,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var index = this.getCellIndexByDate(date, inAllDayRow),
             position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow),
-            shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date)),
+            shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow),
             horizontalHMax = this._getHorizontalMax(groupIndex, date);
 
         if(!position) {
@@ -2138,7 +2138,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return index;
     },
 
-    getPositionShift: function(timeShift) {
+    getPositionShift: function(timeShift, isAllDay) {
         return {
             top: timeShift * this.getCellHeight(),
             left: 0,
@@ -2520,6 +2520,10 @@ var SchedulerWorkSpace = Widget.inherit({
             this.dragBehavior.addTo(this._$allDayPanel);
         }
         this._attachTablesEvents();
+    },
+
+    _isApplyCompactAppointmentOffset: function() {
+        return this._supportCompactDropDownAppointments();
     },
 
     _supportCompactDropDownAppointments: function() {

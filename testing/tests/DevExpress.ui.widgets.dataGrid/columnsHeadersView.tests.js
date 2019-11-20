@@ -255,7 +255,7 @@ QUnit.test('Column widths reset after change columns count and render', function
 
     // act
     this.columnHeadersView.render(testElement);
-    this.columnHeadersView.setColumnWidths([200, 100]);
+    this.columnHeadersView.setColumnWidths({ widths: [200, 100] });
 
     // assert
     assert.deepEqual(this.columnHeadersView.getColumnWidths(), [200, 100]);
@@ -278,11 +278,11 @@ QUnit.test('Scroll position after set column widths', function(assert) {
 
     // act
     this.columnHeadersView.render(testElement);
-    this.columnHeadersView.setColumnWidths([400, 100]);
+    this.columnHeadersView.setColumnWidths({ widths: [400, 100] });
     this.columnHeadersView.scrollTo({ left: 50 });
 
     // act
-    this.columnHeadersView.setColumnWidths([200, 200]);
+    this.columnHeadersView.setColumnWidths({ widths: [200, 200] });
 
     // assert
     $scrollContainer = this.columnHeadersView.element().find(".dx-datagrid-scroll-container");

@@ -2087,12 +2087,24 @@ module("default template", {
         assert.equal($.trim($content.text()), "custom");
     });
 
+    test("template should be rendered correctly with text equals to zero", assert => {
+        const $content = this.prepareItemTest({ text: 0 });
+
+        assert.strictEqual($.trim($content.text()), "0");
+    });
+
     test("template should be rendered correctly with html", assert => {
         const $content = this.prepareItemTest({ html: "<span>test</span>" });
 
         const $span = $content.is("span") ? $content : $content.children();
         assert.ok($span.length);
         assert.equal($span.text(), "test");
+    });
+
+    test("template should be rendered correctly with html equals to an empty string", assert => {
+        const $content = this.prepareItemTest({ text: "test", html: "" });
+
+        assert.strictEqual($.trim($content.text()), "");
     });
 
     test("template should be rendered correctly with htmlstring", assert => {

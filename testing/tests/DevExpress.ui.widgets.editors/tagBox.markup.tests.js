@@ -55,7 +55,7 @@ QUnit.test("tagbox should have base class", function(assert) {
     assert.notOk($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), "tagbox has no skip gesture event class");
 
     var $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-    assert.equal($tagContainer.length, 1, "tag container exists", "tagbox should have tag container");
+    assert.equal($tagContainer.length, 1, "tagbox should have tag container");
 
     var $tags = $tagBox.find("." + TAGBOX_TAG_CLASS),
         $tagContent = $tags.find("." + TAGBOX_TAG_CONTENT_CLASS);

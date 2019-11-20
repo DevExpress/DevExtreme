@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} là bắt buộc",
 
         "dxNumberBox-invalidValueMessage": "Giá trị phải là một số",
+        "dxNumberBox-noDataText": "Không có dữ liệu",
 
         "dxDataGrid-columnChooserTitle": "Trình chọn cột",
         "dxDataGrid-columnChooserEmptyText": "Kéo một cột vào đây để ẩn nó đi",
@@ -289,8 +290,8 @@
         "dxHtmlEditor-heading": "Tiêu đề",
         "dxHtmlEditor-normalText": "Chữ bình thường",
 
-        "dxFileManager-newFolderName": "Thư mục không tên",
-        "dxFileManager-rootFolderName": "Các tập tin",
+        "dxFileManager-newDirectoryName": "Thư mục không tên",
+        "dxFileManager-rootDirectoryName": "Các tập tin",
         "dxFileManager-errorNoAccess": "Từ chối truy cập. Thao tác không thể hoàn tất.",
         "dxFileManager-errorDirectoryExistsFormat": "Thư mục '{0}' đã tồn tại.",
         "dxFileManager-errorFileExistsFormat": "Tập tin '{0}' đã tồn tại.",
