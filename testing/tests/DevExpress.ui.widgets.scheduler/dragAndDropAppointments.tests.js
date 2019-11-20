@@ -1,6 +1,7 @@
 import fx from "animation/fx";
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
 import {
     createWrapper,
     initTestMarkup,
@@ -453,6 +454,45 @@ module("Drag and drop appointments", moduleConfig, () => {
         } finally {
             scheduler.appointmentPopup.dialog.hide();
         }
+    });
+
+    // T832754
+    QUnit.test("The appointment should be dropped correctly after pressing Esc key", function(assert) {
+        const scheduler = createWrapper({
+            editing: true,
+            height: 600,
+            views: [{ type: "day" }],
+            currentView: "day",
+            dataSource: [{
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 11, 30)
+            }],
+            currentDate: new Date(2015, 1, 9),
+            startDayHour: 9
+        });
+
+        let $appointment = scheduler.appointments.find("Task 1").first(),
+            positionBeforeDrag = getAbsolutePosition($appointment),
+            pointer = pointerMock($appointment).start(),
+            cellHeight = scheduler.workSpace.getCellHeight();
+
+        pointer
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, -cellHeight);
+
+        keyboardMock($appointment.get(0)).keyDown("esc");
+
+        pointer.up();
+
+        $appointment = scheduler.appointments.find("Task 1").first();
+        let positionAfterDrag = getAbsolutePosition($appointment);
+
+        assert.deepEqual(positionAfterDrag, {
+            left: positionBeforeDrag.left,
+            top: positionBeforeDrag.top - cellHeight
+        }, "appointment position is correct");
+        assert.deepEqual(scheduler.option("dataSource")[0].startDate, new Date(2015, 1, 9, 10, 30), "Start date is OK");
     });
 
     module("appointmentDragging customization", () => {
