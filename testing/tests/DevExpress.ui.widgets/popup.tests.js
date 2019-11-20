@@ -846,7 +846,8 @@ QUnit.test("works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScr
     let $additionalElement;
 
     try {
-        $additionalElement = $("<div>").height(2000).appendTo("body");
+        const $body = $("body");
+        $additionalElement = $("<div>").height(2000).appendTo($body);
 
         this.instance.option({
             fullScreen: false,
@@ -856,7 +857,6 @@ QUnit.test("works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScr
             }
         });
 
-        const $body = $("body");
         const $wrapper = this.instance.$content().parent();
 
         window.scrollTo(0, 200);
