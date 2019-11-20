@@ -185,7 +185,7 @@ var DataAdapter = Class.inherit({
         processedKeys = processedKeys || [];
         const key = node.internalFields.key;
         if(processedKeys.includes(key)) {
-            throw errors.Error("E1058", `${processedKeys.join('->')}->${key}`);
+            return;
         }
 
         processedKeys.push(key);
