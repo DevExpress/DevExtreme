@@ -417,7 +417,7 @@ var DataControllerFilterRowExtender = {
 
         var that = this,
             filters = [that.callBase()],
-            columns = that._columnsController.getVisibleColumns(),
+            columns = that._columnsController.getVisibleColumns(null, true),
             headerFilterController = that.getController("headerFilter"),
             currentColumn = headerFilterController.getCurrentColumn();
 

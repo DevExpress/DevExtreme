@@ -324,29 +324,29 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.ok(this.wrapper.isSplitterActive(), "Splitter is active");
 
         let oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        let oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        let oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(100);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, oldItemViewWidth - 100, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth - 100, "Item view has correct width");
 
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(-200);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth - 200, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, oldItemViewWidth + 200, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, oldItemViewWidth + 200, "Item view has correct width");
 
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(-oldTreeViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, 0, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, fileManagerWidth, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, fileManagerWidth, "Item view has correct width");
 
         const splitterWidth = this.wrapper.getSplitter().get(0).clientWidth;
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
-        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsPanel().get(0).clientWidth;
         this.wrapper.moveSplitter(oldItemViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, splitterWidth, "Item view has correct width");
+        assert.equal(this.wrapper.getItemsPanel().get(0).clientWidth, splitterWidth, "Item view has correct width");
 
         renderer.fn.width = originalFunc;
     });
@@ -519,6 +519,39 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1.1.1.1", "Target folder is selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + longPath, "breadcrumbs refrers to the target folder");
         assert.equal(this.wrapper.getDetailsItemName(1), "Special deep file.txt", "has specail file");
+    });
+
+    test("'Back' directory must have attributes of the represented directory", function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileProvider: [
+                {
+                    name: "Folder 1",
+                    isDirectory: true,
+                    items: [],
+                    dateModified: "16/06/2018"
+                }
+            ],
+            itemView: {
+                showParentFolder: true
+            }
+        });
+        this.clock.tick(400);
+
+        fileManager._getItemViewItems()
+            .then(fileInfos => {
+                const parentFolder = fileInfos[0];
+                const parentDate = parentFolder.fileItem.dateModified;
+                fileManager.option("currentPath", "Folder 1");
+                this.clock.tick(400);
+                fileManager._getItemViewItems()
+                    .then(fileInfos => {
+                        const targetFolder = fileInfos[0];
+                        assert.ok(targetFolder.fileItem.isParentFolder, "The target folder is 'back' directory");
+                        assert.notOk(parentFolder.fileItem.isParentFolder, "The parent folder regular directory");
+                        assert.equal(targetFolder.fileItem.dateModified, parentDate, "The date is correct");
+                    });
+            });
     });
 
 });

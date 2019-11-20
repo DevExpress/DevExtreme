@@ -312,22 +312,20 @@ module.exports = {
                             visibleColumns = this._columnsController.getVisibleColumns();
 
                         if(row.rowType && this._isDetailRow(row)) {
-                            if(options.columnIndices) {
-                                return;
+                            if(this._needRenderCell(0, options.columnIndices)) {
+                                $detailCell = this._renderCell($row, {
+                                    value: null,
+                                    row: row,
+                                    rowIndex: row.rowIndex,
+                                    column: { command: "detail" },
+                                    columnIndex: 0
+                                });
+
+                                $detailCell
+                                    .addClass(CELL_FOCUS_DISABLED_CLASS)
+                                    .addClass(MASTER_DETAIL_CELL_CLASS)
+                                    .attr("colSpan", visibleColumns.length);
                             }
-
-                            $detailCell = this._renderCell($row, {
-                                value: null,
-                                row: row,
-                                rowIndex: row.rowIndex,
-                                column: { command: "detail" },
-                                columnIndex: 0
-                            });
-
-                            $detailCell
-                                .addClass(CELL_FOCUS_DISABLED_CLASS)
-                                .addClass(MASTER_DETAIL_CELL_CLASS)
-                                .attr("colSpan", visibleColumns.length);
                         } else {
                             this.callBase.apply(this, arguments);
                         }

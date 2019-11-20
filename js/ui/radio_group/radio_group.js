@@ -25,6 +25,10 @@ class RadioCollection extends CollectionWidget {
         return this.$element().parent();
     }
 
+    _nullValueSelectionSupported() {
+        return true;
+    }
+
     _getDefaultOptions() {
         const defaultOptions = super._getDefaultOptions();
 

@@ -757,6 +757,7 @@ var DateBox = DropDownEditor.inherit({
                 this._refreshFormatClass();
                 this._renderPopupWrapper();
                 this._formatValidationIcon();
+                this._updateValue();
                 break;
             case "placeholder":
                 this._renderPlaceholder();

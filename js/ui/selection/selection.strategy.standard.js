@@ -1,5 +1,6 @@
 var commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    isDefined = typeUtils.isDefined,
     getKeyHash = commonUtils.getKeyHash,
     dataQuery = require("../../data/query"),
     deferredUtils = require("../../core/utils/deferred"),
@@ -132,9 +133,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _warnOnIncorrectKeys: function(keys) {
+        var allowNullValue = this.options.allowNullValue;
+
         for(var i = 0; i < keys.length; i++) {
-            if(!this.isItemKeySelected(keys[i])) {
-                errors.log("W1002", keys[i]);
+            var key = keys[i];
+
+            if((!allowNullValue || key !== null) && !this.isItemKeySelected(key)) {
+                errors.log("W1002", key);
             }
         }
     },
@@ -176,7 +181,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key, itemData) {
-        if(itemData.disabled) {
+        if(isDefined(itemData) && itemData.disabled) {
             if(this.options.disabledItemKeys.indexOf(key) === -1) {
                 this.options.disabledItemKeys.push(key);
             }
