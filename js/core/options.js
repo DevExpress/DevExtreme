@@ -24,7 +24,6 @@ export class Options {
             optionsByReference,
             this._changingCallbacks,
             this._changedCallbacks,
-            this._deprecatedCallbacks,
             this
         );
 

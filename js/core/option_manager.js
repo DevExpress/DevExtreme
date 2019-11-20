@@ -8,14 +8,13 @@ const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
 const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 
 export class OptionManager {
-    constructor(options, optionsByReference, _changingCallbacks, _changedCallbacks, _deprecatedCallbacks, owner) {
+    constructor(options, optionsByReference, _changingCallbacks, _changedCallbacks, owner) {
         this._options = options;
         this._optionsByReference = optionsByReference;
         this._owner = owner;
 
         this._changingCallbacks = _changingCallbacks;
         this._changedCallbacks = _changedCallbacks;
-        this._deprecatedCallbacks = _deprecatedCallbacks;
 
         this.cachedGetters = {};
         this.cachedSetters = {};
