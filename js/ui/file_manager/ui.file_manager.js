@@ -148,7 +148,7 @@ class FileManager extends Widget {
 
         const options = {
             selectionMode: this.option("selectionMode"),
-            contextMenu: this._createContextMenu(),
+            contextMenu: this._createContextMenu(true),
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
@@ -176,11 +176,12 @@ class FileManager extends Widget {
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
 
-    _createContextMenu() {
+    _createContextMenu(isolateCreationItemCommands) {
         const $contextMenu = $("<div>").appendTo(this._$wrapper);
         return this._createComponent($contextMenu, FileManagerContextMenu, {
             commandManager: this._commandManager,
-            items: this.option("contextMenu.items")
+            items: this.option("contextMenu.items"),
+            isolateCreationItemCommands
         });
     }
 
@@ -623,7 +624,7 @@ class FileManager extends Widget {
                 ));
                 break;
             case "contextMenu":
-                this._itemView.option("contextMenu", this._createContextMenu());
+                this._itemView.option("contextMenu", this._createContextMenu(true));
                 this._filesTreeView.option("contextMenu", this._createContextMenu());
                 break;
             case "onCurrentDirectoryChanged":
