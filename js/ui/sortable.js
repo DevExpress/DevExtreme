@@ -426,22 +426,24 @@ var Sortable = Draggable.inherit({
     },
 
     _getItemPoints: function() {
-        let result,
-            isVertical = this._isVerticalOrientation(),
-            $items = this._getItems();
+        let that = this,
+            result,
+            isVertical = that._isVerticalOrientation(),
+            $items = that._getItems();
 
         result = $items.map((item, index) => {
-            let offset = $(item).offset();
+            let offset = $(item).offset(),
+                left = that._makeLeftCorrection(offset.left);
 
             return {
                 dropInsideItem: false,
-                left: offset.left,
+                left,
                 top: offset.top,
                 index: index,
                 $item: $(item),
                 width: $(item).outerWidth(),
                 height: $(item).outerHeight(),
-                isValid: this._isValidPoint($items, index)
+                isValid: that._isValidPoint($items, index)
             };
         });
 
@@ -551,13 +553,14 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderSizes: function($placeholderElement, itemElement) {
-        var dropInsideItem = this.option("dropInsideItem"),
-            $item = itemElement ? $(itemElement) : this._getSourceElement(),
-            isVertical = this._isVerticalOrientation(),
+        var that = this,
+            dropInsideItem = that.option("dropInsideItem"),
+            $item = itemElement ? $(itemElement) : that._getSourceElement(),
+            isVertical = that._isVerticalOrientation(),
             width = "",
             height = "";
 
-        $placeholderElement.toggleClass(this._addWidgetPrefix("placeholder-inside"), dropInsideItem);
+        $placeholderElement.toggleClass(that._addWidgetPrefix("placeholder-inside"), dropInsideItem);
 
         if(isVertical || dropInsideItem) {
             width = $item.outerWidth();
@@ -566,10 +569,22 @@ var Sortable = Draggable.inherit({
             height = $item.outerHeight();
         }
 
-        if(!this.preventSetWidth) {
-            $placeholderElement.css("width", width);
+        var hasScrollable = $item.parents().toArray().some(function(element) {
+            let $element = $(element);
+
+            if(that.horizontalScrollHelper.isScrollable($element)) {
+                width = $element.width();
+                that._$scrollable = $element;
+
+                return true;
+            }
+        });
+
+        if(!hasScrollable) {
+            that._$scrollable = null;
         }
 
+        $placeholderElement.css("width", width);
         $placeholderElement.css("height", height);
     },
 
@@ -704,16 +719,27 @@ var Sortable = Draggable.inherit({
         }
     },
 
+    _makeLeftCorrection: function(left) {
+        var that = this;
+
+        if(that._$scrollable && that._$scrollable.scrollLeft() > 0) {
+            return that._$scrollable.offset().left;
+        }
+
+        return left;
+    },
+
     _movePlaceholder: function() {
-        let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
-            items = this._getItems(),
-            toIndex = this.option("toIndex"),
+        let that = this,
+            $placeholderElement = that._$placeholderElement || that._createPlaceholder(),
+            items = that._getItems(),
+            toIndex = that.option("toIndex"),
             itemElement = items[toIndex],
             prevItemElement = items[toIndex - 1],
-            isVerticalOrientation = this._isVerticalOrientation(),
+            isVerticalOrientation = that._isVerticalOrientation(),
             position = null;
 
-        this._updatePlaceholderSizes($placeholderElement, itemElement);
+        that._updatePlaceholderSizes($placeholderElement, itemElement);
 
         if(itemElement) {
             position = $(itemElement).offset();
@@ -722,12 +748,14 @@ var Sortable = Draggable.inherit({
             position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
         }
 
-        if(position && !this._isPositionVisible(position)) {
+        if(position && !that._isPositionVisible(position)) {
             position = null;
         }
 
         if(position) {
-            this._move(position, $placeholderElement);
+            position.left = that._makeLeftCorrection(position.left);
+
+            that._move(position, $placeholderElement);
         }
 
         $placeholderElement.toggle(!!position);

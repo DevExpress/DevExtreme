@@ -75,13 +75,19 @@ class ScrollHelper {
         return !!this._scrollSpeed;
     }
 
+    isScrollable($element) {
+        var that = this;
+
+        return ($element.css(that._overFlowAttr) === "auto" || $element.hasClass("dx-scrollable-container"))
+            && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+    }
+
     _trySetScrollable(element, mousePosition) {
         var that = this,
             $element = $(element),
             distanceToBorders,
             sensitivity = that._component.option("scrollSensitivity"),
-            isScrollable = ($element.css(that._overFlowAttr) === "auto" || $element.hasClass("dx-scrollable-container"))
-                && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+            isScrollable = that.isScrollable($element);
 
         if(isScrollable) {
             distanceToBorders = that._calculateDistanceToBorders($element, mousePosition);
@@ -791,29 +797,31 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _updateScrollable: function(e) {
         var that = this,
-            $dragElement = that._$dragElement,
-            ownerDocument = $dragElement.get(0).ownerDocument,
             $window = $(window),
             mousePosition = {
                 x: e.pageX - $window.scrollLeft(),
                 y: e.pageY - $window.scrollTop()
             },
-            allObjects;
-
-        if(browser.msie) {
-            let msElements = ownerDocument.msElementsFromPoint(mousePosition.x, mousePosition.y);
-
-            if(msElements) {
-                allObjects = Array.prototype.slice.call(msElements);
-            } else {
-                allObjects = [];
-            }
-        } else {
-            allObjects = ownerDocument.elementsFromPoint(mousePosition.x, mousePosition.y);
-        }
+            allObjects = that.getElementsFromPoint(mousePosition);
 
         that.verticalScrollHelper && that.verticalScrollHelper.updateScrollable(allObjects, mousePosition);
         that.horizontalScrollHelper && that.horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+    },
+
+    getElementsFromPoint: function(position) {
+        var ownerDocument = this._$dragElement.get(0).ownerDocument;
+
+        if(browser.msie) {
+            let msElements = ownerDocument.msElementsFromPoint(position.x, position.y);
+
+            if(msElements) {
+                return Array.prototype.slice.call(msElements);
+            }
+
+            return [];
+        }
+
+        return ownerDocument.elementsFromPoint(position.x, position.y);
     },
 
     _defaultActionArgs: function() {
