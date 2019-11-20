@@ -36,10 +36,16 @@ function getCustomArrayStore(data) {
                         summary: null
                     };
 
+                var filterExpr = "";
+                if(loadOptions.filter) {
+                    filterExpr = "(" + loadOptions.filter + ")";
+                }
+
                 if(loadOptions.totalSummary) {
                     totalSummary.summary = [];
+
                     for(var i = 0; i < loadOptions.totalSummary.length; i++) {
-                        totalSummary.summary.push("GT:" + getSummary(loadOptions.totalSummary[i]));
+                        totalSummary.summary.push("GT:" + getSummary(loadOptions.totalSummary[i]) + filterExpr);
                     }
                 }
 
@@ -48,11 +54,6 @@ function getCustomArrayStore(data) {
                     for(var i = 0; i < (loadOptions.groupSummary && loadOptions.groupSummary.length || 0); i++) {
                         if(item.items) {
                             item.summary = item.summary || [];
-
-                            var filterExpr = "";
-                            if(loadOptions.filter) {
-                                filterExpr = "(" + loadOptions.filter + ")";
-                            }
 
                             item.summary.push(path.slice(0, level + 1).join("-") + ":" + getSummary(loadOptions.groupSummary[i]) + filterExpr);
                         }
@@ -279,6 +280,7 @@ QUnit.test("Grand total value should be calculated using summaryType from option
     });
 });
 
+// T830242
 QUnit.test("Grand total value should be calculated using summaryType when there is expanded item", function(assert) {
     this.load({
         columns: [],
@@ -1289,9 +1291,15 @@ QUnit.test("Expand column", function(assert) {
         assert.equal(data.columns[0].value, "Barcelona");
         assert.equal(data.columns[1].value, "Madrid");
         assert.equal(data.columns[2].value, "Sevilla");
-
         assert.equal(data.rows.length, 3, "rows count");
         assert.equal(data.rows[0].value, 1, "first row value is correct");
+        // T830242, T724389
+        assert.deepEqual(data.values[0], [
+            ["GT:count(ShipCountry,=,Spain)"],
+            ["Barcelona:count(ShipCountry,=,Spain)"],
+            ["Madrid:count(ShipCountry,=,Spain)"],
+            ["Sevilla:count(ShipCountry,=,Spain)"]
+        ], "total values");
     });
 });
 
