@@ -636,6 +636,24 @@ eventsEngine.focus = {
     }
 };
 
+eventsEngine.dxClick = {
+    on: ($el, click, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxclick', namespace), click);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxclick', namespace));
+    }
+};
+
+eventsEngine.click = {
+    on: ($el, click, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('click', namespace), click);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('click', namespace));
+    }
+};
+
 eventsEngine.active = {
     on: ($el, active, inactive, opts) => {
         const { selector, showTimeout, hideTimeout, namespace } = opts;
