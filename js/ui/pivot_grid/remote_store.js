@@ -377,23 +377,20 @@ function getGrandTotalRequest(options, dimensionName, expandedIndex, expandedLev
             newOptions[dimensionName] = fields.slice(expandedIndex, i + 1);
             newOptions[oppositeDimensionName] = [];
 
-            if(i === expandedLevel) {
-                newOptions.includeTotalSummary = true;
-            }
-
             result.push(extend({}, options, newOptions));
         }
 
     } else {
         newOptions = {
-            filters: commonFilters,
-            includeTotalSummary: true
+            filters: commonFilters
         };
 
         newOptions[dimensionName] = fields.slice(expandedIndex, expandedLevel + 1);
         newOptions[oppositeDimensionName] = [];
         result.push(extend({}, options, newOptions));
     }
+
+    result[0].includeTotalSummary = true;
 
     return result;
 }
@@ -428,7 +425,7 @@ function getRequestsData(options) {
     columnTotalsOptions = getGrandTotalRequest(options, "columns", columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
-        if(!options.headerName) {
+        if(options.headerName !== "rows") {
             data = data.concat(columnTotalsOptions);
         }
 
@@ -523,7 +520,7 @@ module.exports = Class.inherit((function() {
                 var args = deferreds.length > 1 ? arguments : [arguments];
 
                 each(args, function(index, argument) {
-                    parseResult(argument[0], argument[1], requestsData[index], result);
+                    parseResult(argument[0], argument[1], requestsData[index], result, index === 0);
                 });
 
                 d.resolve({
