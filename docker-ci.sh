@@ -8,7 +8,7 @@ export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
-    npm i eslint eslint-plugin-spellcheck eslint-plugin-qunit stylelint stylelint-config-standard npm-run-all
+    npm i eslint eslint-plugin-spellcheck eslint-plugin-qunit stylelint stylelint-config-standard npm-run-all babel-eslint
     npm run lint
 }
 
