@@ -46,8 +46,8 @@ export default class TemplateManager {
 
         this.option = option;
         this.$element = element;
-        this._getDefaultTemplates = () => getDefaultTemplates();
-        this._anonymousTemplateName = getAnonymousTemplateName();
+        this._getDefaultTemplates = getDefaultTemplates;
+        this._getAnonymousTemplateName = getAnonymousTemplateName;
     }
 
     static getAnonymousTemplateName() {
@@ -159,7 +159,7 @@ export default class TemplateManager {
 
     _extractAnonymousTemplate() {
         const templates = this.option('integrationOptions.templates');
-        const anonymousTemplateName = this._anonymousTemplateName;
+        const anonymousTemplateName = this._getAnonymousTemplateName();
         const $anonymousTemplate = this.$element().contents().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
