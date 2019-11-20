@@ -184,7 +184,7 @@ var DataAdapter = Class.inherit({
         }
         processedKeys = processedKeys || [];
         const key = node.internalFields.key;
-        if(processedKeys.includes(key)) {
+        if(processedKeys.indexOf(key) !== -1) {
             return;
         }
 
