@@ -207,6 +207,10 @@ export class FileManagerWrapper {
         return this.getRowInDetailsView(index).find("td").eq(1);
     }
 
+    getRowsInDetailsView() {
+        return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`);
+    }
+
     getRowInDetailsView(index) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
     }

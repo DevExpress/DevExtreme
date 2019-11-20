@@ -538,4 +538,36 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
+    test("create directory by context menu rised on directory", function(assert) {
+        this.wrapper.getInstance().option({
+            itemView: {
+                showFolders: true
+            },
+            contextMenu: {
+                items: [
+                    {
+                        name: "create",
+                        visible: true
+                    }
+                ]
+            }
+        });
+        this.clock.tick(400);
+
+        const initialItemsLength = this.wrapper.getRowsInDetailsView().length;
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+        this.wrapper.getContextMenuItem("New directory").trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getDialogButton("Create").trigger("dxclick");
+        this.clock.tick(800);
+
+        const items = this.wrapper.getRowsInDetailsView();
+        assert.ok((initialItemsLength + 1) === items.length, "One item added");
+        assert.ok(items.eq(items.length - 1).text().indexOf("Untitled directory") > -1, "Directory created");
+        assert.equal(this.progressPanelWrapper.getInfos()[0].common.commonText, "Created a directory inside Files", "common text is correct");
+    });
+
 });

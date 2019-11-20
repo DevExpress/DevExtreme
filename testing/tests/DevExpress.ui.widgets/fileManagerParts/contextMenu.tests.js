@@ -229,9 +229,15 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
                 "move",
                 {
                     name: "create",
-                    icon: "upload"
+                    icon: "upload",
+                    visible: true
                 },
-                "rename", "upload", "rename", "copy",
+                "rename",
+                {
+                    name: "upload",
+                    visible: true
+                },
+                "rename", "copy",
                 {
                     name: "delete",
                     text: "Destruct"
@@ -242,7 +248,7 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
                 }
             ]
         });
-        this.clock.tick(400);
+        this.clock.tick(800);
 
         this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
         this.clock.tick(400);
@@ -269,7 +275,10 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("contextMenu", {
             items: [
-                "create",
+                {
+                    name: "create",
+                    visible: true
+                },
                 {
                     ID: 42,
                     text: "New commnand text",
@@ -295,7 +304,10 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
 
         fileManagerInstance.option("contextMenu", {
             items: [
-                "create",
+                {
+                    name: "create",
+                    visible: true
+                },
                 {
                     text: "New commnand text",
                     disabled: true,
