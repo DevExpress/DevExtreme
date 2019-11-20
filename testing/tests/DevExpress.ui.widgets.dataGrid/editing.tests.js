@@ -2352,7 +2352,7 @@ QUnit.test("The first cell should not be switched to the editing state when clic
     // assert
     $mainTable = $(rowsView.element().children(".dx-datagrid-content").children("table"));
     assert.strictEqual($mainTable.find("input").length, 0, "hasn't input");
-    assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), 0, "first cell isn't editable");
+    assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), "first cell isn't editable");
 });
 
 // T531154
@@ -4484,7 +4484,7 @@ QUnit.test("Not highlight calculated column", function(assert) {
     that.clock.tick();
 
     assert.equal(testElement.find(".dx-row").first().find(".dx-cell-modified").length, 1, "one modified value");
-    assert.ok(testElement.find(".dx-row").first().children().eq(0).hasClass("dx-cell-modified"), 1, "first cell is modified");
+    assert.ok(testElement.find(".dx-row").first().children().eq(0).hasClass("dx-cell-modified"), "first cell is modified");
 });
 
 // T246535
@@ -11857,7 +11857,7 @@ QUnit.test("The validation message should not be overlapped by the fixed column 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-invalid-message").dxOverlay("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top left", "position.my");
     assert.strictEqual(overlayPosition.at, "bottom left", "position.at");
@@ -11908,14 +11908,14 @@ QUnit.test("The validation message should not be overlapped by the fixed column 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-invalid-message").dxOverlay("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top right", "position.my");
     assert.strictEqual(overlayPosition.at, "bottom right", "position.at");
     assert.strictEqual(overlayPosition.collision, "none flip", "position.collision");
 
     tooltipInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-revert-tooltip").dxTooltip("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     tooltipPosition = tooltipInstance.option("position");
     assert.strictEqual(tooltipPosition.my, "top right", "position.my");
     assert.strictEqual(tooltipPosition.at, "top left", "position.at");
@@ -11965,7 +11965,7 @@ QUnit.test("The validation message should be decreased when there is not enough 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-invalid-message").dxOverlay("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     assert.strictEqual(overlayInstance.option("maxWidth"), 148, "maxWidth of the validation message");
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top left", "position.my");

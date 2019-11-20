@@ -3148,7 +3148,7 @@ QUnit.test("update string lookup for calculated column", function(assert) {
     assert.strictEqual(this.columnsController.getColumns()[0].dataType, 'number');
     assert.strictEqual(this.columnsController.getColumns()[0].lookup.dataType, 'string');
     assert.ok(this.columnsController.getColumns()[0].lookup.calculateCellValue, 'calculateCellValue for lookup exists');
-    assert.ok(this.columnsController.getColumns()[0].lookup.calculateCellValue(2), '123-45-67', 'calculateCellValue for lookup works correctly');
+    assert.strictEqual(this.columnsController.getColumns()[0].lookup.calculateCellValue(2), '123-45-67', 'calculateCellValue for lookup works correctly');
 });
 
 // T200352

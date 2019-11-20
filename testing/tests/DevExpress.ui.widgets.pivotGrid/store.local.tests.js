@@ -1118,7 +1118,7 @@ QUnit.test("Expand row on several levels & column", function(assert) {
         assert.equal(data.rows[14].children.length, 3, 'Spain children count');
         assert.equal(data.rows[14].children[1].value, "Madrid", 'Spain Madrid value');
         assert.equal(data.rows[14].children[1].index, 14, 'Spain Madrid index');
-        assert.ok(data.rows[14].children[1].children, "Madrid", 'Spain - Madrid has children');
+        assert.ok(data.rows[14].children[1].children, 'Spain - Madrid has children');
         assert.equal(data.rows[14].children[1].children.length, 2, 'Spain - Madrid children count');
         assert.equal(data.rows[14].children[1].children[0].value, "Bolido Comidas preparadas", 'Spain - Madrid first children value');
         assert.equal(data.rows[14].children[1].children[0].index, 19, 'Spain - Madrid first children index');
