@@ -519,3 +519,21 @@ module("selection single", () => {
         assert.equal(itemClickHandler.callCount, 1, "click works");
     });
 });
+
+
+['dataSource', 'items'].forEach((optionName) => {
+    QUnit.test(`Nodes selection works even with redirect keys in ${optionName} option`, function(assert) {
+        let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" };
+        options[optionName] = [
+            { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
+            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }];
+
+        const treeView = createInstance(options);
+
+        treeView.checkSelectedNodes([]);
+
+        const elem = treeView.getElement().find('[aria-level="1"]');
+        treeView.instance.selectItem(elem);
+        treeView.checkSelectedNodes([0, 1]);
+    });
+});

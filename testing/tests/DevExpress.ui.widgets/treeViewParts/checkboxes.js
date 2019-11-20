@@ -1,7 +1,8 @@
 /* global DATA, data2, internals, initTree */
-
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 import $ from "jquery";
 
+const createInstance = (options) => new TreeViewTestWrapper(options);
 QUnit.module("Checkboxes");
 
 QUnit.test("Set intermediate state for parent if at least a one child is selected", function(assert) {
@@ -237,4 +238,22 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
     nodes = treeView.getNodes();
     assert.ok(nodes[0].items[0].selected, "item was selected");
     assert.strictEqual(nodes[0].selected, undefined, "item selection has undefined state");
+});
+
+
+['dataSource', 'items'].forEach((optionName) => {
+    QUnit.test(`Nodes selection works even with redirect keys in ${optionName} option`, function(assert) {
+        let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" };
+        options[optionName] = [
+            { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
+            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }];
+
+        const treeView = createInstance(options);
+
+        treeView.checkSelectedNodes([]);
+
+        const elem = treeView.getElement().find('[aria-level="1"]');
+        treeView.instance.selectItem(elem);
+        treeView.checkSelectedNodes([0, 1]);
+    });
 });
