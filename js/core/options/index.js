@@ -205,19 +205,4 @@ export class Options {
     isDeprecated(name) {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
     }
-
-    // static convertRulesToOptions(rules) {
-    //     const currentDevice = devices.current();
-    //     return rules.reduce((options, { device, options: ruleOptions }) => {
-    //         const deviceFilter = device || {};
-    //         const match = isFunction(deviceFilter) ?
-    //             deviceFilter(currentDevice) :
-    //             deviceMatch(currentDevice, deviceFilter);
-
-    //         if(match) {
-    //             extend(options, ruleOptions);
-    //         }
-    //         return options;
-    //     }, {});
-    // }
 }
