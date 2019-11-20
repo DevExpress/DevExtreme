@@ -3,7 +3,9 @@
 import $ from "jquery";
 import { noop } from "core/utils/common";
 import fx from "animation/fx";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
+const createInstance = (options) => new TreeViewTestWrapper(options);
 const TREEVIEW_NODE_CLASS = "dx-treeview-node";
 const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
 const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
@@ -689,5 +691,25 @@ module("Expanded items", {
         this.clock.tick(400);
 
         assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
+    });
+
+    ['dataSource', 'items'].forEach((optionName) => {
+        QUnit.test(`Nodes expanding works even with redirect keys in ${optionName} option`, function(assert) {
+            let options = { dataStructure: "plain", rootValue: 1 };
+            options[optionName] = [
+                { id: 1, text: "item1", parentId: 2, selected: false, expanded: false },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: false }];
+
+            let treeView = createInstance(options),
+                parentItem = treeView.getElement().find('[aria-level="1"]'),
+                childItem = treeView.getElement().find('[aria-level="2"]');
+
+            assert.equal(childItem.length, 0);
+
+            treeView.instance.expandItem(parentItem);
+            childItem = treeView.getElement().find('[aria-level="2"]');
+            assert.equal(childItem.length, 1);
+            assert.equal(treeView.hasInvisibleClass(childItem), false);
+        });
     });
 });
