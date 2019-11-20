@@ -62,16 +62,12 @@ export default class AppointmentDragBehavior {
 
         this.currentAppointment = $appointment;
 
-        if(this.appointments._escPressed) {
-            e.event.cancel = true;
-        } else {
-            this.appointments.notifyObserver("updateAppointmentAfterDrag", {
-                event: e,
-                data: this.appointments._getItemData($appointment),
-                $appointment: $appointment,
-                coordinates: this.initialPosition
-            });
-        }
+        this.appointments.notifyObserver("updateAppointmentAfterDrag", {
+            event: e,
+            data: this.appointments._getItemData($appointment),
+            $appointment: $appointment,
+            coordinates: this.initialPosition
+        });
     }
 
     getItemData(appointment) {
