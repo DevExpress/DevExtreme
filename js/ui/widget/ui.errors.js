@@ -239,11 +239,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1057: "The {0} widget does not support asynchronous validation rules in the \"{1}\" edit mode",
 
     /**
-     * @name ErrorsUIWidgets.E1058
-     */
-    E1058: "The data source keys contains a cyclic links: \"{0}\"",
-
-    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",
