@@ -775,16 +775,24 @@ QUnit.module("default", {}, () => {
 
     QUnit.test("dispose optionManager", (assert) => {
         const component = new TestComponent();
-        const callbacks = ["_changedCallbacks", "_changingCallbacks", "_deprecatedCallbacks"];
+        const callbacks = ["_deprecatedCallbacks"];
+        const optionManagerCallbacks = ["_changedCallbacks", "_changingCallbacks"];
+        // TODO: refactor after rename optionManager
 
         callbacks.forEach((callback) => {
             assert.equal(component._optionManager[callback]._list.length, 1);
+        });
+        optionManagerCallbacks.forEach((callback) => {
+            assert.equal(component._optionManager._optionManager[callback]._list.length, 1);
         });
 
         component._dispose();
 
         callbacks.forEach((callback) => {
             assert.equal(component._optionManager[callback]._list.length, 0);
+        });
+        optionManagerCallbacks.forEach((callback) => {
+            assert.equal(component._optionManager._optionManager[callback]._list.length, 0);
         });
     });
 

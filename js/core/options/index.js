@@ -85,7 +85,7 @@ export class Options {
             fieldName = fieldName ? `.${fieldName}` : '';
             fieldName = getFieldName(fullName) + fieldName;
             fullName = getParentName(fullName);
-            fieldObject = fullName ? this.get(options, fullName, false) : options;
+            fieldObject = fullName ? this._optionManager.get(options, fullName, false) : options;
         } while(!fieldObject);
 
         fieldObject[fieldName] = value;
@@ -96,7 +96,7 @@ export class Options {
 
         const previousFieldName = getParentName(name);
         const fieldObject = previousFieldName ?
-            this.get(options, previousFieldName, false) :
+            this._optionManager.get(options, previousFieldName, false) :
             options;
 
         if(fieldObject) {
