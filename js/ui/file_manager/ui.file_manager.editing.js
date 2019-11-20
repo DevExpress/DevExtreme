@@ -156,7 +156,7 @@ class FileManagerEditingControl extends Widget {
             },
 
             upload: {
-                action: () => this._tryUpload(),
+                action: arg => this._tryUpload(arg),
                 allowCancel: true,
                 allowItemProgress: true,
                 singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemProcessingMessage"),

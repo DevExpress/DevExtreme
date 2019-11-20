@@ -91,7 +91,16 @@ class FileManagerContextMenu extends Widget {
         if(!this._isDefaultItem(menuItem.name) || !menuItem._autoHide) {
             return ensureDefined(menuItem.visible, true);
         }
+
+        if(this._isIsolatedCreationItemCommand(menuItem.name) && fileItems && fileItems.length) {
+            return false;
+        }
+
         return this._commandManager.isCommandAvailable(menuItem.name, fileItems);
+    }
+
+    _isIsolatedCreationItemCommand(commandName) {
+        return (commandName === "create" || commandName === "upload") && this.option("isolateCreationItemCommands");
     }
 
     _isDefaultItem(commandName) {
@@ -144,7 +153,8 @@ class FileManagerContextMenu extends Widget {
     }
 
     _onContextMenuItemClick(commandName) {
-        this._commandManager.executeCommand(commandName, this._targetFileItems);
+        let targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
+        this._commandManager.executeCommand(commandName, targetFileItems);
     }
 
     _createContextMenuHiddenAction() {
