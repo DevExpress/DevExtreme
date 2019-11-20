@@ -167,7 +167,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
             endDate: new Date(2017, 4, 27, 16, 30)
         } }]);
         dataSource.load();
-        assert.equal(getUnmarkedAppointments(scheduler).length, 0, "Should rendered only inserted appointment");
+        assert.equal(getUnmarkedAppointments(scheduler).length, 1, "Should rendered only inserted appointment");
 
         markAppointments(scheduler);
         dataSource.store().remove(0);
