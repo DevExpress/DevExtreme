@@ -3823,6 +3823,50 @@ QUnit.module("keyboard navigation", {
 
         assert.ok(isNoError, "key handlers processed without errors");
     });
+
+    QUnit.test("Pressing escape when focus 'today' button must hide the popup", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+        this.dateBox.option({
+            type: "date",
+            pickerType: "calendar",
+            applyValueMode: "useButtons"
+        });
+        this.dateBox.open();
+
+        $(this.dateBox.content())
+            .parent()
+            .find(".dx-button-today")
+            .trigger(escapeKeyDown);
+
+        assert.ok(!this.dateBox.option("opened"));
+    });
+
+    [
+        { editorName: "hour", editorIndex: 0 },
+        { editorName: "minute", editorIndex: 1 },
+        { editorName: "period", editorIndex: 2 }
+    ].forEach(({ editorName, editorIndex }) => {
+        QUnit.test(`Pressing escape when focus the ${editorName} editor must hide the popup`, (assert) => {
+            const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+            this.dateBox.option({
+                pickerType: "calendar",
+                type: "datetime"
+            });
+            this.dateBox.open();
+
+            $(this.dateBox.content())
+                .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+                .eq(editorIndex)
+                .trigger(escapeKeyDown);
+
+            assert.ok(!this.dateBox.option("opened"));
+        });
+    });
 });
 
 QUnit.module("aria accessibility", {}, () => {
