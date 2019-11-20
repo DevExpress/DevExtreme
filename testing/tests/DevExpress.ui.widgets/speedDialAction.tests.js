@@ -852,14 +852,12 @@ QUnit.module("check action buttons events", (hooks) => {
     }),
     test("trigger and args", (assert) => {
         const contentReadyStub = sinon.stub();
-        const initializedStub = sinon.stub();
         const clickStub = sinon.stub();
 
         $("#fab-one")
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance")
             .on("contentReady", contentReadyStub)
-            .on("initialized", initializedStub)
             .on("click", clickStub);
 
 
@@ -894,10 +892,5 @@ QUnit.module("check action buttons events", (hooks) => {
         assert.equal(contentReadyTwoArgs[0].component.NAME, "dxSpeedDialAction", "right second SDA content ready component in args");
         assert.ok(contentReadyTwoArgs[0].actionElement.hasClass("dx-overlay"), "right second SDA content ready actionElement in args");
         assert.equal($(contentReadyTwoArgs[0].element).attr("id"), "fab-two", "right second SDA content ready element in args");
-
-        const initializedArgs = initializedStub.getCall(0).args;
-        assert.equal(initializedArgs[0].component.NAME, "dxSpeedDialAction", "right first SDA initialized component in args");
-        assert.ok(initializedArgs[0].actionElement.hasClass("dx-overlay"), "right first SDA initialized actionElement in args");
-        assert.equal($(initializedArgs[0].element).attr("id"), "fab-one", "right first SDA initialized element in args");
     });
 });
