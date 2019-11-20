@@ -6,14 +6,16 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    domAdapter = require("../../core/dom_adapter"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
     KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils"),
-    hoverEvents = require("../../events/hover"),
-    feedbackEvents = require("../../events/core/emitter.feedback"),
     clickEvent = require("../../events/click");
+
+require("../../events/hover");
+require("../../events/core/emitter.feedback");
+
+const { hover, focus, active } = eventsEngine;
 
 var UI_FEEDBACK = "UIFeedback",
     WIDGET_CLASS = "dx-widget",
@@ -24,16 +26,6 @@ var UI_FEEDBACK = "UIFeedback",
     FOCUSED_STATE_CLASS = "dx-state-focused",
     FEEDBACK_SHOW_TIMEOUT = 30,
     FEEDBACK_HIDE_TIMEOUT = 400;
-
-const EVENT_NAME = {
-    active: feedbackEvents.active,
-    inactive: feedbackEvents.inactive,
-    hoverStart: eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
-    hoverEnd: eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK),
-    focusIn: owner => eventUtils.addNamespace('focusin', `${owner}Focus`),
-    focusOut: owner => eventUtils.addNamespace('focusout', `${owner}Focus`),
-    beforeActivate: owner => eventUtils.addNamespace('beforeactivate', `${owner}Focus`)
-};
 
 /**
  * @name ui
@@ -379,38 +371,6 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._eventBindingTarget();
     },
 
-    _detachFocusEvents() {
-        const $focusTarget = this._focusEventTarget();
-
-        eventsEngine.off($focusTarget, EVENT_NAME.focusIn(this.NAME));
-        eventsEngine.off($focusTarget, EVENT_NAME.focusOut(this.NAME));
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.off($focusTarget, EVENT_NAME.beforeActivate(this.NAME));
-        }
-    },
-
-    _attachFocusEvents() {
-        this._attachFocusEventsCore(
-            this._focusEventTarget(),
-            this._focusInHandler.bind(this),
-            this._focusOutHandler.bind(this),
-            { owner: this.NAME }
-        );
-    },
-
-    // NOTE: Static method
-    _attachFocusEventsCore($el, focusIn, focusOut, { owner }) {
-        eventsEngine.on($el, EVENT_NAME.focusIn(owner), focusIn);
-        eventsEngine.on($el, EVENT_NAME.focusOut(owner), focusOut);
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.on($el, EVENT_NAME.beforeActivate(owner),
-                e => $(e.target).is(selectors.focusable) || e.preventDefault()
-            );
-        }
-    },
-
     _refreshFocusEvent: function() {
         this._detachFocusEvents();
         this._attachFocusEvents();
@@ -530,84 +490,63 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _attachHoverEvents() {
         const { hoverStateEnabled } = this.option();
-        const hoverableSelector = this._activeStateUnit;
+        const selector = this._activeStateUnit;
+        const namespace = UI_FEEDBACK;
         const $el = this._eventBindingTarget();
 
-        this._detachHoverEvents($el, hoverableSelector);
+        hover.off($el, { selector, namespace });
 
         if(hoverStateEnabled) {
-            this._attachHoverEventsCore($el, ($element, event) => {
+            hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
-                this._refreshHoveredElement($element);
-            }, event => {
+                this._refreshHoveredElement($(element));
+            }, { excludeValidators: ['readOnly'] }), event => {
                 this._hoverEndHandler(event);
                 this._forgetHoveredElement();
-            }, { selector: hoverableSelector });
+            }, { selector, namespace });
         } else {
             this._toggleHoverClass(false);
         }
     },
 
-    // NOTE: Static method
-    _attachHoverEventsCore($el, start, end, { selector }) {
-        const startAction = new Action(({ event, element }) => start($(element), event),
-            { excludeValidators: ['readOnly'] });
-
-        eventsEngine.on($el, EVENT_NAME.hoverEnd, selector, event => end(event));
-        eventsEngine.on($el, EVENT_NAME.hoverStart, selector, event => {
-            startAction.execute({ element: event.target, event });
-        });
-    },
-
-    // NOTE: Static method
-    _detachHoverEvents($el, selector) {
-        eventsEngine.off($el, EVENT_NAME.hoverStart, selector);
-        eventsEngine.off($el, EVENT_NAME.hoverEnd, selector);
-    },
-
     _attachFeedbackEvents() {
         const { activeStateEnabled } = this.option();
-        const eventBindingTarget = this._eventBindingTarget();
+        const selector = this._activeStateUnit;
+        const namespace = UI_FEEDBACK;
+        const $el = this._eventBindingTarget();
 
-        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit, { namespace: UI_FEEDBACK });
+        active.off($el, { namespace, selector });
 
         if(activeStateEnabled) {
-            this._attachFeedbackEventsCore(
-                eventBindingTarget,
-                ($el, event) => this._toggleActiveState($el, true, event),
-                ($el, event) => this._toggleActiveState($el, false, event), {
-                    selector: this._activeStateUnit,
+            active.on($el,
+                new Action(({ event, element }) => this._toggleActiveState($(element), true, event)),
+                new Action(({ event, element }) => this._toggleActiveState($(element), false, event),
+                    { excludeValidators: ['disabled', 'readOnly'] }
+                ), {
                     showTimeout: this._feedbackShowTimeout,
                     hideTimeout: this._feedbackHideTimeout,
-                    namespace: UI_FEEDBACK
+                    selector,
+                    namespace
                 }
             );
         }
     },
 
-    // NOTE: Static method
-    _detachFeedbackEvents($el, selector, { namespace } = {}) {
-        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
-        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
+    _detachFocusEvents() {
+        const $el = this._focusEventTarget();
 
-        eventsEngine.off($el, activeEvent, selector);
-        eventsEngine.off($el, inactiveEvent, selector);
+        focus.off($el, { namespace: `${this.NAME}Focus` });
     },
 
-    // NOTE: Static method
-    _attachFeedbackEventsCore($el, active, inactive, opts) {
-        const { selector, showTimeout, hideTimeout, namespace } = opts;
-        const activeEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.active, namespace) : EVENT_NAME.active;
-        const inactiveEvent = namespace ? eventUtils.addNamespace(EVENT_NAME.inactive, namespace) : EVENT_NAME.inactive;
-        const feedbackAction = new Action(({ event, element }) => active(element, event));
-        const feedbackActionDisabled = new Action(({ event, element }) => inactive(element, event),
-            { excludeValidators: ['disabled', 'readOnly'] });
+    _attachFocusEvents() {
+        const $el = this._focusEventTarget();
 
-        eventsEngine.on($el, activeEvent, selector, { timeout: showTimeout },
-            event => feedbackAction.execute({ event, element: $(event.currentTarget) })
-        );
-        eventsEngine.on($el, inactiveEvent, selector, { timeout: hideTimeout },
-            event => feedbackActionDisabled.execute({ event, element: $(event.currentTarget) })
+        focus.on($el,
+            e => this._focusInHandler(e),
+            e => this._focusOutHandler(e), {
+                namespace: `${this.NAME}Focus`,
+                isFocusable: el => $(el).is(selectors.focusable)
+            }
         );
     },
 

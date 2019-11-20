@@ -596,6 +596,64 @@ hookTouchProps(addProperty);
 var beforeSetStrategy = Callbacks();
 var afterSetStrategy = Callbacks();
 
+function addNamespace(event, namespace) {
+    return namespace ? eventsEngine.addNamespace(event, namespace) : event;
+}
+
+eventsEngine.hover = {
+    on: ($el, start, end, { selector, namespace }) => {
+        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
+        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => {
+            start.execute({ element: event.target, event });
+        });
+    },
+
+    off: ($el, { selector, namespace }) => {
+        eventsEngine.off($el, addNamespace('dxhoverstart', namespace), selector);
+        eventsEngine.off($el, addNamespace('dxhoverend', namespace), selector);
+    }
+};
+
+eventsEngine.focus = {
+    on: ($el, focusIn, focusOut, { namespace, isFocusable }) => {
+        eventsEngine.on($el, addNamespace('focusin', namespace), focusIn);
+        eventsEngine.on($el, addNamespace('focusout', namespace), focusOut);
+
+        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
+            eventsEngine.on($el, addNamespace('beforeactivate', namespace),
+                e => isFocusable(e.target) || e.preventDefault()
+            );
+        }
+    },
+
+    off: ($el, { namespace }) => {
+        eventsEngine.off($el, addNamespace('focusin', namespace));
+        eventsEngine.off($el, addNamespace('focusout', namespace));
+
+        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
+            eventsEngine.off($el, addNamespace('beforeactivate', namespace));
+        }
+    }
+};
+
+eventsEngine.active = {
+    on: ($el, active, inactive, opts) => {
+        const { selector, showTimeout, hideTimeout, namespace } = opts;
+
+        eventsEngine.on($el, addNamespace('dxactive', namespace), selector, { timeout: showTimeout },
+            event => active.execute({ event, element: event.currentTarget })
+        );
+        eventsEngine.on($el, addNamespace('dxinactive', namespace), selector, { timeout: hideTimeout },
+            event => inactive.execute({ event, element: event.currentTarget })
+        );
+    },
+
+    off: ($el, { namespace, selector }) => {
+        eventsEngine.off($el, addNamespace('dxactive', namespace), selector);
+        eventsEngine.off($el, addNamespace('dxinactive', namespace), selector);
+    }
+};
+
 eventsEngine.set = function(engine) {
     beforeSetStrategy.fire();
     eventsEngine.inject(engine);
@@ -628,5 +686,21 @@ eventsEngine.passiveEventHandlersSupported = passiveEventHandlersSupported;
 eventsEngine.elementDataMap = elementDataMap;
 eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;
 ///#ENDDEBUG
+
+eventsEngine.addNamespace = (eventNames, namespace) => {
+    if(!namespace) {
+        throw errors.Error('E0017');
+    }
+
+    if(typeof eventNames === 'string') {
+        return eventNames.indexOf(' ') === -1 ?
+            `${eventNames}.${namespace}` :
+            addNamespace(eventNames.split(/\s+/g), namespace);
+    }
+
+    return eventNames
+        .map(eventName => `${eventName}.${namespace}`)
+        .join(' ');
+};
 
 module.exports = eventsEngine;

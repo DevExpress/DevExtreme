@@ -1,9 +1,10 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import eventsEngine from '../events/core/events_engine';
+import eventsEngine, { active as activeEvents } from '../events/core/events_engine';
 import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import themes from './themes';
+import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
 import { addNamespace } from '../events/utils';
@@ -36,18 +37,20 @@ class Button extends Widget {
     }
 
     _attachActiveEvents(active, inactive) {
-        const eventBindingTarget = this._eventBindingTarget();
+        const $el = this._eventBindingTarget();
         const namespace = 'inkRipple';
+        const selector = this._activeStateUnit;
 
-        // TODO: Remove this line in the future of beauty
-        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit, { namespace });
-
-        this._attachFeedbackEventsCore(eventBindingTarget, active, inactive, {
-            selector: this._activeStateUnit,
-            showTimeout: this._feedbackShowTimeout,
-            hideTimeout: this._feedbackHideTimeout,
-            namespace
-        });
+        activeEvents.off($el, { namespace, selector });
+        activeEvents.on($el,
+            new Action(active),
+            new Action(inactive, { excludeValidators: ['disabled', 'readOnly'] }), {
+                showTimeout: this._feedbackShowTimeout,
+                hideTimeout: this._feedbackHideTimeout,
+                selector,
+                namespace
+            }
+        );
     }
 
     _defaultOptionsRules() {
@@ -311,9 +314,7 @@ class Button extends Widget {
         const $element = this.$element();
         const eventName = addNamespace(clickEventName, this.NAME);
 
-        // TODO: Remove this line in the future of beauty
         eventsEngine.off($element, eventName);
-
         eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
         this._updateClick();
     }
@@ -330,13 +331,13 @@ class Button extends Widget {
             } : {});
 
             this._attachActiveEvents(
-                ($el, event) => {
+                ({ event }) => {
                     const { activeStateEnabled } = this.option();
 
                     activeStateEnabled && !this._disposed &&
                         _inkRipple.showWave({ element: this._$content(), event });
                 },
-                ($el, event) => {
+                ({ event }) => {
                     const { activeStateEnabled } = this.option();
 
                     activeStateEnabled && !this._disposed &&
