@@ -336,6 +336,10 @@ const subscribes = {
         return this._getAppointmentsRenderingStrategy();
     },
 
+    getMaxAppointmentCountPerCellByType: function(isAllDay) {
+        return this.getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
+    },
+
     needCorrectAppointmentDates: function() {
         return this.getRenderingStrategyInstance().needCorrectAppointmentDates();
     },
@@ -441,6 +445,10 @@ const subscribes = {
 
     supportCompactDropDownAppointments: function() {
         return this._workSpace._supportCompactDropDownAppointments();
+    },
+
+    isApplyCompactAppointmentOffset: function() {
+        return this._workSpace._isApplyCompactAppointmentOffset();
     },
 
     getGroupCount: function() {

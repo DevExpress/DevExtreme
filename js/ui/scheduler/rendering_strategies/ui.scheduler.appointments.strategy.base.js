@@ -23,8 +23,17 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
+    _isAdaptive() {
+        return this.instance.fire("isAdaptive");
+    }
+
+    _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
+        coordinates.top = coordinates.top + this.getCompactAppointmentTopOffset(isAllDay);
+        coordinates.left = coordinates.left + this.getCompactAppointmentLeftOffset();
+    }
+
     _initPositioningStrategy() {
-        this._positioningStrategy = this.instance.fire("isAdaptive") ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
+        this._positioningStrategy = this._isAdaptive() ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
     }
 
     getPositioningStrategy() {
@@ -622,10 +631,7 @@ class BaseRenderingStrategy {
             top = coordinates.top + compactAppointmentTopOffset;
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
 
-            if(this.instance.fire("isAdaptive")) {
-                coordinates.top = top;
-                coordinates.left = coordinates.left + compactAppointmentLeftOffset;
-            }
+            this._isAdaptive() && this._correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay);
 
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
