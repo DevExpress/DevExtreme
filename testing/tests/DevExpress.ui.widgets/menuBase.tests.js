@@ -163,7 +163,7 @@ QUnit.test('Render item with icon path', function(assert) {
 
     assert.equal($menuItemContent.children().length, 1, 'there is 1 element inside item-content');
     assert.ok($($menuItemContent.children()[0]).hasClass(DX_ICON_CLASS), 'there is dx-icon class inside item-content');
-    assert.ok($($menuItemContent.children()[0]).attr('src'), '1.png', 'image is right');
+    assert.strictEqual($($menuItemContent.children()[0]).attr('src'), '1.png', 'image is right');
 });
 
 QUnit.test('Render item with expressions', function(assert) {

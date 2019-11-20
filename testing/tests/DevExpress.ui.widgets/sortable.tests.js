@@ -1662,7 +1662,7 @@ QUnit.test("Dragging item to another the sortable widget with dropFeedbackMode i
     items2 = sortable2.$element().children();
     assert.strictEqual(items1.length, 3, "first list - item count");
     assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.ok($("body").children(".dx-sortable-placeholder").length, 1, "placeholder is in body");
+    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder is in body");
 });
 
 QUnit.test("Dropping item to another the sortable widget with dropFeedbackMode indicate", function(assert) {
