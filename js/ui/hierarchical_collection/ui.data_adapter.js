@@ -184,16 +184,15 @@ var DataAdapter = Class.inherit({
         }
         processedKeys = processedKeys || [];
         const key = node.internalFields.key;
-        if(processedKeys.indexOf(key) !== -1) {
-            return;
-        }
 
-        processedKeys.push(key);
-        var parent = this.options.dataConverter.getParentNode(node);
-        if(parent) {
-            typeUtils.isFunction(callback) && callback(parent);
-            if(parent.internalFields.parentKey !== this.options.rootValue) {
-                this._iterateParents(parent, callback, processedKeys);
+        if(processedKeys.indexOf(key) === -1) {
+            processedKeys.push(key);
+            let parent = this.options.dataConverter.getParentNode(node);
+            if(parent) {
+                typeUtils.isFunction(callback) && callback(parent);
+                if(parent.internalFields.parentKey !== this.options.rootValue) {
+                    this._iterateParents(parent, callback, processedKeys);
+                }
             }
         }
     },
