@@ -265,7 +265,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         this.clock.tick(800);
 
         assert.equal(onCurrentDirectoryChangedCounter, 1);
-        assert.equal(inst.option("currentPath"), "The option 'currentPath' was changed", "Folder 1/Folder 1.1");
+        assert.equal(inst.option("currentPath"), "Folder 1/Folder 1.1", "The option 'currentPath' was changed");
 
         const $folder1Node = that.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find("span").text(), "Folder 1");
