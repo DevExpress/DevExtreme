@@ -145,6 +145,7 @@
                     "mozilla",
                     "mvc",
                     "firefox",
+                    "fmt",
                     "msie",
                     "odata",      // OData
                     "readonly",
