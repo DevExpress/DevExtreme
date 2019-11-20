@@ -185,7 +185,7 @@ var DataAdapter = Class.inherit({
         processedKeys = processedKeys || [];
         const key = node.internalFields.key;
         if(processedKeys.includes(key)) {
-            throw `The dataSource has a cycle. Keys: ${processedKeys.join('->')}->${key}`;
+            throw errors.Error("E1058", `${processedKeys.join('->')}->${key}`);
         }
 
         processedKeys.push(key);
