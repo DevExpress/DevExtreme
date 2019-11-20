@@ -2049,9 +2049,23 @@ var EditingController = modules.ViewController.inherit((function() {
                 templateOptions.row.watch && templateOptions.row.watch(function() {
                     return templateOptions.column.selector(templateOptions.row.data);
                 }, function(newValue) {
+                    let $editorElement = $container.find(".dx-widget").first(),
+                        validator = $editorElement.data("dxValidator"),
+                        validatorOptions = validator && validator.option();
+
                     templateOptions.value = newValue;
                     $container.contents().remove();
                     that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+
+                    $editorElement = $container.find(".dx-widget").first();
+                    validator = $editorElement.data("dxValidator");
+                    if(validatorOptions && !validator) {
+                        $editorElement.dxValidator({
+                            validationRules: validatorOptions.validationRules,
+                            validationGroup: validatorOptions.validationGroup,
+                            dataGetter: validatorOptions.dataGetter
+                        });
+                    }
                 });
 
                 that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);

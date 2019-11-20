@@ -4,6 +4,7 @@ import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerEvents from "events/pointer";
 import { Deferred } from "core/utils/deferred";
+import dataUtils from "core/element_data";
 
 QUnit.testStart(function() {
     var markup =
@@ -11970,6 +11971,67 @@ QUnit.test("The validation message should be decreased when there is not enough 
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top left", "position.my");
     assert.strictEqual(overlayPosition.at, "bottom left", "position.at");
+});
+
+// T829925
+QUnit.test("No exceptions on editing a column with given setCellValue when repaintChangedOnly is true", function(assert) {
+    // arrange
+    const $testElement = $('#container');
+
+    this.rowsView.render($testElement);
+
+    this.applyOptions({
+        repaintChangesOnly: true,
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+            form: {
+                items: [{
+                    dataField: "name",
+                    validationRules: [{
+                        "type": "required",
+                        "message": "The LastNameID field is required."
+                    }]
+                }, "age", "lastName"]
+            }
+        },
+        columns: [
+            {
+                dataField: 'name',
+                setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); }
+            }, "age", "lastName"]
+    });
+
+    this.editRow(0);
+
+    // assert
+    let $cellElement = $(this.getCellElement(0, "name")),
+        validator = dataUtils.data($cellElement.find(".dx-texteditor").get(0), "dxValidator");
+
+    assert.strictEqual($(this.getRowElement(0)).find(".dx-form").length, 1, "there is edit form");
+    assert.ok(validator, "editor has validator");
+
+    try {
+        // arrange
+        const validatorOptions = validator.option();
+
+        // act
+        this.cellValue(0, "name", "");
+
+        // assert
+        $cellElement = $(this.getCellElement(0, "name")),
+        validator = dataUtils.data($cellElement.find(".dx-texteditor").get(0), "dxValidator");
+        const validatorOptionsAfterEditing = validator.option();
+
+        assert.ok($cellElement.find(".dx-textbox").first().hasClass("dx-invalid"), "editor value isn't valid");
+        assert.ok(validator, "editor has validator");
+        assert.strictEqual(validatorOptionsAfterEditing.validationRules, validatorOptions.validationRules, "validationRules");
+        assert.strictEqual(validatorOptionsAfterEditing.validationGroup, validatorOptions.validationGroup, "validationGroup");
+        assert.strictEqual(validatorOptionsAfterEditing.dataGetter, validatorOptions.dataGetter, "dataGetter");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
 });
 
 
