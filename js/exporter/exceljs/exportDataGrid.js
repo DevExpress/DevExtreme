@@ -128,7 +128,7 @@ function _tryConvertToExcelNumberFormat(format, dataType) {
     format = newFormat.format;
     dataType = newFormat.dataType;
 
-    return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency, true);
+    return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
 }
 
 function _formatObjectConverter(format, dataType) {
