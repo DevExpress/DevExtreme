@@ -40,7 +40,7 @@ QUnit.test("markup init", function(assert) {
 
     var buttonContent = $(items[0]).hasClass(BUTTON_CONTENT_CLASS);
 
-    assert.equal(true, buttonContent);
+    assert.equal(buttonContent, true);
 });
 
 QUnit.test("init with options", function(assert) {
