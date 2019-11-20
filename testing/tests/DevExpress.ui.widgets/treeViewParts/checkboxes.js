@@ -252,8 +252,8 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
         treeView.checkSelectedNodes([]);
 
-        const elem = treeView.getElement().find('[aria-level="1"]');
-        treeView.instance.selectItem(elem);
+        const $parent = treeView.getElement().find('[aria-level="1"]');
+        treeView.instance.selectItem($parent);
         treeView.checkSelectedNodes([0, 1]);
     });
 });

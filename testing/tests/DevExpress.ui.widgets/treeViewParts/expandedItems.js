@@ -701,15 +701,15 @@ module("Expanded items", {
                 { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: false }];
 
             let treeView = createInstance(options),
-                parentItem = treeView.getElement().find('[aria-level="1"]'),
-                childItem = treeView.getElement().find('[aria-level="2"]');
+                $parentItem = treeView.getElement().find('[aria-level="1"]'),
+                $childItem = treeView.getElement().find('[aria-level="2"]');
 
-            assert.equal(childItem.length, 0);
+            assert.equal($childItem.length, 0);
 
-            treeView.instance.expandItem(parentItem);
-            childItem = treeView.getElement().find('[aria-level="2"]');
-            assert.equal(childItem.length, 1);
-            assert.equal(treeView.hasInvisibleClass(childItem), false);
+            treeView.instance.expandItem($parentItem);
+            $childItem = treeView.getElement().find('[aria-level="2"]');
+            assert.equal($childItem.length, 1);
+            assert.equal(treeView.hasInvisibleClass($childItem), false);
         });
     });
 });
