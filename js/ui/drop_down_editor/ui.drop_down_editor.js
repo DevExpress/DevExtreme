@@ -71,6 +71,8 @@ var DropDownEditor = TextBox.inherit({
                     e.preventDefault();
                 }
                 this.close();
+
+                return true;
             },
             upArrow: function(e) {
                 e.preventDefault();
