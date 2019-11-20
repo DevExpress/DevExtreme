@@ -11,6 +11,7 @@ const HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";
 const LIST_ITEM_CLASS = "dx-list-item";
 const BUTTON_CLASS = "dx-button";
 const FOCUSED_ROW_CLASS = "dx-row-focused";
+const SELECTED_ROW_CLASS = "dx-selection";
 const DATA_GRID_PREFIX = "dx-datagrid";
 const DATA_ROW_CLASS = "dx-data-row";
 const TREELIST_PREFIX = "dx-treelist";
@@ -109,6 +110,10 @@ export class RowsViewWrapper extends GridTableElement {
         return this.getRowElement(rowIndex).find("td").eq(columnIndex);
     }
 
+    getSelectCheckBox(rowIndex, columnIndex) {
+        return this.getCellElement(rowIndex, columnIndex).find('.dx-select-checkbox');
+    }
+
     getDataRowElement(rowIndex) {
         return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
     }
@@ -133,12 +138,12 @@ export class RowsViewWrapper extends GridTableElement {
         return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
     }
 
-    getEditorInputElement(rowIndex, columnIndex) {
+    getEditorInput(rowIndex, columnIndex) {
         return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
     hasEditorInputElement(rowIndex, columnIndex) {
-        return this.getEditorInputElement(rowIndex, columnIndex).length > 0;
+        return this.getEditorInput(rowIndex, columnIndex).length > 0;
     }
 
     getSelectionCheckBoxElement(rowIndex) {
@@ -152,6 +157,10 @@ export class RowsViewWrapper extends GridTableElement {
 
     isFocusedRow(rowIndex) {
         return this.getDataRowElement(rowIndex).hasClass(FOCUSED_ROW_CLASS);
+    }
+
+    isSelectedRow(rowIndex) {
+        return this.getDataRowElement(rowIndex).hasClass(SELECTED_ROW_CLASS);
     }
 
     isNewRow(rowIndex) {

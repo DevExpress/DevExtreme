@@ -1707,24 +1707,24 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        rowsViewWrapper = dataGridWrapper.rowsView;
 
     that.options.editing = {
         allowUpdating: true,
         mode: 'batch'
     };
 
-    rowsView.render(testElement);
-    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
+    rowsView.render($('#container'));
+    rowsViewWrapper.getCellElement(0, 2).trigger('dxclick'); // Edit
     this.clock.tick();
 
     // act
-    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxpointerdown');
-    testElement.find('tbody').first().trigger('dxclick'); // chrome 73+
+    rowsViewWrapper.getEditorInput(0, 2).trigger('dxpointerdown');
+    rowsViewWrapper.getElement().find('tbody').first().trigger('dxclick'); // chrome 73+
     this.clock.tick();
 
     // assert
-    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is not closed');
+    assert.equal(rowsViewWrapper.getEditorInput(0, 2).length, 1, 'editor is not closed');
 });
 
 // T318313
