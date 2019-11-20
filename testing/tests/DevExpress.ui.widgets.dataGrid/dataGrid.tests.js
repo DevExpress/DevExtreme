@@ -280,7 +280,7 @@ QUnit.test("Grid accessibility structure (T640539, T831996)", function(assert) {
             enabled: true
         },
         paging: {
-            pageSize: 2,
+            pageSize: 2
         },
         columns: [
             { type: "selection" },
@@ -359,6 +359,45 @@ QUnit.test("Grid accessibility structure (T640539, T831996)", function(assert) {
     const $buttons = pagerWrapper.getPagerButtonsElements();
     assert.equal($buttons.length, 2, "buttons count");
     $buttons.each((index, button) => assert.equal($(button).attr("tabindex"), 0, `button ${index} tabindex`));
+});
+
+QUnit.test("DataGrid elements shouldn't have aria-describedby attributes if showColumnHeaders is false", function(assert) {
+    createDataGrid({
+        dataSource: [
+            { field1: "1", field2: "2", g0: 0 }
+        ],
+        filterPanel: {
+            visible: true
+        },
+        filterRow: {
+            visible: true
+        },
+        filterValue: ["field1", "=", "1"],
+        showColumnHeaders: false,
+        pager: {
+            visible: true,
+            allowedPageSizes: [1, 2, 3, 4, 5],
+            showPageSizeSelector: true,
+            showNavigationButtons: true
+        },
+        masterDetail: {
+            enabled: true
+        },
+        paging: {
+            pageSize: 2
+        },
+        columns: [
+            { type: "selection" },
+            "field1",
+            "field2",
+            { dataField: "g0", groupIndex: 0, showWhenGrouped: true }
+        ]
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal($("[aria-describedby]").length, 0, "No elements with aria-describedby attribute");
 });
 
 QUnit.testInActiveWindow("Global column index should be unique for the different grids", function(assert) {

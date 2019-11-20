@@ -263,7 +263,6 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions = that._getEditorOptions($editor, column);
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
@@ -375,7 +374,9 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $container,
                 $editorContainer;
 
-            that.setAria("describedby", column.headerId, $cell);
+            if(that.component.option("showColumnHeaders")) {
+                that.setAria("describedby", column.headerId, $cell);
+            }
             that.setAria("label", messageLocalization.format("dxDataGrid-ariaFilterCell"), $cell);
 
             $cell.addClass(EDITOR_CELL_CLASS);
@@ -423,10 +424,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     updateValueTimeout: that.option("filterRow.applyFilter") === "onClick" ? 0 : FILTERING_TIMEOUT,
                     width: null,
                     editorOptions: {
-                        inputAttr: {
-                            "aria-label": messageLocalization.format("dxDataGrid-ariaFilterCell"),
-                            "aria-describedby": column.headerId
-                        }
+                        inputAttr: that._getFilterCellInputAttributes(column)
                     },
                     setValue: function(value, notFireEvent) {
                         updateFilterValue(that, {
@@ -448,6 +446,17 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
             return result;
         },
+        _getFilterCellInputAttributes: function(column) {
+            const columnAriaLabel = messageLocalization.format("dxDataGrid-ariaFilterCell");
+            if(this.component.option("showColumnHeaders")) {
+                return {
+                    "aria-label": columnAriaLabel,
+                    "aria-describedby": column.headerId
+                };
+            }
+            return { "aria-label": columnAriaLabel };
+        },
+
 
         _renderEditor: function($editorContainer, options) {
             $editorContainer.empty();
