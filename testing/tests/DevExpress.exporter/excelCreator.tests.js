@@ -35,9 +35,16 @@ QUnit.test("Date time format converting", function(assert) {
         quarter: "[$-9]M\\/d\\/yyyy"
     };
 
+    const UNSUPPORTED_FORMAT_MAPPING = {
+        quarter: "shortDate",
+        quarterAndYear: "shortDate",
+        minute: "longTime",
+        millisecond: "longTime"
+    };
+
     // assert, act
     for(var formatIndex in expected) {
-        assert.strictEqual(excelCreator.formatConverter.convertFormat(formatIndex, null, "date"), expected[formatIndex], "excel format: " + expected[formatIndex]);
+        assert.strictEqual(excelCreator.formatConverter.convertFormat(UNSUPPORTED_FORMAT_MAPPING[formatIndex] || formatIndex, null, "date"), expected[formatIndex], "excel format: " + expected[formatIndex]);
     }
 });
 
