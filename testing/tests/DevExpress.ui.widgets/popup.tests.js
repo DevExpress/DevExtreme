@@ -811,7 +811,7 @@ QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in saf
 
     this.instance.option("fullScreen", true);
 
-    assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class removed from body if fullScreen is changed to 'true' at runtime");
+    assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class added to the body if fullScreen is changed to 'true' at runtime");
     assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
     this.instance.hide();
 });
