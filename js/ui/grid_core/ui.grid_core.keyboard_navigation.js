@@ -857,7 +857,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _getFocusedViewByElement: function($element) {
         var view = this.getFocusedView(),
             $view = view && $(view.element());
-        return $element.closest($view).length !== 0;
+        return $element && $element.closest($view).length !== 0;
     },
 
     _focusView: function() {
