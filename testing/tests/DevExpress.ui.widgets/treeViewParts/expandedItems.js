@@ -695,10 +695,9 @@ module("Expanded items", {
 
     ['dataSource', 'items'].forEach((optionName) => {
         QUnit.test(`ExpandItem should works with loop/cycle in ${optionName} option with collapsed items`, function(assert) {
-            let options = createTestOptions();
-            options[optionName] = [
+            let options = createTestOptions(optionName, [
                 { id: 1, text: "item1", parentId: 2, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, expanded: false }];
+                { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
 
             let treeView = createInstance(options),
                 $item1 = treeView.getElement().find('[aria-level="1"]'),
@@ -713,10 +712,9 @@ module("Expanded items", {
         });
 
         QUnit.test(`ExpandItem should works with loop/cycle in ${optionName} option with expanded items`, function(assert) {
-            let options = createTestOptions();
-            options[optionName] = [
+            let options = createTestOptions(optionName, [
                 { id: 1, text: "item1", parentId: 2, expanded: true },
-                { id: 2, text: "item1_1", parentId: 1, expanded: true }];
+                { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
 
             let treeView = createInstance(options),
                 $item1 = treeView.getElement().find('[aria-level="1"]'),
@@ -732,10 +730,9 @@ module("Expanded items", {
         });
 
         QUnit.test(`ExpandAll should works with loop/cycle in ${optionName} option`, function(assert) {
-            let options = createTestOptions();
-            options[optionName] = [
+            let options = createTestOptions(optionName, [
                 { id: 1, text: "item1", parentId: 2, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, expanded: false }];
+                { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
 
             let treeView = createInstance(options),
                 $item1_1 = treeView.getElement().find('[aria-level="2"]');
@@ -749,10 +746,9 @@ module("Expanded items", {
         });
 
         QUnit.test(`CollapseItem should works with loop/cycle in ${optionName} option with expanded items`, function(assert) {
-            let options = createTestOptions();
-            options[optionName] = [
+            let options = createTestOptions(optionName, [
                 { id: 1, text: "item1", parentId: 2, expanded: true },
-                { id: 2, text: "item1_1", parentId: 1, expanded: true }];
+                { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
 
             let treeView = createInstance(options),
                 $item1 = treeView.getElement().find('[aria-level="1"]'),
@@ -768,10 +764,9 @@ module("Expanded items", {
         });
 
         QUnit.test(`CollapseItem should works with loop/cycle in ${optionName} option with collapsed items`, function(assert) {
-            let options = createTestOptions();
-            options[optionName] = [
+            let options = createTestOptions(optionName, [
                 { id: 1, text: "item1", parentId: 2, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, expanded: false }];
+                { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
 
             let treeView = createInstance(options),
                 $item1 = treeView.getElement().find('[aria-level="1"]'),
@@ -785,11 +780,10 @@ module("Expanded items", {
             assert.equal($item1_1.length, 0);
         });
 
-        QUnit.test(`ExpandAll should works with loop/cycle in ${optionName} option`, function(assert) {
-            let options = createTestOptions();
-            options[optionName] = [
+        QUnit.test(`CollapseAll should works with loop/cycle in ${optionName} option`, function(assert) {
+            let options = createTestOptions(optionName, [
                 { id: 1, text: "item1", parentId: 2, expanded: true },
-                { id: 2, text: "item1_1", parentId: 1, expanded: true }];
+                { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
 
             let treeView = createInstance(options),
                 $item1_1 = treeView.getElement().find('[aria-level="2"]');
@@ -805,6 +799,8 @@ module("Expanded items", {
 });
 
 
-function createTestOptions() {
-    return { dataStructure: "plain", rootValue: 1 };
+function createTestOptions(itemsOptionName, items) {
+    let options = { dataStructure: "plain", rootValue: 1 };
+    options[itemsOptionName] = items;
+    return options;
 }
