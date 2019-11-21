@@ -1,5 +1,5 @@
 import $ from "../core/renderer";
-import eventsEngine from "../events/core/events_engine";
+import { resize as resizeEvent, visibility as visibilityEvents } from "../events/core/events_engine";
 import windowUtils from "../core/utils/window";
 import { extend } from "./utils/extend";
 import config from "./config";
@@ -18,7 +18,6 @@ const { abstract } = Component;
 
 const RTL_DIRECTION_CLASS = "dx-rtl";
 const VISIBILITY_CHANGE_CLASS = "dx-visibility-change-handler";
-const VISIBILITY_CHANGE_EVENTNAMESPACE = "VisibilityChange";
 
 /**
  * @name DOMComponent
@@ -192,34 +191,27 @@ var DOMComponent = Component.inherit({
         return !!(isDefined(width) || isDefined(height) || element.style.width || element.style.height);
     },
 
-    _attachDimensionChangeHandlers: function() {
-        var that = this;
-        var resizeEventName = "dxresize." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+    _attachDimensionChangeHandlers() {
+        const $el = this.$element();
+        const namespace = `${this.NAME}VisibilityChange`;
 
-
-        eventsEngine.off(that.$element(), resizeEventName);
-        eventsEngine.on(that.$element(), resizeEventName, function() {
-            that._dimensionChanged();
-        });
+        resizeEvent.off($el, { namespace });
+        resizeEvent.on($el, () => this._dimensionChanged(), { namespace });
     },
 
-    _attachVisibilityChangeHandlers: function() {
-        if(!this._isVisibilityChangeSupported()) {
-            return;
-        }
-        var that = this;
-        var hidingEventName = "dxhiding." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
-        var shownEventName = "dxshown." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+    _attachVisibilityChangeHandlers() {
+        if(this._isVisibilityChangeSupported()) {
+            const $el = this.$element();
+            const namespace = `${this.NAME}VisibilityChange`;
 
-        that._isHidden = !that._isVisible();
-        eventsEngine.off(that.$element(), hidingEventName);
-        eventsEngine.on(that.$element(), hidingEventName, function() {
-            that._checkVisibilityChanged("hiding");
-        });
-        eventsEngine.off(that.$element(), shownEventName);
-        eventsEngine.on(that.$element(), shownEventName, function() {
-            that._checkVisibilityChanged("shown");
-        });
+            this._isHidden = !this._isVisible();
+            visibilityEvents.off($el, { namespace });
+            visibilityEvents.on($el,
+                () => this._checkVisibilityChanged('shown'),
+                () => this._checkVisibilityChanged('hiding'),
+                { namespace }
+            );
+        }
     },
 
     _isVisible: function() {
