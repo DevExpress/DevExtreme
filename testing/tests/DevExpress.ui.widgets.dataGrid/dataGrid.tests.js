@@ -8891,6 +8891,7 @@ QUnit.test("ungrouping after grouping and scrolling should works correctly with 
             mode: "virtual",
             rowRenderingMode: "virtual",
             updateTimeout: 0,
+            timeout: 0,
             useNative: false
         },
         grouping: {
