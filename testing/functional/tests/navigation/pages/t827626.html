@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>T827626</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/knockout-latest.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+    </head>
+    <body>
+        
+    <script type="text/html" id="innerTitleTemplate">
+        <div data-options="dxTemplate: { name: 'title' }"><div data-bind="text: $data.text"></div></div>
+    </script>
+    <script type="text/html" id="innerTemplate_item0">
+        <div data-options="dxTemplate: { name: 'item0' }"><div>Content_1</div></div>
+    </script>
+    <script type="text/html" id="innerTemplate_item1">
+        <div data-options="dxTemplate: { name: 'item1' }"><div>Content_2</div></div>
+    </script>
+    
+    <div id="tabPanel" data-bind="dxTabPanel: { items: items, focusStateEnabled: true }">
+        <div data-options="dxTemplate: { name: 'title0' }">
+            <div data-bind="text: $data.text"></div>
+        </div>
+        <div data-options="dxTemplate: { name: 'title1' }">
+            <div data-bind="text: $data.text"></div>
+        </div>
+        <div data-options="dxTemplate: { name: 'item0' }">
+            <div id="nestedTabPanel" data-bind="dxTabPanel: {
+                items: [
+                    {text: 'Item1_1', template: $('#innerTemplate_item0') },
+                    {text: 'Item1_2', template: $('#innerTemplate_item1') }
+                ], itemTitleTemplate: $('#innerTitleTemplate') }">
+            </div>
+        </div>
+        <div data-options="dxTemplate: { name: 'item1' }">
+            <div id="content">Content_2</div>
+        </div>
+    </div>
+
+    <script>
+        $(function() {
+            const items = [
+                { text: "Item_1", template: "item0", tabTemplate: "title0" },
+                { text: "Item_2", template: "item1", tabTemplate: "title1" }
+            ];
+            const $element = $("#tabPanel");
+
+            ko.applyBindings({ items: items, deferRendering: false }, $element[0]);
+        });
+    </script>
+    </body>
+</html>
