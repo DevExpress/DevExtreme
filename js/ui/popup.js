@@ -754,6 +754,15 @@ var Popup = Overlay.inherit({
         return this.callBase() || this.option("fullScreen");
     },
 
+    _toggleSafariFullScreen: function(value) {
+        var toggleFullScreenBeforeShown = this._useFixedPosition() && value && !this.isReady();
+        if(toggleFullScreenBeforeShown) {
+            this._bodyScrollTop = value ? window.pageYOffset : undefined;
+        } else {
+            this._toggleSafariScrolling(!value);
+        }
+    },
+
     _renderDimensions: function() {
         if(this.option("fullScreen")) {
             this._$content.css({
@@ -827,8 +836,11 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
-                this._toggleSafariScrolling(!args.value);
+
+                this._toggleSafariFullScreen(args.value);
+
                 this._renderGeometry();
+
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "showCloseButton":
