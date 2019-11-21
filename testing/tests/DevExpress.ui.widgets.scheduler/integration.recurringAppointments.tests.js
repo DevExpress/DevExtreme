@@ -8,7 +8,7 @@ import translator from "animation/translator";
 import { DataSource } from "data/data_source/data_source";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dateSerialization from "core/utils/date_serialization";
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper, isDesktopEnvironment } from './helpers.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -1473,27 +1473,29 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
     assert.roughEqual(seventhPosition.top, eighthPosition.top, 0.5, "Appointment's occurrences after WKST are positioned correct on top");
 });
 
-QUnit.test("Recurrent appointment occurrence should be resized correctly, when startDayHour is changed on recurrent appointment (T832115)", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        views: ["week"],
-        currentView: "week",
-        startDayHour: 6,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 1, 9, 10),
-            endDate: new Date(2015, 1, 9, 11),
-            recurrenceRule: 'FREQ=DAILY',
-        }]
+if(isDesktopEnvironment()) {
+    QUnit.test("Recurrent appointment occurrence should be resized correctly, when startDayHour is changed on recurrent appointment (T832115)", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            views: ["week"],
+            currentView: "week",
+            startDayHour: 6,
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2015, 1, 9, 10),
+                endDate: new Date(2015, 1, 9, 11),
+                recurrenceRule: 'FREQ=DAILY',
+            }]
+        });
+
+        var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-top").eq(1)).start();
+        pointer.dragStart().drag(0, -3 * this.scheduler.workSpace.getCellHeight()).dragEnd();
+
+        this.scheduler.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(1).trigger("dxclick");
+
+        assert.deepEqual(this.instance.option("dataSource")[1].startDate, new Date(2015, 1, 10, 8, 30), "Start date is OK");
     });
-
-    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-top").eq(1)).start();
-    pointer.dragStart().drag(0, -3 * this.scheduler.workSpace.getCellHeight()).dragEnd();
-
-    this.scheduler.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(1).trigger("dxclick");
-
-    assert.deepEqual(this.instance.option("dataSource")[1].startDate, new Date(2015, 1, 10, 8, 30), "Start date is OK");
-});
+}
 
 QUnit.test("Recurrence appointment occurrences should have correct start date with timezone changing (T818393)", function(assert) {
     this.createInstance({
