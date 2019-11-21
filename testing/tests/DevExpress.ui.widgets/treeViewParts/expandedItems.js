@@ -694,7 +694,7 @@ module("Expanded items", {
     });
 
     ['dataSource', 'items'].forEach((optionName) => {
-        QUnit.test(`Nodes expanding works even with redirect keys in ${optionName} option`, function(assert) {
+        QUnit.test(`Nodes expanding works even with loop/cycle in ${optionName} option`, function(assert) {
             let options = { dataStructure: "plain", rootValue: 1 };
             options[optionName] = [
                 { id: 1, text: "item1", parentId: 2, selected: false, expanded: false },

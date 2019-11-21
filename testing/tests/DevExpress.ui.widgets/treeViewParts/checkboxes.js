@@ -242,7 +242,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
 
 ['dataSource', 'items'].forEach((optionName) => {
-    QUnit.test(`Nodes selection works even with redirect keys in ${optionName} option`, function(assert) {
+    QUnit.test(`Select item works even with loop/cycle in ${optionName} option`, function(assert) {
         let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" };
         options[optionName] = [
             { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
