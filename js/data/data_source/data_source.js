@@ -9,7 +9,7 @@ var Class = require("../../core/class"),
     Store = require("../abstract_store"),
     ArrayStore = require("../array_store"),
     CustomStore = require("../custom_store"),
-    EventsMixin = require("../../core/events_mixin"),
+    EventsStrategy = require("../../core/events_strategy").EventsStrategy,
     errors = require("../errors").errors,
     array = require("../../core/utils/array"),
     queue = require("../../core/utils/queue"),
@@ -216,6 +216,7 @@ var DataSource = Class.inherit({
     ctor: function(options) {
         var that = this;
         options = normalizeDataSourceOptions(options);
+        this._eventsStrategy = new EventsStrategy(this);
 
         /**
         * @name DataSourceOptions.store.type
@@ -407,7 +408,7 @@ var DataSource = Class.inherit({
     */
     dispose: function() {
         this._store.off("push", this._onPushHandler);
-        this._disposeEvents();
+        this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);
 
         delete this._store;
@@ -723,7 +724,7 @@ var DataSource = Class.inherit({
         newLoading = this.isLoading();
 
         if(oldLoading ^ newLoading) {
-            this.fireEvent("loadingChanged", [newLoading]);
+            this._eventsStrategy.fireEvent("loadingChanged", [newLoading]);
         }
     },
 
@@ -745,13 +746,13 @@ var DataSource = Class.inherit({
                 return;
             }
 
-            that.fireEvent("loadError", arguments);
+            that._eventsStrategy.fireEvent("loadError", arguments);
         });
     },
 
     _fireChanged: function(args) {
         var date = new Date();
-        this.fireEvent("changed", args);
+        this._eventsStrategy.fireEvent("changed", args);
         this._changedTime = new Date() - date;
     },
 
@@ -843,7 +844,7 @@ var DataSource = Class.inherit({
 
         loadOperation = this._createLoadOperation(d);
 
-        this.fireEvent("customizeStoreLoadOptions", [loadOperation]);
+        this._eventsStrategy.fireEvent("customizeStoreLoadOptions", [loadOperation]);
 
         this._loadQueue.add(function() {
             if(typeof loadOperation.delay === "number") {
@@ -863,7 +864,7 @@ var DataSource = Class.inherit({
         if(this._reshapeOnPush) {
             this.load();
         } else {
-            this.fireEvent("changing", [{ changes: changes }]);
+            this._eventsStrategy.fireEvent("changing", [{ changes: changes }]);
 
             let group = this.group(),
                 items = this.items(),
@@ -1001,7 +1002,7 @@ var DataSource = Class.inherit({
             function processResult() {
                 var loadResult = extend(normalizeLoadResult(data, extra), loadOptions);
 
-                that.fireEvent("customizeLoadResult", [loadResult]);
+                that._eventsStrategy.fireEvent("customizeLoadResult", [loadResult]);
                 when(loadResult.data).done(function(data) {
                     loadResult.data = data;
                     that._processStoreLoadResult(loadResult, pendingDeferred);
@@ -1089,8 +1090,44 @@ var DataSource = Class.inherit({
         }
 
         return data;
-    }
-}).include(EventsMixin);
+    },
+
+    /**
+     * @name DataSourceMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name DataSourceMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    /**
+     * @name DataSourceMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name DataSourceMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
+    },
+});
 
 exports.DataSource = DataSource;
 exports.normalizeDataSourceOptions = normalizeDataSourceOptions;

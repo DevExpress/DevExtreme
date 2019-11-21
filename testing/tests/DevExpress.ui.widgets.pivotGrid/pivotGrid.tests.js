@@ -4871,12 +4871,14 @@ function getStubComponent(options) {
         option: function() {
             return options[arguments[0]];
         },
-        hasEvent: function() {
-            return false;
-        },
         _defaultActionArgs: function() {
             return {};
-        }
+        },
+        _eventsStrategy: {
+            hasEvent: function() {
+                return false;
+            }
+        },
     };
 }
 

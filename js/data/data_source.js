@@ -1,7 +1,6 @@
 /**
 * @name DataSource
 * @type object
-* @inherits EventsMixin
 * @module data/data_source
 * @export default
 */
