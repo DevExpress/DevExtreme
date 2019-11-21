@@ -17,7 +17,7 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell = { row: 1, column: 1 },
-        excelFilterEnabled = false,
+        excelFilterEnabled = undefined,
         keepColumnWidths = true,
         selectedRowsOnly = false
     } = options;
@@ -64,18 +64,15 @@ function exportDataGrid(options) {
 
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
-            if(excelFilterEnabled === true) {
-                if(!isDefined(worksheet.autoFilter) && dataRowsCount > 0) {
-                    worksheet.autoFilter = cellsRange;
-                    worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
-                }
+            if(headerRowCount > 0) {
+                _setFrozen(dataProvider, worksheet, cellsRange);
+                _setAutoFilter(dataProvider, worksheet, component, cellsRange, excelFilterEnabled);
             }
 
             resolve(cellsRange);
         });
     });
 }
-
 
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
     const styles = dataProvider.getStyles();
@@ -114,6 +111,24 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
                 mergeRanges.push(mergeRange);
             }
         }
+    }
+}
+
+function _setAutoFilter(dataProvider, worksheet, component, cellsRange, excelFilterEnabled) {
+    if(!isDefined(excelFilterEnabled)) {
+        excelFilterEnabled = !!component.option("export.excelFilterEnabled");
+    }
+
+    if(excelFilterEnabled) {
+        if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
+            worksheet.autoFilter = cellsRange;
+        }
+    }
+}
+
+function _setFrozen(dataProvider, worksheet, cellsRange) {
+    if(worksheet.views.length === 0) {
+        worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
     }
 }
 
