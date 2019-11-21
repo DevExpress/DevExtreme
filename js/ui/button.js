@@ -1,18 +1,16 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import eventsEngine, { active as activeEvents } from '../events/core/events_engine';
 import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import themes from './themes';
 import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
-import { addNamespace } from '../events/utils';
+import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } from '../events/core/events_engine';
 import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
-import { name as clickEventName } from '../events/click';
 
 /**
 * @name dxButton
@@ -208,7 +206,7 @@ class Button extends Widget {
         let needValidate = true;
         let validationStatus = 'valid';
 
-        return this._createAction(({ event: e }) => {
+        return this._createAction(({ event }) => {
             if(needValidate) {
                 const validationGroup = this._validationGroupConfig;
 
@@ -220,19 +218,20 @@ class Button extends Widget {
                     if(status === 'pending') {
                         needValidate = false;
                         this.option('disabled', true);
-                        complete.then(({ status }) =>{
-                            validationStatus = status;
+
+                        complete.then(({ status }) => {
+                            needValidate = true;
                             this.option('disabled', false);
+
+                            validationStatus = status;
                             validationStatus === 'valid' && this._submitInput().click();
                         });
                     }
                 }
-            } else {
-                needValidate = true;
             }
 
-            validationStatus !== 'valid' && e.preventDefault();
-            e.stopPropagation();
+            validationStatus !== 'valid' && event.preventDefault();
+            event.stopPropagation();
         });
     }
 
@@ -311,11 +310,11 @@ class Button extends Widget {
     }
 
     _renderClick() {
-        const $element = this.$element();
-        const eventName = addNamespace(clickEventName, this.NAME);
+        const $el = this.$element();
 
-        eventsEngine.off($element, eventName);
-        eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
+        dxClickEvent.off($el, { namespace: this.NAME });
+        dxClickEvent.on($el, event => this._executeClickAction(event),
+            { namespace: this.NAME });
         this._updateClick();
     }
 
@@ -329,20 +328,19 @@ class Button extends Widget {
                 useHoldAnimation: false,
                 isCentered: true
             } : {});
+            const changeWaveVisibility = (event, visible) => {
+                const { activeStateEnabled } = this.option();
+
+                if(activeStateEnabled && !this._disposed) {
+                    const config = { element: this._$content(), event };
+
+                    visible ? _inkRipple.showWave(config) : _inkRipple.hideWave(config);
+                }
+            };
 
             this._attachActiveEvents(
-                ({ event }) => {
-                    const { activeStateEnabled } = this.option();
-
-                    activeStateEnabled && !this._disposed &&
-                        _inkRipple.showWave({ element: this._$content(), event });
-                },
-                ({ event }) => {
-                    const { activeStateEnabled } = this.option();
-
-                    activeStateEnabled && !this._disposed &&
-                        _inkRipple.hideWave({ element: this._$content(), event });
-                }
+                ({ event }) => changeWaveVisibility(event, true),
+                ({ event }) => changeWaveVisibility(event)
             );
         }
     }
@@ -371,7 +369,7 @@ class Button extends Widget {
                 .addClass('dx-button-submit-input')
                 .appendTo($content);
 
-            eventsEngine.on(this._$submitInput(), 'click', e => submitAction({ event: e }));
+            clickEvent.on(this._$submitInput(), event => submitAction({ event }));
         }
     }
 
