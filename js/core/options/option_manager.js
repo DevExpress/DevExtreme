@@ -55,7 +55,7 @@ export class OptionManager {
         this._namePreparedCallbacks.fire(options, name, value);
     }
 
-    get(options, name, unwrapObservables, silent) {
+    get(options = this._options, name, unwrapObservables, silent) {
         if(silent) {
             return this._options[name];
         }

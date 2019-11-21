@@ -12,7 +12,8 @@ export class Options {
         this._default = defaultOptions;
         this._deprecated = deprecatedOptions;
 
-        this._cachedDeprecateNames = [];
+        this._deprecatedNames = [];
+        this._initDeprecatedNames();
 
         this._optionManager = new OptionManager(
             options,
@@ -21,20 +22,6 @@ export class Options {
         this._optionManager.onRelevantNamesPrepared((options, name, value) => this._setRelevantNames(options, name, value));
 
         this._rules = [];
-    }
-
-    get _options() {
-        return this._optionManager._options;
-    }
-
-    get _deprecateNames() {
-        if(!this._cachedDeprecateNames.length) {
-            for(const optionName in this._deprecated) {
-                this._cachedDeprecateNames.push(optionName);
-            }
-        }
-
-        return this._cachedDeprecateNames;
     }
 
     set _initial(value) {
@@ -50,6 +37,12 @@ export class Options {
         }
 
         return this._initialOptions;
+    }
+
+    _initDeprecatedNames() {
+        for(const optionName in this._deprecated) {
+            this._deprecatedNames.push(optionName);
+        }
     }
 
     _getByRules(rules) {
@@ -106,8 +99,8 @@ export class Options {
 
     _normalizeName(name) {
         if(name) {
-            for(let i = 0; i < this._deprecateNames.length; i++) {
-                if(this._deprecateNames[i] === name) {
+            for(let i = 0; i < this._deprecatedNames.length; i++) {
+                if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];
 
                     if(deprecate) {
@@ -172,7 +165,7 @@ export class Options {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            return this._optionManager.get(this._options, this._normalizeName(options));
+            return this._optionManager.get(undefined, this._normalizeName(options));
         } else {
             this._optionManager.set(options, value);
         }
@@ -182,7 +175,7 @@ export class Options {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            return this._optionManager.get(this._options, options, undefined, true);
+            return this._optionManager.get(undefined, options, undefined, true);
         } else {
             this._optionManager.set(options, value, undefined, true);
         }
