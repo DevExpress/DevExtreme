@@ -1507,13 +1507,10 @@ QUnit.test("Recurrence appointment occurrences should have correct start date wi
         dataSource: [{
             text: "Recurrence",
             startDate: new Date(2019, 2, 30, 2, 0),
-            startDateTimeZone: 'Europe/Copenhagen',
             endDate: new Date(2019, 2, 30, 10, 0),
-            endDateTimeZone: 'Europe/Copenhagen',
             recurrenceException: "",
             recurrenceRule: "FREQ=DAILY"
         }],
-        timeZone: 'Europe/Copenhagen',
         currentDate: new Date(2019, 2, 30)
     });
 
