@@ -119,7 +119,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getNodeElement: function(node, cache) {
-        const key = node.internalFields.key;
+        const key = this._encodeString(node.internalFields.key);
         if(cache) {
             if(!cache.$nodeByKey) {
                 cache.$nodeByKey = {};
@@ -132,7 +132,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
             return cache.$nodeByKey[key] || $();
         }
-        const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}='${this._escapeSpecialCharacters(key)}']`);
+        const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}="${key}"]`);
         return $(element);
     },
 
@@ -840,7 +840,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _createDOMElement: function($nodeContainer, node) {
         const $node = $("<li>")
             .addClass(NODE_CLASS)
-            .attr(DATA_ITEM_ID, node.internalFields.key)
+            .attr(DATA_ITEM_ID, this._encodeString(node.internalFields.key))
             .prependTo($nodeContainer);
 
         this.setAria({
@@ -1019,7 +1019,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getNodeByElement: function(itemElement) {
         const $node = $(itemElement).closest("." + NODE_CLASS);
-        const key = $node.attr(DATA_ITEM_ID);
+        const key = this._decodeString($node.attr(DATA_ITEM_ID));
 
         return this._dataAdapter.getNodeByKey(key);
     },
@@ -1701,10 +1701,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _escapeSpecialCharacters: function(query) {
-        return isString(query)
-            ? query.replace(/('|"|\\)/g, '\\$1')
-            : query;
+    _encodeString: function(value) {
+        return isString(value)
+            ? encodeURI(value)
+            : value;
+    },
+
+    _decodeString: function(value) {
+        return isString(value)
+            ? decodeURI(value)
+            : value;
     },
 
     /**
