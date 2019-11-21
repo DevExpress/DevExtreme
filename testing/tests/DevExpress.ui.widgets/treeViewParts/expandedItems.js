@@ -694,22 +694,80 @@ module("Expanded items", {
     });
 
     ['dataSource', 'items'].forEach((optionName) => {
-        QUnit.test(`Nodes expanding works even with loop/cycle in ${optionName} option`, function(assert) {
-            let options = { dataStructure: "plain", rootValue: 1 };
+        QUnit.test(`ExpandItem should works with loop/cycle in ${optionName} option`, function(assert) {
+            let options = createTestOptions();
             options[optionName] = [
-                { id: 1, text: "item1", parentId: 2, selected: false, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: false }];
+                { id: 1, text: "item1", parentId: 2, expanded: false },
+                { id: 2, text: "item1_1", parentId: 1, expanded: false }];
 
             let treeView = createInstance(options),
-                $parentItem = treeView.getElement().find('[aria-level="1"]'),
-                $childItem = treeView.getElement().find('[aria-level="2"]');
+                $item1 = treeView.getElement().find('[aria-level="1"]'),
+                $item1_1 = treeView.getElement().find('[aria-level="2"]');
 
-            assert.equal($childItem.length, 0);
+            assert.equal($item1_1.length, 0);
 
-            treeView.instance.expandItem($parentItem);
-            $childItem = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($childItem.length, 1);
-            assert.equal(treeView.hasInvisibleClass($childItem), false);
+            treeView.instance.expandItem($item1);
+            $item1_1 = treeView.getElement().find('[aria-level="2"]');
+            assert.equal($item1_1.length, 1);
+            assert.equal(treeView.IsVisible($item1_1), true);
+        });
+
+        QUnit.test(`ExpandAll should works with loop/cycle in ${optionName} option`, function(assert) {
+            let options = createTestOptions();
+            options[optionName] = [
+                { id: 1, text: "item1", parentId: 2, expanded: false },
+                { id: 2, text: "item1_1", parentId: 1, expanded: false }];
+
+            let treeView = createInstance(options),
+                $item1_1 = treeView.getElement().find('[aria-level="2"]');
+
+            assert.equal($item1_1.length, 0);
+
+            treeView.instance.expandAll();
+            $item1_1 = treeView.getElement().find('[aria-level="2"]');
+            assert.equal($item1_1.length, 1);
+            assert.equal(treeView.IsVisible($item1_1), true);
+        });
+
+        QUnit.test(`CollapseItem should works with loop/cycle in ${optionName} option`, function(assert) {
+            let options = createTestOptions();
+            options[optionName] = [
+                { id: 1, text: "item1", parentId: 2, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, expanded: true }];
+
+            let treeView = createInstance(options),
+                $item1 = treeView.getElement().find('[aria-level="1"]'),
+                $item1_1 = treeView.getElement().find('[aria-level="2"]');
+
+            assert.equal($item1.length, 1);
+            assert.equal($item1_1.length, 1);
+
+            treeView.instance.collapseItem($item1);
+            $item1_1 = treeView.getElement().find('[aria-level="2"]');
+            assert.equal($item1_1.length, 1);
+            assert.equal(treeView.IsHidden($item1_1), true);
+        });
+
+        QUnit.test(`ExpandAll should works with loop/cycle in ${optionName} option`, function(assert) {
+            let options = createTestOptions();
+            options[optionName] = [
+                { id: 1, text: "item1", parentId: 2, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, expanded: true }];
+
+            let treeView = createInstance(options),
+                $item1_1 = treeView.getElement().find('[aria-level="2"]');
+
+            assert.equal($item1_1.length, 1);
+
+            treeView.instance.collapseAll();
+            $item1_1 = treeView.getElement().find('[aria-level="2"]');
+            assert.equal($item1_1.length, 1);
+            assert.equal(treeView.IsHidden($item1_1), true);
         });
     });
 });
+
+
+function createTestOptions() {
+    return { dataStructure: "plain", rootValue: 1 };
+}
