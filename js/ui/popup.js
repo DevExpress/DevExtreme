@@ -755,7 +755,7 @@ var Popup = Overlay.inherit({
     },
 
     _toggleSafariFullScreen: function(value) {
-        var toggleFullScreenBeforeShown = this._useFixedPosition() && value && !this.isReady();
+        var toggleFullScreenBeforeShown = this._useFixedPosition() && value && !this._isShown;
         if(toggleFullScreenBeforeShown) {
             this._bodyScrollTop = value ? window.pageYOffset : undefined;
         } else {
