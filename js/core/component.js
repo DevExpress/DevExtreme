@@ -157,6 +157,21 @@ var Component = Class.inherit({
         }.bind(this));
     },
 
+    _commitUpdate() {
+        if(!this._initializing && !this._initialized) {
+            this._initializing = true;
+            try {
+                this._init();
+            } finally {
+                this._initializing = false;
+                this._updateLockCount++;
+                this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+                this._updateLockCount--;
+                this._initialized = true;
+            }
+        }
+    },
+
     _logDeprecatedWarning(option, info) {
         var message = info.message || ("Use the '" + info.alias + "' option instead");
         errors.log("W0001", this.NAME, option, info.since, message);
@@ -217,18 +232,7 @@ var Component = Class.inherit({
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
             this.postponedOperations.callPostponedOperations();
-            if(!this._initializing && !this._initialized) {
-                this._initializing = true;
-                try {
-                    this._init();
-                } finally {
-                    this._initializing = false;
-                    this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
-                    this._updateLockCount--;
-                    this._initialized = true;
-                }
-            }
+            this._commitUpdate();
         }
     },
 
