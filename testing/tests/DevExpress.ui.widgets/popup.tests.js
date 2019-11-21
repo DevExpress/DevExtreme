@@ -847,6 +847,43 @@ QUnit.test("start scroll position is saved after full screen popup hiding", func
     }
 });
 
+QUnit.test("works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScreen option is changed on showing event in safari (T825004)", function(assert) {
+    if(!IS_SAFARI) {
+        assert.expect(0);
+        return;
+    }
+    let $additionalElement;
+
+    try {
+        const $body = $("body");
+        $additionalElement = $("<div>").height(2000).appendTo($body);
+
+        this.instance.option({
+            fullScreen: false,
+            visible: false,
+            onShowing(e) {
+                e.component.option("fullScreen", true);
+            }
+        });
+
+        const $wrapper = this.instance.$content().parent();
+
+        window.scrollTo(0, 200);
+        this.instance.show();
+        this.clock.tick(500);
+
+        assert.ok($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        assert.strictEqual($wrapper.css("transform").split(',')[5], " 0)", "popup has translateY: 0");
+        this.instance.hide();
+
+        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), "class removed from body after popup hiding");
+        assert.strictEqual(window.pageYOffset, 200, "scroll position is saved");
+    } finally {
+        window.scrollTo(0, 0);
+        $additionalElement.remove();
+    }
+});
+
 QUnit.test("PopupContent doesn't disappear while fullScreen option changing", function(assert) {
     this.instance.option({
         fullScreen: false,
