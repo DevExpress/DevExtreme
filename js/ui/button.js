@@ -363,7 +363,10 @@ class Button extends Widget {
             const submitAction = this._getSubmitAction();
             const $content = this._$content();
 
-            $('<input type="submit" tabIndex="-1" class="dx-button-submit-input">')
+            $('<input>')
+                .attr('type', 'submit')
+                .attr('tabindex', -1)
+                .addClass('dx-button-submit-input')
                 .appendTo($content);
 
             clickEvent.on(this._$submitInput(), event => submitAction({ event }));
