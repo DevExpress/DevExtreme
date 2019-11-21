@@ -31,7 +31,9 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _initTemplates: function() {
-        this._templateManager.initTemplates();
+        const anonymousTemplateName = this._getAnonymousTemplateName();
+
+        this._templateManager.initTemplates(anonymousTemplateName);
     },
 
     _getAnonymousTemplateName: function() {
