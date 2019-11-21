@@ -201,7 +201,7 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         scheduler.instance.showAppointmentTooltip(itemData, $appointment);
 
         scheduler.tooltip.clickOnItem();
-        assert.ok(scheduler.appointmentPopup.isVisible(), "Popup is rendered instead of recurrence tooltip");
+        assert.ok(scheduler.appointmentPopup.isRendered(), "Popup is rendered instead of recurrence tooltip");
     });
 
     test("Delete button should not exist if editing.allowUpdating is false", function(assert) {

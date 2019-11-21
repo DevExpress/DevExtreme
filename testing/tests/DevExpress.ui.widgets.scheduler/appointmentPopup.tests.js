@@ -83,11 +83,11 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
             scheduler.option("onAppointmentFormOpening", handler);
 
             scheduler.appointments.dblclick();
-            assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call from UI");
+            assert.equal(scheduler.appointmentPopup.isRendered(), expected, text + " if call from UI");
             scheduler.instance.getAppointmentPopup().option('visible', false);
 
             scheduler.instance.showAppointmentPopup(data[0]);
-            assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call showAppointmentPopup method");
+            assert.equal(scheduler.appointmentPopup.isRendered(), expected, text + " if call showAppointmentPopup method");
             scheduler.instance.getAppointmentPopup().option('visible', false);
         });
     });
@@ -96,13 +96,13 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
         const NEW_EXPECTED_SUBJECT = "NEW SUBJECT";
         const scheduler = createScheduler();
 
-        assert.notOk(scheduler.appointmentPopup.isVisible(), "Appointment popup should be invisible in on init");
+        assert.notOk(scheduler.appointmentPopup.isRendered(), "Appointment popup should be invisible in on init");
 
         scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentPopup.form.setSubject(NEW_EXPECTED_SUBJECT);
 
-        assert.ok(scheduler.appointmentPopup.isVisible(), "Appointment popup should be visible after showAppointmentPopup method");
+        assert.ok(scheduler.appointmentPopup.isRendered(), "Appointment popup should be visible after showAppointmentPopup method");
         scheduler.appointmentPopup.clickDoneButton();
 
         const dataItem = scheduler.instance.option("dataSource")[1];
@@ -135,7 +135,7 @@ const createInstance = function(options) {
     return new SchedulerTestWrapper(instance);
 };
 
-var moduleOptions = {
+const moduleOptions = {
     beforeEach: function() {
         this.instance = $("#scheduler").dxScheduler({
             dataSource: [],
@@ -160,7 +160,6 @@ var moduleOptions = {
     }
 };
 
-
 QUnit.module("Appointment Popup Content", moduleOptions);
 
 QUnit.test("showAppointmentPopup method with passed a recurrence appointment should render popup(T698732)", function(assert) {
@@ -180,7 +179,7 @@ QUnit.test("showAppointmentPopup method with passed a recurrence appointment sho
 
     this.instance.showAppointmentPopup(appointments[0], false);
 
-    var popupChoiceAppointmentEdit = $('.dx-popup-normal.dx-resizable').not('.dx-state-invisible');
+    var popupChoiceAppointmentEdit = $(".dx-dialog .dx-popup-normal.dx-resizable").not('.dx-state-invisible');
     assert.equal(popupChoiceAppointmentEdit.length, 1, "Popup with choice edit mode is rendered");
 
     popupChoiceAppointmentEdit.find(".dx-popup-bottom .dx-button:eq(1)").trigger("dxclick");
@@ -555,14 +554,14 @@ QUnit.test("Popup should contain recurrence editor with right config", function(
         startDate: startDate,
         endDate: new Date(2015, 1, 1, 2),
         text: "caption",
-        recurrenceRule: "FREQ=YEARLY"
+        recurrenceRule: "FREQ=YEARLY;BYMONTHDAY=2;BYMONTH=11"
     });
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
 
     assert.equal($recurrenceEditor.length, 1, "Recurrence editor is rendered");
-    assert.equal($recurrenceEditor.dxRecurrenceEditor("instance").option("value"), "FREQ=YEARLY", "value is right");
+    assert.equal($recurrenceEditor.dxRecurrenceEditor("instance").option("value"), "FREQ=YEARLY;BYMONTHDAY=2;BYMONTH=11", "value is right");
     assert.deepEqual($recurrenceEditor.dxRecurrenceEditor("instance").option("startDate"), startDate, "startDate value is right");
     assert.equal($recurrenceEditor.dxRecurrenceEditor("instance").option("firstDayOfWeek"), 5, "firstDayOfWeek value is right");
 });
@@ -1085,7 +1084,7 @@ QUnit.test("Appointment popup will render even if no appointmentData is provided
 
     assert.equal(startDate, null, "startDate has null in the dxForm");
     assert.equal(endDate, null, "endDate has null in the dxForm");
-    assert.ok(appointmentPopup.isVisible(), "Popup is rendered");
+    assert.ok(appointmentPopup.isRendered(), "Popup is rendered");
 
     const $popup = appointmentPopup.getPopup();
     const $startDate = $popup.find("input[name='startDate']")[0];
@@ -1103,7 +1102,7 @@ QUnit.test("Appointment popup will render on showAppointmentPopup with no argume
 
     assert.equal(startDate, null, "startDate has null in the dxForm");
     assert.equal(endDate, null, "endDate has null in the dxForm");
-    assert.ok(appointmentPopup.isVisible(), "Popup is rendered");
+    assert.ok(appointmentPopup.isRendered(), "Popup is rendered");
 
     const $popup = appointmentPopup.getPopup();
     const $startDate = $popup.find("input[name='startDate']")[0];
@@ -1237,5 +1236,19 @@ QUnit.test("Popup should not be closed until the valid value is typed", function
     });
 
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, "the only pending editor is displayed in the form");
+});
+
+QUnit.test("Popup with form is rendered hidden by first Scheduler rendering (T805804)", function(assert) {
+    const appointmentFormOpeningStub = sinon.stub();
+    const scheduler = createInstance({
+        dataSource: [],
+        maxAppointmentsPerCell: null,
+        onAppointmentFormOpening: appointmentFormOpeningStub
+    });
+
+    assert.notOk(scheduler.appointmentPopup.isRendered(), "popup is rendered");
+    assert.notOk(scheduler.appointmentPopup.isVisible(), "popup is hidden");
+    assert.equal(appointmentFormOpeningStub.callCount, 0, "the onAppointmentFormOpening event is not called");
+    assert.ok(scheduler.appointmentPopup.form.isRendered(), "form is rendered");
 });
 
