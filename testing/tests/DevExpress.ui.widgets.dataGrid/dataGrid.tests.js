@@ -17905,7 +17905,7 @@ QUnit.test("DataGrid - Focus updating on refresh should be correct for focused r
         .trigger("dxclick");
 
     // assert
-    assert.ok(rowsViewWrapper.getEditorInputElement(5, 1).length, "Cell[5, 1] is in editing mode");
+    assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, "Cell[5, 1] is in editing mode");
     assert.ok(rowsViewWrapper.isFocusedRow(5), "Row 5 is focused");
     assert.equal(counter, 2, "_scrollToElement called twice");
 });
@@ -17945,7 +17945,7 @@ QUnit.test("DataGrid - Focus updating on refresh should be correct for focused r
         .trigger("dxclick");
 
     // assert
-    assert.ok(rowsViewWrapper.getEditorInputElement(5, 1).length, "Cell[5, 1] is in editing mode");
+    assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, "Cell[5, 1] is in editing mode");
     assert.ok(rowsViewWrapper.isFocusedRow(5), "Row 5 is focused");
     assert.equal(counter, 2, "_scrollToElement called twice");
 });
