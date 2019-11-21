@@ -339,7 +339,11 @@ var TabPanel = MultiView.inherit({
                 }
             }).bind(this),
             onFocusIn: (function(args) { this._focusInHandler(args.event); }).bind(this),
-            onFocusOut: (function(args) { this._focusOutHandler(args.event); }).bind(this)
+            onFocusOut: (function(args) {
+                if(!this._isFocusOutHandlerExecuting) {
+                    this._focusOutHandler(args.event);
+                }
+            }).bind(this)
         };
     },
 
@@ -355,9 +359,13 @@ var TabPanel = MultiView.inherit({
         }
     },
 
-    _focusOutHandler: function() {
+    _focusOutHandler: function(e) {
+        this._isFocusOutHandlerExecuting = true;
+
         this.callBase.apply(this, arguments);
-        this._tabs.option("focusedElement", null);
+
+        this._tabs._focusOutHandler(e);
+        this._isFocusOutHandlerExecuting = false;
     },
 
     _setTabsOption: function(name, value) {
