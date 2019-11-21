@@ -1,17 +1,16 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
-    OptionManager = require("./option_manager").OptionManager,
+    Options = require("./options/index").Options,
+    convertRulesToOptions = require("./options/utils").convertRulesToOptions,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
-    deferredUtils = require("../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
     Callbacks = require("./utils/callbacks"),
     EventsStrategy = require("./events_strategy").EventsStrategy,
     publicComponentUtils = require("./utils/public_component"),
+    PostponedOperations = require("./postponed_operations").PostponedOperations,
 
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
@@ -24,43 +23,6 @@ var Config = require("./config"),
 * @namespace DevExpress
 * @hidden
 */
-
-class PostponedOperations {
-    constructor() {
-        this._postponedOperations = {};
-    }
-
-    add(key, fn, postponedPromise) {
-        if(key in this._postponedOperations) {
-            postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
-        } else {
-            var completePromise = new Deferred();
-            this._postponedOperations[key] = {
-                fn: fn,
-                completePromise: completePromise,
-                promises: postponedPromise ? [postponedPromise] : []
-            };
-        }
-
-        return this._postponedOperations[key].completePromise.promise();
-    }
-
-    callPostponedOperations() {
-        for(var key in this._postponedOperations) {
-            var operation = this._postponedOperations[key];
-
-            if(typeUtils.isDefined(operation)) {
-                if(operation.promises && operation.promises.length) {
-                    when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
-                } else {
-                    operation.fn().done(operation.completePromise.resolve);
-                }
-            }
-        }
-        this._postponedOperations = {};
-    }
-}
-
 var Component = Class.inherit({
     _setDeprecatedOptions: function() {
         this._deprecatedOptions = {};
@@ -117,7 +79,7 @@ var Component = Class.inherit({
     },
 
     _convertRulesToOptions: function(rules) {
-        return OptionManager.convertRulesToOptions(rules);
+        return convertRulesToOptions(rules);
     },
 
     _isInitialOptionValue: function(name) {
@@ -157,7 +119,7 @@ var Component = Class.inherit({
             this._setOptionsByReference();
             this._setDeprecatedOptions();
             this._options = this._getDefaultOptions();
-            this._optionManager = new OptionManager(
+            this._optionManager = new Options(
                 this._options,
                 this._getDefaultOptions(),
                 this._getOptionsByReference(),
@@ -510,4 +472,3 @@ var Component = Class.inherit({
 });
 
 module.exports = Component;
-module.exports.PostponedOperations = PostponedOperations;
