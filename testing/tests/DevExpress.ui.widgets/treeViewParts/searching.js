@@ -7,7 +7,7 @@ const createInstance = (options) => new TreeViewTestWrapper(options);
 QUnit.module("searching");
 
 ['dataSource', 'items'].forEach((optionName) => {
-    QUnit.test(`Search works even with loop/cycle in ${optionName} option`, function(assert) {
+    QUnit.test(`Search works even with loop/cycle in ${optionName} option (T832760)`, function(assert) {
         let options = { dataStructure: "plain", rootValue: 1, searchEnabled: true };
         options[optionName] = [
             { id: 1, text: "item1", parentId: 2, selected: false, expanded: false },

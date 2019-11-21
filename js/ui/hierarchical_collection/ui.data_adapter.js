@@ -166,16 +166,24 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _iterateChildren: function(node, recursive, callback) {
-        var that = this;
+    _iterateChildren: function(node, recursive, callback, processedKeys) {
+        if(!typeUtils.isFunction(callback)) {
+            return;
+        }
 
-        each(node.internalFields.childrenKeys, function(_, key) {
-            var child = that.getNodeByKey(key);
-            typeUtils.isFunction(callback) && callback(child);
-            if(child.internalFields.childrenKeys.length && recursive) {
-                that._iterateChildren(child, recursive, callback);
-            }
-        });
+        const that = this;
+        const nodeKey = node.internalFields.key;
+        processedKeys = processedKeys || [];
+        if(processedKeys.indexOf(nodeKey) === -1) {
+            processedKeys.push(nodeKey);
+            each(node.internalFields.childrenKeys, function(_, key) {
+                let child = that.getNodeByKey(key);
+                callback(child);
+                if(child.internalFields.childrenKeys.length && recursive) {
+                    that._iterateChildren(child, recursive, callback, processedKeys);
+                }
+            });
+        }
     },
 
     _iterateParents: function(node, callback, processedKeys) {
