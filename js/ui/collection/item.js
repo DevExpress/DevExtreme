@@ -77,6 +77,16 @@ var CollectionItem = Class.inherit({
 
     _renderDisabled: function(value, oldValue) {
         this._$element.toggleClass(DISABLED_STATE_CLASS, !!value);
+
+        this._updateOwnerFocus(value);
+    },
+
+    _updateOwnerFocus: function(isDisabled) {
+        var ownerComponent = this._options.owner;
+
+        if(ownerComponent && isDisabled) {
+            ownerComponent._resetItemFocus(this._$element);
+        }
     },
 
     _renderVisible: function(value, oldValue) {
