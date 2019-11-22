@@ -414,7 +414,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
                 .press('right')
                 .press('enter');
             assert.deepEqual(instance.option("text"), selectedDate, `value is successfully changed by calendar when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
-        }.bind(this));
+        });
     });
 
     QUnit.test("T278148 - picker type should be 'rollers' if the real device is phone in generic theme", assert => {
