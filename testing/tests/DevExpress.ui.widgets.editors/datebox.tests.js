@@ -381,6 +381,44 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.equal($input.val(), "", "text is not rendered");
     });
 
+    QUnit.test(`After typing while calendar is opened the typed data should be saved`, assert => {
+        const optionsSet = [];
+        [true, false].forEach(useMaskBehavior => {
+            ["date", "datetime"].forEach(type => {
+                optionsSet.push({
+                    useMaskBehavior,
+                    type,
+                    pickerType: "calendar",
+                    penOnFieldClick: true
+                });
+            });
+        });
+
+        optionsSet.forEach((options) => {
+            const $dateBox = $("#dateBox").dxDateBox(
+                options
+            );
+
+            const instance = $dateBox.dxDateBox("instance");
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const kb = keyboardMock($input);
+            const typedDate = (options.type === "date" ? "10/6/2010" : "10/6/2010, 12:00 PM");
+            const selectedDate = (options.type === "date" ? "9/7/2010" : "9/7/2010, 12:00 PM");
+
+            $input.val("");
+            instance.open();
+            kb.type(typedDate).press("enter");
+            assert.deepEqual(instance.option("text"), typedDate, `typed value is set when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
+
+            instance.open();
+            kb
+                .keyDown('left', { ctrlKey: true })
+                .press('right')
+                .press('enter');
+            assert.deepEqual(instance.option("text"), selectedDate, `value is successfully changed by calendar when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
+        });
+    });
+
     QUnit.test("T278148 - picker type should be 'rollers' if the real device is phone in generic theme", assert => {
         const realDevice = devices.real();
         const currentDevice = devices.current();
