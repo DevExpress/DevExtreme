@@ -359,6 +359,19 @@ QUnit.module("Events", moduleConfig, () => {
         this.clock.tick();
         assert.equal(keyFromEvent, key);
     });
+    test("onContentReady", (assert) => {
+        const onContentReadyHandler = sinon.stub();
+        const options = {
+            tasks: {
+                dataSource: tasks
+            },
+            onContentReady: onContentReadyHandler
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        assert.equal(onContentReadyHandler.callCount, 1, "onContentReadyHandler was called 1 times");
+    });
 });
 
 QUnit.module("Actions", moduleConfig, () => {
