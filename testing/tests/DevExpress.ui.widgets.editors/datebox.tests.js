@@ -398,7 +398,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
             );
 
             const instance = $dateBox.dxDateBox("instance");
-            const $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const kb = keyboardMock($input);
             const typedDate = (options.type === "date" ? "10/6/2010" : "10/6/2010, 12:00 PM");
             const selectedDate = (options.type === "date" ? "9/7/2010" : "9/7/2010, 12:00 PM");
