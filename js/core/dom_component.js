@@ -136,7 +136,7 @@ const DOMComponent = Component.inherit({
     },
 
     _initMarkup() {
-        const { rtlEnabled } = this.option();
+        const { rtlEnabled } = this.option() || {};
 
         this._renderElementAttributes();
         this._toggleRTLDirection(rtlEnabled);
@@ -149,7 +149,7 @@ const DOMComponent = Component.inherit({
     },
 
     _renderElementAttributes() {
-        const { elementAttr } = this.option();
+        const { elementAttr } = this.option() || {};
         const attributes = extend({}, elementAttr);
         const classNames = attributes.class;
 
