@@ -15,6 +15,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         );
 
         this._initTemplates();
+
     },
 
     _dispose: function() {
