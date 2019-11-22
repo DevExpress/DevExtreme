@@ -35,12 +35,16 @@ const DateBoxMask = DateBoxBase.inherit({
 
         return extend({}, originalHandlers, {
             del: (e) => {
-                this._revertPart(FORWARD);
-                this._isAllSelected() || e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._revertPart(FORWARD);
+                    this._isAllSelected() || event.preventDefault();
+                });
             },
             backspace: (e) => {
-                this._revertPart(BACKWARD);
-                this._isAllSelected() || e.preventDefault();
+                return applyHandler(e, (event) => {
+                    this._revertPart(BACKWARD);
+                    this._isAllSelected() || event.preventDefault();
+                });
             },
             home: (e) => {
                 return applyHandler(e, (event) => {
@@ -92,7 +96,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _shouldUseOriginalHandler(e) {
-        return !this._useMaskBehavior() || this.option("opened") || (e && e.altKey);
+        return !this._useMaskBehavior() || this.option("opened") && e.key !== "Delete" && e.key !== "Backspace" || (e && e.altKey);
     },
 
     _upDownArrowHandler(step) {
