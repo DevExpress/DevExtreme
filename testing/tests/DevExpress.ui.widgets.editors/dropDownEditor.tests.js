@@ -16,6 +16,7 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture" class="qunit-fixture-visible">\
             <div id="dropDownEditorLazy"></div>\
+            <div id="dropDownEditorSecond"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -30,6 +31,8 @@ var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
 
 var TAB_KEY_CODE = "Tab",
     ESC_KEY_CODE = "Escape";
+
+var isIOs = devices.current().platform === "ios";
 
 var beforeEach = function() {
     fx.off = true;
@@ -564,6 +567,41 @@ QUnit.test("focusout should not be fired on valueChanged", function(assert) {
 
     assert.equal(onFocusOutStub.callCount, 0, "onFocusOut is fired");
     assert.equal(textBoxOnFocusOutStub.callCount, 0, "onFocusOut textbox is fired");
+});
+
+QUnit.test("focusout to another editor should close current ddb (T832410)", function(assert) {
+    var $dropDownEditor1 = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [0, 1, 2],
+        contentTemplate: function() {
+            return $("<div>").attr("id", "test-content");
+        },
+        acceptCustomValue: true,
+        focusStateEnabled: true,
+        opened: true
+    });
+
+    var $dropDownEditor2 = $("#dropDownEditorSecond").dxDropDownEditor({
+        items: [0, 1, 2],
+        acceptCustomValue: true,
+        focusStateEnabled: true
+    });
+
+    var dropDownEditor1 = $dropDownEditor1.dxDropDownEditor("instance");
+
+    var $input1 = $dropDownEditor1.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    var $input2 = $dropDownEditor2.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+    dropDownEditor1.focus();
+
+    $input1.trigger($.Event('focusout', { relatedTarget: $input2 }));
+
+    assert.strictEqual(dropDownEditor1.option("opened"), !isIOs, "should be closed after another editor focus");
+
+    dropDownEditor1.open();
+    dropDownEditor1.focus();
+    $input1.trigger($.Event('focusout', { relatedTarget: $("#test-content") }));
+
+    assert.ok(dropDownEditor1.option("opened"), "should be still opened after the widget's popup focus");
 });
 
 
