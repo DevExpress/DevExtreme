@@ -22,7 +22,6 @@ QUnit.module('List');
         const initialTextAlign = body.css('text-align');
 
         body.css('text-align', 'start');
-
         const $list = initList({
                 rtlEnabled: testData.rtlEnabled,
                 items: [ 1, 2 ]
