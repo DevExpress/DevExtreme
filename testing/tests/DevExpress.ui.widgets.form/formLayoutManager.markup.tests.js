@@ -88,8 +88,8 @@ QUnit.module("Layout manager", () => {
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).hasClass(internals.FIELD_ITEM_LABEL_LOCATION_CLASS + "left"), "label's location is left by default");
         assert.equal($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").length, 1, "editor is rendered");
         assert.ok(!$testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass(READONLY_STATE_CLASS), "editor is not read only");
-        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS).hasClass(internals.FIELD_ITEM_CONTENT_LOCATION_CLASS + "right"), 1, "Field item content has a right css class");
-        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS + "> .dx-texteditor").length, 1, "editor has field-item-content class");
+        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS).hasClass(internals.FIELD_ITEM_CONTENT_LOCATION_CLASS + "right"), "Field item content has a right css class");
+        assert.equal($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS + "> .dx-texteditor").length, 1, "editor has field-item-content class");
         assert.equal(contentReadyStub.callCount, windowUtils.hasWindow() ? 1 : 0, "contentReady event");
     });
 

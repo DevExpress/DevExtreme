@@ -363,7 +363,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
 
         dateBox.option("type", "datetime");
         assert.ok(dateBox.option("isValid"), "widget is valid after type change");
-        assert.ok(dateBox.option("value"), now, "value has been reset");
+        assert.deepEqual(dateBox.option("value"), now, "value has been reset");
     });
 
     QUnit.test("T252737 - the 'acceptCustomValue' option correct behavior", assert => {
