@@ -4,6 +4,7 @@ import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerEvents from "events/pointer";
 import { Deferred } from "core/utils/deferred";
+import dataUtils from "core/element_data";
 
 QUnit.testStart(function() {
     var markup =
@@ -1707,24 +1708,24 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        rowsViewWrapper = dataGridWrapper.rowsView;
 
     that.options.editing = {
         allowUpdating: true,
         mode: 'batch'
     };
 
-    rowsView.render(testElement);
-    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
+    rowsView.render($('#container'));
+    rowsViewWrapper.getCellElement(0, 2).trigger('dxclick'); // Edit
     this.clock.tick();
 
     // act
-    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxpointerdown');
-    testElement.find('tbody').first().trigger('dxclick'); // chrome 73+
+    rowsViewWrapper.getEditorInput(0, 2).trigger('dxpointerdown');
+    rowsViewWrapper.getElement().find('tbody').first().trigger('dxclick'); // chrome 73+
     this.clock.tick();
 
     // assert
-    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor is not closed');
+    assert.equal(rowsViewWrapper.getEditorInput(0, 2).length, 1, 'editor is not closed');
 });
 
 // T318313
@@ -2352,7 +2353,7 @@ QUnit.test("The first cell should not be switched to the editing state when clic
     // assert
     $mainTable = $(rowsView.element().children(".dx-datagrid-content").children("table"));
     assert.strictEqual($mainTable.find("input").length, 0, "hasn't input");
-    assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), 0, "first cell isn't editable");
+    assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), "first cell isn't editable");
 });
 
 // T531154
@@ -4484,7 +4485,7 @@ QUnit.test("Not highlight calculated column", function(assert) {
     that.clock.tick();
 
     assert.equal(testElement.find(".dx-row").first().find(".dx-cell-modified").length, 1, "one modified value");
-    assert.ok(testElement.find(".dx-row").first().children().eq(0).hasClass("dx-cell-modified"), 1, "first cell is modified");
+    assert.ok(testElement.find(".dx-row").first().children().eq(0).hasClass("dx-cell-modified"), "first cell is modified");
 });
 
 // T246535
@@ -7819,6 +7820,32 @@ QUnit.test("A dependent cascading editor should be updated when a master cell va
 
     // assert
     assert.strictEqual($(rowsView.getCellElement(0, 1)).text(), "Dallas", "text of the second column of the first row");
+});
+
+// T832801
+QUnit.test("The current editable row should close when adding a new row in 'row' mode", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    this.options.editing = {
+        allowUpdating: true,
+        allowAdding: true
+    };
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(2);
+
+    // assert
+    assert.ok($(rowsView.getRowElement(2)).hasClass("dx-edit-row"), "row is edited");
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.ok($(rowsView.getRowElement(0)).hasClass("dx-edit-row dx-row-inserted"), "new row");
+    assert.notOk($(rowsView.getRowElement(3)).hasClass("dx-edit-row"), "row isn't edited");
 });
 
 
@@ -11831,7 +11858,7 @@ QUnit.test("The validation message should not be overlapped by the fixed column 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-invalid-message").dxOverlay("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top left", "position.my");
     assert.strictEqual(overlayPosition.at, "bottom left", "position.at");
@@ -11882,14 +11909,14 @@ QUnit.test("The validation message should not be overlapped by the fixed column 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-invalid-message").dxOverlay("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top right", "position.my");
     assert.strictEqual(overlayPosition.at, "bottom right", "position.at");
     assert.strictEqual(overlayPosition.collision, "none flip", "position.collision");
 
     tooltipInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-revert-tooltip").dxTooltip("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     tooltipPosition = tooltipInstance.option("position");
     assert.strictEqual(tooltipPosition.my, "top right", "position.my");
     assert.strictEqual(tooltipPosition.at, "top left", "position.at");
@@ -11939,11 +11966,72 @@ QUnit.test("The validation message should be decreased when there is not enough 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find(".dx-overlay.dx-datagrid-invalid-message").dxOverlay("instance");
-    assert.ok(overlayInstance, 1, "has invalid message");
+    assert.ok(overlayInstance, "has invalid message");
     assert.strictEqual(overlayInstance.option("maxWidth"), 148, "maxWidth of the validation message");
     overlayPosition = overlayInstance.option("position");
     assert.strictEqual(overlayPosition.my, "top left", "position.my");
     assert.strictEqual(overlayPosition.at, "bottom left", "position.at");
+});
+
+// T829925
+QUnit.test("No exceptions on editing a column with given setCellValue when repaintChangedOnly is true", function(assert) {
+    // arrange
+    const $testElement = $('#container');
+
+    this.rowsView.render($testElement);
+
+    this.applyOptions({
+        repaintChangesOnly: true,
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+            form: {
+                items: [{
+                    dataField: "name",
+                    validationRules: [{
+                        "type": "required",
+                        "message": "The LastNameID field is required."
+                    }]
+                }, "age", "lastName"]
+            }
+        },
+        columns: [
+            {
+                dataField: 'name',
+                setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); }
+            }, "age", "lastName"]
+    });
+
+    this.editRow(0);
+
+    // assert
+    let $cellElement = $(this.getCellElement(0, "name")),
+        validator = dataUtils.data($cellElement.find(".dx-texteditor").get(0), "dxValidator");
+
+    assert.strictEqual($(this.getRowElement(0)).find(".dx-form").length, 1, "there is edit form");
+    assert.ok(validator, "editor has validator");
+
+    try {
+        // arrange
+        const validatorOptions = validator.option();
+
+        // act
+        this.cellValue(0, "name", "");
+
+        // assert
+        $cellElement = $(this.getCellElement(0, "name")),
+        validator = dataUtils.data($cellElement.find(".dx-texteditor").get(0), "dxValidator");
+        const validatorOptionsAfterEditing = validator.option();
+
+        assert.ok($cellElement.find(".dx-textbox").first().hasClass("dx-invalid"), "editor value isn't valid");
+        assert.ok(validator, "editor has validator");
+        assert.strictEqual(validatorOptionsAfterEditing.validationRules, validatorOptions.validationRules, "validationRules");
+        assert.strictEqual(validatorOptionsAfterEditing.validationGroup, validatorOptions.validationGroup, "validationGroup");
+        assert.strictEqual(validatorOptionsAfterEditing.dataGetter, validatorOptions.dataGetter, "dataGetter");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
 });
 
 
@@ -14438,6 +14526,37 @@ QUnit.test("Edit form when the editorType is specified in the column.formItem an
     assert.ok($editorElement.first().dxAutocomplete("instance"), "editor instance");
 });
 
+QUnit.test("The edit form should not be rerendered when setCellValue is set for the column and repaintChangesOnly is true", function(assert) {
+    // arrange
+    this.options.repaintChangesOnly = true;
+    this.columns[0] = { dataField: "name", setCellValue: function() { this.defaultSetCellValue.apply(this, arguments); } };
+    this.setupModules(this);
+
+    let rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    // act
+    this.editRow(0);
+
+    let editFormInstance = this.editingController._editForm,
+        $editForm = $(editFormInstance.element()),
+        $editFormItem = $editForm.find(".dx-datagrid-edit-form-item").first();
+
+    // assert
+    assert.strictEqual($editForm.length, 1, "there is edit form");
+
+    // act
+    this.cellValue(0, "name", "Test");
+
+    // assert
+    assert.strictEqual($(this.getRowElement(0)).find(".dx-form").get(0), $editForm.get(0), "edit form is not re-rendered");
+    assert.strictEqual(this.editingController._editForm, editFormInstance, "edit form is not recreated");
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").get(0), $editFormItem.get(0), "first edit form item is not re-rendered");
+    assert.strictEqual($editForm.find(".dx-datagrid-edit-form-item").first().find(".dx-texteditor-input").val(), "Test", "first cell value is changed");
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
@@ -16019,4 +16138,36 @@ QUnit.test("Adding multiple rows with async onInitNewRow (mixed failures and suc
     // assert
     assert.equal(visibleRows.length, 8, "two rows were added");
     assert.deepEqual(visibleRows[7].data, { room: 9 }, "row #7 data");
+});
+
+QUnit.test("Adding row and editing another row when the onInitNewRow event is asynchronous and row mode is set", function(assert) {
+    // arrange
+    var $testElement = $("#container");
+
+    this.options.columns = ["room"];
+    this.options.editing = {
+        allowAdding: true,
+        mode: "row"
+    };
+    this.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.promise.resolve();
+        }, 500);
+    };
+
+    this.editingController.optionChanged({ name: "onInitNewRow" });
+    this.columnHeadersView.render($testElement);
+    this.rowsView.render($testElement);
+    this.headerPanel.render($testElement);
+    this.columnsController.init();
+
+    // act
+    this.addRow();
+    this.editRow(2);
+    this.clock.tick(500);
+
+    // assert
+    assert.ok($(this.rowsView.getRowElement(0)).hasClass("dx-edit-row dx-row-inserted"), "new row");
+    assert.notOk($(this.rowsView.getRowElement(3)).hasClass("dx-edit-row"), "row isn't edited");
 });

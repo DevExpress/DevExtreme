@@ -181,7 +181,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             const runCheck = () => {
                 setTimeout(() => check() || runCheck(), timeout);
             };
-            ($element.width() > 0 && check()) || runCheck();
+            runCheck();
         });
     },
 

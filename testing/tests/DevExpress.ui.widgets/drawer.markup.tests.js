@@ -73,11 +73,11 @@ QUnit.test("opened class should be applied correctly", assert => {
 
     const instance = $element.dxDrawer("instance");
 
-    assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "drawer has opened class");
+    assert.ok($element.hasClass(OPENED_STATE_CLASS), "drawer has opened class");
 
     instance.option("opened", false);
 
-    assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
+    assert.notOk($element.hasClass(OPENED_STATE_CLASS), "drawer hasn't opened class");
 });
 
 QUnit.test("custom template for panel should be rendered correctly", assert => {

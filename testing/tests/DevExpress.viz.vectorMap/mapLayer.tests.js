@@ -527,7 +527,7 @@ QUnit.test("Create with customization", function(assert) {
     var proxies = $.map(StubMapLayerElement.items, function(item) { return item.proxy; });
 
     assert.deepEqual(customize.lastCall.args, [proxies], "callback args");
-    assert.ok(customize.lastCall.thisValue, this.widget, "callback context");
+    assert.strictEqual(customize.lastCall.thisValue, this.widget, "callback context");
     $.each(StubMapLayerElement.items, function(i, item) {
         assert.ok(customize.calledBefore(item.project.lastCall), "callback is called before item - " + i);
     });

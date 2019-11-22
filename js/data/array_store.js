@@ -75,9 +75,9 @@ var ArrayStore = Store.inherit({
     * @publicName clear()
     */
     clear: function() {
-        this.fireEvent("modifying");
+        this._eventsStrategy.fireEvent("modifying");
         this._array = [];
-        this.fireEvent("modified");
+        this._eventsStrategy.fireEvent("modified");
     }
 }, "array");
 

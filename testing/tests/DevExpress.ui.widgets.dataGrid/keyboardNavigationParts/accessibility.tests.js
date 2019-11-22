@@ -23,6 +23,8 @@ QUnit.module("Keyboard navigation accessibility", {
         this.triggerKeyDown = triggerKeyDown;
         this.focusCell = focusCell;
         this.focusFirstCell = () => this.focusCell(0, 0);
+        this.ctrlUp = () => fireKeyDown($(":focus"), "ArrowUp", true);
+        this.ctrlDown = () => fireKeyDown($(":focus"), "ArrowDown", true);
 
         this.data = this.data || [
             { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 },
@@ -751,7 +753,7 @@ QUnit.module("Keyboard navigation accessibility", {
         assert.ok(pagerWrapper.isFocusedState(), "Pager focus state");
     });
 
-    testInDesktop("View selector", function(assert) {
+    testInDesktop("View selector - groupping, not ordered focusing view", function(assert) {
         this.options = {
             headerFilter: { visible: true },
             filterRow: { visible: true },
@@ -778,51 +780,98 @@ QUnit.module("Keyboard navigation accessibility", {
 
         // act
         dataGridWrapper.headerPanel.getGroupPanelItem(0).focus();
-        fireKeyDown($(":focus"), "ArrowDown", true);
+        this.ctrlDown();
         // assert
         assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(":focus"), "focused element");
+
+        // act, assert
+        dataGridWrapper.headers.getHeaderItem(0, 0).focus();
+        this.ctrlDown();
+        assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(":focus"), "focused element");
+
+        // act, assert
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
+        this.ctrlUp();
+        assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(":focus"), "focused element");
+
+        // act, assert
+        this.ctrlUp();
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(":focus"), "focused element");
+
+        // act, assert
+        this.ctrlUp();
+        assert.ok(dataGridWrapper.headerPanel.getGroupPanelItem(0).is(":focus"), "focused element");
+
+        // act, assert
+        this.ctrlDown();
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(":focus"), "focused element");
+
+        // act, assert
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
+        this.ctrlDown();
+        assert.ok(dataGridWrapper.filterPanel.getIconFilter().is(":focus"), "focused element");
+
+        // act, assert
+        this.ctrlDown();
+        assert.ok(dataGridWrapper.pager.getPagerPageSizeElement(0).is(":focus"), "focused element");
+
+        // act, assert
+        this.ctrlUp();
+        assert.ok(dataGridWrapper.filterPanel.getIconFilter().is(":focus"), "focused element");
+    });
+
+    testInDesktop("View selector - navigation through views", function(assert) {
+        // arrange
+        this.options = {
+            headerFilter: { visible: true },
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            pager: {
+                allowedPageSizes: [1, 2],
+                showPageSizeSelector: true,
+                showNavigationButtons: true,
+                visible: true
+            },
+            columns: [
+                { dataField: "name", allowSorting: true, allowFiltering: true },
+                { dataField: "date", dataType: "date" },
+                { dataField: "room", dataType: "number" },
+                { dataField: "phone", dataType: "number" }
+            ]
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
 
         // act
         dataGridWrapper.headers.getHeaderItem(0, 0).focus();
-        fireKeyDown($(":focus"), "ArrowDown", true);
+        this.ctrlDown();
         // assert
-        assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(":focus"), "focused element");
+        assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(":focus"), "focused filterRow editor");
 
-        // act
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
-        fireKeyDown($(":focus"), "ArrowUp", true);
-        // assert
-        assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(":focus"), "focused element");
+        // act, assert
+        this.ctrlDown();
+        assert.ok($(this.getCellElement(0, 0)).is(":focus"), "first cell is focused");
 
-        // act
-        fireKeyDown($(":focus"), "ArrowUp", true);
-        // assert
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(":focus"), "focused element");
+        // act, assert
+        this.ctrlDown();
+        assert.ok(dataGridWrapper.filterPanel.getIconFilter().is(":focus"), "focused filterPanel filter icon");
 
-        // act
-        fireKeyDown($(":focus"), "ArrowUp", true);
-        // assert
-        assert.ok(dataGridWrapper.headerPanel.getGroupPanelItem(0).is(":focus"), "focused element");
+        // act, assert
+        this.ctrlDown();
+        assert.ok(dataGridWrapper.pager.getPagerPageSizeElement(0).is(":focus"), "focused pager page size element");
 
-        // act
-        fireKeyDown($(":focus"), "ArrowDown", true);
-        // assert
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(":focus"), "focused element");
+        // act, assert
+        this.ctrlUp();
+        assert.ok(dataGridWrapper.filterPanel.getIconFilter().is(":focus"), "focused filterPanel filter icon");
 
-        // act
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
-        fireKeyDown($(":focus"), "ArrowDown", true);
-        // assert
-        assert.ok(dataGridWrapper.filterPanel.getIconFilter().is(":focus"), "focused element");
+        // act, assert
+        this.ctrlUp();
+        assert.ok($(this.getCellElement(0, 0)).is(":focus"), "first cell is focused");
 
-        // act
-        fireKeyDown($(":focus"), "ArrowDown", true);
-        // assert
-        assert.ok(dataGridWrapper.pager.getPagerPageSizeElement(0).is(":focus"), "focused element");
-
-        // act
-        fireKeyDown($(":focus"), "ArrowUp", true);
-        // assert
-        assert.ok(dataGridWrapper.filterPanel.getIconFilter().is(":focus"), "focused element");
+        // act, assert
+        this.ctrlUp();
+        assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(":focus"), "focused filterRow editor");
     });
 });

@@ -18,6 +18,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     TextBox = require("../text_box"),
     clickEvent = require("../../events/click"),
+    devices = require("../../core/devices"),
     FunctionTemplate = require("../../core/templates/function_template").FunctionTemplate,
     Popup = require("../popup");
 
@@ -29,6 +30,8 @@ var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
     DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable",
     DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
+
+var isIOs = devices.current().platform === "ios";
 
 /**
 * @name dxDropDownEditor
@@ -71,6 +74,8 @@ var DropDownEditor = TextBox.inherit({
                     e.preventDefault();
                 }
                 this.close();
+
+                return true;
             },
             upArrow: function(e) {
                 e.preventDefault();
@@ -315,6 +320,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
 
         this._renderOpenHandler();
+        this._attachFocusOutHandler();
         this._renderOpenedState();
     },
 
@@ -446,6 +452,26 @@ var DropDownEditor = TextBox.inherit({
         if(openOnFieldClick) {
             that._openOnFieldClickAction = that._createAction(that._openHandler.bind(that));
         }
+    },
+
+    _attachFocusOutHandler: function() {
+        if(isIOs) {
+            this._detachFocusOutEvents();
+            eventsEngine.on(this._inputWrapper(), eventUtils.addNamespace("focusout", this.NAME), function(event) {
+                var newTarget = event.relatedTarget;
+                if(newTarget && this.option("opened")) {
+                    var isNewTargetOutside = $(newTarget).closest("." + DROP_DOWN_EDITOR_OVERLAY, this._$popup).length === 0;
+
+                    if(isNewTargetOutside) {
+                        this.close();
+                    }
+                }
+            }.bind(this));
+        }
+    },
+
+    _detachFocusOutEvents: function() {
+        isIOs && eventsEngine.off(this._inputWrapper(), eventUtils.addNamespace("focusout", this.NAME));
     },
 
     _getInputClickHandler: function(openOnFieldClick) {
@@ -788,6 +814,11 @@ var DropDownEditor = TextBox.inherit({
         } else {
             return this.callBase();
         }
+    },
+
+    _dispose: function() {
+        this._detachFocusOutEvents();
+        this.callBase();
     },
 
     _optionChanged: function(args) {

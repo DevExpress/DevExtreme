@@ -644,6 +644,7 @@ var Overlay = Widget.inherit({
             return new Deferred().resolve().promise();
         }
         this._currentVisible = true;
+        this._isShown = false;
 
         this._normalizePosition();
 
@@ -672,6 +673,7 @@ var Overlay = Widget.inherit({
 
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
+                    that._isShown = true;
                     that._actions.onShown();
                     that._toggleSafariScrolling(false);
                     deferred.resolve();

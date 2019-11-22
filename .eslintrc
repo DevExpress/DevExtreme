@@ -54,6 +54,7 @@
         "no-extend-native": "error",
         "no-alert": "error",
         "no-console": "error",
+        "no-restricted-syntax": [ "error", "ForOfStatement" ],
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "semi-spacing": "error",
@@ -144,6 +145,7 @@
                     "mozilla",
                     "mvc",
                     "firefox",
+                    "fmt",
                     "msie",
                     "odata",      // OData
                     "readonly",

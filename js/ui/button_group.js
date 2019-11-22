@@ -78,9 +78,14 @@ const ButtonCollection = CollectionWidget.inherit({
         $item.addClass(SHAPE_STANDARD_CLASS);
     },
 
-    _renderItemContent(options) {
-        options.container = $(options.container).parent();
-        this.callBase(options);
+    _renderItemContent(args) {
+        args.container = $(args.container).parent();
+        return this.callBase(args);
+    },
+
+    _renderItemContentByNode: function(args, $node) {
+        args.container = $(args.container.children().first());
+        return this.callBase(args, $node);
     },
 
     _focusTarget() {

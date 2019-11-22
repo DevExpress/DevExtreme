@@ -469,7 +469,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
 
             this.keyboard.press("enter");
-            assert.strictEqual(this.instance.option("value").getMonth(), 10, "November 10 2012", "month was changed in the value");
+            assert.strictEqual(this.instance.option("value").getMonth(), 10, "month was changed in the value");
 
             this.keyboard.press("down");
             assert.strictEqual(this.$input.val(), "November 9 2012", "text was changed");
@@ -852,7 +852,7 @@ if(devices.real().deviceType === "desktop") {
         test("Typing a letter in the year section should not lead to an infinite loop", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
-            sinon.stub(this.instance, "_partIncrease").throws();
+            sinon.stub(this.instance, "_partIncrease").throws(new Error);
 
             try {
                 this.keyboard.type("s");

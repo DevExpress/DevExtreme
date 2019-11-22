@@ -1149,7 +1149,7 @@ module.exports = {
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
                         dataController = that._dataController,
-                        itemCount = dataController.items().length,
+                        itemCount = dataController.items(true).length,
                         contentElement = that._findContentElement(),
                         freeSpaceRowElements = that._getFreeSpaceRowElements($table),
                         freeSpaceRowCount,

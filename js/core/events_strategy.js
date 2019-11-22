@@ -1,43 +1,53 @@
-var Callbacks = require("./utils/callbacks"),
-    isFunction = require("./utils/type").isFunction,
-    each = require("./utils/iterator").each,
-    Class = require("./class");
+import Callbacks from "./utils/callbacks";
+import { each } from "./utils/iterator";
+import { isFunction, isPlainObject } from "./utils/type";
 
-module.exports = Class.inherit({
-    ctor: function(owner) {
+export class EventsStrategy {
+    constructor(owner) {
         this._events = {};
         this._owner = owner;
-    },
-
-    hasEvent: function(eventName) {
-        var callbacks = this._events[eventName];
-        if(callbacks) {
-            return callbacks.has();
+    }
+    static setEventsStrategy(owner, strategy) {
+        if(strategy) {
+            return isFunction(strategy) ? strategy(owner) : strategy;
+        } else {
+            return new EventsStrategy(owner);
         }
-        return false;
-    },
+    }
 
-    fireEvent: function(eventName, eventArgs) {
-        var callbacks = this._events[eventName];
+    hasEvent(eventName) {
+        const callbacks = this._events[eventName];
+        return callbacks ? callbacks.has() : false;
+    }
+
+    fireEvent(eventName, eventArgs) {
+        const callbacks = this._events[eventName];
         if(callbacks) {
             callbacks.fireWith(this._owner, eventArgs);
         }
-    },
+        return this._owner;
+    }
 
-    on: function(eventName, eventHandler) {
-        var callbacks = this._events[eventName],
-            addFn;
+    on(eventName, eventHandler) {
+        if(isPlainObject(eventName)) {
+            each(eventName, (e, h) => {
+                this.on(e, h);
+            });
+        } else {
+            let callbacks = this._events[eventName];
 
-        if(!callbacks) {
-            callbacks = Callbacks();
-            this._events[eventName] = callbacks;
+            if(!callbacks) {
+                callbacks = Callbacks();
+                this._events[eventName] = callbacks;
+            }
+
+            const addFn = callbacks.originalAdd || callbacks.add;
+            addFn.call(callbacks, eventHandler);
         }
-        addFn = callbacks.originalAdd || callbacks.add;
-        addFn.call(callbacks, eventHandler);
-    },
+    }
 
-    off: function(eventName, eventHandler) {
-        var callbacks = this._events[eventName];
+    off(eventName, eventHandler) {
+        const callbacks = this._events[eventName];
         if(callbacks) {
             if(isFunction(eventHandler)) {
                 callbacks.remove(eventHandler);
@@ -45,11 +55,11 @@ module.exports = Class.inherit({
                 callbacks.empty();
             }
         }
-    },
+    }
 
-    dispose: function() {
-        each(this._events, function() {
-            this.empty();
+    dispose() {
+        each(this._events, (eventName, event) => {
+            event.empty();
         });
     }
-});
+}

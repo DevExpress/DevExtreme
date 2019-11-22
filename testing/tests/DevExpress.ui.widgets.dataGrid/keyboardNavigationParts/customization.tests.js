@@ -2037,7 +2037,7 @@ QUnit.module("Customize keyboard navigation", {
         this.triggerKeyDown("1");
 
         // arrange, assert
-        $input = rowsViewWrapper.getEditorInputElement(0, 0);
+        $input = rowsViewWrapper.getEditorInput(0, 0);
         assert.equal($input.val(), "Alex", "input value has not changed");
 
         this.clock.tick();

@@ -1837,7 +1837,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         });
 
         element.dxList("instance")._dataSource.load = () => {
-            element.dxList("instance")._dataSource.fireEvent("loadError");
+            element.dxList("instance")._dataSource._eventsStrategy.fireEvent("loadError");
             return $.Deferred().reject().promise();
         };
 
@@ -1955,7 +1955,7 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
             }
         };
         dataSource.load = () => {
-            dataSource.fireEvent("changed");
+            dataSource._eventsStrategy.fireEvent("changed");
             nextPageCalled = true;
             return $.when(false);
         };
@@ -2501,6 +2501,24 @@ QUnit.module("keyboard navigation", {
         this.clock.tick();
         assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
         assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
+    });
+
+    QUnit.test("Select all when disabled item is null (T832581)", assert => {
+        try {
+            const instance = $("#list").dxList({
+                dataSource: [null, undefined],
+                searchEnabled: true,
+                selectionMode: "all",
+                showSelectionControls: true,
+                selectAllMode: "allPages"
+            }).dxList("instance");
+
+            instance.selectAll();
+        } catch(e) {
+            assert.ok(0, "Error is thrown: " + e.message);
+        }
+
+        assert.ok(1);
     });
 
     QUnit.test("list does not scroll to item after click on it", assert => {

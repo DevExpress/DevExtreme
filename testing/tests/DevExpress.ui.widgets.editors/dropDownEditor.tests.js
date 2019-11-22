@@ -16,6 +16,7 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture" class="qunit-fixture-visible">\
             <div id="dropDownEditorLazy"></div>\
+            <div id="dropDownEditorSecond"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -30,6 +31,8 @@ var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
 
 var TAB_KEY_CODE = "Tab",
     ESC_KEY_CODE = "Escape";
+
+var isIOs = devices.current().platform === "ios";
 
 var beforeEach = function() {
     fx.off = true;
@@ -566,6 +569,41 @@ QUnit.test("focusout should not be fired on valueChanged", function(assert) {
     assert.equal(textBoxOnFocusOutStub.callCount, 0, "onFocusOut textbox is fired");
 });
 
+QUnit.test("focusout to another editor should close current ddb (T832410)", function(assert) {
+    var $dropDownEditor1 = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [0, 1, 2],
+        contentTemplate: function() {
+            return $("<div>").attr("id", "test-content");
+        },
+        acceptCustomValue: true,
+        focusStateEnabled: true,
+        opened: true
+    });
+
+    var $dropDownEditor2 = $("#dropDownEditorSecond").dxDropDownEditor({
+        items: [0, 1, 2],
+        acceptCustomValue: true,
+        focusStateEnabled: true
+    });
+
+    var dropDownEditor1 = $dropDownEditor1.dxDropDownEditor("instance");
+
+    var $input1 = $dropDownEditor1.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    var $input2 = $dropDownEditor2.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+    dropDownEditor1.focus();
+
+    $input1.trigger($.Event('focusout', { relatedTarget: $input2 }));
+
+    assert.strictEqual(dropDownEditor1.option("opened"), !isIOs, "should be closed after another editor focus");
+
+    dropDownEditor1.open();
+    dropDownEditor1.focus();
+    $input1.trigger($.Event('focusout', { relatedTarget: $("#test-content") }));
+
+    assert.ok(dropDownEditor1.option("opened"), "should be still opened after the widget's popup focus");
+});
+
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -652,6 +690,19 @@ QUnit.test("Enter and escape key press does not prevent default when popup in no
     this.keyboard.keyDown("enter");
 
     assert.equal(prevented, 0, "defaults has not prevented on enter and escape keys");
+});
+
+QUnit.test("Escape key press should be handled by a children keyboard processor", function(assert) {
+    const handler = sinon.stub();
+
+    this.dropDownEditor
+        ._keyboardProcessor
+        .attachChildProcessor()
+        .reinitialize(handler, this.dropDownEditor);
+
+    this.keyboard.keyDown("esc");
+
+    assert.ok(handler.calledOnce, "Children keyboard processor can process the 'esc' key pressing");
 });
 
 QUnit.test("Home and end key press prevent default when popup in opened", function(assert) {

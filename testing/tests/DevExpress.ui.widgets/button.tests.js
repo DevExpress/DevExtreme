@@ -400,7 +400,6 @@ QUnit.module("submit behavior", {
 
             assert.ok(clickHandlerSpy.called);
             assert.ok(buttonInstance.option("disabled"), "button is disabled after the click");
-            assert.strictEqual(buttonInstance._validationStatus, "pending");
         } finally {
             ValidationEngine.initGroups();
         }

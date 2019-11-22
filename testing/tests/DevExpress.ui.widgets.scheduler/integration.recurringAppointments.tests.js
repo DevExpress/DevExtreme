@@ -8,7 +8,7 @@ import translator from "animation/translator";
 import { DataSource } from "data/data_source/data_source";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dateSerialization from "core/utils/date_serialization";
-import { SchedulerTestWrapper } from './helpers.js';
+import { SchedulerTestWrapper, isDesktopEnvironment } from './helpers.js';
 
 import "common.css!";
 import "generic_light.css!";
@@ -1471,4 +1471,72 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
     assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left are correct");
     assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, "Appointment's top are correct");
     assert.roughEqual(seventhPosition.top, eighthPosition.top, 0.5, "Appointment's occurrences after WKST are positioned correct on top");
+});
+
+if(isDesktopEnvironment()) {
+    QUnit.test("Recurrent appointment occurrence should be resized correctly, when startDayHour is changed on recurrent appointment (T832115)", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            views: ["week"],
+            currentView: "week",
+            startDayHour: 6,
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2015, 1, 9, 10),
+                endDate: new Date(2015, 1, 9, 11),
+                recurrenceRule: 'FREQ=DAILY',
+            }]
+        });
+
+        var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-top").eq(1)).start();
+        pointer.dragStart().drag(0, -3 * this.scheduler.workSpace.getCellHeight()).dragEnd();
+
+        this.scheduler.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(1).trigger("dxclick");
+
+        assert.deepEqual(this.instance.option("dataSource")[1].startDate, new Date(2015, 1, 10, 8, 30), "Start date is OK");
+    });
+}
+
+QUnit.test("Recurrence appointment occurrences should have correct start date with timezone changing (T818393)", function(assert) {
+    this.createInstance({
+        views: ["day", "week", "workWeek", "month"],
+        currentView: "week",
+        startDayHour: 1,
+        firstDayOfWeek: 2,
+        height: 600,
+        dataSource: [{
+            text: "Recurrence",
+            startDate: new Date(2019, 2, 30, 2, 0),
+            endDate: new Date(2019, 2, 30, 10, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=DAILY"
+        }],
+        currentDate: new Date(2019, 2, 30)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, "Appointment has right count of occurrences");
+    assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, this.scheduler.appointments.getAppointmentPosition(2).top, "Appointment first and third occurrences have same top coordinate");
+});
+
+QUnit.test("Recurrence appointment occurences should have correct text (T818393)", function(assert) {
+    this.createInstance({
+        views: ["week"],
+        currentView: "week",
+        height: 600,
+        dataSource: [{
+            text: "Recurrence",
+            startDate: new Date(2019, 2, 30, 2, 0),
+            endDate: new Date(2019, 2, 30, 3, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=HOURLY;INTERVAL=1;COUNT=5"
+        }],
+        currentDate: new Date(2019, 2, 30)
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 5, "Appointment has right count of occurrences");
+
+    const $thirdAppointment = this.scheduler.appointments.getAppointment(2);
+
+    assert.equal($thirdAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "4:00 AM", "Appointment third occurrences has correct start date text");
+    assert.equal($thirdAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "5:00 AM", "Appointment third occurrences has correct end date text");
 });

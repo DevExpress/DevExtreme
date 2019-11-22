@@ -293,7 +293,8 @@ const Validator = DOMComponent.inherit({
 
     _updateValidationResult(result) {
         if(!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
-            this._validationInfo.result = extend({}, result);
+            const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
+            this._validationInfo.result = extend({}, result, { complete });
         } else {
             for(let prop in result) {
                 if(prop !== "id" && prop !== "complete") {
@@ -316,7 +317,7 @@ const Validator = DOMComponent.inherit({
                 this._validationInfo.deferred = new Deferred();
                 this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this.fireEvent("validating", [this._validationInfo.result]);
+            this._eventsStrategy.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
         if(this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {

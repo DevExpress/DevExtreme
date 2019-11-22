@@ -9,5 +9,12 @@
         "SystemJS": true,
         "DevExpress": true,
         "sinon": true
+    },
+    "plugins": [
+        "qunit"
+    ],
+    "rules": {
+        "qunit/assert-args": "error",
+        "qunit/literal-compare-order": "error"
     }
 }

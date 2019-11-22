@@ -27,8 +27,6 @@ DevExpress.Color = require("../../color");
 
 var animationFrame = require("../../animation/frame");
 
-DevExpress.EventsMixin = require("../../core/events_mixin");
-
 /**
  * @name utils
  * @namespace DevExpress
