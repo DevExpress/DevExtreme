@@ -97,7 +97,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _shouldUseOriginalHandler(e) {
         const keysToHandleByMask = ["backspace", "del"];
-        const isNotDeletingInCalendar = this.option("opened") && e && !keysToHandleByMask.includes(normalizeKeyName(e));
+        const isNotDeletingInCalendar = this.option("opened") && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
 
         return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
     },

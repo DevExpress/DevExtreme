@@ -354,7 +354,7 @@ if(devices.real().deviceType === "desktop") {
             assert.notOk($contouredDate.is($selectedDate), "Contoured date isn't a selected");
         });
 
-        test("keyboard mask handlers should work for delete (T832885)", (assert) => {
+        test("mask handler should be used instead of the default for delete key when widget is opened (T832885)", (assert) => {
             this.instance.open();
 
             for(let i = 0; i < 3; ++i) {
@@ -364,9 +364,10 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "January 1 2000", "value has been reverted");
         });
 
-        test("keyboard mask handlers should work for backspace (T832885)", (assert) => {
-            this.keyboard.press("right");
-            this.keyboard.press("right");
+        test("mask handler should be used instead of the default for backspace key when widget is opened (T832885)", (assert) => {
+            this.keyboard
+                .press("right")
+                .press("right");
             this.instance.open();
 
             for(let i = 0; i < 3; ++i) {
