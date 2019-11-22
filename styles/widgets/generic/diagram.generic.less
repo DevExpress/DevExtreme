@@ -12,6 +12,7 @@
 
 @GENERIC_DIAGRAM_TOOLBAR_ICON_SIZE: @GENERIC_BASE_ICON_SIZE;
 @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
+@DIAGRAM_TOUCHBAR_ITEM_PADDING: 5px;
 
 .dx-diagram {
     border-color: @diagram-border-color;
@@ -159,6 +160,18 @@
                 color: @base-icon-color;
             }
         }
+    }
+}
+
+.dx-diagram-touchbar.dx-context-menu {
+    .dx-menu-item .dx-menu-item-content {
+        padding: @DIAGRAM_TOUCHBAR_ITEM_PADDING;
+    }
+
+    .dx-menu-separator {
+        width: 1px;
+        height: @GENERIC_BASE_ICON_SIZE + @DIAGRAM_TOUCHBAR_ITEM_PADDING + @DIAGRAM_TOUCHBAR_ITEM_PADDING + 2;
+        margin: 0;
     }
 }
 
