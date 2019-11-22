@@ -1180,6 +1180,61 @@ QUnit.test("Cancel collapse row on a collapsing event", function(assert) {
     assert.equal(items.length, 2, "count item");
 });
 
+// T819031
+QUnit.test("All nested children should be loaded when expanding nodes with expandRow method", function(assert) {
+    // arrange
+    const clock = sinon.useFakeTimers();
+
+    const loadSpy = sinon.spy((loadOptions) => {
+        let result = [];
+
+        loadOptions.parentIds.forEach(function(parentId) {
+            const items = itemsByParentId[parentId];
+
+            if(items) {
+                result = result.concat(items);
+            }
+        });
+
+        return result;
+    });
+
+    const itemsByParentId = {
+        "0": [{ id: 1, parentId: 0, name: "Name 1" }],
+        "1": [{ id: 2, parentId: 1, name: "Name 2" }],
+        "2": [{ id: 3, parentId: 2, name: "Name 3" }],
+        "3": [{ id: 4, parentId: 3, name: "Name 4" }]
+    };
+
+    this.applyOptions({
+        loadingTimeout: 30,
+        remoteOperations: { filtering: true },
+        dataSource: {
+            load: loadSpy
+        }
+    });
+    clock.tick(30);
+    loadSpy.reset();
+
+    // act
+    this.expandRow(1);
+    this.expandRow(2);
+    this.expandRow(3);
+    clock.tick(30);
+
+    // assert
+    const rows = this.getVisibleRows();
+    assert.strictEqual(loadSpy.callCount, 1, "load call count");
+    assert.deepEqual(loadSpy.getCall(0).args[0].parentIds, [1, 2, 3], "load arg - parentIds");
+    assert.strictEqual(rows.length, 4, "row count");
+    assert.strictEqual(rows[0].data.id, 1, "first node");
+    assert.strictEqual(rows[1].data.id, 2, "second node");
+    assert.strictEqual(rows[2].data.id, 3, "third node");
+    assert.strictEqual(rows[3].data.id, 4, "fourth node");
+
+    clock.restore();
+});
+
 QUnit.module("Sorting", { beforeEach: function() {
     this.items = [
         { id: 1, parentId: 0, name: "Name 3", age: 19 },
