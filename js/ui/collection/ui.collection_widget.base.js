@@ -539,10 +539,16 @@ var CollectionWidget = Widget.inherit({
             this._refreshItem($item, item);
         }
 
-        const isDisabling = property === 'disabled' && value;
+        const isDisabling = property === "disabled" && value;
 
-        if(isDisabling && $item.is(this.option('focusedElement'))) {
-            this.option('focusedElement', null);
+        if(isDisabling) {
+            this._resetItemFocus($item);
+        }
+    },
+
+    _resetItemFocus($item) {
+        if($item.is(this.option("focusedElement"))) {
+            this.option("focusedElement", null);
         }
     },
 
@@ -1004,6 +1010,7 @@ var CollectionWidget = Widget.inherit({
             watchMethod: function() {
                 return that.option("integrationOptions.watchMethod");
             },
+            owner: that,
             fieldGetter: function(field) {
                 var expr = that.option(field + "Expr"),
                     getter = compileGetter(expr);

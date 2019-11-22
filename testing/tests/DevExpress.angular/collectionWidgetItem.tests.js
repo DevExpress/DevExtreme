@@ -1,11 +1,13 @@
-var $ = require("jquery"),
-    angular = require("angular");
+import $ from "jquery";
+import angular from "angular";
 
-var registerComponent = require("core/component_registrator"),
-    CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
-    CollectionWidgetItem = require("ui/collection/item");
+import registerComponent from "core/component_registrator";
+import CollectionWidget from "ui/collection/ui.collection_widget.edit";
+import CollectionWidgetItem from "ui/collection/item";
 
-require("integration/angular");
+import "integration/angular";
+
+const FOCUSED_STATE_CLASS = "dx-state-focused";
 
 QUnit.module("CollectionWidgetItem", {
     beforeEach: function() {
@@ -27,7 +29,10 @@ QUnit.module("CollectionWidgetItem", {
         });
         TestCollection.ItemClass = TestCollectionItem;
 
+        var DefaultCollection = this.DefaultCollection = CollectionWidget.inherit();
+
         registerComponent("dxTestCollection", TestCollection);
+        registerComponent("dxDefaultCollection", DefaultCollection);
 
         this.testApp = angular.module("testApp", ["dx"]);
         this.$fixtureElement = $("<div/>").attr("ng-app", "testApp").appendTo("#qunit-fixture");
@@ -83,6 +88,34 @@ QUnit.test("item should correctly watch changes for complex expressions", functi
 
     scope.$apply(function() { scope.items[0].value = 2; });
     assert.equal($item.data("value"), 3, "value changed");
+});
+
+QUnit.test("item should correctly reset collection focus state", function(assert) {
+    const $markup = $("<div></div>")
+        .attr("dx-default-collection", "{ itemTemplate: noop, bindingOptions: { items: 'items' } }")
+        .appendTo(this.$controller);
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.items = [{ text: "test" }];
+        $scope.noop = function() {};
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    const scope = $markup.scope();
+    const collection = this.DefaultCollection.getInstance($markup);
+    const $firstItem = $(collection.itemElements()).first();
+    const resetFocusSpy = sinon.spy(collection, "_resetItemFocus");
+
+    collection.option("focusedElement", $firstItem.get(0));
+    assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS));
+
+    scope.$apply(function() { scope.items[0].disabled = true; });
+    assert.ok(resetFocusSpy.calledOnce);
+    assert.notOk($firstItem.hasClass(FOCUSED_STATE_CLASS));
+
+    scope.$apply(function() { scope.items[0].disabled = false; });
+    assert.ok(resetFocusSpy.calledOnce);
 });
 
 QUnit.test("item should not be rerendered", function(assert) {
