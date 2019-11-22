@@ -1,41 +1,45 @@
 import $ from "jquery";
-const initTree = (options) => $("#treeView").dxTreeView(options);
+import TreeViewTestWrapper from "../../../../helpers/TreeViewTestHelper.js";
+const createWrapper = (options) => new TreeViewTestWrapper(options);
 
 import "common.css!";
-QUnit.module('TreeView');
+QUnit.module('TreeView', {
+    beforeEach: function() {
+        this.testSamples = [{ rtlEnabled: false, expectedTextAlign: 'left' }, { rtlEnabled: true, expectedTextAlign: 'right' }];
+    }
+});
 
-QUnit.test("Rrl mode Text-align (T822293)", function(assert) {
-    getTestData().forEach((testData => {
-        const $treeView = initTree({
+QUnit.test("Rtl mode -> text-align (T822293)", function(assert) {
+    this.testSamples.forEach((testData) => {
+        const $treeWrapper = createWrapper({
                 rtlEnabled: testData.rtlEnabled,
                 items: [ { id: "Item1", text: "Item1", items: [{ id: "Item1_1", text: "Item1_1" }] }, { id: "Item2", text: "Item_2" }]
-            }), items = $treeView.find('.dx-treeview-item');
+            }),
+            items = $treeWrapper.getNodes();
 
         items.each((index, item) => {
             assert.equal($(item).css('text-align'), testData.expectedTextAlign);
         });
-    }));
+    });
 });
 
-QUnit.test("Rrl mode Text-align with bootstrap (T822293)", function(assert) {
-    getTestData().forEach((testData => {
-        const body = $('body');
-        body.css('text-align', 'left'); // T822293
+QUnit.test("Rtl mode -> text-align with bootstrap (T822293)", function(assert) {
+    const body = $('body');
+    const initialTextAlign = body.css('text-align');
 
-        const $treeView = initTree({
+    this.testSamples.forEach((testData) => {
+        body.css('text-align', 'left');
+
+        const $treeWrapper = createWrapper({
                 rtlEnabled: testData.rtlEnabled,
                 items: [ { id: "Item1", text: "Item1", items: [{ id: "Item1_1", text: "Item1_1" }] }, { id: "Item2", text: "Item_2" }]
-            }), items = $treeView.find('.dx-treeview-item');
-
+            }),
+            items = $treeWrapper.getNodes();
 
         items.each((index, item) => {
             assert.equal($(item).css('text-align'), testData.expectedTextAlign);
         });
 
-        body.css('text-align', 'initial');
-    }));
+        body.css('text-align', initialTextAlign);
+    });
 });
-
-function getTestData() {
-    return [{ rtlEnabled: false, expectedTextAlign: 'left' }, { rtlEnabled: true, expectedTextAlign: 'right' }];
-}
