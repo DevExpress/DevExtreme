@@ -270,6 +270,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _initTemplates() {
+        this.callBase();
         this._templateManager.addDefaultTemplate({
             ["content"]: new FunctionTemplate((options) => {
                 const $popupContent = $(options.container);
@@ -282,8 +283,6 @@ let DropDownButton = Widget.inherit({
                 this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
             })
         });
-
-        this.callBase();
     },
 
     _itemsToDataSource: function() {

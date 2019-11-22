@@ -26,6 +26,7 @@ QUnit.module("default", {
     beforeEach: () => {
         this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
             _initTemplates() {
+                this.callBase();
                 this._templateManager.addDefaultTemplate({
                     ["content"]: {
                         render() {
@@ -33,7 +34,6 @@ QUnit.module("default", {
                         }
                     }
                 });
-                this.callBase();
             }
         });
         this.TestComponent = DOMComponent.inherit({
