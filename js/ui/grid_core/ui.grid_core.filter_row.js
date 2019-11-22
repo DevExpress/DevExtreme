@@ -417,15 +417,17 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _getEditorOptions: function($editorContainer, column) {
             var that = this,
-                result = extend({}, column, {
+                accessibilityOptions = {
+                    editorOptions: {
+                        inputAttr: that._getFilterInputAccessibilityAttributes(column)
+                    }
+                },
+                result = extend(accessibilityOptions, column, {
                     value: getFilterValue(that, column.index, $editorContainer),
                     parentType: "filterRow",
                     showAllText: that.option("filterRow.showAllText"),
                     updateValueTimeout: that.option("filterRow.applyFilter") === "onClick" ? 0 : FILTERING_TIMEOUT,
                     width: null,
-                    editorOptions: {
-                        inputAttr: that._getFilterCellInputAttributes(column)
-                    },
                     setValue: function(value, notFireEvent) {
                         updateFilterValue(that, {
                             column: column,
@@ -446,7 +448,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
             return result;
         },
-        _getFilterCellInputAttributes: function(column) {
+        _getFilterInputAccessibilityAttributes: function(column) {
             const columnAriaLabel = messageLocalization.format("dxDataGrid-ariaFilterCell");
             if(this.component.option("showColumnHeaders")) {
                 return {
