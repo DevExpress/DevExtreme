@@ -392,7 +392,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
             });
         });
 
-        optionsSet.forEach(function(options) {
+        optionsSet.forEach((options) => {
             const $dateBox = $("#dateBox").dxDateBox(
                 options
             );
