@@ -26,7 +26,11 @@ const CLASS = {
     tooltip: 'dx-tooltip',
     tooltipAppointmentItemContentDate: 'dx-tooltip-appointment-item-content-date',
     tooltipAppointmentItemContentSubject: 'dx-tooltip-appointment-item-content-subject',
-    tooltipWrapper: 'dx-tooltip-wrapper'
+    tooltipWrapper: 'dx-tooltip-wrapper',
+    tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
+
+    dialog: 'dx-dialog.dx-popup',
+    dialogButton: `dx-dialog-button`
 };
 
 class Appointment {
@@ -90,6 +94,18 @@ class AppointmentTooltipListItem {
     }
 }
 
+class AppointmentDialog {
+    element: Selector;
+    series: Selector;
+    appointment: Selector;
+
+    constructor(scheduler: Selector) {
+        this.element = Selector(`.${CLASS.dialog}`);
+        this.series = this.element.find(`.${CLASS.dialogButton}`).nth(0);
+        this.appointment = this.element.find(`.${CLASS.dialogButton}`).nth(1);
+    }
+}
+
 class AppointmentPopup {
     element: Selector;
     wrapper: Selector;
@@ -124,10 +140,12 @@ class AppointmentPopup {
 
 class AppointmentTooltip {
     element: Selector;
+    deleteElement: Selector;
     wrapper: Selector;
 
     constructor(scheduler: Selector) {
         this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltipWrapper}`);
+        this.deleteElement = Selector(`.${CLASS.tooltipDeleteButton}`);
         this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
     }
 
@@ -178,8 +196,12 @@ export default class Scheduler extends Widget {
             top: workSpaceScroll.scrollTop
         };
 
-        this.appointmentTooltip = new AppointmentTooltip(this.element);
         this.appointmentPopup = new AppointmentPopup(this.element);
+        this.appointmentTooltip = new AppointmentTooltip(this.element);
+    }
+
+    getDialog() {
+        return new AppointmentDialog(this.element);
     }
 
     getDateTableCell(rowIndex: number = 0, cellIndex: number = 0): Selector {

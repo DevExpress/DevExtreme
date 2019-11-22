@@ -171,10 +171,6 @@ export class TooltipStrategyBase {
         return e;
     }
 
-    _onDeleteButtonClick() {
-        this.hide();
-    }
-
     _createTemplate(data, currentData, color) {
         this.scheduler._defaultTemplates[this._getItemListDefaultTemplateName()] = new FunctionTemplate(options => {
             const $container = $(options.container);
@@ -230,11 +226,11 @@ export class TooltipStrategyBase {
             icon: "trash",
             stylingMode: "text",
             onClick: e => {
-                this._onDeleteButtonClick();
-                this.scheduler._checkRecurringAppointment(data, currentData,
-                    currentData.startDate, () => this.scheduler.deleteAppointment(data), true);
-
+                this.hide();
                 e.event.stopPropagation();
+
+                const startDate = this.scheduler.fire("getField", "startDate", currentData);
+                this.scheduler._checkRecurringAppointment(data, currentData, startDate, () => this.scheduler.deleteAppointment(data), true);
             }
         });
 
