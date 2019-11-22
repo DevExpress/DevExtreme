@@ -1,38 +1,34 @@
 import $ from "jquery";
-const initList = (options) => $("#list").dxList(options);
 
 import "common.css!";
-QUnit.module('List');
-
-[{ rtlEnabled: false, expectedTextAlign: 'start' }, { rtlEnabled: true, expectedTextAlign: 'right' }].forEach((testData) => {
-    QUnit.test("Rtl mode -> text-align (T822293)", function(assert) {
-        const $list = initList({
+QUnit.module('List rtl', () => {
+    [{ rtlEnabled: false, expectedTextAlign: 'start' }, { rtlEnabled: true, expectedTextAlign: 'right' }].forEach((testData) => {
+        QUnit.test("Rtl mode -> text-align", assert => {
+            const $list = $("#list").dxList({
                 rtlEnabled: testData.rtlEnabled,
                 items: [ 1, 2 ]
-            }),
-            items = $list.find('.dx-list-item');
+            });
 
-        items.each((index, item) => {
-            assert.equal($(item).css('text-align'), testData.expectedTextAlign);
+            $list.find('.dx-list-item').each((_, item) => {
+                assert.equal($(item).css('text-align'), testData.expectedTextAlign, `text-align is ${testData.expectedTextAlign}`);
+            });
         });
-    });
 
-    QUnit.test("Rtl mode -> text-align with bootstrap (T822293)", function(assert) {
-        const body = $('body');
-        const initialTextAlign = body.css('text-align');
+        QUnit.test("Rtl mode -> text-align with bootstrap", assert => {
+            const body = $('body');
+            const initialTextAlign = body.css('text-align');
 
-        body.css('text-align', 'start');
-        const $list = initList({
+            body.css('text-align', 'start');
+            const $list = $("#list").dxList({
                 rtlEnabled: testData.rtlEnabled,
                 items: [ 1, 2 ]
-            }),
-            items = $list.find('.dx-list-item');
+            });
 
-        items.each((index, item) => {
-            assert.equal($(item).css('text-align'), testData.expectedTextAlign);
+            $list.find('.dx-list-item').each((_, item) => {
+                assert.equal($(item).css('text-align'), testData.expectedTextAlign, `text-align is ${testData.expectedTextAlign}`);
+            });
+
+            body.css('text-align', initialTextAlign);
         });
-
-        body.css('text-align', initialTextAlign);
     });
 });
-
