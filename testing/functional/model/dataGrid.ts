@@ -229,4 +229,13 @@ export default class DataGrid extends Widget {
             { dependencies: { getGridInstance: this.getGridInstance } }
         )();
     }
+
+    getScrollbarWidth(isHorizontal: boolean) : Promise<number> {
+        const getGridInstance: any = this.getGridInstance;
+
+        return ClientFunction(
+            () => getGridInstance().getView('rowsView').getScrollbarWidth(isHorizontal),
+            { dependencies: { getGridInstance, isHorizontal } }
+        )();
+    }
 }
