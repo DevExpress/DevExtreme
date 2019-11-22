@@ -95,14 +95,18 @@ module.exports = {
 
     _getSearchEditorOptions: function() {
         var that = this,
-            userEditorOptions = that.option("searchEditorOptions");
+            userEditorOptions = that.option("searchEditorOptions"),
+            searchText = messageLocalization.format("Search");
 
         return extend({
             mode: "search",
-            placeholder: messageLocalization.format("Search"),
+            placeholder: searchText,
             tabIndex: that.option("tabIndex"),
             value: that.option("searchValue"),
             valueChangeEvent: "input",
+            inputAttr: {
+                "aria-label": searchText
+            },
             onValueChanged: function(e) {
                 var searchTimeout = that.option("searchTimeout");
                 that._valueChangeDeferred = new Deferred();

@@ -8,6 +8,8 @@ import devices from "core/devices";
 import themes from "ui/themes";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
 import publicComponentUtils from "core/utils/public_component";
+import messageLocalization from "localization/message";
+import { TreeViewSearchBoxWrapper } from "../../helpers/wrappers/searchBoxWrappers.js";
 
 var device = devices.real();
 
@@ -559,6 +561,22 @@ QUnit.test("Enable search", function(assert) {
     treeView = $overlayWrapper.find(".dx-treeview").dxTreeView("instance");
     assert.ok(treeView.option("searchEnabled"));
     assert.equal(treeView.option("searchTimeout"), 300, "search timeout is assigned");
+});
+
+QUnit.test("Test aria-label in search-box input (T829760)", function(assert) {
+    const searchBoxWrapper = new TreeViewSearchBoxWrapper(".dx-datagrid-column-chooser");
+
+    this.setTestElement($("#container"));
+
+    this.options.columnChooser.allowSearch = true;
+
+    // act
+    this.renderColumnChooser();
+    this.columnChooserView._popupContainer.option("visible", true);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(searchBoxWrapper.getEditorInput().attr("aria-label"), messageLocalization.format("Search"), "Search box input aria-label attribute");
 });
 
 if(device.deviceType === "desktop") {
