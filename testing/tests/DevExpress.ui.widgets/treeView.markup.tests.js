@@ -498,3 +498,6 @@ QUnit.test("On initialization 'selectAll' item should have intermediate state if
 
     assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"));
 });
+
+
+import "./treeViewParts/markup/rtl.js";
