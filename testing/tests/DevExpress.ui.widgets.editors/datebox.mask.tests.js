@@ -354,6 +354,28 @@ if(devices.real().deviceType === "desktop") {
             assert.notOk($contouredDate.is($selectedDate), "Contoured date isn't a selected");
         });
 
+        test("keyboard mask handlers should work for delete (T832885)", (assert) => {
+            this.instance.open();
+
+            for(let i = 0; i < 3; ++i) {
+                this.keyboard.press("del");
+            }
+
+            assert.strictEqual(this.$input.val(), "January 1 2000", "value has been reverted");
+        });
+
+        test("keyboard mask handlers should work for backspace (T832885)", (assert) => {
+            this.keyboard.press("right");
+            this.keyboard.press("right");
+            this.instance.open();
+
+            for(let i = 0; i < 3; ++i) {
+                this.keyboard.press("backspace");
+            }
+
+            assert.strictEqual(this.$input.val(), "January 1 2000", "value has been reverted");
+        });
+
         test("Right and left arrows should move the selection", (assert) => {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");

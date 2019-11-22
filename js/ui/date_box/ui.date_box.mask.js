@@ -35,16 +35,12 @@ const DateBoxMask = DateBoxBase.inherit({
 
         return extend({}, originalHandlers, {
             del: (e) => {
-                return applyHandler(e, (event) => {
-                    this._revertPart(FORWARD);
-                    this._isAllSelected() || event.preventDefault();
-                });
+                this._revertPart(FORWARD);
+                this._isAllSelected() || e.preventDefault();
             },
             backspace: (e) => {
-                return applyHandler(e, (event) => {
-                    this._revertPart(BACKWARD);
-                    this._isAllSelected() || event.preventDefault();
-                });
+                this._revertPart(BACKWARD);
+                this._isAllSelected() || e.preventDefault();
             },
             home: (e) => {
                 return applyHandler(e, (event) => {
