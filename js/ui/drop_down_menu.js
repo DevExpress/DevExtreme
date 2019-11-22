@@ -272,11 +272,10 @@ var DropDownMenu = Widget.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
-
         this._templateManager.addDefaultTemplate({
             ["content"]: new ChildDefaultTemplate("content")
         });
+        this.callBase();
     },
 
     _initMarkup: function() {

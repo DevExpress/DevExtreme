@@ -63,8 +63,6 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
-
         var template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
                 if(data.text) {
@@ -101,6 +99,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             ["item"]: template,
             ["menuItem"]: template,
         });
+        this.callBase();
     },
 
     _getDefaultOptions: function() {

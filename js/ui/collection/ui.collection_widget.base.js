@@ -271,8 +271,8 @@ var CollectionWidget = Widget.inherit({
     _initTemplates: function() {
         this._initItemsFromMarkup();
 
-        this.callBase();
         this._initDefaultItemTemplate();
+        this.callBase();
     },
 
     _initDefaultItemTemplate: function() {
