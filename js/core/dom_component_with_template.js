@@ -11,7 +11,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         this.callBase();
 
         this._templateManager = new TemplateManager(
-            this.option.bind(this)
+            this.option.bind(this),
+            this.$element.bind(this)
         );
 
         this._initTemplates();
@@ -24,9 +25,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
     _initTemplates: function() {
         // const anonymousTemplateName = this._getAnonymousTemplateName();
-        const elementContent = this.$element().contents();
 
-        this._templateManager.initTemplates(elementContent);
+        this._templateManager.initTemplates();
     },
 
     // _getAnonymousTemplateName: function() {
