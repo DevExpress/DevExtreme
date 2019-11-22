@@ -33,6 +33,8 @@ var DRAGGABLE = "dxDraggable",
 var targetDraggable,
     sourceDraggable;
 
+const ANONYMOUS_TEMPLATE_NAME = 'content';
+
 class ScrollHelper {
     constructor(orientation, component) {
         this._preventScroll = true;
@@ -915,9 +917,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this["_" + name + "Action"] || this._createActionByOption(name);
     },
 
-    _getAnonymousTemplateName: function() {
-        return "content";
-    },
+    // _getAnonymousTemplateName: function() {
+    //     return "content";
+    // },
 
     _initTemplates: function() {
         if(!this.option("contentTemplate")) return;
@@ -926,13 +928,14 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._templateManager.addDefaultTemplate({
             ["content"]: new EmptyTemplate()
         });
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _render: function() {
         this.callBase();
         this.$element().addClass(this._addWidgetPrefix());
 
-        const transclude = this._getAnonymousTemplateName() === this.option("contentTemplate"),
+        const transclude = this._templateManager.anonymousTemplateName === this.option("contentTemplate"),
             template = this._getTemplateByOption("contentTemplate");
 
         if(template) {

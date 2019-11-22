@@ -37,6 +37,7 @@ const EMPTY_COLLECTION = "dx-empty-collection";
 const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
 const ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;
+const ANONYMOUS_TEMPLATE_NAME = 'item';
 
 const FOCUS_UP = "up";
 const FOCUS_DOWN = "down";
@@ -250,9 +251,9 @@ var CollectionWidget = Widget.inherit({
         });
     },
 
-    _getAnonymousTemplateName: function() {
-        return "item";
-    },
+    // _getAnonymousTemplateName: function() {
+    //     return "item";
+    // },
 
     _init: function() {
         this._compileDisplayGetter();
@@ -276,6 +277,7 @@ var CollectionWidget = Widget.inherit({
 
     _initDefaultItemTemplate: function() {
         var fieldsMap = this._getFieldsMap();
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             ["item"]: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {

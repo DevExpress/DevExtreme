@@ -79,9 +79,9 @@ var DeferRendering = Widget.inherit({
         });
     },
 
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
+    // _getAnonymousTemplateName: function() {
+    //     return ANONYMOUS_TEMPLATE_NAME;
+    // },
 
     _init: function() {
         this.transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
@@ -93,6 +93,8 @@ var DeferRendering = Widget.inherit({
 
         this._initActions();
         this.callBase();
+
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _initElement: function() {
@@ -211,7 +213,7 @@ var DeferRendering = Widget.inherit({
                 element: $element
             };
 
-        var contentTemplate = this._getTemplate(this._getAnonymousTemplateName());
+        var contentTemplate = this._getTemplate(this._templateManager.anonymousTemplateName);
 
         if(contentTemplate) {
             contentTemplate.render({

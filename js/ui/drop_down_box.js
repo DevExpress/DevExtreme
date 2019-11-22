@@ -49,9 +49,9 @@ var DropDownBox = DropDownEditor.inherit({
         return $(this.content()).find("*");
     },
 
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
+    // _getAnonymousTemplateName: function() {
+    //     return ANONYMOUS_TEMPLATE_NAME;
+    // },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -152,6 +152,7 @@ var DropDownBox = DropDownEditor.inherit({
         this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
         this.callBase();
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _setSubmitValue: function() {

@@ -40,17 +40,18 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, element, getDefaultTemplates) {
+    constructor(option, element) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
+        this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
         this.option = option;
         this.$element = element;
     }
 
-    static getAnonymousTemplateName() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    }
+    // static getAnonymousTemplateName() {
+    //     return ANONYMOUS_TEMPLATE_NAME;
+    // }
 
     static getDefaultOptions() {
         return {
@@ -108,6 +109,14 @@ export default class TemplateManager {
         return args;
     }
 
+    set anonymousTemplateName(templateName) {
+        this._anonymousTemplateName = templateName;
+    }
+
+    get anonymousTemplateName() {
+        return this._anonymousTemplateName;
+    }
+
     addDefaultTemplate(template) {
         this._defaultTemplates = extend({}, this._defaultTemplates, template);
     }
@@ -119,9 +128,9 @@ export default class TemplateManager {
         this._tempTemplates = [];
     }
 
-    initTemplates(anonymousTemplateName) {
+    initTemplates() {
         this._extractTemplates();
-        this._extractAnonymousTemplate(anonymousTemplateName);
+        this._extractAnonymousTemplate();
     }
 
     _extractTemplates() {
@@ -157,7 +166,7 @@ export default class TemplateManager {
         templates[name] = this.createTemplate(template);
     }
 
-    _extractAnonymousTemplate(anonymousTemplateName) {
+    _extractAnonymousTemplate() {
         const templates = this.option('integrationOptions.templates');
         const $anonymousTemplate = this.$element().contents().detach();
 
@@ -169,8 +178,8 @@ export default class TemplateManager {
         });
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
-        if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
-            templates[anonymousTemplateName] = this.createTemplate($anonymousTemplate);
+        if(!templates[this._anonymousTemplateName] && !onlyJunkTemplateContent) {
+            templates[this._anonymousTemplateName] = this.createTemplate($anonymousTemplate);
         }
     }
 

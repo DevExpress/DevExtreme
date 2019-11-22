@@ -24,14 +24,14 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _initTemplates: function() {
-        const anonymousTemplateName = this._getAnonymousTemplateName();
+        // const anonymousTemplateName = this._getAnonymousTemplateName();
 
-        this._templateManager.initTemplates(anonymousTemplateName);
+        this._templateManager.initTemplates();
     },
 
-    _getAnonymousTemplateName: function() {
-        return TemplateManager.getAnonymousTemplateName();
-    },
+    // _getAnonymousTemplateName: function() {
+    //     return TemplateManager.getAnonymousTemplateName();
+    // },
 
     _getTemplateByOption: function(optionName) {
         return this._templateManager.getTemplate(this.option(optionName));

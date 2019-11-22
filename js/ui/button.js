@@ -13,6 +13,8 @@ import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
 import { name as clickEventName } from '../events/click';
 
+const ANONYMOUS_TEMPLATE_NAME = 'content';
+
 /**
 * @name dxButton
 * @inherits Widget
@@ -68,9 +70,9 @@ class Button extends Widget {
 
     }
 
-    _getAnonymousTemplateName() {
-        return 'content';
-    }
+    // _getAnonymousTemplateName() {
+    //     return 'content';
+    // }
 
     _getContentData() {
         const { icon, text, type, _templateData } = this.option();
@@ -227,6 +229,7 @@ class Button extends Widget {
     _initTemplates() {
         super._initTemplates();
 
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             ['content']: new FunctionTemplate(({ model = {}, container }) => {
                 const { text, icon } = model;
@@ -415,7 +418,7 @@ class Button extends Widget {
             .toggleClass('dx-button-icon-right', !!icon && this.option('iconPosition') !== 'left')
             .toggleClass('dx-button-has-text', !!text);
 
-        const transclude = this._getAnonymousTemplateName() === this.option('template');
+        const transclude = this._templateManager.anonymousTemplateName === this.option('template');
         const template = this._getTemplateByOption('template');
         const $result = $(template.render({
             model: data,

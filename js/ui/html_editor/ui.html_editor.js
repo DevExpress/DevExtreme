@@ -241,9 +241,9 @@ const HtmlEditor = Editor.inherit({
         this._contentInitializedCallback = Callbacks();
     },
 
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
+    // _getAnonymousTemplateName: function() {
+    //     return ANONYMOUS_TEMPLATE_NAME;
+    // },
 
     _initTemplates: function() {
         this.callBase();
@@ -305,6 +305,7 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._updateContainerMarkup();
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _renderSubmitElement: function() {
