@@ -329,9 +329,9 @@ const DOMComponent = Component.inherit({
     },
 
     _extendConfig(config, extendConfig) {
-        each(extendConfig, (key, value) =>
-            Object.prototype.hasOwnProperty.call(config, key) && (config[key] = value)
-        );
+        each(extendConfig, (key, value) => {
+            !Object.prototype.hasOwnProperty.call(config, key) && (config[key] = value);
+        });
     },
 
     _defaultActionConfig() {
