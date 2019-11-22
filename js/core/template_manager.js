@@ -40,13 +40,13 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, element) {
+    constructor(option) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
         this.option = option;
-        this.$element = element;
+        // this.$element = element;
     }
 
     // static getAnonymousTemplateName() {
@@ -128,13 +128,13 @@ export default class TemplateManager {
         this._tempTemplates = [];
     }
 
-    initTemplates(getElementContent) {
-        this._extractTemplates(getElementContent);
-        this._extractAnonymousTemplate(getElementContent);
+    initTemplates(elementContent) {
+        this._extractTemplates(elementContent);
+        this._extractAnonymousTemplate(elementContent);
     }
 
-    _extractTemplates(getElementContent) {
-        const templateElements = getElementContent().filter(TEMPLATE_SELECTOR);
+    _extractTemplates(elementContent) {
+        const templateElements = elementContent.filter(TEMPLATE_SELECTOR);
         const templatesMap = {};
 
         templateElements.each((_, template) => {
@@ -166,9 +166,9 @@ export default class TemplateManager {
         templates[name] = this.createTemplate(template);
     }
 
-    _extractAnonymousTemplate(getElementContent) {
+    _extractAnonymousTemplate(elementContent) {
         const templates = this.option('integrationOptions.templates');
-        const $anonymousTemplate = getElementContent().detach();
+        const $anonymousTemplate = elementContent.detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
             const isTextNode = element.nodeType === TEXT_NODE;
