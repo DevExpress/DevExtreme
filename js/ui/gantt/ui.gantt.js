@@ -53,7 +53,7 @@ class Gantt extends Widget {
         this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
-    _render() {
+    _renderContent() {
         this._renderTreeList();
         this._renderSplitter();
         this._renderBars();
@@ -125,6 +125,7 @@ class Gantt extends Widget {
             onPopupMenuShowing: this._showPopupMenu.bind(this),
             modelChangesListener: this._createModelChangesListener()
         });
+        this._fireContentReadyAction();
     }
 
     _onApplyPanelSize(e) {

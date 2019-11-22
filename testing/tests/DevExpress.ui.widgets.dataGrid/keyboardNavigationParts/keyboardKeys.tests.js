@@ -2041,7 +2041,7 @@ QUnit.module("Keyboard keys", {
         this.clock.tick();
 
         // arrange
-        $input = dataGridWrapper.rowsView.getEditorInputElement(0, 0);
+        $input = dataGridWrapper.rowsView.getEditorInput(0, 0);
 
         // assert
         assert.ok($input.is(":focus"), "input is focused");

@@ -252,10 +252,11 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     assert.equal(scrollLeft, 100);
 });
 
-QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", function(assert) {
+QUnit.test("Grid accessibility structure (T640539, T831996)", function(assert) {
     var headersWrapper = dataGridWrapper.headers,
         rowsViewWrapper = dataGridWrapper.rowsView,
         filterPanelWrapper = dataGridWrapper.filterPanel,
+        filterRowWrapper = dataGridWrapper.filterRow,
         pagerWrapper = dataGridWrapper.pager;
 
     createDataGrid({
@@ -266,7 +267,7 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
             visible: true
         },
         filterRow: {
-            enabled: true
+            visible: true
         },
         filterValue: ["field1", "=", "1"],
         pager: {
@@ -279,7 +280,7 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
             enabled: true
         },
         paging: {
-            pageSize: 2,
+            pageSize: 2
         },
         columns: [
             { type: "selection" },
@@ -292,6 +293,16 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
     this.clock.tick();
 
     assert.equal($(".dx-widget").attr("role"), "presentation", "Widget role");
+
+    // filter row
+    assert.equal(filterRowWrapper.getEditorCell(0).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getEditorCell(1).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getEditorCell(0).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 3).attr("id"));
+    assert.equal(filterRowWrapper.getEditorCell(1).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 4).attr("id"));
+    assert.equal(filterRowWrapper.getTextEditorInput(0).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getTextEditorInput(1).attr("aria-label"), messageLocalization.format("dxDataGrid-ariaFilterCell"));
+    assert.equal(filterRowWrapper.getTextEditorInput(0).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 3).attr("id"));
+    assert.equal(filterRowWrapper.getTextEditorInput(1).attr("aria-describedby"), headersWrapper.getHeaderItem(0, 4).attr("id"));
 
     assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr("role"), "grid", "Grid role");
     assert.equal(headersWrapper.getElement().attr("role"), "presentation", 'Headers role');
@@ -348,6 +359,45 @@ QUnit.testInActiveWindow("Grid accessibility structure (T640539, T831996)", func
     const $buttons = pagerWrapper.getPagerButtonsElements();
     assert.equal($buttons.length, 2, "buttons count");
     $buttons.each((index, button) => assert.equal($(button).attr("tabindex"), 0, `button ${index} tabindex`));
+});
+
+QUnit.test("DataGrid elements shouldn't have aria-describedby attributes if showColumnHeaders is false", function(assert) {
+    createDataGrid({
+        dataSource: [
+            { field1: "1", field2: "2", g0: 0 }
+        ],
+        filterPanel: {
+            visible: true
+        },
+        filterRow: {
+            visible: true
+        },
+        filterValue: ["field1", "=", "1"],
+        showColumnHeaders: false,
+        pager: {
+            visible: true,
+            allowedPageSizes: [1, 2, 3, 4, 5],
+            showPageSizeSelector: true,
+            showNavigationButtons: true
+        },
+        masterDetail: {
+            enabled: true
+        },
+        paging: {
+            pageSize: 2
+        },
+        columns: [
+            { type: "selection" },
+            "field1",
+            "field2",
+            { dataField: "g0", groupIndex: 0, showWhenGrouped: true }
+        ]
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal($("[aria-describedby]").length, 0, "No elements with aria-describedby attribute");
 });
 
 QUnit.testInActiveWindow("Global column index should be unique for the different grids", function(assert) {
@@ -17868,6 +17918,86 @@ QUnit.test("Cancel focused row if click selection checkBox (T812681)", function(
     assert.equal(focusedRowChangedFiresCount, 0, "onFocusedRowChanged fires count");
     assert.equal(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey");
     assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+});
+
+QUnit.test("DataGrid - Focus updating on refresh should be correct for focused row if editing mode is cell (T830334)", function(assert) {
+    // arrange
+    var counter = 0,
+        rowsViewWrapper = dataGridWrapper.rowsView,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            height: 100,
+            dataSource: [
+                { name: "Alex", phone: "111111", room: 1 },
+                { name: "Dan", phone: "2222222", room: 2 },
+                { name: "Ben", phone: "333333", room: 3 },
+                { name: "Sean", phone: "4545454", room: 4 },
+                { name: "Smith", phone: "555555", room: 5 },
+                { name: "Zeb", phone: "6666666", room: 6 }
+            ],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            keyExpr: "name",
+            focusedRowEnabled: true
+        });
+
+    dataGrid.getView("rowsView")._scrollToElement = function($row) {
+        ++counter;
+        assert.equal($row.find("td").eq(0).text(), "Zeb", "Row");
+    };
+
+    // act
+    dataGrid.getScrollable().scrollBy({ y: 400 });
+    $(dataGrid.getCellElement(5, 1))
+        .trigger(pointerEvents.up)
+        .trigger("dxclick");
+
+    // assert
+    assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, "Cell[5, 1] is in editing mode");
+    assert.ok(rowsViewWrapper.isFocusedRow(5), "Row 5 is focused");
+    assert.equal(counter, 2, "_scrollToElement called twice");
+});
+
+QUnit.test("DataGrid - Focus updating on refresh should be correct for focused row if editing mode is batch (T830334)", function(assert) {
+    // arrange
+    var counter = 0,
+        rowsViewWrapper = dataGridWrapper.rowsView,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            height: 100,
+            dataSource: [
+                { name: "Alex", phone: "111111", room: 1 },
+                { name: "Dan", phone: "2222222", room: 2 },
+                { name: "Ben", phone: "333333", room: 3 },
+                { name: "Sean", phone: "4545454", room: 4 },
+                { name: "Smith", phone: "555555", room: 5 },
+                { name: "Zeb", phone: "6666666", room: 6 }
+            ],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            keyExpr: "name",
+            focusedRowEnabled: true
+        });
+
+    dataGrid.getView("rowsView")._scrollToElement = function($row) {
+        ++counter;
+        assert.equal($row.find("td").eq(0).text(), "Zeb", "Row");
+    };
+
+    // act
+    dataGrid.getScrollable().scrollBy({ y: 400 });
+    $(dataGrid.getCellElement(5, 1))
+        .trigger(pointerEvents.up)
+        .trigger("dxclick");
+
+    // assert
+    assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, "Cell[5, 1] is in editing mode");
+    assert.ok(rowsViewWrapper.isFocusedRow(5), "Row 5 is focused");
+    assert.equal(counter, 2, "_scrollToElement called twice");
 });
 
 QUnit.test("Popup should apply data changes after editorOptions changing (T817880)", function(assert) {
