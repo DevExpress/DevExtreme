@@ -207,22 +207,24 @@ var Accordion = CollectionWidget.inherit({
         * @name dxAccordionItem.icon
         * @type String
         */
-        this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
-            if(isPlainObject(data)) {
-                if(isDefined(data.title) && !isPlainObject(data.title)) {
-                    $container.text(data.title);
+        this._templateManager.addDefaultTemplate({
+            ["title"]: new BindableTemplate(function($container, data) {
+                if(isPlainObject(data)) {
+                    if(isDefined(data.title) && !isPlainObject(data.title)) {
+                        $container.text(data.title);
+                    }
+
+                    const $iconElement = getImageContainer(data.icon);
+                    $iconElement && $iconElement.appendTo($container);
+                } else {
+                    if(isDefined(data)) {
+                        $container.text(String(data));
+                    }
                 }
 
-                const $iconElement = getImageContainer(data.icon);
-                $iconElement && $iconElement.appendTo($container);
-            } else {
-                if(isDefined(data)) {
-                    $container.text(String(data));
-                }
-            }
-
-            $container.wrapInner($("<div>").addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS));
-        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
+                $container.wrapInner($("<div>").addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS));
+            }, ["title", "icon"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _initMarkup: function() {

@@ -173,7 +173,9 @@ var Toolbar = ToolbarBase.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item");
+        this._templateManager.addDefaultTemplate({
+            ["actionSheetItem"]: new ChildDefaultTemplate("item")
+        });
     },
 
     _initMarkup: function() {

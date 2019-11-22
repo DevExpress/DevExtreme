@@ -227,20 +227,22 @@ class Button extends Widget {
     _initTemplates() {
         super._initTemplates();
 
-        this._defaultTemplates['content'] = new FunctionTemplate(({ model = {}, container }) => {
-            const { text, icon } = model;
-            const $icon = getImageContainer(icon);
-            const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
-            const $container = $(container);
+        this._templateManager.addDefaultTemplate({
+            ['content']: new FunctionTemplate(({ model = {}, container }) => {
+                const { text, icon } = model;
+                const $icon = getImageContainer(icon);
+                const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
+                const $container = $(container);
 
-            $container.append($textContainer);
+                $container.append($textContainer);
 
-            if(this.option('iconPosition') === 'left') {
-                $container.prepend($icon);
-            } else {
-                $icon.addClass('dx-icon-right');
-                $container.append($icon);
-            }
+                if(this.option('iconPosition') === 'left') {
+                    $container.prepend($icon);
+                } else {
+                    $icon.addClass('dx-icon-right');
+                    $container.append($icon);
+                }
+            })
         });
     }
 

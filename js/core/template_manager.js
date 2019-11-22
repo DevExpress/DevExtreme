@@ -42,11 +42,10 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 export default class TemplateManager {
     constructor(option, element, getDefaultTemplates) {
         this._tempTemplates = [];
-        this._defaultTemplates = getDefaultTemplates();
+        this._defaultTemplates = {};
 
         this.option = option;
         this.$element = element;
-        this._getDefaultTemplates = getDefaultTemplates;
     }
 
     static getAnonymousTemplateName() {
@@ -109,6 +108,10 @@ export default class TemplateManager {
         return args;
     }
 
+    addDefaultTemplate(template) {
+        this._defaultTemplates = extend({}, this._defaultTemplates, template);
+    }
+
     dispose() {
         this._tempTemplates.forEach(tempTemplate => {
             tempTemplate.template.dispose && tempTemplate.template.dispose();
@@ -117,8 +120,6 @@ export default class TemplateManager {
     }
 
     initTemplates(anonymousTemplateName) {
-        this._defaultTemplates = this._getDefaultTemplates() || this._defaultTemplates;
-
         this._extractTemplates();
         this._extractAnonymousTemplate(anonymousTemplateName);
     }
@@ -192,9 +193,7 @@ export default class TemplateManager {
         return this.option('integrationOptions.createTemplate')(templateSource);
     }
 
-    getTemplate(templateSource) {
-        this._defaultTemplates = this._getDefaultTemplates() || this._defaultTemplates;
-
+    getTemplate(templateSource, defaultTemplates) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
                 const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));

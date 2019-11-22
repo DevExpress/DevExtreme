@@ -27,11 +27,13 @@ QUnit.module("default", {
         this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
             _initTemplates() {
                 this.callBase();
-                this._defaultTemplates["content"] = {
-                    render() {
-                        return "Default content markup";
+                this._templateManager.addDefaultTemplate({
+                    ["content"]: {
+                        render() {
+                            return "Default content markup";
+                        }
                     }
-                };
+                });
             }
         });
         this.TestComponent = DOMComponent.inherit({

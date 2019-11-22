@@ -567,7 +567,9 @@ var Overlay = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new EmptyTemplate();
+        this._templateManager.addDefaultTemplate({
+            ["content"]: new EmptyTemplate()
+        });
     },
 
     _isTopOverlay: function() {

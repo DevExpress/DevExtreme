@@ -207,22 +207,24 @@ var TabPanel = MultiView.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
-            if(isPlainObject(data)) {
-                if(isDefined(data.title) && !isPlainObject(data.title)) {
-                    $container.text(data.title);
+        this._templateManager.addDefaultTemplate({
+            ["title"]: new BindableTemplate(function($container, data) {
+                if(isPlainObject(data)) {
+                    if(isDefined(data.title) && !isPlainObject(data.title)) {
+                        $container.text(data.title);
+                    }
+
+                    const $iconElement = getImageContainer(data.icon);
+                    $iconElement && $iconElement.prependTo($container);
+                } else {
+                    if(isDefined(data)) {
+                        $container.text(String(data));
+                    }
                 }
 
-                const $iconElement = getImageContainer(data.icon);
-                $iconElement && $iconElement.prependTo($container);
-            } else {
-                if(isDefined(data)) {
-                    $container.text(String(data));
-                }
-            }
-
-            $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
-        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
+                $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
+            }, ["title", "icon"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _createTitleActions: function() {
