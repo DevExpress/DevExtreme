@@ -380,7 +380,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
     });
 
     QUnit.test(`After typing while calendar is opened the typed data should be saved`, assert => {
-        var optionsSet = [];
+        const optionsSet = [];
         [true, false].forEach(useMaskBehavior => {
             ["date", "datetime"].forEach(type => {
                 optionsSet.push({
