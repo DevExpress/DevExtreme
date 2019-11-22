@@ -96,7 +96,9 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _shouldUseOriginalHandler(e) {
-        return !this._useMaskBehavior() || this.option("opened") && e.key !== "Delete" && e.key !== "Backspace" || (e && e.altKey);
+        const keysToHandleByMask = ["backspace", "del"];
+
+        return !this._useMaskBehavior() || (this.option("opened") && e && !keysToHandleByMask.includes(normalizeKeyName(e))) || (e && e.altKey);
     },
 
     _upDownArrowHandler(step) {
