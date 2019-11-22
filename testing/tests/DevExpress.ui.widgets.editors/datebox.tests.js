@@ -379,20 +379,42 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.equal($input.val(), "", "text is not rendered");
     });
 
-    QUnit.test("After typing while calendar is opened the typed data should be saved", assert => {
-        const $dateBox = $("#dateBox").dxDateBox({
-            pickerType: "calendar",
-            openOnFieldClick: true
+    QUnit.test(`After typing while calendar is opened the typed data should be saved`, assert => {
+        var optionsSet = [];
+        [true, false].forEach(useMaskBehavior => {
+            ["date", "datetime"].forEach(type => {
+                optionsSet.push({
+                    useMaskBehavior,
+                    type,
+                    pickerType: "calendar",
+                    penOnFieldClick: true
+                });
+            });
         });
 
-        const instance = $dateBox.dxDateBox("instance");
-        const $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
-        const kb = keyboardMock($input);
-        const date = "10/6/2010";
-        $input.click();
-        kb.type(date).press("enter");
+        optionsSet.forEach(function(options) {
+            const $dateBox = $("#dateBox").dxDateBox(
+                options
+            );
 
-        assert.deepEqual(instance.option("value"), Date(date), "typed value is set");
+            const instance = $dateBox.dxDateBox("instance");
+            const $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
+            const kb = keyboardMock($input);
+            const typedDate = (options.type === "date" ? "10/6/2010" : "10/6/2010, 12:00 PM");
+            const selectedDate = (options.type === "date" ? "9/7/2010" : "9/7/2010, 12:00 PM");
+
+            $input.val("");
+            instance.open();
+            kb.type(typedDate).press("enter");
+            assert.deepEqual(instance.option("text"), typedDate, `typed value is set when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
+
+            instance.open();
+            kb
+                .keyDown('left', { ctrlKey: true })
+                .press('right')
+                .press('enter');
+            assert.deepEqual(instance.option("text"), selectedDate, `value is successfully changed by calendar when useMaskBehavior:${options.useMaskBehavior}, type:${options.type}`);
+        }.bind(this));
     });
 
     QUnit.test("T278148 - picker type should be 'rollers' if the real device is phone in generic theme", assert => {

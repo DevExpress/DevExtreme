@@ -28,8 +28,8 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
                     if(this._widget.option("zoomLevel") === this._widget.option("maxZoomLevel")) {
                         var contouredDate = this._widget._view.option("contouredDate");
-                        contouredDate && contouredDate === this.dateBox.option("text") && this.dateBoxValue(contouredDate, e);
-
+                        var lastActionElement = this._lastActionElement;
+                        contouredDate && lastActionElement === "calendar" && this.dateBoxValue(contouredDate, e);
                         this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
                     } else {
@@ -77,6 +77,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _refreshActiveDescendant: function(e) {
+        this._lastActionElement = "calendar";
         this.dateBox.setAria("activedescendant", e.actionValue);
     },
 
@@ -136,6 +137,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     textChangedHandler: function() {
+        this._lastActionElement = "input";
         if(this.dateBox.option("opened") && this._widget) {
             this._updateValue(true);
         }
@@ -143,10 +145,10 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
     _cellClickHandler: function(e) {
         var dateBox = this.dateBox;
-
         if(dateBox.option("applyValueMode") === "instantly") {
             dateBox.option("opened", false);
             this.dateBoxValue(this.getValue(), e.event);
+            this._lastActionElement = null;
         }
     }
 });
