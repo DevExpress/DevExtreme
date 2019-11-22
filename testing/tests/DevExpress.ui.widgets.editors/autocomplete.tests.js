@@ -124,8 +124,8 @@ QUnit.module("dxAutocomplete", {
         const dWidth = $autocomplete.width() - initialWidth;
         const dPopupWidth = popup.option("width") - initialPopupWidth;
 
-        assert.notEqual(0, dHeight, "Height could be changed");
-        assert.notEqual(0, dWidth, "Width could be changed");
+        assert.notEqual(dHeight, 0, "Height could be changed");
+        assert.notEqual(dWidth, 0, "Width could be changed");
         assert.equal(dWidth, dPopupWidth + autocomplete.option("popupWidthExtension"), "Element and popup change width accordingly");
     });
 
@@ -235,7 +235,7 @@ QUnit.module("dxAutocomplete", {
 
         $list = this.instance._list._$element;
 
-        assert.equal("text", this.instance.option("value"));
+        assert.equal(this.instance.option("value"), "text");
         $($list.find("." + LIST_ITEM_CLASS).first()).trigger("dxclick");
 
         assert.equal(this.instance.option("value"), "item 1", "click on list item, and it-s value replace textbox value");

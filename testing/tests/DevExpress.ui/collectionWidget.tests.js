@@ -833,7 +833,7 @@ module("events", {
         $item.trigger(holdEvent.name);
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
     test("onItemHold should be fired when action changed dynamically", assert => {
@@ -912,7 +912,7 @@ module("events", {
         $item.trigger("dxcontextmenu");
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
     test("itemContextMenu event should be fired when item is held or right clicked", assert => {
@@ -933,7 +933,7 @@ module("events", {
         $item.trigger("dxcontextmenu");
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
     test("onItemContextMenu should be fired when action changed dynamically", assert => {

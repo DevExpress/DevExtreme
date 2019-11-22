@@ -749,7 +749,7 @@ QUnit.module("options changing", moduleConfig, () => {
         clock.tick(10);
         assert.ok($input.val() === "", "Click on 'clear' button causes input value reset");
         assert.ok($element.hasClass(EMPTY_INPUT_CLASS), "Click on 'clear' button causes marking with 'empty input' CSS class");
-        assert.equal(1, eventWasHandled, "Click on 'clear' button rises value update event");
+        assert.equal(eventWasHandled, 1, "Click on 'clear' button rises value update event");
         clock.restore();
     });
 
