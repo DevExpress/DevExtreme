@@ -73,8 +73,8 @@ QUnit.module("API", moduleConfig, () => {
         let topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
         let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
 
-        [true, false, undefined].forEach((excelFilterEnabled) => {
-            let testCaption = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
+        [true, false, undefined].forEach((autoFilterEnabled) => {
+            let testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
             const getOptions = (dataGrid, expectedCustomizeCellArgs, options) => {
                 let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
@@ -87,7 +87,7 @@ QUnit.module("API", moduleConfig, () => {
                             helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, this.customizeCellCallCount++);
                         }
                     },
-                    excelFilterEnabled: excelFilterEnabled
+                    autoFilterEnabled: autoFilterEnabled
                 };
                 result.keepColumnWidths = keepColumnWidths;
                 result.selectedRowsOnly = selectedRowsOnly;
@@ -104,7 +104,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkValues(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
@@ -133,7 +133,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
                 });
@@ -151,7 +151,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
 
                     this.customizeCellCallCount = 0;
@@ -161,7 +161,7 @@ QUnit.module("API", moduleConfig, () => {
                         helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 1, column: 1 }, newTopLeft);
                         helper.checkValues(expectedCells);
                         helper.checkMergeCells(expectedCells, newTopLeft);
-                        helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                        helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                         helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, newTopLeft);
                         done();
                     });
@@ -189,7 +189,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
                 });
@@ -243,7 +243,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     assert.deepEqual(cellsRange.from, topLeft, "cellsRange.from");
                     assert.deepEqual(cellsRange.to, topLeft, "cellsRange.to");
                     done();
@@ -264,7 +264,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
@@ -341,7 +341,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
@@ -475,7 +475,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -559,7 +559,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -584,7 +584,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -610,7 +610,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -640,7 +640,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
                     done();
@@ -669,7 +669,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -698,7 +698,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -726,7 +726,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -755,7 +755,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -784,7 +784,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -813,7 +813,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -821,7 +821,7 @@ QUnit.module("API", moduleConfig, () => {
             });
 
             [true, false, undefined].forEach((gridExcelFilterEnabled) => {
-                QUnit.test(`Data - 1 column & 2 rows, grid.excelFilterEnabled: ${gridExcelFilterEnabled}` + testCaption, (assert) => {
+                QUnit.test(`Data - 1 column & 2 rows, grid.export.excelFilterEnabled: ${gridExcelFilterEnabled}` + testCaption, (assert) => {
                     const done = assert.async();
                     const ds = [{ f1: "1" }];
                     const dataGrid = $("#dataGrid").dxDataGrid({
@@ -840,14 +840,14 @@ QUnit.module("API", moduleConfig, () => {
 
                     helper._extendExpectedCells(expectedCells, topLeft);
 
-                    let expectedExcelFilterEnabled = !!gridExcelFilterEnabled;
-                    if(isDefined(excelFilterEnabled)) {
-                        expectedExcelFilterEnabled = excelFilterEnabled;
+                    let expectedAutoFilterEnabled = !!gridExcelFilterEnabled;
+                    if(isDefined(autoFilterEnabled)) {
+                        expectedAutoFilterEnabled = autoFilterEnabled;
                     }
 
                     exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                         helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                        helper.checkAutoFilter(expectedExcelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                        helper.checkAutoFilter(expectedAutoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                         helper.checkValues(expectedCells);
                         helper.checkMergeCells(expectedCells, topLeft);
                         helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -882,7 +882,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -913,7 +913,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -944,7 +944,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -955,7 +955,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper._extendExpectedCells(expectedCells, newTopLeft);
                     exportDataGrid(getOptions(dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellsRange) => {
                         helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
-                        helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                        helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                         helper.checkValues(expectedCells);
                         helper.checkMergeCells(expectedCells, newTopLeft);
                         helper.checkOutlineLevel([0, 0], newTopLeft.row);
@@ -986,7 +986,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1025,7 +1025,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -1067,7 +1067,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels /* excelColumnWidthFromColumn150Pixels */ ], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -1103,7 +1103,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     // helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -1141,7 +1141,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -1177,7 +1177,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     // helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -1332,7 +1332,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1423,7 +1423,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1463,7 +1463,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 5 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1498,7 +1498,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1535,7 +1535,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1569,7 +1569,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1642,7 +1642,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 7 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1681,7 +1681,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1715,7 +1715,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1783,7 +1783,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1825,7 +1825,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1884,7 +1884,7 @@ QUnit.module("API", moduleConfig, () => {
 
                         exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                             helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
-                            helper.checkAutoFilter(excelFilterEnabled, null);
+                            helper.checkAutoFilter(autoFilterEnabled, null);
                             helper.checkFont(expectedCells);
                             helper.checkAlignment(expectedCells);
                             helper.checkValues(expectedCells);
@@ -1925,7 +1925,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -1995,7 +1995,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2431,7 +2431,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2482,7 +2482,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2525,7 +2525,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2571,7 +2571,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2614,7 +2614,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2657,7 +2657,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2700,7 +2700,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2745,7 +2745,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2790,7 +2790,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2835,7 +2835,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2877,7 +2877,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2990,7 +2990,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, undefined], topLeft.column);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3069,7 +3069,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3115,7 +3115,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3151,7 +3151,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3187,7 +3187,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3225,7 +3225,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3265,7 +3265,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3339,7 +3339,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3383,7 +3383,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3471,7 +3471,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3522,7 +3522,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3575,7 +3575,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3626,7 +3626,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3673,7 +3673,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3720,7 +3720,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3780,7 +3780,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 11, column: 1 }, { row: 11, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3854,7 +3854,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 11, column: 2 }, { row: 11, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3916,7 +3916,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3965,7 +3965,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -4015,7 +4015,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -4062,7 +4062,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -4109,7 +4109,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -4156,7 +4156,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -4206,7 +4206,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -4264,7 +4264,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4317,7 +4317,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4370,7 +4370,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4423,7 +4423,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4473,7 +4473,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4526,7 +4526,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4576,7 +4576,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4819,7 +4819,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4868,7 +4868,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4917,7 +4917,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -4965,7 +4965,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -5014,7 +5014,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -5063,7 +5063,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -5112,7 +5112,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
@@ -5149,7 +5149,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5189,7 +5189,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5238,7 +5238,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -5285,7 +5285,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 3 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 3 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5347,7 +5347,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5411,7 +5411,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5455,7 +5455,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5498,7 +5498,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5541,7 +5541,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5586,7 +5586,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5634,7 +5634,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5679,7 +5679,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5723,7 +5723,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5773,7 +5773,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5823,7 +5823,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 1 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5881,7 +5881,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5935,7 +5935,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -5985,7 +5985,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -6043,7 +6043,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -6097,7 +6097,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -6147,7 +6147,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -6205,7 +6205,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -6259,7 +6259,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -6313,7 +6313,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row + 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);

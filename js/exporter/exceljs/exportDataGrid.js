@@ -17,7 +17,7 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell = { row: 1, column: 1 },
-        excelFilterEnabled = undefined,
+        autoFilterEnabled = undefined,
         keepColumnWidths = true,
         selectedRowsOnly = false
     } = options;
@@ -66,7 +66,7 @@ function exportDataGrid(options) {
 
             if(headerRowCount > 0) {
                 _setFrozen(dataProvider, worksheet, cellsRange);
-                _setAutoFilter(dataProvider, worksheet, component, cellsRange, excelFilterEnabled);
+                _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled);
             }
 
             resolve(cellsRange);
@@ -114,12 +114,12 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setAutoFilter(dataProvider, worksheet, component, cellsRange, excelFilterEnabled) {
-    if(!isDefined(excelFilterEnabled)) {
-        excelFilterEnabled = !!component.option("export.excelFilterEnabled");
+function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
+    if(!isDefined(autoFilterEnabled)) {
+        autoFilterEnabled = !!component.option("export.excelFilterEnabled");
     }
 
-    if(excelFilterEnabled) {
+    if(autoFilterEnabled) {
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
             worksheet.autoFilter = cellsRange;
         }
