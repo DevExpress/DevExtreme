@@ -205,6 +205,8 @@ var TabPanel = MultiView.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
+
         this._templateManager.addDefaultTemplate({
             ["title"]: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
@@ -223,7 +225,6 @@ var TabPanel = MultiView.inherit({
                 $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             }, ["title", "icon"], this.option("integrationOptions.watchMethod"))
         });
-        this.callBase();
     },
 
     _createTitleActions: function() {

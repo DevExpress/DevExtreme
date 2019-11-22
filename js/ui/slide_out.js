@@ -191,12 +191,13 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
+
         this._templateManager.addDefaultTemplate({
             ["menuItem"]: new ChildDefaultTemplate("item"),
             ["menuGroup"]: new ChildDefaultTemplate("group"),
             ["content"]: new EmptyTemplate()
         });
-        this.callBase();
     },
 
     _initEditStrategy: function() {

@@ -193,6 +193,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
         /**
         * @name dxAccordionItem
         * @inherits CollectionWidgetItem
@@ -224,7 +225,6 @@ var Accordion = CollectionWidget.inherit({
                 $container.wrapInner($("<div>").addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS));
             }, ["title", "icon"], this.option("integrationOptions.watchMethod"))
         });
-        this.callBase();
     },
 
     _initMarkup: function() {

@@ -565,11 +565,12 @@ var Overlay = Widget.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
+
         this._templateManager.addDefaultTemplate({
             ["content"]: new EmptyTemplate()
         });
         this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
-        this.callBase();
     },
 
     _isTopOverlay: function() {

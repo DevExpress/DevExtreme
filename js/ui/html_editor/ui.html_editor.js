@@ -246,10 +246,11 @@ const HtmlEditor = Editor.inherit({
     // },
 
     _initTemplates: function() {
+        this.callBase();
+
         this._templateManager.addDefaultTemplate({
             [ANONYMOUS_TEMPLATE_NAME]: new EmptyTemplate()
         });
-        this.callBase();
     },
 
     _focusTarget: function() {

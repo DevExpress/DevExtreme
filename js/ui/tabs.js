@@ -210,6 +210,8 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
+
         this._templateManager.addDefaultTemplate({
             ["item"]: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {
@@ -224,7 +226,6 @@ const Tabs = CollectionWidget.inherit({
                 $iconElement && $iconElement.prependTo($container);
             }).bind(this), ["text", "html", "icon"], this.option("integrationOptions.watchMethod"))
         });
-        this.callBase();
     },
 
     _itemClass: function() {

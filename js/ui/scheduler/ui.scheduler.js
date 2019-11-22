@@ -1707,14 +1707,13 @@ const Scheduler = Widget.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
         this._initAppointmentTemplate();
 
         this._templateManager.addDefaultTemplate({
             ["appointmentTooltip"]: new EmptyTemplate(),
             ["dropDownAppointment"]: new EmptyTemplate(),
         });
-
-        this.callBase();
     },
 
     _initAppointmentTemplate: function() {
