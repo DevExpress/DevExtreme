@@ -2,6 +2,7 @@ import $ from "jquery";
 const initTree = (options) => $("#treeView").dxTreeView(options);
 
 import "common.css!";
+QUnit.module('TreeView');
 
 QUnit.test("Rrl mode Text-align (T822293)", function(assert) {
     getTestData().forEach((testData => {

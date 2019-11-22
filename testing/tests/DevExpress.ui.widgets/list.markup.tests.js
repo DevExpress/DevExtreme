@@ -446,3 +446,6 @@ QUnit.module("decorators markup", {}, () => {
         assert.strictEqual($items.text(), "Item 1", "displayExpr works");
     });
 });
+
+
+import "./listParts/markup/rtl.js";
