@@ -482,3 +482,34 @@ test("Select views by Ctrl+Up, Ctrl+Down keys", async t => {
         focusedRowEnabled: true
     });
 });
+
+test("DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)", async t => {
+    const dataGrid = new DataGrid("#container");
+    const headers = dataGrid.getHeaders();
+
+    await t
+        .click(dataGrid.getDataCell(0, 0).element)
+        .expect(dataGrid.getDataCell(0, 0).element.focused).ok()
+        .pressKey("tab")
+        .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
+        .pressKey("tab")
+        .expect(dataGrid.getDataCell(1, 0).isFocused).ok()
+        .expect(dataGrid.getScrollbarWidth(false)).eql(0);
+}).before(async () => {
+    await createWidget("dxDataGrid", {
+        height: 150,
+        width: 200,
+        columnAutoWidth: true,
+        dataSource: [
+            { c0: "c0_0", c1: "c1_0" },
+            { c0: "c0_1", c1: "c1_1" }
+        ],
+        scrolling: {
+            useNative: true
+        },
+        columns: [
+            "c0",
+            { dataField: "c1", width: 50 }
+        ]
+    });
+});

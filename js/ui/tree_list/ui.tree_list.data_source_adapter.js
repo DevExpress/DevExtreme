@@ -270,7 +270,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             for(var i = 0; i < parentIds.length; i++) {
                 var node = this.getNodeByKey(parentIds[i]);
 
-                if(node && node.hasChildren && !node.children.length) {
+                if(!node || node.hasChildren && !node.children.length) {
                     parentIdsToLoad.push(parentIds[i]);
                 }
             }
