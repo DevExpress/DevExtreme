@@ -403,7 +403,7 @@ QUnit.module("popup options", moduleConfig, () => {
         const instance = new DropDownBox(this.$element, { opened: true });
         const popup = instance._popup;
 
-        assert.equal(instance.option("dropDownOptions.visible"), true, "visible is correct");
+        assert.ok(instance.option("dropDownOptions.visible"), "dropDown is visible");
 
         popup.option("resizeEnabled", true);
         assert.strictEqual(instance.option("dropDownOptions.resizeEnabled"), true, "popup option change leads to dropDownOptions change");
