@@ -186,6 +186,7 @@ class FlexLayoutStrategy {
     }
 }
 
+// obsolete. Will be removed in 20.2
 class FallbackLayoutStrategy {
     constructor($element, option) {
         this._$element = $element;
@@ -527,7 +528,7 @@ class Box extends CollectionWidget {
                     return browser["msie"];
                 },
                 options: {
-                    _layoutStrategy: "fallback"
+                    _layoutStrategy: "flex"
                 }
             }
         ]);
