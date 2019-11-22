@@ -151,10 +151,10 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     _getRecurrencePart(appointments, startDate) {
-        return appointments.some(appointment => {
+        return appointments.filter(appointment => {
             const appointmentStartDate = appointment.data("dxAppointmentStartDate");
             return appointmentStartDate.getTime() === startDate.getTime();
-        });
+        })[0];
     }
 
     _createInitPosition(appointment, mousePosition) {

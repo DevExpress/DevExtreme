@@ -37,3 +37,28 @@ test(`Drag-n-drop in the "month" view`, async t => {
     currentView: "month",
     dataSource: dataSource
 }));
+
+test(`Drag recurrent appointment occurrence from collector (T832887)`, async t => {
+    const scheduler = new Scheduler("#container");
+    const resizableAppointment = scheduler.getAppointment('Recurrence', 1);
+
+    await t
+        .drag(resizableAppointment.resizableHandle.top, 0, -100)
+        .click(resizableAppointment.element)
+        .expect(resizableAppointment.size.height).eql(`200px`)
+        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
+        .expect(resizableAppointment.date.endTime).eql(`12:00 PM`);
+
+}).before(() => createScheduler({
+    views: ["week"],
+    currentView: "week",
+    firstDayOfWeek: 2,  
+    dataSource: [{
+      text: "Recurrence",
+      startDate: new Date(2019, 2, 30, 2, 0),
+      endDate: new Date(2019, 2, 30, 10, 0),
+      recurrenceException: "",
+      recurrenceRule: "FREQ=DAILY"
+    }],
+    currentDate: new Date(2019, 2, 30),
+}));
