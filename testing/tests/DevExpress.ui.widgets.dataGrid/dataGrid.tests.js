@@ -5231,7 +5231,7 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
 
                 setTimeout(function() {
                     d.resolve({ data: data, totalCount: 100000 });
-                }, 300);
+                }, 25);
 
                 return d;
             }
@@ -5258,7 +5258,7 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     this.clock.tick(250);
 
     // assert
-    assert.deepEqual(loadedPages, [0, 1, 3], "all skips");
+    assert.deepEqual(loadedPages, [0, 1, 2, 3, 4], "all pages are unique");
 });
 
 QUnit.test("DataGrid should expand the row in the onContentReady method in virtual scroll mode (T826930)", function(assert) {
@@ -8334,7 +8334,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
                         data: data.slice(loadOptions.skip, loadOptions.skip + loadOptions.take),
                         totalCount: 100
                     });
-                }, 100);
+                }, 50);
 
                 return d.promise();
             }
@@ -8360,7 +8360,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
     // assert
     assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
     assert.strictEqual(dataGrid.getVisibleRows().length, 60);
-    assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 100);
+    assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
 });
 
 function fastScrollTest(assert, that, responseTime, expectedLoadedPages) {
@@ -12859,7 +12859,7 @@ QUnit.test("scroll should be synchronous if row rendering time is middle and vir
                 mode: "virtual",
                 rowRenderingMode: "virtual",
                 useNative: false,
-                renderingThreshold: 150
+                renderingThreshold: 10000
             }
         });
 
