@@ -151,7 +151,6 @@ var CalendarStrategy = DateBoxStrategy.inherit({
         if(dateBox.option("applyValueMode") === "instantly") {
             dateBox.option("opened", false);
             this.dateBoxValue(this.getValue(), e.event);
-            this._lastActionElement = null;
         }
     }
 });
