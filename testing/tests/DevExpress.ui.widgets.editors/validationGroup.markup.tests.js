@@ -110,7 +110,7 @@ testModule("General", {
         // act
         this.fixture.disposeGroup();
         // assert
-        assert.strictEqual(false, $container.hasClass("dx-validationgroup"), "Specific class should be added");
+        assert.notOk($container.hasClass("dx-validationgroup"), "Specific class should be added");
     });
 
 
