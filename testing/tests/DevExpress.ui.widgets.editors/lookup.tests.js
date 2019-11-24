@@ -2891,6 +2891,29 @@ QUnit.test("'Home', 'End' keys does not changed default behaviour in searchField
     assert.equal(lookup.option("value"), undefined, "home key works correctly");
 });
 
+QUnit.test("Pressing escape when focus 'cance' button must hide the popup", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+    const $element = $("#widget").dxLookup({
+        opened: true,
+        focusStateEnabled: true,
+        showCancelButton: true,
+        searchEnabled: true
+    });
+    const instance = $element.dxLookup("instance");
+
+    $(instance.content())
+        .parent()
+        .find(".dx-button.dx-popup-cancel")
+        .trigger(escapeKeyDown);
+
+    assert.ok(!instance.option("opened"));
+}),
+
 
 QUnit.module("dataSource integration");
 
