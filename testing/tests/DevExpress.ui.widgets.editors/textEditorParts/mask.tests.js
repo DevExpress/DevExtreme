@@ -1153,6 +1153,33 @@ QUnit.module("value", moduleConfig, () => {
         assert.equal(valueChangedFired, 1, "change fired once on pressing enter key");
     });
 
+    QUnit.test("value option change and input value change by typing should trigger onValueChange (T833415)", function(assert) {
+        let valueChangeSpy = sinon.spy();
+
+        const $textEditor = $("#texteditor").dxTextEditor({
+            mask: "(000) 000-0000",
+            onValueChanged: valueChangeSpy
+        });
+
+        const $input = $textEditor.find(".dx-texteditor-input");
+        const instance = $textEditor.dxTextEditor("instance");
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type("1111111111")
+            .press("enter");
+
+        instance.option("value", "2222222222");
+
+        keyboard
+            .caret(0)
+            .type("1111111111")
+            .press("enter");
+
+        assert.equal(valueChangeSpy.callCount, 3, "change fired");
+    });
+
     QUnit.test("T278701 - the error should not be thrown if value is null and mask is set", function(assert) {
         try {
             $("#texteditor").dxTextEditor({
