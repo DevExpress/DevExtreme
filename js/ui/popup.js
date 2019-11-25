@@ -404,12 +404,11 @@ var Popup = Overlay.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
-
         this._templateManager.addDefaultTemplate({
             ["title"]: new EmptyTemplate(),
             ["bottom"]: new EmptyTemplate()
         });
+        this.callBase();
     },
 
     _renderContentImpl: function() {

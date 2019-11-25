@@ -255,8 +255,6 @@ class Button extends Widget {
     }
 
     _initTemplates() {
-        super._initTemplates();
-
         this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             ['content']: new FunctionTemplate(({ model = {}, container }) => {
@@ -276,6 +274,7 @@ class Button extends Widget {
                 }
             })
         });
+        super._initTemplates();
     }
 
     _optionChanged(args) {

@@ -251,7 +251,6 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
         /**
         * @name dxGalleryItem
         * @inherits CollectionWidgetItem
@@ -286,6 +285,7 @@ var Gallery = CollectionWidget.inherit({
                 }
             }).bind(this), ["imageSrc", "imageAlt", "text", "html"], this.option("integrationOptions.watchMethod"))
         });
+        this.callBase();
     },
 
     _dataSourceOptions: function() {
