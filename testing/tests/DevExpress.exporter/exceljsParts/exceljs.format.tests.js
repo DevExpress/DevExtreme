@@ -11,23 +11,23 @@ const ExcelJSLocalizationFormatTests = {
     runCurrencyTests(values) {
         let helper;
         QUnit.module("Format", {
-            before: () => {
+            before: function() {
                 initializeDxObjectAssign();
                 initializeDxArrayFind();
             },
-            beforeEach: () => {
+            beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet("Test sheet");
                 this.customizeCellCallCount = 0;
                 helper = new ExcelJSTestHelper(this.worksheet);
             },
-            after: () => {
+            after: function() {
                 clearDxObjectAssign();
                 clearDxArrayFind();
             }
         }, () => {
             values.forEach((currency) => {
 
-                QUnit.test(`Data - columns.dataType: number, columns.format: { type: 'currency', currency: ${currency.value} } `, (assert) => {
+                QUnit.test(`Data - columns.dataType: number, columns.format: { type: 'currency', currency: ${currency.value} } `, function(assert) {
                     const done = assert.async();
                     const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }];
                     const topLeft = { row: 1, column: 1 };
