@@ -432,12 +432,11 @@ var Sortable = Draggable.inherit({
             $items = that._getItems();
 
         result = $items.map((item, index) => {
-            let offset = $(item).offset(),
-                left = that._makeLeftCorrection(offset.left);
+            let offset = $(item).offset();
 
             return {
                 dropInsideItem: false,
-                left,
+                left: offset.left,
                 top: offset.top,
                 index: index,
                 $item: $(item),
@@ -573,7 +572,6 @@ var Sortable = Draggable.inherit({
             let $element = $(element);
 
             if(that.horizontalScrollHelper.isScrollable($element)) {
-                width = $element.width();
                 that._$scrollable = $element;
 
                 return true;
@@ -582,10 +580,21 @@ var Sortable = Draggable.inherit({
 
         if(!hasScrollable) {
             that._$scrollable = null;
+        } else if(that._$scrollable.width() < width) {
+            let scrollableWidth = that._$scrollable.width(),
+                offsetLeft = $item.offset().left - that._$scrollable.offset().left,
+                offsetRight = scrollableWidth - $item.outerWidth() - offsetLeft;
+
+            if(offsetLeft > 0) {
+                width = scrollableWidth - offsetLeft;
+            } else if(offsetRight > 0) {
+                width = scrollableWidth - offsetRight;
+            } else {
+                width = scrollableWidth;
+            }
         }
 
-        $placeholderElement.css("width", width);
-        $placeholderElement.css("height", height);
+        $placeholderElement.css({ width, height });
     },
 
     _moveItem: function($itemElement, index, cancelRemove) {
@@ -719,11 +728,12 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _makeLeftCorrection: function(left) {
-        var that = this;
+    _makeLeftCorrection: function(left, leftMargin) {
+        var that = this,
+            $scrollable = that._$scrollable;
 
-        if(that._$scrollable && that._$scrollable.scrollLeft() > 0) {
-            return that._$scrollable.offset().left;
+        if($scrollable && that._isVerticalOrientation() && $scrollable.scrollLeft() > leftMargin) {
+            left += $scrollable.scrollLeft() - leftMargin;
         }
 
         return left;
@@ -737,12 +747,16 @@ var Sortable = Draggable.inherit({
             itemElement = items[toIndex],
             prevItemElement = items[toIndex - 1],
             isVerticalOrientation = that._isVerticalOrientation(),
-            position = null;
+            position = null,
+            leftMargin = 0;
 
         that._updatePlaceholderSizes($placeholderElement, itemElement);
 
         if(itemElement) {
-            position = $(itemElement).offset();
+            let $itemElement = $(itemElement);
+
+            position = $itemElement.offset();
+            leftMargin = parseFloat($itemElement.css("marginLeft"));
         } else if(prevItemElement) {
             position = $(prevItemElement).offset();
             position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
@@ -753,7 +767,7 @@ var Sortable = Draggable.inherit({
         }
 
         if(position) {
-            position.left = that._makeLeftCorrection(position.left);
+            position.left = that._makeLeftCorrection(position.left, leftMargin);
 
             that._move(position, $placeholderElement);
         }
