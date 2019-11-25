@@ -122,12 +122,12 @@ QUnit.module("markup", {
         $dropDownButton.find("img.dx-icon").css("height", "50px");
         let mainButtonHeight = actionButton.height();
         let dropDownButtonHeight = toggleButton.height();
-        assert.equal(dropDownButtonHeight, mainButtonHeight, "heights are equal after main button content change");
+        assert.strictEqual(dropDownButtonHeight, mainButtonHeight, "heights are equal after main button content change");
 
         $dropDownButton.find("i.dx-icon").css("height", "100px");
         mainButtonHeight = actionButton.height();
         dropDownButtonHeight = toggleButton.height();
-        assert.equal(mainButtonHeight, dropDownButtonHeight, "heights are equal after toggle button content change");
+        assert.strictEqual(mainButtonHeight, dropDownButtonHeight, "heights are equal after toggle button content change");
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
