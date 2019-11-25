@@ -5155,7 +5155,7 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     // arrange, act
     var dataGrid,
         scrollable,
-        skips = [],
+        loadedPages = [],
         data = [];
 
     for(let i = 0; i < 10; i++) {
@@ -5167,13 +5167,13 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
         remoteOperations: true,
         dataSource: {
             load: function(loadOptions) {
-                skips.push(loadOptions.skip);
+                loadedPages.push(loadOptions.skip / 10);
 
                 var d = $.Deferred();
 
                 setTimeout(function() {
                     d.resolve({ data: data, totalCount: 100000 });
-                }, 300);
+                }, 25);
 
                 return d;
             }
@@ -5200,7 +5200,7 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     this.clock.tick(250);
 
     // assert
-    assert.deepEqual(skips, [0, 10, 20, 30, 40], "all skips");
+    assert.deepEqual(loadedPages, [0, 1, 2, 3, 4], "all pages are unique");
 });
 
 QUnit.test("DataGrid should expand the row in the onContentReady method in virtual scroll mode (T826930)", function(assert) {
@@ -8276,7 +8276,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
                         data: data.slice(loadOptions.skip, loadOptions.skip + loadOptions.take),
                         totalCount: 100
                     });
-                }, 100);
+                }, 50);
 
                 return d.promise();
             }
@@ -8303,6 +8303,71 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
     assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
     assert.strictEqual(dataGrid.getVisibleRows().length, 60);
     assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
+});
+
+function fastScrollTest(assert, that, responseTime, expectedLoadedPages) {
+    // arrange
+    var data = [],
+        dataGrid,
+        loadedPages = [],
+        scrollable;
+
+    for(let i = 0; i < 20; i++) {
+        data.push({ field: "someData" });
+    }
+
+    dataGrid = createDataGrid({
+        height: 300,
+        remoteOperations: true,
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+
+                loadedPages.push(loadOptions.skip / 20);
+
+                setTimeout(function() {
+                    d.resolve({
+                        data: data,
+                        totalCount: 1000
+                    });
+                }, responseTime);
+
+                return d.promise();
+            }
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "standard",
+            useNative: false
+        }
+    });
+
+    that.clock.tick(600);
+    scrollable = dataGrid.getScrollable();
+
+    // assert
+    assert.deepEqual(loadedPages, [0, 1]);
+
+    // act
+    for(let i = 1; i <= 5; i++) {
+        scrollable.scrollTo({ y: 700 * i });
+        that.clock.tick(10);
+    }
+
+    that.clock.tick(1000);
+
+    // assert
+    assert.deepEqual(loadedPages, expectedLoadedPages);
+}
+
+// T815141
+QUnit.test("Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow", function(assert) {
+    fastScrollTest(assert, this, 300, [0, 1, 5, 6]);
+});
+
+// T815141
+QUnit.test("Pages should be loaded while scrolling fast if remoteOperations is true and server is fast", function(assert) {
+    fastScrollTest(assert, this, 50, [0, 1, 2, 3, 4, 5, 6]);
 });
 
 // T634232
@@ -8829,6 +8894,7 @@ QUnit.test("ungrouping after grouping and scrolling should works correctly with 
             mode: "virtual",
             rowRenderingMode: "virtual",
             updateTimeout: 0,
+            timeout: 0,
             useNative: false
         },
         grouping: {
@@ -8889,6 +8955,7 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
             mode: "virtual",
             rowRenderingMode: "virtual",
             updateTimeout: 0,
+            timeout: 0,
             useNative: false
         },
         grouping: {
@@ -12691,7 +12758,8 @@ QUnit.test("scroll should be synchronous if row rendering time is middle and vir
             scrolling: {
                 mode: "virtual",
                 rowRenderingMode: "virtual",
-                useNative: false
+                useNative: false,
+                renderingThreshold: 10000
             }
         });
 

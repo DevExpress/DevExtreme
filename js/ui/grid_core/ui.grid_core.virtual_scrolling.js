@@ -121,7 +121,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                     that.changed.fire(e);
                 },
                 changingDuration: function(e) {
-                    return that._renderTime || 0;
+                    return that._changeTime || 0;
                 }
             });
 
@@ -132,6 +132,10 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
             if(!isVirtualMode(that)) {
                 that._isLoading = isLoading;
                 that.callBase.apply(that, arguments);
+            }
+
+            if(isLoading) {
+                that._startLoadTime = new Date();
             }
         },
         _handleLoadError: function() {
@@ -150,7 +154,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this;
 
-            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._renderTime < that.option("scrolling.renderingThreshold")) {
+            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._changeTime < that.option("scrolling.renderingThreshold")) {
                 options.delay = undefined;
             }
 
@@ -334,18 +338,21 @@ var VirtualScrollingRowsViewExtender = (function() {
 
         _renderCore: function(e) {
             var that = this,
-                startRenderDate = new Date();
+                dataSource;
 
             that.callBase.apply(that, arguments);
 
-            var dataSource = that._dataController._dataSource;
+            dataSource = that._dataController._dataSource;
+
             if(dataSource && e) {
-                var itemCount = e.items ? e.items.length : 20;
-                var viewportSize = that._dataController.viewportSize() || 20;
+                var itemCount = e.items ? e.items.length : 20,
+                    viewportSize = that._dataController.viewportSize() || 20,
+                    startLoadTime = dataSource._startLoadTime;
+
                 if(isVirtualRowRendering(that)) {
-                    dataSource._renderTime = (new Date() - startRenderDate) * viewportSize / itemCount;
+                    dataSource._changeTime = (new Date() - startLoadTime) * viewportSize / itemCount;
                 } else {
-                    dataSource._renderTime = (new Date() - startRenderDate);
+                    dataSource._changeTime = (new Date() - startLoadTime);
                 }
             }
         },
@@ -899,7 +906,8 @@ module.exports = {
                             },
                             changingDuration: function(e) {
                                 var dataSource = that.dataSource();
-                                return dataSource && dataSource._renderTime || 0;
+
+                                return dataSource && dataSource._changeTime || 0;
                             }
                         }, true);
 
