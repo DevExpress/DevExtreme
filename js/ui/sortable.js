@@ -551,22 +551,8 @@ var Sortable = Draggable.inherit({
         this._updateItemPoints();
     },
 
-    _updatePlaceholderSizes: function($placeholderElement, itemElement) {
-        var that = this,
-            dropInsideItem = that.option("dropInsideItem"),
-            $item = itemElement ? $(itemElement) : that._getSourceElement(),
-            isVertical = that._isVerticalOrientation(),
-            width = "",
-            height = "";
-
-        $placeholderElement.toggleClass(that._addWidgetPrefix("placeholder-inside"), dropInsideItem);
-
-        if(isVertical || dropInsideItem) {
-            width = $item.outerWidth();
-        }
-        if(!isVertical || dropInsideItem) {
-            height = $item.outerHeight();
-        }
+    _makeWidthCorrection: function($item, width) {
+        var that = this;
 
         var hasScrollable = $item.parents().toArray().some(function(element) {
             let $element = $(element);
@@ -593,6 +579,28 @@ var Sortable = Draggable.inherit({
                 width = scrollableWidth;
             }
         }
+
+        return width;
+    },
+
+    _updatePlaceholderSizes: function($placeholderElement, itemElement) {
+        var that = this,
+            dropInsideItem = that.option("dropInsideItem"),
+            $item = itemElement ? $(itemElement) : that._getSourceElement(),
+            isVertical = that._isVerticalOrientation(),
+            width = "",
+            height = "";
+
+        $placeholderElement.toggleClass(that._addWidgetPrefix("placeholder-inside"), dropInsideItem);
+
+        if(isVertical || dropInsideItem) {
+            width = $item.outerWidth();
+        }
+        if(!isVertical || dropInsideItem) {
+            height = $item.outerHeight();
+        }
+
+        width = that._makeWidthCorrection($item, width);
 
         $placeholderElement.css({ width, height });
     },
