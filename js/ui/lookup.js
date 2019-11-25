@@ -955,12 +955,12 @@ var Lookup = DropDownList.inherit({
     },
 
     _attachSearchChildProcessor: function(searchComponent) {
-        this._listKeyboardProcessor = searchComponent._keyboardProcessor.attachChildProcessor();
+        this._listKeyboardProcessor = this._listKeyboardProcessor || searchComponent._keyboardProcessor.attachChildProcessor();
         this._setListOption("_keyboardProcessor", this._listKeyboardProcessor);
     },
 
     _detachSearchChildProcessor: function() {
-        this._setListOption("_keyboardProcessor", undefined);
+        this._setListOption("_keyboardProcessor", null);
     },
 
     _renderSearch: function() {
@@ -981,13 +981,13 @@ var Lookup = DropDownList.inherit({
                 onDisposing: function() {
                     this._detachSearchChildProcessor();
                 }.bind(this),
+                onFocusIn: this._searchFocusHandler.bind(this),
+                onFocusOut: this._searchBlurHandler.bind(this),
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option("valueChangeEvent"),
                 onValueChanged: this._searchHandler.bind(this)
             });
-
-            this._attachSearchChildProcessor(this._searchBox);
 
             this._registerSearchKeyHandlers();
 
@@ -995,6 +995,14 @@ var Lookup = DropDownList.inherit({
 
             this._setSearchPlaceholder();
         }
+    },
+
+    _searchFocusHandler: function(e) {
+        this._attachSearchChildProcessor(e.component);
+    },
+
+    _searchBlurHandler: function() {
+        this._detachSearchChildProcessor();
     },
 
     _removeSearch: function() {
@@ -1074,17 +1082,12 @@ var Lookup = DropDownList.inherit({
             pageLoadMode: this.option("pageLoadMode"),
             nextButtonText: this.option("nextButtonText"),
             _keyboardProcessor: this._listKeyboardProcessor,
-            onFocusIn: this._onFocusInHandler.bind(this),
             onSelectionChanged: this._getSelectionChangedHandler()
         });
     },
 
     _getSelectionChangedHandler: function() {
         return this.option("showSelectionControls") ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
-    },
-
-    _onFocusInHandler: function() {
-        this._setListOption("_keyboardProcessor", undefined);
     },
 
     _listContentReadyHandler: function() {
