@@ -3042,7 +3042,7 @@ var helper;
 if(devices.real().deviceType === "desktop") {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: () => {
+            beforeEach: function() {
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new Lookup($element,
                         $.extend({
@@ -3050,11 +3050,11 @@ if(devices.real().deviceType === "desktop") {
                         }, options))
                 });
             },
-            afterEach: () => {
+            afterEach: function() {
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, () => {
+            QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, function() {
                 helper.createWidget({ opened: true });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
@@ -3079,7 +3079,7 @@ if(devices.real().deviceType === "desktop") {
                 }
             });
 
-            QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, () => {
+            QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, function() {
                 helper.createWidget({ opened: false });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);

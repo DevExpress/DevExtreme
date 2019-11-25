@@ -57,7 +57,7 @@ const moduleOptions = {
 };
 
 module("render", moduleOptions, () => {
-    test("default size", assert => {
+    test("default size", function(assert) {
         const $element = $("#widget").dxSlider({
             useInkRipple: false
         });
@@ -65,7 +65,7 @@ module("render", moduleOptions, () => {
         assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
     });
 
-    test("onContentReady fired after the widget is fully ready", assert => {
+    test("onContentReady fired after the widget is fully ready", function(assert) {
         assert.expect(2);
         const position = "top";
 
@@ -81,7 +81,7 @@ module("render", moduleOptions, () => {
         });
     });
 
-    test("Resize by option", assert => {
+    test("Resize by option", function(assert) {
         const setUpWidth = 11,
             setUpHeight = 22,
             increment = 123,
@@ -106,7 +106,7 @@ module("render", moduleOptions, () => {
         assert.equal($slider.height() - initialHeight, increment, "Element's height was set properly on resize");
     });
 
-    test("check range-slide width after resize", assert => {
+    test("check range-slide width after resize", function(assert) {
         const setUpWidth = 100,
             decrement = 0.7 * setUpWidth,
             $slider = $("#slider").dxSlider({
@@ -123,7 +123,7 @@ module("render", moduleOptions, () => {
         assert.ok($range.width() < $slider.width(), "range width is correct");
     });
 
-    test("mousedown/touchstart on slider set new value (B233178)", assert => {
+    test("mousedown/touchstart on slider set new value (B233178)", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 500,
             min: 0,
@@ -236,7 +236,7 @@ module("render", moduleOptions, () => {
         assert.ok(!$handle.hasClass(ACTIVE_STATE_CLASS), "feedback turned off");
     });
 
-    test("drag handler", assert => {
+    test("drag handler", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 500,
             min: 0,
@@ -260,7 +260,7 @@ module("render", moduleOptions, () => {
 
     });
 
-    test("smooth drag of handler", assert => {
+    test("smooth drag of handler", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 500,
             min: 0,
@@ -279,7 +279,7 @@ module("render", moduleOptions, () => {
         pointer.up();
     });
 
-    test("value should be updated on swipestart on mobile devices", assert => {
+    test("value should be updated on swipestart on mobile devices", function(assert) {
         const $element = $("#slider").dxSlider({
                 max: 500,
                 min: 0,
@@ -296,7 +296,7 @@ module("render", moduleOptions, () => {
         assert.equal(instance.option("value"), 300, "value set after dxswipestart");
     });
 
-    test("value should be updated on click on mobile devices", assert => {
+    test("value should be updated on click on mobile devices", function(assert) {
         const $element = $("#slider").dxSlider({
                 max: 500,
                 min: 0,
@@ -313,7 +313,7 @@ module("render", moduleOptions, () => {
         assert.equal(instance.option("value"), 300, "value set after dxclick");
     });
 
-    test("value should be correctly updated on swipestart with the step that exceeds the maximum (T831727)", assert => {
+    test("value should be correctly updated on swipestart with the step that exceeds the maximum (T831727)", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 500,
             min: 0,
@@ -342,7 +342,7 @@ module("render", moduleOptions, () => {
 });
 
 module("hidden input", () => {
-    test("the hidden input should use the decimal separator specified in DevExpress.config", assert => {
+    test("the hidden input should use the decimal separator specified in DevExpress.config", function(assert) {
         const originalConfig = config();
         try {
             config({ serverDecimalSeparator: "|" });
@@ -360,7 +360,7 @@ module("hidden input", () => {
 });
 
 module("the 'name' option", () => {
-    test("widget input should get the 'name' attribute with a correct value", assert => {
+    test("widget input should get the 'name' attribute with a correct value", function(assert) {
         const expectedName = "some_name",
             $element = $("#slider").dxSlider({
                 name: expectedName
@@ -372,7 +372,7 @@ module("the 'name' option", () => {
 });
 
 module("slider with tooltip", () => {
-    test("tooltip default rendering", assert => {
+    test("tooltip default rendering", function(assert) {
         const $slider = $("#slider").dxSlider({
                 tooltip: {
                     enabled: true,
@@ -388,7 +388,7 @@ module("slider with tooltip", () => {
         assert.ok(Tooltip.getInstance($tooltip));
     });
 
-    test("'tooltip.enabled' option renders or remove tooltip", assert => {
+    test("'tooltip.enabled' option renders or remove tooltip", function(assert) {
         const $slider = $("#slider").dxSlider({
                 tooltip: {
                     enabled: false,
@@ -414,7 +414,7 @@ module("slider with tooltip", () => {
         assert.ok(!$slider.hasClass("dx-slider-tooltip-position-top") && !$slider.hasClass("dx-slider-tooltip-position-bottom"));
     });
 
-    test("tooltip displays current value", assert => {
+    test("tooltip displays current value", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 50,
@@ -434,7 +434,7 @@ module("slider with tooltip", () => {
         assert.equal($.trim($tooltip.text()), 75);
     });
 
-    test("'tooltip.position' option", assert => {
+    test("'tooltip.position' option", function(assert) {
         const $slider = $("#slider");
 
         positionUtils.setup($slider, {
@@ -478,7 +478,7 @@ module("slider with tooltip", () => {
         assert.ok(tooltipTop > sliderBottom, "tooltip top = " + tooltipTop + ", slider bottom = " + sliderBottom + " - tooltip should be display on bottom");
     });
 
-    test("tooltip should be centered after render", assert => {
+    test("tooltip should be centered after render", function(assert) {
         const $slider = $("#slider").dxSlider({
             max: 100,
             min: 0,
@@ -493,7 +493,7 @@ module("slider with tooltip", () => {
         assert.equal(Math.floor(($tooltip.outerWidth() - $arrow.outerWidth()) / 2), -$tooltip.position().left + parseInt($arrow.css("margin-left").replace("px", "")), "tooltip position is centered");
     });
 
-    test("tooltip should be fitted into slide right and left bounds", assert => {
+    test("tooltip should be fitted into slide right and left bounds", function(assert) {
         const $slider = $("#slider");
 
         positionUtils.setup($slider, {
@@ -529,7 +529,7 @@ module("slider with tooltip", () => {
         assert.ok(tooltipRight <= sliderRight, "tooltip right = " + tooltipRight + ", slider right = " + sliderRight);
     });
 
-    test("'tooltip.showMode' option", assert => {
+    test("'tooltip.showMode' option", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 50,
@@ -548,7 +548,7 @@ module("slider with tooltip", () => {
         assert.ok(!$handle.hasClass("dx-slider-tooltip-on-hover"));
     });
 
-    test("tooltip was not created before slider hanlde has focus", assert => {
+    test("tooltip was not created before slider hanlde has focus", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 50,
@@ -572,7 +572,7 @@ module("slider with tooltip", () => {
         assert.ok(!!Tooltip.getInstance($tooltip), "tooltip was created");
     });
 
-    test("'rtlEnabled' changing should not leads to error", assert => {
+    test("'rtlEnabled' changing should not leads to error", function(assert) {
         assert.expect(0);
 
         const $slider = $("#slider").dxSlider({
@@ -589,7 +589,7 @@ module("slider with tooltip", () => {
         });
     });
 
-    test("tooltip option changing when slider 'visible' = false", assert => {
+    test("tooltip option changing when slider 'visible' = false", function(assert) {
         const $slider = $("#slider");
 
         positionUtils.setup($slider, {
@@ -624,7 +624,7 @@ module("slider with tooltip", () => {
         assert.ok(tooltipBottom < sliderTop, "tooltip bottom = " + tooltipBottom + ", slider top = " + sliderTop + " - tooltip should be display on top");
     });
 
-    test("slider tooltip should not add hideTopOverlayCallback (T104070)", assert => {
+    test("slider tooltip should not add hideTopOverlayCallback (T104070)", function(assert) {
         const $slider = $("#slider");
 
         $slider.dxSlider({
@@ -638,7 +638,7 @@ module("slider with tooltip", () => {
         assert.ok(!hideTopOverlayCallback.hasCallback());
     });
 
-    test("tooltip renders correct after value length changed", assert => {
+    test("tooltip renders correct after value length changed", function(assert) {
         if(browser.msie) {
             assert.expect(0);
             return;
@@ -674,7 +674,7 @@ module("slider with tooltip", () => {
         }
     });
 
-    test("tooltip should repaints when repaint function called (T260971)", assert => {
+    test("tooltip should repaints when repaint function called (T260971)", function(assert) {
         $("#slider").hide();
 
         const $slider = $("#slider").dxSlider({
@@ -697,7 +697,7 @@ module("slider with tooltip", () => {
         assert.ok($slider.find(".dx-tooltip .dx-overlay-content").length, "tooltip is exist");
     });
 
-    test("slider in scrollable should not show scroll in max position (T315618)", assert => {
+    test("slider in scrollable should not show scroll in max position (T315618)", function(assert) {
         const sliderWidth = 400,
             $slider = $("#slider").dxSlider({
                 min: 0,
@@ -718,7 +718,7 @@ module("slider with tooltip", () => {
         assert.equal(boundaryOffset, 2, "tooltip content should have correct boundary offset");
     });
 
-    test("arrow should be centered after dimension was changed", assert => {
+    test("arrow should be centered after dimension was changed", function(assert) {
         const $slider = $("#slider").dxSlider({
             min: 0,
             max: 100,
@@ -738,7 +738,7 @@ module("slider with tooltip", () => {
         assert.equal($arrow.offset().left + $arrow.outerWidth() / 2, $sliderHandle.offset().left + $sliderHandle.outerWidth() / 2, "arrow centered");
     });
 
-    test("arrow should not go outside of the content overlay", assert => {
+    test("arrow should not go outside of the content overlay", function(assert) {
         const $slider = $("#slider").dxSlider({
             min: 0,
             max: 100,
@@ -762,7 +762,7 @@ module("slider with tooltip", () => {
 });
 
 module("'tooltip.format' option", () => {
-    test("'tooltip.format' option as function", assert => {
+    test("'tooltip.format' option as function", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 50,
@@ -785,7 +785,7 @@ module("'tooltip.format' option", () => {
         assert.equal($.trim($tooltip.text()), "$75");
     });
 
-    test("'tooltip.format' option as FormatHelper format", assert => {
+    test("'tooltip.format' option as FormatHelper format", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 0.12345,
@@ -808,7 +808,7 @@ module("'tooltip.format' option", () => {
         assert.equal($.trim($tooltip.text()), "0.12");
     });
 
-    test("'tooltip.format' changing should re-render tooltip content", assert => {
+    test("'tooltip.format' changing should re-render tooltip content", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 1,
@@ -837,7 +837,7 @@ module("'tooltip.format' option", () => {
         assert.equal($.trim($tooltip.text()), "[1]");
     });
 
-    test("'tooltip.format' as undefined (null, false) should render value as is", assert => {
+    test("'tooltip.format' as undefined (null, false) should render value as is", function(assert) {
         const $slider = $("#slider").dxSlider({
                 min: 0,
                 value: 1,
@@ -855,7 +855,7 @@ module("'tooltip.format' option", () => {
         assert.equal($.trim($tooltip.text()), "1");
     });
 
-    test("Update tooltip width when value is formatted", assert => {
+    test("Update tooltip width when value is formatted", function(assert) {
         const values = ["first", "second value", "third"],
             $slider = $("#slider").dxSlider({
                 min: 0,
@@ -879,7 +879,7 @@ module("'tooltip.format' option", () => {
 });
 
 module("labels", moduleOptions, () => {
-    test("'label.visible' option toggles label visibility", assert => {
+    test("'label.visible' option toggles label visibility", function(assert) {
         const $slider = $("#slider").dxSlider({
             min: 0,
             max: 100,
@@ -899,7 +899,7 @@ module("labels", moduleOptions, () => {
         assert.equal($sliderLabels.length, 0, "labels are removed");
     });
 
-    test("labels should re-rendered if 'min' or/and 'max' options changed", assert => {
+    test("labels should re-rendered if 'min' or/and 'max' options changed", function(assert) {
         const $slider = $("#slider").dxSlider({
             label: {
                 visible: true
@@ -933,7 +933,7 @@ module("labels", moduleOptions, () => {
 });
 
 module("events", () => {
-    test("value change should cause value change action call", assert => {
+    test("value change should cause value change action call", function(assert) {
         assert.expect(1);
 
         const $slider = $("#slider").dxSlider({
@@ -949,7 +949,7 @@ module("events", () => {
         pointerMock($slider).start().move(250 + $slider.offset().left).down();
     });
 
-    test("Changing the 'value' option must invoke the 'onValueChanged' action", assert => {
+    test("Changing the 'value' option must invoke the 'onValueChanged' action", function(assert) {
         const slider = $("#slider").dxSlider({
             onValueChanged: function() { assert.ok(true); },
             useInkRipple: false
@@ -957,7 +957,7 @@ module("events", () => {
         slider.option("value", true);
     });
 
-    test("T269867 - handle should not have active state if the 'activeStateEnabled' option is false", assert => {
+    test("T269867 - handle should not have active state if the 'activeStateEnabled' option is false", function(assert) {
         const $element = $("#slider").dxSlider({
                 activeStateEnabled: false,
                 useInkRipple: false
@@ -970,7 +970,7 @@ module("events", () => {
 });
 
 module("focus policy", moduleOptions, () => {
-    testInActiveWindow("Handle focus by click on track bar (T249311)", assert => {
+    testInActiveWindow("Handle focus by click on track bar (T249311)", function(assert) {
         assert.expect(1);
 
         const $slider = $("#slider").dxSlider({
@@ -985,7 +985,7 @@ module("focus policy", moduleOptions, () => {
 });
 
 module("keyboard navigation", moduleOptions, () => {
-    test("control keys test", assert => {
+    test("control keys test", function(assert) {
         assert.expect(2);
 
         const $slider = $("#slider").dxSlider({
@@ -1008,7 +1008,7 @@ module("keyboard navigation", moduleOptions, () => {
         assert.equal(slider.option("value"), 50, "value is correct after leftArrow press");
     });
 
-    test("control keys test with step", assert => {
+    test("control keys test with step", function(assert) {
         assert.expect(4);
 
         const $slider = $("#slider").dxSlider({
@@ -1038,7 +1038,7 @@ module("keyboard navigation", moduleOptions, () => {
         assert.equal(slider.option("value"), 90, "value is correct after end press");
     });
 
-    test("pageUp/pageDown keys test", assert => {
+    test("pageUp/pageDown keys test", function(assert) {
         assert.expect(4);
 
         const $slider = $("#slider").dxSlider({
@@ -1071,7 +1071,7 @@ module("keyboard navigation", moduleOptions, () => {
         assert.equal(slider.option("value"), 50, "value is correct after pageDown press");
     });
 
-    test("control keys test for rtl", assert => {
+    test("control keys test for rtl", function(assert) {
         assert.expect(4);
 
         const $slider = $("#slider").dxSlider({
@@ -1102,7 +1102,7 @@ module("keyboard navigation", moduleOptions, () => {
         assert.equal(slider.option("value"), 90, "value is correct after end press");
     });
 
-    test("pageUp/pageDown keys test for rtl", assert => {
+    test("pageUp/pageDown keys test for rtl", function(assert) {
         assert.expect(4);
 
         const $slider = $("#slider").dxSlider({
@@ -1135,7 +1135,7 @@ module("keyboard navigation", moduleOptions, () => {
         assert.equal(slider.option("value"), 50, "value is correct after pageDown press");
     });
 
-    test("T380070 - the value should not be changed on the 'left' key press if the value is min", assert => {
+    test("T380070 - the value should not be changed on the 'left' key press if the value is min", function(assert) {
         const spy = sinon.spy(),
             $slider = $("#slider").dxSlider({
                 min: 10,
@@ -1149,7 +1149,7 @@ module("keyboard navigation", moduleOptions, () => {
         assert.ok(spy.called === false, "the onValueChanged is not called");
     });
 
-    test("T380070 - the value should not be changed on the 'right' key press if the value is max", assert => {
+    test("T380070 - the value should not be changed on the 'right' key press if the value is max", function(assert) {
         const spy = sinon.spy(),
             $slider = $("#slider").dxSlider({
                 max: 10,
@@ -1165,7 +1165,7 @@ module("keyboard navigation", moduleOptions, () => {
 });
 
 module("regression tests", moduleOptions, () => {
-    test("change value of invisible element", assert => {
+    test("change value of invisible element", function(assert) {
         const $element = $("#slider").dxSlider({
                 max: 100,
                 min: 0,
@@ -1182,7 +1182,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(range.width(), 40, "range width is right");
     });
 
-    test("min value behaviour", assert => {
+    test("min value behaviour", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 600,
             min: 100,
@@ -1196,7 +1196,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(slider.option("value"), 350);
     });
 
-    test("B230095 - value is set to '0' after click on the handle", assert => {
+    test("B230095 - value is set to '0' after click on the handle", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 10,
             min: 0,
@@ -1211,7 +1211,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal($element.dxSlider("option", "value"), 5);
     });
 
-    test("B232111, B233180 - disabled state doesn't work", assert => {
+    test("B232111, B233180 - disabled state doesn't work", function(assert) {
         const $element = $("#slider").dxSlider({
                 min: 0,
                 value: 50,
@@ -1226,7 +1226,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(slider.option("value"), 50);
     });
 
-    test("B233256 - incorrect options", assert => {
+    test("B233256 - incorrect options", function(assert) {
         const $element = $("#slider").dxSlider({
                 min: 0,
                 value: 50,
@@ -1240,7 +1240,7 @@ module("regression tests", moduleOptions, () => {
         assert.expect(0);
     });
 
-    test("B233288 - incorrect behavior when swipe on handle", assert => {
+    test("B233288 - incorrect behavior when swipe on handle", function(assert) {
         const $element = $("#slider")
             .css("width", 500)
             .dxSlider({
@@ -1259,7 +1259,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(instance.option("value"), 252);
     });
 
-    test("B234545 dxRangeSlider/dxSlider - incorrect behavior with negative min and max values.", assert => {
+    test("B234545 dxRangeSlider/dxSlider - incorrect behavior with negative min and max values.", function(assert) {
         const $element = $("#slider").css("width", 960);
 
         $element.dxSlider({
@@ -1280,7 +1280,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal($range.width(), 0);
     });
 
-    test("B234766 dxSlider - incorrect value calculation with fractional step", assert => {
+    test("B234766 dxSlider - incorrect value calculation with fractional step", function(assert) {
         const $element = $("#slider").css("width", 960);
 
         $element.dxSlider({
@@ -1309,7 +1309,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal($range.width(), 960 / 20);
     });
 
-    test("incorrect when step is NAN or empty string", assert => {
+    test("incorrect when step is NAN or empty string", function(assert) {
         const $element = $("#slider")
                 .css("width", 500)
                 .dxSlider({
@@ -1337,7 +1337,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(slider.option("value"), 300);
     });
 
-    test("Q374462 dxSlider - It is impossible to set the step option to the float value", assert => {
+    test("Q374462 dxSlider - It is impossible to set the step option to the float value", function(assert) {
         const $element = $("#slider")
                 .css("width", 100)
                 .dxSlider({
@@ -1368,7 +1368,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(slider.option("value"), 0.3, "step should be reset to default");
     });
 
-    test("step depends on min value after swipe", assert => {
+    test("step depends on min value after swipe", function(assert) {
         const $element = $("#slider")
                 .css("width", 150)
                 .dxSlider({
@@ -1387,7 +1387,7 @@ module("regression tests", moduleOptions, () => {
         assert.equal(slider.option("value"), 1.5, "step depends min value");
     });
 
-    test("'repaint' method should not leads to error if 'tooltip.enabled' is true", assert => {
+    test("'repaint' method should not leads to error if 'tooltip.enabled' is true", function(assert) {
         assert.expect(0);
 
         const $element = $("#slider"),
@@ -1402,7 +1402,7 @@ module("regression tests", moduleOptions, () => {
         slider.repaint();
     });
 
-    test("The error should not be thrown if value is null", assert => {
+    test("The error should not be thrown if value is null", function(assert) {
         try {
             const slider = $("#slider").dxSlider({
                 value: null
@@ -1446,7 +1446,7 @@ module("regression tests", moduleOptions, () => {
 });
 
 module("RTL", moduleOptions, () => {
-    test("render value", assert => {
+    test("render value", function(assert) {
         const $element = $("#slider").css("width", 960);
 
         $element.dxSlider({
@@ -1467,7 +1467,7 @@ module("RTL", moduleOptions, () => {
         assert.equal($range.position().left, 0);
     });
 
-    test("mousedown/touchstart on slider set new value", assert => {
+    test("mousedown/touchstart on slider set new value", function(assert) {
         const $element = $("#slider").dxSlider({
             max: 500,
             min: 0,
@@ -1487,7 +1487,7 @@ module("RTL", moduleOptions, () => {
 });
 
 module("visibility change", () => {
-    test("tooltip should be centered after visibility changed", assert => {
+    test("tooltip should be centered after visibility changed", function(assert) {
         const $slider = $("#slider");
         const $parent = $slider.parent();
 
@@ -1511,7 +1511,7 @@ module("visibility change", () => {
 });
 
 module("validation", () => {
-    testInActiveWindow("add the CSS class on the focusIn event for show a validation message", assert => {
+    testInActiveWindow("add the CSS class on the focusIn event for show a validation message", function(assert) {
         const $slider = $("#slider");
         $slider.dxSlider({
             max: 100,
@@ -1527,7 +1527,7 @@ module("validation", () => {
         assert.equal($(".dx-overlay-wrapper.dx-invalid-message").css("visibility"), "visible", "validation message is shown");
     });
 
-    testInActiveWindow("remove the CSS class on the focusOut event for hide a validation message", assert => {
+    testInActiveWindow("remove the CSS class on the focusOut event for hide a validation message", function(assert) {
         const $slider = $("#slider");
         $slider.dxSlider({
             max: 100,
@@ -1545,7 +1545,7 @@ module("validation", () => {
         assert.equal($(".dx-overlay-wrapper.dx-invalid-message").css("visibility"), "hidden", "validation message is hidden");
     });
 
-    testInActiveWindow("validation message should be hidden once focusStateEnabled option switch off", assert => {
+    testInActiveWindow("validation message should be hidden once focusStateEnabled option switch off", function(assert) {
         const $slider = $("#slider");
         const instance = $slider.dxSlider({
             max: 100,

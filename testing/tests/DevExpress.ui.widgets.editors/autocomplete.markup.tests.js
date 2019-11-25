@@ -123,7 +123,7 @@ QUnit.module("aria accessibility", {}, () => {
         assert.equal($input.attr("aria-autocomplete"), "inline");
     });
 
-    QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", assert => {
+    QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", function(assert) {
         assert.expect(2);
 
         const $element = $("#widget").dxAutocomplete({
