@@ -4,6 +4,10 @@ import typeUtils from "./utils/type";
 import createCallBack from "./utils/callbacks";
 import { extend } from "./utils/extend";
 
+let cachedDeprecateNames = [];
+let cachedGetters = {};
+let cachedSetters = {};
+
 export class OptionManager {
     constructor(options, optionsByReference, deprecatedOptions) {
         this._options = options;
@@ -12,9 +16,6 @@ export class OptionManager {
         this._changingCallbacks = createCallBack({ syncStrategy: true });
         this._changedCallbacks = createCallBack({ syncStrategy: true });
         this._deprecatedCallbacks = createCallBack({ syncStrategy: true });
-        this._cachedDeprecateNames = [];
-        this.cachedGetters = {};
-        this.cachedSetters = {};
     }
 
     _notifyDeprecated(option) {
@@ -62,14 +63,14 @@ export class OptionManager {
     }
 
     _setValue(name, value, merge) {
-        if(!this.cachedSetters[name]) {
-            this.cachedSetters[name] = coreDataUtils.compileSetter(name);
+        if(!cachedSetters[name]) {
+            cachedSetters[name] = coreDataUtils.compileSetter(name);
         }
 
         const path = name.split(/[.[]/);
         merge = typeUtils.isDefined(merge) ? merge : !this._optionsByReference[name];
 
-        this.cachedSetters[name](this._options, value, {
+        cachedSetters[name](this._options, value, {
             functionsAsIs: true,
             merge,
             unwrapObservables: path.length > 1 && !!this._optionsByReference[path[0]]
@@ -102,13 +103,13 @@ export class OptionManager {
     _normalizeName(name) {
         if(!name) return;
         let deprecate;
-        if(!this._cachedDeprecateNames.length) {
+        if(!cachedDeprecateNames.length) {
             for(const optionName in this._deprecatedOptions) {
-                this._cachedDeprecateNames.push(optionName);
+                cachedDeprecateNames.push(optionName);
             }
         }
-        for(let i = 0; i < this._cachedDeprecateNames.length; i++) {
-            if(this._cachedDeprecateNames[i] === name) {
+        for(let i = 0; i < cachedDeprecateNames.length; i++) {
+            if(cachedDeprecateNames[i] === name) {
                 deprecate = this._deprecatedOptions[name];
                 break;
             }
@@ -135,9 +136,9 @@ export class OptionManager {
     }
 
     _getValue(options, name, unwrapObservables) {
-        let getter = this.cachedGetters[name];
+        let getter = cachedGetters[name];
         if(!getter) {
-            getter = this.cachedGetters[name] = coreDataUtils.compileGetter(name);
+            getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
         }
 
         return getter(options, { functionsAsIs: true, unwrapObservables });
