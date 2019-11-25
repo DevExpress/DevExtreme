@@ -34,7 +34,7 @@ const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
-const SCROLL_LINE_HEIGHT = 20;
+const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
@@ -796,9 +796,14 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _scrollByLine: function(lines) {
+        const devicePixelRatio = this._tryGetDevicePixelRatio();
+        let scrollOffset = SCROLL_LINE_HEIGHT;
+        if(devicePixelRatio) {
+            scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
+        }
         this.scrollBy({
-            top: (lines.y || 0) * -SCROLL_LINE_HEIGHT,
-            left: (lines.x || 0) * -SCROLL_LINE_HEIGHT
+            top: (lines.y || 0) * -scrollOffset,
+            left: (lines.x || 0) * -scrollOffset
         });
     },
 
