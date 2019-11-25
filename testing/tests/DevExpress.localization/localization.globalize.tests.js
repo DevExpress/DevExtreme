@@ -52,7 +52,7 @@ define(function(require, exports, module) {
 
     QUnit.module("Globalize common", null, function() {
 
-        QUnit.test("engine", assert => {
+        QUnit.test("engine", function(assert) {
             assert.equal(numberLocalization.engine(), "globalize");
             assert.equal(dateLocalization.engine(), "globalize");
             assert.equal(messageLocalization.engine(), "globalize");
@@ -432,7 +432,7 @@ define(function(require, exports, module) {
         Globalize.locale("en");
     });
 
-    QUnit.test("getCurrencySymbol and config.defaultCurrency", assert => {
+    QUnit.test("getCurrencySymbol and config.defaultCurrency", function(assert) {
         var originalConfig = config();
 
         try {
