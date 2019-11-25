@@ -30,7 +30,7 @@ const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: "#" }] };
 const INSERT_TEXT_DELTA = { ops: [{ insert: "Text" }] };
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.$element = $("#htmlEditor");
@@ -118,7 +118,7 @@ const moduleConfig = {
             editorInstance: this.options.editorInstance
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.reset();
     }
 };
@@ -126,7 +126,7 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module("Mention format", () => {
-    test("Create an element by data", (assert) => {
+    test("Create an element by data", function(assert) {
         const data = {
             value: "John Smith",
             marker: "@",
@@ -140,7 +140,7 @@ QUnit.module("Mention format", () => {
         assert.strictEqual(element.innerText, "@John Smith", "correct inner text");
     });
 
-    test("Get data from element", (assert) => {
+    test("Get data from element", function(assert) {
         const markup = "<span class='dx-mention' data-marker=@ data-mention-value='John Smith' data-id='JohnSm'><span>@</span>John Smith</span>";
         const element = $(markup).get(0);
         const data = MentionFormat.value(element);
@@ -148,7 +148,7 @@ QUnit.module("Mention format", () => {
         assert.deepEqual(data, { value: "John Smith", marker: "@", id: "JohnSm" }, "Correct data");
     });
 
-    test("Change default marker", (assert) => {
+    test("Change default marker", function(assert) {
         const data = {
             value: "John Smith",
             marker: "#",
@@ -159,7 +159,7 @@ QUnit.module("Mention format", () => {
         assert.strictEqual(element.innerText, "#John Smith", "correct inner text");
     });
 
-    test("Change default content renderer", (assert) => {
+    test("Change default content renderer", function(assert) {
         const data = {
             value: "John Smith",
             marker: "@",
@@ -185,7 +185,7 @@ QUnit.module("Mention format", () => {
 });
 
 QUnit.module("Mentions module", moduleConfig, () => {
-    test("insert mention after click on item", (assert) => {
+    test("insert mention after click on item", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -206,7 +206,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         }, "Correct formatting");
     });
 
-    test("Display and value expression with complex data", (assert) => {
+    test("Display and value expression with complex data", function(assert) {
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(0);
@@ -226,7 +226,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         }, "Correct formatting");
     });
 
-    test("Insert embed content should remove marker before insert a mention and restore the selection", (assert) => {
+    test("Insert embed content should remove marker before insert a mention and restore the selection", function(assert) {
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(2);
@@ -257,7 +257,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         }]);
     });
 
-    test("changing text by user should trigger checkMentionRequest", (assert) => {
+    test("changing text by user should trigger checkMentionRequest", function(assert) {
         this.quillMock.getSelection = () => { return { index: 1, length: 0 }; };
 
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
@@ -281,7 +281,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(showPopupSpy.calledOnce, "Show popup with suggestion list");
     });
 
-    test("Should appear after type a marker that replaces a selected text (T730303)", (assert) => {
+    test("Should appear after type a marker that replaces a selected text (T730303)", function(assert) {
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
         const showPopupSpy = sinon.spy(mention._popup, "show");
 
@@ -295,7 +295,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(showPopupSpy.calledTwice);
     });
 
-    test("display expression should be used in the suggestion list", (assert) => {
+    test("display expression should be used in the suggestion list", function(assert) {
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(2);
@@ -306,7 +306,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.strictEqual(itemText, "Alex manager");
     });
 
-    test("item template", (assert) => {
+    test("item template", function(assert) {
         this.complexDataOptions.mentions[0].itemTemplate = (item, index, element) => {
             $(element).text(`${item.name}@`);
         };
@@ -319,7 +319,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.strictEqual(itemText, "Alex@");
     });
 
-    test("several markers using", (assert) => {
+    test("several markers using", function(assert) {
         const usersCount = this.severalMarkerOptions.mentions[0].dataSource.length;
         const issueCount = this.severalMarkerOptions.mentions[1].dataSource.length;
         const mention = new Mentions(this.quillMock, this.severalMarkerOptions);
@@ -363,7 +363,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         }, "insert issue mention");
     });
 
-    test("list shouldn't be focused on text input", (assert) => {
+    test("list shouldn't be focused on text input", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -378,7 +378,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(isFirstListItemFocused);
     });
 
-    test("trigger 'arrow down' should focus next list item", (assert) => {
+    test("trigger 'arrow down' should focus next list item", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -396,7 +396,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(isSecondListItemFocused);
     });
 
-    test("list should load next page on reach end of current page", (assert) => {
+    test("list should load next page on reach end of current page", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
@@ -445,7 +445,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.strictEqual($items.length, 60, "next page has loaded");
     });
 
-    test("trigger 'arrow up' should focus previous list item", (assert) => {
+    test("trigger 'arrow up' should focus previous list item", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -464,7 +464,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
     });
 
     APPLY_VALUE_KEYS.forEach(({ key, code }) => {
-        test(`trigger '${key}' key should select focused list item`, (assert) => {
+        test(`trigger '${key}' key should select focused list item`, function(assert) {
             const mention = new Mentions(this.quillMock, this.options);
 
             mention.savePosition(0);
@@ -486,7 +486,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         });
     });
 
-    test("trigger 'escape' should close list", (assert) => {
+    test("trigger 'escape' should close list", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -502,7 +502,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.notOk($list.is(":visible"));
     });
 
-    test("mention char shouldn't be a part of string (e.g. e-mail)", (assert) => {
+    test("mention char shouldn't be a part of string (e.g. e-mail)", function(assert) {
         let content = "d";
 
         this.quillMock.getContents = (index, length) => {
@@ -532,7 +532,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.deepEqual(this.log[2], { operation: "getContents", index: 0, length: 1 });
     });
 
-    test("popup position config", (assert) => {
+    test("popup position config", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
         mention.savePosition(0);
         const { collision, offset, of: positionTarget } = mention._popupPosition;
@@ -546,7 +546,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(Object.prototype.hasOwnProperty.call(offset, "v"), "it has a vertical offset");
     });
 
-    test("popup shouldn't close on target scroll", (assert) => {
+    test("popup shouldn't close on target scroll", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
@@ -557,7 +557,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(mention._popup.option("visible"), "popup is visible after scrolling");
     });
 
-    test("popup should update position after search", (assert) => {
+    test("popup should update position after search", function(assert) {
         const mention = new Mentions(this.quillMock, this.options);
         const popupRepaintSpy = sinon.spy(mention._popup, "repaint");
 

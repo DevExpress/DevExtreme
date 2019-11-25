@@ -17,7 +17,7 @@ const IMAGE_SIZE = 100;
 const BORDER_PADDING_WIDTH = 2;
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.$element = $("#htmlEditor").css({ position: "relative", margin: "10px" });
         this.$image = $("<img>").attr({
             width: IMAGE_SIZE,
@@ -52,7 +52,7 @@ const moduleConfig = {
 const { test, module } = QUnit;
 
 module("Resizing module", moduleConfig, () => {
-    test("create module instance with default options", (assert) => {
+    test("create module instance with default options", function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 0, "There is no resize frame element");
@@ -60,7 +60,7 @@ module("Resizing module", moduleConfig, () => {
         assert.notOk(resizingInstance.enabled, "module disabled by default");
     });
 
-    test("create module instance with enabled equals to 'true'", (assert) => {
+    test("create module instance with enabled equals to 'true'", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
@@ -70,7 +70,7 @@ module("Resizing module", moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, ["image"], "default allowed targets");
     });
 
-    test("module should detach events on clean", (assert) => {
+    test("module should detach events on clean", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
@@ -80,7 +80,7 @@ module("Resizing module", moduleConfig, () => {
         assert.ok(this.detachEventsSpy.calledOnce, "events has been detached on 'clean'");
     });
 
-    test("module should attach and detach events on the 'enabled' option changing", (assert) => {
+    test("module should attach and detach events on the 'enabled' option changing", function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         this.attachSpies(resizingInstance);
@@ -95,7 +95,7 @@ module("Resizing module", moduleConfig, () => {
         assert.ok(this.detachEventsSpy.calledOnce, "events has been detached");
     });
 
-    test("'allowedTargets' option should accept Array only", (assert) => {
+    test("'allowedTargets' option should accept Array only", function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         resizingInstance.option("allowedTargets", []);
@@ -107,7 +107,7 @@ module("Resizing module", moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, [], "Boolean value rejected");
     });
 
-    test("'option' can apply a set of options", (assert) => {
+    test("'option' can apply a set of options", function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         resizingInstance.option("mediaResizing", { allowedTargets: ["video"], enabled: true });
@@ -116,7 +116,7 @@ module("Resizing module", moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, ["video"], "'allowedTargets' option has been applied");
     });
 
-    test("click on an image with default module options", (assert) => {
+    test("click on an image with default module options", function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         this.attachSpies(resizingInstance);
@@ -127,7 +127,7 @@ module("Resizing module", moduleConfig, () => {
         assert.ok(this.showFrameSpy.notCalled, "Frame isn't shown");
     });
 
-    test("click on an image with enabled resizing", (assert) => {
+    test("click on an image with enabled resizing", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
@@ -147,7 +147,7 @@ module("Resizing module", moduleConfig, () => {
         assert.strictEqual(frameClientRect.height, IMAGE_SIZE + BORDER_PADDING_WIDTH * 2, "Frame has a correct height");
     });
 
-    test("click on an div with enabled resizing", (assert) => {
+    test("click on an div with enabled resizing", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
@@ -161,7 +161,7 @@ module("Resizing module", moduleConfig, () => {
         assert.notOk($resizeFrame.is(":visible"), "Frame element isn't visible");
     });
 
-    test("click on an image after disable image resizing", (assert) => {
+    test("click on an image after disable image resizing", function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         this.attachSpies(resizingInstance);
@@ -178,7 +178,7 @@ module("Resizing module", moduleConfig, () => {
         assert.notOk($resizeFrame.is(":visible"), "Frame element isn't visible");
     });
 
-    test("click outside the target should hide resize frame", (assert) => {
+    test("click outside the target should hide resize frame", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
@@ -195,7 +195,7 @@ module("Resizing module", moduleConfig, () => {
         assert.notOk($resizeFrame.is(":visible"), "Frame element isn't visible");
     });
 
-    test("keydown event should hide resize frame", (assert) => {
+    test("keydown event should hide resize frame", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
@@ -212,7 +212,7 @@ module("Resizing module", moduleConfig, () => {
         assert.notOk($resizeFrame.is(":visible"), "Frame element isn't visible");
     });
 
-    test("scroll event should update resize frame position", (assert) => {
+    test("scroll event should update resize frame position", function(assert) {
         this.options.enabled = true;
         const resizingInstance = new Resizing(this.quillMock, this.options);
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
@@ -231,7 +231,7 @@ module("Resizing module", moduleConfig, () => {
         assert.ok(this.hideFrameSpy.notCalled, "Frame hasn't been hidden");
     });
 
-    test("resize frame should change an target size on the frame resizing", (assert) => {
+    test("resize frame should change an target size on the frame resizing", function(assert) {
         this.options.enabled = true;
         new Resizing(this.quillMock, this.options);
 
@@ -260,7 +260,7 @@ module("Resizing module", moduleConfig, () => {
         assert.strictEqual(imageClientRect.width, IMAGE_SIZE + 10, "Image width has been increased");
     });
 
-    test("check frame position", (assert) => {
+    test("check frame position", function(assert) {
         this.options.enabled = true;
         new Resizing(this.quillMock, this.options);
 
@@ -279,7 +279,7 @@ module("Resizing module", moduleConfig, () => {
         assert.strictEqual(frameClientRect.top + BORDER_PADDING_WIDTH, imageClientRect.top, "Frame positioned correctly by the top");
     });
 
-    test("resize frame should have specific class on mobile devices", (assert) => {
+    test("resize frame should have specific class on mobile devices", function(assert) {
         const currentDevice = devices.current();
 
         devices.current("iPad");
@@ -293,7 +293,7 @@ module("Resizing module", moduleConfig, () => {
         devices.current(currentDevice);
     });
 
-    test("resize frame shouldn't have specific class on desktop", (assert) => {
+    test("resize frame shouldn't have specific class on desktop", function(assert) {
         const currentDevice = devices.current();
 
         devices.current("desktop");

@@ -11,7 +11,7 @@ const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 const { test } = QUnit;
 
 QUnit.module("Base markup", () => {
-    test("render markup", (assert) => {
+    test("render markup", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<h1>Hi!</h1><p>Test</p>"
         }).dxHtmlEditor("instance");
@@ -30,7 +30,7 @@ QUnit.module("Base markup", () => {
         assert.equal(!!instance._quillRegistrator, isQuillRendered, "Quill registrator isn't initialized at SSR");
     });
 
-    test("name options should be applies to the submit element", (assert) => {
+    test("name options should be applies to the submit element", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
             name: "Test"
         }).dxHtmlEditor("instance");
@@ -43,7 +43,7 @@ QUnit.module("Base markup", () => {
         assert.equal($submitElement.attr("name"), "New", "It's the right new name");
     });
 
-    test("render markdown markup", (assert) => {
+    test("render markdown markup", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "*Test* **text**",
                 valueType: "markdown"
@@ -62,7 +62,7 @@ QUnit.module("Base markup", () => {
         assert.equal(!!instance._quillRegistrator, isQuillRendered, "Quill registrator isn't initialized at SSR");
     });
 
-    test("change value", (assert) => {
+    test("change value", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<h1>Hi!</h1><p>Test</p>"
         }).dxHtmlEditor("instance");
