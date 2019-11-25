@@ -63,7 +63,7 @@ var RowDraggingExtender = {
 
                     const onDragStart = rowDragging.onDragStart;
                     onDragStart && onDragStart(e);
-                },
+                }
             }));
         }
 
