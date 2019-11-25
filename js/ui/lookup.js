@@ -1011,7 +1011,6 @@ var Lookup = DropDownList.inherit({
 
         this._$searchBox && this._$searchBox.remove();
         delete this._$searchBox;
-
         delete this._searchBox;
     },
 
