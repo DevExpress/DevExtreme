@@ -4,6 +4,7 @@ import "ui/tabs";
 import "ui/drop_down_menu";
 import $ from "jquery";
 import Toolbar from "ui/toolbar";
+import themes from "ui/themes";
 
 import "common.css!";
 
@@ -231,6 +232,22 @@ QUnit.module("render", {
 
         assert.equal(this.element.find("#2").length, 1, "#2");
         assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
+    });
+
+    test("Clear timer for the animation in the Material theme", (assert) => {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+        this.element.dxToolbar({});
+
+        const beforeContainer = this.element.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS}`);
+        const afterContainer = this.element.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS}`);
+        const centerContainer = this.element.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS}`);
+
+        assert.equal(beforeContainer.length, 1, "the before container is rendered");
+        assert.equal(afterContainer.length, 1, "the after container is rendered");
+        assert.equal(centerContainer.length, 1, "the center container is rendered");
+
+        themes.isMaterial = this.origIsMaterial;
     });
 });
 
