@@ -19,7 +19,7 @@ var $ = require("../../core/renderer"),
     TextBox = require("../text_box"),
     clickEvent = require("../../events/click"),
     devices = require("../../core/devices"),
-    FunctionTemplate = require("../../core/templates/function_template").FunctionTemplate,
+    FunctionTemplate = require("../widget/function_template"),
     Popup = require("../popup");
 
 var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
