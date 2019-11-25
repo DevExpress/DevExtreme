@@ -868,7 +868,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _renderItems: function($nodeContainer, nodes) {
         const length = nodes.length - 1;
-
         for(let i = length; i >= 0; i--) {
             this._renderItem(i, nodes[i], $nodeContainer);
         }
@@ -906,15 +905,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        const adapterNodes = this._dataAdapter.getData();
         this._loadSublevel(node).done(childNodes => {
-            const newNodes = this._getNotExistNodes(childNodes, adapterNodes);
-            this._renderSublevel($node, this._getActualNode(node), newNodes);
+            const actualNodeData = this._getActualNode(node);
+            let notRenderedNodes = this._getNotRenderedNodes(actualNodeData, childNodes);
+            this._renderSublevel($node, actualNodeData, notRenderedNodes);
         });
-    },
-
-    _getNotExistNodes: function(source, target) {
-        return source.filter((childNode) => !target.some((targetNode) => { return targetNode.internalFields.key === childNode.internalFields.key; }));
     },
 
     _getActualNode: function(cachedNode) {
@@ -1131,12 +1126,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _loadNestedItemsWithUpdate: function(node, state, e) {
         const $node = this._getNodeElement(node);
-        const adapterNodes = this._dataAdapter.getData();
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
             const itemNodes = this._dataAdapter.getNodesByItems(items);
-            const newNodes = this._getNotExistNodes(itemNodes, adapterNodes);
-            this._renderSublevel($node, actualNodeData, newNodes);
+
+            let notRenderedNodes = this._getNotRenderedNodes(actualNodeData, itemNodes);
+            this._renderSublevel($node, actualNodeData, notRenderedNodes);
 
             if(!items || !items.length) {
                 return;
@@ -1169,6 +1164,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._appendItems(newItems);
             }
         });
+    },
+
+    _getNotRenderedNodes: function(node, childrenNodes) {
+        return childrenNodes.filter((childNode) => { return node.internalFields.childrenKeys.indexOf(childNode.internalFields.key) !== -1; });
     },
 
     _areNodesExists: function(newItems, items) {
