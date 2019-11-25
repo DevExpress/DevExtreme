@@ -15,16 +15,16 @@ function getSelector(className) {
 const { test } = QUnit;
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 };
 
 QUnit.module("Value as HTML markup", moduleConfig, () => {
-    test("show placeholder is value undefined", (assert) => {
+    test("show placeholder is value undefined", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 placeholder: "test placeholder"
             }).dxHtmlEditor("instance"),
@@ -34,7 +34,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal($content.get(0).dataset.placeholder, "test placeholder");
     });
 
-    test("render default value", (assert) => {
+    test("render default value", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "<h1>Hi!</h1><p>Test</p>"
             }).dxHtmlEditor("instance"),
@@ -45,7 +45,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
     });
 
-    test("render transclude content", (assert) => {
+    test("render transclude content", function(assert) {
         assert.expect(4);
         const instance = $("#htmlEditor")
             .html("<h1>Hi!</h1><p>Test</p>")
@@ -71,7 +71,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
     });
 
-    test("render transclude content and predefined value", (assert) => {
+    test("render transclude content and predefined value", function(assert) {
         const instance = $("#htmlEditor")
                 .html("<h1>Hi!</h1><p>Test</p>")
                 .dxHtmlEditor({
@@ -87,7 +87,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, "<p>Test1</p><p>Test2</p>");
     });
 
-    test("change value by user", (assert) => {
+    test("change value by user", function(assert) {
         const done = assert.async();
         const expectedValue = "<p>Hi! <strong>Test.</strong></p><p>New line</p>";
         const instance = $("#htmlEditor")
@@ -106,7 +106,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
             .html("<p>Hi! <strong>Test.</strong></p><p>New line</p>");
     });
 
-    test("value after change valueType", (assert) => {
+    test("value after change valueType", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
@@ -124,7 +124,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         instance.option("valueType", "html");
     });
 
-    test("render markup with a font-size style", (assert) => {
+    test("render markup with a font-size style", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: '<span style="font-size: 20px">Test</span>'
         }).dxHtmlEditor("instance");
@@ -134,7 +134,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, '<p><span style="font-size: 20px;">Test</span></p>');
     });
 
-    test("render markup with a font-family style", (assert) => {
+    test("render markup with a font-family style", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: '<span style="font-family: Terminal;">Test</span>'
         }).dxHtmlEditor("instance");
@@ -144,7 +144,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, '<p><span style="font-family: Terminal;">Test</span></p>');
     });
 
-    test("editor should preserve break lines", (assert) => {
+    test("editor should preserve break lines", function(assert) {
         const expectedMarkup = "<p><br></p><p><br></p><h1>Hi!</h1><p>Te</p><p>st</p>";
         const instance = $("#htmlEditor")
             .html("<br><br><h1>Hi!</h1><p>Te<br>st</p>")
@@ -160,7 +160,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, expectedMarkup);
     });
 
-    test("editor shouldn't create unexpected break lines", (assert) => {
+    test("editor shouldn't create unexpected break lines", function(assert) {
         const expectedMarkup = "<p>hi</p><ul><li>test</li></ul>";
         const instance = $("#htmlEditor")
             .html("<p>hi</p><ul><li>test</li></ul>")
@@ -176,7 +176,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(markup, expectedMarkup);
     });
 
-    test("editor should respect attributes of the list item", (assert) => {
+    test("editor should respect attributes of the list item", function(assert) {
         const done = assert.async();
         const expectedMarkup = '<ul><li style="text-align: center;">test</li></ul>';
         const instance = $("#htmlEditor")
@@ -197,7 +197,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         this.clock.tick();
     });
 
-    test("editor should respect attributes of the single formatted line", (assert) => {
+    test("editor should respect attributes of the single formatted line", function(assert) {
         const done = assert.async();
         const expectedMarkup = '<p style="text-align: center;">test</p>';
         const instance = $("#htmlEditor")
@@ -218,7 +218,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         this.clock.tick();
     });
 
-    test("editor should have an empty string value when all content has been removed", (assert) => {
+    test("editor should have an empty string value when all content has been removed", function(assert) {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 value: "test"
@@ -228,7 +228,7 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(instance.option("value"), "", "value is empty line");
     });
 
-    test("editor should trigger the 'valueChanged' event after formatting a link", (assert) => {
+    test("editor should trigger the 'valueChanged' event after formatting a link", function(assert) {
         assert.expect(1);
 
         const done = assert.async();
@@ -250,14 +250,14 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
 
 
 QUnit.module("Value as Markdown markup", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("render default value", (assert) => {
+    test("render default value", function(assert) {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "Hi!\nIt's a **test**!",
                 valueType: "markdown"
@@ -269,7 +269,7 @@ QUnit.module("Value as Markdown markup", {
         assert.equal(markup, "<p>Hi!</p><p>It's a <strong>test</strong>!</p>");
     });
 
-    test("change value by user", (assert) => {
+    test("change value by user", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
@@ -287,7 +287,7 @@ QUnit.module("Value as Markdown markup", {
             .html("<p>Hi! <strong>Test.</strong></p>");
     });
 
-    test("value after change valueType", (assert) => {
+    test("value after change valueType", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
@@ -306,14 +306,14 @@ QUnit.module("Value as Markdown markup", {
 });
 
 QUnit.module("Custom blots rendering", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("render image", (assert) => {
+    test("render image", function(assert) {
         const testTag = /<img([\w\W]+?)/;
         const testSrc = /src="http:\/\/test.test\/test.jpg"/g;
         const testAlt = /alt="altering"/g;
@@ -336,7 +336,7 @@ QUnit.module("Custom blots rendering", {
         this.clock.tick();
     });
 
-    test("render link", (assert) => {
+    test("render link", function(assert) {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 value: "test",
@@ -354,7 +354,7 @@ QUnit.module("Custom blots rendering", {
         instance.insertText(0, "test", "link", { href: "http://test.test", target: true });
     });
 
-    test("render variable", (assert) => {
+    test("render variable", function(assert) {
         const expected = '<p><span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span></p>';
         const instance = $("#htmlEditor")
             .dxHtmlEditor({

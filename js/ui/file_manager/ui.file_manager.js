@@ -447,10 +447,6 @@ class FileManager extends Widget {
             * @name dxFileManagerContextMenuItem.visible
             * @default undefined
             */
-            /**
-            * @name dxFileManagerContextMenuItem.items
-            * @type Array<dxFileManagerContextMenuItem>
-            */
 
             contextMenu: {
                 items: [

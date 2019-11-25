@@ -42,7 +42,7 @@ const NAVIGATION_KEYS = [
 const KeyEventsMock = nativePointerMock();
 
 module("Mentions integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.$element = $("#htmlEditor");
@@ -68,11 +68,11 @@ module("Mentions integration", {
 
         this.getItems = () => $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("insert mention after click on item", (assert) => {
+    test("insert mention after click on item", function(assert) {
         const done = assert.async();
         const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -94,7 +94,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("popup position", (assert) => {
+    test("popup position", function(assert) {
         const done = assert.async();
         const $fixture = $("#qunit-fixture");
         const fixtureLeft = $fixture.css("left");
@@ -124,7 +124,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("set up mentions for existed editor", (assert) => {
+    test("set up mentions for existed editor", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $items = this.getItems();
@@ -146,7 +146,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("reset mentions option for existed editor", (assert) => {
+    test("reset mentions option for existed editor", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $list = $(`.${SUGGESTION_LIST_CLASS}`);
@@ -165,7 +165,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("change mentions marker", (assert) => {
+    test("change mentions marker", function(assert) {
         const done = assert.async();
         const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="#" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>#</span>Freddy</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -189,7 +189,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("list isn't shown for wrong marker", (assert) => {
+    test("list isn't shown for wrong marker", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $list = $(`.${SUGGESTION_LIST_CLASS}`);
@@ -208,7 +208,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("several mention markers: first mention", (assert) => {
+    test("several mention markers: first mention", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $items = this.getItems();
@@ -233,7 +233,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("several mention markers: second mention", (assert) => {
+    test("several mention markers: second mention", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $items = this.getItems();
@@ -258,7 +258,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("reduce mention markers", (assert) => {
+    test("reduce mention markers", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $items = this.getItems();
@@ -289,7 +289,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("old marker doesn't work after reduce mention markers", (assert) => {
+    test("old marker doesn't work after reduce mention markers", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             const $list = $(`.${SUGGESTION_LIST_CLASS}`);
@@ -319,7 +319,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("new mention should be selected after press 'enter' key", (assert) => {
+    test("new mention should be selected after press 'enter' key", function(assert) {
         const done = assert.async();
         const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -342,7 +342,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("navigation keys don't change a caret position when suggestion list is visible", (assert) => {
+    test("navigation keys don't change a caret position when suggestion list is visible", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             if(valueChangeSpy.calledOnce) {
@@ -366,7 +366,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("list should show relevant items on typing text", (assert) => {
+    test("list should show relevant items on typing text", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
 
@@ -393,7 +393,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("first list item should be focused on filtering", (assert) => {
+    test("first list item should be focused on filtering", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
             if(valueChangeSpy.calledOnce) {
@@ -418,7 +418,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("input text should be removed after item select", (assert) => {
+    test("input text should be removed after item select", function(assert) {
         const done = assert.async();
         const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>@</span>Freddy</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -448,7 +448,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("search timeout", (assert) => {
+    test("search timeout", function(assert) {
         const done = assert.async();
         const TIMEOUT = 700;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -477,7 +477,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("minimal search length", (assert) => {
+    test("minimal search length", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
@@ -507,7 +507,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("search expression", (assert) => {
+    test("search expression", function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
@@ -543,7 +543,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("template", (assert) => {
+    test("template", function(assert) {
         const done = assert.async();
         const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">John!</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
@@ -568,7 +568,7 @@ module("Mentions integration", {
         this.clock.tick();
     });
 
-    test("template for existed value", (assert) => {
+    test("template for existed value", function(assert) {
         const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">John!</span></span>`;
 
         this.options.mentions[0].template = (data, container) => {

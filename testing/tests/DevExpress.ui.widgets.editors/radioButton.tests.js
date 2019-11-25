@@ -89,7 +89,7 @@ QUnit.test("state changes on space press", function(assert) {
 QUnit.module("validation");
 
 if(devices.real().deviceType === "desktop") {
-    QUnit.test("the click should be processed before the validation message is shown (T570458)", (assert) => {
+    QUnit.test("the click should be processed before the validation message is shown (T570458)", function(assert) {
         const $radioButton = $("#radioButton")
             .dxRadioButton({})
             .dxValidator({
@@ -114,7 +114,7 @@ if(devices.real().deviceType === "desktop") {
         assert.notOk(isValidationMessageVisible());
     });
 
-    QUnit.test("should show validation message after focusing", (assert) => {
+    QUnit.test("should show validation message after focusing", function(assert) {
         const clock = sinon.useFakeTimers();
         const $radioButton = $("#radioButton")
             .dxRadioButton({})

@@ -31,7 +31,7 @@ function isDropDownButton($element) {
 }
 
 module("button collection", () => {
-    test("should render default buttons if the 'buttons' option is not defined", (assert) => {
+    test("should render default buttons if the 'buttons' option is not defined", function(assert) {
         const $textBox = $("<div>").dxTextBox({ showClearButton: true });
         const { $before, $after } = getTextEditorButtons($textBox);
 
@@ -39,7 +39,7 @@ module("button collection", () => {
         assert.strictEqual($after.length, 1);
     });
 
-    test("should not render default buttons if the collection is defined", (assert) => {
+    test("should not render default buttons if the collection is defined", function(assert) {
         const $textBox = $("<div>").dxTextBox({ buttons: [], showClearButton: true });
         const { $before, $after } = getTextEditorButtons($textBox);
 
@@ -47,7 +47,7 @@ module("button collection", () => {
         assert.notOk($after.length);
     });
 
-    test("should be an array", (assert) => {
+    test("should be an array", function(assert) {
         const checkException = (value) => {
             const textBox = $("<div>").dxTextBox({}).dxTextBox("instance");
 
@@ -59,7 +59,7 @@ module("button collection", () => {
     });
 
     module("button", () => {
-        test("should be a string or an object only", (assert) => {
+        test("should be a string or an object only", function(assert) {
             const checkException = (value) => {
                 const textBox = $("<div>").dxTextBox({}).dxTextBox("instance");
 
@@ -70,17 +70,17 @@ module("button collection", () => {
             [0, [], true, null, void 0].forEach(checkException);
         });
 
-        test("should not have buttons with same names", (assert) => {
+        test("should not have buttons with same names", function(assert) {
             assert.throws(() => $("<div>").dxTextBox({ buttons: ["clear", "clear"] }), errors.Error("E1055", "clear"));
             assert.throws(() => $("<div>").dxTextBox({ buttons: [{ name: "name" }, { name: "name" }] }), errors.Error("E1055", "name"));
         });
 
         module("fields", () => {
-            test("'name' filed should be defined for custom buttons", (assert) => {
+            test("'name' filed should be defined for custom buttons", function(assert) {
                 assert.throws(() => $("<div>").dxTextBox({ buttons: [{}] }), errors.Error("E1054"));
             });
 
-            test("'name' filed should be a string", (assert) => {
+            test("'name' filed should be a string", function(assert) {
                 const checkException = (value) => {
                     const textBox = $("<div>").dxTextBox({}).dxTextBox("instance");
 
@@ -91,7 +91,7 @@ module("button collection", () => {
                 [1, [], {}, false, null, void 0].forEach(checkException);
             });
 
-            test("'location' field should be 'after' or 'before' string only", (assert) => {
+            test("'location' field should be 'after' or 'before' string only", function(assert) {
                 const $textBox = $("<div>").dxTextBox({ buttons: [{ name: "name", location: "incorrect" }] });
                 const { $before, $after } = getTextEditorButtons($textBox);
 
@@ -99,7 +99,7 @@ module("button collection", () => {
                 assert.strictEqual($after.length, 1);
             });
 
-            test("'options' and 'location' fields should not be required", (assert) => {
+            test("'options' and 'location' fields should not be required", function(assert) {
                 const $textBox = $("<div>").dxTextBox({ buttons: [{ name: "name1" }, { name: "name2" }] });
                 const { $before, $after } = getTextEditorButtons($textBox);
 
@@ -107,7 +107,7 @@ module("button collection", () => {
                 assert.strictEqual($after.length, 2);
             });
 
-            test("custom button should skip content template from the integrationOptions", (assert) => {
+            test("custom button should skip content template from the integrationOptions", function(assert) {
                 const $textBox = $("<div>").dxTextBox({ buttons: [{ name: "name1" }] });
                 const buttons = getTextEditorButtons($textBox);
                 const button = buttons.$after.eq(0).dxButton("instance");
@@ -119,7 +119,7 @@ module("button collection", () => {
 });
 
 module("API", () => {
-    test("'getButton' method should returns action button instance", (assert) => {
+    test("'getButton' method should returns action button instance", function(assert) {
         const selectBox = $("<div>")
             .dxSelectBox({
                 showClearButton: true,
@@ -146,7 +146,7 @@ module("rendering", () => {
     }
 
     module("textBox", () => {
-        test("custom button options should be applied", (assert) => {
+        test("custom button options should be applied", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,
                 buttons: [{
@@ -163,7 +163,7 @@ module("rendering", () => {
             assert.strictEqual($after.text(), "custom");
         });
 
-        test("editor with button should have smaller placeholder than the editor without buttons", (assert) => {
+        test("editor with button should have smaller placeholder than the editor without buttons", function(assert) {
             const $textBox = $("<div>").appendTo("body").dxTextBox({
                 width: 150,
                 placeholder: "Test long text example",
@@ -187,7 +187,7 @@ module("rendering", () => {
         });
 
 
-        test("should not render 'clear' button if showClearButton is false", (assert) => {
+        test("should not render 'clear' button if showClearButton is false", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,
                 buttons: ["clear"],
@@ -199,7 +199,7 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 1);
         });
 
-        test("should render 'clear' button only after it becomes visible", (assert) => {
+        test("should render 'clear' button only after it becomes visible", function(assert) {
             const $textBox = $("<div>").dxTextBox({});
             const textBox = $textBox.dxTextBox("instance");
             let { $before, $after } = getTextEditorButtons($textBox);
@@ -221,7 +221,7 @@ module("rendering", () => {
             assert.ok(isClearButton($after.eq(0)));
         });
 
-        test("should render predefined button ('clear')", (assert) => {
+        test("should render predefined button ('clear')", function(assert) {
             const $textBox = $("<div>").dxTextBox({ showClearButton: true, buttons: ["clear"] });
             const { $before, $after } = getTextEditorButtons($textBox);
 
@@ -230,17 +230,17 @@ module("rendering", () => {
             assert.notOk(getButtonPlaceHolders($after).length);
         });
 
-        test("should render predefined button ('clear') configurated as object", (assert) => {
+        test("should render predefined button ('clear') configurated as object", function(assert) {
             const $textBox = $("<div>").dxTextBox({ showClearButton: true, buttons: [{ name: "clear" }] });
             let $after = getTextEditorButtons($textBox).$after;
             assert.ok(isClearButton($after.eq(0)));
         });
 
-        test("should have only 'clear' predefined button", (assert) => {
+        test("should have only 'clear' predefined button", function(assert) {
             assert.throws(() => $("<div>").dxTextBox({ buttons: ["fakeButtonName"] }), errors.Error("E1056", "dxTextBox", "fakeButtonName"));
         });
 
-        test("predefined button should ignore 'location' or 'options' fields in predefined button configuration", (assert) => {
+        test("predefined button should ignore 'location' or 'options' fields in predefined button configuration", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 value: "text",
                 showClearButton: true,
@@ -255,7 +255,7 @@ module("rendering", () => {
             assert.strictEqual($after.eq(0).text(), "");
         });
 
-        test("custom button with location 'before' should be rendered", (assert) => {
+        test("custom button with location 'before' should be rendered", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,
                 value: "text",
@@ -273,7 +273,7 @@ module("rendering", () => {
             assert.strictEqual($after.length, 0);
         });
 
-        test("custom button with location 'after' should be rendered", (assert) => {
+        test("custom button with location 'after' should be rendered", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,
                 value: "text",
@@ -291,7 +291,7 @@ module("rendering", () => {
             assert.strictEqual($before.length, 0);
         });
 
-        test("custom button should not change the widget height", (assert) => {
+        test("custom button should not change the widget height", function(assert) {
             const $textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
                 value: "text",
                 stylingMode: "underlined"
@@ -310,7 +310,7 @@ module("rendering", () => {
             assert.strictEqual($textBox.height(), startHeight);
         });
 
-        test("custom button should be disabled in readOnly state by default", (assert) => {
+        test("custom button should be disabled in readOnly state by default", function(assert) {
             const textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
                 value: "text",
                 buttons: [
@@ -332,7 +332,7 @@ module("rendering", () => {
             assert.notOk(button.option("disabled"), "button is enabled");
         });
 
-        test("custom button should not be disabled in readOnly state if it was specified by a user", (assert) => {
+        test("custom button should not be disabled in readOnly state if it was specified by a user", function(assert) {
             const textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
                 value: "text",
                 buttons: [
@@ -358,7 +358,7 @@ module("rendering", () => {
     });
 
     module("numberBox", () => {
-        test("widget should not render a clear button if 'buttons' option have no string for it", (assert) => {
+        test("widget should not render a clear button if 'buttons' option have no string for it", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 showClearButton: true,
                 showSpinButtons: true,
@@ -371,7 +371,7 @@ module("rendering", () => {
             assert.ok(isSpinButton($after.eq(0)));
         });
 
-        test("should render 'spins' buttons only after they become visible", (assert) => {
+        test("should render 'spins' buttons only after they become visible", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({ showClearButton: true });
             const numberBox = $numberBox.dxNumberBox("instance");
             let { $before, $after } = getTextEditorButtons($numberBox);
@@ -393,7 +393,7 @@ module("rendering", () => {
             assert.notOk(getButtonPlaceHolders($after).length);
         });
 
-        test("should render predefined buttons ('clear', 'spins')", (assert) => {
+        test("should render predefined buttons ('clear', 'spins')", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 showClearButton: true,
                 showSpinButtons: true,
@@ -406,7 +406,7 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 0);
         });
 
-        test("should render predefined buttons ('clear', 'spins') configurated as object", (assert) => {
+        test("should render predefined buttons ('clear', 'spins') configurated as object", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 showClearButton: true,
                 showSpinButtons: true,
@@ -420,11 +420,11 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 0);
         });
 
-        test("should have only 'clear', 'spins' predefined buttons", (assert) => {
+        test("should have only 'clear', 'spins' predefined buttons", function(assert) {
             assert.throws(() => $("<div>").dxNumberBox({ buttons: ["fakeButtonName"] }), errors.Error("E1056", "dxNumberBox", "fakeButtonName"));
         });
 
-        test("predefined buttons should ignore 'location' or 'options' fields in predefined button configuration", (assert) => {
+        test("predefined buttons should ignore 'location' or 'options' fields in predefined button configuration", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 value: 1,
                 showClearButton: true,
@@ -443,7 +443,7 @@ module("rendering", () => {
     });
 
     module("dropDownEditors", () => {
-        test("should render drop down button", (assert) => {
+        test("should render drop down button", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({ buttons: ["dropDown"], items: ["1", "2"], value: "1" });
             const $after = getTextEditorButtons($selectBox).$after;
 
@@ -451,7 +451,7 @@ module("rendering", () => {
             assert.ok(isDropDownButton($after.eq(0)));
         });
 
-        test("should render 'dropDown' button only after it becomes visible", (assert) => {
+        test("should render 'dropDown' button only after it becomes visible", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({ showClearButton: true, showDropDownButton: false });
             const selectBox = $selectBox.dxSelectBox("instance");
             let { $before, $after } = getTextEditorButtons($selectBox);
@@ -473,7 +473,7 @@ module("rendering", () => {
             assert.notOk(getButtonPlaceHolders($after).length);
         });
 
-        test("should render predefined buttons ('clear', 'dropDown')", (assert) => {
+        test("should render predefined buttons ('clear', 'dropDown')", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({ showClearButton: true, buttons: ["clear", "dropDown"] });
             const { $before, $after } = getTextEditorButtons($selectBox);
 
@@ -482,7 +482,7 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 0);
         });
 
-        test("should render predefined buttons ('clear', 'dropDown') configurated as object", (assert) => {
+        test("should render predefined buttons ('clear', 'dropDown') configurated as object", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({
                 showClearButton: true,
                 buttons: [{ name: "clear" }, { name: "dropDown" }]
@@ -494,11 +494,11 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($after).length, 0);
         });
 
-        test("should have only 'clear', 'dropDown' predefined button", (assert) => {
+        test("should have only 'clear', 'dropDown' predefined button", function(assert) {
             assert.throws(() => $("<div>").dxSelectBox({ buttons: ["fakeButtonName"] }), errors.Error("E1056", "dxSelectBox", "fakeButtonName"));
         });
 
-        test("predefined buttons should ignore 'location' or 'options' fields in predefined button configuration", (assert) => {
+        test("predefined buttons should ignore 'location' or 'options' fields in predefined button configuration", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({
                 items: ["1", "2"],
                 value: "1",
@@ -515,7 +515,7 @@ module("rendering", () => {
             assert.strictEqual($after.eq(1).text(), "");
         });
 
-        test("buttons is rendered with fieldTemplate", (assert) => {
+        test("buttons is rendered with fieldTemplate", function(assert) {
             const $selectBox = $("<div>").appendTo("#qunit-fixture").dxSelectBox({
                 showClearButton: true,
                 items: ["1", "2"],
@@ -539,7 +539,7 @@ module("rendering", () => {
             assert.ok(isDropDownButton($after.eq(2)));
         });
 
-        test("buttons should not be rendered for the textBox in the dropDownBox fieldTemplate by default", (assert) => {
+        test("buttons should not be rendered for the textBox in the dropDownBox fieldTemplate by default", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({
                 showClearButton: true,
                 buttons: [{
@@ -564,7 +564,7 @@ module("rendering", () => {
             assert.strictEqual(getButtonPlaceHolders($textBoxAfter).length, 1);
         });
 
-        test("buttons can be rendered for the textBox in the dropDownBox fieldTemplate", (assert) => {
+        test("buttons can be rendered for the textBox in the dropDownBox fieldTemplate", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({
                 showClearButton: true,
                 buttons: [{
@@ -597,7 +597,7 @@ module("rendering", () => {
 module("reordering", () => {
 
     module("textBox", () => {
-        test("custom button with location 'after' should be rendered after the clear button", (assert) => {
+        test("custom button with location 'after' should be rendered after the clear button", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: true,
                 buttons: [
@@ -618,7 +618,7 @@ module("reordering", () => {
             assert.strictEqual($after.eq(1).text(), "custom");
         });
 
-        test("the group of predefined and custom buttons should have correct order", (assert) => {
+        test("the group of predefined and custom buttons should have correct order", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: true,
                 buttons: [{
@@ -655,7 +655,7 @@ module("reordering", () => {
             assert.strictEqual($after.eq(2).text(), "after2");
         });
 
-        test("buttons should have correct order if 'before' custom button is after 'after' buttons in the 'buttons' array", (assert) => {
+        test("buttons should have correct order if 'before' custom button is after 'after' buttons in the 'buttons' array", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: true,
                 buttons: ["clear", {
@@ -687,7 +687,7 @@ module("reordering", () => {
 
     module("numberBox", () => {
 
-        test("buttons option can reorder predefined buttons", (assert) => {
+        test("buttons option can reorder predefined buttons", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 showClearButton: true,
                 showSpinButtons: true,
@@ -699,7 +699,7 @@ module("reordering", () => {
             assert.ok(isClearButton($after.eq(1)));
         });
 
-        test("widget should render custom and predefined buttons in the right order", (assert) => {
+        test("widget should render custom and predefined buttons in the right order", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 showClearButton: true,
                 showSpinButtons: true,
@@ -743,7 +743,7 @@ module("reordering", () => {
     });
 
     module("dropDownEditors", () => {
-        test("buttons option can reorder predefined buttons", (assert) => {
+        test("buttons option can reorder predefined buttons", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({
                 showClearButton: true,
                 buttons: ["dropDown", "clear"],
@@ -755,7 +755,7 @@ module("reordering", () => {
             assert.ok(isClearButton($after.eq(1)));
         });
 
-        test("widget should render custom and predefined buttons in the right order", (assert) => {
+        test("widget should render custom and predefined buttons in the right order", function(assert) {
             const $selectBox = $("<div>").dxSelectBox({
                 showClearButton: true,
                 buttons: [{
@@ -801,7 +801,7 @@ module("reordering", () => {
 module("collection updating", () => {
 
     module("textBox", () => {
-        test("it is able to change internal custom button option", (assert) => {
+        test("it is able to change internal custom button option", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: true,
                 buttons: ["clear", {
@@ -826,7 +826,7 @@ module("collection updating", () => {
             assert.ok(isClearButton($after.eq(0)));
         });
 
-        test("it is able to reorder buttons", (assert) => {
+        test("it is able to reorder buttons", function(assert) {
             const customButtonConfig = {
                 name: "custom",
                 location: "after",
@@ -849,7 +849,7 @@ module("collection updating", () => {
             assert.ok(isClearButton($after.eq(1)));
         });
 
-        test("it is able to change buttons", (assert) => {
+        test("it is able to change buttons", function(assert) {
             const customButtonConfig = {
                 name: "custom",
                 location: "after",
@@ -884,7 +884,7 @@ module("collection updating", () => {
             assert.ok(isClearButton($after.eq(0)));
         });
 
-        test("buttons and showClearButton options should control clear button visibility", (assert) => {
+        test("buttons and showClearButton options should control clear button visibility", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: true,
                 buttons: ["clear"],
@@ -909,7 +909,7 @@ module("collection updating", () => {
             assert.ok($after.eq(0).is(":hidden"));
         });
 
-        test("custom button should have 'text' styling mode by default if editor has stylingMode = 'underlined'", (assert) => {
+        test("custom button should have 'text' styling mode by default if editor has stylingMode = 'underlined'", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,
                 stylingMode: "underlined",
@@ -934,7 +934,7 @@ module("collection updating", () => {
     });
 
     module("numberBox", () => {
-        test("number box should work with 'buttons' option", (assert) => {
+        test("number box should work with 'buttons' option", function(assert) {
             const $numberBox = $("<div>").dxNumberBox({
                 showSpinButtons: true,
                 buttons: ["spins"],
@@ -962,7 +962,7 @@ module("collection updating", () => {
     });
 
     module("dropDownEditors", () => {
-        test("Drop button template should work with 'buttons' option", (assert) => {
+        test("Drop button template should work with 'buttons' option", function(assert) {
             const buttonTemplate = () => "<div>Template</div>";
             const $selectBox = $("<div>").dxSelectBox({
                 items: ["1", "2"]
@@ -993,7 +993,7 @@ module("collection updating", () => {
 
 
 module("events", () => {
-    test("should use CUSTOM_BUTTON_HOVERED_CLASS to prevent predefined button hover styling while custom button is hovered", (assert) => {
+    test("should use CUSTOM_BUTTON_HOVERED_CLASS to prevent predefined button hover styling while custom button is hovered", function(assert) {
         const $textBox = $("<div>").dxTextBox({
             value: "text",
             buttons: [{
@@ -1017,7 +1017,7 @@ module("events", () => {
         assert.notOk($textBox.hasClass(CUSTOM_BUTTON_HOVERED_CLASS));
     });
 
-    test("should not open dropDown editor after custom button click", (assert) => {
+    test("should not open dropDown editor after custom button click", function(assert) {
         const spy = sinon.spy();
         const selectBox = $("<div>").dxSelectBox({
             items: ["1", "2"],

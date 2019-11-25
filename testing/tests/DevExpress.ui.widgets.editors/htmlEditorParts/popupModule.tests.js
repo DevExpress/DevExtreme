@@ -10,7 +10,7 @@ const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
 const MIN_HEIGHT = 100;
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.$element = $("#htmlEditor");
         this.clock = sinon.useFakeTimers();
 
@@ -25,7 +25,7 @@ const moduleConfig = {
             }
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 };
@@ -33,7 +33,7 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module("Popup module", moduleConfig, () => {
-    test("Render Popup with a suggestion list", (assert) => {
+    test("Render Popup with a suggestion list", function(assert) {
         this.options.dataSource = ["Test1", "Test2"];
         new PopupModule({}, this.options);
 
@@ -46,7 +46,7 @@ QUnit.module("Popup module", moduleConfig, () => {
         assert.deepEqual(listDataSource, this.options.dataSource, "List has a correct dataSource");
     });
 
-    test("Show and hide popup on item selecting", (assert) => {
+    test("Show and hide popup on item selecting", function(assert) {
         this.options.dataSource = ["Test1", "Test2"];
         const popupModule = new PopupModule({}, this.options);
         const insertEmbedContent = sinon.spy(popupModule, "insertEmbedContent");
@@ -67,7 +67,7 @@ QUnit.module("Popup module", moduleConfig, () => {
         assert.notOk($suggestionList.is(":visible"), "list isn't visible");
     });
 
-    test("Save position and get position", (assert) => {
+    test("Save position and get position", function(assert) {
         const popupModule = new PopupModule({}, this.options);
 
         popupModule.savePosition(5);
@@ -75,7 +75,7 @@ QUnit.module("Popup module", moduleConfig, () => {
         assert.strictEqual(popupModule.getPosition(), 5, "correct position");
     });
 
-    test("Max height should be a half of the window height", (assert) => {
+    test("Max height should be a half of the window height", function(assert) {
         const windowStub = sinon.stub(windowUtils, "getWindow").returns($("<div>").height(240));
         const popupModule = new PopupModule({}, this.options);
 
@@ -83,7 +83,7 @@ QUnit.module("Popup module", moduleConfig, () => {
         windowStub.restore();
     });
 
-    test("Max height shouldn't less than a predefined threshold", (assert) => {
+    test("Max height shouldn't less than a predefined threshold", function(assert) {
         const windowStub = sinon.stub(windowUtils, "getWindow").returns($("<div>").height(80));
         const popupModule = new PopupModule({}, this.options);
 

@@ -11,7 +11,7 @@ const registerKeyHandlerTestHelper = {
         const { createWidget, keyPressTargetElement, checkInitialize, testNamePrefix } = config;
 
         module("RegisterKeyHandler", {
-            beforeEach: () => {
+            beforeEach: function() {
                 this.handler = sinon.spy();
 
                 this.createWidget = (options = {}) => {
@@ -29,13 +29,13 @@ const registerKeyHandlerTestHelper = {
                     assert.ok(this.keyPressTargetElement.is(args.target), "event.target");
                 };
             },
-            afterEach: () => {
+            afterEach: function() {
                 this.$widget.remove();
             }
         }, () => {
             SUPPORTED_KEYS.forEach((key) => {
                 if(checkInitialize) {
-                    test(`${testNamePrefix || ''} RegisterKeyHandler -> onInitialize - "${key}"`, () => {
+                    test(`${testNamePrefix || ''} RegisterKeyHandler -> onInitialize - "${key}"`, function(assert) {
                         this.createWidget({ onInitialized: e => { e.component.registerKeyHandler(key, this.handler); } });
 
                         keyboardMock(this.keyPressTargetElement).press(key);
@@ -43,7 +43,7 @@ const registerKeyHandlerTestHelper = {
                     });
                 }
 
-                test(`${testNamePrefix || ''} RegisterKeyHandler -> "${key}"`, () => {
+                test(`${testNamePrefix || ''} RegisterKeyHandler -> "${key}"`, function() {
                     this.createWidget();
 
                     this.widget.registerKeyHandler(key, this.handler);
