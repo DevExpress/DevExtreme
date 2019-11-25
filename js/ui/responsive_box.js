@@ -177,7 +177,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _init: function() {
         if(!this.option("screenByWidth")) {
-            this._options.screenByWidth = windowUtils.defaultScreenFactorFunc;
+            this.option("screenByWidth", windowUtils.defaultScreenFactorFunc);
         }
 
         this.callBase();

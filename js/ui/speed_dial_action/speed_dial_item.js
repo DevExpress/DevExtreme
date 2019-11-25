@@ -99,12 +99,12 @@ class SpeedDialItem extends Overlay {
     _renderIcon() {
         this._$icon = this._renderButtonIcon(
             this._$icon,
-            this._options.icon,
+            this.option("icon"),
             FAB_ICON_CLASS);
     }
 
     _renderShading() {
-        if(this._options.callOverlayRenderShading) {
+        if(this.option("callOverlayRenderShading")) {
             super._renderShading();
         }
     }

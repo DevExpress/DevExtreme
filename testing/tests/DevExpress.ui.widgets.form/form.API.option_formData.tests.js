@@ -59,8 +59,9 @@ QUnit.test("Set { formData: {}, items: [dataField1] }, call option(formData, {})
 
 QUnit.test("Set { formData: {dataField1: a}, items: [dataField1] }, call option(formData, null)", function(assert) {
     var form = $("#form").dxForm({ formData: { dataField1: "a" }, items: ["dataField1"] }).dxForm("instance");
+    var formData = {};
     form.option("formData", null);
-    assert.propEqual(form.option("formData"), { dataField1: "" });
+    assert.propEqual(form.option("formData"), formData);
     assert.equal(form.getEditor("dataField1").option("value"), "");
 });
 
