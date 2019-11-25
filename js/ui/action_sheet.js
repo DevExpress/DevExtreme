@@ -174,6 +174,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _initTemplates: function() {
+        this.callBase();
         /**
         * @name dxActionSheetItem
         * @inherits CollectionWidgetItem
@@ -216,7 +217,6 @@ var ActionSheet = CollectionWidget.inherit({
                 $container.append(button.$element());
             }, ["disabled", "icon", "text", "type", "onClick", "click"], this.option("integrationOptions.watchMethod"))
         });
-        this.callBase();
     },
 
     _itemContainer: function() {

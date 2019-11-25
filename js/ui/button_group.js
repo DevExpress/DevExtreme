@@ -17,6 +17,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
 
 const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
+        this.callBase();
         /**
          * @name dxButtonGroupItem
          * @inherits CollectionWidgetItem
@@ -48,7 +49,6 @@ const ButtonCollection = CollectionWidget.inherit({
                 }));
             }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"))
         });
-        this.callBase();
     },
 
     _getBasicButtonOptions() {
