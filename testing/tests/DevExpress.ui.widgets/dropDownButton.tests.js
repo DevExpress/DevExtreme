@@ -110,15 +110,24 @@ QUnit.module("markup", {
         assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, "height after option change in runtime is right");
     });
 
-    QUnit.test("splitButton height should be equal to main button height when height depends on content", (assert) => {
+    QUnit.test("dropDownButton height should be equal to main button height when height depends on content", function(assert) {
         const $dropDownButton = $("#dropDownButton").dxDropDownButton({
             splitButton: true,
             icon: "icon.png"
         });
-        $dropDownButton.find("img.dx-icon").css("height", "50px");
 
-        const dropDownButtonHeight = $dropDownButton.find(".dx-dropdownbutton-toggle").height();
-        assert.strictEqual(dropDownButtonHeight, 50, "height is right");
+        const actionButton = $dropDownButton.find(".dx-dropdownbutton-action");
+        const toggleButton = $dropDownButton.find(".dx-dropdownbutton-toggle");
+
+        $dropDownButton.find("img.dx-icon").css("height", "50px");
+        let mainButtonHeight = actionButton.height();
+        let dropDownButtonHeight = toggleButton.height();
+        assert.equal(dropDownButtonHeight, mainButtonHeight, "heights are equal after main button content change");
+
+        $dropDownButton.find("i.dx-icon").css("height", "100px");
+        mainButtonHeight = actionButton.height();
+        dropDownButtonHeight = toggleButton.height();
+        assert.equal(mainButtonHeight, dropDownButtonHeight, "heights are equal after toggle button content change");
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
