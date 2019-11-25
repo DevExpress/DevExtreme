@@ -124,7 +124,7 @@ QUnit.test("position shortcuts", function(assert) {
     fixtures.simple.drop();
 });
 
-QUnit.test("popup should not render arrow when the position side is center (T701940)", (assert) => {
+QUnit.test("popup should not render arrow when the position side is center (T701940)", function(assert) {
     fixtures.simple.create();
 
     const popover = new Popover($("#what"), {
@@ -1892,7 +1892,7 @@ QUnit.test("popover should clear hide timeout when hide method is called", funct
 });
 
 QUnit.module("renderGeometry", () => {
-    QUnit.test("option change", (assert) => {
+    QUnit.test("option change", function(assert) {
         fixtures.simple.create();
         try {
             const $popover = $("#what");
