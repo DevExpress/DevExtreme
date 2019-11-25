@@ -3,7 +3,7 @@ import domAdapter from "../../core/dom_adapter";
 import eventsEngine from "../../events/core/events_engine";
 import { titleize } from "../../core/utils/inflector";
 import { extend } from "../../core/utils/extend";
-import { hasWindow } from "../../core/utils/window";
+import { hasWindow, getWindow } from "../../core/utils/window";
 import { each, map } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
 import translator from "../../animation/translator";
@@ -688,20 +688,34 @@ var SimulatedStrategy = Class.inherit({
         }
         this._saveActive();
         e.preventDefault && e.preventDefault();
-        this._adjustDistance(e.delta);
+
+        this._adjustDistance(e, e.delta);
         this._eventForUserAction = e;
         this._eventHandler("move", e.delta);
     },
 
-    _adjustDistance: function(distance) {
+    _adjustDistance: function(e, distance) {
         distance.x *= this._validDirections[HORIZONTAL];
         distance.y *= this._validDirections[VERTICAL];
+
+        const devicePixelRatio = this._tryGetDevicePixelRatio();
+        if(devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
+            distance.x = Math.round(distance.x / devicePixelRatio * 100) / 100;
+            distance.y = Math.round(distance.y / devicePixelRatio * 100) / 100;
+        }
+    },
+
+    _tryGetDevicePixelRatio: function() {
+        if(hasWindow()) {
+            return getWindow().devicePixelRatio;
+        }
     },
 
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
-        this._adjustDistance(e.velocity);
+
+        this._adjustDistance(e, e.velocity);
         this._eventForUserAction = e;
         return this._eventHandler("end", e.velocity).done(this._endAction);
     },
