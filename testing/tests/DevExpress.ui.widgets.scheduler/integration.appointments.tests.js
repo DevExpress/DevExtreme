@@ -3837,21 +3837,21 @@ QUnit.module("Appointments", () => {
     }];
 
     QUnit.module("appointmentTemplate", () => {
-        QUnit.test("model.targetedAppointmentData argument should have current appointment data", assert => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data", function(assert) {
             const scheduler = createScheduler(commonData);
             scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
             assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
         });
 
-        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", assert => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", function(assert) {
             const scheduler = createScheduler(recurrenceData);
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
             assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
         });
 
-        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties", assert => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties", function(assert) {
             const scheduler = createScheduler(recurrenceDataWithCustomNames, {
                 textExpr: "textCustom",
                 startDateExpr: "startDateCustom",
@@ -3864,7 +3864,7 @@ QUnit.module("Appointments", () => {
     });
 
     QUnit.module("appointmentTooltipTemplate", () => {
-        QUnit.test("model.targetedAppointmentData argument should have current appointment data", assert => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data", function(assert) {
             const scheduler = createScheduler(commonData);
             scheduler.option({ appointmentTooltipTemplate: createTestForCommonData(assert, true) });
 
@@ -3875,7 +3875,7 @@ QUnit.module("Appointments", () => {
             assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
         });
 
-        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", assert => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", function(assert) {
             const scheduler = createScheduler(recurrenceData);
             scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
 

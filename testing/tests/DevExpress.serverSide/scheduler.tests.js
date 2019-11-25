@@ -13,7 +13,7 @@ QUnit.testStart(() => {
 
 QUnit.module("View switcher server markup");
 
-QUnit.test("View switcher tabs should be expanded on server", (assert) => {
+QUnit.test("View switcher tabs should be expanded on server", function(assert) {
     var scheduler = $("#scheduler").dxScheduler().dxScheduler("instance");
     var $switcher = scheduler.$element().find(".dx-tabs.dx-scheduler-view-switcher");
 

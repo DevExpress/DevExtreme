@@ -27,7 +27,7 @@ const config = {
 module("crossScrollingEnabled = true", config, () => {
     const isMobile = devices.current().deviceType !== "desktop";
 
-    test("Appointments should be rendered on the same line after navigating to the next month(T804721)", assert => {
+    test("Appointments should be rendered on the same line after navigating to the next month(T804721)", function(assert) {
         const expectedTop = 26;
         const views = ["timelineMonth", "timelineWeek"];
 
@@ -73,7 +73,7 @@ module("crossScrollingEnabled = true", config, () => {
         });
     });
 
-    test("Appointment should have correct position while vertical dragging", assert => {
+    test("Appointment should have correct position while vertical dragging", function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2015, 6, 10),
             editing: true,
@@ -116,7 +116,7 @@ module("crossScrollingEnabled = true", config, () => {
         pointer.up();
     });
 
-    test("Appointments should be repainted if the 'crossScrollingEnabled' is changed", assert => {
+    test("Appointments should be repainted if the 'crossScrollingEnabled' is changed", function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2015, 6, 10),
             dataSource: [{
@@ -136,7 +136,7 @@ module("crossScrollingEnabled = true", config, () => {
     });
 
     if(!isMobile) {
-        test("Month appointment inside grouped view should have a right resizable area after horizontal scroll end", assert => {
+        test("Month appointment inside grouped view should have a right resizable area after horizontal scroll end", function(assert) {
             const scheduler = createWrapper({
                 currentDate: new Date(2015, 6, 10),
                 views: ["month"],
@@ -177,7 +177,7 @@ module("crossScrollingEnabled = true", config, () => {
             assert.equal($appointment.dxResizable("instance").option("area").right, initialResizableAreaRight - scrollOffset);
         });
 
-        test("Appointment should have correct position while horizontal dragging", assert => {
+        test("Appointment should have correct position while horizontal dragging", function(assert) {
             const dragDistance = 150;
 
             const scheduler = createWrapper({
@@ -202,7 +202,7 @@ module("crossScrollingEnabled = true", config, () => {
             pointer.up();
         });
 
-        test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", assert => {
+        test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", function(assert) {
             const scheduler = createWrapper({
                 height: 500,
                 editing: true,
@@ -230,7 +230,7 @@ module("crossScrollingEnabled = true", config, () => {
             pointer.up();
         });
 
-        test("Appointment should have correct position while horizontal dragging in scrolled date table", assert => {
+        test("Appointment should have correct position while horizontal dragging in scrolled date table", function(assert) {
             const scheduler = createWrapper({
                 height: 500,
                 width: 800,

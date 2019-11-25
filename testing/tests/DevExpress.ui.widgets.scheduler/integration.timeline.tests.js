@@ -34,7 +34,7 @@ QUnit.module("Integration: Timeline", {
     }
 });
 
-QUnit.test("Special classes should be applied in grouped timeline", assert => {
+QUnit.test("Special classes should be applied in grouped timeline", function(assert) {
     let $style = $("<style>").text('#scheduler .dx-scheduler-cell-sizes-vertical {height: 100px } ');
 
     try {
@@ -66,7 +66,7 @@ QUnit.test("Special classes should be applied in grouped timeline", assert => {
     }
 });
 
-QUnit.test("Scheduler should have a right timeline work space", assert => {
+QUnit.test("Scheduler should have a right timeline work space", function(assert) {
     let scheduler = createInstance({
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         currentView: "timelineDay"
@@ -84,7 +84,7 @@ QUnit.test("Scheduler should have a right timeline work space", assert => {
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth("instance"), "Work space is timelineMonth after change option ");
 });
 
-QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline day view ", assert => {
+QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline day view ", function(assert) {
     let scheduler = createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -106,7 +106,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
     }
 });
 
-QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline week view ", assert => {
+QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline week view ", function(assert) {
     let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
@@ -134,7 +134,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
     }
 });
 
-QUnit.test("Scheduler should update scroll position if appointment is not visible, timeline week view ", assert => {
+QUnit.test("Scheduler should update scroll position if appointment is not visible, timeline week view ", function(assert) {
     let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
@@ -162,7 +162,7 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
     }
 });
 
-QUnit.test("getEndViewDate should return correct value on timelineMonth view DST date (T720694)", assert => {
+QUnit.test("getEndViewDate should return correct value on timelineMonth view DST date (T720694)", function(assert) {
     let scheduler = createInstance({
         currentDate: new Date(2019, 2, 5),
         views: ["timelineMonth"],
@@ -175,7 +175,7 @@ QUnit.test("getEndViewDate should return correct value on timelineMonth view DST
     assert.deepEqual(workSpace.getEndViewDate(), new Date(2019, 2, 31, 23, 59), "End view date is OK");
 });
 
-QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline month view ", assert => {
+QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline month view ", function(assert) {
     let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
@@ -203,7 +203,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
     }
 });
 
-QUnit.test("Scheduler should update scroll position if appointment is not visible, timeline month view ", assert => {
+QUnit.test("Scheduler should update scroll position if appointment is not visible, timeline month view ", function(assert) {
     let scheduler = createInstance({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
@@ -231,7 +231,7 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
     }
 });
 
-QUnit.test("Appointments should have a right order on timeline month(lots of appts)", assert => {
+QUnit.test("Appointments should have a right order on timeline month(lots of appts)", function(assert) {
     let scheduler = createInstance({
         currentDate: new Date(2016, 1, 2),
         maxAppointmentsPerCell: null,
@@ -298,7 +298,7 @@ QUnit.test("Appointments should have a right order on timeline month(lots of app
     assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(3)).top, 300, 2.001, "Appointment position is OK");
 });
 
-QUnit.test("Appointments should have a right order on timeline month", assert => {
+QUnit.test("Appointments should have a right order on timeline month", function(assert) {
     let scheduler = createInstance({
         currentDate: new Date(2016, 1, 2),
         dataSource: new DataSource([
@@ -324,7 +324,7 @@ QUnit.test("Appointments should have a right order on timeline month", assert =>
     assert.equal($appointments.eq(1).data("dxItemData").text, "a", "Appointment data is OK");
 });
 
-QUnit.test("Scheduler timeline dateTable should have right height after changing size if crossScrollingEnabled = true (T644407)", assert => {
+QUnit.test("Scheduler timeline dateTable should have right height after changing size if crossScrollingEnabled = true (T644407)", function(assert) {
     const resourcesData = [
         { text: "One", id: 2 },
         { text: "Two", id: 3 },
@@ -357,7 +357,7 @@ QUnit.test("Scheduler timeline dateTable should have right height after changing
     assert.equal(scheduler.workSpace.getCell(0).height(), cellHeight, "Cells has correct height");
 });
 
-QUnit.test("Scheduler timeline groupTable should have right height if widget has auto-height", assert => {
+QUnit.test("Scheduler timeline groupTable should have right height if widget has auto-height", function(assert) {
     const resourcesData = [
         { text: "One", id: 2 },
         { text: "Two", id: 3 },

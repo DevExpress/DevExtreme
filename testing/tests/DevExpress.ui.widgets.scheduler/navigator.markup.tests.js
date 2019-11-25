@@ -13,7 +13,7 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         devices.current({ platform: "generic" });
         this.instance = $("#navigator").dxSchedulerNavigator().dxSchedulerNavigator("instance");
         this.instance.notifyObserver = noop.noop;
@@ -21,17 +21,17 @@ const moduleConfig = {
 };
 
 QUnit.module("Navigator markup", moduleConfig, () => {
-    QUnit.test("Scheduler navigator should be initialized", (assert) => {
+    QUnit.test("Scheduler navigator should be initialized", function(assert) {
         assert.ok(this.instance instanceof SchedulerNavigator, "dxSchedulerNavigator was initialized");
     });
 
-    QUnit.test("Scheduler navigator should have a right css class", (assert) => {
+    QUnit.test("Scheduler navigator should have a right css class", function(assert) {
         var $element = this.instance.$element();
 
         assert.ok($element.hasClass("dx-scheduler-navigator"), "dxSchedulerNavigator has 'dx-scheduler-navigator' css class");
     });
 
-    QUnit.test("Scheduler navigator should contain the 'next' button", (assert) => {
+    QUnit.test("Scheduler navigator should contain the 'next' button", function(assert) {
         var $element = this.instance.$element();
 
         var $button = $element.find(".dx-scheduler-navigator-next");
@@ -41,7 +41,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal($button.attr("aria-label"), "Next period", "Navigator 'next' button has right label");
     });
 
-    QUnit.test("Scheduler navigator should contain the 'previous' button", (assert) => {
+    QUnit.test("Scheduler navigator should contain the 'previous' button", function(assert) {
         var $element = this.instance.$element();
 
         var $button = $element.find(".dx-scheduler-navigator-previous");
@@ -51,7 +51,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal($button.attr("aria-label"), "Previous period", "Navigator 'previous' button has right label");
     });
 
-    QUnit.test("Scheduler navigator should contain the 'caption' button", (assert) => {
+    QUnit.test("Scheduler navigator should contain the 'caption' button", function(assert) {
         var $element = this.instance.$element();
 
         var $button = $element.find(".dx-scheduler-navigator-caption");
@@ -60,7 +60,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.ok($button.hasClass("dx-button"), "Navigator 'caption' is dxButton");
     });
 
-    QUnit.test("Caption should be OK with default options", (assert) => {
+    QUnit.test("Caption should be OK with default options", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(),
@@ -69,7 +69,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
-    QUnit.test("customizeDateNavigatorText shoulde be applied correctly", (assert) => {
+    QUnit.test("customizeDateNavigatorText shoulde be applied correctly", function(assert) {
         var $element = this.instance.$element(),
             date = new Date(2018, 11, 14, 9, 20),
             caption = [dateLocalization.format(date, "day"), dateLocalization.format(date, "monthAndYear")].join(" ");
@@ -88,7 +88,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
     });
 
 
-    QUnit.test("Caption should be OK when step and date are changed", (assert) => {
+    QUnit.test("Caption should be OK when step and date are changed", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 0, 24),
@@ -124,7 +124,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Step is agenda: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view & firstDayOfWeek = 0", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view & firstDayOfWeek = 0", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 0, 24);
@@ -138,7 +138,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for Day with intervalCount", (assert) => {
+    QUnit.test("Caption should be OK for Day with intervalCount", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 4, 25),
@@ -150,7 +150,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view with intervalCount", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view with intervalCount", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 4, 25),
@@ -164,7 +164,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for week view with intervalCount", (assert) => {
+    QUnit.test("Caption should be OK for week view with intervalCount", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 4, 25),
@@ -178,7 +178,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for Month with intervalCount", (assert) => {
+    QUnit.test("Caption should be OK for Month with intervalCount", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2017, 4, 25),
@@ -191,7 +191,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for Month with intervalCount for different years", (assert) => {
+    QUnit.test("Caption should be OK for Month with intervalCount for different years", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2017, 10, 25),
@@ -204,7 +204,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view, if date = Sunday", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view, if date = Sunday", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2016, 0, 10);
@@ -218,7 +218,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view, if date = Sunday and firstDayOfWeek != 0", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view, if date = Sunday and firstDayOfWeek != 0", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2016, 0, 10);
@@ -232,7 +232,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view, if date = Saturday & firstDayOfWeek = 6", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view, if date = Saturday & firstDayOfWeek = 6", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2016, 0, 9);
@@ -246,7 +246,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view, if date = Sunday & firstDayOfWeek = 6", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view, if date = Sunday & firstDayOfWeek = 6", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2016, 0, 10);
@@ -260,7 +260,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for week view, if date = Sunday & firstDayOfWeek = 1", (assert) => {
+    QUnit.test("Caption should be OK for week view, if date = Sunday & firstDayOfWeek = 1", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 2, 1);
@@ -272,7 +272,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), "23 Feb-1 Mar 2015", "Step is week: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for agenda view, different months", (assert) => {
+    QUnit.test("Caption should be OK for agenda view, different months", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
             date = new Date(2015, 2, 29);
@@ -283,7 +283,7 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), "29 Mar-4 Apr 2015", "Step is week: Caption is OK");
     });
 
-    QUnit.test("Caption should be OK for workWeek view and depends on displayedDate", (assert) => {
+    QUnit.test("Caption should be OK for workWeek view and depends on displayedDate", function(assert) {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance");
 
