@@ -24,7 +24,7 @@ QUnit.testStart(function() {
             return $("#form").dxForm({ items: items }).dxForm("instance");
         };
 
-        QUnit.testInActiveWindow("SimpleItem(undefined -> null)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(undefined -> null)", function(assert) {
             const form = createForm();
 
             $("#form").find(".dx-texteditor-input").focus();
@@ -41,7 +41,7 @@ QUnit.testStart(function() {
             assert.ok($("#form").find(".dx-texteditor-input").is(":focus"), "final focus");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(undefined -> class1)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(undefined -> class1)", function(assert) {
             const form = createForm();
 
             $("#form").find(".dx-texteditor-input").focus();
@@ -59,7 +59,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class1").length, 1, "$(#form).find(class1).length");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(null -> undefined)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(null -> undefined)", function(assert) {
             const form = createForm([{
                 itemType: "simple",
                 editorType: "dxTextBox",
@@ -81,7 +81,7 @@ QUnit.testStart(function() {
             assert.ok($("#form").find(".dx-texteditor-input").is(":focus"), "final focus");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(null -> class1)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(null -> class1)", function(assert) {
             const form = createForm([{
                 itemType: "simple",
                 editorType: "dxTextBox",
@@ -104,7 +104,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class1").length, 1, "$(#form).find(class1).length");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(class1 -> undefined)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(class1 -> undefined)", function(assert) {
             const form = createForm([{
                 itemType: "simple",
                 editorType: "dxTextBox",
@@ -128,7 +128,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class1").length, 0, "$(#form).find(class1).length");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(class1 -> null)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(class1 -> null)", function(assert) {
             const form = createForm([{
                 itemType: "simple",
                 editorType: "dxTextBox",
@@ -152,7 +152,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class1").length, 0, "$(#form).find(class1).length");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(class1 -> class2)", assert => {
+        QUnit.testInActiveWindow("SimpleItem(class1 -> class2)", function(assert) {
             const form = createForm([{
                 itemType: "simple",
                 editorType: "dxTextBox",
@@ -184,7 +184,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class2").length, 1, "$(#form).find(class2).length");
         });
 
-        QUnit.testInActiveWindow("SimpleItem(class1 -> class2) in form with 2 items", assert => {
+        QUnit.testInActiveWindow("SimpleItem(class1 -> class2) in form with 2 items", function(assert) {
             const form = createForm([
                 {
                     itemType: "simple",
@@ -222,7 +222,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class2").length, 1, "$(#form).find(class2).length");
         });
 
-        QUnit.test("SimpleItem(undefined -> class1) when item is hidden via api", assert => {
+        QUnit.test("SimpleItem(undefined -> class1) when item is hidden via api", function(assert) {
             const form = createForm([
                 {
                     itemType: "simple",
@@ -244,7 +244,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class2").length, 0, "$(#form).find(class2).length");
         });
 
-        QUnit.testInActiveWindow("ButtonItem(class1 -> class2)", assert => {
+        QUnit.testInActiveWindow("ButtonItem(class1 -> class2)", function(assert) {
             if(devices.real().deviceType !== "desktop") {
                 assert.ok(true, "desktop specific test");
                 return;
@@ -272,7 +272,7 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class2").length, 1, "$(#form).find(class2).length");
         });
 
-        QUnit.testInActiveWindow("ButtonItem(class1 -> class2) in form with 2 items", assert => {
+        QUnit.testInActiveWindow("ButtonItem(class1 -> class2) in form with 2 items", function(assert) {
             if(devices.real().deviceType !== "desktop") {
                 assert.ok(true, "desktop specific test");
                 return;
