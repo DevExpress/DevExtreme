@@ -6,7 +6,7 @@ import ConverterController from "ui/html_editor/converterController";
 const { test } = QUnit;
 
 QUnit.module("Converter controller", () => {
-    test("Check registered converters", (assert) => {
+    test("Check registered converters", function(assert) {
         const deltaConverter = ConverterController.getConverter("delta");
         const markdownConverter = ConverterController.getConverter("markdown");
 
@@ -14,7 +14,7 @@ QUnit.module("Converter controller", () => {
         assert.notOk(markdownConverter, "Markdown converter isn't exists by default");
     });
 
-    test("Add new converter", (assert) => {
+    test("Add new converter", function(assert) {
         ConverterController.addConverter("custom", () => {});
         const customConverter = ConverterController.getConverter("custom");
 
@@ -23,7 +23,7 @@ QUnit.module("Converter controller", () => {
 });
 
 QUnit.module("Unknown converter", () => {
-    test("Editor throw an error if cannot find a converter", (assert) => {
+    test("Editor throw an error if cannot find a converter", function(assert) {
         assert.throws(
             function() { $("#htmlEditor").dxHtmlEditor({ valueType: "markdown" }); },
             function(e) {

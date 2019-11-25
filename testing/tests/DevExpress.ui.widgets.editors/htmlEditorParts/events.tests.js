@@ -20,7 +20,7 @@ function createPasteEvent() {
 }
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.options = {
@@ -33,13 +33,13 @@ const moduleConfig = {
                 .dxHtmlEditor("instance");
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 };
 
 module("Events", moduleConfig, () => {
-    test("focusIn event by API", (assert) => {
+    test("focusIn event by API", function(assert) {
         this.createEditor();
 
         const focusInStub = sinon.stub();
@@ -60,7 +60,7 @@ module("Events", moduleConfig, () => {
         assert.strictEqual(focusOutStub.callCount, 1, "Editor is blurred");
     });
 
-    test("focus events should toggle 'dx-state-focused' class", (assert) => {
+    test("focus events should toggle 'dx-state-focused' class", function(assert) {
         this.createEditor();
         this.instance.focus();
         this.clock.tick(TIME_TO_WAIT);
@@ -78,7 +78,7 @@ module("Events", moduleConfig, () => {
         assert.notOk($focusTarget.hasClass(FOCUS_STATE_CLASS), "focusTarget doesn't have focused class");
     });
 
-    test("focus events should not trigger when content is pasted", (assert) => {
+    test("focus events should not trigger when content is pasted", function(assert) {
         const focusInStub = sinon.stub();
         const focusOutStub = sinon.stub();
 
@@ -104,7 +104,7 @@ module("Events", moduleConfig, () => {
         assert.strictEqual(focusOutStub.callCount, 1, "Editor is blurred one time");
     });
 
-    test("focus events listeners attached via 'on' should not trigger when content is pasted", (assert) => {
+    test("focus events listeners attached via 'on' should not trigger when content is pasted", function(assert) {
         const focusInStub = sinon.stub();
         const focusOutStub = sinon.stub();
 
