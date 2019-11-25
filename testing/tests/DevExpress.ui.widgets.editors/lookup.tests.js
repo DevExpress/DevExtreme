@@ -2252,7 +2252,7 @@ QUnit.test("popup height should be stretch when data items are loaded asynchrono
     assert.ok($(".dx-overlay-content").outerHeight() > defaultHeight, "popup height is changed when data is loaded");
 });
 
-QUnit.test("popover height should be recalculated after async datasource load(T655040)", (assert) => {
+QUnit.test("popover height should be recalculated after async datasource load(T655040)", function(assert) {
     if(browser.mozilla && parseFloat(browser.version) < 71 || devices.real().deviceType !== "desktop") {
         assert.expect(0);
         return;
@@ -2261,7 +2261,6 @@ QUnit.test("popover height should be recalculated after async datasource load(T6
     const $rootLookup = $("<div>").appendTo("body");
 
     try {
-        this.clock = sinon.useFakeTimers();
         const items = ["item 1", "item 2", "item 3", "item 4"];
         const instance = $rootLookup.dxLookup({
             dataSource: new CustomStore({
@@ -2297,7 +2296,6 @@ QUnit.test("popover height should be recalculated after async datasource load(T6
         assert.ok($(instance.content()).height() >= $(instance.content()).find(".dx-scrollable-content").height(), $(instance.content()).height() + " >= " + $(instance.content()).find(".dx-scrollable-content").height());
     } finally {
         $rootLookup.remove();
-        this.clock.restore();
     }
 });
 
