@@ -2,6 +2,7 @@ import { dataSource } from './init/widget.data';
 import { createScheduler } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { debug } from 'util';
 
 fixture `Drag-and-drop appointments in the Scheduler basic views`
     .page(url(__dirname, '../../container.html'));
@@ -40,48 +41,44 @@ test(`Drag-n-drop in the "month" view`, async t => {
 
 test(`Drag recurrent appointment occurrence from collector (T832887)`, async t => {
     const scheduler = new Scheduler("#container");
-    let compactAppointment = scheduler.getAppointmentCollector('1');
-
-    await t.
-        click(compactAppointment.element).debug();
-
-    let tooltipItem = scheduler.appointmentTooltip.getListItem('Recurrence');
-
-    await t.debug().
-        drag(tooltipItem.element, -100, 0);
-        
-    const dialog = scheduler.getDialog();
+    const appointment = scheduler.getAppointment("Recurrence two");
+    const collector = scheduler.getAppointmentCollector("2");
+    const appointmentTooltip = scheduler.appointmentTooltip;
+    const appointmentTooltipItem = appointmentTooltip.getListItem("Recurrence two");
+    const popup = scheduler.getDialog();
     
     await t
-        .click(dialog.appointment);
+        .click(collector.element)
+        .expect(appointmentTooltip.isVisible()).ok()
+        .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 2))
+        .expect(appointmentTooltipItem.element.exists).notOk()
+        .click(popup.appointment)
+        .expect(appointment.element.exists).ok()
+        .expect(appointment.date.startTime).eql("5:00 AM")
+        .expect(appointment.date.endTime).eql("7:00 AM")
 
-    const resizableAppointment = scheduler.getAppointment('Recurrence two', 2);
-
-    await t
-        .expect(resizableAppointment.date.startTime).eql(`7:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`10:00 AM`);
 }).before(() => createScheduler({
     views: ["week"],
     currentView: "week",
     firstDayOfWeek: 2,
     startDayHour: 4,
-    maxAppointmentsPerCell: 2,
+    maxAppointmentsPerCell: 1,
     dataSource: [{
-    text: "Recurrence one",
-    startDate: new Date(2019, 2, 30, 8, 0),
-    endDate: new Date(2019, 2, 30, 10, 0),
-    recurrenceException: "",
-    recurrenceRule: "FREQ=DAILY"
+        text: "Recurrence one",
+        startDate: new Date(2019, 2, 26, 8, 0),
+        endDate: new Date(2019, 2, 26, 10, 0),
+        recurrenceException: "",
+        recurrenceRule: "FREQ=DAILY"
     }, {
-    text: "Non-recurrent appointment",
-    startDate: new Date(2019, 2, 30, 7, 0),
-    endDate: new Date(2019, 2, 30, 11, 0),
+        text: "Non-recurrent appointment",
+        startDate: new Date(2019, 2, 26, 7, 0),
+        endDate: new Date(2019, 2, 26, 11, 0),
     }, {
-    text: "Recurrence two",
-    startDate: new Date(2019, 2, 30, 8, 0),
-    endDate: new Date(2019, 2, 30, 10, 0),
-    recurrenceException: "",
-    recurrenceRule: "FREQ=DAILY"
+        text: "Recurrence two",
+        startDate: new Date(2019, 2, 26, 8, 0),
+        endDate: new Date(2019, 2, 26, 10, 0),
+        recurrenceException: "",
+        recurrenceRule: "FREQ=DAILY"
     }],
-    currentDate: new Date(2019, 2, 30), 
+    currentDate: new Date(2019, 2, 26), 
 }));
