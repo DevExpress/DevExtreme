@@ -2,7 +2,7 @@ import $ from "jquery";
 const { test } = QUnit;
 import "common.css!";
 import "ui/diagram";
-import { DiagramCommand, Browser } from "devexpress-diagram";
+import { DiagramCommand } from "devexpress-diagram";
 
 QUnit.testStart(() => {
     const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
@@ -15,7 +15,6 @@ const CONTEXT_MENU_SELECTOR = "div:not(.dx-diagram-toolbar-wrapper) > .dx-has-co
 const PROPERTIES_PANEL_ACCORDION_SELECTOR = ".dx-diagram-right-panel .dx-accordion";
 const PROPERTIES_PANEL_FORM_SELECTOR = ".dx-diagram-right-panel .dx-accordion .dx-form";
 const TOOLBAR_ITEM_ACTIVE_CLASS = "dx-format-active";
-const MAIN_ELEMENT_SELECTOR = ".dxdi-control";
 const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
 const DX_MENU_ITEM_SELECTOR = ".dx-menu-item";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -227,11 +226,7 @@ QUnit.module("Diagram Toolbar", {
         this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
-        if(Browser.TouchUI) {
-            contextMenu.show();
-        } else {
-            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
-        }
+        contextMenu.show();
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick"); // Select All
         const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
         assert.notOk(button.option("disabled"));
@@ -305,11 +300,7 @@ QUnit.module("Context Menu", {
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.notOk(contextMenu.option("visible"));
         assert.ok(contextMenu.option("items")[0].text.indexOf("Copy") > -1);
-        if(Browser.TouchUI) {
-            contextMenu.show();
-        } else {
-            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
-        }
+        contextMenu.show();
         assert.ok(contextMenu.option("visible"));
         assert.ok(contextMenu.option("items")[0].text.indexOf("Select All") > -1);
     });
@@ -317,11 +308,7 @@ QUnit.module("Context Menu", {
         this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
-        if(Browser.TouchUI) {
-            contextMenu.show();
-        } else {
-            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
-        }
+        contextMenu.show();
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
