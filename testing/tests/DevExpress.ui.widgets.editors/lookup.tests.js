@@ -2615,7 +2615,7 @@ QUnit.test("lookup popup open by enter key press", function(assert) {
     keyboard.keyDown("enter");
 
     assert.ok(instance.option("opened"), "enter key on field open popup");
-}),
+});
 
 QUnit.test("lookup popup open by space key press", function(assert) {
     assert.expect(2);
@@ -2631,7 +2631,7 @@ QUnit.test("lookup popup open by space key press", function(assert) {
     keyboard.keyDown("space");
 
     assert.ok(instance.option("opened"), "space key on field open popup");
-}),
+});
 
 QUnit.testInActiveWindow("lookup search field focused after open popup", function(assert) {
     var $element = $("#widget").dxLookup({
@@ -2643,7 +2643,7 @@ QUnit.testInActiveWindow("lookup search field focused after open popup", functio
 
     assert.ok(instance.option("opened"));
     assert.ok(instance._$searchBox.hasClass(FOCUSED_CLASS), "searchBox has focus after open popup");
-}),
+});
 
 QUnit.testInActiveWindow("lookup-list should be focused after 'down' key pressing", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -2663,7 +2663,7 @@ QUnit.testInActiveWindow("lookup-list should be focused after 'down' key pressin
     keyboard.keyDown("down");
 
     assert.ok(instance._$list.find(".dx-list-item").first().hasClass(FOCUSED_CLASS), "list-item is focused after down key pressing");
-}),
+});
 
 QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focusing on list", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -2686,7 +2686,7 @@ QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focu
     keyboard.keyDown("down");
 
     assert.ok(instance._$list.find(".dx-list-item").eq(1).hasClass(FOCUSED_CLASS), "second list-item is focused after down key pressing");
-}),
+});
 
 QUnit.testInActiveWindow("lookup item should be selected after 'enter' key pressing", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -2708,7 +2708,7 @@ QUnit.testInActiveWindow("lookup item should be selected after 'enter' key press
     keyboard.keyDown("enter");
 
     assert.equal(instance.option("value"), 2, "value is correct");
-}),
+});
 
 QUnit.testInActiveWindow("lookup item should be selected after 'space' key pressing", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -2730,7 +2730,7 @@ QUnit.testInActiveWindow("lookup item should be selected after 'space' key press
     keyboard.keyDown("space");
 
     assert.equal(instance.option("value"), 2, "value is correct");
-}),
+});
 
 QUnit.testInActiveWindow("keyboard for lookup-list should work correctly after 'searchEnabled' option changed", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -2752,7 +2752,7 @@ QUnit.testInActiveWindow("keyboard for lookup-list should work correctly after '
     keyboard.keyDown("down");
 
     assert.ok(instance._$list.find(".dx-list-item").first().hasClass(FOCUSED_CLASS), "list-item is focused after down key pressing");
-}),
+});
 
 QUnit.test("space key press on readOnly lookup doesn't toggle popup visibility", function(assert) {
     var instance = $("#lookup").dxLookup({
@@ -2887,6 +2887,29 @@ QUnit.test("'Home', 'End' keys does not changed default behaviour in searchField
     keyboard.keyDown("enter");
 
     assert.equal(lookup.option("value"), undefined, "home key works correctly");
+});
+
+QUnit.test("Pressing escape when focus 'cancel' button must hide the popup", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+    const $element = $("#widget").dxLookup({
+        opened: true,
+        focusStateEnabled: true,
+        showCancelButton: true,
+        searchEnabled: true
+    });
+    const instance = $element.dxLookup("instance");
+
+    $(instance.content())
+        .parent()
+        .find(".dx-button.dx-popup-cancel")
+        .trigger(escapeKeyDown);
+
+    assert.ok(!instance.option("opened"));
 });
 
 
