@@ -2173,7 +2173,7 @@ QUnit.test("refreshStrategy for android set by real device", function(assert) {
 
 
 module("pullDown, reachBottom events", moduleConfig, () => {
-    test("topPocket visibility depends on pullDown event", (assert) => {
+    test("topPocket visibility depends on pullDown event", function(assert) {
         const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
         const $topPocket = $scrollView.find("." + SCROLLVIEW_PULLDOWN_CLASS);
 
@@ -2182,7 +2182,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
         assert.ok($topPocket.is(":visible"), "topPocket is visible");
     });
 
-    test("pullDown event should be fired after refresh method call", (assert) => {
+    test("pullDown event should be fired after refresh method call", function(assert) {
         assert.expect(1);
 
         const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
@@ -2195,7 +2195,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
         instance.refresh();
     });
 
-    test("bottomPocket element depends on reachBottom event", (assert) => {
+    test("bottomPocket element depends on reachBottom event", function(assert) {
         const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
 
         $scrollView.dxScrollView("instance").on("reachBottom", noop);
@@ -2205,7 +2205,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
         assert.ok($reachBottom.is(":visible"), "reach bottom is visible");
     });
 
-    test("scrollview events support chains", (assert) => {
+    test("scrollview events support chains", function(assert) {
         const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
 
         $scrollView.dxScrollView("instance").on("reachBottom", noop).on("pullDown", noop);
@@ -2213,7 +2213,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
         assert.ok(true, "chains is supported");
     });
 
-    test("scrollview events support chains", (assert) => {
+    test("scrollview events support chains", function(assert) {
         const $scrollView = $("#scrollView").dxScrollView({ useNative: false });
 
         $scrollView.dxScrollView("instance").on("reachBottom", noop).on("pullDown", noop);
@@ -2222,7 +2222,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
     });
 
     ["config", "onInitialized"].forEach(assignMethod => {
-        test(`Check pullDown event handler - ` + assignMethod, (assert) => {
+        test(`Check pullDown event handler - ` + assignMethod, function(assert) {
             let config = {};
             let pullDownHandler = sinon.stub();
 
@@ -2249,7 +2249,7 @@ module("pullDown, reachBottom events", moduleConfig, () => {
             assert.strictEqual(pullDownHandler.callCount, 1, "pullDownHandler.callCount");
         });
 
-        test(`Check reachBottom event handler - ` + assignMethod, (assert) => {
+        test(`Check reachBottom event handler - ` + assignMethod, function(assert) {
             let config = {};
             let reachBottomHandler = sinon.stub();
 

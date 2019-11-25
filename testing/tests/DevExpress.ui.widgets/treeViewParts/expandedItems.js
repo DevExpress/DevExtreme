@@ -31,7 +31,7 @@ module("Expanded items", {
         this.clock.restore();
     }
 }, () => {
-    test("Some item has'expanded' field", assert => {
+    test("Some item has'expanded' field", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].items[1].expanded = true;
         const $treeView = initTree({
@@ -41,7 +41,7 @@ module("Expanded items", {
         assert.equal($treeView.find("." + internals.OPENED_NODE_CONTAINER_CLASS).length, 3);
     });
 
-    test("expansion by itemData", assert => {
+    test("expansion by itemData", function(assert) {
         const data = [
             { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
         ];
@@ -54,7 +54,7 @@ module("Expanded items", {
         assert.notOk(data[0].expanded, "item is not expanded");
     });
 
-    test("onItemExpanded callback", assert => {
+    test("onItemExpanded callback", function(assert) {
         const data = $.extend(true, [], DATA[5]),
             itemExpandedHandler = sinon.spy(noop),
             $treeView = initTree({
@@ -80,7 +80,7 @@ module("Expanded items", {
         });
     });
 
-    test("hidden items should be rendered when deferRendering is false", assert => {
+    test("hidden items should be rendered when deferRendering is false", function(assert) {
         const $treeView = initTree({
             items: [{ text: "Item 1", items: [{ text: "Item 11", items: [{ text: "Item 111" }] }] }],
             deferRendering: false
@@ -89,7 +89,7 @@ module("Expanded items", {
         assert.equal($treeView.find(".dx-treeview-node").length, 3, "all items have been rendered");
     });
 
-    test("onContentReady rises after first expand", assert => {
+    test("onContentReady rises after first expand", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         const onContentReadyHandler = sinon.spy(noop);
         const $treeView = initTree({
@@ -109,7 +109,7 @@ module("Expanded items", {
         assert.equal(onContentReadyHandler.callCount, 2);
     });
 
-    test("onItemExpanded callback after click should have correct arguments", assert => {
+    test("onItemExpanded callback after click should have correct arguments", function(assert) {
         assert.expect(4);
 
         const data = $.extend(true, [], DATA[5]);
@@ -132,7 +132,7 @@ module("Expanded items", {
         });
     });
 
-    test("onItemCollapsed callback", assert => {
+    test("onItemCollapsed callback", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
         const itemCollapsedHandler = sinon.spy(noop);
@@ -157,7 +157,7 @@ module("Expanded items", {
         });
     });
 
-    test("onItemCollapsed callback after click should have correct arguments", assert => {
+    test("onItemCollapsed callback after click should have correct arguments", function(assert) {
         assert.expect(4);
 
         const data = $.extend(true, [], DATA[5]);
@@ -182,7 +182,7 @@ module("Expanded items", {
         });
     });
 
-    test("disabled item should not expand on click", assert => {
+    test("disabled item should not expand on click", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
         const $treeView = initTree({
@@ -197,7 +197,7 @@ module("Expanded items", {
         assert.ok(!treeView.option("items")[0].expanded, "disabled item was not expanded");
     });
 
-    test("expanded disabled item should not collapse on click", assert => {
+    test("expanded disabled item should not collapse on click", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
         data[0].disabled = true;
@@ -213,7 +213,7 @@ module("Expanded items", {
         assert.ok(treeView.option("items")[0].expanded, "disabled item was not expanded");
     });
 
-    test("expanded item shouldn't collapse after setting .disable for it", assert => {
+    test("expanded item shouldn't collapse after setting .disable for it", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
 
@@ -245,7 +245,7 @@ module("Expanded items", {
         assert.ok($toggleExpandIcon.hasClass("dx-treeview-toggle-item-visibility-opened"));
     });
 
-    test("itemExpanded should be fired when expanding item", assert => {
+    test("itemExpanded should be fired when expanding item", function(assert) {
         const data = $.extend(true, [], DATA[5]);
 
         const $treeView = initTree({
@@ -259,7 +259,7 @@ module("Expanded items", {
         $toggleExpandIcon.trigger("dxclick");
     });
 
-    test("itemCollapsed should be fired when collapsing item by click", assert => {
+    test("itemCollapsed should be fired when collapsing item by click", function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].items[1].expanded = true;
         const $treeView = initTree({
@@ -274,7 +274,7 @@ module("Expanded items", {
         $item.trigger("dxclick");
     });
 
-    test("item should expand by click when expansion by click enabled", assert => {
+    test("item should expand by click when expansion by click enabled", function(assert) {
         const items = [{ text: "Item 1", items: [{ text: "Item 11" }] }];
         const $treeView = initTree({
             items: items,
@@ -286,7 +286,7 @@ module("Expanded items", {
         assert.ok(items[0].expanded, "item is expanded");
     });
 
-    test("item should collapse by click when expansion by click enabled", assert => {
+    test("item should collapse by click when expansion by click enabled", function(assert) {
         const items = [{ text: "Item 1", items: [{ text: "Item 11" }] }];
         const $treeView = initTree({
             items: items,
@@ -299,7 +299,7 @@ module("Expanded items", {
         assert.notOk(items[0].expanded, "item is collapsed");
     });
 
-    test("item should not expand by click when expansion by click disabling", assert => {
+    test("item should not expand by click when expansion by click disabling", function(assert) {
         const items = [{ text: "Item 1", items: [{ text: "Item 11" }] }];
         const $treeView = initTree({
             items: items,
@@ -314,7 +314,7 @@ module("Expanded items", {
         assert.notOk(items[0].expanded, "item is collapsed");
     });
 
-    test("collapseAll method should collapse all expanded items", assert => {
+    test("collapseAll method should collapse all expanded items", function(assert) {
         const items = [{ text: "Item 1", expanded: true, items: [{ text: "Item 11" }] }];
         const $treeView = initTree({
             items: items
@@ -326,7 +326,7 @@ module("Expanded items", {
         assert.notOk(items[0].expanded, "item is collapsed");
     });
 
-    test("onItemExpanded should not fire if item is leaf", assert => {
+    test("onItemExpanded should not fire if item is leaf", function(assert) {
         const items = [{ text: "Item 1" }];
         let itemExpanded = 0;
         const $treeView = initTree({
@@ -341,7 +341,7 @@ module("Expanded items", {
         assert.equal(itemExpanded, 0, "event was not fired");
     });
 
-    test("not expand parent items in non-recursive case", assert => {
+    test("not expand parent items in non-recursive case", function(assert) {
         const items = [{ text: "1", id: 1, items: [{ text: "11", id: 11, items: [{ text: "111", id: 111 }] }] }];
         const $treeView = initTree({
             items: items,
@@ -364,7 +364,7 @@ module("Expanded items", {
         assert.equal($items.length, 3, "root item was expanded");
     });
 
-    test("expand parent items in recursive case", assert => {
+    test("expand parent items in recursive case", function(assert) {
         const items = [{ text: "1", id: 1, items: [{ text: "11", id: 11, items: [{ text: "111", id: 111 }] }] }];
         const $treeView = initTree({
             items: items
@@ -381,7 +381,7 @@ module("Expanded items", {
         assert.ok(nodes[0].children[0].expanded, "child node is expanded");
     });
 
-    test("Expand parent items in markup after expand of rendered nested child (T671960)", assert => {
+    test("Expand parent items in markup after expand of rendered nested child (T671960)", function(assert) {
         const items = [{
             text: "1",
             id: 1,
@@ -408,7 +408,7 @@ module("Expanded items", {
         assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), "item 111");
     });
 
-    test("expand childless item in recursive case", assert => {
+    test("expand childless item in recursive case", function(assert) {
         const items = [{ text: "1", id: 1, items: [{ text: "11", id: 11 }] }];
         const $treeView = initTree({
             items: items
@@ -425,7 +425,7 @@ module("Expanded items", {
         assert.ok(nodes[0].children[0].expanded, "child node is expanded");
     });
 
-    test("Expand all method", assert => {
+    test("Expand all method", function(assert) {
         const items = [{
             text: "1",
             id: 1,
@@ -451,7 +451,7 @@ module("Expanded items", {
         assert.ok(nodes[0].items[0].items[0].expanded, "item 111");
     });
 
-    test("Collapse all method", assert => {
+    test("Collapse all method", function(assert) {
         const items = [{
             text: "1",
             id: 1,

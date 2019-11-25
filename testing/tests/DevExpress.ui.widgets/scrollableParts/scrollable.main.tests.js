@@ -304,7 +304,7 @@ QUnit.test("reset unused position after change direction (both)", function(asser
 
 QUnit.module("Hoverable interaction",
     {
-        beforeEach: () => {
+        beforeEach: function() {
             var markup = '\
             <div id="scrollable" style="height: 50px; width: 50px;">\
                 <div class="content1" style="height: 100px; width: 100px;"></div>\
@@ -318,7 +318,7 @@ QUnit.module("Hoverable interaction",
             [false, true].forEach((onInitialize) => {
                 ["vertical", "horizontal"].forEach((direction) => {
                     ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
-                        QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
+                        QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, function(assert) {
                             const $scrollable = $("#scrollable").dxScrollable({
                                 useNative: false,
                                 useSimulatedScrollbar: true,
@@ -809,7 +809,7 @@ QUnit.testInActiveWindow("scrollable should not reset active element outside (B2
 });
 
 QUnit.module("visibility events integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         var markup = '\
         <div id="scrollable" style="height: 50px; width: 50px;">\
             <div class="content1" style="height: 100px; width: 100px;"></div>\

@@ -13,7 +13,7 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.test("tabs should have overflow-hidden class on server", (assert) => {
+QUnit.test("tabs should have overflow-hidden class on server", function(assert) {
     const $tabsElement = $("#tabs").dxTabs({
         items: ["1", "2", "3"]
     });

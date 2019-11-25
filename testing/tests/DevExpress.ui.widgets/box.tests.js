@@ -48,7 +48,7 @@ const createBox = (...parameters) => {
 const getBoxInstance = $element => $($element).dxBox("instance");
 
 module("Scrollable integration", () => {
-    test("Scrollable placed in dxBox stretch correctly", assert => {
+    test("Scrollable placed in dxBox stretch correctly", function(assert) {
         const $box = createBox("#boxWithScrollable", {
             height: 100,
             direction: "col"
@@ -61,7 +61,7 @@ module("Scrollable integration", () => {
 });
 
 module("layouting", () => {
-    test("direction column", assert => {
+    test("direction column", function(assert) {
         const size = 100;
         const $box = createBox({
             direction: "col",
@@ -104,7 +104,7 @@ module("layouting", () => {
         assert.deepEqual(secondItemLayout, secondItemExpectedLayout, "second item positioned correctly");
     });
 
-    test("direction row", assert => {
+    test("direction row", function(assert) {
         const size = 100;
         const $box = createBox({
             direction: "row",
@@ -151,7 +151,7 @@ module("layouting", () => {
         assert.equal($firstItemContent.width(), size / 2, "item content width is less or equal to item width");
     });
 
-    test("align for column direction", assert => {
+    test("align for column direction", function(assert) {
         const baseSize = 40;
         const boxSize = baseSize * 5;
         const $box = createBox({
@@ -191,7 +191,7 @@ module("layouting", () => {
         assert.equal(relativeOffset($secondItem).top, (boxSize / 2) + (boxSize / 2 - baseSize) / 2, "second item positioned correctly for align: space-around");
     });
 
-    test("align for row direction", assert => {
+    test("align for row direction", function(assert) {
         const baseSize = 40;
         const boxSize = baseSize * 5;
         const $box = createBox({
@@ -228,7 +228,7 @@ module("layouting", () => {
         assert.equal(relativeOffset($secondItem).left, (boxSize / 2) + (boxSize / 2 - baseSize) / 2, "second item positioned correctly for align: space-around");
     });
 
-    test("crossAlign for column direction", assert => {
+    test("crossAlign for column direction", function(assert) {
         const size = 50;
         const boxSize = 2 * size;
         const $box = createBox({
@@ -257,7 +257,7 @@ module("layouting", () => {
         assert.equal($item.width(), boxSize, "element is stretched over container");
     });
 
-    test("crossAlign for row direction", assert => {
+    test("crossAlign for row direction", function(assert) {
         const size = 50;
         const boxSize = 2 * size;
         const $box = createBox({
@@ -286,7 +286,7 @@ module("layouting", () => {
         assert.equal($item.height(), boxSize, "element is stretched over container");
     });
 
-    test("percent baseSize", assert => {
+    test("percent baseSize", function(assert) {
         const firstItemDimension = { baseSize: "60%" };
         const secondItemDimension = { baseSize: "40%" };
 
@@ -305,7 +305,7 @@ module("layouting", () => {
         assert.equal($secondItem.width(), 0.4 * boxSize, "second item has correct size");
     });
 
-    test("items with auto baseSize should have size of content", assert => {
+    test("items with auto baseSize should have size of content", function(assert) {
         const firstItemDimension = { ratio: 0, baseSize: "auto" };
         const secondItemDimension = { ratio: 0, baseSize: "auto" };
 
@@ -328,7 +328,7 @@ module("layouting", () => {
         assert.equal($secondItem.width(), 50, "second item has correct size");
     });
 
-    test("items should have baseSize 0 by default", assert => {
+    test("items should have baseSize 0 by default", function(assert) {
         const firstItemDimension = { ratio: 1 };
         const secondItemDimension = { ratio: 1 };
         const boxSize = 300;
@@ -352,7 +352,7 @@ module("layouting", () => {
         assert.equal($firstItem.width(), $secondItem.width(), "items has same width");
     });
 
-    test("baseSize and ratio option", assert => {
+    test("baseSize and ratio option", function(assert) {
         const firstItemDimension = { ratio: 1, baseSize: 100 };
         const secondItemDimension = { ratio: 3, baseSize: 20 };
         const boxSize = 300;
@@ -374,7 +374,7 @@ module("layouting", () => {
         assert.equal($secondItem.width(), secondItemDimension.baseSize + secondItemDimension.ratio * partSpace, "second item has correct size");
     });
 
-    test("default shrink option", assert => {
+    test("default shrink option", function(assert) {
         const firstItemDimension = { ratio: 1, baseSize: 160 };
         const secondItemDimension = { ratio: 3, baseSize: 40 };
         const thirdItemDimension = { ratio: 3 };
@@ -399,7 +399,7 @@ module("layouting", () => {
         assert.equal($thirdItem.width(), 0, "third item has correct size");
     });
 
-    test("minSize & maxSize", assert => {
+    test("minSize & maxSize", function(assert) {
         const boxSize = 100;
         const minSize = 80;
         const maxSize = 5;
@@ -431,7 +431,7 @@ module("layouting", () => {
         assert.equal($thirdItem.css("minHeight"), "0px", "min-height is 0 by default");
     });
 
-    test("rendering after visibility changing", assert => {
+    test("rendering after visibility changing", function(assert) {
         const clock = sinon.useFakeTimers();
         try {
             const $box = createBox({
@@ -458,7 +458,7 @@ module("layouting", () => {
         }
     });
 
-    test("shrink", assert => {
+    test("shrink", function(assert) {
         const boxSize = 100;
         const itemBaseSize = 100;
         const shrinkRatio1 = 1;
@@ -475,7 +475,7 @@ module("layouting", () => {
         assert.equal($items.eq(1).height(), itemBaseSize - (itemBaseSize * 2 - boxSize) / (shrinkRatio1 + shrinkRatio2) * shrinkRatio2);
     });
 
-    test("shrink may be set to 0", assert => {
+    test("shrink may be set to 0", function(assert) {
         const boxSize = 100;
         const firstItemSize = 75;
         const secondItemSize = 100;
@@ -495,7 +495,7 @@ module("layouting", () => {
 });
 
 module("fallback strategy", () => {
-    test("total baseSize should be used when size is zero", assert => {
+    test("total baseSize should be used when size is zero", function(assert) {
         const baseSize1 = 100;
         const baseSize2 = 200;
 
@@ -509,7 +509,7 @@ module("fallback strategy", () => {
         assert.equal($box.height(), baseSize1 + baseSize2, "box height calculated based on total baseSize");
     });
 
-    test("baseSize in % in invisible area", assert => {
+    test("baseSize in % in invisible area", function(assert) {
         const $box = $("#box").hide().dxBox({
             height: 100,
             _layoutStrategy: "fallback",
@@ -525,7 +525,7 @@ module("fallback strategy", () => {
         assert.equal(round($items.eq(0).outerHeight()), round($box.outerHeight() * 0.5), "second item has correct width");
     });
 
-    test("items size should be changed after dxupdate event inside fieldset", assert => {
+    test("items size should be changed after dxupdate event inside fieldset", function(assert) {
         const $box = $("#box");
         const $wrapper = $box.wrap("<fieldset>").parent();
         $wrapper.width(400);
@@ -547,7 +547,7 @@ module("fallback strategy", () => {
 });
 
 module("layouting in RTL (fallback strategy)", () => {
-    test("align for row direction", assert => {
+    test("align for row direction", function(assert) {
         const baseSize = 40;
         const boxSize = baseSize * 5;
         const $box = createBox({
@@ -588,7 +588,7 @@ module("layouting in RTL (fallback strategy)", () => {
         assert.equal(relativeOffset($secondItem).left, (boxSize / 2 - baseSize) / 2, "second item positioned correctly for align: space-around");
     });
 
-    test("crossAlign for column direction", assert => {
+    test("crossAlign for column direction", function(assert) {
         const size = 50;
         const boxSize = 2 * size;
         const $box = createBox({

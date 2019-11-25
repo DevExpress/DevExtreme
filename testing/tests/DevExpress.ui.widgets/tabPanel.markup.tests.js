@@ -32,22 +32,22 @@ const nestedElementsCount = function($element, cssClass) {
 };
 
 QUnit.module("TabPanel markup", () => {
-    QUnit.test("tabPanel should have correct class", (assert) => {
+    QUnit.test("tabPanel should have correct class", function(assert) {
         const $tabPanel = $("#tabPanel").dxTabPanel();
         assert.ok($tabPanel.hasClass(TABPANEL_CLASS), "widget class added");
     });
 
-    QUnit.test("rendering tabs widget test", (assert) => {
+    QUnit.test("rendering tabs widget test", function(assert) {
         const $tabPanel = $("#tabPanel").dxTabPanel();
         assert.ok($tabPanel.find("." + TABS_CLASS), "tabs widget added");
     });
 
-    QUnit.test("rendering multiview widget test", (assert) => {
+    QUnit.test("rendering multiview widget test", function(assert) {
         const $tabPanel = $("#tabPanel").dxTabPanel();
         assert.ok($tabPanel.hasClass(MULTIVIEW_CLASS), "multiview widget added");
     });
 
-    QUnit.test("count of nested widget elements test", (assert) => {
+    QUnit.test("count of nested widget elements test", function(assert) {
         assert.expect(1);
 
         const items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
@@ -65,7 +65,7 @@ QUnit.module("TabPanel markup", () => {
 });
 
 QUnit.module("TabPanel items", () => {
-    QUnit.test("items option test - changing a single item at runtime", (assert) => {
+    QUnit.test("items option test - changing a single item at runtime", function(assert) {
         const items = [
             { text: "Greg", title: "Name" }
         ];
@@ -82,7 +82,7 @@ QUnit.module("TabPanel items", () => {
             "test", "option <items> of nested tabs widget successfully changed - tabs were rerendered");
     });
 
-    QUnit.test("itemTitleTemplate rendering test", (assert) => {
+    QUnit.test("itemTitleTemplate rendering test", function(assert) {
         assert.expect(2);
 
         const items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
@@ -106,7 +106,7 @@ QUnit.module("TabPanel items", () => {
             "option <itemTitleTemplate> of nested tabs widget successfully changed");
     });
 
-    QUnit.test("disabled item should be rendered correctly", (assert) => {
+    QUnit.test("disabled item should be rendered correctly", function(assert) {
         const items = [
             { text: "Greg", title: "Name" },
             { text: "Albert", title: "Name" }
@@ -136,7 +136,7 @@ QUnit.module("TabPanel items", () => {
         { title: new Date(2019, 10, 13), expected: String(new Date(2019, 10, 13)) },
         { title: { value: "title" }, expected: "" }
     ].forEach((value) => {
-        QUnit.test(`DefaultTemplate: title template property - ${value.title}`, (assert) => {
+        QUnit.test(`DefaultTemplate: title template property - ${value.title}`, function(assert) {
             const $element = $("<div>").appendTo("#qunit-fixture");
 
             new TabPanel($element, { items: [ { title: value.title }] });
@@ -146,7 +146,7 @@ QUnit.module("TabPanel items", () => {
             assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), value.expected, "item.title");
         });
 
-        QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, (assert) => {
+        QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, function(assert) {
             const $element = $("<div>").appendTo("#qunit-fixture");
 
             new TabPanel($element, { items: [ value.title ] });
@@ -159,12 +159,12 @@ QUnit.module("TabPanel items", () => {
 });
 
 QUnit.module("aria accessibility", () => {
-    QUnit.test("aria role", (assert) => {
+    QUnit.test("aria role", function(assert) {
         const $element = $("#tabPanel").dxTabPanel();
         assert.equal($element.attr("role"), "tabpanel");
     });
 
-    QUnit.test("tabpanel should NOT have aria-activedescendant", (assert) => {
+    QUnit.test("tabpanel should NOT have aria-activedescendant", function(assert) {
         const $element = $("#tabPanel").dxTabPanel({ items: [1, 2] }),
             instance = $element.dxTabPanel("instance");
 
