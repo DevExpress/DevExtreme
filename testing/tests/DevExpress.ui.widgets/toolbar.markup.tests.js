@@ -234,7 +234,7 @@ QUnit.module("render", {
         assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
     });
 
-    test("Clear timer for the animation in the Material theme", (assert) => {
+    test("Clear timer for the animation in the Material theme", function(assert) {
         this.origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
         this.element.dxToolbar({});
