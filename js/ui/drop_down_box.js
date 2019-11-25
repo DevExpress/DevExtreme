@@ -147,12 +147,16 @@ var DropDownBox = DropDownEditor.inherit({
         });
     },
 
+    _initTemplates: function() {
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
+        this.callBase();
+    },
+
     _initMarkup: function() {
         this._initDataExpressions();
         this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
         this.callBase();
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _setSubmitValue: function() {
