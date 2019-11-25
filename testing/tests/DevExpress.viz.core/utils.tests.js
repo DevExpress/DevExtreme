@@ -151,16 +151,17 @@ QUnit.test("Check options are processed", function(assert) {
 });
 
 QUnit.test("Check exceptions", function(assert) {
-    var options = { font: { cursor: 'default', opacity: 0.3, size: 14 } };
+    var options = { font: { color: '#767676', cursor: 'default', opacity: 0.3, size: 14 } };
 
     var fontOptions = utils.patchFontOptions(options.font);
 
-    assert.deepEqual(options.font, { cursor: 'default', opacity: 0.3, size: 14 });
+    assert.deepEqual(options.font, { color: '#767676', cursor: 'default', opacity: 0.3, size: 14 });
 
     assert.deepEqual(fontOptions, {
         'font-size': 14,
-        opacity: 0.3,
-        cursor: 'default'
+        fill: 'rgba(118,118,118,0.3)',
+        cursor: 'default',
+        opacity: null
     });
 });
 

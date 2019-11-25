@@ -5,6 +5,7 @@ var noop = require("../../core/utils/common").noop,
     mathUtils = require("../../core/utils/math"),
     dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
     domAdapter = require("../../core/dom_adapter"),
+    Color = require("../../color"),
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
     isExponential = typeUtils.isExponential,
@@ -254,10 +255,16 @@ extend(exports, {
     patchFontOptions: function(options) {
         var fontOptions = {};
         each(options || {}, function(key, value) {
-            if(/^(cursor|opacity)$/i.test(key)) {
+            if(/^(cursor)$/i.test(key)) {
                 // TODO check other properties, add tests
+            } else if(key === "opacity") {
+                value = null;
             } else if(key === "color") {
                 key = "fill";
+                if("opacity" in options) {
+                    const color = new Color(value);
+                    value = `rgba(${color.r},${color.g},${color.b},${options.opacity})`;
+                }
             } else {
                 key = "font-" + key;
             }
