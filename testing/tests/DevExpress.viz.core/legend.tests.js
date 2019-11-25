@@ -400,7 +400,8 @@ QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
     this.createSimpleLegend()
         .draw(200, 200);
 
-    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.5, "Label should have opacity");
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.css.lastCall.args[0], {}, "Label should not have font style");
+    assert.equal(this.renderer.g.getCall(1).returnValue.children[0].css.lastCall.args[0].fill, "rgba(127,127,127,0.5)", "Label's group should have fill with opacity");
 });
 
 QUnit.test('Create legend, textOpacity less than font opacity', function(assert) {
@@ -420,7 +421,7 @@ QUnit.test('Create legend, textOpacity less than font opacity', function(assert)
     ];
     this.createAndDrawLegend();
 
-    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.3, "Label should be changed");
+    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].fill, "rgba(127,127,127,0.3)", "Label should be changed");
 });
 
 QUnit.test('Create legend, selected fill is "none"', function(assert) {
@@ -1919,7 +1920,7 @@ QUnit.test('Erase legend on update options', function(assert) {
     this.legend.update([]);
 
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
-    assert.ok(this.renderer.g.getCall(1).returnValue.remove.lastCall.calledAfter(titleGroup.linkRemove.lastCall), 'group is removed');
+    assert.ok(this.renderer.g.getCall(1).returnValue.remove.lastCall.calledAfter(titleGroup.linkRemove.lastCall), [], 'group is removed');
 });
 
 QUnit.test('Check groups order', function(assert) {
@@ -2651,6 +2652,34 @@ QUnit.test("Pass customized item size to hover state", function(assert) {
 
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.state, "hovered");
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.size, 60);
+});
+
+QUnit.test("Pass customized item opacity for different states", function(assert) {
+    this.options.customizeItems = items => {
+        items.forEach(i => {
+            i.marker.opacity = 0.65;
+            i.states.normal.opacity = 0.3;
+            i.states.selection.opacity = 0.9;
+        });
+    };
+
+    this.createAndDrawLegend();
+
+    assert.equal(this.data[0].marker.opacity, 0.3);
+    assert.equal(this.options.markerTemplate.lastCall.args[0].marker.state, "normal");
+    assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.3);
+
+    this.options.markerTemplate.reset();
+    this.legend.applyHover(0);
+
+    assert.equal(this.options.markerTemplate.lastCall.args[0].marker.state, "hovered");
+    assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.65);
+
+    this.options.markerTemplate.reset();
+    this.legend.applySelected(0);
+
+    assert.equal(this.options.markerTemplate.lastCall.args[0].marker.state, "selected");
+    assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.9);
 });
 
 QUnit.test("Request change if template is asynchronous", function(assert) {

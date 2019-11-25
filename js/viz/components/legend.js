@@ -389,6 +389,16 @@ extend(legendPrototype, {
                     dataItem.size = value;
                 }
             });
+            Object.defineProperty(dataItem.marker, "opacity", {
+                get() {
+                    return dataItem.states.normal.opacity;
+                },
+                set(value) {
+                    dataItem.states.normal.opacity =
+                    dataItem.states.hover.opacity =
+                    dataItem.states.selection.opacity = value;
+                }
+            });
 
             return dataItem;
         });
@@ -619,7 +629,7 @@ extend(legendPrototype, {
         const options = this._options;
         const align = getAlign(options.itemTextPosition);
         const text = options.customizeText.call(labelFormatObject, labelFormatObject);
-        const fontStyle = _isDefined(data.textOpacity) ? _extend({}, options.font, { opacity: data.textOpacity }) : options.font;
+        const fontStyle = _isDefined(data.textOpacity) ? { color: options.font.color, opacity: data.textOpacity } : {};
 
         return this._renderer.text(text, 0, 0)
             .css(patchFontOptions(fontStyle))
