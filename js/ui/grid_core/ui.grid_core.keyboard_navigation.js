@@ -1364,22 +1364,28 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _isLastValidCell: function(cellPosition) {
         var nextColumnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex + 1 : 0,
+            rowIndex = cellPosition.rowIndex,
             checkingPosition = {
                 columnIndex: nextColumnIndex,
-                rowIndex: cellPosition.rowIndex
+                rowIndex: rowIndex
             },
-            visibleColumnsCount = this._getVisibleColumnCount(),
-            isCheckingCellValid = this._isCellByPositionValid(checkingPosition);
+            visibleRows = this.component.getVisibleRows(),
+            row = visibleRows && visibleRows[rowIndex],
+            isLastRow = this._isLastRow(rowIndex);
 
-        if(!this._isLastRow(cellPosition.rowIndex)) {
+        if(!isLastRow) {
             return false;
         }
 
-        if(cellPosition.columnIndex === visibleColumnsCount - 1) {
+        if(row && row.rowType === "group" && cellPosition.columnIndex > 0) {
             return true;
         }
 
-        if(isCheckingCellValid) {
+        if(cellPosition.columnIndex === this._getVisibleColumnCount() - 1) {
+            return true;
+        }
+
+        if(this._isCellByPositionValid(checkingPosition)) {
             return false;
         }
 

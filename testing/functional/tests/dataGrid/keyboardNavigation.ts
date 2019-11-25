@@ -510,3 +510,41 @@ test("DataGrid - Scroll bars should not appear when updating edge cell focus ove
         ]
     });
 });
+
+test("Tab key on the focused group row should be handled by default behavior (T833621)", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    await t
+        .click(dataGrid.getGroupRow(1).element)
+        .expect(dataGrid.getGroupRow(1).hasHiddenFocusState).ok()
+        .pressKey("tab")
+        .expect(dataGrid.getPager().getNavPage(0).element.focused).ok();
+}).before(async () => {
+    await createWidget("dxDataGrid", {
+        width: 400,
+        dataSource: [
+            { id: 0, c0: "Test00 resize", c1: "Test10" },
+            { id: 1, c0: "Test01 resize", c1: "Test11" },
+            { id: 1, c0: "Test01 resize", c1: "Test12" },
+            { id: 1, c0: "Test01 resize", c1: "Test10" },
+            { id: 1, c0: "Test01 resize", c1: "Test11" },
+            { id: 1, c0: "Test01 resize", c1: "Test12" },
+            { id: 1, c0: "Test01 resize", c1: "Test10" },
+        ],
+        columns: [
+            "id",
+            "c0",
+            {
+                dataField: "c1",
+                groupIndex: 0,
+                showWhenGrouped: true
+            }
+        ],
+        paging: {
+            pageSize: 2
+        },
+        grouping: {
+            autoExpandAll: false
+        }
+    });
+});

@@ -7,10 +7,12 @@ const CLASS = {
     filterRow: 'dx-datagrid-filter-row',
     filterMenu: 'dx-filter-menu',
     dataRow: 'dx-data-row',
+    groupRow: 'dx-group-row',
     commandEdit: 'dx-command-edit',
     commandLink: 'dx-link',
     focused: 'dx-focused',
     focusedState: 'dx-state-focused',
+    hiddenFocusedState: 'dx-cell-focus-disabled',
     focusedRow: 'dx-row-focused',
     editCell: 'dx-editor-cell',
     rowRemoved: 'dx-row-removed',
@@ -28,10 +30,12 @@ const CLASS = {
 class DxElement {
     element: Selector;
     hasFocusedState: Promise<boolean>;
+    hasHiddenFocusState: Promise<boolean>;
 
     constructor(element: Selector) {
         this.element = element;
         this.hasFocusedState = this.element.hasClass(CLASS.focusedState);
+        this.hasHiddenFocusState = this.element.hasClass(CLASS.hiddenFocusedState);
     }
 }
 
@@ -133,6 +137,19 @@ class DataRow extends DxElement {
     }
 }
 
+class GroupRow extends DxElement {
+    isFocusedRow: Promise<boolean>;
+
+    constructor(element: Selector) {
+        super(element);
+        this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
+    }
+
+    getCell(index: number): DataCell {
+        return new DataCell(this.element, index);
+    }
+}
+
 class FilterPanel extends DxElement {
     constructor(element: Selector) {
         super(element);
@@ -198,6 +215,10 @@ export default class DataGrid extends Widget {
 
     getDataCell(rowIndex: number, columnIndex: number): DataCell {
         return this.getDataRow(rowIndex).getDataCell(columnIndex);
+    }
+
+    getGroupRow(index: number): GroupRow {
+        return new GroupRow(this.element.find(`.${CLASS.groupRow}`).nth(index));
     }
 
     getFocusedRow(): Selector {
