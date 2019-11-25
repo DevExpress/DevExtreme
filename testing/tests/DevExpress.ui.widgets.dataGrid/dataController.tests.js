@@ -6752,6 +6752,21 @@ QUnit.test("Not apply groupInterval of the headerFilter for filterRow", function
     assert.deepEqual(this.getCombinedFilter(true), [["birthDate", ">=", new Date(1992, 7, 6)], "and", ["birthDate", "<", new Date(1992, 7, 7)]], "filter expression");
 });
 
+// T835675
+QUnit.test("clearFilter should not fall with error if dataSource is not set", function(assert) {
+    // arrange
+    this.dataSource = undefined;
+
+    // act, assert
+    try {
+        this.dataController.clearFilter();
+
+        assert.ok(true, "no error");
+    } catch(e) {
+        assert.notOk(true, "error was thrown");
+    }
+});
+
 QUnit.module("Grouping", { beforeEach: setupModule, afterEach: teardownModule });
 
 // T161732
