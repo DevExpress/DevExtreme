@@ -9,37 +9,58 @@ QUnit.test("Init tree view", function(assert) {
     assert.ok($treeView);
 });
 
-['dataSource', 'items'].forEach((sourceOptionName) => {
-    QUnit.test(`Tree initialize with loop/cycle keys in ${sourceOptionName} option. -> rootValue  (T832760)`, function(assert) {
-        const testData = [ { configRoot: 1, expectedItemId: 2 }, { configRoot: 2, expectedItemId: 3 }, { configRoot: 3, expectedItemId: 1 }, { configRoot: 0, expectedItemId: undefined },
-            { configRoot: null, expectedItemId: undefined },
-            { configRoot: undefined, expectedItemId: undefined } ];
+QUnit.module("Initialization with cycle/loop keys (T832760)", () => {
+    ['dataSource', 'items'].forEach((sourceOptionName) => {
+        QUnit.test(`rootValue option`, function(assert) {
+            const testData = [ { configRoot: 1, expectedItemId: 2 }, { configRoot: 2, expectedItemId: 3 }, { configRoot: 3, expectedItemId: 1 }, { configRoot: 0, expectedItemId: undefined },
+                { configRoot: null, expectedItemId: undefined },
+                { configRoot: undefined, expectedItemId: undefined } ];
 
-        testData.forEach((testData) => {
-            let options = { dataStructure: "plain", rootValue: testData.configRoot };
-            options[sourceOptionName] = [
-                { id: 1, text: "item1", parentId: 3 },
-                { id: 2, text: "item2", parentId: 1 },
-                { id: 3, text: "item3", parentId: 2 }];
-            const tree = createInstance(options);
+            testData.forEach((testData) => {
+                let options = { dataStructure: "plain", rootValue: testData.configRoot };
+                options[sourceOptionName] = [
+                    { id: 1, text: "item1", parentId: 3 },
+                    { id: 2, text: "item2", parentId: 1 },
+                    { id: 3, text: "item3", parentId: 2 }];
+                const treeView = createInstance(options);
 
-            assert.notEqual(tree.instance, undefined);
-            let actualLevelNode = tree.getElement().find('[aria-level="1"]');
-            assert.equal(actualLevelNode.attr('data-item-id'), testData.expectedItemId);
+                assert.notEqual(treeView.instance, undefined);
+                let actualLevelNode = treeView.getElement().find('[aria-level="1"]');
+                assert.equal(actualLevelNode.attr('data-item-id'), testData.expectedItemId);
+            });
         });
-    });
 
-    QUnit.test(`Tree initialize with with loop/cycle keys in ${sourceOptionName} option. -> Expanded and collapsed (T832760)`, function(assert) {
-        const testData = [true, false];
-        testData.forEach((optionValue) => {
-            let options = { dataStructure: "plain", showCheckBoxesMode: "normal" };
-            options[sourceOptionName] = [
-                { id: 1, text: "item1", parentId: 3, expanded: optionValue, selected: optionValue },
-                { id: 2, text: "item2", parentId: 1, expanded: optionValue, selected: optionValue },
-                { id: 3, text: "item3", parentId: 2, expanded: optionValue, selected: optionValue }];
-            const tree = createInstance(options);
+        QUnit.test(`Expanded value`, function(assert) {
+            const testSamples = [true, false];
+            testSamples.forEach((optionValue) => {
+                let options = { dataStructure: "plain", rootValue: 1 };
+                options[sourceOptionName] = [
+                    { id: 1, text: "item1", parentId: 2, expanded: optionValue },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: optionValue }];
 
-            assert.notEqual(tree.instance, undefined);
+                const treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]'),
+                    $item2 = treeView.getElement().find('[aria-level="2"]');
+
+                assert.notEqual(treeView.instance, undefined);
+                assert.equal(treeView.IsVisible($item1), true);
+                assert.equal(treeView.IsVisible($item2), optionValue);
+            });
+        });
+
+        QUnit.test(`Selected value`, function(assert) {
+            const testSamples = [{ selectedOption: true, expectedSelected: [0, 1] }, { selectedOption: false, expectedSelected: [] } ];
+            testSamples.forEach((testData) => {
+                let options = { dataStructure: "plain", showCheckBoxesMode: "normal", rootValue: 1 };
+                options[sourceOptionName] = [
+                    { id: 1, text: "item1", parentId: 2, expanded: true, selected: testData.selectedOption },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true, selected: testData.selectedOption }];
+
+                const treeView = createInstance(options);
+                assert.notEqual(treeView.instance, undefined);
+                treeView.checkSelectedNodes(testData.expectedSelected);
+            });
         });
     });
 });
+

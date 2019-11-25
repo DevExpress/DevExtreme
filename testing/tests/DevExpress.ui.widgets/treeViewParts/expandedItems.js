@@ -693,114 +693,194 @@ module("Expanded items", {
         assert.equal(contentReadyStub.callCount, 2, "event is thrown twice");
     });
 
-    ['dataSource', 'items'].forEach((optionName) => {
-        QUnit.test(`ExpandItem should works with loop/cycle in ${optionName} option with collapsed items`, function(assert) {
-            let options = createTestOptions(optionName, [
-                { id: 1, text: "item1", parentId: 2, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
 
-            let treeView = createInstance(options),
-                $item1 = treeView.getElement().find('[aria-level="1"]'),
+    QUnit.module("Expanding with cycle/loop keys (T832760)", () => {
+        ['dataSource', 'items'].forEach((optionName) => {
+            QUnit.test(`ExpandItem by jquery node. ${optionName} option with collapsed items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.expandItem($item1);
+
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
+
+            QUnit.test(`ExpandItem by html node. ${optionName} option with collapsed items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.expandItem($item1.get(0));
+
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
+
+            QUnit.test(`ExpandItem by key. ${optionName} option with collapsed items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options);
+
+                treeView.instance.expandItem('1');
+
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
+
+            QUnit.test(`ExpandItem by jquery node. ${optionName} option with expanded items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.expandItem($item1);
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
+
+            QUnit.test(`ExpandItem by html node. ${optionName} option with expanded items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.expandItem($item1.get(0));
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
+
+            QUnit.test(`ExpandItem by key. ${optionName} option with expanded items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                let treeView = createInstance(options);
+
+                treeView.instance.expandItem('2');
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
+
+            QUnit.test(`ExpandAll. ${optionName} option`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options),
+                    $item1_1 = treeView.getElement().find('[aria-level="2"]');
+
+                assert.equal($item1_1.length, 0);
+
+                treeView.instance.expandAll();
                 $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsVisible($item1_1), true);
+            });
 
-            assert.equal($item1_1.length, 0);
+            QUnit.test(`CollapseItem by jquery node ${optionName} option with expanded items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
 
-            treeView.instance.expandItem($item1);
-            $item1_1 = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($item1_1.length, 1);
-            assert.equal(treeView.IsVisible($item1_1), true);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.collapseItem($item1);
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsHidden($item1_1), true);
+            });
+
+            QUnit.test(`CollapseItem by html node. ${optionName} option with expanded items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.collapseItem($item1.get(0));
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsHidden($item1_1), true);
+            });
+
+            QUnit.test(`CollapseItem by key. ${optionName} option with expanded items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                let treeView = createInstance(options);
+
+                treeView.instance.collapseItem('2');
+
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsHidden($item1_1), true);
+            });
+
+            QUnit.test(`CollapseItem by jquery node. ${optionName} option with collapsed items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.collapseItem($item1);
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 0);
+            });
+
+            QUnit.test(`CollapseItem by html node. ${optionName} option with collapsed items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options),
+                    $item1 = treeView.getElement().find('[aria-level="1"]');
+
+                treeView.instance.collapseItem($item1.get(0));
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 0);
+            });
+
+            QUnit.test(`CollapseItem by key. ${optionName} option with collapsed items`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: false },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                let treeView = createInstance(options);
+
+                treeView.instance.collapseItem('2');
+
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 0);
+            });
+
+            QUnit.test(`CollapseAll should works with loop/cycle in ${optionName} option`, function(assert) {
+                let options = createOptions(optionName, [
+                    { id: 1, text: "item1", parentId: 2, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                let treeView = createInstance(options);
+
+                treeView.instance.collapseAll();
+
+                let $item1_1 = treeView.getElement().find('[aria-level="2"]');
+                assert.equal($item1_1.length, 1);
+                assert.equal(treeView.IsHidden($item1_1), true);
+            });
         });
 
-        QUnit.test(`ExpandItem should works with loop/cycle in ${optionName} option with expanded items`, function(assert) {
-            let options = createTestOptions(optionName, [
-                { id: 1, text: "item1", parentId: 2, expanded: true },
-                { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-
-            let treeView = createInstance(options),
-                $item1 = treeView.getElement().find('[aria-level="1"]'),
-                $item1_1 = treeView.getElement().find('[aria-level="2"]');
-
-            assert.equal($item1_1.length, 1);
-            assert.equal(treeView.IsVisible($item1_1), true);
-
-            treeView.instance.expandItem($item1);
-            $item1_1 = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($item1_1.length, 1);
-            assert.equal(treeView.IsVisible($item1_1), true);
-        });
-
-        QUnit.test(`ExpandAll should works with loop/cycle in ${optionName} option`, function(assert) {
-            let options = createTestOptions(optionName, [
-                { id: 1, text: "item1", parentId: 2, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-
-            let treeView = createInstance(options),
-                $item1_1 = treeView.getElement().find('[aria-level="2"]');
-
-            assert.equal($item1_1.length, 0);
-
-            treeView.instance.expandAll();
-            $item1_1 = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($item1_1.length, 1);
-            assert.equal(treeView.IsVisible($item1_1), true);
-        });
-
-        QUnit.test(`CollapseItem should works with loop/cycle in ${optionName} option with expanded items`, function(assert) {
-            let options = createTestOptions(optionName, [
-                { id: 1, text: "item1", parentId: 2, expanded: true },
-                { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-
-            let treeView = createInstance(options),
-                $item1 = treeView.getElement().find('[aria-level="1"]'),
-                $item1_1 = treeView.getElement().find('[aria-level="2"]');
-
-            assert.equal($item1.length, 1);
-            assert.equal($item1_1.length, 1);
-
-            treeView.instance.collapseItem($item1);
-            $item1_1 = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($item1_1.length, 1);
-            assert.equal(treeView.IsHidden($item1_1), true);
-        });
-
-        QUnit.test(`CollapseItem should works with loop/cycle in ${optionName} option with collapsed items`, function(assert) {
-            let options = createTestOptions(optionName, [
-                { id: 1, text: "item1", parentId: 2, expanded: false },
-                { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-
-            let treeView = createInstance(options),
-                $item1 = treeView.getElement().find('[aria-level="1"]'),
-                $item1_1 = treeView.getElement().find('[aria-level="2"]');
-
-            assert.equal($item1.length, 1);
-            assert.equal($item1_1.length, 0);
-
-            treeView.instance.collapseItem($item1);
-            $item1_1 = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($item1_1.length, 0);
-        });
-
-        QUnit.test(`CollapseAll should works with loop/cycle in ${optionName} option`, function(assert) {
-            let options = createTestOptions(optionName, [
-                { id: 1, text: "item1", parentId: 2, expanded: true },
-                { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-
-            let treeView = createInstance(options),
-                $item1_1 = treeView.getElement().find('[aria-level="2"]');
-
-            assert.equal($item1_1.length, 1);
-
-            treeView.instance.collapseAll();
-            $item1_1 = treeView.getElement().find('[aria-level="2"]');
-            assert.equal($item1_1.length, 1);
-            assert.equal(treeView.IsHidden($item1_1), true);
-        });
+        function createOptions(itemsOptionName, items) {
+            let options = { dataStructure: "plain", rootValue: 1 };
+            options[itemsOptionName] = items;
+            return options;
+        }
     });
 });
-
-
-function createTestOptions(itemsOptionName, items) {
-    let options = { dataStructure: "plain", rootValue: 1 };
-    options[itemsOptionName] = items;
-    return options;
-}

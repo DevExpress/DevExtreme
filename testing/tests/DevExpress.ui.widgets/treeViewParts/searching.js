@@ -13,27 +13,19 @@ QUnit.module("searching");
             { id: 1, text: "item1", parentId: 2, selected: false, expanded: false },
             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: false },
             { id: 3, text: "item1_2", parentId: 1, selected: false, expanded: false }];
-
-        let treeView = createInstance(options),
-            $item1 = treeView.getElement().find('[aria-label="item1"]'),
-            $item1_1 = treeView.getElement().find('[aria-label="item1_1"]'),
-            $item1_2 = treeView.getElement().find('[aria-label="item1_2"]');
-
-        assert.equal($item1.length, 0);
-        assert.equal($item1_1.length, 1);
-        assert.equal($item1_2.length, 1);
+        let treeView = createInstance(options);
 
         treeView.instance.option('searchValue', "1");
 
-        $item1 = treeView.getElement().find('[aria-label="item1"]');
+        let $item1 = treeView.getElement().find('[aria-label="item1"]');
         assert.equal($item1.length, 1);
         assert.equal(treeView.hasInvisibleClass($item1), false);
 
-        $item1_1 = treeView.getElement().find('[aria-label="item1_1"]');
+        let $item1_1 = treeView.getElement().find('[aria-label="item1_1"]');
         assert.equal($item1_1.length, 1);
         assert.equal(treeView.hasInvisibleClass($item1_1), false);
 
-        $item1_2 = treeView.getElement().find('[aria-label="item2"]');
+        let $item1_2 = treeView.getElement().find('[aria-label="item2"]');
         assert.equal($item1_2.length, 0);
     });
 });

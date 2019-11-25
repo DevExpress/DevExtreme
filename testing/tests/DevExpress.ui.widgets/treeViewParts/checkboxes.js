@@ -241,60 +241,96 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 });
 
 
-['dataSource', 'items'].forEach((optionName) => {
-    QUnit.test(`SelectItem should works with loop/cycle in ${optionName} option. (T832760)`, function(assert) {
-        let options = createTestOptions(optionName, [
-            { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
-            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
+QUnit.module("Selection with cycle/loop keys (T832760)", () => {
+    ['dataSource', 'items'].forEach((optionName) => {
+        QUnit.test(`SelectItem by jQuery node. ${optionName} option.`, function(assert) {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
+            const treeView = createInstance(options);
 
-        const treeView = createInstance(options);
-        treeView.checkSelectedNodes([]);
+            const $parent = treeView.getElement().find('[aria-level="1"]');
+            treeView.instance.selectItem($parent);
+            treeView.checkSelectedNodes([0, 1]);
+        });
 
-        const $parent = treeView.getElement().find('[aria-level="1"]');
-        treeView.instance.selectItem($parent);
-        treeView.checkSelectedNodes([0, 1]);
+        QUnit.test(`SelectItem by html node. ${optionName} option.`, function(assert) {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
+            const treeView = createInstance(options);
+
+            const $parent = treeView.getElement().find('[aria-level="1"]');
+            treeView.instance.selectItem($parent.get(0));
+            treeView.checkSelectedNodes([0, 1]);
+        });
+
+        QUnit.test(`SelectItem by key. ${optionName} option.`, function(assert) {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
+            const treeView = createInstance(options);
+
+            treeView.instance.selectItem('1');
+            treeView.checkSelectedNodes([0, 1]);
+        });
+
+        QUnit.test(`SelectAll. ${optionName} option.`, function(assert) {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
+            const treeView = createInstance(options);
+
+            treeView.instance.selectAll();
+            treeView.checkSelectedNodes([0, 1]);
+        });
+
+        QUnit.test(`UnselectItem by jquery node. ${optionName} option.`, function() {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
+            const treeView = createInstance(options);
+
+            const $parent = treeView.getElement().find('[aria-level="1"]');
+            treeView.instance.unselectItem($parent);
+            treeView.checkSelectedNodes([]);
+        });
+
+        QUnit.test(`UnselectItem by html node. ${optionName} option.`, function() {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
+            const treeView = createInstance(options);
+
+            const $parent = treeView.getElement().find('[aria-level="1"]');
+            treeView.instance.unselectItem($parent.get(0));
+            treeView.checkSelectedNodes([]);
+        });
+
+        QUnit.test(`UnselectItem by key. ${optionName} option.`, function() {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
+            const treeView = createInstance(options);
+
+            treeView.instance.unselectItem('1');
+            treeView.checkSelectedNodes([]);
+        });
+
+        QUnit.test(`UnselectAll should works with loop/cycle in ${optionName} option. (T832760)`, function() {
+            let options = createOptions(optionName, [
+                { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
+            const treeView = createInstance(options);
+
+            treeView.instance.unselectAll();
+            treeView.checkSelectedNodes([]);
+        });
     });
 
-    QUnit.test(`SelectAll should works with loop/cycle in ${optionName} option. (T832760)`, function(assert) {
-        let options = createTestOptions(optionName, [
-            { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
-            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-
-        const treeView = createInstance(options);
-        treeView.checkSelectedNodes([]);
-
-        treeView.instance.selectAll();
-        treeView.checkSelectedNodes([0, 1]);
-    });
-
-    QUnit.test(`UnselectItem should works with loop/cycle in ${optionName} option. (T832760)`, function() {
-        let options = createTestOptions(optionName, [
-            { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
-            { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-
-        const treeView = createInstance(options);
-        treeView.checkSelectedNodes([0, 1]);
-
-        const $parent = treeView.getElement().find('[aria-level="1"]');
-        treeView.instance.unselectItem($parent);
-        treeView.checkSelectedNodes([]);
-    });
-
-    QUnit.test(`UnselectAll should works with loop/cycle in ${optionName} option. (T832760)`, function() {
-        let options = createTestOptions(optionName, [
-            { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
-            { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-
-        const treeView = createInstance(options);
-        treeView.checkSelectedNodes([0, 1]);
-
-        treeView.instance.unselectAll();
-        treeView.checkSelectedNodes([]);
-    });
+    function createOptions(itemsOptionName, items) {
+        let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" };
+        options[itemsOptionName] = items;
+        return options;
+    }
 });
-
-function createTestOptions(itemsOptionName, items) {
-    let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" };
-    options[itemsOptionName] = items;
-    return options;
-}
