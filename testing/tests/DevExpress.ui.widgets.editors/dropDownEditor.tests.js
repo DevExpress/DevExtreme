@@ -570,7 +570,7 @@ QUnit.test("focusout should not be fired on valueChanged", function(assert) {
 });
 
 QUnit.test("focusout to another editor should close current ddb (T832410)", function(assert) {
-    var $dropDownEditor1 = $("#dropDownEditorLazy").dxDropDownEditor({
+    const $dropDownEditor1 = $("#dropDownEditorLazy").dxDropDownEditor({
         items: [0, 1, 2],
         contentTemplate: function() {
             return $("<div>").attr("id", "test-content");
@@ -580,16 +580,16 @@ QUnit.test("focusout to another editor should close current ddb (T832410)", func
         opened: true
     });
 
-    var $dropDownEditor2 = $("#dropDownEditorSecond").dxDropDownEditor({
+    const $dropDownEditor2 = $("#dropDownEditorSecond").dxDropDownEditor({
         items: [0, 1, 2],
         acceptCustomValue: true,
         focusStateEnabled: true
     });
 
-    var dropDownEditor1 = $dropDownEditor1.dxDropDownEditor("instance");
+    const dropDownEditor1 = $dropDownEditor1.dxDropDownEditor("instance");
 
-    var $input1 = $dropDownEditor1.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-    var $input2 = $dropDownEditor2.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    const $input1 = $dropDownEditor1.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    const $input2 = $dropDownEditor2.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
     dropDownEditor1.focus();
 
