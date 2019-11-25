@@ -316,7 +316,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
     assert.equal(testArgs.dataField, "name", "dataField");
 });
 
-QUnit.test("Should save layoutData properties by reference (T706177)", (assert) => {
+QUnit.test("Should save layoutData properties by reference (T706177)", function(assert) {
     const done = assert.async();
 
     const items = [

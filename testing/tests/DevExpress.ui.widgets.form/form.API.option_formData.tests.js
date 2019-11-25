@@ -180,7 +180,7 @@ QUnit.test("Set { formData: {dataField1: a}, items: [dxTextArea] }, change edito
     assert.equal(form.getEditor("custom1").option("value"), "val1");
 });
 
-QUnit.test("Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, dataField2], call option(formData, {dataField3: c}", assert => {
+QUnit.test("Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, dataField2], call option(formData, {dataField3: c}", function(assert) {
     const onFieldDataChangedStub = sinon.stub();
     const form = $("#form").dxForm({
         formData: {
@@ -203,7 +203,7 @@ QUnit.test("Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, 
     assert.equal(calls[0].args[0].value, "c", "value argument of the onFieldDataChanged event");
 });
 
-QUnit.test("Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, dataField2], call option(formData, {dataField3: c}, change editor value", assert => {
+QUnit.test("Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, dataField2], call option(formData, {dataField3: c}, change editor value", function(assert) {
     const onFieldDataChangedStub = sinon.stub();
     const form = $("#form").dxForm({
         formData: {
@@ -229,7 +229,7 @@ QUnit.test("Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, 
     assert.equal(calls[1].args[0].value, "d", "second call - value argument of the onFieldDataChanged event");
 });
 
-QUnit.test("Set { formData: {dataField3: c}, items: [dataField1, dataField2], call option(formData, {dataField1: a, dataField2: b})", assert => {
+QUnit.test("Set { formData: {dataField3: c}, items: [dataField1, dataField2], call option(formData, {dataField1: a, dataField2: b})", function(assert) {
     const onFieldDataChangedStub = sinon.stub();
     const form = $("#form").dxForm({
         formData: {
@@ -257,7 +257,7 @@ QUnit.test("Set { formData: {dataField3: c}, items: [dataField1, dataField2], ca
     assert.equal(calls[1].args[0].value, "b", "second call - value argument of the onFieldDataChanged event");
 });
 
-QUnit.test("Reset editor's value when set formData: {dataField1: a}", assert => {
+QUnit.test("Reset editor's value when set formData: {dataField1: a}", function(assert) {
     const formData = {
         dxTextBox: "a",
         dxDateBox: new Date(),
