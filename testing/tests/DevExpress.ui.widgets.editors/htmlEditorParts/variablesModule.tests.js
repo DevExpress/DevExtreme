@@ -7,7 +7,7 @@ import { noop } from "core/utils/common";
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.$element = $("#htmlEditor");
@@ -43,7 +43,7 @@ const moduleConfig = {
             }
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.reset();
     }
 };
@@ -51,7 +51,7 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module("Variable format", () => {
-    test("Create an element by data", (assert) => {
+    test("Create an element by data", function(assert) {
         const data = {
             value: "TEST_NAME",
             escapeChar: "@"
@@ -64,7 +64,7 @@ QUnit.module("Variable format", () => {
         assert.equal(element.innerText, "@TEST_NAME@", "correct inner text");
     });
 
-    test("Create an element with default escape char", (assert) => {
+    test("Create an element with default escape char", function(assert) {
         const data = {
             value: "TEST_NAME",
             escapeChar: ""
@@ -77,7 +77,7 @@ QUnit.module("Variable format", () => {
         assert.equal(element.innerText, "TEST_NAME", "correct inner text");
     });
 
-    test("Create an element with start escaping char", (assert) => {
+    test("Create an element with start escaping char", function(assert) {
         const data = {
             value: "TEST_NAME",
             escapeChar: ["{", ""],
@@ -90,7 +90,7 @@ QUnit.module("Variable format", () => {
         assert.equal(element.innerText, "{TEST_NAME", "correct inner text");
     });
 
-    test("Create an element with end escaping char", (assert) => {
+    test("Create an element with end escaping char", function(assert) {
         const data = {
             value: "TEST_NAME",
             escapeChar: ["", "}"],
@@ -103,7 +103,7 @@ QUnit.module("Variable format", () => {
         assert.equal(element.innerText, "TEST_NAME}", "correct inner text");
     });
 
-    test("Create an element with start, end and default escaping char", (assert) => {
+    test("Create an element with start, end and default escaping char", function(assert) {
         const data = {
             value: "TEST_NAME",
             escapeChar: ["{", "}"]
@@ -116,7 +116,7 @@ QUnit.module("Variable format", () => {
         assert.equal(element.innerText, "{TEST_NAME}", "correct inner text");
     });
 
-    test("Get data from element", (assert) => {
+    test("Get data from element", function(assert) {
         const markup = "<span class='dx-variable' data-var-start-esc-char=## data-var-value=TEST_NAME><span>##TEST_NAME##</span></span>";
         const element = $(markup).get(0);
         const data = VariableFormat.value(element);
@@ -126,7 +126,7 @@ QUnit.module("Variable format", () => {
 });
 
 QUnit.module("Variables module", moduleConfig, () => {
-    test("insert variable after click on item", (assert) => {
+    test("insert variable after click on item", function(assert) {
         this.options.escapeChar = "#";
         const variables = new Variables(this.quillMock, this.options);
 

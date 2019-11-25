@@ -217,8 +217,8 @@ const SchedulerAppointmentForm = {
                 editorOptions: {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
-                    onValueChanged: function(args) {
-                        var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
+                    onValueChanged() {
+                        const value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
                         schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
                     },
                     onContentReady: function(args) {
@@ -241,8 +241,6 @@ const SchedulerAppointmentForm = {
         if(!dataExprs.recurrenceRuleExpr) {
             this._editors.splice(9, 2);
         }
-
-        return this._editors;
     },
 
     _getRecurrenceRule: function(schedulerInstance, appointmentForm) {

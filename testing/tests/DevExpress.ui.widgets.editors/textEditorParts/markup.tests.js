@@ -13,7 +13,7 @@ const TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container";
 const { test, module } = QUnit;
 
 module("Basic markup", () => {
-    test("basic init", (assert) => {
+    test("basic init", function(assert) {
         const element = $("#texteditor").dxTextEditor();
         assert.ok(element.hasClass(TEXTEDITOR_CLASS));
         assert.equal(element.children().length, 1);
@@ -22,7 +22,7 @@ module("Basic markup", () => {
         assert.equal(element.find(`.${CONTAINER_CLASS}`).length, 1);
     });
 
-    test("init with placeholder in the input container", (assert) => {
+    test("init with placeholder in the input container", function(assert) {
         const element = $("#texteditor").dxTextEditor({
             placeholder: "enter value"
         });
@@ -35,7 +35,7 @@ module("Basic markup", () => {
         assert.notOk(placeholder.hasClass(STATE_INVISIBLE_CLASS), "placeholder is visible when editor hasn't a value");
     });
 
-    test("init with options", (assert) => {
+    test("init with options", function(assert) {
         const element = $("#texteditor").dxTextEditor({
             value: "custom",
             placeholder: "enter value",
@@ -53,7 +53,7 @@ module("Basic markup", () => {
         assert.equal(input.prop("tabindex"), 3);
     });
 
-    test("init with focusStateEnabled = false", (assert) => {
+    test("init with focusStateEnabled = false", function(assert) {
         const element = $("#texteditor").dxTextEditor({
             focusStateEnabled: false,
             tabIndex: 3
@@ -64,7 +64,7 @@ module("Basic markup", () => {
         assert.equal(input.prop("tabindex"), -1);
     });
 
-    test("value === 0 should be rendered on init", (assert) => {
+    test("value === 0 should be rendered on init", function(assert) {
         const $element = $("#texteditor").dxTextEditor({
             value: 0
         });
@@ -73,7 +73,7 @@ module("Basic markup", () => {
         assert.equal(input.val(), "0", "value rendered correctly");
     });
 
-    test("T220209 - the 'displayValueFormatter' option", (assert) => {
+    test("T220209 - the 'displayValueFormatter' option", function(assert) {
         const $textEditor = $("#texteditor").dxTextEditor({
             value: "First",
             displayValueFormatter: function(value) {
@@ -85,7 +85,7 @@ module("Basic markup", () => {
         assert.equal($textEditor.find(`.${INPUT_CLASS}`).val(), "First format", "input value is correct");
     });
 
-    test("renderValue should return a promise that resolves after render input value", (assert) => {
+    test("renderValue should return a promise that resolves after render input value", function(assert) {
         assert.expect(1);
 
         const done = assert.async();
@@ -110,7 +110,7 @@ module("Basic markup", () => {
 });
 
 module("the 'name' option", () => {
-    test("widget input should get the 'name' attribute with a correct value", (assert) => {
+    test("widget input should get the 'name' attribute with a correct value", function(assert) {
         const expectedName = "some_name",
             $element = $("#texteditor").dxTextEditor({
                 name: expectedName

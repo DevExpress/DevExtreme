@@ -6,7 +6,7 @@ import Size from "ui/html_editor/formats/size";
 const { test } = QUnit;
 
 QUnit.module("Quill registrator", () => {
-    test("check defaults", (assert) => {
+    test("check defaults", function(assert) {
         const quillRegistrator = new QuillRegistrator();
         const quill = quillRegistrator.getQuill();
 
@@ -32,7 +32,7 @@ QUnit.module("Quill registrator", () => {
         assert.ok(baseTheme, "custom base theme");
     });
 
-    test("change format", (assert) => {
+    test("change format", function(assert) {
         const quillRegistrator = new QuillRegistrator();
         const quill = quillRegistrator.getQuill();
 
@@ -47,7 +47,7 @@ QUnit.module("Quill registrator", () => {
         assert.deepEqual(alignFormat, alignClassFormat, "Class attributor");
     });
 
-    test("create a quill editor instance", (assert) => {
+    test("create a quill editor instance", function(assert) {
         const element = document.getElementById("htmlEditor");
         const quillRegistrator = new QuillRegistrator();
 
@@ -56,7 +56,7 @@ QUnit.module("Quill registrator", () => {
         assert.equal(element.className, "ql-container");
     });
 
-    test("add a customModule", (assert) => {
+    test("add a customModule", function(assert) {
         const quillRegistrator = new QuillRegistrator();
 
         quillRegistrator.registerModules({

@@ -23,7 +23,7 @@ testStart(function() {
 });
 
 module("slider markup", () => {
-    test("default", assert => {
+    test("default", function(assert) {
         const $sliderElement = $("#slider").dxSlider({
             useInkRipple: false
         });
@@ -43,7 +43,7 @@ module("slider markup", () => {
         assert.ok($bar.length, "bar is rendered");
     });
 
-    test("'showRange' option should toggle class to range element", assert => {
+    test("'showRange' option should toggle class to range element", function(assert) {
         const slider = $("#slider").dxSlider({
             showRange: true,
             useInkRipple: false
@@ -55,7 +55,7 @@ module("slider markup", () => {
         assert.ok(!$("." + SLIDER_RANGE_CLASS).hasClass(SLIDER_RANGE_VISIBLE_CLASS));
     });
 
-    test("labels visibility", assert => {
+    test("labels visibility", function(assert) {
         const $slider = $("#slider").dxSlider({
             min: 0,
             max: 100,
@@ -69,7 +69,7 @@ module("slider markup", () => {
         assert.equal($sliderLabels.length, 2, "labels are rendered");
     });
 
-    test("labels visiility - format", assert => {
+    test("labels visiility - format", function(assert) {
         const $slider = $("#slider").dxSlider({
             label: {
                 visible: true,
@@ -91,7 +91,7 @@ module("slider markup", () => {
         assert.equal($sliderLabels.eq(1).html(), "(100)");
     });
 
-    test("labels visiility - position", assert => {
+    test("labels visiility - position", function(assert) {
         const $slider = $("#slider").dxSlider({
             label: {
                 visible: true,
@@ -112,7 +112,7 @@ module("slider markup", () => {
         assert.ok(!$slider.hasClass("dx-slider-label-position-top"));
     });
 
-    test("set the validationMessageOffset for the Generic theme", assert => {
+    test("set the validationMessageOffset for the Generic theme", function(assert) {
         const slider = $("#slider").dxSlider({
             useInkRipple: false
         }).dxSlider("instance");
@@ -120,7 +120,7 @@ module("slider markup", () => {
         assert.deepEqual(slider.option("validationMessageOffset"), { h: 7, v: 4 });
     });
 
-    test("set the validationMessageOffset for the Material theme", assert => {
+    test("set the validationMessageOffset for the Material theme", function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -135,7 +135,7 @@ module("slider markup", () => {
 });
 
 module("widget sizing render", () => {
-    test("constructor", assert => {
+    test("constructor", function(assert) {
         const $element = $("#widget").dxSlider({
                 width: 400,
                 useInkRipple: false
@@ -146,7 +146,7 @@ module("widget sizing render", () => {
         assert.strictEqual($element[0].style.width, "400px", "outer width of the element must be equal to custom width");
     });
 
-    test("root with custom width", assert => {
+    test("root with custom width", function(assert) {
         const $element = $("#widthRootStyle").dxSlider({
                 useInkRipple: false
             }),
@@ -156,7 +156,7 @@ module("widget sizing render", () => {
         assert.strictEqual($element[0].style.width, "300px", "outer width of the element must be equal to custom width");
     });
 
-    test("change width", assert => {
+    test("change width", function(assert) {
         const $element = $("#widget").dxSlider({
                 useInkRipple: false
             }),
@@ -170,7 +170,7 @@ module("widget sizing render", () => {
 });
 
 module("hidden input", () => {
-    test("a hidden input should be rendered", assert => {
+    test("a hidden input should be rendered", function(assert) {
         const $slider = $("#slider").dxSlider(),
             $input = $slider.find("input");
 
@@ -178,7 +178,7 @@ module("hidden input", () => {
         assert.equal($input.attr("type"), "hidden", "the input type is 'hidden'");
     });
 
-    test("the hidden input should have correct value on widget init", assert => {
+    test("the hidden input should have correct value on widget init", function(assert) {
         const expectedValue = 30,
             $slider = $("#slider").dxSlider({
                 value: expectedValue
@@ -188,7 +188,7 @@ module("hidden input", () => {
         assert.equal(parseInt($input.val()), expectedValue, "the hidden input value is correct");
     });
 
-    test("the hidden input should get correct value on widget value change", assert => {
+    test("the hidden input should get correct value on widget value change", function(assert) {
         const expectedValue = 77,
             $slider = $("#slider").dxSlider(),
             instance = $slider.dxSlider("instance"),
@@ -201,7 +201,7 @@ module("hidden input", () => {
 });
 
 module("aria accessibility", () => {
-    test("aria role", assert => {
+    test("aria role", function(assert) {
         const $element = $("#widget").dxSlider({
                 useInkRipple: false
             }),
@@ -210,7 +210,7 @@ module("aria accessibility", () => {
         assert.equal($handle.attr("role"), "slider", "aria role is correct");
     });
 
-    test("aria properties", assert => {
+    test("aria properties", function(assert) {
         const $element = $("#widget").dxSlider({
                 min: 20,
                 max: 50,
@@ -224,7 +224,7 @@ module("aria accessibility", () => {
         assert.equal($handle.attr("aria-valuenow"), 35, "aria now is correct");
     });
 
-    test("change aria properties on option changing", assert => {
+    test("change aria properties on option changing", function(assert) {
         const $element = $("#widget").dxSlider({
                 min: 20,
                 max: 50,

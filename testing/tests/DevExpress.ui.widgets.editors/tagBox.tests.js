@@ -52,19 +52,19 @@ const CLEAR_BUTTON_AREA = "dx-clear-button-area";
 const TIME_TO_WAIT = 500;
 
 const moduleSetup = {
-    beforeEach: () => {
+    beforeEach: function() {
         TagBox.defaultOptions({ options: { deferRendering: false } });
         fx.off = true;
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
         this.clock.restore();
     }
 };
 
 QUnit.module("rendering", moduleSetup, () => {
-    QUnit.test("popup wrapper gets the 'dx-tagbox-popup-wrapper' class", assert => {
+    QUnit.test("popup wrapper gets the 'dx-tagbox-popup-wrapper' class", function(assert) {
         $("#tagBox").dxTagBox({
             opened: true
         }).dxTagBox("instance");
@@ -73,7 +73,7 @@ QUnit.module("rendering", moduleSetup, () => {
         assert.ok($popupWrapper.hasClass(TAGBOX_POPUP_WRAPPER_CLASS), "the class is added");
     });
 
-    QUnit.test("empty class should be added if no one tags selected", assert => {
+    QUnit.test("empty class should be added if no one tags selected", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3]
         });
@@ -86,7 +86,7 @@ QUnit.module("rendering", moduleSetup, () => {
         assert.ok($tagBox.hasClass(EMPTY_INPUT_CLASS), "empty class present");
     });
 
-    QUnit.test("skip gesture event class attach only when popup is opened", assert => {
+    QUnit.test("skip gesture event class attach only when popup is opened", function(assert) {
         const SKIP_GESTURE_EVENT_CLASS = "dx-skip-gesture-event";
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3]
@@ -103,14 +103,14 @@ QUnit.module("rendering", moduleSetup, () => {
 });
 
 QUnit.module("select element", () => {
-    QUnit.test("the select element should be invisible", assert => {
+    QUnit.test("the select element should be invisible", function(assert) {
         const $select = $("#tagBox").dxTagBox()
             .find("select");
 
         assert.notOk($select.is(":visible"), "select in not visible");
     });
 
-    QUnit.test("option elements should be updated on value change", assert => {
+    QUnit.test("option elements should be updated on value change", function(assert) {
         const items = [{ id: 1, text: "eins" }, { id: 2, text: "zwei" }, { id: 3, text: "drei" }];
         const initialValue = [1];
         const newValue = [2, 3];
@@ -134,7 +134,7 @@ QUnit.module("select element", () => {
         });
     });
 
-    QUnit.test("unselect item with value '0'", assert => {
+    QUnit.test("unselect item with value '0'", function(assert) {
         const items = [{ id: 0, text: "eins" }, { id: 1, text: "zwei" }, { id: 2, text: "drei" }];
         const value = [0, 1];
         const $tagBox = $("#tagBox");
@@ -157,7 +157,7 @@ QUnit.module("select element", () => {
 });
 
 QUnit.module("list selection", moduleSetup, () => {
-    QUnit.test("selected item class", (assert) => {
+    QUnit.test("selected item class", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 4]
@@ -172,7 +172,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.equal($listItems.eq(3).hasClass(LIST_ITEM_SELECTED_CLASS), true, "fourth item has selected class");
     });
 
-    QUnit.test("Selected item should be unselected on click", assert => {
+    QUnit.test("Selected item should be unselected on click", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             value: [1, 2],
@@ -186,7 +186,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.deepEqual(tagBox.option("value"), [2], "value is correct");
     });
 
-    QUnit.test("Selected item should be removed from list if 'hideSelectedItems' option is true", assert => {
+    QUnit.test("Selected item should be removed from list if 'hideSelectedItems' option is true", function(assert) {
         const dataSource = [1, 2, 3, 4, 5];
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -221,7 +221,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.equal($list.find("." + LIST_ITEM_CLASS).length, dataSource.length - 1, "items count is correct after the second tag is removed");
     });
 
-    QUnit.test("Selected item tag should be correct if hideSelectedItems is set (T580639)", assert => {
+    QUnit.test("Selected item tag should be correct if hideSelectedItems is set (T580639)", function(assert) {
         const dataSource = [{
             "ID": 1,
             "Name": "Item 1"
@@ -251,7 +251,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).eq(1).text(), "Item 2", "tag is correct after selection");
     });
 
-    QUnit.test("Items should be hidden on init if hideSelectedItems is true", assert => {
+    QUnit.test("Items should be hidden on init if hideSelectedItems is true", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4, 5],
             opened: true,
@@ -264,7 +264,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.equal(tagBox._list.option("items").length, 2, "items was restored");
     });
 
-    QUnit.test("Items should not be changed if one of them is hidden", assert => {
+    QUnit.test("Items should not be changed if one of them is hidden", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4, 5],
             opened: true,
@@ -282,7 +282,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.equal(tagBox.option("items").length, 5, "items was restored");
     });
 
-    QUnit.test("added and removed items should be correct with hideSelecterdItems option and dataSource (T589590)", assert => {
+    QUnit.test("added and removed items should be correct with hideSelecterdItems option and dataSource (T589590)", function(assert) {
         const spy = sinon.spy();
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -305,7 +305,7 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.deepEqual(spy.args[2][0].removedItems, [], "removed items is empty");
     });
 
-    QUnit.test("selected items should be correct after item click with hideSelecterdItems option (T606462)", assert => {
+    QUnit.test("selected items should be correct after item click with hideSelecterdItems option (T606462)", function(assert) {
         const tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             value: [1],
@@ -323,7 +323,7 @@ QUnit.module("list selection", moduleSetup, () => {
 });
 
 QUnit.module("tags", moduleSetup, () => {
-    QUnit.test("add/delete tags", (assert) => {
+    QUnit.test("add/delete tags", function(assert) {
         const items = [1, 2, 3];
 
         const $element = $("#tagBox").dxTagBox({
@@ -347,7 +347,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($element.find("." + TAGBOX_TAG_CLASS).length, 0, "tag is removed");
     });
 
-    QUnit.test("tags should remove after clear values", assert => {
+    QUnit.test("tags should remove after clear values", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             value: [1]
@@ -359,7 +359,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tagBox.find(".dx-tag").length, 0, "zero item rendered");
     });
 
-    QUnit.testInActiveWindow("tags should not be rerendered when editor looses focus", assert => {
+    QUnit.testInActiveWindow("tags should not be rerendered when editor looses focus", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             focusStateEnabled: true
@@ -375,7 +375,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal(renderTagsStub.callCount, 0, "tags weren't rerendered");
     });
 
-    QUnit.test("tagBox field is not cleared on blur", (assert) => {
+    QUnit.test("tagBox field is not cleared on blur", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             value: [1]
@@ -390,7 +390,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tags.is(":visible"), true, "tag is rendered");
     });
 
-    QUnit.test("list item with zero value should be selectable", (assert) => {
+    QUnit.test("list item with zero value should be selectable", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [0, 1, 2, 3],
             opened: true
@@ -405,7 +405,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($.trim($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text()), "01", "selected first and second items");
     });
 
-    QUnit.test("'text' option should have correct value when item value is zero", assert => {
+    QUnit.test("'text' option should have correct value when item value is zero", function(assert) {
         const tagBox = $("#tagBox").dxTagBox({
             value: [0],
             items: [0, 1]
@@ -414,7 +414,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal(tagBox.option("text"), "0");
     });
 
-    QUnit.test("tag should have correct value when item value is an empty string", (assert) => {
+    QUnit.test("tag should have correct value when item value is an empty string", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["", 1, 2, 3],
             opened: true
@@ -428,7 +428,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 1, "empty string value was successfully selected");
     });
 
-    QUnit.test("TagBox has right content after items setting", assert => {
+    QUnit.test("TagBox has right content after items setting", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             value: [1],
             valueExpr: "id",
@@ -442,7 +442,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal(content.text(), "First", "tags has right content");
     });
 
-    QUnit.test("TagBox has right tag order if byKey return value in wrong order", (assert) => {
+    QUnit.test("TagBox has right tag order if byKey return value in wrong order", function(assert) {
         const data = [1, 2];
         const timeToWait = 500;
         let count = 2;
@@ -476,7 +476,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal(content.eq(1).text(), "2", "second tag has right content");
     });
 
-    QUnit.test("removing tags after clicking the 'clear' button", assert => {
+    QUnit.test("removing tags after clicking the 'clear' button", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             showClearButton: true,
@@ -493,7 +493,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($element.find("." + TAGBOX_TAG_CLASS).length, 1, "one item is chosen");
     });
 
-    QUnit.test("clear button should save valueChangeEvent", assert => {
+    QUnit.test("clear button should save valueChangeEvent", function(assert) {
         const valueChangedHandler = sinon.spy();
 
         const $element = $("#tagBox").dxTagBox({
@@ -510,7 +510,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
     });
 
-    QUnit.test("clear button should also clear the input value", assert => {
+    QUnit.test("clear button should also clear the input value", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1],
             showClearButton: true,
@@ -531,7 +531,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($input.val(), "", "input is also cleared");
     });
 
-    QUnit.test("clear button should have sizes similar as the other editors have", assert => {
+    QUnit.test("clear button should have sizes similar as the other editors have", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             showClearButton: true,
             dataSource: ['1'],
@@ -551,7 +551,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal(tagBoxClearButtonWidth, textBoxClearButtonWidth, "clear button's width is ok");
     });
 
-    QUnit.test("Tag should have empty text if display value is empty", assert => {
+    QUnit.test("Tag should have empty text if display value is empty", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [{ name: "", value: 1 }, { name: "two", value: 2 }],
             displayExpr: "name",
@@ -563,7 +563,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tag.text(), "", "tag has empty text");
     });
 
-    QUnit.test("Tag should have correct text if display value is '0'", assert => {
+    QUnit.test("Tag should have correct text if display value is '0'", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [{ name: 0, value: 1 }, { name: "two", value: 2 }],
             displayExpr: "name",
@@ -575,7 +575,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tag.text(), 0, "tag has correct text");
     });
 
-    QUnit.test("Tag should have correct text if display value is 'null'", assert => {
+    QUnit.test("Tag should have correct text if display value is 'null'", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [{ name: null, value: 1 }, { name: "two", value: 2 }],
             displayExpr: "name",
@@ -587,7 +587,7 @@ QUnit.module("tags", moduleSetup, () => {
         assert.equal($tag.text(), "", "tag has correct text");
     });
 
-    QUnit.test("onValueChanged has dxclick event on remove button click", assert => {
+    QUnit.test("onValueChanged has dxclick event on remove button click", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             value: ["123"],
             onValueChanged: function(e) {
@@ -602,7 +602,7 @@ QUnit.module("tags", moduleSetup, () => {
 });
 
 QUnit.module("multi tag support", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.getTexts = $tags => {
             return $tags.map((_, tag) => {
                 return $(tag).text();
@@ -616,11 +616,11 @@ QUnit.module("multi tag support", {
             }
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("tagBox should display one tag after new tags was added", assert => {
+    QUnit.test("tagBox should display one tag after new tags was added", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -639,7 +639,7 @@ QUnit.module("multi tag support", {
         assert.equal($tag.text(), "3 selected", "tag has correct text");
     });
 
-    QUnit.test("tagBox should display multiple tags after value was changed", (assert) => {
+    QUnit.test("tagBox should display multiple tags after value was changed", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -655,7 +655,7 @@ QUnit.module("multi tag support", {
         assert.deepEqual(this.getTexts($tag), ["1", "2"], "tags have correct text");
     });
 
-    QUnit.test("multi tag should work with data expressions", (assert) => {
+    QUnit.test("multi tag should work with data expressions", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [{ id: 1, name: "item 1" }, { id: 2, name: "item 2" }, { id: 3, name: "item 3" }],
             value: [1, 2, 3],
@@ -668,7 +668,7 @@ QUnit.module("multi tag support", {
         assert.deepEqual(this.getTexts($tag), ["3 selected"], "multi tag works");
     });
 
-    QUnit.test("tagBox should deselect all items after multi tag removed", assert => {
+    QUnit.test("tagBox should deselect all items after multi tag removed", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -687,7 +687,7 @@ QUnit.module("multi tag support", {
         assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "there are no tags in the field");
     });
 
-    QUnit.test("tags should be recalculated after maxDisplayedTags option changed", assert => {
+    QUnit.test("tags should be recalculated after maxDisplayedTags option changed", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4]
@@ -708,7 +708,7 @@ QUnit.module("multi tag support", {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 4, "4 tags when option was disabled");
     });
 
-    QUnit.test("onMultitagPreparing option change", assert => {
+    QUnit.test("onMultitagPreparing option change", function(assert) {
         assert.expect(4);
 
         const onMultiTagPreparing = e => {
@@ -732,7 +732,7 @@ QUnit.module("multi tag support", {
         assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
     });
 
-    QUnit.test("tags should be rerendered after showMultiTagOnly option changed", assert => {
+    QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -750,7 +750,7 @@ QUnit.module("multi tag support", {
         assert.deepEqual($tag.text(), "3 selected", "text is correct");
     });
 
-    QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly is false", (assert) => {
+    QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly is false", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
@@ -768,7 +768,7 @@ QUnit.module("multi tag support", {
         assert.deepEqual(this.getTexts($tagBox.find("." + TAGBOX_TAG_CLASS)), ["1", "2"], "tags have correct text");
     });
 
-    QUnit.test("only one multi tag should be rendered when selectAll checked and value changind on runtime", assert => {
+    QUnit.test("only one multi tag should be rendered when selectAll checked and value changind on runtime", function(assert) {
         let suppressSelectionChanged = false;
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -788,7 +788,7 @@ QUnit.module("multi tag support", {
         assert.equal($multiTag.length, 1, "only 1 tag rendered");
     });
 
-    QUnit.test("tagbox should show count of selected items when only first page is loaded", (assert) => {
+    QUnit.test("tagbox should show count of selected items when only first page is loaded", function(assert) {
         const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: {
@@ -811,7 +811,7 @@ QUnit.module("multi tag support", {
 });
 
 QUnit.module("the 'value' option", moduleSetup, () => {
-    QUnit.test("value should be passed by value (not by reference)", assert => {
+    QUnit.test("value should be passed by value (not by reference)", function(assert) {
         const value = ["item1"];
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["item1", "item2"],
@@ -823,7 +823,7 @@ QUnit.module("the 'value' option", moduleSetup, () => {
         assert.deepEqual(value, ["item1"], "outer value is not changed");
     });
 
-    QUnit.test("reset()", assert => {
+    QUnit.test("reset()", function(assert) {
         const tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             value: [1]
@@ -833,7 +833,7 @@ QUnit.module("the 'value' option", moduleSetup, () => {
         assert.deepEqual(tagBox.option("value"), [], "Value should be reset");
     });
 
-    QUnit.test("displayExpr change at runtime", assert => {
+    QUnit.test("displayExpr change at runtime", function(assert) {
         const items = [{ name: "one", value: 1 },
             { name: "two", value: 2 }];
 
@@ -854,7 +854,7 @@ QUnit.module("the 'value' option", moduleSetup, () => {
 });
 
 QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
-    QUnit.test("onValueChanged provides selected values", (assert) => {
+    QUnit.test("onValueChanged provides selected values", function(assert) {
         let value;
 
         const $element = $("#tagBox").dxTagBox({
@@ -873,7 +873,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.deepEqual(value, [1, 3], "two items are selected");
     });
 
-    QUnit.test("onValueChanged should not be fired on first render", (assert) => {
+    QUnit.test("onValueChanged should not be fired on first render", function(assert) {
         const valueChangeActionSpy = sinon.spy();
         $("#tagBox").dxTagBox({
             items: [1, 2, 3],
@@ -886,7 +886,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.equal(valueChangeActionSpy.called, false, "onValueChanged was not fired");
     });
 
-    QUnit.test("onValueChanged should be fired when dxTagBox is readOnly", assert => {
+    QUnit.test("onValueChanged should be fired when dxTagBox is readOnly", function(assert) {
         const valueChangeActionSpy = sinon.spy();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -901,7 +901,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.ok(valueChangeActionSpy.called, "onValueChanged was fired");
     });
 
-    QUnit.test("onValueChanged should be fired when dxTagBox is disabled", assert => {
+    QUnit.test("onValueChanged should be fired when dxTagBox is disabled", function(assert) {
         const valueChangeActionSpy = sinon.spy();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -916,7 +916,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.ok(valueChangeActionSpy.called, "onValueChanged was fired");
     });
 
-    QUnit.test("onValueChanged provide selected value after removing values", (assert) => {
+    QUnit.test("onValueChanged provide selected value after removing values", function(assert) {
         let value;
 
         const $element = $("#tagBox").dxTagBox({
@@ -934,7 +934,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.deepEqual(value, [3], "item is deleted");
     });
 
-    QUnit.test("T338728 - onValueChanged action should contain correct previousValues", assert => {
+    QUnit.test("T338728 - onValueChanged action should contain correct previousValues", function(assert) {
         const spy = sinon.spy();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -949,7 +949,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.deepEqual(spy.args[0][0].previousValue, [1, 2], "the 'previousValue' argument is correct");
     });
 
-    QUnit.test("onValueChanged should not be fired on the 'backspace' key press if the editor is already empty (T385450)", assert => {
+    QUnit.test("onValueChanged should not be fired on the 'backspace' key press if the editor is already empty (T385450)", function(assert) {
         const spy = sinon.spy();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -964,7 +964,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
 });
 
 QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
-    QUnit.test("using the 'onCustomItemCreating' option should throw a warning if handler returns an item", assert => {
+    QUnit.test("using the 'onCustomItemCreating' option should throw a warning if handler returns an item", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true,
             displayExpr: "display",
@@ -995,7 +995,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.deepEqual(logStub.firstCall.args, ["W0015", "onCustomItemCreating", "customItem"], "Check warning parameters");
     });
 
-    QUnit.test("creating custom item via the 'customItem' event parameter", assert => {
+    QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true,
             displayExpr: "display",
@@ -1023,7 +1023,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.equal($tags.eq(0).text(), "display " + customValue);
     });
 
-    QUnit.test("create custom item by subscribe on event via 'on' method", assert => {
+    QUnit.test("create custom item by subscribe on event via 'on' method", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true,
             displayExpr: "display",
@@ -1056,7 +1056,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.equal($tags.eq(0).text(), "display " + customValue);
     });
 
-    QUnit.test("the 'onCustomItemCreating' option with Deferred", assert => {
+    QUnit.test("the 'onCustomItemCreating' option with Deferred", function(assert) {
         const deferred = $.Deferred();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -1091,7 +1091,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.equal($tags.eq(0).text(), "display " + customValue, "added tag text is correct");
     });
 
-    QUnit.test("the selected list items should be correct if custom item is in list", assert => {
+    QUnit.test("the selected list items should be correct if custom item is in list", function(assert) {
         const items = [1, 2, 3];
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -1121,7 +1121,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.deepEqual(list.option("selectedItems"), [customValue], "selected items are correct");
     });
 
-    QUnit.test("tags should have a right display texts for acceptCustomValue and preset value", assert => {
+    QUnit.test("tags should have a right display texts for acceptCustomValue and preset value", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [],
             value: ["one"],
@@ -1143,7 +1143,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.equal($tags.eq(1).text(), "two");
     });
 
-    QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode", (assert) => {
+    QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode", function(assert) {
         const store = new ArrayStore([{ id: 1, name: "Alex" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -1178,7 +1178,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
         assert.equal($listItems.length, 1, "list item should be selected after enter press");
     });
 
-    QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode with checkboxes", (assert) => {
+    QUnit.test("custom item should be selected in list but tag should not be rendered in useButtons mode with checkboxes", function(assert) {
         const store = new ArrayStore([{ id: 1, name: "Alex" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -1218,7 +1218,7 @@ QUnit.module("the 'onCustomItemCreating' option", moduleSetup, () => {
 });
 
 QUnit.module("placeholder", () => {
-    QUnit.test("placeholder should appear after tag deleted", assert => {
+    QUnit.test("placeholder should appear after tag deleted", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: ['item1', 'item2', 'item3'],
             value: ['item1']
@@ -1234,7 +1234,7 @@ QUnit.module("placeholder", () => {
         assert.equal($placeholder.is(":visible"), true, "placeholder was appear");
     });
 
-    QUnit.test("placeholder is hidden after tag is removed if the search value is exist", assert => {
+    QUnit.test("placeholder is hidden after tag is removed if the search value is exist", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             value: [1],
@@ -1249,7 +1249,7 @@ QUnit.module("placeholder", () => {
         assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
     });
 
-    QUnit.test("placeholder should be restored after focusout in Angular", assert => {
+    QUnit.test("placeholder should be restored after focusout in Angular", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             searchEnabled: true
@@ -1267,7 +1267,7 @@ QUnit.module("placeholder", () => {
 });
 
 QUnit.module("tag template", moduleSetup, () => {
-    QUnit.test("tag template should have correct arguments", assert => {
+    QUnit.test("tag template should have correct arguments", function(assert) {
         const items = [{ text: 1 }, { text: 2 }];
 
         $("#tagBox").dxTagBox({
@@ -1282,7 +1282,7 @@ QUnit.module("tag template", moduleSetup, () => {
         });
     });
 
-    QUnit.test("tag template should get item in arguments even if the 'displayExpr' option is specified", assert => {
+    QUnit.test("tag template should get item in arguments even if the 'displayExpr' option is specified", function(assert) {
         const items = [{ id: 1, text: "one" }, { id: 2, text: "two" }];
 
         $("#tagBox").dxTagBox({
@@ -1295,7 +1295,7 @@ QUnit.module("tag template", moduleSetup, () => {
         });
     });
 
-    QUnit.test("displayExpr as function should work", assert => {
+    QUnit.test("displayExpr as function should work", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [{ name: "Item 1", id: 1 }],
             displayExpr(item) {
@@ -1310,7 +1310,7 @@ QUnit.module("tag template", moduleSetup, () => {
         assert.equal($tags.text(), "Item 1", "tags are correct");
     });
 
-    QUnit.test("tag template should be applied correctly after item selection (T589269)", assert => {
+    QUnit.test("tag template should be applied correctly after item selection (T589269)", function(assert) {
         const items = [{ id: 1, text: "one" }, { id: 2, text: "two" }];
 
         const $element = $("#tagBox").dxTagBox({
@@ -1334,7 +1334,7 @@ QUnit.module("tag template", moduleSetup, () => {
         assert.equal($.trim($tagContainer.text()), "onetwo", "selected values are rendered correctly");
     });
 
-    QUnit.test("value should be correct if the default tag template is used and the displayExpr is specified", assert => {
+    QUnit.test("value should be correct if the default tag template is used and the displayExpr is specified", function(assert) {
         const items = [{ id: 1, text: "one" }];
 
         const $element = $("#tagBox").dxTagBox({
@@ -1351,7 +1351,7 @@ QUnit.module("tag template", moduleSetup, () => {
         assert.deepEqual(instance.option("value"), [items[0]], "the 'value' option is correct");
     });
 
-    QUnit.test("selected list items should be correct if the default tag template is used and the displayExpr is specified", assert => {
+    QUnit.test("selected list items should be correct if the default tag template is used and the displayExpr is specified", function(assert) {
         const items = [{ id: 1, text: "one" }];
 
         const $element = $("#tagBox").dxTagBox({
@@ -1368,7 +1368,7 @@ QUnit.module("tag template", moduleSetup, () => {
         assert.deepEqual(list.option("selectedItems"), [items[0]], "the 'selectedItems' list option is correct");
     });
 
-    QUnit.test("user can return default tag template from the custom function", assert => {
+    QUnit.test("user can return default tag template from the custom function", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             items: [{ id: 1, text: "item 1" }],
             valueExpr: "id",
@@ -1386,7 +1386,7 @@ QUnit.module("tag template", moduleSetup, () => {
 });
 
 QUnit.module("showSelectionControls", moduleSetup, () => {
-    QUnit.test("showSelectionControls", (assert) => {
+    QUnit.test("showSelectionControls", function(assert) {
         $("#tagBox").dxTagBox({
             items: [1],
             opened: true,
@@ -1398,7 +1398,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal($(".dx-checkbox").length, 2, "selectAll checkbox and checkbox on item added");
     });
 
-    QUnit.test("click on selected item causes item uncheck", (assert) => {
+    QUnit.test("click on selected item causes item uncheck", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             opened: true,
@@ -1415,7 +1415,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox("option", "value"), [2], "value is reset");
     });
 
-    QUnit.test("click on selected item causes item uncheck", (assert) => {
+    QUnit.test("click on selected item causes item uncheck", function(assert) {
         $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             value: [1, 2],
@@ -1428,7 +1428,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal($(".dx-checkbox-checked").length, 2, "values selected on render");
     });
 
-    QUnit.test("selectAll element should be rendered correctly when opening tagBox", (assert) => {
+    QUnit.test("selectAll element should be rendered correctly when opening tagBox", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: {
                 store: new ArrayStore([1, 2, 3]),
@@ -1445,7 +1445,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal($(".dx-list-select-all").length, 1, "selectAll item is rendered");
     });
 
-    QUnit.test("changing selectAll state with selectAllMode 'allPages'", (assert) => {
+    QUnit.test("changing selectAll state with selectAllMode 'allPages'", function(assert) {
         const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: {
@@ -1466,7 +1466,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox("option", "value"), items, "items is selected");
     });
 
-    QUnit.test("items check state reset after deleting of the value", assert => {
+    QUnit.test("items check state reset after deleting of the value", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2],
@@ -1482,7 +1482,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal($checkedItems.length, 1, "only one item highlighted");
     });
 
-    QUnit.test("onValueChanged should be fired once when showSelectionControls is true", (assert) => {
+    QUnit.test("onValueChanged should be fired once when showSelectionControls is true", function(assert) {
         let fired = 0;
         $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
@@ -1501,7 +1501,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal(fired, 1, "event fired once");
     });
 
-    QUnit.test("correct value after deselecting all items", (assert) => {
+    QUnit.test("correct value after deselecting all items", function(assert) {
         const items = [1, 2, 3, 4];
         const tagBox = $("#tagBox").dxTagBox({
             items,
@@ -1515,7 +1515,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.deepEqual(tagBox.option("value"), [], "value is an empty array");
     });
 
-    QUnit.test("onValueChanged was not raised when time after time popup opening (showSelectionControls = true)", (assert) => {
+    QUnit.test("onValueChanged was not raised when time after time popup opening (showSelectionControls = true)", function(assert) {
         let fired = 0;
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -1539,7 +1539,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal(fired, 1, "event was fired once");
     });
 
-    QUnit.test("tag rendered after click on selections control", (assert) => {
+    QUnit.test("tag rendered after click on selections control", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             showSelectionControls: true,
@@ -1555,7 +1555,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal($tagBox.find(".dx-tag").length, 1, "tag rendered");
     });
 
-    QUnit.testInActiveWindow("tag should not be removed when editor looses focus", assert => {
+    QUnit.testInActiveWindow("tag should not be removed when editor looses focus", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             showSelectionControls: true,
@@ -1572,7 +1572,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal($tagBox.find(".dx-tag").length, 1, "tag is present");
     });
 
-    QUnit.test("list 'select all' checkbox state should be correct if all items are selected on init and data source paging is enabled", assert => {
+    QUnit.test("list 'select all' checkbox state should be correct if all items are selected on init and data source paging is enabled", function(assert) {
         const items = (() => {
             const items = [];
             for(let i = 0, n = 200; i < n; i++) {
@@ -1597,7 +1597,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
         assert.equal(selectAllCheck.option("value"), true, "the 'select all' checkbox is checked");
     });
 
-    QUnit.test("T378748 - the tab key press should not lead to error while navigating in list", assert => {
+    QUnit.test("T378748 - the tab key press should not lead to error while navigating in list", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             showSelectionControls: true,
@@ -1616,7 +1616,7 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
 });
 
 QUnit.module("keyboard navigation", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
@@ -1640,13 +1640,13 @@ QUnit.module("keyboard navigation", {
             this._init(options);
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.$element.remove();
         this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test("backspace", (assert) => {
+    QUnit.test("backspace", function(assert) {
         assert.expect(2);
 
         this.keyboard
@@ -1659,7 +1659,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), [], "values is empty");
     });
 
-    QUnit.test("backspace UI", (assert) => {
+    QUnit.test("backspace UI", function(assert) {
         assert.expect(2);
 
         this.keyboard
@@ -1672,7 +1672,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($("." + LIST_ITEM_SELECTED_CLASS).length, 0, "there are no selected items in list");
     });
 
-    QUnit.test("TagBox should not select items when list is not shown", (assert) => {
+    QUnit.test("TagBox should not select items when list is not shown", function(assert) {
         assert.expect(1);
 
         this.instance.option({
@@ -1686,7 +1686,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), [], "downArrow should not select value when the list is hidden");
     });
 
-    QUnit.test("T309987 - value should not be changed when moving focus by the 'tab' key", (assert) => {
+    QUnit.test("T309987 - value should not be changed when moving focus by the 'tab' key", function(assert) {
         const items = ["first", "second", "third", "fourth"];
         const value = [items[1], items[3]];
 
@@ -1703,7 +1703,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), value, "the value is correct");
     });
 
-    QUnit.testInActiveWindow("Value should be correct when not last item is focused and the 'tab' key pressed", (assert) => {
+    QUnit.testInActiveWindow("Value should be correct when not last item is focused and the 'tab' key pressed", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
@@ -1726,7 +1726,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), [items[0], items[2]], "value is still the same");
     });
 
-    QUnit.test("First item is not selected when edit is disabled", (assert) => {
+    QUnit.test("First item is not selected when edit is disabled", function(assert) {
         this.reinit({
             value: [],
             acceptCustomValue: false,
@@ -1740,7 +1740,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), [], "was selected first item and be set");
     });
 
-    QUnit.test("Enter and escape key press prevent default when popup is opened", (assert) => {
+    QUnit.test("Enter and escape key press prevent default when popup is opened", function(assert) {
         this.reinit({
             items: [0, 1, 2],
             value: [1],
@@ -1769,7 +1769,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(prevented, 1, "defaults prevented on escape keys");
     });
 
-    QUnit.test("Enter and escape key press prevent default when popup is opened and field edit enabled is not set", (assert) => {
+    QUnit.test("Enter and escape key press prevent default when popup is opened and field edit enabled is not set", function(assert) {
         this.reinit({
             items: [0, 1, 2],
             value: [1],
@@ -1797,7 +1797,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(prevented, 0, "defaults not prevented on enter when popup is closed");
     });
 
-    QUnit.test("input value should be cleared", (assert) => {
+    QUnit.test("input value should be cleared", function(assert) {
         this.reinit({
             items: [1, 2],
             opened: true
@@ -1810,7 +1810,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(this.$input.val(), "", "value was not rendered");
     });
 
-    QUnit.test("tagBox selects item on enter key", (assert) => {
+    QUnit.test("tagBox selects item on enter key", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1831,7 +1831,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($tags.text(), "1", "rendered first item");
     });
 
-    QUnit.test("control keys test", (assert) => {
+    QUnit.test("control keys test", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1854,7 +1854,7 @@ QUnit.module("keyboard navigation", {
         assert.notOk(this.instance.option("opened"), "overlay is invisible on alt+up press");
     });
 
-    QUnit.test("up and down keys should work correctly in dxTagBox", (assert) => {
+    QUnit.test("up and down keys should work correctly in dxTagBox", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1870,7 +1870,7 @@ QUnit.module("keyboard navigation", {
         assert.ok(true, "there is no exceptions");
     });
 
-    QUnit.test("tagBox selects item on space key", (assert) => {
+    QUnit.test("tagBox selects item on space key", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1891,7 +1891,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($tags.text(), "1", "rendered first item");
     });
 
-    QUnit.test("tagBox didn't selects item on space key if it acceptCustomValue", (assert) => {
+    QUnit.test("tagBox didn't selects item on space key if it acceptCustomValue", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1913,7 +1913,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($tags.length, 0, "there are no tags");
     });
 
-    QUnit.test("tagBox didn't selects item on space key if search is enabled", (assert) => {
+    QUnit.test("tagBox didn't selects item on space key if search is enabled", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1935,7 +1935,7 @@ QUnit.module("keyboard navigation", {
         assert.equal($tags.length, 0, "there are no tags");
     });
 
-    QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (T378292)", (assert) => {
+    QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (T378292)", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1957,7 +1957,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), [], "value is not changed");
     });
 
-    QUnit.test("onValueChanged shouldn't be fired on the 'tab' key press", (assert) => {
+    QUnit.test("onValueChanged shouldn't be fired on the 'tab' key press", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1975,7 +1975,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(spy.callCount, 0, "onValueChanged event isn't fired");
     });
 
-    QUnit.test("value shouldn't be changed on 'tab' if there is a focused item in the drop down list", (assert) => {
+    QUnit.test("value shouldn't be changed on 'tab' if there is a focused item in the drop down list", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1992,7 +1992,7 @@ QUnit.module("keyboard navigation", {
         assert.deepEqual(this.instance.option("value"), expectedValue, "the value is correct");
     });
 
-    QUnit.testInActiveWindow("the 'apply' button should be focused on the 'tab' key press if the input is focused and showSelectionControls if false (T389453)", (assert) => {
+    QUnit.testInActiveWindow("the 'apply' button should be focused on the 'tab' key press if the input is focused and showSelectionControls if false (T389453)", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
@@ -2013,7 +2013,7 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.module("keyboard navigation through tags", {
-    beforeEach: () => {
+    beforeEach: function() {
         const items = [1, 2, 3, 4];
 
         this.$element = $("#tagBox").dxTagBox({
@@ -2044,7 +2044,7 @@ QUnit.module("keyboard navigation through tags", {
         this._init();
     },
 }, () => {
-    QUnit.test("the last rendered tag should get 'focused' class after the 'leftArrow' key press", (assert) => {
+    QUnit.test("the last rendered tag should get 'focused' class after the 'leftArrow' key press", function(assert) {
         this.keyboard
             .focus()
             .press("left");
@@ -2053,7 +2053,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag got the 'focused' class");
     });
 
-    QUnit.test("the last rendered tag should get 'focused' class after the 'leftArrow' key press if field is editable", (assert) => {
+    QUnit.test("the last rendered tag should get 'focused' class after the 'leftArrow' key press if field is editable", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2070,7 +2070,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag got the 'focused' class");
     });
 
-    QUnit.test("the first rendered tag should get 'focused' class after the 'rightArrow' key press", (assert) => {
+    QUnit.test("the first rendered tag should get 'focused' class after the 'rightArrow' key press", function(assert) {
         this.keyboard
             .focus()
             .press("right");
@@ -2079,7 +2079,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($firstTag.hasClass(FOCUSED_CLASS), "the first tag got the 'focused' class");
     });
 
-    QUnit.test("the 'focused' class should be moved to the previous tag after the 'leftArrow' key press", (assert) => {
+    QUnit.test("the 'focused' class should be moved to the previous tag after the 'leftArrow' key press", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2092,7 +2092,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($penultTag.hasClass(FOCUSED_CLASS), "the penult tag has the 'focused' class");
     });
 
-    QUnit.test("the 'focused' should remain on the first tag if the 'leftArrow' key is pressed", (assert) => {
+    QUnit.test("the 'focused' should remain on the first tag if the 'leftArrow' key is pressed", function(assert) {
         this.instance.option({
             items: [1],
             value: [1]
@@ -2107,7 +2107,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($firstTag.hasClass(FOCUSED_CLASS), "the first tag has the 'focused' class");
     });
 
-    QUnit.test("the 'focused' class should be moved to the next tag after the 'rightArrow' key press", (assert) => {
+    QUnit.test("the 'focused' class should be moved to the next tag after the 'rightArrow' key press", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2121,7 +2121,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.notOk($penultTag.hasClass(FOCUSED_CLASS), "the penult tag does not have the 'focused' class");
     });
 
-    QUnit.test("the 'focused' class should remain on the last tag if the 'rightArrow' key is pressed", (assert) => {
+    QUnit.test("the 'focused' class should remain on the last tag if the 'rightArrow' key is pressed", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2133,7 +2133,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.notOk(this.$input.hasClass(FOCUSED_CLASS), "the 'tag focused' class should not be set on the input");
     });
 
-    QUnit.test("the 'focused' class should be removed from the last tag if the 'rightArrow' key is pressed is field is editable", (assert) => {
+    QUnit.test("the 'focused' class should be removed from the last tag if the 'rightArrow' key is pressed is field is editable", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2153,7 +2153,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.notOk(this.$input.hasClass(FOCUSED_CLASS), "the 'tag focused' class should not be set on the input");
     });
 
-    QUnit.test("it should be possible to move input caret after navigating through tags", (assert) => {
+    QUnit.test("it should be possible to move input caret after navigating through tags", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2181,7 +2181,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.notOk(event.isDefaultPrevented(), "the event default is not prevented, so the input caret move");
     });
 
-    QUnit.test("typing symbols should not remove the 'focused' class from currently focused tag", (assert) => {
+    QUnit.test("typing symbols should not remove the 'focused' class from currently focused tag", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2191,7 +2191,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag has the 'focused' class");
     });
 
-    QUnit.test("typing symbols should remove the 'focused' class from currently focused tag if the field is editable", (assert) => {
+    QUnit.test("typing symbols should remove the 'focused' class from currently focused tag if the field is editable", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2209,7 +2209,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal($focusedTags.length, 0, "no tags have the 'focused' class");
     });
 
-    QUnit.test("the last tag should not be selected after the 'leftArrow' key press if the input caret is not at the start position", (assert) => {
+    QUnit.test("the last tag should not be selected after the 'leftArrow' key press if the input caret is not at the start position", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2227,7 +2227,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal($focusedTags.length, 0, "there are no focused tags");
     });
 
-    QUnit.test("the input caret should not move while navigating through tags", (assert) => {
+    QUnit.test("the input caret should not move while navigating through tags", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2254,7 +2254,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok(event.isDefaultPrevented(), "the event default is prevented, so the input caret did not move");
     });
 
-    QUnit.test("the focused tag should be removed after pressing the 'backspace' key", (assert) => {
+    QUnit.test("the focused tag should be removed after pressing the 'backspace' key", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2272,7 +2272,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.deepEqual(value, expectedValue, "the widget's value is correct");
     });
 
-    QUnit.test("backspace should remove selected search text but not tag if any text is selected", (assert) => {
+    QUnit.test("backspace should remove selected search text but not tag if any text is selected", function(assert) {
         this.reinit({
             items: ["item 1", "item 2"],
             value: ["item 1"],
@@ -2287,7 +2287,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(this.instance.option("value"), "item 1", "tag was not removed");
     });
 
-    QUnit.test("the focused tag should be removed after pressing the 'delete' key", (assert) => {
+    QUnit.test("the focused tag should be removed after pressing the 'delete' key", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2305,7 +2305,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.deepEqual(value, expectedValue, "the widget's value is correct");
     });
 
-    QUnit.test("pressing any of 'backspace' or 'delete' keys while tag is focused should not affect on input value", (assert) => {
+    QUnit.test("pressing any of 'backspace' or 'delete' keys while tag is focused should not affect on input value", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2340,7 +2340,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok(event.isDefaultPrevented(), "the default is prevented after the 'delete' key press, so the input value is not modified");
     });
 
-    QUnit.test("continuously removing tags with the 'backspace' key while input is focused", (assert) => {
+    QUnit.test("continuously removing tags with the 'backspace' key while input is focused", function(assert) {
         const expectedTagsCount = this.instance.option("value").length - 2;
 
         this.keyboard
@@ -2351,7 +2351,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(this.instance.option("value").length, expectedTagsCount, "tags are removed correctly");
     });
 
-    QUnit.test("the previous tag is focused after the 'backspace' key press", (assert) => {
+    QUnit.test("the previous tag is focused after the 'backspace' key press", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2365,7 +2365,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($expectedFocusedTag.hasClass(FOCUSED_CLASS), "the previous tag is focused");
     });
 
-    QUnit.test("there are no focused tags after removing the first tag with the help of the 'backspace' key", (assert) => {
+    QUnit.test("there are no focused tags after removing the first tag with the help of the 'backspace' key", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2378,7 +2378,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
-    QUnit.test("there are no focused tags after pressing the 'backspace' key while input is focused", (assert) => {
+    QUnit.test("there are no focused tags after pressing the 'backspace' key while input is focused", function(assert) {
         this.keyboard
             .focus()
             .press("backspace");
@@ -2387,7 +2387,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
-    QUnit.test("keyboard navigation should work after removing the last tag with the help of the 'backspace' key (T378397)", (assert) => {
+    QUnit.test("keyboard navigation should work after removing the last tag with the help of the 'backspace' key (T378397)", function(assert) {
         this.keyboard
             .focus()
             .press("right")
@@ -2398,7 +2398,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag is focused");
     });
 
-    QUnit.test("the next tag is focused after the 'del' key press", (assert) => {
+    QUnit.test("the next tag is focused after the 'del' key press", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2412,7 +2412,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($expectedFocusedTag.hasClass(FOCUSED_CLASS), "the next tag is focused");
     });
 
-    QUnit.test("there are no focused tags after removing the last tag with the help of the 'del' key", (assert) => {
+    QUnit.test("there are no focused tags after removing the last tag with the help of the 'del' key", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2422,7 +2422,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
-    QUnit.test("keyboard navigation should work after removing the last tag with the help of the 'del' key (T378397)", (assert) => {
+    QUnit.test("keyboard navigation should work after removing the last tag with the help of the 'del' key (T378397)", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -2433,7 +2433,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag is focused");
     });
 
-    QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", (assert) => {
+    QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", function(assert) {
         this.instance.focus();
         this.keyboard
             .press("left");
@@ -2444,7 +2444,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
-    QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", (assert) => {
+    QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", function(assert) {
         this.instance.focus();
 
         this.keyboard
@@ -2457,7 +2457,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
-    QUnit.test("there should be no focused tags after changing value not by keyboard", (assert) => {
+    QUnit.test("there should be no focused tags after changing value not by keyboard", function(assert) {
         this.keyboard
             .focus()
             .press("right");
@@ -2469,7 +2469,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
-    QUnit.test("navigating through tags in the RTL mode", (assert) => {
+    QUnit.test("navigating through tags in the RTL mode", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2498,7 +2498,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal($focusedTag.index(), 3, "correct tag is focused after the 'left' key press");
     });
 
-    QUnit.test("navigating through tags in the RTL mode if the field is editable", (assert) => {
+    QUnit.test("navigating through tags in the RTL mode if the field is editable", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2528,7 +2528,7 @@ QUnit.module("keyboard navigation through tags", {
         assert.equal($focusedTag.index(), 3, "correct tag is focused after the 'left' key press");
     });
 
-    QUnit.test("the input caret should not move while navigating through tags in the RTL mode", (assert) => {
+    QUnit.test("the input caret should not move while navigating through tags in the RTL mode", function(assert) {
         const items = [1, 2, 3, 4];
         this.reinit({
             items,
@@ -2558,7 +2558,7 @@ QUnit.module("keyboard navigation through tags", {
 });
 
 QUnit.module("searchEnabled", moduleSetup, () => {
-    QUnit.test("searchEnabled allows searching", (assert) => {
+    QUnit.test("searchEnabled allows searching", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["test", "custom"],
             searchEnabled: true,
@@ -2576,7 +2576,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($.trim($listItems.text()), "test", "items filtered");
     });
 
-    QUnit.test("renders all tags after search", (assert) => {
+    QUnit.test("renders all tags after search", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["Moscow", "London"],
             searchEnabled: true,
@@ -2599,7 +2599,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($.trim($tagContainer.text()), "MoscowLondon", "selected values are rendered");
     });
 
-    QUnit.test("input is positioned on the right of last tag", (assert) => {
+    QUnit.test("input is positioned on the right of last tag", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["Moscow"],
             searchEnabled: true,
@@ -2615,7 +2615,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($input.offset().left > inputLeft, "input is moved to the right");
     });
 
-    QUnit.test("size of input changes depending on search value length", assert => {
+    QUnit.test("size of input changes depending on search value length", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: true
         });
@@ -2629,7 +2629,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
     });
 
     ["searchEnabled", "acceptCustomValue"].forEach((option) => {
-        QUnit.test(`width of input is enougth for all content with ${option} option (T807069)`, assert => {
+        QUnit.test(`width of input is enougth for all content with ${option} option (T807069)`, function(assert) {
             const $tagBox = $("#tagBox").dxTagBox({
                 width: 300,
                 [option]: true
@@ -2650,7 +2650,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
-    QUnit.test("size of input is reset after selecting item", assert => {
+    QUnit.test("size of input is reset after selecting item", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: true,
             items: ["test1", "test2"]
@@ -2663,7 +2663,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, "input width is not changed after selecting item");
     });
 
-    QUnit.test("size of input is 1 when searchEnabled and acceptCustomValue is false", assert => {
+    QUnit.test("size of input is 1 when searchEnabled and acceptCustomValue is false", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: false,
             acceptCustomValue: false
@@ -2674,7 +2674,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
     });
 
-    QUnit.test("no placeholder when textbox is not empty", assert => {
+    QUnit.test("no placeholder when textbox is not empty", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: true,
             placeholder: "placeholder"
@@ -2687,7 +2687,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($placeholder.is(":hidden"), "placeholder is hidden");
     });
 
-    QUnit.test("the 'backspace' key press should remove text and preserve the widget's value", assert => {
+    QUnit.test("the 'backspace' key press should remove text and preserve the widget's value", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: true,
             dataSource: [1, 2, 3],
@@ -2708,7 +2708,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal(tagBox.option("value").length, 2, "tags are not removed");
     });
 
-    QUnit.test("deleting tag when input is not empty", (assert) => {
+    QUnit.test("deleting tag when input is not empty", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2731,7 +2731,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($tagContainer.text(), "1", "tags is refreshed correctly");
     });
 
-    QUnit.test("list item obtained focus only after press on control key", (assert) => {
+    QUnit.test("list item obtained focus only after press on control key", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -2756,7 +2756,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($firstItemList.hasClass(FOCUSED_CLASS), "first list item obtained focus");
     });
 
-    QUnit.test("tagBox should not be opened after selecting item", (assert) => {
+    QUnit.test("tagBox should not be opened after selecting item", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             searchEnabled: true
@@ -2776,7 +2776,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal(tagBox.option("opened"), false, "widget closed");
     });
 
-    QUnit.test("tagBox removeTag with searchEnabled when input is focused", assert => {
+    QUnit.test("tagBox removeTag with searchEnabled when input is focused", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2795,7 +2795,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.deepEqual(tagBox.option("value"), [], "tag was removed");
     });
 
-    QUnit.test("tagBox set focused class with searchEnabled after press 'delete' key", (assert) => {
+    QUnit.test("tagBox set focused class with searchEnabled after press 'delete' key", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -2828,7 +2828,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($focusedItemList.hasClass(FOCUSED_CLASS), "list item save focus after press 'delete' key");
     });
 
-    QUnit.test("remove tag by backspace", (assert) => {
+    QUnit.test("remove tag by backspace", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["one", "two", "three"],
             value: ["one", "two"],
@@ -2850,7 +2850,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "all tags removed");
     });
 
-    QUnit.test("removing tag by backspace should not load data from DS", (assert) => {
+    QUnit.test("removing tag by backspace should not load data from DS", function(assert) {
         const data = ["one", "two", "three"];
         let loadedCount = 0;
 
@@ -2882,7 +2882,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal(loadedCount, 1, "data source did not load data again");
     });
 
-    QUnit.test("search after selection first item", (assert) => {
+    QUnit.test("search after selection first item", function(assert) {
         const items = [{ text: "item1" }, { text: "item2" }];
         const $tagBox = $("#tagBox").dxTagBox({
             items,
@@ -2905,7 +2905,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($input.val(), "It", "input value is correct");
     });
 
-    QUnit.test("input should not be cleared after the 'value' option change", assert => {
+    QUnit.test("input should not be cleared after the 'value' option change", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["one", "two"],
             searchEnabled: true,
@@ -2921,7 +2921,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($input.val(), searchValue, "input is clear");
     });
 
-    QUnit.test("input should be cleared after list item is clicked", assert => {
+    QUnit.test("input should be cleared after list item is clicked", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["one", "two"],
             searchEnabled: true,
@@ -2937,7 +2937,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($input.val(), "", "input is clear");
     });
 
-    QUnit.test("input should not be cleared after list item is clicked when checkboxes are visible", assert => {
+    QUnit.test("input should not be cleared after list item is clicked when checkboxes are visible", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["one", "two"],
             searchEnabled: true,
@@ -2954,7 +2954,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($input.val(), "one", "input was not cleared");
     });
 
-    QUnit.test("input should not be cleared after tag is removed", assert => {
+    QUnit.test("input should not be cleared after tag is removed", function(assert) {
         const items = [1, 2, 3];
 
         const $element = $("#tagBox").dxTagBox({
@@ -2972,7 +2972,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($input.val(), searchValue, "search value is not cleared");
     });
 
-    QUnit.testInActiveWindow("input should be cleared after widget focus out", assert => {
+    QUnit.testInActiveWindow("input should be cleared after widget focus out", function(assert) {
         const items = [1, 2, 3];
         const $element = $("#tagBox").dxTagBox({
             items,
@@ -2990,7 +2990,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($input.val(), "", "search value is cleared");
     });
 
-    QUnit.test("search was work if acceptCustomValue is set to true", assert => {
+    QUnit.test("search was work if acceptCustomValue is set to true", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             dataSource: ["item 1", "element 1", "item 2"],
             searchEnabled: true,
@@ -3007,7 +3007,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal(listItems.length, 2, "search was performed");
     });
 
-    QUnit.test("tag should be added after enter press key if popup was not opened early", assert => {
+    QUnit.test("tag should be added after enter press key if popup was not opened early", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             dataSource: ["q", "er", "fsd", "fd"],
             searchEnabled: true,
@@ -3029,7 +3029,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($element.find(".dx-tag").length, 1, "tag is added");
     });
 
-    QUnit.test("popup should be repaint after change height of input", assert => {
+    QUnit.test("popup should be repaint after change height of input", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             dataSource: ["Antigua and Barbuda", "Albania", "American Samoa"],
             value: ["Antigua and Barbuda", "Albania"],
@@ -3052,7 +3052,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok(handlerStub.called, "repaint was fired");
     });
 
-    QUnit.test("the input size should change if autocompletion is Enabled (T378411)", (assert) => {
+    QUnit.test("the input size should change if autocompletion is Enabled (T378411)", function(assert) {
         const items = ["Antigua and Barbuda", "Albania"];
         const $element = $("#tagBox").dxTagBox({
             dataSource: items,
@@ -3069,7 +3069,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
-    QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
+    QUnit.test("filter should be reset after the search value clearing (T385456)", function(assert) {
         const items = ["111", "222", "333"];
 
         const $element = $("#tagBox").dxTagBox({
@@ -3090,7 +3090,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($listItems.length, items.length, "list items count is correct");
     });
 
-    QUnit.test("filtering operation should pass 'customQueryParams' to the data source (T683047)", (assert) => {
+    QUnit.test("filtering operation should pass 'customQueryParams' to the data source (T683047)", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -3111,7 +3111,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
-    QUnit.test("filtering operation should pass 'expand' parameter to the dataSource", (assert) => {
+    QUnit.test("filtering operation should pass 'expand' parameter to the dataSource", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
@@ -3135,7 +3135,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
-    QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", (assert) => {
+    QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", function(assert) {
         const items = ["111", "222", "333"];
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -3154,7 +3154,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($input.is(":focus"), "input was focused");
     });
 
-    QUnit.test("Select all' checkBox is checked when filtered items are selected only", assert => {
+    QUnit.test("Select all' checkBox is checked when filtered items are selected only", function(assert) {
         const items = ["111", "222", "333"];
 
         const $element = $("#tagBox").dxTagBox({
@@ -3175,7 +3175,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal(instance.option("selectedItems").length, 1, "selected items count");
     });
 
-    QUnit.test("filter should not be cleared when no focusout and no item selection happened", assert => {
+    QUnit.test("filter should not be cleared when no focusout and no item selection happened", function(assert) {
         const items = ["111", "222", "333"];
 
         const $element = $("#tagBox").dxTagBox({
@@ -3199,7 +3199,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.equal($.trim($(".dx-item").first().text()), "111", "value of first item");
     });
 
-    QUnit.test("TagBox with selection controls shouldn't clear search after click on item", (assert) => {
+    QUnit.test("TagBox with selection controls shouldn't clear search after click on item", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["test1", "custom", "test2"],
             searchEnabled: true,
@@ -3226,7 +3226,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.deepEqual(instance.option("value"), ["test1", "test2"], "Correct value");
     });
 
-    QUnit.test("load tags data should not raise an error after widget has been disposed", (assert) => {
+    QUnit.test("load tags data should not raise an error after widget has been disposed", function(assert) {
         assert.expect(1);
 
         const $container = $("#tagBox").dxTagBox({
@@ -3277,7 +3277,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 });
 
 QUnit.module("popup position and size", moduleSetup, () => {
-    QUnit.testInActiveWindow("popup height should be depended from its content height", assert => {
+    QUnit.testInActiveWindow("popup height should be depended from its content height", function(assert) {
         const $element = $("#tagBox").dxTagBox({
             dataSource: ["Antigua and Barbuda", "Albania", "American Samoa"],
             acceptCustomValue: true,
@@ -3300,7 +3300,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
         assert.notEqual(height, currentHeight);
     });
 
-    QUnit.test("popup changes its position when field height changed", assert => {
+    QUnit.test("popup changes its position when field height changed", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["item1", "item2", "item3", "item4", "item5", "item6"],
             showSelectionControls: true,
@@ -3322,7 +3322,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
         assert.roughEqual(popupContent.offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
     });
 
-    QUnit.test("refresh popup size after dataSource loaded", (assert) => {
+    QUnit.test("refresh popup size after dataSource loaded", function(assert) {
         const d = $.Deferred();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -3345,7 +3345,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
         assert.ok($popup.height() > popupHeight, "popup enlarged after loading");
     });
 
-    QUnit.test("Second search should be work, when first search are running", (assert) => {
+    QUnit.test("Second search should be work, when first search are running", function(assert) {
         const items = [
             { name: 'Zambia', code: 'ZM' },
             { name: 'Zimbabwe', code: 'ZW' }
@@ -3384,7 +3384,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
         assert.equal($(".dx-list-item").length, 1, "search was completed");
     });
 
-    QUnit.test("load selected item data via custom store", (assert) => {
+    QUnit.test("load selected item data via custom store", function(assert) {
         let testPassed = true;
         try {
             const $tagBox = $("#tagBox").dxTagBox({
@@ -3410,7 +3410,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
 });
 
 QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
-    QUnit.test("acceptCustomValue", (assert) => {
+    QUnit.test("acceptCustomValue", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["item1", "item2"],
             acceptCustomValue: true,
@@ -3435,7 +3435,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
         assert.equal($.trim($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text()), "item1test", "all tags rendered");
     });
 
-    QUnit.test("acceptCustomValue should not add empty tag", assert => {
+    QUnit.test("acceptCustomValue should not add empty tag", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true
         });
@@ -3447,7 +3447,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox("option", "value"), [], "empty value was not added");
     });
 
-    QUnit.test("adding the custom tag should clear input value (T385448)", assert => {
+    QUnit.test("adding the custom tag should clear input value (T385448)", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true
         });
@@ -3461,7 +3461,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
         assert.equal($input.val(), "", "the input is empty");
     });
 
-    QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags", (assert) => {
+    QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true,
             items: [1, 2, 3]
@@ -3482,7 +3482,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
 });
 
 QUnit.module("the 'selectedItems' option", moduleSetup, () => {
-    QUnit.test("The 'selectedItems' option value is correct on init if the 'value' option is specified", assert => {
+    QUnit.test("The 'selectedItems' option value is correct on init if the 'value' option is specified", function(assert) {
         const items = [1, 2, 3];
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3493,7 +3493,7 @@ QUnit.module("the 'selectedItems' option", moduleSetup, () => {
         assert.deepEqual(tagBox.option("selectedItems"), [items[1]], "the 'selectedItems' option value is correct");
     });
 
-    QUnit.test("The 'selectedItems' option changes after the 'value' option", assert => {
+    QUnit.test("The 'selectedItems' option changes after the 'value' option", function(assert) {
         const items = [1, 2, 3];
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3504,7 +3504,7 @@ QUnit.module("the 'selectedItems' option", moduleSetup, () => {
         assert.deepEqual(tagBox.option("selectedItems"), items, "the 'selectedItems' option value is changed");
     });
 
-    QUnit.test("selected items should be correct if the list item is selected", assert => {
+    QUnit.test("selected items should be correct if the list item is selected", function(assert) {
         const items = [1, 2, 3];
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3519,7 +3519,7 @@ QUnit.module("the 'selectedItems' option", moduleSetup, () => {
         assert.deepEqual(tagBox.option("selectedItems"), [items[0], items[1]], "the 'selectedItems' option value is correct");
     });
 
-    QUnit.test("selected items should be correct if the list item is unselected", assert => {
+    QUnit.test("selected items should be correct if the list item is unselected", function(assert) {
         const items = [1, 2, 3];
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3534,7 +3534,7 @@ QUnit.module("the 'selectedItems' option", moduleSetup, () => {
         assert.deepEqual(tagBox.option("selectedItems"), [items[1], items[2]], "the 'selectedItems' option value is correct");
     });
 
-    QUnit.test("all items are selected correctly when the last item is deselected from an editor", (assert) => {
+    QUnit.test("all items are selected correctly when the last item is deselected from an editor", function(assert) {
         let selectedItems;
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3572,7 +3572,7 @@ QUnit.module("the 'selectedItems' option", moduleSetup, () => {
 });
 
 QUnit.module("the 'onSelectionChanged' option", moduleSetup, () => {
-    QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' argument", assert => {
+    QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' argument", function(assert) {
         const items = [1, 2, 3];
         const spy = sinon.spy();
 
@@ -3594,7 +3594,7 @@ QUnit.module("the 'onSelectionChanged' option", moduleSetup, () => {
         assert.deepEqual(spy.args[3][0].addedItems, [], "no items in the 'addedItems' argument after item is unselected");
     });
 
-    QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' argument", assert => {
+    QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' argument", function(assert) {
         const items = [1, 2, 3];
         const spy = sinon.spy();
 
@@ -3638,7 +3638,7 @@ QUnit.module("the 'onSelectionChanged' option", moduleSetup, () => {
         });
     };
 
-    QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' when a remote store is used", assert => {
+    QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' when a remote store is used", function(assert) {
         const data = [
             {
                 "id": 1,
@@ -3675,7 +3675,7 @@ QUnit.module("the 'onSelectionChanged' option", moduleSetup, () => {
         assert.equal(spy.args[1][0].removedItems.length, 0, "the 'removedItems' argument");
     });
 
-    QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' when a remote store is used", assert => {
+    QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' when a remote store is used", function(assert) {
         const data = [
             {
                 "id": 1,
@@ -3710,7 +3710,7 @@ QUnit.module("the 'onSelectionChanged' option", moduleSetup, () => {
 });
 
 QUnit.module("the 'fieldTemplate' option", moduleSetup, () => {
-    QUnit.test("the 'fieldTemplate' function should be called only once on init and value change", assert => {
+    QUnit.test("the 'fieldTemplate' function should be called only once on init and value change", function(assert) {
         let callCount = 0;
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3729,7 +3729,7 @@ QUnit.module("the 'fieldTemplate' option", moduleSetup, () => {
         assert.equal(callCount, 1, "the 'fieldTemplate' was called once on value change");
     });
 
-    QUnit.test("the 'fieldTemplate' has correct arguments", assert => {
+    QUnit.test("the 'fieldTemplate' has correct arguments", function(assert) {
         const args = [];
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -3751,7 +3751,7 @@ QUnit.module("the 'fieldTemplate' option", moduleSetup, () => {
         assert.deepEqual(args[2], [2], "arguments are correct after removing values");
     });
 
-    QUnit.testInActiveWindow("field should not be updated on focus changing", assert => {
+    QUnit.testInActiveWindow("field should not be updated on focus changing", function(assert) {
         const fieldTemplate = () => {
             return $("<div>").dxTextBox();
         };
@@ -3771,7 +3771,7 @@ QUnit.module("the 'fieldTemplate' option", moduleSetup, () => {
         assert.equal(fieldTemplateSpy.callCount, 0, "fieldTemplate render was not called");
     });
 
-    QUnit.test("tagbox should get template classes after fieldTemplate option change", assert => {
+    QUnit.test("tagbox should get template classes after fieldTemplate option change", function(assert) {
         const fieldTemplate = () => {
             return $("<div>").dxTextBox();
         };
@@ -3787,7 +3787,7 @@ QUnit.module("the 'fieldTemplate' option", moduleSetup, () => {
         assert.ok($tagBox.hasClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS), "default template class wasn't applied");
     });
 
-    QUnit.test("value should be cleared after deselect all items if fieldTemplate and searchEnabled is used", assert => {
+    QUnit.test("value should be cleared after deselect all items if fieldTemplate and searchEnabled is used", function(assert) {
         const $field = $("<div>");
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -3817,7 +3817,7 @@ QUnit.module("the 'fieldTemplate' option", moduleSetup, () => {
 });
 
 QUnit.module("applyValueMode = 'useButtons'", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
@@ -3844,13 +3844,13 @@ QUnit.module("applyValueMode = 'useButtons'", {
             this._init(options);
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.$element.remove();
         this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test("popup should not be hidden after list item click", (assert) => {
+    QUnit.test("popup should not be hidden after list item click", function(assert) {
         const $listItems = this.$listItems;
 
         $($listItems.eq(0)).trigger("dxclick");
@@ -3862,7 +3862,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [], "value is not changed after the second item is clicked");
     });
 
-    QUnit.test("tags should not be rendered on list item click", (assert) => {
+    QUnit.test("tags should not be rendered on list item click", function(assert) {
         const $listItems = this.$listItems;
 
         $($listItems.eq(0)).trigger("dxclick");
@@ -3872,7 +3872,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.equal(this.$element.find(".dx-tag").length, 0, "tag is not rendered after the second list item is clicked");
     });
 
-    QUnit.test("value should be applied after the 'done' button click", (assert) => {
+    QUnit.test("value should be applied after the 'done' button click", function(assert) {
         const items = this.instance.option("items");
         const $listItems = this.$listItems;
 
@@ -3885,7 +3885,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "value is changed to selected list items");
     });
 
-    QUnit.test("value should not be changed after the 'cancel' button click", (assert) => {
+    QUnit.test("value should not be changed after the 'cancel' button click", function(assert) {
         const $listItems = this.$listItems;
 
         $($listItems.eq(0)).trigger("dxclick");
@@ -3897,7 +3897,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [], "value is changed to selected list items");
     });
 
-    QUnit.test("value should not be changed after the popup is closed", (assert) => {
+    QUnit.test("value should not be changed after the popup is closed", function(assert) {
         const $listItems = this.$listItems;
         const initialValue = this.instance.option("value");
 
@@ -3908,7 +3908,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), initialValue, "value is not changed");
     });
 
-    QUnit.test("selected list items should be reset after the 'cancel' button is clicked", (assert) => {
+    QUnit.test("selected list items should be reset after the 'cancel' button is clicked", function(assert) {
         const $listItems = this.$listItems;
 
         $($listItems.eq(0)).trigger("dxclick");
@@ -3918,7 +3918,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.getListInstance().option("selectedItems"), [], "selected items are reset");
     });
 
-    QUnit.test("selected list items should be reset after the popup is closed", (assert) => {
+    QUnit.test("selected list items should be reset after the popup is closed", function(assert) {
         const $listItems = this.$listItems;
 
         $($listItems.eq(0)).trigger("dxclick");
@@ -3928,7 +3928,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.getListInstance().option("selectedItems"), [], "selected items are reset");
     });
 
-    QUnit.test("list items selection should not be reset after next page loading", (assert) => {
+    QUnit.test("list items selection should not be reset after next page loading", function(assert) {
         const dataSource = new DataSource({
             store: new CustomStore({
                 load(loadOptions) {
@@ -3966,12 +3966,12 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.equal(list.option("selectedItems").length, selectedItemsCount, "selection is not reset");
     });
 
-    QUnit.test("the 'selectedItems' should not be updated after list item click", (assert) => {
+    QUnit.test("the 'selectedItems' should not be updated after list item click", function(assert) {
         $(this.$listItems.eq(0)).trigger("dxclick");
         assert.deepEqual(this.instance.option("selectedItems"), [], "selected items are not changed");
     });
 
-    QUnit.test("'onValueChanged' should not be fired after clicking on list item (T378374)", (assert) => {
+    QUnit.test("'onValueChanged' should not be fired after clicking on list item (T378374)", function(assert) {
         const valueChangedSpy = sinon.spy();
         this.reinit({
             applyValueMode: "useButtons",
@@ -3985,7 +3985,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.equal(valueChangedSpy.callCount, 0, "the 'onValueChanged' was not fired after checking an item");
     });
 
-    QUnit.test("'onValueChanged' should not be fired after clicking on list item when value is not empty (T378374)", (assert) => {
+    QUnit.test("'onValueChanged' should not be fired after clicking on list item when value is not empty (T378374)", function(assert) {
         const valueChangedSpy = sinon.spy();
         this.reinit({
             applyValueMode: "useButtons",
@@ -4000,7 +4000,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.equal(valueChangedSpy.callCount, 0, "the 'onValueChanged' was not fired after checking an item");
     });
 
-    QUnit.test("the list selection should be updated after value is changed while editor is opened", (assert) => {
+    QUnit.test("the list selection should be updated after value is changed while editor is opened", function(assert) {
         const items = this.instance.option("items");
         const list = this.getListInstance();
 
@@ -4011,7 +4011,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.equal(this.getListInstance().option("selectedItems").length, 1, "list selection is updated after removing item");
     });
 
-    QUnit.testInActiveWindow("the value should be applied after search (T402855)", (assert) => {
+    QUnit.testInActiveWindow("the value should be applied after search (T402855)", function(assert) {
         this.reinit({
             applyValueMode: "useButtons",
             items: ["aa", "ab", "bb", "ac", "bc"],
@@ -4034,7 +4034,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), ["ac", "bc"], "value is applied correctly");
     });
 
-    QUnit.test("the search should be cleared after pressing the 'OK' button", (assert) => {
+    QUnit.test("the search should be cleared after pressing the 'OK' button", function(assert) {
         this.reinit({
             applyValueMode: "useButtons",
             items: ["aa", "ab", "bb", "ac", "bc"],
@@ -4056,7 +4056,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.notOk(this.instance._dataSource.searchValue(), "The search value is cleared");
     });
 
-    QUnit.test("value should keep initial tag order", (assert) => {
+    QUnit.test("value should keep initial tag order", function(assert) {
         const items = this.instance.option("items");
         const $listItems = this.$listItems;
 
@@ -4071,7 +4071,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
     });
 
-    QUnit.test("value should keep initial tag order with object items", (assert) => {
+    QUnit.test("value should keep initial tag order with object items", function(assert) {
         this.reinit({
             items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
             valueExpr: "id",
@@ -4093,7 +4093,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[1].id, items[0].id], "tags order is correct");
     });
 
-    QUnit.test("value should keep initial tag order with object items and 'this' valueExpr", (assert) => {
+    QUnit.test("value should keep initial tag order with object items and 'this' valueExpr", function(assert) {
         this.reinit({
             items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
             valueExpr: "this",
@@ -4115,7 +4115,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
     });
 
-    QUnit.test("Value should keep initial order if tags aren't changed", (assert) => {
+    QUnit.test("Value should keep initial order if tags aren't changed", function(assert) {
         const items = this.instance.option("items");
         const $listItems = this.$listItems;
 
@@ -4129,7 +4129,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "tags order is correct");
     });
 
-    QUnit.test("Value should correctly update if items count isn't changed", (assert) => {
+    QUnit.test("Value should correctly update if items count isn't changed", function(assert) {
         const items = this.instance.option("items");
         const $listItems = this.$listItems;
 
@@ -4145,7 +4145,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[2], items[0]], "tags order is correct");
     });
 
-    QUnit.test("Object value should keep initial order if tags aren't changed", (assert) => {
+    QUnit.test("Object value should keep initial order if tags aren't changed", function(assert) {
         this.reinit({
             items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
             valueExpr: "id",
@@ -4166,7 +4166,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[0].id, items[1].id], "tags order is correct");
     });
 
-    QUnit.test("Value should correctly update if valueExpr is 'this' and value is object", (assert) => {
+    QUnit.test("Value should correctly update if valueExpr is 'this' and value is object", function(assert) {
         this.reinit({
             items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
             valueExpr: "this",
@@ -4189,7 +4189,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "tags order is correct");
     });
 
-    QUnit.testInActiveWindow("tags are rendered correctly when minSearchLength is used", (assert) => {
+    QUnit.testInActiveWindow("tags are rendered correctly when minSearchLength is used", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [
                 {
@@ -4210,27 +4210,32 @@ QUnit.module("applyValueMode = 'useButtons'", {
         });
         this.clock.tick(TIME_TO_WAIT);
 
+        const tagBox = $tagBox.dxTagBox("instance");
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type("aaa");
         this.clock.tick(TIME_TO_WAIT);
 
-        $(".dx-list-select-all-checkbox").trigger("dxclick");
-        $(".dx-popup-done").trigger("dxclick");
+        let $popupWrapper = $(tagBox.content()).parent().parent();
+
+        $popupWrapper.find(".dx-list-select-all-checkbox").trigger("dxclick");
+        $popupWrapper.find(".dx-popup-done.dx-button").trigger("dxclick");
 
         keyboard.type("bbb");
         this.clock.tick(TIME_TO_WAIT);
 
-        $(".dx-list-select-all-checkbox").trigger("dxclick");
-        $(".dx-popup-done").trigger("dxclick");
+        $popupWrapper = $(tagBox.content()).parent().parent();
+
+        $popupWrapper.find(".dx-list-select-all-checkbox").trigger("dxclick");
+        $popupWrapper.find(".dx-popup-done.dx-button").trigger("dxclick");
 
         assert.deepEqual($tagBox.dxTagBox("instance").option("value"), [0, 1], "value of TagBox");
     });
 });
 
 QUnit.module("the 'onSelectAllValueChanged' option", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.items = [1, 2, 3];
 
         this._init = (options) => {
@@ -4256,11 +4261,11 @@ QUnit.module("the 'onSelectAllValueChanged' option", {
             items: this.items
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         this.$element.remove();
     }
 }, () => {
-    QUnit.test("the 'onSelectAllValueChanged' option behavior", (assert) => {
+    QUnit.test("the 'onSelectAllValueChanged' option behavior", function(assert) {
         const $selectAllCheckbox = this.instance._list.$element().find(".dx-list-select-all-checkbox");
 
         $($selectAllCheckbox).trigger("dxclick");
@@ -4270,13 +4275,13 @@ QUnit.module("the 'onSelectAllValueChanged' option", {
         assert.ok(this.spy.args[this.spy.args.length - 1][0].value === false, "all items are unselected");
     });
 
-    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all items are selected", (assert) => {
+    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all items are selected", function(assert) {
         const $list = this.instance._list.$element();
         $($list.find(".dx-list-select-all-checkbox")).trigger("dxclick");
         assert.equal(this.spy.callCount, 1, "count is correct");
     });
 
-    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all items are unselected", (assert) => {
+    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all items are unselected", function(assert) {
         this.reinit({
             items: this.items,
             value: this.items.slice()
@@ -4287,13 +4292,13 @@ QUnit.module("the 'onSelectAllValueChanged' option", {
         assert.equal(this.spy.callCount, 1, "count is correct");
     });
 
-    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one item is selected", (assert) => {
+    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one item is selected", function(assert) {
         const $list = this.instance._list.$element();
         $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
         assert.equal(this.spy.callCount, 1, "count is correct");
     });
 
-    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one item is unselected", (assert) => {
+    QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one item is unselected", function(assert) {
         this.reinit({
             items: this.items,
             value: this.items.splice()
@@ -4306,7 +4311,7 @@ QUnit.module("the 'onSelectAllValueChanged' option", {
 });
 
 QUnit.module("single line mode", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
 
         this.items = ["Africa", "Antarctica", "Asia", "Australia/Oceania", "Europe", "North America", "South America"];
@@ -4324,12 +4329,12 @@ QUnit.module("single line mode", {
             });
         this.instance = this.$element.dxTagBox("instance");
     },
-    afterEach: () => {
+    afterEach: function() {
         this.$element.remove();
         fx.off = false;
     }
 }, () => {
-    QUnit.test("single line class presence should depend the 'multiline' option", (assert) => {
+    QUnit.test("single line class presence should depend the 'multiline' option", function(assert) {
         this.instance.option("multiline", true);
         assert.notOk(this.$element.hasClass(TAGBOX_SINGLE_LINE_CLASS), "there is no single line class on widget");
 
@@ -4337,7 +4342,7 @@ QUnit.module("single line mode", {
         assert.ok(this.$element.hasClass(TAGBOX_SINGLE_LINE_CLASS), "the single line class is added");
     });
 
-    QUnit.test("tags container should be scrolled to the end on value change", (assert) => {
+    QUnit.test("tags container should be scrolled to the end on value change", function(assert) {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
         this.instance.option("value", [this.items[0]]);
@@ -4347,7 +4352,7 @@ QUnit.module("single line mode", {
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
-    QUnit.test("tags should be scrolled by mouse wheel (T386939)", (assert) => {
+    QUnit.test("tags should be scrolled by mouse wheel (T386939)", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
@@ -4383,7 +4388,7 @@ QUnit.module("single line mode", {
         assert.equal($tagContainer.scrollLeft(), 2 * delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER, "tag container position is correct after the second scroll");
     });
 
-    QUnit.test("stopPropagation and preventDefault should be called for the mouse wheel event (T386939)", (assert) => {
+    QUnit.test("stopPropagation and preventDefault should be called for the mouse wheel event (T386939)", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
@@ -4402,7 +4407,7 @@ QUnit.module("single line mode", {
         assert.ok(event.isPropagationStopped(), "propagation is stopped");
     });
 
-    QUnit.test("it is should be possible to scroll tag container natively on mobile device", assert => {
+    QUnit.test("it is should be possible to scroll tag container natively on mobile device", function(assert) {
         const currentDevice = devices.real();
         let $tagBox;
 
@@ -4426,7 +4431,7 @@ QUnit.module("single line mode", {
         }
     });
 
-    QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout (T390041)", (assert) => {
+    QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout (T390041)", function(assert) {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
         const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
@@ -4439,14 +4444,14 @@ QUnit.module("single line mode", {
         assert.equal($container.scrollLeft(), 0, "scroll position is correct on focus out");
     });
 
-    QUnit.test("tags container should be scrolled to the end on focusin (T390041)", (assert) => {
+    QUnit.test("tags container should be scrolled to the end on focusin (T390041)", function(assert) {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
         this.instance.focus();
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
-    QUnit.test("list should save it's scroll position after value changed", (assert) => {
+    QUnit.test("list should save it's scroll position after value changed", function(assert) {
         this.instance.option({
             opened: true,
             showSelectionControls: true
@@ -4465,7 +4470,7 @@ QUnit.module("single line mode", {
         assert.equal(scrollView.scrollTop(), 2, "list should not be scrolled to the top after value changed");
     });
 
-    QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)", (assert) => {
+    QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)", function(assert) {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
@@ -4483,7 +4488,7 @@ QUnit.module("single line mode", {
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on focus out");
     });
 
-    QUnit.test("tags container should be scrolled to the end on focusin in the RTL mode (T390041)", (assert) => {
+    QUnit.test("tags container should be scrolled to the end on focusin in the RTL mode (T390041)", function(assert) {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
@@ -4497,7 +4502,7 @@ QUnit.module("single line mode", {
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the end");
     });
 
-    QUnit.test("tags container should be scrolled on mobile devices", (assert) => {
+    QUnit.test("tags container should be scrolled on mobile devices", function(assert) {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
 
         if(devices.real().deviceType === "desktop") {
@@ -4507,7 +4512,7 @@ QUnit.module("single line mode", {
         }
     });
 
-    QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", (assert) => {
+    QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
         assert.expect(1);
 
         const $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
@@ -4523,7 +4528,7 @@ QUnit.module("single line mode", {
 });
 
 QUnit.module("keyboard navigation through tags in single line mode", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
 
         this.items = ["Africa", "Antarctica", "Asia", "Australia/Oceania", "Europe", "North America", "South America"];
@@ -4562,12 +4567,12 @@ QUnit.module("keyboard navigation through tags in single line mode", {
 
         this._init();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.$element.remove();
         fx.off = false;
     }
 }, () => {
-    QUnit.test("the focused tag should be visible during keyboard navigation to the left", (assert) => {
+    QUnit.test("the focused tag should be visible during keyboard navigation to the left", function(assert) {
         this.keyboard
             .focus()
             .press("left")
@@ -4583,7 +4588,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
         assert.roughEqual(this.getFocusedTag().position().left, 0, 1, "focused tag is visible");
     });
 
-    QUnit.test("the focused tag should be visible during keyboard navigation to the right", (assert) => {
+    QUnit.test("the focused tag should be visible during keyboard navigation to the right", function(assert) {
         const containerWidth = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS).outerWidth();
 
         this.keyboard.focus();
@@ -4608,7 +4613,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
         assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, "focused tag is visible");
     });
 
-    QUnit.test("tags container should be scrolled to the end after the last tag loses focus during navigation to the right", (assert) => {
+    QUnit.test("tags container should be scrolled to the end after the last tag loses focus during navigation to the right", function(assert) {
         this.reinit({
             items: this.items,
             value: this.items,
@@ -4630,7 +4635,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
-    QUnit.test("tags container should be scrolled to the start on value change in the RTL mode", (assert) => {
+    QUnit.test("tags container should be scrolled to the start on value change in the RTL mode", function(assert) {
         this.reinit({
             items: this.items,
             value: this.items,
@@ -4653,7 +4658,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the start");
     });
 
-    QUnit.test("the focused tag should be visible during keyboard navigation to the right in the RTL mode", (assert) => {
+    QUnit.test("the focused tag should be visible during keyboard navigation to the right in the RTL mode", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test is not relevant for mobile devices");
             return;
@@ -4687,7 +4692,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
         assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, "focused tag is visible");
     });
 
-    QUnit.test("the focused tag should be visible during keyboard navigation to the left in the RTL mode", (assert) => {
+    QUnit.test("the focused tag should be visible during keyboard navigation to the left in the RTL mode", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test is not relevant for mobile devices");
             return;
@@ -4721,7 +4726,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
         assert.roughEqual(this.getFocusedTag().position().left, 0, 1, "focused tag is not hidden at left");
     });
 
-    QUnit.test("tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode", (assert) => {
+    QUnit.test("tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode", function(assert) {
         this.reinit({
             items: this.items,
             value: this.items,
@@ -4750,7 +4755,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
 });
 
 QUnit.module("dataSource integration", moduleSetup, () => {
-    QUnit.test("item should be chosen synchronously if item is already loaded", (assert) => {
+    QUnit.test("item should be chosen synchronously if item is already loaded", function(assert) {
         assert.expect(0);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -4766,7 +4771,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         $tagBox.dxTagBox("option", "value", [1]);
     });
 
-    QUnit.test("first page should be displayed after search and tag select", assert => {
+    QUnit.test("first page should be displayed after search and tag select", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: {
                 store: new CustomStore({
@@ -4805,7 +4810,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal($.trim($(".dx-item").first().text()), "0", "first item loaded");
     });
 
-    QUnit.test("'byKey' should not be called on initialization (T533200)", assert => {
+    QUnit.test("'byKey' should not be called on initialization (T533200)", function(assert) {
         const byKeySpy = sinon.spy(key => {
             return key;
         });
@@ -4823,7 +4828,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(byKeySpy.callCount, 0);
     });
 
-    QUnit.test("tagBox should not load data from the DataSource when showDataBeforeSearch is disabled", (assert) => {
+    QUnit.test("tagBox should not load data from the DataSource when showDataBeforeSearch is disabled", function(assert) {
         const load = sinon.stub().returns([{ text: "Item 1" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -4845,7 +4850,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.ok(load.called, "load has been called after the search only");
     });
 
-    QUnit.test("map function should correctly applies to the widget datasource with the default value", (assert) => {
+    QUnit.test("map function should correctly applies to the widget datasource with the default value", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: new DataSource({
                 store: [
@@ -4866,7 +4871,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
     });
 
-    QUnit.test("Tagbox should not try to update size if input is empty(T818690)", (assert) => {
+    QUnit.test("Tagbox should not try to update size if input is empty(T818690)", function(assert) {
         const instance = $("#tagBox").dxTagBox({
             multiline: false,
             searchEnabled: true,
@@ -4895,7 +4900,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.ok(true, "TagBox rendered");
     });
 
-    QUnit.test("TagBox should correctly handle disposing on data loading", (assert) => {
+    QUnit.test("TagBox should correctly handle disposing on data loading", function(assert) {
         assert.expect(1);
 
         try {
@@ -4931,7 +4936,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
 });
 
 QUnit.module("performance", () => {
-    QUnit.test("selectionHandler should call twice on popup opening", assert => {
+    QUnit.test("selectionHandler should call twice on popup opening", function(assert) {
         const items = [1, 2, 3, 4, 5];
         const tagBox = $("#tagBox").dxTagBox({
             items,
@@ -4946,7 +4951,7 @@ QUnit.module("performance", () => {
         assert.ok(selectionChangeHandlerSpy.callCount <= 2, "selection change handler called less than 2 (ListContentReady and SelectAll)");
     });
 
-    QUnit.test("loadOptions.filter should be a filter expression when key is specified", assert => {
+    QUnit.test("loadOptions.filter should be a filter expression when key is specified", function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -4969,7 +4974,7 @@ QUnit.module("performance", () => {
         assert.deepEqual(filter, [["!", ["id", 1]]], "filter should be correct");
     });
 
-    QUnit.test("loadOptions.filter should be a function when valueExpr is function", assert => {
+    QUnit.test("loadOptions.filter should be a function when valueExpr is function", function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -4993,7 +4998,7 @@ QUnit.module("performance", () => {
         assert.ok($.isFunction(filter), "filter is function");
     });
 
-    QUnit.test("loadOptions.filter should be correct when user filter is also used", assert => {
+    QUnit.test("loadOptions.filter should be correct when user filter is also used", function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -5024,7 +5029,7 @@ QUnit.module("performance", () => {
         assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
     });
 
-    QUnit.test("loadOptions.filter should be correct after some items selecting/deselecting", assert => {
+    QUnit.test("loadOptions.filter should be correct after some items selecting/deselecting", function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]);
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -5050,7 +5055,7 @@ QUnit.module("performance", () => {
         assert.deepEqual(filter, null, "filter is correct");
     });
 
-    QUnit.test("Select All should use cache", assert => {
+    QUnit.test("Select All should use cache", function(assert) {
         const items = [];
         let keyGetterCounter = 0;
 
@@ -5094,7 +5099,7 @@ QUnit.module("performance", () => {
         assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
     });
 
-    QUnit.test("load filter should be undefined when tagBox has a lot of initial values", assert => {
+    QUnit.test("load filter should be undefined when tagBox has a lot of initial values", function(assert) {
         const load = sinon.stub();
 
         $("#tagBox").dxTagBox({
@@ -5109,7 +5114,7 @@ QUnit.module("performance", () => {
         assert.strictEqual(load.getCall(0).args[0].filter, undefined);
     });
 
-    QUnit.test("load filter should be array when tagBox has not a lot of initial values", assert => {
+    QUnit.test("load filter should be array when tagBox has not a lot of initial values", function(assert) {
         const load = sinon.stub();
 
         $("#tagBox").dxTagBox({
@@ -5124,7 +5129,7 @@ QUnit.module("performance", () => {
         assert.deepEqual(load.getCall(0).args[0].filter, [["id", "=", 0], "or", ["id", "=", 1]]);
     });
 
-    QUnit.test("initial items value should be loaded when filter is not implemented in load method", assert => {
+    QUnit.test("initial items value should be loaded when filter is not implemented in load method", function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }, {
             id: 3,
             text: "item 3"
@@ -5142,7 +5147,7 @@ QUnit.module("performance", () => {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2item 3");
     });
 
-    QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key is used (T662546)", assert => {
+    QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key is used (T662546)", function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }, {
             id: 3,
             text: "item 3"
@@ -5165,7 +5170,7 @@ QUnit.module("performance", () => {
         assert.deepEqual(list.option("selectedItems"), [{ id: 2, text: "item 2" }]);
     });
 
-    QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key and deferred datasource is used", assert => {
+    QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key and deferred datasource is used", function(assert) {
         const clock = sinon.useFakeTimers();
 
         const $tagBox = $("#tagBox").dxTagBox({
@@ -5199,7 +5204,7 @@ QUnit.module("performance", () => {
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 1");
     });
 
-    QUnit.test("useSubmitBehavior option", assert => {
+    QUnit.test("useSubmitBehavior option", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2],
             useSubmitBehavior: false,
@@ -5221,7 +5226,7 @@ QUnit.module("performance", () => {
         assert.equal($tagBox.find("select").length, 0, "submit element was removed");
     });
 
-    QUnit.test("Unnecessary a load calls do not happen of custom store when item is selected", assert => {
+    QUnit.test("Unnecessary a load calls do not happen of custom store when item is selected", function(assert) {
         let loadCallCounter = 0;
 
         const store = new CustomStore({
@@ -5252,16 +5257,16 @@ QUnit.module("performance", () => {
 });
 
 QUnit.module("regression", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", assert => {
+    QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", function(assert) {
         const clock = sinon.useFakeTimers();
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -5285,7 +5290,7 @@ QUnit.module("regression", {
         clock.restore();
     });
 
-    QUnit.test("should render function item template that returns default template's name (T726777)", (assert) => {
+    QUnit.test("should render function item template that returns default template's name (T726777)", function(assert) {
         const tagBox = $("#tagBox").dxTagBox({
             items: [{ text: "item1" }, { text: "item2" }],
             itemTemplate: () => "item",
@@ -5303,7 +5308,7 @@ QUnit.module("regression", {
         checkItemsRender();
     });
 
-    QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", (assert) => {
+    QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", function(assert) {
         const data = [1, 2, 3, 4, 5];
         const timeToWait = 500;
 
@@ -5334,7 +5339,7 @@ QUnit.module("regression", {
         assert.expect(0);
     });
 
-    QUnit.test("tagBox should not fail when asynchronous data source is used in the single line mode (T381326)", (assert) => {
+    QUnit.test("tagBox should not fail when asynchronous data source is used in the single line mode (T381326)", function(assert) {
         const data = [1, 2, 3, 4, 5];
         const timeToWait = 500;
 
@@ -5366,7 +5371,7 @@ QUnit.module("regression", {
         assert.expect(0);
     });
 
-    QUnit.test("tagBox should not render duplicated tags after searching", (assert) => {
+    QUnit.test("tagBox should not render duplicated tags after searching", function(assert) {
         const data = [{ "id": 1, "Name": "Item14" }, { "id": 2, "Name": "Item21" }, {
             "id": 3,
             "Name": "Item31"
@@ -5419,7 +5424,7 @@ QUnit.module("regression", {
         assert.equal($.trim($tagContainer.text()), "Item14Item41", "selected values are rendered correctly");
     });
 
-    QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", (assert) => {
+    QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", function(assert) {
         const items = [
             { id: 1, name: "Item 1" },
             { id: 2, name: "Item 2" },
@@ -5472,7 +5477,7 @@ QUnit.module("regression", {
         assert.equal(tagBox.option("selectedItems").length, 1, "selectedItems was changed correctly");
     });
 
-    QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", (assert) => {
+    QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -5514,7 +5519,7 @@ QUnit.module("regression", {
         assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
     });
 
-    QUnit.test("selection should work with pregrouped data without paging and with preloaded datasource", (assert) => {
+    QUnit.test("selection should work with pregrouped data without paging and with preloaded datasource", function(assert) {
         const ds = new DataSource({
             store: [
                 { key: "Category 1", items: [{ id: 11, name: "Item 11" }, { id: 12, name: "Item 12" }] },
@@ -5534,7 +5539,7 @@ QUnit.module("regression", {
         assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text(), "Item 21", "Tag was selected");
     });
 
-    QUnit.test("selection should work with pregrouped data without paging", (assert) => {
+    QUnit.test("selection should work with pregrouped data without paging", function(assert) {
         const loadMock = sinon.stub().returns([
             { key: "Category 1", items: [{ id: 11, name: "Item 11" }, { id: 12, name: "Item 12" }] },
             { key: "Category 2", items: [{ id: 21, name: "Item 21" }, { id: 22, name: "Item 22" }] }
@@ -5555,7 +5560,7 @@ QUnit.module("regression", {
         assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text(), "Item 21", "Tag was selected");
     });
 
-    QUnit.testInActiveWindow("focusout event should remove focus class from the widget", assert => {
+    QUnit.testInActiveWindow("focusout event should remove focus class from the widget", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({});
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
@@ -5566,7 +5571,7 @@ QUnit.module("regression", {
         assert.notOk($tagBox.hasClass(FOCUSED_CLASS), "focused class was removed");
     });
 
-    QUnit.test("search filter should be cleared on close", (assert) => {
+    QUnit.test("search filter should be cleared on close", function(assert) {
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["111", "222", "333"],
             searchTimeout: 0,
@@ -5590,7 +5595,7 @@ QUnit.module("regression", {
         assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 3, "filter was cleared");
     });
 
-    QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", assert => {
+    QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", function(assert) {
         const dataSource = ["Item 1", "item 2", "item 3", "item 4"];
 
         $("#tagBox").dxTagBox({
@@ -5616,7 +5621,7 @@ QUnit.module("regression", {
         assert.equal(selectedItems.length, 4, "selected items");
     });
 
-    QUnit.test("Read only TagBox should be able to render the multitag", assert => {
+    QUnit.test("Read only TagBox should be able to render the multitag", function(assert) {
         assert.expect(1);
 
         try {
@@ -5634,7 +5639,7 @@ QUnit.module("regression", {
         assert.ok(true, "Widget rendered");
     });
 
-    QUnit.test("Disabled TagBox should be able to render the multitag", assert => {
+    QUnit.test("Disabled TagBox should be able to render the multitag", function(assert) {
         assert.expect(1);
 
         try {

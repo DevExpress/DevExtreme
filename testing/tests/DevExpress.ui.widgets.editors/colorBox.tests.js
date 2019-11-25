@@ -790,7 +790,7 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
     assert.equal(colorBox.option("value"), "#326b8a");
 });
 
-QUnit.test("value should be reseted after popup closing when 'applyValueMode' is 'useButtons' (T806577)", (assert) => {
+QUnit.test("value should be reseted after popup closing when 'applyValueMode' is 'useButtons' (T806577)", function(assert) {
     const colorBox = $("#color-box").dxColorBox({
             value: "#aabbcc",
             applyValueMode: "useButtons",

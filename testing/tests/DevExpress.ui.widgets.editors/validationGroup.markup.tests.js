@@ -51,11 +51,11 @@ testStart(() => {
 
 
 testModule("General", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.fixture = new Fixture();
     }
 }, () => {
-    test("dxValidationGroup can be created", (assert) => {
+    test("dxValidationGroup can be created", function(assert) {
         const $container = $("#dxValidationGroup");
         // act
         const group = this.fixture.createGroup($container);
@@ -64,7 +64,7 @@ testModule("General", {
         assert.ok($container.hasClass("dx-validationgroup"), "Specific class should be added");
     });
 
-    test("dxValidationGroup should not remove container content", (assert) => {
+    test("dxValidationGroup should not remove container content", function(assert) {
         const $container = $("#dxValidationGroup");
         $("<img/>").appendTo($container);
 
@@ -74,7 +74,7 @@ testModule("General", {
         assert.equal($container.find("img").length, 1, "Image inside of container should remain untouched");
     });
 
-    test("dxValidator can be validated as part of dxValidationGroup", (assert) => {
+    test("dxValidator can be validated as part of dxValidationGroup", function(assert) {
         const $container = $("#dxValidationGroup");
         const group = this.fixture.createGroup($container);
         const validator = this.fixture.createValidatorInGroup();
@@ -87,7 +87,7 @@ testModule("General", {
     });
 
 
-    test("dxValidator should be registered as part of dxValidationGroup - when dxValidationGroup was created after dxValidator", (assert) => {
+    test("dxValidator should be registered as part of dxValidationGroup - when dxValidationGroup was created after dxValidator", function(assert) {
         const $container = $("#dxValidationGroup");
 
         this.fixture.createValidationGroupContainer($container);
@@ -104,7 +104,7 @@ testModule("General", {
         assert.ok(validator.validate.calledOnce, "Validator should be validated as part of group");
     });
 
-    test("dxValidationGroup can be disposed, container should be cleared (T199232)", (assert) => {
+    test("dxValidationGroup can be disposed, container should be cleared (T199232)", function(assert) {
         const $container = $("#dxValidationGroup");
         this.fixture.createGroup($container);
         // act
@@ -114,7 +114,7 @@ testModule("General", {
     });
 
 
-    test("dxValidator can be reset as part of dxValidationGroup", (assert) => {
+    test("dxValidator can be reset as part of dxValidationGroup", function(assert) {
         const $container = $("#dxValidationGroup");
         const group = this.fixture.createGroup($container);
         const validator = this.fixture.createValidatorInGroup();
@@ -128,14 +128,14 @@ testModule("General", {
 });
 
 testModule("API", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.fixture = new Fixture();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.fixture.teardown();
     }
 }, () => {
-    test("group.validate", (assert) => {
+    test("group.validate", function(assert) {
         const $container = $("#dxValidationGroup");
         const group = this.fixture.createGroup($container);
 
@@ -150,7 +150,7 @@ testModule("API", {
         assert.equal(ValidationEngine.validateGroup.getCall(0).args[0], group, "correct group key should be passed");
     });
 
-    test("empty validation group should return valid 'validationResult' object", (assert) => {
+    test("empty validation group should return valid 'validationResult' object", function(assert) {
         const $container = $("#dxValidationGroup");
         const group = this.fixture.createGroup($container);
         const { isValid, brokenRules, validators } = group.validate();

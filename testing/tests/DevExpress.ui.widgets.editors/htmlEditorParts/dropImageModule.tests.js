@@ -13,7 +13,7 @@ class DropImageMock extends DropImage {
 }
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.$element = $("#htmlEditor");
 
         this.insertEmbedStub = sinon.stub();
@@ -39,7 +39,7 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module("DropImage module", moduleConfig, () => {
-    test("insert image on drop", (assert) => {
+    test("insert image on drop", function(assert) {
         new DropImageMock(this.quillMock, this.options);
 
         const event = $.Event($.Event("drop", { dataTransfer: { files: [this.file] } }));
@@ -50,7 +50,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
         assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "extendedImage", IMAGE, "user"], "insert base64 image by user");
     });
 
-    test("check file type", (assert) => {
+    test("check file type", function(assert) {
         const dropImage = new DropImage(this.quillMock, this.options);
 
         const textFile = createBlobFile("test", 80, "text/html");
@@ -61,7 +61,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
         assert.notOk(dropImage._isImage(unsupportedImage), "PSD is unsupported");
     });
 
-    test("insert image on paste", (assert) => {
+    test("insert image on paste", function(assert) {
         const clock = sinon.useFakeTimers();
         new DropImageMock(this.quillMock, this.options);
 
@@ -84,7 +84,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
         clock.restore();
     });
 
-    test("Do not encode pasted image with URL", (assert) => {
+    test("Do not encode pasted image with URL", function(assert) {
         new DropImageMock(this.quillMock, this.options);
 
         const textFile = createBlobFile("test", 80, "text/html");
@@ -100,7 +100,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
         assert.equal(this.insertEmbedStub.callCount, 0, "File isn't inserted");
     });
 
-    test("dragover event", (assert) => {
+    test("dragover event", function(assert) {
         new DropImage(this.quillMock, this.options);
 
         const event = $.Event("dragover");

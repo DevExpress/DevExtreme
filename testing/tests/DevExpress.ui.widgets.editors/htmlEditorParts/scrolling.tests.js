@@ -12,11 +12,11 @@ const { test } = QUnit;
 const MULTILINE_VALUE = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
 QUnit.module("Scrolling", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         fx.off = false;
     }
@@ -99,7 +99,7 @@ QUnit.module("Scrolling", {
         }
     }
 
-    test(`editor + scrollView: editor scrollTop - start`, (assert) => {
+    test(`editor + scrollView: editor scrollTop - start`, function(assert) {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
@@ -118,7 +118,7 @@ QUnit.module("Scrolling", {
 
     });
 
-    test(`editor + scrollView: editor scrollTop - end`, (assert) => {
+    test(`editor + scrollView: editor scrollTop - end`, function(assert) {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
@@ -137,7 +137,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 45);
     });
 
-    test(`editor + scrollView: editor scrollTop - middle`, (assert) => {
+    test(`editor + scrollView: editor scrollTop - middle`, function(assert) {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
@@ -156,7 +156,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup: editor scrollTop - start`, (assert) => {
+    test(`editor + popup: editor scrollTop - start`, function(assert) {
         const helper = new TestHelper();
         helper.initPopupTest();
 
@@ -174,7 +174,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup: editor scrollTop - end`, (assert) => {
+    test(`editor + popup: editor scrollTop - end`, function(assert) {
         const helper = new TestHelper();
         helper.initPopupTest();
 
@@ -193,7 +193,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 25);
     });
 
-    test(`editor + popup: editor scrollTop - middle`, (assert) => {
+    test(`editor + popup: editor scrollTop - middle`, function(assert) {
         const helper = new TestHelper();
         helper.initPopupTest();
 
@@ -212,7 +212,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup + scrollView: editor scrollTop - start`, (assert) => {
+    test(`editor + popup + scrollView: editor scrollTop - start`, function(assert) {
         const helper = new TestHelper();
         helper.initPopupWithScrollViewTest();
 
@@ -230,7 +230,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 30);
     });
 
-    test(`editor + popup + scrollView: editor scrollTop - end`, (assert) => {
+    test(`editor + popup + scrollView: editor scrollTop - end`, function(assert) {
         const helper = new TestHelper();
         helper.initPopupWithScrollViewTest();
 
@@ -249,7 +249,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 45);
     });
 
-    test(`editor + popup + scrollView: editor scrollTop - middle`, (assert) => {
+    test(`editor + popup + scrollView: editor scrollTop - middle`, function(assert) {
         const helper = new TestHelper();
         helper.initPopupWithScrollViewTest();
 
@@ -268,7 +268,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup: wheel event should be passed for element with contenteditable=false`, (assert) => {
+    test(`editor + popup: wheel event should be passed for element with contenteditable=false`, function(assert) {
         const helper = new TestHelper();
         const labelClass = "test-label";
 
