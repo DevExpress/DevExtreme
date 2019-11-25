@@ -82,6 +82,10 @@ var DeferRendering = Widget.inherit({
     // _getAnonymousTemplateName: function() {
     //     return ANONYMOUS_TEMPLATE_NAME;
     // },
+    _initTemplates: function() {
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
+        this.callBase();
+    },
 
     _init: function() {
         this.transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
@@ -93,8 +97,6 @@ var DeferRendering = Widget.inherit({
 
         this._initActions();
         this.callBase();
-
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _initElement: function() {

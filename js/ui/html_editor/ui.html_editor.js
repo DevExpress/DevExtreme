@@ -246,6 +246,7 @@ const HtmlEditor = Editor.inherit({
     // },
 
     _initTemplates: function() {
+        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             [ANONYMOUS_TEMPLATE_NAME]: new EmptyTemplate()
         });
@@ -304,7 +305,6 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._updateContainerMarkup();
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
     },
 
     _renderSubmitElement: function() {
