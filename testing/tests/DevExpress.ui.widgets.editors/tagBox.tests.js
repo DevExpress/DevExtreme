@@ -4215,20 +4215,25 @@ QUnit.module("applyValueMode = 'useButtons'", {
         });
         this.clock.tick(TIME_TO_WAIT);
 
+        const tagBox = $tagBox.dxTagBox("instance");
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type("aaa");
         this.clock.tick(TIME_TO_WAIT);
 
-        $(".dx-list-select-all-checkbox").trigger("dxclick");
-        $(".dx-popup-done").trigger("dxclick");
+        let $popupWrapper = $(tagBox.content()).parent().parent();
+
+        $popupWrapper.find(".dx-list-select-all-checkbox").trigger("dxclick");
+        $popupWrapper.find(".dx-popup-done.dx-button").trigger("dxclick");
 
         keyboard.type("bbb");
         this.clock.tick(TIME_TO_WAIT);
 
-        $(".dx-list-select-all-checkbox").trigger("dxclick");
-        $(".dx-popup-done").trigger("dxclick");
+        $popupWrapper = $(tagBox.content()).parent().parent();
+
+        $popupWrapper.find(".dx-list-select-all-checkbox").trigger("dxclick");
+        $popupWrapper.find(".dx-popup-done.dx-button").trigger("dxclick");
 
         assert.deepEqual($tagBox.dxTagBox("instance").option("value"), [0, 1], "value of TagBox");
     });
