@@ -40,13 +40,12 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, element) {
+    constructor(option) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
         this.option = option;
-        // this.$element = element;
     }
 
     static getDefaultOptions() {
@@ -159,7 +158,7 @@ export default class TemplateManager {
 
     saveTemplate(name, template) {
         const templates = this.option('integrationOptions.templates');
-        templates[name] = this.createTemplate(template);
+        templates[name] = this._createTemplate(template);
     }
 
     _extractAnonymousTemplate(getElementContent) {
@@ -175,7 +174,7 @@ export default class TemplateManager {
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         if(!templates[this._anonymousTemplateName] && !onlyJunkTemplateContent) {
-            templates[this._anonymousTemplateName] = this.createTemplate($anonymousTemplate);
+            templates[this._anonymousTemplateName] = this._createTemplate($anonymousTemplate);
         }
     }
 
@@ -188,17 +187,17 @@ export default class TemplateManager {
         })[0];
         if(cachedTemplate) return cachedTemplate.template;
 
-        const template = this.createTemplate(templateSource);
+        const template = this._createTemplate(templateSource);
         this._tempTemplates.push({ template, source: templateKey(templateSource) });
         return template;
     }
 
-    createTemplate(templateSource) {
+    _createTemplate(templateSource) {
         templateSource = typeof templateSource === 'string' ? normalizeTemplateElement(templateSource) : templateSource;
         return this.option('integrationOptions.createTemplate')(templateSource);
     }
 
-    getTemplate(templateSource, defaultTemplates) {
+    getTemplate(templateSource) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
                 const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
@@ -213,7 +212,7 @@ export default class TemplateManager {
                         return new FunctionTemplate(() => templateSource);
                     }
                     dispose = true;
-                    return this.createTemplate(templateSource);
+                    return this._createTemplate(templateSource);
                 });
 
                 const result = template.render(options);

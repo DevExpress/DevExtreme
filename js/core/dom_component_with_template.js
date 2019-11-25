@@ -10,10 +10,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _init: function() {
         this.callBase();
 
-        this._templateManager = new TemplateManager(
-            this.option.bind(this),
-            this.$element.bind(this)
-        );
+        this._templateManager = new TemplateManager(this.option.bind(this));
 
         this._initTemplates();
     },
