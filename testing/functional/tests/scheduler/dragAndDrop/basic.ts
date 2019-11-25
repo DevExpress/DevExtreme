@@ -40,25 +40,48 @@ test(`Drag-n-drop in the "month" view`, async t => {
 
 test(`Drag recurrent appointment occurrence from collector (T832887)`, async t => {
     const scheduler = new Scheduler("#container");
-    const resizableAppointment = scheduler.getAppointment('Recurrence', 1);
+    let compactAppointment = scheduler.getAppointmentCollector('1');
+
+    await t.
+        click(compactAppointment.element).debug();
+
+    let tooltipItem = scheduler.appointmentTooltip.getListItem('Recurrence');
+
+    await t.debug().
+        drag(tooltipItem.element, -100, 0);
+        
+    const dialog = scheduler.getDialog();
+    
+    await t
+        .click(dialog.appointment);
+
+    const resizableAppointment = scheduler.getAppointment('Recurrence two', 2);
 
     await t
-        .drag(resizableAppointment.resizableHandle.top, 0, -100)
-        .click(resizableAppointment.element)
-        .expect(resizableAppointment.size.height).eql(`200px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`12:00 PM`);
-
+        .expect(resizableAppointment.date.startTime).eql(`7:00 AM`)
+        .expect(resizableAppointment.date.endTime).eql(`10:00 AM`);
 }).before(() => createScheduler({
     views: ["week"],
     currentView: "week",
-    firstDayOfWeek: 2,  
+    firstDayOfWeek: 2,
+    startDayHour: 4,
+    maxAppointmentsPerCell: 2,
     dataSource: [{
-      text: "Recurrence",
-      startDate: new Date(2019, 2, 30, 2, 0),
-      endDate: new Date(2019, 2, 30, 10, 0),
-      recurrenceException: "",
-      recurrenceRule: "FREQ=DAILY"
+    text: "Recurrence one",
+    startDate: new Date(2019, 2, 30, 8, 0),
+    endDate: new Date(2019, 2, 30, 10, 0),
+    recurrenceException: "",
+    recurrenceRule: "FREQ=DAILY"
+    }, {
+    text: "Non-recurrent appointment",
+    startDate: new Date(2019, 2, 30, 7, 0),
+    endDate: new Date(2019, 2, 30, 11, 0),
+    }, {
+    text: "Recurrence two",
+    startDate: new Date(2019, 2, 30, 8, 0),
+    endDate: new Date(2019, 2, 30, 10, 0),
+    recurrenceException: "",
+    recurrenceRule: "FREQ=DAILY"
     }],
-    currentDate: new Date(2019, 2, 30),
+    currentDate: new Date(2019, 2, 30), 
 }));
