@@ -520,7 +520,7 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [{ caption: "f1", width: "auto" }, { caption: "f2", width: "auto" }]
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getOptions(dataGrid, null, true)).then(() => {
+                exportDataGrid(getOptions(this, dataGrid, null, true)).then(() => {
                     let expectedWidths = [3.71, 67.71, undefined];
                     if(browser.mozilla) {
                         expectedWidths = [3.85, 67.57, undefined];
