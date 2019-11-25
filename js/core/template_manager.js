@@ -46,12 +46,8 @@ export default class TemplateManager {
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
         this.option = option;
-        this.$element = element;
+        // this.$element = element;
     }
-
-    // static getAnonymousTemplateName() {
-    //     return ANONYMOUS_TEMPLATE_NAME;
-    // }
 
     static getDefaultOptions() {
         return {
@@ -128,13 +124,13 @@ export default class TemplateManager {
         this._tempTemplates = [];
     }
 
-    initTemplates() {
-        this._extractTemplates();
-        this._extractAnonymousTemplate();
+    initTemplates(getElementContent) {
+        this._extractTemplates(getElementContent);
+        this._extractAnonymousTemplate(getElementContent);
     }
 
-    _extractTemplates() {
-        const templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
+    _extractTemplates(getElementContent) {
+        const templateElements = getElementContent().filter(TEMPLATE_SELECTOR);
         const templatesMap = {};
 
         templateElements.each((_, template) => {
@@ -166,9 +162,9 @@ export default class TemplateManager {
         templates[name] = this.createTemplate(template);
     }
 
-    _extractAnonymousTemplate() {
+    _extractAnonymousTemplate(getElementContent) {
         const templates = this.option('integrationOptions.templates');
-        const $anonymousTemplate = this.$element().contents().detach();
+        const $anonymousTemplate = getElementContent().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
             const isTextNode = element.nodeType === TEXT_NODE;

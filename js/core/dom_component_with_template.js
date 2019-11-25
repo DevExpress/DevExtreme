@@ -24,7 +24,9 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _initTemplates: function() {
-        this._templateManager.initTemplates();
+        const getElementContent = () => this.$element().contents();
+
+        this._templateManager.initTemplates(getElementContent);
     },
 
     _getTemplateByOption: function(optionName) {
