@@ -251,10 +251,6 @@ var CollectionWidget = Widget.inherit({
         });
     },
 
-    // _getAnonymousTemplateName: function() {
-    //     return "item";
-    // },
-
     _init: function() {
         this._compileDisplayGetter();
         this.callBase();

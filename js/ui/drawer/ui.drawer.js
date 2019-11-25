@@ -150,10 +150,6 @@ const Drawer = Widget.inherit({
         });
     },
 
-    // _getAnonymousTemplateName() {
-    //     return ANONYMOUS_TEMPLATE_NAME;
-    // },
-
     _init() {
         this.callBase();
 

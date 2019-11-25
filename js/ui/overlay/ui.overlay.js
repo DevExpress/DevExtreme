@@ -412,10 +412,6 @@ var Overlay = Widget.inherit({
         });
     },
 
-    // _getAnonymousTemplateName: function() {
-    //     return ANONYMOUS_TEMPLATE_NAME;
-    // },
-
     _wrapper: function() {
         return this._$wrapper;
     },

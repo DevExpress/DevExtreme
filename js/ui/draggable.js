@@ -923,10 +923,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this["_" + name + "Action"] || this._createActionByOption(name);
     },
 
-    // _getAnonymousTemplateName: function() {
-    //     return "content";
-    // },
-
     _initTemplates: function() {
         if(!this.option("contentTemplate")) return;
 

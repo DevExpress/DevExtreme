@@ -88,10 +88,6 @@ class Button extends Widget {
         return validationGroup || ValidationEngine.findGroup($element, model);
     }
 
-    // _getAnonymousTemplateName() {
-    //     return 'content';
-    // }
-
     _getContentData() {
         const { icon, text, type, _templateData } = this.option();
 

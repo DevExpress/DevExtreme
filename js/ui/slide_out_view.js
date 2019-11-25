@@ -150,10 +150,6 @@ var SlideOutView = Widget.inherit({
         ]);
     },
 
-    // _getAnonymousTemplateName: function() {
-    //     return ANONYMOUS_TEMPLATE_NAME;
-    // },
-
     _init: function() {
         this.callBase();
         this.$element().addClass(SLIDEOUTVIEW_CLASS);
