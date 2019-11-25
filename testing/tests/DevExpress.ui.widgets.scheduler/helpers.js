@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { extend } from "core/utils/extend";
 import translator from "animation/translator";
 import devices from "core/devices";
 import "ui/scheduler/ui.scheduler";
@@ -121,7 +120,8 @@ export class SchedulerTestWrapper {
                     const textBox = this.appointmentPopup.form.getSubjectTextBox();
                     return textBox.option("value");
                 },
-                isRecurrenceEditorVisible: () => $(".dx-recurrence-editor-container").is(":visible")
+                isRecurrenceEditorVisible: () => $(".dx-recurrence-editor-container").is(":visible"),
+                isRendered: () => $(".dx-scheduler-appointment-popup .dx-form .dx-layout-manager").length > 0
             },
 
             dialog: {
@@ -136,15 +136,10 @@ export class SchedulerTestWrapper {
                 return scrollableContainer.scrollHeight > scrollableContainer.clientHeight;
             },
             getPopupInstance: () => $(".dx-scheduler-appointment-popup.dx-widget").dxPopup("instance"),
-            isVisible: () => this.appointmentPopup.getPopup().length !== 0,
+            isRendered: () => this.appointmentPopup.getPopup().length !== 0,
+            isVisible: () => this.instance._appointmentPopup._popup.option("visible"),
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
-            setInitialPopupSize: size => {
-                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
-                this.instance._appointmentPopup._createPopupConfig = () => {
-                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
-                    return extend(config, size);
-                };
-            },
+            setInitialPopupSize: size => this.instance._appointmentPopup._popup.option(size),
             setPopupWidth: width => this.appointmentPopup.getPopupInstance().option("width", width),
             getToolbarElementByLocation: location => {
                 const toolbarName = location === TOOLBAR_TOP_LOCATION ? "title" : TOOLBAR_BOTTOM_LOCATION;
