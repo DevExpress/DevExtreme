@@ -42,7 +42,7 @@ QUnit.module("Intl localization", {
 }, () => {
     sharedTests();
 
-    QUnit.test("engine", assert => {
+    QUnit.test("engine", function(assert) {
         assert.equal(numberLocalization.engine(), "intl");
         assert.equal(dateLocalization.engine(), "intl");
     });
@@ -73,7 +73,7 @@ QUnit.module("Intl localization", {
             }
         });
 
-        QUnit.test("format", assert => {
+        QUnit.test("format", function(assert) {
             const separators = {
                 de: ",",
                 ru: ",",
@@ -194,7 +194,7 @@ QUnit.module("Intl localization", {
             });
         });
 
-        QUnit.test("formatter caching", assert => {
+        QUnit.test("formatter caching", function(assert) {
             const originalIntl = window.Intl;
             let count = 0;
             const IntlMock = {
@@ -216,7 +216,7 @@ QUnit.module("Intl localization", {
             }
         });
 
-        QUnit.test("parse", assert => {
+        QUnit.test("parse", function(assert) {
             assert.equal(numberLocalization.parse(getIntlNumberFormatter({ maximumFractionDigits: 0, minimumFractionDigits: 0 })(437)), 437);
             assert.equal(numberLocalization.parse(getIntlNumberFormatter({ maximumFractionDigits: 1, minimumFractionDigits: 1 })(1.2)), 1.2);
             assert.equal(numberLocalization.parse(getIntlNumberFormatter({ maximumFractionDigits: 0, minimumFractionDigits: 0 })(12000)), 12000);
@@ -225,16 +225,16 @@ QUnit.module("Intl localization", {
             assert.equal(numberLocalization.parse(getIntlNumberFormatter({ style: "currency", currency: "USD", minimumFractionDigits: 1 })(1.2)), 1.2);
         });
 
-        QUnit.test("format by a function", assert => {
+        QUnit.test("format by a function", function(assert) {
             assert.equal(numberLocalization.format(437, value => { return "!" + value; }), "!437");
             assert.equal(numberLocalization.format(437, { formatter: function(value) { return "!" + value; } }), "!437");
         });
 
-        QUnit.test("parse by a function", assert => {
+        QUnit.test("parse by a function", function(assert) {
             assert.equal(numberLocalization.parse("!437", { parser: function(text) { return Number(text.substr(1)); } }), 437);
         });
 
-        QUnit.test("parse long string", assert => {
+        QUnit.test("parse long string", function(assert) {
             assert.ok(isNaN(numberLocalization.parse("1111111111111111111111111111111111111")));
         });
 
@@ -247,7 +247,7 @@ QUnit.module("Intl localization", {
             }
         });
 
-        QUnit.test("getOpenXmlCurrencyFormat", assert => {
+        QUnit.test("getOpenXmlCurrencyFormat", function(assert) {
             const nonBreakingSpace = "\xa0",
                 expectedResults = {
                     RUB: {
@@ -274,7 +274,7 @@ QUnit.module("Intl localization", {
             }
         });
 
-        QUnit.test("getOpenXmlCurrencyFormat should return default format when currency is undefined", assert => {
+        QUnit.test("getOpenXmlCurrencyFormat should return default format when currency is undefined", function(assert) {
             assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), "$#,##0{0}_);\\($#,##0{0}\\)");
         });
 
@@ -296,7 +296,7 @@ QUnit.module("Intl localization", {
             }
         });
 
-        QUnit.test("getMonthNames", assert => {
+        QUnit.test("getMonthNames", function(assert) {
             const getIntlMonthNames = format => {
                 return Array.apply(null, new Array(12)).map((_, monthIndex) => {
                     return getIntlDateFormatter({ month: format })(new Date(0, monthIndex, 2));
@@ -311,7 +311,7 @@ QUnit.module("Intl localization", {
             assert.deepEqual(dateLocalization.getMonthNames("narrow"), monthsNarrow, "Array of month names (narrow format)");
         });
 
-        QUnit.test("getMonthNames non-standalone", assert => {
+        QUnit.test("getMonthNames non-standalone", function(assert) {
             const expected = {
                 de: "November",
                 en: "November",
@@ -327,7 +327,7 @@ QUnit.module("Intl localization", {
             assert.equal(dateLocalization.getMonthNames("wide", "format")[10], expected[localeId], "Array of non-standalone month names");
         });
 
-        QUnit.test("getDayNames", assert => {
+        QUnit.test("getDayNames", function(assert) {
             const dayNames = {
                 en: { long: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] }
             };
@@ -356,11 +356,11 @@ QUnit.module("Intl localization", {
                 "Array of day names (narrow format)");
         });
 
-        QUnit.test("getTimeSeparator", assert => {
+        QUnit.test("getTimeSeparator", function(assert) {
             assert.equal(dateLocalization.getTimeSeparator(), ":");
         });
 
-        QUnit.test("formatUsesMonthName", assert => {
+        QUnit.test("formatUsesMonthName", function(assert) {
             assert.equal(dateLocalization.formatUsesMonthName("monthAndDay"), true);
             assert.equal(dateLocalization.formatUsesMonthName("monthAndYear"), true);
             assert.equal(dateLocalization.formatUsesMonthName({ month: "long", day: "number", year: "2-digit" }), true);
@@ -370,7 +370,7 @@ QUnit.module("Intl localization", {
             assert.equal(dateLocalization.formatUsesMonthName("month"), false);
         });
 
-        QUnit.test("formatUsesDayName", assert => {
+        QUnit.test("formatUsesDayName", function(assert) {
             assert.equal(dateLocalization.formatUsesDayName("dayofweek"), true);
             assert.equal(dateLocalization.formatUsesDayName("longdate"), true);
             assert.equal(dateLocalization.formatUsesDayName("longdatelongtime"), true);
@@ -381,13 +381,13 @@ QUnit.module("Intl localization", {
             assert.equal(dateLocalization.formatUsesDayName("shortDate"), false);
         });
 
-        QUnit.test("getFormatParts", assert => {
+        QUnit.test("getFormatParts", function(assert) {
             assert.deepEqual(dateLocalization.getFormatParts("shortdate").sort(), ["year", "month", "day"].sort());
             assert.deepEqual(dateLocalization.getFormatParts("shorttime").sort(), ["hours", "minutes"].sort());
             assert.deepEqual(dateLocalization.getFormatParts("shortdateshorttime").sort(), ["year", "month", "day", "hours", "minutes"].sort());
         });
 
-        QUnit.test("format", assert => {
+        QUnit.test("format", function(assert) {
             const defaultOptions = Intl.DateTimeFormat(localeId).resolvedOptions();
             const formats = [
                 { format: "day", intlFormat: { day: "numeric" } },
@@ -490,7 +490,7 @@ QUnit.module("Intl localization", {
             assert.notOk(dateLocalization.format(), "without date");
         });
 
-        QUnit.test("formatter caching", assert => {
+        QUnit.test("formatter caching", function(assert) {
             const originalIntl = window.Intl;
             let count = 0;
             const IntlMock = {
@@ -512,7 +512,7 @@ QUnit.module("Intl localization", {
             }
         });
 
-        QUnit.test("parse", assert => {
+        QUnit.test("parse", function(assert) {
             const currentDate = new Date();
             const testData = [
                 { format: "shortDate", date: new Date(2016, 10, 17) },
@@ -574,13 +574,13 @@ QUnit.module("Intl localization", {
             });
         });
 
-        QUnit.test("parse wrong arguments", assert => {
+        QUnit.test("parse wrong arguments", function(assert) {
             assert.equal(dateLocalization.parse(null, "shortDate"), undefined);
             assert.equal(dateLocalization.parse(undefined, "shortDate"), undefined);
             assert.equal(dateLocalization.parse("", "shortDate"), undefined);
         });
 
-        QUnit.test("parse by a function", assert => {
+        QUnit.test("parse by a function", function(assert) {
             const expectedDate = new Date(2018, 1, 1);
             const customDateString = "Custom date string";
             const customParser = text => {
@@ -591,7 +591,7 @@ QUnit.module("Intl localization", {
             assert.equal(dateLocalization.parse(customDateString, { parser: customParser }).toString(), expectedDate.toString());
         });
 
-        QUnit.test("DevExtreme format uses default locale options", assert => {
+        QUnit.test("DevExtreme format uses default locale options", function(assert) {
             const date = new Date();
 
             const intlFormatted = getIntlDateFormatter()(date);
@@ -602,7 +602,7 @@ QUnit.module("Intl localization", {
             assert.ok(dateTimeFormatted.indexOf(intlFormatted) > -1, dateTimeFormatted + " not contain " + intlFormatted);
         });
 
-        QUnit.test("format/parse by a function", assert => {
+        QUnit.test("format/parse by a function", function(assert) {
             const format = {
                 formatter: function(date) {
                     return "It was year " + date.getFullYear() + ".";
@@ -617,7 +617,7 @@ QUnit.module("Intl localization", {
             assert.equal(dateLocalization.parse("It was year 2000.", format).getFullYear(), 2000);
         });
 
-        QUnit.test("firstDayOfWeekIndex", assert => {
+        QUnit.test("firstDayOfWeekIndex", function(assert) {
             const expectedValues = {
                 de: 1, en: 0, ja: 0, ru: 1, zh: 0, hr: 1, ar: 6, el: 1, ca: 1
             };
@@ -627,7 +627,7 @@ QUnit.module("Intl localization", {
 
     QUnit.module("defaultCurrency");
 
-    QUnit.test("config.defaultCurrency affects on localization", assert => {
+    QUnit.test("config.defaultCurrency affects on localization", function(assert) {
         var originalConfig = config();
 
         try {
@@ -648,7 +648,7 @@ QUnit.module("Intl localization", {
     QUnit.module("date - browser specific behavior");
 
     // NOTE: Workaroud for the MS Edge bug https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101503/
-    QUnit.test("formatted value should not contain &lrm & &rlm symbols", assert => {
+    QUnit.test("formatted value should not contain &lrm & &rlm symbols", function(assert) {
         const unwantedSymbols = "\u200E\u200F";
         const originalDateTimeFormatter = Intl.DateTimeFormat;
 
@@ -670,7 +670,7 @@ QUnit.module("Intl localization", {
     });
 
     // Workaroud for the MS Edge and IE bug https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11907541/
-    QUnit.test("Format by `hour` and `minute` shortcuts in IE and Edge", assert => {
+    QUnit.test("Format by `hour` and `minute` shortcuts in IE and Edge", function(assert) {
         const originalDateTimeFormatter = Intl.DateTimeFormat;
 
         const testData = {
@@ -707,7 +707,7 @@ QUnit.module("Intl localization", {
     });
 
     QUnit.module("Fallback strategy", {
-        afterEach: () => {
+        afterEach: function() {
             numberLocalization.resetInjection();
             dateLocalization.resetInjection();
             numberLocalization.inject(intlNumberLocalization);
@@ -716,7 +716,7 @@ QUnit.module("Intl localization", {
         }
     });
 
-    QUnit.test("disableIntl", assert => {
+    QUnit.test("disableIntl", function(assert) {
         disableIntl();
         assert.equal(numberLocalization.engine(), "base");
         assert.equal(dateLocalization.engine(), "base");
