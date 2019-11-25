@@ -4,7 +4,7 @@ import translator from "animation/translator";
 import dateUtils from "core/utils/date";
 import dateSerialization from "core/utils/date_serialization";
 import { noop } from "core/utils/common";
-import KeyboardProcessor from "ui/widget/ui.keyboard_processor";
+import KeyboardProcessor from "events/core/keyboard_processor";
 import swipeEvents from "events/swipe";
 import fx from "animation/fx";
 import Views from "ui/calendar/ui.calendar.views";
@@ -1070,23 +1070,15 @@ QUnit.module("Keyboard navigation", {
 
         this.$element.remove();
         this.$element = $("<div>").appendTo("body");
-
-        const kb = new KeyboardProcessor({
-            element: this.$element,
-            handler: noop
-        });
-
         this.$element.dxCalendar({
-            _keyboardProcessor: kb,
             value: new Date(2013, 11, 15),
             focusStateEnabled: true
         });
 
         this.$element
-            .on("keydown.TEST", (e) => {
+            .on("keydown.TEST", e => {
                 assert.ok(e.isDefaultPrevented());
             })
-            .find("[data-value='2013/12/15']")
             .trigger($.Event("keydown", { key: LEFT_ARROW_KEY_CODE }))
             .trigger($.Event("keydown", { key: UP_ARROW_KEY_CODE }))
             .trigger($.Event("keydown", { key: RIGHT_ARROW_KEY_CODE }))

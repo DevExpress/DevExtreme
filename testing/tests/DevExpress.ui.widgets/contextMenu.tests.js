@@ -249,7 +249,7 @@ QUnit.module("Rendering", moduleConfig, () => {
     QUnit.test("not create keyboardProcessor on rendering", function(assert) {
         const instance = new ContextMenu(this.$element, {});
 
-        assert.notOk(instance._keyboardProcessor, "keyboard processor is undefined");
+        assert.notOk(instance._keyboardListenerId, "keyboard processor is undefined");
     });
 });
 

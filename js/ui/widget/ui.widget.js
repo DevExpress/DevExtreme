@@ -1,5 +1,6 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    events = require("../../events/index"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -7,7 +8,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
-    KeyboardProcessor = require("./ui.keyboard_processor"),
+    keyboard = require("../../events/index").keyboard,
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils");
 
@@ -15,7 +16,7 @@ require("../../events/click");
 require("../../events/hover");
 require("../../events/core/emitter.feedback");
 
-const { hover, focus, active, dxClick } = eventsEngine;
+const { hover, focus, active, dxClick } = events;
 
 var WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",
@@ -133,7 +134,8 @@ var Widget = DOMComponentWithTemplate.inherit({
             */
             onFocusOut: null,
 
-            _keyboardProcessor: undefined,
+            _listenerId: Symbol('listenerId'),
+            onKeyboardHandled: null,
 
             /**
             * @name ui.template
@@ -183,6 +185,11 @@ var Widget = DOMComponentWithTemplate.inherit({
     _init: function() {
         this.callBase();
         this._initContentReadyAction();
+        this._initKeyboardHandledAction();
+    },
+
+    _initKeyboardHandledAction() {
+        this._keyboardHandledAction = this._createActionByOption('onKeyboardHandled');
     },
 
     _clearInnerOptionCache: function(optionContainer) {
@@ -290,6 +297,8 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _dispose: function() {
         this._contentReadyAction = null;
+        this._keyboardHandledAction = null;
+        this._disposeKeyboardProcessor();
 
         this.callBase();
     },
@@ -430,37 +439,49 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._hasFocusClass();
     },
 
+    _getKeyboardListeners() {
+        return [];
+    },
+
     _attachKeyboardEvents: function() {
-        var processor = this.option("_keyboardProcessor");
+        this._disposeKeyboardProcessor();
 
-        if(processor) {
-            this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
-        } else if(this.option("focusStateEnabled")) {
-            this._disposeKeyboardProcessor();
+        const { focusStateEnabled, onKeyboardHandled } = this.option();
+        const hasChildListeners = this._getKeyboardListeners().length;
+        const hasKeyboardEventHandler = !!onKeyboardHandled;
+        const shouldAttach = focusStateEnabled || hasChildListeners || hasKeyboardEventHandler;
 
-            this._keyboardProcessor = new KeyboardProcessor({
-                element: this._keyboardEventBindingTarget(),
-                handler: this._keyboardHandler,
-                focusTarget: this._focusTarget(),
-                context: this
-            });
+        if(shouldAttach) {
+            this._keyboardListenerId = keyboard.on(
+                this._keyboardEventBindingTarget(),
+                this._focusTarget(),
+                opts => this._keyboardHandler(opts)
+            );
         }
     },
 
-    _keyboardHandler: function(options) {
-        var e = options.originalEvent;
-        var keyName = options.keyName;
-        var keyCode = options.which;
+    _keyboardHandler: function(options, onlyChildProcessing) {
+        if(!onlyChildProcessing) {
+            const { originalEvent, keyName, which } = options;
+            const keys = this._supportedKeys(originalEvent);
+            const func = keys[keyName] || keys[which];
 
-        var keys = this._supportedKeys(e),
-            func = keys[keyName] || keys[keyCode];
+            if(func !== undefined) {
+                const handler = func.bind(this);
+                const result = handler(originalEvent, options);
 
-        if(func !== undefined) {
-            var handler = func.bind(this);
-            return handler(e) || false;
-        } else {
-            return true;
+                if(!result) {
+                    return false;
+                }
+            }
         }
+
+        const keyboardListeners = this._getKeyboardListeners();
+
+        keyboardListeners.forEach(listener => listener && listener._keyboardHandler(options));
+        this._keyboardHandledAction(options);
+
+        return true;
     },
 
     _refreshFocusState: function() {
@@ -480,10 +501,8 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _disposeKeyboardProcessor() {
-        if(this._keyboardProcessor) {
-            this._keyboardProcessor.dispose();
-            delete this._keyboardProcessor;
-        }
+        keyboard.off(this._keyboardListenerId);
+        this._keyboardListenerId = null;
     },
 
     _attachHoverEvents() {
@@ -620,7 +639,6 @@ var Widget = DOMComponentWithTemplate.inherit({
                 this._attachHoverEvents();
                 break;
             case "tabIndex":
-            case "_keyboardProcessor":
             case "focusStateEnabled":
                 this._refreshFocusState();
                 break;
@@ -637,6 +655,10 @@ var Widget = DOMComponentWithTemplate.inherit({
                     // TODO hiding works wrong
                     this._checkVisibilityChanged(args.value ? "shown" : "hiding");
                 }
+                break;
+            case "onKeyboardHandled":
+                this._initKeyboardHandledAction();
+                this._attachKeyboardEvents();
                 break;
             case "onContentReady":
                 this._initContentReadyAction();

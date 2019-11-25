@@ -12,7 +12,7 @@ import { grep, noop } from './utils/common';
 import { inArray } from './utils/array';
 import { isString, isDefined } from './utils/type';
 import { hasWindow } from '../core/utils/window';
-import { resize as resizeEvent, visibility as visibilityEvents } from '../events/core/events_engine';
+import { resize as resizeEvent, visibility as visibilityEvents } from '../events/index';
 
 const { abstract } = Component;
 

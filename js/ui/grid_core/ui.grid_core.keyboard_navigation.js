@@ -6,13 +6,13 @@ import { focusAndSelectElement, getWidgetInstance } from "./ui.grid_core.utils";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { focused } from "../widget/selectors";
-import KeyboardProcessor from "../widget/ui.keyboard_processor";
 import eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
 import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 import browser from "../../core/utils/browser";
+import { keyboard } from "../../events/index";
 
 
 var ROWS_VIEW_CLASS = "rowsview",
@@ -140,7 +140,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
             eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
 
-            that._initKeyDownProcessor(that, $element, that._keyDownHandler);
+            that._initKeyDownProcessor($element, e => that._keyDownHandler(e));
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
@@ -149,22 +149,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
         });
     },
 
-    _initKeyDownProcessor: function(context, element, handler) {
-        if(this._keyDownProcessor) {
-            this._keyDownProcessor.dispose();
-            this._keyDownProcessor = null;
-        }
-        this._keyDownProcessor = new KeyboardProcessor({
-            element: element,
-            context: context,
-            handler: handler
-        });
+    _initKeyDownProcessor: function(element, handler) {
+        keyboard.off(this._keyDownListener);
+        this._keyDownListener = keyboard.on(element, null, handler);
     },
 
     dispose: function() {
         this.callBase();
         this._focusedView = null;
-        this._keyDownProcessor && this._keyDownProcessor.dispose();
+        keyboard.off(this._keyDownListener);
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
     },
     // #endregion Initialization

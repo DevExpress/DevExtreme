@@ -424,8 +424,7 @@ var SchedulerNavigator = Widget.inherit({
                 this._popover.hide();
             }).bind(this),
             hasFocus: function() { return true; },
-            tabIndex: null,
-            _keyboardProcessor: this._calendarKeyboardProcessor
+            tabIndex: null
         };
     },
 
@@ -438,9 +437,12 @@ var SchedulerNavigator = Widget.inherit({
 
         this._caption.option({
             text: caption,
-            onClick: (function() {
-                this._popover.toggle();
-            }).bind(this)
+            onKeyboardHandled: opts => {
+                this.option("focusStateEnabled") &&
+                    !this.option("disabled") &&
+                    this._calendar._keyboardHandler(opts);
+            },
+            onClick: () => this._popover.toggle()
         });
     },
 
@@ -448,9 +450,6 @@ var SchedulerNavigator = Widget.inherit({
         if(!this.option("focusStateEnabled") || this.option("disabled")) {
             return;
         }
-
-        this._calendarKeyboardProcessor = this._caption._keyboardProcessor.attachChildProcessor();
-        this._setCalendarOption("_keyboardProcessor", this._calendarKeyboardProcessor);
 
         var that = this,
             executeHandler = function() {

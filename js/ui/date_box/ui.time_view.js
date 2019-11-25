@@ -170,26 +170,16 @@ const TimeView = Editor.inherit({
         }).$element();
     },
 
-    _attachKeyboardProcessorToEditor: function(editor) {
-        const keyboardProcessor = editor._keyboardProcessor;
-
-        if(keyboardProcessor) {
-            keyboardProcessor
-                .attachChildProcessor()
-                .reinitialize(this._keyboardHandler, this);
-        }
-    },
-
     _createHourBox: function() {
         const editor = this._hourBox = this._createComponent($("<div>"), NumberBox, extend({
             min: -1,
             max: 24,
             value: this._getValue().getHours(),
             onValueChanged: this._onHourBoxValueChanged.bind(this),
+            onKeyboardHandled: opts => this._keyboardHandler(opts)
         }, this._getNumberBoxConfig()));
 
         editor.setAria("label", "hours");
-        this._attachKeyboardProcessorToEditor(editor);
     },
 
     _isPM: function() {
@@ -220,6 +210,7 @@ const TimeView = Editor.inherit({
             min: -1,
             max: 60,
             value: this._getValue().getMinutes(),
+            onKeyboardHandled: opts => this._keyboardHandler(opts),
             onValueChanged: ({ value, component }) => {
                 const newMinutes = (60 + value) % 60;
                 component.option("value", newMinutes);
@@ -232,7 +223,6 @@ const TimeView = Editor.inherit({
         }, this._getNumberBoxConfig()));
 
         editor.setAria("label", "minutes");
-        this._attachKeyboardProcessorToEditor(editor);
     },
 
     _createFormat12Box: function() {
@@ -244,6 +234,7 @@ const TimeView = Editor.inherit({
             ],
             valueExpr: "value",
             displayExpr: "text",
+            onKeyboardHandled: opts => this._keyboardHandler(opts),
             onValueChanged: ({ value }) => {
                 const hours = this._getValue().getHours();
                 const time = new Date(this._getValue());
@@ -256,7 +247,6 @@ const TimeView = Editor.inherit({
             stylingMode: this.option("stylingMode")
         });
 
-        this._attachKeyboardProcessorToEditor(editor);
         editor.setAria("label", "type");
     },
 

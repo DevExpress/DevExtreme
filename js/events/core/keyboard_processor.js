@@ -2,7 +2,6 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import Class from "../../core/class";
 import { inArray } from "../../core/utils/array";
-import { each } from "../../core/utils/iterator";
 import { addNamespace, normalizeKeyName } from "../../events/utils";
 
 const COMPOSITION_START_EVENT = "compositionstart";
@@ -24,8 +23,7 @@ const KeyboardProcessor = Class.inherit({
             this._focusTarget = options.focusTarget;
         }
         this._handler = options.handler;
-        this._context = options.context;
-        this._childProcessors = [];
+
         if(this._element) {
             this._processFunction = (e) => {
                 const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, this._focusTarget) < 0;
@@ -52,37 +50,10 @@ const KeyboardProcessor = Class.inherit({
         }
         this._element = undefined;
         this._handler = undefined;
-        this._context = undefined;
-        this._childProcessors = undefined;
-    },
-
-    clearChildren: function() {
-        this._childProcessors = [];
-    },
-
-    push: function(child) {
-        if(!this._childProcessors) {
-            this.clearChildren();
-        }
-
-        this._childProcessors.push(child);
-        return child;
-    },
-
-    attachChildProcessor: function() {
-        const childProcessor = new KeyboardProcessor();
-        this._childProcessors.push(childProcessor);
-        return childProcessor;
-    },
-
-    reinitialize: function(childHandler, childContext) {
-        this._context = childContext;
-        this._handler = childHandler;
-        return this;
     },
 
     process: function(e) {
-        const args = {
+        this._handler({
             keyName: normalizeKeyName(e),
             key: e.key,
             code: e.code,
@@ -93,15 +64,7 @@ const KeyboardProcessor = Class.inherit({
             alt: e.altKey,
             which: e.which,
             originalEvent: e
-        };
-
-        const handlerResult = this._handler && this._handler.call(this._context, args);
-
-        if(handlerResult && this._childProcessors) {
-            each(this._childProcessors, (index, childProcessor) => {
-                childProcessor.process(e);
-            });
-        }
+        });
     },
 
     toggleProcessing: function({ type }) {

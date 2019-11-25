@@ -70,6 +70,7 @@ import config from "core/config";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import pointerEvents from "events/pointer";
+import { keyboard } from "events/index";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
@@ -13847,7 +13848,9 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
                 }, "lastName"]
         }),
         triggerTabPress = function(target) {
-            dataGrid.getController("keyboardNavigation")._keyDownProcessor.process({
+            const keyboardListenerId = dataGrid.getController("keyboardNavigation")._keyDownListener;
+
+            keyboard._getProcessor(keyboardListenerId).process({
                 key: "Tab",
                 keyName: "tab",
                 target: target && target[0] || target,

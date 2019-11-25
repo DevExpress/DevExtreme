@@ -102,11 +102,11 @@ QUnit.module("Editor", {
     QUnit.test("keyboardProcessor is not defined for readOnly editor", function(assert) {
         const editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
 
-        assert.strictEqual(editor._keyboardProcessor, undefined, "keyboardProcessor is not defined after init");
+        assert.notOk(editor._keyboardListenerId, "keyboardProcessor is not defined after init");
 
         editor.option("readOnly", false);
 
-        assert.ok(editor._keyboardProcessor, "keyboardProcessor is defined");
+        assert.ok(editor._keyboardListenerId, "keyboardProcessor is defined");
     });
 
     QUnit.test("If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument; and then _valueChangeEventInstance must be reset", function(assert) {

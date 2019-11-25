@@ -51,7 +51,7 @@ const TagBox = SelectBox.inherit({
 
     _supportedKeys: function() {
         const parent = this.callBase();
-        const sendToList = (e) => this._list._keyboardProcessor.process(e);
+        const sendToList = options => this._list._keyboardHandler(options);
 
         return extend({}, parent, {
             backspace: function(e) {
@@ -77,13 +77,11 @@ const TagBox = SelectBox.inherit({
                 this._removeTagElement($tagToDelete);
                 delete this._preserveFocusedTag;
             },
-            upArrow: (e) => {
-                const handler = e.altKey || !this._list ? parent.upArrow : sendToList;
-                return handler.apply(this, arguments);
+            upArrow: (e, opts) => {
+                return e.altKey || !this._list ? parent.upArrow.call(this, e) : sendToList(opts);
             },
-            downArrow: (e) => {
-                const handler = e.altKey || !this._list ? parent.downArrow : sendToList;
-                return handler.apply(this, arguments);
+            downArrow: (e, opts) => {
+                return e.altKey || !this._list ? parent.downArrow.call(this, e) : sendToList(opts);
             },
             del: function(e) {
                 if(!this._$focusedTag || !this._isCaretAtTheStart()) {
@@ -102,7 +100,7 @@ const TagBox = SelectBox.inherit({
                 this._removeTagElement($tagToDelete);
                 delete this._preserveFocusedTag;
             },
-            enter: function(e) {
+            enter: function(e, options) {
                 const isListItemFocused = this._list && this._list.option("focusedElement") !== null;
                 const isCustomItem = this.option("acceptCustomValue") && !isListItemFocused;
 
@@ -113,16 +111,16 @@ const TagBox = SelectBox.inherit({
                 }
 
                 if(this.option("opened")) {
-                    sendToList(e);
+                    sendToList(options);
                     e.preventDefault();
                 }
             },
-            space: function(e) {
+            space: function(e, options) {
                 const isOpened = this.option("opened");
                 const isInputActive = this._shouldRenderSearchEvent();
 
                 if(isOpened && !isInputActive) {
-                    sendToList(e);
+                    sendToList(options);
                     e.preventDefault();
                 }
             },
