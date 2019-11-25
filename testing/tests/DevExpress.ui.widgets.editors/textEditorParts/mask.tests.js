@@ -1153,7 +1153,7 @@ QUnit.module("value", moduleConfig, () => {
         assert.equal(valueChangedFired, 1, "change fired once on pressing enter key");
     });
 
-    QUnit.test("value change by option should reset _changedValue (T833415)", (assert) => {
+    QUnit.test("value option change and input value change by typing should trigger onValueChange (T833415)", (assert) => {
         let valueChangeSpy = sinon.spy();
 
         const $textEditor = $("#texteditor").dxTextEditor({
