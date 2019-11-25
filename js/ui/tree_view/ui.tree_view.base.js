@@ -906,9 +906,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
+        const adapterNodes = this._dataAdapter.getData();
         this._loadSublevel(node).done(childNodes => {
-            this._renderSublevel($node, this._getActualNode(node), childNodes);
+            const newNodes = this._getNotExistNodes(childNodes, adapterNodes);
+            this._renderSublevel($node, this._getActualNode(node), newNodes);
         });
+    },
+
+    _getNotExistNodes: function(source, target) {
+        return source.filter((childNode) => !target.some((targetNode) => { return targetNode.internalFields.key === childNode.internalFields.key; }));
     },
 
     _getActualNode: function(cachedNode) {
@@ -1125,10 +1131,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _loadNestedItemsWithUpdate: function(node, state, e) {
         const $node = this._getNodeElement(node);
-
+        const adapterNodes = this._dataAdapter.getData();
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
-            this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
+            const itemNodes = this._dataAdapter.getNodesByItems(items);
+            const newNodes = this._getNotExistNodes(itemNodes, adapterNodes);
+            this._renderSublevel($node, actualNodeData, newNodes);
 
             if(!items || !items.length) {
                 return;
