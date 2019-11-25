@@ -363,7 +363,7 @@ QUnit.test("On/trigger/off event listeners", function(assert) {
     removeListener.restore();
 });
 
-QUnit.test("Passive event listeners support detection, positive case", assert => {
+QUnit.test("Passive event listeners support detection, positive case", function(assert) {
     const addEventListenerStub = sinon.stub(window, "addEventListener", (name, handler, options) => {
         options.passive;
     });
@@ -374,7 +374,7 @@ QUnit.test("Passive event listeners support detection, positive case", assert =>
     addEventListenerStub.restore();
 });
 
-QUnit.test("Passive event listeners support detection, negative case", assert => {
+QUnit.test("Passive event listeners support detection, negative case", function(assert) {
     const addEventListenerStub = sinon.stub(window, "addEventListener", (name, handler) => {
     });
 
