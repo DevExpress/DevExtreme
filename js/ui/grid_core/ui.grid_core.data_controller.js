@@ -1014,10 +1014,10 @@ module.exports = {
                  */
                 filter: function(filterExpr) {
                     var dataSource = this._dataSource,
-                        filter = dataSource.filter();
+                        filter = dataSource && dataSource.filter();
 
                     if(arguments.length === 0) {
-                        return dataSource ? dataSource.filter() : undefined;
+                        return filter;
                     }
 
                     filterExpr = arguments.length > 1 ? Array.prototype.slice.call(arguments, 0) : filterExpr;
