@@ -22,8 +22,19 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
     _initTemplates: function() {
         const getElementContent = () => this.$element().contents();
+        const optionTemplates = this.option('integrationOptions.templates');
 
-        this._templateManager.initTemplates(getElementContent);
+        const { templates, anonymousTemplateMeta } = this._templateManager.initTemplates(getElementContent);
+
+        templates.forEach(({ name, template }) => {
+            const templateSource = TemplateManager.validateTemplateSource(template);
+            optionTemplates[name] = this.option('integrationOptions.createTemplate')(templateSource);
+        });
+
+        if(!templates[anonymousTemplateMeta.name]) { // this._anonymousTemplateName is not defined !!!
+            const templateSource = TemplateManager.validateTemplateSource(anonymousTemplateMeta.template);
+            templates[anonymousTemplateMeta.name] = this.option('integrationOptions.createTemplate')(templateSource);
+        }
     },
 
     _getTemplateByOption: function(optionName) {
@@ -35,7 +46,11 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        this._templateManager.saveTemplate(name, template);
+        // this._templateManager.saveTemplate(name, template);
+
+        const templates = this.option('integrationOptions.templates');
+        const templateSource = TemplateManager.validateTemplateSource(template);
+        templates[name] = this.option('integrationOptions.createTemplate')(templateSource);
     },
 });
 

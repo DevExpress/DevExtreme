@@ -104,6 +104,12 @@ export default class TemplateManager {
         return args;
     }
 
+    static validateTemplateSource(templateSource) {
+        return typeof templateSource === 'string'
+            ? normalizeTemplateElement(templateSource)
+            : templateSource;
+    }
+
     set anonymousTemplateName(templateName) {
         this._anonymousTemplateName = templateName;
     }
@@ -124,8 +130,9 @@ export default class TemplateManager {
     }
 
     initTemplates(getElementContent) {
-        this._extractTemplates(getElementContent);
-        this._extractAnonymousTemplate(getElementContent);
+        const templates = this._extractTemplates(getElementContent);
+        const anonymousTemplateMeta = this._extractAnonymousTemplate(getElementContent);
+        return { templates, anonymousTemplateMeta };
     }
 
     _extractTemplates(getElementContent) {
@@ -148,21 +155,24 @@ export default class TemplateManager {
             templatesMap[templateOptions.name].push(template);
         });
 
+        const templates = [];
         for(let templateName in templatesMap) {
             const deviceTemplate = TemplateManager._findTemplateByDevice(templatesMap[templateName]);
             if(deviceTemplate) {
-                this.saveTemplate(templateName, deviceTemplate);
+                // this.saveTemplate(templateName, deviceTemplate);
+                templates.push({ name: templateName, template: deviceTemplate });
             }
         }
+        return templates;
     }
 
-    saveTemplate(name, template) {
-        const templates = this.option('integrationOptions.templates');
-        templates[name] = this._createTemplate(template);
-    }
+    // saveTemplate(name, template) {
+    //     const templates = this.option('integrationOptions.templates');
+    //     templates[name] = this._createTemplate(template);
+    // }
 
     _extractAnonymousTemplate(getElementContent) {
-        const templates = this.option('integrationOptions.templates');
+        // const templates = this.option('integrationOptions.templates');
         const $anonymousTemplate = getElementContent().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
@@ -173,9 +183,12 @@ export default class TemplateManager {
         });
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
-        if(!templates[this._anonymousTemplateName] && !onlyJunkTemplateContent) {
-            templates[this._anonymousTemplateName] = this._createTemplate($anonymousTemplate);
-        }
+        // if(!templates[this._anonymousTemplateName] && !onlyJunkTemplateContent) {
+        //     templates[this._anonymousTemplateName] = this._createTemplate($anonymousTemplate);
+        // }
+        return !onlyJunkTemplateContent
+            ? { template: $anonymousTemplate, name: this._anonymousTemplateName }
+            : {};
     }
 
     _createTemplateIfNeeded(templateSource) {
