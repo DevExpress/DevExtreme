@@ -360,24 +360,13 @@ var Component = Class.inherit({
     },
 
     initialOption: function(optionName) {
-        let value;
         if(!this._initialOptions) {
             this._initialOptions = this._getDefaultOptions();
             const rulesOptions = this._getOptionByRules(this._getOptionByStealth("defaultOptionsRules"));
             this._optionManager.setValueByReference(this._initialOptions, rulesOptions);
         }
 
-        if(optionName.search(/\.|\[/) !== -1) {
-            optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
-            const fullPath = optionName.split(".");
-            fullPath.forEach((path) => {
-                value = value ? value[path] : this._initialOptions[path];
-            });
-        } else {
-            value = this._initialOptions[optionName];
-        }
-
-        return typeof value === "object" ? objectUtils.clone(value) : value;
+        return this._initialOptions[optionName];
     },
 
     _defaultActionConfig: function() {
@@ -551,7 +540,20 @@ var Component = Class.inherit({
         if(!name) {
             return;
         }
-        let defaultValue = this.initialOption(name);
+
+        let defaultValue;
+        if(name.search(/\.|\[/) !== -1) {
+            name = name.replace(/\[/g, ".").replace(/\]/g, "");
+            const fullPath = name.split(".");
+            fullPath.forEach((path) => {
+                defaultValue = defaultValue ? defaultValue[path] : this.initialOption(path);
+            });
+        } else {
+            defaultValue = this.initialOption(name);
+        }
+
+        defaultValue = typeUtils.isObject(defaultValue) ? objectUtils.clone(defaultValue) : defaultValue;
+
         this.beginUpdate();
         this._optionManager.setValue(normalizeOptions(name, defaultValue), false);
         this.endUpdate();
