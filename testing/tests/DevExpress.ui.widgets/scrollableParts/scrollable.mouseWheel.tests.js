@@ -418,7 +418,7 @@ if(devices.current().deviceType === "desktop") {
             }
         }
 
-        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, (assert) => {
+        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, function(assert) {
             let helper = new ValidateMouseWheelEventTestHelper(direction);
             let event = helper.getEvent();
 
@@ -429,7 +429,7 @@ if(devices.current().deviceType === "desktop") {
             assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
         });
 
-        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, (assert) => {
+        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, function(assert) {
             let helper = new ValidateMouseWheelEventTestHelper(direction);
             let event = helper.getEvent();
             let $container = helper.getScrollableContainer();
@@ -444,7 +444,7 @@ if(devices.current().deviceType === "desktop") {
             assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = -1");
         });
 
-        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, (assert) => {
+        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, function(assert) {
             let helper = new ValidateMouseWheelEventTestHelper(direction);
             let event = helper.getEvent();
             let $container = helper.getScrollableContainer();

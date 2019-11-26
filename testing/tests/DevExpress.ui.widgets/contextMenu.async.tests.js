@@ -14,7 +14,7 @@ QUnit.testStart(() => {
 
 QUnit.module("Context menu", () => {
     // T755681
-    QUnit.test("Context menu should shown in the same position after repaint()", (assert) => {
+    QUnit.test("Context menu should shown in the same position after repaint()", function(assert) {
         assert.expect(5);
 
         const menuTargetSelector = "#menuTarget";
@@ -44,7 +44,7 @@ QUnit.module("Context menu", () => {
         });
     });
 
-    QUnit.test("Add item on positioning", (assert) => {
+    QUnit.test("Add item on positioning", function(assert) {
         const menuTargetSelector = "#menuTarget";
         const instance = new ContextMenu($("#simpleMenu"), {
             items: [{ text: "item 1" }],

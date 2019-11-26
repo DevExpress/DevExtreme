@@ -102,7 +102,7 @@ QUnit.test("init option 'rtl' is true", function(assert) {
     assert.ok(!$element.hasClass(RTL_CLASS));
 });
 
-QUnit.test("rtlEnabled scrolls to very right position when a width was changing via API", assert => {
+QUnit.test("rtlEnabled scrolls to very right position when a width was changing via API", function(assert) {
     const $scrollable = $("#scrollable")
         .dxScrollable({
             direction: "horizontal",

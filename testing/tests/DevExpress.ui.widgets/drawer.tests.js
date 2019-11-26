@@ -91,7 +91,7 @@ QUnit.testStart(() => {
 
 QUnit.module("Drawer behavior");
 
-QUnit.test("defaults", assert => {
+QUnit.test("defaults", function(assert) {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
 
@@ -105,14 +105,14 @@ QUnit.test("defaults", assert => {
     assert.equal(instance.option("animationDuration"), 400, "animationDuration is OK");
 });
 
-QUnit.test("drawer should preserve content", assert => {
+QUnit.test("drawer should preserve content", function(assert) {
     const $content = $("#drawer #content"),
         $element = $("#drawer").dxDrawer();
 
     assert.equal($content[0], $element.find("#content")[0]);
 });
 
-QUnit.test("drawer shouldn't lose its content after repaint (T731771)", assert => {
+QUnit.test("drawer shouldn't lose its content after repaint (T731771)", function(assert) {
     let $button = $("#button").dxButton();
 
     const $element = $("#drawerWithContent").dxDrawer();
@@ -127,7 +127,7 @@ QUnit.test("drawer shouldn't lose its content after repaint (T731771)", assert =
     assert.ok(buttonInstance instanceof Button, "button into drawer content wasn't clean after repaint");
 });
 
-QUnit.test("drawer tabIndex should be removed after _clean", assert => {
+QUnit.test("drawer tabIndex should be removed after _clean", function(assert) {
     const $element = $("#drawer").dxDrawer();
     const instance = $element.dxDrawer("instance");
 
@@ -136,7 +136,7 @@ QUnit.test("drawer tabIndex should be removed after _clean", assert => {
     assert.equal($element.attr("tabIndex"), undefined, "tabIndex was removed");
 });
 
-QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
+QUnit.test("subscribe on toggle function should fired at the end of animation", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: false
     });
@@ -154,7 +154,7 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
     assert.equal(count, 0, "callback not fired at animation start");
 });
 
-QUnit.test("dxresize event should be fired for content at the end of animation", assert => {
+QUnit.test("dxresize event should be fired for content at the end of animation", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: false
     });
@@ -178,7 +178,7 @@ QUnit.test("dxresize event should be fired for content at the end of animation",
     }
 });
 
-QUnit.test("dxresize event should be fired if there is no any animation", assert => {
+QUnit.test("dxresize event should be fired if there is no any animation", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: false,
         position: "right"
@@ -201,7 +201,7 @@ QUnit.test("dxresize event should be fired if there is no any animation", assert
     }
 });
 
-QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
+QUnit.test("incomplete animation should be stopped after toggling visibility", function(assert) {
     let origFxStop = fx.stop,
         panelStopCalls = 0,
         contentStopCalls = 0,
@@ -252,7 +252,7 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
     }
 });
 
-QUnit.test("incomplete animation should be stopped after closing on outside click", assert => {
+QUnit.test("incomplete animation should be stopped after closing on outside click", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         openedStateMode: "overlap",
@@ -303,7 +303,7 @@ QUnit.test("incomplete animation should be stopped after closing on outside clic
     }
 });
 
-QUnit.test("incomplete animation should be stopped after changing modes", assert => {
+QUnit.test("incomplete animation should be stopped after changing modes", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         openedStateMode: "push",
@@ -350,7 +350,7 @@ QUnit.test("incomplete animation should be stopped after changing modes", assert
     }
 });
 
-QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
+QUnit.test("drawer shouldn't fail after changing openedStateMode", function(assert) {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "push"
     });
@@ -362,7 +362,7 @@ QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
     assert.ok(true, "Drawer works correctly");
 });
 
-QUnit.test("target option", assert => {
+QUnit.test("target option", function(assert) {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "overlap"
     });
@@ -374,7 +374,7 @@ QUnit.test("target option", assert => {
     assert.ok($(instance._overlay.option("position").of).hasClass("dx-drawer-content"), "target is ok");
 });
 
-QUnit.test("content() function", assert => {
+QUnit.test("content() function", function(assert) {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
@@ -382,7 +382,7 @@ QUnit.test("content() function", assert => {
     assert.equal($panel.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
 });
 
-QUnit.test("viewContent() function", assert => {
+QUnit.test("viewContent() function", function(assert) {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
@@ -390,7 +390,7 @@ QUnit.test("viewContent() function", assert => {
     assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
 });
 
-QUnit.test("show() and hide() methods", assert => {
+QUnit.test("show() and hide() methods", function(assert) {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
 
@@ -401,7 +401,7 @@ QUnit.test("show() and hide() methods", assert => {
     assert.equal(instance.option("opened"), false, "panel was hidden");
 });
 
-QUnit.test("toggle() method", assert => {
+QUnit.test("toggle() method", function(assert) {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const opened = instance.option("opened");
@@ -413,7 +413,7 @@ QUnit.test("toggle() method", assert => {
     assert.equal(instance.option("opened"), opened, "panel was hidden");
 });
 
-QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'", assert => {
+QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'", function(assert) {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "shrink"
     });
@@ -434,7 +434,7 @@ QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'
     assert.ok($content.eq(1).hasClass("dx-drawer-content"));
 });
 
-QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed", assert => {
+QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed", function(assert) {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "push",
         position: "right"
@@ -456,7 +456,7 @@ QUnit.test("wrapper content should be reversed if position = 'right' and openedS
     assert.ok($content.eq(1).hasClass("dx-drawer-content"));
 });
 
-QUnit.test("drawer panel should be repositioned correctly after dimension changed,left position", assert => {
+QUnit.test("drawer panel should be repositioned correctly after dimension changed,left position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -480,7 +480,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned correctly after dimension changed,top position", assert => {
+QUnit.test("drawer panel should be repositioned correctly after dimension changed,top position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -505,7 +505,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     fx.off = false;
 });
 
-QUnit.test("drawer panel should have correct size after dimension changed,top position", assert => {
+QUnit.test("drawer panel should have correct size after dimension changed,top position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -532,7 +532,7 @@ QUnit.test("drawer panel should have correct size after dimension changed,top po
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned correctly after dimension changed, right position", assert => {
+QUnit.test("drawer panel should be repositioned correctly after dimension changed, right position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -558,7 +558,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned after dimension changed, right position", assert => {
+QUnit.test("drawer panel should be repositioned after dimension changed, right position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -583,7 +583,7 @@ QUnit.test("drawer panel should be repositioned after dimension changed, right p
     fx.off = false;
 });
 
-QUnit.test("content container should have correct position if panel isn't visible", assert => {
+QUnit.test("content container should have correct position if panel isn't visible", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: false
     });
@@ -594,7 +594,7 @@ QUnit.test("content container should have correct position if panel isn't visibl
     assert.equal(position($content), 0, "container rendered at correct position");
 });
 
-QUnit.test("content container should have correct position if panel is visible", assert => {
+QUnit.test("content container should have correct position if panel is visible", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true
     });
@@ -606,7 +606,7 @@ QUnit.test("content container should have correct position if panel is visible",
     assert.equal(position($content), $panel.width(), "container rendered at correct position");
 });
 
-QUnit.test("content container should have correct position after resize", assert => {
+QUnit.test("content container should have correct position after resize", function(assert) {
     const $element = $("#drawer2").dxDrawer({
         width: "100%",
         opened: true
@@ -622,7 +622,7 @@ QUnit.test("content container should have correct position after resize", assert
     assert.equal(position($content), $(instance.content()).width(), "container rendered at correct position");
 });
 
-QUnit.test("content container should have correct position if it is rendered in invisible container", assert => {
+QUnit.test("content container should have correct position if it is rendered in invisible container", function(assert) {
     const $container = $("#drawerContainer");
     const $element = $("#drawer2");
 
@@ -642,7 +642,7 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
-QUnit.test("drawer panel should have correct width when panel content is wrapped by div with borders (T702576)", assert => {
+QUnit.test("drawer panel should have correct width when panel content is wrapped by div with borders (T702576)", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         template: function($content) {
@@ -661,7 +661,7 @@ QUnit.test("drawer panel should have correct width when panel content is wrapped
     assert.equal($panelContent.outerWidth(), 200, "panel content has correct outerWidth");
 });
 
-QUnit.test("drawer panel should have correct width when async template is used", assert => {
+QUnit.test("drawer panel should have correct width when async template is used", function(assert) {
     var clock = sinon.useFakeTimers();
 
     $("#drawer").dxDrawer({
@@ -690,7 +690,7 @@ QUnit.test("drawer panel should have correct width when async template is used",
     clock.restore();
 });
 
-QUnit.test("drawer panel should have correct width when async template is used, overlap mode", assert => {
+QUnit.test("drawer panel should have correct width when async template is used, overlap mode", function(assert) {
     var clock = sinon.useFakeTimers();
 
     $("#drawer").dxDrawer({
@@ -719,7 +719,7 @@ QUnit.test("drawer panel should have correct width when async template is used, 
     clock.restore();
 });
 
-QUnit.test("drawer panel should have correct z-index when async template is used, overlap mode", assert => {
+QUnit.test("drawer panel should have correct z-index when async template is used, overlap mode", function(assert) {
     var clock = sinon.useFakeTimers();
 
     $("#drawer").dxDrawer({
@@ -748,7 +748,7 @@ QUnit.test("drawer panel should have correct z-index when async template is used
     clock.restore();
 });
 
-QUnit.test("drawer panel should have correct margin when async template is used", assert => {
+QUnit.test("drawer panel should have correct margin when async template is used", function(assert) {
     var clock = sinon.useFakeTimers();
 
     $("#drawer").dxDrawer({
@@ -778,7 +778,7 @@ QUnit.test("drawer panel should have correct margin when async template is used"
     clock.restore();
 });
 
-QUnit.test("getting real panel position in accordance with rtlEnabled and position options", assert => {
+QUnit.test("getting real panel position in accordance with rtlEnabled and position options", function(assert) {
     const $element = $("#drawer").dxDrawer({
         position: "after"
     });
@@ -808,7 +808,7 @@ QUnit.module("Animation", {
     }
 });
 
-QUnit.test("animationEnabled option test", assert => {
+QUnit.test("animationEnabled option test", function(assert) {
     fx.off = false;
 
     const origFX = fx.animate;
@@ -861,7 +861,7 @@ QUnit.test("animationDuration option test", function(assert) {
 
 QUnit.module("Shader");
 
-QUnit.test("shader should be visible if drawer is opened and shading = true", assert => {
+QUnit.test("shader should be visible if drawer is opened and shading = true", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true
@@ -872,7 +872,7 @@ QUnit.test("shader should be visible if drawer is opened and shading = true", as
     assert.ok($shader.is(":visible"), "shader is visible");
 });
 
-QUnit.test("shader should not be visible if drawer is closed", assert => {
+QUnit.test("shader should not be visible if drawer is closed", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: false,
         shading: true
@@ -884,7 +884,7 @@ QUnit.test("shader should not be visible if drawer is closed", assert => {
     assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
 });
 
-QUnit.test("shader should have correct visibility after toggling state", assert => {
+QUnit.test("shader should have correct visibility after toggling state", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true,
@@ -899,7 +899,7 @@ QUnit.test("shader should have correct visibility after toggling state", assert 
     assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
 });
 
-QUnit.test("shader should have correct opacity after toggling state", assert => {
+QUnit.test("shader should have correct opacity after toggling state", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true,
@@ -913,7 +913,7 @@ QUnit.test("shader should have correct opacity after toggling state", assert => 
     assert.equal($shader.css("opacity"), 0, "shader has right opacity");
 });
 
-QUnit.test("shading option", assert => {
+QUnit.test("shading option", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true
@@ -927,7 +927,7 @@ QUnit.test("shading option", assert => {
     assert.ok($shader.is(":hidden"), "shader is hidden");
 });
 
-QUnit.test("click on shader should not close drawer", assert => {
+QUnit.test("click on shader should not close drawer", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true
@@ -940,7 +940,7 @@ QUnit.test("click on shader should not close drawer", assert => {
     assert.ok(instance.option("opened"), "drawer is opened");
 });
 
-QUnit.test("shader should be visible during animation", assert => {
+QUnit.test("shader should be visible during animation", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: false,
         shading: true
@@ -953,7 +953,7 @@ QUnit.test("shader should be visible during animation", assert => {
     assert.ok($shader.is(":visible"), "shader is visible during animation");
 });
 
-QUnit.test("shader should have correct position", assert => {
+QUnit.test("shader should have correct position", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true
@@ -966,7 +966,7 @@ QUnit.test("shader should have correct position", assert => {
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
-QUnit.test("shader should have correct position after widget resize", assert => {
+QUnit.test("shader should have correct position after widget resize", function(assert) {
     const $element = $("#drawer2").dxDrawer({
         width: "100%",
         opened: true,
@@ -984,7 +984,7 @@ QUnit.test("shader should have correct position after widget resize", assert => 
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
-QUnit.test("shader should have correct zIndex in overlap mode", assert => {
+QUnit.test("shader should have correct zIndex in overlap mode", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         openedStateMode: "overlap",
@@ -998,7 +998,7 @@ QUnit.test("shader should have correct zIndex in overlap mode", assert => {
 
 QUnit.module("Rtl");
 
-QUnit.test("content should have correct position if panel is visible in rtl mode", assert => {
+QUnit.test("content should have correct position if panel is visible in rtl mode", function(assert) {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         openedStateMode: "push",
@@ -1012,7 +1012,7 @@ QUnit.test("content should have correct position if panel is visible in rtl mode
     assert.equal(position($content), $panel.width(), "container rendered at correct position");
 });
 
-QUnit.test("drawer panel overlay should have right position config", assert => {
+QUnit.test("drawer panel overlay should have right position config", function(assert) {
     let drawer = $("#drawer").dxDrawer({
             openedStateMode: "overlap",
             rtlEnabled: true
@@ -1029,7 +1029,7 @@ QUnit.test("drawer panel overlay should have right position config", assert => {
     assert.equal(overlay.option("position").at, "top right");
 });
 
-QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl, slide", assert => {
+QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl, slide", function(assert) {
     fx.off = true;
     let drawer = $("#drawer").dxDrawer({
         openedStateMode: "overlap",
@@ -1059,7 +1059,7 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
     fx.off = false;
 });
 
-QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed, rtl", assert => {
+QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed, rtl", function(assert) {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "push",
         rtlEnabled: true,
@@ -1085,7 +1085,7 @@ QUnit.test("wrapper content should be reversed if position = 'right' and openedS
 
 QUnit.module("CloseOnOutsideClick");
 
-QUnit.test("drawer should be hidden after click on content", (assert) => {
+QUnit.test("drawer should be hidden after click on content", function(assert) {
     var drawer = $("#drawer").dxDrawer({
             closeOnOutsideClick: false,
             opened: true,
@@ -1105,7 +1105,7 @@ QUnit.test("drawer should be hidden after click on content", (assert) => {
     assert.ok($shader.is(":hidden"), "shader is hidden");
 });
 
-QUnit.test("closeOnOutsideClick as function should be processed correctly", (assert) => {
+QUnit.test("closeOnOutsideClick as function should be processed correctly", function(assert) {
     var drawer = $("#drawer").dxDrawer({
             closeOnOutsideClick: () => {
                 return false;
@@ -1127,7 +1127,7 @@ QUnit.test("closeOnOutsideClick as function should be processed correctly", (ass
 
 
 QUnit.module("Push mode", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.createInstance = function(options) {
             this.instance = $("#drawer").dxDrawer($.extend(options, {
                 openedStateMode: "push",
@@ -1143,11 +1143,11 @@ QUnit.module("Push mode", {
 
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
-    QUnit.test("minSize and maxSize should be rendered correctly in push mode", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in push mode", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 400,
@@ -1163,7 +1163,7 @@ QUnit.module("Push mode", {
         assert.equal($content.position().left, 50, "content has correct left when minSize and maxSize are set");
     });
 
-    QUnit.test("drawer should be rendered correctly in push mode, right panel position", assert => {
+    QUnit.test("drawer should be rendered correctly in push mode, right panel position", function(assert) {
         this.createInstance({
             position: "right",
             opened: true
@@ -1180,7 +1180,7 @@ QUnit.module("Push mode", {
         fx.off = false;
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in push mode, right panel position", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in push mode, right panel position", function(assert) {
         this.createInstance({
             position: "right",
             minSize: 50,
@@ -1199,7 +1199,7 @@ QUnit.module("Push mode", {
         fx.off = false;
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in push mode, top panel position", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in push mode, top panel position", function(assert) {
         this.createInstance({
             position: "top",
             minSize: 50,
@@ -1218,7 +1218,7 @@ QUnit.module("Push mode", {
         fx.off = false;
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in push mode, bottom panel position", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in push mode, bottom panel position", function(assert) {
         this.createInstance({
             position: "bottom",
             minSize: 50,
@@ -1239,7 +1239,7 @@ QUnit.module("Push mode", {
 });
 
 QUnit.module("Shrink mode", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.createInstance = function(options) {
             this.instance = $("#drawer").dxDrawer($.extend(options, {
                 openedStateMode: "shrink",
@@ -1257,11 +1257,11 @@ QUnit.module("Shrink mode", {
 
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, expand", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 100,
@@ -1284,7 +1284,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.width(), 100, "panel has correct width when minSize is set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, slide", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 200,
@@ -1309,7 +1309,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.width(), 300, "panel has correct width when minSize is set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, right panel position expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, right panel position expand", function(assert) {
         this.createInstance({
             position: "right",
             minSize: 50,
@@ -1333,7 +1333,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.width(), 100, "panel has correct width when minSize is set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, right panel position slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, right panel position slide", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 200,
@@ -1359,7 +1359,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.width(), 300, "panel has correct width when minSize is set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, top panel position expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, top panel position expand", function(assert) {
         this.createInstance({
             position: "top",
             minSize: 50,
@@ -1383,7 +1383,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.height(), 100, "panel has correct height");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, top panel position slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, top panel position slide", function(assert) {
         this.createInstance({
             position: "top",
             minSize: 50,
@@ -1409,7 +1409,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.css("marginTop"), "-100px", "panel content has correct marginTop");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bottom panel position expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bottom panel position expand", function(assert) {
         this.createInstance({
             position: "bottom",
             minSize: 50,
@@ -1433,7 +1433,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.height(), 100, "panel has correct height");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bottom panel position slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bottom panel position slide", function(assert) {
         this.createInstance({
             position: "bottom",
             minSize: 50,
@@ -1459,7 +1459,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.css("marginBottom"), "-100px", "panel content has correct marginBottom");
     });
 
-    QUnit.test("panel should have correct width in shrink mode after drawer resizing, expand", assert => {
+    QUnit.test("panel should have correct width in shrink mode after drawer resizing, expand", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 100,
@@ -1475,7 +1475,7 @@ QUnit.module("Shrink mode", {
         assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
     });
 
-    QUnit.test("panel should have correct height in shrink mode after drawer resizing, expand", assert => {
+    QUnit.test("panel should have correct height in shrink mode after drawer resizing, expand", function(assert) {
         this.createInstance({
             position: "top",
             minSize: 50,
@@ -1496,7 +1496,7 @@ QUnit.module("Shrink mode", {
 });
 
 QUnit.module("Overlap mode", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.createInstance = function(options) {
             this.instance = $("#drawer").dxDrawer($.extend({
                 openedStateMode: "overlap",
@@ -1508,11 +1508,11 @@ QUnit.module("Overlap mode", {
 
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
-    QUnit.test("drawer panel should be overlay in overlap mode", assert => {
+    QUnit.test("drawer panel should be overlay in overlap mode", function(assert) {
         this.createInstance({});
 
         assert.ok(this.instance.getOverlay() instanceof Overlay, "Drawer has overlay");
@@ -1522,7 +1522,7 @@ QUnit.module("Overlap mode", {
     [true, false].forEach((shading) => {
         [true, false].forEach((isOpened) => {
             [0, 100, null, undefined].forEach((minSize) => {
-                QUnit.test(`overlay configuration: opened- ${isOpened}, shading- ${shading}, minSize-${minSize}`, assert => {
+                QUnit.test(`overlay configuration: opened- ${isOpened}, shading- ${shading}, minSize-${minSize}`, function(assert) {
                     this.createInstance({
                         shading: shading,
                         opened: isOpened,
@@ -1561,7 +1561,7 @@ QUnit.module("Overlap mode", {
         });
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, expand", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1588,7 +1588,7 @@ QUnit.module("Overlap mode", {
         assert.equal($overlayContent.width(), 300, "panel content has correct width when minSize and max size are set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, slide", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1612,7 +1612,7 @@ QUnit.module("Overlap mode", {
         assert.equal($overlayContent.width(), 300, "panel has correct width when minSize and max size are set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, right panel position expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, right panel position expand", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1640,7 +1640,7 @@ QUnit.module("Overlap mode", {
         assert.equal($overlayContent.width(), 300, "panel content has correct width when minSize and max size are set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, right panel position slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, right panel position slide", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1665,7 +1665,7 @@ QUnit.module("Overlap mode", {
         assert.equal($overlayContent.width(), 300, "panel has correct width when minSize is set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, top panel position expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, top panel position expand", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1688,7 +1688,7 @@ QUnit.module("Overlap mode", {
         assert.equal($content.css("paddingTop"), "50px", "content has correct padding when minSize and max size are set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, top panel position slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, top panel position slide", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1709,7 +1709,7 @@ QUnit.module("Overlap mode", {
         assert.equal($panel.position().top, 100, "panel has correct top when minSize is set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, bottom panel position expand", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, bottom panel position expand", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1734,7 +1734,7 @@ QUnit.module("Overlap mode", {
         assert.equal($content.css("paddingBottom"), "50px", "content has correct padding when minSize and max size are set");
     });
 
-    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, bottom panel position slide", assert => {
+    QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, bottom panel position slide", function(assert) {
         this.createInstance({
             minSize: 50,
             maxSize: 300,
@@ -1755,7 +1755,7 @@ QUnit.module("Overlap mode", {
         assert.equal($panel.position().top, -100, "panel has correct top when minSize is set");
     });
 
-    QUnit.test("nested drawers. Inner drawer should have right overflow", assert => {
+    QUnit.test("nested drawers. Inner drawer should have right overflow", function(assert) {
         $("#outerDrawer").dxDrawer({
             opened: true,
             height: 400,
@@ -1774,7 +1774,7 @@ QUnit.module("Overlap mode", {
 });
 
 QUnit.module("Modes changing", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.createInstance = function(options) {
             this.instance = $("#drawer").dxDrawer($.extend(options, {
                 template: function($content) {
@@ -1789,11 +1789,11 @@ QUnit.module("Modes changing", {
 
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
-    QUnit.test("panel should be rendered correctly after openedStateMode changing", assert => {
+    QUnit.test("panel should be rendered correctly after openedStateMode changing", function(assert) {
         this.createInstance({
             maxSize: 300,
             opened: false,
@@ -1811,7 +1811,7 @@ QUnit.module("Modes changing", {
         assert.equal($panel.width(), 300, "panel has correct size");
     });
 
-    QUnit.test("panel should be rendered correctly after openedStateMode changing, right panel position, slide", assert => {
+    QUnit.test("panel should be rendered correctly after openedStateMode changing, right panel position, slide", function(assert) {
         this.createInstance({
             maxSize: 300,
             opened: true,
@@ -1827,7 +1827,7 @@ QUnit.module("Modes changing", {
         assert.equal($panel.position().left, 700, "panel has correct left");
     });
 
-    QUnit.test("panel should be rendered correctly after openedStateMode changing, right panel position, expand", assert => {
+    QUnit.test("panel should be rendered correctly after openedStateMode changing, right panel position, expand", function(assert) {
         this.createInstance({
             maxSize: 300,
             opened: true,
@@ -1842,7 +1842,7 @@ QUnit.module("Modes changing", {
         assert.equal($panel.css("marginRight"), "0px", "panel has correct right");
     });
 
-    QUnit.test("panel should be rendered correctly after openedStateMode changing, vertical direction", assert => {
+    QUnit.test("panel should be rendered correctly after openedStateMode changing, vertical direction", function(assert) {
         this.createInstance({
             maxSize: 300,
             opened: false,
@@ -1860,7 +1860,7 @@ QUnit.module("Modes changing", {
         assert.equal($panel.height(), 300, "panel has correct size");
     });
 
-    QUnit.test("panel and content should be rendered correctly after revealMode changing, horizontal direction", assert => {
+    QUnit.test("panel and content should be rendered correctly after revealMode changing, horizontal direction", function(assert) {
         this.createInstance({
             minSize: 50,
             opened: true,
@@ -1889,7 +1889,7 @@ QUnit.module("Modes changing", {
         assert.equal($panelContent.position().left, 0, "panel content has correct position");
     });
 
-    QUnit.test("panel and content should be rendered correctly after revealMode changing, vertical direction", assert => {
+    QUnit.test("panel and content should be rendered correctly after revealMode changing, vertical direction", function(assert) {
         this.createInstance({
             minSize: 50,
             opened: true,
@@ -1919,7 +1919,7 @@ QUnit.module("Modes changing", {
         assert.equal($panelContent.position().top, 0, "panel content has correct position");
     });
 
-    QUnit.test("drawer panel should be rendered correctly in overlap mode after mode changing, expand", assert => {
+    QUnit.test("drawer panel should be rendered correctly in overlap mode after mode changing, expand", function(assert) {
         this.createInstance({
             opened: false,
             revealMode: "expand",
@@ -1936,7 +1936,7 @@ QUnit.module("Modes changing", {
         assert.equal($overlayContent.width(), 300, "overlay content should have correct width after option changing");
     });
 
-    QUnit.test("drawer panel and content should be rendered correctly in overlap mode after mode changing, slide", assert => {
+    QUnit.test("drawer panel and content should be rendered correctly in overlap mode after mode changing, slide", function(assert) {
         this.createInstance({
             opened: true,
             revealMode: "slide",
@@ -1953,7 +1953,7 @@ QUnit.module("Modes changing", {
         assert.equal($content.css("transform"), "none", "content has right css transform");
     });
 
-    QUnit.test("drawer should have only one panel after mode changing", assert => {
+    QUnit.test("drawer should have only one panel after mode changing", function(assert) {
         this.createInstance({
             opened: true,
             revealMode: "expand",
