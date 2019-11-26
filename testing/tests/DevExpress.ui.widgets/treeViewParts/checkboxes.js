@@ -242,9 +242,9 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
 
 QUnit.module("Selection with cycle/loop keys (T832760)", () => {
-    [{ optionName: 'items', virtualModeEnabled: false }, { optionName: 'dataSource', virtualModeEnabled: false }, { optionName: 'dataSource', virtualModeEnabled: true }].forEach((testConfig) => {
-        QUnit.test(`SelectItem by jQuery node. ${testConfig.optionName} option.`, function(assert) {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+    [{ sourceOptionName: 'items', virtualModeEnabled: false }, { sourceOptionName: 'dataSource', virtualModeEnabled: false }, { sourceOptionName: 'dataSource', virtualModeEnabled: true }, { sourceOptionName: 'createChildren', virtualModeEnabled: true }, { sourceOptionName: 'createChildren', virtualModeEnabled: false } ].forEach((testConfig) => {
+        QUnit.test(`SelectItem by jQuery node. ${testConfig.sourceOptionName} option.`, function(assert) {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
             const treeView = createInstance(options);
@@ -252,10 +252,11 @@ QUnit.module("Selection with cycle/loop keys (T832760)", () => {
             const $parent = treeView.getElement().find('[aria-level="1"]');
             treeView.instance.selectItem($parent);
             treeView.checkSelectedNodes([0, 1]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`SelectItem by html node. ${testConfig.optionName} option.`, function(assert) {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`SelectItem by html node. ${testConfig.sourceOptionName} option.`, function(assert) {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
             const treeView = createInstance(options);
@@ -263,30 +264,33 @@ QUnit.module("Selection with cycle/loop keys (T832760)", () => {
             const $parent = treeView.getElement().find('[aria-level="1"]');
             treeView.instance.selectItem($parent.get(0));
             treeView.checkSelectedNodes([0, 1]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`SelectItem by key. ${testConfig.optionName} option.`, function(assert) {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`SelectItem by key. ${testConfig.sourceOptionName} option.`, function(assert) {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
             const treeView = createInstance(options);
 
             treeView.instance.selectItem('1');
             treeView.checkSelectedNodes([0, 1]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`SelectAll. ${testConfig.optionName} option.`, function(assert) {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`SelectAll. ${testConfig.sourceOptionName} option.`, function(assert) {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
             const treeView = createInstance(options);
 
             treeView.instance.selectAll();
             treeView.checkSelectedNodes([0, 1]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`UnselectItem by jquery node. ${testConfig.optionName} option.`, function() {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`UnselectItem by jquery node. ${testConfig.sourceOptionName} option.`, function() {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
             const treeView = createInstance(options);
@@ -294,10 +298,11 @@ QUnit.module("Selection with cycle/loop keys (T832760)", () => {
             const $parent = treeView.getElement().find('[aria-level="1"]');
             treeView.instance.unselectItem($parent);
             treeView.checkSelectedNodes([]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`UnselectItem by html node. ${testConfig.optionName} option.`, function() {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`UnselectItem by html node. ${testConfig.sourceOptionName} option.`, function() {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
             const treeView = createInstance(options);
@@ -305,32 +310,39 @@ QUnit.module("Selection with cycle/loop keys (T832760)", () => {
             const $parent = treeView.getElement().find('[aria-level="1"]');
             treeView.instance.unselectItem($parent.get(0));
             treeView.checkSelectedNodes([]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`UnselectItem by key. ${testConfig.optionName} option.`, function() {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`UnselectItem by key. ${testConfig.sourceOptionName} option.`, function() {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
             const treeView = createInstance(options);
 
             treeView.instance.unselectItem('1');
             treeView.checkSelectedNodes([]);
+            treeView.instance.dispose();
         });
 
-        QUnit.test(`UnselectAll should works with loop/cycle in ${testConfig.optionName} option. (T832760)`, function() {
-            let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        QUnit.test(`UnselectAll. ${testConfig.sourceOptionName} option. (T832760)`, function() {
+            let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                 { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                 { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
             const treeView = createInstance(options);
 
             treeView.instance.unselectAll();
             treeView.checkSelectedNodes([]);
+            treeView.instance.dispose();
         });
     });
 
     function createOptions(itemsOptionName, isVirtualModeEnabled, items) {
-        let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" };
-        options[itemsOptionName] = items;
+        let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal", virtualModeEnabled: isVirtualModeEnabled };
+        options[itemsOptionName] = itemsOptionName === 'createChildren' ? getCreateChildFunction(items) : items;
         return options;
+    }
+
+    function getCreateChildFunction(items) {
+        return (parent) => { return parent == null ? [ items[1] ] : items.filter(function(item) { return parent.itemData.id === item.parentId; }); };
     }
 });

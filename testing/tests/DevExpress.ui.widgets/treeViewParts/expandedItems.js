@@ -876,7 +876,6 @@ module("Expanded items", {
                 let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                options['rootValue'] = 2;
                 let treeView = createInstance(options);
 
                 treeView.instance.collapseAll();
@@ -895,7 +894,7 @@ module("Expanded items", {
         }
 
         function getCreateChildFunction(items) {
-            return (parent) => { return parent == null ? [ items[0] ] : items.filter(function(item) { return parent.itemData.id === item.parentId; }); };
+            return (parent) => { return parent == null ? [ items[1] ] : items.filter(function(item) { return parent.itemData.id === item.parentId; }); };
         }
     });
 });
