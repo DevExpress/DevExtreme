@@ -110,6 +110,10 @@ export default class TemplateManager {
             : templateSource;
     }
 
+    static templateKey(templateSource) {
+        return (isRenderer(templateSource) && templateSource[0]) || templateSource;
+    }
+
     set anonymousTemplateName(templateName) {
         this._anonymousTemplateName = templateName;
     }
@@ -166,10 +170,10 @@ export default class TemplateManager {
         return templates;
     }
 
-    // saveTemplate(name, template) {
-    //     const templates = this.option('integrationOptions.templates');
-    //     templates[name] = this._createTemplate(template);
-    // }
+    saveTemplate(name, template) {
+        const templates = this.option('integrationOptions.templates');
+        templates[name] = this._createTemplate(template);
+    }
 
     _extractAnonymousTemplate(getElementContent) {
         // const templates = this.option('integrationOptions.templates');
@@ -192,16 +196,13 @@ export default class TemplateManager {
     }
 
     _createTemplateIfNeeded(templateSource) {
-        const templateKey = tSource => (isRenderer(tSource) && tSource[0]) || tSource;
-
-        const cachedTemplate = this._tempTemplates.filter((tempTemplate) => {
-            templateSource = templateKey(templateSource);
-            return tempTemplate.source === templateSource;
-        })[0];
+        const cachedTemplate = this._tempTemplates.filter(tempTemplate =>
+            tempTemplate.source === TemplateManager.templateKey(templateSource)
+        )[0];
         if(cachedTemplate) return cachedTemplate.template;
 
         const template = this._createTemplate(templateSource);
-        this._tempTemplates.push({ template, source: templateKey(templateSource) });
+        this._tempTemplates.push({ template, source: TemplateManager.templateKey(templateSource) });
         return template;
     }
 
