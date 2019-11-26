@@ -40,12 +40,13 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option) {
+    constructor(option, createTemplate) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
-        this.option = option;
+        // this.option = option;
+        this.createTemplate = createTemplate;
     }
 
     static getDefaultOptions() {
@@ -170,13 +171,7 @@ export default class TemplateManager {
         return templates;
     }
 
-    saveTemplate(name, template) {
-        const templates = this.option('integrationOptions.templates');
-        templates[name] = this._createTemplate(template);
-    }
-
     _extractAnonymousTemplate(getElementContent) {
-        // const templates = this.option('integrationOptions.templates');
         const $anonymousTemplate = getElementContent().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
@@ -187,9 +182,6 @@ export default class TemplateManager {
         });
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
-        // if(!templates[this._anonymousTemplateName] && !onlyJunkTemplateContent) {
-        //     templates[this._anonymousTemplateName] = this._createTemplate($anonymousTemplate);
-        // }
         return !onlyJunkTemplateContent
             ? { template: $anonymousTemplate, name: this._anonymousTemplateName }
             : {};
@@ -207,11 +199,10 @@ export default class TemplateManager {
     }
 
     _createTemplate(templateSource) {
-        templateSource = typeof templateSource === 'string' ? normalizeTemplateElement(templateSource) : templateSource;
-        return this.option('integrationOptions.createTemplate')(templateSource);
+        return this.createTemplate(TemplateManager.validateTemplateSource(templateSource));
     }
 
-    getTemplate(templateSource) {
+    getTemplate(templateSource, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
                 const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
@@ -227,7 +218,7 @@ export default class TemplateManager {
                     }
                     dispose = true;
                     return this._createTemplate(templateSource);
-                });
+                }, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates);
 
                 const result = template.render(options);
                 dispose && template.dispose && template.dispose();
@@ -235,10 +226,10 @@ export default class TemplateManager {
             });
         }
 
-        return this._acquireTemplate(templateSource, this._createTemplateIfNeeded.bind(this));
+        return this._acquireTemplate(templateSource, this._createTemplateIfNeeded.bind(this), getIntegrationTemplate, isAsyncTemplate, getSkipTemplates);
     }
 
-    _acquireTemplate(templateSource, createTemplate) {
+    _acquireTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
         if(templateSource == null) {
             return new EmptyTemplate();
         }
@@ -260,32 +251,47 @@ export default class TemplateManager {
             return createTemplate($(templateSource));
         }
 
-        if(typeof templateSource === 'string') {
-            const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
-            let integrationTemplate = null;
+        // if(typeof templateSource === 'string') {
+        //     const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
+        //     let integrationTemplate = null;
 
-            if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
-                integrationTemplate = this._renderIntegrationTemplate(templateSource);
-            }
+        //     if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
+        //         integrationTemplate = this._renderIntegrationTemplate(templateSource);
+        //     }
 
-            return integrationTemplate
-            || this._defaultTemplates[templateSource]
-            || createTemplate(templateSource);
-        }
+        //     return integrationTemplate
+        //     || this._defaultTemplates[templateSource]
+        //     || createTemplate(templateSource);
+        // }
 
-        return this._acquireTemplate(templateSource.toString(), createTemplate);
+        // return this._acquireStringTemplate(templateSource.toString(), createTemplate);
+        return this._acquireStringTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates);
     }
 
-    _renderIntegrationTemplate(templateSource) {
-        const integrationTemplate = this.option('integrationOptions.templates')[templateSource];
+    _renderIntegrationTemplate(templateSource, getIntegrationTemplate, asyncTemplate) {
+        const integrationTemplate = getIntegrationTemplate(templateSource);
+        const isAsyncTemplate = asyncTemplate();
+        // const integrationTemplate = this.option('integrationOptions.templates')[templateSource];
+        // const isAsyncTemplate = this.option('templatesRenderAsynchronously');
 
-        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            const isAsyncTemplate = this.option('templatesRenderAsynchronously');
-            if(!isAsyncTemplate) {
-                return TemplateManager._addOneRenderedCall(integrationTemplate);
-            }
+        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
+            return TemplateManager._addOneRenderedCall(integrationTemplate);
         }
 
         return integrationTemplate;
+    }
+
+    _acquireStringTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
+        // const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
+        const nonIntegrationTemplates = getSkipTemplates() || [];
+        let integrationTemplate = null;
+
+        if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
+            integrationTemplate = this._renderIntegrationTemplate(templateSource, getIntegrationTemplate, isAsyncTemplate);
+        }
+
+        return integrationTemplate
+        || this._defaultTemplates[templateSource]
+        || createTemplate(templateSource);
     }
 }

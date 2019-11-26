@@ -10,7 +10,12 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _init: function() {
         this.callBase();
 
-        this._templateManager = new TemplateManager(this.option.bind(this));
+        const createTemplate = (...args) => this.option('integrationOptions.createTemplate')(...args);
+
+        this._templateManager = new TemplateManager(
+            this.option.bind(this),
+            createTemplate
+        );
 
         this._initTemplates();
     },
@@ -38,11 +43,29 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _getTemplateByOption: function(optionName) {
-        return this._templateManager.getTemplate(this.option(optionName));
+        const getIntegrationTemplate = tSource => this.option('integrationOptions.templates')[tSource];
+        const isAsyncTemplate = () => this.option('templatesRenderAsynchronously');
+        const getSkipTemplates = () => this.option('integrationOptions.skipTemplates');
+
+        return this._templateManager.getTemplate(
+            this.option(optionName),
+            getIntegrationTemplate,
+            isAsyncTemplate,
+            getSkipTemplates
+        );
     },
 
     _getTemplate: function(templateSource) {
-        return this._templateManager.getTemplate(templateSource);
+        const getIntegrationTemplate = tSource => this.option('integrationOptions.templates')[tSource];
+        const isAsyncTemplate = () => this.option('templatesRenderAsynchronously');
+        const getSkipTemplates = () => this.option('integrationOptions.skipTemplates');
+
+        return this._templateManager.getTemplate(
+            templateSource,
+            getIntegrationTemplate,
+            isAsyncTemplate,
+            getSkipTemplates
+        );
     },
 
     _saveTemplate: function(name, template) {
