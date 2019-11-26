@@ -251,14 +251,14 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                         { id: 1, text: "item1", parentId: 2, expanded: optionValue },
                         { id: 2, text: "item1_1", parentId: 1, expanded: optionValue }]);
 
-                    const treeView = createInstance(options),
-                        $item1 = treeView.getElement().find('[aria-level="1"]'),
-                        $item2 = treeView.getElement().find('[aria-level="2"]');
+                    const treeWrapper = createInstance(options),
+                        $item1 = treeWrapper.getElement().find('[aria-level="1"]'),
+                        $item2 = treeWrapper.getElement().find('[aria-level="2"]');
 
-                    assert.notEqual(treeView.instance, undefined);
-                    assert.equal(treeView.IsVisible($item1), true);
-                    assert.equal(treeView.IsVisible($item2), optionValue);
-                    treeView.instance.dispose();
+                    assert.notEqual(treeWrapper.instance, undefined);
+                    assert.equal(treeWrapper.IsVisible($item1), true);
+                    assert.equal(treeWrapper.IsVisible($item2), optionValue);
+                    treeWrapper.instance.dispose();
                 });
             });
 
@@ -266,92 +266,92 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                const $parent = treeView.getElement().find('[aria-level="1"]');
-                treeView.instance.selectItem($parent);
-                treeView.checkSelectedNodes([0, 1]);
-                treeView.instance.dispose();
+                const $parent = treeWrapper.getElement().find('[aria-level="1"]');
+                treeWrapper.instance.selectItem($parent);
+                treeWrapper.checkSelectedNodes([0, 1]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`SelectItem -> html node.`, function(assert) {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                const $parent = treeView.getElement().find('[aria-level="1"]');
-                treeView.instance.selectItem($parent.get(0));
-                treeView.checkSelectedNodes([0, 1]);
-                treeView.instance.dispose();
+                const $parent = treeWrapper.getElement().find('[aria-level="1"]');
+                treeWrapper.instance.selectItem($parent.get(0));
+                treeWrapper.checkSelectedNodes([0, 1]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`SelectItem -> key`, function(assert) {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                treeView.instance.selectItem('1');
-                treeView.checkSelectedNodes([0, 1]);
-                treeView.instance.dispose();
+                treeWrapper.instance.selectItem('1');
+                treeWrapper.checkSelectedNodes([0, 1]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`SelectAll.`, function(assert) {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                treeView.instance.selectAll();
-                treeView.checkSelectedNodes([0, 1]);
-                treeView.instance.dispose();
+                treeWrapper.instance.selectAll();
+                treeWrapper.checkSelectedNodes([0, 1]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`UnselectItem -> jquery node.`, function() {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                const $parent = treeView.getElement().find('[aria-level="1"]');
-                treeView.instance.unselectItem($parent);
-                treeView.checkSelectedNodes([]);
-                treeView.instance.dispose();
+                const $parent = treeWrapper.getElement().find('[aria-level="1"]');
+                treeWrapper.instance.unselectItem($parent);
+                treeWrapper.checkSelectedNodes([]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`UnselectItem -> html node.`, function() {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                const $parent = treeView.getElement().find('[aria-level="1"]');
-                treeView.instance.unselectItem($parent.get(0));
-                treeView.checkSelectedNodes([]);
-                treeView.instance.dispose();
+                const $parent = treeWrapper.getElement().find('[aria-level="1"]');
+                treeWrapper.instance.unselectItem($parent.get(0));
+                treeWrapper.checkSelectedNodes([]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`UnselectItem -> key.`, function() {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                treeView.instance.unselectItem('1');
-                treeView.checkSelectedNodes([]);
-                treeView.instance.dispose();
+                treeWrapper.instance.unselectItem('1');
+                treeWrapper.checkSelectedNodes([]);
+                treeWrapper.instance.dispose();
             });
 
             QUnit.test(`UnselectAll.`, function() {
                 let options = createOptions(sourceOptionName, virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const treeView = createInstance(options);
+                const treeWrapper = createInstance(options);
 
-                treeView.instance.unselectAll();
-                treeView.checkSelectedNodes([]);
-                treeView.instance.dispose();
+                treeWrapper.instance.unselectAll();
+                treeWrapper.checkSelectedNodes([]);
+                treeWrapper.instance.dispose();
             });
         });
 

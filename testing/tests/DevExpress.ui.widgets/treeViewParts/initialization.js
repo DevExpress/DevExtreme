@@ -24,13 +24,13 @@ QUnit.test("Init tree view", function(assert) {
                         { id: 2, text: "item2", parentId: 1 },
                         { id: 3, text: "item3", parentId: 2 }]);
                     options['rootValue'] = testData.configRoot;
-                    const treeView = createInstance(options);
+                    const treeWrapper = createInstance(options);
 
-                    assert.notEqual(treeView.instance, undefined);
+                    assert.notEqual(treeWrapper.instance, undefined);
 
-                    let actualLevelNode = treeView.getElement().find('[aria-level="1"]');
+                    let actualLevelNode = treeWrapper.getElement().find('[aria-level="1"]');
                     assert.equal(actualLevelNode.attr('data-item-id'), testData.expectedItemId);
-                    treeView.instance.dispose();
+                    treeWrapper.instance.dispose();
                 });
             });
 
