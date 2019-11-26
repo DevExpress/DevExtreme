@@ -48,10 +48,22 @@ const ValidatingController = modules.Controller.inherit((function() {
             this.createAction("onRowValidating");
         },
 
-        _rowValidating: function(editData, validate) {
+        _getBrokenRules: function(editData, validationResults) {
+            let brokenRules;
+
+            if(validationResults) {
+                brokenRules = validationResults.brokenRules || validationResults.brokenRule && [validationResults.brokenRule];
+            } else {
+                brokenRules = editData.brokenRules || [];
+            }
+
+            return brokenRules;
+        },
+
+        _rowValidating: function(editData, validationResults) {
             const deferred = new Deferred(),
-                brokenRules = validate ? validate.brokenRules || validate.brokenRule && [validate.brokenRule] : [],
-                isValid = validate ? validate.isValid : editData.isValid,
+                brokenRules = this._getBrokenRules(editData, validationResults),
+                isValid = validationResults ? validationResults.isValid : editData.isValid,
                 parameters = {
                     brokenRules: brokenRules,
                     isValid: isValid,
@@ -166,8 +178,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                     const validationResult = ValidationEngine.validateGroup(editData);
                     when(validationResult.complete || validationResult).done(validationResult => {
                         editData.isValid = validationResult.isValid;
+
+                        editData.brokenRules = validationResult.brokenRules;
                     });
-                } else {
+                } else if(!editData.brokenRules || !editData.brokenRules.length) {
                     editData.isValid = true;
                 }
                 this.setDisableApplyValidationResults(false);
@@ -334,6 +348,7 @@ module.exports = {
                         startInsertIndex = that.getView("rowsView").getTopVisibleItemIndex(),
                         rowIndex = startInsertIndex;
 
+                    // debugger
                     each(that._editData, function(_, editData) {
                         if(!editData.isValid && editData.pageIndex !== that._pageIndex) {
                             editData.pageIndex = that._pageIndex;
@@ -396,6 +411,7 @@ module.exports = {
                     items = that.callBase(items, changeType);
                     itemsCount = items.length;
 
+                    // debugger
                     if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== "prepend" && changeType !== "append") {
                         for(i = 0; i < editData.length; i++) {
                             if(editData[i].type && editData[i].pageIndex === that._pageIndex && editData[i].key.pageIndex !== that._pageIndex) {

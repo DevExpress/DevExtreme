@@ -11005,6 +11005,51 @@ QUnit.test('Do not call onRowValidating on row deleting for edit mode row', func
     assert.equal(countCallOnRowValidating, 0, "onRowValidating in not called");
 });
 
+// T831738
+QUnit.test("brokenRules should be correct in onRowValidating callback if save after page change", function(assert) {
+    var that = this,
+        rowsView = this.rowsView,
+        countCallOnRowValidating = 0,
+        testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }, "age", "lastName"],
+        onRowValidating: function(e) {
+            countCallOnRowValidating++;
+
+            // assert
+            assert.ok(e.brokenRules.length, "broken rules array");
+            assert.notOk(e.isValid, "is not valid");
+        }
+    });
+
+    that.editCell(0, 0);
+
+    // assert
+    assert.equal(getInputElements(testElement).length, 1, "has input");
+
+    // act
+    testElement.find('input').first().val("");
+    testElement.find('input').first().trigger('change');
+
+    // act
+    that.dataController.pageIndex(1);
+    that.editingController.update();
+    that.dataController.updateItems();
+    that.saveEditData();
+
+    assert.equal(countCallOnRowValidating, 1, "onRowValidating was called");
+});
+
 // T393606
 QUnit.test("Not create validator for group column with validationRules when edit mode is 'row'", function(assert) {
     // arrange
