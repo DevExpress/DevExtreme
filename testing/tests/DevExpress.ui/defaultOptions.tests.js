@@ -155,7 +155,7 @@ testComponentDefaults(DateBox,
 
 testComponentDefaults(Box,
     {},
-    { _layoutStrategy: 'fallback' },
+    { _layoutStrategy: 'flex' },
     function() {
         this._origMSIE = browser.msie;
         browser.msie = true;
