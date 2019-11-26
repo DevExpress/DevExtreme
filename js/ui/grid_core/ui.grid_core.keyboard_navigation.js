@@ -474,7 +474,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _focus: function($cell, disableFocus, isInteractiveElement) {
-        var $row = ($cell && $cell.is("td")) ? $cell.parent() : $cell;
+        const $row = ($cell && $cell.is("td")) ? $cell.parent() : $cell;
 
         if($row && isNotFocusedRow($row)) {
             return;
@@ -500,6 +500,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         $prevFocusedCell && $prevFocusedCell.is("td") && $prevFocusedCell.not($focusElement).removeAttr("tabIndex");
 
         if($focusElement) {
+            eventsEngine.one($focusElement, "blur", () => $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS));
             if(!isInteractiveElement) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, "focus");

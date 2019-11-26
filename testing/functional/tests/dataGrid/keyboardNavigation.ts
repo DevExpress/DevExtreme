@@ -513,12 +513,21 @@ test("DataGrid - Scroll bars should not appear when updating edge cell focus ove
 
 test("Tab key on the focused group row should be handled by default behavior (T833621)", async t => {
     const dataGrid = new DataGrid("#container");
+    const groupRow = dataGrid.getGroupRow(1);
+    const pagerPage0 = dataGrid.getPager().getNavPage(0);
 
     await t
-        .click(dataGrid.getGroupRow(1).element)
-        .expect(dataGrid.getGroupRow(1).hasHiddenFocusState).ok()
+        .click(groupRow.element)
+        .expect(groupRow.hasHiddenFocusState).ok()
         .pressKey("tab")
-        .expect(dataGrid.getPager().getNavPage(0).element.focused).ok();
+        .expect(pagerPage0.element.focused).ok()
+        .pressKey("shift+tab")
+        .expect(groupRow.hasHiddenFocusState).notOk()
+        .expect(groupRow.hasFocusedState).notOk()
+        .expect(groupRow.element.focused).ok()
+        .pressKey("tab")
+        .expect(groupRow.hasHiddenFocusState).notOk()
+        .expect(pagerPage0.element.focused).ok();
 }).before(async () => {
     await createWidget("dxDataGrid", {
         width: 400,
