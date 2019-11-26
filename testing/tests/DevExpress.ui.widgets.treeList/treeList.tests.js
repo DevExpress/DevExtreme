@@ -927,6 +927,38 @@ QUnit.test("Highlight searchText in expandable column", function(assert) {
     assert.equal(treeList.$element().find(searchTextSelector).length, 1);
 });
 
+// T835655
+QUnit.test("Change searchPanel.text", function(assert) {
+    var treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0, name: "Name 1", age: 16 },
+                { id: 2, parentId: 1, name: "Name 2", age: 17 },
+                { id: 3, parentId: 2, name: "Name", age: 18 }
+            ],
+            searchPanel: {
+                visible: true,
+                text: "3"
+            }
+        }),
+        searchPanelSelector = ".dx-treelist-search-panel",
+        $searchInput;
+
+    this.clock.tick(30);
+
+    // act, assert
+    $searchInput = treeList.$element().find(searchPanelSelector).find("input");
+
+    assert.equal($searchInput.val(), "3", "search text");
+
+    // act
+    treeList.option("searchPanel.text", "new text");
+
+    $searchInput = treeList.$element().find(searchPanelSelector).find("input");
+
+    // assert
+    assert.equal($searchInput.val(), "new text", "search text");
+});
+
 QUnit.module("Expand/Collapse rows");
 
 // T627926
