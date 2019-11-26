@@ -6677,14 +6677,11 @@ QUnit.test("clearFilter should not fall with error if dataSource is not set", fu
     // arrange
     this.dataSource = undefined;
 
-    // act, assert
-    try {
-        this.dataController.clearFilter();
+    // assert
+    assert.notOk(this.dataController.getDataSource(), "no dataSource");
 
-        assert.ok(true, "no error");
-    } catch(e) {
-        assert.notOk(true, "error was thrown");
-    }
+    // act
+    this.dataController.clearFilter();
 });
 
 QUnit.module("Grouping", { beforeEach: setupModule, afterEach: teardownModule });
