@@ -348,7 +348,6 @@ module.exports = {
                         startInsertIndex = that.getView("rowsView").getTopVisibleItemIndex(),
                         rowIndex = startInsertIndex;
 
-                    // debugger
                     each(that._editData, function(_, editData) {
                         if(!editData.isValid && editData.pageIndex !== that._pageIndex) {
                             editData.pageIndex = that._pageIndex;
@@ -411,7 +410,6 @@ module.exports = {
                     items = that.callBase(items, changeType);
                     itemsCount = items.length;
 
-                    // debugger
                     if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== "prepend" && changeType !== "append") {
                         for(i = 0; i < editData.length; i++) {
                             if(editData[i].type && editData[i].pageIndex === that._pageIndex && editData[i].key.pageIndex !== that._pageIndex) {
