@@ -695,9 +695,9 @@ module("Expanded items", {
 
 
     QUnit.module("Expanding with cycle/loop keys (T832760)", () => {
-        [{ optionName: 'items', virtualModeEnabled: false }, { optionName: 'dataSource', virtualModeEnabled: false }, { optionName: 'dataSource', virtualModeEnabled: true }].forEach((testConfig) => {
-            QUnit.test(`ExpandItem by jquery node. ${testConfig.optionName} option with collapsed items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+        [{ sourceOptionName: 'items', virtualModeEnabled: false }, { sourceOptionName: 'dataSource', virtualModeEnabled: false }, { sourceOptionName: 'dataSource', virtualModeEnabled: true }, { sourceOptionName: 'createChildren', virtualModeEnabled: true }, { sourceOptionName: 'createChildren', virtualModeEnabled: false } ].forEach((testConfig) => {
+            QUnit.test(`ExpandItem by jquery node. ${testConfig.sourceOptionName} option with collapsed items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options),
@@ -707,10 +707,11 @@ module("Expanded items", {
 
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`ExpandItem by html node. ${testConfig.optionName} option with collapsed items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`ExpandItem by html node. ${testConfig.sourceOptionName} option with collapsed items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options),
@@ -720,10 +721,11 @@ module("Expanded items", {
 
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`ExpandItem by key. ${testConfig.optionName} option with collapsed items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`ExpandItem by key. ${testConfig.sourceOptionName} option with collapsed items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options);
@@ -732,10 +734,11 @@ module("Expanded items", {
 
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`ExpandItem by jquery node. ${testConfig.optionName} option with expanded items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`ExpandItem by jquery node. ${testConfig.sourceOptionName} option with expanded items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
                 let treeView = createInstance(options),
@@ -743,12 +746,12 @@ module("Expanded items", {
 
                 treeView.instance.expandItem($item1);
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
-                assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`ExpandItem by html node. ${testConfig.optionName} option with expanded items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`ExpandItem by html node. ${testConfig.sourceOptionName} option with expanded items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
                 let treeView = createInstance(options),
@@ -756,24 +759,24 @@ module("Expanded items", {
 
                 treeView.instance.expandItem($item1.get(0));
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
-                assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`ExpandItem by key. ${testConfig.optionName} option with expanded items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`ExpandItem by key. ${testConfig.sourceOptionName} option with expanded items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
                 let treeView = createInstance(options);
 
                 treeView.instance.expandItem('2');
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
-                assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`ExpandAll. ${testConfig.optionName} option`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`ExpandAll. ${testConfig.sourceOptionName} option`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options),
@@ -783,12 +786,12 @@ module("Expanded items", {
 
                 treeView.instance.expandAll();
                 $item1_1 = treeView.getElement().find('[aria-level="2"]');
-                assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsVisible($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseItem by jquery node ${testConfig.optionName} option with expanded items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseItem by jquery node ${testConfig.sourceOptionName} option with expanded items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
 
@@ -799,10 +802,11 @@ module("Expanded items", {
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsHidden($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseItem by html node. ${testConfig.optionName} option with expanded items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseItem by html node. ${testConfig.sourceOptionName} option with expanded items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
                 let treeView = createInstance(options),
@@ -812,10 +816,11 @@ module("Expanded items", {
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsHidden($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseItem by key. ${testConfig.optionName} option with expanded items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseItem by key. ${testConfig.sourceOptionName} option with expanded items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
                 let treeView = createInstance(options);
@@ -825,10 +830,11 @@ module("Expanded items", {
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsHidden($item1_1), true);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseItem by jquery node. ${testConfig.optionName} option with collapsed items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseItem by jquery node. ${testConfig.sourceOptionName} option with collapsed items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options),
@@ -837,10 +843,11 @@ module("Expanded items", {
                 treeView.instance.collapseItem($item1);
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 0);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseItem by html node. ${testConfig.optionName} option with collapsed items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseItem by html node. ${testConfig.sourceOptionName} option with collapsed items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options),
@@ -849,10 +856,11 @@ module("Expanded items", {
                 treeView.instance.collapseItem($item1.get(0));
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 0);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseItem by key. ${testConfig.optionName} option with collapsed items`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseItem by key. ${testConfig.sourceOptionName} option with collapsed items`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: false },
                     { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                 let treeView = createInstance(options);
@@ -861,12 +869,14 @@ module("Expanded items", {
 
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 0);
+                treeView.instance.dispose();
             });
 
-            QUnit.test(`CollapseAll should works with loop/cycle in ${testConfig.optionName} option`, function(assert) {
-                let options = createOptions(testConfig.optionName, testConfig.virtualModeEnabled, [
+            QUnit.test(`CollapseAll. ${testConfig.sourceOptionName} option`, function(assert) {
+                let options = createOptions(testConfig.sourceOptionName, testConfig.virtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                options['rootValue'] = 2;
                 let treeView = createInstance(options);
 
                 treeView.instance.collapseAll();
@@ -874,13 +884,18 @@ module("Expanded items", {
                 let $item1_1 = treeView.getElement().find('[aria-level="2"]');
                 assert.equal($item1_1.length, 1);
                 assert.equal(treeView.IsHidden($item1_1), true);
+                treeView.instance.dispose();
             });
         });
 
         function createOptions(itemsOptionName, isVirtualModeEnabled, items) {
             let options = { dataStructure: "plain", rootValue: 1, virtualModeEnabled: isVirtualModeEnabled };
-            options[itemsOptionName] = items;
+            options[itemsOptionName] = itemsOptionName === 'createChildren' ? getCreateChildFunction(items) : items;
             return options;
+        }
+
+        function getCreateChildFunction(items) {
+            return (parent) => { return parent == null ? [ items[0] ] : items.filter(function(item) { return parent.itemData.id === item.parentId; }); };
         }
     });
 });
