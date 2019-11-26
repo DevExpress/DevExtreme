@@ -3961,7 +3961,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.resources */
         resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
         /** @name dxGantt.Options.scaleType */
-        scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
+        scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /** @name dxGantt.Options.selectedRowKey */
         selectedRowKey?: any;
         /** @name dxGantt.Options.showResources */
