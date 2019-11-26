@@ -410,11 +410,7 @@ const TextEditorBase = Editor.inherit({
 
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
-
-        if(this.option("onKeyPress")) {
-            errors.log("W0001", this.NAME, "onKeyPress", "20.1", "This event is removed from the web standards and will be deprecated in modern browsers soon.");
-        }
-
+        this._checkKeyPressSubscriptions();
         this.callBase();
     },
 
@@ -839,6 +835,12 @@ const TextEditorBase = Editor.inherit({
         return this._input();
     },
 
+    _checkKeyPressSubscriptions: function() {
+        if(this.option("onKeyPress")) {
+            errors.log("W0001", this.NAME, "onKeyPress", "20.1", "This event is removed from the web standards and will be deprecated in modern browsers soon.");
+        }
+    },
+
     _optionChanged: function(args) {
         var name = args.name;
 
@@ -857,7 +859,7 @@ const TextEditorBase = Editor.inherit({
                 this._createValueChangeAction();
                 break;
             case "onKeyPress":
-                errors.log("W0001", this.NAME, "onKeyPress", "20.1", "This event is removed from the web standards and will be deprecated in modern browsers soon.");
+                this._checkKeyPressSubscriptions();
                 break;
             case "focusStateEnabled":
                 this.callBase(args);
