@@ -31,7 +31,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
             optionTemplates[name] = this.option('integrationOptions.createTemplate')(templateSource);
         });
 
-        if(!optionTemplates[anonymousTemplateMeta.name]) {
+        if(anonymousTemplateMeta.name && !optionTemplates[anonymousTemplateMeta.name]) {
             const templateSource = TemplateManager.validateTemplateSource(anonymousTemplateMeta.template);
             optionTemplates[anonymousTemplateMeta.name] = this.option('integrationOptions.createTemplate')(templateSource);
         }
