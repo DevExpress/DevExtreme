@@ -8,7 +8,7 @@ const { module, test } = QUnit;
 var helper;
 [true, false].forEach((searchEnabled) => {
     module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-        beforeEach: () => {
+        beforeEach: function() {
             this.items = [{ id: 1, text: "Item_1", expanded: true, items: [{ id: 3, text: "Item_1_1" }, { id: 4, text: "Item_1_2" }] }, { id: 2, text: "Item_2", expanded: false }];
             helper = new ariaAccessibilityTestHelper({
                 createWidget: ($element, options) => new TreeView($element,
@@ -21,12 +21,12 @@ var helper;
             });
             this.clock = sinon.useFakeTimers();
         },
-        afterEach: () => {
+        afterEach: function() {
             this.clock.restore();
             helper.$widget.remove();
         }
     }, () => {
-        test(`Selected: [], selectionMode: "single"`, () => {
+        test(`Selected: [], selectionMode: "single"`, function() {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
             if(searchEnabled) {
@@ -40,7 +40,7 @@ var helper;
             helper.checkItemsAttributes([], { });
         });
 
-        test(`Selected: [], change searchEnabled after initialize"`, () => {
+        test(`Selected: [], change searchEnabled after initialize"`, function() {
             helper.createWidget({ items: this.items, selectionMode: "single" });
             helper.widget.option("searchEnabled", !searchEnabled);
 
@@ -55,7 +55,7 @@ var helper;
             helper.checkItemsAttributes([], { });
         });
 
-        test(`Selected: ["Item_1"], selectionMode: "single"`, () => {
+        test(`Selected: ["Item_1"], selectionMode: "single"`, function() {
             this.items[0].selected = true;
 
             helper.createWidget({ items: this.items, selectionMode: "single" });
@@ -65,7 +65,7 @@ var helper;
             helper.checkItemsAttributes([0], { });
         });
 
-        test(`Selected: ["Item_1_1"], selectionMode: "single", Item_1.expanded: true, collapseItem(["Item_1"]) -> expand(["Item_1"])`, () => {
+        test(`Selected: ["Item_1_1"], selectionMode: "single", Item_1.expanded: true, collapseItem(["Item_1"]) -> expand(["Item_1"])`, function() {
             this.items[0].items[0].selected = true;
 
             helper.createWidget({ items: this.items, selectionMode: "single" });
@@ -84,7 +84,7 @@ var helper;
             helper.checkItemsAttributes([1], { });
         });
 
-        test(`Selected: ["Item_1"], selectionMode: "single", Item_1.expanded: false, expand(["Item_1"]) -> collapseItem(["Item_1"])`, () => {
+        test(`Selected: ["Item_1"], selectionMode: "single", Item_1.expanded: false, expand(["Item_1"]) -> collapseItem(["Item_1"])`, function() {
             this.items[0].selected = true;
             this.items[0].expanded = false;
 
@@ -104,7 +104,7 @@ var helper;
             helper.checkItemsAttributes([0], { });
         });
 
-        test(`Selected: ["Item_1_1"], selectionMode: "single", collapseItem(["Item_1"]) -> expand(["Item_1"])`, () => {
+        test(`Selected: ["Item_1_1"], selectionMode: "single", collapseItem(["Item_1"]) -> expand(["Item_1"])`, function() {
             this.items[0].items[0].selected = true;
 
             helper.createWidget({ items: this.items, selectionMode: "single" });
@@ -123,7 +123,7 @@ var helper;
             helper.checkItemsAttributes([1], { });
         });
 
-        test(`Selected: [], selectionMode: "single", selectItem(["Item_1"])`, () => {
+        test(`Selected: [], selectionMode: "single", selectItem(["Item_1"])`, function() {
             helper.createWidget({ items: this.items, selectionMode: "single" });
             helper.widget.selectItem(1);
 
@@ -132,7 +132,7 @@ var helper;
             helper.checkItemsAttributes([0], { });
         });
 
-        test(`Selected: [], selectionMode: "single", click checkbox ["Item_1"] -> ["Item_1_1"]`, () => {
+        test(`Selected: [], selectionMode: "single", click checkbox ["Item_1"] -> ["Item_1_1"]`, function() {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
             eventsEngine.trigger(helper.getItems().eq(0).prev(), "dxclick");
@@ -148,7 +148,7 @@ var helper;
             helper.checkItemsAttributes([1], { focusedNodeIndex: 1, });
         });
 
-        test(`Selected: [], selectionMode: "multiple", selectNodesRecursive: true, click checkbox ["Item_1"] -> ["Item_1_1"]`, () => {
+        test(`Selected: [], selectionMode: "multiple", selectNodesRecursive: true, click checkbox ["Item_1"] -> ["Item_1_1"]`, function() {
             helper.createWidget({ items: this.items, selectionMode: "multiple", selectNodesRecursive: true });
 
             eventsEngine.trigger(helper.getItems().eq(0).prev(), "dxclick");
@@ -164,7 +164,7 @@ var helper;
             helper.checkItemsAttributes([0, 2], { focusedNodeIndex: 1, selectionMode: "multiple" });
         });
 
-        test(`Selected: ["Item_1", "Item_1_1"], selectionMode: "multiple", selectNodesRecursive: false, unselectItem(["Item_1"]) -> selectItem(["Item_1_2"])`, () => {
+        test(`Selected: ["Item_1", "Item_1_1"], selectionMode: "multiple", selectNodesRecursive: false, unselectItem(["Item_1"]) -> selectItem(["Item_1_2"])`, function() {
             this.items[0].items[0].selected = true;
             this.items[0].selected = true;
 
@@ -181,7 +181,7 @@ var helper;
             helper.checkItemsAttributes([1, 2], { selectionMode: "multiple" });
         });
 
-        test(`Selected: [], selectionMode: "single" -> focusin -> focusout`, () => {
+        test(`Selected: [], selectionMode: "single" -> focusin -> focusout`, function() {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
             if(searchEnabled) {
@@ -200,7 +200,7 @@ var helper;
             helper.checkItemsAttributes([], { focusedNodeIndex: 0 });
         });
 
-        test(`Selected: [], selectionMode: "single" -> set focusedElement -> clean focusedElement`, () => {
+        test(`Selected: [], selectionMode: "single" -> set focusedElement -> clean focusedElement`, function() {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
             helper.widget.option("focusedElement", helper.getItems().eq(2).closest(".dx-treeview-node"));

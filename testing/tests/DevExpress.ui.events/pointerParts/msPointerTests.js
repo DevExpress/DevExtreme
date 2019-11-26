@@ -17,7 +17,7 @@ const POINTER_LEAVE_EVENT_NAME = "pointerleave";
 const { test } = QUnit;
 
 QUnit.module("mspointer events", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         $.each(MsPointerStrategy.map, (pointerEvent, originalEvents) => {
@@ -30,12 +30,12 @@ QUnit.module("mspointer events", {
         this.$element = $("#element");
     },
 
-    afterEach: () => {
+    afterEach: function() {
         MsPointerStrategy.resetObserver();
         this.clock.restore();
     }
 }, () => {
-    test("pointer event should not trigger twice on real devices", (assert) => {
+    test("pointer event should not trigger twice on real devices", function(assert) {
         const stubHandler = sinon.stub();
         const $container = $("#container").on("dxpointerdown", stubHandler);
         const $element = this.$element.on("dxpointerdown", stubHandler);
@@ -55,7 +55,7 @@ QUnit.module("mspointer events", {
         assert.strictEqual(stubHandler.callCount, 3);
     });
 
-    test("dxpointerup triggers twice on real devices", (assert) => {
+    test("dxpointerup triggers twice on real devices", function(assert) {
         const stubHandler = sinon.stub();
 
         this.$element.on("dxpointerup", stubHandler);
@@ -83,7 +83,7 @@ QUnit.module("mspointer events", {
         "dxpointerenter": POINTER_ENTER_EVENT_NAME,
         "dxpointerleave": POINTER_LEAVE_EVENT_NAME
     }, (eventName, triggerEvent) => {
-        test("'" + eventName + "' has pointerType = 'mouse' if it was triggered by mouse event", (assert) => {
+        test("'" + eventName + "' has pointerType = 'mouse' if it was triggered by mouse event", function(assert) {
             this.$element.on(eventName, (e) => {
                 assert.strictEqual(e.pointerType, "mouse");
             });
@@ -104,7 +104,7 @@ QUnit.module("mspointer events", {
         "dxpointerenter": "pointerenter",
         "dxpointerleave": "pointerleave"
     }, (eventName, triggerEvent) => {
-        test("'" + eventName + "' was triggered once", (assert) => {
+        test("'" + eventName + "' was triggered once", function(assert) {
             const stubHandler = sinon.stub();
             this.$element.on(eventName, stubHandler);
 
@@ -123,7 +123,7 @@ QUnit.module("mspointer events", {
         "dxpointerenter": POINTER_ENTER_EVENT_NAME,
         "dxpointerleave": POINTER_LEAVE_EVENT_NAME
     }, (eventName, triggerEvent) => {
-        test(`'${eventName}' has pointerType = 'touch' if it was triggered by touch event`, (assert) => {
+        test(`'${eventName}' has pointerType = 'touch' if it was triggered by touch event`, function(assert) {
             this.$element.on(eventName, (e) => {
                 assert.strictEqual(e.pointerType, "touch");
             });
@@ -144,7 +144,7 @@ QUnit.module("mspointer events", {
         "dxpointerenter": POINTER_ENTER_EVENT_NAME,
         "dxpointerleave": POINTER_LEAVE_EVENT_NAME
     }, (eventName, triggerEvent) => {
-        test(`'${eventName}' event should have correct pointerId`, (assert) => {
+        test(`'${eventName}' event should have correct pointerId`, function(assert) {
             this.$element.on(eventName, (e) => {
                 assert.strictEqual(e.pointerId, 17);
             });
@@ -191,7 +191,7 @@ QUnit.module("mspointer events", {
             $element[0].dispatchEvent(event);
         };
 
-        QUnit.test("dxpointer events should have all touches in pointer array", (assert) => {
+        QUnit.test("dxpointer events should have all touches in pointer array", function(assert) {
             simulatePointerEvent(this.$element, "pointerdown", { pointerType: "touch", pointerId: 17 });
 
             this.$element.on("dxpointerdown", (e) => {
@@ -211,7 +211,7 @@ QUnit.module("mspointer events", {
             simulatePointerEvent(this.$element, POINTER_UP_EVENT_NAME, { pointerType: "touch", pointerId: 17 });
         });
 
-        QUnit.test("active touches should be reset if primary pointer is added", (assert) => {
+        QUnit.test("active touches should be reset if primary pointer is added", function(assert) {
             simulatePointerEvent(this.$element, POINTER_DOWN_EVENT_NAME, { pointerType: "touch", pointerId: 17, isPrimary: false });
 
             this.$element.on("dxpointerdown", (e) => {
@@ -223,7 +223,7 @@ QUnit.module("mspointer events", {
             simulatePointerEvent(this.$element, POINTER_DOWN_EVENT_NAME, { pointerType: "touch", pointerId: 18, isPrimary: true });
         });
 
-        QUnit.test("pointers in dxpointer events should be updated on mouse move", (assert) => {
+        QUnit.test("pointers in dxpointer events should be updated on mouse move", function(assert) {
             simulatePointerEvent(this.$element, POINTER_DOWN_EVENT_NAME, { pointerType: "touch", pointerId: 17, clientX: 0 });
             simulatePointerEvent(this.$element, POINTER_DOWN_EVENT_NAME, { pointerType: "touch", pointerId: 18, clientX: 100 });
 
@@ -244,7 +244,7 @@ QUnit.module("mspointer events", {
             simulatePointerEvent(this.$element, POINTER_MOVE_EVENT_NAME, { pointerType: "touch", pointerId: 17, clientX: 20 });
         });
 
-        QUnit.test("two pointers with same pointerid should not be present in pointers array", (assert) => {
+        QUnit.test("two pointers with same pointerid should not be present in pointers array", function(assert) {
             this.$element.on("dxpointerdown", (e) => {
                 assert.strictEqual(e.pointers.length, 1);
             });

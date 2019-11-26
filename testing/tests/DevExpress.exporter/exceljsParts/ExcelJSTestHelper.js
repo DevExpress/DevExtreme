@@ -39,11 +39,11 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkAutoFilter(excelFilterEnabled, from, to, frozenArea) {
-        if(excelFilterEnabled === true) {
-            assert.deepEqual(this.worksheet.autoFilter.from, from, "worksheet.autoFilter.from");
-            assert.deepEqual(this.worksheet.autoFilter.to, to, "worksheet.autoFilter.to");
-            assert.deepEqual(this.worksheet.views, [ { state: "frozen", ySplit: frozenArea.y } ], "worksheet.views");
+    checkAutoFilter(autoFilterEnabled, autoFilter, frozenState) {
+        assert.deepEqual(this.worksheet.views, frozenState ? [frozenState] : [], "worksheet.views");
+
+        if(autoFilterEnabled === true) {
+            assert.deepEqual(this.worksheet.autoFilter, autoFilter, "worksheet.autoFilter");
         } else {
             assert.deepEqual(this.worksheet.autoFilter, null, "worksheet.autoFilter");
         }

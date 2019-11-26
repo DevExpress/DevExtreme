@@ -80,7 +80,7 @@ QUnit.test("with no key specified", function(assert) {
     );
 });
 
-QUnit.test("with filter as a function (T686655)", (assert) => {
+QUnit.test("with filter as a function (T686655)", function(assert) {
     assert.expect(2);
 
     const source = new DataSource({

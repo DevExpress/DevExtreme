@@ -275,7 +275,7 @@ QUnit.testInActiveWindow("arrows was not handled when focus on input element", f
             QUnit.assert.deepEqual(scrollLocation, expectedLocation, "scroll location");
         }
 
-        QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}`, (assert) => {
+        QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}`, function(assert) {
             if(devices.real().deviceType !== "desktop") {
                 assert.ok(true, "mobile device does not support tabindex on div element");
                 return;

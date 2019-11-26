@@ -23,7 +23,7 @@ const moduleConfig = {
 
 module("RTL", moduleConfig, () => {
     if(isDesktopEnvironment()) {
-        test("Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)", assert => {
+        test("Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)", function(assert) {
             const views = ["month", "week", "day"];
 
             const expectedValues = {
@@ -116,7 +116,7 @@ module("RTL", moduleConfig, () => {
             });
         };
 
-        test("Day view", assert => {
+        test("Day view", function(assert) {
             const scheduler = createScheduler("day");
 
             const cell = scheduler.workSpace.getCell(8);
@@ -125,7 +125,7 @@ module("RTL", moduleConfig, () => {
             assert.equal(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), "task position is correct");
         });
 
-        test("Week view", assert => {
+        test("Week view", function(assert) {
             const scheduler = createScheduler("week");
 
             const cell = scheduler.workSpace.getCell(1);
@@ -134,7 +134,7 @@ module("RTL", moduleConfig, () => {
             assert.equal(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), "task position is correct");
         });
 
-        test("Month view", assert => {
+        test("Month view", function(assert) {
             const scheduler = createScheduler("month");
 
             const cell = scheduler.workSpace.getCell(1);

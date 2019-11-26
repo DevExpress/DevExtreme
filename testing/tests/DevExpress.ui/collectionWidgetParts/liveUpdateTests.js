@@ -73,14 +73,14 @@ module("live update", {
         helper = new LiveUpdateTestHelper();
     }
 }, () => {
-    test("check load next page", (assert) => {
+    test("check load next page", function(assert) {
         assert.equal(helper.getItems().length, 2);
         helper.instance.loadNextPage();
         assert.equal(helper.getItems()[2], helper.data[2]);
         assert.equal(helper.getItems().length, 4);
     });
 
-    test("correct index after push insert", (assert) => {
+    test("correct index after push insert", function(assert) {
         helper.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
         helper.instance.loadNextPage();
         assert.equal(helper.getItems().length, 5);
@@ -88,7 +88,7 @@ module("live update", {
         assert.equal(helper.getItems()[4].id, 4);
     });
 
-    test("correct index after push 'remove'", (assert) => {
+    test("correct index after push 'remove'", function(assert) {
         helper.store.push([{ type: "remove", key: 0 }]);
         helper.instance.loadNextPage();
         assert.equal(helper.getItems().length, 3);
@@ -97,7 +97,7 @@ module("live update", {
     });
 
     // T723520
-    test("correct index after push 'remove' and dataSource reload", (assert) => {
+    test("correct index after push 'remove' and dataSource reload", function(assert) {
         helper.instance._shouldAppendItems = () => false;
         helper.instance.getDataSource().pageSize(20);
         helper.instance.reload();
@@ -115,13 +115,13 @@ module("live update", {
         assert.equal(take, 20);
     });
 
-    test("fire deleting event after push 'remove'", (assert) => {
+    test("fire deleting event after push 'remove'", function(assert) {
         assert.equal(helper.onItemDeletingSpy.callCount, 0);
         helper.store.push([{ type: "remove", key: 0 }]);
         assert.equal(helper.onItemDeletingSpy.callCount, 1);
     });
 
-    test("fire dxremove event after push 'remove'", (assert) => {
+    test("fire dxremove event after push 'remove'", function(assert) {
         const removeSpy = sinon.spy();
 
         $(".dx-item").on("dxremove", removeSpy);
@@ -130,7 +130,7 @@ module("live update", {
         assert.equal(removeSpy.callCount, 1, "should trigger dxremove event");
     });
 
-    test("refresh correct index after reload", (assert) => {
+    test("refresh correct index after reload", function(assert) {
         helper.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
         assert.equal(helper.getItems().length, 3);
         helper.instance.reload();
@@ -140,7 +140,7 @@ module("live update", {
         assert.equal(helper.instance.itemElements().length, 2);
     });
 
-    test("item is pushed to the end of store's array", (assert) => {
+    test("item is pushed to the end of store's array", function(assert) {
         helper.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
         assert.equal(helper.data.pop().id, 200);
     });

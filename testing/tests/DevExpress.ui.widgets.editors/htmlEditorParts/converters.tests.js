@@ -5,13 +5,13 @@ import { getQuill } from "ui/html_editor/quill_importer";
 const { test } = QUnit;
 
 QUnit.module("Delta converter", {
-    beforeEach: () => {
+    beforeEach: function() {
         const Quill = getQuill();
         this.deltaConverter = new DeltaConverter();
         this.quillInstance = new Quill(document.getElementById("htmlEditor"), {});
         this.deltaConverter.setQuillInstance(this.quillInstance);
     } }, () => {
-    test("it convert an editor content to semantic HTML markup", (assert) => {
+    test("it convert an editor content to semantic HTML markup", function(assert) {
         const deltaOps = [{
             insert: 'test',
             attributes: {
@@ -24,7 +24,7 @@ QUnit.module("Delta converter", {
         assert.strictEqual(this.deltaConverter.toHtml(), "<p><strong>test</strong></p>", "It converts delta operations");
     });
 
-    test("it should respect more the one level indent between list items", (assert) => {
+    test("it should respect more the one level indent between list items", function(assert) {
         const deltaOps = [{
             insert: "item1-1"
         }, {
@@ -53,7 +53,7 @@ QUnit.module("Delta converter", {
         assert.strictEqual(this.deltaConverter.toHtml(), expected, "convert list with indent more the one step");
     });
 
-    test("it should respect list item attributes", (assert) => {
+    test("it should respect list item attributes", function(assert) {
         const deltaOps = [
             { insert: "item1" },
             {
@@ -79,20 +79,20 @@ QUnit.module("Delta converter", {
         assert.strictEqual(this.deltaConverter.toHtml(), expected, "converted markup should contains inner styles");
     });
 
-    test("it should return an empty string when editor is empty", (assert) => {
+    test("it should return an empty string when editor is empty", function(assert) {
         assert.strictEqual(this.deltaConverter.toHtml(), "", "editor is empty and converter return an empty string");
     });
 });
 
 QUnit.module("Markdown converter", () => {
-    test("it convert a HTML to the Markdown", (assert) => {
+    test("it convert a HTML to the Markdown", function(assert) {
         const markdownConverter = new MarkdownConverter();
         const html = "<p>Te<strong>st</strong></p>";
 
         assert.equal(markdownConverter.toMarkdown(html), "Te**st**", "It converts a HTML to Markdown");
     });
 
-    test("it convert a Markdown to the HTML", (assert) => {
+    test("it convert a Markdown to the HTML", function(assert) {
         const markdownConverter = new MarkdownConverter();
         const markdown = "Te**st**";
 

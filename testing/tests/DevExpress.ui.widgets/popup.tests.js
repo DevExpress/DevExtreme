@@ -543,7 +543,7 @@ QUnit.test("maxHeight should affect popup content height correctly", function(as
     );
 });
 
-QUnit.test("Popup should keep nested scroll position on dimension changed", (assert) => {
+QUnit.test("Popup should keep nested scroll position on dimension changed", function(assert) {
     const SCROLLABLE_CONTAINER_CLASS = "test-scroll";
 
     $("#popup").dxPopup({
@@ -602,7 +602,7 @@ QUnit.test("width/height", function(assert) {
     assert.equal($overlayContent.outerHeight(), 567);
 });
 
-QUnit.test("popup height can be changed according to the content if height = auto", assert => {
+QUnit.test("popup height can be changed according to the content if height = auto", function(assert) {
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -639,7 +639,7 @@ QUnit.test("popup height can be changed according to the content if height = aut
     assert.strictEqual($popup.height(), (IS_IE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
 });
 
-QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
+QUnit.test("popup height should support top and bottom toolbars if height = auto", function(assert) {
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -673,7 +673,7 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
     assert.strictEqual(popupContentHeight, 300 - topToolbarHeight - bottomToolbarHeight, "popup has maximum content height");
 });
 
-QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", assert => {
+QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", function(assert) {
     devices.current("desktop");
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
@@ -706,7 +706,7 @@ QUnit.test("popup height should support any maxHeight and minHeight option value
     devices.current(devices.real());
 });
 
-QUnit.test("popup overlay should have correct height strategy classes for all browsers", assert => {
+QUnit.test("popup overlay should have correct height strategy classes for all browsers", function(assert) {
     const popup = $("#popup").dxPopup({
         visible: true,
         height: "auto",
@@ -737,7 +737,7 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
 });
 
 
-QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", assert => {
+QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", function(assert) {
     if(IS_OLD_SAFARI) {
         assert.expect(0);
         return;
@@ -1488,7 +1488,7 @@ QUnit.test("popup title should be rendered before content", function(assert) {
 
 
 QUnit.module("renderGeometry", () => {
-    QUnit.test("option change", (assert) => {
+    QUnit.test("option change", function(assert) {
         const instance = $("#popup").dxPopup({
             visible: true
         }).dxPopup("instance");

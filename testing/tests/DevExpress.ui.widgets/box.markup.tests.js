@@ -38,7 +38,7 @@ const BOX_CLASS = "dx-box",
     BOX_ITEM_CLASS = "dx-box-item";
 
 QUnit.module("render", () => {
-    QUnit.test("render", (assert) => {
+    QUnit.test("render", function(assert) {
         const $box = $("#box").dxBox({
             items: [1, 2]
         });
@@ -52,7 +52,7 @@ QUnit.module("render", () => {
         assert.equal($items.eq(1).text(), "2", "second item rendered");
     });
 
-    QUnit.test("render the box item content with flexBasis equal zero pixel", (assert) => {
+    QUnit.test("render the box item content with flexBasis equal zero pixel", function(assert) {
         const $box = $("#box").dxBox({
             items: [1],
             _layoutStrategy: "flex"
@@ -61,7 +61,7 @@ QUnit.module("render", () => {
         assert.equal($box.find("." + BOX_ITEM_CLASS + "-content").css("flexBasis"), "0px");
     });
 
-    QUnit.test("strategy class", (assert) => {
+    QUnit.test("strategy class", function(assert) {
         const $box = $("#box").dxBox({
             _layoutStrategy: "test"
         });
@@ -71,7 +71,7 @@ QUnit.module("render", () => {
 });
 
 QUnit.module("layouting", () => {
-    QUnit.test("render box in dxBox", (assert) => {
+    QUnit.test("render box in dxBox", function(assert) {
         const $box = $("#box").dxBox({
             items: [{ box: { direction: "row" } }]
         });
@@ -82,7 +82,7 @@ QUnit.module("layouting", () => {
         assert.ok(innerBox instanceof Box, "box was created inside box");
     });
 
-    QUnit.test("box pass _layoutStrategy to children box", (assert) => {
+    QUnit.test("box pass _layoutStrategy to children box", function(assert) {
         const $box = $("#box").dxBox({
             _layoutStrategy: 'test',
             items: [{ box: {} }]
@@ -93,7 +93,7 @@ QUnit.module("layouting", () => {
         assert.equal(innerBox.option("_layoutStrategy"), "test", "_layoutStrategy was passed to children box");
     });
 
-    QUnit.test("box must have a correct flex direction on items rendering (T604581)", (assert) => {
+    QUnit.test("box must have a correct flex direction on items rendering (T604581)", function(assert) {
         const boxInstance = new Box($("#box"), {
             direction: "col",
             items: [{ baseSize: 100 }],
@@ -104,7 +104,7 @@ QUnit.module("layouting", () => {
 });
 
 QUnit.module("template rendering", () => {
-    QUnit.test("innerBox with template", (assert) => {
+    QUnit.test("innerBox with template", function(assert) {
         const $box = $("#boxWithInnerBox").dxBox({
             items: [
                 {
@@ -118,7 +118,7 @@ QUnit.module("template rendering", () => {
         assert.equal($.trim($box.text()), "test", "inner box rendered with template");
     });
 
-    QUnit.test("innerBox with item renderer", (assert) => {
+    QUnit.test("innerBox with item renderer", function(assert) {
         const $box = $("#box").dxBox({
             items: [
                 {
@@ -133,7 +133,7 @@ QUnit.module("template rendering", () => {
         assert.equal($.trim($box.text()), "test1test2", "inner box rendered");
     });
 
-    QUnit.test("innerBox with nested box item", (assert) => {
+    QUnit.test("innerBox with nested box item", function(assert) {
         const $box = $("#nestedBox").dxBox({});
 
         assert.equal($.trim($box.text()), "Box1", "inner box rendered");
@@ -141,7 +141,7 @@ QUnit.module("template rendering", () => {
 });
 
 QUnit.module("rendering box item", () => {
-    QUnit.test("callstack should not grow when nesting is growing", (assert) => {
+    QUnit.test("callstack should not grow when nesting is growing", function(assert) {
         const originalBox = Box;
         let deep = 0;
 
@@ -175,7 +175,7 @@ QUnit.module("rendering box item", () => {
         }
     });
 
-    QUnit.test("onItemStateChanged action should fire after item visibility changed", (assert) => {
+    QUnit.test("onItemStateChanged action should fire after item visibility changed", function(assert) {
         const items = [{ text: "Item 1" }],
             itemStateChangedHandler = sinon.spy(),
             $box = $("#box").dxBox({ items: items, onItemStateChanged: itemStateChangedHandler }),

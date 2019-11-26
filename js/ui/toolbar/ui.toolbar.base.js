@@ -178,7 +178,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 return readyToResolve;
             };
             const runCheck = () => {
-                setTimeout(() => check() || runCheck(), timeout);
+                clearTimeout(this._waitParentAnimationTimeout);
+                this._waitParentAnimationTimeout = setTimeout(() => check() || runCheck(), timeout);
             };
             runCheck();
         });
@@ -470,7 +471,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             default:
                 this.callBase.apply(this, arguments);
         }
-    }
+    },
+
+    _dispose: function() {
+        this.callBase();
+        clearTimeout(this._waitParentAnimationTimeout);
+    },
 
     /**
     * @name dxToolbarMethods.registerKeyHandler

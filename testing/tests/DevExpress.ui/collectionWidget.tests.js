@@ -84,24 +84,24 @@ import "./collectionWidgetParts/editingTests.js";
 import "./collectionWidgetParts/liveUpdateTests.js";
 
 module("render", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.element = $("#cmp");
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
         this.clock.restore();
     }
 }, () => {
 
-    test("markup init", assert => {
+    test("markup init", function(assert) {
         const element = this.element;
         new TestComponent(element, {});
 
         assert.ok(element.hasClass(COLLECTION_CLASS), "collection widget has dx-collection class");
     });
 
-    test("item content should be wrapped", assert => {
+    test("item content should be wrapped", function(assert) {
         const element = this.element;
         const component = new TestComponent(element, { items: [1] });
 
@@ -116,7 +116,7 @@ module("render", {
         assert.equal($itemContent.contents().text(), "1", "item content placed inside content");
     });
 
-    test("custom render func, returns jquery", assert => {
+    test("custom render func, returns jquery", function(assert) {
         const element = this.element;
 
         new TestComponent("#cmp", {
@@ -137,7 +137,7 @@ module("render", {
         assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: 2;");
     });
 
-    test("custom render func, returns jquery", assert => {
+    test("custom render func, returns jquery", function(assert) {
         const element = this.element;
         new TestComponent("#cmp", {
             items: [{
@@ -157,7 +157,7 @@ module("render", {
         assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
     });
 
-    test("custom render func, returns dom node", assert => {
+    test("custom render func, returns dom node", function(assert) {
         const element = this.element;
         new TestComponent("#cmp", {
             integrationOptions: {
@@ -186,7 +186,7 @@ module("render", {
         assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
     });
 
-    test("custom render func, returns string", assert => {
+    test("custom render func, returns string", function(assert) {
         const element = this.element;
 
         new TestComponent("#cmp", {
@@ -206,7 +206,7 @@ module("render", {
         assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: ;");
     });
 
-    test("custom render func, returns numbers", assert => {
+    test("custom render func, returns numbers", function(assert) {
         const element = this.element;
 
         new TestComponent("#cmp", {
@@ -220,7 +220,7 @@ module("render", {
         assert.equal($.trim(element.text()), "01");
     });
 
-    test("itemTemplateProperty option", assert => {
+    test("itemTemplateProperty option", function(assert) {
         const $element = $("#cmp-with-template");
 
         const instance = new TestComponent(
@@ -233,7 +233,7 @@ module("render", {
         assert.equal($.trim($item.text()), "First Template", "item has correct template");
     });
 
-    test("showItemDataTitle as primitive", (assert) => {
+    test("showItemDataTitle as primitive", function(assert) {
         const $element = $("#cmp-with-template");
         const instance = new TestComponent(
             $element, {
@@ -248,7 +248,7 @@ module("render", {
         assert.strictEqual(instance.itemElements().eq(0).attr("title"), undefined, "title was removed");
     });
 
-    test("showItemDataTitle as object", (assert) => {
+    test("showItemDataTitle as object", function(assert) {
         const $element = $("#cmp-with-template");
         const instance = new TestComponent(
             $element, {
@@ -261,13 +261,13 @@ module("render", {
         assert.strictEqual($item.attr("title"), "Test", "title is correct");
     });
 
-    test("item takes new template", assert => {
+    test("item takes new template", function(assert) {
         const componentWithTemplate = new TestComponent("#cmp-with-template", { itemTemplate: "testTemplate" });
         const component = new TestComponent("#cmp", { itemTemplate: componentWithTemplate._getTemplateByOption("itemTemplate") });
         assert.equal(component._getTemplateByOption("itemTemplate"), componentWithTemplate._getTemplateByOption("itemTemplate"));
     });
 
-    test("anonymous item template", assert => {
+    test("anonymous item template", function(assert) {
         const $element = $("<div>").append($("<div>").addClass("test"));
 
         new TestComponent($element, {
@@ -277,7 +277,7 @@ module("render", {
         assert.equal($element.find(".test").length, 2);
     });
 
-    test("'itemTemplate' as DOM node", assert => {
+    test("'itemTemplate' as DOM node", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -290,7 +290,7 @@ module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    test("'itemTemplate' as jQuery element", assert => {
+    test("'itemTemplate' as jQuery element", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -303,7 +303,7 @@ module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    test("'itemTemplate' as jQuery element with custom template engine", assert => {
+    test("'itemTemplate' as jQuery element with custom template engine", function(assert) {
         setTemplateEngine({
             compile: noop,
             render() {
@@ -327,7 +327,7 @@ module("render", {
         }
     });
 
-    test("'itemTemplate' as function returning template name", assert => {
+    test("'itemTemplate' as function returning template name", function(assert) {
         const $element = $("#cmp-with-template");
 
         new TestComponent($element, {
@@ -342,7 +342,7 @@ module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "First Template");
     });
 
-    test("'itemTemplate' as function returning template name that is not string", assert => {
+    test("'itemTemplate' as function returning template name that is not string", function(assert) {
         const $element = $("#cmp-with-zero-template");
 
         new TestComponent($element, {
@@ -355,7 +355,7 @@ module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "zero");
     });
 
-    test("'itemTemplate' as function returning string", assert => {
+    test("'itemTemplate' as function returning string", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -368,7 +368,7 @@ module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "0");
     });
 
-    test("'itemTemplate' as function returning template DOM node", assert => {
+    test("'itemTemplate' as function returning template DOM node", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -383,7 +383,7 @@ module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    test("'itemTemplate' as function returning template jQuery element", assert => {
+    test("'itemTemplate' as function returning template jQuery element", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -396,7 +396,7 @@ module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).children().text()), "Test");
     });
 
-    test("'itemTemplate' as script element", assert => {
+    test("'itemTemplate' as script element", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -407,7 +407,7 @@ module("render", {
         assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).html()), "Test");
     });
 
-    test("'itemTemplate' as script element (no root element)", assert => {
+    test("'itemTemplate' as script element (no root element)", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -420,7 +420,7 @@ module("render", {
         assert.equal($.trim($element.children().eq(1).text()), "Outer text Test");
     });
 
-    test("'itemTemplate' as script element (no root element) with string renderer in template engine (T161432)", assert => {
+    test("'itemTemplate' as script element (no root element) with string renderer in template engine (T161432)", function(assert) {
         setTemplateEngine({
             compile(element) {
                 return element.html();
@@ -446,7 +446,7 @@ module("render", {
         }
     });
 
-    test("itemTemplate should get correct index for second page", assert => {
+    test("itemTemplate should get correct index for second page", function(assert) {
         const itemTemplateMethod = sinon.spy();
         const $element = $("#cmp");
 
@@ -468,7 +468,7 @@ module("render", {
         assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
     });
 
-    test("data item indices should be recalculated after item delete", assert => {
+    test("data item indices should be recalculated after item delete", function(assert) {
         const component = new TestComponent($("#cmp"), {
             items: ["Item 1", "Item 2", "Item 3"]
         });
@@ -484,12 +484,12 @@ module("render", {
         assert.equal($itemElements.eq(1).data("123"), "Item 3", "second item text is correct");
     });
 
-    test("No data text message - no items and source", assert => {
+    test("No data text message - no items and source", function(assert) {
         const component = new TestComponent("#cmp", {});
         assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
     });
 
-    test("No data text message - empty items", assert => {
+    test("No data text message - empty items", function(assert) {
         const list = new List(this.element);
 
         list.option("items", null);
@@ -502,7 +502,7 @@ module("render", {
         assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    test("No data text message - empty dataSource", assert => {
+    test("No data text message - empty dataSource", function(assert) {
         executeAsyncMock.setup();
 
         new TestComponent("#cmp", {
@@ -522,12 +522,12 @@ module("render", {
         assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    test("No data text message - value", assert => {
+    test("No data text message - value", function(assert) {
         new TestComponent("#cmp");
         assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).text(), DEFAULT_EMPTY_TEXT);
     });
 
-    test("No data text message - custom value", assert => {
+    test("No data text message - custom value", function(assert) {
         let noDataText = "noDataText";
 
         const component = new TestComponent("#cmp", {
@@ -541,7 +541,7 @@ module("render", {
         assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
     });
 
-    test("message element is not rendered if no data text is null, '', false", assert => {
+    test("message element is not rendered if no data text is null, '', false", function(assert) {
         const component = new TestComponent("#cmp", {
             noDataText: null
         });
@@ -555,7 +555,7 @@ module("render", {
         assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    test("No data message may contain HTML markup", assert => {
+    test("No data message may contain HTML markup", function(assert) {
         const component = new TestComponent("#cmp", {
             noDataText: "<div class=\"custom\">No data custom</div>"
         });
@@ -565,7 +565,7 @@ module("render", {
         assert.equal($noDataContainer.find(".custom").length, 1, "custom HTML markup is present");
     });
 
-    test("B235442 - 'No data to display' blinks while items loading ", assert => {
+    test("B235442 - 'No data to display' blinks while items loading ", function(assert) {
         const store = new ArrayStore([0, 1, 3, 4]);
         const source = new DataSource(store);
         const el = this.element;
@@ -577,7 +577,7 @@ module("render", {
         assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    test("B235884 - 'No data' no show ", assert => {
+    test("B235884 - 'No data' no show ", function(assert) {
         const deferred = $.Deferred();
         const el = this.element;
 
@@ -598,7 +598,7 @@ module("render", {
         assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 1, "'No data' shown");
     });
 
-    test("render items with multiple templates, jquery scenario", assert => {
+    test("render items with multiple templates, jquery scenario", function(assert) {
         const $element = $("#container-with-jq-template");
         const testSet = ["First Template", "Second Template", "eraser", "abc", "pencil", "First Template"];
         let $items;
@@ -639,7 +639,7 @@ module("render", {
         });
     });
 
-    test("onContentReady should be fired after if dataSource isn't empty", assert => {
+    test("onContentReady should be fired after if dataSource isn't empty", function(assert) {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -652,7 +652,7 @@ module("render", {
         assert.equal(count, 1, "onContentReady fired after dataSource load");
     });
 
-    test("onContentReady should be fired after if dataSource is empty", assert => {
+    test("onContentReady should be fired after if dataSource is empty", function(assert) {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -665,7 +665,7 @@ module("render", {
         assert.equal(count, 1, "onContentReady fired after dataSource load");
     });
 
-    test("onContentReady should be fired after if items isn't empty", assert => {
+    test("onContentReady should be fired after if items isn't empty", function(assert) {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -678,7 +678,7 @@ module("render", {
         assert.equal(count, 1, "onContentReady fired");
     });
 
-    test("onContentReady should be fired after if items is empty", assert => {
+    test("onContentReady should be fired after if items is empty", function(assert) {
         let count = 0;
 
         new TestComponent("#cmp", {
@@ -691,7 +691,7 @@ module("render", {
         assert.equal(count, 1, "onContentReady fired");
     });
 
-    test("item.visible property changing should not re-render whole item (T259051)", assert => {
+    test("item.visible property changing should not re-render whole item (T259051)", function(assert) {
         const instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
         });
@@ -702,7 +702,7 @@ module("render", {
         assert.ok($item.is(instance.$element().find(".item")));
     });
 
-    test("item.disabled property changing should not re-render whole item", assert => {
+    test("item.disabled property changing should not re-render whole item", function(assert) {
         const instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
         });
@@ -713,7 +713,7 @@ module("render", {
         assert.ok($item.is(instance.$element().find(".item")));
     });
 
-    test("_getSummaryItemsWidth function returns right values", assert => {
+    test("_getSummaryItemsWidth function returns right values", function(assert) {
         const instance = new TestComponent("#cmp", {
             items: [
                 { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
@@ -727,16 +727,16 @@ module("render", {
 });
 
 module("events", {
-    beforeEach: () => {
+    beforeEach: function() {
         registerComponent("TestComponent", TestComponent);
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         $.fn["TestComponent"] = null;
         this.clock.restore();
     }
 }, () => {
-    test("onItemClick should be fired when item is clicked", assert => {
+    test("onItemClick should be fired when item is clicked", function(assert) {
         let actionFired;
         let actionData;
 
@@ -760,7 +760,7 @@ module("events", {
         assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
     });
 
-    test("onItemClick should have correct item index when placed near another collection", assert => {
+    test("onItemClick should have correct item index when placed near another collection", function(assert) {
         let actionData;
 
         const $element = $("#cmp");
@@ -782,7 +782,7 @@ module("events", {
         assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
     });
 
-    test("item should not have active-state class after click, if it is disabled", assert => {
+    test("item should not have active-state class after click, if it is disabled", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -798,7 +798,7 @@ module("events", {
         assert.ok(!$item.hasClass(ACTIVE_ITEM_CLASS), "active state was not toggled for disabled item");
     });
 
-    test("item should not have focus-state class after focusin, if it is disabled", assert => {
+    test("item should not have focus-state class after focusin, if it is disabled", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -814,7 +814,7 @@ module("events", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus state was not toggled for disabled item");
     });
 
-    test("Action should be fired when item is held", assert => {
+    test("Action should be fired when item is held", function(assert) {
         let actionFired;
         let actionData;
 
@@ -833,10 +833,10 @@ module("events", {
         $item.trigger(holdEvent.name);
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
-    test("onItemHold should be fired when action changed dynamically", assert => {
+    test("onItemHold should be fired when action changed dynamically", function(assert) {
         let actionFired;
 
         const $element = $("#cmp");
@@ -854,7 +854,7 @@ module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    test("itemHold event should be fired", assert => {
+    test("itemHold event should be fired", function(assert) {
         let actionFired;
 
         const $element = $("#cmp");
@@ -872,7 +872,7 @@ module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    test("itemHoldTimeout should be passed to hold event", assert => {
+    test("itemHoldTimeout should be passed to hold event", function(assert) {
         let actionFired;
         const $element = $("#cmp");
 
@@ -893,7 +893,7 @@ module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    test("onItemContextMenu should be fired when item is held or right clicked", assert => {
+    test("onItemContextMenu should be fired when item is held or right clicked", function(assert) {
         let actionFired;
         let actionData;
 
@@ -912,10 +912,10 @@ module("events", {
         $item.trigger("dxcontextmenu");
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
-    test("itemContextMenu event should be fired when item is held or right clicked", assert => {
+    test("itemContextMenu event should be fired when item is held or right clicked", function(assert) {
         let actionFired;
         let actionData;
         const $element = $("#cmp");
@@ -933,10 +933,10 @@ module("events", {
         $item.trigger("dxcontextmenu");
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
-    test("onItemContextMenu should be fired when action changed dynamically", assert => {
+    test("onItemContextMenu should be fired when action changed dynamically", function(assert) {
         let actionFired;
 
         const $element = $("#cmp");
@@ -959,7 +959,7 @@ module("events", {
         }
     });
 
-    test("hold should not be handled if onItemHold or onItemContextMenu is not specified", assert => {
+    test("hold should not be handled if onItemHold or onItemContextMenu is not specified", function(assert) {
         let actionFired;
 
         const $element = $("#cmp");
@@ -980,7 +980,7 @@ module("events", {
         assert.ok(actionFired, "action fired");
     });
 
-    test("click on selected item does not fire option change if selectionRequired option is true", assert => {
+    test("click on selected item does not fire option change if selectionRequired option is true", function(assert) {
         let actionFired = false;
 
         const $element = $("#cmp");
@@ -1005,7 +1005,7 @@ module("events", {
         assert.ok(!actionFired, "option does not change");
     });
 
-    test("'onItemRendered' event should be fired with correct arguments", assert => {
+    test("'onItemRendered' event should be fired with correct arguments", function(assert) {
         const items = ["item 0"];
         let eventTriggered;
         let eventData;
@@ -1029,7 +1029,7 @@ module("events", {
         assert.equal(instance.__actionConfigs.onItemRendered.category, "rendering", "action category is 'rendering'");
     });
 
-    test("onClick option in item", assert => {
+    test("onClick option in item", function(assert) {
         let itemClicked = 0;
         const item = {
             text: 'test',
@@ -1057,17 +1057,17 @@ module("events", {
 });
 
 module("option change", () => {
-    test("changing onItemRendered should not fire refresh", assert => {
+    test("changing onItemRendered should not fire refresh", function(assert) {
         const instance = new TestComponent($("#cmp"), { items: [1, 2, 3] });
         let itemsReRendered = false;
 
-        instance.option("onItemRendered", assert => {
+        instance.option("onItemRendered", function(assert) {
             itemsReRendered = true;
         });
         assert.ok(!itemsReRendered, "items does not refreshed");
     });
 
-    test("user defined selectedItem with null value should be more important than default selected index", assert => {
+    test("user defined selectedItem with null value should be more important than default selected index", function(assert) {
         const TestCollection = CollectionWidget.inherit({
             NAME: "TestCollection",
             _getDefaultOptions() {
@@ -1090,14 +1090,14 @@ module("option change", () => {
 });
 
 module("items via markup", {
-    beforeEach: () => {
+    beforeEach: function() {
         registerComponent("dxTestComponent", TestComponent);
     },
-    afterEach: () => {
+    afterEach: function() {
         delete $.fn["dxTestComponent"];
     }
 }, () => {
-    test("item property changing should not re-render whole widget", assert => {
+    test("item property changing should not re-render whole widget", function(assert) {
         const contentReadySpy = sinon.spy();
 
         const component = new TestComponent("#cmp", {
@@ -1109,7 +1109,7 @@ module("items via markup", {
         assert.equal(contentReadySpy.callCount, 1);
     });
 
-    test("dxItem should not be modified", assert => {
+    test("dxItem should not be modified", function(assert) {
         const $element = $("#cmp");
         const dxItemString = "dxItem: {}";
 
@@ -1121,7 +1121,7 @@ module("items via markup", {
         assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");
     });
 
-    test("dxItem with custom parser", assert => {
+    test("dxItem with custom parser", function(assert) {
         const originalParser = config().optionsParser;
         config({ optionsParser: JSON.parse });
         const $element = $("#cmp");
@@ -1142,14 +1142,14 @@ module("items via markup", {
 });
 
 module("keyboard navigation", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("loopItemFocus option test", assert => {
+    test("loopItemFocus option test", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1172,7 +1172,7 @@ module("keyboard navigation", {
         assert.ok(!$firstItem.hasClass(FOCUSED_ITEM_CLASS), "focus is not looping when option loopItemFocus set to false");
     });
 
-    test("onItemClick fires on enter and space", assert => {
+    test("onItemClick fires on enter and space", function(assert) {
         assert.expect(2);
 
         let itemClicked = 0;
@@ -1198,7 +1198,7 @@ module("keyboard navigation", {
         assert.equal(itemClicked, 2, "press space on item call item click action");
     }),
 
-    test("default page scroll should be prevented for space key", assert => {
+    test("default page scroll should be prevented for space key", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1217,7 +1217,7 @@ module("keyboard navigation", {
         keyboardMock($element).keyDown("space");
     }),
 
-    test("focused item changed after press right/left arrows", assert => {
+    test("focused item changed after press right/left arrows", function(assert) {
         assert.expect(3);
 
         const $element = $("#cmp");
@@ -1242,7 +1242,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on item change focused item on prev");
     }),
 
-    test("focused item changed after press right/left arrows for rtl", assert => {
+    test("focused item changed after press right/left arrows for rtl", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1269,7 +1269,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
     }),
 
-    test("focused item changed after press up/down arrows", assert => {
+    test("focused item changed after press up/down arrows", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1295,7 +1295,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press up arrow on item change focused item on prev");
     }),
 
-    test("focused item changed on next not hidden item after press left/right", assert => {
+    test("focused item changed on next not hidden item after press left/right", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1324,7 +1324,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "next not hidden item has focused class after press right when next item is hidden");
     });
 
-    test("focused item cycle", assert => {
+    test("focused item cycle", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1350,7 +1350,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press down arrow on last item change focused item on first");
     }),
 
-    test("focused item changed after press pageUp/Down", assert => {
+    test("focused item changed after press pageUp/Down", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1376,7 +1376,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press pageUp on item change focused item on prev");
     }),
 
-    test("focused item changed after press home/end", assert => {
+    test("focused item changed after press home/end", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1402,7 +1402,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press home on item change focused item on prev");
     }),
 
-    test("focused item changed on last but one after press home/end if last is hidden", assert => {
+    test("focused item changed on last but one after press home/end if last is hidden", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1430,7 +1430,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has focused class after press home when first item is hidden");
     });
 
-    test("focus attribute", assert => {
+    test("focus attribute", function(assert) {
         assert.expect(4);
 
         const $element = $("#cmp");
@@ -1458,7 +1458,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has id active after press down arrow key");
     });
 
-    test("selectOnFocus test", assert => {
+    test("selectOnFocus test", function(assert) {
         assert.expect(9);
 
         const $element = $("#cmp");
@@ -1507,7 +1507,7 @@ module("keyboard navigation", {
         assert.equal(instance.option("selectedIndex"), 2, "loopItemFocus is working");
     });
 
-    test("focused item should be changed asynchronous (T400886)", assert => {
+    test("focused item should be changed asynchronous (T400886)", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1525,7 +1525,7 @@ module("keyboard navigation", {
         assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set after timeout");
     });
 
-    testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", assert => {
+    testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1541,7 +1541,7 @@ module("keyboard navigation", {
         assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus isn't set");
     });
 
-    test("focused item should not be changed if pointerdown prevented (T400886)", assert => {
+    test("focused item should not be changed if pointerdown prevented (T400886)", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1559,7 +1559,7 @@ module("keyboard navigation", {
         assert.equal(instance.option("focusedElement"), null, "focus isn't set");
     });
 
-    test("selectOnFocus test for widget with disabled items", assert => {
+    test("selectOnFocus test for widget with disabled items", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestComponent($element, {
@@ -1584,7 +1584,7 @@ module("keyboard navigation", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "correct item has an focused-state");
     });
 
-    test("Item should not lose focus class when you use arrows with 'selectOnFocus' option", assert => {
+    test("Item should not lose focus class when you use arrows with 'selectOnFocus' option", function(assert) {
         const $element = $("#cmp");
 
         new TestComponent($element, {
@@ -1614,14 +1614,14 @@ module("keyboard navigation", {
 });
 
 module("focus policy", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("dx-state-focused is not set for item when focusStateEnabled is false by dxpoinerdown", assert => {
+    test("dx-state-focused is not set for item when focusStateEnabled is false by dxpoinerdown", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1638,7 +1638,7 @@ module("focus policy", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    test("dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown", assert => {
+    test("dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1658,7 +1658,7 @@ module("focus policy", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    test("focusedElement is set for item when nested element selected by dxpoinerdown", assert => {
+    test("focusedElement is set for item when nested element selected by dxpoinerdown", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1679,7 +1679,7 @@ module("focus policy", {
         assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
     });
 
-    test("dx-state-focused is not set for item when it is not closest focused target by focusin", assert => {
+    test("dx-state-focused is not set for item when it is not closest focused target by focusin", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1698,7 +1698,7 @@ module("focus policy", {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    test("option focusOnSelectedItem", assert => {
+    test("option focusOnSelectedItem", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1715,7 +1715,7 @@ module("focus policy", {
         assert.ok($element.find(".item").eq(0).hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    test("option focusOnSelectedItem", assert => {
+    test("option focusOnSelectedItem", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1732,7 +1732,7 @@ module("focus policy", {
         assert.ok($element.find(".item").eq(1).hasClass(FOCUSED_ITEM_CLASS), "focus set to selected item");
     });
 
-    test("item is focused after setting focusedElement option", assert => {
+    test("item is focused after setting focusedElement option", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1753,7 +1753,7 @@ module("focus policy", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused after setting focusedItem option");
     });
 
-    test("first item  should be focused after setting focusedElement option to empty array", assert => {
+    test("first item  should be focused after setting focusedElement option to empty array", function(assert) {
         assert.expect(1);
 
         const $element = $("#cmp");
@@ -1771,7 +1771,7 @@ module("focus policy", {
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
     });
 
-    test("item is focused after focusing on element", assert => {
+    test("item is focused after focusing on element", function(assert) {
         assert.expect(2);
 
         const $element = $("#cmp");
@@ -1791,7 +1791,7 @@ module("focus policy", {
 });
 
 module("isReady", () => {
-    test("collection widget is ready when dataSource is loaded", assert => {
+    test("collection widget is ready when dataSource is loaded", function(assert) {
         let isReadyBeforeLoaded;
         const deferred = $.Deferred();
 
@@ -1837,14 +1837,14 @@ const TestStore = Store.inherit({
 });
 
 module("Data layer integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("data widget doesn't load already loaded datasource", assert => {
+    test("data widget doesn't load already loaded datasource", function(assert) {
         assert.expect(3);
 
         const store = new TestStore();
@@ -1867,7 +1867,7 @@ module("Data layer integration", {
         this.clock.tick(1);
     });
 
-    test("data widget should handle dataSource loading error", assert => {
+    test("data widget should handle dataSource loading error", function(assert) {
         const deferred = $.Deferred();
         let contentReadyFired = 0;
 
@@ -1887,7 +1887,7 @@ module("Data layer integration", {
         assert.equal(contentReadyFired, 1, "onContentReady fired once on loading fail");
     });
 
-    test("collection correctly handle loadResult object", (assert) => {
+    test("collection correctly handle loadResult object", function(assert) {
         const mapStub = sinon.stub();
         const instance = new TestWidget("#cmp", {
             dataSource: {
@@ -1909,7 +1909,7 @@ module("Data layer integration", {
         assert.deepEqual(filteredItems, [{ id: 3, text: "test3" }], "correct data");
     });
 
-    test("getDataSource. dataSource is not defined", assert => {
+    test("getDataSource. dataSource is not defined", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
@@ -1919,7 +1919,7 @@ module("Data layer integration", {
         assert.strictEqual(instance.getDataSource(), null);
     });
 
-    test("getDataSource, dataSource is defined", assert => {
+    test("getDataSource, dataSource is defined", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
@@ -1932,7 +1932,7 @@ module("Data layer integration", {
 
 var helper;
 QUnit.module(`Aria accessibility`, {
-    beforeEach: () => {
+    beforeEach: function() {
         this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
         helper = new ariaAccessibilityTestHelper({
             createWidget: ($element, options) => new TestWidget($element,
@@ -1941,18 +1941,18 @@ QUnit.module(`Aria accessibility`, {
                 }, options))
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         helper.$widget.remove();
     }
 }, () => {
-    test(`Attributes on initialize`, () => {
+    test(`Attributes on initialize`, function() {
         helper.createWidget({ items: [] });
 
         helper.checkAttributes(helper.$widget, { tabindex: "0", "aria-label": "No data to display" });
         helper.checkItemsAttributes([], { });
     });
 
-    test("Items[] -> Items['Item_1', 'Item_2', 'Item_3' ]", assert => {
+    test("Items[] -> Items['Item_1', 'Item_2', 'Item_3' ]", function(assert) {
         helper.createWidget({ items: [] });
 
         helper.checkAttributes(helper.$widget, { tabindex: "0", "aria-label": "No data to display" });
@@ -1963,7 +1963,7 @@ QUnit.module(`Aria accessibility`, {
         helper.checkItemsAttributes([], { });
     });
 
-    test(`Set focusedElement: item[1] -> clean focusedElement`, () => {
+    test(`Set focusedElement: item[1] -> clean focusedElement`, function() {
         helper.createWidget({ items: this.items });
 
         const $focusedItem = helper.$widget.find(`.${ITEM_CLASS}`).eq(1);
@@ -1977,7 +1977,7 @@ QUnit.module(`Aria accessibility`, {
         helper.checkItemsAttributes([], { });
     });
 
-    test(`Select item[0] on focus -> focusout`, () => {
+    test(`Select item[0] on focus -> focusout`, function() {
         helper.createWidget({ items: this.items });
 
         helper.$widget.focusin();
@@ -1989,14 +1989,14 @@ QUnit.module(`Aria accessibility`, {
         helper.checkItemsAttributes([], { focusedItemIndex: 0 });
     });
 
-    test(`SelectionMode: single, selectedIndex: 1`, () => {
+    test(`SelectionMode: single, selectedIndex: 1`, function() {
         helper.createWidget({ items: this.items, selectedIndex: 1, selectionMode: "single" });
 
         helper.checkAttributes(helper.$widget, { tabindex: "0" });
         helper.checkItemsAttributes([1], { attributes: ["aria-selected"] });
     });
 
-    test("Refresh aria-activedescendant when focused item changed", assert => {
+    test("Refresh aria-activedescendant when focused item changed", function(assert) {
         let refreshActiveDescendantCallCount = 0;
         helper.createWidget({ items: this.items });
 
@@ -2018,7 +2018,7 @@ QUnit.module(`Aria accessibility`, {
         }
     });
 
-    test("onFocusedItemChanged option on init", assert => {
+    test("onFocusedItemChanged option on init", function(assert) {
         let focusedItemChangedCallCount = 0;
 
         helper.createWidget({
@@ -2053,7 +2053,7 @@ QUnit.module(`Aria accessibility`, {
 
 
 module("default template", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.prepareItemTest = (data) => {
             const testWidget = new TestWidget($("<div>"), {
                 items: [data]
@@ -2063,37 +2063,37 @@ module("default template", {
         };
     }
 }, () => {
-    test("template should be rendered correctly with text", assert => {
+    test("template should be rendered correctly with text", function(assert) {
         const $content = this.prepareItemTest("custom");
 
         assert.equal($content.text(), "custom");
     });
 
-    test("template should be rendered correctly with boolean", assert => {
+    test("template should be rendered correctly with boolean", function(assert) {
         const $content = this.prepareItemTest(true);
 
         assert.equal($.trim($content.text()), "true");
     });
 
-    test("template should be rendered correctly with number", assert => {
+    test("template should be rendered correctly with number", function(assert) {
         const $content = this.prepareItemTest(1);
 
         assert.equal($.trim($content.text()), "1");
     });
 
-    test("template should be rendered correctly with text", assert => {
+    test("template should be rendered correctly with text", function(assert) {
         const $content = this.prepareItemTest({ text: "custom" });
 
         assert.equal($.trim($content.text()), "custom");
     });
 
-    test("template should be rendered correctly with text equals to zero", assert => {
+    test("template should be rendered correctly with text equals to zero", function(assert) {
         const $content = this.prepareItemTest({ text: 0 });
 
         assert.strictEqual($.trim($content.text()), "0");
     });
 
-    test("template should be rendered correctly with html", assert => {
+    test("template should be rendered correctly with html", function(assert) {
         const $content = this.prepareItemTest({ html: "<span>test</span>" });
 
         const $span = $content.is("span") ? $content : $content.children();
@@ -2101,19 +2101,19 @@ module("default template", {
         assert.equal($span.text(), "test");
     });
 
-    test("template should be rendered correctly with html equals to an empty string", assert => {
+    test("template should be rendered correctly with html equals to an empty string", function(assert) {
         const $content = this.prepareItemTest({ text: "test", html: "" });
 
         assert.strictEqual($.trim($content.text()), "");
     });
 
-    test("template should be rendered correctly with htmlstring", assert => {
+    test("template should be rendered correctly with htmlstring", function(assert) {
         const $content = this.prepareItemTest("<span>test</span>");
 
         assert.equal($content.text(), "<span>test</span>");
     });
 
-    test("template should be rendered correctly with html & text", assert => {
+    test("template should be rendered correctly with html & text", function(assert) {
         const $content = this.prepareItemTest({ text: "text", html: "<span>test</span>" });
 
         const $span = $content.is("span") ? $content : $content.children();
@@ -2122,7 +2122,7 @@ module("default template", {
         assert.equal($content.text(), "test");
     });
 
-    test("displayExpr option should work", assert => {
+    test("displayExpr option should work", function(assert) {
         const $element = $("#cmp");
 
         const instance = new TestWidget($element, {
@@ -2137,7 +2137,7 @@ module("default template", {
 });
 
 module("selection", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.createWidget = (options) => {
             options.items = options.items || [1, 2, 3];
 
@@ -2146,7 +2146,7 @@ module("selection", {
     }
 }, () => {
     ["single", "multiple"].forEach((selectionMode) => {
-        test(`selectedItemKeys should be updates properly with the ${selectionMode} selection mode`, assert => {
+        test(`selectedItemKeys should be updates properly with the ${selectionMode} selection mode`, function(assert) {
             const instance = this.createWidget({
                 selectionMode
             });
@@ -2159,7 +2159,7 @@ module("selection", {
             assert.deepEqual(newKeys, [2], "after selection 'selectedItemKeys' container correct item key");
         });
 
-        test(`selectedItemKeys === null should not throw an error with the ${selectionMode} selection mode`, assert => {
+        test(`selectedItemKeys === null should not throw an error with the ${selectionMode} selection mode`, function(assert) {
             let isOK = true;
             let selectedItemKeys;
 

@@ -23,44 +23,44 @@ const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-templat
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 module("DropDownEditor markup", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.rootElement = $("<div id='dropDownEditor'></div>");
         this.rootElement.appendTo($("#qunit-fixture"));
         this.$dropDownEditor = $("#dropDownEditor").dxDropDownEditor();
         this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor("instance");
     },
-    afterEach: () => {
+    afterEach: function() {
         this.rootElement.remove();
         this.dropDownEditor = null;
     }
 }, () => {
-    test("root element must be decorated with DROP_DOWN_EDITOR_CLASS", (assert) => {
+    test("root element must be decorated with DROP_DOWN_EDITOR_CLASS", function(assert) {
         assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_CLASS));
     });
 
-    test("dxDropDownEditor must have a button which must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS", (assert) => {
+    test("dxDropDownEditor must have a button which must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS", function(assert) {
         const $dropDownButton = this.rootElement.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
         assert.strictEqual($dropDownButton.length, 1);
         assert.ok($dropDownButton.hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS));
     });
 
-    test("dxDropDownEditor button should have correct aria-label attribute", (assert) => {
+    test("dxDropDownEditor button should have correct aria-label attribute", function(assert) {
         const $dropDownButton = this.rootElement.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
         assert.strictEqual($dropDownButton.attr("aria-label"), "Select", "'aria-label' is correct");
     });
 
-    test("input wrapper must be upper than button", (assert) => {
+    test("input wrapper must be upper than button", function(assert) {
         const $inputWrapper = this.rootElement.children();
 
         assert.strictEqual(this.rootElement.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`)[0], $inputWrapper[0]);
         assert.strictEqual(this.rootElement.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`)[0], $inputWrapper.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`)[0]);
     });
 
-    test("input must be wrapped for proper event handling", (assert) => {
+    test("input must be wrapped for proper event handling", function(assert) {
         assert.ok(this.dropDownEditor._input().parents().find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).hasClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
     });
 
-    test("DROP_DOWN_EDITOR_BUTTON_VISIBLE class should depend on drop down button visibility", (assert) => {
+    test("DROP_DOWN_EDITOR_BUTTON_VISIBLE class should depend on drop down button visibility", function(assert) {
         assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE), "class present by default");
 
         this.dropDownEditor.option("showDropDownButton", false);
@@ -70,7 +70,7 @@ module("DropDownEditor markup", {
         assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE), "class appears when the button shows");
     });
 
-    test("correct buttons order after rendering", (assert) => {
+    test("correct buttons order after rendering", function(assert) {
         const $dropDownEditor = this.rootElement.dxDropDownEditor({
                 showClearButton: true
             }),
@@ -82,7 +82,7 @@ module("DropDownEditor markup", {
         assert.ok($buttons.eq(1).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the second one");
     });
 
-    test("fieldTemplate as render", (assert) => {
+    test("fieldTemplate as render", function(assert) {
         const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
             fieldTemplate: function(value) {
                 const $textBox = $("<div>").dxTextBox();
@@ -95,7 +95,7 @@ module("DropDownEditor markup", {
         assert.equal($.trim($dropDownEditor.text()), "testtest", "field rendered");
     });
 
-    test("field should be rendered after input value rendering", (assert) => {
+    test("field should be rendered after input value rendering", function(assert) {
         const dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
             value: "test"
         }).dxDropDownEditor("instance");
@@ -113,7 +113,7 @@ module("DropDownEditor markup", {
 
 
 module("aria accessibility", () => {
-    test("aria role", (assert) => {
+    test("aria role", function(assert) {
         const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor(),
             $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
@@ -121,7 +121,7 @@ module("aria accessibility", () => {
         assert.strictEqual($dropDownEditor.attr("role"), undefined, "aria role on element is not exist");
     });
 
-    test("aria-autocomplete property on input", (assert) => {
+    test("aria-autocomplete property on input", function(assert) {
         const $input = $("#dropDownEditorLazy").dxDropDownEditor().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.attr("aria-autocomplete"), "list", "haspopup attribute exists");
     });

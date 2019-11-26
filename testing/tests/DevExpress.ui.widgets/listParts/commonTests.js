@@ -31,7 +31,7 @@ const toSelector = cssClass => {
     return "." + cssClass;
 };
 
-const isDeviceDesktop = assert => {
+const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "skip this test on mobile devices");
         return false;
@@ -121,7 +121,7 @@ const ScrollViewMock = DOMComponent.inherit({
 });
 
 const moduleSetup = {
-    beforeEach: () => {
+    beforeEach: function() {
         executeAsyncMock.setup();
 
         this.element = $("#list");
@@ -133,7 +133,7 @@ const moduleSetup = {
         this.clock = sinon.useFakeTimers();
         $.fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
 
         List.mockScrollView(ScrollView);
@@ -148,7 +148,7 @@ const LIST_GROUP_COLLAPSED_CLASS = "dx-list-group-collapsed";
 const LIST_COLLAPSIBLE_GROUPS_CLASS = "dx-list-collapsible-groups";
 
 QUnit.module("collapsible groups", moduleSetup, () => {
-    QUnit.test("collapsible groups class should be present if groups can be collapsed", assert => {
+    QUnit.test("collapsible groups class should be present if groups can be collapsed", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
             grouped: true,
@@ -161,7 +161,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.ok(!$element.hasClass(LIST_COLLAPSIBLE_GROUPS_CLASS), "collapsible groups class is present");
     });
 
-    QUnit.test("focus should move to first group's item when group expands", assert => {
+    QUnit.test("focus should move to first group's item when group expands", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["11", "12"] }, { key: "b", items: ["21", "22"] }],
             grouped: true,
@@ -183,7 +183,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.notOk($items.eq(0).hasClass("dx-state-focused"), "first item of the first group lost focus");
     });
 
-    QUnit.test("focus class should not be added to any item when expanding group via api", assert => {
+    QUnit.test("focus class should not be added to any item when expanding group via api", function(assert) {
         const element = this.element.dxList({
             items: [{ key: "a", items: ["11", "12"] }, { key: "b", items: ["21", "22"] }],
             grouped: true,
@@ -198,7 +198,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.notOk($items.eq(0).hasClass("dx-state-focused"), "first item has not focused class");
     });
 
-    QUnit.test("focus class should not be added to first group item when focusStateEnabled is false", assert => {
+    QUnit.test("focus class should not be added to first group item when focusStateEnabled is false", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["11", "12"] }, { key: "b", items: ["21", "22"] }],
             grouped: true,
@@ -216,7 +216,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.notOk($items.eq(2).hasClass("dx-state-focused"), "first item of the second group is focused");
     });
 
-    QUnit.test("group body should be collapsed by click on header", assert => {
+    QUnit.test("group body should be collapsed by click on header", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
             grouped: true,
@@ -232,7 +232,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
     });
 
-    QUnit.test("group body should be not collapsed by click on header if collapsibleGroups is disabled", assert => {
+    QUnit.test("group body should be not collapsed by click on header if collapsibleGroups is disabled", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
             grouped: true,
@@ -246,7 +246,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
     });
 
-    QUnit.test("group body should be not collapsed by click on header in disabled state", assert => {
+    QUnit.test("group body should be not collapsed by click on header in disabled state", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
             grouped: true,
@@ -263,7 +263,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
 
     const LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator";
 
-    QUnit.test("group header collapsed indicator element for the Material theme", assert => {
+    QUnit.test("group header collapsed indicator element for the Material theme", function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = () => {
             return true;
@@ -282,7 +282,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         themes.isMaterial = origIsMaterial;
     });
 
-    QUnit.test("no group header collapsed indicator element for the Generic theme", assert => {
+    QUnit.test("no group header collapsed indicator element for the Generic theme", function(assert) {
         const $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
             grouped: true,
@@ -294,7 +294,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, "group header should not have collapsed indicator element for the Generic theme");
     });
 
-    QUnit.test("group collapsing is animated", assert => {
+    QUnit.test("group collapsing is animated", function(assert) {
         try {
             const animateSpy = sinon.spy(fx, "animate");
 
@@ -324,7 +324,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("group collapsing should update scroller position after animation", assert => {
+    QUnit.test("group collapsing should update scroller position after animation", function(assert) {
         const origAnimate = fx.animate;
 
         try {
@@ -357,7 +357,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("group should be collapsed by the collapseGroup method", assert => {
+    QUnit.test("group should be collapsed by the collapseGroup method", function(assert) {
         const origAnimate = fx.animate;
 
         try {
@@ -401,7 +401,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("group should be stay collapsed if collapseGroup method called twice", assert => {
+    QUnit.test("group should be stay collapsed if collapseGroup method called twice", function(assert) {
         fx.off = true;
 
         try {
@@ -427,7 +427,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("group should be stay expanded by the expandGroup method", assert => {
+    QUnit.test("group should be stay expanded by the expandGroup method", function(assert) {
         fx.off = true;
 
         try {
@@ -452,7 +452,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("group should be expanded by the expandGroup method", assert => {
+    QUnit.test("group should be expanded by the expandGroup method", function(assert) {
         const origAnimate = fx.animate;
 
         try {
@@ -499,7 +499,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("items on another page are selected when grouping is enabled", assert => {
+    QUnit.test("items on another page are selected when grouping is enabled", function(assert) {
         const list = this.element.dxList({
             dataSource: {
                 store: [
@@ -521,7 +521,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         assert.equal(selectedItems.length, 2, "count of selected items");
     });
 
-    QUnit.test("scrollView should be updated after group collapsed", assert => {
+    QUnit.test("scrollView should be updated after group collapsed", function(assert) {
         try {
             List.mockScrollView(this.originalScrollView);
             fx.off = true;
@@ -554,7 +554,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("scrollView should update its position after a group has been collapsed", assert => {
+    QUnit.test("scrollView should update its position after a group has been collapsed", function(assert) {
         try {
             List.mockScrollView(this.originalScrollView);
             fx.off = true;
@@ -617,7 +617,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("more button shouldn't disappear after group collapsed with array store", assert => {
+    QUnit.test("more button shouldn't disappear after group collapsed with array store", function(assert) {
         try {
             List.mockScrollView(this.originalScrollView);
             fx.off = true;
@@ -649,7 +649,7 @@ QUnit.module("collapsible groups", moduleSetup, () => {
         }
     });
 
-    QUnit.test("more button shouldn't disappear after group collapsed with custom store", assert => {
+    QUnit.test("more button shouldn't disappear after group collapsed with custom store", function(assert) {
         try {
             List.mockScrollView(this.originalScrollView);
             fx.off = true;
@@ -691,7 +691,7 @@ QUnit.module("next button", moduleSetup, () => {
         return (!$element.length || $element.is(":hidden"));
     };
 
-    QUnit.test("show next button", assert => {
+    QUnit.test("show next button", function(assert) {
         this.element.dxList({
             dataSource: {
                 store: [1, 2, 3],
@@ -707,7 +707,7 @@ QUnit.module("next button", moduleSetup, () => {
         assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 3, "second page loaded");
     });
 
-    QUnit.test("showNextButton", assert => {
+    QUnit.test("showNextButton", function(assert) {
         const list = this.element.dxList({
             dataSource: {
                 store: [1, 2, 3],
@@ -741,7 +741,7 @@ QUnit.module("next button", moduleSetup, () => {
         assert.ok(isElementHidden($(".dx-list-next-button", this.element)), "no nextButton showed, if all data is loaded");
     });
 
-    QUnit.test("nextButtonText", assert => {
+    QUnit.test("nextButtonText", function(assert) {
         const dataSource = new DataSource({
             store: [1, 2, 3],
             pageSize: 2
@@ -760,7 +760,7 @@ QUnit.module("next button", moduleSetup, () => {
         assert.equal(this.element.find(".dx-list-next-button").text(), "anotherText");
     });
 
-    QUnit.test("no nextButton when no dataSource", assert => {
+    QUnit.test("no nextButton when no dataSource", function(assert) {
         const dataSource = new DataSource({
             store: [1, 2, 3],
             pageSize: 2
@@ -781,7 +781,7 @@ QUnit.module("next button", moduleSetup, () => {
         assert.ok(isElementHidden($(".dx-list-next-button", this.element)));
     });
 
-    QUnit.test("nextButton should not be removed after repaint", assert => {
+    QUnit.test("nextButton should not be removed after repaint", function(assert) {
         const dataSource = new DataSource({
             store: [1, 2, 3],
             pageSize: 2
@@ -798,7 +798,7 @@ QUnit.module("next button", moduleSetup, () => {
 });
 
 QUnit.module("options", moduleSetup, () => {
-    QUnit.test("dataSource as config", assert => {
+    QUnit.test("dataSource as config", function(assert) {
         const element = this.element.dxList({
             dataSource: {
                 store: new ArrayStore([5, 3, 4, 2, 1]),
@@ -811,7 +811,7 @@ QUnit.module("options", moduleSetup, () => {
         assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4, 5]);
     });
 
-    QUnit.test("dataSource as array", assert => {
+    QUnit.test("dataSource as array", function(assert) {
         const element = this.element.dxList({
             dataSource: [1, 2, 3, 4, 5],
             pageLoadMode: "scrollBottom"
@@ -821,7 +821,7 @@ QUnit.module("options", moduleSetup, () => {
         assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4, 5]);
     });
 
-    QUnit.test("dataSource as store", assert => {
+    QUnit.test("dataSource as store", function(assert) {
         const element = this.element.dxList({
             dataSource: new ArrayStore([1, 2, 3, 4, 5]),
             pageLoadMode: "scrollBottom"
@@ -831,7 +831,7 @@ QUnit.module("options", moduleSetup, () => {
         assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4, 5]);
     });
 
-    QUnit.test("wrapItemText option", (assert) => {
+    QUnit.test("wrapItemText option", function(assert) {
         const element = this.element.dxList({
             items: [1],
             wrapItemText: true
@@ -847,7 +847,7 @@ QUnit.module("options", moduleSetup, () => {
 });
 
 QUnit.module("options changed", moduleSetup, () => {
-    QUnit.test("dataSource", assert => {
+    QUnit.test("dataSource", function(assert) {
         const element = this.element.dxList({
             dataSource: {
                 store: new ArrayStore([0, 1, 3, 5, 4])
@@ -868,7 +868,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.deepEqual(element.dxList("instance").option("items"), [2, 6, 8, 9, 7]);
     });
 
-    QUnit.test("items", assert => {
+    QUnit.test("items", function(assert) {
         const element = this.element.dxList({
             items: [0, 1, 3, 5, 4]
         });
@@ -882,7 +882,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.equal(element.text(), "26897");
     });
 
-    QUnit.test("scrollingEnabled", assert => {
+    QUnit.test("scrollingEnabled", function(assert) {
         const list = this.element.dxList({
             scrollingEnabled: false
         }).dxList("instance");
@@ -893,7 +893,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.ok(!list._scrollView.option("disabled"));
     });
 
-    QUnit.test("scrollView disables when list is disabled", assert => {
+    QUnit.test("scrollView disables when list is disabled", function(assert) {
         const list = this.element.dxList({ disabled: false }).dxList("instance");
         const scrollView = this.element.dxScrollView("instance");
 
@@ -904,7 +904,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.ok(scrollView.option("disabled"), "list is disabled, scrollView is disabled too");
     });
 
-    QUnit.test("onItemSwipe", assert => {
+    QUnit.test("onItemSwipe", function(assert) {
         assert.expect(2);
 
         const swipeHandler = () => {
@@ -934,7 +934,7 @@ QUnit.module("options changed", moduleSetup, () => {
         swipeItem();
     });
 
-    QUnit.test("displayExpr option change", assert => {
+    QUnit.test("displayExpr option change", function(assert) {
         const instance = this.element.dxList({
             items: [{ id: 1, name: "Item text", caption: "New item text" }],
             displayExpr: "name"
@@ -946,7 +946,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(instance.itemElements().text(), "New item text", "item text was changed");
     });
 
-    QUnit.test("dxList shouldn't show 'Loading' and 'No data' at the same time than dataSource option changed", assert => {
+    QUnit.test("dxList shouldn't show 'Loading' and 'No data' at the same time than dataSource option changed", function(assert) {
         const $list = $("#list").dxList({ pageLoadMode: "scrollBottom" });
         const instance = $list.dxList("instance");
         const scrollView = $list.dxScrollView("instance");
@@ -964,7 +964,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.equal($list.find(".dx-empty-message").length, 0, "empty message was not rendered");
     });
 
-    QUnit.test("list should be able to change grouped option after dataSource option", assert => {
+    QUnit.test("list should be able to change grouped option after dataSource option", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [{ key: 'parent', items: [{ text: 'child' }] }],
             grouped: true
@@ -980,7 +980,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.notOk(instance.option("grouped"), "grouped option was changed without exceptions");
     });
 
-    QUnit.test("searchEnabled option changing", assert => {
+    QUnit.test("searchEnabled option changing", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true
@@ -999,7 +999,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
     });
 
-    QUnit.test("searchValue", assert => {
+    QUnit.test("searchValue", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchExpr: "this"
@@ -1013,7 +1013,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(instance.getDataSource().searchValue(), 2, "search value of dataSource");
     });
 
-    QUnit.test("searchMode", assert => {
+    QUnit.test("searchMode", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 21, 3],
             searchExpr: "this",
@@ -1030,7 +1030,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation of dataSource");
     });
 
-    QUnit.test("searchMode equals", assert => {
+    QUnit.test("searchMode equals", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 11, 111],
             searchExpr: "this",
@@ -1044,7 +1044,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(instance.getDataSource().searchOperation(), "=", "search operation of dataSource");
     });
 
-    QUnit.test("searchExpr", assert => {
+    QUnit.test("searchExpr", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [
                 { text: "test1", value: "3" },
@@ -1068,7 +1068,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(instance.getDataSource().searchExpr(), "value", "search operation of dataSource");
     });
 
-    QUnit.test("searchEditorOptions", assert => {
+    QUnit.test("searchEditorOptions", function(assert) {
         let searchEditorInstance;
 
         const $element = $("#list").dxList({
@@ -1093,7 +1093,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search box");
     });
 
-    QUnit.test("apply list search options if dataSource set as dataSource instance", assert => {
+    QUnit.test("apply list search options if dataSource set as dataSource instance", function(assert) {
         const instance = $("#list").dxList({
             dataSource: new DataSource({
                 store: [],
@@ -1113,7 +1113,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(ds.searchOperation(), "startsWith", "search operation is applied");
     });
 
-    QUnit.test("apply dataSource options if list search options are default", assert => {
+    QUnit.test("apply dataSource options if list search options are default", function(assert) {
         const instance = $("#list").dxList({
             dataSource: new DataSource({
                 store: [],
@@ -1130,7 +1130,7 @@ QUnit.module("options changed", moduleSetup, () => {
         assert.strictEqual(ds.searchOperation(), "startsWith", "search operation is applied");
     });
 
-    QUnit.test("dataSource change should save filter", assert => {
+    QUnit.test("dataSource change should save filter", function(assert) {
         const getDataSource = data => {
             return new DataSource({
                 store: new ArrayStore({
@@ -1156,7 +1156,7 @@ QUnit.module("options changed", moduleSetup, () => {
 });
 
 QUnit.module("selection", moduleSetup, () => {
-    QUnit.test("should select item from invisible page", (assert) => {
+    QUnit.test("should select item from invisible page", function(assert) {
         const clock = sinon.useFakeTimers();
         const done = assert.async();
 
@@ -1185,7 +1185,7 @@ QUnit.module("selection", moduleSetup, () => {
         clock.tick(0);
     });
 
-    QUnit.test("selection should not be removed after second click if selectionMode is single", assert => {
+    QUnit.test("selection should not be removed after second click if selectionMode is single", function(assert) {
         const $element = this.element.dxList({
             items: [1],
             selectionMode: "single"
@@ -1201,7 +1201,7 @@ QUnit.module("selection", moduleSetup, () => {
 });
 
 QUnit.module("events", moduleSetup, () => {
-    QUnit.test("onItemClick should be fired when item is clicked in ungrouped list", assert => {
+    QUnit.test("onItemClick should be fired when item is clicked in ungrouped list", function(assert) {
         let actionFired;
         let actionData;
 
@@ -1219,10 +1219,10 @@ QUnit.module("events", moduleSetup, () => {
         $item.trigger("dxclick");
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
-    QUnit.test("onItemClick should be fired when item is clicked in grouped list", assert => {
+    QUnit.test("onItemClick should be fired when item is clicked in grouped list", function(assert) {
         let actionFired;
         let actionData;
 
@@ -1253,11 +1253,11 @@ QUnit.module("events", moduleSetup, () => {
 
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
         assert.strictEqual(items[1].items[0], actionData.itemData, "correct element passed");
-        assert.strictEqual(0, actionData.itemIndex.item, "correct element itemIndex passed");
-        assert.strictEqual(1, actionData.itemIndex.group, "correct groupIndex passed");
+        assert.strictEqual(actionData.itemIndex.item, 0, "correct element itemIndex passed");
+        assert.strictEqual(actionData.itemIndex.group, 1, "correct groupIndex passed");
     });
 
-    QUnit.test("onItemHold should be fired when item is held", assert => {
+    QUnit.test("onItemHold should be fired when item is held", function(assert) {
         let actionFired;
         let actionData;
 
@@ -1274,10 +1274,10 @@ QUnit.module("events", moduleSetup, () => {
         $item.trigger(holdEvent.name);
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
     });
 
-    QUnit.test("onItemSwipe should be fired when item is swiped", assert => {
+    QUnit.test("onItemSwipe should be fired when item is swiped", function(assert) {
         let actionFired;
         let actionData;
 
@@ -1297,17 +1297,17 @@ QUnit.module("events", moduleSetup, () => {
         });
         assert.ok(actionFired, "action fired");
         assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-        assert.strictEqual("0", actionData.itemData, "correct element passed");
-        assert.equal("left", actionData.direction, "correct direction passed");
+        assert.strictEqual(actionData.itemData, "0", "correct element passed");
+        assert.equal(actionData.direction, "left", "correct direction passed");
 
         $item.trigger({
             type: swipeEvents.end,
             offset: 1
         });
-        assert.equal("right", actionData.direction, "correct direction passed");
+        assert.equal(actionData.direction, "right", "correct direction passed");
     });
 
-    QUnit.test("onContentReady", assert => {
+    QUnit.test("onContentReady", function(assert) {
         let contentReadyFired = 0;
 
         const instance = $("#list").dxList({
@@ -1322,7 +1322,7 @@ QUnit.module("events", moduleSetup, () => {
         assert.equal(contentReadyFired, 2);
     });
 
-    QUnit.test("onGroupRendered should fired with correct params", assert => {
+    QUnit.test("onGroupRendered should fired with correct params", function(assert) {
         const items = [
             {
                 key: 'first',
@@ -1349,7 +1349,7 @@ QUnit.module("events", moduleSetup, () => {
         assert.strictEqual(eventData.groupIndex, 0, "groupIndex is correct");
     });
 
-    QUnit.test("list should prevent default behavior when context menu event is firing", assert => {
+    QUnit.test("list should prevent default behavior when context menu event is firing", function(assert) {
         const $list = $("#list").dxList({
             items: [{ text: "test" }],
             menuMode: "context",
@@ -1366,7 +1366,7 @@ QUnit.module("events", moduleSetup, () => {
 });
 
 QUnit.module("dataSource integration", moduleSetup, () => {
-    QUnit.test("pageLoading should be ordered for async dataSource (T233998)", assert => {
+    QUnit.test("pageLoading should be ordered for async dataSource (T233998)", function(assert) {
         List.mockScrollView(ScrollViewMock.inherit({
             isFull() {
                 return false;
@@ -1394,7 +1394,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal($.trim($list.find(".dx-list-item").text()), "012");
     });
 
-    QUnit.test("shared data source", assert => {
+    QUnit.test("shared data source", function(assert) {
         const dataSource = new DataSource();
         let widget;
         let changedHandler;
@@ -1416,7 +1416,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.ok(!("_dataSource" in widget), "dataSource is unlinked");
     });
 
-    QUnit.test("aggregated source (created from options)", assert => {
+    QUnit.test("aggregated source (created from options)", function(assert) {
         const dataSourceConfig = {
             store: new ArrayStore([])
         };
@@ -1435,7 +1435,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.ok(!("_dataSource" in widget), "source is unlinked");
     });
 
-    QUnit.test("list shouldn't load dataSource again after first request fail (B253304)", assert => {
+    QUnit.test("list shouldn't load dataSource again after first request fail (B253304)", function(assert) {
         let loadCalled = 0;
 
         $("#list").dxList({
@@ -1450,7 +1450,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(loadCalled, 1, "load called once");
     });
 
-    QUnit.test("loading indication panel should not be shown when list has no items", assert => {
+    QUnit.test("loading indication panel should not be shown when list has no items", function(assert) {
         const element = this.element;
         element.dxList({
             height: 300,
@@ -1469,7 +1469,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(scrollView._loading, false, "scrollView not in loading state");
     });
 
-    QUnit.test("list indicates loading during dataSource loading", assert => {
+    QUnit.test("list indicates loading during dataSource loading", function(assert) {
         const dataSourceLoadTime = 100;
 
         const dataSource = new DataSource({
@@ -1500,7 +1500,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(scrollView._loading, false, "scrollview loading finished on data load");
     });
 
-    QUnit.test("list doesn't indicate loading during dataSource loading when indicateLoading = false", assert => {
+    QUnit.test("list doesn't indicate loading during dataSource loading when indicateLoading = false", function(assert) {
         const dataSourceLoadTime = 100;
 
         const dataSource = new DataSource({
@@ -1528,7 +1528,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(scrollView._loading, false, "scrollView loading not indicated");
     });
 
-    QUnit.test("setting indicateLoading to false hides load panel at once", assert => {
+    QUnit.test("setting indicateLoading to false hides load panel at once", function(assert) {
         const dataSourceLoadTime = 100;
 
         const dataSource = new DataSource({
@@ -1560,7 +1560,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(scrollView._loading, false, "scrollview loading not indicated");
     });
 
-    QUnit.test("list doesn't indicate loading when click more button", assert => {
+    QUnit.test("list doesn't indicate loading when click more button", function(assert) {
         const dataSourceLoadTime = 100;
 
         const element = this.element.dxList({
@@ -1586,7 +1586,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(scrollView._loading, false, "scrollview loading started");
     });
 
-    QUnit.test("reload", assert => {
+    QUnit.test("reload", function(assert) {
         let loaded = 0;
         const $list = this.element.dxList({
             dataSource: new DataSource({
@@ -1608,7 +1608,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal(list.scrollTop(), 0, "scroll to top after reload");
     });
 
-    QUnit.test("first item rendered when pageSize is 1 and dataSource set as array", assert => {
+    QUnit.test("first item rendered when pageSize is 1 and dataSource set as array", function(assert) {
         List.mockScrollView(ScrollViewMock.inherit({
             isFull() {
                 return false;
@@ -1626,7 +1626,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.equal($list.find(".dx-list-item").eq(0).text(), "1", "first item rendered");
     });
 
-    QUnit.test("list should scroll to top if data source is load is happened", assert => {
+    QUnit.test("list should scroll to top if data source is load is happened", function(assert) {
         let loaded = 0;
 
         const data = (() => {
@@ -1667,7 +1667,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
 });
 
 QUnit.module("infinite list scenario", moduleSetup, () => {
-    QUnit.test("appending items on scroll bottom", assert => {
+    QUnit.test("appending items on scroll bottom", function(assert) {
         const element = this.element.dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1682,7 +1682,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.deepEqual(element.dxList("instance").option("items"), [1, 2, 3, 4], "correct items presented in options");
     });
 
-    QUnit.test("scroll bottom action shouldn't load data if all items was loaded", assert => {
+    QUnit.test("scroll bottom action shouldn't load data if all items was loaded", function(assert) {
         let count = 0;
         const element = this.element.dxList({
             pageLoadMode: "scrollBottom",
@@ -1702,7 +1702,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(count, 1, "data source loaded, shouldn't load another page");
     });
 
-    QUnit.test("appending items on scroll bottom", assert => {
+    QUnit.test("appending items on scroll bottom", function(assert) {
         const element = this.element.dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1730,7 +1730,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "does not expecting appending items if all items rendered");
     });
 
-    QUnit.test("appending items on 'more' button", assert => {
+    QUnit.test("appending items on 'more' button", function(assert) {
         const element = this.element.dxList({
             dataSource: {
                 store: new ArrayStore([1, 2, 3, 4]),
@@ -1756,7 +1756,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "does not expecting appending items if all items rendered");
     });
 
-    QUnit.test("more button should have default type for the Material theme", assert => {
+    QUnit.test("more button should have default type for the Material theme", function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = () => {
             return true;
@@ -1778,7 +1778,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         themes.isMaterial = origIsMaterial;
     });
 
-    QUnit.test("more button should have undefined type for the Generic theme", assert => {
+    QUnit.test("more button should have undefined type for the Generic theme", function(assert) {
         const element = this.element.dxList({
             dataSource: {
                 store: new ArrayStore([1, 2, 3, 4]),
@@ -1793,7 +1793,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(button.option("type"), undefined, "more button should have undefined type for the Generic theme");
     });
 
-    QUnit.test("should not expect appending items if items were appended just now", assert => {
+    QUnit.test("should not expect appending items if items were appended just now", function(assert) {
         const element = this.element.dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1808,7 +1808,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "flag set correctly");
     });
 
-    QUnit.test("should not expect appending items if all items loaded", assert => {
+    QUnit.test("should not expect appending items if all items loaded", function(assert) {
         const element = this.element.dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1822,7 +1822,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "flag set correctly");
     });
 
-    QUnit.test("should not expect appending items if load error handled", assert => {
+    QUnit.test("should not expect appending items if load error handled", function(assert) {
         const element = this.element.dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1848,7 +1848,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.equal(element.dxList("instance")._startIndexForAppendedItems, null, "flag set correctly");
     });
 
-    QUnit.test("infinite loading should not happen if widget element is hidden", assert => {
+    QUnit.test("infinite loading should not happen if widget element is hidden", function(assert) {
         const $element = this.element.hide().dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1868,7 +1868,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         assert.deepEqual($element.dxList("option", "items"), [1, 2], "only first page is loaded");
     });
 
-    QUnit.test("infinite loading should happen when widget element is shown", assert => {
+    QUnit.test("infinite loading should happen when widget element is shown", function(assert) {
         const $element = this.element.hide().dxList({
             pageLoadMode: "scrollBottom",
             scrollingEnabled: true,
@@ -1893,7 +1893,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
 });
 
 QUnit.module("scrollView interaction", moduleSetup, () => {
-    QUnit.test("list.updateDimensions calls scrollView.update", assert => {
+    QUnit.test("list.updateDimensions calls scrollView.update", function(assert) {
         assert.expect(4);
 
         const list = this.element.dxList({
@@ -1913,7 +1913,7 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
         assert.equal(scrollView._updateCount, 2, "+2 after update() call");
     });
 
-    QUnit.test("width & height option change should call update method of scroll view", assert => {
+    QUnit.test("width & height option change should call update method of scroll view", function(assert) {
         const list = this.element.dxList({
             items: [1, 2, 3]
         }).dxList("instance");
@@ -1926,7 +1926,7 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
         assert.equal(scrollView._updateCount, updateCount + 2, "scroll view updated twice");
     });
 
-    QUnit.test("visible option change should call update method of scroll view", assert => {
+    QUnit.test("visible option change should call update method of scroll view", function(assert) {
         const list = this.element.dxList({
             visible: false
         }).dxList("instance");
@@ -1938,7 +1938,7 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
         assert.equal(scrollView._updateCount, updateCount + 1, "scroll view updated");
     });
 
-    QUnit.test("scrollView callbacks", assert => {
+    QUnit.test("scrollView callbacks", function(assert) {
         let reloaded = 0;
         let nextPageCalled = 0;
         let pullRefreshActionFired = 0;
@@ -1984,7 +1984,7 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
         assert.equal(pageLoadingActionFired, 1, "onPageLoading fired");
     });
 
-    QUnit.test("rtlEnabled option should be passed to scrollView", assert => {
+    QUnit.test("rtlEnabled option should be passed to scrollView", function(assert) {
         const list = this.element.dxList({
             items: [1, 2, 3],
             rtlEnabled: true
@@ -2000,14 +2000,14 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
 });
 
 QUnit.module("scrollView integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("on repaint scroll should be moved to top", assert => {
+    QUnit.test("on repaint scroll should be moved to top", function(assert) {
         const $list = $("#list");
         $list.height(100);
         $list.dxList({
@@ -2020,7 +2020,7 @@ QUnit.module("scrollView integration", {
         assert.equal($list.dxList("scrollTop"), 0);
     });
 
-    QUnit.test("on start scrollbar has correct height", assert => {
+    QUnit.test("on start scrollbar has correct height", function(assert) {
         const $list = $("#list");
         $list.height(100);
 
@@ -2038,7 +2038,7 @@ QUnit.module("scrollView integration", {
         assert.equal($scrollableScroll.height(), scrollBarSize, "scrollbar has correct height");
     });
 
-    QUnit.test("update scroll after change items", assert => {
+    QUnit.test("update scroll after change items", function(assert) {
         const $list = $("#list")
             .dxList({
                 height: 50,
@@ -2055,7 +2055,7 @@ QUnit.module("scrollView integration", {
         assert.equal(newHeight, contentHeight * 2, "update after items was changed");
     });
 
-    QUnit.test("infinite sync data loading if scrollView is not full", assert => {
+    QUnit.test("infinite sync data loading if scrollView is not full", function(assert) {
         const dataSource = new DataSource({
             store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             pageSize: 1
@@ -2075,7 +2075,7 @@ QUnit.module("scrollView integration", {
         assert.ok(itemHeight * listItems.length <= listHeight + itemHeight);
     });
 
-    QUnit.test("infinite async data loading if scrollView is not full", assert => {
+    QUnit.test("infinite async data loading if scrollView is not full", function(assert) {
         let count = 0;
         const dataSource = new DataSource({
             load() {
@@ -2101,7 +2101,7 @@ QUnit.module("scrollView integration", {
         assert.equal(listItems.eq(1).text(), "1");
     });
 
-    QUnit.test("list should try to load next page if scrollView is not full after dimensions updated", assert => {
+    QUnit.test("list should try to load next page if scrollView is not full after dimensions updated", function(assert) {
         const $element = $("#list").dxList({
             pageLoadMode: "scrollBottom",
             height: 300,
@@ -2140,7 +2140,7 @@ QUnit.module("scrollView integration", {
         assert.deepEqual($element.find(".dx-list-item").length, 6, "all data loaded");
     });
 
-    QUnit.test("list should be scrolled to item from bottom by scrollToItem", assert => {
+    QUnit.test("list should be scrolled to item from bottom by scrollToItem", function(assert) {
         const $list = $("#list").dxList({
             items: ["0"]
         });
@@ -2156,7 +2156,7 @@ QUnit.module("scrollView integration", {
         assert.equal(scrollToElementSpy.firstCall.args[0].get(0), $item.get(0), "list scrolled to item");
     });
 
-    QUnit.test("it should be possible to scroll to an item by denormalized index", assert => {
+    QUnit.test("it should be possible to scroll to an item by denormalized index", function(assert) {
         const $list = $("#list").dxList({
             dataSource: new DataSource({
                 store: [{ group: "Group 1", text: "Item 1", id: 1 }, { group: "Group 2", text: "Item 2", id: 2 }],
@@ -2174,7 +2174,7 @@ QUnit.module("scrollView integration", {
         assert.equal(scrollToElementSpy.getCall(0).args[0].text(), $item.text(), "list scrolled to correct item");
     });
 
-    QUnit.test("list shouldn't be scrolled if item isn't specified", assert => {
+    QUnit.test("list shouldn't be scrolled if item isn't specified", function(assert) {
         const $list = $("#list").dxList({
             items: ["0"]
         });
@@ -2188,7 +2188,7 @@ QUnit.module("scrollView integration", {
         assert.equal(scrollToElementSpy.firstCall.args[0], null, "list wasn't scrolled");
     });
 
-    QUnit.test("list should be scrolled to item from bottom by scrollToItem", assert => {
+    QUnit.test("list should be scrolled to item from bottom by scrollToItem", function(assert) {
         const $list = $("#list").dxList({
             items: ["0"]
         });
@@ -2204,7 +2204,7 @@ QUnit.module("scrollView integration", {
         assert.equal(scrollToElementSpy.firstCall.args[0].get(0), $item.get(0), "list scrolled to item");
     });
 
-    QUnit.test("list should not fail on scrollToItem if item is a string of the specific format (T381823)", assert => {
+    QUnit.test("list should not fail on scrollToItem if item is a string of the specific format (T381823)", function(assert) {
         const items = ["12", "1.6", "#43"];
 
         const list = $("#list").dxList({
@@ -2216,7 +2216,7 @@ QUnit.module("scrollView integration", {
         assert.expect(0);
     });
 
-    QUnit.test("pulldown to refresh should work when option items is set", assert => {
+    QUnit.test("pulldown to refresh should work when option items is set", function(assert) {
         assert.expect(0);
 
         const $list = $("#list").dxList({
@@ -2231,7 +2231,7 @@ QUnit.module("scrollView integration", {
         }
     });
 
-    QUnit.test("updating scrollView options should release scroll", assert => {
+    QUnit.test("updating scrollView options should release scroll", function(assert) {
         const $list = $("#list").height(1000).dxList({
             items: [1, 2, 3],
             pullRefreshEnabled: false
@@ -2244,7 +2244,7 @@ QUnit.module("scrollView integration", {
         assert.ok(releaseSpy.calledOnce, "list release scrollview");
     });
 
-    QUnit.test("scroll position should be saved after selectionMode option changing", assert => {
+    QUnit.test("scroll position should be saved after selectionMode option changing", function(assert) {
         const $list = $("#list").height(1000).dxList({
             items: [1, 2, 3, 4],
             selectionMode: "none",
@@ -2263,7 +2263,7 @@ QUnit.module("scrollView integration", {
 });
 
 QUnit.module("regressions", moduleSetup, () => {
-    QUnit.test("list loading does not re-render items", assert => {
+    QUnit.test("list loading does not re-render items", function(assert) {
         const dataSource = new DataSource({
             store: [1, 2, 3],
             pageSize: 2
@@ -2277,7 +2277,7 @@ QUnit.module("regressions", moduleSetup, () => {
         assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
     });
 
-    QUnit.test("correctly handle data source errors (B230041)", assert => {
+    QUnit.test("correctly handle data source errors (B230041)", function(assert) {
         const list = this.element.dxList({
             dataSource: {
                 store: new ArrayStore([1]),
@@ -2293,7 +2293,7 @@ QUnit.module("regressions", moduleSetup, () => {
         assert.equal(list._scrollView._history.length, 2);
     });
 
-    QUnit.test("B230535", assert => {
+    QUnit.test("B230535", function(assert) {
         let clicked = 0;
 
         this.element.dxList({
@@ -2310,7 +2310,7 @@ QUnit.module("regressions", moduleSetup, () => {
         });
     });
 
-    QUnit.test("Q471954. dxList displays a blank area below the widget", assert => {
+    QUnit.test("Q471954. dxList displays a blank area below the widget", function(assert) {
         this.element.dxList({
             items: [1, 2, 3]
         }).dxList("instance");
@@ -2320,7 +2320,7 @@ QUnit.module("regressions", moduleSetup, () => {
         assert.ok(!scrollView._pageLoading, "scrollBottom div is hidden");
     });
 
-    QUnit.test("Q501091: dxList - onItemRendered is not called when swiped down", assert => {
+    QUnit.test("Q501091: dxList - onItemRendered is not called when swiped down", function(assert) {
         let itemRenderedCalled = false;
 
         const dataSource = new DataSource({
@@ -2343,7 +2343,7 @@ QUnit.module("regressions", moduleSetup, () => {
         assert.ok(itemRenderedCalled);
     });
 
-    QUnit.test("onItemClick on disabled items", assert => {
+    QUnit.test("onItemClick on disabled items", function(assert) {
         let count = 0;
 
         const element = this.element.dxList({
@@ -2376,13 +2376,13 @@ QUnit.module("regressions", moduleSetup, () => {
 });
 
 QUnit.module("widget sizing render", {}, () => {
-    QUnit.test("default", assert => {
+    QUnit.test("default", function(assert) {
         const $element = $("#list").dxList({ items: [1, 2, 3, 4] });
 
         assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
     });
 
-    QUnit.test("change width", assert => {
+    QUnit.test("change width", function(assert) {
         const $element = $("#list").dxList({ items: [1, 2, 3, 4] });
         const instance = $element.dxList("instance");
         const customWidth = 400;
@@ -2394,14 +2394,14 @@ QUnit.module("widget sizing render", {}, () => {
 });
 
 QUnit.module("keyboard navigation", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("list scroll to focused item after press up/down arrows", assert => {
+    QUnit.test("list scroll to focused item after press up/down arrows", function(assert) {
         assert.expect(2);
 
         const $element = $("#list").dxList({
@@ -2428,7 +2428,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when up arrow were pressed");
     });
 
-    QUnit.test("'enter'/'space' keys pressing on selectAll checkbox", assert => {
+    QUnit.test("'enter'/'space' keys pressing on selectAll checkbox", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -2462,7 +2462,7 @@ QUnit.module("keyboard navigation", {
         assert.ok(!$selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox isn't checked");
     });
 
-    QUnit.test("focusing on selectAll checkbox after 'down'/'up' pressing", assert => {
+    QUnit.test("focusing on selectAll checkbox after 'down'/'up' pressing", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -2503,7 +2503,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
     });
 
-    QUnit.test("Select all when disabled item is null (T832581)", assert => {
+    QUnit.test("Select all when disabled item is null (T832581)", function(assert) {
         try {
             const instance = $("#list").dxList({
                 dataSource: [null, undefined],
@@ -2521,7 +2521,7 @@ QUnit.module("keyboard navigation", {
         assert.ok(1);
     });
 
-    QUnit.test("list does not scroll to item after click on it", assert => {
+    QUnit.test("list does not scroll to item after click on it", function(assert) {
         assert.expect(2);
 
         const $element = $("#list").dxList({
@@ -2542,7 +2542,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(instance.scrollTop(), 0, "item was not scrolled to half-visible item by click on it");
     });
 
-    QUnit.test("list scroll to focused item after press home/end", assert => {
+    QUnit.test("list scroll to focused item after press home/end", function(assert) {
         assert.expect(2);
 
         const $element = $("#list").dxList({
@@ -2565,7 +2565,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when home were pressed");
     });
 
-    QUnit.test("list scroll to focused item after press pageDown", assert => {
+    QUnit.test("list scroll to focused item after press pageDown", function(assert) {
         assert.expect(7);
 
         const $element = $("#list").dxList({
@@ -2599,7 +2599,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($items.eq(5).hasClass("dx-state-focused"), "last item on last page obtained focus");
     });
 
-    QUnit.test("list scroll to hidden focused item after press pageDown", assert => {
+    QUnit.test("list scroll to hidden focused item after press pageDown", function(assert) {
         assert.expect(3);
 
         const $element = $("#list").dxList({
@@ -2626,7 +2626,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($items.eq(5).hasClass("dx-state-focused"), "focused item change to last visible item on new page");
     });
 
-    QUnit.test("list scroll to focused item after press pageUp", assert => {
+    QUnit.test("list scroll to focused item after press pageUp", function(assert) {
         assert.expect(6);
 
         const $element = $("#list").dxList({
@@ -2661,7 +2661,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($items.eq(0).hasClass("dx-state-focused"), "first item on first page obtained focus");
     });
 
-    QUnit.test("list scroll to hidden focused item after press pageUp", assert => {
+    QUnit.test("list scroll to hidden focused item after press pageUp", function(assert) {
         assert.expect(3);
 
         const $element = $("#list").dxList({
@@ -2688,7 +2688,7 @@ QUnit.module("keyboard navigation", {
         assert.ok($items.eq(1).hasClass("dx-state-focused"), "focused item change to last visible item on new page");
     });
 
-    QUnit.test("list should attach keyboard events even if focusStateEnabled is false when this option was passed from outer widget", assert => {
+    QUnit.test("list should attach keyboard events even if focusStateEnabled is false when this option was passed from outer widget", function(assert) {
         const handler = sinon.stub();
         const $element = $("#list");
 
@@ -2704,7 +2704,7 @@ QUnit.module("keyboard navigation", {
         assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
     });
 
-    QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", assert => {
+    QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "keyboard navigation is disabled for not desktop devices");
             return;
@@ -2738,7 +2738,7 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.module("Search", () => {
-    QUnit.test("Render search editor", assert => {
+    QUnit.test("Render search editor", function(assert) {
         let $searchEditor;
 
         const $element = $("#list").dxList({
@@ -2753,7 +2753,7 @@ QUnit.module("Search", () => {
         assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "3", "editor value");
     });
 
-    QUnit.test("Search", assert => {
+    QUnit.test("Search", function(assert) {
         let searchEditor;
 
         const $element = $("#list").dxList({
@@ -2771,7 +2771,7 @@ QUnit.module("Search", () => {
         assert.strictEqual(instance.option("searchValue"), "2", "search value");
     });
 
-    QUnit.testInActiveWindow("Focusing widget when there is search editor", assert => {
+    QUnit.testInActiveWindow("Focusing widget when there is search editor", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2785,7 +2785,7 @@ QUnit.module("Search", () => {
         assert.ok($element.children(".dx-list-search").hasClass("dx-state-focused"), "search editor is focused");
     });
 
-    QUnit.test("Show warning when dataSource is not specified", assert => {
+    QUnit.test("Show warning when dataSource is not specified", function(assert) {
         const instance = $("#list").dxList({
             items: [1, 2, 3],
             searchEnabled: true,
@@ -2804,7 +2804,7 @@ QUnit.module("Search", () => {
         }
     });
 
-    QUnit.test("Search when searchMode is specified", assert => {
+    QUnit.test("Search when searchMode is specified", function(assert) {
         let searchEditor;
 
         const $element = $("#list").dxList({
@@ -2824,7 +2824,7 @@ QUnit.module("Search", () => {
         assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
     });
 
-    QUnit.test("Search in items of grouped dataSource", assert => {
+    QUnit.test("Search in items of grouped dataSource", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }],
             grouped: true,
@@ -2842,7 +2842,7 @@ QUnit.module("Search", () => {
         assert.deepEqual(instance.option("items")[0], expectedValue, "items");
     });
 
-    QUnit.test("Search in items of grouped dataSource with simple items", assert => {
+    QUnit.test("Search in items of grouped dataSource with simple items", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [{ key: "a", items: ["1", "2"] }],
             grouped: true,
@@ -2862,7 +2862,7 @@ QUnit.module("Search", () => {
     });
 
     // T582179
-    QUnit.test("Selection should not be cleared after searching", assert => {
+    QUnit.test("Selection should not be cleared after searching", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2882,7 +2882,7 @@ QUnit.module("Search", () => {
         assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
     });
 
-    QUnit.test("Delayed search value should be applied on the widget reset", assert => {
+    QUnit.test("Delayed search value should be applied on the widget reset", function(assert) {
         const clock = sinon.useFakeTimers();
 
         const $element = $("#list").dxList({
@@ -2909,7 +2909,7 @@ var helper;
 if(devices.real().deviceType === "desktop") {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: () => {
+            beforeEach: function() {
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new List($element,
                         $.extend({
@@ -2919,12 +2919,12 @@ if(devices.real().deviceType === "desktop") {
                 });
                 this.clock = sinon.useFakeTimers();
             },
-            afterEach: () => {
+            afterEach: function() {
                 this.clock.restore();
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test(`Selected: ["Item_3"] -> focusin -> focusout`, () => {
+            QUnit.test(`Selected: ["Item_3"] -> focusin -> focusout`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_3"], keyExpr: "text", selectionMode: "single" });
 
                 if(searchEnabled) {
@@ -2942,7 +2942,7 @@ if(devices.real().deviceType === "desktop") {
             });
 
 
-            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> change by click`, () => {
+            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> change by click`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
 
                 if(searchEnabled) {
@@ -2964,7 +2964,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkItemsAttributes([2], { attributes: ["aria-selected"], role: "option" });
             });
 
-            QUnit.test(`Selected: ["Item_1", "Item_3"] -> select "Item_2" by click`, () => {
+            QUnit.test(`Selected: ["Item_1", "Item_3"] -> select "Item_2" by click`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_1", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });

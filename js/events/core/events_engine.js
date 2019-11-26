@@ -614,6 +614,18 @@ eventsEngine.hover = {
     }
 };
 
+eventsEngine.visibility = {
+    on: ($el, shown, hiding, { namespace }) => {
+        eventsEngine.on($el, addNamespace('dxhiding', namespace), hiding);
+        eventsEngine.on($el, addNamespace('dxshown', namespace), shown);
+    },
+
+    off: ($el, { namespace }) => {
+        eventsEngine.off($el, addNamespace('dxhiding', namespace));
+        eventsEngine.off($el, addNamespace('dxshown', namespace));
+    }
+};
+
 eventsEngine.focus = {
     on: ($el, focusIn, focusOut, { namespace, isFocusable }) => {
         eventsEngine.on($el, addNamespace('focusin', namespace), focusIn);
@@ -651,6 +663,15 @@ eventsEngine.click = {
     },
     off: ($el, { namespace } = {}) => {
         eventsEngine.off($el, addNamespace('click', namespace));
+    }
+};
+
+eventsEngine.resize = {
+    on: ($el, resize, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxresize', namespace), resize);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxresize', namespace));
     }
 };
 

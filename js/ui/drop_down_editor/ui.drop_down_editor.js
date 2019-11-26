@@ -458,9 +458,9 @@ var DropDownEditor = TextBox.inherit({
             this._detachFocusOutEvents();
             eventsEngine.on(this._inputWrapper(), eventUtils.addNamespace("focusout", this.NAME), function(event) {
                 var newTarget = event.relatedTarget;
+                var popupWrapper = this.content ? $(this.content()).closest("." + DROP_DOWN_EDITOR_OVERLAY) : this._$popup;
                 if(newTarget && this.option("opened")) {
-                    var isNewTargetOutside = $(newTarget).closest("." + DROP_DOWN_EDITOR_OVERLAY, this._$popup).length === 0;
-
+                    var isNewTargetOutside = $(newTarget).closest("." + DROP_DOWN_EDITOR_OVERLAY, popupWrapper).length === 0;
                     if(isNewTargetOutside) {
                         this.close();
                     }

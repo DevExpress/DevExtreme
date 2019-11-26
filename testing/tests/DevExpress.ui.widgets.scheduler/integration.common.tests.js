@@ -18,7 +18,7 @@ const moduleConfig = {
 
 module("Views:startDate property", moduleConfig, () => {
     module("Month", () => {
-        test("if set startDate shouldn't throw exception(T828646)", assert => {
+        test("if set startDate shouldn't throw exception(T828646)", function(assert) {
             const data = [{
                 text: "Google AdWords Strategy",
                 startDate: new Date(2019, 10, 1, 9, 0, 0),
