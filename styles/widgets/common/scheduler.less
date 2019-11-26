@@ -101,7 +101,10 @@
 
     .dx-scheduler-work-space-month > .dx-scrollable-native {
         .dx-scrollable-content {
+            // min-height is need to rewrite the original .dx-scrollable-content that have magic min-height: 101%.
+            // 101% is need to fix the bounds on ios devices.
             min-height: 100%;
+            height: 100%;
         }
     }
 }
