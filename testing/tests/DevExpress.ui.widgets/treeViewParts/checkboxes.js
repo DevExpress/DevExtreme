@@ -244,7 +244,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 ['items', 'dataSource', 'createChildren'].forEach((sourceOptionName) => {
     [false, true].forEach((virtualModeEnabled) => {
         QUnit.module(`Checkbox selection DataSource: ${sourceOptionName}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
-            QUnit.test(`Initialization value`, function(assert) {
+            QUnit.test(`Initialization`, function(assert) {
                 const testSamples = [true, false];
                 testSamples.forEach((optionValue) => {
                     const options = createOptions(sourceOptionName, virtualModeEnabled, [
