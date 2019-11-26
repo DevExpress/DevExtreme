@@ -337,9 +337,13 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb - Sat, 23 Feb", "is weeks scale type");
         this.instance.option("scaleType", "months");
         assert.equal(getFirstHeaderTitle(), "January", "is months scale type");
+        this.instance.option("scaleType", "quarters");
+        assert.equal(getFirstHeaderTitle(), "Q1", "is quarters scale type");
+        this.instance.option("scaleType", "years");
+        assert.equal(getFirstHeaderTitle(), "2019", "is years scale type");
 
         this.instance.option("tasks.dataSource", [{ "id": 0, "title": "t", "start": "2019-02-21", "end": "2019-02-26" }]);
-        assert.equal(getFirstHeaderTitle(), "January", "is still months scale type");
+        assert.equal(getFirstHeaderTitle(), "2019", "is still years scale type");
         this.instance.option("scaleType", "auto");
         assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb", "is days scale type (auto)");
     });
