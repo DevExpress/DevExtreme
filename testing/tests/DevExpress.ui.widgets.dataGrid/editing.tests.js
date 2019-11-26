@@ -11029,6 +11029,11 @@ QUnit.test("brokenRules should be correct in onRowValidating callback if save af
             // assert
             assert.ok(e.brokenRules.length, "broken rules array");
             assert.notOk(e.isValid, "is not valid");
+            assert.equal(e.brokenRules[0].message, "Name is required", "brokenRule message");
+            assert.equal(e.brokenRules[0].type, "required", "brokenRule type");
+            assert.equal(e.brokenRules[0].columnIndex, 0, "brokenRule columnIndex");
+            assert.equal(e.brokenRules[0].index, 0, "brokenRule index");
+            assert.equal(e.brokenRules[0].value, "", "brokenRule value");
         }
     });
 
