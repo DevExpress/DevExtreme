@@ -251,14 +251,14 @@ function generateAutoBreaks(options, series, viewport) {
         edgePoints = points[1].filter(function(p) {
             return points[0].indexOf(p) < 0;
         }),
-        epsilon = visibleRange / 1E10,
         minDiff = RANGE_RATIO * visibleRange;
 
     ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort(function(a, b) {
         return b.length - a.length;
     });
+    const epsilon = _math.min.apply(null, ranges.map(r => r.length)) / 1000;
 
-    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? Math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
+    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? _math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
     for(i = 0; i < maxAutoBreakCount; i++) {
         if(ranges[i].length >= minDiff) {
             if(visibleRange <= ranges[i].length) {
