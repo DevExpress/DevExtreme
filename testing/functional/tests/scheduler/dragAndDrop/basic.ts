@@ -2,7 +2,6 @@ import { dataSource } from './init/widget.data';
 import { createScheduler } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import { debug } from 'util';
 
 fixture `Drag-and-drop appointments in the Scheduler basic views`
     .page(url(__dirname, '../../container.html'));

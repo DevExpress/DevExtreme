@@ -774,8 +774,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
-        appointmentData.settings = [appointmentSetting];
-        this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
+        let appData = extend({}, appointmentData);
+        appData.settings = [appointmentSetting];
+        this._virtualAppointments[virtualGroupIndex].items.data.push(appData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 
         $appointment.remove();
