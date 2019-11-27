@@ -40,7 +40,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _getTemplateByOption: function(optionName) {
-        return this.getTemplate(this.option(optionName));
+        return this._getTemplate(this.option(optionName));
     },
 
     _getTemplate: function(templateSource) {
