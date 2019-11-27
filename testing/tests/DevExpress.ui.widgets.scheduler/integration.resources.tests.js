@@ -265,7 +265,7 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
         assert.deepEqual(roomEditor.editorOptions.dataSource.items(), roomResource, "Data source is OK");
     });
 
-    QUnit.test("Resource editor of appointment form should be render with valid editor type and data source", function(assert) {
+    QUnit.test("Editor for resource should be passed to details view for scheduler with groups", function(assert) {
         var task = {
                 text: "Task 1",
                 ownerId: 1,
@@ -307,8 +307,8 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
 
 
         assert.equal(ownerEditor.editorType, "dxTagBox", "Editor is dxTagBox");
-        assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, "The data source of editor is equal to established resources");
-        assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, "The displayExpr of editor is equal to established displayExpr");
+        assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, "Data source is OK");
+        assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, "displayExpr is OK");
     });
 
     QUnit.test("Editor for resource with right value should be passed to details view when fieldExpr is used", function(assert) {
