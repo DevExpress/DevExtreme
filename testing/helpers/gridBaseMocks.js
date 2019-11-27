@@ -720,6 +720,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             customizeLoadResult: $.Callbacks(),
             changing: $.Callbacks(),
 
+            cancelAll: commonUtils.noop,
+
             on: function(eventName, eventHandler) {
                 this[eventName].add(eventHandler);
             },
