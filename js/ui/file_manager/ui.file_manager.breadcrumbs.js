@@ -63,6 +63,7 @@ class FileManagerBreadcrumbs extends Widget {
                 cssClass: FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS
             },
             {
+                text: " ",
                 cssClass: FILE_MANAGER_BREADCRUMBS_SEPARATOR_ITEM_CLASS
             }
         ];
