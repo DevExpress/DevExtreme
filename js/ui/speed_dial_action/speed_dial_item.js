@@ -42,11 +42,6 @@ class SpeedDialItem extends Overlay {
         this._renderClick();
     }
 
-    _init() {
-        super._init();
-        this._renderEvents();
-    }
-
     _renderButtonIcon($element, icon, iconClass) {
         !!$element && $element.remove();
 
@@ -77,19 +72,14 @@ class SpeedDialItem extends Overlay {
         return this.option("actionComponent") || this.option("actions")[0];
     }
 
-    _renderEvents() {
-        const actionEvents = [
-            "initialized",
-            "disposing",
-            "contentReady"
-        ];
+    _initContentReadyAction() {
+        this._contentReadyAction = this._getActionComponent()._createActionByOption("onContentReady", {
+            excludeValidators: ["disabled", "readOnly"]
+        }, true);
+    }
 
-        actionEvents.forEach((actionEvent) => {
-            this.on(actionEvent, () => {
-                const actionOption = `on${actionEvent.charAt(0).toUpperCase() + actionEvent.substr(1)}`;
-                this._getActionComponent()._createActionByOption(actionOption, {}, true)({ actionElement: this.$element() });
-            });
-        });
+    _fireContentReadyAction() {
+        this._contentReadyAction({ actionElement: this.$element() });
     }
 
     _fixWrapperPosition() {
