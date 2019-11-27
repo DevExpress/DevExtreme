@@ -421,6 +421,10 @@
 */
 @button-group-normal-selected-color: @base-text-color;
 
+@button-group-normal-contained-selected-bg: darken(@button-normal-bg, 18%);
+@button-group-normal-contained-selected-bg-hover: darken(@button-group-normal-contained-selected-bg, -6%);
+@button-group-normal-contained-selected-bg-focused: darken(@button-group-normal-contained-selected-bg, -6%);
+
 /**
 * @name 20. Selected item background color
 * @type color
@@ -447,6 +451,9 @@
 @button-group-default-selected-bg-hover: fade(@button-group-default-selected-bg, 14%);
 @button-group-default-selected-bg-focused: fade(@button-group-default-selected-bg, 14%);
 
+@button-group-default-contained-hover-bg: lighten(@button-default-bg, 43.5%);
+@button-group-default-contained-focused-bg: lighten(@button-default-bg, 43.5%);
+
 // Danger Button
 
 /**
@@ -464,6 +471,9 @@
 @button-group-danger-selected-bg-hover: fade(@button-group-danger-selected-bg, 14%);
 @button-group-danger-selected-bg-focused: fade(@button-group-danger-selected-bg, 14%);
 
+@button-group-danger-contained-hover-bg: lighten(@button-danger-bg, 38.3%);
+@button-group-danger-contained-focused-bg: lighten(@button-danger-bg, 38.3%);
+
 // Success Button
 
 /**
@@ -480,6 +490,9 @@
 
 @button-group-success-selected-bg-hover: fade(@button-group-success-selected-bg, 14%);
 @button-group-success-selected-bg-focused: fade(@button-group-success-selected-bg, 14%);
+
+@button-group-success-contained-hover-bg: lighten(@button-success-bg, 43.5%);
+@button-group-success-contained-focused-bg: lighten(@button-success-bg, 43.5%);
 
 // Checkbox
 
