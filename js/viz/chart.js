@@ -1379,8 +1379,8 @@ var dxChart = AdvancedChart.inherit({
     option() {
         const option = this.callBase.apply(this, arguments);
 
-        if(type(this._options.valueAxis) === "array") {
-            for(let i = 0; i < this._options.valueAxis.length; i++) {
+        if(type(this._options.silent('valueAxis')) === "array") {
+            for(let i = 0; i < this._options.silent('valueAxis').length; i++) {
                 const optionPath = `valueAxis[${i}].visualRange`;
                 this._optionsByReference[optionPath] = true;
             }

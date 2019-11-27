@@ -24,7 +24,7 @@ QUnit.test("Reset option in themeManager on optionChanged", function(assert) {
 
     assert.ok(this.themeManager.resetOptions.calledWith("prop"));
     assert.ok(this.themeManager.update.calledOnce);
-    assert.ok(this.themeManager.update.calledWith(chart._options));
+    assert.ok(this.themeManager.update.calledWith(chart.option()));
 });
 
 QUnit.test("refresh chart without _refreshData", function(assert) {
@@ -470,7 +470,7 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
         containerBackgroundColor: "red"
     });
     // assert
-    assert.equal(chart._options.containerBackgroundColor, "red", "Container background color should be correct");
+    assert.equal(chart.option('containerBackgroundColor'), "red", "Container background color should be correct");
     assert.ok(!series.disposed);
     assert.ok(!seriesFamily.dispose.called);
     assert.ok(!valAxis.disposed);
@@ -533,9 +533,9 @@ QUnit.test("change title option only. change title settings", function(assert) {
     });
     // assert
     assert.ok(!chart._dataSourceChangedHandlerCalled);
-    assert.equal(chart._options.title.text, "changed title");
-    assert.equal(chart._options.title.verticalAlignment, "center");
-    assert.equal(chart._options.title.horizontalAlignment, "top");
+    assert.equal(chart.option('title.text'), "changed title");
+    assert.equal(chart.option('title.verticalAlignment'), "center");
+    assert.equal(chart.option('title.horizontalAlignment'), "top");
     assert.strictEqual(this.validateData.callCount, 0, "validation");
 });
 
@@ -955,7 +955,7 @@ QUnit.test("palette option changed. palette as array", function(assert) {
         palette: ["black", "blue"]
     });
     // assert
-    assert.deepEqual(chart._options.palette, ["black", "blue"], "palette");
+    assert.deepEqual(chart.option('palette'), ["black", "blue"], "palette");
     assert.ok(chart._themeManager.updatePalette.calledOnce, "palette updated");
     assert.ok(!chart.seriesDisposed, "Series should not be disposed");
     assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
