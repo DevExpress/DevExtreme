@@ -109,10 +109,10 @@ var Component = Class.inherit({
         this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
         this._disposingCallbacks = options._disposingCallbacks || Callbacks();
         this.postponedOperations = new PostponedOperations();
-        this._initOptions(options);
+        this._createOptions(options);
     },
 
-    _initOptions(options) {
+    _createOptions(options) {
         this.beginUpdate();
 
         try {
@@ -138,10 +138,14 @@ var Component = Class.inherit({
             }
 
             this._setOptionsByDevice(options.defaultOptionsRules);
-            this.option(options);
+            this._initOptions(options);
         } finally {
             this.endUpdate();
         }
+    },
+
+    _initOptions: function(options) {
+        this.option(options);
     },
 
     _init() {
