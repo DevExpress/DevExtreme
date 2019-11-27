@@ -40,12 +40,12 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(createTemplate) {
+    constructor(createElement) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
-        this.createTemplate = createTemplate;
+        this._createElement = createElement;
     }
 
     static getDefaultOptions() {
@@ -58,7 +58,7 @@ export default class TemplateManager {
                     return noop;
                 },
                 templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
-                createTemplate: element => new Template(element),
+                createElement: element => new Template(element),
             }
         };
     }
@@ -163,7 +163,6 @@ export default class TemplateManager {
         for(let templateName in templatesMap) {
             const deviceTemplate = TemplateManager._findTemplateByDevice(templatesMap[templateName]);
             if(deviceTemplate) {
-                // this.saveTemplate(templateName, deviceTemplate);
                 templates.push({ name: templateName, template: deviceTemplate });
             }
         }
@@ -198,7 +197,7 @@ export default class TemplateManager {
     }
 
     _createTemplate(templateSource) {
-        return this.createTemplate(TemplateManager.validateTemplateSource(templateSource));
+        return this._createElement(TemplateManager.validateTemplateSource(templateSource));
     }
 
     getTemplate(templateSource, context, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
