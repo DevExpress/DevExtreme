@@ -291,7 +291,7 @@ export default class TemplateManager {
         }
 
         return integrationTemplate
-        || this._defaultTemplates[templateSource]
-        || createTemplate(templateSource);
+            || this._defaultTemplates[templateSource]
+            || createTemplate(templateSource);
     }
 }

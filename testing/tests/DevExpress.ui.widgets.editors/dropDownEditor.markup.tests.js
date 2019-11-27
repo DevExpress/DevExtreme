@@ -86,7 +86,7 @@ module("DropDownEditor markup", {
         const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
             fieldTemplate: function(value) {
                 const $textBox = $("<div>").dxTextBox();
-                return $("<div>").text(value + this.option("value")).append($textBox);
+                return $("<div>").text(value + value).append($textBox);
             },
             value: "test"
         });
