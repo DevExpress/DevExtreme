@@ -12,10 +12,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
         const createTemplate = (...args) => this.option('integrationOptions.createTemplate')(...args);
 
-        this._templateManager = new TemplateManager(
-            this.option.bind(this),
-            createTemplate
-        );
+        this._templateManager = new TemplateManager(createTemplate);
 
         this._initTemplates();
     },
@@ -73,8 +70,6 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        // this._templateManager.saveTemplate(name, template);
-
         const templates = this.option('integrationOptions.templates');
         const templateSource = TemplateManager.validateTemplateSource(template);
         templates[name] = this.option('integrationOptions.createTemplate')(templateSource);

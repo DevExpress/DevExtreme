@@ -40,12 +40,11 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export default class TemplateManager {
-    constructor(option, createTemplate) {
+    constructor(createTemplate) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
-        // this.option = option;
         this.createTemplate = createTemplate;
     }
 
@@ -251,28 +250,12 @@ export default class TemplateManager {
             return createTemplate($(templateSource));
         }
 
-        // if(typeof templateSource === 'string') {
-        //     const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
-        //     let integrationTemplate = null;
-
-        //     if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
-        //         integrationTemplate = this._renderIntegrationTemplate(templateSource);
-        //     }
-
-        //     return integrationTemplate
-        //     || this._defaultTemplates[templateSource]
-        //     || createTemplate(templateSource);
-        // }
-
-        // return this._acquireStringTemplate(templateSource.toString(), createTemplate);
         return this._acquireStringTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates);
     }
 
     _renderIntegrationTemplate(templateSource, getIntegrationTemplate, asyncTemplate) {
         const integrationTemplate = getIntegrationTemplate(templateSource);
         const isAsyncTemplate = asyncTemplate();
-        // const integrationTemplate = this.option('integrationOptions.templates')[templateSource];
-        // const isAsyncTemplate = this.option('templatesRenderAsynchronously');
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
             return TemplateManager._addOneRenderedCall(integrationTemplate);
@@ -282,7 +265,6 @@ export default class TemplateManager {
     }
 
     _acquireStringTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
-        // const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
         const nonIntegrationTemplates = getSkipTemplates() || [];
         let integrationTemplate = null;
 
