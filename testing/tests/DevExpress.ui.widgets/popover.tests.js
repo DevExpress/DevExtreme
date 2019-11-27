@@ -1022,7 +1022,7 @@ QUnit.test("popover should not change it's position option during rendering", fu
             position: { my: "left center", at: "right center" }
         });
 
-        assert.strictEqual(popover.option("position").of, undefined, "position was not changed");
+        assert.strictEqual(popover.option("position.of"), undefined, "position was not changed");
     } finally {
         fixtures.simple.drop();
     }
