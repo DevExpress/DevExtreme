@@ -10,6 +10,7 @@ import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramLeftPanel from "./ui.diagram.leftpanel";
 import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
+import DiagramContextToolbox from "./ui.diagram.contexttoolbox";
 import DiagramDialog from './ui.diagram.dialogs';
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptionsUpdateBar from "./ui.diagram.optionsupdate";
@@ -94,6 +95,11 @@ class Diagram extends Widget {
             this._renderContextMenu(this._content);
         }
 
+        this._contextToolbox = undefined;
+        if(this.option("contextToolbox.enabled")) {
+            this._renderContextToolbox(this._content);
+        }
+
         this._renderDialog(this._content);
 
         !isServerSide && this._diagramInstance.createDocument(this._content[0]);
@@ -152,7 +158,7 @@ class Diagram extends Widget {
                 if(isServerSide) return;
 
                 var $toolboxContainer = $(e.$element);
-                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8,
+                this._diagramInstance.createToolbox($toolboxContainer[0], 32, 8,
                     { 'data-toggle': 'shape-toolbox-tooltip' },
                     e.shapes || e.category, e.displayMode === "texts");
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
@@ -255,6 +261,39 @@ class Diagram extends Widget {
         });
     }
 
+    _renderContextToolbox($mainElement) {
+        const isServerSide = !hasWindow();
+        const category = this.option("contextToolbox.category");
+        const displayMode = this.option("contextToolbox.displayMode");
+        const shapes = this.option("contextToolbox.shapes");
+
+        const $contextToolbox = $("<div>")
+            .appendTo(this.$element());
+        this._contextToolbox = this._createComponent($contextToolbox, DiagramContextToolbox, {
+            onShown: (e) => {
+                if(isServerSide) return;
+
+                var $toolboxContainer = $(e.$element);
+                var isTextGroup = displayMode === "texts";
+                if(!shapes && !category && !isTextGroup) {
+                    let group = this._getToolboxGroups().filter(function(g) {
+                        return g.category === e.category;
+                    })[0];
+                    if(group) {
+                        isTextGroup = group.displayMode === "texts";
+                    }
+                }
+                this._diagramInstance.createContextToolbox($toolboxContainer[0], 24, 8, {},
+                    shapes || category || e.category, isTextGroup,
+                    function(shapeType) {
+                        e.callback(shapeType);
+                        this._diagramInstance.captureFocus();
+                    }.bind(this)
+                );
+            }
+        });
+    }
+
     _onBeforeCommandExecuted(command) {
         var dialogParameters = DiagramDialogManager.getDialogParameters(command);
         if(dialogParameters) {
@@ -306,6 +345,8 @@ class Diagram extends Widget {
         this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
         this._diagramInstance.onShowContextMenu = this._onShowContextMenu.bind(this);
         this._diagramInstance.onHideContextMenu = this._onHideContextMenu.bind(this);
+        this._diagramInstance.onShowContextToolbox = this._onShowContextToolbox.bind(this);
+        this._diagramInstance.onHideContextToolbox = this._onHideContextToolbox.bind(this);
         this._diagramInstance.onNativeAction.add({
             notifyItemClick: this._raiseItemClickAction.bind(this),
             notifyItemDblClick: this._raiseItemDblClickAction.bind(this),
@@ -722,10 +763,24 @@ class Diagram extends Widget {
         }
     }
     _onShowContextMenu(x, y, selection) {
-        this._contextMenu._show(x, y, selection);
+        if(this._contextMenu) {
+            this._contextMenu._show(x, y, selection);
+        }
     }
     _onHideContextMenu() {
-        this._contextMenu._hide();
+        if(this._contextMenu) {
+            this._contextMenu._hide();
+        }
+    }
+    _onShowContextToolbox(x, y, side, category, callback) {
+        if(this._contextToolbox) {
+            this._contextToolbox._show(x, y, side, category, callback);
+        }
+    }
+    _onHideContextToolbox() {
+        if(this._contextToolbox) {
+            this._contextToolbox._hide();
+        }
     }
 
     _getDiagramUnitValue(value) {
@@ -1452,6 +1507,31 @@ class Diagram extends Widget {
                 */
             },
             /**
+            * @name dxDiagramOptions.contextToolbox
+            * @type Object
+            * @default {}
+            */
+            contextToolbox: {
+                /**
+                * @name dxDiagramOptions.contextToolbox.enabled
+                * @type boolean
+                * @default true
+                */
+                enabled: true,
+                /**
+                * @name dxDiagramOptions.contextToolbox.category
+                * @type Enums.DiagramShapeCategory|String
+                */
+                /**
+                * @name dxDiagramOptions.contextToolbox.displayMode
+                * @type Enums.DiagramToolboxDisplayMode
+                */
+                /**
+                * @name dxDiagramOptions.contextToolbox.shapes
+                * @type Array<Enums.DiagramShapeType>|Array<String>
+                */
+            },
+            /**
             * @name dxDiagramOptions.propertiesPanel
             * @type Object
             * @default {}
@@ -1718,6 +1798,11 @@ class Diagram extends Widget {
                 if(args.fullName === "contextMenu.commands") {
                     this._invalidateContextMenuCommands();
                 } else {
+                    this._invalidate();
+                }
+                break;
+            case "contextToolbox":
+                if(args.fullName === "contextToolbox.enabled") {
                     this._invalidate();
                 }
                 break;

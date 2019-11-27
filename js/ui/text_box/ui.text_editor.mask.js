@@ -579,6 +579,8 @@ var TextEditorMask = TextEditorBase.inherit({
                 this._renderMaskedValue();
                 this._validateMask();
                 this.callBase(args);
+
+                this._changedValue = this._input().val();
                 break;
             case "maskInvalidMessage":
                 break;

@@ -40,7 +40,7 @@ const MS_INVALID_LIST_PARAGRAPH = "<p class='MsoListParagraphCxSpFirst'><span>te
 const { module: testModule, test } = QUnit;
 
 testModule("Paste from MS Word", () => {
-    test("paste bullet list with indent", (assert) => {
+    test("paste bullet list with indent", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
@@ -55,7 +55,7 @@ testModule("Paste from MS Word", () => {
         instance._quillInstance.setContents(newDelta);
     });
 
-    test("paste ordered list with indent", (assert) => {
+    test("paste ordered list with indent", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
@@ -70,7 +70,7 @@ testModule("Paste from MS Word", () => {
         instance._quillInstance.setContents(newDelta);
     });
 
-    test("paste list paragraph without styles", (assert) => {
+    test("paste list paragraph without styles", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
@@ -87,7 +87,7 @@ testModule("Paste from MS Word", () => {
 });
 
 testModule("Text with decoration", () => {
-    test("paste text with text-decoration style", (assert) => {
+    test("paste text with text-decoration style", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({

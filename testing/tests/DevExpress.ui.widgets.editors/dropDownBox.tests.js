@@ -27,7 +27,7 @@ const DX_STATE_FOCUSED_CLASS = "dx-state-focused";
 const OVERLAY_CONTENT_CLASS = "dx-overlay-content";
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
         this.$element = $("#dropDownBox");
@@ -37,7 +37,7 @@ const moduleConfig = {
             { id: 3, name: "Item 3" }
         ];
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
         this.clock.restore();
     }
@@ -46,7 +46,7 @@ const moduleConfig = {
 const isIE11 = (browser.msie && parseInt(browser.version) === 11);
 
 QUnit.module("common", moduleConfig, () => {
-    QUnit.test("the widget should work without the dataSource", (assert) => {
+    QUnit.test("the widget should work without the dataSource", function(assert) {
         this.$element.dxDropDownBox({ value: 1 });
         const $input = this.$element.find(".dx-texteditor-input");
         const instance = this.$element.dxDropDownBox("instance");
@@ -61,7 +61,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "Test", "input value is correct");
     });
 
-    QUnit.test("the widget should work when dataSource is set to null", (assert) => {
+    QUnit.test("the widget should work when dataSource is set to null", function(assert) {
         this.$element.dxDropDownBox({ value: 1, dataSource: [1, 2, 3] });
 
         const instance = this.$element.dxDropDownBox("instance");
@@ -71,7 +71,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.ok(true, "widget works correctly");
     });
 
-    QUnit.test("array value should be supported", (assert) => {
+    QUnit.test("array value should be supported", function(assert) {
         this.$element.dxDropDownBox({
             items: this.simpleItems,
             valueExpr: "id",
@@ -83,7 +83,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "Item 2", "array value works");
     });
 
-    QUnit.test("it should be possible to restore value after reset", (assert) => {
+    QUnit.test("it should be possible to restore value after reset", function(assert) {
         const instance = new DropDownBox(this.$element, {
             value: 2
         });
@@ -96,7 +96,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "Test", "value has been applied");
     });
 
-    QUnit.test("array value changing", (assert) => {
+    QUnit.test("array value changing", function(assert) {
         const instance = new DropDownBox(this.$element, {
             items: this.simpleItems,
             valueExpr: "id",
@@ -113,7 +113,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "Item 2", "value has been changed correctly from primitive to array");
     });
 
-    QUnit.test("multiple selection should work", (assert) => {
+    QUnit.test("multiple selection should work", function(assert) {
         this.$element.dxDropDownBox({
             items: this.simpleItems,
             valueExpr: "id",
@@ -125,7 +125,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "Item 1, Item 3", "multiple selection works");
     });
 
-    QUnit.test("multiple selection value changing", (assert) => {
+    QUnit.test("multiple selection value changing", function(assert) {
         const instance = new DropDownBox(this.$element, {
             items: this.simpleItems,
             valueExpr: "id",
@@ -139,7 +139,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "Item 1, Item 3", "correct values are selected");
     });
 
-    QUnit.test("value clearing", (assert) => {
+    QUnit.test("value clearing", function(assert) {
         const instance = new DropDownBox(this.$element, {
             items: this.simpleItems,
             valueExpr: "id",
@@ -153,7 +153,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "", "input was cleared");
     });
 
-    QUnit.test("clear button should save valueChangeEvent", (assert) => {
+    QUnit.test("clear button should save valueChangeEvent", function(assert) {
         const valueChangedHandler = sinon.spy();
 
         new DropDownBox(this.$element, {
@@ -172,7 +172,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
     });
 
-    QUnit.test("content template should work", (assert) => {
+    QUnit.test("content template should work", function(assert) {
         assert.expect(4);
 
         const instance = new DropDownBox(this.$element, {
@@ -193,7 +193,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($(instance.content()).text(), "Test content", "content template has been rendered");
     });
 
-    QUnit.test("anonymous content template should work", assert => {
+    QUnit.test("anonymous content template should work", function(assert) {
         const $inner = $("#dropDownBoxAnonymous #inner");
         const instance = new DropDownBox($("#dropDownBoxAnonymous"), { opened: true });
         const $content = $(instance.content());
@@ -202,7 +202,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($content.find("#inner")[0], $inner[0], "Markup is equal by the link");
     });
 
-    QUnit.test("anonymous template should not be passed to the custom button", assert => {
+    QUnit.test("anonymous template should not be passed to the custom button", function(assert) {
         const instance = new DropDownBox($("#dropDownBoxAnonymous"), {
             buttons: [
                 { name: "test", location: "after", options: { text: "Button text" } }
@@ -216,7 +216,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($("#dropDownBoxAnonymous").find(".dx-button").text(), "Button text", "Button text is correct");
     });
 
-    QUnit.test("popup and editor width should be equal", (assert) => {
+    QUnit.test("popup and editor width should be equal", function(assert) {
         const instance = new DropDownBox(this.$element, {
             items: this.simpleItems,
             opened: true,
@@ -237,7 +237,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
     });
 
-    QUnit.test("popup and editor width should be equal when container resizes after runtime width change", (assert) => {
+    QUnit.test("popup and editor width should be equal when container resizes after runtime width change", function(assert) {
         const instance = new DropDownBox(this.$element, {
             width: "100%",
             opened: true
@@ -252,7 +252,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($(instance.content()).outerWidth(), 810, "width are equal after option change");
     });
 
-    QUnit.test("popup and editor width should be eual when the editor rendered in the hidden content", (assert) => {
+    QUnit.test("popup and editor width should be eual when the editor rendered in the hidden content", function(assert) {
         this.$element.hide();
         const instance = new DropDownBox(this.$element, {
             deferRendering: false,
@@ -266,7 +266,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal");
     });
 
-    QUnit.test("dropDownBox should work with the slow dataSource", (assert) => {
+    QUnit.test("dropDownBox should work with the slow dataSource", function(assert) {
         const items = [{ key: 1, text: "Item 1" }, { key: 2, text: "Item 2" }];
 
         const instance = new DropDownBox(this.$element, {
@@ -297,7 +297,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal(instance.option("value"), 2, "value was applied");
     });
 
-    QUnit.test("dropDownBox should update display text after dataSource changed", (assert) => {
+    QUnit.test("dropDownBox should update display text after dataSource changed", function(assert) {
         const items = [{ id: 1, name: "item 1" }, { id: 2, name: "item 2" }, { id: 3, name: "item 3" }];
 
         const instance = new DropDownBox(this.$element, {
@@ -314,7 +314,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "item 2, item 3", "input text has been updated");
     });
 
-    QUnit.test("dropDownBox should update display text after displayExpr changed", (assert) => {
+    QUnit.test("dropDownBox should update display text after displayExpr changed", function(assert) {
         const items = [{ id: 1, name: "item 1", text: "text 1" }];
 
         const instance = new DropDownBox(this.$element, {
@@ -330,7 +330,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "text 1", "input text has been updated");
     });
 
-    QUnit.test("dropDownBox should update display text when displayExpr was changed on initialization", (assert) => {
+    QUnit.test("dropDownBox should update display text when displayExpr was changed on initialization", function(assert) {
         this.$element.dxDropDownBox({
             items: [{ id: 1, name: "item 1", text: "text 1" }],
             onInitialized(e) {
@@ -345,14 +345,14 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal($input.val(), "item 1", "input text is correct");
     });
 
-    QUnit.test("text option should follow the displayValue option", (assert) => {
+    QUnit.test("text option should follow the displayValue option", function(assert) {
         const instance = new DropDownBox(this.$element, {});
         instance.option("displayValue", "test");
 
         assert.equal(instance.option("text"), "test", "text option has been changed");
     });
 
-    QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true", (assert) => {
+    QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true", function(assert) {
         const instance = new DropDownBox(this.$element,
             {
                 acceptCustomValue: true,
@@ -365,7 +365,7 @@ QUnit.module("common", moduleConfig, () => {
         assert.equal(instance.option("displayValue"), "12", "displayValue option has been changed");
     });
 
-    QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true, initial value = null", (assert) => {
+    QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true, initial value = null", function(assert) {
         const instance = new DropDownBox(this.$element,
             {
                 acceptCustomValue: true,
@@ -380,7 +380,7 @@ QUnit.module("common", moduleConfig, () => {
 });
 
 QUnit.module("popup options", moduleConfig, () => {
-    QUnit.test("customize width and height", (assert) => {
+    QUnit.test("customize width and height", function(assert) {
         const instance = new DropDownBox(this.$element, {
             width: 200,
             dropDownOptions: {
@@ -399,17 +399,17 @@ QUnit.module("popup options", moduleConfig, () => {
         assert.equal($popupContent.outerWidth(), 200, "popup width customization has been cancelled");
     });
 
-    QUnit.test("two way binding should work with dropDownOptions", (assert) => {
+    QUnit.test("two way binding should work with dropDownOptions", function(assert) {
         const instance = new DropDownBox(this.$element, { opened: true });
         const popup = instance._popup;
 
-        assert.equal(instance.option("dropDownOptions.visible", true, "visible is correct"));
+        assert.ok(instance.option("dropDownOptions.visible"), "dropDown is visible");
 
         popup.option("resizeEnabled", true);
         assert.strictEqual(instance.option("dropDownOptions.resizeEnabled"), true, "popup option change leads to dropDownOptions change");
     });
 
-    QUnit.test("popup should not be draggable by default", (assert) => {
+    QUnit.test("popup should not be draggable by default", function(assert) {
         this.$element.dxDropDownBox({
             opened: true
         });
@@ -419,7 +419,7 @@ QUnit.module("popup options", moduleConfig, () => {
         assert.strictEqual(popup.option("dragEnabled"), false, "dragging is disabled");
     });
 
-    QUnit.test("popup should be flipped when container size is smaller than content size", assert => {
+    QUnit.test("popup should be flipped when container size is smaller than content size", function(assert) {
         const $dropDownBox = $("<div>").appendTo("body");
         try {
             $dropDownBox.css({ position: "fixed", bottom: 0 });
@@ -438,7 +438,7 @@ QUnit.module("popup options", moduleConfig, () => {
         }
     });
 
-    QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets including page scroll", (assert) => {
+    QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets including page scroll", function(assert) {
         this.$element.dxDropDownBox({
             items: [1, 2, 3],
             value: 2
@@ -463,7 +463,7 @@ QUnit.module("popup options", moduleConfig, () => {
         }
     });
 
-    QUnit.test("Dropdownbox popup should change height according to the content", assert => {
+    QUnit.test("Dropdownbox popup should change height according to the content", function(assert) {
         if(isIE11) {
             assert.expect(0);
             return;
@@ -485,7 +485,7 @@ QUnit.module("popup options", moduleConfig, () => {
 });
 
 QUnit.module("keyboard navigation", moduleConfig, () => {
-    QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", (assert) => {
+    QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", function(assert) {
         const $input1 = $("<input>", { id: "input1", type: "text" });
         const $input2 = $("<input>", { id: "input2", type: "text" });
 
@@ -507,7 +507,7 @@ QUnit.module("keyboard navigation", moduleConfig, () => {
         assert.ok($input1.is(":focus"), "first focusable content element got focused");
     });
 
-    QUnit.testInActiveWindow("last focusable element inside of content should get focused after shift+tab pressing", (assert) => {
+    QUnit.testInActiveWindow("last focusable element inside of content should get focused after shift+tab pressing", function(assert) {
         const $input1 = $("<input>", { id: "input1", type: "text" });
         const $input2 = $("<input>", { id: "input2", type: "text" });
 
@@ -528,7 +528,7 @@ QUnit.module("keyboard navigation", moduleConfig, () => {
         assert.ok($input2.is(":focus"), "first focusable content element got focused");
     });
 
-    QUnit.testInActiveWindow("widget should be closed after tab pressing on the last content element", (assert) => {
+    QUnit.testInActiveWindow("widget should be closed after tab pressing on the last content element", function(assert) {
         const $input1 = $("<input>", { id: "input1", type: "text" });
         const $input2 = $("<input>", { id: "input2", type: "text" });
 
@@ -548,7 +548,7 @@ QUnit.module("keyboard navigation", moduleConfig, () => {
         assert.notOk(instance.option("opened"), "popup was closed");
     });
 
-    QUnit.testInActiveWindow("input should get focused when shift+tab pressed on first content element", (assert) => {
+    QUnit.testInActiveWindow("input should get focused when shift+tab pressed on first content element", function(assert) {
         const $input1 = $("<input>", { id: "input1", type: "text" });
         const $input2 = $("<input>", { id: "input2", type: "text" });
 
@@ -569,7 +569,7 @@ QUnit.module("keyboard navigation", moduleConfig, () => {
         assert.ok(event.isDefaultPrevented(), "prevent default for focusing it's own input but not an input of the previous editor on the page");
     });
 
-    QUnit.testInActiveWindow("inner input should be focused after popup opening", (assert) => {
+    QUnit.testInActiveWindow("inner input should be focused after popup opening", function(assert) {
         const inputFocusedHandler = sinon.stub();
         const $input = $("<input>", { id: "input1", type: "text" }).on("focusin", inputFocusedHandler);
 

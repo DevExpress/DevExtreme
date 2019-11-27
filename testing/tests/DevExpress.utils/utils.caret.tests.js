@@ -5,7 +5,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 const { module: testModule, test } = QUnit;
 
 testModule("caret", () => {
-    test("get caret position", (assert) => {
+    test("get caret position", function(assert) {
         const caretPosition = { start: 1, end: 2 };
         const $input = $("<input>").appendTo("#qunit-fixture");
 
@@ -16,7 +16,7 @@ testModule("caret", () => {
         assert.deepEqual(caret($input), caretPosition, "caret position is correct");
     });
 
-    test("set caret position", (assert) => {
+    test("set caret position", function(assert) {
         const caretPosition = { start: 1, end: 2 };
         const $input = $("<input>").val("12345").appendTo("#qunit-fixture");
 
@@ -26,7 +26,7 @@ testModule("caret", () => {
         assert.deepEqual(caret($input), caretPosition, "caret position set correctly");
     });
 
-    test("T341277 - an exception if element is not in document", (assert) => {
+    test("T341277 - an exception if element is not in document", function(assert) {
         const caretPosition = { start: 1, end: 2 };
         const input = document.createElement("input");
 
@@ -38,7 +38,7 @@ testModule("caret", () => {
         }
     });
 
-    test("'getCaret' does not raise an error when it is impossible to get a range", (assert) => {
+    test("'getCaret' does not raise an error when it is impossible to get a range", function(assert) {
         const pseudoInput = {
             get selectionStart() {
                 throw "You can not get a selection";
@@ -57,7 +57,7 @@ testModule("caret", () => {
         }
     });
 
-    test("'setCaret' does not raise an error when it is impossible to set a range", (assert) => {
+    test("'setCaret' does not raise an error when it is impossible to set a range", function(assert) {
         const caretPosition = { start: 1, end: 2 };
         const initialDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionStart');
         const getterSetterConfig = {

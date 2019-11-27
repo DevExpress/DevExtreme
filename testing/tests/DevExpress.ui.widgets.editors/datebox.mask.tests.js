@@ -16,7 +16,7 @@ QUnit.testStart(() => {
 
 if(devices.real().deviceType === "desktop") {
     let setupModule = {
-        beforeEach: () => {
+        beforeEach: function() {
             this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm a", dateLocalization));
             this.$element = $("#dateBox").dxDateBox({
                 value: new Date("10/10/2012 13:07"),
@@ -32,30 +32,30 @@ if(devices.real().deviceType === "desktop") {
             this.clock = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
         },
 
-        afterEach: () => {
+        afterEach: function() {
             this.clock.restore();
         }
     };
 
     module("Rendering", setupModule, () => {
-        test("Text option should depend on the input value", (assert) => {
+        test("Text option should depend on the input value", function(assert) {
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("text"), "November 10 2012", "text is correct");
         });
 
-        test("Masks should be enabled when displayFormat is not specified", (assert) => {
+        test("Masks should be enabled when displayFormat is not specified", function(assert) {
             this.instance.option("displayFormat", undefined);
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("text"), "11/10/2012", "mask behavior works");
         });
 
-        test("Masks should not be enabled when mode is not text", (assert) => {
+        test("Masks should not be enabled when mode is not text", function(assert) {
             this.instance.option("mode", "date");
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("text"), "October 10 2012", "mask behavior does not work");
         });
 
-        test("Rendering with non-ldml format", (assert) => {
+        test("Rendering with non-ldml format", function(assert) {
             this.instance.option("displayFormat", "shortdate");
             assert.strictEqual(this.instance.option("text"), "10/10/2012", "format works");
         });
@@ -78,11 +78,11 @@ if(devices.real().deviceType === "desktop") {
             delete part.limits;
         };
 
-        test("Check parts length", (assert) => {
+        test("Check parts length", function(assert) {
             assert.strictEqual(this.parts.length, 13);
         });
 
-        test("Day of week", (assert) => {
+        test("Day of week", function(assert) {
             checkAndRemoveLimits(this.parts[0], { min: 0, max: 6 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
@@ -100,7 +100,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Month", (assert) => {
+        test("Month", function(assert) {
             checkAndRemoveLimits(this.parts[2], { min: 1, max: 12 }, assert);
 
             let date = new Date(2012, 2, 30);
@@ -120,7 +120,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Day", (assert) => {
+        test("Day", function(assert) {
             checkAndRemoveLimits(this.parts[4], { min: 1, max: 31 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
@@ -138,7 +138,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Year", (assert) => {
+        test("Year", function(assert) {
             checkAndRemoveLimits(this.parts[6], { min: 0, max: 9999 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
@@ -156,7 +156,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Hours", (assert) => {
+        test("Hours", function(assert) {
             checkAndRemoveLimits(this.parts[8], { min: 0, max: 23 }, assert);
 
             assert.deepEqual(this.parts[8], {
@@ -170,7 +170,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Minutes", (assert) => {
+        test("Minutes", function(assert) {
             checkAndRemoveLimits(this.parts[10], { min: 0, max: 59 }, assert);
 
             assert.deepEqual(this.parts[10], {
@@ -184,7 +184,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Seconds", (assert) => {
+        test("Seconds", function(assert) {
             const dateString = "Tuesday, July 2, 2024 16:19:22";
             const regExpInfo = dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm:ss", dateLocalization);
 
@@ -202,7 +202,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Milliseconds", (assert) => {
+        test("Milliseconds", function(assert) {
             const dateString = "Tuesday, July 2, 2024 16:19:22:333";
             const regExpInfo = dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm:ss:SSS", dateLocalization);
 
@@ -220,7 +220,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Time indication", (assert) => {
+        test("Time indication", function(assert) {
             checkAndRemoveLimits(this.parts[12], { min: 0, max: 1 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
@@ -242,7 +242,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Comma stub", (assert) => {
+        test("Comma stub", function(assert) {
             checkAndRemoveAccessors(this.parts[1], ",", assert);
 
             assert.deepEqual(this.parts[1], {
@@ -254,7 +254,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Space stub", (assert) => {
+        test("Space stub", function(assert) {
             checkAndRemoveAccessors(this.parts[3], " ", assert);
 
             assert.deepEqual(this.parts[3], {
@@ -266,7 +266,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Colon stub", (assert) => {
+        test("Colon stub", function(assert) {
             checkAndRemoveAccessors(this.parts[9], ":", assert);
 
             assert.deepEqual(this.parts[9], {
@@ -278,7 +278,7 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
-        test("Pattern stub", (assert) => {
+        test("Pattern stub", function(assert) {
             const parts = renderDateParts("dd 2016", dateParser.getRegExpInfo("'dd' yyyy", dateLocalization));
 
             assert.strictEqual(parts.length, 2, "there are 2 parts rendered");
@@ -288,42 +288,42 @@ if(devices.real().deviceType === "desktop") {
     });
 
     module("Date parts find", setupModule, () => {
-        test("Find day of week", (assert) => {
+        test("Find day of week", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 7), 0, "end position of the group");
         });
 
-        test("Find month", (assert) => {
+        test("Find month", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 9), 2, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 10), 2, "middle position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 13), 2, "end position of the group");
         });
 
-        test("Find day", (assert) => {
+        test("Find day", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 14), 4, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 15), 4, "end position of the group");
         });
 
-        test("Find year", (assert) => {
+        test("Find year", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 17), 6, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 19), 6, "middle position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 21), 6, "end position of the group");
         });
 
-        test("Find hours", (assert) => {
+        test("Find hours", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 22), 8, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 23), 8, "middle position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 24), 8, "end position of the group");
         });
 
-        test("Find minutes", (assert) => {
+        test("Find minutes", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 25), 10, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 26), 10, "middle position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 27), 10, "end position of the group");
         });
 
-        test("Find time indicator", (assert) => {
+        test("Find time indicator", function(assert) {
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 28), 12, "start position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 29), 12, "middle position of the group");
             assert.strictEqual(getDatePartIndexByPosition(this.parts, 30), 12, "end position of the group");
@@ -331,7 +331,7 @@ if(devices.real().deviceType === "desktop") {
     });
 
     module("Keyboard navigation", setupModule, () => {
-        test("RegisterKeyHandler should work", (assert) => {
+        test("RegisterKeyHandler should work", function(assert) {
             const handler = sinon.spy();
             this.instance.registerKeyHandler("del", handler);
 
@@ -339,7 +339,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(handler.callCount, 1, "registerKeyHandler works");
         });
 
-        test("original keyboard handlers should work after 'registerKeyHandler'", (assert) => {
+        test("original keyboard handlers should work after 'registerKeyHandler'", function(assert) {
             this.instance.option("pickerType", "calendar");
             this.instance.registerKeyHandler("space", sinon.stub());
             this.instance.open();
@@ -354,7 +354,30 @@ if(devices.real().deviceType === "desktop") {
             assert.notOk($contouredDate.is($selectedDate), "Contoured date isn't a selected");
         });
 
-        test("Right and left arrows should move the selection", (assert) => {
+        test("mask handler should be used instead of the default for delete key when widget is opened (T832885)", function(assert) {
+            this.instance.open();
+
+            for(let i = 0; i < 3; ++i) {
+                this.keyboard.press("del");
+            }
+
+            assert.strictEqual(this.$input.val(), "January 1 2000", "value has been reverted");
+        });
+
+        test("mask handler should be used instead of the default for backspace key when widget is opened (T832885)", function(assert) {
+            this.keyboard
+                .press("right")
+                .press("right");
+            this.instance.open();
+
+            for(let i = 0; i < 3; ++i) {
+                this.keyboard.press("backspace");
+            }
+
+            assert.strictEqual(this.$input.val(), "January 1 2000", "value has been reverted");
+        });
+
+        test("Right and left arrows should move the selection", function(assert) {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
 
@@ -362,7 +385,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "previous group is selected");
         });
 
-        test("Home and end keys should move selection to boundaries", (assert) => {
+        test("Home and end keys should move selection to boundaries", function(assert) {
             this.keyboard.focus();
             this.keyboard.press("end");
             assert.deepEqual(this.keyboard.caret(), { start: 11, end: 15 }, "last group is selected");
@@ -371,7 +394,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is selected");
         });
 
-        test("Up and down arrows should increase and decrease current group value", (assert) => {
+        test("Up and down arrows should increase and decrease current group value", function(assert) {
             const groups = [
                 { pattern: "EEEE", up: "Thursday", down: "Wednesday" },
                 { pattern: "d", up: "11", down: "10" },
@@ -396,7 +419,7 @@ if(devices.real().deviceType === "desktop") {
             }.bind(this));
         });
 
-        test("Hours switching should not switch am/pm", (assert) => {
+        test("Hours switching should not switch am/pm", function(assert) {
             this.instance.option("displayFormat", "h a");
             this.instance.option("value", new Date(2012, 3, 4, 23, 55, 0));
 
@@ -406,7 +429,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "12 PM", "am/pm was not switched");
         });
 
-        test("Moving through the february should not break day value", (assert) => {
+        test("Moving through the february should not break day value", function(assert) {
             this.instance.option({
                 value: new Date(2015, 0, 29),
                 displayFormat: "MMMM, dd"
@@ -419,7 +442,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "January, 29");
         });
 
-        test("Day reducing by down arrow key should use max date for the current month", (assert) => {
+        test("Day reducing by down arrow key should use max date for the current month", function(assert) {
             this.instance.option({
                 value: new Date(2015, 1, 1),
                 displayFormat: "dd/MM/yyyy"
@@ -437,7 +460,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "February, 28", "the date is correct for 'd' date format");
         });
 
-        test("Day increasing by up arrow key should use max date for the current month", (assert) => {
+        test("Day increasing by up arrow key should use max date for the current month", function(assert) {
             this.instance.option({
                 value: new Date(2015, 1, 28),
                 displayFormat: "dd/MM/yyyy"
@@ -447,7 +470,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "01/02/2015");
         });
 
-        test("Month changing should adjust days to limits", (assert) => {
+        test("Month changing should adjust days to limits", function(assert) {
             this.instance.option("value", new Date(2018, 2, 30));
             assert.strictEqual(this.$input.val(), "March 30 2018", "initial text is correct");
 
@@ -455,7 +478,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "February 28 2018", "text is correct");
         });
 
-        test("Esc should restore the value", (assert) => {
+        test("Esc should restore the value", function(assert) {
             this.keyboard.press("up");
             assert.strictEqual(this.$input.val(), "November 10 2012", "text was changed");
             assert.strictEqual(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
@@ -464,19 +487,19 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "October 10 2012", "text was reverted");
         });
 
-        test("Enter should commit the value", (assert) => {
+        test("Enter should commit the value", function(assert) {
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
 
             this.keyboard.press("enter");
-            assert.strictEqual(this.instance.option("value").getMonth(), 10, "November 10 2012", "month was changed in the value");
+            assert.strictEqual(this.instance.option("value").getMonth(), 10, "month was changed in the value");
 
             this.keyboard.press("down");
             assert.strictEqual(this.$input.val(), "November 9 2012", "text was changed");
             assert.strictEqual(this.instance.option("value").getDate(), 10, "day did not changed in the value after commit");
         });
 
-        test("Mask should not catch arrows on opened dateBox", (assert) => {
+        test("Mask should not catch arrows on opened dateBox", function(assert) {
             this.instance.open();
             this.keyboard.press("up");
             this.keyboard.press("right");
@@ -484,18 +507,18 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "October 10 2012", "text was not changed");
         });
 
-        test("Mask should catch char input on opened dateBox", (assert) => {
+        test("Mask should catch char input on opened dateBox", function(assert) {
             this.instance.open();
             this.keyboard.type("3");
             assert.strictEqual(this.$input.val(), "March 10 2012", "text has been changed");
         });
 
-        test("alt+down should open dxDateBox", (assert) => {
+        test("alt+down should open dxDateBox", function(assert) {
             this.keyboard.keyDown("down", { altKey: true });
             assert.ok(this.instance.option("opened"), "datebox is opened");
         });
 
-        test("delete should revert group to an empty date and go to the next part", (assert) => {
+        test("delete should revert group to an empty date and go to the next part", function(assert) {
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("text"), "November 10 2012", "text has been changed");
 
@@ -513,7 +536,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
         });
 
-        test("search value should be cleared after part is reverted", (assert) => {
+        test("search value should be cleared after part is reverted", function(assert) {
             this.instance.option("displayFormat", "dd, yyyy");
 
             this.keyboard.press("right");
@@ -524,13 +547,13 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("text"), "10, 2044", "text is correct");
         });
 
-        test("search value should be cleared if number was entered after the letter", (assert) => {
+        test("search value should be cleared if number was entered after the letter", function(assert) {
             this.instance.option("displayFormat", "dd-MMM-yyyy");
             this.keyboard.type("11m12y2015");
             assert.strictEqual(this.instance.option("text"), "11-Dec-2015", "date is correct");
         });
 
-        test("search value should be cleared after part is reverted when all text is selected", (assert) => {
+        test("search value should be cleared after part is reverted when all text is selected", function(assert) {
             this.instance.option("displayFormat", "yyyy");
 
             this.keyboard.type("33");
@@ -540,7 +563,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("text"), "2044", "text is correct");
         });
 
-        test("delete should revert a part when the value is null", (assert) => {
+        test("delete should revert a part when the value is null", function(assert) {
             this.instance.option({
                 displayFormat: "MMM yyyy",
                 value: null
@@ -554,7 +577,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 4, end: 8 }, "next group is selected");
         });
 
-        test("backspace should revert group to an empty date and go to the previous part", (assert) => {
+        test("backspace should revert group to an empty date and go to the previous part", function(assert) {
             this.keyboard.press("right");
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("text"), "October 11 2012", "text has been changed");
@@ -565,7 +588,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
 
-        test("emptyDateValue option should work", (assert) => {
+        test("emptyDateValue option should work", function(assert) {
             this.instance.option("emptyDateValue", new Date(2015, 5, 4));
             this.keyboard.press("up");
             assert.strictEqual(this.instance.option("text"), "November 10 2012", "text has been changed");
@@ -576,7 +599,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret is good");
         });
 
-        test("removing all text should be possible", (assert) => {
+        test("removing all text should be possible", function(assert) {
             this.keyboard
                 .caret({ start: 0, end: 15 })
                 .press("del")
@@ -586,7 +609,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value"), null, "value has been cleared");
         });
 
-        test("focusout should clear search value", (assert) => {
+        test("focusout should clear search value", function(assert) {
             this.keyboard.type("1");
             assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
@@ -596,7 +619,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
         });
 
-        test("enter should clear search value", (assert) => {
+        test("enter should clear search value", function(assert) {
             this.keyboard.type("1");
             assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
@@ -606,12 +629,12 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
         });
 
-        test("incorrect input should clear search value", (assert) => {
+        test("incorrect input should clear search value", function(assert) {
             this.keyboard.type("jqwed");
             assert.strictEqual(this.instance.option("text"), "December 10 2012", "text has been changed");
         });
 
-        test("first part should be active if select all parts and type new date", (assert) => {
+        test("first part should be active if select all parts and type new date", function(assert) {
             this.keyboard.press("right");
 
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
@@ -623,7 +646,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
 
-        test("first part should be active if select all parts, delete and type new", (assert) => {
+        test("first part should be active if select all parts, delete and type new", function(assert) {
             this.keyboard.press("right");
 
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
@@ -636,21 +659,21 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
 
-        test("keydown event shouldn't be prevented on 'Esc' key press", (assert) => {
+        test("keydown event shouldn't be prevented on 'Esc' key press", function(assert) {
             this.keyboard.press("esc");
             assert.notOk(this.keyboard.event.isDefaultPrevented(), "event should not be prevented");
         });
     });
 
     module("Events", setupModule, () => {
-        test("Select date part on click", (assert) => {
+        test("Select date part on click", function(assert) {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
 
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret position is good");
         });
 
-        test("Increment and decrement date part by mouse wheel", (assert) => {
+        test("Increment and decrement date part by mouse wheel", function(assert) {
             this.$input.get(0).focus();
 
             this.pointer.wheel(10);
@@ -660,7 +683,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "October 10 2012", "decrement works");
         });
 
-        test("it should not be possible to drag text in the editor", (assert) => {
+        test("it should not be possible to drag text in the editor", function(assert) {
             this.keyboard.type("3");
             assert.strictEqual(this.$input.val(), "March 10 2012", "text has been changed");
 
@@ -669,7 +692,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 6, end: 8 }, "caret is good");
         });
 
-        test("paste should be possible when pasting data matches the format", (assert) => {
+        test("paste should be possible when pasting data matches the format", function(assert) {
             this.instance.option("value", null);
 
             this.keyboard.paste("123456");
@@ -679,7 +702,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
         });
 
-        test("exception should not be thrown when the widget disposed on valueChange", (assert) => {
+        test("exception should not be thrown when the widget disposed on valueChange", function(assert) {
             this.instance.option({
                 value: new Date(2019, 11, 31),
                 onValueChanged: function(e) {
@@ -696,7 +719,7 @@ if(devices.real().deviceType === "desktop") {
 
 
     module("Search", setupModule, () => {
-        test("Time indication", (assert) => {
+        test("Time indication", function(assert) {
             this.instance.option("displayFormat", "a");
 
             this.keyboard.type("a");
@@ -706,7 +729,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "PM", "revert incorrect changes");
         });
 
-        test("Hour", (assert) => {
+        test("Hour", function(assert) {
             this.instance.option("displayFormat", "hh");
 
             this.keyboard.type("31");
@@ -716,7 +739,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "12", "set new value");
         });
 
-        test("Day of week", (assert) => {
+        test("Day of week", function(assert) {
             this.instance.option("displayFormat", "EEEE");
 
             this.keyboard.type("monda");
@@ -726,7 +749,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "Saturday", "revert incorrect changes");
         });
 
-        test("Day of week by a number", (assert) => {
+        test("Day of week by a number", function(assert) {
             this.instance.option("displayFormat", "EEEE");
 
             this.keyboard.type("0");
@@ -739,7 +762,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "Saturday", "out-of-limit values does not supported");
         });
 
-        test("Day", (assert) => {
+        test("Day", function(assert) {
             this.instance.option("displayFormat", "MMM, dd");
 
             this.keyboard
@@ -757,7 +780,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "Mar, 05", "out-of-limit values should clear search value");
         });
 
-        test("Month", (assert) => {
+        test("Month", function(assert) {
             this.instance.option("displayFormat", "MMMM");
 
             this.keyboard.type("janu");
@@ -768,7 +791,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "December", "revert incorrect chars");
         });
 
-        test("Month by char step over February", (assert) => {
+        test("Month by char step over February", function(assert) {
             this.instance.option({
                 value: new Date(2015, 0, 29),
                 displayFormat: "MMMM, dd"
@@ -781,7 +804,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "January, 29", "move backward, text is correct");
         });
 
-        test("Short month", (assert) => {
+        test("Short month", function(assert) {
             this.instance.option("displayFormat", "MMM");
 
             this.keyboard.type("jan");
@@ -791,7 +814,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "Dec", "revert incorrect chars");
         });
 
-        test("Month by a number", (assert) => {
+        test("Month by a number", function(assert) {
             this.instance.option("displayFormat", "MMMM");
 
             this.keyboard.type("1");
@@ -804,7 +827,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "May");
         });
 
-        test("Year", (assert) => {
+        test("Year", function(assert) {
             this.instance.option("displayFormat", "yyyy");
 
             this.keyboard.type("1995");
@@ -826,7 +849,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "0000");
         });
 
-        test("Short Year", (assert) => {
+        test("Short Year", function(assert) {
             this.instance.option({
                 value: new Date(1990, 4, 2),
                 displayFormat: "yy"
@@ -839,7 +862,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value").getFullYear(), 1921, "only 2 last digits of the year should be changed");
         });
 
-        test("Hotkeys should not be handled by the search", (assert) => {
+        test("Hotkeys should not be handled by the search", function(assert) {
             this.instance.option("displayFormat", "EEEE");
 
             this.keyboard.keyDown("s", { altKey: true });
@@ -849,7 +872,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "Wednesday", "ctrl was not handled");
         });
 
-        test("Typing a letter in the year section should not lead to an infinite loop", (assert) => {
+        test("Typing a letter in the year section should not lead to an infinite loop", function(assert) {
             this.instance.option("displayFormat", "yyyy");
 
             sinon.stub(this.instance, "_partIncrease").throws(new Error);
@@ -864,18 +887,18 @@ if(devices.real().deviceType === "desktop") {
     });
 
     module("Empty dateBox", {
-        beforeEach: () => {
+        beforeEach: function() {
             setupModule.beforeEach.call(this);
             this.instance.option("value", null);
         },
         afterEach: setupModule.afterEach
     }, () => {
-        test("Current date should be rendered on first input", (assert) => {
+        test("Current date should be rendered on first input", function(assert) {
             this.keyboard.type("1");
             assert.strictEqual(this.$input.val(), "January 14 2015", "first part was changed, other parts is from the current date");
         });
 
-        test("Bluring the input after first input should update the value", (assert) => {
+        test("Bluring the input after first input should update the value", function(assert) {
             this.keyboard.type("1");
             this.instance.blur();
 
@@ -883,7 +906,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value").getMonth(), 0, "value is correct");
         });
 
-        test("Clear button should work", (assert) => {
+        test("Clear button should work", function(assert) {
             this.instance.option({
                 showClearButton: true,
                 value: new Date(2018, 6, 19)
@@ -905,14 +928,14 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "January 14 2015", "text is correct after clearing");
         });
 
-        test("Incorrect search on empty input should render current date", (assert) => {
+        test("Incorrect search on empty input should render current date", function(assert) {
             this.keyboard.type("qq");
 
             assert.strictEqual(this.$input.val(), "April 14 2015", "text is correct");
             assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
-        test("focus and blur empty input should not change it's value", (assert) => {
+        test("focus and blur empty input should not change it's value", function(assert) {
             this.$input.trigger("focusin");
             this.$input.trigger("focusout");
 
@@ -920,7 +943,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
-        test("focusing datebox by click should work", (assert) => {
+        test("focusing datebox by click should work", function(assert) {
             this.$input.trigger("dxclick");
             this.keyboard.type("2");
 
@@ -928,7 +951,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
-        test("focusing datebox by mousewheel should work", (assert) => {
+        test("focusing datebox by mousewheel should work", function(assert) {
             this.pointer.wheel(10);
             this.keyboard.type("2");
 
@@ -936,7 +959,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
-        test("moving between groups should work with empty dateBox", (assert) => {
+        test("moving between groups should work with empty dateBox", function(assert) {
             ["up", "down", "right", "left", "home", "end", "esc"].forEach((arrow) => {
                 this.instance.option("value", null);
                 this.keyboard.press(arrow);
@@ -947,7 +970,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
-        test("Short Year should use current date", (assert) => {
+        test("Short Year should use current date", function(assert) {
             this.instance.option("displayFormat", "yy");
 
             let dateStart = new Date().getFullYear().toString().substr(0, 2);
@@ -959,7 +982,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value").getFullYear(), parseInt(dateStart + "21"), "only 2 last digits of the year should be changed");
         });
 
-        test("Click and leave empty datebox should not change the value", (assert) => {
+        test("Click and leave empty datebox should not change the value", function(assert) {
             this.instance.option("displayFormat", "yy");
 
             this.$input.trigger("dxclick");
@@ -969,7 +992,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "", "value is correct");
         });
 
-        test("navigation keys should do nothing in an empty datebox", (assert) => {
+        test("navigation keys should do nothing in an empty datebox", function(assert) {
             this.keyboard.press("home");
             this.keyboard.press("end");
             this.keyboard.press("del");
@@ -986,7 +1009,7 @@ if(devices.real().deviceType === "desktop") {
     });
 
     module("Options changed", setupModule, () => {
-        test("The 'useMaskBehavior' option is changed to false", (assert) => {
+        test("The 'useMaskBehavior' option is changed to false", function(assert) {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
 
@@ -1005,7 +1028,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
         });
 
-        test("onValueChanged should have event", (assert) => {
+        test("onValueChanged should have event", function(assert) {
             const valueChangedHandler = sinon.spy();
 
             this.instance.option({
@@ -1022,7 +1045,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(valueChangedHandler.getCall(1).args[0].event, undefined, "event has been cleared");
         });
 
-        test("It should be possible to set a value via calendar", (assert) => {
+        test("It should be possible to set a value via calendar", function(assert) {
             this.instance.option({
                 opened: true
             });
@@ -1033,7 +1056,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
 
-        test("Internal _maskValue and public value should be different objects", (assert) => {
+        test("Internal _maskValue and public value should be different objects", function(assert) {
             assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different on init");
 
             this.instance.option("value", new Date(2012, 1, 2));
@@ -1053,7 +1076,7 @@ if(devices.real().deviceType === "desktop") {
             assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after change event");
         });
 
-        test("performance - value change should not lead to recreate regexp and format pattern", (assert) => {
+        test("performance - value change should not lead to recreate regexp and format pattern", function(assert) {
             const regExpInfo = sinon.spy(dateParser, "getRegExpInfo");
 
             this.instance.option("displayFormat", "dd.MM");
@@ -1065,7 +1088,7 @@ if(devices.real().deviceType === "desktop") {
     });
 
     module("Regression", () => {
-        QUnit.test("should paste text if value was not initialized (T715236)", (assert) => {
+        QUnit.test("should paste text if value was not initialized (T715236)", function(assert) {
             const $input = $("#dateBox")
                 .dxDateBox({ useMaskBehavior: true })
                 .dxDateBox("instance")
@@ -1075,7 +1098,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual($input.get(0).value, "2/15/2019");
         });
 
-        QUnit.test("selected date should be in 1970 when it was set from user's input (T758357)", (assert) => {
+        QUnit.test("selected date should be in 1970 when it was set from user's input (T758357)", function(assert) {
             const $dateBox = $("#dateBox").dxDateBox({
                 value: null,
                 displayFormat: "HH:mm",
@@ -1093,7 +1116,7 @@ if(devices.real().deviceType === "desktop") {
     });
 
     module("Advanced caret", setupModule, () => {
-        test("Move caret to the next group", (assert) => {
+        test("Move caret to the next group", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "dd.MM"
@@ -1104,7 +1127,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
         });
 
-        test("Move caret to the next group when next digit will overflow", (assert) => {
+        test("Move caret to the next group when next digit will overflow", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "MM.dd"
@@ -1115,7 +1138,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
         });
 
-        test("Move caret to the next group after limit overflow", (assert) => {
+        test("Move caret to the next group after limit overflow", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "dd.MM"
@@ -1125,7 +1148,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
         });
 
-        test("Move caret to the next group after format length overflow", (assert) => {
+        test("Move caret to the next group after format length overflow", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "yy MM"
@@ -1136,7 +1159,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
         });
 
-        test("Don't move caret to next group when format length is less than limit length", (assert) => {
+        test("Don't move caret to next group when format length is less than limit length", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "y MM"
@@ -1147,7 +1170,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret was moved to month");
         });
 
-        test("Typed year and value should be in the same century when short year format is used", (assert) => {
+        test("Typed year and value should be in the same century when short year format is used", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "yy MM",
@@ -1169,7 +1192,7 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("value").getFullYear(), 2014, "year is correct");
         });
 
-        test("Move caret to the next group after string length overflow", (assert) => {
+        test("Move caret to the next group after string length overflow", function(assert) {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "dd.MM"

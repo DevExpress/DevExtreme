@@ -374,9 +374,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $container,
                 $editorContainer;
 
-            that.setAria("label",
-                messageLocalization.format("dxDataGrid-ariaColumn") + " " + column.caption + ", " + messageLocalization.format("dxDataGrid-ariaFilterCell"),
-                $cell);
+            if(that.component.option("showColumnHeaders")) {
+                that.setAria("describedby", column.headerId, $cell);
+            }
+            that.setAria("label", messageLocalization.format("dxDataGrid-ariaFilterCell"), $cell);
+
             $cell.addClass(EDITOR_CELL_CLASS);
             $container = $("<div>").appendTo($cell);
             $editorContainer = $("<div>").addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
@@ -384,7 +386,8 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             if(getColumnSelectedFilterOperation(that, column) === "between") {
                 that._renderFilterRangeContent($cell, column);
             } else {
-                that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
+                const editorOptions = that._getEditorOptions($editorContainer, column);
+                that._renderEditor($editorContainer, editorOptions);
             }
 
             if(column.alignment) {
@@ -414,7 +417,12 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _getEditorOptions: function($editorContainer, column) {
             var that = this,
-                result = extend({}, column, {
+                accessibilityOptions = {
+                    editorOptions: {
+                        inputAttr: that._getFilterInputAccessibilityAttributes(column)
+                    }
+                },
+                result = extend(accessibilityOptions, column, {
                     value: getFilterValue(that, column.index, $editorContainer),
                     parentType: "filterRow",
                     showAllText: that.option("filterRow.showAllText"),
@@ -440,6 +448,17 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
             return result;
         },
+        _getFilterInputAccessibilityAttributes: function(column) {
+            const columnAriaLabel = messageLocalization.format("dxDataGrid-ariaFilterCell");
+            if(this.component.option("showColumnHeaders")) {
+                return {
+                    "aria-label": columnAriaLabel,
+                    "aria-describedby": column.headerId
+                };
+            }
+            return { "aria-label": columnAriaLabel };
+        },
+
 
         _renderEditor: function($editorContainer, options) {
             $editorContainer.empty();

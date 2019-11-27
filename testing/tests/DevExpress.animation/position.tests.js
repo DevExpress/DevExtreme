@@ -53,7 +53,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
     QUnit.module("default");
 
-    QUnit.test("act as getter", assert => {
+    QUnit.test("act as getter", function(assert) {
         fixtures.simple.create();
         try {
             const pos = setupPosition("#where");
@@ -457,7 +457,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
     QUnit.module("collision returned value");
 
-    QUnit.test("returned value is correct when flip vertical", assert => {
+    QUnit.test("returned value is correct when flip vertical", function(assert) {
         fixtures.collisionBottomRight.create();
         try {
             const result = calculatePosition("#what", { my: "top right", at: "bottom right", of: "#where", collision: "flip" });
@@ -468,7 +468,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("position should be flipped to maximum free space", assert => {
+    QUnit.test("position should be flipped to maximum free space", function(assert) {
         fixtures.customBoundaryWithLeftTopOffset.create();
         try {
             const $what = $("#what").height(300);
@@ -489,7 +489,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("returned value is correct when flip horizontal", assert => {
+    QUnit.test("returned value is correct when flip horizontal", function(assert) {
         fixtures.collisionBottomRight.create();
         try {
             const result = calculatePosition("#what", { my: "bottom left", at: "top right", of: "#where", collision: "flip" });
@@ -501,7 +501,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("returned value is correct when fit vertical", assert => {
+    QUnit.test("returned value is correct when fit vertical", function(assert) {
         fixtures.collisionBottomRight.create();
         try {
             const result = calculatePosition("#what", { my: "top right", at: "bottom right", of: "#where", collision: "fit" });
@@ -512,7 +512,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("returned value is correct when fit horizontal", assert => {
+    QUnit.test("returned value is correct when fit horizontal", function(assert) {
         fixtures.collisionBottomRight.create();
         try {
             const result = calculatePosition("#what", { my: "bottom left", at: "top right", of: "#where", collision: "fit" });
@@ -524,7 +524,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("returned value is correct when expected flips did not happen because there is less space on the flip side", assert => {
+    QUnit.test("returned value is correct when expected flips did not happen because there is less space on the flip side", function(assert) {
         fixtures.collisionSmallWindow.create();
         try {
             const result = calculatePosition("#what", { my: "top left", at: "bottom right", of: "#where", collision: "flip" });
@@ -612,7 +612,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         210, 10
     );
 
-    QUnit.test("custom boundary is used for collision 'flip'", assert => {
+    QUnit.test("custom boundary is used for collision 'flip'", function(assert) {
         fixtures.customBoundary.create();
         try {
             $("#where").css({ top: "45px" });
@@ -655,7 +655,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         10, 150
     );
 
-    QUnit.test("bounds should be calculated properly when content is scrolled", assert => {
+    QUnit.test("bounds should be calculated properly when content is scrolled", function(assert) {
         fixtures.customBoundary.create();
         const $wrapper = $("<div>").appendTo("body");
         try {
@@ -708,7 +708,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("coordinates should not be rounded if option precise is true in calculatePosition method", assert => {
+    QUnit.test("coordinates should not be rounded if option precise is true in calculatePosition method", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         translator.move($where, { top: 0.5, left: 0.5 });
         const location = translator.locate($where);
@@ -724,7 +724,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.v.location, location.left);
     });
 
-    QUnit.test("coordinates should be rounded if option precise is false in calculatePosition method", assert => {
+    QUnit.test("coordinates should be rounded if option precise is false in calculatePosition method", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         translator.move($where, { top: 0.5, left: 0.5 });
         const location = translator.locate($where);
@@ -740,7 +740,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.v.location, Math.round(location.left));
     });
 
-    QUnit.test("coordinates should be rounded by default in calculatePosition method", assert => {
+    QUnit.test("coordinates should be rounded by default in calculatePosition method", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         translator.move($where, { top: 0.5, left: 0.5 });
         const location = translator.locate($where);
@@ -755,7 +755,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.v.location, Math.round(location.left));
     });
 
-    QUnit.test("coordinates should not be rounded if option precise is true in position method", assert => {
+    QUnit.test("coordinates should not be rounded if option precise is true in position method", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         const $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -773,7 +773,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.left, location.left - $where.offset().left);
     });
 
-    QUnit.test("coordinates should be rounded if option precise is false in position method", assert => {
+    QUnit.test("coordinates should be rounded if option precise is false in position method", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         const $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -791,7 +791,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.left, Math.round(location.left - $where.offset().left));
     });
 
-    QUnit.test("coordinates should be rounded by default in position method", assert => {
+    QUnit.test("coordinates should be rounded by default in position method", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         const $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -808,7 +808,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.left, Math.round(location.left - $where.offset().left));
     });
 
-    QUnit.test("coordinates should not be rounded if option precise is true in calculatePosition used in position method as params", assert => {
+    QUnit.test("coordinates should not be rounded if option precise is true in calculatePosition used in position method as params", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         const $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -827,7 +827,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.equal(pos.left, location.left - $where.offset().left);
     });
 
-    QUnit.test("coordinates should be rounded if option precise is false in calculatePosition used in position method as params", assert => {
+    QUnit.test("coordinates should be rounded if option precise is false in calculatePosition used in position method as params", function(assert) {
         const $where = $("#where").css({ top: 0, left: 0 });
         const $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -852,7 +852,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
     QUnit.module("oversize");
 
-    QUnit.test("oversize should calculated when flip or fit", assert => {
+    QUnit.test("oversize should calculated when flip or fit", function(assert) {
         fixtures.customBoundaryWithLeftTopOffset.create();
         try {
             const $what = $("#what").height(300);
@@ -876,7 +876,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("oversize should be 0 when collision is none", assert => {
+    QUnit.test("oversize should be 0 when collision is none", function(assert) {
         fixtures.customBoundaryWithLeftTopOffset.create();
         try {
             const $what = $("#what").height(300);
@@ -910,23 +910,23 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("position offset should be equal jQuery offset for DOM nodes", assert => {
+    QUnit.test("position offset should be equal jQuery offset for DOM nodes", function(assert) {
         const $element = $("#where").css({ top: 100, left: 40 });
         assert.deepEqual(positionUtils.offset($element), $element.offset(), "position.offset() is correct");
     });
 
-    QUnit.test("position offset should be null for window", assert => {
+    QUnit.test("position offset should be null for window", function(assert) {
         assert.deepEqual(positionUtils.offset($(window)), null, "position.offset() is correct");
     });
 
-    QUnit.test("position offset should have pageX and pageY for Events", assert => {
+    QUnit.test("position offset should have pageX and pageY for Events", function(assert) {
         const position = { pageX: 100, pageY: 200 };
         const $event = new $.Event("dxpointerdown", position);
 
         assert.deepEqual(positionUtils.offset($event), { left: 100, top: 200 }, "position.offset() is correct");
     });
 
-    QUnit.test("position should return window.innerHeight for mobile safari if window.outerHeight < window.innerHeight", assert => {
+    QUnit.test("position should return window.innerHeight for mobile safari if window.outerHeight < window.innerHeight", function(assert) {
         if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
             // skip for ie because we can not write window.innerHeight in IE
             assert.expect(0);
@@ -953,7 +953,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     // T509285
-    QUnit.test("position should return window.innerWidth for mobile safari if window.outerWidth < window.innerWidth", assert => {
+    QUnit.test("position should return window.innerWidth for mobile safari if window.outerWidth < window.innerWidth", function(assert) {
         if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
             // skip for ie because we can not write window.innerWidth in IE
             assert.expect(0);
@@ -980,7 +980,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     // T750017
-    QUnit.test("position should return window.innerWidth for chrome on android if window.outerHeight === window.innerHeight but window height is less then innerHeight", assert => {
+    QUnit.test("position should return window.innerWidth for chrome on android if window.outerHeight === window.innerHeight but window height is less then innerHeight", function(assert) {
         if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
             // skip for ie because we can not write window.innerWidth in IE
             assert.expect(0);
@@ -1006,7 +1006,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test("position should return window.innerWidth for chrome on android if window.outerHeight < window.innerHeight but window.height is less then innerHeight in Safari", assert => {
+    QUnit.test("position should return window.innerWidth for chrome on android if window.outerHeight < window.innerHeight but window.height is less then innerHeight in Safari", function(assert) {
         if(!browser.safari) {
             assert.expect(0);
             return;
@@ -1032,7 +1032,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     // T664522
-    QUnit.test("setup should call resetPosition with finishTransition argument", assert => {
+    QUnit.test("setup should call resetPosition with finishTransition argument", function(assert) {
         const origResetPosition = translator.resetPosition;
 
         translator.resetPosition = ($element, finishTransition) => {

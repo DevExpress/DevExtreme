@@ -9,13 +9,13 @@ import { logger } from "core/utils/console";
 QUnit.module("base localization", {}, () => {
     sharedTests();
 
-    QUnit.test("engine", assert => {
+    QUnit.test("engine", function(assert) {
         assert.equal(numberLocalization.engine(), "base");
         assert.equal(dateLocalization.engine(), "base");
         assert.equal(messageLocalization.engine(), "base");
     });
 
-    QUnit.test("'no parser' errors", assert => {
+    QUnit.test("'no parser' errors", function(assert) {
         const warningIdPrefixLength = 8;
         const dateWarning = "Date parsing is invoked while the parser is not defined";
         const originalLoggerWarn = logger.warn;

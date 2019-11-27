@@ -28,8 +28,8 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "0.2.0",
-    "devexpress-gantt": "0.0.24",
+    "devexpress-diagram": "0.2.1",
+    "devexpress-gantt": "0.0.26",
     "jszip": "^2.0.0 || ^3.0.0",
     "quill": "^1.3.7",
     "showdown": "^1.8.6",

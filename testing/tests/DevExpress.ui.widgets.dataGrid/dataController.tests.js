@@ -3536,7 +3536,7 @@ var setupVirtualRenderingModule = function() {
 
     this.dataController.viewportItemSize(10);
     this.dataController.viewportSize(9);
-    this.dataController._dataSource._renderTime = 50;
+    this.dataController._dataSource._changeTime = 50;
 
     this.clock.tick();
 
@@ -6750,6 +6750,18 @@ QUnit.test("Not apply groupInterval of the headerFilter for filterRow", function
 
     // act, assert
     assert.deepEqual(this.getCombinedFilter(true), [["birthDate", ">=", new Date(1992, 7, 6)], "and", ["birthDate", "<", new Date(1992, 7, 7)]], "filter expression");
+});
+
+// T835675
+QUnit.test("clearFilter should not fall with error if dataSource is not set", function(assert) {
+    // arrange
+    this.dataSource = undefined;
+
+    // assert
+    assert.notOk(this.dataController.getDataSource(), "no dataSource");
+
+    // act
+    this.dataController.clearFilter();
 });
 
 QUnit.module("Grouping", { beforeEach: setupModule, afterEach: teardownModule });

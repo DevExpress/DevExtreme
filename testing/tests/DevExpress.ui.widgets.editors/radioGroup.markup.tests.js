@@ -20,22 +20,22 @@ const RADIO_GROUP_CLASS = "dx-radiogroup",
 const toSelector = cssClass => "." + cssClass;
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         executeAsyncMock.setup();
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
     }
 };
 
 QUnit.module("buttons group rendering", moduleConfig, () => {
-    QUnit.test("widget should be rendered", (assert) => {
+    QUnit.test("widget should be rendered", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup();
 
         assert.ok($radioGroup.hasClass(RADIO_GROUP_CLASS), "widget class added");
     });
 
-    QUnit.test("widget should generate buttons", (assert) => {
+    QUnit.test("widget should generate buttons", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [
                 { text: "0" },
@@ -47,13 +47,13 @@ QUnit.module("buttons group rendering", moduleConfig, () => {
         assert.equal($radioGroup.find(toSelector(RADIO_BUTTON_CLASS)).length, 3, "buttons generated");
     });
 
-    QUnit.test("empty message should not be generated if no items", (assert) => {
+    QUnit.test("empty message should not be generated if no items", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup();
 
         assert.equal($radioGroup.find(".dx-scrollview-content").text(), "", "empty message is not shown");
     });
 
-    QUnit.test("widget should correctly process 'disabled' option changed", (assert) => {
+    QUnit.test("widget should correctly process 'disabled' option changed", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [
                 { text: "0" },
@@ -73,7 +73,7 @@ QUnit.module("buttons group rendering", moduleConfig, () => {
 });
 
 QUnit.module("buttons rendering", moduleConfig, () => {
-    QUnit.test("button markup item if item.value is specified", (assert) => {
+    QUnit.test("button markup item if item.value is specified", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [
                 { text: "0", value: "0" }
@@ -85,7 +85,7 @@ QUnit.module("buttons rendering", moduleConfig, () => {
         assert.equal($radioButton.text(), "0", "text rendered correctly");
     });
 
-    QUnit.test("button markup item if item.value is not specified", (assert) => {
+    QUnit.test("button markup item if item.value is not specified", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [
                 { text: "0" }
@@ -97,7 +97,7 @@ QUnit.module("buttons rendering", moduleConfig, () => {
         assert.equal($radioButton.text(), "0", "text rendered correctly");
     });
 
-    QUnit.test("button markup item if item is primitive string", (assert) => {
+    QUnit.test("button markup item if item is primitive string", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [
                 "0"
@@ -108,7 +108,7 @@ QUnit.module("buttons rendering", moduleConfig, () => {
         assert.equal($radioButton.text(), "0", "text rendered correctly");
     });
 
-    QUnit.test("button markup item if item has html", (assert) => {
+    QUnit.test("button markup item if item has html", function(assert) {
         const $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [
                 { html: "<input type='radio' value='foo'>" }
@@ -123,7 +123,7 @@ QUnit.module("buttons rendering", moduleConfig, () => {
 });
 
 QUnit.module("hidden input", () => {
-    QUnit.test("a hidden input should be rendered", (assert) => {
+    QUnit.test("a hidden input should be rendered", function(assert) {
         const $element = $("#radioGroup").dxRadioGroup(),
             $input = $element.find("input");
 
@@ -131,7 +131,7 @@ QUnit.module("hidden input", () => {
         assert.equal($input.attr("type"), "hidden", "the input type is 'hidden'");
     });
 
-    QUnit.test("the hidden input should have correct value on widget init", (assert) => {
+    QUnit.test("the hidden input should have correct value on widget init", function(assert) {
         const $element = $("#radioGroup").dxRadioGroup({
                 items: [1, 2, 3],
                 value: 2
@@ -141,7 +141,7 @@ QUnit.module("hidden input", () => {
         assert.equal($input.val(), "2", "input value is correct");
     });
 
-    QUnit.test("the hidden input should get display text as value if widget value is an object", (assert) => {
+    QUnit.test("the hidden input should get display text as value if widget value is an object", function(assert) {
         const items = [{ id: 1, text: "one" }],
             $element = $("#radioGroup").dxRadioGroup({
                 items: items,
@@ -153,7 +153,7 @@ QUnit.module("hidden input", () => {
         assert.equal($input.val(), items[0].text, "input value is correct");
     });
 
-    QUnit.test("the hidden input should get value in respect of the 'valueExpr' option", (assert) => {
+    QUnit.test("the hidden input should get value in respect of the 'valueExpr' option", function(assert) {
         const items = [{ id: 1, text: "one" }],
             $element = $("#radioGroup").dxRadioGroup({
                 items: items,
@@ -168,7 +168,7 @@ QUnit.module("hidden input", () => {
 });
 
 QUnit.module("the 'name' option", () => {
-    QUnit.test("widget hidden input should get the 'name' attribute with a correct value", (assert) => {
+    QUnit.test("widget hidden input should get the 'name' attribute with a correct value", function(assert) {
         const expectedName = "some_name",
             $element = $("#radioGroup").dxRadioGroup({
                 name: expectedName
@@ -180,7 +180,7 @@ QUnit.module("the 'name' option", () => {
 });
 
 QUnit.module("value", moduleConfig, () => {
-    QUnit.test("item checked on start", (assert) => {
+    QUnit.test("item checked on start", function(assert) {
         const done = assert.async();
 
         executeAsyncMock.teardown();
@@ -201,7 +201,7 @@ QUnit.module("value", moduleConfig, () => {
 });
 
 QUnit.module("valueExpr", moduleConfig, () => {
-    QUnit.test("value should be correct if valueExpr is a string", (assert) => {
+    QUnit.test("value should be correct if valueExpr is a string", function(assert) {
         const items = [
             { number: 0, caption: "zero" },
             { number: 1, caption: "one" }
@@ -225,7 +225,7 @@ QUnit.module("valueExpr", moduleConfig, () => {
 });
 
 QUnit.module("widget sizing render", moduleConfig, () => {
-    QUnit.test("default", (assert) => {
+    QUnit.test("default", function(assert) {
         const $element = $("#widget").dxRadioGroup({
             items: [
                 { text: "0" },
@@ -238,7 +238,7 @@ QUnit.module("widget sizing render", moduleConfig, () => {
         assert.ok($element[0].offsetWidth > 0, "outer width of the element must be more than zero");
     });
 
-    QUnit.test("constructor", (assert) => {
+    QUnit.test("constructor", function(assert) {
         const $element = $("#widget").dxRadioGroup({
                 items: [
                     { text: "0" },
@@ -254,7 +254,7 @@ QUnit.module("widget sizing render", moduleConfig, () => {
         assert.strictEqual($element[0].style.width, "400px", "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("root with custom width", (assert) => {
+    QUnit.test("root with custom width", function(assert) {
         const $element = $("#widthRootStyle").dxRadioGroup({
                 items: [
                     { text: "0" },
@@ -272,7 +272,7 @@ QUnit.module("widget sizing render", moduleConfig, () => {
 
 var helper;
 QUnit.module(`Aria accessibility`, {
-    beforeEach: () => {
+    beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({
             createWidget: ($element, options) => new RadioGroup($element,
                 $.extend({
@@ -280,24 +280,24 @@ QUnit.module(`Aria accessibility`, {
                 }, options))
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test(`Items: []`, () => {
+    QUnit.test(`Items: []`, function() {
         helper.createWidget({ });
 
         helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
     });
 
-    QUnit.test(`Items: [1, 2, 3], Item.selected: true`, () => {
+    QUnit.test(`Items: [1, 2, 3], Item.selected: true`, function() {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
         helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
     });
 
-    QUnit.test(`Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement`, () => {
+    QUnit.test(`Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement`, function() {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.widget.option("focusedElement", helper.getItems().eq(0));

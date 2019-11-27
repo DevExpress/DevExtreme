@@ -1102,7 +1102,7 @@ QUnit.test("Expand all method with the virtual mode", function(assert) {
     assert.equal(nodes[0].items[0].items.length, 0, "children count of the item 11");
 });
 
-QUnit.test("load indicator should be located before an item", assert => {
+QUnit.test("load indicator should be located before an item", function(assert) {
     const treeView = new TreeView($("#treeView"), {
         virtualModeEnabled: true,
         items: [
@@ -1448,7 +1448,7 @@ module("Loadindicator", () => {
                 assert.equal($toggleItem.css('display') === 'none', contentReadyCount ? false : true, "toggle item is hidden");
             };
 
-            test(`Loadindicator: ${config}`, () => {
+            test(`Loadindicator: ${config}`, function() {
                 const clock = sinon.useFakeTimers();
 
                 try {

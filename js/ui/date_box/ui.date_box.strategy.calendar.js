@@ -28,7 +28,10 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
                     if(this._widget.option("zoomLevel") === this._widget.option("maxZoomLevel")) {
                         var contouredDate = this._widget._view.option("contouredDate");
-                        contouredDate && this.dateBoxValue(contouredDate, e);
+                        var lastActionElement = this._lastActionElement;
+                        if(contouredDate && lastActionElement === "calendar") {
+                            this.dateBoxValue(contouredDate, e);
+                        }
 
                         this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
@@ -77,6 +80,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _refreshActiveDescendant: function(e) {
+        this._lastActionElement = "calendar";
         this.dateBox.setAria("activedescendant", e.actionValue);
     },
 
@@ -144,6 +148,8 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     textChangedHandler: function() {
+        this._lastActionElement = "input";
+
         if(this.dateBox.option("opened") && this._widget) {
             this._updateValue(true);
         }

@@ -108,7 +108,7 @@ QUnit.test("onContentReady fired after setting the value", function(assert) {
 QUnit.module("validation");
 
 if(devices.real().deviceType === "desktop") {
-    QUnit.test("the click should be processed before the validation message is shown (T570458)", (assert) => {
+    QUnit.test("the click should be processed before the validation message is shown (T570458)", function(assert) {
         const $checkbox = $("#checkbox")
             .dxCheckBox({})
             .dxValidator({
@@ -137,7 +137,7 @@ if(devices.real().deviceType === "desktop") {
         assert.ok(isValidationMessageVisible());
     });
 
-    QUnit.test("should show validation message after focusing", (assert) => {
+    QUnit.test("should show validation message after focusing", function(assert) {
         const clock = sinon.useFakeTimers();
         const $checkbox = $("#checkbox")
             .dxCheckBox({})

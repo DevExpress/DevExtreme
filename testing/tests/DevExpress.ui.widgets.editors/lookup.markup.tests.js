@@ -25,7 +25,7 @@ testStart(() => {
 const LOOKUP_FIELD_CLASS = "dx-lookup-field";
 
 module("Lookup", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         executeAsyncMock.setup();
         this.clock = sinon.useFakeTimers();
@@ -34,20 +34,20 @@ module("Lookup", {
         this.instance = this.element.dxLookup({ fullScreen: false }).dxLookup("instance");
         this.$field = $(this.instance._$field);
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
         this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    test("render dxLookup", (assert) => {
+    test("render dxLookup", function(assert) {
         assert.ok(this.instance instanceof Lookup);
         assert.ok(this.element.hasClass("dx-lookup"), "widget has class dx-lookup");
         assert.ok($(`.${LOOKUP_FIELD_CLASS}`, this.element).length, "widget contents field");
         assert.ok($(".dx-lookup-arrow", this.element).length, "widget contents arrow");
     });
 
-    test("regression: value is out of range (B231783)", (assert) => {
+    test("regression: value is out of range (B231783)", function(assert) {
         this.instance.option({
             dataSource: [1, 2, 3],
             value: "wrongValue"
@@ -56,18 +56,18 @@ module("Lookup", {
         assert.equal(this.$field.text(), "Select...");
     });
 
-    test("regression: B232016 - Lookup element has no 'dx-widget' CSS class", (assert) => {
+    test("regression: B232016 - Lookup element has no 'dx-widget' CSS class", function(assert) {
         assert.ok(this.element.hasClass("dx-widget"));
     });
 
-    test("lookup empty class is attached when no item is selected", (assert) => {
+    test("lookup empty class is attached when no item is selected", function(assert) {
         const $lookup = this.element.dxLookup({ dataSource: [1, 2, 3], showClearButton: true, placeholder: "placeholder" });
         const LOOKUP_EMPTY_CLASS = "dx-lookup-empty";
 
         assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), "Lookup without preselected value has empty class");
     });
 
-    test("data source should be paginated by default", (assert) => {
+    test("data source should be paginated by default", function(assert) {
         assert.expect(1);
 
         const $element = $("#lookup").dxLookup({
@@ -78,7 +78,7 @@ module("Lookup", {
         assert.equal(instance._dataSource.paginate(), true, "pagination enabled by default");
     });
 
-    test("T373464 - the 'fieldTemplate' should be used for rendering if the item is get asynchronously", (assert) => {
+    test("T373464 - the 'fieldTemplate' should be used for rendering if the item is get asynchronously", function(assert) {
         const fieldTemplateText = "Field template";
         const items = ["1", "2"];
         const $element = $("#lookup").dxLookup({
@@ -105,7 +105,7 @@ module("Lookup", {
     });
 
 
-    test("field template should be render one time per value rendering", (assert) => {
+    test("field template should be render one time per value rendering", function(assert) {
         const fieldTemplateStub = sinon.stub().returns($("<div>"));
         $("#widthRootStyle").dxLookup({
             fieldTemplate: fieldTemplateStub,
@@ -116,7 +116,7 @@ module("Lookup", {
         assert.ok(fieldTemplateStub.calledOnce, "field template called once");
     });
 
-    test("value should be rendered correctly when async data source has been used", (assert) => {
+    test("value should be rendered correctly when async data source has been used", function(assert) {
         const value = "last name";
 
         this.element.dxLookup({
@@ -143,14 +143,14 @@ module("Lookup", {
 
 
 module("hidden input", () => {
-    test("a hidden input should be rendered", (assert) => {
+    test("a hidden input should be rendered", function(assert) {
         const $element = $("#lookup").dxLookup();
         const $input = $element.find("input[type='hidden']");
 
         assert.equal($input.length, 1, "a hidden input is rendered");
     });
 
-    test("the hidden input should have correct value on widget init", (assert) => {
+    test("the hidden input should have correct value on widget init", function(assert) {
         const $element = $("#lookup").dxLookup({
             items: [1, 2, 3],
             value: 2
@@ -160,7 +160,7 @@ module("hidden input", () => {
         assert.equal($input.val(), "2", "input value is correct");
     });
 
-    test("the hidden input should get display text as value if widget value is an object", (assert) => {
+    test("the hidden input should get display text as value if widget value is an object", function(assert) {
         const items = [{ id: 1, text: "one" }];
         const $element = $("#lookup").dxLookup({
             items: items,
@@ -173,7 +173,7 @@ module("hidden input", () => {
         assert.equal($input.val(), items[0].text, "input value is correct");
     });
 
-    test("the submit value must be equal to the value of the widget", (assert) => {
+    test("the submit value must be equal to the value of the widget", function(assert) {
         const items = ["test"];
         const $element = $("#lookup").dxLookup({
             items: items,
@@ -190,7 +190,7 @@ module("hidden input", () => {
         assert.deepEqual($input.val(), items[0], "input value is correct");
     });
 
-    test("the hidden input should get value in respect of the 'valueExpr' option", (assert) => {
+    test("the hidden input should get value in respect of the 'valueExpr' option", function(assert) {
         const items = [{ id: 1, text: "one" }];
         const $element = $("#lookup").dxLookup({
             items: items,
@@ -206,18 +206,18 @@ module("hidden input", () => {
 
 
 module("options", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         executeAsyncMock.setup();
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
         fx.off = false;
         this.clock.restore();
     }
 }, () => {
-    test("hidden input should get the 'name' attribute with a correct value", (assert) => {
+    test("hidden input should get the 'name' attribute with a correct value", function(assert) {
         const expectedName = "lookup";
         const $element = $("#lookup").dxLookup({
             name: expectedName
@@ -227,7 +227,7 @@ module("options", {
         assert.equal($input.attr("name"), expectedName, "input has correct 'name' attribute");
     });
 
-    test("displayExpr, valueExpr as functions (regression B230600)", (assert) => {
+    test("displayExpr, valueExpr as functions (regression B230600)", function(assert) {
         const instance = $("#lookup").dxLookup({
             dataSource: [1, 2],
             valueExpr: function(item) {
@@ -243,7 +243,7 @@ module("options", {
         assert.equal($field.text(), "number 1");
     });
 
-    test("value", (assert) => {
+    test("value", function(assert) {
         const items = [1, 2, 3];
         const instance = $("#lookup").dxLookup({ dataSource: items, value: 1 }).dxLookup("instance");
         const $field = $(instance._$field);
@@ -252,7 +252,7 @@ module("options", {
         assert.equal(instance.option("displayValue"), 1, "displayValue is selected item value");
     });
 
-    test("value should be assigned by reference", (assert) => {
+    test("value should be assigned by reference", function(assert) {
         const items = [{ name: "name" }];
         const instance = $("#lookup").dxLookup({
             dataSource: items,
@@ -264,7 +264,7 @@ module("options", {
         assert.equal($field.text(), "name", "item was found in items by reference");
     });
 
-    test("placeholder", (assert) => {
+    test("placeholder", function(assert) {
         const instance = $("#lookup").dxLookup({
             dataSource: []
         }).dxLookup("instance");
@@ -272,13 +272,13 @@ module("options", {
         assert.equal($(instance._$field).text(), "Select...", "default value");
     });
 
-    test("fieldTemplate should be rendered", (assert) => {
+    test("fieldTemplate should be rendered", function(assert) {
         $("#lookupFieldTemplate").dxLookup({ fieldTemplate: "field" });
 
         assert.equal($.trim($("#lookupFieldTemplate").text()), "test", "test was be rendered");
     });
 
-    test("selected item should be passed as first argument if fieldTemplate is a function", (assert) => {
+    test("selected item should be passed as first argument if fieldTemplate is a function", function(assert) {
         const items = [{ id: 1, text: "one", data: 11 }, { id: 2, text: "two", data: 22 }];
 
         $("#lookup").dxLookup({
@@ -297,7 +297,7 @@ module("options", {
 
 
 module("widget sizing render", () => {
-    test("constructor", (assert) => {
+    test("constructor", function(assert) {
         const $element = $("#lookup").dxLookup({ width: 400 });
         const instance = $element.dxLookup("instance");
 
@@ -305,7 +305,7 @@ module("widget sizing render", () => {
         assert.strictEqual($element.get(0).style.width, "400px", "outer width of the element must be equal to custom width");
     });
 
-    test("root with custom width", (assert) => {
+    test("root with custom width", function(assert) {
         const $element = $("#widthRootStyle").dxLookup();
         const instance = $element.dxLookup("instance");
 
@@ -316,7 +316,7 @@ module("widget sizing render", () => {
 
 
 module("aria accessibility", () => {
-    test("aria role", (assert) => {
+    test("aria role", function(assert) {
         const $element = $("#lookup").dxLookup();
         const $field = $element.find(`.${LOOKUP_FIELD_CLASS}:first`);
 

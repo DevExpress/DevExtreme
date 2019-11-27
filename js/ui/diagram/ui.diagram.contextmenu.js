@@ -38,6 +38,8 @@ class DiagramContextMenu extends Widget {
 
         const { Browser } = getDiagram();
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
+            closeOnOutsideClick: false,
+            showEvent: "",
             cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : "",
             items: this._getItems(this._commands),
             focusStateEnabled: false,
@@ -46,21 +48,14 @@ class DiagramContextMenu extends Widget {
                 at: { x: "center", y: "top" },
                 of: this._$contextMenuTargetElement
             } : {}),
-
-
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
-                if(this._tempState === true) return;
+                if(this._inOnShowing === true) return;
 
-                this._tempState = true;
+                this._inOnShowing = true;
                 this._onVisibleChangedAction({ visible: true, component: this });
                 this._contextMenuInstance.option("items", this._getItems(this._commands, true));
-                delete this._tempState;
-            },
-            onHiding: (e) => {
-                this._tempState = false;
-                this._onVisibleChangedAction({ visible: false, component: this });
-                delete this._tempState;
+                delete this._inOnShowing;
             }
         });
     }
@@ -86,8 +81,9 @@ class DiagramContextMenu extends Widget {
     _show(x, y, selection) {
         this.clickPosition = { x, y };
         const { Browser } = getDiagram();
+
+        this._contextMenuInstance.hide();
         if(Browser.TouchUI) {
-            this._contextMenuInstance.hide();
             this._$contextMenuTargetElement.show();
             if(!selection) {
                 selection = { x, y, width: 0, height: 0 };
@@ -101,7 +97,6 @@ class DiagramContextMenu extends Widget {
             });
             this._contextMenuInstance.show();
         } else {
-            this._contextMenuInstance.hide();
             this._contextMenuInstance.option("position", { offset: x + " " + y });
             this._contextMenuInstance.show();
         }
@@ -140,10 +135,7 @@ class DiagramContextMenu extends Widget {
         this._contextMenuInstance.option("disabled", !enabled);
     }
     isVisible() {
-        if(this._tempState !== undefined) {
-            return this._tempState;
-        }
-        return !!this._contextMenuInstance.option("visible");
+        return this._inOnShowing;
     }
     _createOnVisibleChangedAction() {
         this._onVisibleChangedAction = this._createActionByOption("onVisibleChanged");

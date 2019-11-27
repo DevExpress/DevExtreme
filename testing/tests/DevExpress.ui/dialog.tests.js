@@ -11,7 +11,7 @@ import { value as viewPort } from "core/utils/view_port";
 const { module, test, testInActiveWindow } = QUnit;
 
 module("dialog tests", {
-    beforeEach: () => {
+    beforeEach: function() {
         viewPort("#qunit-fixture");
 
         fx.off = true;
@@ -36,11 +36,11 @@ module("dialog tests", {
         };
         this.isPopupDraggable = () => $(".dx-popup").dxPopup("instance").option("dragEnabled");
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
-    test("dialog show/hide by Escape (T686065)", (assert) => {
+    test("dialog show/hide by Escape (T686065)", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
@@ -52,7 +52,7 @@ module("dialog tests", {
         assert.ok(this.thereIsNoDialog());
     });
 
-    test("dialog show/hide", (assert) => {
+    test("dialog show/hide", function(assert) {
         let instance;
         const options = {
             title: this.title,
@@ -81,7 +81,7 @@ module("dialog tests", {
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown after button was clicked.");
     });
 
-    testInActiveWindow("first button in dialog obtained focus on shown", (assert) => {
+    testInActiveWindow("first button in dialog obtained focus on shown", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "focus is absent on mobile devices");
             return;
@@ -91,7 +91,7 @@ module("dialog tests", {
         assert.equal($(".dx-dialog-wrapper").find(".dx-state-focused").length, 1, "button obtained focus");
     });
 
-    test("dialog content", (assert) => {
+    test("dialog content", function(assert) {
         let instance;
         let options = {
             title: this.title,
@@ -123,7 +123,7 @@ module("dialog tests", {
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
     });
 
-    test("dialog content without title", (assert) => {
+    test("dialog content without title", function(assert) {
         const options = {
             title: this.title,
             messageHtml: this.messageHtml,
@@ -136,7 +136,7 @@ module("dialog tests", {
         assert.equal(this.dialog().find(".dx-popup-title").length, 0, "Actual title is equal not expected.");
     });
 
-    test("popup drag enabled", (assert) => {
+    test("popup drag enabled", function(assert) {
         const testPopupDrag = (dialogDragEnabled, expectedPopupDragEnabled, message) => {
             const options = {
                 title: this.title,
@@ -156,7 +156,7 @@ module("dialog tests", {
         testPopupDrag(undefined, true, "drag was not enabled");
     });
 
-    test("alert dialog without title should not be draggable", assert => {
+    test("alert dialog without title should not be draggable", function(assert) {
         const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
             dialog.alert(this.messageHtml, "alert title", showTitle);
 
@@ -170,7 +170,7 @@ module("dialog tests", {
         testPopupDrag(undefined, true, "drag was not enabled");
     });
 
-    test("confirm dialog without title should not be draggable", assert => {
+    test("confirm dialog without title should not be draggable", function(assert) {
         const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
             dialog.confirm(this.messageHtml, "confirm title", showTitle);
 
@@ -184,7 +184,7 @@ module("dialog tests", {
         testPopupDrag(undefined, true, "drag was not enabled");
     });
 
-    test("dialog buttons", (assert) => {
+    test("dialog buttons", function(assert) {
         let actual;
         const expected = "ButtonReturnValue#2";
         const options = {
@@ -217,7 +217,7 @@ module("dialog tests", {
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
     });
 
-    test("alert dialog", (assert) => {
+    test("alert dialog", function(assert) {
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
 
         dialog.title = this.title;
@@ -236,7 +236,7 @@ module("dialog tests", {
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
     });
 
-    test("confirm dialog", (assert) => {
+    test("confirm dialog", function(assert) {
         let actual;
 
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
@@ -249,7 +249,7 @@ module("dialog tests", {
         assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
     });
 
-    test("dialog overlay content has 'dx-rtl' class when RTL is enabled", (assert) => {
+    test("dialog overlay content has 'dx-rtl' class when RTL is enabled", function(assert) {
         config({ rtlEnabled: true });
 
         dialog.confirm(this.messageHtml, this.title);
@@ -259,7 +259,7 @@ module("dialog tests", {
         config({ rtlEnabled: false });
     });
 
-    test("should show 'W1013' warning if deprecated 'message' option is used", (assert) => {
+    test("should show 'W1013' warning if deprecated 'message' option is used", function(assert) {
         const originalLog = errors.log;
         let warning = null;
 
@@ -273,7 +273,7 @@ module("dialog tests", {
         }
     });
 
-    test("dialog should reset active element on showing", (assert) => {
+    test("dialog should reset active element on showing", function(assert) {
         const options = {
             title: "title",
             messageHtml: "message"
@@ -290,7 +290,7 @@ module("dialog tests", {
         }
     });
 
-    test("it should be possible to redefine popup option in the dialog", (assert) => {
+    test("it should be possible to redefine popup option in the dialog", function(assert) {
         dialog.custom({
             title: "Test Title",
             popupOptions: {
@@ -307,7 +307,7 @@ module("dialog tests", {
         assert.equal(popup.option("height"), 300, "default option is redefined");
     });
 
-    test("it should apply correct arguments to the button 'onClick' handler", (assert) => {
+    test("it should apply correct arguments to the button 'onClick' handler", function(assert) {
         const clickStub = sinon.stub();
 
         dialog.custom({

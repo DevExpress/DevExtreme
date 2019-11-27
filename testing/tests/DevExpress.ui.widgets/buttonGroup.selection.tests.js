@@ -98,7 +98,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                 config = `, onInitial=${onInitialOption}, selectionMode=${selectionMode}`;
 
                 [null, undefined, []].forEach((selectedOptionValue) => {
-                    QUnit.test(`${selectedOption}: ${selectedOptionValue}` + config, () => {
+                    QUnit.test(`${selectedOption}: ${selectedOptionValue}` + config, function() {
                         let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                         if(selectedOption === "selectedItems") {
@@ -115,7 +115,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     });
                 });
 
-                QUnit.test(`${selectedOption}: ['notExist']` + config, () => {
+                QUnit.test(`${selectedOption}: ['notExist']` + config, function() {
                     try {
                         let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
                         if(selectedOption === "selectedItems") {
@@ -129,7 +129,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1']` + config, () => {
+                QUnit.test(`${selectedOption}: ['btn1']` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -147,7 +147,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkSelectedItems([items[0].id]);
                 });
 
-                QUnit.test(`${selectedOption}: ['btn2']` + config, () => {
+                QUnit.test(`${selectedOption}: ['btn2']` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -165,7 +165,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkSelectedItems([items[1].id]);
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1', 'btn2']` + config, (assert) => {
+                QUnit.test(`${selectedOption}: ['btn1', 'btn2']` + config, function(assert) {
                     if(selectionMode === "single") {
                         assert.ok("skip");
                         return;
@@ -188,7 +188,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkSelectedItems([items[0].id, items[1].id]);
                 });
 
-                QUnit.test(`${selectedOption}: [], click(btn1)` + config, () => {
+                QUnit.test(`${selectedOption}: [], click(btn1)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -207,7 +207,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkSelectedItems([items[0].id]);
                 });
 
-                QUnit.test(`${selectedOption}: [], click(btn2)` + config, () => {
+                QUnit.test(`${selectedOption}: [], click(btn2)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -226,7 +226,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkSelectedItems([items[1].id]);
                 });
 
-                QUnit.test(`${selectedOption}: [], click(btn1, btn2)` + config, () => {
+                QUnit.test(`${selectedOption}: [], click(btn1, btn2)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -256,7 +256,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: [], click(btn1, btn1)` + config, () => {
+                QUnit.test(`${selectedOption}: [], click(btn1, btn1)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -285,7 +285,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: [{ "text": "btn2" }], click(btn1)` + config, () => {
+                QUnit.test(`${selectedOption}: [{ "text": "btn2" }], click(btn1)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -313,7 +313,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: [{ "text": "btn2" }], click(btn2)` + config, () => {
+                QUnit.test(`${selectedOption}: [{ "text": "btn2" }], click(btn2)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -341,7 +341,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: [{ "text": "btn2" }], click(btn1, btn2)` + config, () => {
+                QUnit.test(`${selectedOption}: [{ "text": "btn2" }], click(btn1, btn2)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -371,7 +371,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(btn1)` + config, (assert) => {
+                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(btn1)` + config, function(assert) {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -394,7 +394,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(bnt2)` + config, () => {
+                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(bnt2)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -420,7 +420,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(bnt2, btn1)` + config, () => {
+                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(bnt2, btn1)` + config, function() {
                     let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === "selectedItems") {
@@ -449,7 +449,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                 });
             });
 
-            QUnit.test("KeyExpr: custom, set items: [], selectedItems[], click(btn1) -> click(btn3)" + config, () => {
+            QUnit.test("KeyExpr: custom, set items: [], selectedItems[], click(btn1) -> click(btn3)" + config, function() {
                 let helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
                 helper.createButtonGroup({
                     items: [

@@ -482,3 +482,81 @@ test("Select views by Ctrl+Up, Ctrl+Down keys", async t => {
         focusedRowEnabled: true
     });
 });
+
+test("DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)", async t => {
+    const dataGrid = new DataGrid("#container");
+    const headers = dataGrid.getHeaders();
+
+    await t
+        .click(dataGrid.getDataCell(0, 0).element)
+        .expect(dataGrid.getDataCell(0, 0).element.focused).ok()
+        .pressKey("tab")
+        .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
+        .pressKey("tab")
+        .expect(dataGrid.getDataCell(1, 0).isFocused).ok()
+        .expect(dataGrid.getScrollbarWidth(false)).eql(0);
+}).before(async () => {
+    await createWidget("dxDataGrid", {
+        height: 150,
+        width: 200,
+        columnAutoWidth: true,
+        dataSource: [
+            { c0: "c0_0", c1: "c1_0" },
+            { c0: "c0_1", c1: "c1_1" }
+        ],
+        scrolling: {
+            useNative: true
+        },
+        columns: [
+            "c0",
+            { dataField: "c1", width: 50 }
+        ]
+    });
+});
+
+test("Tab key on the focused group row should be handled by default behavior (T833621)", async t => {
+    const dataGrid = new DataGrid("#container");
+    const groupRow = dataGrid.getGroupRow(1);
+    const pagerPage0 = dataGrid.getPager().getNavPage(0);
+
+    await t
+        .click(groupRow.element)
+        .expect(groupRow.hasHiddenFocusState).ok()
+        .pressKey("tab")
+        .expect(pagerPage0.element.focused).ok()
+        .pressKey("shift+tab")
+        .expect(groupRow.hasHiddenFocusState).notOk()
+        .expect(groupRow.hasFocusedState).notOk()
+        .expect(groupRow.element.focused).ok()
+        .pressKey("tab")
+        .expect(groupRow.hasHiddenFocusState).notOk()
+        .expect(pagerPage0.element.focused).ok();
+}).before(async () => {
+    await createWidget("dxDataGrid", {
+        width: 400,
+        dataSource: [
+            { id: 0, c0: "Test00 resize", c1: "Test10" },
+            { id: 1, c0: "Test01 resize", c1: "Test11" },
+            { id: 1, c0: "Test01 resize", c1: "Test12" },
+            { id: 1, c0: "Test01 resize", c1: "Test10" },
+            { id: 1, c0: "Test01 resize", c1: "Test11" },
+            { id: 1, c0: "Test01 resize", c1: "Test12" },
+            { id: 1, c0: "Test01 resize", c1: "Test10" },
+        ],
+        columns: [
+            "id",
+            "c0",
+            {
+                dataField: "c1",
+                groupIndex: 0,
+                showWhenGrouped: true
+            }
+        ],
+        paging: {
+            pageSize: 2
+        },
+        grouping: {
+            autoExpandAll: false
+        }
+    });
+});

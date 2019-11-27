@@ -14,7 +14,7 @@ const IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcS
 const IMAGE_SIZE = 100;
 
 module("Resizing integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.$element = $("#htmlEditor");
@@ -28,11 +28,11 @@ module("Resizing integration", {
                 .dxHtmlEditor("instance");
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("Click on an image with default resize module config", (assert) => {
+    test("Click on an image with default resize module config", function(assert) {
         this.createWidget();
 
         this.$element
@@ -44,7 +44,7 @@ module("Resizing integration", {
         assert.strictEqual($resizeFrame.length, 0, "There is no resize frame");
     });
 
-    test("Click on an image after enable resizing via optionChange", (assert) => {
+    test("Click on an image after enable resizing via optionChange", function(assert) {
         this.createWidget();
 
         this.instance.option("mediaResizing.enabled", true);
@@ -59,7 +59,7 @@ module("Resizing integration", {
         assert.ok($resizeFrame.is(":visible"), "Resize frame is visible");
     });
 
-    test("Click on an image with enabled resizing", (assert) => {
+    test("Click on an image with enabled resizing", function(assert) {
         this.options.mediaResizing = { enabled: true };
         this.createWidget();
 
@@ -73,7 +73,7 @@ module("Resizing integration", {
         assert.ok($resizeFrame.is(":visible"), "Resize frame is visible");
     });
 
-    test("Click on an image after disable resizing via optionChange", (assert) => {
+    test("Click on an image after disable resizing via optionChange", function(assert) {
         this.options.mediaResizing = { enabled: true };
         this.createWidget();
 
@@ -88,7 +88,7 @@ module("Resizing integration", {
         assert.strictEqual($resizeFrame.length, 0, "There is resize frame");
     });
 
-    test("Click on an image with enabled resizing but remove 'image' from allowed resizing targets", (assert) => {
+    test("Click on an image with enabled resizing but remove 'image' from allowed resizing targets", function(assert) {
         this.createWidget();
 
         this.instance.option("mediaResizing", {
@@ -106,7 +106,7 @@ module("Resizing integration", {
         assert.notOk($resizeFrame.is(":visible"), "Resize frame isn't visible, image isn't resizable");
     });
 
-    test("check editor value after resizing", (assert) => {
+    test("check editor value after resizing", function(assert) {
         const done = assert.async();
         const hOffset = 10;
         const vOffset = 5;

@@ -25,7 +25,6 @@ export default class AppointmentPopup {
     constructor(scheduler) {
         this.scheduler = scheduler;
 
-        this._popup = null;
         this._appointmentForm = null;
 
         this.state = {
@@ -37,6 +36,8 @@ export default class AppointmentPopup {
                 isEmptyDescription: false
             }
         };
+
+        this._popup = this._createPopup();
     }
 
     show(data, showButtons, processTimeZone) {
@@ -44,10 +45,6 @@ export default class AppointmentPopup {
             data: data,
             processTimeZone: processTimeZone
         };
-
-        if(!this._popup) {
-            this._popup = this._createPopup();
-        }
 
         this._popup.option({
             toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
@@ -95,6 +92,17 @@ export default class AppointmentPopup {
         }
     }
 
+    setFirstDayOfWeek(value) {
+        if(this._appointmentForm) {
+            const { expr } = this.scheduler._dataAccessors;
+            const { startDateExpr, endDateExpr, recurrenceRuleExpr } = expr;
+
+            this._appointmentForm.itemOption(startDateExpr, "editorOptions", { calendarOptions: { firstDayOfWeek: value } });
+            this._appointmentForm.itemOption(endDateExpr, "editorOptions", { calendarOptions: { firstDayOfWeek: value } });
+            this._appointmentForm.itemOption(recurrenceRuleExpr, "editorOptions", { firstDayOfWeek: value });
+        }
+    }
+
     _createPopup() {
         const popupElement = $("<div>")
             .addClass(APPOINTMENT_POPUP_CLASS)
@@ -107,6 +115,8 @@ export default class AppointmentPopup {
         return {
             height: "auto",
             maxHeight: "100%",
+            visible: false,
+            deferRendering: false,
             onHiding: () => this.scheduler.focus(),
             contentTemplate: () => this._createPopupContent(),
             defaultOptionsRules: [

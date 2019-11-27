@@ -595,6 +595,8 @@ var ColorView = Editor.inherit({
 
         var editor = new editorType($editor, editorOptions);
 
+        this._attachKeyboardProcessorToEditor(editor);
+
         editor.registerKeyHandler("enter", (function(e) {
             this._fireEnterKeyPressed(e);
         }).bind(this));
@@ -602,6 +604,16 @@ var ColorView = Editor.inherit({
         this.setAria("label", options.labelAriaText, $editor);
 
         return $label;
+    },
+
+    _attachKeyboardProcessorToEditor: function(editor) {
+        var keyboardProcessor = editor._keyboardProcessor;
+
+        if(keyboardProcessor) {
+            keyboardProcessor
+                .attachChildProcessor()
+                .reinitialize(this._keyboardHandler, this);
+        }
     },
 
     hexInputOptions: function() {

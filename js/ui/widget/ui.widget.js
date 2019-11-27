@@ -9,16 +9,15 @@ var $ = require("../../core/renderer"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
     KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
-    eventUtils = require("../../events/utils"),
-    clickEvent = require("../../events/click");
+    eventUtils = require("../../events/utils");
 
+require("../../events/click");
 require("../../events/hover");
 require("../../events/core/emitter.feedback");
 
-const { hover, focus, active } = eventsEngine;
+const { hover, focus, active, dxClick } = eventsEngine;
 
-var UI_FEEDBACK = "UIFeedback",
-    WIDGET_CLASS = "dx-widget",
+var WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",
     DISABLED_STATE_CLASS = "dx-state-disabled",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
@@ -323,20 +322,19 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._renderAccessKey();
     },
 
-    _renderAccessKey: function() {
-        var focusTarget = this._focusTarget();
-        focusTarget.attr("accesskey", this.option("accessKey"));
+    _renderAccessKey() {
+        const $el = this._focusTarget();
+        const { accessKey } = this.option();
+        const namespace = 'UIFeedback';
 
-        var clickNamespace = eventUtils.addNamespace(clickEvent.name, UI_FEEDBACK);
-
-        eventsEngine.off(focusTarget, clickNamespace);
-
-        this.option("accessKey") && eventsEngine.on(focusTarget, clickNamespace, (function(e) {
+        $el.attr('accesskey', accessKey);
+        dxClick.off($el, { namespace });
+        accessKey && dxClick.on($el, e => {
             if(eventUtils.isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this.focus();
             }
-        }).bind(this));
+        }, { namespace });
     },
 
     _isFocusable: function() {
@@ -491,7 +489,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     _attachHoverEvents() {
         const { hoverStateEnabled } = this.option();
         const selector = this._activeStateUnit;
-        const namespace = UI_FEEDBACK;
+        const namespace = 'UIFeedback';
         const $el = this._eventBindingTarget();
 
         hover.off($el, { selector, namespace });
@@ -512,7 +510,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     _attachFeedbackEvents() {
         const { activeStateEnabled } = this.option();
         const selector = this._activeStateUnit;
-        const namespace = UI_FEEDBACK;
+        const namespace = 'UIFeedback';
         const $el = this._eventBindingTarget();
 
         active.off($el, { namespace, selector });

@@ -29,7 +29,7 @@ const moduleConfig = {
 };
 
 QUnit.module("Integration: Resources", moduleConfig, () => {
-    QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935)", assert => {
+    QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935)", function(assert) {
         const views = ["timelineDay", "day"];
         const expectedValues = [
             {
@@ -122,7 +122,7 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
         });
     });
 
-    QUnit.test("Resource editors should have valid value after show appointment form", assert => {
+    QUnit.test("Resource editors should have valid value after show appointment form", function(assert) {
         const dataSource = [{
             text: "Task 1",
             ownerId: 1,
@@ -265,7 +265,7 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
         assert.deepEqual(roomEditor.editorOptions.dataSource.items(), roomResource, "Data source is OK");
     });
 
-    QUnit.test("Editor for resource should be passed to details view for scheduler with groups", function(assert) {
+    QUnit.test("Resource editor of appointment form should be render with valid editor type and data source", function(assert) {
         var task = {
                 text: "Task 1",
                 ownerId: 1,
@@ -307,8 +307,8 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
 
 
         assert.equal(ownerEditor.editorType, "dxTagBox", "Editor is dxTagBox");
-        assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, "Data source is OK");
-        assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, "displayExpr is OK");
+        assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, "The data source of editor is equal to established resources");
+        assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, "The displayExpr of editor is equal to established displayExpr");
     });
 
     QUnit.test("Editor for resource with right value should be passed to details view when fieldExpr is used", function(assert) {
@@ -606,7 +606,7 @@ if(devices.real().deviceType === "desktop") {
         const SCHEDULER_HORIZONTAL_SCROLLBAR = ".dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal";
         const SCHEDULER_SCROLLBAR_CONTAINER = ".dx-scheduler-work-space-both-scrollbar";
 
-        QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", assert => {
+        QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
             const getData = function(count) {
                 let result = [];
                 for(let i = 0; i < count; i++) {

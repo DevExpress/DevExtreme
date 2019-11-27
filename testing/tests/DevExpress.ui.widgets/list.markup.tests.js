@@ -32,12 +32,12 @@ const toSelector = cssClass => {
 };
 
 QUnit.module("List markup", {}, () => {
-    QUnit.test("rendering empty message for empty list", assert => {
+    QUnit.test("rendering empty message for empty list", function(assert) {
         const element = $("#list").dxList();
         assert.equal(element.find(".dx-empty-message").length, 1, "empty message was rendered");
     });
 
-    QUnit.test("default markup", assert => {
+    QUnit.test("default markup", function(assert) {
         const element = $("#list").dxList({ items: ["0", "1"] });
         assert.ok(element.hasClass(LIST_CLASS));
 
@@ -48,7 +48,7 @@ QUnit.module("List markup", {}, () => {
         assert.equal($.trim(items.text()), "01", "all items rendered");
     });
 
-    QUnit.test("itemTemplate default", assert => {
+    QUnit.test("itemTemplate default", function(assert) {
         const element = $("#list").dxList({
             items: ["a", "b"],
             itemTemplate(item, index) {
@@ -62,7 +62,7 @@ QUnit.module("List markup", {}, () => {
         assert.equal(item.eq(1).text(), "1: b");
     });
 
-    QUnit.test("itemTemplate returning string", assert => {
+    QUnit.test("itemTemplate returning string", function(assert) {
         const element = $("#list").dxList({
             items: ["a", "b"],
             itemTemplate(item, index) {
@@ -76,7 +76,7 @@ QUnit.module("List markup", {}, () => {
         assert.equal(item.eq(1).text(), "1: b");
     });
 
-    QUnit.test("itemTemplate returning jquery", assert => {
+    QUnit.test("itemTemplate returning jquery", function(assert) {
         const element = $("#list").dxList({
             items: ["a"],
             itemTemplate(item, index) {
@@ -88,14 +88,14 @@ QUnit.module("List markup", {}, () => {
         assert.ok(item.find("span.test").length);
     });
 
-    QUnit.test("rendering empty message for empty grouplist", assert => {
+    QUnit.test("rendering empty message for empty grouplist", function(assert) {
         const element = $("#list").dxList({
             grouped: true
         });
         assert.equal(element.find(".dx-empty-message").length, 1, "empty message was rendered");
     });
 
-    QUnit.test("groupTemplate default", assert => {
+    QUnit.test("groupTemplate default", function(assert) {
         const element = $("#list").dxList({
             items: [
                 {
@@ -123,7 +123,7 @@ QUnit.module("List markup", {}, () => {
         assert.equal(items.length, 3);
     });
 
-    QUnit.test("groupTemplate returning string", assert => {
+    QUnit.test("groupTemplate returning string", function(assert) {
         const element = $("#list").dxList({
             items: [
                 {
@@ -149,7 +149,7 @@ QUnit.module("List markup", {}, () => {
         assert.equal(groupHeaders.eq(1).text(), "1: b");
     });
 
-    QUnit.test("groupTemplate returning jquery", assert => {
+    QUnit.test("groupTemplate returning jquery", function(assert) {
         const element = $("#list").dxList({
             items: [
                 {
@@ -170,7 +170,7 @@ QUnit.module("List markup", {}, () => {
         assert.ok(groupHeaders.find("span").length);
     });
 
-    QUnit.test("items of group should be in a group body", assert => {
+    QUnit.test("items of group should be in a group body", function(assert) {
         const $element = $("#list").dxList({
             items: [{ key: "a", items: ["0"] }],
             grouped: true
@@ -183,7 +183,7 @@ QUnit.module("List markup", {}, () => {
         assert.equal($groupBody.children("." + LIST_ITEM_CLASS).length, 1, "there are items in items wrapper");
     });
 
-    QUnit.test("next button showing", assert => {
+    QUnit.test("next button showing", function(assert) {
         $("#list").dxList({
             dataSource: {
                 store: [1, 2, 3],
@@ -198,7 +198,7 @@ QUnit.module("List markup", {}, () => {
 });
 
 QUnit.module("widget sizing render", {}, () => {
-    QUnit.test("constructor", assert => {
+    QUnit.test("constructor", function(assert) {
         const $element = $("#list").dxList({ items: [1, 2, 3, 4], width: 400 });
         const instance = $element.dxList("instance");
 
@@ -206,7 +206,7 @@ QUnit.module("widget sizing render", {}, () => {
         assert.strictEqual($element[0].style.width, 400 + "px", "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("root with custom width", assert => {
+    QUnit.test("root with custom width", function(assert) {
         const $element = $("#widthRootStyle").dxList({ items: [1, 2, 3, 4] });
         const instance = $element.dxList("instance");
 
@@ -216,7 +216,7 @@ QUnit.module("widget sizing render", {}, () => {
 });
 
 QUnit.module("nested rendering", {}, () => {
-    QUnit.test("plain list with nested list should contain correct items", assert => {
+    QUnit.test("plain list with nested list should contain correct items", function(assert) {
         const $element = $("<div>").appendTo("#qunit-fixture");
         const instance = new List($element, {
             items: [1, 2],
@@ -231,7 +231,7 @@ QUnit.module("nested rendering", {}, () => {
         assert.equal(instance.itemElements().length, 2, "correct items count");
     });
 
-    QUnit.test("grouped list with nested list should contain correct items", assert => {
+    QUnit.test("grouped list with nested list should contain correct items", function(assert) {
         const $element = $("<div>").appendTo("#qunit-fixture");
         const instance = new List($element, {
             grouped: true,
@@ -253,7 +253,7 @@ var helper;
 if(devices.real().deviceType === "desktop") {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: () => {
+            beforeEach: function() {
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new List($element,
                         $.extend({
@@ -263,12 +263,12 @@ if(devices.real().deviceType === "desktop") {
                 });
                 this.clock = sinon.useFakeTimers();
             },
-            afterEach: () => {
+            afterEach: function() {
                 this.clock.restore();
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test(`Selected: [], selectionMode: "none"`, () => {
+            QUnit.test(`Selected: [], selectionMode: "none"`, function() {
                 helper.createWidget();
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
@@ -276,7 +276,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkItemsAttributes([], { role: "option" });
             });
 
-            QUnit.test(`Selected: ["Item_2"], change searchEnabled after initialize`, () => {
+            QUnit.test(`Selected: ["Item_2"], change searchEnabled after initialize`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_2"], keyExpr: "text", selectionMode: "single" });
                 helper.widget.option("searchEnabled", !searchEnabled);
 
@@ -285,7 +285,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkItemsAttributes([1], { attributes: ["aria-selected"], role: "option" });
             });
 
-            QUnit.test(`Selected: ["Item_2"], selectionMode: "single"`, () => {
+            QUnit.test(`Selected: ["Item_2"], selectionMode: "single"`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_2"], keyExpr: "text", selectionMode: "single" });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
@@ -293,7 +293,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkItemsAttributes([1], { attributes: ["aria-selected"], role: "option" });
             });
 
-            QUnit.test(`Selected: ["Item_2", "Item_3"], selectionMode: "multiple"`, () => {
+            QUnit.test(`Selected: ["Item_2", "Item_3"], selectionMode: "multiple"`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_2", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
@@ -301,7 +301,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkItemsAttributes([1, 2], { attributes: ["aria-selected"], role: "option" });
             });
 
-            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> clean focusedElement`, () => {
+            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> clean focusedElement`, function() {
                 helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
 
                 helper.widget.option("focusedElement", helper.getItems().eq(0));
@@ -317,7 +317,7 @@ if(devices.real().deviceType === "desktop") {
 }
 
 QUnit.module("searching", {}, () => {
-    QUnit.test("searchEnabled", assert => {
+    QUnit.test("searchEnabled", function(assert) {
         const $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true
@@ -340,7 +340,7 @@ const REORDER_HANDLE_CONTAINER_CLASS = "dx-list-reorder-handle-container";
 const REORDER_HANDLE_CLASS = "dx-list-reorder-handle";
 
 QUnit.module("decorators markup", {}, () => {
-    QUnit.test("list item markup, static delete decorator", assert => {
+    QUnit.test("list item markup, static delete decorator", function(assert) {
         const $list = $($("#list").dxList({
             items: ["0", "1", "2"],
             allowItemDeleting: true,
@@ -357,7 +357,7 @@ QUnit.module("decorators markup", {}, () => {
         assert.equal($list.find(toSelector(STATIC_DELETE_BUTTON_CLASS)).length, 3, "delete button was rendered for all items");
     });
 
-    QUnit.test("list item markup, toggle delete decorator", assert => {
+    QUnit.test("list item markup, toggle delete decorator", function(assert) {
         const $list = $($("#templated-list").dxList({
             items: ["0"],
             allowItemDeleting: true,
@@ -372,7 +372,7 @@ QUnit.module("decorators markup", {}, () => {
         assert.ok($deleteToggle.find(toSelector(TOGGLE_DELETE_SWITCH_ICON_CLASS)).length, "toggle icon generated");
     });
 
-    QUnit.test("list item markup, item select decorator", assert => {
+    QUnit.test("list item markup, item select decorator", function(assert) {
         const $list = $($("#templated-list").dxList({
             items: ["0"],
             showSelectionControls: true,
@@ -388,7 +388,7 @@ QUnit.module("decorators markup", {}, () => {
         assert.ok($checkbox.hasClass("dx-checkbox"), "select generated");
     });
 
-    QUnit.test("list item markup, item select decorator with single selection mode", assert => {
+    QUnit.test("list item markup, item select decorator with single selection mode", function(assert) {
         const $list = $($("#templated-list").dxList({
             items: ["0"],
             showSelectionControls: true,
@@ -403,7 +403,7 @@ QUnit.module("decorators markup", {}, () => {
         assert.ok($radioButton.hasClass("dx-radiobutton"), "radio button generated");
     });
 
-    QUnit.test("render selectAll item when showSelectedAll is true, item select decorator with selectAll selection mode", assert => {
+    QUnit.test("render selectAll item when showSelectedAll is true, item select decorator with selectAll selection mode", function(assert) {
         const $list = $($("#list").dxList({
             items: [0],
             showSelectionControls: true,
@@ -418,7 +418,7 @@ QUnit.module("decorators markup", {}, () => {
         assert.equal($checkbox.length, 1, "checkbox rendered");
     });
 
-    QUnit.test("list item markup should be correct, reordering decorator", assert => {
+    QUnit.test("list item markup should be correct, reordering decorator", function(assert) {
         const $list = $($("#templated-list").dxList({
             items: ["0"],
             itemDragging: {
@@ -435,7 +435,7 @@ QUnit.module("decorators markup", {}, () => {
         assert.equal($handle.length, 1, "handle generated");
     });
 
-    QUnit.test("displayExpr option should work", assert => {
+    QUnit.test("displayExpr option should work", function(assert) {
         const $list = $("#list").dxList({
             items: [{ name: "Item 1", id: 1 }],
             displayExpr: "name"

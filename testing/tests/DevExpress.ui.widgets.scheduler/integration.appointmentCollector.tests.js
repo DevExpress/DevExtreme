@@ -25,7 +25,7 @@ const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
 const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
 
 QUnit.module("Integration: Appointments Collector Base Tests", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
 
         this.editing = true;
@@ -57,24 +57,24 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
             }));
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
-    QUnit.test("Appointment collector should be rendered with right class", (assert) => {
+    QUnit.test("Appointment collector should be rendered with right class", function(assert) {
         const $collector = this.renderAppointmentsCollectorContainer();
         assert.ok($collector.hasClass("dx-scheduler-appointment-collector"), "Container is rendered");
         assert.ok($collector.dxButton("instance"), "Container is button");
     });
 
-    QUnit.test("Appointment collector should be painted", (assert) => {
+    QUnit.test("Appointment collector should be painted", function(assert) {
         this.color = "#0000ff";
         const $collector = this.renderAppointmentsCollectorContainer();
 
         assert.equal(new Color($collector.css("backgroundColor")).toHex(), this.color, "Color is OK");
     });
 
-    QUnit.test("Appointment collector should not be painted if items have different colors", (assert) => {
+    QUnit.test("Appointment collector should not be painted if items have different colors", function(assert) {
         this.color = "#0000ff";
         const $collector = this.renderAppointmentsCollectorContainer({
             data: [
@@ -87,7 +87,7 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
         assert.notEqual(new Color($collector.css("backgroundColor")).toHex(), this.color, "Color is OK");
     });
 
-    QUnit.test("Appointment collector should have a correct markup", (assert) => {
+    QUnit.test("Appointment collector should have a correct markup", function(assert) {
         const $button = this.renderAppointmentsCollectorContainer();
         const $collectorContent = $button.find(".dx-scheduler-appointment-collector-content");
 
@@ -97,7 +97,7 @@ QUnit.module("Integration: Appointments Collector Base Tests", {
 });
 
 QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
         this.tasks = [
@@ -113,7 +113,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             return new Color($task.css(checkedProperty)).toHex();
         };
 
-        this.checkItemDataInDropDownTemplate = (assert, dataSource, currentDate) => {
+        this.checkItemDataInDropDownTemplate = function(assert, dataSource, currentDate) {
             this.createInstance({
                 dataSource: dataSource,
                 height: 600,
@@ -127,7 +127,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
             });
             this.scheduler.appointments.compact.click();
         };
-        this.createInstance = (options) => {
+        this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend({
                 dataSource: this.tasks,
                 views: ["month", "week"],
@@ -135,18 +135,18 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
                 currentView: "month",
                 height: 1000,
                 currentDate: new Date(2019, 2, 4),
-                onContentReady: () => {
-                    this.scheduler = new SchedulerTestWrapper(this.instance);
-                }
+                onContentReady: function(e) {
+                    this.scheduler = new SchedulerTestWrapper(e.component);
+                }.bind(this)
             }, options)).dxScheduler("instance");
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("Appointment collector should have correct coordinates on month view", (assert) => {
+    QUnit.test("Appointment collector should have correct coordinates on month view", function(assert) {
         this.createInstance();
 
         assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, "Collector wasn't rendered");
@@ -166,7 +166,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Appointment collector should have correct size in material theme", (assert) => {
+    QUnit.test("Appointment collector should have correct size in material theme", function(assert) {
         const origIsMaterial = themes.isMaterial;
 
         try {
@@ -189,7 +189,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         }
     });
 
-    QUnit.test("DropDown appointment button should have correct coordinates on weekView, not in allDay panel", (assert) => {
+    QUnit.test("DropDown appointment button should have correct coordinates on weekView, not in allDay panel", function(assert) {
         const WEEK_VIEW_BUTTON_OFFSET = 5;
 
         this.createInstance({
@@ -216,7 +216,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Appointment collector should have correct size when intervalCount is set", (assert) => {
+    QUnit.test("Appointment collector should have correct size when intervalCount is set", function(assert) {
         this.createInstance({
             views: [{ type: "month", intervalCount: 2 }],
             width: 850,
@@ -244,7 +244,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.roughEqual(this.scheduler.appointments.compact.getButtonHeight(), 20, 1, "Collector height is ok");
     });
 
-    QUnit.test("Appointment collector count should be ok when there are multiday appointments", (assert) => {
+    QUnit.test("Appointment collector count should be ok when there are multiday appointments", function(assert) {
         this.createInstance({
             views: ['month'],
             currentView: 'month',
@@ -265,7 +265,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.equal(this.scheduler.appointments.compact.getButtonCount(), 3, "Collectors count is ok");
     });
 
-    QUnit.test("Many dropDown appts with one multi day task should be grouped correctly", (assert) => {
+    QUnit.test("Many dropDown appts with one multi day task should be grouped correctly", function(assert) {
         this.createInstance({
             views: ['month'],
             currentView: 'month',
@@ -293,7 +293,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.equal(this.scheduler.tooltip.getItemCount(), 8, "There are 8 collapsed appts");
     });
 
-    QUnit.test("Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)", (assert) => {
+    QUnit.test("Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)", function(assert) {
         this.createInstance({
             views: ['month'],
             currentView: 'month',
@@ -327,7 +327,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.equal(this.scheduler.tooltip.getItemCount(), 13, "There are 13 drop down appts");
     });
 
-    QUnit.test("Appointment collector should have correct coordinates: rtl mode", (assert) =>{
+    QUnit.test("Appointment collector should have correct coordinates: rtl mode", function(assert) {
         this.createInstance({
             currentDate: new Date(2019, 2, 4),
             views: ["month"],
@@ -347,7 +347,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Collapsed appointment should raise the onAppointmentClick event", (assert) => {
+    QUnit.test("Collapsed appointment should raise the onAppointmentClick event", function(assert) {
         let tooltipItemElement = null;
         const spy = sinon.spy();
         const appointments = [
@@ -396,7 +396,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         }
     });
 
-    QUnit.test("Collapse appointment should process the onAppointmentClick event correctly if e.cancel = true", (assert) => {
+    QUnit.test("Collapse appointment should process the onAppointmentClick event correctly if e.cancel = true", function(assert) {
         const spy = sinon.spy();
         this.createInstance({
             currentDate: new Date(2015, 2, 4),
@@ -435,7 +435,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         }
     });
 
-    QUnit.test("Appointment collector should be painted depend on resource color", (assert) => {
+    QUnit.test("Appointment collector should be painted depend on resource color", function(assert) {
         const colors = [
             "#ff0000",
             "#ff0000",
@@ -482,7 +482,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         });
     });
 
-    QUnit.test("Appointment collector should be painted depend on resource color when resourses store is asynchronous", (assert) => {
+    QUnit.test("Appointment collector should be painted depend on resource color when resourses store is asynchronous", function(assert) {
         const colors = [
             "#ff0000",
             "#ff0000",
@@ -541,7 +541,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         });
     });
 
-    QUnit.test("Collapsed appointments should not be duplicated when items option change (T503748)", (assert) => {
+    QUnit.test("Collapsed appointments should not be duplicated when items option change (T503748)", function(assert) {
         this.createInstance({
             views: ['month'],
             currentView: 'month',
@@ -568,7 +568,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.equal(this.scheduler.tooltip.getItemCount(), 2, "There are 3 drop down appts");
     });
 
-    QUnit.test("Collapsed appointment should be rendered correctly with expressions on custom template", (assert) => {
+    QUnit.test("Collapsed appointment should be rendered correctly with expressions on custom template", function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -606,7 +606,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
     });
 
 
-    QUnit.test("Appointment collector should be rendered correctly when appointmentCollectorTemplate is used", (assert) => {
+    QUnit.test("Appointment collector should be rendered correctly when appointmentCollectorTemplate is used", function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -644,7 +644,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.equal($collector.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
     });
 
-    QUnit.test("dxScheduler should render dropDownAppointment appointment template with render function that returns dom node", (assert) => {
+    QUnit.test("dxScheduler should render dropDownAppointment appointment template with render function that returns dom node", function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -692,7 +692,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.equal(this.scheduler.tooltip.getItemElement().text(), "text", "Text is correct on init");
     });
 
-    QUnit.test("Appointment collector should have correct width on timeline view", (assert) => {
+    QUnit.test("Appointment collector should have correct width on timeline view", function(assert) {
         this.createInstance({
             currentDate: new Date(2015, 2, 4),
             views: [{ type: "timelineDay", name: "timelineDay" }],
@@ -716,7 +716,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         assert.roughEqual(collectorWidth, cellWidth - 4, 1.5, "DropDown button has correct width");
     });
 
-    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", (assert) => {
+    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", function(assert) {
         const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
@@ -736,7 +736,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
         this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
-    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", (assert) => {
+    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", function(assert) {
         const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
@@ -762,7 +762,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = false", {
 });
 
 QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
         this.tasks = [
@@ -786,12 +786,12 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         };
         this.scheduler = new SchedulerTestWrapper(this.instance);
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("There are no ordinary appointments on adaptive month view", (assert) => {
+    QUnit.test("There are no ordinary appointments on adaptive month view", function(assert) {
         this.createInstance();
 
         assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, "Collector is rendered");
@@ -803,7 +803,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appointments are not rendered");
     });
 
-    QUnit.test("There are no ordinary appointments on adaptive week view allDay panel", (assert) => {
+    QUnit.test("There are no ordinary appointments on adaptive week view allDay panel", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
@@ -813,7 +813,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appointments are not rendered");
     });
 
-    QUnit.test("Adaptive collector should have correct coordinates", (assert) => {
+    QUnit.test("Adaptive collector should have correct coordinates", function(assert) {
         this.createInstance();
 
         let $collector = this.scheduler.appointments.compact.getButton(0);
@@ -825,7 +825,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Adaptive collector should have correct sizes", (assert) => {
+    QUnit.test("Adaptive collector should have correct sizes", function(assert) {
         this.createInstance();
 
         let $collector = this.scheduler.appointments.compact.getButton(0);
@@ -834,7 +834,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, "Height is OK");
     });
 
-    QUnit.test("Adaptive collector should have correct size in material theme", (assert) => {
+    QUnit.test("Adaptive collector should have correct size in material theme", function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = () => true;
 
@@ -847,7 +847,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         themes.isMaterial = origIsMaterial;
     });
 
-    QUnit.test("Adaptive collector should have correct coordinates on allDay panel", (assert) => {
+    QUnit.test("Adaptive collector should have correct coordinates on allDay panel", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
@@ -862,7 +862,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual(buttonCoordinates.top, (this.scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Adaptive collector should have correct sizes on allDayPanel", (assert) => {
+    QUnit.test("Adaptive collector should have correct sizes on allDayPanel", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
@@ -874,7 +874,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, "Height is OK");
     });
 
-    QUnit.test("Ordinary appointment count depends on scheduler width on week view", (assert) => {
+    QUnit.test("Ordinary appointment count depends on scheduler width on week view", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
@@ -894,7 +894,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
     });
 
-    QUnit.test("Ordinary appointments should have correct sizes on week view", (assert) => {
+    QUnit.test("Ordinary appointments should have correct sizes on week view", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
@@ -917,7 +917,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, "Height is OK");
     });
 
-    QUnit.test("Adaptive collector should have correct coordinates on week view", (assert) => {
+    QUnit.test("Adaptive collector should have correct coordinates on week view", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);
@@ -932,7 +932,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, "Top coordinate is OK");
     });
 
-    QUnit.test("Adaptive collector should have correct coordinates coordinates on week view in compact theme", (assert) => {
+    QUnit.test("Adaptive collector should have correct coordinates coordinates on week view in compact theme", function(assert) {
         try {
             this.themeMock = sinon.stub(themes, "current").returns("generic.light.compact");
             this.createInstance();
@@ -950,7 +950,7 @@ QUnit.module("Integration: Appointments Collector, adaptivityEnabled = true", {
         }
     });
 
-    QUnit.test("Adaptive collector should have correct sizes on week view", (assert) => {
+    QUnit.test("Adaptive collector should have correct sizes on week view", function(assert) {
         this.createInstance();
 
         this.instance.option("dataSource", [{ startDate: new Date(2019, 2, 4), text: "a", endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: "b", endDate: new Date(2019, 2, 4, 0, 30) }]);

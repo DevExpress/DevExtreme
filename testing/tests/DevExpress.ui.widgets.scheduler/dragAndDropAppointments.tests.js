@@ -217,9 +217,9 @@ module("Drag and drop appointments", moduleConfig, () => {
                 .up();
         };
 
-        test("in common views", assert => testViews(commonViews, assert));
-        test("in time line views", assert => testViews(timeLineViews, assert));
-        test("in group views", assert => testViews(groupViews, assert));
+        test("in common views", function(assert) { testViews(commonViews, assert); });
+        test("in time line views", function(assert) { testViews(timeLineViews, assert); });
+        test("in group views", function(assert) { testViews(groupViews, assert); });
     });
 
     module("Appointment should move a same distance as mouse", () => {
@@ -304,9 +304,9 @@ module("Drag and drop appointments", moduleConfig, () => {
             });
         };
 
-        test("in common views", assert => testViews(commonViews, assert));
-        test("in time line views", assert => testViews(timeLineViews, assert));
-        test("in group views", assert => testViews(groupViews, assert));
+        test("in common views", function(assert) { testViews(commonViews, assert); });
+        test("in time line views", function(assert) { testViews(timeLineViews, assert); });
+        test("in group views", function(assert) { testViews(groupViews, assert); });
     });
 
     test("DropDownAppointment shouldn't be draggable if editing.allowDragging is false", function(assert) {
@@ -528,7 +528,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 }, options));
         };
 
-        test("Event calls on appointment drag", assert => {
+        test("Event calls on appointment drag", function(assert) {
             const appointmentDragging = {
                 onDragStart: sinon.spy(),
                 onDragEnd: sinon.spy(),
@@ -563,7 +563,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             assert.strictEqual(appointmentDragging.onRemove.callCount, 0, "onRemove is not called");
         });
 
-        test("Cancel onDragStart event", assert => {
+        test("Cancel onDragStart event", function(assert) {
             const appointmentDragging = {
                 onDragStart: sinon.spy(e => {
                     e.cancel = true;
@@ -594,7 +594,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             assert.strictEqual(appointmentDragging.onDragEnd.callCount, 0, "onDragEnd is not called");
         });
 
-        test("Cancel onDragEnd event", assert => {
+        test("Cancel onDragEnd event", function(assert) {
             const appointmentDragging = {
                 onDragEnd: e => {
                     e.cancel = true;
@@ -622,7 +622,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             assert.deepEqual(dataSource[0].startDate, new Date(2018, 4, 21, 9, 30), "startDate is not changed");
         });
 
-        test("Move appointment from Draggable", assert => {
+        test("Move appointment from Draggable", function(assert) {
             const group = "testGroup";
 
             const appointmentDragging = {
@@ -663,7 +663,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             assert.deepEqual(draggableData, { text: "App from Draggable" }, "draggable data is not changed");
         });
 
-        test("Move appointment to Draggable", assert => {
+        test("Move appointment to Draggable", function(assert) {
             const group = "testGroup";
 
             const appointmentDragging = {
@@ -695,7 +695,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             assert.strictEqual(appointmentDragging.onRemove.getCall(0).args[0].itemData.text, "App 1", "onRemove itemData parameter");
         });
 
-        test("Move appointment to Draggable from tooltip", assert => {
+        test("Move appointment to Draggable from tooltip", function(assert) {
             const group = "testGroup";
 
             const appointmentDragging = {
