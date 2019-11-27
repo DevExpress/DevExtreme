@@ -133,8 +133,8 @@ const chartPlugin = {
                 offsetX: annotation.offsetX,
                 offsetY: annotation.offsetY
             };
-            const argCoordName = this._options.rotated ? "y" : "x";
-            const valCoordName = this._options.rotated ? "x" : "y";
+            const argCoordName = this.option("rotated") ? "y" : "x";
+            const valCoordName = this.option("rotated") ? "x" : "y";
             const argAxis = this.getArgumentAxis();
             const argument = argAxis.validateUnit(annotation.argument);
             let axis = this.getValueAxis(annotation.axis);
