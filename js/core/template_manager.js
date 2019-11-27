@@ -58,7 +58,7 @@ export default class TemplateManager {
                     return noop;
                 },
                 templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
-                createElement: element => new Template(element),
+                createTemplate: element => new Template(element),
             }
         };
     }
@@ -163,7 +163,10 @@ export default class TemplateManager {
         for(let templateName in templatesMap) {
             const deviceTemplate = TemplateManager._findTemplateByDevice(templatesMap[templateName]);
             if(deviceTemplate) {
-                templates.push({ name: templateName, template: deviceTemplate });
+                templates.push({
+                    name: templateName,
+                    template: this._createTemplate(deviceTemplate),
+                });
             }
         }
         return templates;

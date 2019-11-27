@@ -29,8 +29,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         const { templates, anonymousTemplateMeta } = this._templateManager.initTemplates(getElementContent);
 
         templates.forEach(({ name, template }) => {
-            const templateSource = TemplateManager.validateTemplateSource(template);
-            optionTemplates[name] = this.option('integrationOptions.createTemplate')(templateSource);
+            optionTemplates[name] = template;
         });
 
         if(anonymousTemplateMeta.name && !optionTemplates[anonymousTemplateMeta.name]) {
