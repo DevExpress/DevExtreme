@@ -31,10 +31,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 args.handled = true;
             } else if(args.name === "focusedRowEnabled") {
                 args.handled = true;
-            } else if(args.name === "skipFocusedRowNavigation") {
-                args.handled = true;
             } else if(args.name === "autoNavigateToFocusedRow") {
-                this.option("skipFocusedRowNavigation", !args.value);
                 args.handled = true;
             } else {
                 this.callBase(args);
@@ -159,8 +156,6 @@ exports.FocusController = core.ViewController.inherit((function() {
                 isAutoNavigate = that.option("autoNavigateToFocusedRow"),
                 d = new Deferred();
 
-            that.option("skipFocusedRowNavigation", !needFocusRow);
-
             if(key === undefined || !dataController.dataSource()) {
                 return d.reject().promise();
             }
@@ -169,6 +164,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 isPaginate = dataController.getDataSource().paginate();
 
             if(!isAutoNavigate && needFocusRow || !isPaginate || rowIndexByKey >= 0) {
+                if(!isAutoNavigate) {
+                    this.option("focusedRowIndex", -1);
+                }
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
@@ -189,9 +187,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                             that._navigateTo(key, d, needFocusRow);
                         }).fail(d.reject);
                     }
-                })
-                    .always(() => that.option("skipFocusedRowNavigation", false))
-                    .fail(d.reject);
+                }).fail(d.reject);
             }
 
             return d.promise();
@@ -526,10 +522,9 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var isPartialUpdateWithDeleting,
-                        skipFocusedRowNavigation = this.option("skipFocusedRowNavigation");
+                    let isPartialUpdateWithDeleting;
 
-                    if(this.option("focusedRowEnabled") && !skipFocusedRowNavigation && this._dataSource) {
+                    if(this.option("focusedRowEnabled") && this._dataSource) {
                         let isPartialUpdate = e.changeType === "update" && e.repaintChangesOnly;
 
                         isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf("remove") >= 0;
@@ -558,7 +553,8 @@ module.exports = {
                         isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
                         focusedRowKey = this.option("focusedRowKey"),
                         paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex,
-                        pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
+                        pagingByRendering = renderingPageIndex !== prevRenderingPageIndex,
+                        isAutoNavigate = this.option("autoNavigateToFocusedRow");
 
                     this._prevPageIndex = pageIndex;
                     this._prevRenderingPageIndex = renderingPageIndex;
@@ -569,7 +565,7 @@ module.exports = {
                                 focusController._focusRowByIndex();
                             }
                         });
-                    } else if(paging) {
+                    } else if(paging && isAutoNavigate) {
                         if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
                             focusController._focusRowByIndex();
                         }
