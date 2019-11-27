@@ -1,7 +1,7 @@
 import coreDataUtils from "./utils/data";
 import { equals } from "./utils/comparator";
 import typeUtils from "./utils/type";
-import createCallBack from "./utils/callbacks";
+import { noop } from "./utils/common";
 import { extend } from "./utils/extend";
 
 let cachedDeprecateNames = [];
@@ -13,15 +13,15 @@ export class OptionManager {
         this._options = options;
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._changingCallbacks = createCallBack({ syncStrategy: true });
-        this._changedCallbacks = createCallBack({ syncStrategy: true });
-        this._deprecatedCallbacks = createCallBack({ syncStrategy: true });
+        this._changingCallbacks;
+        this._changedCallbacks;
+        this._deprecatedCallbacks;
     }
 
     _notifyDeprecated(option) {
         const info = this._deprecatedOptions[option];
         if(info) {
-            this._deprecatedCallbacks.fire(option, info);
+            this._deprecatedCallbacks(option, info);
         }
     }
 
@@ -84,10 +84,10 @@ export class OptionManager {
             return;
         }
 
-        this._changingCallbacks.fire(name, previousValue, value);
+        this._changingCallbacks(name, previousValue, value);
 
         this._setValue(name, value, merge);
-        this._changedCallbacks.fire(name, value, previousValue);
+        this._changedCallbacks(name, value, previousValue);
     }
 
     _setRelevantNames(options, name, value) {
@@ -145,15 +145,15 @@ export class OptionManager {
     }
 
     onChanging(callBack) {
-        this._changingCallbacks.add(callBack);
+        this._changingCallbacks = callBack;
     }
 
     onChanged(callBack) {
-        this._changedCallbacks.add(callBack);
+        this._changedCallbacks = callBack;
     }
 
     onDeprecated(callBack) {
-        this._deprecatedCallbacks.add(callBack);
+        this._deprecatedCallbacks = callBack;
     }
 
     setValueByReference(options, rulesOptions) {
@@ -188,8 +188,8 @@ export class OptionManager {
     }
 
     dispose() {
-        this._changingCallbacks.empty();
-        this._changedCallbacks.empty();
-        this._deprecatedCallbacks.empty();
+        this._changingCallbacks = noop;
+        this._changedCallbacks = noop;
+        this._deprecatedCallbacks = noop;
     }
 }
