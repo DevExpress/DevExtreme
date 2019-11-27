@@ -167,7 +167,7 @@ QUnit.test("Default drag template", function(assert) {
     // assert
     var $draggingElement = $(".dx-sortable-dragging");
     assert.ok($draggingElement.hasClass("dx-sortable-clone"), "clone class");
-    assert.strictEqual($draggingElement.css("z-index"), "10000", "z-index");
+    assert.strictEqual($draggingElement.css("z-index"), "2147483647", "z-index");
     assert.strictEqual($draggingElement.text(), "item1", "text is correct");
     assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
@@ -175,6 +175,17 @@ QUnit.test("Default drag template", function(assert) {
     assert.strictEqual($draggingElement.children().get(0).style.width, "300px", "width style exists in dragging item");
     assert.strictEqual($items.get(0).style.height, "", "height style does not exist in item");
     assert.strictEqual($draggingElement.children().get(0).style.height, "30px", "height style exists in dragging item");
+});
+
+QUnit.test("While dragging cursor should be 'grab'", function(assert) {
+    // arrange
+    this.createSortable({});
+
+    // act
+    pointerMock(this.$element.children().eq(0)).start().down().move(10, 0);
+
+    // assert
+    assert.equal($(".dx-sortable-dragging").css("cursor"), "grab", "cursor is grab");
 });
 
 QUnit.module("allowReordering", moduleConfig);
@@ -418,7 +429,7 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     $placeholder = $(".dx-sortable-placeholder");
     assert.strictEqual(items.length, 3, "item count is not changed");
     assert.equal($placeholder.length, 1, "placeholder exists");
-    assert.strictEqual($placeholder.css("z-index"), "10000", "z-index");
+    assert.strictEqual($placeholder.css("z-index"), "2147483647", "z-index");
     assert.ok($placeholder.next().hasClass("dx-sortable-dragging"), "palceholder is before dragging");
     assert.equal($placeholder.get(0).style.height, "", "placeholder height");
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
