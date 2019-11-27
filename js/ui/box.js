@@ -528,7 +528,7 @@ class Box extends CollectionWidget {
                     return browser["msie"];
                 },
                 options: {
-                    _layoutStrategy: "flex"
+                    _layoutStrategy: "fallback"
                 }
             }
         ]);
