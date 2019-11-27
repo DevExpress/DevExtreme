@@ -22,6 +22,7 @@ export const Consts = {
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: "dx-filemanager-breadcrumbs-parent-folder-item",
+    BREADCRUMBS_SEPARATOR_ITEM_CLASS: "dx-filemanager-breadcrumbs-separator-item",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     INACTIVE_AREA_CLASS: "dx-filemanager-inactive-area",
@@ -411,7 +412,7 @@ export class FileManagerBreadcrumbsWrapper {
     }
 
     getItems() {
-        return this._$element.find(`.${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+        return this._$element.find(`.${Consts.MENU_ITEM_WITH_TEXT_CLASS}:not(.${Consts.BREADCRUMBS_SEPARATOR_ITEM_CLASS})`);
     }
 
     getItemByText(text) {
@@ -425,7 +426,7 @@ export class FileManagerBreadcrumbsWrapper {
         let result = "";
         const $elements = this.getItems();
         $elements.each((_, element) => {
-            const name = $(element).text() !== " " ? $(element).text() : "";
+            const name = $(element).text();
             result = result ? `${result}/${name}` : name;
         });
         return result;
