@@ -1,6 +1,7 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
     optionManager = require("./option_manager").OptionManager,
+    bracketsToDots = require("./utils/data").bracketsToDots,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -366,16 +367,7 @@ var Component = Class.inherit({
             this._optionManager.setValueByReference(this._initialOptions, rulesOptions);
         }
 
-        optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
-        const fullPath = optionName.split(".");
-        let value;
-        fullPath.forEach((path) => {
-            value = value ? value[path] : this._initialOptions[path];
-        });
-
-        value = typeUtils.isObject(value) ? objectUtils.clone(value) : value;
-
-        return value;
+        return this._initialOptions[optionName];
     },
 
     _defaultActionConfig: function() {
@@ -549,7 +541,20 @@ var Component = Class.inherit({
         if(!name) {
             return;
         }
-        let defaultValue = this.initialOption(name);
+
+        let defaultValue;
+        if(name.search(/\.|\[/) !== -1) {
+            name = bracketsToDots(name);
+            const fullPath = name.split(".");
+            fullPath.forEach((path) => {
+                defaultValue = defaultValue ? defaultValue[path] : this.initialOption(path);
+            });
+        } else {
+            defaultValue = this.initialOption(name);
+        }
+
+        defaultValue = typeUtils.isObject(defaultValue) ? objectUtils.clone(defaultValue) : defaultValue;
+
         this.beginUpdate();
         this._optionManager.setValue(normalizeOptions(name, defaultValue), false);
         this.endUpdate();

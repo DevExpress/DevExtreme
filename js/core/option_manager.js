@@ -1,26 +1,27 @@
 import coreDataUtils from "./utils/data";
 import { equals } from "./utils/comparator";
 import typeUtils from "./utils/type";
-import createCallBack from "./utils/callbacks";
+import { noop } from "./utils/common";
 import { extend } from "./utils/extend";
+
+let cachedDeprecateNames = [];
+let cachedGetters = {};
+let cachedSetters = {};
 
 export class OptionManager {
     constructor(options, optionsByReference, deprecatedOptions) {
         this._options = options;
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._changingCallbacks = createCallBack({ syncStrategy: true });
-        this._changedCallbacks = createCallBack({ syncStrategy: true });
-        this._deprecatedCallbacks = createCallBack({ syncStrategy: true });
-        this._cachedDeprecateNames = [];
-        this.cachedGetters = {};
-        this.cachedSetters = {};
+        this._changingCallback;
+        this._changedCallback;
+        this._deprecatedCallback;
     }
 
     _notifyDeprecated(option) {
         const info = this._deprecatedOptions[option];
         if(info) {
-            this._deprecatedCallbacks.fire(option, info);
+            this._deprecatedCallback(option, info);
         }
     }
 
@@ -62,14 +63,14 @@ export class OptionManager {
     }
 
     _setValue(name, value, merge) {
-        if(!this.cachedSetters[name]) {
-            this.cachedSetters[name] = coreDataUtils.compileSetter(name);
+        if(!cachedSetters[name]) {
+            cachedSetters[name] = coreDataUtils.compileSetter(name);
         }
 
         const path = name.split(/[.[]/);
         merge = typeUtils.isDefined(merge) ? merge : !this._optionsByReference[name];
 
-        this.cachedSetters[name](this._options, value, {
+        cachedSetters[name](this._options, value, {
             functionsAsIs: true,
             merge,
             unwrapObservables: path.length > 1 && !!this._optionsByReference[path[0]]
@@ -83,10 +84,10 @@ export class OptionManager {
             return;
         }
 
-        this._changingCallbacks.fire(name, previousValue, value);
+        this._changingCallback(name, previousValue, value);
 
         this._setValue(name, value, merge);
-        this._changedCallbacks.fire(name, value, previousValue);
+        this._changedCallback(name, value, previousValue);
     }
 
     _setRelevantNames(options, name, value) {
@@ -102,13 +103,13 @@ export class OptionManager {
     _normalizeName(name) {
         if(!name) return;
         let deprecate;
-        if(!this._cachedDeprecateNames.length) {
+        if(!cachedDeprecateNames.length) {
             for(const optionName in this._deprecatedOptions) {
-                this._cachedDeprecateNames.push(optionName);
+                cachedDeprecateNames.push(optionName);
             }
         }
-        for(let i = 0; i < this._cachedDeprecateNames.length; i++) {
-            if(this._cachedDeprecateNames[i] === name) {
+        for(let i = 0; i < cachedDeprecateNames.length; i++) {
+            if(cachedDeprecateNames[i] === name) {
                 deprecate = this._deprecatedOptions[name];
                 break;
             }
@@ -135,24 +136,24 @@ export class OptionManager {
     }
 
     _getValue(options, name, unwrapObservables) {
-        let getter = this.cachedGetters[name];
+        let getter = cachedGetters[name];
         if(!getter) {
-            getter = this.cachedGetters[name] = coreDataUtils.compileGetter(name);
+            getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
         }
 
         return getter(options, { functionsAsIs: true, unwrapObservables });
     }
 
     onChanging(callBack) {
-        this._changingCallbacks.add(callBack);
+        this._changingCallback = callBack;
     }
 
     onChanged(callBack) {
-        this._changedCallbacks.add(callBack);
+        this._changedCallback = callBack;
     }
 
     onDeprecated(callBack) {
-        this._deprecatedCallbacks.add(callBack);
+        this._deprecatedCallback = callBack;
     }
 
     setValueByReference(options, rulesOptions) {
@@ -187,8 +188,8 @@ export class OptionManager {
     }
 
     dispose() {
-        this._changingCallbacks.empty();
-        this._changedCallbacks.empty();
-        this._deprecatedCallbacks.empty();
+        this._changingCallback = noop;
+        this._changedCallback = noop;
+        this._deprecatedCallback = noop;
     }
 }
