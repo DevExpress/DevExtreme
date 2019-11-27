@@ -36,17 +36,13 @@ QUnit.test("Scheduler should have 'readonly' css class", function(assert) {
     assert.notOk(this.instance.$element().hasClass("dx-scheduler-readonly"), "Readonly class is removed");
 });
 
-QUnit.test("popup should not be shown after click on focused cell", function(assert) {
+QUnit.test("popup should not be shown  after click on focused cell", function(assert) {
     this.createInstance();
 
-    $(this.instance.$element())
-        .find(".dx-scheduler-date-table-cell")
-        .first()
-        .trigger("dxpointerdown")
-        .trigger("dxpointerdown")
-        .trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown").trigger("dxclick");
 
-    assert.equal($(".dx-scheduler-appointment-popup.dx-state-invisible .dx-overlay-content").length, 1, "Popup is hidden");
+    assert.notOk($(".dx-scheduler-appointment-popup .dx-overlay-content").length, "Popup is not shown");
+
 });
 
 QUnit.test("popup should not be shown after press Enter", function(assert) {
@@ -58,7 +54,7 @@ QUnit.test("popup should not be shown after press Enter", function(assert) {
     $($workSpace).trigger("focusin");
     keyboard.keyDown("enter");
 
-    assert.equal($(".dx-scheduler-appointment-popup.dx-state-invisible .dx-overlay-content").length, 1, "Popup is hidden");
+    assert.notOk($(".dx-scheduler-appointment-popup .dx-overlay-content").length, "Popup is not shown");
 });
 
 QUnit.test("Appointment should not be draggable & resizable", function(assert) {
