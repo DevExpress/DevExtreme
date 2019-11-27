@@ -46,15 +46,15 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _getTemplate: function(templateSource) {
         const that = this;
         const getIntegrationTemplate = tSource => this.option('integrationOptions.templates')[tSource];
-        const isAsyncTemplate = () => this.option('templatesRenderAsynchronously');
-        const getSkipTemplates = () => this.option('integrationOptions.skipTemplates');
+        const isAsyncTemplate = this.option('templatesRenderAsynchronously');
+        const skipTemplates = this.option('integrationOptions.skipTemplates');
 
         return this._templateManager.getTemplate(
             templateSource,
             that,
             getIntegrationTemplate,
             isAsyncTemplate,
-            getSkipTemplates
+            skipTemplates
         );
     },
 
