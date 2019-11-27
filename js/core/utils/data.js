@@ -203,3 +203,4 @@ var toComparable = function(value, caseSensitive) {
 exports.compileGetter = compileGetter;
 exports.compileSetter = compileSetter;
 exports.toComparable = toComparable;
+exports.bracketsToDots = bracketsToDots;

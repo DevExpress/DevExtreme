@@ -1,6 +1,7 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
     optionManager = require("./option_manager").OptionManager,
+    bracketsToDots = require("./utils/data").bracketsToDots,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -543,7 +544,7 @@ var Component = Class.inherit({
 
         let defaultValue;
         if(name.search(/\.|\[/) !== -1) {
-            name = name.replace(/\[/g, ".").replace(/\]/g, "");
+            name = bracketsToDots(name);
             const fullPath = name.split(".");
             fullPath.forEach((path) => {
                 defaultValue = defaultValue ? defaultValue[path] : this.initialOption(path);
