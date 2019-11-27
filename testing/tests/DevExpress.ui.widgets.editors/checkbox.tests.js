@@ -305,7 +305,46 @@ QUnit.test("check state changes on space press", function(assert) {
 
     $element.trigger("focusin");
     keyboard.keyDown("space");
-
     assert.equal(instance.option("value"), true, "value has been change successfully");
+
+});
+
+QUnit.module("events");
+
+QUnit.test("valueChanged event fired after setting the value by click", function(assert) {
+    const handler = sinon.stub();
+    const $element = $("#checkbox").dxCheckBox({});
+    const checkbox = $element.dxCheckBox("instance");
+
+    checkbox.on("valueChanged", handler);
+
+    $element.trigger("dxclick");
+    assert.ok(handler.calledOnce);
+});
+
+QUnit.test("valueChanged event fired after setting the value by keyboard", function(assert) {
+    const handler = sinon.stub();
+    const $element = $("#checkbox").dxCheckBox({});
+    const checkbox = $element.dxCheckBox("instance");
+    const keyboard = keyboardMock($element);
+
+    checkbox.on("valueChanged", handler);
+
+    $element.trigger("focusin");
+    keyboard.keyDown("space");
+    assert.ok(handler.calledOnce);
+});
+
+QUnit.test("valueChanged event fired after setting the value by option", function(assert) {
+    const handler = sinon.stub();
+    const $element = $("#checkbox").dxCheckBox({
+        value: true
+    });
+    const checkbox = $element.dxCheckBox("instance");
+
+    checkbox.on("valueChanged", handler);
+
+    checkbox.option("value", false);
+    assert.ok(handler.calledOnce);
 });
 
