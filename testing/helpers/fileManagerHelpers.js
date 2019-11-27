@@ -425,7 +425,7 @@ export class FileManagerBreadcrumbsWrapper {
         let result = "";
         const $elements = this.getItems();
         $elements.each((_, element) => {
-            const name = $(element).text();
+            const name = $(element).text() !== " " ? $(element).text() : "";
             result = result ? `${result}/${name}` : name;
         });
         return result;
