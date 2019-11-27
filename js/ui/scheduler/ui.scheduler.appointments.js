@@ -595,6 +595,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this._initialCoordinates = translator.locate(this._$currentAppointment);
             }).bind(this),
             onResizeEnd: (function(e) {
+                this._initialSize = undefined;
                 if(this._escPressed) {
                     e.event.cancel = true;
                     return;
