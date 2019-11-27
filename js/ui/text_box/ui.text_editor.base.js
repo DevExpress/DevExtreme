@@ -844,6 +844,10 @@ const TextEditorBase = Editor.inherit({
     _optionChanged: function(args) {
         var name = args.name;
 
+        if(name === "onKeyPress") {
+            this._checkKeyPressSubscriptions();
+        }
+
         if(inArray(name.replace("on", ""), EVENTS_LIST) > -1) {
             this._refreshEvents();
             return;
@@ -857,9 +861,6 @@ const TextEditorBase = Editor.inherit({
                 break;
             case "onValueChanged":
                 this._createValueChangeAction();
-                break;
-            case "onKeyPress":
-                this._checkKeyPressSubscriptions();
                 break;
             case "focusStateEnabled":
                 this.callBase(args);
