@@ -246,10 +246,10 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
         QUnit.module(`Checkbox selection DataSource: ${sourceOptionName}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
             QUnit.test(`Initialization`, function(assert) {
                 const testSamples = [true, false];
-                testSamples.forEach((optionValue) => {
+                testSamples.forEach((isExpanded) => {
                     const options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: optionValue },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: optionValue }]);
+                        { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
+                        { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
 
                     const treeWrapper = createInstance(options),
                         $item1 = treeWrapper.getElement().find('[aria-level="1"]'),
@@ -257,7 +257,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
                     assert.notEqual(treeWrapper.instance, undefined);
                     assert.equal(treeWrapper.IsVisible($item1), true);
-                    assert.equal(treeWrapper.IsVisible($item2), optionValue);
+                    assert.equal(treeWrapper.IsVisible($item2), isExpanded);
                     treeWrapper.instance.dispose();
                 });
             });

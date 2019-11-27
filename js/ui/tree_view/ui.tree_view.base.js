@@ -940,15 +940,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderSublevel: function($node, node, childNodes) {
         const $nestedNodeContainer = this._renderNodeContainer($node, node);
 
-        const notCycledNodes = childNodes.filter((childNode) => { return node.internalFields.childrenKeys.indexOf(childNode.internalFields.key) !== -1; });
-        this._renderItems($nestedNodeContainer, notCycledNodes);
+        const childNodesByChildrenKeys = childNodes.filter((childNode) => { return node.internalFields.childrenKeys.indexOf(childNode.internalFields.key) !== -1; });
+        this._renderItems($nestedNodeContainer, childNodesByChildrenKeys);
 
-        if(notCycledNodes.length && !node.internalFields.selected) {
-            const firstChild = notCycledNodes[0];
+        if(childNodesByChildrenKeys.length && !node.internalFields.selected) {
+            const firstChild = childNodesByChildrenKeys[0];
             this._updateParentsState(firstChild, this._getNodeElement(firstChild));
         }
 
-        this._normalizeIconState($node, notCycledNodes.length);
+        this._normalizeIconState($node, childNodesByChildrenKeys.length);
 
         if(node.internalFields.expanded) {
             $nestedNodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
