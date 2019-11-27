@@ -202,10 +202,10 @@ export default class TemplateManager {
         return this.createTemplate(TemplateManager.validateTemplateSource(templateSource));
     }
 
-    getTemplate(templateSource, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
+    getTemplate(templateSource, context, getIntegrationTemplate, isAsyncTemplate, getSkipTemplates) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
-                const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
+                const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
 
                 if(!isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
