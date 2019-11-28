@@ -114,10 +114,6 @@ export default class TemplateManager {
         return (isRenderer(templateSource) && templateSource[0]) || templateSource;
     }
 
-    set anonymousTemplateName(templateName) {
-        this._anonymousTemplateName = templateName;
-    }
-
     get anonymousTemplateName() {
         return this._anonymousTemplateName;
     }
