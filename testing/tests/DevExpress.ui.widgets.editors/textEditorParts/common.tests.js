@@ -8,7 +8,7 @@ import caretWorkaround from "./caretWorkaround.js";
 import themes from "ui/themes";
 import config from "core/config";
 import { noop } from "core/utils/common";
-import errors from 'ui/widget/ui.errors';
+import consoleUtils from "core/utils/console";
 
 import "ui/text_box/ui.text_editor";
 
@@ -1069,35 +1069,44 @@ QUnit.module("api", moduleConfig, () => {
         assert.equal(keyUpSpy.callCount, 2, "keyUp event handled twice");
     });
 
-    QUnit.test("widget without onKeyPress does not fire a deprecation warning on render", function(assert) {
-        this.instance.dispose();
-        const logStub = sinon.stub(errors, "log");
-
-        $("#texteditor").dxTextEditor({});
-
-        assert.strictEqual(logStub.callCount, 0, "Warning is not raised");
-        logStub.restore();
-    });
-
     QUnit.test("user onKeyPress event subscriptions fires a deprecation warning", function(assert) {
         this.instance.dispose();
-        const logStub = sinon.stub(errors, "log");
 
-        const textBox = $("#texteditor").dxTextEditor({
-            onKeyPress: noop
-        }).dxTextEditor("instance");
+        const originalLogger = consoleUtils.logger;
+        const log = [];
 
-        assert.strictEqual(logStub.lastCall.args[0], "W0001", "Warning is raised");
+        try {
+            consoleUtils.logger = {
+                warn: function(message) {
+                    log.push({ "warn": message });
+                },
 
-        textBox.option("onKeyPress", null);
-        textBox.option("onKeyPress", undefined);
+                error: function(message) {
+                    log.push({ "error": message });
+                },
 
-        assert.strictEqual(logStub.callCount, 1, "warning don't raised if set a null or undefined value");
+                log: function(message) {
+                    log.push({ "log": message });
+                }
+            };
 
-        textBox.option("onKeyPress", noop);
+            let textBox = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
+            assert.strictEqual(log.length, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
+            textBox.dispose();
 
-        assert.strictEqual(logStub.callCount, 2, "Warning is raised if set a new handler");
-        logStub.restore();
+            textBox = $("#texteditor").dxTextEditor({
+                onKeyPress: noop
+            }).dxTextEditor("instance");
+
+            assert.strictEqual(log.length, 1, "Warning is raised");
+            assert.strictEqual(log[0].warn.substring(0, 5), "W0001", "Warning is correct");
+
+            textBox.option("onKeyPress", null);
+            textBox.option("onKeyPress", noop);
+            assert.strictEqual(log.length, 3, "Warning is raised if set a new handler");
+        } finally {
+            consoleUtils.logger = originalLogger;
+        }
     });
 });
 

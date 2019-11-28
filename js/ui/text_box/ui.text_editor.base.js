@@ -341,6 +341,14 @@ const TextEditorBase = Editor.inherit({
         ]);
     },
 
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            "onKeyPress": { since: "20.1", message: "This event is removed from the web standards and will be deprecated in modern browsers soon." }
+        });
+    },
+
     _getDefaultButtons: function() {
         return [{ name: "clear", Ctor: ClearButton }];
     },
@@ -410,7 +418,6 @@ const TextEditorBase = Editor.inherit({
 
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
-        this._checkKeyPressSubscriptions();
         this.callBase();
     },
 
@@ -835,18 +842,8 @@ const TextEditorBase = Editor.inherit({
         return this._input();
     },
 
-    _checkKeyPressSubscriptions: function() {
-        if(this.option("onKeyPress")) {
-            errors.log("W0001", this.NAME, "onKeyPress", "20.1", "This event is removed from the web standards and will be deprecated in modern browsers soon.");
-        }
-    },
-
     _optionChanged: function(args) {
         var name = args.name;
-
-        if(name === "onKeyPress") {
-            this._checkKeyPressSubscriptions();
-        }
 
         if(inArray(name.replace("on", ""), EVENTS_LIST) > -1) {
             this._refreshEvents();
