@@ -110,32 +110,34 @@ module("Drag and drop appointments", moduleConfig, () => {
                 height: 600
             });
 
-            const getAppointment = () => scheduler.appointments.findFirst(APPOINTMENT_TEXT);
+            const appointment = () => scheduler.appointments.findFirst(APPOINTMENT_TEXT);
             const getSizeByDirection = (appointment) => appointment.isHorizontalResize ? appointment.element.width() : appointment.element.height();
 
             views.forEach(testCase => {
                 scheduler.option("currentView", testCase.name);
                 scheduler.option("dataSource", createDataSource());
 
-                let appointment = getAppointment();
-                const initSize = getSizeByDirection(appointment);
-                appointment.resizeTo(appointment.isHorizontalResize ? "right" : "bottom", 200);
-
-                appointment = getAppointment();
-                const currentSize = getSizeByDirection(appointment);
+                const initSize = getSizeByDirection(appointment());
+                appointment().resizeTo(appointment().isHorizontalResize ? "right" : "bottom", 200);
+                const currentSize = getSizeByDirection(appointment());
 
                 assert.ok(currentSize > initSize, `appointment size should be increase after resize in ${testCase.name} view`);
 
-                const initPosition = appointment.getPosition();
-                const sizeBeforeDragging = appointment.getSize();
-                appointment.dragTo({ x: 200, y: 200 });
+                const positionBeforeDragging = appointment().getPosition();
+                const sizeBeforeDragging = appointment().getSize();
 
-                appointment = getAppointment();
-                const currentPosition = appointment.getPosition();
-                const sizeAfterDragging = appointment.getSize();
+                const offset = appointment().element.offset();
+                const pointer = pointerMock(appointment().element)
+                    .start()
+                    .down(offset.left, offset.top)
+                    .move(10, 10);
+                pointer.up();
 
-                assert.ok(initPosition.left !== currentPosition.left || initPosition.top !== currentPosition.top,
-                    `appointment position should be change after drag in ${testCase.name} view`);
+                const positionAfterDragging = appointment().getPosition();
+                const sizeAfterDragging = appointment().getSize();
+
+                assert.ok(positionBeforeDragging.left === positionAfterDragging.left && positionBeforeDragging.top === positionAfterDragging.top,
+                    `appointment position shouldn't change after drag in ${testCase.name} view`);
                 assert.ok(sizeBeforeDragging.width === sizeAfterDragging.width && sizeBeforeDragging.height === sizeAfterDragging.height,
                     `appointment size shouldn't change after drag in ${testCase.name} view`);
             });
