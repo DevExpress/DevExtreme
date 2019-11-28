@@ -21,7 +21,8 @@ var TABLE_CLASS = "table",
     SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual",
     SCROLLING_MODE_STANDARD = "standard",
-    PIXELS_LIMIT = 250000; // this limit is defined for IE
+    PIXELS_LIMIT = 250000, // this limit is defined for IE
+    LOAD_TIMEOUT = 300;
 
 var isVirtualMode = function(that) {
     return that.option("scrolling.mode") === SCROLLING_MODE_VIRTUAL;
@@ -121,7 +122,11 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                     that.changed.fire(e);
                 },
                 changingDuration: function(e) {
-                    return that._changeTime || 0;
+                    if(that.isLoading()) {
+                        return LOAD_TIMEOUT;
+                    }
+
+                    return that._renderTime || 0;
                 }
             });
 
@@ -136,6 +141,8 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
             if(isLoading) {
                 that._startLoadTime = new Date();
+            } else {
+                that._startLoadTime = undefined;
             }
         },
         _handleLoadError: function() {
@@ -154,7 +161,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this;
 
-            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._changeTime < that.option("scrolling.renderingThreshold")) {
+            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._renderTime < that.option("scrolling.renderingThreshold")) {
                 options.delay = undefined;
             }
 
@@ -338,7 +345,8 @@ var VirtualScrollingRowsViewExtender = (function() {
 
         _renderCore: function(e) {
             var that = this,
-                dataSource;
+                dataSource,
+                startRenderTime = new Date();
 
             that.callBase.apply(that, arguments);
 
@@ -346,13 +354,12 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             if(dataSource && e) {
                 var itemCount = e.items ? e.items.length : 20,
-                    viewportSize = that._dataController.viewportSize() || 20,
-                    startLoadTime = dataSource._startLoadTime;
+                    viewportSize = that._dataController.viewportSize() || 20;
 
                 if(isVirtualRowRendering(that)) {
-                    dataSource._changeTime = (new Date() - startLoadTime) * viewportSize / itemCount;
+                    dataSource._renderTime = (new Date() - startRenderTime) * viewportSize / itemCount;
                 } else {
-                    dataSource._changeTime = (new Date() - startLoadTime);
+                    dataSource._renderTime = (new Date() - startRenderTime);
                 }
             }
         },
@@ -907,7 +914,11 @@ module.exports = {
                             changingDuration: function(e) {
                                 var dataSource = that.dataSource();
 
-                                return dataSource && dataSource._changeTime || 0;
+                                if(dataSource.isLoading()) {
+                                    return LOAD_TIMEOUT;
+                                }
+
+                                return dataSource && dataSource._renderTime || 0;
                             }
                         }, true);
 
