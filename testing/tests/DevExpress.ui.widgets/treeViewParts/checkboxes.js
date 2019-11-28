@@ -258,35 +258,30 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                 });
             });
 
-            ['JQuery node', 'html node', 'key', 'key string'].forEach((selectItemArgType) => {
-                QUnit.test(`SelectItem -> ${selectItemArgType}`, function(assert) {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-                    const wrapper = new TreeViewTestWrapper(options);
+            function runSelectItemTest(getUnselectItemArgument) {
+                let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                    { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
+                const wrapper = new TreeViewTestWrapper(options);
 
-                    const $parent = wrapper.getElement().find('[aria-level="1"]');
+                const $parent = wrapper.getElement().find('[aria-level="1"]');
 
-                    let selectItemArgument;
-                    if(selectItemArgType === 'JQuery node') {
-                        selectItemArgument = $parent;
-                    }
-                    if(selectItemArgType === 'html node') {
-                        selectItemArgument = $parent.get(0);
-                    }
-                    if(selectItemArgType === 'key') {
-                        selectItemArgument = 1;
-                    }
-                    if(selectItemArgType === 'key string') {
-                        selectItemArgument = '1';
-                    }
-                    wrapper.instance.selectItem(selectItemArgument);
-                    wrapper.checkSelectedNodes([0, 1]);
-                    wrapper.instance.dispose();
-                });
+                wrapper.instance.selectItem(getUnselectItemArgument($parent));
+                wrapper.checkSelectedNodes([0, 1]);
+                wrapper.instance.dispose();
+            }
+
+            QUnit.test(`selectItem($node)`, function() {
+                runSelectItemTest($parent => $parent);
+            });
+            QUnit.test(`selectItem(DOMElement)`, function() {
+                runSelectItemTest($parent => $parent.get(0));
+            });
+            QUnit.test(`selectItem(key)`, function() {
+                runSelectItemTest(_ => 1);
             });
 
-            QUnit.test(`SelectAll`, function(assert) {
+            QUnit.test(`selectAll`, function(assert) {
                 let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
@@ -297,33 +292,27 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                 wrapper.instance.dispose();
             });
 
-            ['JQuery node', 'html node', 'key', 'key string'].forEach((unselectItemArgType) => {
-                QUnit.test(`unselectItem -> ${unselectItemArgType}`, function() {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                    const wrapper = new TreeViewTestWrapper(options);
+            function runUnselectItemTest(getUnselectItemArgument) {
+                let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                    { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
+                    { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
+                const wrapper = new TreeViewTestWrapper(options);
 
-                    const $parent = wrapper.getElement().find('[aria-level="1"]');
+                const $parent = wrapper.getElement().find('[aria-level="1"]');
 
-                    let unselectItemArgument;
-                    if(unselectItemArgType === 'JQuery node') {
-                        unselectItemArgument = $parent;
-                    }
-                    if(unselectItemArgType === 'html node') {
-                        unselectItemArgument = $parent.get(0);
-                    }
-                    if(unselectItemArgType === 'key') {
-                        unselectItemArgument = 1;
-                    }
-                    if(unselectItemArgType === 'key string') {
-                        unselectItemArgument = '1';
-                    }
+                wrapper.instance.unselectItem(getUnselectItemArgument($parent));
+                wrapper.checkSelectedNodes([]);
+                wrapper.instance.dispose();
+            }
 
-                    wrapper.instance.unselectItem(unselectItemArgument);
-                    wrapper.checkSelectedNodes([]);
-                    wrapper.instance.dispose();
-                });
+            QUnit.test(`unselectItem($node)`, function() {
+                runUnselectItemTest($parent => $parent);
+            });
+            QUnit.test(`unselectItem(DOMElement)`, function() {
+                runUnselectItemTest($parent => $parent.get(0));
+            });
+            QUnit.test(`unselectItem(key)`, function() {
+                runUnselectItemTest(_ => 1);
             });
 
             QUnit.test(`unselectAll`, function() {

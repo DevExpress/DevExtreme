@@ -716,34 +716,29 @@ module("Expanded items", {
                     });
                 });
 
-                ['JQuery node', 'html node', 'key', 'key string'].forEach((expandItemArgType) => {
-                    [false, true].forEach((isExpanded) => {
-                        QUnit.test(`ExpandItem. Items expanded = ${isExpanded} -> ${expandItemArgType}`, function(assert) {
-                            let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                                { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
-                                { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
-                            let wrapper = new TreeViewTestWrapper(options),
-                                $item1 = wrapper.getElement().find('[aria-level="1"]');
 
-                            let expandItemArgument;
-                            if(expandItemArgType === 'JQuery node') {
-                                expandItemArgument = $item1;
-                            }
-                            if(expandItemArgType === 'html node') {
-                                expandItemArgument = $item1.get(0);
-                            }
-                            if(expandItemArgType === 'key') {
-                                expandItemArgument = 2;
-                            }
-                            if(expandItemArgType === 'key string') {
-                                expandItemArgument = '2';
-                            }
-                            wrapper.instance.expandItem(expandItemArgument);
+                function runExpandItemTest(assert, isExpanded, argumentGetter) {
+                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                        { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
+                        { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
+                    let wrapper = new TreeViewTestWrapper(options),
+                        $item1 = wrapper.getElement().find('[aria-level="1"]');
+                    wrapper.instance.expandItem(argumentGetter($item1));
 
-                            let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
-                            assert.equal($item1_1.is(':visible'), true);
-                            wrapper.instance.dispose();
-                        });
+                    let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    assert.equal($item1_1.is(':visible'), true);
+                    wrapper.instance.dispose();
+                }
+
+                [false, true].forEach((isExpanded) => {
+                    QUnit.test(`expandItem($node)`, function(assert) {
+                        runExpandItemTest(assert, isExpanded, $parent => $parent);
+                    });
+                    QUnit.test(`expandItem(DOMElement)`, function(assert) {
+                        runExpandItemTest(assert, isExpanded, $parent => $parent.get(0));
+                    });
+                    QUnit.test(`expandItem(Key)`, function(assert) {
+                        runExpandItemTest(assert, isExpanded, _ => 2);
                     });
                 });
 
@@ -751,73 +746,42 @@ module("Expanded items", {
                     let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                         { id: 1, text: "item1", parentId: 2, expanded: false },
                         { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let wrapper = new TreeViewTestWrapper(options),
-                        $item1_1 = wrapper.getElement().find('[aria-level="2"]');
-
-                    assert.equal($item1_1.length, 0);
+                    let wrapper = new TreeViewTestWrapper(options);
 
                     wrapper.instance.expandAll();
-                    $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+
+                    const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    assert.equal($item1_1.length, 1);
                     assert.equal($item1_1.is(':visible'), true);
                     wrapper.instance.dispose();
                 });
 
-                ['JQuery node', 'html node', 'key', 'key string'].forEach((collapseItemArgType) => {
-                    QUnit.test(`CollapseItem with expanded nodes -> ${collapseItemArgType}`, function(assert) {
-                        let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                            { id: 1, text: "item1", parentId: 2, expanded: true },
-                            { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                        let wrapper = new TreeViewTestWrapper(options),
-                            $item1 = wrapper.getElement().find('[aria-level="1"]');
+                function runCollapseItemTest(assert, isExpanded, argumentGetter) {
+                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                        { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
+                        { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
+                    let wrapper = new TreeViewTestWrapper(options),
+                        $item1 = wrapper.getElement().find('[aria-level="1"]');
+                    wrapper.instance.collapseItem(argumentGetter($item1));
 
-                        let collapseItemArgument;
-                        if(collapseItemArgType === 'JQuery node') {
-                            collapseItemArgument = $item1;
-                        }
-                        if(collapseItemArgType === 'html node') {
-                            collapseItemArgument = $item1.get(0);
-                        }
-                        if(collapseItemArgType === 'key') {
-                            collapseItemArgument = 2;
-                        }
-                        if(collapseItemArgType === 'key string') {
-                            collapseItemArgument = '2';
-                        }
-                        wrapper.instance.collapseItem(collapseItemArgument);
-
-                        let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    if(isExpanded) {
                         assert.equal($item1_1.is(':hidden'), true);
-                        wrapper.instance.dispose();
-                    });
-                });
-
-
-                ['JQuery node', 'html node', 'key', 'key string'].forEach((collapseItemArgType) => {
-                    QUnit.test(`CollapseItem, with not expanded items -> ${collapseItemArgType}`, function(assert) {
-                        let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                            { id: 1, text: "item1", parentId: 2, expanded: false },
-                            { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                        let wrapper = new TreeViewTestWrapper(options),
-                            $item1 = wrapper.getElement().find('[aria-level="1"]');
-
-                        let collapseItemArgument;
-                        if(collapseItemArgType === 'JQuery node') {
-                            collapseItemArgument = $item1;
-                        }
-                        if(collapseItemArgType === 'html node') {
-                            collapseItemArgument = $item1.get(0);
-                        }
-                        if(collapseItemArgType === 'key') {
-                            collapseItemArgument = 2;
-                        }
-                        if(collapseItemArgType === 'key string') {
-                            collapseItemArgument = '2';
-                        }
-                        wrapper.instance.collapseItem(collapseItemArgument);
-
-                        let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    } else {
                         assert.equal($item1_1.length, 0);
-                        wrapper.instance.dispose();
+                    }
+                    wrapper.instance.dispose();
+                }
+
+                [false, true].forEach((isExpanded) => {
+                    QUnit.test(`collapseItem($node)`, function(assert) {
+                        runCollapseItemTest(assert, isExpanded, $parent => $parent);
+                    });
+                    QUnit.test(`collapseItem(DOMElement)`, function(assert) {
+                        runCollapseItemTest(assert, isExpanded, $parent => $parent.get(0));
+                    });
+                    QUnit.test(`collapseItem(Key)`, function(assert) {
+                        runCollapseItemTest(assert, isExpanded, _ => 2);
                     });
                 });
 
