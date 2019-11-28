@@ -1181,7 +1181,7 @@ const Form = Widget.inherit({
 
             if(optionFullName === "formData") {
                 if(!isDefined(args.value)) {
-                    that.option('formData', args.value = {});
+                    that.option("formData", args.value = {});
                 }
 
                 that._triggerOnFieldDataChangedByDataSet(args.value);

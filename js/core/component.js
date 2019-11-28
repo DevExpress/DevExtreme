@@ -24,15 +24,15 @@ var Config = require("./config"),
 * @hidden
 */
 var Component = Class.inherit({
-    _setDeprecatedOptions: function() {
+    _setDeprecatedOptions() {
         this._deprecatedOptions = {};
     },
 
-    _getDeprecatedOptions: function() {
+    _getDeprecatedOptions() {
         return this._deprecatedOptions;
     },
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return {
             /**
             * @name ComponentOptions.onInitialized
@@ -70,27 +70,27 @@ var Component = Class.inherit({
         };
     },
 
-    _defaultOptionsRules: function() {
+    _defaultOptionsRules() {
         return [];
     },
 
-    _setOptionsByDevice: function(rules) {
+    _setOptionsByDevice(rules) {
         this._options.applyRules(rules);
     },
 
-    _convertRulesToOptions: function(rules) {
+    _convertRulesToOptions(rules) {
         return convertRulesToOptions(rules);
     },
 
-    _isInitialOptionValue: function(name) {
+    _isInitialOptionValue(name) {
         return this._options.isInitial(name);
     },
 
-    _setOptionsByReference: function() {
+    _setOptionsByReference() {
         this._optionsByReference = {};
     },
 
-    _getOptionsByReference: function() {
+    _getOptionsByReference() {
         return this._optionsByReference;
     },
     /**
@@ -99,7 +99,7 @@ var Component = Class.inherit({
     * @param1 options:ComponentOptions|undefined
     * @hidden
     */
-    ctor: function(options = {}) {
+    ctor(options = {}) {
         this.NAME = publicComponentUtils.name(this.constructor);
 
         this._eventsStrategy = EventsStrategy.setEventsStrategy(this, options.eventsStrategy);
@@ -144,7 +144,7 @@ var Component = Class.inherit({
         }
     },
 
-    _initOptions: function(options) {
+    _initOptions(options) {
         this.option(options);
     },
 
@@ -176,15 +176,15 @@ var Component = Class.inherit({
         errors.log("W0001", this.NAME, option, info.since, message);
     },
 
-    _createOptionChangedAction: function() {
+    _createOptionChangedAction() {
         this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly"] });
     },
 
-    _createDisposingAction: function() {
+    _createDisposingAction() {
         this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly"] });
     },
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "onDisposing":
             case "onInitialized":
@@ -197,7 +197,7 @@ var Component = Class.inherit({
         }
     },
 
-    _dispose: function() {
+    _dispose() {
         this._optionChangedCallbacks.empty();
         this._createDisposingAction();
         this._disposingAction();
@@ -211,7 +211,7 @@ var Component = Class.inherit({
      * @publicName instance()
      * @return this
      */
-    instance: function() {
+    instance() {
         return this;
     },
 
@@ -219,7 +219,7 @@ var Component = Class.inherit({
      * @name componentmethods.beginupdate
      * @publicName beginUpdate()
      */
-    beginUpdate: function() {
+    beginUpdate() {
         this._updateLockCount++;
     },
 
@@ -227,7 +227,7 @@ var Component = Class.inherit({
      * @name componentmethods.endupdate
      * @publicName endUpdate()
      */
-    endUpdate: function() {
+    endUpdate() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
             this.postponedOperations.callPostponedOperations();
@@ -237,7 +237,7 @@ var Component = Class.inherit({
 
     _optionChanging: noop,
 
-    _notifyOptionChanged: function(option, value, previousValue) {
+    _notifyOptionChanged(option, value, previousValue) {
         var that = this;
 
         if(this._initialized) {
@@ -261,24 +261,24 @@ var Component = Class.inherit({
         }
     },
 
-    initialOption: function(name) {
+    initialOption(name) {
         return this._options.initial(name);
     },
 
-    _defaultActionConfig: function() {
+    _defaultActionConfig() {
         return {
             context: this,
             component: this
         };
     },
 
-    _defaultActionArgs: function() {
+    _defaultActionArgs() {
         return {
             component: this
         };
     },
 
-    _createAction: function(actionSource, config) {
+    _createAction(actionSource, config) {
         var that = this,
             action;
 
@@ -297,7 +297,7 @@ var Component = Class.inherit({
         };
     },
 
-    _createActionByOption: function(optionName, config) {
+    _createActionByOption(optionName, config) {
         var that = this,
             action,
             eventName,
@@ -353,15 +353,15 @@ var Component = Class.inherit({
         return result;
     },
 
-    _getOptionByStealth: function(name) {
+    _getOptionByStealth(name) {
         return this._options.silent(name);
     },
 
-    _setOptionByStealth: function(options, value) {
+    _setOptionByStealth(options, value) {
         this._options.silent(options, value);
     },
 
-    _getEventName: function(actionName) {
+    _getEventName(actionName) {
         return actionName.charAt(2).toLowerCase() + actionName.substr(3);
     },
 
@@ -401,22 +401,22 @@ var Component = Class.inherit({
         return this;
     },
 
-    hasActionSubscription: function(actionName) {
+    hasActionSubscription(actionName) {
         return !!this.option(actionName) ||
             this._eventsStrategy.hasEvent(this._getEventName(actionName));
     },
 
-    isOptionDeprecated: function(name) {
+    isOptionDeprecated(name) {
         return this._options.isDeprecated(name);
     },
 
-    _setOptionSilent: function(name, value) {
+    _setOptionSilent(name, value) {
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
     },
 
-    _getOptionValue: function(name, context) {
+    _getOptionValue(name, context) {
         var value = this.option(name);
 
         if(isFunction(value)) {
@@ -448,7 +448,7 @@ var Component = Class.inherit({
      * @publicName option(options)
      * @param1 options:object
      */
-    option: function(options, value) {
+    option(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== "object") {
             return this._options.option(options);
         } else {
@@ -467,7 +467,7 @@ var Component = Class.inherit({
      * @publicName resetOption(optionName)
      * @param1 optionName:string
      */
-    resetOption: function(name) {
+    resetOption(name) {
         this.beginUpdate();
         this._options.reset(name);
         this.endUpdate();
