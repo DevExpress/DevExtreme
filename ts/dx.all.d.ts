@@ -598,14 +598,6 @@ declare module DevExpress {
         endUpdate(): void;
         /** @name Component.instance() */
         instance(): this;
-        /** @name Component.off(eventName) */
-        off(eventName: string): this;
-        /** @name Component.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name Component.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name Component.on(events) */
-        on(events: any): this;
         /** @name Component.option() */
         option(): any;
         /** @name Component.option(optionName) */
@@ -679,14 +671,6 @@ declare module DevExpress {
         current(): Device;
         /** @name DevicesObject.current(deviceName) */
         current(deviceName: string | Device): void;
-        /** @name DevicesObject.off(eventName) */
-        off(eventName: string): this;
-        /** @name DevicesObject.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name DevicesObject.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name DevicesObject.on(events) */
-        on(events: any): this;
         /** @name DevicesObject.orientation() */
         orientation(): string;
         /** @name DevicesObject.real() */
@@ -928,6 +912,17 @@ declare module DevExpress {
     }
 }
 declare module DevExpress.core {
+    /** @name EventsStrategy */
+    export class EventsStrategy {
+        /** @name EventsStrategy.off(owner, eventName) */
+        off(eventName: string): any;
+        /** @name EventsStrategy.off(owner, eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): any;
+        /** @name EventsStrategy.on(owner, eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): any;
+        /** @name EventsStrategy.on(owner, events) */
+        on(events: any): any;
+    }
     /** @name dxElement */
     export type dxElement = Element & JQuery;
     /** @name dxTemplate.Options */
@@ -1058,14 +1053,6 @@ declare module DevExpress.data {
         load(): Promise<any> & JQueryPromise<any>;
         /** @name DataSource.loadOptions() */
         loadOptions(): any;
-        /** @name DataSource.off(eventName) */
-        off(eventName: string): this;
-        /** @name DataSource.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name DataSource.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name DataSource.on(events) */
-        on(events: any): this;
         /** @name DataSource.pageIndex() */
         pageIndex(): number;
         /** @name DataSource.pageIndex(newIndex) */
@@ -1381,14 +1368,6 @@ declare module DevExpress.data {
         isLoading(): boolean;
         /** @name PivotGridDataSource.load() */
         load(): Promise<any> & JQueryPromise<any>;
-        /** @name PivotGridDataSource.off(eventName) */
-        off(eventName: string): this;
-        /** @name PivotGridDataSource.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name PivotGridDataSource.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name PivotGridDataSource.on(events) */
-        on(events: any): this;
         /** @name PivotGridDataSource.reload() */
         reload(): Promise<any> & JQueryPromise<any>;
         /** @name PivotGridDataSource.state() */
@@ -1487,14 +1466,6 @@ declare module DevExpress.data {
         load(): Promise<any> & JQueryPromise<any>;
         /** @name Store.load(options) */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
-        /** @name Store.off(eventName) */
-        off(eventName: string): this;
-        /** @name Store.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name Store.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name Store.on(events) */
-        on(events: any): this;
         /** @name Store.push(changes) */
         push(changes: Array<any>): void;
         /** @name Store.remove(key) */

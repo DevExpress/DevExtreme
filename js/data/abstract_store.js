@@ -1,6 +1,8 @@
 var Class = require("../core/class"),
     abstract = Class.abstract,
     EventsStrategy = require("../core/events_strategy").EventsStrategy,
+    on = require("../core/events_strategy").on,
+    off = require("../core/events_strategy").off,
     each = require("../core/utils/iterator").each,
     errorsModule = require("./errors"),
     dataUtils = require("./utils"),
@@ -25,6 +27,8 @@ var Store = Class.inherit({
         var that = this;
         options = options || {};
         this._eventsStrategy = new EventsStrategy(this);
+        this.on = on(this);
+        this.off = off(this);
 
         each(
             [
@@ -322,42 +326,6 @@ var Store = Class.inherit({
 
     _addFailHandlers: function(deferred) {
         return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
-    },
-
-    /**
-     * @name StoreMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name StoreMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
-    on(eventName, eventHandler) {
-        this._eventsStrategy.on(eventName, eventHandler);
-        return this;
-    },
-
-    /**
-     * @name StoreMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name StoreMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    off(eventName, eventHandler) {
-        this._eventsStrategy.off(eventName, eventHandler);
-        return this;
     }
 });
 

@@ -10,6 +10,8 @@ var Class = require("../../core/class"),
     ArrayStore = require("../array_store"),
     CustomStore = require("../custom_store"),
     EventsStrategy = require("../../core/events_strategy").EventsStrategy,
+    on = require("../../core/events_strategy").on,
+    off = require("../../core/events_strategy").off,
     errors = require("../errors").errors,
     array = require("../../core/utils/array"),
     queue = require("../../core/utils/queue"),
@@ -217,6 +219,8 @@ var DataSource = Class.inherit({
         var that = this;
         options = normalizeDataSourceOptions(options);
         this._eventsStrategy = new EventsStrategy(this);
+        this.on = on(this);
+        this.off = off(this);
 
         /**
         * @name DataSourceOptions.store.type
@@ -1090,43 +1094,7 @@ var DataSource = Class.inherit({
         }
 
         return data;
-    },
-
-    /**
-     * @name DataSourceMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name DataSourceMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
-    on(eventName, eventHandler) {
-        this._eventsStrategy.on(eventName, eventHandler);
-        return this;
-    },
-
-    /**
-     * @name DataSourceMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name DataSourceMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    off(eventName, eventHandler) {
-        this._eventsStrategy.off(eventName, eventHandler);
-        return this;
-    },
+    }
 });
 
 exports.DataSource = DataSource;

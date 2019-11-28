@@ -1,7 +1,7 @@
 import { each, map } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import Class from "../../core/class";
-import { EventsStrategy } from "../../core/events_strategy";
+import { EventsStrategy, on, off } from "../../core/events_strategy";
 import ValidationEngine from "../../ui/validation_engine";
 import { Deferred } from "../../core/utils/deferred";
 import Guid from "../../core/guid";
@@ -19,6 +19,8 @@ const koDxValidator = Class.inherit({
         this.validationErrors = ko.observable();
         this.validationStatus = ko.observable(VALIDATION_STATUS_VALID);
         this._eventsStrategy = new EventsStrategy(this);
+        this.on = on(this);
+        this.off = off(this);
 
         this.validationRules = map(validationRules, (rule, index) => {
             return extend({}, rule, {
@@ -99,16 +101,6 @@ const koDxValidator = Class.inherit({
                 this._validationInfo.deferred = null;
             }
         }
-    },
-
-    on(eventName, eventHandler) {
-        this._eventsStrategy.on(eventName, eventHandler);
-        return this;
-    },
-
-    off(eventName, eventHandler) {
-        this._eventsStrategy.off(eventName, eventHandler);
-        return this;
     }
 });
 

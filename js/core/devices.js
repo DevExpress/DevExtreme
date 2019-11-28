@@ -10,6 +10,8 @@ var $ = require("../core/renderer"),
     Callbacks = require("./utils/callbacks"),
     resizeCallbacks = require("./utils/resize_callbacks"),
     EventsStrategy = require("./events_strategy").EventsStrategy,
+    on = require("./events_strategy").on,
+    off = require("./events_strategy").off,
     SessionStorage = require("./utils/storage").sessionStorage,
     viewPort = require("./utils/view_port"),
     Config = require("./config");
@@ -177,6 +179,8 @@ var Devices = Class.inherit({
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
         this._eventsStrategy = new EventsStrategy(this);
+        this.on = on(this);
+        this.off = off(this);
 
         this.changed = Callbacks();
         if(windowUtils.hasWindow()) {
@@ -413,42 +417,6 @@ var Devices = Class.inherit({
 
         this._changeOrientation();
 
-    },
-
-    /**
-     * @name DevicesObjectMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name DevicesObjectMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
-    on(eventName, eventHandler) {
-        this._eventsStrategy.on(eventName, eventHandler);
-        return this;
-    },
-
-    /**
-     * @name DevicesObjectMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name DevicesObjectMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    off(eventName, eventHandler) {
-        this._eventsStrategy.off(eventName, eventHandler);
-        return this;
     }
 });
 
