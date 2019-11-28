@@ -40,13 +40,13 @@ export class EventsStrategy {
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
-     * @returns this
+     * @return this
      */
     /**
      * @name EventsStrategyMethods.on
      * @publicName on(events)
      * @param1 events:object
-     * @returns this
+     * @return this
      */
     on(eventName, eventHandler) {
         if(isPlainObject(eventName)) {

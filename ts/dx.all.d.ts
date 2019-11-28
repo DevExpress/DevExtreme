@@ -919,9 +919,9 @@ declare module DevExpress.core {
         /** @name EventsStrategy.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
         /** @name EventsStrategy.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): void;
+        on(eventName: string, eventHandler: Function): this;
         /** @name EventsStrategy.on(events) */
-        on(events: any): void;
+        on(events: any): this;
     }
     /** @name dxElement */
     export type dxElement = Element & JQuery;
