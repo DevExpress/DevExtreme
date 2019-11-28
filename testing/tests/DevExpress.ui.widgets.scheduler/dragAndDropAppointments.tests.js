@@ -113,8 +113,6 @@ module("Drag and drop appointments", moduleConfig, () => {
             const getAppointment = () => scheduler.appointments.find(APPOINTMENT_TEXT)[0];
             const getSizeByDirection = (appointment) => appointment.isHorizontalResize ? appointment.element.width() : appointment.element.height();
 
-            scheduler.drawControl();
-
             views.forEach(testCase => {
                 scheduler.option("currentView", testCase.name);
                 scheduler.option("dataSource", createDataSource());
@@ -323,7 +321,7 @@ module("Drag and drop appointments", moduleConfig, () => {
         ];
 
         const testAppointmentPosition = (scheduler, text, rtlEnabled, dragCase, viewName, assert) => {
-            const appointment = scheduler.appointments.find(text);
+            const appointment = scheduler.appointments.find(text)[0].element;
 
             const positionBeforeDrag = getAbsolutePosition(appointment);
             const pointer = pointerMock(appointment).start();
