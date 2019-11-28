@@ -86,9 +86,9 @@ QUnit.testStart(() => {
 
 QUnit.module("Form validation rules");
 
-function getID(form, dataField) {
-    return "dx_" + form.option("formID") + "_" + dataField;
-}
+const getID = (form, dataField) => `dx_${form.option("formID")}_${dataField}`;
+
+const createForm = options => $("#form").dxForm(options).dxForm("instance");
 
 QUnit.test("The validation result is invalid when item has validation rules", assert => {
     const form = $("#form").dxForm({
@@ -393,6 +393,31 @@ QUnit.test("validate -> resetValues old test", assert => {
 
     // assert
     assert.equal($("." + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, "validation summary items");
+});
+
+QUnit.test("validate -> the resetValues method is safely called for all item's types", function(assert) {
+    const form = createForm({
+        formData: { name: "TestName" },
+        items: [{
+            itemType: "tabbed",
+            tabs: [{
+                items: [{
+                    itemType: "group",
+                    items: [{
+                        itemType: "button"
+                    }, {
+                        itemType: "empty"
+                    }, {
+                        dataField: "name"
+                    }]
+                }]
+            }]
+        }]
+    });
+
+    form.resetValues();
+
+    assert.equal(form.getEditor("name").option("value"), "", "value of editor");
 });
 
 QUnit.test("validate -> resetValues when there are invalid validation rules", function(assert) {
