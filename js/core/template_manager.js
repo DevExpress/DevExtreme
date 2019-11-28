@@ -38,6 +38,7 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 
     return widgetElement;
 });
+const defaultCreateElement = element => new Template(element);
 
 export default class TemplateManager {
     constructor(createElement) {
@@ -45,7 +46,7 @@ export default class TemplateManager {
         this._defaultTemplates = {};
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
-        this._createElement = createElement;
+        this._createElement = createElement || defaultCreateElement;
     }
 
     static getDefaultOptions() {
@@ -58,7 +59,6 @@ export default class TemplateManager {
                     return noop;
                 },
                 templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
-                createTemplate: element => new Template(element),
             }
         };
     }
