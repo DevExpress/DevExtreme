@@ -131,6 +131,9 @@ export class GanttView extends Widget {
     getRowHeight() {
         return this.option("rowHeight");
     }
+    getHeaderHeight() {
+        return this.option("headerHeight");
+    }
     getGanttTasksData() {
         return this.option("tasks");
     }
