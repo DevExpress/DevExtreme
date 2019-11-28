@@ -7,12 +7,19 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         return extend(this.callBase(), TemplateManager.getDefaultOptions());
     },
 
+    _getAnonymousTemplateName: function() {
+        return undefined;
+    },
+
     _init: function() {
         this.callBase();
 
         const createTemplate = this.option('integrationOptions').createTemplate;
 
-        this._templateManager = new TemplateManager(createTemplate);
+        this._templateManager = new TemplateManager(
+            createTemplate,
+            this._getAnonymousTemplateName()
+        );
         this._initTemplates();
     },
 

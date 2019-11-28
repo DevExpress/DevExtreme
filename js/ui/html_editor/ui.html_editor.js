@@ -241,8 +241,11 @@ const HtmlEditor = Editor.inherit({
         this._contentInitializedCallback = Callbacks();
     },
 
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
+
     _initTemplates: function() {
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             [ANONYMOUS_TEMPLATE_NAME]: new EmptyTemplate()
         });

@@ -200,12 +200,15 @@ const Drawer = Widget.inherit({
         this._hideMenuHandler = this.hide.bind(this);
     },
 
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
+
     _initTemplates() {
         this._templateManager.addDefaultTemplate({
             ["panel"]: new EmptyTemplate(),
             ["content"]: new EmptyTemplate()
         });
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this.callBase();
     },
 

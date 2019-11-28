@@ -271,9 +271,12 @@ var CollectionWidget = Widget.inherit({
         this.callBase();
     },
 
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
+
     _initDefaultItemTemplate: function() {
         var fieldsMap = this._getFieldsMap();
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             ["item"]: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {

@@ -143,8 +143,11 @@ var DropDownBox = DropDownEditor.inherit({
         });
     },
 
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
+
     _initTemplates: function() {
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this.callBase();
     },
 

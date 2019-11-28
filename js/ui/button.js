@@ -250,8 +250,11 @@ class Button extends Widget {
         this.setAria('role', 'button');
     }
 
+    _getAnonymousTemplateName() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    }
+
     _initTemplates() {
-        this._templateManager.anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
         this._templateManager.addDefaultTemplate({
             ['content']: new FunctionTemplate(({ model = {}, container }) => {
                 const { text, icon } = model;

@@ -41,10 +41,10 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 const defaultCreateElement = element => new Template(element);
 
 export default class TemplateManager {
-    constructor(createElement) {
+    constructor(createElement, anonymousTemplateName) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
-        this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
+        this._anonymousTemplateName = anonymousTemplateName || ANONYMOUS_TEMPLATE_NAME;
 
         this._createElement = createElement || defaultCreateElement;
     }
