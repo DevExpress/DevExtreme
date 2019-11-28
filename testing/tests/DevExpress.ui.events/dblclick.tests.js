@@ -37,7 +37,7 @@ QUnit.test("dxdblclick should bubble up", function(assert) {
 
 QUnit.module("timeout", moduleConfig);
 
-QUnit.test("dxdblclick should be fired if element clicked twice with timeout < 300ms", function(assert) {
+QUnit.test("dxdblclick should be fired if element clicked twice with timeout < 500ms", function(assert) {
     assert.expect(1);
 
     var $element = $("#element").on(dblclickEvent.name, function(e) {
@@ -45,12 +45,12 @@ QUnit.test("dxdblclick should be fired if element clicked twice with timeout < 3
         }),
         pointer = pointerMock($element).start();
 
-    pointer.click().wait(299);
-    this.clock.tick(299);
+    pointer.click().wait(499);
+    this.clock.tick(499);
     pointer.click();
 });
 
-QUnit.test("dxdblclick should not be fired if element clicked twice with timeout > 300ms", function(assert) {
+QUnit.test("dxdblclick should not be fired if element clicked twice with timeout > 500ms", function(assert) {
     assert.expect(0);
 
     var $element = $("#element").on(dblclickEvent.name, function(e) {
@@ -58,8 +58,8 @@ QUnit.test("dxdblclick should not be fired if element clicked twice with timeout
         }),
         pointer = pointerMock($element).start();
 
-    pointer.click().wait(301);
-    this.clock.tick(301);
+    pointer.click().wait(501);
+    this.clock.tick(501);
     pointer.click();
 });
 

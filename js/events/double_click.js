@@ -10,7 +10,7 @@ var DBLCLICK_EVENT_NAME = "dxdblclick",
     DBLCLICK_NAMESPACE = "dxDblClick",
     NAMESPACED_CLICK_EVENT = eventUtils.addNamespace(clickEvent.name, DBLCLICK_NAMESPACE),
 
-    DBLCLICK_TIMEOUT = 300;
+    DBLCLICK_TIMEOUT = 500;
 
 
 var DblClick = Class.inherit({
