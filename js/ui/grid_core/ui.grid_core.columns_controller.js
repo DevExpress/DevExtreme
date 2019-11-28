@@ -1795,7 +1795,7 @@ module.exports = {
                 },
 
                 publicMethods: function() {
-                    return ["addColumn", "deleteColumn", "columnOption", "columnCount", "clearSorting", "clearGrouping", "getVisibleColumns"];
+                    return ["addColumn", "deleteColumn", "columnOption", "columnCount", "clearSorting", "clearGrouping", "getVisibleColumns", "getVisibleColumnIndex"];
                 },
                 applyDataSource: function(dataSource, forceApplying) {
                     var that = this,
@@ -2864,6 +2864,20 @@ module.exports = {
                     }
                     return -1;
                 },
+
+                /**
+                 * @name GridBaseMethods.getVisibleColumnIndex
+                 * @publicName getVisibleColumnIndex(id)
+                 * @param1 id:number|string
+                 * @return number
+                 */
+                getVisibleColumnIndex: function(id, rowIndex) {
+                    let option = this.columnOption(id),
+                        index = option && option.index;
+
+                    return this.getVisibleIndex(index, rowIndex);
+                },
+
                 /**
                  * @name dxDataGridMethods.addColumn
                  * @publicName addColumn(columnOptions)

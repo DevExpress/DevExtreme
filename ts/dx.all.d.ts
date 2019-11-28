@@ -2204,6 +2204,8 @@ declare module DevExpress.ui {
         getRowIndexByKey(key: any | string | number): number;
         /** @name GridBase.getScrollable() */
         getScrollable(): dxScrollable;
+        /** @name GridBase.getVisibleColumnIndex(id) */
+        getVisibleColumnIndex(id: number | string): number;
         /** @name GridBase.hasEditData() */
         hasEditData(): boolean;
         /** @name GridBase.hideColumnChooser() */
