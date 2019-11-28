@@ -367,7 +367,7 @@ var Sortable = Draggable.inherit({
         if(itemPoint) {
             this._updatePlaceholderPosition(e, itemPoint);
 
-            if(this.verticalScrollHelper.isScrolling() && this._isIndicateMode()) {
+            if(this._verticalScrollHelper.isScrolling() && this._isIndicateMode()) {
                 this._movePlaceholder();
             }
         }
@@ -557,7 +557,7 @@ var Sortable = Draggable.inherit({
         var hasScrollable = $item.parents().toArray().some(function(element) {
             let $element = $(element);
 
-            if(that.horizontalScrollHelper.isScrollable($element)) {
+            if(that._horizontalScrollHelper.isScrollable($element)) {
                 that._$scrollable = $element;
 
                 return true;

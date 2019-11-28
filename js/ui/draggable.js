@@ -402,8 +402,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         this._scrollAnimator = new ScrollAnimator(this);
 
-        this.horizontalScrollHelper = new ScrollHelper("horizontal", this);
-        this.verticalScrollHelper = new ScrollHelper("vertical", this);
+        this._horizontalScrollHelper = new ScrollHelper("horizontal", this);
+        this._verticalScrollHelper = new ScrollHelper("vertical", this);
     },
 
     _normalizeCursorOffset: function(offset) {
@@ -804,8 +804,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
             },
             allObjects = that.getElementsFromPoint(mousePosition);
 
-        that.verticalScrollHelper && that.verticalScrollHelper.updateScrollable(allObjects, mousePosition);
-        that.horizontalScrollHelper && that.horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+        that._verticalScrollHelper && that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
+        that._horizontalScrollHelper && that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
     },
 
     getElementsFromPoint: function(position) {
@@ -895,8 +895,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
                     this.reset();
                     targetDraggable.reset();
                     this._stopAnimator();
-                    this.horizontalScrollHelper.reset();
-                    this.verticalScrollHelper.reset();
+                    this._horizontalScrollHelper.reset();
+                    this._verticalScrollHelper.reset();
 
                     this._resetDragElement();
                     this._resetSourceElement();
@@ -982,8 +982,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
                 this._attachEventHandlers();
                 break;
             case "autoScroll":
-                this.verticalScrollHelper.reset();
-                this.horizontalScrollHelper.reset();
+                this._verticalScrollHelper.reset();
+                this._horizontalScrollHelper.reset();
                 break;
             case "scrollSensitivity":
             case "scrollSpeed":
