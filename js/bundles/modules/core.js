@@ -27,8 +27,6 @@ DevExpress.Color = require("../../color");
 
 var animationFrame = require("../../animation/frame");
 
-DevExpress.EventsStrategy = require("../../core/events_strategy").EventsStrategy;
-
 /**
  * @name utils
  * @namespace DevExpress

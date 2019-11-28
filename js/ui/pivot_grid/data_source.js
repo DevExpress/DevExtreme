@@ -7,7 +7,7 @@ import { inArray } from "../../core/utils/array";
 import { each, map } from "../../core/utils/iterator";
 import { when, Deferred } from "../../core/utils/deferred";
 import Class from "../../core/class";
-import { EventsStrategy, on, off } from "../../core/events_strategy";
+import { EventsStrategy } from "../../core/events_strategy";
 import { titleize } from "../../core/utils/inflector";
 import { normalizeIndexes } from "../../core/utils/array";
 import { LocalStore } from "./local_store";
@@ -627,6 +627,7 @@ module.exports = Class.inherit((function() {
     /**
     * @name PivotGridDataSource
     * @type object
+    * @inherits EventsStrategy
     * @namespace DevExpress.data
     * @module ui/pivot_grid/data_source
     * @export default
@@ -636,8 +637,6 @@ module.exports = Class.inherit((function() {
         ctor: function(options) {
             options = options || {};
             this._eventsStrategy = new EventsStrategy(this);
-            this.on = on(this);
-            this.off = off(this);
 
             var that = this,
                 store = createStore(options, function(progress) {
@@ -1723,6 +1722,16 @@ module.exports = Class.inherit((function() {
                     });
                 }
             }
+        },
+
+        on(eventName, eventHandler) {
+            this._eventsStrategy.on(eventName, eventHandler);
+            return this;
+        },
+
+        off(eventName, eventHandler) {
+            this._eventsStrategy.off(eventName, eventHandler);
+            return this;
         },
 
         /**

@@ -590,7 +590,7 @@ declare module DevExpress {
         onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
     }
     /** @name Component */
-    export class Component {
+    export class Component extends DevExpress.core.EventsStrategy {
         constructor(options?: ComponentOptions);
         /** @name Component.beginUpdate() */
         beginUpdate(): void;
@@ -665,7 +665,7 @@ declare module DevExpress {
         version?: Array<number>;
     }
     /** @name DevicesObject */
-    export class DevicesObject {
+    export class DevicesObject extends DevExpress.core.EventsStrategy {
         constructor(options: { window?: Window });
         /** @name DevicesObject.current() */
         current(): Device;
@@ -914,14 +914,14 @@ declare module DevExpress {
 declare module DevExpress.core {
     /** @name EventsStrategy */
     export class EventsStrategy {
-        /** @name EventsStrategy.off(owner, eventName) */
-        off(eventName: string): any;
-        /** @name EventsStrategy.off(owner, eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): any;
-        /** @name EventsStrategy.on(owner, eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): any;
-        /** @name EventsStrategy.on(owner, events) */
-        on(events: any): any;
+        /** @name EventsStrategy.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsStrategy.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsStrategy.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): void;
+        /** @name EventsStrategy.on(events) */
+        on(events: any): void;
     }
     /** @name dxElement */
     export type dxElement = Element & JQuery;
@@ -1022,7 +1022,7 @@ declare module DevExpress.data {
         store?: Store | StoreOptions | Array<any> | any;
     }
     /** @name DataSource */
-    export class DataSource {
+    export class DataSource extends DevExpress.core.EventsStrategy {
         constructor(data: Array<any>);
         constructor(options: CustomStoreOptions | DataSourceOptions);
         constructor(store: Store);
@@ -1334,7 +1334,7 @@ declare module DevExpress.data {
         wordWrapEnabled?: boolean;
     }
     /** @name PivotGridDataSource */
-    export class PivotGridDataSource {
+    export class PivotGridDataSource extends DevExpress.core.EventsStrategy {
         constructor(options?: PivotGridDataSourceOptions)
         /** @name PivotGridDataSource.collapseAll(id) */
         collapseAll(id: number | string): void;
@@ -1452,7 +1452,7 @@ declare module DevExpress.data {
         onUpdating?: ((key: any | string | number, values: any) => any);
     }
     /** @name Store */
-    export class Store {
+    export class Store extends DevExpress.core.EventsStrategy {
         constructor(options?: StoreOptions)
         /** @name Store.byKey(key) */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;

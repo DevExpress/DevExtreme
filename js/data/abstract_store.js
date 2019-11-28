@@ -1,8 +1,6 @@
 var Class = require("../core/class"),
     abstract = Class.abstract,
     EventsStrategy = require("../core/events_strategy").EventsStrategy,
-    on = require("../core/events_strategy").on,
-    off = require("../core/events_strategy").off,
     each = require("../core/utils/iterator").each,
     errorsModule = require("./errors"),
     dataUtils = require("./utils"),
@@ -17,6 +15,7 @@ var Class = require("../core/class"),
 /**
 * @name Store
 * @type object
+* @inherits EventsStrategy
 * @hidden
 * @module data/abstract_store
 * @export default
@@ -27,8 +26,6 @@ var Store = Class.inherit({
         var that = this;
         options = options || {};
         this._eventsStrategy = new EventsStrategy(this);
-        this.on = on(this);
-        this.off = off(this);
 
         each(
             [
@@ -326,6 +323,16 @@ var Store = Class.inherit({
 
     _addFailHandlers: function(deferred) {
         return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
+    },
+
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     }
 });
 

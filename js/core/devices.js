@@ -10,8 +10,6 @@ var $ = require("../core/renderer"),
     Callbacks = require("./utils/callbacks"),
     resizeCallbacks = require("./utils/resize_callbacks"),
     EventsStrategy = require("./events_strategy").EventsStrategy,
-    on = require("./events_strategy").on,
-    off = require("./events_strategy").off,
     SessionStorage = require("./utils/storage").sessionStorage,
     viewPort = require("./utils/view_port"),
     Config = require("./config");
@@ -154,6 +152,7 @@ var uaParsers = {
  * @name DevicesObject
  * @publicName devices
  * @section Utils
+ * @inherits EventsStrategy
  * @namespace DevExpress
  * @module core/devices
  * @export default
@@ -179,8 +178,6 @@ var Devices = Class.inherit({
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
         this._eventsStrategy = new EventsStrategy(this);
-        this.on = on(this);
-        this.off = off(this);
 
         this.changed = Callbacks();
         if(windowUtils.hasWindow()) {
@@ -417,6 +414,16 @@ var Devices = Class.inherit({
 
         this._changeOrientation();
 
+    },
+
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     }
 });
 

@@ -9,8 +9,6 @@ var Config = require("./config"),
     typeUtils = require("./utils/type"),
     Callbacks = require("./utils/callbacks"),
     EventsStrategy = require("./events_strategy").EventsStrategy,
-    on = require("./events_strategy").on,
-    off = require("./events_strategy").off,
     publicComponentUtils = require("./utils/public_component"),
     PostponedOperations = require("./postponed_operations").PostponedOperations,
 
@@ -20,6 +18,7 @@ var Config = require("./config"),
 /**
 * @name Component
 * @type object
+* @inherits EventsStrategy
 * @module core/component
 * @export default
 * @namespace DevExpress
@@ -105,8 +104,6 @@ var Component = Class.inherit({
         this.NAME = publicComponentUtils.name(this.constructor);
 
         this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
-        this.on = on(this);
-        this.off = off(this);
 
         this._updateLockCount = 0;
 
@@ -364,6 +361,16 @@ var Component = Class.inherit({
 
     _getEventName: function(actionName) {
         return actionName.charAt(2).toLowerCase() + actionName.substr(3);
+    },
+
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     },
 
     hasActionSubscription: function(actionName) {

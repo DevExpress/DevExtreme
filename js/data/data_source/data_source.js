@@ -10,8 +10,6 @@ var Class = require("../../core/class"),
     ArrayStore = require("../array_store"),
     CustomStore = require("../custom_store"),
     EventsStrategy = require("../../core/events_strategy").EventsStrategy,
-    on = require("../../core/events_strategy").on,
-    off = require("../../core/events_strategy").off,
     errors = require("../errors").errors,
     array = require("../../core/utils/array"),
     queue = require("../../core/utils/queue"),
@@ -219,8 +217,6 @@ var DataSource = Class.inherit({
         var that = this;
         options = normalizeDataSourceOptions(options);
         this._eventsStrategy = new EventsStrategy(this);
-        this.on = on(this);
-        this.off = off(this);
 
         /**
         * @name DataSourceOptions.store.type
@@ -1094,7 +1090,17 @@ var DataSource = Class.inherit({
         }
 
         return data;
-    }
+    },
+
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
+    },
 });
 
 exports.DataSource = DataSource;
