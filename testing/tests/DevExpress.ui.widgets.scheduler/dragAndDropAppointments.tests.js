@@ -110,7 +110,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 height: 600
             });
 
-            const getAppointment = () => scheduler.appointments.find(APPOINTMENT_TEXT)[0];
+            const getAppointment = () => scheduler.appointments.findFirst(APPOINTMENT_TEXT);
             const getSizeByDirection = (appointment) => appointment.isHorizontalResize ? appointment.element.width() : appointment.element.height();
 
             views.forEach(testCase => {
@@ -321,7 +321,7 @@ module("Drag and drop appointments", moduleConfig, () => {
         ];
 
         const testAppointmentPosition = (scheduler, text, rtlEnabled, dragCase, viewName, assert) => {
-            const appointment = scheduler.appointments.find(text)[0].element;
+            const appointment = scheduler.appointments.findFirst(text).element;
 
             const positionBeforeDrag = getAbsolutePosition(appointment);
             const pointer = pointerMock(appointment).start();
@@ -489,7 +489,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             }]
         });
 
-        const $appointment = scheduler.appointments.find("Watercolor Landscape")[0].element;
+        const $appointment = scheduler.appointments.findFirst("Watercolor Landscape").element;
         const positionBeforeDrag = getAbsolutePosition($appointment);
         const pointer = pointerMock($appointment).start();
 
@@ -526,7 +526,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             startDayHour: 9
         });
 
-        let $appointment = scheduler.appointments.find("Task 1")[0].element,
+        let $appointment = scheduler.appointments.findFirst("Task 1").element,
             positionBeforeDrag = getAbsolutePosition($appointment),
             pointer = pointerMock($appointment).start(),
             cellHeight = scheduler.workSpace.getCellHeight();
@@ -539,7 +539,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         pointer.up();
 
-        $appointment = scheduler.appointments.find("Task 1")[0].element;
+        $appointment = scheduler.appointments.findFirst("Task 1").element;
         let positionAfterDrag = getAbsolutePosition($appointment);
 
         assert.deepEqual(positionAfterDrag, {
@@ -595,7 +595,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             });
 
             const dataSource = scheduler.instance.option("dataSource");
-            const appointment = scheduler.appointments.find("App 1")[0].element;
+            const appointment = scheduler.appointments.findFirst("App 1").element;
             const positionBeforeDrag = getAbsolutePosition(appointment);
             const pointer = pointerMock(appointment).start();
 
@@ -630,7 +630,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             });
 
             const dataSource = scheduler.instance.option("dataSource");
-            const appointment = scheduler.appointments.find("App 1")[0].element;
+            const appointment = scheduler.appointments.findFirst("App 1").element;
             const positionBeforeDrag = getAbsolutePosition(appointment);
             const pointer = pointerMock(appointment).start();
 
@@ -660,7 +660,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             });
 
             const dataSource = scheduler.instance.option("dataSource");
-            const appointment = scheduler.appointments.find("App 1")[0].element;
+            const appointment = scheduler.appointments.findFirst("App 1").element;
             const positionBeforeDrag = getAbsolutePosition(appointment);
             const pointer = pointerMock(appointment).start();
 
@@ -694,7 +694,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
             const draggable = createDraggable({ group: group }, draggableData);
 
-            const appointment = scheduler.appointments.find("App 1")[0].element;
+            const appointment = scheduler.appointments.findFirst("App 1").element;
             const appointmentPosition = getAbsolutePosition(appointment);
             const draggablePosition = getAbsolutePosition(draggable);
             const dataSource = scheduler.instance.option("dataSource");
@@ -733,7 +733,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
             const draggable = createDraggable({ group: group });
 
-            const appointment = scheduler.appointments.find("App 1")[0].element;
+            const appointment = scheduler.appointments.findFirst("App 1").element;
             const appointmentPosition = getAbsolutePosition(appointment);
             const draggablePosition = getAbsolutePosition(draggable);
             const dataSource = scheduler.instance.option("dataSource");
@@ -799,7 +799,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 }
             });
 
-            const appointment = scheduler.appointments.find("App 1")[0].element;
+            const appointment = scheduler.appointments.findFirst("App 1").element;
             const appointmentPosition = getAbsolutePosition(appointment);
             const draggablePosition = getAbsolutePosition($dragElement);
             const dataSource = scheduler.instance.option("dataSource");
