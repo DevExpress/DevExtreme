@@ -174,7 +174,7 @@ QUnit.test("Draggable rendering option 'immediate' should be turned off", functi
         editing: true
     });
 
-    var $workspace = $(this.instance.$element()).find(".dx-scrollable-content.dx-draggable"),
+    var $workspace = $(this.instance.$element()).find(".dx-scrollable-content"),
         immediate = $workspace.dxDraggable("instance").option("immediate");
 
     assert.notOk(immediate, "immediate option is false");

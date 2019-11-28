@@ -1,21 +1,22 @@
 import createCallBack from '../utils/callbacks';
 import { compileGetter, compileSetter } from '../utils/data';
+import { noop } from '../utils/common';
 import { equals } from '../utils/comparator';
 import { extend } from '../utils/extend';
 import { isDefined, isPlainObject } from '../utils/type';
 import { normalizeOptions } from './utils';
+
+let cachedGetters = {};
+let cachedSetters = {};
 
 export class OptionManager {
     constructor(options, optionsByReference) {
         this._options = options;
         this._optionsByReference = optionsByReference;
 
-        this._changingCallbacks = createCallBack({ syncStrategy: true });
-        this._changedCallbacks = createCallBack({ syncStrategy: true });
+        this._changingCallback;
+        this._changedCallback;
         this._namePreparedCallbacks = createCallBack({ syncStrategy: true });
-
-        this.cachedGetters = {};
-        this.cachedSetters = {};
     }
 
     _setByReference(options, rulesOptions) {
@@ -34,14 +35,14 @@ export class OptionManager {
         if(!equals(previousValue, value)) {
             const path = name.split(/[.[]/);
 
-            this._changingCallbacks.fire(name, previousValue, value);
-            this.cachedSetters[name] = this.cachedSetters[name] || compileSetter(name);
-            this.cachedSetters[name](this._options, value, {
+            this._changingCallback(name, previousValue, value);
+            cachedSetters[name] = cachedSetters[name] || compileSetter(name);
+            cachedSetters[name](this._options, value, {
                 functionsAsIs: true,
                 merge: isDefined(merge) ? merge : !this._optionsByReference[name],
                 unwrapObservables: path.length > 1 && !!this._optionsByReference[path[0]]
             });
-            this._changedCallbacks.fire(name, value, previousValue);
+            this._changedCallback(name, value, previousValue);
         }
     }
 
@@ -60,9 +61,9 @@ export class OptionManager {
             return this._options[name];
         }
 
-        this.cachedGetters[name] = this.cachedGetters[name] || compileGetter(name);
+        cachedGetters[name] = cachedGetters[name] || compileGetter(name);
 
-        return this.cachedGetters[name](options, { functionsAsIs: true, unwrapObservables });
+        return cachedGetters[name](options, { functionsAsIs: true, unwrapObservables });
     }
 
     set(options, value, merge, silent) {
@@ -86,15 +87,15 @@ export class OptionManager {
     }
 
     onChanging(callBack) {
-        this._changingCallbacks.add(callBack);
+        this._changingCallback = callBack;
     }
 
     onChanged(callBack) {
-        this._changedCallbacks.add(callBack);
+        this._changedCallback = callBack;
     }
 
     dispose() {
-        this._changingCallbacks.empty();
-        this._changedCallbacks.empty();
+        this._changingCallback = noop;
+        this._changedCallback = noop;
     }
 }
