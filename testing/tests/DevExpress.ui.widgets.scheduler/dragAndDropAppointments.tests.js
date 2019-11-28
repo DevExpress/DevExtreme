@@ -88,6 +88,62 @@ module("Drag and drop appointments", moduleConfig, () => {
 
     const getAbsolutePosition = appointment => appointment.offset();
 
+    module("Common cases", () => {
+        test("After drag'n'drop appointment, size of appointment shouldn't change (T835545)", assert => {
+            const APPOINTMENT_TEXT = "app";
+
+            const views = commonViews.concat(timeLineViews);
+
+            const createDataSource = () => {
+                return [{
+                    text: APPOINTMENT_TEXT,
+                    startDate: new Date(2017, 4, 1, 9, 0),
+                    endDate: new Date(2017, 4, 1, 10, 30),
+                }];
+            };
+
+            const scheduler = createWrapper({
+                dataSource: createDataSource(),
+                views: views,
+                startDayHour: 9,
+                currentDate: new Date(2017, 4, 1),
+                height: 600
+            });
+
+            const getAppointment = () => scheduler.appointments.find(APPOINTMENT_TEXT)[0];
+            const getSizeByDirection = (appointment) => appointment.isHorizontalResize ? appointment.element.width() : appointment.element.height();
+
+            scheduler.drawControl();
+
+            views.forEach(testCase => {
+                scheduler.option("currentView", testCase.name);
+                scheduler.option("dataSource", createDataSource());
+
+                let appointment = getAppointment();
+                const initSize = getSizeByDirection(appointment);
+                appointment.resizeTo(appointment.isHorizontalResize ? "right" : "bottom", 200);
+
+                appointment = getAppointment();
+                const currentSize = getSizeByDirection(appointment);
+
+                assert.ok(currentSize > initSize, `appointment size should be increase after resize in ${testCase.name} view`);
+
+                const initPosition = appointment.getPosition();
+                const sizeBeforeDragging = appointment.getSize();
+                appointment.dragTo({ x: 200, y: 200 });
+
+                appointment = getAppointment();
+                const currentPosition = appointment.getPosition();
+                const sizeAfterDragging = appointment.getSize();
+
+                assert.ok(initPosition.left !== currentPosition.left || initPosition.top !== currentPosition.top,
+                    `appointment position should be change after drag in ${testCase.name} view`);
+                assert.ok(sizeBeforeDragging.width === sizeAfterDragging.width && sizeBeforeDragging.height === sizeAfterDragging.height,
+                    `appointment size shouldn't change after drag in ${testCase.name} view`);
+            });
+        });
+    });
+
     module("Appointment should move a same distance in dragging from tooltip case", () => {
         const data = [
             {
@@ -380,7 +436,7 @@ module("Drag and drop appointments", moduleConfig, () => {
         pointer.dragEnd();
     });
 
-    QUnit.test("Appointment should move to the first cell from tooltip case", function(assert) {
+    test("Appointment should move to the first cell from tooltip case", function(assert) {
         const scheduler = createWrapper({
             editing: true,
             height: 600,
@@ -410,7 +466,7 @@ module("Drag and drop appointments", moduleConfig, () => {
         assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), "end date is correct");
     });
 
-    QUnit.test("The recurring appointment should have correct position when dragging", function(assert) {
+    test("The recurring appointment should have correct position when dragging", function(assert) {
         const scheduler = createWrapper({
             editing: true,
             height: 600,
@@ -457,7 +513,7 @@ module("Drag and drop appointments", moduleConfig, () => {
     });
 
     // T832754
-    QUnit.test("The appointment should be dropped correctly after pressing Esc key", function(assert) {
+    test("The appointment should be dropped correctly after pressing Esc key", function(assert) {
         const scheduler = createWrapper({
             editing: true,
             height: 600,
