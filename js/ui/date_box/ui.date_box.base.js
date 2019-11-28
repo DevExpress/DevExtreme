@@ -427,7 +427,7 @@ var DateBox = DropDownEditor.inherit({
         $longestValueElement.remove();
 
         var clearButtonWidth = 0;
-        if(this.option("showClearButton") && $input.val() === "" && !this.option("readOnly")) {
+        if(this._isClearButtonVisible() && $input.val() === "") {
             var clearButtonElement = $dateBox.find("." + DX_CLEAR_BUTTON_CLASS).get(0);
             clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
         }
