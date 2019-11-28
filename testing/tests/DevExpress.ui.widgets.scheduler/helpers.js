@@ -154,6 +154,10 @@ export class SchedulerTestWrapper {
                     .map(element => new Appointment(element));
             },
 
+            findFirst: (text) => {
+                return this.appointments.find(text)[0];
+            },
+
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
                 this.appointments.getAppointment(index).trigger("dxclick");
