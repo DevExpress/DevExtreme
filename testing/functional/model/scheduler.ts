@@ -30,7 +30,11 @@ const CLASS = {
     tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
 
     dialog: 'dx-dialog.dx-popup',
-    dialogButton: `dx-dialog-button`
+    dialogButton: `dx-dialog-button`,
+    navigator: `dx-scheduler-navigator`,
+    navigatorButtonNext: `dx-scheduler-navigator-next`,
+    navigatorButtonPrev: `dx-scheduler-navigator-previous`,
+    navigatorButtonCaption: `dx-scheduler-navigator-caption`
 };
 
 class Appointment {
@@ -163,6 +167,20 @@ class AppointmentTooltip {
     }
 }
 
+class SchedulerNavigator {
+    element: Selector;
+    nextDuration: Selector;
+    prevDuration: Selector;
+    caption: Selector;
+
+    constructor(scheduler: Selector) {
+        this.element = scheduler.find(`.${CLASS.navigator}`);
+        this.nextDuration = Selector(`.${CLASS.navigatorButtonNext}`);
+        this.prevDuration = Selector(`.${CLASS.navigatorButtonPrev}`);
+        this.caption = Selector(`.${CLASS.navigatorButtonCaption}`);
+    }
+}
+
 export default class Scheduler extends Widget {
     dateTableCells: Selector;
     dateTableRows: Selector;
@@ -172,6 +190,7 @@ export default class Scheduler extends Widget {
     workSpaceScroll: { left: Promise<number>, top: Promise<number> };
     appointmentPopup: AppointmentPopup;
     appointmentTooltip: AppointmentTooltip;
+    navigator: SchedulerNavigator;
 
     name: string = 'dxScheduler';
 
@@ -230,5 +249,9 @@ export default class Scheduler extends Widget {
 
     getAppointmentCollectorCount() {
         return this.element.find(`.${CLASS.appointmentCollector}`).count;
+    }
+
+    getNavigator(): SchedulerNavigator {
+        return new SchedulerNavigator(this.element);
     }
 };

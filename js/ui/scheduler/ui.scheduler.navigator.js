@@ -114,8 +114,8 @@ var formatCaptionByMonths = function(lastDate, firstDate) {
 };
 
 var getMonthCaption = function(date) {
-    var firstDate = new Date(date),
-        lastDate = new Date(firstDate),
+    var firstDate = new Date(dateUtils.getFirstMonthDate(date)),
+        lastDate = new Date(dateUtils.getLastMonthDate(firstDate)),
         text;
 
     if(this.option("intervalCount") > 1) {
@@ -335,13 +335,14 @@ var SchedulerNavigator = Widget.inherit({
 
     _updateButtonsState: function() {
         var min = this.option("min"),
-            max = this.option("max");
+            max = this.option("max"),
+            caption = this._getConfig().getCaption.call(this, this.option("displayedDate") || this.option("date"));
 
         min = min ? dateUtils.trimTime(min) : min;
         max = max ? dateUtils.trimTime(max) : max;
 
-        this._prev.option("disabled", min && !isNaN(min.getTime()) && this._getNextDate(-1) < min);
-        this._next.option("disabled", max && !isNaN(max.getTime()) && this._getNextDate(1) > max);
+        this._prev.option("disabled", min && !isNaN(min.getTime()) && this._getNextDate(-1, caption.endDate) < min);
+        this._next.option("disabled", max && !isNaN(max.getTime()) && this._getNextDate(1, caption.startDate) > max);
     },
 
     _updateCurrentDate: function(direction) {
@@ -351,10 +352,10 @@ var SchedulerNavigator = Widget.inherit({
         this.notifyObserver("currentDateUpdated", date);
     },
 
-    _getNextDate: function(direction) {
+    _getNextDate: function(direction, initialDate = null) {
         var stepConfig = this._getConfig(),
             offset = stepConfig.duration * direction,
-            date = stepConfig.getDate(new Date(this.option("date")), offset);
+            date = stepConfig.getDate(new Date(initialDate || this.option("date")), offset);
 
         return date;
     },
