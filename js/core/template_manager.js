@@ -41,15 +41,15 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 const defaultCreateElement = element => new Template(element);
 
 export default class TemplateManager {
-    constructor(createElement, anonymousTemplateName) {
+    constructor(createElement, anonymousTemplateName, defaultTemplates) {
         this._tempTemplates = [];
-        this._defaultTemplates = {};
+        this._defaultTemplates = defaultTemplates || {};
         this._anonymousTemplateName = anonymousTemplateName || ANONYMOUS_TEMPLATE_NAME;
 
         this._createElement = createElement || defaultCreateElement;
     }
 
-    static getDefaultOptions() {
+    static get defaultOptions() {
         return {
             integrationOptions: {
                 watchMethod: (fn, callback, options = {}) => {
@@ -129,14 +129,14 @@ export default class TemplateManager {
         this._tempTemplates = [];
     }
 
-    initTemplates(getElementContent) {
-        const templates = this._extractTemplates(getElementContent);
-        const anonymousTemplateMeta = this._extractAnonymousTemplate(getElementContent);
+    extractTemplates($el) {
+        const templates = this._extractTemplates($el);
+        const anonymousTemplateMeta = this._extractAnonymousTemplate($el);
         return { templates, anonymousTemplateMeta };
     }
 
-    _extractTemplates(getElementContent) {
-        const templateElements = getElementContent().filter(TEMPLATE_SELECTOR);
+    _extractTemplates($el) {
+        const templateElements = $el.contents().filter(TEMPLATE_SELECTOR);
         const templatesMap = {};
 
         templateElements.each((_, template) => {
@@ -168,8 +168,8 @@ export default class TemplateManager {
         return templates;
     }
 
-    _extractAnonymousTemplate(getElementContent) {
-        const $anonymousTemplate = getElementContent().detach();
+    _extractAnonymousTemplate($el) {
+        const $anonymousTemplate = $el.contents().detach();
 
         const $notJunkTemplateContent = $anonymousTemplate.filter((_, element) => {
             const isTextNode = element.nodeType === TEXT_NODE;
@@ -199,10 +199,11 @@ export default class TemplateManager {
         return this._createElement(TemplateManager.validateTemplateSource(templateSource));
     }
 
-    getTemplate(templateSource, context, getIntegrationTemplate, isAsyncTemplate, skipTemplates) {
+    getTemplate(templateSource, templates, { isAsyncTemplate, skipTemplates }) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
-                const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
+                const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
+                // const templateSourceResult = templateSource(TemplateManager._getNormalizedTemplateArgs(options)); // accordion tests
 
                 if(!isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
@@ -215,7 +216,7 @@ export default class TemplateManager {
                     }
                     dispose = true;
                     return this._createTemplate(templateSource);
-                }, getIntegrationTemplate, isAsyncTemplate, skipTemplates);
+                }, templates, isAsyncTemplate, skipTemplates);
 
                 const result = template.render(options);
                 dispose && template.dispose && template.dispose();
@@ -223,10 +224,10 @@ export default class TemplateManager {
             });
         }
 
-        return this._acquireTemplate(templateSource, this._createTemplateIfNeeded.bind(this), getIntegrationTemplate, isAsyncTemplate, skipTemplates);
+        return this._acquireTemplate(templateSource, this._createTemplateIfNeeded.bind(this), templates, isAsyncTemplate, skipTemplates);
     }
 
-    _acquireTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, skipTemplates) {
+    _acquireTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates) {
         if(templateSource == null) {
             return new EmptyTemplate();
         }
@@ -248,11 +249,11 @@ export default class TemplateManager {
             return createTemplate($(templateSource));
         }
 
-        return this._acquireStringTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, skipTemplates);
+        return this._acquireStringTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates);
     }
 
-    _renderIntegrationTemplate(templateSource, getIntegrationTemplate, isAsyncTemplate) {
-        const integrationTemplate = getIntegrationTemplate(templateSource);
+    _renderIntegrationTemplate(templateSource, templates, isAsyncTemplate) {
+        const integrationTemplate = templates[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
             return TemplateManager._addOneRenderedCall(integrationTemplate);

@@ -4,22 +4,27 @@ import TemplateManager from './template_manager';
 
 const DOMComponentWithTemplate = DomComponent.inherit({
     _getDefaultOptions: function() {
-        return extend(this.callBase(), TemplateManager.getDefaultOptions());
+        return extend(this.callBase(), TemplateManager.defaultOptions);
     },
 
     _getAnonymousTemplateName: function() {
-        return undefined;
+        return void 0;
+    },
+
+    _getDefaultTemplates: function() {
+        return void 0;
     },
 
     _init: function() {
         this.callBase();
 
-        const integrationOptions = this.option('integrationOptions');
-        const createTemplate = integrationOptions && integrationOptions.createTemplate;
+        const { integrationOptions = {} } = this.option();
+        const { createTemplate } = integrationOptions;
 
         this._templateManager = new TemplateManager(
             createTemplate,
-            this._getAnonymousTemplateName()
+            this._getAnonymousTemplateName(),
+            this._getDefaultTemplates()
         );
         this._initTemplates();
     },
@@ -30,18 +35,17 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _initTemplates: function() {
-        const getElementContent = () => this.$element().contents();
-        const { templates, anonymousTemplateMeta } = this._templateManager.initTemplates(getElementContent);
-        const anonymousTemplate = this.option('integrationOptions.templates.' + anonymousTemplateMeta.name);
+        const { templates, anonymousTemplateMeta } = this._templateManager.extractTemplates(this.$element());
+        const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
 
         templates.forEach(({ name, template }) => {
             // TODO: we should use `silent` instead of `this._setOptionSilent` method here
-            this._setOptionSilent('integrationOptions.templates.' + name, template);
+            this._setOptionSilent(`integrationOptions.templates.${name}`, template);
         });
 
         if(anonymousTemplateMeta.name && !anonymousTemplate) {
             // TODO: we should use `silent` instead of `this._setOptionSilent` method here
-            this._setOptionSilent('integrationOptions.templates.' + anonymousTemplateMeta.name, anonymousTemplateMeta.template);
+            this._setOptionSilent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
         }
     },
 
@@ -50,17 +54,17 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _getTemplate: function(templateSource) {
-        const that = this;
-        const getIntegrationTemplate = tSource => this.option('integrationOptions.templates')[tSource];
+        const templates = this.option('integrationOptions.templates');
         const isAsyncTemplate = this.option('templatesRenderAsynchronously');
         const skipTemplates = this.option('integrationOptions.skipTemplates');
 
         return this._templateManager.getTemplate(
             templateSource,
-            that,
-            getIntegrationTemplate,
-            isAsyncTemplate,
-            skipTemplates
+            templates,
+            {
+                isAsyncTemplate,
+                skipTemplates
+            }
         );
     },
 
