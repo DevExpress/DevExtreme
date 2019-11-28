@@ -258,7 +258,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                 });
             });
 
-            function runSelectItemTest(getUnselectItemArgument) {
+            function runSelectItemTest(argumentGetter) {
                 let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
@@ -266,7 +266,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
                 const $parent = wrapper.getElement().find('[aria-level="1"]');
 
-                wrapper.instance.selectItem(getUnselectItemArgument($parent));
+                wrapper.instance.selectItem(argumentGetter($parent));
                 wrapper.checkSelectedNodes([0, 1]);
                 wrapper.instance.dispose();
             }
@@ -292,7 +292,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                 wrapper.instance.dispose();
             });
 
-            function runUnselectItemTest(getUnselectItemArgument) {
+            function runUnselectItemTest(argumentGetter) {
                 let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
@@ -300,7 +300,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
                 const $parent = wrapper.getElement().find('[aria-level="1"]');
 
-                wrapper.instance.unselectItem(getUnselectItemArgument($parent));
+                wrapper.instance.unselectItem(argumentGetter($parent));
                 wrapper.checkSelectedNodes([]);
                 wrapper.instance.dispose();
             }
