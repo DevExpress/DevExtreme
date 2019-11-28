@@ -102,7 +102,7 @@ QUnit.module("Markup", moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
         const elements = this.$element.find(TASK_WRAPPER_SELECTOR);
-        assert.equal(elements.length, tasks.length);
+        assert.equal(elements.length, tasks.length - 1);
     });
     test("should render dependencies", function(assert) {
         this.createInstance(allSourcesOptions);
@@ -382,7 +382,7 @@ QUnit.module("Actions", moduleConfig, () => {
     test("expand", function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
         const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger("dxclick");
         this.clock.tick();
@@ -391,11 +391,11 @@ QUnit.module("Actions", moduleConfig, () => {
     test("collapse", function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
         const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger("dxclick");
         this.clock.tick();
-        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
     });
 
     test("move splitter", function(assert) {
