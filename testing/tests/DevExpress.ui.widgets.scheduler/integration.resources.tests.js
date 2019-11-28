@@ -8,7 +8,6 @@ import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
 import CustomStore from "data/custom_store";
 import Color from "color";
-import translator from "animation/translator";
 
 import "ui/scheduler/ui.scheduler";
 
@@ -114,7 +113,7 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
             const expectedValue = expectedValues[index];
             ["appointment1", "appointment2"].forEach(appointmentName => {
                 const expectedPosition = expectedValue[appointmentName];
-                const position = translator.locate(scheduler.appointments.find(appointmentName));
+                const position = scheduler.appointments.find(appointmentName)[0].getPosition();
 
                 assert.roughEqual(position.top, expectedPosition.top, 2, `top position of ${appointmentName} should be valid in ${view}`);
                 assert.roughEqual(position.left, expectedPosition.left, 2, `left position of ${appointmentName} should be valid in ${view}`);
