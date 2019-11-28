@@ -1,10 +1,21 @@
 import $ from "jquery";
 import translator from "animation/translator";
 import devices from "core/devices";
+import pointerMock from "../../helpers/pointerMock.js";
 import "ui/scheduler/ui.scheduler";
 
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
+
+const CLASSES = {
+    appointment: ".dx-scheduler-appointment",
+    appointmentTitle: ".dx-scheduler-appointment-title",
+
+    appointmentResizeTopHandle: ".dx-resizable-handle-top",
+    appointmentResizeBottomHandle: ".dx-resizable-handle-bottom",
+    appointmentResizeLeftHandle: ".dx-resizable-handle-left",
+    appointmentResizeRightHandle: ".dx-resizable-handle-right"
+};
 
 const SCHEDULER_ID = "scheduler";
 const TEST_ROOT_ELEMENT_ID = "qunit-fixture";
@@ -14,6 +25,69 @@ export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id=
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler("instance"));
 
 export const isDesktopEnvironment = () => devices.real().deviceType === "desktop";
+
+class Appointment {
+    constructor(element) {
+        this.element = $(element);
+
+        this.resizeTopHandle = this.element.find(CLASSES.appointmentResizeTopHandle);
+        this.resizeBottomHandle = this.element.find(CLASSES.appointmentResizeBottomHandle);
+        this.resizeLeftHandle = this.element.find(CLASSES.appointmentResizeLeftHandle);
+        this.resizeRightHandle = this.element.find(CLASSES.appointmentResizeRightHandle);
+
+        this.isHorizontalResize = this.resizeLeftHandle.length > 0;
+    }
+
+    getPosition() {
+        return translator.locate(this.element);
+    }
+
+    getSize() {
+        return {
+            width: this.element.width(),
+            height: this.element.height()
+        };
+    }
+
+    dragTo(position) {
+        const offset = this.element.offset();
+        const pointer = pointerMock(this.element)
+            .start()
+            .down(offset.left, offset.top);
+        pointer.move(position.x, position.y);
+        pointer.up();
+    }
+
+    resizeTo(direction, value) {
+        let element = null;
+        const position = { x: 0, y: 0 };
+
+        switch(direction) {
+            case "top":
+                element = this.resizeTopHandle;
+                position.y = value;
+                break;
+            case "bottom":
+                element = this.resizeBottomHandle;
+                position.y = value;
+                break;
+            case "left":
+                element = this.resizeLeftHandle;
+                position.x = value;
+                break;
+            case "right":
+                element = this.resizeRightHandle;
+                position.x = value;
+                break;
+        }
+
+        pointerMock(element)
+            .start()
+            .down()
+            .move(position.x, position.y)
+            .up();
+    }
+}
 
 export class SchedulerTestWrapper {
     constructor(instance) {
@@ -63,7 +137,7 @@ export class SchedulerTestWrapper {
         };
 
         this.appointments = {
-            getAppointments: () => $(".dx-scheduler-appointment"),
+            getAppointments: () => $(CLASSES.appointment),
             getAppointmentCount: () => this.appointments.getAppointments().length,
             getAppointment: (index = 0) => this.appointments.getAppointments().eq(index),
             getTitleText: (index = 0) => this.appointments.getAppointment(index).find(".dx-scheduler-appointment-title").text(),
@@ -74,7 +148,9 @@ export class SchedulerTestWrapper {
             find: (text) => {
                 return this.appointments
                     .getAppointments()
-                    .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+                    .filter((index, element) => $(element).find(CLASSES.appointmentTitle).text() === text)
+                    .toArray()
+                    .map(element => new Appointment(element));
             },
 
             click: (index = 0) => {
