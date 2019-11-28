@@ -113,7 +113,7 @@ QUnit.module("Integration: Resources", moduleConfig, () => {
             const expectedValue = expectedValues[index];
             ["appointment1", "appointment2"].forEach(appointmentName => {
                 const expectedPosition = expectedValue[appointmentName];
-                const position = scheduler.appointments.find(appointmentName)[0].getPosition();
+                const position = scheduler.appointments.findFirst(appointmentName).getPosition();
 
                 assert.roughEqual(position.top, expectedPosition.top, 2, `top position of ${appointmentName} should be valid in ${view}`);
                 assert.roughEqual(position.left, expectedPosition.left, 2, `left position of ${appointmentName} should be valid in ${view}`);
