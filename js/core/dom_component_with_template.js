@@ -24,17 +24,17 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
     _initTemplates: function() {
         const getElementContent = () => this.$element().contents();
-        const optionTemplates = this.option('integrationOptions.templates');
-
         const { templates, anonymousTemplateMeta } = this._templateManager.initTemplates(getElementContent);
+        const anonymousTemplate = this.option('integrationOptions.templates.' + anonymousTemplateMeta.name);
 
         templates.forEach(({ name, template }) => {
-            optionTemplates[name] = template;
+            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
+            this._setOptionSilent('integrationOptions.templates.' + name, template);
         });
 
-        if(anonymousTemplateMeta.name && !optionTemplates[anonymousTemplateMeta.name]) {
-            const templateSource = TemplateManager.validateTemplateSource(anonymousTemplateMeta.template);
-            optionTemplates[anonymousTemplateMeta.name] = this.option('integrationOptions.createTemplate')(templateSource);
+        if(anonymousTemplateMeta.name && !anonymousTemplate) {
+            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
+            this._setOptionSilent('integrationOptions.templates.' + anonymousTemplateMeta.name, anonymousTemplateMeta.template);
         }
     },
 

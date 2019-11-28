@@ -184,7 +184,7 @@ export default class TemplateManager {
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         return !onlyJunkTemplateContent
-            ? { template: $anonymousTemplate, name: this._anonymousTemplateName }
+            ? { template: this._createTemplate($anonymousTemplate), name: this._anonymousTemplateName }
             : {};
     }
 
