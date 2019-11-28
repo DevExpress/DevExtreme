@@ -409,42 +409,57 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
+        var inputElement = this._input().get(0);
+        var isRtlEnabled = this.option("rtlEnabled");
+        var clearButtonWidth = this._getClearButtonWidth();
+        var longestElementDimensions = this._getLongestElementDimensions();
+        var curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
+        var shouldHideValidationIcon = (longestElementDimensions.width > curWidth);
+        var style = inputElement.style;
+
+        this.$element().toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);
+
+        if(shouldHideValidationIcon) {
+            if(this._storedPadding === undefined) {
+                this._storedPadding = isRtlEnabled ? longestElementDimensions.leftPadding : longestElementDimensions.rightPadding;
+            }
+            isRtlEnabled ? style.paddingLeft = 0 : style.paddingRight = 0;
+        } else {
+            isRtlEnabled ? style.paddingLeft = this._storedPadding + "px" : style.paddingRight = this._storedPadding + "px";
+        }
+    },
+
+    _getClearButtonWidth: function() {
+        var clearButtonWidth = 0;
+        if(this._isClearButtonVisible() && this._input().val() === "") {
+            var clearButtonElement = this.$element().find("." + DX_CLEAR_BUTTON_CLASS).get(0);
+            clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
+        }
+
+        return clearButtonWidth;
+    },
+
+    _getLongestElementDimensions: function() {
         var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
         var $input = this._input();
         var inputElement = $input.get(0);
-        var $dateBox = this.$element();
         var $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
-        var isPaddingStored = this.storedPadding !== undefined;
-        var storedPadding = !isPaddingStored ? 0 : this.storedPadding;
-        var isRtlEnabled = this.option("rtlEnabled");
+        var isPaddingStored = this._storedPadding !== undefined;
+        var storedPadding = !isPaddingStored ? 0 : this._storedPadding;
 
-        $longestValueElement.appendTo($dateBox);
+        $longestValueElement.appendTo(this.$element());
         var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
         var rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
         var leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
         var necessaryWidth = elementWidth + leftPadding + rightPadding + storedPadding;
         $longestValueElement.remove();
 
-        var clearButtonWidth = 0;
-        if(this._isClearButtonVisible() && $input.val() === "") {
-            var clearButtonElement = $dateBox.find("." + DX_CLEAR_BUTTON_CLASS).get(0);
-            clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
-        }
-
-        var curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
-        var shouldHideValidationIcon = (necessaryWidth > curWidth);
-
-        var style = inputElement.style;
-        $dateBox.toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);
-        if(shouldHideValidationIcon) {
-            if(!isPaddingStored) {
-                this.storedPadding = isRtlEnabled ? leftPadding : rightPadding;
-            }
-            isRtlEnabled ? style.paddingLeft = 0 : style.paddingRight = 0;
-        } else {
-            isRtlEnabled ? style.paddingLeft = this.storedPadding + "px" : style.paddingRight = this.storedPadding + "px";
-        }
+        return {
+            width: necessaryWidth,
+            leftPadding: leftPadding,
+            rightPadding: rightPadding
+        };
     },
 
     _attachChildKeyboardEvents: function() {
