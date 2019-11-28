@@ -298,7 +298,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             });
 
             ['JQuery node', 'html node', 'key', 'key string'].forEach((unselectItemArgType) => {
-                QUnit.test(`unselectItem -> jquery node`, function() {
+                QUnit.test(`unselectItem -> ${unselectItemArgType}`, function() {
                     let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                         { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
