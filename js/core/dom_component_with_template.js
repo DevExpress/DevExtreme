@@ -14,7 +14,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _init: function() {
         this.callBase();
 
-        const createTemplate = this.option('integrationOptions').createTemplate;
+        const integrationOptions = this.option('integrationOptions');
+        const createTemplate = integrationOptions && integrationOptions.createTemplate;
 
         this._templateManager = new TemplateManager(
             createTemplate,
