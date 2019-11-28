@@ -38,8 +38,6 @@ class TreeViewTestWrapper {
     hasCheckboxCheckedClass($item) { return $item.hasClass(CHECK_BOX_CHECKED_CLASS); }
     hasSelectedClass($item) { return $item.hasClass(SELECTED_ITEM_CLASS); }
     hasInvisibleClass($item) { return $item.hasClass(INVISIBLE_ITEM_CLASS); }
-    IsHidden($item) { return $item.is(':hidden'); }
-    IsVisible($item) { return $item.is(':visible'); }
 
     checkSelectedNodes(selectedIndexes) {
         let $node = this.getNodes();

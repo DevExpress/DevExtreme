@@ -1,7 +1,5 @@
 /* global initTree */
 import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
-const createInstance = (options) => new TreeViewTestWrapper(options);
-
 QUnit.module("Initialization");
 
 QUnit.test("Init tree view", function(assert) {
@@ -10,33 +8,41 @@ QUnit.test("Init tree view", function(assert) {
 });
 
 
-['items', 'dataSource', 'createChildren'].forEach((sourceOptionName) => {
+['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
     [false, true].forEach((virtualModeEnabled) => {
-        QUnit.module(`Initialization with cycle/loop keys. DataSource: ${sourceOptionName}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
+        QUnit.module(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
             QUnit.test(`rootValue`, function(assert) {
-                const testData = [ { configRoot: 1, expectedItemId: 2 }, { configRoot: 2, expectedItemId: 3 }, { configRoot: 3, expectedItemId: 1 }, { configRoot: 0, expectedItemId: undefined },
-                    { configRoot: null, expectedItemId: undefined },
-                    { configRoot: undefined, expectedItemId: undefined } ];
+                const testData = [
+                    { rootValue: 1, expectedItemId: 2 },
+                    { rootValue: 2, expectedItemId: 3 },
+                    { rootValue: 3, expectedItemId: 1 },
+                    { rootValue: 0, expectedItemId: undefined },
+                    { rootValue: null, expectedItemId: undefined },
+                    { rootValue: undefined, expectedItemId: undefined } ];
 
                 testData.forEach((testData) => {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
+                    let options = createOptions(dataSourceOption, virtualModeEnabled, [
                         { id: 1, text: "item1", parentId: 3 },
                         { id: 2, text: "item2", parentId: 1 },
                         { id: 3, text: "item3", parentId: 2 }]);
-                    options['rootValue'] = testData.configRoot;
-                    const treeWrapper = createInstance(options);
+                    options['rootValue'] = testData.rootValue;
+                    const wrapper = new TreeViewTestWrapper(options);
 
-                    assert.notEqual(treeWrapper.instance, undefined);
-
-                    let actualLevelNode = treeWrapper.getElement().find('[aria-level="1"]');
-                    assert.equal(actualLevelNode.attr('data-item-id'), testData.expectedItemId);
-                    treeWrapper.instance.dispose();
+                    assert.notEqual(wrapper.instance, undefined);
+                    let $rootNode = wrapper.getElement().find('[aria-level="1"]');
+                    if(testData.expectedItemId !== undefined) {
+                        assert.equal($rootNode.attr('data-item-id'), testData.expectedItemId);
+                    } else {
+                        assert.equal($rootNode.length, 0);
+                    }
+                    wrapper.instance.dispose();
                 });
             });
 
-            function createOptions(itemsOptionName, isVirtualModeEnabled, items) {
+            function createOptions(dataSourceOptionName, isVirtualModeEnabled, items) {
                 let options = { dataStructure: "plain", virtualModeEnabled: isVirtualModeEnabled, rootValue: 1 };
-                options[itemsOptionName] = itemsOptionName === 'createChildren' ? (parent) => { return items; } : items;
+                const isCreateChildrenDataSource = dataSourceOptionName === 'createChildren';
+                options[dataSourceOptionName] = isCreateChildrenDataSource ? (parent) => { return items; } : items;
                 return options;
             }
         });

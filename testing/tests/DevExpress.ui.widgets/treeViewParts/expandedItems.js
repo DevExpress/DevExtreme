@@ -5,7 +5,6 @@ import { noop } from "core/utils/common";
 import fx from "animation/fx";
 import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
 
-const createInstance = (options) => new TreeViewTestWrapper(options);
 const TREEVIEW_NODE_CLASS = "dx-treeview-node";
 const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
 const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
@@ -697,227 +696,158 @@ module("Expanded items", {
     });
 
 
-    ['items', 'dataSource', 'createChildren'].forEach((sourceOptionName) => {
-        [false, true].forEach((virtualModeEnabled) => {
-            QUnit.module(`Nodes expanding. DataSource: ${sourceOptionName}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
-                QUnit.test(`Initialization`, function(assert) {
-                    const testSamples = [{ selectedOption: true, expectedSelected: [0, 1] }, { selectedOption: false, expectedSelected: [] } ];
-                    testSamples.forEach((testData) => {
-                        let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                            { id: 1, text: "item1", parentId: 2, expanded: true, selected: testData.selectedOption },
-                            { id: 2, text: "item1_1", parentId: 1, expanded: true, selected: testData.selectedOption }]);
-                        options['showCheckBoxesMode'] = "normal";
+    ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
+        [false, true].forEach((isVirtualModeEnabled) => {
+            QUnit.module(`Nodes expanding. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${isVirtualModeEnabled} (T832760)`, () => {
+                [false, true].forEach((isExpanded) => {
+                    QUnit.test(`Initialization`, function(assert) {
+                        const options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                            { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
+                            { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
 
-                        const treeWrapper = createInstance(options);
-                        assert.notEqual(treeWrapper.instance, undefined);
-                        treeWrapper.checkSelectedNodes(testData.expectedSelected);
-                        treeWrapper.instance.dispose();
+                        const wrapper = new TreeViewTestWrapper(options),
+                            $item1 = wrapper.getElement().find('[aria-level="1"]'),
+                            $item2 = wrapper.getElement().find('[aria-level="2"]');
+
+                        assert.notEqual(wrapper.instance, undefined);
+                        assert.equal($item1.is(':visible'), true);
+                        assert.equal($item2.is(':visible'), isExpanded);
+                        wrapper.instance.dispose();
                     });
                 });
 
-                QUnit.test(`ExpandItem with collapsed items -> jquery node`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
+                ['JQuery node', 'html node', 'key', 'key string'].forEach((expandItemArgType) => {
+                    [false, true].forEach((isExpanded) => {
+                        QUnit.test(`ExpandItem. Items expanded = ${isExpanded} -> ${expandItemArgType}`, function(assert) {
+                            let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                                { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
+                                { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
+                            let wrapper = new TreeViewTestWrapper(options),
+                                $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                            let expandItemArgument;
+                            if(expandItemArgType === 'JQuery node') {
+                                expandItemArgument = $item1;
+                            }
+                            if(expandItemArgType === 'html node') {
+                                expandItemArgument = $item1.get(0);
+                            }
+                            if(expandItemArgType === 'key') {
+                                expandItemArgument = 2;
+                            }
+                            if(expandItemArgType === 'key string') {
+                                expandItemArgument = '2';
+                            }
+                            wrapper.instance.expandItem(expandItemArgument);
+
+                            let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                            assert.equal($item1_1.is(':visible'), true);
+                            wrapper.instance.dispose();
+                        });
+                    });
+                });
+
+                QUnit.test(`ExpandAll`, function(assert) {
+                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                         { id: 1, text: "item1", parentId: 2, expanded: false },
                         { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.expandItem($item1);
-
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`ExpandItem with collapsed items -> html node.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: false },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.expandItem($item1.get(0));
-
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`ExpandItem with collapsed items -> key.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: false },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options);
-
-                    treeWrapper.instance.expandItem('2');
-
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`ExpandItem with expanded items -> jquery node.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.expandItem($item1);
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`ExpandItem with expanded items -> html node.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.expandItem($item1.get(0));
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`ExpandItem with expanded items -> key.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                    let treeWrapper = createInstance(options);
-
-                    treeWrapper.instance.expandItem('2');
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`ExpandAll.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: false },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options),
-                        $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
+                    let wrapper = new TreeViewTestWrapper(options),
+                        $item1_1 = wrapper.getElement().find('[aria-level="2"]');
 
                     assert.equal($item1_1.length, 0);
 
-                    treeWrapper.instance.expandAll();
-                    $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal(treeWrapper.IsVisible($item1_1), true);
-                    treeWrapper.instance.dispose();
+                    wrapper.instance.expandAll();
+                    $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    assert.equal($item1_1.is(':visible'), true);
+                    wrapper.instance.dispose();
                 });
 
-                QUnit.test(`CollapseItem with expanded items -> jquery node`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
+                ['JQuery node', 'html node', 'key', 'key string'].forEach((collapseItemArgType) => {
+                    QUnit.test(`CollapseItem with expanded nodes -> ${collapseItemArgType}`, function(assert) {
+                        let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                            { id: 1, text: "item1", parentId: 2, expanded: true },
+                            { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                        let wrapper = new TreeViewTestWrapper(options),
+                            $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                        let collapseItemArgument;
+                        if(collapseItemArgType === 'JQuery node') {
+                            collapseItemArgument = $item1;
+                        }
+                        if(collapseItemArgType === 'html node') {
+                            collapseItemArgument = $item1.get(0);
+                        }
+                        if(collapseItemArgType === 'key') {
+                            collapseItemArgument = 2;
+                        }
+                        if(collapseItemArgType === 'key string') {
+                            collapseItemArgument = '2';
+                        }
+                        wrapper.instance.collapseItem(collapseItemArgument);
+
+                        let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                        assert.equal($item1_1.is(':hidden'), true);
+                        wrapper.instance.dispose();
+                    });
+                });
+
+
+                ['JQuery node', 'html node', 'key', 'key string'].forEach((collapseItemArgType) => {
+                    QUnit.test(`CollapseItem, with not expanded items -> ${collapseItemArgType}`, function(assert) {
+                        let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                            { id: 1, text: "item1", parentId: 2, expanded: false },
+                            { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
+                        let wrapper = new TreeViewTestWrapper(options),
+                            $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                        let collapseItemArgument;
+                        if(collapseItemArgType === 'JQuery node') {
+                            collapseItemArgument = $item1;
+                        }
+                        if(collapseItemArgType === 'html node') {
+                            collapseItemArgument = $item1.get(0);
+                        }
+                        if(collapseItemArgType === 'key') {
+                            collapseItemArgument = 2;
+                        }
+                        if(collapseItemArgType === 'key string') {
+                            collapseItemArgument = '2';
+                        }
+                        wrapper.instance.collapseItem(collapseItemArgument);
+
+                        let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                        assert.equal($item1_1.length, 0);
+                        wrapper.instance.dispose();
+                    });
+                });
+
+                QUnit.test(`CollapseAll`, function(assert) {
+                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
                         { id: 1, text: "item1", parentId: 2, expanded: true },
                         { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
+                    let wrapper = new TreeViewTestWrapper(options);
 
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
+                    wrapper.instance.collapseAll();
 
-                    treeWrapper.instance.collapseItem($item1);
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
+                    let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     assert.equal($item1_1.length, 1);
-                    assert.equal(treeWrapper.IsHidden($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`CollapseItem with expanded items -> html node.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.collapseItem($item1.get(0));
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 1);
-                    assert.equal(treeWrapper.IsHidden($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`CollapseItem with expanded items -> key.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                    let treeWrapper = createInstance(options);
-
-                    treeWrapper.instance.collapseItem('2');
-
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 1);
-                    assert.equal(treeWrapper.IsHidden($item1_1), true);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`CollapseItem with collapsed items -> jquery node.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: false },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.collapseItem($item1);
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 0);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`CollapseItem with collapsed items -> html node.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: false },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options),
-                        $item1 = treeWrapper.getElement().find('[aria-level="1"]');
-
-                    treeWrapper.instance.collapseItem($item1.get(0));
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 0);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`CollapseItem with collapsed items -> key.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: false },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
-                    let treeWrapper = createInstance(options);
-
-                    treeWrapper.instance.collapseItem('2');
-
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 0);
-                    treeWrapper.instance.dispose();
-                });
-
-                QUnit.test(`CollapseAll.`, function(assert) {
-                    let options = createOptions(sourceOptionName, virtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
-                    let treeWrapper = createInstance(options);
-
-                    treeWrapper.instance.collapseAll();
-
-                    let $item1_1 = treeWrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 1);
-                    assert.equal(treeWrapper.IsHidden($item1_1), true);
-                    treeWrapper.instance.dispose();
+                    assert.equal($item1_1.is(':hidden'), true);
+                    wrapper.instance.dispose();
                 });
             });
 
-            function createOptions(itemsOptionName, isVirtualModeEnabled, items) {
+            function createOptions(dataSourceOptionName, isVirtualModeEnabled, items) {
                 let options = { dataStructure: "plain", rootValue: 1, virtualModeEnabled: isVirtualModeEnabled };
-                options[itemsOptionName] = itemsOptionName === 'createChildren' ? getCreateChildFunction(items) : items;
-                return options;
-            }
-
-            function getCreateChildFunction(items) {
-                return (parent) => {
-                    return parent == null ? [items[1]] : items.filter(function(item) {
-                        return parent.itemData.id === item.parentId;
-                    });
+                const isCreateChildrenDataSource = dataSourceOptionName === 'createChildren';
+                const createChildFunction = (parent) => {
+                    return parent == null
+                        ? [ items[1] ]
+                        : items.filter(function(item) { return parent.itemData.id === item.parentId; });
                 };
+                options[dataSourceOptionName] = isCreateChildrenDataSource
+                    ? createChildFunction
+                    : items;
+                return options;
             }
         });
     });
