@@ -38,29 +38,33 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 
     return widgetElement;
 });
+const defaultIntegrationOptions = {
+    watchMethod: (fn, callback, options = {}) => {
+        if(!options.skipImmediate) {
+            callback(fn());
+        }
+        return noop;
+    },
+    templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
+};
+const defaultOptions = {
+    createTemplate: element => new Template(element),
+};
 
 export default class TemplateManager {
-    constructor(createElement) {
+    constructor(integrationOptions) {
         this._tempTemplates = [];
         this._defaultTemplates = {};
+        this._integrationTemplates = integrationOptions.templates;
         this._anonymousTemplateName = ANONYMOUS_TEMPLATE_NAME;
 
-        this._createElement = createElement;
+        // this._createElement = createElement;
+
+        this._integrationOptions = extend({}, defaultOptions, integrationOptions);
     }
 
     static getDefaultOptions() {
-        return {
-            integrationOptions: {
-                watchMethod: (fn, callback, options = {}) => {
-                    if(!options.skipImmediate) {
-                        callback(fn());
-                    }
-                    return noop;
-                },
-                templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
-                createTemplate: element => new Template(element),
-            }
-        };
+        return { integrationOptions: defaultIntegrationOptions };
     }
 
     static _findTemplateByDevice(templates) {
@@ -184,7 +188,7 @@ export default class TemplateManager {
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         return !onlyJunkTemplateContent
-            ? { template: $anonymousTemplate, name: this._anonymousTemplateName }
+            ? { template: this._createTemplate($anonymousTemplate), name: this._anonymousTemplateName }
             : {};
     }
 
@@ -200,7 +204,8 @@ export default class TemplateManager {
     }
 
     _createTemplate(templateSource) {
-        return this._createElement(TemplateManager.validateTemplateSource(templateSource));
+        // return this._createElement(TemplateManager.validateTemplateSource(templateSource));
+        return this._integrationOptions.createTemplate(TemplateManager.validateTemplateSource(templateSource));
     }
 
     getTemplate(templateSource, context, getIntegrationTemplate, isAsyncTemplate, skipTemplates) {
