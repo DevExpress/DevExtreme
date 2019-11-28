@@ -44,10 +44,7 @@ module("Expanded items", {
 
     test("expansion by itemData", assert => {
         const data = [
-            { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, {
-                id: 12,
-                text: "Item 12"
-            }
+            { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
         ];
         const treeView = initTree({ items: data }).dxTreeView("instance");
 
@@ -697,13 +694,14 @@ module("Expanded items", {
 
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
-        [false, true].forEach((isVirtualModeEnabled) => {
-            QUnit.module(`Nodes expanding. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${isVirtualModeEnabled} (T832760)`, () => {
-                [false, true].forEach((isExpanded) => {
+        [false, true].forEach((virtualModeEnabled) => {
+            QUnit.module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
+                [false, true].forEach((expanded) => {
                     QUnit.test(`Initialization`, function(assert) {
-                        const options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                            { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
-                            { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
+                        const options = createOptions(
+                            { virtualModeEnabled, dataSourceOption },
+                            [{ id: 1, text: "item1", parentId: 2, expanded }, { id: 2, text: "item1_1", parentId: 1, expanded }]
+                        );
 
                         const wrapper = new TreeViewTestWrapper(options),
                             $item1 = wrapper.getElement().find('[aria-level="1"]'),
@@ -711,16 +709,16 @@ module("Expanded items", {
 
                         assert.notEqual(wrapper.instance, undefined);
                         assert.equal($item1.is(':visible'), true);
-                        assert.equal($item2.is(':visible'), isExpanded);
+                        assert.equal($item2.is(':visible'), expanded);
                         wrapper.instance.dispose();
                     });
                 });
 
 
-                function runExpandItemTest(assert, isExpanded, argumentGetter) {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
+                function runExpandItemTest(assert, expanded, argumentGetter) {
+                    let options = createOptions(
+                        { dataSourceOption, virtualModeEnabled },
+                        [ { id: 1, text: "item1", parentId: 2, expanded }, { id: 2, text: "item1_1", parentId: 1, expanded }]);
                     let wrapper = new TreeViewTestWrapper(options),
                         $item1 = wrapper.getElement().find('[aria-level="1"]');
                     wrapper.instance.expandItem(argumentGetter($item1));
@@ -743,7 +741,7 @@ module("Expanded items", {
                 });
 
                 QUnit.test(`ExpandAll`, function(assert) {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: "item1", parentId: 2, expanded: false },
                         { id: 2, text: "item1_1", parentId: 1, expanded: false }]);
                     let wrapper = new TreeViewTestWrapper(options);
@@ -756,16 +754,16 @@ module("Expanded items", {
                     wrapper.instance.dispose();
                 });
 
-                function runCollapseItemTest(assert, isExpanded, argumentGetter) {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: isExpanded },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: isExpanded }]);
+                function runCollapseItemTest(assert, expanded, argumentGetter) {
+                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                        { id: 1, text: "item1", parentId: 2, expanded },
+                        { id: 2, text: "item1_1", parentId: 1, expanded }]);
                     let wrapper = new TreeViewTestWrapper(options),
                         $item1 = wrapper.getElement().find('[aria-level="1"]');
                     wrapper.instance.collapseItem(argumentGetter($item1));
 
                     let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
-                    if(isExpanded) {
+                    if(expanded) {
                         assert.equal($item1_1.is(':hidden'), true);
                     } else {
                         assert.equal($item1_1.length, 0);
@@ -773,20 +771,20 @@ module("Expanded items", {
                     wrapper.instance.dispose();
                 }
 
-                [false, true].forEach((isExpanded) => {
+                [false, true].forEach((expanded) => {
                     QUnit.test(`collapseItem($node)`, function(assert) {
-                        runCollapseItemTest(assert, isExpanded, $parent => $parent);
+                        runCollapseItemTest(assert, expanded, $parent => $parent);
                     });
                     QUnit.test(`collapseItem(DOMElement)`, function(assert) {
-                        runCollapseItemTest(assert, isExpanded, $parent => $parent.get(0));
+                        runCollapseItemTest(assert, expanded, $parent => $parent.get(0));
                     });
                     QUnit.test(`collapseItem(Key)`, function(assert) {
-                        runCollapseItemTest(assert, isExpanded, _ => 2);
+                        runCollapseItemTest(assert, expanded, _ => 2);
                     });
                 });
 
                 QUnit.test(`CollapseAll`, function(assert) {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: "item1", parentId: 2, expanded: true },
                         { id: 2, text: "item1_1", parentId: 1, expanded: true }]);
                     let wrapper = new TreeViewTestWrapper(options);
@@ -800,18 +798,19 @@ module("Expanded items", {
                 });
             });
 
-            function createOptions(dataSourceOptionName, isVirtualModeEnabled, items) {
-                let options = { dataStructure: "plain", rootValue: 1, virtualModeEnabled: isVirtualModeEnabled };
-                const isCreateChildrenDataSource = dataSourceOptionName === 'createChildren';
-                const createChildFunction = (parent) => {
-                    return parent == null
-                        ? [ items[1] ]
-                        : items.filter(function(item) { return parent.itemData.id === item.parentId; });
-                };
-                options[dataSourceOptionName] = isCreateChildrenDataSource
-                    ? createChildFunction
-                    : items;
-                return options;
+            function createOptions(options, items) {
+                const result = $.extend({ dataStructure: "plain", rootValue: 1 }, options);
+                if(result.dataSourceOption === 'createChildren') {
+                    const createChildFunction = (parent) => {
+                        return parent == null
+                            ? [ items[1] ]
+                            : items.filter(function(item) { return parent.itemData.id === item.parentId; });
+                    };
+                    result.createChildren = createChildFunction;
+                } else {
+                    result[options.dataSourceOption] = items;
+                }
+                return result;
             }
         });
     });

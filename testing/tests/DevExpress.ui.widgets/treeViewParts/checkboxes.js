@@ -241,14 +241,14 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
 
 ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
-    [false, true].forEach((isVirtualModeEnabled) => {
-        QUnit.module(`Checkbox selection. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${isVirtualModeEnabled} (T832760)`, () => {
+    [false, true].forEach((virtualModeEnabled) => {
+        QUnit.module(`Checkbox selection. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
             QUnit.test(`Initialization`, function(assert) {
-                const testSamples = [{ selectedOption: true, expectedSelected: [0, 1] }, { selectedOption: false, expectedSelected: [] } ];
+                const testSamples = [{ selected: true, expectedSelected: [0, 1] }, { selectedOption: false, expectedSelected: [] } ];
                 testSamples.forEach((testData) => {
-                    let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true, selected: testData.selectedOption },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true, selected: testData.selectedOption }]);
+                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                        { id: 1, text: "item1", parentId: 2, expanded: true, selected: testData.selected },
+                        { id: 2, text: "item1_1", parentId: 1, expanded: true, selected: testData.selected }]);
                     options['showCheckBoxesMode'] = "normal";
 
                     const wrapper = new TreeViewTestWrapper(options);
@@ -259,7 +259,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             });
 
             function runSelectItemTest(argumentGetter) {
-                let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -282,7 +282,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             });
 
             QUnit.test(`selectAll`, function(assert) {
-                let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -293,7 +293,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             });
 
             function runUnselectItemTest(argumentGetter) {
-                let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -316,7 +316,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             });
 
             QUnit.test(`unselectAll`, function() {
-                let options = createOptions(dataSourceOption, isVirtualModeEnabled, [
+                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -327,19 +327,19 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             });
         });
 
-        function createOptions(dataSourceOptionName, isVirtualModeEnabled, items) {
-            let options = { dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal", virtualModeEnabled: isVirtualModeEnabled };
-
-            const isCreateChildrenDataSource = dataSourceOptionName === 'createChildren';
-            const createChildFunction = (parent) => {
-                return parent == null
-                    ? [ items[1] ]
-                    : items.filter(function(item) { return parent.itemData.id === item.parentId; });
-            };
-            options[dataSourceOptionName] = isCreateChildrenDataSource
-                ? createChildFunction
-                : items;
-            return options;
+        function createOptions(options, items) {
+            const result = $.extend({ dataStructure: "plain", rootValue: 1 }, options);
+            if(result.dataSourceOption === 'createChildren') {
+                const createChildFunction = (parent) => {
+                    return parent == null
+                        ? [ items[1] ]
+                        : items.filter(function(item) { return parent.itemData.id === item.parentId; });
+                };
+                result.createChildren = createChildFunction;
+            } else {
+                result[options.dataSourceOption] = items;
+            }
+            return result;
         }
     });
 });
