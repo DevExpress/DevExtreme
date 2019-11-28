@@ -4464,6 +4464,7 @@ QUnit.test("focusedRowKey should not overwrite dataSource field", function(asser
 QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)", function(assert) {
     // arrange
     var isReady,
+        changedSpy = sinon.spy(),
         data = [
             { name: "Alex", phone: "111111", room: 6 },
             { name: "Dan", phone: "2222222", room: 5 },
@@ -4482,6 +4483,11 @@ QUnit.test("DataGrid should not scroll back to the focusedRow after paging if vi
             paging: { pageSize: 2 },
             onContentReady: function(e) {
                 if(!isReady) {
+                    // assert
+                    assert.equal(changedSpy.callCount, 2, "changed is called twice");
+                    assert.equal(changedSpy.getCall(0).args[0].changeType, "updateFocusedRow", "changed with changeType updateFocusedRow");
+                    assert.equal(changedSpy.getCall(1).args[0].changeType, "refresh", "changed with changeType refresh");
+
                     // act
                     e.component.pageIndex(1);
                     isReady = true;
@@ -4489,10 +4495,15 @@ QUnit.test("DataGrid should not scroll back to the focusedRow after paging if vi
             }
         }).dxDataGrid("instance");
 
+    dataGrid.getController("data").changed.add(changedSpy);
+
     this.clock.tick();
 
     // assert
     assert.equal(dataGrid.pageIndex(), 1, "pageIndex");
+    assert.equal(changedSpy.callCount, 4, "changed is called 4 times");
+    assert.equal(changedSpy.getCall(2).args[0].changeType, "pageIndex", "changed with changeType pageIndex");
+    assert.equal(changedSpy.getCall(3).args[0].changeType, "append", "changed with changeType append");
 });
 
 QUnit.test("Focused row should be visible in infinite scrolling mode", function(assert) {
