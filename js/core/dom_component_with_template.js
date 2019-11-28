@@ -10,12 +10,10 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _init: function() {
         this.callBase();
 
-        // const createTemplate = (...args) => this.option('integrationOptions.createTemplate')(...args);
-        const integrationOptions = this._getDefaultOptions().integrationOptions;
-        this._templateManager = new TemplateManager(
-            // createTemplate,
-            integrationOptions
-        );
+        const createTemplate = (...args) => this.option('integrationOptions.createTemplate')(...args);
+
+        this._templateManager = new TemplateManager(createTemplate);
+
         this._initTemplates();
     },
 
@@ -26,17 +24,17 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
     _initTemplates: function() {
         const getElementContent = () => this.$element().contents();
+        const optionTemplates = this.option('integrationOptions.templates');
+
         const { templates, anonymousTemplateMeta } = this._templateManager.initTemplates(getElementContent);
-        const anonymousTemplate = this.option('integrationOptions.templates.' + anonymousTemplateMeta.name);
 
         templates.forEach(({ name, template }) => {
-            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
-            this._setOptionSilent('integrationOptions.templates.' + name, template);
+            optionTemplates[name] = template;
         });
 
-        if(anonymousTemplateMeta.name && !anonymousTemplate) {
-            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
-            this._setOptionSilent('integrationOptions.templates.' + anonymousTemplateMeta.name, anonymousTemplateMeta.template);
+        if(anonymousTemplateMeta.name && !optionTemplates[anonymousTemplateMeta.name]) {
+            const templateSource = TemplateManager.validateTemplateSource(anonymousTemplateMeta.template);
+            optionTemplates[anonymousTemplateMeta.name] = this.option('integrationOptions.createTemplate')(templateSource);
         }
     },
 
@@ -60,10 +58,9 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        this._setOptionSilent(
-            'integrationOptions.templates.' + name,
-            this._templateManager._createTemplate(template)
-        );
+        const templates = this.option('integrationOptions.templates');
+        const templateSource = TemplateManager.validateTemplateSource(template);
+        templates[name] = this.option('integrationOptions.createTemplate')(templateSource);
     },
 });
 
