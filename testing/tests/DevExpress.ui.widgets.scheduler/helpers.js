@@ -49,15 +49,6 @@ class Appointment {
         };
     }
 
-    dragTo(position) {
-        const offset = this.element.offset();
-        const pointer = pointerMock(this.element)
-            .start()
-            .down(offset.left, offset.top);
-        pointer.move(position.x, position.y);
-        pointer.up();
-    }
-
     resizeTo(direction, value) {
         let element = null;
         const position = { x: 0, y: 0 };
