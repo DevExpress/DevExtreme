@@ -119,9 +119,9 @@ var getMonthCaption = function(date) {
         text;
 
     if(this.option("intervalCount") > 1) {
-        lastDate = firstDate;
+        lastDate = new Date(firstDate);
         lastDate.setMonth(firstDate.getMonth() + this.option("intervalCount") - 1);
-        lastDate = new Date(dateUtils.getLastMonthDate(firstDate));
+        lastDate = new Date(dateUtils.getLastMonthDate(lastDate));
 
         var isSameYear = firstDate.getYear() === lastDate.getYear(),
             lastDateText = getMonthYearFormat(lastDate),
