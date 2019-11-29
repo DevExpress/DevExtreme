@@ -339,12 +339,27 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _removeStubs: function(text, excludeComma) {
-        var format = this._getFormatForSign(text),
-            thousandsSeparator = number.getThousandsSeparator(),
-            stubs = format.replace(/[#0.,]/g, ""),
-            regExp = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
+        var format = this._getFormatForSign(text);
+        var thousandsSeparator = number.getThousandsSeparator();
+        var stubs = this._getStubs(format);
+        var getDecorators = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator)) + "]", "g");
+        var getLastStub = new RegExp("(" + escapeRegExp(stubs[1] || "") + ")$", "g");
 
-        return text.replace(regExp, "");
+        return text
+            .replace(stubs[0], "")
+            .replace(getLastStub, "")
+            .replace(getDecorators, "");
+    },
+
+    _getStubs: function(format) {
+        var regExpResult = /[^']([#0.,]+)/g.exec(format);
+        var pattern = regExpResult && regExpResult[0].trim();
+
+        return format
+            .split(pattern)
+            .map(function(stub) {
+                return stub.replace(/'/g, "");
+            });
     },
 
     _truncateToPrecision: function(value, maxPrecision) {
@@ -364,7 +379,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var editedText = this._replaceSelectedText(text, selection, char),
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
-            parsed = this._parse(editedText, format),
+            textWithoutStubs = this._removeStubs(editedText, true),
+            parsed = this._parse(textWithoutStubs, format),
             maxPrecision = this._getPrecisionLimits(format, editedText).max,
             isValueChanged = parsed !== this._parsedValue,
             decimalSeparator = number.getDecimalSeparator();
