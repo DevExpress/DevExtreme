@@ -452,7 +452,7 @@
         "dxDiagram-shapeContainer": "Контейнер",
         "dxDiagram-shapeVerticalContainer": "Вертикальный контейнер",
         "dxDiagram-shapeHorizontalContainer": "Горизонтальные контейнер",
-        "dxDiagram-shapeCard": "Карточка",
+        "dxDiagram-shapeCard": "Имя человека",
         "dxDiagram-shapeCardWithImageOnLeft": "Карточка с картинкой слева",
         "dxDiagram-shapeCardWithImageOnTop": "Карточка с картинкой сверху",
         "dxDiagram-shapeCardWithImageOnRight": "Карточка с картинкой справа"
