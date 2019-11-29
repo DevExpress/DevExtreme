@@ -331,7 +331,7 @@ QUnit.module("events", function() {
 
     QUnit.test("valueChanged event fired after setting the value by keyboard", function(assert) {
         const handler = sinon.stub();
-        const $element = $("#checkbox").dxCheckBox({});
+        const $element = $("#checkbox").dxCheckBox({ focusStateEnabled: true });
         const checkbox = $element.dxCheckBox("instance");
         const keyboard = keyboardMock($element);
 
