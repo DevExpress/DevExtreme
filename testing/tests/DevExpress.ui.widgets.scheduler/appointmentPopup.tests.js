@@ -1275,5 +1275,5 @@ QUnit.test("Appointment should have correct recurrence rule on consecutive shows
     scheduler.appointmentPopup.clickCancelButton();
     scheduler.instance.showAppointmentPopup({ startDate: new Date(2017, 4, 25) }, true);
 
-    assert.equal(scheduler.appointmentForm.getEditor("recurrenceRule").option("value"), "", "Appointment forn recurrence rule is correct");
+    assert.equal(scheduler.appointmentForm.getEditor("recurrenceRule").option("value"), "", "Appointment form recurrence rule is correct");
 });

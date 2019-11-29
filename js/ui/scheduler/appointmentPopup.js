@@ -55,7 +55,7 @@ export default class AppointmentPopup {
         });
 
         this._popup.option("onShowing", e => {
-            // this._appointmentForm.resetValues();
+            this._appointmentForm.resetValues();
             this._updateForm(data, processTimeZone);
 
             const arg = {
