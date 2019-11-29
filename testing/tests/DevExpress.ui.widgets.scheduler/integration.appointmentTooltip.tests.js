@@ -246,37 +246,6 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         );
     });
 
-    test('Click on disabled appointment should not call scheduler.showAppointmentTooltip', function(assert) {
-        var data = new DataSource({
-            store: [{
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0),
-                text: 'Task 2',
-                disabled: true
-            }]
-        });
-
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
-        var stub = sinon.stub(scheduler.instance, 'showAppointmentTooltip');
-
-        scheduler.appointments.click();
-
-        assert.notOk(stub.called, 'showAppointmentTooltip doesn\'t called');
-    });
-
-    test('Click on appointment should not call scheduler.showAppointmentTooltip for disabled mode', function(assert) {
-        const data = new DataSource({
-            store: getSampleData()
-        });
-
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, disabled: true });
-        var stub = sinon.stub(scheduler.instance, 'showAppointmentTooltip');
-
-        scheduler.appointments.click(1);
-
-        assert.equal(stub.calledOnce, false, 'Observer was not notified');
-    });
-
     test('Shown tooltip should have right boundary', function(assert) {
         const tasks = [
             {
@@ -321,6 +290,35 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         scheduler.appointments.click(1);
 
         assert.equal(Tooltip.getInstance($('.dx-tooltip')).option('rtlEnabled'), true, 'rtlEnabled for tooltip was set to true');
+    });
+
+    test('Click on tooltip-edit button should call scheduler._appointmentPopup and hide tooltip', function(assert) {
+        var data = new DataSource({
+            store: getSampleData()
+        });
+
+        const scheduler = createScheduler({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
+        var stub = sinon.stub(scheduler.instance._appointmentPopup, 'show');
+
+        scheduler.appointments.click(1);
+        scheduler.tooltip.clickOnItem();
+
+        var args = stub.getCall(0).args;
+
+        assert.deepEqual(args[0], {
+            startDate: new Date(2015, 1, 9, 11, 0),
+            endDate: new Date(2015, 1, 9, 12, 0),
+            text: 'Task 2'
+        },
+        'show has a right appointment data arg');
+
+        assert.equal(args[1], true, 'show has a right createNewAppointment arg');
+
+        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
     });
 
     test('Scheduler appointment tooltip should has right content', function(assert) {
@@ -511,35 +509,6 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         scheduler.appointments.click(1);
 
         assert.equal(scheduler.tooltip.getDateText(), 'February 9, 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
-    });
-
-    test('Click on tooltip-edit button should call scheduler.showAppointmentPopup and hide tooltip', function(assert) {
-        var data = new DataSource({
-            store: getSampleData()
-        });
-
-        const scheduler = createScheduler({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data
-        });
-
-        var stub = sinon.stub(scheduler.instance, 'showAppointmentPopup');
-
-        scheduler.appointments.click(1);
-        scheduler.tooltip.clickOnItem();
-
-        var args = stub.getCall(0).args;
-
-        assert.deepEqual(args[0], {
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0),
-            text: 'Task 2'
-        },
-        'showAppointmentPopup has a right appointment data arg');
-
-        assert.equal(args[1], false, 'showAppointmentPopup has a right \'createNewAppointment\' arg');
-
-        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
     });
 
     test('Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip', function(assert) {
@@ -1120,33 +1089,6 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
 
         scheduler.tooltip.clickOnDeleteButton();
         assert.equal(scheduler.appointments.compact.getButtonCount(), 0, 'Compact button shouldn\'t render after click delete button');
-    });
-
-    test('Templates should valid markup', function(assert) {
-        const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = 'appointment-tooltip-template-marker';
-        const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = 'drop-down-appointment-template';
-
-        const hasElementInTooltipItem = (className) => {
-            return scheduler.tooltip.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
-        };
-
-        const scheduler = createScheduler({
-            appointmentTooltipTemplate: () => $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME)
-        });
-
-        scheduler.appointments.click();
-        assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), '\'appointmentTooltipTemplate\' should render for cell appointment');
-
-        scheduler.appointments.compact.click();
-        assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), '\'appointmentTooltipTemplate\' should render for compact appointment');
-
-        scheduler.instance.option('dropDownAppointmentTemplate', () => $('<div />').addClass(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME));
-
-        scheduler.appointments.click();
-        assert.notOk(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), '\'dropDownAppointmentTemplate\' shouldn\'t render for cell appointment');
-
-        scheduler.appointments.compact.click();
-        assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), '\'dropDownAppointmentTemplate\' should render for compact appointment');
     });
 
     test('appointmentTooltipTemplate method should pass valid arguments', function(assert) {
