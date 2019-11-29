@@ -119,7 +119,9 @@ var getMonthCaption = function(date) {
         text;
 
     if(this.option("intervalCount") > 1) {
-        lastDate.setMonth(lastDate.getMonth() + this.option("intervalCount") - 1);
+        lastDate = firstDate;
+        lastDate.setMonth(firstDate.getMonth() + this.option("intervalCount") - 1);
+        lastDate = new Date(dateUtils.getLastMonthDate(firstDate));
 
         var isSameYear = firstDate.getYear() === lastDate.getYear(),
             lastDateText = getMonthYearFormat(lastDate),
@@ -340,6 +342,8 @@ var SchedulerNavigator = Widget.inherit({
 
         min = min ? dateUtils.trimTime(min) : min;
         max = max ? dateUtils.trimTime(max) : max;
+
+        max.setHours(23, 59, 59);
 
         this._prev.option("disabled", min && !isNaN(min.getTime()) && this._getNextDate(-1, caption.endDate) < min);
         this._next.option("disabled", max && !isNaN(max.getTime()) && this._getNextDate(1, caption.startDate) > max);
