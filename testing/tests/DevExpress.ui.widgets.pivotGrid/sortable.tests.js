@@ -2061,7 +2061,7 @@ QUnit.test("Stop scrolling affer drag end", function(assert) {
     this.clock.tick(100);
 
     assert.strictEqual(this.onScroll.callCount, 0);
-    assert.strictEqual($sortable.find(".test-container").dxScrollable("instance")._eventsStrategy.hasEvent("scroll"), false);
+    assert.strictEqual($sortable.find(".test-container").dxScrollable("instance").hasEvent("scroll"), false);
 });
 
 QUnit.test("Stop scrolling affer drag to another group", function(assert) {
@@ -2088,7 +2088,7 @@ QUnit.test("Stop scrolling affer drag to another group", function(assert) {
     this.clock.tick(100);
 
     assert.strictEqual(this.onScroll.callCount, 0);
-    assert.strictEqual($sortable.find(".test-container").eq(0).dxScrollable("instance")._eventsStrategy.hasEvent("scroll"), false);
+    assert.strictEqual($sortable.find(".test-container").eq(0).dxScrollable("instance").hasEvent("scroll"), false);
 });
 
 QUnit.test("Stop scrolling affer drag from emty space(no group) to another group", function(assert) {
@@ -2115,7 +2115,7 @@ QUnit.test("Stop scrolling affer drag from emty space(no group) to another group
     this.clock.tick(100);
 
     assert.strictEqual(this.onScroll.callCount, 0);
-    assert.strictEqual($sortable.find(".test-container").eq(0).dxScrollable("instance")._eventsStrategy.hasEvent("scroll"), false);
+    assert.strictEqual($sortable.find(".test-container").eq(0).dxScrollable("instance").hasEvent("scroll"), false);
 });
 
 

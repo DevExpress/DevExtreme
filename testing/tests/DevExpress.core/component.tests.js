@@ -1412,17 +1412,17 @@ QUnit.module("event API", {
         this.component.on("event", () => {
             triggered = true;
         });
-        this.component._eventsStrategy.fireEvent("event");
+        this.component.fireEvent("event");
 
         assert.ok(triggered);
     });
 
     QUnit.test("hasEvent", function(assert) {
-        assert.ok(!this.component._eventsStrategy.hasEvent("event"));
+        assert.ok(!this.component.hasEvent("event"));
         this.component.on("event", noop);
-        assert.ok(this.component._eventsStrategy.hasEvent("event"));
+        assert.ok(this.component.hasEvent("event"));
         this.component.off("event", noop);
-        assert.ok(!this.component._eventsStrategy.hasEvent("event"));
+        assert.ok(!this.component.hasEvent("event"));
     });
 
     QUnit.test("fire context and args", function(assert) {
@@ -1433,7 +1433,7 @@ QUnit.module("event API", {
             assert.strictEqual(this, component);
             assert.equal(e, "OK");
         });
-        component._eventsStrategy.fireEvent("event", ["OK"]);
+        component.fireEvent("event", ["OK"]);
     });
 
     QUnit.test("off", function(assert) {
@@ -1450,12 +1450,12 @@ QUnit.module("event API", {
         component.on("event", h1);
         component.on("event", h2);
 
-        component._eventsStrategy.fireEvent("event");
+        component.fireEvent("event");
         assert.equal(count, 2);
 
         component.on("event", h1);
         component.off("event");
-        component._eventsStrategy.fireEvent("event");
+        component.fireEvent("event");
         assert.equal(count, 2);
     });
 
@@ -1474,17 +1474,17 @@ QUnit.module("event API", {
             event2: h2
         });
 
-        component._eventsStrategy.fireEvent("event1");
+        component.fireEvent("event1");
         assert.equal(count, 1);
 
-        component._eventsStrategy.fireEvent("event2");
+        component.fireEvent("event2");
         assert.equal(count, 3);
     });
 
     QUnit.test("methods are chainable", function(assert) {
         assert.strictEqual(this.component.on(), this.component);
         assert.strictEqual(this.component.off(), this.component);
-        assert.strictEqual(this.component._eventsStrategy.fireEvent(), this.component);
+        assert.strictEqual(this.component.fireEvent(), this.component);
     });
 
     QUnit.test("event callbacks should be disposed on component disposing", function(assert) {
@@ -1494,7 +1494,7 @@ QUnit.module("event API", {
             assert.ok(false);
         });
         this.component._dispose();
-        this.component._eventsStrategy.fireEvent("event");
+        this.component.fireEvent("event");
     });
 });
 

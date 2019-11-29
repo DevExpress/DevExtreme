@@ -59,7 +59,7 @@ function createResizeHandler(callback) {
 }
 
 function defaultOnIncidentOccurred(e) {
-    if(!e.component._eventsStrategy.hasEvent("incidentOccurred")) {
+    if(!e.component.hasEvent("incidentOccurred")) {
         _log.apply(null, [e.target.id].concat(e.target.args || []));
     }
 }

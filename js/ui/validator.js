@@ -317,7 +317,7 @@ const Validator = DOMComponent.inherit({
                 this._validationInfo.deferred = new Deferred();
                 this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this._eventsStrategy.fireEvent("validating", [this._validationInfo.result]);
+            this.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
         if(this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {

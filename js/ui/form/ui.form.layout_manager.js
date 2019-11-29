@@ -1203,7 +1203,7 @@ const LayoutManager = Widget.inherit({
 
     _dimensionChanged: function() {
         if(this.option("colCount") === "auto" && this.isCachedColCountObsolete()) {
-            this._eventsStrategy.fireEvent("autoColCountChanged");
+            this.fireEvent("autoColCountChanged");
         }
     },
 
