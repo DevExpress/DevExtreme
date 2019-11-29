@@ -921,7 +921,7 @@ function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
 }
 
 function getTextWidth(text) {
-    return text.value.length && text.tspan.getBoundingClientRect().width > 0 ? text.tspan.getSubStringLength(0, text.value.length) : 0;
+    return text.value.length ? text.tspan.getSubStringLength(0, text.value.length) : 0;
 }
 
 function prepareLines(element, texts, maxWidth) {
