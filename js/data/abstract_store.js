@@ -15,7 +15,6 @@ var Class = require("../core/class"),
 /**
 * @name Store
 * @type object
-* @inherits EventsStrategy
 * @hidden
 * @module data/abstract_store
 * @export default
@@ -325,11 +324,37 @@ var Store = Class.inherit({
         return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
     },
 
+    /**
+     * @name StoreMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name StoreMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
+    /**
+     * @name StoreMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name StoreMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;

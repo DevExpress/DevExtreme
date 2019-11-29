@@ -2,18 +2,11 @@ import Callbacks from "./utils/callbacks";
 import { each } from "./utils/iterator";
 import { isFunction, isPlainObject } from "./utils/type";
 
-/**
- * @name EventsStrategy
- * @module core/events_strategy
- * @export EventsStrategy
- * @hidden
- */
 export class EventsStrategy {
     constructor(owner) {
         this._events = {};
         this._owner = owner;
     }
-
     static create(owner, strategy) {
         if(strategy) {
             return isFunction(strategy) ? strategy(owner) : strategy;
@@ -35,19 +28,6 @@ export class EventsStrategy {
         return this._owner;
     }
 
-    /**
-     * @name EventsStrategyMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name EventsStrategyMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on(eventName, eventHandler) {
         if(isPlainObject(eventName)) {
             each(eventName, (e, h) => {
@@ -66,19 +46,6 @@ export class EventsStrategy {
         }
     }
 
-    /**
-     * @name EventsStrategyMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name EventsStrategyMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
     off(eventName, eventHandler) {
         const callbacks = this._events[eventName];
         if(callbacks) {

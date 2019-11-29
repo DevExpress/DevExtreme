@@ -1092,11 +1092,37 @@ var DataSource = Class.inherit({
         return data;
     },
 
+    /**
+     * @name DataSourceMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name DataSourceMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
+    /**
+     * @name DataSourceMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name DataSourceMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;

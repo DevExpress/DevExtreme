@@ -590,7 +590,7 @@ declare module DevExpress {
         onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
     }
     /** @name Component */
-    export class Component extends DevExpress.core.EventsStrategy {
+    export class Component {
         constructor(options?: ComponentOptions);
         /** @name Component.beginUpdate() */
         beginUpdate(): void;
@@ -598,6 +598,14 @@ declare module DevExpress {
         endUpdate(): void;
         /** @name Component.instance() */
         instance(): this;
+        /** @name Component.off(eventName) */
+        off(eventName: string): this;
+        /** @name Component.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name Component.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name Component.on(events) */
+        on(events: any): this;
         /** @name Component.option() */
         option(): any;
         /** @name Component.option(optionName) */
@@ -665,12 +673,20 @@ declare module DevExpress {
         version?: Array<number>;
     }
     /** @name DevicesObject */
-    export class DevicesObject extends DevExpress.core.EventsStrategy {
+    export class DevicesObject {
         constructor(options: { window?: Window });
         /** @name DevicesObject.current() */
         current(): Device;
         /** @name DevicesObject.current(deviceName) */
         current(deviceName: string | Device): void;
+        /** @name DevicesObject.off(eventName) */
+        off(eventName: string): this;
+        /** @name DevicesObject.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name DevicesObject.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name DevicesObject.on(events) */
+        on(events: any): this;
         /** @name DevicesObject.orientation() */
         orientation(): string;
         /** @name DevicesObject.real() */
@@ -912,17 +928,6 @@ declare module DevExpress {
     }
 }
 declare module DevExpress.core {
-    /** @name EventsStrategy */
-    export class EventsStrategy {
-        /** @name EventsStrategy.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsStrategy.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsStrategy.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsStrategy.on(events) */
-        on(events: any): this;
-    }
     /** @name dxElement */
     export type dxElement = Element & JQuery;
     /** @name dxTemplate.Options */
@@ -1022,7 +1027,7 @@ declare module DevExpress.data {
         store?: Store | StoreOptions | Array<any> | any;
     }
     /** @name DataSource */
-    export class DataSource extends DevExpress.core.EventsStrategy {
+    export class DataSource {
         constructor(data: Array<any>);
         constructor(options: CustomStoreOptions | DataSourceOptions);
         constructor(store: Store);
@@ -1053,6 +1058,14 @@ declare module DevExpress.data {
         load(): Promise<any> & JQueryPromise<any>;
         /** @name DataSource.loadOptions() */
         loadOptions(): any;
+        /** @name DataSource.off(eventName) */
+        off(eventName: string): this;
+        /** @name DataSource.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name DataSource.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name DataSource.on(events) */
+        on(events: any): this;
         /** @name DataSource.pageIndex() */
         pageIndex(): number;
         /** @name DataSource.pageIndex(newIndex) */
@@ -1334,7 +1347,7 @@ declare module DevExpress.data {
         wordWrapEnabled?: boolean;
     }
     /** @name PivotGridDataSource */
-    export class PivotGridDataSource extends DevExpress.core.EventsStrategy {
+    export class PivotGridDataSource {
         constructor(options?: PivotGridDataSourceOptions)
         /** @name PivotGridDataSource.collapseAll(id) */
         collapseAll(id: number | string): void;
@@ -1368,6 +1381,14 @@ declare module DevExpress.data {
         isLoading(): boolean;
         /** @name PivotGridDataSource.load() */
         load(): Promise<any> & JQueryPromise<any>;
+        /** @name PivotGridDataSource.off(eventName) */
+        off(eventName: string): this;
+        /** @name PivotGridDataSource.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name PivotGridDataSource.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name PivotGridDataSource.on(events) */
+        on(events: any): this;
         /** @name PivotGridDataSource.reload() */
         reload(): Promise<any> & JQueryPromise<any>;
         /** @name PivotGridDataSource.state() */
@@ -1452,7 +1473,7 @@ declare module DevExpress.data {
         onUpdating?: ((key: any | string | number, values: any) => any);
     }
     /** @name Store */
-    export class Store extends DevExpress.core.EventsStrategy {
+    export class Store {
         constructor(options?: StoreOptions)
         /** @name Store.byKey(key) */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
@@ -1466,6 +1487,14 @@ declare module DevExpress.data {
         load(): Promise<any> & JQueryPromise<any>;
         /** @name Store.load(options) */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
+        /** @name Store.off(eventName) */
+        off(eventName: string): this;
+        /** @name Store.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name Store.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name Store.on(events) */
+        on(events: any): this;
         /** @name Store.push(changes) */
         push(changes: Array<any>): void;
         /** @name Store.remove(key) */

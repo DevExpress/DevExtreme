@@ -627,7 +627,6 @@ module.exports = Class.inherit((function() {
     /**
     * @name PivotGridDataSource
     * @type object
-    * @inherits EventsStrategy
     * @namespace DevExpress.data
     * @module ui/pivot_grid/data_source
     * @export default
@@ -1724,11 +1723,37 @@ module.exports = Class.inherit((function() {
             }
         },
 
+        /**
+         * @name PivotGridDataSourceMethods.on
+         * @publicName on(eventName, eventHandler)
+         * @param1 eventName:string
+         * @param2 eventHandler:function
+         * @return this
+         */
+        /**
+         * @name PivotGridDataSourceMethods.on
+         * @publicName on(events)
+         * @param1 events:object
+         * @return this
+         */
         on(eventName, eventHandler) {
             this._eventsStrategy.on(eventName, eventHandler);
             return this;
         },
 
+        /**
+         * @name PivotGridDataSourceMethods.off
+         * @publicName off(eventName)
+         * @param1 eventName:string
+         * @return this
+         */
+        /**
+         * @name PivotGridDataSourceMethods.off
+         * @publicName off(eventName, eventHandler)
+         * @param1 eventName:string
+         * @param2 eventHandler:function
+         * @return this
+         */
         off(eventName, eventHandler) {
             this._eventsStrategy.off(eventName, eventHandler);
             return this;

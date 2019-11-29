@@ -18,7 +18,6 @@ var Config = require("./config"),
 /**
 * @name Component
 * @type object
-* @inherits EventsStrategy
 * @module core/component
 * @export default
 * @namespace DevExpress
@@ -363,11 +362,37 @@ var Component = Class.inherit({
         return actionName.charAt(2).toLowerCase() + actionName.substr(3);
     },
 
+    /**
+     * @name ComponentMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name ComponentMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
+    /**
+     * @name ComponentMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name ComponentMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;

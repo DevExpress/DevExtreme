@@ -152,7 +152,6 @@ var uaParsers = {
  * @name DevicesObject
  * @publicName devices
  * @section Utils
- * @inherits EventsStrategy
  * @namespace DevExpress
  * @module core/devices
  * @export default
@@ -416,11 +415,37 @@ var Devices = Class.inherit({
 
     },
 
+    /**
+     * @name DevicesObjectMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name DevicesObjectMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
+    /**
+     * @name DevicesObjectMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name DevicesObjectMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
