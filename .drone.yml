@@ -36,6 +36,7 @@ matrix:
   include:
     - { TARGET: lint }
     - { TARGET: ts }
+    - { TARGET: test, PERF: true, JQUERY: true }
     - { TARGET: test, CONSTEL: export }
     - { TARGET: test, CONSTEL: misc }
     - { TARGET: test, CONSTEL: misc, JQUERY: true }

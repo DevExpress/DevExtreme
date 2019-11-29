@@ -42,7 +42,8 @@ function run_test {
     local ios_user_agent="Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
-    [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true&jquery="
+    [ -z "$JQUERY" ] && url="$url&nojquery=true"
 
     if [ "$HEADLESS" != "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -83,6 +84,21 @@ function run_test {
                     --remote-debugging-address=0.0.0.0 \
                     --remote-debugging-port=9222 \
                     $url &>headless-chrome.log &
+            elif [ "$PERF" == "true" ]; then
+                dbus-launch --exit-with-session google-chrome-stable \
+                    --no-sandbox \
+                    --disable-dev-shm-usage \
+                    --disable-gpu \
+                    --user-data-dir=/tmp/chrome \
+                    --no-first-run \
+                    --no-default-browser-check \
+                    --disable-translate \
+                    --disable-popup-blocking \
+                    --remote-debugging-port=9223 \
+                    --enable-impl-side-painting \
+                    --enable-skia-benchmarking \
+                    --disable-web-security \
+                    $url &
             elif [ "$IOS" == "true" ]; then
                 dbus-launch --exit-with-session google-chrome-stable \
                     --no-sandbox \
