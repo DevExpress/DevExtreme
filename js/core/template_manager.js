@@ -161,7 +161,7 @@ export default class TemplateManager {
             if(deviceTemplate) {
                 templates.push({
                     name: templateName,
-                    template: this.createTemplate(deviceTemplate),
+                    template: this._createTemplate(deviceTemplate),
                 });
             }
         }
@@ -180,7 +180,7 @@ export default class TemplateManager {
         const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         return !onlyJunkTemplateContent
-            ? { template: this.createTemplate($anonymousTemplate), name: this._anonymousTemplateName }
+            ? { template: this._createTemplate($anonymousTemplate), name: this._anonymousTemplateName }
             : {};
     }
 
@@ -190,12 +190,12 @@ export default class TemplateManager {
         )[0];
         if(cachedTemplate) return cachedTemplate.template;
 
-        const template = this.createTemplate(templateSource);
+        const template = this._createTemplate(templateSource);
         this._tempTemplates.push({ template, source: TemplateManager.templateKey(templateSource) });
         return template;
     }
 
-    createTemplate(templateSource) {
+    _createTemplate(templateSource) {
         return this._createElement(TemplateManager.validateTemplateSource(templateSource));
     }
 
@@ -203,6 +203,7 @@ export default class TemplateManager {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
                 const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
+                // const templateSourceResult = templateSource(TemplateManager._getNormalizedTemplateArgs(options)); // accordion tests
 
                 if(!isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
@@ -214,7 +215,7 @@ export default class TemplateManager {
                         return new FunctionTemplate(() => templateSource);
                     }
                     dispose = true;
-                    return this.createTemplate(templateSource);
+                    return this._createTemplate(templateSource);
                 }, templates, isAsyncTemplate, skipTemplates);
 
                 const result = template.render(options);
