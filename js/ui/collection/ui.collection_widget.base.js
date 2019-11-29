@@ -266,6 +266,8 @@ var CollectionWidget = Widget.inherit({
 
     _initTemplates: function() {
         this._initItemsFromMarkup();
+
+        // this._initDefaultItemTemplate();
         this.callBase();
     },
 
@@ -289,11 +291,21 @@ var CollectionWidget = Widget.inherit({
         });
     },
 
-    _initDefaultItemTemplate: function() {
-        this._templateManager.addDefaultTemplate(
-            this._getDefaultTemplates()
-        );
-    },
+    // _initDefaultItemTemplate: function() {
+    //     var fieldsMap = this._getFieldsMap();
+    //     this._templateManager.addDefaultTemplate({
+    //         ["item"]: new BindableTemplate((function($container, data) {
+    //             if(isPlainObject(data)) {
+    //                 this._prepareDefaultItemTemplate(data, $container);
+    //             } else {
+    //                 if(fieldsMap && isFunction(fieldsMap.text)) {
+    //                     data = fieldsMap.text(data);
+    //                 }
+    //                 $container.text(String(commonUtils.ensureDefined(data, "")));
+    //             }
+    //         }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap)
+    //     });
+    // },
 
     _getBindableFields: function() {
         return ["text", "html"];
@@ -622,7 +634,7 @@ var CollectionWidget = Widget.inherit({
                 break;
             case "displayExpr":
                 this._compileDisplayGetter();
-                this._initDefaultItemTemplate();
+                // this._initDefaultItemTemplate();
                 this._invalidate();
                 break;
             case "visibleExpr":

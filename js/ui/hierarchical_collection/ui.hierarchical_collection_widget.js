@@ -121,12 +121,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _getDataAdapterOptions: noop,
 
-    _initDynamicTemplates: function() {
-        this._templateManager.addDefaultTemplate(
-            this._getDefaultTemplates()
-        );
-    },
-
     _getDefaultTemplates: function() {
         var that = this;
 
@@ -247,7 +241,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             case "displayExpr":
             case "keyExpr":
                 this._initAccessors();
-                this._initDynamicTemplates();
+                // this._initDynamicTemplates();
                 this.repaint();
                 break;
             case "itemsExpr":
