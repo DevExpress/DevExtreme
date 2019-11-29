@@ -167,7 +167,8 @@ module.exports = {
             pager: {
                 /**
                  * @name GridBaseOptions.pager.visible
-                 * @type boolean
+                 * @type boolean|Enums.Mode
+                 * @default "auto"
                  */
                 visible: "auto",
                 /**

@@ -2007,7 +2007,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.onToolbarPreparing */
         onToolbarPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /** @name GridBase.Options.pager */
-        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' | 'auto' };
         /** @name GridBase.Options.paging */
         paging?: GridBasePaging;
         /** @name GridBase.Options.renderAsync */
