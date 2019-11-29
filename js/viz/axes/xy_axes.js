@@ -1108,7 +1108,7 @@ module.exports = {
                     "stroke-width": width
                 },
                 getPoints = that._isHorizontal ? rotateLine : function(p) { return p; },
-                drawer = getLineDrawer(that._renderer, spaceAttr, attr, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
+                drawer = getLineDrawer(that._renderer, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
 
             drawer(width / 2, spaceAttr);
             drawer(0, attr);
@@ -1239,7 +1239,7 @@ module.exports = {
     }
 };
 
-function getLineDrawer(renderer, spaceAttr, elementAttr, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
+function getLineDrawer(renderer, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
     var elementType = isWaved ? "bezier" : "line",
         group = renderer.g().append(root);
 
