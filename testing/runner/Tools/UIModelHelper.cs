@@ -14,7 +14,7 @@ namespace Runner.Tools
     public class UIModelHelper
     {
         // constellation is a set of categories, they are defined in __meta.json files inside category directories
-        static readonly ICollection<string> KnownConstellations = new HashSet<string> { "misc", "ui", "ui.editors", "ui.grid", "ui.scheduler", "viz", "perf" };
+        static readonly ICollection<string> KnownConstellations = new HashSet<string> { "export", "misc", "ui", "ui.editors", "ui.grid", "ui.scheduler", "viz", "perf" };
 
         UrlHelper UrlHelper;
         string TestsRootPath;
