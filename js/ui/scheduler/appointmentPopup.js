@@ -242,7 +242,8 @@ export default class AppointmentPopup {
             },
             {
                 shortcut: "cancel",
-                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
+                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION,
+                onClick: (e) => this._cancelButtonClickHandler(e)
             }
         ];
     }
@@ -325,6 +326,10 @@ export default class AppointmentPopup {
     _doneButtonClickHandler(e) {
         e.cancel = true;
         this.saveEditData();
+    }
+
+    _cancelButtonClickHandler(e) {
+        this._appointmentForm.resetValues();
     }
 
     saveEditData() {
