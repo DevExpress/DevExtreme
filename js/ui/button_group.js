@@ -16,8 +16,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     SHAPE_STANDARD_CLASS = "dx-shape-standard";
 
 const ButtonCollection = CollectionWidget.inherit({
-    _initTemplates() {
-        this.callBase();
+    _getDefaultTemplates: function() {
         /**
          * @name dxButtonGroupItem
          * @inherits CollectionWidgetItem
@@ -40,7 +39,7 @@ const ButtonCollection = CollectionWidget.inherit({
          * @name dxButtonGroupItem.html
          * @hidden
          */
-        this._templateManager.addDefaultTemplate({
+        return extend(this.callBase(), {
             ["item"]: new BindableTemplate((($container, data, model) => {
                 this._prepareItemStyles($container);
                 this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {

@@ -95,6 +95,9 @@ Object.keys(widgets).forEach(function(widget) {
         var options = this.instance.option(),
             clock = widget === "DataGrid" || widget === "TreeList" ? sinon.useFakeTimers() : null;
 
+        if(options || Object.keys(options).length === 0) {
+            assert.ok(false, "options is not defined " + widget);
+        }
         for(var optionName in options) {
             var prevValue = options[optionName],
                 newValue = prevValue;

@@ -25,16 +25,15 @@ const RTL_CLASS = "dx-rtl";
 QUnit.module("default", {
     beforeEach: function() {
         this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
-            _initTemplates() {
-                this.callBase();
-                this._templateManager.addDefaultTemplate({
+            _getDefaultTemplates: function() {
+                return {
                     ["content"]: {
                         render() {
                             return "Default content markup";
                         }
                     }
-                });
-            }
+                };
+            },
         });
         this.TestComponent = DOMComponent.inherit({
 

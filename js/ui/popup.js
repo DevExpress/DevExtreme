@@ -403,9 +403,8 @@ var Popup = Overlay.inherit({
             .toggleClass(POPUP_NORMAL_CLASS, !value);
     },
 
-    _initTemplates: function() {
-        this.callBase();
-        this._templateManager.addDefaultTemplate({
+    _getDefaultTemplates: function() {
+        return extend(this.callBase(), {
             ["title"]: new EmptyTemplate(),
             ["bottom"]: new EmptyTemplate()
         });

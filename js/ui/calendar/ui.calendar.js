@@ -443,14 +443,13 @@ var Calendar = Editor.inherit({
         this._onContouredChanged = this._createActionByOption("onContouredChanged");
     },
 
-    _initTemplates: function() {
-        this._templateManager.addDefaultTemplate({
+    _getDefaultTemplates: function() {
+        return extend(this.callBase(), {
             ["cell"]: new FunctionTemplate(function(options) {
                 var data = options.model;
                 $(options.container).append($("<span>").text(data && data.text || String(data)));
             })
         });
-        this.callBase();
     },
 
     _updateCurrentDate: function(date) {

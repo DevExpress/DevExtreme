@@ -170,9 +170,8 @@ var Toolbar = ToolbarBase.inherit({
         this._menuStrategy.renderMenuItems();
     },
 
-    _initTemplates: function() {
-        this.callBase();
-        this._templateManager.addDefaultTemplate({
+    _getDefaultTemplates: function() {
+        return extend(this.callBase(), {
             ["actionSheetItem"]: new ChildDefaultTemplate("item")
         });
     },

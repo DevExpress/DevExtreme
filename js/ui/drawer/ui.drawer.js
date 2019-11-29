@@ -204,12 +204,11 @@ const Drawer = Widget.inherit({
         return ANONYMOUS_TEMPLATE_NAME;
     },
 
-    _initTemplates() {
-        this._templateManager.addDefaultTemplate({
+    _getDefaultTemplates: function() {
+        return extend(this.callBase(), {
             ["panel"]: new EmptyTemplate(),
             ["content"]: new EmptyTemplate()
         });
-        this.callBase();
     },
 
     _initCloseOnOutsideClickHandler() {

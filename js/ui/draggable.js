@@ -927,13 +927,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return ANONYMOUS_TEMPLATE_NAME;
     },
 
-    _initTemplates: function() {
-        if(!this.option("contentTemplate")) return;
+    _getDefaultTemplates: function() {
+        if(!this.option("contentTemplate")) return this.callBase();
 
-        this._templateManager.addDefaultTemplate({
+        return extend(this.callBase(), {
             ["content"]: new EmptyTemplate()
         });
-        this.callBase.apply(this, arguments);
     },
 
     _render: function() {

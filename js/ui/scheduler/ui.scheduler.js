@@ -1707,21 +1707,13 @@ const Scheduler = Widget.inherit({
         this._subscribes = subscribes;
     },
 
-    _initTemplates: function() {
-        this._initAppointmentTemplate();
-
-        this._templateManager.addDefaultTemplate({
-            ["appointmentTooltip"]: new EmptyTemplate(),
-            ["dropDownAppointment"]: new EmptyTemplate(),
-        });
-        this.callBase();
-    },
-
-    _initAppointmentTemplate: function() {
+    _getDefaultTemplates: function() {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
 
-        this._templateManager.addDefaultTemplate({
+        return extend(this.callBase(), {
+            ["appointmentTooltip"]: new EmptyTemplate(),
+            ["dropDownAppointment"]: new EmptyTemplate(),
             ["item"]: new BindableTemplate(($container, data, model) => {
                 this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
             }, [

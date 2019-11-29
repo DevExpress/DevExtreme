@@ -192,8 +192,7 @@ var Accordion = CollectionWidget.inherit({
         $element.append(this._$container);
     },
 
-    _initTemplates: function() {
-        this.callBase();
+    _getDefaultTemplates: function() {
         /**
         * @name dxAccordionItem
         * @inherits CollectionWidgetItem
@@ -207,7 +206,7 @@ var Accordion = CollectionWidget.inherit({
         * @name dxAccordionItem.icon
         * @type String
         */
-        this._templateManager.addDefaultTemplate({
+        return extend(this.callBase(), {
             ["title"]: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
                     if(isDefined(data.title) && !isPlainObject(data.title)) {

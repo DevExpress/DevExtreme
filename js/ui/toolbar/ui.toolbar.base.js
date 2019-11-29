@@ -62,8 +62,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         return this.callBase().filter(item => item !== "disabled");
     },
 
-    _initTemplates: function() {
-        this.callBase();
+    _getDefaultTemplates: function() {
         var template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
                 if(data.text) {
@@ -96,7 +95,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             });
         }.bind(this), ["text", "html", "widget", "options"], this.option("integrationOptions.watchMethod"));
 
-        this._templateManager.addDefaultTemplate({
+        return extend(this.callBase(), {
             ["item"]: template,
             ["menuItem"]: template,
         });
