@@ -199,10 +199,10 @@ export default class TemplateManager {
         return this._createElement(TemplateManager.validateTemplateSource(templateSource));
     }
 
-    getTemplate(templateSource, templates, { isAsyncTemplate, skipTemplates }) {
+    getTemplate(templateSource, templates, { isAsyncTemplate, skipTemplates }, context) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
-                const templateSourceResult = templateSource.apply(this, TemplateManager._getNormalizedTemplateArgs(options));
+                const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
                 // const templateSourceResult = templateSource(TemplateManager._getNormalizedTemplateArgs(options)); // accordion tests
 
                 if(!isDefined(templateSourceResult)) {
