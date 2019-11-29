@@ -3461,7 +3461,7 @@ QUnit.module("Discrete axis multiline label layout (T833812)", $.extend({}, modu
         moduleSetup.beforeEach.call(this);
         this.options = {
             size: {
-                width: 350,
+                width: 385,
                 height: 400
             },
             dataSource: [{
@@ -3498,21 +3498,16 @@ QUnit.module("Discrete axis multiline label layout (T833812)", $.extend({}, modu
 QUnit.test("Alignment left. No rotate", function(assert) {
     var chart = this.createChart(this.options),
         axis = chart.getArgumentAxis(),
-        texts0 = axis._majorTicks[0].label._texts,
-        texts1 = axis._majorTicks[1].label._texts;
+        texts = axis._majorTicks[0].label._texts;
 
-    assert.equal(texts0.length, 3);
-    assert.equal(texts1.length, 2);
-    assert.ok(parseInt(texts0[0].tspan.getAttribute("dx")) < -10);
-    assert.ok(parseInt(texts0[0].tspan.getAttribute("dx")) > parseInt(texts0[2].tspan.getAttribute("dx")));
-    assert.roughEqual(texts0[0].tspan.getStartPositionOfChar(0).x, texts0[1].tspan.getStartPositionOfChar(0).x, 0.15);
-    assert.roughEqual(texts0[0].tspan.getStartPositionOfChar(0).x, texts0[2].tspan.getStartPositionOfChar(0).x, 0.15);
-    assert.roughEqual(texts1[0].tspan.getStartPositionOfChar(0).x, texts1[1].tspan.getStartPositionOfChar(0).x, 0.15);
+    assert.equal(texts.length, 2);
+    assert.ok(parseInt(texts[0].tspan.getAttribute("dx")) < -20);
+    assert.roughEqual(texts[0].tspan.getStartPositionOfChar(0).x, texts[1].tspan.getStartPositionOfChar(0).x, 0.15);
 });
 
 QUnit.test("Alignment right. Chart rotated", function(assert) {
     this.options.rotated = true;
-    this.options.argumentAxis.placeholderSize = 110;
+    this.options.argumentAxis.placeholderSize = 130;
     this.options.argumentAxis.label.alignment = "right";
 
     var chart = this.createChart(this.options),
@@ -3524,5 +3519,5 @@ QUnit.test("Alignment right. Chart rotated", function(assert) {
     assert.equal(texts1.length, 2);
     assert.ok(parseInt(texts0[0].tspan.getAttribute("dx")) > 20);
     assert.roughEqual(texts0[0].tspan.getEndPositionOfChar(8).x, texts0[1].tspan.getEndPositionOfChar(20).x, 0.15);
-    assert.roughEqual(texts1[0].tspan.getEndPositionOfChar(17).x, texts1[1].tspan.getEndPositionOfChar(8).x, 0.15);
+    assert.roughEqual(texts1[0].tspan.getEndPositionOfChar(22).x, texts1[1].tspan.getEndPositionOfChar(3).x, 0.15);
 });
