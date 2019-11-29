@@ -3461,7 +3461,7 @@ QUnit.module("Discrete axis multiline label layout (T833812)", $.extend({}, modu
         moduleSetup.beforeEach.call(this);
         this.options = {
             size: {
-                width: 350,
+                width: 355,
                 height: 400
             },
             dataSource: [{
@@ -3512,7 +3512,7 @@ QUnit.test("Alignment left. No rotate", function(assert) {
 
 QUnit.test("Alignment right. Chart rotated", function(assert) {
     this.options.rotated = true;
-    this.options.argumentAxis.placeholderSize = 110;
+    this.options.argumentAxis.placeholderSize = 130;
     this.options.argumentAxis.label.alignment = "right";
 
     var chart = this.createChart(this.options),
