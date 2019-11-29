@@ -25,6 +25,7 @@ export class EventsStrategy {
         if(callbacks) {
             callbacks.fireWith(this._owner, eventArgs);
         }
+        return this._owner;
     }
 
     on(eventName, eventHandler) {

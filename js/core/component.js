@@ -399,8 +399,7 @@ var Component = Class.inherit({
     },
 
     fireEvent(eventName, eventArgs) {
-        this._eventsStrategy.fireEvent(eventName, eventArgs);
-        return this;
+        return this._eventsStrategy.fireEvent(eventName, eventArgs);
     },
 
     hasEvent(eventName) {
