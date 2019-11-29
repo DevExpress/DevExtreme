@@ -122,9 +122,20 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getDataAdapterOptions: noop,
 
     _initDynamicTemplates: function() {
-        this._templateManager.addDefaultTemplate(
-            this._getDefaultTemplates()
-        );
+        var that = this;
+        this._templateManager.addDefaultTemplate({
+            ["item"]: new BindableTemplate(function($container, itemData) {
+                $container
+                    .html(itemData.html)
+                    .append(this._getIconContainer(itemData))
+                    .append(this._getTextContainer(itemData))
+                    .append(this._getPopoutContainer(itemData));
+                that._addContentClasses(itemData, $container.parent());
+            }.bind(this), ["text", "html", "items", "icon"], this.option("integrationOptions.watchMethod"), {
+                "text": this._displayGetter,
+                "items": this._itemsGetter
+            })
+        });
     },
 
     _getDefaultTemplates: function() {
