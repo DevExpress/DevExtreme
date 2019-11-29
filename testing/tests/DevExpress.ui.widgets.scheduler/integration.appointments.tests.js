@@ -3770,7 +3770,7 @@ QUnit.test("Multi-day appointment is hidden in compact collectors according to h
     const tailCoords = translator.locate(this.scheduler.appointments.compact.getButton(1));
 
     assert.strictEqual(tailCoords.top, 0, "Appointment top is correct");
-    assert.roughEqual(tailCoords.left, 239, 2, "Appointment left is correct");
+    assert.roughEqual(tailCoords.left, 240, 2, "Appointment left is correct");
 });
 
 QUnit.module("Appointments", () => {
