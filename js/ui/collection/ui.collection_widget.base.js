@@ -290,19 +290,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initDefaultItemTemplate: function() {
-        var fieldsMap = this._getFieldsMap();
-        this._templateManager.addDefaultTemplate({
-            ["item"]: new BindableTemplate((function($container, data) {
-                if(isPlainObject(data)) {
-                    this._prepareDefaultItemTemplate(data, $container);
-                } else {
-                    if(fieldsMap && isFunction(fieldsMap.text)) {
-                        data = fieldsMap.text(data);
-                    }
-                    $container.text(String(commonUtils.ensureDefined(data, "")));
-                }
-            }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap)
-        });
+        this._templateManager.addDefaultTemplate(
+            this._getDefaultTemplates()
+        );
     },
 
     _getBindableFields: function() {
