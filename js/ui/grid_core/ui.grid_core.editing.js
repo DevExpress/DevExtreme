@@ -1300,6 +1300,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 editingTexts = editingOptions && editingOptions.texts,
                 confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle,
                 isBatchMode = editingOptions && editingOptions.mode === EDIT_MODE_BATCH,
+                confirmDelete = editingOptions && editingOptions.confirmDelete,
                 confirmDeleteMessage = editingTexts && editingTexts.confirmDeleteMessage,
                 dataController = that._dataController,
                 removeByKey,
@@ -1335,7 +1336,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 };
 
-                if(isBatchMode || !confirmDeleteMessage) {
+                if(isBatchMode || !confirmDelete || !confirmDeleteMessage) {
                     removeByKey(key);
                 } else {
                     showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
@@ -2550,6 +2551,12 @@ module.exports = {
                  * @default false
                  */
                 selectTextOnEditStart: false,
+                /**
+                 * @name GridBaseOptions.editing.confirmDelete
+                 * @type boolean
+                 * @default true
+                 */
+                confirmDelete: true,
                 /**
                  * @name dxDataGridOptions.editing.texts
                  * @type object
