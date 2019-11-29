@@ -1249,6 +1249,7 @@ QUnit.test('Remove row with message', function(assert) {
 
         that.options.editing = {
             allowDeleting: true,
+            confirmDelete: true,
             texts: {
                 deleteRow: "Delete",
                 confirmDeleteMessage: "TestMessage",
@@ -1302,6 +1303,7 @@ QUnit.test('Remove row with message ("cell" edit mode)', function(assert) {
 
         that.options.editing = {
             allowDeleting: true,
+            confirmDelete: true,
             mode: "cell",
             texts: {
                 deleteRow: "Delete",
@@ -1354,6 +1356,7 @@ QUnit.test('Not remove row with message', function(assert) {
 
         that.options.editing = {
             allowDeleting: true,
+            confirmDelete: true,
             texts: {
                 confirmDeleteMessage: "TestMessage",
                 confirmDeleteTitle: "TestTitle"
@@ -2169,6 +2172,7 @@ QUnit.test("Title of delete dialog is not displayed when title text is empty or 
 
     this.options.editing = {
         allowUpdating: true,
+        confirmDelete: true,
         texts: {
             confirmDeleteMessage: "Test"
         }
@@ -2189,6 +2193,7 @@ QUnit.test("Title of delete dialog is displayed when title text is defined", fun
 
     this.options.editing = {
         allowUpdating: true,
+        confirmDelete: true,
         texts: {
             confirmDeleteMessage: "Test",
             confirmDeleteTitle: "Title"
@@ -4746,6 +4751,7 @@ QUnit.test("Remove row when set onRowRemoving", function(assert) {
 
     that.options.editing = {
         allowDeleting: true,
+        confirmDelete: true,
         texts: {
             deleteRow: "Delete",
             undeleteRow: "Undelete",

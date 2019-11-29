@@ -2045,6 +2045,8 @@ declare module DevExpress.ui {
     }
     /** @name GridBase.Options.editing */
     export interface GridBaseEditing {
+        /** @name GridBase.Options.editing.confirmDelete */
+        confirmDelete?: boolean;
         /** @name GridBase.Options.editing.form */
         form?: dxFormOptions;
         /** @name GridBase.Options.editing.mode */
