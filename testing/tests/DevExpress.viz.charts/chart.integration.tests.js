@@ -3455,3 +3455,74 @@ QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", functi
 
     translateX.forEach((tX, i) => assert.roughEqual(tX, 44, 2.1));
 });
+
+QUnit.module("Discrete axis multiline label layout (T833812)", $.extend({}, moduleSetup, {
+    beforeEach() {
+        moduleSetup.beforeEach.call(this);
+        this.options = {
+            size: {
+                width: 350,
+                height: 400
+            },
+            dataSource: [{
+                arg: "long long\nlong long title title",
+                val: 3
+            }, {
+                arg: "long long title ti long long",
+                val: 2
+            }, {
+                arg: "Wednesday",
+                val: 3
+            }],
+            series: [{}],
+            valueAxis: {
+                label: {
+                    visible: false
+                }
+            },
+            argumentAxis: {
+                label: {
+                    alignment: "left"
+                }
+            },
+            legend: {
+                visible: false
+            }
+        };
+    },
+    afterEach() {
+        moduleSetup.afterEach.call(this);
+    }
+}));
+
+QUnit.test("Alignment left. No rotate", function(assert) {
+    var chart = this.createChart(this.options),
+        axis = chart.getArgumentAxis(),
+        texts0 = axis._majorTicks[0].label._texts,
+        texts1 = axis._majorTicks[1].label._texts;
+
+    assert.equal(texts0.length, 3);
+    assert.equal(texts1.length, 2);
+    assert.ok(parseInt(texts0[0].tspan.getAttribute("dx")) < -10);
+    assert.ok(parseInt(texts0[0].tspan.getAttribute("dx")) > parseInt(texts0[2].tspan.getAttribute("dx")));
+    assert.roughEqual(texts0[0].tspan.getStartPositionOfChar(0).x, texts0[1].tspan.getStartPositionOfChar(0).x, 0.15);
+    assert.roughEqual(texts0[0].tspan.getStartPositionOfChar(0).x, texts0[2].tspan.getStartPositionOfChar(0).x, 0.15);
+    assert.roughEqual(texts1[0].tspan.getStartPositionOfChar(0).x, texts1[1].tspan.getStartPositionOfChar(0).x, 0.15);
+});
+
+QUnit.test("Alignment right. Chart rotated", function(assert) {
+    this.options.rotated = true;
+    this.options.argumentAxis.placeholderSize = 110;
+    this.options.argumentAxis.label.alignment = "right";
+
+    var chart = this.createChart(this.options),
+        axis = chart.getArgumentAxis(),
+        texts0 = axis._majorTicks[0].label._texts,
+        texts1 = axis._majorTicks[1].label._texts;
+
+    assert.equal(texts0.length, 2);
+    assert.equal(texts1.length, 2);
+    assert.ok(parseInt(texts0[0].tspan.getAttribute("dx")) > 20);
+    assert.roughEqual(texts0[0].tspan.getEndPositionOfChar(8).x, texts0[1].tspan.getEndPositionOfChar(20).x, 0.15);
+    assert.roughEqual(texts1[0].tspan.getEndPositionOfChar(17).x, texts1[1].tspan.getEndPositionOfChar(8).x, 0.15);
+});
