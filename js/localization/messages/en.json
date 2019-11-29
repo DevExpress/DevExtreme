@@ -485,7 +485,7 @@
         "dxDiagram-shapeContainer": "Container",
         "dxDiagram-shapeVerticalContainer": "Vertical Container",
         "dxDiagram-shapeHorizontalContainer": "Horizontal Container",
-        "dxDiagram-shapeCard": "Card",
+        "dxDiagram-shapeCard": "Person's Name",
         "dxDiagram-shapeCardWithImageOnLeft": "Card with Image on the Left",
         "dxDiagram-shapeCardWithImageOnTop": "Card with Image on the Top",
         "dxDiagram-shapeCardWithImageOnRight": "Card with Image on the Right"
