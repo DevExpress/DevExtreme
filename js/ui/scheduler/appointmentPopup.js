@@ -55,6 +55,7 @@ export default class AppointmentPopup {
         });
 
         this._popup.option("onShowing", e => {
+            // this._appointmentForm.resetValues();
             this._updateForm(data, processTimeZone);
 
             const arg = {
@@ -242,8 +243,7 @@ export default class AppointmentPopup {
             },
             {
                 shortcut: "cancel",
-                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION,
-                onClick: (e) => this._cancelButtonClickHandler(e)
+                location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
             }
         ];
     }
@@ -326,10 +326,6 @@ export default class AppointmentPopup {
     _doneButtonClickHandler(e) {
         e.cancel = true;
         this.saveEditData();
-    }
-
-    _cancelButtonClickHandler(e) {
-        this._appointmentForm.resetValues();
     }
 
     saveEditData() {

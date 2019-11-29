@@ -1239,3 +1239,41 @@ QUnit.test("Popup should not be closed until the valid value is typed", function
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, "the only pending editor is displayed in the form");
 });
 
+QUnit.test("Appointment should have correct form data on consecutive shows (T832711)", function(assert) {
+    const scheduler = createInstance({
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 25),
+        endDayHour: 20,
+        dataSource: [{
+            'text': 'Google AdWords Strategy',
+            'startDate': new Date(2017, 4, 1),
+            'endDate': new Date(2017, 4, 5),
+            'allDay': true,
+        }],
+        height: 580
+    });
+    scheduler.appointments.getAppointment().trigger("dxdblclick");
+
+    $(scheduler.appointmentForm.getEditor("allDay").element()).trigger("dxclick");
+    scheduler.appointmentPopup.clickCancelButton();
+    scheduler.appointments.getAppointment().trigger("dxdblclick");
+
+    assert.equal(scheduler.appointmentForm.getEditor("endDate").option("text"), "5/5/2017", "Appointment endDate is correct");
+});
+
+QUnit.test("Appointment should have correct recurrence rule on consecutive shows (T835243)", function(assert) {
+    const scheduler = createInstance({
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 25),
+        dataSource: [],
+        height: 580,
+        recurrenceEditMode: "series"
+    });
+    scheduler.instance.showAppointmentPopup({ startDate: new Date(2017, 4, 25), recurrenceRule: "FREQ=DAILY" }, true);
+    scheduler.appointmentPopup.clickCancelButton();
+    scheduler.instance.showAppointmentPopup({ startDate: new Date(2017, 4, 25) }, true);
+
+    assert.equal(scheduler.appointmentForm.getEditor("recurrenceRule").option("value"), "", "Appointment forn recurrence rule is correct");
+});
