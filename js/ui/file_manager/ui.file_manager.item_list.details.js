@@ -72,6 +72,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             {
                 dataField: "isDirectory",
                 caption: "",
+                width: 36,
                 alignment: "center",
                 cellTemplate: this._createThumbnailColumnCell.bind(this),
                 cssClass: FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS
