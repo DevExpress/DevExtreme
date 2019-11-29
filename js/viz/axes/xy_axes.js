@@ -230,36 +230,30 @@ function generateRangesOnPoints(points, edgePoints, getRange) {
     return ranges;
 }
 
-function generateAutoBreaks(options, series, viewport) {
-    var ranges,
-        breaks = [],
-        i,
-        getRange = options.type === "logarithmic" ?
-            function(min, max) { return vizUtils.getLog(max / min, options.logarithmBase); } :
-            function(min, max) { return max - min; },
-        visibleRange = getRange(viewport.minVisible, viewport.maxVisible),
-        maxAutoBreakCount,
-        points = series.reduce(function(result, s) {
-            var points = s.getPointsInViewPort();
-            result[0] = result[0].concat(points[0]);
-            result[1] = result[1].concat(points[1]);
-            return result;
-        }, [[], []]),
-        sortedAllPoints = points[0].concat(points[1]).sort(function(a, b) {
-            return b - a;
-        }),
-        edgePoints = points[1].filter(function(p) {
-            return points[0].indexOf(p) < 0;
-        }),
-        epsilon = visibleRange / 1E10,
-        minDiff = RANGE_RATIO * visibleRange;
+function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, { minVisible, maxVisible }) {
+    const breaks = [];
+    const getRange = type === "logarithmic" ?
+        (min, max) => { return vizUtils.getLog(max / min, logarithmBase); } :
+        (min, max) => { return max - min; };
 
-    ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort(function(a, b) {
-        return b.length - a.length;
-    });
+    let visibleRange = getRange(minVisible, maxVisible);
+    const points = series.reduce((result, s) => {
+        var points = s.getPointsInViewPort();
+        result[0] = result[0].concat(points[0]);
+        result[1] = result[1].concat(points[1]);
+        return result;
+    }, [[], []]);
 
-    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? Math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
-    for(i = 0; i < maxAutoBreakCount; i++) {
+    const sortedAllPoints = points[0].concat(points[1]).sort((a, b) => b - a);
+    const edgePoints = points[1].filter(p => points[0].indexOf(p) < 0);
+
+    let minDiff = RANGE_RATIO * visibleRange;
+
+    const ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort((a, b) => b.length - a.length);
+    const epsilon = _math.min.apply(null, ranges.map(r => r.length)) / 1000;
+    const _maxAutoBreakCount = isDefined(maxAutoBreakCount) ? _math.min(maxAutoBreakCount, ranges.length) : ranges.length;
+
+    for(let i = 0; i < _maxAutoBreakCount; i++) {
         if(ranges[i].length >= minDiff) {
             if(visibleRange <= ranges[i].length) {
                 break;
@@ -1128,7 +1122,7 @@ module.exports = {
                     "stroke-width": width
                 },
                 getPoints = that._isHorizontal ? rotateLine : function(p) { return p; },
-                drawer = getLineDrawer(that._renderer, spaceAttr, attr, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
+                drawer = getLineDrawer(that._renderer, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
 
             drawer(width / 2, spaceAttr);
             drawer(0, attr);
@@ -1259,7 +1253,7 @@ module.exports = {
     }
 };
 
-function getLineDrawer(renderer, spaceAttr, elementAttr, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
+function getLineDrawer(renderer, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
     var elementType = isWaved ? "bezier" : "line",
         group = renderer.g().append(root);
 
