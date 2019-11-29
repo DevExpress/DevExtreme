@@ -204,8 +204,9 @@ var TabPanel = MultiView.inherit({
         this._renderLayout();
     },
 
-    _getDefaultTemplates: function() {
-        return extend(this.callBase(), {
+    _initTemplates: function() {
+        this.callBase();
+        this._templateManager.addDefaultTemplate({
             ["title"]: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
                     if(isDefined(data.title) && !isPlainObject(data.title)) {

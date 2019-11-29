@@ -254,8 +254,8 @@ class Button extends Widget {
         return ANONYMOUS_TEMPLATE_NAME;
     }
 
-    _getDefaultTemplates() {
-        return extend(this.callBase(), {
+    _initTemplates() {
+        this._templateManager.addDefaultTemplate({
             ['content']: new FunctionTemplate(({ model = {}, container }) => {
                 const { text, icon } = model;
                 const { iconPosition } = this.option();
@@ -273,6 +273,7 @@ class Button extends Widget {
                 }
             })
         });
+        super._initTemplates();
     }
 
     _optionChanged(args) {

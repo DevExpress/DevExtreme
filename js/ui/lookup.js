@@ -606,8 +606,9 @@ var Lookup = DropDownList.inherit({
         ]);
     },
 
-    _getDefaultTemplates: function() {
-        return extend(this.callBase(), {
+    _initTemplates: function() {
+        this.callBase();
+        this._templateManager.addDefaultTemplate({
             ["group"]: new ChildDefaultTemplate("group"),
             ["title"]: new ChildDefaultTemplate("title"),
         });

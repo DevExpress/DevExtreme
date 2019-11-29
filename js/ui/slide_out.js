@@ -190,8 +190,9 @@ var SlideOut = CollectionWidget.inherit({
         this._initSlideOutView();
     },
 
-    _getDefaultTemplates: function() {
-        return extend(this.callBase(), {
+    _initTemplates: function() {
+        this.callBase();
+        this._templateManager.addDefaultTemplate({
             ["menuItem"]: new ChildDefaultTemplate("item"),
             ["menuGroup"]: new ChildDefaultTemplate("group"),
             ["content"]: new EmptyTemplate()

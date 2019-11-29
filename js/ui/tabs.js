@@ -209,8 +209,9 @@ const Tabs = CollectionWidget.inherit({
         this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
     },
 
-    _getDefaultTemplates: function() {
-        return extend(this.callBase(), {
+    _initTemplates: function() {
+        this.callBase();
+        this._templateManager.addDefaultTemplate({
             ["item"]: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {
                     this._prepareDefaultItemTemplate(data, $container);

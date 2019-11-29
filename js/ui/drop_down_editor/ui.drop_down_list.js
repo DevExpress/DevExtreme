@@ -309,8 +309,9 @@ var DropDownList = DropDownEditor.inherit({
         this._itemClickAction = this._createActionByOption("onItemClick");
     },
 
-    _getDefaultTemplates: function() {
-        return extend(this.callBase(), {
+    _initTemplates: function() {
+        this.callBase();
+        this._templateManager.addDefaultTemplate({
             ["item"]: new ChildDefaultTemplate("item")
         });
     },

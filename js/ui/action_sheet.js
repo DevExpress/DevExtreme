@@ -173,7 +173,8 @@ var ActionSheet = CollectionWidget.inherit({
         }]);
     },
 
-    _getDefaultTemplates: function() {
+    _initTemplates: function() {
+        this.callBase();
         /**
         * @name dxActionSheetItem
         * @inherits CollectionWidgetItem
@@ -210,7 +211,7 @@ var ActionSheet = CollectionWidget.inherit({
         * @type String
         * @hidden
         */
-        return extend(this.callBase(), {
+        this._templateManager.addDefaultTemplate({
             ["item"]: new BindableTemplate(function($container, data) {
                 var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
                 $container.append(button.$element());

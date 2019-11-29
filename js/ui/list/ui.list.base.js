@@ -653,8 +653,9 @@ var ListBase = CollectionWidget.inherit({
         this._scrollAction && this._scrollAction(e);
     },
 
-    _getDefaultTemplates: function() {
-        return extend(this.callBase(), {
+    _initTemplates: function() {
+        this.callBase();
+        this._templateManager.addDefaultTemplate({
             ["group"]: new BindableTemplate(function($container, data) {
                 if(typeUtils.isPlainObject(data)) {
                     if(data.key) {

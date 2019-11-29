@@ -250,7 +250,8 @@ var Gallery = CollectionWidget.inherit({
         this.option("loopItemFocus", this.option("loop"));
     },
 
-    _getDefaultTemplates: function() {
+    _initTemplates: function() {
+        this.callBase();
         /**
         * @name dxGalleryItem
         * @inherits CollectionWidgetItem
@@ -268,7 +269,8 @@ var Gallery = CollectionWidget.inherit({
         * @name dxGalleryItem.visible
         * @hidden
         */
-        return extend(this.callBase(), {
+
+        this._templateManager.addDefaultTemplate({
             ["item"]: new BindableTemplate((function($container, data) {
                 var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
