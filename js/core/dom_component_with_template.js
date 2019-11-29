@@ -12,7 +12,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _getDefaultTemplates: function() {
-        return void 0;
+        return {};
     },
 
     _init: function() {
@@ -73,7 +73,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _saveTemplate: function(name, template) {
         this._setOptionSilent(
             'integrationOptions.templates.' + name,
-            this._templateManager._createTemplate(template)
+            this._templateManager.createTemplate(template)
         );
     },
 });
