@@ -41,6 +41,7 @@ const KEY_FONT_SIZE = "font-size";
 const KEY_FONT_STYLE = "font-style";
 const KEY_FONT_WEIGHT = "font-weight";
 const KEY_TEXT_DECORATION = "text-decoration";
+const KEY_TEXTS_ALIGNMENT = "textsAlignment";
 const NONE = "none";
 const DEFAULT_FONT_SIZE = 12;
 const ELLIPSIS = "...";
@@ -645,6 +646,10 @@ function textAttr(attrs) {
         settings[KEY_STROKE_OPACITY] = attrs[KEY_STROKE_OPACITY];
         delete attrs[KEY_STROKE_OPACITY];
     }
+    if(attrs[KEY_TEXTS_ALIGNMENT] !== undefined) {
+        alignTextNodes(that, attrs[KEY_TEXTS_ALIGNMENT]);
+        delete attrs[KEY_TEXTS_ALIGNMENT];
+    }
 
     isStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
     baseAttr(that, attrs);
@@ -916,7 +921,7 @@ function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
 }
 
 function getTextWidth(text) {
-    return text.value.length ? text.tspan.getSubStringLength(0, text.value.length) : 0;
+    return text.value.length && text.tspan.getBoundingClientRect().width > 0 ? text.tspan.getSubStringLength(0, text.value.length) : 0;
 }
 
 function prepareLines(element, texts, maxWidth) {
@@ -1229,6 +1234,24 @@ function locateTextNodes(wrapper) {
             setTextNodeAttribute(item, "x", x);
             const height = getItemLineHeight(item, lineHeight);
             setTextNodeAttribute(item, "dy", height); // T177039
+        }
+    }
+}
+
+function alignTextNodes(wrapper, alignment) {
+    if(!wrapper._texts || alignment === "center") {
+        return;
+    }
+
+    const items = wrapper._texts;
+    const direction = alignment === "left" ? -1 : 1;
+    const maxTextWidth = Math.max.apply(Math, items.map(t => { return getTextWidth(t); }));
+
+    for(let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const textWidth = getTextWidth(item);
+        if(maxTextWidth !== 0 && maxTextWidth !== textWidth) {
+            setTextNodeAttribute(item, "dx", direction * round(((maxTextWidth - textWidth) / 2) * 10) / 10);
         }
     }
 }
