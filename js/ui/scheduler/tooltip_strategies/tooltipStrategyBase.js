@@ -35,7 +35,7 @@ export class TooltipStrategyBase {
     }
 
     show(target, dataList, isSingleItemBehavior) {
-        if(this._canShowTooltip(target, dataList)) {
+        if(this._canShowTooltip(dataList)) {
             this.hide();
             this._showCore(target, dataList, isSingleItemBehavior);
         }
@@ -43,27 +43,25 @@ export class TooltipStrategyBase {
 
     _showCore(target, dataList, isSingleItemBehavior) {
         if(!this.tooltip) {
-            this.tooltip = this._createTooltip(target);
-            this.tooltip.option({
-                contentTemplate: container => {
-                    if(!this.list) {
-                        const listElement = $('<div>');
-                        $(container).append(listElement);
-                        this.list = this._createList(listElement, dataList);
-                    }
-                },
-                onShown: this._onShown.bind(this)
-            });
+            this.tooltip = this._createTooltip(target, dataList);
         } else {
             this._shouldUseTarget() && this.tooltip.option('target', target);
-            this.list.option('dataSource', dataList);
+            this._list.option('dataSource', dataList);
         }
 
         this.tooltip.option('visible', true);
     }
 
+    _getContentTemplate(dataList) {
+        return container => {
+            const listElement = $('<div>');
+            $(container).append(listElement);
+            this._list = this._createList(listElement, dataList);
+        };
+    }
+
     _onShown() {
-        this.list.option('focusStateEnabled', this.scheduler.option('focusStateEnabled'));
+        this._list.option('focusStateEnabled', this.scheduler.option('focusStateEnabled'));
     }
 
     dispose() {
@@ -79,11 +77,11 @@ export class TooltipStrategyBase {
         return true;
     }
 
-    _createTooltip(target, list) {
+    _createTooltip() {
     }
 
-    _canShowTooltip(target, dataList) {
-        if(!dataList.length || this.tooltip && this.tooltip.option('visible') && $(this.tooltip.option('target')).get(0) === $(target).get(0)) {
+    _canShowTooltip(dataList) {
+        if(!dataList.length) {
             return false;
         }
         return true;
@@ -92,10 +90,16 @@ export class TooltipStrategyBase {
     _createListOption(dataList) {
         return {
             dataSource: dataList,
-            onContentReady: this._onListRendered.bind(this),
+            onContentReady: this._onListRendered.bind(this), // TODO: there is no tests
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) => this._renderTemplate(this.tooltip.option('target'), item.data, item.currentData || item.data, index, item.color)
+            itemTemplate: (item, index) =>
+                this._renderTemplate(this.tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
+
         };
+    }
+
+    _createTooltipElement(wrapperClass) {
+        return $("<div>").appendTo(this.scheduler.$element()).addClass(wrapperClass);
     }
 
     _createList(listElement, dataList) {
@@ -110,8 +114,14 @@ export class TooltipStrategyBase {
     }
 
     _renderTemplate(target, data, currentData, index, color) {
-        this._createTemplate(data, currentData, color);
-        const template = this.scheduler._getAppointmentTemplate(this._getItemListTemplateName());
+        this.scheduler.setDefaultTemplate(
+            this._getItemListTemplateName(),
+            new FunctionTemplate(options => {
+                const $container = $(options.container);
+                $container.append(this._createItemListContent(data, currentData, color));
+                return $container;
+            }));
+        const template = this.scheduler._getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
         return this._createFunctionTemplate(template, data, this._getTargetData(data, target), index);
     }
 
@@ -120,10 +130,6 @@ export class TooltipStrategyBase {
     }
 
     _getItemListTemplateName() {
-        return 'appointmentTooltipTemplate';
-    }
-
-    _getItemListDefaultTemplateName() {
         return 'appointmentTooltip';
     }
 
@@ -145,38 +151,25 @@ export class TooltipStrategyBase {
             itemData: e.itemData.data,
             itemElement: e.itemElement
         };
-        const showEditAppointmentPopupAction = this.createAppointmentClickAction();
-        showEditAppointmentPopupAction(this.createClickEventArgument(config, e));
-    }
-
-    createAppointmentClickAction() {
-        return this.scheduler._createActionByOption('onAppointmentClick', {
+        this.scheduler._createActionByOption('onAppointmentClick', {
             afterExecute: e => {
                 const config = e.args[0];
                 config.event.stopPropagation();
                 this.scheduler.fire('showEditAppointmentPopup', { data: config.appointmentData });
             }
-        });
+        })(this._createClickEventArgument(config, e));
     }
 
-    createClickEventArgument(config, clickArg) {
+    _createClickEventArgument(config, clickArg) {
         const result = extendFromObject(this.scheduler.fire('mapAppointmentFields', config), clickArg, false);
-        return this.trimClickEventArgument(result);
+        return this._trimClickEventArgument(result);
     }
 
-    trimClickEventArgument(e) {
+    _trimClickEventArgument(e) {
         delete e.itemData;
         delete e.itemIndex;
         delete e.itemElement;
         return e;
-    }
-
-    _createTemplate(data, currentData, color) {
-        this.scheduler._defaultTemplates[this._getItemListDefaultTemplateName()] = new FunctionTemplate(options => {
-            const $container = $(options.container);
-            $container.append(this._createItemListContent(data, currentData, color));
-            return $container;
-        });
     }
 
     _createItemListContent(data, currentData, color) {

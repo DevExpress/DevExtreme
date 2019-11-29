@@ -25,10 +25,6 @@ class TooltipBehaviorBase {
     }
 
     getItemListTemplateName() {
-        return 'appointmentTooltipTemplate';
-    }
-
-    getItemListDefaultTemplateName() {
         return 'appointmentTooltip';
     }
 
@@ -114,10 +110,6 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     getItemListTemplateName() {
-        return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltipTemplate' : 'dropDownAppointmentTemplate';
-    }
-
-    getItemListDefaultTemplateName() {
         return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltip' : 'dropDownAppointment';
     }
 
@@ -171,12 +163,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
     constructor(scheduler) {
         super(scheduler);
-        this.skipHidingOnScroll = false;
-        this.isSingleBehavior = false;
+        this._skipHidingOnScroll = false;
+        this._isSingleBehavior = false;
     }
 
     _showCore(target, dataList, isSingleBehavior) {
-        this.isSingleBehavior = isSingleBehavior;
+        this._isSingleBehavior = isSingleBehavior;
         this.behavior = this._createBehavior(isSingleBehavior);
         super._showCore(target, dataList, isSingleBehavior);
         this.tooltip.option('position', this._getTooltipPosition(dataList));
@@ -237,34 +229,32 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return result;
     }
 
-    _createTooltip(target) {
-        this.$tooltip = this._createTooltipElement();
+    _createTooltip(target, dataList) {
+        this.$tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
             target: target,
             onShowing: this._onTooltipShowing.bind(this),
-            closeOnTargetScroll: () => this.skipHidingOnScroll,
+            closeOnTargetScroll: () => this._skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option('rtlEnabled')
+            rtlEnabled: this.scheduler.option('rtlEnabled'),
+            onShown: this._onShown.bind(this),
+            contentTemplate: this._getContentTemplate(dataList)
         });
     }
 
     dispose() {
-        clearTimeout(this.skipHidingOnScrollTimeId);
+        clearTimeout(this._skipHidingOnScrollTimeId);
     }
 
     _onTooltipShowing() {
-        clearTimeout(this.skipHidingOnScrollTimeId);
+        clearTimeout(this._skipHidingOnScrollTimeId);
 
-        this.skipHidingOnScroll = true;
-        this.skipHidingOnScrollTimeId = setTimeout(() => {
-            this.skipHidingOnScroll = false;
-            clearTimeout(this.skipHidingOnScrollTimeId);
+        this._skipHidingOnScroll = true;
+        this._skipHidingOnScrollTimeId = setTimeout(() => {
+            this._skipHidingOnScroll = false;
+            clearTimeout(this._skipHidingOnScrollTimeId);
         }, 0);
-    }
-
-    _createTooltipElement() {
-        return $('<div>').appendTo(this.scheduler.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
     }
 
     _onListRendered(e) {

@@ -1,6 +1,5 @@
 import Overlay from '../../overlay';
 import { TooltipStrategyBase } from './tooltipStrategyBase';
-import $ from '../../../core/renderer';
 import { getWindow } from '../../../core/utils/window';
 
 const SLIDE_PANEL_CLASS_NAME = 'dx-scheduler-overlay-panel';
@@ -39,12 +38,12 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
 
     _onShowing() {
         this.tooltip.option('height', 'auto');
-        const height = this.list.$element().outerHeight();
+        const height = this._list.$element().outerHeight();
         this.tooltip.option('height', height > MAX_OVERLAY_HEIGHT ? MAX_OVERLAY_HEIGHT : 'auto');
     }
 
-    _createTooltip(target) {
-        const $overlay = $('<div>').addClass(SLIDE_PANEL_CLASS_NAME).appendTo(this.scheduler.$element());
+    _createTooltip(target, dataList) {
+        const $overlay = this._createTooltipElement(SLIDE_PANEL_CLASS_NAME);
         return this.scheduler._createComponent($overlay, Overlay, {
             shading: false,
             position: positionConfig,
@@ -54,7 +53,9 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             closeOnOutsideClick: true,
             width: '100%',
             height: 'auto',
-            onShowing: () => this._onShowing()
+            onShowing: () => this._onShowing(),
+            onShown: this._onShown.bind(this),
+            contentTemplate: this._getContentTemplate(dataList)
         });
     }
 }

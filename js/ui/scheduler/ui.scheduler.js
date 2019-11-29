@@ -1674,6 +1674,10 @@ const Scheduler = Widget.inherit({
         this._defaultTemplates['dropDownAppointment'] = new EmptyTemplate();
     },
 
+    setDefaultTemplate: function(templateName, template) {
+        this._defaultTemplates[templateName] = template;
+    },
+
     _initAppointmentTemplate: function() {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
