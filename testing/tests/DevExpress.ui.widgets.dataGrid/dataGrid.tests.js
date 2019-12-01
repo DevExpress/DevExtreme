@@ -5651,6 +5651,27 @@ QUnit.test("max-height from styles", function(assert) {
     assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
 });
 
+// T820186
+QUnit.test("width 100% should be applied if container width is zero on render", function(assert) {
+    // arrange
+    $("#dataGrid").parent().width(0);
+    $("#dataGrid").dxDataGrid({
+        width: "100%",
+        dataSource: [],
+        columns: [
+            { dataField: "field1", width: 100 },
+            { dataField: "field2", width: 100 }
+        ]
+    });
+
+    // act
+    $("#dataGrid").parent().width(300);
+    this.clock.tick();
+
+    // assert
+    assert.equal($("#dataGrid").width(), 300, "width 100% is applied");
+});
+
 // T412035
 QUnit.test("scrollTop position must be kept after updateDimensions when scrolling is native", function(assert) {
     // arrange, act
