@@ -396,7 +396,7 @@ var ResizingController = modules.ViewController.inherit({
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = "auto";
                     isColumnWidthsCorrected = true;
-                    if(!hasWidth && !hasPercentWidth) {
+                    if(hasWidth === false && !hasPercentWidth) {
                         that._maxWidth = totalWidth + scrollbarWidth + (that.option("showBorders") ? 2 : 0);
                         $element.css("maxWidth", that._maxWidth);
                     }
@@ -477,7 +477,7 @@ var ResizingController = modules.ViewController.inherit({
             width,
             importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-        if(that._hasHeight === undefined && $rootElement && $rootElement.is(":visible")) {
+        if(that._hasHeight === undefined && $rootElement && $rootElement.is(":visible") && $rootElement.width()) {
             $groupElement = $rootElement.children("." + that.getWidgetContainerClass());
             if($groupElement.length) {
                 $groupElement.detach();
