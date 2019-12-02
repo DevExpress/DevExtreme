@@ -88,6 +88,62 @@ module("Drag and drop appointments", moduleConfig, () => {
 
     const getAbsolutePosition = appointment => appointment.offset();
 
+    module("Common cases", () => {
+        test("After drag'n'drop appointment, size of appointment shouldn't change (T835545)", assert => {
+            const APPOINTMENT_TEXT = "app";
+
+            const views = commonViews.concat(timeLineViews);
+
+            const createDataSource = () => {
+                return [{
+                    text: APPOINTMENT_TEXT,
+                    startDate: new Date(2017, 4, 1, 9, 0),
+                    endDate: new Date(2017, 4, 1, 10, 30),
+                }];
+            };
+
+            const scheduler = createWrapper({
+                dataSource: createDataSource(),
+                views: views,
+                startDayHour: 9,
+                currentDate: new Date(2017, 4, 1),
+                height: 600
+            });
+
+            const appointment = () => scheduler.appointments.findFirst(APPOINTMENT_TEXT);
+            const getSizeByDirection = (appointment) => appointment.isHorizontalResize ? appointment.element.width() : appointment.element.height();
+
+            views.forEach(testCase => {
+                scheduler.option("currentView", testCase.name);
+                scheduler.option("dataSource", createDataSource());
+
+                const initSize = getSizeByDirection(appointment());
+                appointment().resizeTo(appointment().isHorizontalResize ? "right" : "bottom", 200);
+                const currentSize = getSizeByDirection(appointment());
+
+                assert.ok(currentSize > initSize, `appointment size should be increase after resize in ${testCase.name} view`);
+
+                const positionBeforeDragging = appointment().getPosition();
+                const sizeBeforeDragging = appointment().getSize();
+
+                const offset = appointment().element.offset();
+                const pointer = pointerMock(appointment().element)
+                    .start()
+                    .down(offset.left, offset.top)
+                    .move(10, 10);
+                pointer.up();
+
+                const positionAfterDragging = appointment().getPosition();
+                const sizeAfterDragging = appointment().getSize();
+
+                assert.ok(positionBeforeDragging.left === positionAfterDragging.left && positionBeforeDragging.top === positionAfterDragging.top,
+                    `appointment position shouldn't change after drag in ${testCase.name} view`);
+                assert.ok(sizeBeforeDragging.width === sizeAfterDragging.width && sizeBeforeDragging.height === sizeAfterDragging.height,
+                    `appointment size shouldn't change after drag in ${testCase.name} view`);
+            });
+        });
+    });
+
     module("Appointment should move a same distance in dragging from tooltip case", () => {
         const data = [
             {
