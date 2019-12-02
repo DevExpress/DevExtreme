@@ -550,6 +550,7 @@ QUnit.test("Popup should contain recurrence editor with right config", function(
 
     this.instance.option("recurrenceEditMode", "series");
     this.instance.option("firstDayOfWeek", 5);
+    this.instance.option("currentDate", new Date(2019, 11, 1));
 
     this.instance.showAppointmentPopup({
         startDate: startDate,
@@ -1246,10 +1247,10 @@ QUnit.test("Appointment should have correct form data on consecutive shows (T832
         currentDate: new Date(2017, 4, 25),
         endDayHour: 20,
         dataSource: [{
-            'text': 'Google AdWords Strategy',
-            'startDate': new Date(2017, 4, 1),
-            'endDate': new Date(2017, 4, 5),
-            'allDay': true,
+            text: 'Google AdWords Strategy',
+            startDate: new Date(2017, 4, 1),
+            endDate: new Date(2017, 4, 5),
+            allDay: true,
         }],
         height: 580
     });

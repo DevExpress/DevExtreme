@@ -55,7 +55,6 @@ export default class AppointmentPopup {
         });
 
         this._popup.option("onShowing", e => {
-            this._appointmentForm.resetValues();
             this._updateForm(data, processTimeZone);
 
             const arg = {
@@ -108,7 +107,7 @@ export default class AppointmentPopup {
         return {
             height: "auto",
             maxHeight: "100%",
-            onHiding: () => this.scheduler.focus(),
+            onHiding: () => { this._appointmentForm.resetValues(); this.scheduler.focus(); },
             contentTemplate: () => this._createPopupContent(),
             defaultOptionsRules: [
                 {
