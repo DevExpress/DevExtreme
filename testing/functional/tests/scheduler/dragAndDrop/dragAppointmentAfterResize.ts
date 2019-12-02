@@ -15,12 +15,13 @@ fixture `Drag-n-drop appointment after resize(T835545)`
         height: await element.clientHeight
     };
 
-    const isHorizontal = await resizableHandle.bottom.count !== 0;
+    const isVertical = await resizableHandle.bottom.count !== 0;
 
     await t
-        .drag(isHorizontal ? resizableHandle.bottom : resizableHandle.right, 10, 10)
-        .expect(isHorizontal ? initSize.width : initSize.height)
-        .gt(isHorizontal ? await element.clientHeight : await element.clientWidth);
+        .drag(isVertical ? resizableHandle.bottom : resizableHandle.right, 50, 50);
+
+    await t .expect(isVertical ? await element.clientHeight : await element.clientWidth)
+        .gt(isVertical ? initSize.height : initSize.width);
 
     const sizeBeforeDrag = {
         width: await element.clientWidth,
@@ -32,10 +33,12 @@ fixture `Drag-n-drop appointment after resize(T835545)`
     };
 
     await t
-        .debug()
-        .setTestSpeed(0.1)
-        .drag(element, 10, 10)
-        .wait(5000)
+        .drag(element, 10, 10, {
+            offsetX: 0,
+            offsetY: 0
+        });
+
+    await t
         .expect(sizeBeforeDrag.width)
         .eql(await element.clientWidth)
 
