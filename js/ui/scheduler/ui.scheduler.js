@@ -1252,7 +1252,6 @@ const Scheduler = Widget.inherit({
             case "firstDayOfWeek":
                 this._updateOption("workSpace", name, value);
                 this._updateOption("header", name, value);
-                this._appointmentPopup.setFirstDayOfWeek(value);
                 break;
             case "currentDate":
                 value = this._dateOption(name);
@@ -1945,6 +1944,7 @@ const Scheduler = Widget.inherit({
         this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
 
         this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
+        this._appointmentPopup = new AppointmentPopup(this);
 
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
@@ -1956,8 +1956,6 @@ const Scheduler = Widget.inherit({
                 this._reloadDataSource();
             }).bind(this));
         }
-
-        this._appointmentPopup = new AppointmentPopup(this);
     },
 
     _initMarkupCore: function(resources) {

@@ -1080,7 +1080,7 @@ QUnit.test("lineargradient", function(assert) {
     $.when(imageBlob).done(() => {
         try {
             assert.strictEqual(this.drawnElements.length, 3, "Canvas elements count");
-            assert.strictEqual(this.drawnElements[1].type, "linearGradient", "First element has no shadow filter");
+            assert.strictEqual(this.drawnElements[1].type, "linearGradient", "First element is linearGradient");
             assert.deepEqual(this.drawnElements[1].args, { x0: 0, y0: 0, x1: 30, y1: 0 });
             assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
             assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, "red"]);
@@ -1088,7 +1088,7 @@ QUnit.test("lineargradient", function(assert) {
 
             assert.roughEqual(this.drawnElements[2].style.globalAlpha, 0.3, 0.1);
             assert.strictEqual(this.drawnElements[2].style.fillStyle, "#aaaaaa");
-            assert.deepEqual(this.drawnElements[2].args, { x: 0, y: 0, width: 30, height: 20 });
+            assert.strictEqual(this.drawnElements[2].type, "fill", "fill");
         } finally {
             done();
         }
@@ -2318,7 +2318,7 @@ QUnit.test("Read computed style of elements if export target is attached element
     // act
     var imageBlob = getData(element);
 
-    assert.expect(7);
+    assert.expect(9);
     $.when(imageBlob).done(function() {
         try {
             var textElem = that.drawnElements[1];
@@ -2331,6 +2331,8 @@ QUnit.test("Read computed style of elements if export target is attached element
             assert.equal(textElem.style.style, "italic", "Style");
             assert.equal(textElem.style.fillStyle, "#ff0000", "Style fill");
             assert.roughEqual(textElem.style.globalAlpha, 0.3, 0.1, "Style opacity");
+            assert.strictEqual($("#qunit-fixture").children().length, 1);
+            assert.strictEqual($("#qunit-fixture").children()[0].nodeName, "svg");
         } finally {
             done();
         }
