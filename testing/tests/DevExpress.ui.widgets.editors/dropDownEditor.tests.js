@@ -475,7 +475,7 @@ QUnit.testInActiveWindow("editor should save focus on clearbutton clicking, fiel
                 text: value,
                 focusStateEnabled: true
             });
-            return $("<div>").text(value + '1').append($textBox);
+            return $("<div>").text(value + this.option("value")).append($textBox);
         },
     });
 
@@ -556,7 +556,7 @@ QUnit.test("focusout should not be fired on valueChanged", function(assert) {
             const $textBox = $("<div>").dxTextBox({
                 onFocusOut: textBoxOnFocusOutStub,
             });
-            return $("<div>").text(value + value).append($textBox);
+            return $("<div>").text(value + this.option("value")).append($textBox);
         },
         items: [0, 1, 2, 3, 4, 5],
         acceptCustomValue: true,
@@ -968,7 +968,7 @@ QUnit.test("onValueChanged should be fired for each change by keyboard when fiel
     const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
         fieldTemplate(value) {
             const $textBox = $("<div>").dxTextBox();
-            return $("<div>").text(value + value).append($textBox);
+            return $("<div>").text(value + this.option("value")).append($textBox);
         },
         items: [0, 1, 2, 3, 4, 5],
         acceptCustomValue: true,
@@ -1049,7 +1049,7 @@ QUnit.test("should have no errors after value change if text editor buttons were
         value: 1,
         fieldTemplate(value) {
             const $textBox = $("<div>").dxTextBox();
-            return $("<div>").text(value + value).append($textBox);
+            return $("<div>").text(value + this.option("value")).append($textBox);
         }
     });
     const dropDownEditor = $dropDownEditor.dxDropDownEditor("instance");
