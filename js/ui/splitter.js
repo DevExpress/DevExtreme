@@ -8,7 +8,7 @@ import { isString } from "../core/utils/type";
 
 const SPLITTER_CLASS = "dx-splitter";
 const SPLITTER_WRAPPER_CLASS = `${SPLITTER_CLASS}-wrapper`;
-const SPLITTER_TRANSPARENT_CLASS = `${SPLITTER_CLASS}-transparent`;
+const SPLITTER_INACTIVE_CLASS = `${SPLITTER_CLASS}-inactive`;
 const SPLITTER_BORDER_CLASS = `${SPLITTER_CLASS}-border`;
 const SPLITTER_INITIAL_STATE_CLASS = `${SPLITTER_CLASS}-initial`;
 
@@ -34,7 +34,7 @@ export default class SplitterControl extends Widget {
             .appendTo(this.$element());
         this._$splitter = $("<div>")
             .addClass(SPLITTER_CLASS)
-            .addClass(SPLITTER_TRANSPARENT_CLASS)
+            .addClass(SPLITTER_INACTIVE_CLASS)
             .appendTo(this._$splitterBorder);
     }
 
@@ -87,7 +87,7 @@ export default class SplitterControl extends Widget {
         this._containerWidth = this._$container.get(0).clientWidth;
 
         this.$element().removeClass(SPLITTER_INITIAL_STATE_CLASS);
-        this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
+        this._$splitter.removeClass(SPLITTER_INACTIVE_CLASS);
 
         this.setSplitterPositionLeft(null, true);
     }
@@ -99,9 +99,9 @@ export default class SplitterControl extends Widget {
         this.setSplitterPositionLeft(this._getNewSplitterPositionLeft(e), true);
     }
 
-    _onMouseUpHandler(e) {
+    _onMouseUpHandler() {
         if(this._isSplitterActive) {
-            this._$splitter.addClass(SPLITTER_TRANSPARENT_CLASS);
+            this._$splitter.addClass(SPLITTER_INACTIVE_CLASS);
             this._isSplitterActive = false;
         }
     }
