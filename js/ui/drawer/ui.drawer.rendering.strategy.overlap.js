@@ -47,7 +47,12 @@ class OverlapStrategy extends DrawerStrategy {
         if(typeUtils.isDefined(this._initialPosition)) {
             translator.move($overlayContent, this._initialPosition);
         } else {
-            translator.move($overlayContent, { left: 0 });
+            translator.move($overlayContent, { left: 0, top: 0 });
+        }
+
+        const drawer = this.getDrawerInstance();
+        if(drawer.getDrawerPosition() === "right") {
+            $overlayContent.css("left", "auto");
         }
     }
 
@@ -107,7 +112,7 @@ class OverlapStrategy extends DrawerStrategy {
     slidePositionRendering(config, offset, animate) {
         const drawer = this.getDrawerInstance();
 
-        this._initialPosition = { left: config.panelOffset };
+        this._initialPosition = drawer.isHorizontalDirection() ? { left: config.panelOffset } : { top: config.panelOffset };
         const position = drawer.getDrawerPosition();
 
         this.setupContent(config.$content, position, config.drawer);
