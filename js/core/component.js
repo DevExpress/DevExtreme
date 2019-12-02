@@ -399,7 +399,7 @@ var Component = Class.inherit({
     },
 
     hasActionSubscription: function(actionName) {
-        return !!this.option(actionName) ||
+        return !!this._getOptionByStealth(actionName) ||
             this._eventsStrategy.hasEvent(this._getEventName(actionName));
     },
 
