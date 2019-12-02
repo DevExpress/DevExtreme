@@ -931,7 +931,7 @@ QUnit.module("default", {}, () => {
 
     QUnit.test("'hasActionSubscription' should not raise deprecation warning for event option", function(assert) {
         const instance = new TestComponent();
-        var logDeprecatedWarningSpy = sinon.spy(instance, "_logDeprecatedWarning");
+        const logDeprecatedWarningSpy = sinon.spy(instance, "_logDeprecatedWarning");
 
         try {
             instance.hasActionSubscription("onDeprecatedEvent");
