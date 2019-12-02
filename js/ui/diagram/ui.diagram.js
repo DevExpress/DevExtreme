@@ -933,11 +933,11 @@ class Diagram extends Widget {
         texts[ShapeTypes.Octagon] = messageLocalization.format("dxDiagram-shapeOctagon");
         texts[ShapeTypes.Star] = messageLocalization.format("dxDiagram-shapeStar");
         texts[ShapeTypes.ArrowLeft] = messageLocalization.format("dxDiagram-shapeArrowLeft");
-        texts[ShapeTypes.ArrowTop] = messageLocalization.format("dxDiagram-shapeArrowTop");
+        texts[ShapeTypes.ArrowUp] = messageLocalization.format("dxDiagram-shapeArrowUp");
         texts[ShapeTypes.ArrowRight] = messageLocalization.format("dxDiagram-shapeArrowRight");
-        texts[ShapeTypes.ArrowBottom] = messageLocalization.format("dxDiagram-shapeArrowBottom");
-        texts[ShapeTypes.ArrowNorthSouth] = messageLocalization.format("dxDiagram-shapeArrowNorthSouth");
-        texts[ShapeTypes.ArrowEastWest] = messageLocalization.format("dxDiagram-shapeArrowEastWest");
+        texts[ShapeTypes.ArrowDown] = messageLocalization.format("dxDiagram-shapeArrowDown");
+        texts[ShapeTypes.ArrowUpDown] = messageLocalization.format("dxDiagram-shapeArrowUpDown");
+        texts[ShapeTypes.ArrowLeftRight] = messageLocalization.format("dxDiagram-shapeArrowLeftRight");
         // Flowchart
         texts[ShapeTypes.Process] = messageLocalization.format("dxDiagram-shapeProcess");
         texts[ShapeTypes.Decision] = messageLocalization.format("dxDiagram-shapeDecision");
