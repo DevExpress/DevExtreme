@@ -1955,11 +1955,16 @@ QUnit.module("format: custom parser and formatter", moduleConfig, () => {
 QUnit.module("stubs", moduleConfig, function() {
     [
         { format: "123a 0,###.##", expectedText: "123a 1,234.56", expectedValue: 1234.56 },
+        { format: "123a 0,###.##", expectedText: "-123a 1,234.56", expectedValue: -1234.56 },
         { format: "0,###.## 456b", expectedText: "1,234.56 456b", expectedValue: 1234.56 },
+        { format: "0,###.## 456b", expectedText: "-1,234.56 456b", expectedValue: -1234.56 },
         { format: "'0'1 0,###.##", expectedText: "01 1,234.56", expectedValue: 1234.56 },
+        { format: "'0'1 0,###.##", expectedText: "-01 1,234.56", expectedValue: -1234.56 },
         { format: "0,###.## '#'1", expectedText: "1,234.56 #1", expectedValue: 1234.56 },
+        { format: "0,###.## '#'1", expectedText: "-1,234.56 #1", expectedValue: -1234.56 },
+        { format: "0,###.##;abc(0,###.##)", expectedText: "abc(1,234.56)", expectedValue: -1234.56 }
     ].forEach(({ format, expectedText, expectedValue }) => {
-        QUnit.test(`widget should correctly apply format="${format}"`, function(assert) {
+        QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
             this.instance.option({
                 value: null,
                 format
