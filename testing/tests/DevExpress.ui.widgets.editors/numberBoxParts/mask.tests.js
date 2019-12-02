@@ -1952,7 +1952,16 @@ QUnit.module("format: custom parser and formatter", moduleConfig, () => {
     });
 });
 
-QUnit.module("stubs", moduleConfig, function() {
+QUnit.module("stubs", {
+    beforeEach: function() {
+        this.$element = $("#numberbox").dxNumberBox({
+            useMaskBehavior: true
+        });
+        this.input = this.$element.find(".dx-texteditor-input");
+        this.instance = this.$element.dxNumberBox("instance");
+        this.keyboard = keyboardMock(this.input, true);
+    }
+}, function() {
     [
         { format: "123a 0,###.##", expectedText: "123a 1,234.56", expectedValue: 1234.56 },
         { format: "123a 0,###.##", expectedText: "-123a 1,234.56", expectedValue: -1234.56 },
