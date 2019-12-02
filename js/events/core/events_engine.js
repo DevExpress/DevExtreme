@@ -629,20 +629,4 @@ eventsEngine.elementDataMap = elementDataMap;
 eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;
 ///#ENDDEBUG
 
-eventsEngine.addNamespace = (eventNames, namespace) => {
-    if(!namespace) {
-        throw errors.Error('E0017');
-    }
-
-    if(typeof eventNames === 'string') {
-        return eventNames.indexOf(' ') === -1 ?
-            `${eventNames}.${namespace}` :
-            eventsEngine.addNamespace(eventNames.split(/\s+/g), namespace);
-    }
-
-    return eventNames
-        .map(eventName => `${eventName}.${namespace}`)
-        .join(' ');
-};
-
 module.exports = eventsEngine;

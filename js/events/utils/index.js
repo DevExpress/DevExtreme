@@ -1,8 +1,9 @@
-import $ from "../core/renderer";
-import eventsEngine from "./core/events_engine";
-import { focused } from "../ui/widget/selectors";
-import { extend } from "../core/utils/extend";
-import { each } from "../core/utils/iterator";
+import $ from "../../core/renderer";
+import addNamespace from "./add_namespace";
+import eventsEngine from "../core/events_engine";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { focused } from "../../ui/widget/selectors";
 
 const KEY_MAP = {
     "backspace": "backspace",
@@ -250,7 +251,7 @@ module.exports = {
     createEvent: createEvent,
     fireEvent: fireEvent,
 
-    addNamespace: eventsEngine.addNamespace,
+    addNamespace: addNamespace,
     setEventFixMethod: setEventFixMethod,
 
     normalizeKeyName: normalizeKeyName,

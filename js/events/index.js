@@ -1,9 +1,10 @@
 import domAdapter from '../core/dom_adapter';
 import eventsEngine from './core/events_engine';
 import KeyboardProcessor from './core/keyboard_processor';
+import { addNamespace as pureAddNamespace } from './utils';
 
 function addNamespace(event, namespace) {
-    return namespace ? eventsEngine.addNamespace(event, namespace) : event;
+    return namespace ? pureAddNamespace(event, namespace) : event;
 }
 
 export const active = {
