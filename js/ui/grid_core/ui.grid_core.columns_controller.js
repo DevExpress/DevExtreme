@@ -2872,8 +2872,7 @@ module.exports = {
                  * @return number
                  */
                 getVisibleColumnIndex: function(id, rowIndex) {
-                    let option = this.columnOption(id),
-                        index = option && option.index;
+                    const index = this.columnOption(id, "index");
 
                     return this.getVisibleIndex(index, rowIndex);
                 },
