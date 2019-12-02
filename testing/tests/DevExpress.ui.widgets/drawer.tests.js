@@ -562,7 +562,7 @@ QUnit.skip("drawer panel should be repositioned after dimension changed, right p
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
-        opened: true,
+        opened: false,
         revealMode: "slide",
         position: "right",
         openedStateMode: "overlap",
