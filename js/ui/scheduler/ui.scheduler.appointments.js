@@ -943,10 +943,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     moveAppointmentBack: function(dragEvent) {
-        var $appointment = this._$currentAppointment,
-            size = this._initialSize,
-            coords = this._initialCoordinates;
-
         if(dragEvent) {
             if(typeUtils.isDeferred(dragEvent.cancel)) {
                 dragEvent.cancel.resolve(true);
@@ -957,14 +953,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         this.notifyObserver("moveBack");
 
-        if($appointment) {
-            if(coords) {
-                translator.move($appointment, coords);
+        if(this._$currentAppointment && !dragEvent) {
+            if(this._initialCoordinates) {
+                translator.move(this._$currentAppointment, this._initialCoordinates);
                 delete this._initialSize;
             }
-            if(size) {
-                $appointment.outerWidth(size.width);
-                $appointment.outerHeight(size.height);
+            if(this._initialSize) {
+                this._$currentAppointment.outerWidth(this._initialSize.width);
+                this._$currentAppointment.outerHeight(this._initialSize.height);
                 delete this._initialCoordinates;
             }
         }
