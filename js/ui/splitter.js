@@ -52,21 +52,21 @@ export default class SplitterControl extends Widget {
 
     _attachEventHandlers() {
         const document = domAdapter.getDocument();
-        eventsEngine.on(this._$splitter, SPLITTER_POINTER_DOWN_EVENT_NAME, this._onMouseDownHandler.bind(this));
+        eventsEngine.on(this._$splitterBorder, SPLITTER_POINTER_DOWN_EVENT_NAME, this._onMouseDownHandler.bind(this));
         eventsEngine.on(document, SPLITTER_POINTER_MOVE_EVENT_NAME, this._onMouseMoveHandler.bind(this));
         eventsEngine.on(document, SPLITTER_POINTER_UP_EVENT_NAME, this._onMouseUpHandler.bind(this));
     }
 
     _detachEventHandlers() {
         const document = domAdapter.getDocument();
-        eventsEngine.off(this._$splitter, SPLITTER_POINTER_DOWN_EVENT_NAME);
+        eventsEngine.off(this._$splitterBorder, SPLITTER_POINTER_DOWN_EVENT_NAME);
         eventsEngine.off(document, SPLITTER_POINTER_MOVE_EVENT_NAME);
         eventsEngine.off(document, SPLITTER_POINTER_UP_EVENT_NAME);
     }
 
     _dimensionChanged() {
         if(this._leftPanelPercentageWidth === undefined) {
-            let leftElementWidth = this._$leftElement.get(0).clientWidth;
+            let leftElementWidth = this._$leftElement.get(0).clientWidth + this._$splitterBorder.get(0).clientWidth / 2;
             this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftElementWidth);
         }
 
@@ -75,7 +75,7 @@ export default class SplitterControl extends Widget {
             leftPanelWidth: this._leftPanelPercentageWidth + "%",
             rightPanelWidth: rightPanelWidth + "%"
         });
-        this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth);
+        this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth - this._$splitterBorder.get(0).clientWidth / 2);
     }
 
     _onMouseDownHandler(e) {
@@ -85,22 +85,14 @@ export default class SplitterControl extends Widget {
         this._offsetX = e.offsetX <= this._$splitterBorder.get(0).clientWidth ? e.offsetX : 0;
         this._isSplitterActive = true;
         this._containerWidth = this._$container.get(0).clientWidth;
-        this.setSplitterPositionLeft(this._getNewSplitterPositionLeft(e));
+        this.setSplitterPositionLeft(this._getNewSplitterPositionLeft(e), true);
     }
 
     _onMouseMoveHandler(e) {
         if(!this._isSplitterActive) {
             return;
         }
-        const splitterPositionLeft = this._getNewSplitterPositionLeft(e);
-        const leftPanelWidth = splitterPositionLeft;
-        const rightPanelWidth = this._containerWidth - leftPanelWidth;
-        this.setSplitterPositionLeft(splitterPositionLeft);
-        this._onApplyPanelSize({
-            leftPanelWidth: leftPanelWidth,
-            rightPanelWidth: rightPanelWidth
-        });
-        this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftPanelWidth);
+        this.setSplitterPositionLeft(this._getNewSplitterPositionLeft(e), true);
     }
 
     _onMouseUpHandler() {
@@ -135,8 +127,18 @@ export default class SplitterControl extends Widget {
         return !this.$element().hasClass(SPLITTER_INITIAL_STATE_CLASS);
     }
 
-    setSplitterPositionLeft(splitterPositionLeft) {
+    setSplitterPositionLeft(splitterPositionLeft, needUpdatePanels) {
         this.$element().css("left", splitterPositionLeft);
+        if(!needUpdatePanels) {
+            return;
+        }
+        const leftPanelWidth = splitterPositionLeft + this._$splitterBorder.get(0).clientWidth / 2;
+        const rightPanelWidth = this._containerWidth - leftPanelWidth;
+        this._onApplyPanelSize({
+            leftPanelWidth: leftPanelWidth,
+            rightPanelWidth: rightPanelWidth
+        });
+        this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftPanelWidth);
     }
 
     _optionChanged(args) {
