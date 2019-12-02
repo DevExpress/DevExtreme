@@ -34,7 +34,7 @@ const DX_MENU_ITEM_POPOUT_CLASS = "dx-menu-item-popout";
 const DX_SUBMENU_CLASS = "dx-submenu";
 const DX_HAS_SUBMENU_CLASS = "dx-menu-item-has-submenu";
 
-const isDeviceDesktop = assert => {
+const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "skip this test on mobile devices");
         return false;
@@ -43,7 +43,7 @@ const isDeviceDesktop = assert => {
 };
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
 
         this.items = [
@@ -58,21 +58,21 @@ const moduleConfig = {
         this.clock = sinon.useFakeTimers();
     },
 
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
         this.clock.restore();
     }
 };
 
 QUnit.module("Rendering", moduleConfig, () => {
-    QUnit.test("all items in root level should be wrapped in submenu", (assert) => {
+    QUnit.test("all items in root level should be wrapped in submenu", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: "item1" }], visible: true });
         const $itemsContainer = instance.itemsContainer();
 
         assert.ok($itemsContainer.children().hasClass(DX_SUBMENU_CLASS), "items are wrapped in submenu");
     });
 
-    QUnit.test("lazy rendering: not render overlay on init", (assert) => {
+    QUnit.test("lazy rendering: not render overlay on init", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: "item1" }] });
         let $itemsContainer = instance.itemsContainer();
 
@@ -83,7 +83,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.ok($itemsContainer.length, "overlay is defined");
     });
 
-    QUnit.test("item click should not prevent document click handler", (assert) => {
+    QUnit.test("item click should not prevent document click handler", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "a" }]
         });
@@ -99,7 +99,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         $(document).off("click");
     });
 
-    QUnit.test("context menu items with submenu should have 'has-submenu' class", (assert) => {
+    QUnit.test("context menu items with submenu should have 'has-submenu' class", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item1", items: [{ text: "item11" }] }],
             visible: true
@@ -115,7 +115,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.notOk($items.eq(1).hasClass(DX_HAS_SUBMENU_CLASS), "item without children has not special class");
     });
 
-    QUnit.test("context menu items with submenu should have item popout", (assert) => {
+    QUnit.test("context menu items with submenu should have item popout", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item1", items: [{ text: "item11" }] }],
             visible: true
@@ -127,7 +127,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.equal($items.eq(0).find("." + DX_MENU_ITEM_POPOUT_CLASS).length, 1, "popout is on the first item");
     });
 
-    QUnit.test("item container should have special class for phone devices", (assert) => {
+    QUnit.test("item container should have special class for phone devices", function(assert) {
         const device = devices.current();
 
         devices.current({ deviceType: "phone" });
@@ -140,7 +140,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         }
     });
 
-    QUnit.test("context menu should create only root level at first", (assert) => {
+    QUnit.test("context menu should create only root level at first", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11" }] }],
             visible: true
@@ -151,14 +151,14 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.equal(submenus.length, 1, "only root level rendered");
     });
 
-    QUnit.test("root level should not be rendered without items", (assert) => {
+    QUnit.test("root level should not be rendered without items", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [], visible: true });
         const submenus = instance.itemsContainer().find("." + DX_SUBMENU_CLASS);
 
         assert.equal(submenus.length, 0, "there is no submenus in menu");
     });
 
-    QUnit.test("submenus should not be rendered without items", (assert) => {
+    QUnit.test("submenus should not be rendered without items", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: true,
             items: [{ text: "item1", items: [] }]
@@ -176,7 +176,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.notOk($rootItem.hasClass(DX_HAS_SUBMENU_CLASS), "root item has no 'has-submenu' class");
     });
 
-    QUnit.test("onSubmenuCreated should be fired after submenu was rendered", (assert) => {
+    QUnit.test("onSubmenuCreated should be fired after submenu was rendered", function(assert) {
         const onSubmenuCreated = sinon.spy();
 
         const instance = new ContextMenu(this.$element, {
@@ -200,7 +200,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.equal(onSubmenuCreated.callCount, 1, "handler should not be called after the second showing");
     });
 
-    QUnit.test("contextMenu should not create a new overlay after refresh", (assert) => {
+    QUnit.test("contextMenu should not create a new overlay after refresh", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }, { text: 2 }] });
 
         instance.option("items", [{ text: 3 }, { text: 4 }]);
@@ -208,7 +208,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.equal($(".dx-overlay").length, 1, "only one overlay should exists");
     });
 
-    QUnit.test("submenus in the same level should have same horizontal offset", (assert) => {
+    QUnit.test("submenus in the same level should have same horizontal offset", function(assert) {
         const instance = new ContextMenu(this.$element, {
             target: "#menuTarget",
             items: [
@@ -233,7 +233,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.equal(offsets[0], offsets[1], "offsets are equal");
     });
 
-    QUnit.test("event handlers should be bound for detached target", (assert) => {
+    QUnit.test("event handlers should be bound for detached target", function(assert) {
         const $target = $("#menuTarget");
         const $parent = $target.parent();
 
@@ -246,7 +246,7 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.ok(contextMenu.option("visible"), "context menu is shown after detached target been attached");
     });
 
-    QUnit.test("not create keyboardProcessor on rendering", (assert) => {
+    QUnit.test("not create keyboardProcessor on rendering", function(assert) {
         const instance = new ContextMenu(this.$element, {});
 
         assert.notOk(instance._keyboardProcessor, "keyboard processor is undefined");
@@ -254,7 +254,7 @@ QUnit.module("Rendering", moduleConfig, () => {
 });
 
 QUnit.module("Showing and hiding context menu", moduleConfig, () => {
-    QUnit.test("visible option should toggle menu's visibility", (assert) => {
+    QUnit.test("visible option should toggle menu's visibility", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1, items: [{ text: 11 }] }], visible: true });
         const $itemsContainer = instance.itemsContainer();
 
@@ -267,28 +267,28 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.ok($itemsContainer.is(":visible"), "menu is visible");
     });
 
-    QUnit.test("context menu should not leak overlays", (assert) => {
+    QUnit.test("context menu should not leak overlays", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.option("items", [{ text: 1 }]);
         assert.equal($(".dx-overlay").length, 1, "overlays cleaned correctly");
     });
 
-    QUnit.test("show method should toggle menu's visibility", (assert) => {
+    QUnit.test("show method should toggle menu's visibility", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: false });
 
         instance.show();
         assert.ok(instance.option("visible"), "option visible was changed to true");
     });
 
-    QUnit.test("hide method should toggle menu's visibility", (assert) => {
+    QUnit.test("hide method should toggle menu's visibility", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.hide();
         assert.notOk(instance.option("visible"), "option visible was changed to false");
     });
 
-    QUnit.test("expanded class should be removed from submenus after hiding menu with hide method", (assert) => {
+    QUnit.test("expanded class should be removed from submenus after hiding menu with hide method", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", items: [{ text: "item 111" }] }] }],
             visible: true
@@ -311,7 +311,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         });
     });
 
-    QUnit.test("expanded class should be removed from submenus after hiding menu with visible option", (assert) => {
+    QUnit.test("expanded class should be removed from submenus after hiding menu with visible option", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", items: [{ text: "item 111" }] }] }],
             visible: true
@@ -334,7 +334,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         });
     });
 
-    QUnit.test("expanded class should be removed from submenus after hiding menu with outside click", (assert) => {
+    QUnit.test("expanded class should be removed from submenus after hiding menu with outside click", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", items: [{ text: "item 111" }] }] }],
             visible: true
@@ -357,7 +357,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         });
     });
 
-    QUnit.test("context menu should not be shown if target is disabled", (assert) => {
+    QUnit.test("context menu should not be shown if target is disabled", function(assert) {
         try {
             let eventCounter = 0;
             const incrementCounter = () => {
@@ -383,7 +383,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         }
     });
 
-    QUnit.test("context menu should not be shown if it is disabled", (assert) => {
+    QUnit.test("context menu should not be shown if it is disabled", function(assert) {
         try {
             let eventCounter = 0;
             const incrementCounter = () => {
@@ -410,7 +410,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         }
     });
 
-    QUnit.test("context menu should be shown after submenuDirection option change", (assert) => {
+    QUnit.test("context menu should be shown after submenuDirection option change", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: "item 1" }], visible: true });
         let $itemsContainer;
 
@@ -424,21 +424,21 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.ok($itemsContainer.is(":visible"), "menu is rendered again");
     });
 
-    QUnit.test("context menu's overlay should have flipfit position as native context menu", (assert) => {
+    QUnit.test("context menu's overlay should have flipfit position as native context menu", function(assert) {
         new ContextMenu(this.$element, { items: [{ text: "item 1" }], visible: true });
 
         const overlay = this.$element.find(".dx-overlay").dxOverlay("instance");
         assert.equal(overlay.option("position").collision, "flipfit", "position is correct");
     });
 
-    QUnit.test("overlay should have innerOverlay option", (assert) => {
+    QUnit.test("overlay should have innerOverlay option", function(assert) {
         new ContextMenu(this.$element, { items: [{ text: "item 1" }], visible: true });
 
         const overlay = this.$element.find(".dx-overlay").dxOverlay("instance");
         assert.ok(overlay.option("innerOverlay"));
     });
 
-    QUnit.test("Document should be default target", (assert) => {
+    QUnit.test("Document should be default target", function(assert) {
         const showingHandler = sinon.stub();
 
         new ContextMenu(this.$element, {
@@ -454,7 +454,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
     });
 
     // T459373
-    QUnit.test("Show context menu when position and target is defined", (assert) => {
+    QUnit.test("Show context menu when position and target is defined", function(assert) {
         let overlay;
 
         const instance = new ContextMenu(this.$element, {
@@ -475,7 +475,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.deepEqual(overlay.option("position.of").get(0), $("#menuTarget").get(0), "position is correct");
     });
 
-    QUnit.test("Show context menu when position.of is defined", (assert) => {
+    QUnit.test("Show context menu when position.of is defined", function(assert) {
         let overlay;
 
         const instance = new ContextMenu(this.$element, {
@@ -495,7 +495,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.deepEqual(overlay.option("position.of").get(0), $("#menuShower").get(0), "position is correct");
     });
 
-    QUnit.test("Show context menu when position is undefined", (assert) => {
+    QUnit.test("Show context menu when position is undefined", function(assert) {
         let overlay;
 
         const instance = new ContextMenu(this.$element, {
@@ -511,7 +511,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.ok(overlay.option("position.of") instanceof $.Event, "position is correct");
     });
 
-    QUnit.test("Show context menu via api when position is defined", (assert) => {
+    QUnit.test("Show context menu via api when position is defined", function(assert) {
         let overlay;
 
         const instance = new ContextMenu(this.$element, {
@@ -532,7 +532,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.deepEqual(overlay.option("position.of").get(0), $("#menuTarget").get(0), "position is correct");
     });
 
-    QUnit.test("Show context menu via api when position is undefined", (assert) => {
+    QUnit.test("Show context menu via api when position is undefined", function(assert) {
         let overlay;
 
         const instance = new ContextMenu(this.$element, {
@@ -548,7 +548,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         assert.deepEqual(overlay.option("position.of").get(0), $("#menuTarget").get(0), "position is correct");
     });
 
-    QUnit.test("show/hide methods should return Deferred", (assert) => {
+    QUnit.test("show/hide methods should return Deferred", function(assert) {
         const instance = new ContextMenu(this.$element, {
             target: $("#menuTarget"),
             items: [{ text: "item 1" }],
@@ -566,7 +566,7 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
 });
 
 QUnit.module("Showing and hiding submenus", moduleConfig, () => {
-    QUnit.test("submenu should be shown after click on root item", (assert) => {
+    QUnit.test("submenu should be shown after click on root item", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item1", items: [{ text: "item11" }] }],
             visible: true
@@ -584,7 +584,7 @@ QUnit.module("Showing and hiding submenus", moduleConfig, () => {
         assert.ok($rootItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "expanded class was added");
     });
 
-    QUnit.test("all submenus should hide after click on item from different branch", (assert) => {
+    QUnit.test("all submenus should hide after click on item from different branch", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11" }] }, { text: "item 2" }],
             visible: true
@@ -602,7 +602,7 @@ QUnit.module("Showing and hiding submenus", moduleConfig, () => {
         assert.notOk($items.eq(0).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "expanded class was removed from first item");
     });
 
-    QUnit.test("submenu should not hide after click on parent submenu", (assert) => {
+    QUnit.test("submenu should not hide after click on parent submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", items: [{ text: "item 111" }] }] }],
             visible: true
@@ -622,7 +622,7 @@ QUnit.module("Showing and hiding submenus", moduleConfig, () => {
         assert.ok($items.eq(1).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "expanded class was not removed");
     });
 
-    QUnit.test("submenu should not hide after second click on root item", (assert) => {
+    QUnit.test("submenu should not hide after second click on root item", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item1", items: [{ text: "item11" }] }],
             visible: true
@@ -641,7 +641,7 @@ QUnit.module("Showing and hiding submenus", moduleConfig, () => {
         assert.ok($rootItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "expanded class was not removed");
     });
 
-    QUnit.test("context menu should not blink after second hover on root item", (assert) => {
+    QUnit.test("context menu should not blink after second hover on root item", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -673,7 +673,7 @@ QUnit.module("Showing and hiding submenus", moduleConfig, () => {
         }
     });
 
-    QUnit.test("custom slide animation should work for submenus", (assert) => {
+    QUnit.test("custom slide animation should work for submenus", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: true,
             animation: {
@@ -707,7 +707,7 @@ QUnit.module("Showing and hiding submenus", moduleConfig, () => {
 });
 
 QUnit.module("Visibility callbacks", moduleConfig, () => {
-    QUnit.test("onHiding and onHidden options with outside click", (assert) => {
+    QUnit.test("onHiding and onHidden options with outside click", function(assert) {
         const events = [];
 
         new ContextMenu(this.$element, {
@@ -725,7 +725,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
         assert.deepEqual(events, ["onHiding", "onHidden"], "events triggered and trigger order is correct");
     });
 
-    QUnit.test("onHiding and onHidden options with hide method", (assert) => {
+    QUnit.test("onHiding and onHidden options with hide method", function(assert) {
         const events = [];
 
         const instance = new ContextMenu(this.$element, {
@@ -743,7 +743,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
         assert.deepEqual(events, ["onHiding", "onHidden"], "events triggered and trigger order is correct");
     });
 
-    QUnit.test("onHiding and onHidden options with visible option", (assert) => {
+    QUnit.test("onHiding and onHidden options with visible option", function(assert) {
         const events = [];
 
         const instance = new ContextMenu(this.$element, {
@@ -761,7 +761,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
         assert.deepEqual(events, ["onHiding", "onHidden"], "events triggered and trigger order is correct");
     });
 
-    QUnit.test("visibility callbacks should not fire for submenus", (assert) => {
+    QUnit.test("visibility callbacks should not fire for submenus", function(assert) {
         let events = [];
 
         const instance = new ContextMenu(this.$element, {
@@ -791,7 +791,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
         assert.deepEqual(events, [], "events was not triggered");
     });
 
-    QUnit.test("onShowing and onShown options with show method", (assert) => {
+    QUnit.test("onShowing and onShown options with show method", function(assert) {
         const events = [];
 
         const instance = new ContextMenu(this.$element, {
@@ -809,7 +809,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
         assert.deepEqual(events, ["onShowing", "onShown"], "events triggered and trigger order is correct");
     });
 
-    QUnit.test("onShowing and onShown options should fire when visible is initially true", (assert) => {
+    QUnit.test("onShowing and onShown options should fire when visible is initially true", function(assert) {
         const events = [];
 
         new ContextMenu(this.$element, {
@@ -826,7 +826,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
         assert.deepEqual(events, ["onShowing", "onShown"], "events triggered and trigger order is correct");
     });
 
-    QUnit.test("onShowing and onShown options with visible option", (assert) => {
+    QUnit.test("onShowing and onShown options with visible option", function(assert) {
         const events = [];
 
         const instance = new ContextMenu(this.$element, {
@@ -846,7 +846,7 @@ QUnit.module("Visibility callbacks", moduleConfig, () => {
 });
 
 QUnit.module("Options", moduleConfig, () => {
-    QUnit.test("onItemClick option", (assert) => {
+    QUnit.test("onItemClick option", function(assert) {
         assert.expect(1);
 
         const instance = new ContextMenu(this.$element, {
@@ -862,7 +862,7 @@ QUnit.module("Options", moduleConfig, () => {
         $($items.eq(0)).trigger("dxclick");
     });
 
-    QUnit.test("itemsExpr option", (assert) => {
+    QUnit.test("itemsExpr option", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: true,
             items: [{ text: "itemA", subItems: [{ text: "itemB" }] }],
@@ -878,7 +878,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($items.length, 2, "second level is rendered");
     });
 
-    QUnit.test("target option as string", (assert) => {
+    QUnit.test("target option as string", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: false,
             items: [{ text: "itemA" }],
@@ -890,7 +890,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "menu was shown");
     });
 
-    QUnit.test("target option as jQuery", (assert) => {
+    QUnit.test("target option as jQuery", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: false,
             items: [{ text: "itemA" }],
@@ -902,7 +902,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "menu was shown");
     });
 
-    QUnit.test("target option as DOM element", (assert) => {
+    QUnit.test("target option as DOM element", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: false,
             items: [{ text: "itemA" }],
@@ -914,7 +914,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "menu was shown");
     });
 
-    QUnit.test("target option changing should change the target", (assert) => {
+    QUnit.test("target option changing should change the target", function(assert) {
         const instance = new ContextMenu(this.$element, {
             visible: false,
             items: [{ text: "itemA" }],
@@ -930,7 +930,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "menu was shown");
     });
 
-    QUnit.test("showSubmenuMode hover without delay", (assert) => {
+    QUnit.test("showSubmenuMode hover without delay", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -953,7 +953,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($items.length, 2, "second item was rendered");
     });
 
-    QUnit.test("showSubmenuMode hover with custom delay", (assert) => {
+    QUnit.test("showSubmenuMode hover with custom delay", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -976,7 +976,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($items.length, 2, "second item was rendered");
     });
 
-    QUnit.test("submenu should not be shown if hover was ended before show delay time exceeded", (assert) => {
+    QUnit.test("submenu should not be shown if hover was ended before show delay time exceeded", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -1001,7 +1001,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($items.length, 1, "second item was not rendered");
     });
 
-    QUnit.test("showSubmenuMode click with custom delay", (assert) => {
+    QUnit.test("showSubmenuMode click with custom delay", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1019,7 +1019,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($items.length, 2, "delay should be ignored");
     });
 
-    QUnit.test("showSubmenuMode click during hover delay", (assert) => {
+    QUnit.test("showSubmenuMode click during hover delay", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1039,7 +1039,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($items.length, 2, "delay should be ignored");
     });
 
-    QUnit.test("context menu should not crash when items changing during onShowing event", (assert) => {
+    QUnit.test("context menu should not crash when items changing during onShowing event", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }, { text: 2 }],
             onShowing() {
@@ -1051,7 +1051,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(1, "context menu did not crash");
     });
 
-    QUnit.test("context menu should not show if showing is prevented during onPositioning action", (assert) => {
+    QUnit.test("context menu should not show if showing is prevented during onPositioning action", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1064,7 +1064,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.notOk(instance.option("visible"));
     });
 
-    QUnit.test("context menu should not show if showing is prevented during onShowing action", (assert) => {
+    QUnit.test("context menu should not show if showing is prevented during onShowing action", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1077,7 +1077,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.notOk(instance.option("visible"));
     });
 
-    QUnit.test("default browser menu should not be prevented if context menu showing is prevented", (assert) => {
+    QUnit.test("default browser menu should not be prevented if context menu showing is prevented", function(assert) {
         new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1092,7 +1092,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
     });
 
-    QUnit.test("default browser menu should not be prevented if context menu positioning is prevented", (assert) => {
+    QUnit.test("default browser menu should not be prevented if context menu positioning is prevented", function(assert) {
         new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1107,7 +1107,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
     });
 
-    QUnit.test("show event should not be handled by other menus targeted on the parent div", (assert) => {
+    QUnit.test("show event should not be handled by other menus targeted on the parent div", function(assert) {
         new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget"
@@ -1119,7 +1119,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(e.isPropagationStopped(), "propagation was stopped");
     });
 
-    QUnit.test("disabling for nested item should work correctly", (assert) => {
+    QUnit.test("disabling for nested item should work correctly", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             target: "#menuTarget",
@@ -1136,7 +1136,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok($items.eq(1).hasClass("dx-state-disabled"), "item was disabled");
     });
 
-    QUnit.test("onItemContextMenu option when context menu initially hidden", (assert) => {
+    QUnit.test("onItemContextMenu option when context menu initially hidden", function(assert) {
         let fired = 0;
         let args = {};
 
@@ -1165,7 +1165,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(args.itemData.text, "1", "item data is correct");
     });
 
-    QUnit.test("Separator should not be shown if last rendered item was in other level", (assert) => {
+    QUnit.test("Separator should not be shown if last rendered item was in other level", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 {
@@ -1191,7 +1191,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(instance.itemsContainer().find(".dx-menu-separator").length, 0, "separator should not be rendered");
     });
 
-    QUnit.test("showEvent can prevent showing", (assert) => {
+    QUnit.test("showEvent can prevent showing", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1203,7 +1203,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(!instance.option("visible"), "default behaviour was prevented");
     });
 
-    QUnit.test("showEvent set as string", (assert) => {
+    QUnit.test("showEvent set as string", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1214,7 +1214,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "context menu was shown");
     });
 
-    QUnit.test("showEvent set as string with several events", (assert) => {
+    QUnit.test("showEvent set as string with several events", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1231,7 +1231,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "context menu was shown");
     });
 
-    QUnit.test("showEvent set as object", (assert) => {
+    QUnit.test("showEvent set as object", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1247,7 +1247,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "context menu was shown");
     });
 
-    QUnit.test("showEvent set only as delay", (assert) => {
+    QUnit.test("showEvent set only as delay", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
             target: "#menuTarget",
@@ -1262,7 +1262,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.ok(instance.option("visible"), "context menu was shown");
     });
 
-    QUnit.test("items change should clear focused item", (assert) => {
+    QUnit.test("items change should clear focused item", function(assert) {
         const items1 = [{ text: "item 1" }, { text: "item 2" }];
         const items2 = [{ text: "item 3" }, { text: "item 4" }];
         const instance = new ContextMenu(this.$element, { items: items1, focusStateEnabled: true, visible: true });
@@ -1275,7 +1275,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.strictEqual(instance.option("focusedElement"), null, "focused element is cleaned");
     });
 
-    QUnit.test("items changed should not break keyboard navigation", (assert) => {
+    QUnit.test("items changed should not break keyboard navigation", function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -1292,14 +1292,14 @@ QUnit.module("Options", moduleConfig, () => {
 });
 
 QUnit.module("Public api", moduleConfig, () => {
-    QUnit.test("itemsContainer method should return overlay content", (assert) => {
+    QUnit.test("itemsContainer method should return overlay content", function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         assert.ok(instance.itemsContainer().hasClass("dx-overlay-content"));
         assert.ok(instance.itemsContainer().hasClass(DX_CONTEXT_MENU_CLASS));
     });
 
-    QUnit.test("Overlay's position should be correct when the target option is changed", (assert) => {
+    QUnit.test("Overlay's position should be correct when the target option is changed", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
         });
@@ -1323,7 +1323,7 @@ QUnit.module("Public api", moduleConfig, () => {
 });
 
 QUnit.module("Behavior", moduleConfig, () => {
-    QUnit.test("it should be possible to update items on item click", (assert) => {
+    QUnit.test("it should be possible to update items on item click", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "a" }],
             onItemClick(e) {
@@ -1345,7 +1345,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.equal($items.eq(0).text(), "b", "items was changed");
     });
 
-    QUnit.test("context menu should hide after click on item without children", (assert) => {
+    QUnit.test("context menu should hide after click on item without children", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "a" }],
             visible: true
@@ -1357,7 +1357,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.notOk(instance.option("visible"), "menu was hidden");
     });
 
-    QUnit.test("submenu shouldn't be hidden after click on item with children (T640708)", (assert) => {
+    QUnit.test("submenu shouldn't be hidden after click on item with children (T640708)", function(assert) {
         const contextMenuItems = [
             {
                 text: 'item',
@@ -1387,7 +1387,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.equal(getVisibleSubmenuCount(instance), 3, "All submenus is visible");
     });
 
-    QUnit.test("context menu should not hide after click when item.closeMenuOnClick is false", (assert) => {
+    QUnit.test("context menu should not hide after click when item.closeMenuOnClick is false", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "a", closeMenuOnClick: false }],
             visible: true
@@ -1399,7 +1399,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.ok(instance.option("visible"), "menu is visible");
     });
 
-    QUnit.test("context menu should hide after outside click", (assert) => {
+    QUnit.test("context menu should hide after outside click", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", items: [{ text: "item 111" }] }] }],
             visible: true
@@ -1410,7 +1410,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.notOk(instance.option("visible"), "menu was hidden");
     });
 
-    QUnit.test("context menu should not hide after outsideclick when event is canceled", (assert) => {
+    QUnit.test("context menu should not hide after outsideclick when event is canceled", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", items: [{ text: "item 111" }] }] }],
             visible: true,
@@ -1424,7 +1424,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.ok(instance.option("visible"), "menu is visible");
     });
 
-    QUnit.test("context menu should not block outside click for other overlays on outside click", (assert) => {
+    QUnit.test("context menu should not block outside click for other overlays on outside click", function(assert) {
         const otherOverlay = $("<div>").appendTo("#qunit-fixture").dxOverlay({
             closeOnOutsideClick: true,
             visible: true
@@ -1438,7 +1438,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.notOk(contextMenu.option("visible"), "context menu was hidden");
     });
 
-    QUnit.test("context menu should prevent default behavior if it shows", (assert) => {
+    QUnit.test("context menu should prevent default behavior if it shows", function(assert) {
         new ContextMenu(this.$element, {
             items: [{ text: "item 1" }],
             target: "#menuTarget",
@@ -1451,7 +1451,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.ok(contextMenuEvent.isDefaultPrevented(), "default prevented");
     });
 
-    QUnit.test("onItemClick should fire for submenus", (assert) => {
+    QUnit.test("onItemClick should fire for submenus", function(assert) {
         const itemClickArgs = [];
         const items = [{
             text: "item 1",
@@ -1477,7 +1477,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.deepEqual(itemClickArgs, [items[0], items[0].items[0]], "onItemClick fired with correct arguments");
     });
 
-    QUnit.test("First item should not get focus after menu shown", (assert) => {
+    QUnit.test("First item should not get focus after menu shown", function(assert) {
         let focusedElementChangeCount = 0;
 
         const instance = new ContextMenu(this.$element, {
@@ -1499,7 +1499,7 @@ QUnit.module("Behavior", moduleConfig, () => {
         assert.equal(instance.itemsContainer().find("." + DX_STATE_FOCUSED_CLASS).length, 0, "there are no focused elements in ui");
     });
 
-    QUnit.test("incomplete show animation should be stopped when new submenu item starts to show", (assert) => {
+    QUnit.test("incomplete show animation should be stopped when new submenu item starts to show", function(assert) {
         const origFxStop = fx.stop;
         let stopCalls = 0;
 
@@ -1534,7 +1534,7 @@ QUnit.module("Behavior", moduleConfig, () => {
 });
 
 QUnit.module("Selection", moduleConfig, () => {
-    QUnit.test("select item via item.selected property", (assert) => {
+    QUnit.test("select item via item.selected property", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11", selected: true, items: [{ text: "item 111" }] }] }],
             visible: true
@@ -1548,7 +1548,7 @@ QUnit.module("Selection", moduleConfig, () => {
         assert.equal($itemContainer.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1, "one selected items");
     });
 
-    QUnit.test("select item via selectedItem option", (assert) => {
+    QUnit.test("select item via selectedItem option", function(assert) {
         const items = [{ text: "item 1", selected: true, items: [{ text: "item 11", items: [{ text: "item 111" }] }] }];
 
         const instance = new ContextMenu(this.$element, {
@@ -1567,7 +1567,7 @@ QUnit.module("Selection", moduleConfig, () => {
         assert.ok(items[0].items[0].selected, "nested item selected");
     });
 
-    QUnit.test("changing selection via selectedItem option", (assert) => {
+    QUnit.test("changing selection via selectedItem option", function(assert) {
         const items = [{ text: "item 1", selected: true, items: [{ text: "item 11", items: [{ text: "item 111" }] }] }];
 
         const instance = new ContextMenu(this.$element, {
@@ -1589,7 +1589,7 @@ QUnit.module("Selection", moduleConfig, () => {
 
 var helper;
 QUnit.module("Aria accessibility", {
-    beforeEach: () => {
+    beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({
             createWidget: ($element, options) => new ContextMenu($element,
                 $.extend({
@@ -1597,11 +1597,11 @@ QUnit.module("Aria accessibility", {
                 }, options))
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test(`Items: [] -> show() -> hide()`, () => {
+    QUnit.test(`Items: [] -> show() -> hide()`, function() {
         helper.createWidget({ items: [] });
         helper.checkAttributes(helper.$widget, { }, "widget");
         helper.checkItemsAttributes([], { });
@@ -1616,7 +1616,7 @@ QUnit.module("Aria accessibility", {
         helper.checkItemsAttributes([], { });
     });
 
-    QUnit.test(`Items: [1, 2, 3] -> show() -> hide()`, () => {
+    QUnit.test(`Items: [1, 2, 3] -> show() -> hide()`, function() {
         helper.createWidget({ items: [1, 2, 3] });
         helper.checkAttributes(helper.$widget, { }, "widget");
         helper.checkItemsAttributes([], { });
@@ -1631,7 +1631,7 @@ QUnit.module("Aria accessibility", {
         helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
     });
 
-    QUnit.test(`Items: [1, 2, 3] -> set focusedElement: item[0] -> clean focusedElement`, () => {
+    QUnit.test(`Items: [1, 2, 3] -> set focusedElement: item[0] -> clean focusedElement`, function() {
         helper.createWidget({ items: [1, 2, 3] });
         helper.checkAttributes(helper.$widget, { }, "widget");
         helper.checkItemsAttributes([], { });
@@ -1648,7 +1648,7 @@ QUnit.module("Aria accessibility", {
         helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
     });
 
-    QUnit.test(`Items: [{items[{}, {}], {}] -> set focusedElement by keyboard on inner level`, () => {
+    QUnit.test(`Items: [{items[{}, {}], {}] -> set focusedElement by keyboard on inner level`, function() {
         helper.createWidget({
             focusStateEnabled: true,
             items: [{ text: "Item1_1", items: [{ text: "Item2_1" }, { text: "Item2_2" }] }, { text: "item1_2" }]
@@ -1676,7 +1676,7 @@ QUnit.module("Aria accessibility", {
 });
 
 QUnit.module("Keyboard navigation", moduleConfig, () => {
-    QUnit.test("onItemClick should fire when enter pressed", (assert) => {
+    QUnit.test("onItemClick should fire when enter pressed", function(assert) {
         let itemClicked = 0;
 
         const instance = new ContextMenu(this.$element, {
@@ -1696,7 +1696,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(itemClicked, 1, "press enter on item call item click action");
     });
 
-    QUnit.test("hide menu when space pressed", (assert) => {
+    QUnit.test("hide menu when space pressed", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }, { text: "item 2" }],
             focusStateEnabled: true
@@ -1712,7 +1712,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.notOk(instance.option("visible"));
     });
 
-    QUnit.test("select item when space pressed", (assert) => {
+    QUnit.test("select item when space pressed", function(assert) {
         const items = [{ text: "item 1" }, { text: "item 2" }];
 
         const instance = new ContextMenu(this.$element, {
@@ -1733,7 +1733,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.ok(items[1].selected, "item has selected property");
     });
 
-    QUnit.test("when selectionMode is none, not select item when space pressed", (assert) => {
+    QUnit.test("when selectionMode is none, not select item when space pressed", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }, { text: "item 2" }],
             selectByClick: true,
@@ -1751,7 +1751,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(instance.option("selectedItem"), null, "no item is selected");
     });
 
-    QUnit.test("select item when space pressed on inner level", (assert) => {
+    QUnit.test("select item when space pressed on inner level", function(assert) {
         const items = [{ text: "item 1" }, { text: "item 2", items: [{ text: "item 21" }, { text: "item 22" }] }];
 
         const instance = new ContextMenu(this.$element, {
@@ -1773,7 +1773,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(instance.option("selectedItem").text, "item 22", "correct item is selected");
     });
 
-    QUnit.test("onSelectionChanged handle fire when space pressed", (assert) => {
+    QUnit.test("onSelectionChanged handle fire when space pressed", function(assert) {
         let itemSelected = 0;
 
         const instance = new ContextMenu(this.$element, {
@@ -1795,7 +1795,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(itemSelected, 1, "press space on item call item select");
     });
 
-    QUnit.test("when selectionMode is none, onSelectionChanged handle not fire when space pressed", (assert) => {
+    QUnit.test("when selectionMode is none, onSelectionChanged handle not fire when space pressed", function(assert) {
         let itemSelected = 0;
 
         const instance = new ContextMenu(this.$element, {
@@ -1817,7 +1817,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(itemSelected, 0, "press space on item call item select");
     });
 
-    QUnit.test("hide context menu when esc pressed", (assert) => {
+    QUnit.test("hide context menu when esc pressed", function(assert) {
         const instance = new ContextMenu(this.$element, { focusStateEnabled: true });
 
         instance.show();
@@ -1828,7 +1828,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.ok(!instance.option("visible"), "context menu is hidden");
     });
 
-    QUnit.test("when press right arrow key we only show submenu if exist", (assert) => {
+    QUnit.test("when press right arrow key we only show submenu if exist", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }, { text: "item 2", items: [{ text: "item 21" }] }],
             focusStateEnabled: true
@@ -1856,7 +1856,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(getVisibleSubmenuCount(instance), 2, "we still see two submenus");
     });
 
-    QUnit.test("don't open submenu on right key press when item is disabled", (assert) => {
+    QUnit.test("don't open submenu on right key press when item is disabled", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }, { text: "item 2", disabled: true, items: [{ text: "item 21" }] }],
             focusStateEnabled: true
@@ -1872,7 +1872,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS).length, 2, "submenu was not rendered");
     });
 
-    QUnit.test("end key work only in current submenu", (assert) => {
+    QUnit.test("end key work only in current submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "item 1" },
@@ -1894,7 +1894,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal($(instance.option("focusedElement")).text(), "item 23", "focus on last item of current submenu");
     });
 
-    QUnit.test("home key work only in current submenu", (assert) => {
+    QUnit.test("home key work only in current submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "item 1" },
@@ -1916,7 +1916,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal($(instance.option("focusedElement")).text(), "item 21", "focus on first item of current submenu");
     });
 
-    QUnit.test("down key work only in current submenu", (assert) => {
+    QUnit.test("down key work only in current submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "item 1" },
@@ -1940,7 +1940,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal($(instance.option("focusedElement")).text(), "item 22", "focus on first item of current submenu");
     });
 
-    QUnit.test("up key work only in current submenu", (assert) => {
+    QUnit.test("up key work only in current submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "item 1" },
@@ -1964,7 +1964,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal($(instance.option("focusedElement")).text(), "item 23", "focus on first item of current submenu");
     });
 
-    QUnit.test("left arrow key should not close context menu", (assert) => {
+    QUnit.test("left arrow key should not close context menu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }],
             focusStateEnabled: true
@@ -1979,7 +1979,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(getVisibleSubmenuCount(instance), 1, "submenu should not open");
     });
 
-    QUnit.test("left arrow key should hide only previous submenu", (assert) => {
+    QUnit.test("left arrow key should hide only previous submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "item 1" },
@@ -2003,7 +2003,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(getFocusedItemText(instance), "item 2", "focus on second item of root submenu");
     });
 
-    QUnit.test("rtl: when press left arrow key we only show submenu if exist", (assert) => {
+    QUnit.test("rtl: when press left arrow key we only show submenu if exist", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1" }, { text: "item 2", items: [{ text: "item 21" }] }],
             rtlEnabled: true,
@@ -2027,7 +2027,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(getVisibleSubmenuCount(instance), 2, "we still see two submenus");
     });
 
-    QUnit.test("rtl: right arrow key should not close context menu", (assert) => {
+    QUnit.test("rtl: right arrow key should not close context menu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "item 1", items: [{ text: "item 11" }] }],
             rtlEnabled: true,
@@ -2043,7 +2043,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(getVisibleSubmenuCount(instance), 1, "submenu should not open");
     });
 
-    QUnit.test("rtl: right arrow key should hide only previous submenu", (assert) => {
+    QUnit.test("rtl: right arrow key should hide only previous submenu", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "item 1" },
@@ -2068,7 +2068,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal(getFocusedItemText(instance), "item 2", "focus on second item of root submenu");
     });
 
-    QUnit.test("Moving focus should starts from the hovered item", (assert) => {
+    QUnit.test("Moving focus should starts from the hovered item", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "Item 1" },
@@ -2095,7 +2095,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.equal($itemsContainer.find("." + DX_STATE_FOCUSED_CLASS).text(), "Item 3", "last item was focused");
     });
 
-    QUnit.test("Moving focus should starts from the hovered item in nested level", (assert) => {
+    QUnit.test("Moving focus should starts from the hovered item in nested level", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 {
@@ -2132,7 +2132,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(3).hasClass(DX_STATE_FOCUSED_CLASS), "Item 13 is focused");
     });
 
-    QUnit.test("Disabled item should be skipped when keyboard navigation", (assert) => {
+    QUnit.test("Disabled item should be skipped when keyboard navigation", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "Item 1", disabled: true },
@@ -2152,7 +2152,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), "disabled item was skipped");
     });
 
-    QUnit.test("Focus should follow the nested hovered item if item in the parent level is focused", (assert) => {
+    QUnit.test("Focus should follow the nested hovered item if item in the parent level is focused", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: "Item 1" },
@@ -2182,7 +2182,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
     });
 
     // T806502
-    QUnit.test("Keyboard should be work when submenu shown in second time", (assert) => {
+    QUnit.test("Keyboard should be work when submenu shown in second time", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "Item 1" }, { text: "Item 2", items: [{ text: "Item 2_1" }, { text: "Item 2_2" }] }],
             focusStateEnabled: true
@@ -2217,7 +2217,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
     });
 
-    QUnit.test("FocusedElement should be cleaned when context menu was hidden", (assert) => {
+    QUnit.test("FocusedElement should be cleaned when context menu was hidden", function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "Item 1" }, { text: "Item 2" }, { text: "Item 3" } ],
             focusStateEnabled: true

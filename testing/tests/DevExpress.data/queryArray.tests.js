@@ -281,7 +281,7 @@ QUnit.test("filter by function", function(assert) {
     });
 });
 
-QUnit.test("group criterion with function", (assert) => {
+QUnit.test("group criterion with function", function(assert) {
     assert.expect(2);
 
     const data = [

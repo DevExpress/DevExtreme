@@ -95,42 +95,42 @@ class TabPanelWidthTestHelper {
 ["resizeBrowser", "container", "option"].forEach((setWidthApproach) => {
     const config = `, change ${setWidthApproach}.width`;
 
-    QUnit.test(`Tabpanel with fixed tabs, resize to show navigation button tabs${config}`, (assert) => {
+    QUnit.test(`Tabpanel with fixed tabs, resize to show navigation button tabs${config}`, function(assert) {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel({ width: 400, expectNavButtons: 0 });
         helper.setWidth(100);
         helper.checkTabPanel({ width: 100, expectNavButtons: 2 });
     });
 
-    QUnit.test(`Tabpanel with navigation button tabs, resize to fixed tabs ${config}`, (assert) => {
+    QUnit.test(`Tabpanel with navigation button tabs, resize to fixed tabs ${config}`, function(assert) {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel({ width: 100, expectNavButtons: 2 });
         helper.setWidth(400);
         helper.checkTabPanel({ width: 400, expectNavButtons: 0 });
     });
 
-    QUnit.test(`Tabpanel with navigation button tabs, resize to stretched tabs ${config}`, (assert) => {
+    QUnit.test(`Tabpanel with navigation button tabs, resize to stretched tabs ${config}`, function(assert) {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel({ width: 100, expectNavButtons: 2 });
         helper.setWidth(150);
         helper.checkTabPanel({ width: 150, expectNavButtons: 0 });
     });
 
-    QUnit.test(`Tabpanel with fixed tabs, resize to stretched tabs ${config}`, (assert) => {
+    QUnit.test(`Tabpanel with fixed tabs, resize to stretched tabs ${config}`, function(assert) {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel({ width: 400, expectNavButtons: 0 });
         helper.setWidth(150);
         helper.checkTabPanel({ width: 150, expectNavButtons: 0 });
     });
 
-    QUnit.test(`Tabpanel with stretched tabs, resize to fixed tabs ${config}`, (assert) => {
+    QUnit.test(`Tabpanel with stretched tabs, resize to fixed tabs ${config}`, function(assert) {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel({ width: 150, expectNavButtons: 0 });
         helper.setWidth(400);
         helper.checkTabPanel({ width: 400, expectNavButtons: 0 });
     });
 
-    QUnit.test(`Tabpanel with stretched tabs, resize to navigation buttons tabs ${config}`, (assert) => {
+    QUnit.test(`Tabpanel with stretched tabs, resize to navigation buttons tabs ${config}`, function(assert) {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel({ width: 150, expectNavButtons: 0 });
         helper.setWidth(100);

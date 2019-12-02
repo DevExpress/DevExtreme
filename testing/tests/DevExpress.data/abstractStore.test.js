@@ -2,7 +2,7 @@ import Store from "data/abstract_store";
 
 QUnit.module("Abstract Store", function() {
     class MyStore { }
-    QUnit.test("registerClass", assert => {
+    QUnit.test("registerClass", function(assert) {
         Store.registerClass(MyStore, "my-store");
         const
             customStore = Store.create("my-store");

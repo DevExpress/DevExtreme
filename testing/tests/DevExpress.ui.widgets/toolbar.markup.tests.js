@@ -36,11 +36,11 @@ const prepareItemTest = function(itemData) {
 };
 
 QUnit.module("render", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.element = $("#toolbar");
     }
 }, () => {
-    test("containers", (assert) => {
+    test("containers", function(assert) {
         this.element.dxToolbar({});
 
         let beforeContainer = this.element.find("." + TOOLBAR_BEFORE_CONTAINER_CLASS);
@@ -53,7 +53,7 @@ QUnit.module("render", {
         assert.equal(centerContainer.length, 1);
     });
 
-    test("render dropDownMenu", (assert) => {
+    test("render dropDownMenu", function(assert) {
         this.element.dxToolbar({
             items: [
                 { location: "after", locateInMenu: "always", widget: "button", options: { text: "After Button" } }
@@ -66,7 +66,7 @@ QUnit.module("render", {
         assert.ok($toolbarMenuContainer.children().hasClass(DROP_DOWN_MENU_CLASS), "DropDownMenu rendered");
     });
 
-    test("items - widgets", (assert) => {
+    test("items - widgets", function(assert) {
         this.element.dxToolbar({
             items: [
                 { location: "before", widget: "button", options: { text: "Before Button" } },
@@ -88,7 +88,7 @@ QUnit.module("render", {
 
     });
 
-    test("items - label", (assert) => {
+    test("items - label", function(assert) {
         this.element.dxToolbar({
             items: [
                 { location: "center", text: "Label" }
@@ -102,7 +102,7 @@ QUnit.module("render", {
         assert.ok(label.hasClass(TOOLBAR_LABEL_CLASS));
     });
 
-    test("items - custom html", (assert) => {
+    test("items - custom html", function(assert) {
         this.element.dxToolbar({
             items: [
                 { location: "center", html: "<b>Label</b>" }
@@ -115,7 +115,7 @@ QUnit.module("render", {
         assert.ok(this.element.find("." + TOOLBAR_ITEM_CLASS).hasClass(TOOLBAR_LABEL_CLASS));
     });
 
-    test("items - location", (assert) => {
+    test("items - location", function(assert) {
         let element = this.element.dxToolbar({
             items: [
                 { location: "before", text: "before" },
@@ -129,7 +129,7 @@ QUnit.module("render", {
         });
     });
 
-    test("items - location", (assert) => {
+    test("items - location", function(assert) {
         let element = this.element.dxToolbar({
             items: [
                 { location: "before", text: "before" },
@@ -143,7 +143,7 @@ QUnit.module("render", {
         });
     });
 
-    test("add a custom CSS class to item", (assert) => {
+    test("add a custom CSS class to item", function(assert) {
         this.element.dxToolbar({
             items: [
                 { location: "before", cssClass: "test-before" },
@@ -162,7 +162,7 @@ QUnit.module("render", {
         });
     });
 
-    test("items with nested toolbar config 1", (assert) => {
+    test("items with nested toolbar config 1", function(assert) {
         this.element.dxToolbar({
             items: [
                 {
@@ -183,7 +183,7 @@ QUnit.module("render", {
         assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
     });
 
-    test("items with nested toolbar config 2", (assert) => {
+    test("items with nested toolbar config 2", function(assert) {
         this.element.dxToolbar({
             items: [
                 { html: '<div id="1">1</div>' },
@@ -204,7 +204,7 @@ QUnit.module("render", {
         assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
     });
 
-    test("items with nested toolbar config 3", (assert) => {
+    test("items with nested toolbar config 3", function(assert) {
         this.element.dxToolbar({
             items: [
                 {
@@ -234,7 +234,7 @@ QUnit.module("render", {
         assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
     });
 
-    test("Clear timer for the animation in the Material theme", (assert) => {
+    test("Clear timer for the animation in the Material theme", function(assert) {
         this.origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
         this.element.dxToolbar({});
@@ -266,11 +266,11 @@ QUnit.test("elementAttr should be rendered on button items", function(assert) {
 });
 
 QUnit.module("option change handlers", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.element = $("#toolbar");
     }
 }, () => {
-    test("items", (assert) => {
+    test("items", function(assert) {
         let instance = this.element.dxToolbar({ items: [{ location: "center", text: "0" }] }).dxToolbar("instance");
 
         instance.option("items", [{ location: "center", text: "1" }]);
@@ -279,12 +279,12 @@ QUnit.module("option change handlers", {
 });
 
 QUnit.module("regressions", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.element = $("#toolbar").dxToolbar({});
         this.instance = this.element.dxToolbar("instance");
     }
 }, () => {
-    test("B231277", (assert) => {
+    test("B231277", function(assert) {
         this.instance.option("items", [{ location: "center" }]);
         assert.equal($.trim(this.element.text()), "");
 
@@ -297,7 +297,7 @@ QUnit.module("regressions", {
 });
 
 QUnit.module("aria accessibility", () => {
-    test("aria role", (assert) => {
+    test("aria role", function(assert) {
         let $element = $("#toolbar").dxToolbar();
 
         assert.equal($element.attr("role"), "toolbar", "role is correct");
@@ -305,7 +305,7 @@ QUnit.module("aria accessibility", () => {
 });
 
 QUnit.module("item groups", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.$element = $("#toolbar");
         this.groups = [
             {
@@ -332,7 +332,7 @@ QUnit.module("item groups", {
         ];
     }
 }, () => {
-    test("toolbar should show item groups", (assert) => {
+    test("toolbar should show item groups", function(assert) {
         let $element = this.$element.dxToolbar({
                 items: this.groups,
                 grouped: true,
@@ -344,7 +344,7 @@ QUnit.module("item groups", {
         assert.equal($groups.eq(1).find("." + TOOLBAR_ITEM_CLASS).length, 3, "second group contains 3 items");
     });
 
-    test("toolbar groups should be placed inside toolbar blocks", (assert) => {
+    test("toolbar groups should be placed inside toolbar blocks", function(assert) {
         let $element = this.$element.dxToolbar({
                 items: this.groups,
                 grouped: true
@@ -360,31 +360,31 @@ QUnit.module("item groups", {
 });
 
 QUnit.module("default template", () => {
-    test("template should be rendered correctly with text", (assert) => {
+    test("template should be rendered correctly with text", function(assert) {
         let $content = prepareItemTest("custom");
 
         assert.equal($content.text(), "custom");
     });
 
-    test("template should be rendered correctly with boolean", (assert) => {
+    test("template should be rendered correctly with boolean", function(assert) {
         let $content = prepareItemTest(true);
 
         assert.equal($.trim($content.text()), "true");
     });
 
-    test("template should be rendered correctly with number", (assert) => {
+    test("template should be rendered correctly with number", function(assert) {
         let $content = prepareItemTest(1);
 
         assert.equal($.trim($content.text()), "1");
     });
 
-    test("template should be rendered correctly with text", (assert) => {
+    test("template should be rendered correctly with text", function(assert) {
         let $content = prepareItemTest({ text: "custom" });
 
         assert.equal($.trim($content.text()), "custom");
     });
 
-    test("template should be rendered correctly with html", (assert) => {
+    test("template should be rendered correctly with html", function(assert) {
         let $content = prepareItemTest({ html: "<span>test</span>" });
 
         let $span = $content.is("span") ? $content : $content.children();
@@ -392,13 +392,13 @@ QUnit.module("default template", () => {
         assert.equal($span.text(), "test");
     });
 
-    test("template should be rendered correctly with htmlstring", (assert) => {
+    test("template should be rendered correctly with htmlstring", function(assert) {
         let $content = prepareItemTest("<span>test</span>");
 
         assert.equal($content.text(), "<span>test</span>");
     });
 
-    test("template should be rendered correctly with html & text", (assert) => {
+    test("template should be rendered correctly with html & text", function(assert) {
         let $content = prepareItemTest({ text: "text", html: "<span>test</span>" });
 
         let $span = $content.is("span") ? $content : $content.children();
@@ -407,21 +407,21 @@ QUnit.module("default template", () => {
         assert.equal($content.text(), "test");
     });
 
-    test("template should be rendered correctly with button without options", (assert) => {
+    test("template should be rendered correctly with button without options", function(assert) {
         let $content = prepareItemTest({ widget: "button" });
 
         let button = $content.filter(".dx-button");
         assert.equal(button.length, 1);
     });
 
-    test("template should be rendered correctly with dxbutton without options", (assert) => {
+    test("template should be rendered correctly with dxbutton without options", function(assert) {
         let $content = prepareItemTest({ widget: "dxButton" });
 
         let button = $content.filter(".dx-button");
         assert.equal(button.length, 1);
     });
 
-    test("template should be rendered correctly with button", (assert) => {
+    test("template should be rendered correctly with button", function(assert) {
         let $content = prepareItemTest({ widget: "button", options: { text: "test" } });
 
         let button = $content.filter(".dx-button");
@@ -429,7 +429,7 @@ QUnit.module("default template", () => {
         assert.equal($.trim(button.text()), "test");
     });
 
-    test("template should be rendered correctly with dxtabs", (assert) => {
+    test("template should be rendered correctly with dxtabs", function(assert) {
         let $content = prepareItemTest({ widget: "dxTabs", options: { items: [{ text: "test" }] } });
 
         let tabs = $content.filter(".dx-tabs");
@@ -439,7 +439,7 @@ QUnit.module("default template", () => {
         assert.equal($.trim(tabs.text()), "test");
     });
 
-    test("template should be rendered correctly with tabs", (assert) => {
+    test("template should be rendered correctly with tabs", function(assert) {
         let $content = prepareItemTest({ widget: "tabs", options: { items: [{ text: "test" }] } });
 
         let tabs = $content.filter(".dx-tabs");
@@ -449,7 +449,7 @@ QUnit.module("default template", () => {
         assert.equal($.trim(tabs.text()), "test");
     });
 
-    test("template should be rendered correctly with dropDownMenu", (assert) => {
+    test("template should be rendered correctly with dropDownMenu", function(assert) {
         let $content = prepareItemTest({ widget: "dropDownMenu", options: { items: [{ text: "test" }] } });
 
         let dropDown = $content.filter(".dx-dropdownmenu");

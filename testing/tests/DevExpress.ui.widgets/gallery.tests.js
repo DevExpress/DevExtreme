@@ -239,7 +239,7 @@ QUnit.test("indicator selected item should be correct after showIndicator option
     assert.equal($gallery.find(`.${GALLERY_SELECTED_ITEM_CLASS}`).index(), 0);
 });
 
-QUnit.test("B232221 -  backward direction behavior has bugs", assert => {
+QUnit.test("B232221 -  backward direction behavior has bugs", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({ items: [1, 2, 3, 4], loop: true });
     const instance = $gallery.dxGallery("instance");
     const items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
@@ -489,7 +489,7 @@ QUnit.test("non correct loop behavior", function(assert) {
     assert.equal($galleryItems.eq(0).position().left, 0);
 });
 
-QUnit.test("swipe right, wrong item position", assert => {
+QUnit.test("swipe right, wrong item position", function(assert) {
     const $gallery = $("#gallerySimple")
         .dxGallery({
             items: [0, 1, 2, 3],
@@ -641,7 +641,7 @@ QUnit.test("changing selected index while animation should work correctly", func
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 0);
 });
 
-QUnit.test("gallery with two items works correctly when loop is enabled", assert => {
+QUnit.test("gallery with two items works correctly when loop is enabled", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1],
         selectedIndex: 0,
@@ -753,7 +753,7 @@ QUnit.module("render", {
     }
 });
 
-QUnit.test("default", assert => {
+QUnit.test("default", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3],
         showNavButtons: true
@@ -771,7 +771,7 @@ QUnit.test("default", assert => {
     assert.equal($gallery.find(`.${NAV_PREV_BUTTON_CLASS}`).hasClass(DX_WIDGET_CLASS), true);
 });
 
-QUnit.test("render with auto height", assert => {
+QUnit.test("render with auto height", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3],
         height: "auto"
@@ -780,7 +780,7 @@ QUnit.test("render with auto height", assert => {
     assert.ok($gallery.height() > 0, "Gallery has non-zero height");
 });
 
-QUnit.test("selectedIndex option on init", assert => {
+QUnit.test("selectedIndex option on init", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3],
         showNavButtons: true,
@@ -792,20 +792,20 @@ QUnit.test("selectedIndex option on init", assert => {
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 0);
 });
 
-QUnit.test("B237131: gallery is not rendered if width and height are not set", assert => {
+QUnit.test("B237131: gallery is not rendered if width and height are not set", function(assert) {
     const $gallery = $("#galleryWithoutSize").dxGallery({ items: [1, 2, 3, 4], loop: true });
     const instance = $gallery.dxGallery("instance");
 
     assert.equal(instance.option("height"), instance._itemElements().first().outerHeight(), "if widget height is undefined, that we use the item height");
 });
 
-QUnit.test("B230374 - error in our simulator when we are using items from viewmodel", assert => {
+QUnit.test("B230374 - error in our simulator when we are using items from viewmodel", function(assert) {
     assert.expect(0);
     const $gallery = $("#gallerySimple").dxGallery();
     pointerMock($gallery).start().swipeStart().swipe(0.5).swipeEnd(1);
 });
 
-QUnit.test("B234431 - displays only first 20 items when bound to array", assert => {
+QUnit.test("B234431 - displays only first 20 items when bound to array", function(assert) {
     executeAsyncMock.setup();
     try {
         const ITEMS_COUNT = 20 + 10;
@@ -823,7 +823,7 @@ QUnit.test("B234431 - displays only first 20 items when bound to array", assert 
     }
 });
 
-QUnit.test("navigation buttons duplication (B233450)", assert => {
+QUnit.test("navigation buttons duplication (B233450)", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({ showNavButtons: true });
     const instance = $gallery.dxGallery("instance");
 
@@ -833,7 +833,7 @@ QUnit.test("navigation buttons duplication (B233450)", assert => {
     assert.equal($gallery.find(`.${NAV_NEXT_BUTTON_CLASS}`).length, 1);
 });
 
-QUnit.test("item template", assert => {
+QUnit.test("item template", function(assert) {
     const $gallery = $("#galleryWithTmpl").dxGallery({ items: [ 1, 2, 3 ] });
     const items = $gallery.find(`.${GALLERY_ITEM_CLASS}`);
 
@@ -849,7 +849,7 @@ const checkItemPositionForCurrentIndex = (items, currentIndex, $gallery, assert)
     });
 };
 
-QUnit.test("paddings support", assert => {
+QUnit.test("paddings support", function(assert) {
     const $element = $("#galleryWithItemPaddings").dxGallery({ items: [1, 2, 3] });
     const itemsElements = $element.find(`.${GALLERY_ITEM_CLASS}`);
 
@@ -862,7 +862,7 @@ QUnit.test("paddings support", assert => {
     checkItemPositionForCurrentIndex(itemsElements, 1, $("#galleryWithItemPaddings"), assert);
 });
 
-QUnit.test("box-sizing support", assert => {
+QUnit.test("box-sizing support", function(assert) {
     const $element = $("#galleryWithBorderBox").dxGallery({ items: [1, 2, 3] });
     const itemsElements = $element.find(`.${GALLERY_ITEM_CLASS}`);
 
@@ -875,7 +875,7 @@ QUnit.test("box-sizing support", assert => {
     checkItemPositionForCurrentIndex(itemsElements, 1, $("#galleryWithBorderBox"), assert);
 });
 
-QUnit.test("items changed", assert => {
+QUnit.test("items changed", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2],
         loop: true
@@ -893,7 +893,7 @@ QUnit.test("items changed", assert => {
     assert.equal(items().length, 4, "2 items + 2 duplicates");
 });
 
-QUnit.test("indicator change", assert => {
+QUnit.test("indicator change", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({ items: [0, 1] });
     const instance = $gallery.dxGallery("instance");
 
@@ -910,7 +910,7 @@ QUnit.test("indicator change", assert => {
     assert.equal(indicators().length, 0);
 });
 
-QUnit.test("showNavButtons", assert => {
+QUnit.test("showNavButtons", function(assert) {
     const $element = $("#gallerySimple").dxGallery({
         items: [1, 2, 3],
         showNavButtons: true
@@ -928,7 +928,7 @@ QUnit.test("showNavButtons", assert => {
     assert.equal($wrapper.children(`.${NAV_NEXT_BUTTON_CLASS}`).length, 0);
 });
 
-QUnit.test("showNavButtons with 2 items", assert => {
+QUnit.test("showNavButtons with 2 items", function(assert) {
     const $element = $("#gallerySimple").dxGallery({
         items: [1, 2],
         showNavButtons: true
@@ -947,7 +947,7 @@ QUnit.test("showNavButtons with 2 items", assert => {
     assert.equal($nextNavButton.css("display"), "block");
 });
 
-QUnit.test("'wrapAround' option test when 'stretchImages' = true", assert => {
+QUnit.test("'wrapAround' option test when 'stretchImages' = true", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [1, 2, 3, 4],
         wrapAround: true,
@@ -970,7 +970,7 @@ QUnit.test("'wrapAround' option test when 'stretchImages' = true", assert => {
     assert.equal(calculateItemPosition($galleryItems.last(), $gallery), -100);
 });
 
-QUnit.test("'wrapAround' option test when 'stretchImages' = false", assert => {
+QUnit.test("'wrapAround' option test when 'stretchImages' = false", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [1, 2, 3, 4],
         wrapAround: true,
@@ -987,7 +987,7 @@ QUnit.test("'wrapAround' option test when 'stretchImages' = false", assert => {
     assert.equal(calculateItemPosition($galleryItems.last(), $gallery), -195);
 });
 
-QUnit.test("'wrapAround' option changed test", assert => {
+QUnit.test("'wrapAround' option changed test", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [1, 2, 3, 4],
         wrapAround: true,
@@ -1006,7 +1006,7 @@ QUnit.test("'wrapAround' option changed test", assert => {
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 0);
 });
 
-QUnit.test("Image should have correct sizes across the browsers", assert => {
+QUnit.test("Image should have correct sizes across the browsers", function(assert) {
     const done = assert.async();
     const $gallery = $("#gallerySimple").dxGallery({
         width: 800,
@@ -1875,7 +1875,7 @@ QUnit.test("B233068 - When change from 2nd to 4th slide or vice versa, animation
     this.clock.tick(ANIMATION_WAIT_TIME);
 });
 
-QUnit.test("prevItem / nextItem", assert => {
+QUnit.test("prevItem / nextItem", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1]
     });
@@ -1892,7 +1892,7 @@ QUnit.test("prevItem / nextItem", assert => {
     assert.equal(galleryInstance.option("selectedIndex"), 0);
 });
 
-QUnit.test("prevItem / nextItem for loop", assert => {
+QUnit.test("prevItem / nextItem for loop", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2],
         loop: true
@@ -1906,7 +1906,7 @@ QUnit.test("prevItem / nextItem for loop", assert => {
     assert.equal(galleryInstance.option("selectedIndex"), 0);
 });
 
-QUnit.test("goToItem", assert => {
+QUnit.test("goToItem", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3, 4],
         loop: true
@@ -1957,7 +1957,7 @@ QUnit.test("goToItem with animation", function(assert) {
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), 400);
 });
 
-QUnit.test("goToItem without animation when animationEnabled is true", assert => {
+QUnit.test("goToItem without animation when animationEnabled is true", function(assert) {
     fx.off = false;
 
     const origFX = fx.animate;
@@ -2010,7 +2010,7 @@ QUnit.test("prevItem / nextItem with animation", function(assert) {
     assert.equal(calculateItemPosition($galleryItems.eq(1), $gallery), 400);
 });
 
-QUnit.test("goToItem should not cause animation if index equals selected index", assert => {
+QUnit.test("goToItem should not cause animation if index equals selected index", function(assert) {
     fx.off = false;
 
     const origFX = fx.animate;
@@ -2039,7 +2039,7 @@ QUnit.test("goToItem should not cause animation if index equals selected index",
     }
 });
 
-QUnit.test("click on navButtons switch current item", assert => {
+QUnit.test("click on navButtons switch current item", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1],
         animationDuration: 10,
@@ -2055,7 +2055,7 @@ QUnit.test("click on navButtons switch current item", assert => {
     assert.equal(instance.option("selectedIndex"), 0);
 });
 
-QUnit.test("click on navButtons switch current item when loop mode", assert => {
+QUnit.test("click on navButtons switch current item when loop mode", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2],
         showNavButtons: true,
@@ -2072,7 +2072,7 @@ QUnit.test("click on navButtons switch current item when loop mode", assert => {
     assert.equal(instance.option("selectedIndex"), 2);
 });
 
-QUnit.test("animationDuration", assert => {
+QUnit.test("animationDuration", function(assert) {
     fx.off = false;
 
     const clock = sinon.useFakeTimers();
@@ -2244,7 +2244,7 @@ QUnit.module("RTL", {
     }
 });
 
-QUnit.test("default render", assert => {
+QUnit.test("default render", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3],
         showNavButtons: true,
@@ -2284,7 +2284,7 @@ QUnit.test("change selected item by swipe change indicator selected item", funct
     assert.ok($indicatorItems().eq(1).hasClass(GALLERY_SELECTED_ITEM_CLASS));
 });
 
-QUnit.test("userInteraction", assert => {
+QUnit.test("userInteraction", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2],
         rtlEnabled: true,
@@ -2323,7 +2323,7 @@ QUnit.test("loop works correctly for rtl mode", function(assert) {
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 1200);
 });
 
-QUnit.test("gallery with two items works correctly when loop is enabled, rtl mode", assert => {
+QUnit.test("gallery with two items works correctly when loop is enabled, rtl mode", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1],
         selectedIndex: 0,
@@ -2350,7 +2350,7 @@ QUnit.test("gallery with two items works correctly when loop is enabled, rtl mod
     assert.equal(calculateItemPosition($galleryItems.eq(0), $gallery), 0, "going to prev item is correct");
 });
 
-QUnit.test("Item positions are correct for responsive gallery, stretchImages=false, rtl mode", assert => {
+QUnit.test("Item positions are correct for responsive gallery, stretchImages=false, rtl mode", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         width: 400,
         initialItemWidth: 210,
@@ -2367,13 +2367,13 @@ QUnit.test("Item positions are correct for responsive gallery, stretchImages=fal
 
 QUnit.module("widget sizing render");
 
-QUnit.test("default", assert => {
+QUnit.test("default", function(assert) {
     const $element = $("#widget").dxGallery({ items: [0, 1, 2] });
 
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
-QUnit.test("constructor", assert => {
+QUnit.test("constructor", function(assert) {
     const $element = $("#widget").dxGallery({ items: [0, 1, 2], width: 400 });
     const instance = $element.dxGallery("instance");
 
@@ -2381,13 +2381,13 @@ QUnit.test("constructor", assert => {
     assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
 });
 
-QUnit.test("root with custom width", assert => {
+QUnit.test("root with custom width", function(assert) {
     const $element = $("#widthRootStyle").dxGallery({ items: [0, 1, 2] });
 
     assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
 });
 
-QUnit.test("change width", assert => {
+QUnit.test("change width", function(assert) {
     const $element = $("#widget").dxGallery({ items: [0, 1, 2] });
     const instance = $element.dxGallery("instance");
     const customWidth = 400;
@@ -2397,7 +2397,7 @@ QUnit.test("change width", assert => {
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
-QUnit.test("change sizes after showing", assert => {
+QUnit.test("change sizes after showing", function(assert) {
     const $element = $("#widget");
     const $elementWrapper = $element.wrap("<div>").parent().detach();
 
@@ -2414,7 +2414,7 @@ QUnit.test("change sizes after showing", assert => {
     assert.ok($element.height() > 0, "height present");
 });
 
-QUnit.test("items position set without animation after windowsResizeCallback is fired", assert => {
+QUnit.test("items position set without animation after windowsResizeCallback is fired", function(assert) {
     const origFX = fx.animate;
     let animated = false;
     fx.animate = () => {
@@ -2450,7 +2450,7 @@ QUnit.module("gallery with paginated dataSource", {
 
 });
 
-QUnit.test("gallery should load next page on next nav button click", assert => {
+QUnit.test("gallery should load next page on next nav button click", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         showNavButtons: true,
         dataSource: {
@@ -2473,7 +2473,7 @@ QUnit.test("gallery should load next page on next nav button click", assert => {
     assert.equal($items.filter(":visible").length, 4, "rendered items count is correct, there are items for showing next gallery page");
 });
 
-QUnit.test("next navButton is visible if dataSource has next page", assert => {
+QUnit.test("next navButton is visible if dataSource has next page", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         showNavButtons: true,
         dataSource: {
@@ -2487,7 +2487,7 @@ QUnit.test("next navButton is visible if dataSource has next page", assert => {
     assert.notEqual($nextNavButton.css("display"), "none", "navButton is visible");
 });
 
-QUnit.test("next navButton is invisible for last page and visible after click on prev navButton", assert => {
+QUnit.test("next navButton is invisible for last page and visible after click on prev navButton", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         showNavButtons: true,
         dataSource: {
@@ -2508,7 +2508,7 @@ QUnit.test("next navButton is invisible for last page and visible after click on
     assert.notEqual($nextNavButton.css("display"), "none", "next navButton is invisible");
 });
 
-QUnit.test("gallery should load next page on creating if next visible page is not full", assert => {
+QUnit.test("gallery should load next page on creating if next visible page is not full", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         showNavButtons: true,
         dataSource: {
@@ -2522,7 +2522,7 @@ QUnit.test("gallery should load next page on creating if next visible page is no
     assert.equal($items.filter(":visible").length, 2, "rendered items count is correct, there are items for showing next gallery page");
 });
 
-QUnit.test("items positions are correct after loading new items", assert => {
+QUnit.test("items positions are correct after loading new items", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         showNavButtons: true,
         dataSource: {
@@ -2538,7 +2538,7 @@ QUnit.test("items positions are correct after loading new items", assert => {
     assert.equal(calculateItemPosition($thirdItem, $gallery), ITEM_WIDTH, "item position is correct");
 });
 
-QUnit.test("indicators count is correct after loading new items", assert => {
+QUnit.test("indicators count is correct after loading new items", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         showNavButtons: true,
         dataSource: {
@@ -2555,7 +2555,7 @@ QUnit.test("indicators count is correct after loading new items", assert => {
     assert.equal($gallery.find(`.${INDICATOR_ITEM_CLASS}`).length, 3, "indicators count is correct, next page was loaded");
 });
 
-QUnit.test("next dataSource page should be loaded during swipe gesture", assert => {
+QUnit.test("next dataSource page should be loaded during swipe gesture", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         dataSource: {
             store: [1, 2, 3],
@@ -2571,7 +2571,7 @@ QUnit.test("next dataSource page should be loaded during swipe gesture", assert 
     assert.equal($items.filter(":visible").length, 3, "rendered items count is correct");
 });
 
-QUnit.test("width of loaded items is correct", assert => {
+QUnit.test("width of loaded items is correct", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         width: 400,
         loop: true,
@@ -2590,7 +2590,7 @@ QUnit.test("width of loaded items is correct", assert => {
     assert.equal($items.eq(3).width(), 350, "rendered items width is correct");
 });
 
-QUnit.test("loading items on init when dataSource pageSize < visible pageSize", assert => {
+QUnit.test("loading items on init when dataSource pageSize < visible pageSize", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         width: 400,
         initialItemWidth: 200,
@@ -2606,7 +2606,7 @@ QUnit.test("loading items on init when dataSource pageSize < visible pageSize", 
     assert.equal($items.filter(":visible").length, 4, "items count is correct");
 });
 
-QUnit.test("next dataSource page should be loaded on indicator click", assert => {
+QUnit.test("next dataSource page should be loaded on indicator click", function(assert) {
     const $gallery = $("#gallerySimple").dxGallery({
         width: 400,
         initialItemWidth: 200,

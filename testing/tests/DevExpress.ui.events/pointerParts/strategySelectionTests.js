@@ -8,13 +8,13 @@ import MouseAndTouchStrategy from "events/pointer/mouse_and_touch";
 const { test } = QUnit;
 
 QUnit.module("Strategy selection", () => {
-    test("Use the Mouse strategy by default", (assert) => {
+    test("Use the Mouse strategy by default", function(assert) {
         const strategy = getStrategy({}, {}, {});
 
         assert.strictEqual(strategy, MouseStrategy);
     });
 
-    test("Use the MouseAndTouch strategy when touch supported and device isn't a tablet or phone", (assert) => {
+    test("Use the MouseAndTouch strategy when touch supported and device isn't a tablet or phone", function(assert) {
         const strategyDesktop = getStrategy({ touch: true }, { desktop: true }, {});
         const strategyPhone = getStrategy({ touch: true }, { tablet: true }, {});
         const strategyTablet = getStrategy({ touch: true }, { phone: true }, {});
@@ -24,7 +24,7 @@ QUnit.module("Strategy selection", () => {
         assert.strictEqual(strategyTablet, TouchStrategy);
     });
 
-    test("Use the MsPointer strategy when PointerEvent supported and the Edge or IE11 browser using", (assert) => {
+    test("Use the MsPointer strategy when PointerEvent supported and the Edge or IE11 browser using", function(assert) {
         const strategyMsie = getStrategy({ pointerEvents: true }, {}, { msie: true });
         const strategyWebkit = getStrategy({ pointerEvents: true }, {}, { webkit: true });
 

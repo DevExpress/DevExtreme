@@ -77,6 +77,10 @@ export class GanttView extends Widget {
                 return 4;
             case "months":
                 return 5;
+            case "quarters":
+                return 6;
+            case "years":
+                return 7;
             default:
                 return undefined;
         }
@@ -126,6 +130,9 @@ export class GanttView extends Widget {
     }
     getRowHeight() {
         return this.option("rowHeight");
+    }
+    getHeaderHeight() {
+        return this.option("headerHeight");
     }
     getGanttTasksData() {
         return this.option("tasks");

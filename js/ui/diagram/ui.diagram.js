@@ -353,6 +353,7 @@ class Diagram extends Widget {
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
 
+        this._updateShapeTexts();
         this._updateUnitItems();
         this._updateFormatUnitsMethod();
 
@@ -857,15 +858,24 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
     _updateUnitItems() {
+        const { DiagramLocalizationService } = getDiagram();
+        var items = this._getUnitItems();
+        if(this._unitItems !== items) {
+            this._unitItems = items;
+            DiagramLocalizationService.unitItems = items;
+        }
+    }
+    _getUnitItems() {
         const { DiagramUnit } = getDiagram();
         var items = {};
         items[DiagramUnit.In] = messageLocalization.format("dxDiagram-unitIn");
         items[DiagramUnit.Cm] = messageLocalization.format("dxDiagram-unitCm");
         items[DiagramUnit.Px] = messageLocalization.format("dxDiagram-unitPx");
-        this._diagramInstance.settings.unitItems = items;
+        return items;
     }
     _updateFormatUnitsMethod() {
-        this._diagramInstance.settings.formatUnit = function(value) {
+        const { DiagramLocalizationService } = getDiagram();
+        DiagramLocalizationService.formatUnit = function(value) {
             return numberLocalization.format(value);
         };
     }
@@ -899,7 +909,68 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.PageColor, this.option("pageColor"));
     }
-
+    _updateShapeTexts() {
+        const { DiagramLocalizationService } = getDiagram();
+        var texts = this._getShapeTexts();
+        if(this._shapeTexts !== texts) {
+            this._shapeTexts = texts;
+            DiagramLocalizationService.shapeTexts = texts;
+        }
+    }
+    _getShapeTexts() {
+        const { ShapeTypes } = getDiagram();
+        var texts = {};
+        // Standard
+        texts[ShapeTypes.Text] = messageLocalization.format("dxDiagram-shapeText");
+        texts[ShapeTypes.Rectangle] = messageLocalization.format("dxDiagram-shapeRectangle");
+        texts[ShapeTypes.Ellipse] = messageLocalization.format("dxDiagram-shapeEllipse");
+        texts[ShapeTypes.Cross] = messageLocalization.format("dxDiagram-shapeCross");
+        texts[ShapeTypes.Triangle] = messageLocalization.format("dxDiagram-shapeTriangle");
+        texts[ShapeTypes.Diamond] = messageLocalization.format("dxDiagram-shapeDiamond");
+        texts[ShapeTypes.Heart] = messageLocalization.format("dxDiagram-shapeHeart");
+        texts[ShapeTypes.Pentagon] = messageLocalization.format("dxDiagram-shapePentagon");
+        texts[ShapeTypes.Hexagon] = messageLocalization.format("dxDiagram-shapeHexagon");
+        texts[ShapeTypes.Octagon] = messageLocalization.format("dxDiagram-shapeOctagon");
+        texts[ShapeTypes.Star] = messageLocalization.format("dxDiagram-shapeStar");
+        texts[ShapeTypes.ArrowLeft] = messageLocalization.format("dxDiagram-shapeArrowLeft");
+        texts[ShapeTypes.ArrowUp] = messageLocalization.format("dxDiagram-shapeArrowUp");
+        texts[ShapeTypes.ArrowRight] = messageLocalization.format("dxDiagram-shapeArrowRight");
+        texts[ShapeTypes.ArrowDown] = messageLocalization.format("dxDiagram-shapeArrowDown");
+        texts[ShapeTypes.ArrowUpDown] = messageLocalization.format("dxDiagram-shapeArrowUpDown");
+        texts[ShapeTypes.ArrowLeftRight] = messageLocalization.format("dxDiagram-shapeArrowLeftRight");
+        // Flowchart
+        texts[ShapeTypes.Process] = messageLocalization.format("dxDiagram-shapeProcess");
+        texts[ShapeTypes.Decision] = messageLocalization.format("dxDiagram-shapeDecision");
+        texts[ShapeTypes.Terminator] = messageLocalization.format("dxDiagram-shapeTerminator");
+        texts[ShapeTypes.PredefinedProcess] = messageLocalization.format("dxDiagram-shapePredefinedProcess");
+        texts[ShapeTypes.Document] = messageLocalization.format("dxDiagram-shapeDocument");
+        texts[ShapeTypes.MultipleDocuments] = messageLocalization.format("dxDiagram-shapeMultipleDocuments");
+        texts[ShapeTypes.ManualInput] = messageLocalization.format("dxDiagram-shapeManualInput");
+        texts[ShapeTypes.Preparation] = messageLocalization.format("dxDiagram-shapePreparation");
+        texts[ShapeTypes.Data] = messageLocalization.format("dxDiagram-shapeData");
+        texts[ShapeTypes.Database] = messageLocalization.format("dxDiagram-shapeDatabase");
+        texts[ShapeTypes.HardDisk] = messageLocalization.format("dxDiagram-shapeHardDisk");
+        texts[ShapeTypes.InternalStorage] = messageLocalization.format("dxDiagram-shapeInternalStorage");
+        texts[ShapeTypes.PaperTape] = messageLocalization.format("dxDiagram-shapePaperTape");
+        texts[ShapeTypes.ManualOperation] = messageLocalization.format("dxDiagram-shapeManualOperation");
+        texts[ShapeTypes.Delay] = messageLocalization.format("dxDiagram-shapeDelay");
+        texts[ShapeTypes.StoredData] = messageLocalization.format("dxDiagram-shapeStoredData");
+        texts[ShapeTypes.Display] = messageLocalization.format("dxDiagram-shapeDisplay");
+        texts[ShapeTypes.Merge] = messageLocalization.format("dxDiagram-shapeMerge");
+        texts[ShapeTypes.Connector] = messageLocalization.format("dxDiagram-shapeConnector");
+        texts[ShapeTypes.Or] = messageLocalization.format("dxDiagram-shapeOr");
+        texts[ShapeTypes.SummingJunction] = messageLocalization.format("dxDiagram-shapeSummingJunction");
+        // Containers
+        texts[ShapeTypes.Container] = messageLocalization.format("dxDiagram-shapeContainer");
+        texts[ShapeTypes.VerticalContainer] = messageLocalization.format("dxDiagram-shapeVerticalContainer");
+        texts[ShapeTypes.HorizontalContainer] = messageLocalization.format("dxDiagram-shapeHorizontalContainer");
+        // Shapes with images
+        texts[ShapeTypes.Card] = messageLocalization.format("dxDiagram-shapeCard");
+        texts[ShapeTypes.CardWithImageOnLeft] = messageLocalization.format("dxDiagram-shapeCardWithImageOnLeft");
+        texts[ShapeTypes.CardWithImageOnTop] = messageLocalization.format("dxDiagram-shapeCardWithImageOnTop");
+        texts[ShapeTypes.CardWithImageOnRight] = messageLocalization.format("dxDiagram-shapeCardWithImageOnRight");
+        return texts;
+    }
 
     /**
     * @name dxDiagramMethods.export

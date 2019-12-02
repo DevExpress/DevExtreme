@@ -186,6 +186,7 @@ class FlexLayoutStrategy {
     }
 }
 
+// Deprecated in 19.2 (T823974)
 class FallbackLayoutStrategy {
     constructor($element, option) {
         this._$element = $element;

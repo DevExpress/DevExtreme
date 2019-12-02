@@ -143,7 +143,7 @@ QUnit.module("Throttling", {
 
 QUnit.module("isGroupCriterion", () => {
 
-    QUnit.test("check", (assert) => {
+    QUnit.test("check", function(assert) {
         const testFunc = () => {};
         const testBinary = ["id", "=", 1];
 

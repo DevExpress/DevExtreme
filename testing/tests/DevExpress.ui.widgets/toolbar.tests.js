@@ -1250,7 +1250,7 @@ QUnit.test("add a custom CSS to item of menu", function(assert) {
     assert.equal($("." + TOOLBAR_MENU_SECTION_CLASS + " ." + LIST_ITEM_CLASS + ".test").length, 1, "item with the custom CSS");
 });
 
-QUnit.test("dropDown should use default container", (assert) => {
+QUnit.test("dropDown should use default container", function(assert) {
     const $element = $("#widget").dxToolbar({
         items: [
             {
@@ -1266,7 +1266,7 @@ QUnit.test("dropDown should use default container", (assert) => {
     assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, "Toolbar's container isn't contains a dropDown list");
 });
 
-QUnit.test("init Toolbar with new menuContainer", (assert) => {
+QUnit.test("init Toolbar with new menuContainer", function(assert) {
     const $element = $("#widget");
 
     $element.dxToolbar({
@@ -1285,7 +1285,7 @@ QUnit.test("init Toolbar with new menuContainer", (assert) => {
     assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, "Toolbar's container contains a dropDown list");
 });
 
-QUnit.test("change Toolbar menuContainer", (assert) => {
+QUnit.test("change Toolbar menuContainer", function(assert) {
     const $element = $("#widget");
 
     const instance = $element.dxToolbar({

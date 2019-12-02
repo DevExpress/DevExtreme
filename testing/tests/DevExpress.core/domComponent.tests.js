@@ -23,7 +23,7 @@ QUnit.testStart(() => {
 const RTL_CLASS = "dx-rtl";
 
 QUnit.module("default", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
             _initTemplates() {
                 this.callBase();
@@ -156,17 +156,17 @@ QUnit.module("default", {
         registerComponent("TestComponentWithTemplate", nameSpace, this.TestComponentWithTemplate);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         delete $.fn.TestComponent;
     }
 }, () => {
-    QUnit.test("component has registered", (assert) => {
+    QUnit.test("component has registered", function(assert) {
         assert.strictEqual(nameSpace.TestComponent, this.TestComponent);
         assert.ok("TestComponent" in $());
         assert.equal(publicComponentUtils.name(this.TestComponent), "TestComponent");
     });
 
-    QUnit.test("obtaining instance from element", (assert) => {
+    QUnit.test("obtaining instance from element", function(assert) {
         const element = $("#component").TestComponent();
         if(!QUnit.urlParams["nojquery"]) {
             assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
@@ -174,14 +174,14 @@ QUnit.module("default", {
         assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
     });
 
-    QUnit.test("method call api", (assert) => {
+    QUnit.test("method call api", function(assert) {
         const element = $("#component").TestComponent();
         assert.equal(element.TestComponent("func", "abc"), "abc");
         assert.strictEqual(element.TestComponent("action"), undefined);
         assert.ok(element.TestComponent("instance").instanceChain() instanceof this.TestComponent);
     });
 
-    QUnit.test("method call made on not initialized widget throws informative exception", (assert) => {
+    QUnit.test("method call made on not initialized widget throws informative exception", function(assert) {
         let message;
         try {
             $("<div></div>").TestComponent("func");
@@ -191,7 +191,7 @@ QUnit.module("default", {
         assert.ok(message.indexOf("TestComponent") > -1);
     });
 
-    QUnit.test("options api", (assert) => {
+    QUnit.test("options api", function(assert) {
         const element = $("#component").TestComponent({ opt2: "custom" });
         const instance = element.TestComponent("instance");
 
@@ -213,7 +213,7 @@ QUnit.module("default", {
         assert.equal(instance.option("opt2"), "mass2");
     });
 
-    QUnit.test("component lifecycle, changing a couple of options", (assert) => {
+    QUnit.test("component lifecycle, changing a couple of options", function(assert) {
         const TestComponent = this.TestComponent.inherit({
             _optionChanged(args) {
                 this.callBase(args);
@@ -266,7 +266,7 @@ QUnit.module("default", {
         assert.deepEqual(optionChangedArgs[1].arguments[0].name, "c");
     });
 
-    QUnit.test("mass option change", (assert) => {
+    QUnit.test("mass option change", function(assert) {
         const element = $("#component").TestComponent({
             opt1: "firstCall",
             opt2: "firstCall"
@@ -286,7 +286,7 @@ QUnit.module("default", {
         assert.equal(instance.option("opt3"), "secondCall");
     });
 
-    QUnit.test("mass option change call 'refresh' once", (assert) => {
+    QUnit.test("mass option change call 'refresh' once", function(assert) {
         const TestComponent = this.TestComponent.inherit({
             _optionChanged(args) {
                 this.callBase(args);
@@ -313,7 +313,7 @@ QUnit.module("default", {
         assert.equal(instance._getTraceLogByMethod("_refresh").length, 1);
     });
 
-    QUnit.test("mass option getting", (assert) => {
+    QUnit.test("mass option getting", function(assert) {
         const element = $("#component").TestComponent({});
         const instance = element.TestComponent("instance");
         const options = instance.option();
@@ -323,7 +323,7 @@ QUnit.module("default", {
         assert.ok(options["opt2"]);
     });
 
-    QUnit.test("'option' method invoking directly and by jQuery plugin syntax should works consistently with undefined value", (assert) => {
+    QUnit.test("'option' method invoking directly and by jQuery plugin syntax should works consistently with undefined value", function(assert) {
         const $element = $("#component");
         const instance = new this.TestComponent($element, { optionWithUndefinedValue: undefined });
 
@@ -331,7 +331,7 @@ QUnit.module("default", {
         assert.strictEqual($element.TestComponent("option", "optionWithUndefinedValue"), undefined);
     });
 
-    QUnit.test("mass method invoking should call method for each component (setter case)", (assert) => {
+    QUnit.test("mass method invoking should call method for each component (setter case)", function(assert) {
         const $firstElement = $("#component");
         const $secondElement = $("#anotherComponent");
         const $elements = $($firstElement).add($secondElement);
@@ -352,7 +352,7 @@ QUnit.module("default", {
         assert.ok(secondInstance._setterReturningThisCalled);
     });
 
-    QUnit.test("mass method invoking should return first instance method result", (assert) => {
+    QUnit.test("mass method invoking should return first instance method result", function(assert) {
         const $firstElement = $("#component");
         const $secondElement = $("#anotherComponent");
         const $elements = $($firstElement).add($secondElement);
@@ -372,7 +372,7 @@ QUnit.module("default", {
         assert.strictEqual(firstInstance, result);
     });
 
-    QUnit.test("jQuery instances should be compared by DOM elements set (not by reference)", (assert) => {
+    QUnit.test("jQuery instances should be compared by DOM elements set (not by reference)", function(assert) {
         const $element = $("<div>");
 
         const instance = $("#component").TestComponent({
@@ -383,27 +383,27 @@ QUnit.module("default", {
         assert.ok(!instance._optionChangedCalled);
     });
 
-    QUnit.test("component should not be refreshed after unknown option changing (B251443)", (assert) => {
+    QUnit.test("component should not be refreshed after unknown option changing (B251443)", function(assert) {
         const instance = new this.TestComponent("#component");
         instance.option("unknown option", 1);
         assert.equal(instance._getTraceLogByMethod("_refresh"), 0);
     });
 
-    QUnit.test("no infinite loop during refresh()", (assert) => {
+    QUnit.test("no infinite loop during refresh()", function(assert) {
         assert.expect(0);
 
         const instance = new this.TestComponent("#component");
         instance.option("option2", 2);
     });
 
-    QUnit.test("option 'disabled' is false on init", (assert) => {
+    QUnit.test("option 'disabled' is false on init", function(assert) {
         const $element = $("#component").TestComponent();
         const instance = $element.TestComponent("instance");
 
         assert.strictEqual(instance.option("disabled"), false);
     });
 
-    QUnit.test("'disabled' option is passed to createComponent", (assert) => {
+    QUnit.test("'disabled' option is passed to createComponent", function(assert) {
         const $firstElement = $("#component");
         const $secondElement = $("#anotherComponent");
 
@@ -419,7 +419,7 @@ QUnit.module("default", {
         assert.ok(secondInstance.option("disabled"), "disabled state is correct");
     });
 
-    QUnit.test("T283132 - the 'disabled' option of inner component is changed if the 'disabled' option of outer component is changed", (assert) => {
+    QUnit.test("T283132 - the 'disabled' option of inner component is changed if the 'disabled' option of outer component is changed", function(assert) {
         const $firstElement = $("#component");
         const $secondElement = $("#anotherComponent");
 
@@ -436,7 +436,7 @@ QUnit.module("default", {
         assert.ok(!secondInstance.option("disabled"), "disabled state is correct");
     });
 
-    QUnit.test("'rtlEnabled' option is passed to createComponent", (assert) => {
+    QUnit.test("'rtlEnabled' option is passed to createComponent", function(assert) {
         const $firstElement = $("#component");
         const $secondElement = $("#anotherComponent");
 
@@ -452,7 +452,7 @@ QUnit.module("default", {
         assert.ok(secondInstance.option("rtlEnabled"), true);
     });
 
-    QUnit.test("'templatesRenderAsynchronously' option is passed to createComponent", (assert) => {
+    QUnit.test("'templatesRenderAsynchronously' option is passed to createComponent", function(assert) {
         const $firstElement = $("#component");
         const $secondElement = $("#anotherComponent");
 
@@ -468,7 +468,7 @@ QUnit.module("default", {
         assert.ok(secondInstance.option("templatesRenderAsynchronously"), true);
     });
 
-    QUnit.test("custom template should not be taken from integrationOptions when it is skipped", (assert) => {
+    QUnit.test("custom template should not be taken from integrationOptions when it is skipped", function(assert) {
         const instance = new DomComponentWithTemplate("#component", {
             template: "customTemplate",
             integrationOptions: {
@@ -494,7 +494,7 @@ QUnit.module("default", {
         assert.strictEqual(template.render(), "Created custom template", "name2 is found in integration options. Use it");
     });
 
-    QUnit.test("default template should not be taken from integrationOptions when it is skipped", (assert) => {
+    QUnit.test("default template should not be taken from integrationOptions when it is skipped", function(assert) {
         const instance = new this.TestComponentWithTemplate("#component", {
             integrationOptions: {
                 skipTemplates: ["content"],
@@ -512,7 +512,7 @@ QUnit.module("default", {
         assert.strictEqual(template.render(), "Default content markup", "name1 is not found in integrationOptions. Use the default");
     });
 
-    QUnit.test("option 'rtl'", (assert) => {
+    QUnit.test("option 'rtl'", function(assert) {
         const $element = $("#component").TestComponent();
         const instance = $element.TestComponent("instance");
 
@@ -522,7 +522,7 @@ QUnit.module("default", {
         assert.ok($element.hasClass(RTL_CLASS));
     });
 
-    QUnit.test("init option 'rtl' is true", (assert) => {
+    QUnit.test("init option 'rtl' is true", function(assert) {
         const $element = $("#component").TestComponent({ rtlEnabled: true });
         const instance = $element.TestComponent("instance");
 
@@ -532,7 +532,7 @@ QUnit.module("default", {
         assert.ok(!$element.hasClass(RTL_CLASS));
     });
 
-    QUnit.test("dispose on remove from DOM", (assert) => {
+    QUnit.test("dispose on remove from DOM", function(assert) {
         const element = $("#component").TestComponent();
         const instance = element.TestComponent("instance");
         let disposed = false;
@@ -547,7 +547,7 @@ QUnit.module("default", {
         assert.ok(disposed);
     });
 
-    QUnit.test("customizing default option rules", (assert) => {
+    QUnit.test("customizing default option rules", function(assert) {
         const TestComponent = DOMComponent.inherit({
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{
@@ -575,7 +575,7 @@ QUnit.module("default", {
         assert.notEqual(new TestComponent($("<div/>")).option("test"), "value", "test option is not customized for android");
     });
 
-    QUnit.test("customizing default option rules applies only on the target component class", (assert) => {
+    QUnit.test("customizing default option rules applies only on the target component class", function(assert) {
         const TestComponent1 = DOMComponent.inherit({
             _getDefaultOptions() {
                 return $.extend(this.callBase(), {
@@ -621,7 +621,7 @@ QUnit.module("default", {
         assert.equal(new TestComponent1($("<div/>")).option("anotherOption"), "Another option value", "Multiple calls should not clean previous rules");
     });
 
-    QUnit.test("DevExpress.rtlEnabled proxied to DOMComponent", (assert) => {
+    QUnit.test("DevExpress.rtlEnabled proxied to DOMComponent", function(assert) {
         assert.equal(coreConfig().rtlEnabled, false, "DevExpress.rtlEnabled equals false by default");
         assert.equal(new DOMComponent($("<div/>")).option("rtlEnabled"), false, "false by default");
 
@@ -631,7 +631,7 @@ QUnit.module("default", {
         coreConfig({ rtlEnabled: false });
     });
 
-    QUnit.test("_visibilityChanged is called on dxhiding and dxshown events and special css class is attached", (assert) => {
+    QUnit.test("_visibilityChanged is called on dxhiding and dxshown events and special css class is attached", function(assert) {
         let hidingFired = 0;
         let shownFired = 0;
 
@@ -661,7 +661,7 @@ QUnit.module("default", {
         assert.equal(shownFired, 1, "shown was fired");
     });
 
-    QUnit.test("visibility change subscriptions should not clash", (assert) => {
+    QUnit.test("visibility change subscriptions should not clash", function(assert) {
         let hidingFired = 0;
         let shownFired = 0;
 
@@ -690,7 +690,7 @@ QUnit.module("default", {
         assert.equal(shownFired, 2, "shown fired for both components");
     });
 
-    QUnit.test("visibility change handling works optimally (initially visible)", (assert) => {
+    QUnit.test("visibility change handling works optimally (initially visible)", function(assert) {
         let hidingFired = 0;
         let shownFired = 0;
 
@@ -719,7 +719,7 @@ QUnit.module("default", {
         assert.equal(hidingFired, 1, "hiding is not fired for the second time");
     });
 
-    QUnit.test("visibility change handling works optimally (initially hidden)", (assert) => {
+    QUnit.test("visibility change handling works optimally (initially hidden)", function(assert) {
         let hidingFired = 0;
         let shownFired = 0;
 
@@ -748,7 +748,7 @@ QUnit.module("default", {
         assert.equal(shownFired, 1, "shown is not fired for the second time");
     });
 
-    QUnit.test("visibility change handling works with hidden parent", (assert) => {
+    QUnit.test("visibility change handling works with hidden parent", function(assert) {
         let hidingFired = 0;
         let shownFired = 0;
 
@@ -777,7 +777,7 @@ QUnit.module("default", {
         assert.equal(shownFired, 1, "shown is fired since parent is shown");
     });
 
-    QUnit.test("_dimensionChanged is called when window resize fired", (assert) => {
+    QUnit.test("_dimensionChanged is called when window resize fired", function(assert) {
         let dimensionChanged = 0;
 
         const TestComponent = this.TestComponent.inherit({
@@ -798,7 +798,7 @@ QUnit.module("default", {
         assert.equal(dimensionChanged, 1, "resize fired");
     });
 
-    QUnit.test("_dimensionChanged is called when dxresize event fired", (assert) => {
+    QUnit.test("_dimensionChanged is called when dxresize event fired", function(assert) {
         let dimensionChanged = 0;
 
         const TestComponent = this.TestComponent.inherit({
@@ -821,7 +821,7 @@ QUnit.module("default", {
         assert.equal(dimensionChanged, 1, "dimension changed fired");
     });
 
-    QUnit.test("'option' method should work correctly with $.Event instance (T105184)", (assert) => {
+    QUnit.test("'option' method should work correctly with $.Event instance (T105184)", function(assert) {
         const component = $("#component").TestComponent({
             position: {
                 of: window,
@@ -842,7 +842,7 @@ QUnit.module("default", {
         assert.ok(component.option("position.of") instanceof $.Event);
     });
 
-    QUnit.test("element method should return correct component element", (assert) => {
+    QUnit.test("element method should return correct component element", function(assert) {
         const $element = $("#component").TestComponent();
         const instance = $element.TestComponent("instance");
 
@@ -850,7 +850,7 @@ QUnit.module("default", {
     });
 
     $.each(["onInitialized", "onOptionChanged", "onDisposing"], (_, action) => {
-        QUnit.test("'" + action + "' action should be fired even in disabled & readOnly", (assert) => {
+        QUnit.test("'" + action + "' action should be fired even in disabled & readOnly", function(assert) {
             const config = {
                 value: true
             };
@@ -870,7 +870,7 @@ QUnit.module("default", {
         });
     });
 
-    QUnit.test("the 'elementAttr' option should set attributes to widget element according to the object passed", (assert) => {
+    QUnit.test("the 'elementAttr' option should set attributes to widget element according to the object passed", function(assert) {
         const $element = $("#component").TestComponent({
             elementAttr: {
                 attr1: "widget 01"
@@ -880,7 +880,7 @@ QUnit.module("default", {
         assert.equal($element.attr("attr1"), "widget 01", "the second attribute is set correctly");
     });
 
-    QUnit.test("changing elementAttr option should not rerender the component", (assert) => {
+    QUnit.test("changing elementAttr option should not rerender the component", function(assert) {
         const $element = $("#component").TestComponent({ elementAttr: { attr1: "widget 01" } });
         const instance = $element.TestComponent("instance");
         const render = sinon.spy(instance, "_render");
@@ -891,7 +891,7 @@ QUnit.module("default", {
         assert.equal($element.attr("attr1"), "widget 02", "attribute is correct");
     });
 
-    QUnit.test("changing class via 'elementAttr' option should preserve component specific classes", (assert) => {
+    QUnit.test("changing class via 'elementAttr' option should preserve component specific classes", function(assert) {
         const SomeComponent = DOMComponent.inherit({
             _render() {
                 this.$element().addClass("dx-some-class1");
@@ -914,7 +914,7 @@ QUnit.module("default", {
         assert.ok($element.hasClass(specialClass), "the new class is also present");
     });
 
-    QUnit.test("Dispose: component can be recreated after dispose", (assert) => {
+    QUnit.test("Dispose: component can be recreated after dispose", function(assert) {
         let element = $("#component").TestComponent();
         let instance = element.TestComponent("instance");
 
@@ -936,7 +936,7 @@ QUnit.module("default", {
         assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
     });
 
-    QUnit.test("Dispose: content of container is cleaned", (assert) => {
+    QUnit.test("Dispose: content of container is cleaned", function(assert) {
         const SomeComponent = DOMComponent.inherit({
             _render() {
                 const p = document.createElement("p");
@@ -958,7 +958,7 @@ QUnit.module("default", {
         assert.equal(element[0].childElementCount, 0);
     });
 
-    QUnit.test("Dispose: dx classes are removed", (assert) => {
+    QUnit.test("Dispose: dx classes are removed", function(assert) {
         const element = $("#component").TestComponent();
         const instance = element.TestComponent("instance");
 
@@ -978,7 +978,7 @@ QUnit.module("default", {
         assert.ok(element.hasClass("some-class-3"));
     });
 
-    QUnit.test("Dispose: attributes deleted", (assert) => {
+    QUnit.test("Dispose: attributes deleted", function(assert) {
         const element = $("#component").TestComponent();
         const instance = element.TestComponent("instance");
 
@@ -1028,7 +1028,7 @@ QUnit.module("default", {
         assert.equal(element.attr("tabindex"), undefined);
     });
 
-    QUnit.test("Dispose: events are cleaned, dxremove is fired", (assert) => {
+    QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
 
         let disposeRun = false;
         let clickRun = false;
@@ -1059,7 +1059,7 @@ QUnit.module("default", {
         assert.notOk(clickRun);
     });
 
-    QUnit.test("get element", (assert) => {
+    QUnit.test("get element", function(assert) {
         const element = $("#component").TestComponent();
         const instance = dataUtils.data(element[0], "TestComponent");
 
@@ -1070,7 +1070,7 @@ QUnit.module("default", {
         }
     });
 
-    QUnit.test("getInstance method", (assert) => {
+    QUnit.test("getInstance method", function(assert) {
         const $element = $("#component");
         const instance = new this.TestComponent($element);
         const AnotherComponent = DOMComponent.inherit();
@@ -1082,7 +1082,7 @@ QUnit.module("default", {
         assert.strictEqual(AnotherComponent.getInstance($element.get(0)), undefined);
     });
 
-    QUnit.test("reset dimensions", (assert) => {
+    QUnit.test("reset dimensions", function(assert) {
         const $element = $("#component").TestComponent({ width: 200, height: 100 });
         const element = $element.get(0);
         const instance = $element.TestComponent("instance");
@@ -1096,7 +1096,7 @@ QUnit.module("default", {
         assert.equal(element.style.height, "", "height is correct");
     });
 
-    QUnit.test("reset dimensions with custom default value", (assert) => {
+    QUnit.test("reset dimensions with custom default value", function(assert) {
         const TestComponentCustomDefault = DOMComponent.inherit({
             _getDefaultOptions() {
                 return $.extend(

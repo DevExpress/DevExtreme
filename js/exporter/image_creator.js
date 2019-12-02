@@ -460,7 +460,7 @@ function applyGradient(context, options, { gradients }, element) {
 
         context.globalAlpha = options.opacity;
         context.fillStyle = gradient;
-        context.fillRect(box.x, box.y, box.width, box.height);
+        context.fill();
     }
 }
 
@@ -723,22 +723,26 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToC
     const canvas = createCanvas(width, height, margin);
     const context = canvas.getContext("2d");
     const svgElem = svgUtils.getSvgElement(markup);
-    const invisibleDiv = createInvisibleDiv();
+    let invisibleDiv;
+    const markupIsDomElement = domAdapter.isElementNode(markup);
     context.translate(margin, margin);
 
     domAdapter.getBody().appendChild(canvas);
-    invisibleDiv.appendChild(svgElem);
-    domAdapter.getBody().appendChild(invisibleDiv);
+    if(!markupIsDomElement) {
+        invisibleDiv = createInvisibleDiv();
+        invisibleDiv.appendChild(svgElem);
+        domAdapter.getBody().appendChild(invisibleDiv);
+    }
     // for rtl mode
     if(svgElem.attributes.direction) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
     drawBackground(context, width, height, backgroundColor, margin);
 
-    return fromPromise(svgToCanvas(svgElem, canvas, domAdapter.isElementNode(markup) && domUtils.contains(domAdapter.getBody(), markup)))
+    return fromPromise(svgToCanvas(svgElem, canvas, markupIsDomElement && domUtils.contains(domAdapter.getBody(), markup)))
         .then(() => canvas)
         .always(() => {
-            domAdapter.getBody().removeChild(invisibleDiv);
+            invisibleDiv && domAdapter.getBody().removeChild(invisibleDiv);
             domAdapter.getBody().removeChild(canvas);
         });
 }

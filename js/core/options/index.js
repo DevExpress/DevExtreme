@@ -1,13 +1,12 @@
-import createCallBack from '../utils/callbacks';
 import { isFunction, isObject, type } from '../utils/type';
-import { equalByValue } from '../utils/common';
+import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
 import { getFieldName, getParentName, convertRulesToOptions } from './utils';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
-        this._deprecatedCallbacks = createCallBack({ syncStrategy: true });
+        this._deprecatedCallback;
 
         this._default = defaultOptions;
         this._deprecated = deprecatedOptions;
@@ -55,7 +54,7 @@ export class Options {
         const info = this._deprecated[option];
 
         if(info) {
-            this._deprecatedCallbacks.fire(option, info);
+            this._deprecatedCallback(option, info);
         }
     }
 
@@ -126,7 +125,7 @@ export class Options {
     }
 
     dispose() {
-        this._deprecatedCallbacks.empty();
+        this._deprecatedCallback = noop;
         this._optionManager.dispose();
     }
 
@@ -139,7 +138,7 @@ export class Options {
     }
 
     onDeprecated(callBack) {
-        this._deprecatedCallbacks.add(callBack);
+        this._deprecatedCallback = callBack;
     }
 
     isInitial(name) {
@@ -153,12 +152,7 @@ export class Options {
     }
 
     initial(name) {
-        const fullPath = name.replace(/\[([^\]])\]/g, '.$1').split('.');
-        const value = fullPath.reduce(
-            (value, field) => value ? value[field] : this._initial[field], null
-        );
-
-        return isObject(value) ? clone(value) : value;
+        return this._initial[name];
     }
 
     option(options, value) {
@@ -183,7 +177,12 @@ export class Options {
 
     reset(name) {
         if(name) {
-            const defaultValue = this.initial(name);
+            const fullPath = name.replace(/\[([^\]])\]/g, '.$1').split('.');
+            const value = fullPath.reduce(
+                (value, field) => value ? value[field] : this.initial(field), null
+            );
+
+            const defaultValue = isObject(value) ? clone(value) : value;
 
             this._optionManager.set(name, defaultValue, false);
         }

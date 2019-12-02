@@ -102,7 +102,7 @@ var Component = Class.inherit({
     ctor: function(options = {}) {
         this.NAME = publicComponentUtils.name(this.constructor);
 
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this, options.eventsStrategy);
+        this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
 
         this._updateLockCount = 0;
 
@@ -399,7 +399,7 @@ var Component = Class.inherit({
     },
 
     hasActionSubscription: function(actionName) {
-        return !!this.option(actionName) ||
+        return !!this._getOptionByStealth(actionName) ||
             this._eventsStrategy.hasEvent(this._getEventName(actionName));
     },
 
