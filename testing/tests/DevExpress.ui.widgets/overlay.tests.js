@@ -77,7 +77,7 @@ QUnit.testStart(function() {
         <div id="overlayWithWrongTemplateName">\
             <div data-options="dxTemplate: { name: \'wrongName\' }">testContent</div>\
         </div>\
-        <div id="containerT821559" style="height:300px; width:200px;">\
+        <div id="containerWithDimensions" style="height:300px; width:200px;">\
         </div>\
         <div id="widget"></div>\
         \
@@ -839,6 +839,30 @@ testModule("position", moduleConfig, () => {
     });
 
     test("position of overlay is correct when position.of is window and shading is false", function(assert) {
+        const $targetContainer = $("#containerWithDimensions");
+
+        $("#overlay").dxOverlay({
+            visible: true,
+            shading: false,
+            width: "50px",
+            position: {
+                my: "top right",
+                at: "top right",
+                of: $targetContainer
+            },
+            container: $targetContainer,
+            height: "100%"
+        });
+
+        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+        const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
+        const targetRect = $targetContainer.get(0).getBoundingClientRect();
+
+        assert.equal(wrapperRect.right, targetRect.right, "right is ok");
+        assert.equal(wrapperRect.bottom, targetRect.bottom, "bottom is ok");
+    });
+
+    test("overlay wrapper position is correct when shading is false", function(assert) {
         $("#overlay").dxOverlay({
             visible: true,
             shading: false,
@@ -2228,7 +2252,7 @@ testModule("container", moduleConfig, () => {
     });
 
     test("shader should stretch across container when target is container(T821559)", function(assert) {
-        const $container = $("#containerT821559");
+        const $container = $("#containerWithDimensions");
 
         const $overlay = $("#overlay").dxOverlay({
             container: $container,
@@ -2246,7 +2270,7 @@ testModule("container", moduleConfig, () => {
     });
 
     test("overlay should render inside of container when target is container(T821559)", function(assert) {
-        const $container = $("#containerT821559");
+        const $container = $("#containerWithDimensions");
 
         const $overlay = $("#overlay").dxOverlay({
             container: $container,

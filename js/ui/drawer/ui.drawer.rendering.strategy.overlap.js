@@ -44,17 +44,10 @@ class OverlapStrategy extends DrawerStrategy {
 
     _fixOverlayPosition($overlayContent) {
         // NOTE: overlay should be positioned in extended wrapper
-        const drawer = this.getDrawerInstance();
-
         if(typeUtils.isDefined(this._initialPosition)) {
-            translator.move($overlayContent, { left: this._initialPosition.left, top: this._initialPosition.top });
-        }
-        if(drawer.getDrawerPosition() === "right") {
-            $overlayContent.css("left", "auto");
-
-            if(drawer.option("rtlEnabled")) {
-                translator.move($overlayContent, { left: 0 });
-            }
+            translator.move($overlayContent, this._initialPosition);
+        } else {
+            translator.move($overlayContent, { left: 0 });
         }
     }
 
@@ -114,7 +107,7 @@ class OverlapStrategy extends DrawerStrategy {
     slidePositionRendering(config, offset, animate) {
         const drawer = this.getDrawerInstance();
 
-        this._initialPosition = drawer.getOverlay().$content().position();
+        this._initialPosition = { left: config.panelOffset };
         const position = drawer.getDrawerPosition();
 
         this.setupContent(config.$content, position, config.drawer);
@@ -129,7 +122,6 @@ class OverlapStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-
             if(drawer.isHorizontalDirection()) {
                 translator.move(config.$panel, { left: config.panelOffset });
             } else {
@@ -141,7 +133,7 @@ class OverlapStrategy extends DrawerStrategy {
     expandPositionRendering(config, offset, animate) {
         const drawer = this.getDrawerInstance();
 
-        this._initialPosition = drawer.getOverlay().$content().position();
+        this._initialPosition = { left: 0 };
         const position = drawer.getDrawerPosition();
 
         this.setupContent(config.$content, position);
