@@ -425,7 +425,7 @@ QUnit.module("Actions", moduleConfig, () => {
 
         assert.equal(treeListWrapperElement.width(), 100);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
-        assert.equal(splitterWrapper.css("left"), "100px", "Splitter has been moved by mouse");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), 100, "Splitter has been moved by mouse");
 
         splitter.trigger($.Event("dxpointerdown", { pointerType: "touch" }));
         splitter.trigger($.Event("dxpointermove", {
@@ -436,7 +436,7 @@ QUnit.module("Actions", moduleConfig, () => {
 
         assert.equal(treeListWrapperElement.width(), 300);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
-        assert.equal(splitterWrapper.css("left"), "300px", "Splitter has been moved by touch");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), 300, "Splitter has been moved by touch");
 
         splitter.trigger($.Event("dxpointerdown"));
         splitter.trigger($.Event("dxpointermove", {
@@ -446,7 +446,7 @@ QUnit.module("Actions", moduleConfig, () => {
 
         assert.equal(treeListWrapperElement.width(), 0);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth);
-        assert.equal(splitterWrapper.css("left"), "0px", "Splitter has not cross the left side");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), 0, "Splitter has not cross the left side");
 
         splitter.trigger($.Event("dxpointerdown"));
         splitter.trigger($.Event("dxpointermove", {
@@ -456,7 +456,7 @@ QUnit.module("Actions", moduleConfig, () => {
 
         assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
         assert.equal(ganttView.width(), splitter.width());
-        assert.equal(splitterWrapper.css("left"), `${splitterContainerWrapperWidth - splitter.width()}px`, "Splitter has not cross the right side");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), "Splitter has not cross the right side");
     });
 });
 
