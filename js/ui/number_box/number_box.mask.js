@@ -342,13 +342,20 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var format = this._getFormatForSign(text);
         var thousandsSeparator = number.getThousandsSeparator();
         var stubs = this._getStubs(format);
-        var getDecorators = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator)) + "]", "g");
-        var getLastStub = new RegExp("(" + escapeRegExp(stubs[1] || "") + ")$", "g");
+        var result = text;
 
-        return text
-            .replace(stubs[0], "")
-            .replace(getLastStub, "")
-            .replace(getDecorators, "");
+        if(stubs.length) {
+            var prefixStubs = stubs[0];
+            var postfixRegex = new RegExp("(" + escapeRegExp(stubs[1] || "") + ")$", "g");
+            var decoratorsRegex = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator)) + "]", "g");
+
+            result = result
+                .replace(prefixStubs, "")
+                .replace(postfixRegex, "")
+                .replace(decoratorsRegex, "");
+        }
+
+        return result;
     },
 
     _getStubs: function(format) {
