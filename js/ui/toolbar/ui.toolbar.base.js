@@ -97,8 +97,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         }.bind(this), ["text", "html", "widget", "options"], this.option("integrationOptions.watchMethod"));
 
         this._templateManager.addDefaultTemplate({
-            ["item"]: template,
-            ["menuItem"]: template,
+            item: template,
+            menuItem: template,
         });
     },
 

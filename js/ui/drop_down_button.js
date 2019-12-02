@@ -271,7 +271,7 @@ let DropDownButton = Widget.inherit({
 
     _initTemplates() {
         this._templateManager.addDefaultTemplate({
-            ["content"]: new FunctionTemplate((options) => {
+            content: new FunctionTemplate((options) => {
                 const $popupContent = $(options.container);
                 const $listContainer = $("<div>").appendTo($popupContent);
                 this._list = this._createComponent($listContainer, List, this._listOptions());

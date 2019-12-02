@@ -83,10 +83,6 @@ var DeferRendering = Widget.inherit({
         return ANONYMOUS_TEMPLATE_NAME;
     },
 
-    _initTemplates: function() {
-        this.callBase();
-    },
-
     _init: function() {
         this.transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 

@@ -125,7 +125,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         var that = this;
 
         this._templateManager.addDefaultTemplate({
-            ["item"]: new BindableTemplate(function($container, itemData) {
+            item: new BindableTemplate(function($container, itemData) {
                 $container
                     .html(itemData.html)
                     .append(this._getIconContainer(itemData))

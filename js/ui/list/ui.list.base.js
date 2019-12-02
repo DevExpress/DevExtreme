@@ -656,7 +656,7 @@ var ListBase = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         this._templateManager.addDefaultTemplate({
-            ["group"]: new BindableTemplate(function($container, data) {
+            group: new BindableTemplate(function($container, data) {
                 if(typeUtils.isPlainObject(data)) {
                     if(data.key) {
                         $container.text(data.key);

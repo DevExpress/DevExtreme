@@ -212,7 +212,7 @@ const Tabs = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         this._templateManager.addDefaultTemplate({
-            ["item"]: new BindableTemplate((function($container, data) {
+            item: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {
                     this._prepareDefaultItemTemplate(data, $container);
                 } else {

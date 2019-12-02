@@ -28,7 +28,7 @@ QUnit.module("default", {
             _initTemplates() {
                 this.callBase();
                 this._templateManager.addDefaultTemplate({
-                    ["content"]: {
+                    content: {
                         render() {
                             return "Default content markup";
                         }

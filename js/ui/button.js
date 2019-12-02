@@ -256,7 +256,7 @@ class Button extends Widget {
 
     _initTemplates() {
         this._templateManager.addDefaultTemplate({
-            ['content']: new FunctionTemplate(({ model = {}, container }) => {
+            content: new FunctionTemplate(({ model = {}, container }) => {
                 const { text, icon } = model;
                 const { iconPosition } = this.option();
                 const $icon = getImageContainer(icon);

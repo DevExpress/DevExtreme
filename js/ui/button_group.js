@@ -41,7 +41,7 @@ const ButtonCollection = CollectionWidget.inherit({
          * @hidden
          */
         this._templateManager.addDefaultTemplate({
-            ["item"]: new BindableTemplate((($container, data, model) => {
+            item: new BindableTemplate((($container, data, model) => {
                 this._prepareItemStyles($container);
                 this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
                     _templateData: model,

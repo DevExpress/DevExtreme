@@ -566,7 +566,7 @@ var Overlay = Widget.inherit({
 
     _initTemplates: function() {
         this._templateManager.addDefaultTemplate({
-            ["content"]: new EmptyTemplate()
+            content: new EmptyTemplate()
         });
         this.callBase();
     },

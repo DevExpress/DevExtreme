@@ -445,7 +445,7 @@ var Calendar = Editor.inherit({
 
     _initTemplates: function() {
         this._templateManager.addDefaultTemplate({
-            ["cell"]: new FunctionTemplate(function(options) {
+            cell: new FunctionTemplate(function(options) {
                 var data = options.model;
                 $(options.container).append($("<span>").text(data && data.text || String(data)));
             })
