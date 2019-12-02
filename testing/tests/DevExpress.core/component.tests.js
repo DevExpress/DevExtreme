@@ -28,7 +28,8 @@ const TestComponent = Component.inherit({
             deprecatedOption: { since: "14.1", message: "Use some other option instead" },
             deprecatedOptionWithSugarSyntax: { since: "14.2", alias: "deprecatedOptionAliasWithSugarSyntax" },
             "secondLevel.deprecatedOption": { since: "14.2", alias: "secondLevel.deprecatedOptionAlias" },
-            "thirdLevel.option.deprecated": { since: "15.2", alias: "thirdLevel.option.deprecatedAlias" }
+            "thirdLevel.option.deprecated": { since: "15.2", alias: "thirdLevel.option.deprecatedAlias" },
+            "onDeprecatedEvent": { since: "20.1", message: "Use another events instead" }
         });
     },
 
@@ -926,6 +927,18 @@ QUnit.module("default", {}, () => {
         });
 
         assert.ok(component.hasActionSubscription("onInitialized"), "component has onInitialized subscribe");
+    });
+
+    QUnit.test("'hasActionSubscription' should not raise deprecation warning for event option", function(assert) {
+        const instance = new TestComponent();
+        const logDeprecatedWarningSpy = sinon.spy(instance, "_logDeprecatedWarning");
+
+        try {
+            instance.hasActionSubscription("onDeprecatedEvent");
+            assert.ok(logDeprecatedWarningSpy.notCalled);
+        } finally {
+            logDeprecatedWarningSpy.restore();
+        }
     });
 
     QUnit.test("changing value to NaN does not call optionChanged twice", function(assert) {
