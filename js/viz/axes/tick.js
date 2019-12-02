@@ -213,6 +213,13 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 }
             },
 
+            updateMultilineTextAlignment() {
+                if(!this.label) {
+                    return;
+                }
+                this.label.attr({ textsAlignment: this.labelAlignment || axis.getOptions().label.alignment });
+            },
+
             drawGrid: function(drawLine) {
                 if(gridOptions.visible && skippedCategory !== this.value) {
                     if(this.grid) {
