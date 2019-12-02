@@ -181,8 +181,8 @@ var ScrollAnimator = Animator.inherit({
     },
 
     _step: function() {
-        var horizontalScrollHelper = this._strategy.horizontalScrollHelper,
-            verticalScrollHelper = this._strategy.verticalScrollHelper;
+        var horizontalScrollHelper = this._strategy._horizontalScrollHelper,
+            verticalScrollHelper = this._strategy._verticalScrollHelper;
 
         horizontalScrollHelper && horizontalScrollHelper.scrollByStep();
         verticalScrollHelper && verticalScrollHelper.scrollByStep();
