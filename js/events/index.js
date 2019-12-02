@@ -33,7 +33,6 @@ export const resize = {
     }
 };
 
-
 export const hover = {
     on: ($el, start, end, { selector, namespace }) => {
         eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
@@ -100,18 +99,20 @@ export const click = {
     }
 };
 
+let index = 0;
 const keyboardProcessors = {};
+const getKeyboardProcessorId = () => `keyboardProcessorId${index++}`;
 
 export const keyboard = {
     on: (element, focusTarget, handler) => {
-        const listenerId = Symbol('listenerId');
+        const listenerId = getKeyboardProcessorId();
 
         keyboardProcessors[listenerId] = new KeyboardProcessor({ element, focusTarget, handler });
 
         return listenerId;
     },
 
-    off: (listenerId) => {
+    off: listenerId => {
         if(listenerId && keyboardProcessors[listenerId]) {
             keyboardProcessors[listenerId].dispose();
             delete keyboardProcessors[listenerId];
@@ -119,5 +120,5 @@ export const keyboard = {
     },
 
     // NOTE: For tests
-    _getProcessor: (listenerId) => keyboardProcessors[listenerId]
+    _getProcessor: listenerId => keyboardProcessors[listenerId]
 };
