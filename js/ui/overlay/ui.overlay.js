@@ -1333,7 +1333,7 @@ var Overlay = Widget.inherit({
         const $container = this._getContainer();
 
         if($container) {
-            positionUtils.setup(this._$wrapper, { my: "left top", at: "left top", of: $container });
+            positionUtils.setup(this._$wrapper, { my: "top left", at: "top left", of: $container });
         }
     },
 
@@ -1596,10 +1596,6 @@ var Overlay = Widget.inherit({
 
     $content: function() {
         return this._$content;
-    },
-
-    $wrapper: function() {
-        return this._$wrapper;
     },
 
     /**
