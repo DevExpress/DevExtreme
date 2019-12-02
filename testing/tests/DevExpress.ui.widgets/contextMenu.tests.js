@@ -246,10 +246,10 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.ok(contextMenu.option("visible"), "context menu is shown after detached target been attached");
     });
 
-    QUnit.test("not create keyboardProcessor on rendering", function(assert) {
+    QUnit.test("not attach keyboard handler on rendering", function(assert) {
         const instance = new ContextMenu(this.$element, {});
 
-        assert.notOk(instance._keyboardListenerId, "keyboard processor is undefined");
+        assert.notOk(instance._keyboardListenerId);
     });
 });
 

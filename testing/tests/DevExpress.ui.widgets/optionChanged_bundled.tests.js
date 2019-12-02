@@ -38,8 +38,7 @@ define(function(require) {
                     name === "validationMessageOffset" ||
                     name === "templatesRenderAsynchronously" ||
                     name === "ignoreChildEvents" ||
-                    name === "_checkParentVisibility" ||
-                    name === "_listenerId") {
+                    name === "_checkParentVisibility") {
                     return;
                 }
                 this.QUnitAssert.ok(false, "Option '" + name + "' is not processed after runtime change");

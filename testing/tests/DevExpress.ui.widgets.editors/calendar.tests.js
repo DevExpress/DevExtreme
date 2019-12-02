@@ -4,7 +4,6 @@ import translator from "animation/translator";
 import dateUtils from "core/utils/date";
 import dateSerialization from "core/utils/date_serialization";
 import { noop } from "core/utils/common";
-import KeyboardProcessor from "events/core/keyboard_processor";
 import swipeEvents from "events/swipe";
 import fx from "animation/fx";
 import Views from "ui/calendar/ui.calendar.views";
@@ -734,39 +733,17 @@ QUnit.module("Keyboard navigation", {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("when a KeyboardProcessor instance is not passed into the constructor, rootElement must have a tabindex of 0", function(assert) {
+    QUnit.test("rootElement must have a tabindex of 0 by default", function(assert) {
         assert.equal(this.$element.attr("tabindex"), 0);
     });
 
-    QUnit.test("calendar should not dispose a keyDownProcessor passed via the constructor", function(assert) {
-        let disposeCount = 0;
-        const disposeMock = () => {
-            ++disposeCount;
-        };
-        const keyDownProcessor = new KeyboardProcessor({});
-
-        keyDownProcessor.dispose = disposeMock;
-
-        this.reinit({
-            keyDownProcessor: keyDownProcessor
-        });
-
-        this.calendar._clean();
-        assert.strictEqual(disposeCount, 0);
-    });
-
-    QUnit.test("when a KeyboardProcessor instance is passed into the constructor, the main table must not have tabindex", function(assert) {
-        this.reinit({
-            keyDownProcessor: new KeyboardProcessor({})
-        });
-
+    QUnit.test("The main table must not have tabindex by default", function(assert) {
+        this.reinit();
         assert.ok(!this.$element.find("table").attr("tabindex"));
     });
 
     QUnit.test("click must not focus the main table if it does have tabindex", function(assert) {
-        this.reinit({
-            keyDownProcessor: new KeyboardProcessor()
-        });
+        this.reinit();
 
         const $cell = $(getCurrentViewInstance(this.calendar).$element().find("table").find("td")[0]);
         assert.ok(!this.$element.find("table").attr("tabindex"));
@@ -1168,7 +1145,7 @@ QUnit.module("Calendar footer", {
             showTodayButton: true
         }).dxCalendar("instance");
 
-        this.reinit = (options) => {
+        this.reinit = (options = {}) => {
             this.$element.remove();
             this.$element = $("<div>").appendTo("body");
             this.calendar = this.$element.dxCalendar(options).dxCalendar("instance");

@@ -140,7 +140,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
             eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
 
-            that._initKeyDownProcessor($element, e => that._keyDownHandler(e));
+            that._initKeyDownHandler($element, e => that._keyDownHandler(e));
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
@@ -149,7 +149,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         });
     },
 
-    _initKeyDownProcessor: function(element, handler) {
+    _initKeyDownHandler: function(element, handler) {
         keyboard.off(this._keyDownListener);
         this._keyDownListener = keyboard.on(element, null, handler);
     },

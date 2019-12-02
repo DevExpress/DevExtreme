@@ -133,8 +133,6 @@ var Widget = DOMComponentWithTemplate.inherit({
             * @hidden
             */
             onFocusOut: null,
-
-            _listenerId: Symbol('listenerId'),
             onKeyboardHandled: null,
 
             /**
@@ -298,7 +296,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     _dispose: function() {
         this._contentReadyAction = null;
         this._keyboardHandledAction = null;
-        this._disposeKeyboardProcessor();
+        this._detachKeyboardEvents();
 
         this.callBase();
     },
@@ -444,7 +442,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        this._disposeKeyboardProcessor();
+        this._detachKeyboardEvents();
 
         const { focusStateEnabled, onKeyboardHandled } = this.option();
         const hasChildListeners = this._getKeyboardListeners().length;
@@ -497,10 +495,10 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._toggleFocusClass(false);
         $element.removeAttr("tabIndex");
 
-        this._disposeKeyboardProcessor();
+        this._detachKeyboardEvents();
     },
 
-    _disposeKeyboardProcessor() {
+    _detachKeyboardEvents() {
         keyboard.off(this._keyboardListenerId);
         this._keyboardListenerId = null;
     },
