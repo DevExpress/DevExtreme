@@ -650,7 +650,8 @@ QUnit.test("Command drag cell should have cursor 'move' for data rows and 'defau
     $rowsView.render($testElement);
 
     // assert
-    assert.equal($($rowsView.getRowElement(0)).find(".dx-command-drag").eq(0).css("cursor"), "default", "group row has default cursor");
-    assert.equal($($rowsView.getRowElement(1)).find(".dx-command-drag").eq(0).css("cursor"), "move", "data row has move cursor");
-    assert.equal($($rowsView.getRowElement(1)).find("td").eq(1).css("cursor"), "default", "data cell has default cursor");
+    assert.equal($($rowsView.getRowElement(0)).find(".dx-command-drag").eq(0).css("cursor"), "default", "command-drag in group row has default cursor");
+    assert.equal($($rowsView.getRowElement(0)).find(".dx-group-cell").eq(0).css("cursor"), "default", "data cell in group row has default cursor");
+    assert.equal($($rowsView.getRowElement(1)).find(".dx-command-drag").eq(0).css("cursor"), "move", "command-drag in data row has move cursor");
+    assert.equal($($rowsView.getRowElement(1)).find("td").eq(2).css("cursor"), "default", "data cell in data row has default cursor");
 });
