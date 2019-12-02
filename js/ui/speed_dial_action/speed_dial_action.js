@@ -3,7 +3,6 @@ import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import readyCallbacks from "../../core/utils/ready_callbacks";
 import Widget from "../widget/ui.widget";
-import { noop } from "../../core/utils/common";
 import { initAction, disposeAction } from "./speed_dial_main_item";
 import { getSwatchContainer } from "../widget/swatch_container";
 
@@ -64,26 +63,6 @@ class SpeedDialAction extends Widget {
             */
             onContentReady: null,
 
-            /**
-            * @name dxSpeedDialActionOptions.onInitialized
-            * @type function
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 actionElement:dxElement
-            * @action
-            */
-            onInitialized: null,
-
-            /**
-            * @name dxSpeedDialActionOptions.onDisposing
-            * @type function
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 actionElement:dxElement
-            * @action
-            */
-            onDisposing: null,
-
             activeStateEnabled: true,
             hoverStateEnabled: true,
             animation: {
@@ -130,9 +109,7 @@ class SpeedDialAction extends Widget {
                 super._optionChanged(args);
         }
     }
-    _createActionByOption(optionName, config, isExecute) {
-        return !!isExecute || (optionName !== "onInitialized" && optionName !== "onDisposing") ? super._createActionByOption(optionName, config) : noop;
-    }
+
     _render() {
         if(!getSwatchContainer(this.$element())) {
             ready(() => initAction(this));
