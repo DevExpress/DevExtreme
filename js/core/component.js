@@ -102,7 +102,7 @@ var Component = Class.inherit({
     ctor: function(options = {}) {
         this.NAME = publicComponentUtils.name(this.constructor);
 
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this, options.eventsStrategy);
+        this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
 
         this._updateLockCount = 0;
 
