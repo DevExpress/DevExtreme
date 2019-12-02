@@ -320,7 +320,7 @@ var Component = Class.inherit({
                 actionFunc = that.option(optionName);
             }
 
-            if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !that.hasEvent(eventName)) {
+            if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !that._eventsStrategy.hasEvent(eventName)) {
                 return;
             }
 
@@ -328,7 +328,7 @@ var Component = Class.inherit({
                 var beforeExecute = config.beforeExecute;
                 config.beforeExecute = function(args) {
                     beforeExecute && beforeExecute.apply(that, arguments);
-                    that.fireEvent(eventName, args.args);
+                    that._eventsStrategy.fireEvent(eventName, args.args);
                 };
                 action = that._createAction(actionFunc, config);
             }
@@ -398,6 +398,7 @@ var Component = Class.inherit({
         return this;
     },
 
+    // NOTE: these methods are added for integration
     fireEvent(eventName, eventArgs) {
         return this._eventsStrategy.fireEvent(eventName, eventArgs);
     },
@@ -408,7 +409,7 @@ var Component = Class.inherit({
 
     hasActionSubscription: function(actionName) {
         return !!this.option(actionName) ||
-            this.hasEvent(this._getEventName(actionName));
+            this._eventsStrategy.hasEvent(this._getEventName(actionName));
     },
 
     isOptionDeprecated: function(name) {

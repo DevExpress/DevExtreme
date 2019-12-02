@@ -45,8 +45,8 @@ QUnit.test("setup event strategy", function(assert) {
 
     instance.on(eventName, function() {});
     instance.off(eventName, function() {});
-    assert.ok(instance.hasEvent(eventName));
-    instance.fireEvent(eventName);
+    assert.ok(instance._eventsStrategy.hasEvent(eventName));
+    instance._eventsStrategy.fireEvent(eventName);
 
     $("#element").remove();
 });
@@ -82,8 +82,8 @@ QUnit.test("setup event strategy as function", function(assert) {
 
     instance.on(eventName, function() {});
     instance.off(eventName, function() {});
-    assert.ok(instance.hasEvent(eventName));
-    instance.fireEvent(eventName);
+    assert.ok(instance._eventsStrategy.hasEvent(eventName));
+    instance._eventsStrategy.fireEvent(eventName);
 
     $("#element").remove();
 });

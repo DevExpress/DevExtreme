@@ -1227,7 +1227,7 @@ QUnit.test("Angular component should not fire 'triggerResizeEvent' on 'contentRe
     angular.bootstrap(this.$container, ["testApp"]);
 
     const instance = $markup.dxTest("instance");
-    instance.fireEvent("contentReady", {});
+    instance._eventsStrategy.fireEvent("contentReady", {});
 
     this.clock.tick();
 
