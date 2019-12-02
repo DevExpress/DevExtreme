@@ -22,7 +22,7 @@ fixture `Drag-and-drop appointments in the Scheduler basic views`
     dataSource: dataSource
 })));
 
-test(`Drag-n-drop in the "month" view`, async t => {
+test(`Drag-n-drop in the 'month' view`, async t => {
     const scheduler = new Scheduler("#container");
     const draggableAppointment = scheduler.getAppointment("Brochure Design Review");
 
