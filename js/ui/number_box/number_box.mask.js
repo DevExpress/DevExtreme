@@ -379,10 +379,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var editedText = this._replaceSelectedText(text, selection, char),
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
-            textWithoutStubs = this._removeStubs(editedText, true),
-            parsed = this._parse(textWithoutStubs, format),
+            parsedValue = this._getParsedValue(editedText, format),
             maxPrecision = this._getPrecisionLimits(format, editedText).max,
-            isValueChanged = parsed !== this._parsedValue,
+            isValueChanged = parsedValue !== this._parsedValue,
             decimalSeparator = number.getDecimalSeparator();
 
         var isDecimalPointRestricted = char === decimalSeparator && maxPrecision === 0,
@@ -393,17 +392,26 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         if(this._removeStubs(editedText) === "") {
-            parsed = this._parsedValue * 0;
+            parsedValue = this._parsedValue * 0;
         }
 
-        if(isNaN(parsed)) {
+        if(isNaN(parsedValue)) {
             return undefined;
         }
 
-        var value = parsed === null ? this._parsedValue : parsed;
-        parsed = this._truncateToPrecision(value, maxPrecision);
+        var value = parsedValue === null ? this._parsedValue : parsedValue;
+        parsedValue = this._truncateToPrecision(value, maxPrecision);
 
-        return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
+        return this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
+    },
+
+    _getParsedValue: function(text, format) {
+        var sign = number.getSign(text, format);
+        var textWithoutStubs = this._removeStubs(text, true);
+        var parsedValue = this._parse(textWithoutStubs, format);
+        var parsedValueWithSign = parsedValue ? sign * parsedValue : parsedValue;
+
+        return parsedValueWithSign;
     },
 
     _isValueIncomplete: function(text) {
