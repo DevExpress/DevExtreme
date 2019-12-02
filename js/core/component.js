@@ -398,11 +398,12 @@ var Component = Class.inherit({
         return this;
     },
 
-    // NOTE: these methods are added for integration
+    // NOTE: this method is added for integration
     fireEvent(eventName, eventArgs) {
         return this._eventsStrategy.fireEvent(eventName, eventArgs);
     },
 
+    // NOTE: this method is added for integration
     hasEvent(eventName) {
         return this._eventsStrategy.hasEvent(eventName);
     },
