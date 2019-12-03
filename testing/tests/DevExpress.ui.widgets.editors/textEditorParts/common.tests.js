@@ -1070,16 +1070,20 @@ QUnit.module("api", moduleConfig, () => {
     });
 });
 
-QUnit.module("events", moduleConfig, () => {
-    QUnit.test("widget has no warnings if it is no user onKeyPress event subscriptions", function(assert) {
+QUnit.module("deprecated options", {
+    beforeEach: function() {
         sinon.spy(consoleUtils.logger, "warn");
+    },
+    afterEach: function() {
+        consoleUtils.logger.warn.restore();
+    }
+}, () => {
+    QUnit.test("widget has no warnings if it is no user onKeyPress event subscriptions", function(assert) {
         $("#texteditor").dxTextEditor({});
         assert.strictEqual(consoleUtils.logger.warn.callCount, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
-        consoleUtils.logger.warn.restore();
     });
 
     QUnit.test("user onKeyPress event subscriptions fires a deprecation warning", function(assert) {
-        sinon.spy(consoleUtils.logger, "warn");
         const textBox = $("#texteditor").dxTextEditor({
             onKeyPress: noop
         }).dxTextEditor("instance");
@@ -1090,7 +1094,6 @@ QUnit.module("events", moduleConfig, () => {
         textBox.option("onKeyPress", null);
         textBox.option("onKeyPress", noop);
         assert.strictEqual(consoleUtils.logger.warn.callCount, 3, "Warning is raised if set a new handler");
-        consoleUtils.logger.warn.restore();
     });
 });
 
