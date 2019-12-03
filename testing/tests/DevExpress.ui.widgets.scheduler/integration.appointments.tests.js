@@ -4523,7 +4523,7 @@ QUnit.test("Multi-day appointment is hidden in compact collectors according to h
         maxAppointmentsPerCell: 1,
     });
 
-    let compactAppointments = $(this.instance.element).find(".dx-scheduler-appointment-collector-compact");
+    let compactAppointments = $(this.instance.element).find(".dx-scheduler-dropdown-appointments-compact");
 
     assert.strictEqual(compactAppointments.length, 2, "Appointments are rendered");
 
