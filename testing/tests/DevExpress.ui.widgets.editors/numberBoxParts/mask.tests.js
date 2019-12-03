@@ -1955,7 +1955,8 @@ QUnit.module("format: custom parser and formatter", moduleConfig, () => {
 QUnit.module("stubs", {
     beforeEach: function() {
         this.$element = $("#numberbox").dxNumberBox({
-            useMaskBehavior: true
+            useMaskBehavior: true,
+            mode: "text"
         });
         this.input = this.$element.find(".dx-texteditor-input");
         this.instance = this.$element.dxNumberBox("instance");
