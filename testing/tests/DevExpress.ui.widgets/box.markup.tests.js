@@ -94,12 +94,17 @@ QUnit.module("layouting", () => {
     });
 
     QUnit.test("box must have a correct flex direction on items rendering (T604581)", function(assert) {
-        const boxInstance = new Box($("#box"), {
+        new Box($("#box"), {
             direction: "col",
             items: [{ baseSize: 100 }],
-        }).instance();
-
-        assert.equal($(boxInstance._$element)[0].style.flexDirection, "column");
+            itemTemplate: function() {
+                if(this.option("_layoutStrategy") === "flex") {
+                    assert.equal(this._$element[0].style.flexDirection, "column");
+                } else {
+                    assert.ok(true);
+                }
+            }
+        });
     });
 });
 
