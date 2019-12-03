@@ -550,7 +550,6 @@ QUnit.test("Popup should contain recurrence editor with right config", function(
 
     this.instance.option("recurrenceEditMode", "series");
     this.instance.option("firstDayOfWeek", 5);
-    this.instance.option("currentDate", new Date(2019, 11, 1));
 
     this.instance.showAppointmentPopup({
         startDate: startDate,
