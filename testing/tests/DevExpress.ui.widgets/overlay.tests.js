@@ -2230,8 +2230,7 @@ testModule("container", moduleConfig, () => {
             const $targetContainer = $("#container");
             $targetContainer.css({
                 height: 300,
-                width: 200,
-                left: 500
+                width: 200
             });
 
             $("#overlay").dxOverlay({
@@ -2248,7 +2247,10 @@ testModule("container", moduleConfig, () => {
             const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
             const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
+
             assert.deepEqual(wrapperRect, targetRect, "wrapper position and size are correct");
+            assert.strictEqual(wrapperRect.left, -10000, "wrapper left is ok");
+            assert.strictEqual(wrapperRect.top, -9979, "wrapper top is ok");
         });
     });
 
