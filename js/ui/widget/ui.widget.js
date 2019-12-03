@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    events = require("../../events/index"),
+    events = require("../../events/"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -8,7 +8,6 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
-    keyboard = require("../../events/index").keyboard,
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils");
 
@@ -16,7 +15,7 @@ require("../../events/click");
 require("../../events/hover");
 require("../../events/core/emitter.feedback");
 
-const { hover, focus, active, dxClick } = events;
+const { hover, focus, active, dxClick, keyboard } = events;
 
 var WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",

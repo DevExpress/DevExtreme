@@ -70,7 +70,7 @@ import config from "core/config";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import pointerEvents from "events/pointer";
-import { keyboard } from "events/index";
+import { keyboard } from "events/";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";

@@ -16,7 +16,7 @@ import $ from "jquery";
 import eventUtils from "events/utils";
 import ArrayStore from "data/array_store";
 import pointerEvents from "events/pointer";
-import { keyboard } from "events/index";
+import { keyboard } from "events/";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
