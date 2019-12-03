@@ -1867,9 +1867,9 @@ declare module DevExpress.ui {
         /** @name Editor.Options.readOnly */
         readOnly?: boolean;
         /** @name Editor.Options.validationError */
-        validationError?: any;
+        validationError?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
         /** @name Editor.Options.validationErrors */
-        validationErrors?: Array<any>;
+        validationErrors?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /** @name Editor.Options.validationMessageMode */
         validationMessageMode?: 'always' | 'auto';
         /** @name Editor.Options.validationStatus */
