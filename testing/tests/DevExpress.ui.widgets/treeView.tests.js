@@ -206,6 +206,7 @@ import "./treeViewParts/optionChanged.js";
 import "./treeViewParts/regression.js";
 import "./treeViewParts/rendering.js";
 import "./treeViewParts/selection.js";
+import "./treeViewParts/searching.js";
 import "./treeViewParts/selectAllMode.js";
 import "./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js";
 import "./treeViewParts/selectNodesRecursiveTrue.js";
