@@ -77,8 +77,7 @@ function createFieldFilterExpressions(field, operation) {
     }
 
     each(field.filterValues, function(index, filterValue) {
-        var currentExpression = [],
-            currentField = field.levels ? field.levels[index] : field;
+        var currentExpression = [];
 
         if(Array.isArray(filterValue)) {
             var parseLevelsRecursive = field.levels && field.levels.length;
@@ -86,11 +85,13 @@ function createFieldFilterExpressions(field, operation) {
             if(parseLevelsRecursive) {
                 currentExpression = createFieldFilterExpressions({
                     filterValues: filterValue,
-                    filterType: currentField.filterType,
+                    filterType: field.filterType,
                     levels: field.levels
                 }, "and");
             }
         } else {
+            const currentField = field.levels ? field.levels[index] : field;
+
             currentExpression = getFilterExpressionForFilterValue(currentField, filterValue);
         }
 
