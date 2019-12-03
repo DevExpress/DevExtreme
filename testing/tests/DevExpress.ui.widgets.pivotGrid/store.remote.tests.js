@@ -874,6 +874,29 @@ QUnit.test("Set default formatter for group fields with groupInterval", function
 });
 
 
+QUnit.test("Error should not be thrown during filtering if there are more filter values ​​than fields", function(assert) {
+    var store = new RemoteStore(getCustomArrayStore([])),
+        fields = [
+            { dataField: "OrderDate", dataType: "date", groupInterval: "year" },
+            { dataField: "OrderDate", dataType: "date", groupInterval: "month" }
+        ];
+
+    store.load({
+        columns: fields,
+        rows: [],
+        values: [{ summaryType: "count" }],
+        filters: [
+            {
+                dataField: "OrderDate", groupName: "OrderDate", filterValues: [[1, 1], [1, 2], [2, 4]],
+                levels: fields
+            }
+        ]
+    }).done(function(data) {
+        assert.strictEqual(pivotGridUtils.formatValue(1, fields[0]), "Q1", "quarter");
+        assert.strictEqual(pivotGridUtils.formatValue(1, fields[1]), "January", "month");
+    });
+});
+
 QUnit.module("Mock tests");
 
 QUnit.test("Mock should group values correctly", function(assert) {
