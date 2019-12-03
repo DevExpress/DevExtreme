@@ -73,6 +73,7 @@ import pointerEvents from "events/pointer";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
+import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from "../../helpers/checkDxFontIconHelper.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -1929,12 +1930,7 @@ QUnit.test("Cursor should switch style when it was moved to columns separator if
     assert.equal(columnsSeparator.css("cursor"), "col-resize", "cursor style");
 });
 
-const exportToExcelIconClass = ".dx-icon-exportxlsx";
-const iconGenericSize = 18;
-
-// T757579
-QUnit.test("Export icons must be the same size (T757579)", function(assert) {
-
+QUnit.test("export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)", function(assert) {
     $("#dataGrid").dxDataGrid({
         export: {
             enabled: true,
@@ -1944,35 +1940,19 @@ QUnit.test("Export icons must be the same size (T757579)", function(assert) {
 
     $(".dx-datagrid-export-button").trigger("dxclick");
 
-    var $exportAllIcon = $(exportToExcelIconClass);
-    var $exportSelected = $(".dx-icon-exportselected");
-
-    assert.equal($exportAllIcon.width(), iconGenericSize, "exportAllIcon.width");
-    assert.equal($exportAllIcon.height(), iconGenericSize, "exportAllIcon.height");
-
-    assert.equal($exportSelected.width(), iconGenericSize, "exportSelected.width");
-    assert.equal($exportSelected.height(), iconGenericSize, "exportSelected.height");
+    checkDxFontIcon(assert, ".dx-icon-xlsxfile", DX_ICON_XLSX_FILE_CONTENT_CODE);
+    checkDxFontIcon(assert, ".dx-icon-exportselected", DX_ICON_EXPORT_SELECTED_CONTENT_CODE);
 });
 
-QUnit.test("Export icons must be the same size (T757579)_", function(assert) {
-
+QUnit.test("export.enabled: true, allowExportSelectedData: false -> check export menu icons (T827793)", function(assert) {
     $("#dataGrid").dxDataGrid({
         export: {
             enabled: true,
-            allowExportSelectedData: true
+            allowExportSelectedData: false
         }
     });
 
-    $(".dx-datagrid-export-button").trigger("dxclick");
-
-    var $exportAllIcon = $(exportToExcelIconClass);
-    var $exportSelected = $(".dx-icon-exportselected");
-
-    assert.equal($exportAllIcon.width(), iconGenericSize, "exportAllIcon.width");
-    assert.equal($exportAllIcon.height(), iconGenericSize, "exportAllIcon.height");
-
-    assert.equal($exportSelected.width(), iconGenericSize, "exportSelected.width");
-    assert.equal($exportSelected.height(), iconGenericSize, "exportSelected.height");
+    checkDxFontIcon(assert, ".dx-datagrid-export-button .dx-icon", DX_ICON_XLSX_FILE_CONTENT_CODE);
 });
 
 // T571282

@@ -3,8 +3,11 @@ import { DataProvider } from "ui/pivot_grid/ui.pivot_grid.export";
 import clientExporter from "exporter";
 import dateLocalization from "localization/date";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE } from "../../helpers/checkDxFontIconHelper.js";
 
 import "ui/pivot_grid/ui.pivot_grid";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -320,6 +323,9 @@ QUnit.test("Context menu with export", function(assert) {
 
     // assert
     assert.equal($(".dx-menu-item-text").eq(1).text(), "Export to Excel file");
+
+    checkDxFontIcon(assert, ".dx-context-menu .dx-menu-item .dx-icon-xlsxfile", DX_ICON_XLSX_FILE_CONTENT_CODE);
+    checkDxFontIcon(assert, ".dx-pivotgrid-export-button .dx-icon-xlsxfile", DX_ICON_XLSX_FILE_CONTENT_CODE);
 });
 
 QUnit.test("Hide export from the context menu when the export.enabled option is disabled", function(assert) {
