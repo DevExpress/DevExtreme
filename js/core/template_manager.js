@@ -118,8 +118,8 @@ export default class TemplateManager {
         return this._anonymousTemplateName;
     }
 
-    addDefaultTemplate(template) {
-        this._defaultTemplates = extend({}, this._defaultTemplates, template);
+    addDefaultTemplates(templates) {
+        this._defaultTemplates = extend({}, this._defaultTemplates, templates);
     }
 
     dispose() {

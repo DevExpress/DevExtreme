@@ -930,7 +930,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _initTemplates: function() {
         if(!this.option("contentTemplate")) return;
 
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             content: new EmptyTemplate()
         });
         this.callBase.apply(this, arguments);

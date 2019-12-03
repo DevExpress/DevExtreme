@@ -429,7 +429,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _initTemplates: function() {
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             dropDownButton: new FunctionTemplate(function(options) {
                 var $icon = $("<div>").addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
                 $(options.container).append($icon);

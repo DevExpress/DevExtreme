@@ -40,7 +40,7 @@ const ButtonCollection = CollectionWidget.inherit({
          * @name dxButtonGroupItem.html
          * @hidden
          */
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((($container, data, model) => {
                 this._prepareItemStyles($container);
                 this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {

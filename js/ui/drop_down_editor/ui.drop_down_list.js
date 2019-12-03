@@ -311,7 +311,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _initTemplates: function() {
         this.callBase();
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             item: new ChildDefaultTemplate("item")
         });
     },

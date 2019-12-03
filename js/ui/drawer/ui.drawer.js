@@ -205,7 +205,7 @@ const Drawer = Widget.inherit({
     },
 
     _initTemplates() {
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             panel: new EmptyTemplate(),
             content: new EmptyTemplate()
         });

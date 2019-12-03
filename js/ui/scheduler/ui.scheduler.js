@@ -1709,7 +1709,7 @@ const Scheduler = Widget.inherit({
     _initTemplates: function() {
         this._initAppointmentTemplate();
 
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             appointmentTooltip: new EmptyTemplate(),
             dropDownAppointment: new EmptyTemplate(),
         });
@@ -1720,7 +1720,7 @@ const Scheduler = Widget.inherit({
         const { expr } = this._dataAccessors;
         const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
 
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             ["item"]: new BindableTemplate(($container, data, model) => {
                 this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
             }, [

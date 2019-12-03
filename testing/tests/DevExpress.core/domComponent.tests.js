@@ -27,7 +27,7 @@ QUnit.module("default", {
         this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
             _initTemplates() {
                 this.callBase();
-                this._templateManager.addDefaultTemplate({
+                this._templateManager.addDefaultTemplates({
                     content: {
                         render() {
                             return "Default content markup";

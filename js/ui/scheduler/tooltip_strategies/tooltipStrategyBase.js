@@ -172,7 +172,7 @@ export class TooltipStrategyBase {
     }
 
     _createTemplate(data, currentData, color) {
-        this.scheduler._templateManager.addDefaultTemplate({
+        this.scheduler._templateManager.addDefaultTemplates({
             [this._getItemListDefaultTemplateName()]: new FunctionTemplate(options => {
                 const $container = $(options.container);
                 $container.append(this._createItemListContent(data, currentData, color));

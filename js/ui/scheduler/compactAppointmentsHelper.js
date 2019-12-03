@@ -143,7 +143,7 @@ export class CompactAppointmentsHelper {
     }
 
     _initButtonTemplate(count, isCompact) {
-        this.instance._templateManager.addDefaultTemplate({
+        this.instance._templateManager.addDefaultTemplates({
             appointmentCollector: new FunctionTemplate(options =>
                 this._createButtonTemplate(count, $(options.container), isCompact)
             )

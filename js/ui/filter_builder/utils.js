@@ -675,7 +675,7 @@ function isValidCondition(condition) {
     return condition[2] !== "";
 }
 
-function getMergedOperations(customOperations, betweenCaption) {
+function getMergedOperations(customOperations, betweenCaption, context) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
     result.some(function(customOperation, index) {
@@ -685,9 +685,9 @@ function getMergedOperations(customOperations, betweenCaption) {
         }
     });
     if(betweenIndex !== -1) {
-        result[betweenIndex] = extend(between.getConfig.bind(this)(betweenCaption), result[betweenIndex]);
+        result[betweenIndex] = extend(between.getConfig(betweenCaption, context), result[betweenIndex]);
     } else {
-        result.unshift(between.getConfig.bind(this)(betweenCaption));
+        result.unshift(between.getConfig(betweenCaption, context));
     }
     return result;
 }

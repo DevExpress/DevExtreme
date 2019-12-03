@@ -277,7 +277,7 @@ var CollectionWidget = Widget.inherit({
 
     _initDefaultItemTemplate: function() {
         var fieldsMap = this._getFieldsMap();
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {
                     this._prepareDefaultItemTemplate(data, $container);

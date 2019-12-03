@@ -124,7 +124,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _initDynamicTemplates: function() {
         var that = this;
 
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, itemData) {
                 $container
                     .html(itemData.html)

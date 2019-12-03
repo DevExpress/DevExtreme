@@ -270,7 +270,7 @@ var Gallery = CollectionWidget.inherit({
         * @hidden
         */
 
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((function($container, data) {
                 var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 

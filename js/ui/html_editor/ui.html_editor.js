@@ -246,7 +246,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _initTemplates: function() {
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             [ANONYMOUS_TEMPLATE_NAME]: new EmptyTemplate()
         });
         this.callBase();

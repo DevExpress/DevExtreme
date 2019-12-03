@@ -483,7 +483,7 @@ const TagBox = SelectBox.inherit({
     _initDynamicTemplates: function() {
         this.callBase();
 
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             tag: new BindableTemplate(($container, data) => {
                 const $tagContent = $("<div>").addClass(TAGBOX_TAG_CONTENT_CLASS);
 

@@ -608,7 +608,7 @@ var Lookup = DropDownList.inherit({
 
     _initTemplates: function() {
         this.callBase();
-        this._templateManager.addDefaultTemplate({
+        this._templateManager.addDefaultTemplates({
             group: new ChildDefaultTemplate("group"),
             title: new ChildDefaultTemplate("title"),
         });
