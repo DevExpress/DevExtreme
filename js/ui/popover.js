@@ -82,7 +82,8 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
-            this._clearEventTimeout(name === "hide");
+            this._clearEventsTimeouts();
+
             if(delay) {
                 this._timeouts[name] = setTimeout(function() {
                     that[name]();
@@ -596,6 +597,11 @@ var Popover = Popup.inherit({
 
     _clearEventTimeout: function(visibility) {
         clearTimeout(this._timeouts[visibility ? "show" : "hide"]);
+    },
+
+    _clearEventsTimeouts: function() {
+        this._clearEventTimeout(true);
+        this._clearEventTimeout(false);
     },
 
     _clean: function() {
