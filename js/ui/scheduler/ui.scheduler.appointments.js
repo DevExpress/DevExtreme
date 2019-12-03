@@ -957,7 +957,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         this.notifyObserver("moveBack");
 
-        if($appointment) {
+        if($appointment && !dragEvent) {
             if(coords) {
                 translator.move($appointment, coords);
                 delete this._initialSize;
