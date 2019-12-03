@@ -1951,3 +1951,40 @@ QUnit.module("format: custom parser and formatter", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 1234.56, "value is correct");
     });
 });
+
+QUnit.module("stubs", {
+    beforeEach: function() {
+        this.$element = $("#numberbox").dxNumberBox({
+            useMaskBehavior: true
+        });
+        this.input = this.$element.find(".dx-texteditor-input");
+        this.instance = this.$element.dxNumberBox("instance");
+        this.keyboard = keyboardMock(this.input, true);
+    }
+}, function() {
+    [
+        { format: "123a 0,###.##", expectedText: "123a 1,234.56", expectedValue: 1234.56 },
+        { format: "123a 0,###.##", expectedText: "-123a 1,234.56", expectedValue: -1234.56 },
+        { format: "0,###.## 456b", expectedText: "1,234.56 456b", expectedValue: 1234.56 },
+        { format: "0,###.## 456b", expectedText: "-1,234.56 456b", expectedValue: -1234.56 },
+        { format: "'0'1 0,###.##", expectedText: "01 1,234.56", expectedValue: 1234.56 },
+        { format: "'0'1 0,###.##", expectedText: "-01 1,234.56", expectedValue: -1234.56 },
+        { format: "0,###.## '#'1", expectedText: "1,234.56 #1", expectedValue: 1234.56 },
+        { format: "0,###.## '#'1", expectedText: "-1,234.56 #1", expectedValue: -1234.56 },
+        { format: "0,###.##;abc(0,###.##)", expectedText: "abc(1,234.56)", expectedValue: -1234.56 }
+    ].forEach(({ format, expectedText, expectedValue }) => {
+        QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
+            this.instance.option({
+                value: null,
+                format
+            });
+
+            this.keyboard
+                .type(expectedValue.toString())
+                .press("enter");
+
+            assert.equal(this.input.val(), expectedText, "text is correct");
+            assert.equal(this.instance.option("value"), expectedValue, "value is correct");
+        });
+    });
+});
