@@ -165,9 +165,9 @@ class SpeedDialMainItem extends SpeedDialItem {
                 this._clickHandler();
             });
 
-            action.option("actionComponent", action);
-            action.option("parentPosition", this._getPosition());
-            action.option("actionVisible", action.option("visible"));
+            action._setOptionByStealth("actionComponent", action);
+            action._setOptionByStealth("parentPosition", this._getPosition());
+            action._setOptionByStealth("actionVisible", action.option("visible"));
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action.option(), { visible: false })));
         }
@@ -176,8 +176,8 @@ class SpeedDialMainItem extends SpeedDialItem {
     _getActionAnimation(action, index, lastActionIndex) {
         const actionAnimationDelay = 30;
 
-        action.option("animation.show.delay", actionAnimationDelay * index);
-        action.option("animation.hide.delay", actionAnimationDelay * (lastActionIndex - index));
+        action._setOptionByStealth("animation.show.delay", actionAnimationDelay * index);
+        action._setOptionByStealth("animation.hide.delay", actionAnimationDelay * (lastActionIndex - index));
 
         return action.option("animation");
     }
