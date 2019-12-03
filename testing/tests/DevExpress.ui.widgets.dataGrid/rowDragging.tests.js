@@ -615,3 +615,58 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
     assert.ok($handleElement.hasClass("dx-cell-focus-disabled"), "cell focus disabled for handle");
     assert.strictEqual($handleElement.find(".dx-datagrid-drag-icon").length, 1, "there is handle icon");
 });
+
+QUnit.test("Row should have cursor 'pointer' if showDragIcons set false", function(assert) {
+    // arrange
+    let rowsView,
+        $handleElement,
+        $testElement = $("#container");
+
+    rowsView = createRowsView.call(this);
+    rowsView.render($testElement);
+    $handleElement = $(rowsView.getRowElement(0)).children().first();
+
+    // assert
+    assert.ok(rowsView.element().find(".dx-sortable-without-handle").length, "grid has 'dx-sortable-without-handle' class");
+    assert.equal($handleElement.css("cursor"), "pointer", "cursor is pointer");
+});
+
+QUnit.test("Command drag cell should have cursor 'move' for data rows and 'default' for group rows", function(assert) {
+    // arrange
+    let $rowsView,
+        $testElement = $("#container");
+
+    $.extend(this.options, {
+        columns: [{ dataField: "field1", groupIndex: 0 }, "field2", "field3"],
+        grouping: {
+            autoExpandAll: true
+        },
+        rowDragging: {
+            showDragIcons: true
+        }
+    });
+
+    $rowsView = this.createRowsView();
+    $rowsView.render($testElement);
+
+    // assert
+    assert.equal($($rowsView.getRowElement(0)).find(".dx-command-drag").eq(0).css("cursor"), "default", "command-drag in group row has default cursor");
+    assert.equal($($rowsView.getRowElement(0)).find(".dx-group-cell").eq(0).css("cursor"), "default", "data cell in group row has default cursor");
+    assert.equal($($rowsView.getRowElement(1)).find(".dx-command-drag").eq(0).css("cursor"), "move", "command-drag in data row has move cursor");
+    assert.equal($($rowsView.getRowElement(1)).find("td").eq(2).css("cursor"), "default", "data cell in data row has default cursor");
+});
+
+QUnit.test("Command drag cell should have cursor 'grabbing' for dragging row", function(assert) {
+    // arrange
+    let rowsView = this.createRowsView();
+    rowsView.render($("#container"));
+
+    let $handleElement = $(rowsView.getRowElement(0)).children().first();
+
+    // act
+    pointerMock($handleElement).start().down().move(0, 70);
+
+    // assert
+    let $draggableElement = $("body").children(".dx-sortable-dragging");
+    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), "grabbing", "cursor is grabbing");
+});

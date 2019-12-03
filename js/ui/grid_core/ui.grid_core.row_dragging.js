@@ -5,7 +5,8 @@ import Sortable from "../sortable";
 let COMMAND_HANDLE_CLASS = "dx-command-drag",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     HANDLE_ICON_CLASS = "drag-icon",
-    ROWS_VIEW = "rowsview";
+    ROWS_VIEW = "rowsview",
+    SORTABLE_WITHOUT_HANDLE_CLASS = "dx-sortable-without-handle";
 
 var RowDraggingExtender = {
     init: function() {
@@ -65,6 +66,8 @@ var RowDraggingExtender = {
                     onDragStart && onDragStart(e);
                 }
             }));
+
+            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, !rowDragging.showDragIcons);
         }
 
         return $content;
