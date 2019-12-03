@@ -879,7 +879,7 @@ QUnit.test("Set default formatter for group fields with groupInterval", function
 QUnit.test("Error should not be thrown during filtering if there are more filter values ​​than fields", function(assert) {
     var store = new RemoteStore(getCustomArrayStore([])),
         fields = [
-            { dataField: "OrderDate", dataType: "date", groupInterval: "year" },
+            { dataField: "OrderDate", dataType: "date", groupInterval: "quarter" },
             { dataField: "OrderDate", dataType: "date", groupInterval: "month" }
         ];
 
