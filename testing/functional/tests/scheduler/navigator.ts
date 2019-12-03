@@ -7,17 +7,14 @@ import url from '../../helpers/getPageUrl';
 fixture `Scheduler: Navigator`
     .page(url(__dirname, '../container.html'));
 
-const disableAnimation = ClientFunction(() => (window as any).DevExpress.fx.off = true);
-
 const createScheduler = async (options = {}) => {
-    await disableAnimation();
     await createWidget("dxScheduler", extend(options, {
         dataSource: [],
         currentDate: new Date(2017, 4, 18),
         firstDayOfWeek: 1,
         height: 600,
         views: ["week", "month"],
-    }));
+    }), true);
 };
 
 test("Navigator can change week when current date interval is more than diff between current date and `max` (T830754)", async t => {
