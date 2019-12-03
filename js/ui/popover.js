@@ -595,13 +595,13 @@ var Popover = Popup.inherit({
         return side === "left" || side === "right";
     },
 
-    _clearEventTimeout: function(visibility) {
-        clearTimeout(this._timeouts[visibility ? "show" : "hide"]);
+    _clearEventTimeout: function(name) {
+        clearTimeout(this._timeouts[name]);
     },
 
     _clearEventsTimeouts: function() {
-        this._clearEventTimeout(true);
-        this._clearEventTimeout(false);
+        this._clearEventTimeout("show");
+        this._clearEventTimeout("hide");
     },
 
     _clean: function() {
@@ -635,7 +635,7 @@ var Popover = Popup.inherit({
                 attachEvent(this, name);
                 break;
             case "visible":
-                this._clearEventTimeout(args.value);
+                this._clearEventTimeout(args.value ? "show" : "hide");
                 this.callBase(args);
                 break;
             default:
