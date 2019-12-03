@@ -547,7 +547,9 @@ class BaseRenderingStrategy {
             coordinates.virtual = {
                 top: coordinates.top,
                 left: coordinates.left,
-                index: coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex,
+                index: coordinates.appointmentReduced === 'tail' ?
+                    coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex :
+                    coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex + "-tail",
                 isAllDay: isAllDay
             };
         }

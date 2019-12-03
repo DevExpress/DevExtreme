@@ -3793,3 +3793,31 @@ QUnit.test("Appointment with equal startDate and endDate should render with 1 mi
     assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
     assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), "Appointment heights are equal");
 });
+
+QUnit.test("Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 4, 22, 10, 45),
+            endDate: new Date(2017, 4, 23, 10, 30)
+        }, {
+            text: "Appointment 2",
+            startDate: new Date(2017, 4, 22, 15, 15),
+            endDate: new Date(2017, 4, 23, 13, 0)
+        }],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2017, 4, 21),
+        startDayHour: 9,
+        height: 800,
+        width: 500,
+        maxAppointmentsPerCell: 1,
+    });
+
+    assert.strictEqual(this.scheduler.appointments.compact.getButtonCount(), 2, "Appointments are rendered");
+
+    const tailCoords = translator.locate(this.scheduler.appointments.compact.getButton(1));
+
+    assert.strictEqual(tailCoords.top, 0, "Appointment top is correct");
+    assert.roughEqual(tailCoords.left, 240, 2, "Appointment left is correct");
+});
