@@ -1,6 +1,7 @@
 import { createWidget } from '../../helpers/testHelper';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
+import { Selector } from 'testcafe';
 
 fixture `Appointment popup form`
     .page(url(__dirname, '../container.html'));
