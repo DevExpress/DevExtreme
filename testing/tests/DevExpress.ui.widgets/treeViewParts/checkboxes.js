@@ -242,104 +242,353 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
 ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
     [false, true].forEach((virtualModeEnabled) => {
-        QUnit.module(`Checkbox selection. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
-            QUnit.test(`Initialization`, function(assert) {
-                const testSamples = [{ selected: true, expectedSelected: [0, 1] }, { selectedOption: false, expectedSelected: [] } ];
-                testSamples.forEach((testData) => {
-                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
-                        { id: 1, text: "item1", parentId: 2, expanded: true, selected: testData.selected },
-                        { id: 2, text: "item1_1", parentId: 1, expanded: true, selected: testData.selected }]);
-                    options['showCheckBoxesMode'] = "normal";
+        [false, true].forEach((expanded) => {
+            [false, true].forEach((disabled) => {
+                function createWrapper(options, items) {
+                    const result = $.extend({ dataStructure: "plain", rootValue: 1, showCheckBoxesMode: "normal" }, options);
+                    if(result.dataSourceOption === 'createChildren') {
+                        const createChildFunction = (parent) => {
+                            const parentId = (parent !== null)
+                                ? parent.itemData.id
+                                : result.rootValue;
+                            return items.filter(function(item) { return parentId === item.parentId; });
+                        };
+                        result.createChildren = createChildFunction;
+                    } else {
+                        result[options.dataSourceOption] = items;
+                    }
+                    return new TreeViewTestWrapper(result);
+                }
 
-                    const wrapper = new TreeViewTestWrapper(options);
-                    assert.notEqual(wrapper.instance, undefined);
-                    wrapper.checkSelectedNodes(testData.expectedSelected);
-                    wrapper.instance.dispose();
+                QUnit.module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. Expanded: ${expanded}. Disabled: ${disabled}.`, () => {
+                    QUnit.test(`selectionMode: multiple, selected: false -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple' }, [
+                            { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                        wrapper.checkSelectedKeys([]);
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selected: true -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple' }, [
+                            { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? [2]
+                            : [1, 2];
+
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selectNodesRecursive: false. Parent is selected -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                            { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
+
+                        wrapper.checkSelectedKeys([2]);
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selectNodesRecursive: false. Child is selected -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                            { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? []
+                            : [1];
+
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    QUnit.test(`selectionMode: single, selected: lvl 0 -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                            { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 3, selected: false, expanded, disabled },
+                            { id: 3, text: "item1_1_1", parentId: 1, selected: true, expanded, disabled }]);
+
+                        wrapper.checkSelectedKeys([3]);
+                    });
+
+                    QUnit.test(`selectionMode: single, selected: lvl 1 -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                            { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 3, selected: true, expanded, disabled },
+                            { id: 3, text: "item1_1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? []
+                            : [2];
+
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    QUnit.test(`selectionMode: single, selected: lvl 2 -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                            { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 3, selected: false, expanded, disabled },
+                            { id: 3, text: "item1_1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? []
+                            : [1];
+
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    QUnit.test(`selectionMode: single, selected: all -> getSelectedKeys`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                            { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 3, selected: true, expanded, disabled },
+                            { id: 3, text: "item1_1_1", parentId: 1, selected: true, expanded, disabled }]);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = expanded && isLazy
+                            ? [1]
+                            : [3];
+
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    [true, false].forEach((selected) => {
+                        QUnit.test(`selectionMode: multiple, selected: ${selected}, selectNodesRecursive: true -> selectItem(lvl0_key)`, function(assert) {
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive: true }, [
+                                { id: 1, text: "item1", parentId: 2, selected, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                            wrapper.instance.selectItem(2);
+
+                            const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                            const expectedKeys = !expanded && isLazy
+                                ? [2]
+                                : [1, 2];
+                            wrapper.checkSelectedKeys(expectedKeys);
+                        });
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selected: false, selectNodesRecursive: true -> selectItem(lvl1_key)`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive: true }, [
+                            { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+                        wrapper.instance.selectItem(1);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? []
+                            : [1, 2];
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    [true, false].forEach((selected) => {
+                        QUnit.test(`selectionMode: multiple, selected: ${selected}, selectNodesRecursive: false -> selectItem(lvl0_key)`, function(assert) {
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive: false }, [
+                                { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                            wrapper.instance.selectItem(2);
+
+                            wrapper.checkSelectedKeys([2]);
+                        });
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selected: false, selectNodesRecursive: false -> selectItem(lvl1_key)`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive: false }, [
+                            { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+                        wrapper.instance.selectItem(1);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? []
+                            : [1];
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    [true, false].forEach((selected) => {
+                        [true, false].forEach((selectNodesRecursive) => {
+                            QUnit.test(`selectionMode: single, selected: ${selected}, selectNodesRecursive: ${selectNodesRecursive} -> selectItem(lvl0_key)`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'single' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                                wrapper.instance.selectItem(2);
+
+                                wrapper.checkSelectedKeys([2]);
+                            });
+
+                            QUnit.test(`selectionMode: single, selected: ${selected}, selectNodesRecursive: ${selectNodesRecursive} -> selectItem(lvl1_key)`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'single' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+                                wrapper.instance.selectItem(1);
+
+                                const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                                const expectedKeys = !expanded && isLazy
+                                    ? []
+                                    : [1];
+                                wrapper.checkSelectedKeys(expectedKeys);
+                            });
+                        });
+                    });
+
+                    [{ selectItemArgumentType: '$node', itemGetter: ($item) => $item },
+                        { selectItemArgumentType: 'DOMElement', itemGetter: ($item) => $item.get(0) }].forEach((config) => {
+                        QUnit.test(`selectionMode: multiple, selected: false -> selectItem(lvl0_${config.selectItemArgumentType}})`, function(assert) {
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple' }, [
+                                { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            const $root = wrapper.getElement().find('[aria-level="1"]');
+                            wrapper.instance.selectItem(config.itemGetter($root));
+
+                            const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                            const expectedKeys = !expanded && isLazy
+                                ? [2]
+                                : [1, 2];
+                            wrapper.checkSelectedKeys(expectedKeys);
+                        });
+                    });
+
+                    [true, false].forEach((selected) => {
+                        QUnit.test(`selectionMode: multiple, selected: ${selected}, selectNodesRecursive: true -> unselectItem(lvl0_key)`, function(assert) {
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                                { id: 1, text: "item1", parentId: 2, selected, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                            wrapper.instance.unselectItem(2);
+
+                            wrapper.checkSelectedKeys([]);
+                        });
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selected: true, selectNodesRecursive: true -> unselectItem(lvl1_key)`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                            { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
+                        wrapper.instance.unselectItem(1);
+
+                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                        const expectedKeys = !expanded && isLazy
+                            ? [2]
+                            : [];
+
+                        wrapper.checkSelectedKeys(expectedKeys);
+                    });
+
+                    [true, false].forEach((selected) => {
+                        QUnit.test(`selectionMode: multiple, selected: ${selected}, selectNodesRecursive: false -> usselectItem(lvl0_key)`, function(assert) {
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                                { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                            wrapper.instance.unselectItem(2);
+
+                            wrapper.checkSelectedKeys([]);
+                        });
+                    });
+
+                    QUnit.test(`selectionMode: multiple, selected: true, selectNodesRecursive: false -> unselectItem(lvl1_key)`, function(assert) {
+                        const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                            { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
+                            { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
+                        wrapper.instance.unselectItem(1);
+
+                        wrapper.checkSelectedKeys([2]);
+                    });
+
+                    [true, false].forEach((selected) => {
+                        [true, false].forEach((selectNodesRecursive) => {
+                            QUnit.test(`selectionMode: single, selected: ${selected}, selectNodesRecursive: ${selectNodesRecursive} -> unselectItem(lvl0_key)`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'single' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                                wrapper.instance.unselectItem(2);
+
+                                wrapper.checkSelectedKeys([]);
+                            });
+
+                            QUnit.test(`selectionMode: single, selected: ${selected}, selectNodesRecursive: ${selectNodesRecursive} -> unselectItem(lvl1_key)`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'single' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+                                wrapper.instance.unselectItem(1);
+                                wrapper.checkSelectedKeys([]);
+                            });
+                        });
+                    });
+
+                    [{ selectItemArgumentType: '$node', itemGetter: ($item) => $item },
+                        { selectItemArgumentType: 'DOMElement', itemGetter: ($item) => $item.get(0) }].forEach((config) => {
+                        QUnit.test(`selectionMode: multiple, selected: false -> unselectItem(lvl0_${config.selectItemArgumentType}})`, function(assert) {
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple' }, [
+                                { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            const $root = wrapper.getElement().find('[aria-level="1"]');
+                            wrapper.instance.unselectItem(config.itemGetter($root));
+
+                            wrapper.checkSelectedKeys([]);
+                        });
+                    });
+
+                    [true, false].forEach((selected) => {
+                        [true, false].forEach((selectNodesRecursive) => {
+                            QUnit.test(`selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> selectAll`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'multiple' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+
+                                wrapper.instance.selectAll();
+
+                                const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                                const expectedKeys = !expanded && isLazy
+                                    ? [2]
+                                    : [1, 2];
+
+                                wrapper.checkSelectedKeys(expectedKeys);
+                            });
+
+                            QUnit.test(`selectionMode: single, selected: ${selected}, selectNodesRecursive: ${selectNodesRecursive} -> selectAll`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'single' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+                                wrapper.instance.selectAll();
+
+                                const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
+                                const expectedKeys = isLazy && expanded
+                                    ? [1]
+                                    : [2];
+
+                                wrapper.checkSelectedKeys(expectedKeys);
+                            });
+                        });
+                    });
+
+
+                    [true, false].forEach((selected) => {
+                        [true, false].forEach((selectNodesRecursive) => {
+                            QUnit.test(`selectionMode: multiple, , selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectAll`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'multiple' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+
+                                wrapper.instance.unselectAll();
+                                wrapper.checkSelectedKeys([]);
+                            });
+
+
+                            QUnit.test(`selectionMode: single, selected: ${selected}, selectNodesRecursive: ${selectNodesRecursive} -> unselectAll`, function(assert) {
+                                const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive, selectionMode: 'single' }, [
+                                    { id: 1, text: "item1", parentId: 2, selected: false, expanded, disabled },
+                                    { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
+
+                                wrapper.instance.unselectAll();
+                                wrapper.checkSelectedKeys([]);
+                            });
+                        });
+                    });
                 });
             });
-
-            function runSelectItemTest(argumentGetter) {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
-                    { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
-                    { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const wrapper = new TreeViewTestWrapper(options);
-
-                const $parent = wrapper.getElement().find('[aria-level="1"]');
-
-                wrapper.instance.selectItem(argumentGetter($parent));
-                wrapper.checkSelectedNodes([0, 1]);
-                wrapper.instance.dispose();
-            }
-
-            QUnit.test(`selectItem($node)`, function() {
-                runSelectItemTest($parent => $parent);
-            });
-            QUnit.test(`selectItem(DOMElement)`, function() {
-                runSelectItemTest($parent => $parent.get(0));
-            });
-            QUnit.test(`selectItem(key)`, function() {
-                runSelectItemTest(_ => 1);
-            });
-
-            QUnit.test(`selectAll`, function(assert) {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
-                    { id: 1, text: "item1", parentId: 2, selected: false, expanded: true },
-                    { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: true }]);
-                const wrapper = new TreeViewTestWrapper(options);
-
-                wrapper.instance.selectAll();
-                wrapper.checkSelectedNodes([0, 1]);
-                wrapper.instance.dispose();
-            });
-
-            function runUnselectItemTest(argumentGetter) {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
-                    { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
-                    { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const wrapper = new TreeViewTestWrapper(options);
-
-                const $parent = wrapper.getElement().find('[aria-level="1"]');
-
-                wrapper.instance.unselectItem(argumentGetter($parent));
-                wrapper.checkSelectedNodes([]);
-                wrapper.instance.dispose();
-            }
-
-            QUnit.test(`unselectItem($node)`, function() {
-                runUnselectItemTest($parent => $parent);
-            });
-            QUnit.test(`unselectItem(DOMElement)`, function() {
-                runUnselectItemTest($parent => $parent.get(0));
-            });
-            QUnit.test(`unselectItem(key)`, function() {
-                runUnselectItemTest(_ => 1);
-            });
-
-            QUnit.test(`unselectAll`, function() {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
-                    { id: 1, text: "item1", parentId: 2, selected: true, expanded: true },
-                    { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: true }]);
-                const wrapper = new TreeViewTestWrapper(options);
-
-                wrapper.instance.unselectAll();
-                wrapper.checkSelectedNodes([]);
-                wrapper.instance.dispose();
-            });
         });
-
-        function createOptions(options, items) {
-            const result = $.extend({ dataStructure: "plain", rootValue: 1 }, options);
-            if(result.dataSourceOption === 'createChildren') {
-                const createChildFunction = (parent) => {
-                    return parent == null
-                        ? [ items[1] ]
-                        : items.filter(function(item) { return parent.itemData.id === item.parentId; });
-                };
-                result.createChildren = createChildFunction;
-            } else {
-                result[options.dataSourceOption] = items;
-            }
-            return result;
-        }
     });
 });
+

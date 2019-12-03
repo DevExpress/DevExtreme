@@ -19,6 +19,7 @@ const { assert } = QUnit;
 
 class TreeViewTestWrapper {
     constructor(options) {
+        this.options = options;
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option("showCheckBoxesMode") === "normal";
     }
@@ -70,6 +71,11 @@ class TreeViewTestWrapper {
     checkSelected(expectedSelectedIndexes, items) {
         this.checkSelectedItems(expectedSelectedIndexes, items);
         this.checkSelectedNodes(expectedSelectedIndexes);
+    }
+
+    checkSelectedKeys(expectedSelectedKeys) {
+        const actualSelectedKeys = this.instance._dataAdapter.getSelectedNodesKeys();
+        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort());
     }
 
     convertTreeToFlatList(items) {
