@@ -1072,41 +1072,21 @@ QUnit.module("api", moduleConfig, () => {
     QUnit.test("user onKeyPress event subscriptions fires a deprecation warning", function(assert) {
         this.instance.dispose();
 
-        const originalLogger = consoleUtils.logger;
-        const log = [];
+        sinon.spy(consoleUtils.logger, "warn");
+        let textBox = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
+        textBox.dispose();
 
-        try {
-            consoleUtils.logger = {
-                warn: function(message) {
-                    log.push({ "warn": message });
-                },
+        textBox = $("#texteditor").dxTextEditor({
+            onKeyPress: noop
+        }).dxTextEditor("instance");
 
-                error: function(message) {
-                    log.push({ "error": message });
-                },
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 1, "Warning is raised");
+        assert.strictEqual(consoleUtils.logger.warn.getCall(0).args[0].substring(0, 5), "W0001", "Warning is correct");
 
-                log: function(message) {
-                    log.push({ "log": message });
-                }
-            };
-
-            let textBox = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
-            assert.strictEqual(log.length, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
-            textBox.dispose();
-
-            textBox = $("#texteditor").dxTextEditor({
-                onKeyPress: noop
-            }).dxTextEditor("instance");
-
-            assert.strictEqual(log.length, 1, "Warning is raised");
-            assert.strictEqual(log[0].warn.substring(0, 5), "W0001", "Warning is correct");
-
-            textBox.option("onKeyPress", null);
-            textBox.option("onKeyPress", noop);
-            assert.strictEqual(log.length, 3, "Warning is raised if set a new handler");
-        } finally {
-            consoleUtils.logger = originalLogger;
-        }
+        textBox.option("onKeyPress", null);
+        textBox.option("onKeyPress", noop);
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 3, "Warning is raised if set a new handler");
     });
 });
 
