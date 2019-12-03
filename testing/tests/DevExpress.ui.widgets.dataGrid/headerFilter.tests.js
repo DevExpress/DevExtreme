@@ -1765,10 +1765,13 @@ QUnit.test("HeaderFilter should be without search bar when column allowSearch is
     assert.notOk(list.option("searchEnabled"), "list without search bar");
 });
 
-QUnit.test("Check select all state after search", function(assert) {
+QUnit.test("Check select all state after filtering", function(assert) {
     // arrange
     var that = this,
         list,
+        $selectAll,
+        selectAll,
+        column,
         testElement = $("#container"),
         $popupContent;
 
@@ -1783,20 +1786,28 @@ QUnit.test("Check select all state after search", function(assert) {
     $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
-    // assert
-    assert.ok(list.$element().find(".dx-list-select-all-checkbox").is(":visible"), "selectAll is visible");
-
     // act
     list.option("searchValue", "3");
+    $selectAll = list.$element().find(".dx-list-select-all-checkbox");
+    $($selectAll).trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
+
+    selectAll = $selectAll.dxCheckBox("instance");
+    column = that.columnsController.getVisibleColumns()[0];
 
     // assert
-    assert.notOk(list.$element().find(".dx-list-select-all-checkbox").is(":visible"), "selectAll is hidden visible");
+    assert.equal(selectAll.option("value"), true, "select all has correct state");
+    assert.deepEqual(column.filterValues, ["test3"], "filterValue is correct");
+    assert.notEqual(column.filterType, "exclude", "filterType is correct");
 });
 
-QUnit.test("Check select all state after search if column dataType is date", function(assert) {
+QUnit.test("Check select all state after filtering if column dataType is date", function(assert) {
     // arrange
     var that = this,
         treeView,
+        $selectAll,
+        selectAll,
+        column,
         testElement = $("#container"),
         $popupContent;
 
@@ -1812,21 +1823,28 @@ QUnit.test("Check select all state after search if column dataType is date", fun
     $popupContent = that.headerFilterView.getPopupContainer().$content();
     treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
 
-    // assert
-    assert.ok(treeView.$element().find(".dx-treeview-select-all-item").is(":visible"), "select all is visible");
-
     // act
     treeView.option("searchValue", "4");
 
+    $selectAll = treeView.$element().find(".dx-treeview-select-all-item");
+    $($selectAll).trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
+
+    selectAll = $selectAll.dxCheckBox("instance");
+    column = that.columnsController.getVisibleColumns()[0];
+
     // assert
-    assert.notOk(treeView.$element().find(".dx-treeview-select-all-item").is(":visible"), "select all is visible");
+    assert.equal(selectAll.option("value"), undefined, "select all has correct state"); // should be true after treeview fix
+    assert.deepEqual(column.filterValues, ["1986/1/4"], "filterValue is correct");
+    assert.notEqual(column.filterType, "exclude", "filterType is correct");
 });
 
-QUnit.test("Check select all state after search and select if column dataType is date and search is by month", function(assert) {
+QUnit.test("Check select all state after filtering if column dataType is date and search is by month", function(assert) {
     // arrange
     var that = this,
         treeView,
         $selectAll,
+        selectAll,
         column,
         testElement = $("#container"),
         $popupContent;
@@ -1846,25 +1864,20 @@ QUnit.test("Check select all state after search and select if column dataType is
     // act
     treeView.option("searchValue", "March");
 
-    $(treeView.$element()).find(".dx-treeview-node").eq(0).children(".dx-checkbox").trigger("dxclick");
-
-    // assert
-    assert.notOk(treeView.$element().find(".dx-treeview-select-all-item").is(":visible"), "selectAll is not visible");
-
-    // act
-    treeView.option("searchValue", "");
     $selectAll = treeView.$element().find(".dx-treeview-select-all-item");
+    $($selectAll).trigger("dxclick");
     $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
+
+    selectAll = $selectAll.dxCheckBox("instance");
     column = that.columnsController.getVisibleColumns()[0];
 
     // assert
-    assert.ok(treeView.$element().find(".dx-treeview-select-all-item").is(":visible"), "selectAll is visible");
-    assert.equal($selectAll.dxCheckBox("instance").option("value"), undefined, "select all has correct state"); // should be true after treeview fix
+    assert.equal(selectAll.option("value"), undefined, "select all has correct state"); // should be true after treeview fix
     assert.deepEqual(column.filterValues, ["1986/3"], "filterValue is correct");
     assert.notEqual(column.filterType, "exclude", "filterType is correct");
 });
 
-QUnit.test("Check search in column lookup with simple types", function(assert) {
+QUnit.test("Check filtering in column lookup with simple types", function(assert) {
     // arrange
     var that = this,
         list,
@@ -1885,16 +1898,12 @@ QUnit.test("Check search in column lookup with simple types", function(assert) {
     $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
-    // assert
-    assert.equal(list.option("selectionMode"), "all", "selectAll item is visible");
-
     // act
     list.option("searchValue", "t2");
     listItems = list.$element().find(".dx-list-item");
 
     // assert
     assert.equal(list.option("searchExpr"), "this", "searchExpr is correct");
-    assert.equal(list.option("selectionMode"), "multiple", "selectAll item is hidden");
     assert.equal(listItems.length, 1, "list item's count");
     assert.equal(listItems.text(), "test2", "correct item's text");
 });
