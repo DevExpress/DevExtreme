@@ -538,13 +538,13 @@ var Popover = Popup.inherit({
         }
     },
 
-    _renderShadingPosition: function() {
+    _renderWrapperPosition: function() {
         if(this.option("shading")) {
             this._$wrapper.css({ top: 0, left: 0 });
         }
     },
 
-    _renderShadingDimensions: function() {
+    _renderWrapperDimensions: function() {
         if(this.option("shading")) {
             this._$wrapper.css({
                 width: "100%",
