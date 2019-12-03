@@ -1068,16 +1068,19 @@ QUnit.module("api", moduleConfig, () => {
         assert.equal(keyDownSpy.callCount, 2, "keyDown event handled twice");
         assert.equal(keyUpSpy.callCount, 2, "keyUp event handled twice");
     });
+});
+
+QUnit.module("events", moduleConfig, () => {
+    QUnit.test("widget has no warnings if it is no user onKeyPress event subscriptions", function(assert) {
+        sinon.spy(consoleUtils.logger, "warn");
+        $("#texteditor").dxTextEditor({});
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
+        consoleUtils.logger.warn.restore();
+    });
 
     QUnit.test("user onKeyPress event subscriptions fires a deprecation warning", function(assert) {
-        this.instance.dispose();
-
         sinon.spy(consoleUtils.logger, "warn");
-        let textBox = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
-        textBox.dispose();
-
-        textBox = $("#texteditor").dxTextEditor({
+        const textBox = $("#texteditor").dxTextEditor({
             onKeyPress: noop
         }).dxTextEditor("instance");
 
@@ -1087,6 +1090,7 @@ QUnit.module("api", moduleConfig, () => {
         textBox.option("onKeyPress", null);
         textBox.option("onKeyPress", noop);
         assert.strictEqual(consoleUtils.logger.warn.callCount, 3, "Warning is raised if set a new handler");
+        consoleUtils.logger.warn.restore();
     });
 });
 
