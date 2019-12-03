@@ -2249,8 +2249,6 @@ testModule("container", moduleConfig, () => {
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
 
             assert.deepEqual(wrapperRect, targetRect, "wrapper position and size are correct");
-            assert.strictEqual(wrapperRect.left, -10000, "wrapper left is ok");
-            assert.strictEqual(wrapperRect.top, -9979, "wrapper top is ok");
         });
     });
 
