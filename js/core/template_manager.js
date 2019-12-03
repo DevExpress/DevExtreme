@@ -203,7 +203,6 @@ export default class TemplateManager {
         if(isFunction(templateSource)) {
             return new FunctionTemplate((options) => {
                 const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
-                // const templateSourceResult = templateSource(TemplateManager._getNormalizedTemplateArgs(options)); // accordion tests
 
                 if(!isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
