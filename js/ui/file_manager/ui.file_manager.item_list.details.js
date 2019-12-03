@@ -13,7 +13,7 @@ const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
 const FILE_MANAGER_DETAILS_ITEM_NAME_CLASS = "dx-filemanager-details-item-name";
 const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = "dx-filemanager-details-item-name-wrapper";
-const FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS = "dx-filemanager-details-item_is_directory";
+const FILE_MANAGER_DETAILS_ITEM_IS_DIRECTORY_CLASS = "dx-filemanager-details-item-is-directory";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
 const PREDEFINED_COLUMN_NAMES = [ "name", "isDirectory", "size", "thumbnail", "dateModified", "isParentFolder" ];
 
