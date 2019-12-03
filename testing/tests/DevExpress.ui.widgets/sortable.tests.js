@@ -177,7 +177,7 @@ QUnit.test("Default drag template", function(assert) {
     assert.strictEqual($draggingElement.children().get(0).style.height, "30px", "height style exists in dragging item");
 });
 
-QUnit.test("While dragging cursor should be 'grab'", function(assert) {
+QUnit.test("While dragging cursor should be 'grabbing'", function(assert) {
     // arrange
     this.createSortable({});
 
@@ -185,7 +185,7 @@ QUnit.test("While dragging cursor should be 'grab'", function(assert) {
     pointerMock(this.$element.children().eq(0)).start().down().move(10, 0);
 
     // assert
-    assert.equal($(".dx-sortable-dragging").css("cursor"), "grab", "cursor is grab");
+    assert.equal($(".dx-sortable-dragging").css("cursor"), "grabbing", "cursor is grabbing");
 });
 
 QUnit.module("allowReordering", moduleConfig);

@@ -656,7 +656,7 @@ QUnit.test("Command drag cell should have cursor 'move' for data rows and 'defau
     assert.equal($($rowsView.getRowElement(1)).find("td").eq(2).css("cursor"), "default", "data cell in data row has default cursor");
 });
 
-QUnit.test("Command drag cell should have cursor 'grab' for dragging row", function(assert) {
+QUnit.test("Command drag cell should have cursor 'grabbing' for dragging row", function(assert) {
     // arrange
     let rowsView = this.createRowsView();
     rowsView.render($("#container"));
@@ -668,5 +668,5 @@ QUnit.test("Command drag cell should have cursor 'grab' for dragging row", funct
 
     // assert
     let $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), "grab", "cursor is grab");
+    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), "grabbing", "cursor is grabbing");
 });
