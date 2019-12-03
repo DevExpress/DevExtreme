@@ -3,7 +3,7 @@ import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 import Overlay from "../overlay";
-import typeUtils from "../../core/utils/type";
+import { ensureDefined } from "../../core/utils/common";
 import { extend } from "../../core/utils/extend";
 import { camelize } from "../../core/utils/inflector";
 
@@ -44,11 +44,8 @@ class OverlapStrategy extends DrawerStrategy {
 
     _fixOverlayPosition($overlayContent) {
         // NOTE: overlay should be positioned in extended wrapper
-        if(typeUtils.isDefined(this._initialPosition)) {
-            translator.move($overlayContent, this._initialPosition);
-        } else {
-            translator.move($overlayContent, { left: 0, top: 0 });
-        }
+        const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
+        translator.move($overlayContent, position);
 
         const drawer = this.getDrawerInstance();
         if(drawer.getDrawerPosition() === "right") {
