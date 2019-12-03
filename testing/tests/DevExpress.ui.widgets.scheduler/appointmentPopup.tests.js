@@ -550,6 +550,7 @@ QUnit.test("Popup should contain recurrence editor with right config", function(
 
     this.instance.option("recurrenceEditMode", "series");
     this.instance.option("firstDayOfWeek", 5);
+    this.instance.option("currentDate", new Date(2019, 11, 1));
 
     this.instance.showAppointmentPopup({
         startDate: startDate,
@@ -1239,3 +1240,18 @@ QUnit.test("Popup should not be closed until the valid value is typed", function
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, "the only pending editor is displayed in the form");
 });
 
+QUnit.test("Appointment should have correct recurrence rule on consecutive shows (T835243)", function(assert) {
+    const scheduler = createInstance({
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 25),
+        dataSource: [],
+        height: 580,
+        recurrenceEditMode: "series"
+    });
+    scheduler.instance.showAppointmentPopup({ startDate: new Date(2017, 4, 25), recurrenceRule: "FREQ=DAILY" }, true);
+    scheduler.appointmentPopup.clickCancelButton();
+    scheduler.instance.showAppointmentPopup({ startDate: new Date(2017, 4, 25) }, true);
+
+    assert.equal(scheduler.appointmentForm.getEditor("recurrenceRule").option("value"), "", "Appointment form recurrence rule is correct");
+});
