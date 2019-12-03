@@ -655,3 +655,18 @@ QUnit.test("Command drag cell should have cursor 'move' for data rows and 'defau
     assert.equal($($rowsView.getRowElement(1)).find(".dx-command-drag").eq(0).css("cursor"), "move", "command-drag in data row has move cursor");
     assert.equal($($rowsView.getRowElement(1)).find("td").eq(2).css("cursor"), "default", "data cell in data row has default cursor");
 });
+
+QUnit.test("Command drag cell should have cursor 'grab' for dragging row", function(assert) {
+    // arrange
+    let rowsView = this.createRowsView();
+    rowsView.render($("#container"));
+
+    let $handleElement = $(rowsView.getRowElement(0)).children().first();
+
+    // act
+    pointerMock($handleElement).start().down().move(0, 70);
+
+    // assert
+    let $draggableElement = $("body").children(".dx-sortable-dragging");
+    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), "grab", "cursor is grab");
+});
