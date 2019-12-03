@@ -98,9 +98,9 @@ class SpeedDialItem extends Overlay {
             FAB_ICON_CLASS);
     }
 
-    _renderShading() {
+    _renderWrapper() {
         if(this._options.callOverlayRenderShading) {
-            super._renderShading();
+            super._renderWrapper();
         }
     }
 
