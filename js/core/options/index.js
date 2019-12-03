@@ -18,7 +18,7 @@ export class Options {
             options,
             optionsByReference
         );
-        this._optionManager.onRelevantNamesPrepared((options, name, value) => this._setRelevantNames(options, name, value));
+        this._optionManager.onRelevantNamesPrepared((options, name, value, silent) => this._setRelevantNames(options, name, value, silent));
 
         this._rules = [];
     }
@@ -29,7 +29,7 @@ export class Options {
 
     get _initial() {
         if(!this._initialOptions) {
-            const rulesOptions = this._getByRules(this.silent('defaultOptionsRules'));
+            const rulesOptions = this._getByRules(this.option('defaultOptionsRules'));
 
             this._initialOptions = this._default;
             this._optionManager._setByReference(this._initialOptions, rulesOptions);
@@ -58,9 +58,9 @@ export class Options {
         }
     }
 
-    _setRelevantNames(options, name, value) {
+    _setRelevantNames(options, name, value, silent) {
         if(name) {
-            const normalizedName = this._normalizeName(name);
+            const normalizedName = this._normalizeName(name, silent);
 
             if(normalizedName && normalizedName !== name) {
                 this._setField(options, normalizedName, value);
@@ -96,8 +96,8 @@ export class Options {
         }
     }
 
-    _normalizeName(name) {
-        if(name) {
+    _normalizeName(name, silent) {
+        if(name && !silent) {
             for(let i = 0; i < this._deprecatedNames.length; i++) {
                 if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];

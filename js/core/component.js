@@ -349,14 +349,6 @@ var Component = Class.inherit({
         return result;
     },
 
-    _getOptionByStealth(name) {
-        return this._options.silent(name);
-    },
-
-    _setOptionByStealth(options, value) {
-        this._options.silent(options, value);
-    },
-
     _getEventName(actionName) {
         return actionName.charAt(2).toLowerCase() + actionName.substr(3);
     },
@@ -404,6 +396,14 @@ var Component = Class.inherit({
 
     isOptionDeprecated(name) {
         return this._options.isDeprecated(name);
+    },
+
+    _getOptionByStealth(name) {
+        return this._options.silent(name);
+    },
+
+    _setOptionByStealth(options, value) {
+        this._options.silent(options, value);
     },
 
     _setOptionSilent(name, value) {
