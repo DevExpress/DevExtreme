@@ -4018,77 +4018,6 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     assert.ok(dataGridWrapper.rowsView.isRowVisible(4, 1), "Navigation row is visible");
 });
 
-QUnit.test("Test skipFocusedRowNavigation option using navigateToRow", function(assert) {
-    // arrange
-    var count = 0,
-        data = [
-            { name: "Alex", phone: "111111", room: 6 },
-            { name: "Dan", phone: "2222222", room: 5 },
-            { name: "Ben", phone: "333333", room: 4 },
-            { name: "Sean", phone: "4545454", room: 3 },
-            { name: "Smith", phone: "555555", room: 2 },
-            { name: "Zeb", phone: "6666666", room: 1 }
-        ],
-        dataGrid = $("#dataGrid").dxDataGrid({
-            height: 100,
-            dataSource: data,
-            keyExpr: "name",
-            focusedRowEnabled: true,
-            scrolling: { mode: "virtual" },
-            onOptionChanged: e => {
-                if(e.name === "skipFocusedRowNavigation") {
-                    ++count;
-                    if(count === 1) {
-                        assert.equal(e.value, true, "Need focus row");
-                    } else if(count === 2) {
-                        assert.equal(e.value, false, "No need focus row");
-                    }
-                }
-            }
-        }).dxDataGrid("instance");
-
-    // act
-    dataGrid.navigateToRow("Smith");
-    this.clock.tick();
-
-    // assert
-    assert.equal(count, 2, "skipFocusedRowNavigation invokes count");
-});
-
-QUnit.test("Test skipFocusedRowNavigation option using focusedRowKey", function(assert) {
-    // arrange
-    var count = 0,
-        data = [
-            { name: "Alex", phone: "111111", room: 6 },
-            { name: "Dan", phone: "2222222", room: 5 },
-            { name: "Ben", phone: "333333", room: 4 },
-            { name: "Sean", phone: "4545454", room: 3 },
-            { name: "Smith", phone: "555555", room: 2 },
-            { name: "Zeb", phone: "6666666", room: 1 }
-        ],
-        dataGrid = $("#dataGrid").dxDataGrid({
-            height: 100,
-            dataSource: data,
-            keyExpr: "name",
-            focusedRowEnabled: true,
-            scrolling: { mode: "virtual" },
-            onOptionChanged: e => {
-                if(e.name === "skipFocusedRowNavigation") {
-                    ++count;
-                    // assert
-                    assert.equal(e.value, false, "No need focus row");
-                }
-            }
-        }).dxDataGrid("instance");
-
-    // act
-    dataGrid.option("focusedRowKey", "Smith");
-    this.clock.tick();
-
-    // assert
-    assert.equal(count, 1, "skipFocusedRowNavigation invokes count");
-});
-
 QUnit.test("Test 'autoNavigateToFocusedRow' option if focused row key is not visible", function(assert) {
     // arrange
     var data = [
@@ -4175,8 +4104,8 @@ QUnit.test("Test 'autoNavigateToFocusedRow' option if focused row key is visible
     dataGrid.pageIndex(1);
     this.clock.tick();
     assert.equal(dataGrid.pageIndex(), 1, "Page index");
-    assert.equal(dataGrid.option("focusedRowKey"), "Sean", "focusedRowKey");
-    assert.equal(dataGrid.option("focusedRowIndex"), 1, "focusedRowIndex");
+    assert.equal(dataGrid.option("focusedRowKey"), "Ben", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
 
     // act, assert - sorting
     dataGrid.pageIndex(2);
