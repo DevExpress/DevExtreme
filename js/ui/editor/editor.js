@@ -116,7 +116,7 @@ const Editor = Widget.inherit({
 
             /**
             * @name EditorOptions.validationError
-            * @type object
+            * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
             * @ref
             * @default null
             */
@@ -124,7 +124,7 @@ const Editor = Widget.inherit({
 
             /**
             * @name EditorOptions.validationErrors
-            * @type Array<object>
+            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
             * @default null
             */
             validationErrors: null,
