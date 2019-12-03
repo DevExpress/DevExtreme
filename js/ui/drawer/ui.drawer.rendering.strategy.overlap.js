@@ -3,7 +3,7 @@ import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 import Overlay from "../overlay";
-import typeUtils from "../../core/utils/type";
+import { ensureDefined } from "../../core/utils/common";
 import { extend } from "../../core/utils/extend";
 import { camelize } from "../../core/utils/inflector";
 
@@ -44,17 +44,12 @@ class OverlapStrategy extends DrawerStrategy {
 
     _fixOverlayPosition($overlayContent) {
         // NOTE: overlay should be positioned in extended wrapper
-        const drawer = this.getDrawerInstance();
+        const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
+        translator.move($overlayContent, position);
 
-        if(typeUtils.isDefined(this._initialPosition)) {
-            translator.move($overlayContent, { left: this._initialPosition.left, top: this._initialPosition.top });
-        }
+        const drawer = this.getDrawerInstance();
         if(drawer.getDrawerPosition() === "right") {
             $overlayContent.css("left", "auto");
-
-            if(drawer.option("rtlEnabled")) {
-                translator.move($overlayContent, { left: 0 });
-            }
         }
     }
 
@@ -114,7 +109,7 @@ class OverlapStrategy extends DrawerStrategy {
     slidePositionRendering(config, offset, animate) {
         const drawer = this.getDrawerInstance();
 
-        this._initialPosition = drawer.getOverlay().$content().position();
+        this._initialPosition = drawer.isHorizontalDirection() ? { left: config.panelOffset } : { top: config.panelOffset };
         const position = drawer.getDrawerPosition();
 
         this.setupContent(config.$content, position, config.drawer);
@@ -129,7 +124,6 @@ class OverlapStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-
             if(drawer.isHorizontalDirection()) {
                 translator.move(config.$panel, { left: config.panelOffset });
             } else {
@@ -141,7 +135,7 @@ class OverlapStrategy extends DrawerStrategy {
     expandPositionRendering(config, offset, animate) {
         const drawer = this.getDrawerInstance();
 
-        this._initialPosition = drawer.getOverlay().$content().position();
+        this._initialPosition = { left: 0 };
         const position = drawer.getDrawerPosition();
 
         this.setupContent(config.$content, position);
