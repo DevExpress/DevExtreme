@@ -5744,6 +5744,7 @@ declare module DevExpress.ui {
         onInput?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** @name dxTextEditor.Options.onKeyDown */
         onKeyDown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+        /** @deprecated */
         /** @name dxTextEditor.Options.onKeyPress */
         onKeyPress?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** @name dxTextEditor.Options.onKeyUp */
