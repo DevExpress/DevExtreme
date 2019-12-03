@@ -102,11 +102,11 @@ export const click = {
 
 let index = 0;
 const keyboardProcessors = {};
-const getKeyboardProcessorId = () => `keyboardProcessorId${index++}`;
+const generateListenerId = () => `keyboardProcessorId${index++}`;
 
 export const keyboard = {
     on: (element, focusTarget, handler) => {
-        const listenerId = getKeyboardProcessorId();
+        const listenerId = generateListenerId();
 
         keyboardProcessors[listenerId] = new KeyboardProcessor({ element, focusTarget, handler });
 
