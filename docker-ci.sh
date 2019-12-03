@@ -109,48 +109,13 @@ function run_test {
                     --enable-features=OverlayScrollbar"
             fi
 
-            google-chrome-stable --version
-
+            chrome_command="$chrome_command \"$url\""
             echo "Chrome cmd: $chrome_command"
 
-            $chrome_command $url &>chrome.log &
+            google-chrome-stable --version
 
-            # if [ "$HEADLESS" == "true" ]; then
-            #   google-chrome-stable \
-            #     --no-sandbox \
-            #     --disable-dev-shm-usage \
-            #     --disable-gpu \
-            #     --user-data-dir=/tmp/chrome \
-            #     --headless \
-            #     --remote-debugging-address=0.0.0.0 \
-            #     --remote-debugging-port=9222 \
-            #     $url &>headless-chrome.log &
-            # elif [ "$IOS" == "true" ]; then
-            #     dbus-launch --exit-with-session google-chrome-stable \
-            #         --no-sandbox \
-            #         --disable-dev-shm-usage \
-            #         --disable-gpu \
-            #         --user-data-dir=/tmp/chrome \
-            #         --no-first-run \
-            #         --no-default-browser-check \
-            #         --disable-translate \
-            #         --user-agent="$ios_user_agent" \
-            #         --enable-viewport \
-            #         --touch-events \
-            #         --enable-overlay-scrollbar \
-            #         --enable-features=OverlayScrollbar \
-            #         $url &
-            # else
-            #     dbus-launch --exit-with-session google-chrome-stable \
-            #         --no-sandbox \
-            #         --disable-dev-shm-usage \
-            #         --disable-gpu \
-            #         --user-data-dir=/tmp/chrome \
-            #         --no-first-run \
-            #         --no-default-browser-check \
-            #         --disable-translate \
-            #         $url &
-            # fi
+            eval "$chrome_command" &>chrome.log &
+
         ;;
 
     esac
