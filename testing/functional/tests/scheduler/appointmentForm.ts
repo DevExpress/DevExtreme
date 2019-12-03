@@ -1,8 +1,6 @@
 import { createWidget } from '../../helpers/testHelper';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
-import { Selector } from 'testcafe';
-import { debug } from 'util';
 
 fixture `Appointment popup form`
     .page(url(__dirname, '../container.html'));
@@ -108,10 +106,7 @@ test("Appointment should have correct form data on consecutive shows (T832711)",
         .eql(APPOINTMENT_TEXT)
 
         .click(appointmentPopup.allDayElement)
-
         .click(appointmentPopup.cancelButton)
-        .debug()
-
         .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
 
         .expect(appointmentPopup.endDateElement.value)
