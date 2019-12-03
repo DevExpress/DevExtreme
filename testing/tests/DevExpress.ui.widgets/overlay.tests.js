@@ -77,8 +77,6 @@ QUnit.testStart(function() {
         <div id="overlayWithWrongTemplateName">\
             <div data-options="dxTemplate: { name: \'wrongName\' }">testContent</div>\
         </div>\
-        <div id="containerWithDimensions" style="height:300px; width:200px;">\
-        </div>\
         <div id="widget"></div>\
         \
         <script type="text/html" id="focusableTemplate">\
@@ -839,30 +837,6 @@ testModule("position", moduleConfig, () => {
     });
 
     test("position of overlay is correct when position.of is window and shading is false", function(assert) {
-        const $targetContainer = $("#containerWithDimensions");
-
-        $("#overlay").dxOverlay({
-            visible: true,
-            shading: false,
-            width: "50px",
-            position: {
-                my: "top right",
-                at: "top right",
-                of: $targetContainer
-            },
-            container: $targetContainer,
-            height: "100%"
-        });
-
-        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
-        const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
-        const targetRect = $targetContainer.get(0).getBoundingClientRect();
-
-        assert.equal(wrapperRect.right, targetRect.right, "right is ok");
-        assert.equal(wrapperRect.bottom, targetRect.bottom, "bottom is ok");
-    });
-
-    test("overlay wrapper position is correct when shading is false", function(assert) {
         $("#overlay").dxOverlay({
             visible: true,
             shading: false,
@@ -2251,26 +2225,39 @@ testModule("container", moduleConfig, () => {
         assert.strictEqual($shader.height(), $container.height(), "shader height is correct");
     });
 
-    test("shader should stretch across container when target is container(T821559)", function(assert) {
-        const $container = $("#containerWithDimensions");
+    [true, false].forEach(shading => {
+        test(`wrapper should cover the container when target is container, shading=${shading}(T821559, T835358)`, function(assert) {
+            const $targetContainer = $("#container");
+            $targetContainer.css({
+                height: 300,
+                width: 200,
+                left: 500
+            });
 
-        const $overlay = $("#overlay").dxOverlay({
-            container: $container,
-            shading: true,
-            position: {
-                of: $container
-            }
+            $("#overlay").dxOverlay({
+                shading,
+                container: $targetContainer,
+                visible: true,
+                position: {
+                    my: "top right",
+                    at: "top right",
+                    of: $targetContainer
+                },
+            });
+
+            const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+            const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
+            const targetRect = $targetContainer.get(0).getBoundingClientRect();
+            assert.deepEqual(wrapperRect, targetRect, "wrapper position and size are correct");
         });
-
-        $overlay.dxOverlay("show");
-
-        const $shader = $container.find(toSelector(OVERLAY_SHADER_CLASS));
-        assert.strictEqual($shader.height(), $container.height(), "shader height is correct");
-        assert.strictEqual($shader.width(), $container.width(), "shader width is correct");
     });
 
     test("overlay should render inside of container when target is container(T821559)", function(assert) {
-        const $container = $("#containerWithDimensions");
+        const $container = $("#container");
+        $container.css({
+            height: 300,
+            width: 200
+        });
 
         const $overlay = $("#overlay").dxOverlay({
             container: $container,
