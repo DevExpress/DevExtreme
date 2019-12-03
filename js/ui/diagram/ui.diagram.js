@@ -353,9 +353,9 @@ class Diagram extends Widget {
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
 
-        this._updateShapeTexts();
-        this._updateUnitItems();
-        this._updateFormatUnitsMethod();
+        // this._updateShapeTexts();
+        // this._updateUnitItems();
+        // this._updateFormatUnitsMethod();
 
         if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
             this._updateUnitsState();
