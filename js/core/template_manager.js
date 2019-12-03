@@ -16,7 +16,7 @@ const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
 const TEMPLATE_SELECTOR = '[data-options*="dxTemplate"]';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
-const DEPRECATED_WIDGET_NAMES = ['button', 'tabs', 'dropDownMenu'];
+const DEPRECATED_WIDGET_NAMES = new Set(['button', 'tabs', 'dropDownMenu']);
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {
     let widgetName = model.widget;
     if(!widgetName) return $();
@@ -24,7 +24,7 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
     const widgetElement = $('<div>');
     const widgetOptions = model.options || {};
 
-    if(DEPRECATED_WIDGET_NAMES.some(deprecatedWidgetName => deprecatedWidgetName === widgetName)) {
+    if(DEPRECATED_WIDGET_NAMES.has(widgetName)) {
         const deprecatedName = widgetName;
         widgetName = camelize('dx-' + widgetName);
         log('W0001', 'dxToolbar - "widget" item field', deprecatedName, '16.1', 'Use: ' + widgetName + 'instead');
@@ -47,6 +47,7 @@ export default class TemplateManager {
         this._anonymousTemplateName = anonymousTemplateName || ANONYMOUS_TEMPLATE_NAME;
 
         this._createElement = createElement || defaultCreateElement;
+        this._createTemplateIfNeeded = this._createTemplateIfNeeded.bind(this);
     }
 
     static get defaultOptions() {
@@ -200,30 +201,30 @@ export default class TemplateManager {
     }
 
     getTemplate(templateSource, templates, { isAsyncTemplate, skipTemplates }, context) {
-        if(isFunction(templateSource)) {
-            return new FunctionTemplate((options) => {
-                const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
-
-                if(!isDefined(templateSourceResult)) {
-                    return new EmptyTemplate();
-                }
-
-                let dispose = false;
-                const template = this._acquireTemplate(templateSourceResult, (templateSource) => {
-                    if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
-                        return new FunctionTemplate(() => templateSource);
-                    }
-                    dispose = true;
-                    return this._createTemplate(templateSource);
-                }, templates, isAsyncTemplate, skipTemplates);
-
-                const result = template.render(options);
-                dispose && template.dispose && template.dispose();
-                return result;
-            });
+        if(!isFunction(templateSource)) {
+            return this._acquireTemplate(templateSource, this._createTemplateIfNeeded, templates, isAsyncTemplate, skipTemplates);
         }
 
-        return this._acquireTemplate(templateSource, this._createTemplateIfNeeded.bind(this), templates, isAsyncTemplate, skipTemplates);
+        return new FunctionTemplate((options) => {
+            const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
+
+            if(!isDefined(templateSourceResult)) {
+                return new EmptyTemplate();
+            }
+
+            let dispose = false;
+            const template = this._acquireTemplate(templateSourceResult, (templateSource) => {
+                if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
+                    return new FunctionTemplate(() => templateSource);
+                }
+                dispose = true;
+                return this._createTemplate(templateSource);
+            }, templates, isAsyncTemplate, skipTemplates);
+
+            const result = template.render(options);
+            dispose && template.dispose && template.dispose();
+            return result;
+        });
     }
 
     _acquireTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates) {
@@ -251,22 +252,15 @@ export default class TemplateManager {
         return this._acquireStringTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates);
     }
 
-    _renderIntegrationTemplate(templateSource, templates, isAsyncTemplate) {
-        const integrationTemplate = templates[templateSource];
-
-        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
-            return TemplateManager._addOneRenderedCall(integrationTemplate);
-        }
-
-        return integrationTemplate;
-    }
-
-    _acquireStringTemplate(templateSource, createTemplate, getIntegrationTemplate, isAsyncTemplate, skipTemplates) {
+    _acquireStringTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates) {
         const nonIntegrationTemplates = skipTemplates || [];
         let integrationTemplate = null;
 
         if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
-            integrationTemplate = this._renderIntegrationTemplate(templateSource, getIntegrationTemplate, isAsyncTemplate);
+            integrationTemplate = templates[templateSource];
+            if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
+                integrationTemplate = TemplateManager._addOneRenderedCall(integrationTemplate);
+            }
         }
 
         return integrationTemplate
