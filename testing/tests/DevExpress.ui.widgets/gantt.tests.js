@@ -419,7 +419,7 @@ QUnit.module("Actions", moduleConfig, () => {
         splitter.trigger($.Event("dxpointerdown", { pointerType: "mouse" }));
         splitter.trigger($.Event("dxpointermove", {
             pointerType: "mouse",
-            pageX: treeListWrapperLeftOffset + 100,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup", { pointerType: "mouse" }));
 
@@ -430,7 +430,7 @@ QUnit.module("Actions", moduleConfig, () => {
         splitter.trigger($.Event("dxpointerdown", { pointerType: "touch" }));
         splitter.trigger($.Event("dxpointermove", {
             pointerType: "touch",
-            pageX: treeListWrapperLeftOffset + 300,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup", { pointerType: "touch" }));
 
@@ -440,7 +440,7 @@ QUnit.module("Actions", moduleConfig, () => {
 
         splitter.trigger($.Event("dxpointerdown"));
         splitter.trigger($.Event("dxpointermove", {
-            pageX: treeListWrapperLeftOffset - 10,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup"));
 
@@ -450,7 +450,7 @@ QUnit.module("Actions", moduleConfig, () => {
 
         splitter.trigger($.Event("dxpointerdown"));
         splitter.trigger($.Event("dxpointermove", {
-            pageX: splitterContainerWrapperWidth + 10,
+            pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup"));
 

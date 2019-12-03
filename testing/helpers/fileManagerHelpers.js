@@ -263,7 +263,7 @@ export class FileManagerWrapper {
         const contentRect = $drawerContent[0].getBoundingClientRect();
         $splitter.trigger($.Event("dxpointermove", {
             pointerType,
-            pageX: contentRect.right + delta
+            pageX: contentRect.right - parseFloat($splitter.css('margin-left')) + delta
         }));
 
         $splitter.trigger($.Event("dxpointerup", { pointerType }));

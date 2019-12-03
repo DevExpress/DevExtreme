@@ -80,7 +80,7 @@ export default class SplitterControl extends Widget {
 
     _onMouseDownHandler(e) {
         e.preventDefault();
-        this._offsetX = e.pageX - this._$splitterBorder.offset().left <= this._$splitterBorder.get(0).clientWidth
+        this._offsetX = e.pageX - this._$splitterBorder.offset().left <= this._getSplitterBorderWidth()
             ? e.pageX - this._$splitterBorder.offset().left
             : 0;
         this._isSplitterActive = true;
@@ -107,7 +107,7 @@ export default class SplitterControl extends Widget {
     }
 
     _getNewSplitterPositionLeft(e) {
-        let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX - this.getSplitterOffset();
+        let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX;
         newSplitterPositionLeft = Math.max(0 - this.getSplitterOffset(), newSplitterPositionLeft);
         newSplitterPositionLeft = Math.min(this._containerWidth - this.getSplitterOffset() - this._getSplitterWidth(), newSplitterPositionLeft);
         return newSplitterPositionLeft;
@@ -122,11 +122,15 @@ export default class SplitterControl extends Widget {
     }
 
     getSplitterOffset() {
-        return (this._$splitterBorder.get(0).clientWidth - this._getSplitterWidth()) / 2;
+        return (this._getSplitterBorderWidth() - this._getSplitterWidth()) / 2;
     }
 
     _getSplitterWidth() {
         return this._$splitter.get(0).clientWidth;
+    }
+
+    _getSplitterBorderWidth() {
+        return this._$splitterBorder.get(0).clientWidth;
     }
 
     toggleState(isActive) {
