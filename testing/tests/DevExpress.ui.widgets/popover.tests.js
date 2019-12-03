@@ -956,6 +956,33 @@ QUnit.test("popover rendering with position.of and target options", function(ass
     }
 });
 
+QUnit.test("popover shading should cover the parent element with absolute position, not target element", function(assert) {
+    fixtures.simple.create();
+
+    try {
+        var $popover = $("#what"),
+            $target = $("#where");
+
+        $popover.css({
+            width: "111px",
+            height: "333px"
+        });
+
+        new Popover($popover, {
+            target: $target,
+            visible: true,
+            shading: true
+        });
+
+        var $shader = $(".dx-overlay-shader");
+
+        assert.equal($shader.height(), $popover.height(), "shading height is equal to height of parent with absolute position");
+        assert.equal($shader.width(), $popover.width(), "shading width is equal to width of parent with absolute position");
+    } finally {
+        fixtures.simple.drop();
+    }
+});
+
 QUnit.test("popover is placed on the left of target", function(assert) {
     fixtures.simple.create();
     try {
