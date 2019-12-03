@@ -4502,3 +4502,33 @@ QUnit.test("Appointment should be rendered without compact ones if only one per 
     var $appointment = $(this.instance.$element).find(".dx-scheduler-appointment");
     assert.equal($appointment.length, 30, "Scheduler appointments are rendered without compact ones");
 });
+
+QUnit.test("Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 4, 22, 10, 45),
+            endDate: new Date(2017, 4, 23, 10, 30)
+        }, {
+            text: "Appointment 2",
+            startDate: new Date(2017, 4, 22, 15, 15),
+            endDate: new Date(2017, 4, 23, 13, 0)
+        }],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2017, 4, 21),
+        startDayHour: 9,
+        height: 800,
+        width: 500,
+        maxAppointmentsPerCell: 1,
+    });
+
+    let compactAppointments = $(this.instance.element).find(".dx-scheduler-appointment-collector-compact");
+
+    assert.strictEqual(compactAppointments.length, 2, "Appointments are rendered");
+
+    const tailCoords = translator.locate($(compactAppointments[1]));
+
+    assert.strictEqual(tailCoords.top, 0, "Appointment top is correct");
+    assert.roughEqual(tailCoords.left, 240, 2, "Appointment left is correct");
+});
