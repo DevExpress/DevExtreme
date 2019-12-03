@@ -16,11 +16,11 @@ env:
     - TARGET=test CONSTEL=ui.grid
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=viz
-    - TARGET=test IOS=true JQUERY=true CONSTEL=ui
-    - TARGET=test IOS=true JQUERY=true CONSTEL=ui.editors
-    - TARGET=test IOS=true JQUERY=true CONSTEL=ui.grid
-    - TARGET=test IOS=true JQUERY=true CONSTEL=ui.scheduler
-    - TARGET=test IOS=true JQUERY=true CONSTEL=viz
+    - TARGET=test MOBILE_UA=ios9 JQUERY=true CONSTEL=ui
+    - TARGET=test MOBILE_UA=ios9 JQUERY=true CONSTEL=ui.editors
+    - TARGET=test MOBILE_UA=ios9 JQUERY=true CONSTEL=ui.grid
+    - TARGET=test MOBILE_UA=ios9 JQUERY=true CONSTEL=ui.scheduler
+    - TARGET=test MOBILE_UA=ios9 JQUERY=true CONSTEL=viz
     - TARGET=test BROWSER=firefox CONSTEL=export
     - TARGET=test BROWSER=firefox CONSTEL=misc
     - TARGET=test BROWSER=firefox CONSTEL=ui
