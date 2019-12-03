@@ -260,6 +260,11 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                     return new TreeViewTestWrapper(result);
                 }
 
+                function isLazyDataSourceMode(wrapper) {
+                    const options = wrapper.instance.option();
+                    return options.dataSource && options.virtualModeEnabled || options.createChildren;
+                }
+
                 QUnit.module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. Expanded: ${expanded}. Disabled: ${disabled}.`, () => {
                     QUnit.test(`selectionMode: multiple, selected: false -> getSelectedKeys`, function(assert) {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple' }, [
@@ -274,8 +279,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
                             { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? [2]
                             : [1, 2];
 
@@ -295,8 +299,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 1, text: "item1", parentId: 2, selected: true, expanded, disabled },
                             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? []
                             : [1];
 
@@ -318,8 +321,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 2, text: "item1_1", parentId: 3, selected: true, expanded, disabled },
                             { id: 3, text: "item1_1_1", parentId: 1, selected: false, expanded, disabled }]);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? []
                             : [2];
 
@@ -332,8 +334,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 2, text: "item1_1", parentId: 3, selected: false, expanded, disabled },
                             { id: 3, text: "item1_1_1", parentId: 1, selected: false, expanded, disabled }]);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? []
                             : [1];
 
@@ -346,8 +347,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 2, text: "item1_1", parentId: 3, selected: true, expanded, disabled },
                             { id: 3, text: "item1_1_1", parentId: 1, selected: true, expanded, disabled }]);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = expanded && isLazy
+                        const expectedKeys = expanded && isLazyDataSourceMode(wrapper)
                             ? [1]
                             : [3];
 
@@ -361,8 +361,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                                 { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
                             wrapper.instance.selectItem(2);
 
-                            const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                            const expectedKeys = !expanded && isLazy
+                            const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                                 ? [2]
                                 : [1, 2];
                             wrapper.checkSelectedKeys(expectedKeys);
@@ -375,8 +374,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
                         wrapper.instance.selectItem(1);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? []
                             : [1, 2];
                         wrapper.checkSelectedKeys(expectedKeys);
@@ -399,8 +397,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
                         wrapper.instance.selectItem(1);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? []
                             : [1];
                         wrapper.checkSelectedKeys(expectedKeys);
@@ -423,8 +420,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                                     { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
                                 wrapper.instance.selectItem(1);
 
-                                const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                                const expectedKeys = !expanded && isLazy
+                                const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                                     ? []
                                     : [1];
                                 wrapper.checkSelectedKeys(expectedKeys);
@@ -442,8 +438,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             const $root = wrapper.getElement().find('[aria-level="1"]');
                             wrapper.instance.selectItem(config.itemGetter($root));
 
-                            const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                            const expectedKeys = !expanded && isLazy
+                            const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                                 ? [2]
                                 : [1, 2];
                             wrapper.checkSelectedKeys(expectedKeys);
@@ -467,8 +462,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                             { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
                         wrapper.instance.unselectItem(1);
 
-                        const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                        const expectedKeys = !expanded && isLazy
+                        const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                             ? [2]
                             : [];
 
@@ -539,8 +533,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
 
                                 wrapper.instance.selectAll();
 
-                                const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                                const expectedKeys = !expanded && isLazy
+                                const expectedKeys = !expanded && isLazyDataSourceMode(wrapper)
                                     ? [2]
                                     : [1, 2];
 
@@ -553,8 +546,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
                                     { id: 2, text: "item1_1", parentId: 1, selected, expanded, disabled }]);
                                 wrapper.instance.selectAll();
 
-                                const isLazy = (wrapper.options.dataSource && virtualModeEnabled) || (wrapper.options.createChildren);
-                                const expectedKeys = isLazy && expanded
+                                const expectedKeys = expanded && isLazyDataSourceMode(wrapper)
                                     ? [1]
                                     : [2];
 

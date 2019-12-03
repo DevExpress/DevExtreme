@@ -19,7 +19,6 @@ const { assert } = QUnit;
 
 class TreeViewTestWrapper {
     constructor(options) {
-        this.options = options;
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option("showCheckBoxesMode") === "normal";
     }
