@@ -14,14 +14,6 @@ import "../check_box";
 
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const TOOLBAR_CLASS = "dx-diagram-toolbar";
-const WIDGET_COMMANDS = [
-    {
-        command: "options",
-        icon: "preferences",
-        hint: messageLocalization.format("dxDiagram-commandProperties"),
-        text: messageLocalization.format("dxDiagram-commandProperties"),
-    }
-];
 const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
 const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
 
@@ -42,10 +34,21 @@ class DiagramToolbar extends DiagramPanel {
         this._renderToolbar($toolbar);
     }
 
+    _getWidgetCommands() {
+        return this._widgetCommands ||
+            (this._widgetCommands = [
+                {
+                    command: "options",
+                    icon: "preferences",
+                    hint: messageLocalization.format("dxDiagram-commandProperties"),
+                    text: messageLocalization.format("dxDiagram-commandProperties"),
+                }
+            ]);
+    }
     _renderToolbar($toolbar) {
         const commands = DiagramCommands.getToolbarCommands(this.option("commands"));
         var widgetCommandNames = this.option("widgetCommandNames") || [];
-        var widgetCommands = WIDGET_COMMANDS.filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
+        var widgetCommands = this._getWidgetCommands().filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
         let dataSource = this._prepareToolbarItems(commands, "before", this._execDiagramCommand);
         dataSource = dataSource.concat(this._prepareToolbarItems(widgetCommands, "after", this._execWidgetCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, {

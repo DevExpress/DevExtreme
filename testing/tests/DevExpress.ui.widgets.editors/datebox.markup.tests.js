@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    support = require("core/utils/support"),
-    uiDateUtils = require("ui/date_box/ui.date_utils"),
-    DateBox = require("ui/date_box"),
-    dateLocalization = require("localization/date");
+import $ from "jquery";
+import support from "core/utils/support";
+import uiDateUtils from "ui/date_box/ui.date_utils";
+import DateBox from "ui/date_box";
+import dateLocalization from "localization/date";
 
 QUnit.testStart(function() {
     var markup =
@@ -12,8 +12,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
 var TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     DATEBOX_CLASS = "dx-datebox",
@@ -79,6 +79,21 @@ QUnit.test("clear button should not be rendered if pickerType is 'native' (T2093
 
     assert.equal($clearButton.length, 0, "no clear buttons are rendered");
 });
+
+QUnit.test("widget should render without error with 'showClearButton'=true", function(assert) {
+    let isOK = true;
+
+    try {
+        this.createInstance({
+            showClearButton: true
+        });
+    } catch(e) {
+        isOK = false;
+    }
+
+    assert.ok(isOK, "widget rendered without any error");
+});
+
 
 QUnit.module("Rendering input", moduleConfig);
 

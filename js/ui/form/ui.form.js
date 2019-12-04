@@ -12,6 +12,7 @@ import browser from "../../core/utils/browser";
 import { getPublicElement, triggerShownEvent } from "../../core/utils/dom";
 import messageLocalization from "../../localization/message";
 import Widget from "../widget/ui.widget";
+import Editor from "../editor/editor";
 import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from "../../core/utils/window";
 import ValidationEngine from "../validation_engine";
 import LayoutManager from "./ui.form.layout_manager";
@@ -1642,7 +1643,7 @@ const Form = Widget.inherit({
 
     _resetValues: function() {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
-            if(isDefined(itemRunTimeInfo.widgetInstance) && isDefined(itemRunTimeInfo.item) && itemRunTimeInfo.item.itemType !== "button") {
+            if(isDefined(itemRunTimeInfo.widgetInstance) && itemRunTimeInfo.widgetInstance instanceof Editor) {
                 itemRunTimeInfo.widgetInstance.reset();
                 itemRunTimeInfo.widgetInstance.option("isValid", true);
             }

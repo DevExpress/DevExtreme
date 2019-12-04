@@ -166,28 +166,41 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _iterateChildren: function(node, recursive, callback) {
-        var that = this;
-
-        each(node.internalFields.childrenKeys, function(_, key) {
-            var child = that.getNodeByKey(key);
-            typeUtils.isFunction(callback) && callback(child);
-            if(child.internalFields.childrenKeys.length && recursive) {
-                that._iterateChildren(child, recursive, callback);
-            }
-        });
-    },
-
-    _iterateParents: function(node, callback) {
-        if(node.internalFields.parentKey === this.options.rootValue) {
+    _iterateChildren: function(node, recursive, callback, processedKeys) {
+        if(!typeUtils.isFunction(callback)) {
             return;
         }
 
-        var parent = this.options.dataConverter.getParentNode(node);
-        if(parent) {
-            typeUtils.isFunction(callback) && callback(parent);
-            if(parent.internalFields.parentKey !== this.options.rootValue) {
-                this._iterateParents(parent, callback);
+        const that = this;
+        const nodeKey = node.internalFields.key;
+        processedKeys = processedKeys || [];
+        if(processedKeys.indexOf(nodeKey) === -1) {
+            processedKeys.push(nodeKey);
+            each(node.internalFields.childrenKeys, function(_, key) {
+                let child = that.getNodeByKey(key);
+                callback(child);
+                if(child.internalFields.childrenKeys.length && recursive) {
+                    that._iterateChildren(child, recursive, callback, processedKeys);
+                }
+            });
+        }
+    },
+
+    _iterateParents: function(node, callback, processedKeys) {
+        if(node.internalFields.parentKey === this.options.rootValue || !typeUtils.isFunction(callback)) {
+            return;
+        }
+        processedKeys = processedKeys || [];
+        const key = node.internalFields.key;
+
+        if(processedKeys.indexOf(key) === -1) {
+            processedKeys.push(key);
+            let parent = this.options.dataConverter.getParentNode(node);
+            if(parent) {
+                callback(parent);
+                if(parent.internalFields.parentKey !== this.options.rootValue) {
+                    this._iterateParents(parent, callback, processedKeys);
+                }
             }
         }
     },

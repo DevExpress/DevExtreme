@@ -2193,6 +2193,8 @@ declare module DevExpress.ui {
         getRowIndexByKey(key: any | string | number): number;
         /** @name GridBase.getScrollable() */
         getScrollable(): dxScrollable;
+        /** @name GridBase.getVisibleColumnIndex(id) */
+        getVisibleColumnIndex(id: number | string): number;
         /** @name GridBase.hasEditData() */
         hasEditData(): boolean;
         /** @name GridBase.hideColumnChooser() */
@@ -5528,10 +5530,6 @@ declare module DevExpress.ui {
         onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.onContentReady */
         onContentReady?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
-        /** @name dxSpeedDialAction.Options.onDisposing */
-        onDisposing?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
-        /** @name dxSpeedDialAction.Options.onInitialized */
-        onInitialized?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.visible */
         visible?: boolean;
     }
@@ -5746,6 +5744,7 @@ declare module DevExpress.ui {
         onInput?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** @name dxTextEditor.Options.onKeyDown */
         onKeyDown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+        /** @deprecated */
         /** @name dxTextEditor.Options.onKeyPress */
         onKeyPress?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** @name dxTextEditor.Options.onKeyUp */

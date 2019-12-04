@@ -91,7 +91,6 @@ class Gantt extends Widget {
             rightElement: this._$ganttView,
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        this._setInnerElementsWidth();
         this._splitter.option("initialLeftPanelWidth", this.option("taskListWidth"));
     }
     _renderBars() {
@@ -107,6 +106,7 @@ class Gantt extends Widget {
             width: "100%",
             height: this._treeList._$element.get(0).offsetHeight,
             rowHeight: this._getTreeListRowHeight(),
+            headerHeight: this._getTreeListHeaderHeight(),
             tasks: this._tasks,
             dependencies: this._dependencies,
             resources: this._resources,
@@ -144,7 +144,7 @@ class Gantt extends Widget {
         }
     }
     _onTreeListContextMenuPreparing(e) {
-        if(e.row.rowType === "data") {
+        if(e.row && e.row.rowType === "data") {
             this._setTreeListOption("selectedRowKeys", [e.row.data.id]);
             e.items = [];
             this._showPopupMenu({ position: { x: e.event.clientX, y: e.event.clientY } });
@@ -187,7 +187,11 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find(".dx-data-row");
-        return $row.length ? $row.last().get(0).getBoundingClientRect().height : GANTT_DEFAULT_ROW_HEIGHT;
+        const height = $row.length ? $row.last().get(0).getBoundingClientRect().height : GANTT_DEFAULT_ROW_HEIGHT;
+        return height ? height : GANTT_DEFAULT_ROW_HEIGHT;
+    }
+    _getTreeListHeaderHeight() {
+        return this._treeList._$element.find(".dx-treelist-headers").get(0).getBoundingClientRect().height;
     }
 
 
@@ -206,8 +210,6 @@ class Gantt extends Widget {
 
         const isPercentage = typeUtils.isString(leftPanelWidth) && leftPanelWidth.slice(-1) === "%";
         this._$treeList.width(isPercentage ? "100%" : leftPanelWidth);
-
-        this._splitter.setSplitterPositionLeft(leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
         this._setGanttViewOption("width", this._$ganttView.width());

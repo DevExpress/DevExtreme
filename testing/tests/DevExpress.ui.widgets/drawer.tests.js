@@ -456,7 +456,7 @@ QUnit.test("wrapper content should be reversed if position = 'right' and openedS
     assert.ok($content.eq(1).hasClass("dx-drawer-content"));
 });
 
-QUnit.test("drawer panel should be repositioned correctly after dimension changed,left position", function(assert) {
+QUnit.skip("drawer panel should be repositioned correctly after dimension changed,left position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -480,7 +480,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned correctly after dimension changed,top position", function(assert) {
+QUnit.skip("drawer panel should be repositioned correctly after dimension changed,top position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -558,7 +558,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned after dimension changed, right position", function(assert) {
+QUnit.skip("drawer panel should be repositioned after dimension changed, right position", function(assert) {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({

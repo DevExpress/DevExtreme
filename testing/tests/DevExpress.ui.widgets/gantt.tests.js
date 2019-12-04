@@ -102,7 +102,7 @@ QUnit.module("Markup", moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
         const elements = this.$element.find(TASK_WRAPPER_SELECTOR);
-        assert.equal(elements.length, tasks.length);
+        assert.equal(elements.length, tasks.length - 1);
     });
     test("should render dependencies", function(assert) {
         this.createInstance(allSourcesOptions);
@@ -382,7 +382,7 @@ QUnit.module("Actions", moduleConfig, () => {
     test("expand", function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
         const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger("dxclick");
         this.clock.tick();
@@ -391,11 +391,11 @@ QUnit.module("Actions", moduleConfig, () => {
     test("collapse", function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
         const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger("dxclick");
         this.clock.tick();
-        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
     });
 
     test("move splitter", function(assert) {
@@ -419,44 +419,44 @@ QUnit.module("Actions", moduleConfig, () => {
         splitter.trigger($.Event("dxpointerdown", { pointerType: "mouse" }));
         splitter.trigger($.Event("dxpointermove", {
             pointerType: "mouse",
-            pageX: treeListWrapperLeftOffset + 100,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup", { pointerType: "mouse" }));
 
         assert.equal(treeListWrapperElement.width(), 100);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
-        assert.equal(splitterWrapper.css("left"), "100px", "Splitter has been moved by mouse");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), 100, "Splitter has been moved by mouse");
 
         splitter.trigger($.Event("dxpointerdown", { pointerType: "touch" }));
         splitter.trigger($.Event("dxpointermove", {
             pointerType: "touch",
-            pageX: treeListWrapperLeftOffset + 300,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup", { pointerType: "touch" }));
 
         assert.equal(treeListWrapperElement.width(), 300);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
-        assert.equal(splitterWrapper.css("left"), "300px", "Splitter has been moved by touch");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), 300, "Splitter has been moved by touch");
 
         splitter.trigger($.Event("dxpointerdown"));
         splitter.trigger($.Event("dxpointermove", {
-            pageX: treeListWrapperLeftOffset - 10,
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup"));
 
         assert.equal(treeListWrapperElement.width(), 0);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth);
-        assert.equal(splitterWrapper.css("left"), "0px", "Splitter has not cross the left side");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), 0, "Splitter has not cross the left side");
 
         splitter.trigger($.Event("dxpointerdown"));
         splitter.trigger($.Event("dxpointermove", {
-            pageX: splitterContainerWrapperWidth + 10,
+            pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event("dxpointerup"));
 
         assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
         assert.equal(ganttView.width(), splitter.width());
-        assert.equal(splitterWrapper.css("left"), `${splitterContainerWrapperWidth - splitter.width()}px`, "Splitter has not cross the right side");
+        assert.equal(parseFloat(splitterWrapper.css("left")) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), "Splitter has not cross the right side");
     });
 });
 

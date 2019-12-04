@@ -263,6 +263,19 @@ QUnit.test("events rising on second initialize not shared dataSource", function(
     assert.strictEqual(changedCount, 1, 'changed called');
 });
 
+QUnit.test("dataSource should be disposed after calling dispose method", function(assert) {
+    var dataSource = createDataSource([]);
+
+    this.dataController.setDataSource(dataSource);
+
+    // act
+    this.dataController.dispose();
+
+    // assert
+    assert.ok(dataSource._disposed, 'dataSource is disposed');
+    assert.strictEqual(this.dataController._dataSource, null, 'dataSourceAdapter is removed');
+});
+
 // T697860
 QUnit.test("loading should be rised once on change dataSource and grouping", function(assert) {
     var loadingSpy = sinon.spy();

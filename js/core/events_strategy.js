@@ -7,7 +7,7 @@ export class EventsStrategy {
         this._events = {};
         this._owner = owner;
     }
-    static setEventsStrategy(owner, strategy) {
+    static create(owner, strategy) {
         if(strategy) {
             return isFunction(strategy) ? strategy(owner) : strategy;
         } else {

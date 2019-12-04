@@ -1401,6 +1401,10 @@ module.exports = {
                 _disposeDataSource: function() {
                     this.setDataSource(null);
                 },
+                dispose: function() {
+                    this._disposeDataSource();
+                    this.callBase.apply(this, arguments);
+                },
 
                 /**
                 * @name GridBaseMethods.repaintRows

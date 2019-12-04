@@ -339,12 +339,34 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _removeStubs: function(text, excludeComma) {
-        var format = this._getFormatForSign(text),
-            thousandsSeparator = number.getThousandsSeparator(),
-            stubs = format.replace(/[#0.,]/g, ""),
-            regExp = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
+        var format = this._getFormatForSign(text);
+        var thousandsSeparator = number.getThousandsSeparator();
+        var stubs = this._getStubs(format);
+        var result = text;
 
-        return text.replace(regExp, "");
+        if(stubs.length) {
+            var prefixStubs = stubs[0];
+            var postfixRegex = new RegExp("(" + escapeRegExp(stubs[1] || "") + ")$", "g");
+            var decoratorsRegex = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator)) + "]", "g");
+
+            result = result
+                .replace(prefixStubs, "")
+                .replace(postfixRegex, "")
+                .replace(decoratorsRegex, "");
+        }
+
+        return result;
+    },
+
+    _getStubs: function(format) {
+        var regExpResult = /[^']([#0.,]+)/g.exec(format);
+        var pattern = regExpResult && regExpResult[0].trim();
+
+        return format
+            .split(pattern)
+            .map(function(stub) {
+                return stub.replace(/'/g, "");
+            });
     },
 
     _truncateToPrecision: function(value, maxPrecision) {
@@ -364,9 +386,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var editedText = this._replaceSelectedText(text, selection, char),
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
-            parsed = this._parse(editedText, format),
+            parsedValue = this._getParsedValue(editedText, format),
             maxPrecision = this._getPrecisionLimits(format, editedText).max,
-            isValueChanged = parsed !== this._parsedValue,
+            isValueChanged = parsedValue !== this._parsedValue,
             decimalSeparator = number.getDecimalSeparator();
 
         var isDecimalPointRestricted = char === decimalSeparator && maxPrecision === 0,
@@ -377,17 +399,26 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         if(this._removeStubs(editedText) === "") {
-            parsed = this._parsedValue * 0;
+            parsedValue = this._parsedValue * 0;
         }
 
-        if(isNaN(parsed)) {
+        if(isNaN(parsedValue)) {
             return undefined;
         }
 
-        var value = parsed === null ? this._parsedValue : parsed;
-        parsed = this._truncateToPrecision(value, maxPrecision);
+        var value = parsedValue === null ? this._parsedValue : parsedValue;
+        parsedValue = this._truncateToPrecision(value, maxPrecision);
 
-        return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
+        return this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
+    },
+
+    _getParsedValue: function(text, format) {
+        var sign = number.getSign(text, format);
+        var textWithoutStubs = this._removeStubs(text, true);
+        var parsedValue = this._parse(textWithoutStubs, format);
+        var parsedValueWithSign = parsedValue ? sign * parsedValue : parsedValue;
+
+        return parsedValueWithSign;
     },
 
     _isValueIncomplete: function(text) {
