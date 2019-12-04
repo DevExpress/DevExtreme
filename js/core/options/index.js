@@ -29,7 +29,7 @@ export class Options {
 
     get _initial() {
         if(!this._initialOptions) {
-            const rulesOptions = this._getByRules(this.option('defaultOptionsRules'));
+            const rulesOptions = this._getByRules(this.silent('defaultOptionsRules'));
 
             this._initialOptions = this._default;
             this._optionManager._setByReference(this._initialOptions, rulesOptions);

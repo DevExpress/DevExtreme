@@ -136,7 +136,7 @@ class SpeedDialAction extends Widget {
         }
     }
     _dispose() {
-        disposeAction(this.option("id"));
+        disposeAction(this._getOptionByStealth("id"));
         super._dispose();
     }
 }

@@ -293,7 +293,7 @@ var dxBarGauge = dxBaseGauge.inherit({
 
     _buildNodes() {
         const that = this;
-        const options = that.option();
+        const options = that._getOptionByStealth();
 
         that._palette = that._themeManager.createPalette(options.palette, {
             useHighlight: true,
@@ -394,7 +394,7 @@ var dxBarGauge = dxBaseGauge.inherit({
     _getLegendData() {
         var that = this,
             formatOptions = {},
-            options = that.option(),
+            options = that._getOptionByStealth(),
             labelFormatOptions = (options.label || {}).format,
             legendFormatOptions = (options.legend || {}).itemTextFormat;
 

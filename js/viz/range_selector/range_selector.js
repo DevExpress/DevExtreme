@@ -621,7 +621,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
             trackersGroup: trackersGroup,
             updateSelectedRange: function(range, lastSelectedRange, e) {
                 if(!that._rangeOption) {
-                    that.option(VALUE, convertVisualRangeObject(range, isPlainObject(that.option(VALUE))));
+                    that.option(VALUE, convertVisualRangeObject(range, isPlainObject(that._getOptionByStealth(VALUE))));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
@@ -671,7 +671,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _setValueByDataSource() {
         const that = this;
-        const options = that.option();
+        const options = that._getOptionByStealth();
         const axis = that._axis;
 
         if(options.dataSource) {
@@ -710,7 +710,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
     },
 
     _change_DATA_SOURCE: function() {
-        if(this.option('dataSource')) {
+        if(this._getOptionByStealth('dataSource')) {
             this._updateDataSource();
         }
     },
@@ -723,7 +723,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _change_SLIDER_SELECTION: function() {
         var that = this,
-            value = that.option(VALUE);
+            value = that._getOptionByStealth(VALUE);
 
         that._slidersController.setSelectedRange(value && parseValue(value));
     },
@@ -748,7 +748,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _applyChanges: function() {
         var that = this,
-            value = that.option(VALUE);
+            value = that._getOptionByStealth(VALUE);
 
         if(that._changes.has("VALUE") && value) {
             that._rangeOption = value;
