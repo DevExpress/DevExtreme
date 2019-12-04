@@ -32,9 +32,9 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     }
 
     _onShowing() {
-        this.tooltip.option('height', 'auto');
+        this._tooltip.option('height', 'auto');
         const height = this._list.$element().outerHeight();
-        this.tooltip.option('height', height > MAX_OVERLAY_HEIGHT ? MAX_OVERLAY_HEIGHT : 'auto');
+        this._tooltip.option('height', height > MAX_OVERLAY_HEIGHT ? MAX_OVERLAY_HEIGHT : 'auto');
     }
 
     _createTooltip(target, dataList) {

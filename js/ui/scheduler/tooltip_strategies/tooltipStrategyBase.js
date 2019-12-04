@@ -15,10 +15,15 @@ const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item',
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
 
 export class TooltipStrategyBase {
-    constructor(scheduler) {
+    constructor(scheduler, options) {
         this.scheduler = scheduler;
-        this.tooltip = null;
+        this._tooltip = null;
         this._clickEvent = null;
+        this._options = options;
+    }
+
+    update(options) {
+        this._options = options;
     }
 
     show(target, dataList, clickEvent, drag) {
@@ -31,14 +36,14 @@ export class TooltipStrategyBase {
     }
 
     _showCore(target, dataList) {
-        if(!this.tooltip) {
-            this.tooltip = this._createTooltip(target, dataList);
+        if(!this._tooltip) {
+            this._tooltip = this._createTooltip(target, dataList);
         } else {
-            this._shouldUseTarget() && this.tooltip.option('target', target);
+            this._shouldUseTarget() && this._tooltip.option('target', target);
             this._list.option('dataSource', dataList);
         }
 
-        this.tooltip.option('visible', true);
+        this._tooltip.option('visible', true);
     }
 
     _getContentTemplate(dataList) {
@@ -57,8 +62,8 @@ export class TooltipStrategyBase {
     }
 
     hide() {
-        if(this.tooltip) {
-            this.tooltip.option('visible', false);
+        if(this._tooltip) {
+            this._tooltip.option('visible', false);
         }
     }
 
@@ -79,16 +84,18 @@ export class TooltipStrategyBase {
     _createListOption(dataList) {
         return {
             dataSource: dataList,
-            onContentReady: this._drag,
+            onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) =>
-                this._renderTemplate(this.tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
+                this._renderTemplate(this._tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
 
         };
     }
 
+    _onListRender() {}
+
     _createTooltipElement(wrapperClass) {
-        return $("<div>").appendTo(this.scheduler.$element()).addClass(wrapperClass);
+        return $('<div>').appendTo(this.scheduler.$element()).addClass(wrapperClass);
     }
 
     _createList(listElement, dataList) {

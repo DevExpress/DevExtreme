@@ -13,35 +13,17 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _showCore(target, dataList) {
         super._showCore(target, dataList);
-        this.tooltip.option('position', this._getTooltipPosition(dataList));
+        this._tooltip.option('position', {
+            my: 'bottom',
+            at: 'top',
+            collision: 'fit flipfit',
+        });
     }
 
     _onShown() {
         super._onShown();
         this._list.focus();
         this._list.option('focusedElement', null);
-    }
-
-    _getTooltipPosition(dataList) {
-        return {
-            my: 'bottom',
-            at: 'top',
-            of: this.target,
-            collision: 'fit flipfit',
-            boundary: this._getBoundary(dataList),
-            offset: this.scheduler.option('_appointmentTooltipOffset')
-        };
-    }
-
-    _getBoundary(dataList) {
-        return this._isAppointmentInAllDayPanel(dataList[0].data) ? this.scheduler.$element() : this.scheduler.getWorkSpaceScrollableContainer();
-    }
-
-    _isAppointmentInAllDayPanel(appointmentData) {
-        const workSpace = this.scheduler._workSpace,
-            itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
-
-        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
     }
 
     _createListOption(target, dataList) {
@@ -52,18 +34,22 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return result;
     }
 
-    _createTooltip(target, dataList) {
-        this.$tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
+    _createTooltip(target, dataList, drag) {
+        var tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
-        return this.scheduler._createComponent(this.$tooltip, Tooltip, {
+        return this.scheduler._createComponent(tooltip, Tooltip, {
             target: target,
             onShowing: this._onTooltipShowing.bind(this),
             closeOnTargetScroll: () => this._skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
             rtlEnabled: this.scheduler.option('rtlEnabled'),
             onShown: this._onShown.bind(this),
-            contentTemplate: this._getContentTemplate(dataList)
+            contentTemplate: this._getContentTemplate(dataList, drag)
         });
+    }
+
+    _onListRender(e) {
+        return this._drag && this._drag(e);
     }
 
     dispose() {
