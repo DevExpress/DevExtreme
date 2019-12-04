@@ -900,7 +900,12 @@ var Lookup = DropDownList.inherit({
         return this.option("showCancelButton") ? {
             shortcut: "cancel",
             onClick: this._cancelButtonHandler.bind(this),
-            options: { text: this.option("cancelButtonText") }
+            options: {
+                onInitialized: function(e) {
+                    e.component.registerKeyHandler("escape", this.close.bind(this));
+                }.bind(this),
+                text: this.option("cancelButtonText")
+            }
         } : null;
     },
 
@@ -947,29 +952,23 @@ var Lookup = DropDownList.inherit({
     _renderPopupContent: function() {
         this.callBase();
         this._renderSearch();
-
-        this._attachSearchChildProcessor();
     },
 
-    _attachSearchChildProcessor: function() {
-        if(this.option("searchEnabled") && this._searchBox) {
-            this._listKeyboardProcessor = this._searchBox._keyboardProcessor.attachChildProcessor();
-            this._setListOption("_keyboardProcessor", this._listKeyboardProcessor);
-        } else {
-            this._setListOption("_keyboardProcessor", undefined);
-        }
+    _attachSearchChildProcessor: function(searchComponent) {
+        this._listKeyboardProcessor = this._listKeyboardProcessor || searchComponent._keyboardProcessor.attachChildProcessor();
+        this._setListOption("_keyboardProcessor", this._listKeyboardProcessor);
+    },
+
+    _detachSearchChildProcessor: function() {
+        this._setListOption("_keyboardProcessor", null);
     },
 
     _renderSearch: function() {
-        this._$searchWrapper && this._$searchWrapper.remove();
-        delete this._$searchWrapper;
+        var isSearchEnabled = this.option("searchEnabled");
 
-        this._$searchBox && this._$searchBox.remove();
-        delete this._$searchBox;
+        this._toggleSearchClass(isSearchEnabled);
 
-        delete this._searchBox;
-
-        if(this.option("searchEnabled")) {
+        if(isSearchEnabled) {
             var $searchWrapper = this._$searchWrapper = $("<div>").addClass(LOOKUP_SEARCH_WRAPPER_CLASS);
 
             var $searchBox = this._$searchBox = $("<div>").addClass(LOOKUP_SEARCH_CLASS)
@@ -979,6 +978,11 @@ var Lookup = DropDownList.inherit({
                 searchMode = currentDevice.android && currentDevice.version[0] >= 5 ? "text" : "search";
 
             this._searchBox = this._createComponent($searchBox, TextBox, {
+                onDisposing: function() {
+                    this._detachSearchChildProcessor();
+                }.bind(this),
+                onFocusIn: this._searchFocusHandler.bind(this),
+                onFocusOut: this._searchBlurHandler.bind(this),
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option("valueChangeEvent"),
@@ -988,10 +992,26 @@ var Lookup = DropDownList.inherit({
             this._registerSearchKeyHandlers();
 
             $searchWrapper.insertBefore(this._$list);
-        }
 
-        this._renderSearchVisibility();
-        this._setSearchPlaceholder();
+            this._setSearchPlaceholder();
+        }
+    },
+
+    _searchFocusHandler: function(e) {
+        this._attachSearchChildProcessor(e.component);
+    },
+
+    _searchBlurHandler: function() {
+        this._detachSearchChildProcessor();
+    },
+
+    _removeSearch: function() {
+        this._$searchWrapper && this._$searchWrapper.remove();
+        delete this._$searchWrapper;
+
+        this._$searchBox && this._$searchBox.remove();
+        delete this._$searchBox;
+        delete this._searchBox;
     },
 
     _selectListItemHandler: function(e) {
@@ -1013,9 +1033,9 @@ var Lookup = DropDownList.inherit({
         this._searchBox.registerKeyHandler("home", commonUtils.noop);
     },
 
-    _renderSearchVisibility: function() {
+    _toggleSearchClass: function(isSearchEnabled) {
         if(this._popup) {
-            this._popup._wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, this.option("searchEnabled"));
+            this._popup._wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
         }
     },
 
@@ -1061,17 +1081,12 @@ var Lookup = DropDownList.inherit({
             pageLoadMode: this.option("pageLoadMode"),
             nextButtonText: this.option("nextButtonText"),
             _keyboardProcessor: this._listKeyboardProcessor,
-            onFocusIn: this._onFocusInHandler.bind(this),
             onSelectionChanged: this._getSelectionChangedHandler()
         });
     },
 
     _getSelectionChangedHandler: function() {
         return this.option("showSelectionControls") ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
-    },
-
-    _onFocusInHandler: function() {
-        this._setListOption("_keyboardProcessor", undefined);
     },
 
     _listContentReadyHandler: function() {
@@ -1161,8 +1176,10 @@ var Lookup = DropDownList.inherit({
                 this._renderField();
                 break;
             case "searchEnabled":
-                this._popup && this._renderSearch();
-                this._attachSearchChildProcessor();
+                if(this._popup) {
+                    this._removeSearch();
+                    this._renderSearch();
+                }
                 break;
             case "searchPlaceholder":
                 this._setSearchPlaceholder();

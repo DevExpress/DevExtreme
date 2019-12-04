@@ -9,6 +9,7 @@ import dataQuery from "../../data/query";
 
 var SEARCH_PANEL_CLASS = "search-panel",
     SEARCH_TEXT_CLASS = "search-text",
+    HEADER_PANEL_CLASS = "header-panel",
     FILTERING_TIMEOUT = 700;
 
 
@@ -224,9 +225,10 @@ module.exports = {
                     },
 
                     getSearchTextEditor: function() {
-                        var $element = this.element(),
-                            $searchPanel = $element.find("." + this.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
-                                return $(this).closest(".dx-datagrid-header-panel").is($element);
+                        var that = this,
+                            $element = that.element(),
+                            $searchPanel = $element.find("." + that.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
+                                return $(this).closest("." + that.addWidgetPrefix(HEADER_PANEL_CLASS)).is($element);
                             });
 
                         if($searchPanel.length) {

@@ -33,8 +33,8 @@ class GanttContextMenuBar { // IBar
             { text: "Add",
                 commandId: commandIds.addTask,
                 items: [
-                    { text: "Task", commandId: commandIds.createTask },
-                    { text: "Subtask", commandId: commandIds.createSubTask }
+                    { text: "New Task", commandId: commandIds.createTask },
+                    { text: "New Subtask", commandId: commandIds.createSubTask }
                 ]
             },
             { text: "Task Details...", commandId: commandIds.showTasksDialog },

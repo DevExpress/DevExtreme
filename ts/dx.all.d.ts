@@ -2202,6 +2202,8 @@ declare module DevExpress.ui {
         getRowIndexByKey(key: any | string | number): number;
         /** @name GridBase.getScrollable() */
         getScrollable(): dxScrollable;
+        /** @name GridBase.getVisibleColumnIndex(id) */
+        getVisibleColumnIndex(id: number | string): number;
         /** @name GridBase.hasEditData() */
         hasEditData(): boolean;
         /** @name GridBase.hideColumnChooser() */
@@ -3968,7 +3970,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.resources */
         resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
         /** @name dxGantt.Options.scaleType */
-        scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
+        scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /** @name dxGantt.Options.selectedRowKey */
         selectedRowKey?: any;
         /** @name dxGantt.Options.showResources */
@@ -5531,10 +5533,6 @@ declare module DevExpress.ui {
         onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.onContentReady */
         onContentReady?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
-        /** @name dxSpeedDialAction.Options.onDisposing */
-        onDisposing?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
-        /** @name dxSpeedDialAction.Options.onInitialized */
-        onInitialized?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.visible */
         visible?: boolean;
     }

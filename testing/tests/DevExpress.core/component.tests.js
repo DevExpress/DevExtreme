@@ -775,17 +775,14 @@ QUnit.module("default", {}, () => {
 
     QUnit.test("dispose optionManager", (assert) => {
         const component = new TestComponent();
-        const callbacks = ["_changedCallbacks", "_changingCallbacks", "_deprecatedCallbacks"];
-
-        callbacks.forEach((callback) => {
-            assert.equal(component._optionManager[callback]._list.length, 1);
-        });
+        const disposeHandler = sinon.spy();
+        const originalDispose = component._optionManager.dispose;
+        component._optionManager.dispose = disposeHandler;
 
         component._dispose();
 
-        callbacks.forEach((callback) => {
-            assert.equal(component._optionManager[callback]._list.length, 0);
-        });
+        component._optionManager.dispose = originalDispose;
+        assert.equal(disposeHandler.callCount, 1);
     });
 
     QUnit.test("T320061 - third level of nesting option deprecated message on option change using string", (assert) => {

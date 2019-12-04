@@ -1951,7 +1951,7 @@ QUnit.test("Export icons must be the same size", function(assert) {
     assert.equal(exportAllButton.height(), exportSelectedButton.height(), "same height");
 });
 
-// T571282
+// T571282, T835869
 QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
     // arrange
     var generateData = function(count) {
@@ -1967,6 +1967,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
 
     var rowHeight,
         resizeController,
+        loadingSpy = sinon.spy(),
         dataGrid = $("#dataGrid").dxDataGrid({
             width: 200,
             height: 200,
@@ -1975,7 +1976,11 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             loadingTimeout: undefined,
             columnResizingMode: "widget",
             dataSource: {
-                store: generateData(60),
+                store: {
+                    type: "array",
+                    data: generateData(60),
+                    onLoading: loadingSpy
+                },
                 pageSize: 2
             },
             columns: [{ dataField: "name", width: 100 }, "description"],
@@ -2023,6 +2028,8 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
     assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
     assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
+    // T835869
+    assert.strictEqual(loadingSpy.callCount, 1, "data is loaded once");
 });
 
 // T596274
@@ -5263,7 +5270,7 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     // arrange, act
     var dataGrid,
         scrollable,
-        skips = [],
+        loadedPages = [],
         data = [];
 
     for(let i = 0; i < 10; i++) {
@@ -5275,13 +5282,13 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
         remoteOperations: true,
         dataSource: {
             load: function(loadOptions) {
-                skips.push(loadOptions.skip);
+                loadedPages.push(loadOptions.skip / 10);
 
                 var d = $.Deferred();
 
                 setTimeout(function() {
                     d.resolve({ data: data, totalCount: 100000 });
-                }, 300);
+                }, 25);
 
                 return d;
             }
@@ -5308,7 +5315,7 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     this.clock.tick(250);
 
     // assert
-    assert.deepEqual(skips, [0, 10, 20, 30, 40], "all skips");
+    assert.deepEqual(loadedPages, [0, 1, 2, 3, 4], "all pages are unique");
 });
 
 QUnit.test("DataGrid should expand the row in the onContentReady method in virtual scroll mode (T826930)", function(assert) {
@@ -5761,6 +5768,27 @@ QUnit.test("max-height from styles", function(assert) {
     // assert
     assert.equal(dataGrid.totalCount(), 0, "no items");
     assert.ok($dataGrid.find(".dx-datagrid").height() < 400, "height is less then max-height");
+});
+
+// T820186
+QUnit.test("width 100% should be applied if container width is zero on render", function(assert) {
+    // arrange
+    $("#dataGrid").parent().width(0);
+    $("#dataGrid").dxDataGrid({
+        width: "100%",
+        dataSource: [],
+        columns: [
+            { dataField: "field1", width: 100 },
+            { dataField: "field2", width: 100 }
+        ]
+    });
+
+    // act
+    $("#dataGrid").parent().width(300);
+    this.clock.tick();
+
+    // assert
+    assert.equal($("#dataGrid").width(), 300, "width 100% is applied");
 });
 
 // T412035
@@ -8384,7 +8412,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
                         data: data.slice(loadOptions.skip, loadOptions.skip + loadOptions.take),
                         totalCount: 100
                     });
-                }, 100);
+                }, 50);
 
                 return d.promise();
             }
@@ -8411,6 +8439,71 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
     assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
     assert.strictEqual(dataGrid.getVisibleRows().length, 60);
     assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
+});
+
+function fastScrollTest(assert, that, responseTime, expectedLoadedPages) {
+    // arrange
+    var data = [],
+        dataGrid,
+        loadedPages = [],
+        scrollable;
+
+    for(let i = 0; i < 20; i++) {
+        data.push({ field: "someData" });
+    }
+
+    dataGrid = createDataGrid({
+        height: 300,
+        remoteOperations: true,
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+
+                loadedPages.push(loadOptions.skip / 20);
+
+                setTimeout(function() {
+                    d.resolve({
+                        data: data,
+                        totalCount: 1000
+                    });
+                }, responseTime);
+
+                return d.promise();
+            }
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "standard",
+            useNative: false
+        }
+    });
+
+    that.clock.tick(600);
+    scrollable = dataGrid.getScrollable();
+
+    // assert
+    assert.deepEqual(loadedPages, [0, 1]);
+
+    // act
+    for(let i = 1; i <= 5; i++) {
+        scrollable.scrollTo({ y: 700 * i });
+        that.clock.tick(10);
+    }
+
+    that.clock.tick(1000);
+
+    // assert
+    assert.deepEqual(loadedPages, expectedLoadedPages);
+}
+
+// T815141
+QUnit.test("Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow", function(assert) {
+    fastScrollTest(assert, this, 300, [0, 1, 5, 6]);
+});
+
+// T815141
+QUnit.test("Pages should be loaded while scrolling fast if remoteOperations is true and server is fast", function(assert) {
+    fastScrollTest(assert, this, 50, [0, 1, 2, 3, 4, 5, 6]);
 });
 
 // T634232
@@ -8937,6 +9030,7 @@ QUnit.test("ungrouping after grouping and scrolling should works correctly with 
             mode: "virtual",
             rowRenderingMode: "virtual",
             updateTimeout: 0,
+            timeout: 0,
             useNative: false
         },
         grouping: {
@@ -8997,6 +9091,7 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
             mode: "virtual",
             rowRenderingMode: "virtual",
             updateTimeout: 0,
+            timeout: 0,
             useNative: false
         },
         grouping: {
@@ -12841,7 +12936,8 @@ QUnit.test("scroll should be synchronous if row rendering time is middle and vir
             scrolling: {
                 mode: "virtual",
                 rowRenderingMode: "virtual",
-                useNative: false
+                useNative: false,
+                renderingThreshold: 10000
             }
         });
 
