@@ -13,7 +13,7 @@ import "ui/data_grid/ui.data_grid";
 import "data/odata/store";
 
 import $ from "jquery";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import ArrayStore from "data/array_store";
 import pointerEvents from "events/pointer";
 import { keyboard } from "events/";

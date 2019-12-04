@@ -8,7 +8,7 @@ import keyboardNavigationModule from "ui/grid_core/ui.grid_core.keyboard_navigat
 import commonUtils from "core/utils/common";
 import typeUtils from "core/utils/type";
 import publicComponentUtils from "core/utils/public_component";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import eventsEngine from "events/core/events_engine";
 import pointerEvents from "events/pointer";
 import { MockDataController, MockColumnsController, MockEditingController } from "../../../helpers/dataGridMocks.js";

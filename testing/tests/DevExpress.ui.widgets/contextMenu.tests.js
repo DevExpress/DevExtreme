@@ -2,7 +2,7 @@ import $ from "jquery";
 import devices from "core/devices";
 import fx from "animation/fx";
 import ContextMenu from "ui/context_menu";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import contextMenuEvent from "events/contextmenu";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";

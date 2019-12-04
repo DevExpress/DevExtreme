@@ -1,6 +1,6 @@
 import $ from "jquery";
 import devices from "core/devices";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import {
     setupDataGridModules,
     MockDataController,

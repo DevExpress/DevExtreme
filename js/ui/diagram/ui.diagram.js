@@ -20,7 +20,7 @@ import Tooltip from "../tooltip";
 import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import messageLocalization from "../../localization/message";
 import numberLocalization from "../../localization/number";
 import DiagramDialogManager from "./ui.diagram.dialogmanager";

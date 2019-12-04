@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import { noop } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
 import devices from "../../core/devices";

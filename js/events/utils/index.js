@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
-import addNamespace from "./add_namespace";
-import eventsEngine from "../core/events_engine";
+import mappedAddNamespace from "./add_namespace";
+import eventsEngine, { Event } from "../core/events_engine";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { focused } from "../../ui/widget/selectors";
@@ -66,103 +66,80 @@ const LEGACY_KEY_CODES = {
     "18": "alt"
 };
 
-const eventSource = (() => {
-    const EVENT_SOURCES_REGEX = {
-        "dx": /^dx/i,
-        "mouse": /(mouse|wheel)/i,
-        "touch": /^touch/i,
-        "keyboard": /^key/i,
-        "pointer": /^(ms)?pointer/i
-    };
-
-    return (e) => {
-        let result = "other";
-
-        each(EVENT_SOURCES_REGEX, function(key) {
-            if(this.test(e.type)) {
-                result = key;
-                return false;
-            }
-        });
-
-        return result;
-    };
-})();
-
-
-const isDxEvent = (e) => {
-    return eventSource(e) === "dx";
+const EVENT_SOURCES_REGEX = {
+    dx: /^dx/i,
+    mouse: /(mouse|wheel)/i,
+    touch: /^touch/i,
+    keyboard: /^key/i,
+    pointer: /^(ms)?pointer/i
 };
 
-const isNativeMouseEvent = (e) => {
-    return eventSource(e) === "mouse";
+let fixMethod = e => e;
+const copyEvent = originalEvent => fixMethod(Event(originalEvent, originalEvent), originalEvent);
+const isDxEvent = e => eventSource(e) === "dx";
+const isNativeMouseEvent = e => eventSource(e) === "mouse";
+const isNativeTouchEvent = e => eventSource(e) === "touch";
+
+export const eventSource = ({ type }) => {
+    let result = "other";
+
+    each(EVENT_SOURCES_REGEX, function(key) {
+        if(this.test(type)) {
+            result = key;
+
+            return false;
+        }
+    });
+
+    return result;
 };
 
-const isNativeTouchEvent = (e) => {
-    return eventSource(e) === "touch";
-};
+export const isPointerEvent = e => eventSource(e) === "pointer";
 
-const isPointerEvent = (e) => {
-    return eventSource(e) === "pointer";
-};
+export const isMouseEvent = e => isNativeMouseEvent(e) ||
+    ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "mouse");
 
-const isMouseEvent = (e) => {
-    return isNativeMouseEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "mouse");
-};
+export const isDxMouseWheelEvent = e => e && e.type === "dxmousewheel";
 
-const isDxMouseWheelEvent = (e) => {
-    return e && e.type === "dxmousewheel";
-};
+export const isTouchEvent = e => isNativeTouchEvent(e) ||
+    ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
 
-const isTouchEvent = (e) => {
-    return isNativeTouchEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
-};
+export const isKeyboardEvent = e => eventSource(e) === "keyboard";
 
-const isKeyboardEvent = (e) => {
-    return eventSource(e) === "keyboard";
-};
+export const isFakeClickEvent = ({ screenX, offsetX, pageX }) => screenX === 0 && !offsetX && pageX === 0;
 
-const isFakeClickEvent = (e) => {
-    return e.screenX === 0 && !e.offsetX && e.pageX === 0;
-};
+export const eventData = ({ pageX, pageY, timeStamp }) => ({
+    x: pageX,
+    y: pageY,
+    time: timeStamp
+});
 
+export const eventDelta = (from, to) => ({
+    x: to.x - from.x,
+    y: to.y - from.y,
+    time: to.time - from.time || 1
+});
 
-const eventData = (e) => {
-    return {
-        x: e.pageX,
-        y: e.pageY,
-        time: e.timeStamp
-    };
-};
-
-const eventDelta = function(from, to) {
-    return {
-        x: to.x - from.x,
-        y: to.y - from.y,
-        time: to.time - from.time || 1
-    };
-};
-
-
-const hasTouches = (e) => {
+export const hasTouches = e => {
     if(isNativeTouchEvent(e)) {
         return (e.originalEvent.touches || []).length;
-    }
-    if(isDxEvent(e)) {
+    } else if(isDxEvent(e)) {
         return (e.pointers || []).length;
+    } else {
+        return 0;
     }
-    return 0;
 };
 
-const needSkipEvent = (e) => {
+export const needSkipEvent = e => {
     // TODO: this checking used in swipeable first move handler. is it correct?
-    const target = e.target;
+    const { target } = e;
     const $target = $(target);
     const touchInInput = $target.is("input, textarea, select");
 
     if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
         return true;
     }
+
     if(isDxMouseWheelEvent(e)) {
         const isTextArea = $target.is("textarea") && $target.hasClass("dx-texteditor-input");
 
@@ -171,89 +148,60 @@ const needSkipEvent = (e) => {
         }
 
         const isContentEditable = target.isContentEditable || target.hasAttribute("contenteditable");
+
         if(isContentEditable) {
             return false;
         }
 
         const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
+
         return isInputFocused;
     }
+
     if(isMouseEvent(e)) {
         return touchInInput || e.which > 1; // only left mouse button
     }
+
     if(isTouchEvent(e)) {
         return touchInInput && focused($target);
     }
 };
 
+export const setEventFixMethod = func => fixMethod = func;
 
-let fixMethod = (e) => { return e; };
-const setEventFixMethod = function(func) {
-    fixMethod = func;
-};
-const copyEvent = function(originalEvent) {
-    return fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
-};
-
-const createEvent = function(originalEvent, args) {
+export const createEvent = (originalEvent, args) => {
     let event = copyEvent(originalEvent);
 
-    if(args) {
-        extend(event, args);
-    }
+    args && extend(event, args);
 
     return event;
 };
 
-const fireEvent = function(props) {
-    const event = createEvent(props.originalEvent, props);
-    eventsEngine.trigger(props.delegateTarget || event.target, event);
+export const fireEvent = props => {
+    const { originalEvent, delegateTarget } = props;
+    const event = createEvent(originalEvent, props);
+
+    eventsEngine.trigger(delegateTarget || event.target, event);
+
     return event;
 };
 
-const normalizeKeyName = (event) => {
-    const isKeySupported = !!event.key;
-    let key = isKeySupported ? event.key : event.which;
+export const normalizeKeyName = ({ key, which }) => {
+    const isKeySupported = !!key;
 
-    if(!key) {
-        return;
+    key = isKeySupported ? key : which;
+
+    if(key) {
+        if(isKeySupported) {
+            key = KEY_MAP[key.toLowerCase()] || key;
+        } else {
+            key = LEGACY_KEY_CODES[key] || String.fromCharCode(key);
+        }
+
+        return key;
     }
-
-    if(isKeySupported) {
-        key = KEY_MAP[key.toLowerCase()] || key;
-    } else {
-        key = LEGACY_KEY_CODES[key] || String.fromCharCode(key);
-    }
-
-    return key;
 };
 
-const getChar = (event) => {
-    return event.key || String.fromCharCode(event.which);
-};
+export const getChar = ({ key, which }) => key || String.fromCharCode(which);
 
-
-module.exports = {
-    eventSource: eventSource,
-    isPointerEvent: isPointerEvent,
-    isMouseEvent: isMouseEvent,
-    isDxMouseWheelEvent: isDxMouseWheelEvent,
-    isTouchEvent: isTouchEvent,
-    isKeyboardEvent: isKeyboardEvent,
-
-    isFakeClickEvent: isFakeClickEvent,
-
-    hasTouches: hasTouches,
-    eventData: eventData,
-    eventDelta: eventDelta,
-    needSkipEvent: needSkipEvent,
-
-    createEvent: createEvent,
-    fireEvent: fireEvent,
-
-    addNamespace: addNamespace,
-    setEventFixMethod: setEventFixMethod,
-
-    normalizeKeyName: normalizeKeyName,
-    getChar: getChar
-};
+export const addNamespace = mappedAddNamespace;
