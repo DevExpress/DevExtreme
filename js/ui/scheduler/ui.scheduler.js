@@ -51,6 +51,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
+import { extendFromObject } from '../../core/utils/extend';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -65,6 +66,10 @@ const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
 const RECURRENCE_EDITOR_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item`;
 const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item-opened`;
 const WIDGET_SMALL_WIDTH = 400;
+
+const LIST_ITEM_DATA_KEY = 'dxListItemData';
+const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
+const LIST_ITEM_CLASS = 'dx-list-item';
 
 var FULL_DATE_FORMAT = 'yyyyMMddTHHmmss',
     UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
@@ -2794,6 +2799,77 @@ const Scheduler = Widget.inherit({
                 (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
     },
 
+    raiseClickEvent(e) {
+        var config = {
+            itemData: e.itemData.data,
+            itemElement: e.itemElement
+        };
+        var createClickEvent = extendFromObject(this.fire("mapAppointmentFields", config), e, false);
+        this._createActionByOption("onAppointmentClick")(createClickEvent);
+    },
+
+    createTooltipDragBehavior(e) {
+        let dragElement,
+            $element = $(e.element);
+
+        if(this._allowDragging()) {
+            const dragBehavior = this.getWorkSpace().dragBehavior;
+
+            dragBehavior && dragBehavior.addTo($element, {
+                filter: `.${LIST_ITEM_CLASS}`,
+                container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+                cursorOffset: () => {
+                    const $dragElement = $(dragElement);
+
+                    return {
+                        x: $dragElement.width() / 2,
+                        y: $dragElement.height() / 2
+                    };
+                },
+                dragTemplate: () => {
+                    return dragElement;
+                },
+                onDragStart: (e) => {
+                    const event = e.event,
+                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+
+                    if(itemData) {
+                        event.data = event.data || {};
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
+
+                        dragBehavior.initialPosition = translator.locate($(dragElement));
+                        translator.resetPosition($(dragElement));
+
+                        this.hideAppointmentTooltip();
+                    }
+                }
+            });
+        }
+    },
+
+    _createDragAppointment(itemData, settings) {
+        var appointments = this.getAppointmentsInstance();
+        var appointmentIndex = appointments.option("items").length;
+
+        settings[0].isCompact = false;
+        settings[0].virtual = false;
+
+        appointments._currentAppointmentSettings = settings;
+        appointments._renderItem(appointmentIndex, {
+            itemData: itemData,
+            settings: settings
+        });
+
+        var appointmentList = appointments._findItemElementByItem(itemData);
+        return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings[0].startDate) : appointmentList[0];
+    },
+
+    _getRecurrencePart(appointments, startDate) {
+        return appointments.some(appointment => {
+            return appointment.data("dxAppointmentStartDate").getTime() === startDate.getTime();
+        });
+    },
+
     setTargetedAppointmentResources: function(targetedAppointment, appointmentElement, appointmentIndex) {
         var groups = this._getCurrentViewOption('groups');
 
@@ -2892,12 +2968,12 @@ const Scheduler = Widget.inherit({
                 color: this._appointments._tryGetAppointmentColor(target),
                 data: appointmentData,
                 currentData: currentAppointmentData,
-            }], true);
+            }]);
         }
     },
 
-    showAppointmentTooltipCore: function(target, data, isSingleBehavior) {
-        this._appointmentTooltip.show(target, data, isSingleBehavior);
+    showAppointmentTooltipCore: function(target, data, clickEvent, dragBehavior) {
+        this._appointmentTooltip.show(target, data, clickEvent, dragBehavior);
     },
 
     /**

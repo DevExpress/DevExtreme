@@ -27,11 +27,6 @@ const positionConfig = {
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {
-    _onListItemClick(e) {
-        super._onListItemClick(e);
-        this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
-    }
-
     _shouldUseTarget() {
         return false;
     }

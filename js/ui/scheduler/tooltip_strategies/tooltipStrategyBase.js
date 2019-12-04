@@ -3,7 +3,6 @@ import dateUtils from '../../../core/utils/date';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import $ from '../../../core/renderer';
 import List from '../../list/ui.list.edit';
-import { extendFromObject } from '../../../core/utils/extend';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item',
     TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + '-content',
@@ -15,33 +14,23 @@ const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item',
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + '-delete-button-container',
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
 
-export const createDefaultTooltipTemplate = (template, data, targetData, index) => {
-    return new FunctionTemplate(options => {
-        return template.render({
-            model: {
-                appointmentData: data,
-                targetedAppointmentData: targetData
-            },
-            container: options.container,
-            index: index
-        });
-    });
-};
-
 export class TooltipStrategyBase {
     constructor(scheduler) {
         this.scheduler = scheduler;
         this.tooltip = null;
+        this._clickEvent = null;
     }
 
-    show(target, dataList, isSingleItemBehavior) {
+    show(target, dataList, clickEvent, drag) {
         if(this._canShowTooltip(dataList)) {
             this.hide();
-            this._showCore(target, dataList, isSingleItemBehavior);
+            this._clickEvent = clickEvent;
+            this._drag = drag;
+            this._showCore(target, dataList);
         }
     }
 
-    _showCore(target, dataList, isSingleItemBehavior) {
+    _showCore(target, dataList) {
         if(!this.tooltip) {
             this.tooltip = this._createTooltip(target, dataList);
         } else {
@@ -90,7 +79,7 @@ export class TooltipStrategyBase {
     _createListOption(dataList) {
         return {
             dataSource: dataList,
-            onContentReady: this._onListRendered.bind(this), // TODO: there is no tests
+            onContentReady: this._drag,
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) =>
                 this._renderTemplate(this.tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
@@ -104,9 +93,6 @@ export class TooltipStrategyBase {
 
     _createList(listElement, dataList) {
         return this.scheduler._createComponent(listElement, List, this._createListOption(dataList));
-    }
-
-    _onListRendered(e) {
     }
 
     _getTargetData(data, $appointment) {
@@ -126,7 +112,16 @@ export class TooltipStrategyBase {
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
-        return createDefaultTooltipTemplate(template, data, targetData, index);
+        return new FunctionTemplate(options => {
+            return template.render({
+                model: {
+                    appointmentData: data,
+                    targetedAppointmentData: targetData
+                },
+                container: options.container,
+                index: index
+            });
+        });
     }
 
     _getItemListTemplateName() {
@@ -135,41 +130,10 @@ export class TooltipStrategyBase {
 
     _onListItemClick(e) {
         this.hide();
-        if(this._canRaiseClickEvent()) {
-            this._raiseClickEventAndShowAppointmentPopup(e);
-        } else {
-            this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
+        if(this._clickEvent) {
+            this._clickEvent(e);
         }
-    }
-
-    _canRaiseClickEvent() {
-        return true;
-    }
-
-    _raiseClickEventAndShowAppointmentPopup(e) {
-        const config = {
-            itemData: e.itemData.data,
-            itemElement: e.itemElement
-        };
-        this.scheduler._createActionByOption('onAppointmentClick', {
-            afterExecute: e => {
-                const config = e.args[0];
-                config.event.stopPropagation();
-                this.scheduler.fire('showEditAppointmentPopup', { data: config.appointmentData });
-            }
-        })(this._createClickEventArgument(config, e));
-    }
-
-    _createClickEventArgument(config, clickArg) {
-        const result = extendFromObject(this.scheduler.fire('mapAppointmentFields', config), clickArg, false);
-        return this._trimClickEventArgument(result);
-    }
-
-    _trimClickEventArgument(e) {
-        delete e.itemData;
-        delete e.itemIndex;
-        delete e.itemElement;
-        return e;
+        this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
     }
 
     _createItemListContent(data, currentData, color) {
