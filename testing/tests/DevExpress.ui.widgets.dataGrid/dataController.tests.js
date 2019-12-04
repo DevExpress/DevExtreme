@@ -38,6 +38,15 @@ var setupModule = function() {
         $.extend(this.options, options);
         this.columnsController.init();
     };
+
+    this.options.editing = this.options.editing || {};
+    $.extend(this.options.editing, {
+        confirmDelete: true,
+        texts: {
+            confirmDeleteMessage: "Are you sure?"
+        }
+    });
+
     this.clock = sinon.useFakeTimers();
     this.editingController.getFirstEditableCellInRow = function() { return $([]); };
 };
@@ -7682,6 +7691,73 @@ QUnit.test("Expand detail row before edit form and detail rows", function(assert
     assert.strictEqual(this.dataController.items()[4].rowType, "data", "row 4 is detail");
 });
 
+QUnit.test("delete row with confirmDelete and confirmDeleteMessage is not empty", function(assert) {
+    // arrange
+    let removeHandlerCallCount = 0;
+    var dataSource = new DataSource({
+        key: 'id',
+        load: () => [{ id: 1 }],
+        totalCount: () => 1,
+        remove: () => ++removeHandlerCallCount
+    });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 0, "row is not deleted");
+
+    // arrange
+    this.options.editing.confirmDelete = false;
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 1, "row is deleted");
+});
+
+QUnit.test("delete row with confirmDelete and confirmDeleteMessage is empty", function(assert) {
+    // arrange
+    let removeHandlerCallCount = 0;
+    var dataSource = new DataSource({
+        key: 'id',
+        load: () => [{ id: 1 }],
+        totalCount: () => 1,
+        remove: () => ++removeHandlerCallCount
+    });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.applyOptions({
+        editing: {
+            confirmDelete: true,
+            texts: {
+                confirmDeleteMessage: ""
+            }
+        }
+    });
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 1, "row is deleted");
+
+    // arrange
+    this.options.editing.confirmDelete = false;
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 2, "row is deleted");
+});
+
 QUnit.module("Error handling", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -7909,84 +7985,6 @@ QUnit.test("update error", function(assert) {
     // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.deepEqual(dataErrors, ['Update error']);
-});
-
-QUnit.test("delete row with confirmDelete and confirmDeleteMessage is not empty", function(assert) {
-    // arrange
-    let removeHandlerCallCount = 0;
-    this.options = {
-        dataSource: {
-            key: 'id',
-            load: () => [{ id: 1 }],
-            totalCount: () => 1,
-            remove: () => ++removeHandlerCallCount
-        },
-        editing: {
-            confirmDelete: true,
-            texts: {
-                confirmDeleteMessage: "Are you sure?"
-            }
-        }
-    };
-
-    setupDataGridModules(this, ['data', 'columns', 'editing']);
-    this.clock.tick();
-
-    // act
-    this.editingController.deleteRow(0);
-
-    // assert
-    assert.equal(removeHandlerCallCount, 0, "row is not deleted");
-
-    // arrange
-    $.extend(this.options.editing, {
-        confirmDelete: false
-    });
-
-    // act
-    this.editingController.deleteRow(0);
-
-    // assert
-    assert.equal(removeHandlerCallCount, 1, "row is deleted");
-});
-
-QUnit.test("delete row with confirmDelete and confirmDeleteMessage is empty", function(assert) {
-    // arrange
-    let removeHandlerCallCount = 0;
-    this.options = {
-        dataSource: {
-            key: 'id',
-            load: () => [{ id: 1 }, { id: 2 }],
-            totalCount: () => 1,
-            remove: () => ++removeHandlerCallCount
-        },
-        editing: {
-            confirmDelete: true,
-            texts: {
-                confirmDeleteMessage: ""
-            }
-        }
-    };
-
-    setupDataGridModules(this, ['data', 'columns', 'editing']);
-    this.clock.tick();
-
-    // act
-    this.editingController.deleteRow(0);
-
-    // assert
-    assert.equal(removeHandlerCallCount, 1, "row is deleted");
-
-    // arrange
-    $.extend(this.options.editing, {
-        confirmDelete: false
-    });
-
-    // act
-    this.editingController.deleteRow(0);
-
-    // assert
-    assert.equal(removeHandlerCallCount, 2, "row is deleted");
 });
 
 QUnit.module("Remote Grouping", {
