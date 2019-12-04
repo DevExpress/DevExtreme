@@ -2248,7 +2248,10 @@ testModule("container", moduleConfig, () => {
             const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
 
-            assert.deepEqual(wrapperRect, targetRect, "wrapper position and size are correct");
+            assert.strictEqual(wrapperRect.left, targetRect.left, "left coordinates are equal");
+            assert.strictEqual(wrapperRect.top, targetRect.top, "top coordinates are equal");
+            assert.strictEqual(wrapperRect.width, targetRect.width, "width coordinates are equal");
+            assert.strictEqual(wrapperRect.height, targetRect.height, "height coordinates are equal");
             assert.strictEqual(wrapperRect.height, 300, "wrapper height is ok");
             assert.strictEqual(wrapperRect.width, 200, "wrapper width is ok");
         });
