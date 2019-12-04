@@ -13,7 +13,13 @@ const CLASS = {
     resizableHandleRight: 'dx-resizable-handle-right',
     resizableHandleTop: 'dx-resizable-handle-top',
     schedulerHeaderScrollable: 'dx-scheduler-header-scrollable',
-    scrollableContainer: 'dx-scrollable-container'
+    scrollableContainer: 'dx-scrollable-container',
+
+    dialogButton: `dx-dialog-button`,
+    navigator: `dx-scheduler-navigator`,
+    navigatorButtonNext: `dx-scheduler-navigator-next`,
+    navigatorButtonPrev: `dx-scheduler-navigator-previous`,
+    navigatorButtonCaption: `dx-scheduler-navigator-caption`
 };
 
 class Appointment {
@@ -43,6 +49,20 @@ class Appointment {
             width: this.element.getStyleProperty('width'),
             height: this.element.getStyleProperty('height')
         }
+    }
+}
+
+class SchedulerNavigator {
+    element: Selector;
+    nextDuration: Selector;
+    prevDuration: Selector;
+    caption: Selector;
+
+    constructor(scheduler: Selector) {
+        this.element = scheduler.find(`.${CLASS.navigator}`);
+        this.nextDuration = Selector(`.${CLASS.navigatorButtonNext}`);
+        this.prevDuration = Selector(`.${CLASS.navigatorButtonPrev}`);
+        this.caption = Selector(`.${CLASS.navigatorButtonCaption}`);
     }
 }
 
@@ -86,5 +106,9 @@ export default class Scheduler extends Widget {
 
     getAppointment(title: string, index:number = 0): Appointment {
         return new Appointment(this.element, title, index);
+    }
+
+    getNavigator(): SchedulerNavigator {
+        return new SchedulerNavigator(this.element);
     }
 };
