@@ -1238,4 +1238,3 @@ QUnit.test("Popup should not be closed until the valid value is typed", function
 
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, "the only pending editor is displayed in the form");
 });
-

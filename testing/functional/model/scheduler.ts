@@ -116,6 +116,9 @@ class AppointmentPopup {
 
     subjectElement: Selector;
     descriptionElement: Selector;
+    startDateElement: Selector;
+    endDateElement: Selector;
+    allDayElement: Selector;
 
     doneButton: Selector;
     cancelButton: Selector;
@@ -126,7 +129,10 @@ class AppointmentPopup {
         this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 
         this.subjectElement = this.wrapper.find(".dx-texteditor-input").nth(0);
+        this.startDateElement = this.wrapper.find(".dx-texteditor-input").nth(1);
+        this.endDateElement = this.wrapper.find(".dx-texteditor-input").nth(2);
         this.descriptionElement = this.wrapper.find(".dx-texteditor-input").nth(3);
+        this.allDayElement = this.wrapper.find(".dx-switch").nth(0);
 
         this.doneButton = this.wrapper.find(".dx-popup-done.dx-button");
         this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
