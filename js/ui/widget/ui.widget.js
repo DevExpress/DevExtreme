@@ -182,11 +182,6 @@ var Widget = DOMComponentWithTemplate.inherit({
     _init: function() {
         this.callBase();
         this._initContentReadyAction();
-        this._initKeyboardHandledAction();
-    },
-
-    _initKeyboardHandledAction() {
-        this._keyboardHandledAction = this._createActionByOption('onKeyboardHandled');
     },
 
     _clearInnerOptionCache: function(optionContainer) {
@@ -294,7 +289,6 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _dispose: function() {
         this._contentReadyAction = null;
-        this._keyboardHandledAction = null;
         this._detachKeyboardEvents();
 
         this.callBase();
@@ -474,9 +468,11 @@ var Widget = DOMComponentWithTemplate.inherit({
         }
 
         const keyboardListeners = this._getKeyboardListeners();
+        const { onKeyboardHandled } = this.option();
 
         keyboardListeners.forEach(listener => listener && listener._keyboardHandler(options));
-        this._keyboardHandledAction(options);
+
+        onKeyboardHandled && onKeyboardHandled(options);
 
         return true;
     },
@@ -654,7 +650,6 @@ var Widget = DOMComponentWithTemplate.inherit({
                 }
                 break;
             case "onKeyboardHandled":
-                this._initKeyboardHandledAction();
                 this._attachKeyboardEvents();
                 break;
             case "onContentReady":
