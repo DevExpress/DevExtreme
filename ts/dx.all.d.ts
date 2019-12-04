@@ -2788,7 +2788,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.onExporting */
         onExporting?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onFileSaving */
-        onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onFocusedCellChanged */
         onFocusedCellChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
         /** @name dxDataGrid.Options.onFocusedCellChanging */
@@ -4422,7 +4422,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.onExporting */
         onExporting?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** @name dxPivotGrid.Options.onFileSaving */
-        onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name dxPivotGrid.Options.rowHeaderLayout */
         rowHeaderLayout?: 'standard' | 'tree';
         /** @name dxPivotGrid.Options.scrolling */
@@ -4709,7 +4709,7 @@ declare module DevExpress.ui {
         /** @name dxRangeSlider.Options.endName */
         endName?: string;
         /** @name dxRangeSlider.Options.onValueChanged */
-        onValueChanged?: ((e: { component?: dxRangeSlider, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onValueChanged?: ((e: { component?: dxRangeSlider, element?: DevExpress.core.dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
         /** @name dxRangeSlider.Options.start */
         start?: number;
         /** @name dxRangeSlider.Options.startName */
@@ -6335,7 +6335,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.onExporting */
         onExporting?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
         /** @name BaseWidget.Options.onFileSaving */
-        onFileSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name BaseWidget.Options.onIncidentOccurred */
         onIncidentOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** @name BaseWidget.Options.pathModified */
