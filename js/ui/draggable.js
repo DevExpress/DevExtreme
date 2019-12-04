@@ -75,13 +75,19 @@ class ScrollHelper {
         return !!this._scrollSpeed;
     }
 
+    isScrollable($element) {
+        var that = this;
+
+        return ($element.css(that._overFlowAttr) === "auto" || $element.hasClass("dx-scrollable-container"))
+            && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+    }
+
     _trySetScrollable(element, mousePosition) {
         var that = this,
             $element = $(element),
             distanceToBorders,
             sensitivity = that._component.option("scrollSensitivity"),
-            isScrollable = ($element.css(that._overFlowAttr) === "auto" || $element.hasClass("dx-scrollable-container"))
-                && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+            isScrollable = that.isScrollable($element);
 
         if(isScrollable) {
             distanceToBorders = that._calculateDistanceToBorders($element, mousePosition);
@@ -175,8 +181,8 @@ var ScrollAnimator = Animator.inherit({
     },
 
     _step: function() {
-        var horizontalScrollHelper = this._strategy.horizontalScrollHelper,
-            verticalScrollHelper = this._strategy.verticalScrollHelper;
+        var horizontalScrollHelper = this._strategy._horizontalScrollHelper,
+            verticalScrollHelper = this._strategy._verticalScrollHelper;
 
         horizontalScrollHelper && horizontalScrollHelper.scrollByStep();
         verticalScrollHelper && verticalScrollHelper.scrollByStep();
@@ -396,8 +402,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         this._scrollAnimator = new ScrollAnimator(this);
 
-        this.horizontalScrollHelper = new ScrollHelper("horizontal", this);
-        this.verticalScrollHelper = new ScrollHelper("vertical", this);
+        this._horizontalScrollHelper = new ScrollHelper("horizontal", this);
+        this._verticalScrollHelper = new ScrollHelper("vertical", this);
     },
 
     _normalizeCursorOffset: function(offset) {
@@ -791,29 +797,31 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _updateScrollable: function(e) {
         var that = this,
-            $dragElement = that._$dragElement,
-            ownerDocument = $dragElement.get(0).ownerDocument,
             $window = $(window),
             mousePosition = {
                 x: e.pageX - $window.scrollLeft(),
                 y: e.pageY - $window.scrollTop()
             },
-            allObjects;
+            allObjects = that.getElementsFromPoint(mousePosition);
+
+        that._verticalScrollHelper && that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
+        that._horizontalScrollHelper && that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+    },
+
+    getElementsFromPoint: function(position) {
+        var ownerDocument = this._$dragElement.get(0).ownerDocument;
 
         if(browser.msie) {
-            let msElements = ownerDocument.msElementsFromPoint(mousePosition.x, mousePosition.y);
+            let msElements = ownerDocument.msElementsFromPoint(position.x, position.y);
 
             if(msElements) {
-                allObjects = Array.prototype.slice.call(msElements);
-            } else {
-                allObjects = [];
+                return Array.prototype.slice.call(msElements);
             }
-        } else {
-            allObjects = ownerDocument.elementsFromPoint(mousePosition.x, mousePosition.y);
+
+            return [];
         }
 
-        that.verticalScrollHelper && that.verticalScrollHelper.updateScrollable(allObjects, mousePosition);
-        that.horizontalScrollHelper && that.horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+        return ownerDocument.elementsFromPoint(position.x, position.y);
     },
 
     _defaultActionArgs: function() {
@@ -887,8 +895,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
                     this.reset();
                     targetDraggable.reset();
                     this._stopAnimator();
-                    this.horizontalScrollHelper.reset();
-                    this.verticalScrollHelper.reset();
+                    this._horizontalScrollHelper.reset();
+                    this._verticalScrollHelper.reset();
 
                     this._resetDragElement();
                     this._resetSourceElement();
@@ -974,8 +982,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
                 this._attachEventHandlers();
                 break;
             case "autoScroll":
-                this.verticalScrollHelper.reset();
-                this.horizontalScrollHelper.reset();
+                this._verticalScrollHelper.reset();
+                this._horizontalScrollHelper.reset();
                 break;
             case "scrollSensitivity":
             case "scrollSpeed":

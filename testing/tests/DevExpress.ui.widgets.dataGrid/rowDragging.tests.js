@@ -538,6 +538,48 @@ QUnit.test("Dragging row when there are fixed columns", function(assert) {
     assert.strictEqual($fixTable.find(".dx-data-row").children(".dx-pointer-events-none").length, 1, "fixed table has transparent column");
 });
 
+// T830034
+QUnit.test("Placeholder should not be wider than grid if horizontal scroll exists", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    $testElement.css("width", "500px");
+    this.options.columnWidth = 300;
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 115).move(0, 5);
+
+    // assert
+    assert.ok($(".dx-sortable-placeholder").width() < 501, "placeholder width");
+});
+
+// T830034
+QUnit.test("Placeholder should be placed correctly if scrollLeft > 0", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container"),
+        $placeholderElement;
+
+    $testElement.css("width", "200px");
+    this.options.columnWidth = 100;
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find(".dx-scrollable-container").scrollLeft(50);
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 115);
+
+    $placeholderElement = $(".dx-sortable-placeholder");
+
+    // assert
+    assert.ok($placeholderElement.width() < 501, "placeholder width");
+    assert.equal($placeholderElement.offset().left, 0, "placeholder offset left");
+});
 
 QUnit.module("Handle", $.extend({}, moduleConfig, {
     beforeEach: function() {
