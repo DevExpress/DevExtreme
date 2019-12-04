@@ -1,16 +1,19 @@
 import $ from './renderer';
 import { isDefined, isFunction, isRenderer } from './utils/type';
-import { findBestMatches, noop } from './utils/common';
+import { noop } from './utils/common';
 import { extend } from './utils/extend';
 import { Error, log } from './errors';
-import { getElementOptions, normalizeTemplateElement } from './utils/dom';
-import devices from './devices';
-import { Template } from './templates/template';
+import { getElementOptions } from './utils/dom';
 import { TemplateBase } from './templates/template_base';
 import { FunctionTemplate } from './templates/function_template';
 import { EmptyTemplate } from './templates/empty_template';
 import { ChildDefaultTemplate } from './templates/child_default_template';
 import { camelize } from './utils/inflector';
+import {
+    findTemplateByDevice, addOneRenderedCall, templateKey,
+    getNormalizedTemplateArgs, validateTemplateSource,
+    defaultCreateElement,
+} from './utils/template_manager';
 
 const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
@@ -38,7 +41,6 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 
     return widgetElement;
 });
-const defaultCreateElement = element => new Template(element);
 
 export default class TemplateManager {
     constructor(createElement, anonymousTemplateName) {
@@ -62,57 +64,6 @@ export default class TemplateManager {
                 templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
             }
         };
-    }
-
-    static _findTemplateByDevice(templates) {
-        const suitableTemplate = findBestMatches(
-            devices.current(),
-            templates,
-            template => getElementOptions(template).dxTemplate
-        )[0];
-
-        templates.forEach((template) => {
-            if(template !== suitableTemplate) {
-                $(template).remove();
-            }
-        });
-
-        return suitableTemplate;
-    }
-
-    static _addOneRenderedCall(template) {
-        const render = template.render.bind(template);
-        return extend({}, template, {
-            render(options) {
-                const templateResult = render(options);
-                options && options.onRendered && options.onRendered();
-                return templateResult;
-            }
-        });
-    }
-
-    static _getNormalizedTemplateArgs(options) {
-        const args = [];
-
-        if('model' in options) {
-            args.push(options.model);
-        }
-        if('index' in options) {
-            args.push(options.index);
-        }
-        args.push(options.container);
-
-        return args;
-    }
-
-    static validateTemplateSource(templateSource) {
-        return typeof templateSource === 'string'
-            ? normalizeTemplateElement(templateSource)
-            : templateSource;
-    }
-
-    static templateKey(templateSource) {
-        return (isRenderer(templateSource) && templateSource[0]) || templateSource;
     }
 
     get anonymousTemplateName() {
@@ -158,7 +109,7 @@ export default class TemplateManager {
 
         const templates = [];
         for(let templateName in templatesMap) {
-            const deviceTemplate = TemplateManager._findTemplateByDevice(templatesMap[templateName]);
+            const deviceTemplate = findTemplateByDevice(templatesMap[templateName]);
             if(deviceTemplate) {
                 templates.push({
                     name: templateName,
@@ -187,17 +138,17 @@ export default class TemplateManager {
 
     _createTemplateIfNeeded(templateSource) {
         const cachedTemplate = this._tempTemplates.filter(tempTemplate =>
-            tempTemplate.source === TemplateManager.templateKey(templateSource)
+            tempTemplate.source === templateKey(templateSource)
         )[0];
         if(cachedTemplate) return cachedTemplate.template;
 
         const template = this._createTemplate(templateSource);
-        this._tempTemplates.push({ template, source: TemplateManager.templateKey(templateSource) });
+        this._tempTemplates.push({ template, source: templateKey(templateSource) });
         return template;
     }
 
     _createTemplate(templateSource) {
-        return this._createElement(TemplateManager.validateTemplateSource(templateSource));
+        return this._createElement(validateTemplateSource(templateSource));
     }
 
     getTemplate(templateSource, templates, { isAsyncTemplate, skipTemplates }, context) {
@@ -206,7 +157,7 @@ export default class TemplateManager {
         }
 
         return new FunctionTemplate((options) => {
-            const templateSourceResult = templateSource.apply(context, TemplateManager._getNormalizedTemplateArgs(options));
+            const templateSourceResult = templateSource.apply(context, getNormalizedTemplateArgs(options));
 
             if(!isDefined(templateSourceResult)) {
                 return new EmptyTemplate();
@@ -242,7 +193,7 @@ export default class TemplateManager {
 
         // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
         if(isFunction(templateSource.render) && !isRenderer(templateSource)) {
-            return TemplateManager._addOneRenderedCall(templateSource);
+            return addOneRenderedCall(templateSource);
         }
 
         if(templateSource.nodeType || isRenderer(templateSource)) {
@@ -259,7 +210,7 @@ export default class TemplateManager {
         if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
             integrationTemplate = templates[templateSource];
             if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
-                integrationTemplate = TemplateManager._addOneRenderedCall(integrationTemplate);
+                integrationTemplate = addOneRenderedCall(integrationTemplate);
             }
         }
 
