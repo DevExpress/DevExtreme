@@ -1951,7 +1951,7 @@ QUnit.test("Export icons must be the same size", function(assert) {
     assert.equal(exportAllButton.height(), exportSelectedButton.height(), "same height");
 });
 
-// T571282
+// T571282, T835869
 QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
     // arrange
     var generateData = function(count) {
@@ -1967,6 +1967,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
 
     var rowHeight,
         resizeController,
+        loadingSpy = sinon.spy(),
         dataGrid = $("#dataGrid").dxDataGrid({
             width: 200,
             height: 200,
@@ -1975,7 +1976,11 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             loadingTimeout: undefined,
             columnResizingMode: "widget",
             dataSource: {
-                store: generateData(60),
+                store: {
+                    type: "array",
+                    data: generateData(60),
+                    onLoading: loadingSpy
+                },
                 pageSize: 2
             },
             columns: [{ dataField: "name", width: 100 }, "description"],
@@ -2023,6 +2028,8 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
     assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
     assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
+    // T835869
+    assert.strictEqual(loadingSpy.callCount, 1, "data is loaded once");
 });
 
 // T596274

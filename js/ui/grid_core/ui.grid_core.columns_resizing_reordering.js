@@ -680,7 +680,8 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                 that.component.updateDimensions();
 
                 if(that.option("wordWrapEnabled") && that.option("scrolling.mode") === "virtual") {
-                    that.component.refresh().done(function() {
+                    const dataSource = that.component.getDataSource();
+                    dataSource && dataSource.load().done(function() {
                         that._rowsView.scrollToPage(pageIndex);
                     });
                 }
