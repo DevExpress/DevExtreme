@@ -246,22 +246,23 @@ class FileManagerToolbar extends Widget {
     }
 
     _createViewModeItem() {
-        const commandItems = ["thumbnails", "details"].map(name => {
-            const { text } = this._commandManager.getCommandByName(name);
-            return { name, text };
+        const commandItems = ["details", "thumbnails"].map(name => {
+            const { text, icon } = this._commandManager.getCommandByName(name);
+            return { name, text, icon };
         });
-
-        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 0 : 1;
 
         return {
             cssClass: FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS,
-            widget: "dxSelectBox",
+            widget: "dxDropDownButton",
             options: {
                 items: commandItems,
-                value: commandItems[selectedIndex],
-                displayExpr: "text",
-                stylingMode: "filled",
-                onValueChanged: e => this._executeCommand(e.value.name)
+                keyExpr: "name",
+                selectedItemKey: this.option("itemViewMode"),
+                displayExpr: " ",
+                stylingMode: "text",
+                showArrowIcon: false,
+                useSelectMode: true,
+                onItemClick: e => this._executeCommand(e.itemData.name)
             }
         };
     }
