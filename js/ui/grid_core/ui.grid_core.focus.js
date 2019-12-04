@@ -564,7 +564,7 @@ module.exports = {
                             }
                         });
                     } else if(paging) {
-                        if(isAutoNavigate || keyboardController.hasActiveRow()) {
+                        if(isAutoNavigate) {
                             if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
                                 focusController._focusRowByIndex();
                             }

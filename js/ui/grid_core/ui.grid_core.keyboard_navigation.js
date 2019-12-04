@@ -14,6 +14,7 @@ import { selectView } from "../shared/accessibility";
 import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 import browser from "../../core/utils/browser";
 
+
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",
     GROUP_FOOTER_CLASS = "group-footer",
@@ -1689,12 +1690,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
             var isCanceled = this._canceledCellPosition.rowIndex === rowIndex && this._canceledCellPosition.columnIndex === columnIndex;
             this._canceledCellPosition = null;
             return isCanceled;
-        }
-    },
-
-    hasActiveRow: function() {
-        if(this.getFocusedView()) {
-            return this._focusedCellPosition && this._focusedCellPosition.rowIndex >= 0;
         }
     }
 });

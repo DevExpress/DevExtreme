@@ -485,7 +485,6 @@ test("Select views by Ctrl+Up, Ctrl+Down keys", async t => {
 
 test("DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)", async t => {
     const dataGrid = new DataGrid("#container");
-    const headers = dataGrid.getHeaders();
 
     await t
         .click(dataGrid.getDataCell(0, 0).element)
@@ -560,3 +559,28 @@ test("Tab key on the focused group row should be handled by default behavior (T8
         }
     });
 });
+
+test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' if 'autoNavigateToFocused' row is false", async t => {
+    const dataGrid = new DataGrid("#container");
+    const pager = dataGrid.getPager();
+
+    await t
+        .expect(dataGrid.getDataRow(1).isFocusedRow).ok()
+        .click(pager.getNavPage(1).element)
+        .expect(pager.getNavPage(1).isSelected).ok()
+        .expect(dataGrid.getFocusedRow().exists).notOk();
+    }).before(() => createWidget("dxDataGrid", {
+        dataSource: [
+            { id: 0, c0: "c0_0" },
+            { id: 1, c0: "c0_1" },
+            { id: 2, c0: "c0_2" },
+            { id: 3, c0: "c0_3" }
+        ],
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        autoNavigateToFocusedRow: false,
+        focusedRowIndex: 1,
+        paging: {
+            pageSize: 2
+        }
+    }));

@@ -211,7 +211,7 @@ QUnit.testInActiveWindow("PageUp key and focusedRow", function(assert) {
     assert.equal(this.option("focusedRowKey"), 1, "FocusedRowKey");
 });
 
-QUnit.testInActiveWindow("PageDown key, focusedRow and autoNavigateToFocusedRow is false", function(assert) {
+QUnit.testInActiveWindow("Row should be focused by 'focusedRowIndex' after PageDown key press if autoNavigateToFocusedRow is false", function(assert) {
     // arrange
     this.options = {
         height: 150,
@@ -249,7 +249,8 @@ QUnit.testInActiveWindow("PageDown key, focusedRow and autoNavigateToFocusedRow 
     assert.equal(this.option("focusedRowKey"), 1, "FocusedRowKey");
 
     // act
-    const $cell = $(this.getCellElement(1, 1)).focus();
+    const $cell = $(this.getCellElement(1, 1));
+    $cell.trigger(CLICK_EVENT);
     fireKeyDown($cell, "PageDown");
     this.clock.tick();
 
@@ -258,7 +259,7 @@ QUnit.testInActiveWindow("PageDown key, focusedRow and autoNavigateToFocusedRow 
     assert.equal(this.option("focusedRowKey"), 3, "FocusedRowKey");
 });
 
-QUnit.testInActiveWindow("PageUp key, focusedRow and autoNavigateToFocusedRow is false", function(assert) {
+QUnit.testInActiveWindow("Row should be focused by 'focusedRowIndex' after PageUp key press if autoNavigateToFocusedRow is false", function(assert) {
     // arrange
     this.options = {
         height: 150,
@@ -297,7 +298,8 @@ QUnit.testInActiveWindow("PageUp key, focusedRow and autoNavigateToFocusedRow is
     assert.equal(this.option("focusedRowKey"), 3, "FocusedRowKey");
 
     // act
-    const $cell = $(this.getCellElement(1, 1)).focus();
+    const $cell = $(this.getCellElement(1, 1));
+    $cell.trigger(CLICK_EVENT);
     fireKeyDown($cell, "PageUp");
     this.clock.tick();
 
@@ -2860,7 +2862,8 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     var that = this,
         focusedCellChangedCount = 0,
         rowsView,
-        scrollable;
+        scrollable,
+        visibleRow;
 
     // arrange
     that.data = generateItems(50);
@@ -2877,14 +2880,16 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
         },
         scrolling: {
             mode: "virtual",
-            useNative: false
+            useNative: false,
+            removeInvisiblePages: true
         },
         onFocusedCellChanged: function(e) {
             ++focusedCellChangedCount;
             assert.ok(e.row, "Row object present");
-            assert.equal(e.row.key, 13, "Key");
-            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
-            assert.equal(e.rowIndex, 12, "Global rowIndex");
+            assert.equal(e.row.key, visibleRow.key, "Key");
+            assert.equal(e.row.rowIndex, visibleRow.rowIndex, "Local rowIndex");
+            const globalRowIndex = that.pageIndex() * that.pageSize();
+            assert.equal(e.rowIndex, globalRowIndex, "Global rowIndex");
         },
         columns: ["id", "field1", "field2"]
     };
@@ -2902,6 +2907,7 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     // act
     scrollable.scrollBy({ y: 400 });
     that.clock.tick();
+    visibleRow = that.getVisibleRows()[0];
     $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
     // assert
     assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");
@@ -2911,7 +2917,8 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     var that = this,
         focusedCellChangedCount = 0,
         rowsView,
-        scrollable;
+        scrollable,
+        visibleRow;
 
     // arrange
     that.data = generateItems(50);
@@ -2934,9 +2941,10 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
         onFocusedCellChanged: function(e) {
             ++focusedCellChangedCount;
             assert.ok(e.row, "Row object present");
-            assert.equal(e.row.key, 13, "Key");
-            assert.equal(e.row.rowIndex, 0, "Local rowIndex");
-            assert.equal(e.rowIndex, 12, "Global rowIndex");
+            assert.equal(e.row.key, visibleRow.key, "Key");
+            assert.equal(e.row.rowIndex, visibleRow.rowIndex, "Local rowIndex");
+            const globalRowIndex = that.pageIndex() * that.pageSize();
+            assert.equal(e.rowIndex, globalRowIndex, "Global rowIndex");
         },
         columns: ["id", "field1", "field2"]
     };
@@ -2954,6 +2962,7 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     // act
     scrollable.scrollBy({ y: 400 });
     that.clock.tick();
+    visibleRow = that.getVisibleRows()[0];
     $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
     // assert
     assert.equal(focusedCellChangedCount, 1, "onFocusedCellChanged fires count");

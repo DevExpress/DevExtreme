@@ -24,7 +24,8 @@ const CLASS = {
     pagerPageSize: 'dx-page-size',
     pagerPrevNavButton: 'dx-prev-button',
     pagerNextNavButton: 'dx-next-button',
-    pagerPage: 'dx-page'
+    pagerPage: 'dx-page',
+    selection: 'dx-selection'
 };
 
 class DxElement {
@@ -165,6 +166,14 @@ class FilterPanel extends DxElement {
     }
 }
 
+class NavPage extends DxElement {
+    isSelected = this.element.hasClass(CLASS.selection);
+
+    constructor(pagerElement: Selector, index: number) {
+        super(pagerElement.find(`.${CLASS.pagerPage}`).nth(index));
+    }
+}
+
 class Pager extends DxElement {
     constructor(element: Selector) {
         super(element);
@@ -182,8 +191,8 @@ class Pager extends DxElement {
         return new DxElement(this.element.find(`.${CLASS.pagerNextNavButton}`));
     }
 
-    getNavPage(index: number): DxElement {
-        return new DxElement(this.element.find(`.${CLASS.pagerPage}`).nth(index));
+    getNavPage(index: number): NavPage {
+        return new NavPage(this.element, index);
     }
 }
 
