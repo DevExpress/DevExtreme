@@ -5,15 +5,15 @@ const addNamespace = (eventNames, namespace) => {
         throw errors.Error('E0017');
     }
 
-    if(typeof eventNames === 'string') {
-        return eventNames.indexOf(' ') === -1 ?
-            `${eventNames}.${namespace}` :
-            addNamespace(eventNames.split(/\s+/g), namespace);
+    if(Array.isArray(eventNames)) {
+        return eventNames
+            .map(eventName => `${eventName}.${namespace}`)
+            .join(' ');
+    } else if(eventNames.indexOf(' ') !== -1) {
+        return addNamespace(eventNames.split(/\s+/g), namespace);
     }
 
-    return eventNames
-        .map(eventName => `${eventName}.${namespace}`)
-        .join(' ');
+    return `${eventNames}.${namespace}`;
 };
 
 export default addNamespace;
