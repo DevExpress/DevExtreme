@@ -67,7 +67,7 @@ const getValue = value => value;
 const getLogValue = (base, allowNegatives, linearThreshold) => value => getLog(value, base, allowNegatives, linearThreshold);
 const raiseTo = (base, allowNegatives, linearThreshold) => value => raiseToExt(value, base, allowNegatives, linearThreshold);
 const mathRaiseTo = base => value => mathRaise(value, base);
-const logAbsValue = base => value => mathLog(mathAbs(value), base);
+const logAbsValue = base => value => value === 0 ? 0 : mathLog(mathAbs(value), base);
 
 const correctValueByInterval = (post, round, getValue) => (value, interval) => adjust(post(round(adjust(getValue(value) / interval)) * interval));
 
