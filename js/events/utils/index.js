@@ -121,13 +121,17 @@ export const eventDelta = (from, to) => ({
 });
 
 export const hasTouches = e => {
+    const { originalEvent, pointers } = e;
+
     if(isNativeTouchEvent(e)) {
-        return (e.originalEvent.touches || []).length;
-    } else if(isDxEvent(e)) {
-        return (e.pointers || []).length;
-    } else {
-        return 0;
+        return (originalEvent.touches || []).length;
     }
+
+    if(isDxEvent(e)) {
+        return (pointers || []).length;
+    }
+
+    return 0;
 };
 
 export const needSkipEvent = e => {

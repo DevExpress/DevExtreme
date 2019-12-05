@@ -7,9 +7,11 @@ const addNamespace = (eventNames, namespace) => {
 
     if(Array.isArray(eventNames)) {
         return eventNames
-            .map(eventName => `${eventName}.${namespace}`)
+            .map(eventName => addNamespace(eventName, namespace))
             .join(' ');
-    } else if(eventNames.indexOf(' ') !== -1) {
+    }
+
+    if(eventNames.indexOf(' ') !== -1) {
         return addNamespace(eventNames.split(/\s+/g), namespace);
     }
 
