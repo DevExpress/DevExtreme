@@ -51,11 +51,13 @@ module.exports = {
             onDataErrorOccurred: null,
             /**
              * @name dxDataGridOptions.remoteOperations
-             * @type boolean|object
+             * @type boolean|object|Enums.Mode
+             * @default "auto"
              */
             /**
              * @name dxTreeListOptions.remoteOperations
-             * @type object
+             * @type object|Enums.Mode
+             * @default "auto"
              */
             remoteOperations: "auto",
             /**

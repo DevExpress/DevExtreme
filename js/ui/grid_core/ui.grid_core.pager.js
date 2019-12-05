@@ -167,7 +167,8 @@ module.exports = {
             pager: {
                 /**
                  * @name GridBaseOptions.pager.visible
-                 * @type boolean
+                 * @type boolean|Enums.Mode
+                 * @default "auto"
                  */
                 visible: "auto",
                 /**
@@ -178,7 +179,8 @@ module.exports = {
                 showPageSizeSelector: false,
                 /**
                  * @name GridBaseOptions.pager.allowedPageSizes
-                 * @type Array<number>
+                 * @type Array<number>|Enums.Mode
+                 * @default "auto"
                 */
                 allowedPageSizes: "auto"
                 /**

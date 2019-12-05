@@ -90,7 +90,8 @@ module.exports = {
             scrolling: {
                 /**
                  * @name GridBaseOptions.scrolling.useNative
-                 * @type boolean
+                 * @type boolean|Enums.Mode
+                 * @default "auto"
                  */
                 useNative: "auto"
                 /**
@@ -117,7 +118,8 @@ module.exports = {
             loadPanel: {
                 /**
                  * @name GridBaseOptions.loadPanel.enabled
-                 * @type boolean
+                 * @type boolean|Enums.Mode
+                 * @default "auto"
                  */
                 enabled: "auto",
                 /**
