@@ -239,8 +239,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
     assert.strictEqual(nodes[0].selected, undefined, "item selection has undefined state");
 });
 
-const ROOT_ID = 2; // T832760
-const THREE_LEVELS_ROOT_ID = 3; // T832760
+const ROOT_ID = 0;
 ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
     [false, true].forEach((virtualModeEnabled) => {
         [false, true].forEach((expanded) => {
@@ -327,8 +326,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: true`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -340,8 +339,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: false`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -349,8 +348,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: single`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single' }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -358,8 +357,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -373,8 +372,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -389,8 +388,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -400,8 +399,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> selectAll -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -416,8 +415,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: single -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single' }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -427,8 +426,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1.selected: true, selectionMode: single -> selectAll -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single' }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: true, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -443,8 +442,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -456,8 +455,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -469,8 +468,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: single`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -482,8 +481,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -496,8 +495,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -511,8 +510,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -522,8 +521,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: single -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -533,8 +532,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1.selected: true, selectionMode: single -> selectAll -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded }]);
 
@@ -549,8 +548,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -562,8 +561,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -575,8 +574,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: single`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single' }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -588,8 +587,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -603,8 +602,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll -> selectAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: true }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -619,8 +618,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'multiple', selectNodesRecursive: false }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -632,8 +631,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: single -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single' }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
@@ -646,8 +645,8 @@ const THREE_LEVELS_ROOT_ID = 3; // T832760
                 });
 
                 QUnit.test(`item1_1_1.selected: true, selectionMode: single -> selectAll -> expandAll`, function(assert) {
-                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, rootValue: THREE_LEVELS_ROOT_ID, selectionMode: 'single' }, [
-                        { id: 1, text: "item1", parentId: THREE_LEVELS_ROOT_ID, selected: false, expanded },
+                    const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                         { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
                         { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded }]);
 
