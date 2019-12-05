@@ -15,7 +15,7 @@ import recurrenceUtils from "./utils.recurrence";
 import registerComponent from "../../core/component_registrator";
 import publisherMixin from "./ui.scheduler.publisher_mixin";
 import Appointment from "./ui.scheduler.appointment";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import dblclickEvent from "../../events/double_click";
 import dateLocalization from "../../localization/date";
 import messageLocalization from "../../localization/message";

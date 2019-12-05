@@ -4405,23 +4405,17 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
     });
 
     QUnit.test("Escape key press should be handled by a children keyboard processor", function(assert) {
-
+        const handler = sinon.stub();
         const $element = $("#selectBox").dxSelectBox({
             dataSource: [0, 1, 2],
             value: 1,
             focusStateEnabled: true,
             opened: false,
-            deferRendering: true
+            deferRendering: true,
+            onKeyboardHandled: handler
         });
-        const instance = $element.dxSelectBox("instance");
         const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
         const keyboard = keyboardMock($input);
-        const handler = sinon.stub();
-
-        instance
-            ._keyboardProcessor
-            .attachChildProcessor()
-            .reinitialize(handler, instance);
 
         keyboard.keyDown("esc");
 

@@ -16,7 +16,6 @@ import themes from "ui/themes";
 import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
 import DOMComponent from "core/dom_component";
-import KeyboardProcessor from "ui/widget/ui.keyboard_processor";
 import List from "ui/list";
 import ScrollView from "ui/scroll_view";
 import eventsEngine from "events/core/events_engine";
@@ -2688,52 +2687,23 @@ QUnit.module("keyboard navigation", {
         assert.ok($items.eq(1).hasClass("dx-state-focused"), "focused item change to last visible item on new page");
     });
 
-    QUnit.test("list should attach keyboard events even if focusStateEnabled is false when this option was passed from outer widget", function(assert) {
+    QUnit.test("list should attach keyboard events even if focusStateEnabled is false when the widget's onKeyboardHandled is defined", function(assert) {
         const handler = sinon.stub();
         const $element = $("#list");
 
         const instance = $element.dxList({
             focusStateEnabled: false,
-            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
             items: [1, 2, 3]
         }).dxList("instance");
 
         instance.registerKeyHandler("enter", handler);
+
         $element.trigger($.Event("keydown", { key: "Enter" }));
+        assert.equal(handler.callCount, 0);
 
-        assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
-    });
-
-    QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
-        if(devices.real().deviceType !== "desktop") {
-            assert.ok(true, "keyboard navigation is disabled for not desktop devices");
-            return;
-        }
-
-        const $element = $("#list");
-
-        const instance = $element.dxList({
-            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
-            dataSource: [1, 2, 3],
-            searchEnabled: true
-        }).dxList("instance");
-
-        let $searchEditor = $element.children(".dx-list-search");
-
-        $searchEditor.find("input").focus();
-        this.clock.tick();
-
-        instance.registerKeyHandler("tab", e => {
-            $element.find("[tabIndex]:not(:focus)").first().focus();
-        });
-
-        $element.trigger($.Event("keydown", { key: "Tab" }));
-        this.clock.tick();
-
-        $searchEditor = $element.children(".dx-list-search");
-        assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).first().hasClass("dx-state-focused"), "first list item is focused");
-        assert.ok($element.hasClass("dx-state-focused"), "list is focused");
-        assert.ok($element.find(".dx-scrollview-content").hasClass("dx-state-focused"), "scrollview content is focused");
+        instance.option("onKeyboardHandled", () => true);
+        $element.trigger($.Event("keydown", { key: "Enter" }));
+        assert.equal(handler.callCount, 1);
     });
 });
 

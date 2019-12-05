@@ -6,7 +6,7 @@ import Mentions from "ui/html_editor/modules/mentions";
 import { noop } from "core/utils/common";
 import devices from "core/devices";
 import browser from "core/utils/browser";
-import { Event as dxEvent } from "events";
+import { Event as dxEvent } from "events/core/events_engine";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";

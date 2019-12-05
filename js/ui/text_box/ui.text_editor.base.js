@@ -9,7 +9,7 @@ import { inArray } from "../../core/utils/array";
 import { each } from "../../core/utils/iterator";
 import themes from "../themes";
 import Editor from "../editor/editor";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import ClearButton from "./ui.text_editor.clear";
 import TextEditorButtonCollection from "./texteditor_button_collection/index";

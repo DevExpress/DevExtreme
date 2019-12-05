@@ -462,8 +462,8 @@ var DateBox = DropDownEditor.inherit({
         };
     },
 
-    _attachChildKeyboardEvents: function() {
-        this._strategy.attachKeyboardEvents(this._keyboardProcessor);
+    _getKeyboardListeners() {
+        return this.callBase().concat([this._strategy && this._strategy.getKeyboardListener()]);
     },
 
     _renderPopup: function() {

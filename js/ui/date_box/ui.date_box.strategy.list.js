@@ -75,10 +75,7 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getWidgetOptions: function() {
-        var keyboardProcessor = this.dateBox._keyboardProcessor;
-
         return {
-            _keyboardProcessor: keyboardProcessor ? keyboardProcessor.attachChildProcessor() : null,
             itemTemplate: this._timeListItemTemplate.bind(this),
             onItemClick: this._listItemClickHandler.bind(this),
             tabIndex: -1,
@@ -249,12 +246,8 @@ var ListStrategy = DateBoxStrategy.inherit({
         this.dateBoxValue(date);
     },
 
-    attachKeyboardEvents: function(keyboardProcessor) {
-        var child = keyboardProcessor.attachChildProcessor();
-
-        if(this._widget) {
-            this._widget.option("_keyboardProcessor", child);
-        }
+    getKeyboardListener() {
+        return this._widget;
     },
 
     _dimensionChanged: function() {

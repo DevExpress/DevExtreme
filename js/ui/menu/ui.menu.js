@@ -520,7 +520,7 @@ class Menu extends MenuBase {
     }
 
     _keyboardHandler(e) {
-        return this._visibleSubmenu ? true : super._keyboardHandler(e);
+        return super._keyboardHandler(e, !!this._visibleSubmenu);
     }
 
     _renderContainer() {
@@ -541,14 +541,16 @@ class Menu extends MenuBase {
         return submenu;
     }
 
+    _getKeyboardListeners() {
+        return super._getKeyboardListeners().concat(this._submenus);
+    }
+
     _createSubmenu(node, $rootItem) {
         const $submenuContainer = $("<div>").addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
-        const childKeyboardProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor(),
-            items = this._getChildNodes(node),
+        const items = this._getChildNodes(node),
             result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
-                _keyboardProcessor: childKeyboardProcessor,
                 _dataAdapter: this._dataAdapter,
                 _parentKey: node.internalFields.key,
                 items: items,
