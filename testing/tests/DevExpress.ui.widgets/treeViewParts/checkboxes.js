@@ -692,7 +692,6 @@ const ROOT_ID = 2; // T832760
                             const expectedCallCount = disabled ? 0 : 1;
                             assert.equal(onItemSelectionChanged.callCount, expectedCallCount);
                         });
-
                         QUnit.test(`item1.selected: true. selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive} -> onItemSelectionChanged event`, function(assert) {
                             let onItemSelectionChanged = sinon.stub();
                             const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive, onItemSelectionChanged }, [
@@ -742,7 +741,6 @@ const ROOT_ID = 2; // T832760
 
                             assert.equal(onItemSelectionChanged.callCount, expectedCallCount);
                         });
-
                         QUnit.test(`item1_1.selected: true. selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive} -> onItemSelectionChanged event`, function(assert) {
                             let onItemSelectionChanged = sinon.stub();
                             const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive, onItemSelectionChanged }, [
@@ -762,6 +760,100 @@ const ROOT_ID = 2; // T832760
                             wrapper.instance.selectItem(2);
 
                             assert.equal(onItemSelectionChanged.callCount, 0);
+                        });
+                    });
+
+                    [true, false].forEach((selectNodesRecursive) => {
+                        QUnit.test(`item1.selected: false. selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(1);
+
+                            const expectedCallCount = 1;
+                            assert.equal(onSelectionChanged.callCount, expectedCallCount);
+                        });
+                        QUnit.test(`item1.selected: false. selectionMode: single, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(1);
+
+                            const expectedCallCount = 1;
+                            assert.equal(onSelectionChanged.callCount, expectedCallCount);
+                        });
+                        QUnit.test(`item1.selected: true. selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(1);
+
+                            assert.equal(onSelectionChanged.callCount, 0);
+                        });
+                        QUnit.test(`item1.selected: true. selectionMode: single, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(1);
+
+                            assert.equal(onSelectionChanged.callCount, 0);
+                        });
+
+                        QUnit.test(`item1_1.selected: false. selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(2);
+
+                            const expectedCallCount = !expanded && isLazyDataSourceMode(wrapper)
+                                ? 0
+                                : 1;
+
+                            assert.equal(onSelectionChanged.callCount, expectedCallCount);
+                        });
+                        QUnit.test(`item1_1.selected: false. selectionMode: single, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(2);
+
+                            const expectedCallCount = !expanded && isLazyDataSourceMode(wrapper)
+                                ? 0
+                                : 1;
+
+                            assert.equal(onSelectionChanged.callCount, expectedCallCount);
+                        });
+                        QUnit.test(`item1_1.selected: true. selectionMode: multiple, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(2);
+
+                            assert.equal(onSelectionChanged.callCount, 0);
+                        });
+                        QUnit.test(`item1_1.selected: true. selectionMode: single, selectNodesRecursive: ${selectNodesRecursive} -> onSelectionChanged event`, function(assert) {
+                            let onSelectionChanged = sinon.stub();
+                            const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive, onSelectionChanged }, [
+                                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded, disabled },
+                                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded, disabled }]);
+
+                            wrapper.instance.selectItem(2);
+
+                            assert.equal(onSelectionChanged.callCount, 0);
                         });
                     });
                 });
