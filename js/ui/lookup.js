@@ -1080,6 +1080,7 @@ var Lookup = DropDownList.inherit({
             onPageLoading: this.option("onPageLoading"),
             pageLoadMode: this.option("pageLoadMode"),
             nextButtonText: this.option("nextButtonText"),
+            indicateLoading: this.option("searchEnabled"),
             _keyboardProcessor: this._listKeyboardProcessor,
             onSelectionChanged: this._getSelectionChangedHandler()
         });
