@@ -81,6 +81,11 @@
         .dx-filemanager-toolbar-has-large-icon .dx-button-content {
             padding: @FILEMANAGER_LARGE_ICON_BUTTON_CONTENT_PADDING;
         }
+
+        .dx-toolbar .dx-filemanager-toolbar-viewmode-item .dx-button-content {
+            padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE;
+            padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE;
+        }
     }
 
     .dx-filemanager-container {
@@ -181,6 +186,13 @@
             color: @filemanager-dirs-tree-item-focus-color;
         }
     }
+}
+
+.dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+    padding-top: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE - 1px;
+    padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE - 1px;
+    padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE;
+    text-overflow: clip;
 }
 
 .dx-filemanager-file-actions-button {
