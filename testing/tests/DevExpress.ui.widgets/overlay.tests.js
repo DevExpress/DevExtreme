@@ -2248,7 +2248,10 @@ testModule("container", moduleConfig, () => {
             const wrapperRect = $overlayWrapper.get(0).getBoundingClientRect();
             const targetRect = $targetContainer.get(0).getBoundingClientRect();
 
-            assert.deepEqual(wrapperRect, targetRect, "wrapper position and size are correct");
+            assert.roughEqual(wrapperRect.left, targetRect.left, 0.5, "left coordinates are equal");
+            assert.roughEqual(wrapperRect.top, targetRect.top, 0.5, "top coordinates are equal");
+            assert.strictEqual(wrapperRect.width, targetRect.width, "width coordinates are equal");
+            assert.strictEqual(wrapperRect.height, targetRect.height, "height coordinates are equal");
             assert.strictEqual(wrapperRect.height, 300, "wrapper height is ok");
             assert.strictEqual(wrapperRect.width, 200, "wrapper width is ok");
         });
@@ -2809,7 +2812,7 @@ testModule("drag", moduleConfig, () => {
             $(toSelector(VIEWPORT_CLASS)).attr("style", "width: 100px; height: 100px");
 
             const $container = $(window);
-            const viewWidth = $container.outerWidth();
+            const viewWidth = Math.max($(document).outerWidth(), $container.outerWidth());
             const viewHeight = Math.max($(document).outerHeight(), $container.outerHeight());
             const position = $overlayContent.position();
 
