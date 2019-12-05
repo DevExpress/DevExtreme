@@ -4363,6 +4363,26 @@ QUnit.module("datebox validation", {}, () => {
         assert.ok(dateBox.option("isValid"), "datebox is valid");
     });
 
+    QUnit.test("required validator should be triggered when another validation rule has been changed for widget in invalid state (T838294)", function(assert) {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: new Date(2015, 6, 15),
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxValidator({
+            validationRules: [{ type: "required", message: "Date is required" }]
+        }).dxDateBox("instance");
+
+        dateBox.option("value", null);
+
+        dateBox.option({
+            min: new Date(2015, 6, 13),
+            max: new Date(2015, 6, 21)
+        });
+
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+    });
+
     QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", assert => {
         const $element = $("#dateBox");
         const dateBox = $element.dxDateBox({
