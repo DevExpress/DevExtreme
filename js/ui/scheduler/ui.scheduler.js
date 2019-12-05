@@ -1908,7 +1908,8 @@ const Scheduler = Widget.inherit({
         this._appointments = this._createComponent('<div>', SchedulerAppointments, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
 
-        this._appointmentTooltip = this.option('adaptivityEnabled') ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
+        this._appointmentTooltip = new (this.option('adaptivityEnabled') ?
+            MobileTooltipStrategy : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
         this._appointmentPopup = new AppointmentPopup(this);
 
         if(this._isLoaded()) {
@@ -1921,6 +1922,72 @@ const Scheduler = Widget.inherit({
                 this._reloadDataSource();
             }).bind(this));
         }
+    },
+
+    _getAppointmentTooltipOptions: function() {
+        var that = this;
+        return {
+            createComponent: that._createComponent.bind(that),
+            container: that.$element(),
+            setDefaultTemplate: that.setDefaultTemplate.bind(that),
+            getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
+            showAppointmentPopup: that.showAppointmentPopup.bind(that),
+            getText: that.getText.bind(that),
+            checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
+            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment)
+        };
+    },
+
+    checkAndDeleteAppointment(data, appointmentData) {
+        const that = this;
+        const startDate = that.fire('getField', 'startDate', appointmentData);
+        that._checkRecurringAppointment(data, appointmentData, startDate, (function() {
+            that.deleteAppointment(data);
+        }), true);
+    },
+
+    _getExtraAppointmentTooltipOptions: function() {
+        return {
+            rtlEnabled: this.option('rtlEnabled'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            editing: this.option('editing'),
+        };
+    },
+
+    getText(data, currentData) {
+        const isAllDay = this.fire('getField', 'allDay', data),
+            text = this.fire('getField', 'text', data),
+            startDateTimeZone = this.fire('getField', 'startDateTimeZone', data),
+            endDateTimeZone = this.fire('getField', 'endDateTimeZone', data),
+            startDate = this.fire('convertDateByTimezone', this.fire('getField', 'startDate', currentData), startDateTimeZone),
+            endDate = this.fire('convertDateByTimezone', this.fire('getField', 'endDate', currentData), endDateTimeZone);
+        return {
+            text: text,
+            formatDate: this._formatDate(startDate, endDate, isAllDay)
+        };
+    },
+
+    _formatDate(startDate, endDate, isAllDay) {
+        let result = '';
+
+        this.fire('formatDates', {
+            startDate: startDate,
+            endDate: endDate,
+            formatType: this._getTypeFormat(startDate, endDate, isAllDay),
+            callback: value => result = value
+        });
+
+        return result;
+    },
+
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
     },
 
     _initMarkupCore: function(resources) {
@@ -2804,8 +2871,8 @@ const Scheduler = Widget.inherit({
             itemData: e.itemData.data,
             itemElement: e.itemElement
         };
-        var createClickEvent = extendFromObject(this.fire("mapAppointmentFields", config), e, false);
-        this._createActionByOption("onAppointmentClick")(createClickEvent);
+        var createClickEvent = extendFromObject(this.fire('mapAppointmentFields', config), e, false);
+        this._createActionByOption('onAppointmentClick')(createClickEvent);
     },
 
     createTooltipDragBehavior(e) {
@@ -2849,7 +2916,7 @@ const Scheduler = Widget.inherit({
 
     _createDragAppointment(itemData, settings) {
         var appointments = this.getAppointmentsInstance();
-        var appointmentIndex = appointments.option("items").length;
+        var appointmentIndex = appointments.option('items').length;
 
         settings[0].isCompact = false;
         settings[0].virtual = false;
@@ -2866,7 +2933,7 @@ const Scheduler = Widget.inherit({
 
     _getRecurrencePart(appointments, startDate) {
         return appointments.some(appointment => {
-            return appointment.data("dxAppointmentStartDate").getTime() === startDate.getTime();
+            return appointment.data('dxAppointmentStartDate').getTime() === startDate.getTime();
         });
     },
 
@@ -2973,7 +3040,9 @@ const Scheduler = Widget.inherit({
     },
 
     showAppointmentTooltipCore: function(target, data, clickEvent, dragBehavior) {
-        this._appointmentTooltip.show(target, data, clickEvent, dragBehavior);
+        this._appointmentTooltip.show(
+            target, data, extend(this._getExtraAppointmentTooltipOptions(), { clickEvent: clickEvent, dragBehavior: dragBehavior })
+        );
     },
 
     /**

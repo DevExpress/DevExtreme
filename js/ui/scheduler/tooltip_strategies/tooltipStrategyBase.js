@@ -1,5 +1,4 @@
 import Button from '../../button';
-import dateUtils from '../../../core/utils/date';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import $ from '../../../core/renderer';
 import List from '../../list/ui.list.edit';
@@ -15,22 +14,16 @@ const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item',
     TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
 
 export class TooltipStrategyBase {
-    constructor(scheduler, options) {
-        this.scheduler = scheduler;
+    constructor(options) {
         this._tooltip = null;
-        this._clickEvent = null;
         this._options = options;
+        this._extraOptions = null;
     }
 
-    update(options) {
-        this._options = options;
-    }
-
-    show(target, dataList, clickEvent, drag) {
+    show(target, dataList, extraOptions) {
         if(this._canShowTooltip(dataList)) {
             this.hide();
-            this._clickEvent = clickEvent;
-            this._drag = drag;
+            this._extraOptions = extraOptions;
             this._showCore(target, dataList);
         }
     }
@@ -55,7 +48,7 @@ export class TooltipStrategyBase {
     }
 
     _onShown() {
-        this._list.option('focusStateEnabled', this.scheduler.option('focusStateEnabled'));
+        this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
     }
 
     dispose() {
@@ -95,27 +88,24 @@ export class TooltipStrategyBase {
     _onListRender() {}
 
     _createTooltipElement(wrapperClass) {
-        return $('<div>').appendTo(this.scheduler.$element()).addClass(wrapperClass);
+        return $('<div>').appendTo(this._options.container).addClass(wrapperClass);
     }
 
     _createList(listElement, dataList) {
-        return this.scheduler._createComponent(listElement, List, this._createListOption(dataList));
-    }
-
-    _getTargetData(data, $appointment) {
-        return this.scheduler.fire('getTargetedAppointmentData', data, $appointment);
+        return this._options.createComponent(listElement, List, this._createListOption(dataList));
     }
 
     _renderTemplate(target, data, currentData, index, color) {
-        this.scheduler.setDefaultTemplate(
+        this._options.setDefaultTemplate(
             this._getItemListTemplateName(),
             new FunctionTemplate(options => {
                 const $container = $(options.container);
                 $container.append(this._createItemListContent(data, currentData, color));
                 return $container;
             }));
-        const template = this.scheduler._getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
-        return this._createFunctionTemplate(template, data, this._getTargetData(data, target), index);
+
+        const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
+        return this._createFunctionTemplate(template, data, this._options.getTargetedAppointmentData(data, target), index);
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
@@ -137,24 +127,17 @@ export class TooltipStrategyBase {
 
     _onListItemClick(e) {
         this.hide();
-        if(this._clickEvent) {
-            this._clickEvent(e);
+        if(this._extraOptions.clickEvent) {
+            this._extraOptions.clickEvent(e);
         }
-        this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
+        this._options.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
     }
 
     _createItemListContent(data, currentData, color) {
-        const editing = this.scheduler.option('editing'),
-            isAllDay = this.scheduler.fire('getField', 'allDay', data),
-            text = this.scheduler.fire('getField', 'text', data),
-            startDateTimeZone = this.scheduler.fire('getField', 'startDateTimeZone', data),
-            endDateTimeZone = this.scheduler.fire('getField', 'endDateTimeZone', data),
-            startDate = this.scheduler.fire('convertDateByTimezone', this.scheduler.fire('getField', 'startDate', currentData), startDateTimeZone),
-            endDate = this.scheduler.fire('convertDateByTimezone', this.scheduler.fire('getField', 'endDate', currentData), endDateTimeZone);
-
+        const editing = this._extraOptions.editing;
         const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
         $itemElement.append(this._createItemListMarker(color));
-        $itemElement.append(this._createItemListInfo(text, this._formatDate(startDate, endDate, isAllDay)));
+        $itemElement.append(this._createItemListInfo(this._options.getText(data, currentData)));
 
         if(editing && editing.allowDeleting === true || editing === true) {
             $itemElement.append(this._createDeleteButton(data, currentData));
@@ -173,10 +156,10 @@ export class TooltipStrategyBase {
         return $marker;
     }
 
-    _createItemListInfo(text, formattedDate) {
+    _createItemListInfo(object) {
         const result = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT);
-        const $title = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT).text(text);
-        const $date = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE).text(formattedDate);
+        const $title = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT).text(object.text);
+        const $date = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE).text(object.formatDate);
 
         return result.append($title).append($date);
     }
@@ -186,41 +169,17 @@ export class TooltipStrategyBase {
             $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
         $container.append($deleteButton);
-        this.scheduler._createComponent($deleteButton, Button, {
+        this._options.createComponent($deleteButton, Button, {
             icon: 'trash',
             stylingMode: 'text',
             onClick: e => {
                 this.hide();
                 e.event.stopPropagation();
 
-                const startDate = this.scheduler.fire('getField', 'startDate', currentData);
-                this.scheduler._checkRecurringAppointment(data, currentData, startDate, () => this.scheduler.deleteAppointment(data), true);
+                this._options.checkAndDeleteAppointment(data, currentData);
             }
         });
 
         return $container;
-    }
-
-    _formatDate(startDate, endDate, isAllDay) {
-        let result = '';
-
-        this.scheduler.fire('formatDates', {
-            startDate: startDate,
-            endDate: endDate,
-            formatType: this._getTypeFormat(startDate, endDate, isAllDay),
-            callback: value => result = value
-        });
-
-        return result;
-    }
-
-    _getTypeFormat(startDate, endDate, isAllDay) {
-        if(isAllDay) {
-            return 'DATE';
-        }
-        if(this.scheduler.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
-            return 'TIME';
-        }
-        return 'DATETIME';
     }
 }

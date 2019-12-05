@@ -39,12 +39,12 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
 
     _createTooltip(target, dataList) {
         const $overlay = this._createTooltipElement(SLIDE_PANEL_CLASS_NAME);
-        return this.scheduler._createComponent($overlay, Overlay, {
+        return this._options.createComponent($overlay, Overlay, {
             shading: false,
             position: positionConfig,
             animation: animationConfig,
-            target: this.scheduler.$element(),
-            container: this.scheduler.$element(),
+            target: this._options.container,
+            container: this._options.container,
             closeOnOutsideClick: true,
             width: '100%',
             height: 'auto',

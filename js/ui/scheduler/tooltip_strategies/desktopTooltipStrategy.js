@@ -6,8 +6,8 @@ const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = 'dx-scheduler-appointment-tooltip-wrap
 const MAX_TOOLTIP_HEIGHT = 200;
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
-    constructor(scheduler) {
-        super(scheduler);
+    constructor(options) {
+        super(options);
         this._skipHidingOnScroll = false;
     }
 
@@ -34,22 +34,22 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return result;
     }
 
-    _createTooltip(target, dataList, drag) {
+    _createTooltip(target, dataList) {
         var tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
-        return this.scheduler._createComponent(tooltip, Tooltip, {
+        return this._options.createComponent(tooltip, Tooltip, {
             target: target,
             onShowing: this._onTooltipShowing.bind(this),
             closeOnTargetScroll: () => this._skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option('rtlEnabled'),
+            rtlEnabled: this._extraOptions.rtlEnabled,
             onShown: this._onShown.bind(this),
-            contentTemplate: this._getContentTemplate(dataList, drag)
+            contentTemplate: this._getContentTemplate(dataList)
         });
     }
 
     _onListRender(e) {
-        return this._drag && this._drag(e);
+        return this._extraOptions.dragBehavior && this._extraOptions.dragBehavior(e);
     }
 
     dispose() {
