@@ -1872,6 +1872,28 @@ QUnit.test("popover should clear hide timeout when show event fired", function(a
     assert.ok(instance.option("visible"), "Hiding has been cancelled");
 });
 
+QUnit.test("popover should clear old show timeout when show event fired (T829575)", function(assert) {
+    const $target = $("#where");
+    const instance = new Popover($("#what"), {
+        target: $target,
+        showEvent: {
+            name: "dxhoverstart",
+            delay: 100,
+        },
+        hideEvent: {
+            name: "dxhoverend"
+        }
+    });
+
+    $target.trigger("dxhoverstart");
+    $target.trigger("dxhoverstart");
+    $target.trigger("dxhoverend");
+
+    this.clock.tick(200);
+
+    assert.notOk(instance.option("visible"), "Popover is hidden");
+});
+
 QUnit.test("popover should clear show timeout when show method is called", function(assert) {
     const instance = new Popover($("#what"), {
         visible: false,
