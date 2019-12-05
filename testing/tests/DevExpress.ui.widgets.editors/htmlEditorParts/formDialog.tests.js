@@ -13,7 +13,7 @@ const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.$element = $("#htmlEditor");
         this.componentMock = {
             _createComponent: ($container, Widget, options) => {
@@ -29,7 +29,7 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module("FormDialog", moduleConfig, () => {
-    test("render FormDialog", (assert) => {
+    test("render FormDialog", function(assert) {
         const formDialog = new FormDialog(this.componentMock);
         const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
         const $form = $dialog.find(`.${FORM_CLASS}`);
@@ -39,13 +39,13 @@ QUnit.module("FormDialog", moduleConfig, () => {
         assert.equal($form.length, 1, "There is element with the Form class inside FormDialog");
     });
 
-    test("render FormDialog with popup options", (assert) => {
+    test("render FormDialog with popup options", function(assert) {
         const formDialog = new FormDialog(this.componentMock, { width: 155 });
 
         assert.equal(formDialog.popupOption("width"), 155, "Custom width should apply");
     });
 
-    test("show dialog", (assert) => {
+    test("show dialog", function(assert) {
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ["name", "age"] });
         const formItemsCount = this.$element.find(`.${FORM_CLASS} .${FIELD_ITEM_CLASS}`).length;
@@ -54,7 +54,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         assert.equal(formItemsCount, 2, "2 form items are rendered");
     });
 
-    test("confirm dialog by api", (assert) => {
+    test("confirm dialog by api", function(assert) {
         assert.expect(1);
 
         const EXPECTED_DATA = { name: "Test", age: 20 };
@@ -68,7 +68,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         formDialog.hide(EXPECTED_DATA);
     });
 
-    test("confirm dialog by Enter key press", (assert) => {
+    test("confirm dialog by Enter key press", function(assert) {
         assert.expect(1);
 
         const EXPECTED_DATA = { name: "Test" };
@@ -83,7 +83,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         keyboardMock($input).type("Test").change().press("enter");
     });
 
-    test("IE11 should reset active editor to update data", (assert) => {
+    test("IE11 should reset active editor to update data", function(assert) {
         const isIE11 = browser.msie && parseInt(browser.version) <= 11;
         if(!isIE11) {
             assert.ok("IE11 specific test");
@@ -108,7 +108,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         activeElements.push(getActiveElement());
     });
 
-    test("confirm dialog by button", (assert) => {
+    test("confirm dialog by button", function(assert) {
         assert.expect(1);
 
         const EXPECTED_DATA = { name: "Test" };
@@ -127,7 +127,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
             .trigger("dxclick");
     });
 
-    test("decline dialog by button click", (assert) => {
+    test("decline dialog by button click", function(assert) {
         assert.expect(1);
 
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
@@ -145,7 +145,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
             .trigger("dxclick");
     });
 
-    test("decline dialog on hiding", (assert) => {
+    test("decline dialog on hiding", function(assert) {
         assert.expect(1);
 
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
@@ -161,7 +161,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         formDialog._popup.hide();
     });
 
-    test("decline dialog by escape key press", (assert) => {
+    test("decline dialog by escape key press", function(assert) {
         assert.expect(1);
 
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });

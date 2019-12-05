@@ -17,7 +17,7 @@ import "ui/data_grid/ui.data_grid";
 import $ from "jquery";
 import { setupDataGridModules, MockDataController } from "../../helpers/dataGridMocks.js";
 import dataUtils from "core/element_data";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 
 import Pager from "ui/pager";
 

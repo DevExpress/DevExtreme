@@ -13,7 +13,7 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
@@ -37,23 +37,23 @@ const moduleConfig = {
             }
         ];
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         fx.off = false;
     }
 };
 
 QUnit.module("Scheduler markup", moduleConfig, () => {
-    QUnit.test("Scheduler should be initialized", (assert) => {
+    QUnit.test("Scheduler should be initialized", function(assert) {
         assert.ok(this.instance instanceof dxScheduler, "Scheduler was initialized");
     });
 
-    QUnit.test("Scheduler should have a right css classes", (assert) => {
+    QUnit.test("Scheduler should have a right css classes", function(assert) {
         assert.ok(this.instance.$element().hasClass("dx-scheduler"), "Scheduler has 'dx-scheduler' css class");
         assert.ok(this.instance.$element().hasClass("dx-widget"), "Scheduler has 'dx-widget' css class");
     });
 
-    QUnit.test("Scheduler should not fail when dataSource is set", (assert) => {
+    QUnit.test("Scheduler should not fail when dataSource is set", function(assert) {
         const data = new DataSource.DataSource({
             store: this.tasks
         });
@@ -69,7 +69,7 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
         assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
     });
 
-    QUnit.test("Scheduler should not fail when dataSource is set, timelineView", (assert) => {
+    QUnit.test("Scheduler should not fail when dataSource is set, timelineView", function(assert) {
         const data = new DataSource.DataSource({
             store: this.tasks
         });
@@ -85,7 +85,7 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
         assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
     });
 
-    QUnit.test("Scheduler should not fail when dataSource is set, timelineWeek", (assert) => {
+    QUnit.test("Scheduler should not fail when dataSource is set, timelineWeek", function(assert) {
         const data = new DataSource.DataSource({
             store: this.tasks
         });
@@ -101,7 +101,7 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
         assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
     });
 
-    QUnit.test("Scheduler should not fail when dataSource is set, agenda", (assert) => {
+    QUnit.test("Scheduler should not fail when dataSource is set, agenda", function(assert) {
         const data = new DataSource.DataSource({
             store: this.tasks
         });
@@ -117,7 +117,7 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
         assert.ok(instance._appointmentModel._dataSource instanceof DataSource.DataSource, "Task model has data source instance");
     });
 
-    QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", (assert) => {
+    QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", function(assert) {
         var currentDate = this.instance.option("currentDate"),
             header = this.instance.getHeader(),
             workSpace = this.instance.getWorkSpace(),
@@ -141,17 +141,17 @@ QUnit.module("Scheduler markup", moduleConfig, () => {
 });
 
 QUnit.module("Scheduler with config", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
         };
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("Scheduler should have specific viewName setting of the view", (assert) => {
+    QUnit.test("Scheduler should have specific viewName setting of the view", function(assert) {
         this.createInstance({
             views: [{
                 type: "day",
@@ -168,7 +168,7 @@ QUnit.module("Scheduler with config", {
         assert.equal($header.find(".dx-tab").eq(1).text(), "Week");
     });
 
-    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", (assert) => {
+    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
         this.createInstance({
             currentView: "Week",
             maxAppointmentsPerCell: null,
@@ -182,7 +182,7 @@ QUnit.module("Scheduler with config", {
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 
-    QUnit.test("Scheduler should not fail when crossScrollingEnabled is set", (assert) => {
+    QUnit.test("Scheduler should not fail when crossScrollingEnabled is set", function(assert) {
         this.createInstance();
 
         assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), false, "option is OK");
@@ -191,7 +191,7 @@ QUnit.module("Scheduler with config", {
         assert.strictEqual(this.instance.getWorkSpace().option("crossScrollingEnabled"), true, "option is OK");
     });
 
-    QUnit.test("Scheduler should not fail when crossScrollingEnabled is set, agenda view", (assert) => {
+    QUnit.test("Scheduler should not fail when crossScrollingEnabled is set, agenda view", function(assert) {
         this.createInstance({
             crossScrollingEnabled: true,
             currentView: "agenda"

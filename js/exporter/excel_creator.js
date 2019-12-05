@@ -1,44 +1,50 @@
-var Class = require("../core/class"),
-    window = require("../core/utils/window").getWindow(),
-    typeUtils = require("../core/utils/type"),
-    extend = require("../core/utils/extend").extend,
-    errors = require("../ui/widget/ui.errors"),
-    stringUtils = require("../core/utils/string"),
-    JSZip = require("jszip"),
-    fileSaver = require("./file_saver"),
-    excelFormatConverter = require("./excel_format_converter"),
-    ExcelFile = require("./excel/excel.file"),
-    isDefined = typeUtils.isDefined,
-    XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
-    GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
-    SINGLE_SHEET_PR_XML = "<sheetPr/>",
-    BASE_STYLE_XML2 = "<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\">" +
-                     "<color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/>" +
-                     "</bottom></border></borders><cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>",
-    OPEN_XML_FORMAT_URL = "http://schemas.openxmlformats.org",
-    RELATIONSHIP_PART_NAME = "rels",
-    XL_FOLDER_NAME = "xl",
-    WORKBOOK_FILE_NAME = "workbook.xml",
-    CONTENTTYPES_FILE_NAME = "[Content_Types].xml",
-    SHAREDSTRING_FILE_NAME = "sharedStrings.xml",
-    STYLE_FILE_NAME = "styles.xml",
-    WORKSHEETS_FOLDER = "worksheets",
-    WORKSHEET_FILE_NAME = "sheet1.xml",
-    WORKSHEET_HEADER_XML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
-        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
-        'mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">',
-    VALID_TYPES = {
-        // §18.18.11, ST_CellType (Cell Type)
-        "boolean": "b",
-        "date": "d",
-        "number": "n",
-        "string": "s"
-    },
-    Deferred = require("../core/utils/deferred").Deferred,
-    EXCEL_START_TIME = Date.UTC(1899, 11, 30),
-    DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
+import Class from "../core/class";
+import { getWindow } from "../core/utils/window";
+import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from "../core/utils/type";
+import { extend } from "../core/utils/extend";
+import errors from "../ui/widget/ui.errors";
+import stringUtils from "../core/utils/string";
+import JSZip from "jszip";
+import fileSaver from "./file_saver";
+import excelFormatConverter from "./excel_format_converter";
+import ExcelFile from "./excel/excel.file";
+import { Deferred } from "../core/utils/deferred";
 
-    MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
+const XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+const GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>";
+const SINGLE_SHEET_PR_XML = "<sheetPr/>";
+const BASE_STYLE_XML2 = "<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\">" +
+                     "<color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/>" +
+                     "</bottom></border></borders><cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>";
+const OPEN_XML_FORMAT_URL = "http://schemas.openxmlformats.org";
+const RELATIONSHIP_PART_NAME = "rels";
+const XL_FOLDER_NAME = "xl";
+const WORKBOOK_FILE_NAME = "workbook.xml";
+const CONTENTTYPES_FILE_NAME = "[Content_Types].xml";
+const SHAREDSTRING_FILE_NAME = "sharedStrings.xml";
+const STYLE_FILE_NAME = "styles.xml";
+const WORKSHEETS_FOLDER = "worksheets";
+const WORKSHEET_FILE_NAME = "sheet1.xml";
+const WORKSHEET_HEADER_XML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
+        'mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">';
+const VALID_TYPES = {
+    // §18.18.11, ST_CellType (Cell Type)
+    "boolean": "b",
+    "date": "d",
+    "number": "n",
+    "string": "s"
+};
+const EXCEL_START_TIME = Date.UTC(1899, 11, 30);
+const DAYS_COUNT_BEFORE_29_FEB_1900 = 60;
+
+const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
+const UNSUPPORTED_FORMAT_MAPPING = {
+    quarter: "shortDate",
+    quarterAndYear: "shortDate",
+    minute: "longTime",
+    millisecond: "longTime"
+};
 
 var ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
@@ -54,7 +60,7 @@ var ExcelCreator = Class.inherit({
             }
         }
 
-        return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
+        return isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
     },
 
     _convertToExcelCellRef: function(zeroBasedRowIndex, zeroBasedCellIndex) {
@@ -95,18 +101,18 @@ var ExcelCreator = Class.inherit({
     },
 
     _tryGetExcelCellDataType: function(object) {
-        if(typeUtils.isDefined(object)) {
+        if(isDefined(object)) {
             if((typeof object === "number")) {
                 if(isFinite(object)) {
                     return VALID_TYPES["number"];
                 } else {
                     return VALID_TYPES["string"];
                 }
-            } else if(typeUtils.isString(object)) {
+            } else if(isString(object)) {
                 return VALID_TYPES["string"];
-            } else if(typeUtils.isDate(object)) {
+            } else if(isDate(object)) {
                 return VALID_TYPES["number"];
-            } else if(typeUtils.isBoolean(object)) {
+            } else if(isBoolean(object)) {
                 return VALID_TYPES["boolean"];
             }
         }
@@ -119,7 +125,7 @@ var ExcelCreator = Class.inherit({
             dataType: dataType
         };
 
-        if(typeUtils.isObject(format)) {
+        if(isObject(format)) {
             return extend(result, format, {
                 format: format.formatter || format.type,
                 currency: format.currency
@@ -136,11 +142,15 @@ var ExcelCreator = Class.inherit({
         currency = newFormat.currency;
         dataType = newFormat.dataType;
 
+        if(isDefined(format) && dataType === "date") {
+            format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
+        }
+
         return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
     },
 
     _appendString: function(value) {
-        if(typeUtils.isDefined(value)) {
+        if(isDefined(value)) {
             value = String(value);
             if(value.length) {
                 value = stringUtils.encodeHtml(value);
@@ -157,7 +167,7 @@ var ExcelCreator = Class.inherit({
         var days,
             totalTime;
 
-        if(typeUtils.isDate(date)) {
+        if(isDate(date)) {
             days = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - EXCEL_START_TIME) / (1000 * 60 * 60 * 24));
             if(days < DAYS_COUNT_BEFORE_29_FEB_1900) {
                 days--;
@@ -174,7 +184,7 @@ var ExcelCreator = Class.inherit({
             sourceValue,
             type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
-        if(type === VALID_TYPES.date && !typeUtils.isDate(value)) {
+        if(type === VALID_TYPES.date && !isDate(value)) {
             type = VALID_TYPES.string;
         }
 
@@ -281,7 +291,7 @@ var ExcelCreator = Class.inherit({
                     if(modifiedExcelCell.value !== value) {
                         if(typeof modifiedExcelCell.value !== typeof value || (typeof modifiedExcelCell.value === "number") && !isFinite(modifiedExcelCell.value)) {
                             const cellDataType = this._tryGetExcelCellDataType(modifiedExcelCell.value);
-                            if(typeUtils.isDefined(cellDataType)) {
+                            if(isDefined(cellDataType)) {
                                 cellData.type = cellDataType;
                             }
                         }
@@ -296,7 +306,7 @@ var ExcelCreator = Class.inherit({
                             case VALID_TYPES.number: {
                                 let newValue = modifiedExcelCell.value;
                                 const excelDateValue = this._tryGetExcelDateValue(newValue);
-                                if(typeUtils.isDefined(excelDateValue)) {
+                                if(isDefined(excelDateValue)) {
                                     newValue = excelDateValue;
                                 }
                                 cellData.value = newValue;
@@ -348,7 +358,7 @@ var ExcelCreator = Class.inherit({
 
         styles.forEach(function(style) {
             let numberFormat = that._tryConvertToExcelNumberFormat(style.format, style.dataType);
-            if(!typeUtils.isDefined(numberFormat)) {
+            if(!isDefined(numberFormat)) {
                 numberFormat = 0;
             }
             that._styleArray.push({
@@ -533,7 +543,7 @@ var ExcelCreator = Class.inherit({
                     { name: "r", value: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex, colIndex) },
                     { name: "s", value: cellData.style },
                     { name: "t", value: cellData.type } // 18.18.11 ST_CellType (Cell Type)
-                ], (typeUtils.isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
+                ], (isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
             }
             xmlRows.push(this._getXMLTag("row", [
                 { name: "r", value: Number(rowIndex) + 1 },
@@ -575,7 +585,7 @@ var ExcelCreator = Class.inherit({
             l,
             cellIndex,
             rowIndex,
-            rowsLength = typeUtils.isDefined(this._dataProvider.getHeaderRowCount) ? this._dataProvider.getHeaderRowCount() : this._dataProvider.getRowsCount(),
+            rowsLength = isDefined(this._dataProvider.getHeaderRowCount) ? this._dataProvider.getHeaderRowCount() : this._dataProvider.getRowsCount(),
             columnsLength = this._dataProvider.getColumns().length,
             usedArea = [],
             mergeArray = [],
@@ -585,7 +595,7 @@ var ExcelCreator = Class.inherit({
 
         for(rowIndex = 0; rowIndex < rowsLength; rowIndex++) {
             for(cellIndex = 0; cellIndex !== columnsLength; cellIndex++) {
-                if(!typeUtils.isDefined(usedArea[rowIndex]) || !typeUtils.isDefined(usedArea[rowIndex][cellIndex])) {
+                if(!isDefined(usedArea[rowIndex]) || !isDefined(usedArea[rowIndex][cellIndex])) {
                     var cellMerge = this._dataProvider.getCellMerging(rowIndex, cellIndex);
                     if(cellMerge.colspan || cellMerge.rowspan) {
                         mergeArray.push({
@@ -594,7 +604,7 @@ var ExcelCreator = Class.inherit({
                         });
                         for(k = rowIndex; k <= rowIndex + cellMerge.rowspan || 0; k++) {
                             for(l = cellIndex; l <= cellIndex + cellMerge.colspan || 0; l++) {
-                                if(!typeUtils.isDefined(usedArea[k])) {
+                                if(!isDefined(usedArea[k])) {
                                     usedArea[k] = [];
                                 }
                                 usedArea[k][l] = true;
@@ -656,7 +666,7 @@ var ExcelCreator = Class.inherit({
         this._dataProvider = dataProvider;
         this._excelFile = new ExcelFile();
 
-        if(typeUtils.isDefined(ExcelCreator.JSZip)) {
+        if(isDefined(ExcelCreator.JSZip)) {
             this._zip = new ExcelCreator.JSZip();
         } else {
             this._zip = null;
@@ -703,7 +713,7 @@ exports.getData = function(data, options) {
 
     excelCreator._checkZipState();
 
-    return excelCreator.ready().then(() => excelCreator.getData(typeUtils.isFunction(window.Blob)));
+    return excelCreator.ready().then(() => excelCreator.getData(isFunction(getWindow().Blob)));
 };
 
 ///#DEBUG

@@ -6,7 +6,7 @@ const ICON_CLASS = "dx-icon";
 const SVG_ICON_CLASS = "dx-svg-icon";
 
 testModule("icon utils", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.sourceArray = [{ // 1
             source: "data:image/png;base64,qwertyuiopasdfghjklzxcvbmnQWERTYUIOPLKJHGFDSAZXCVBNM/+0987654321",
             result: "image"
@@ -95,7 +95,7 @@ testModule("icon utils", {
         }];
     }
 }, () => {
-    test("getImageSourceType", (assert) => {
+    test("getImageSourceType", function(assert) {
         assert.expect(19);
 
         this.sourceArray.forEach(({ source, result }) => {
@@ -103,7 +103,7 @@ testModule("icon utils", {
         });
     });
 
-    test("getImageContainer", (assert) => {
+    test("getImageContainer", function(assert) {
         this.sourceArray.forEach(({ source, result }) => {
             var $iconElement = getImageContainer(source);
             switch(result) {

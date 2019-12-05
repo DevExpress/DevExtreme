@@ -33,6 +33,7 @@ var EDIT_FORM_CLASS = "edit-form",
     EDIT_POPUP_CLASS = "edit-popup",
     FORM_BUTTONS_CONTAINER_CLASS = "form-buttons-container",
     ADD_ROW_BUTTON_CLASS = "addrow-button",
+    DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     LINK_CLASS = "dx-link",
     EDITOR_CELL_CLASS = "dx-editor-cell",
     ROW_SELECTED = "dx-selection",
@@ -133,10 +134,6 @@ var isRowEditMode = function(that) {
     return ROW_BASED_MODES.indexOf(editMode) !== -1;
 };
 
-var getDocumentClickEventName = function() {
-    return devices.real().deviceType === "desktop" ? pointerEvents.down : clickEvent.name;
-};
-
 var EditingController = modules.ViewController.inherit((function() {
     var getDefaultEditorTemplate = function(that) {
         return function(container, options) {
@@ -232,6 +229,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 that.createAction("onRowRemoving", { excludeValidators: ["disabled", "readOnly"] });
                 that.createAction("onRowRemoved", { excludeValidators: ["disabled", "readOnly"] });
 
+                let $pointerDownTarget; // chrome 73+
+                that._pointerDownEditorHandler = e => $pointerDownTarget = $(e.target);
                 that._saveEditorHandler = that.createAction(function(e) {
                     var event = e.event,
                         isEditorPopup,
@@ -239,16 +238,19 @@ var EditingController = modules.ViewController.inherit((function() {
                         isFocusOverlay,
                         isAddRowButton,
                         isCellEditMode,
-                        $target,
+                        $target = $(event.target),
                         isAnotherComponent,
                         targetComponent = event[TARGET_COMPONENT_NAME];
 
+                    if($pointerDownTarget && $pointerDownTarget.is("input") && !$pointerDownTarget.is($target)) {
+                        return;
+                    }
+
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
-                        $target = $(event.target);
-                        isEditorPopup = $target.closest(".dx-dropdowneditor-overlay").length;
-                        isDomElement = $target.closest(getWindow().document).length;
+                        isEditorPopup = !!$target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+                        isDomElement = !!$target.closest(getWindow().document).length;
                         isAnotherComponent = targetComponent && targetComponent !== that.component;
-                        isAddRowButton = $target.closest("." + that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)).length;
+                        isAddRowButton = !!$target.closest(`.${that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
                         isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
 
@@ -258,7 +260,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(domAdapter.getDocument(), getDocumentClickEventName(), that._saveEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, that._pointerDownEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), clickEvent.name, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -546,7 +549,8 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(domAdapter.getDocument(), getDocumentClickEventName(), this._saveEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), clickEvent.name, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
@@ -890,8 +894,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return true;
         },
 
-        _addRowCore: function(data, parentKey, oldEditRowIndex) {
+        _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             var that = this,
+                oldEditRowIndex = that._getVisibleEditRowIndex(),
                 insertKey = that._getInsertKey(parentKey),
                 editMode = getEditMode(that);
 
@@ -899,7 +904,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that._dataController.updateItems({
                 changeType: "update",
-                rowIndices: [oldEditRowIndex, insertKey.rowIndex]
+                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, insertKey.rowIndex]
             });
 
             if(editMode === EDIT_MODE_POPUP) {
@@ -1295,6 +1300,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 editingTexts = editingOptions && editingOptions.texts,
                 confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle,
                 isBatchMode = editingOptions && editingOptions.mode === EDIT_MODE_BATCH,
+                confirmDelete = editingOptions && editingOptions.confirmDelete,
                 confirmDeleteMessage = editingTexts && editingTexts.confirmDeleteMessage,
                 dataController = that._dataController,
                 removeByKey,
@@ -1330,7 +1336,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 };
 
-                if(isBatchMode || !confirmDeleteMessage) {
+                if(isBatchMode || !confirmDelete || !confirmDeleteMessage) {
                     removeByKey(key);
                 } else {
                     showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
@@ -2044,9 +2050,23 @@ var EditingController = modules.ViewController.inherit((function() {
                 templateOptions.row.watch && templateOptions.row.watch(function() {
                     return templateOptions.column.selector(templateOptions.row.data);
                 }, function(newValue) {
+                    let $editorElement = $container.find(".dx-widget").first(),
+                        validator = $editorElement.data("dxValidator"),
+                        validatorOptions = validator && validator.option();
+
                     templateOptions.value = newValue;
                     $container.contents().remove();
                     that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
+
+                    $editorElement = $container.find(".dx-widget").first();
+                    validator = $editorElement.data("dxValidator");
+                    if(validatorOptions && !validator) {
+                        $editorElement.dxValidator({
+                            validationRules: validatorOptions.validationRules,
+                            validationGroup: validatorOptions.validationGroup,
+                            dataGetter: validatorOptions.dataGetter
+                        });
+                    }
                 });
 
                 that.renderFormEditTemplate.bind(that)(cellOptions, item, options.component, $container);
@@ -2206,10 +2226,6 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 if(typeUtils.isDefined(button.hint)) {
                     $button.attr("title", button.hint);
-                }
-
-                if(that.option("keyboardNavigation.enabled")) {
-                    $button.attr("tabindex", -1);
                 }
 
                 eventsEngine.on($button, addNamespace("click", EDITING_NAMESPACE), that.createAction(function(e) {
@@ -2535,6 +2551,12 @@ module.exports = {
                  * @default false
                  */
                 selectTextOnEditStart: false,
+                /**
+                 * @name GridBaseOptions.editing.confirmDelete
+                 * @type boolean
+                 * @default true
+                 */
+                confirmDelete: true,
                 /**
                  * @name dxDataGridOptions.editing.texts
                  * @type object

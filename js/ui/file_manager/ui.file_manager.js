@@ -22,8 +22,6 @@ import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 import FileManagerAdaptivityControl from "./ui.file_manager.adaptivity";
 
-import { FileManagerItem } from "./file_provider/file_provider";
-
 const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + "-wrapper";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
@@ -150,7 +148,7 @@ class FileManager extends Widget {
 
         const options = {
             selectionMode: this.option("selectionMode"),
-            contextMenu: this._createContextMenu(),
+            contextMenu: this._createContextMenu(true),
             getItems: this._getItemViewItems.bind(this),
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
@@ -178,11 +176,12 @@ class FileManager extends Widget {
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
 
-    _createContextMenu() {
+    _createContextMenu(isolateCreationItemCommands) {
         const $contextMenu = $("<div>").appendTo(this._$wrapper);
         return this._createComponent($contextMenu, FileManagerContextMenu, {
             commandManager: this._commandManager,
-            items: this.option("contextMenu.items")
+            items: this.option("contextMenu.items"),
+            isolateCreationItemCommands
         });
     }
 
@@ -303,8 +302,10 @@ class FileManager extends Widget {
             : this._controller.getFiles(selectedDir);
 
         if(this.option("itemView.showParentFolder") && !selectedDir.fileItem.isRoot) {
-            let parentDirItem = new FileManagerItem(null, "..", true);
+            let parentDirItem = selectedDir.fileItem.createClone();
             parentDirItem.isParentFolder = true;
+            parentDirItem.name = "..";
+            parentDirItem.relativeName = "..";
             itemInfos = when(itemInfos)
                 .then(items => {
                     let itemInfosCopy = [...items];
@@ -445,10 +446,6 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerContextMenuItem.visible
             * @default undefined
-            */
-            /**
-            * @name dxFileManagerContextMenuItem.items
-            * @type Array<dxFileManagerContextMenuItem>
             */
 
             contextMenu: {
@@ -623,7 +620,7 @@ class FileManager extends Widget {
                 ));
                 break;
             case "contextMenu":
-                this._itemView.option("contextMenu", this._createContextMenu());
+                this._itemView.option("contextMenu", this._createContextMenu(true));
                 this._filesTreeView.option("contextMenu", this._createContextMenu());
                 break;
             case "onCurrentDirectoryChanged":

@@ -777,7 +777,7 @@ QUnit.test("dxclick should be fired even if propagation was stopped", function(a
     pointer.start().down().up();
 });
 
-QUnit.test("dxclick should not be fired twice when 'click' is triggered from its handler (T503035)", (assert) => {
+QUnit.test("dxclick should not be fired twice when 'click' is triggered from its handler (T503035)", function(assert) {
     assert.expect(1);
 
     if(!clickEvent.useNativeClick) {

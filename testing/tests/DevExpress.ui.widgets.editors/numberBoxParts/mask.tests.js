@@ -13,7 +13,7 @@ const IE_NUMPAD_MINUS_KEY = "Subtract";
 const CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // IE prevent browser text selection on double click if caret was moved
 
 const moduleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         this.$element = $("#numberbox").dxNumberBox({
             format: "#0.##",
             value: "",
@@ -26,13 +26,13 @@ const moduleConfig = {
         this.keyboard = keyboardMock(this.input, true);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 };
 
 QUnit.module("format: api value changing", moduleConfig, () => {
-    QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", assert => {
+    QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", function(assert) {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
         const realBrowser = browser;
         const $element = $("<div>").appendTo("body");
@@ -64,7 +64,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         }
     });
 
-    QUnit.test("number type of input should be converted to text on desktop device", assert => {
+    QUnit.test("number type of input should be converted to text on desktop device", function(assert) {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "desktop" });
         const $element = $("<div>").appendTo("body");
 
@@ -85,12 +85,12 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         }
     });
 
-    QUnit.test("empty value should not be formatted", (assert) => {
+    QUnit.test("empty value should not be formatted", function(assert) {
         this.instance.option("value", "");
         assert.equal(this.input.val(), "", "value is empty");
     });
 
-    QUnit.test("placeholder should disappear when an empty value has been changed", (assert) => {
+    QUnit.test("placeholder should disappear when an empty value has been changed", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: null,
@@ -102,12 +102,12 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         assert.notOk(this.$element.find(".dx-placeholder").is(":visible"), "placeholder is hidden");
     });
 
-    QUnit.test("format should be applied on value change", (assert) => {
+    QUnit.test("format should be applied on value change", function(assert) {
         this.instance.option("value", 12.34);
         assert.equal(this.input.val(), "12.34", "value is correct");
     });
 
-    QUnit.test("value should be reformatted when format option changed", (assert) => {
+    QUnit.test("value should be reformatted when format option changed", function(assert) {
         this.instance.option("value", 123);
         assert.equal(this.input.val(), "123", "value is correct");
 
@@ -115,7 +115,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         assert.equal(this.input.val(), "123.00", "value was reformatted");
     });
 
-    QUnit.test("setting value to undefined should work correctly", (assert) => {
+    QUnit.test("setting value to undefined should work correctly", function(assert) {
         this.instance.option({
             format: "#0",
             value: 667
@@ -128,7 +128,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         assert.strictEqual(this.instance.option("value"), undefined, "value is correct");
     });
 
-    QUnit.test("widget should not crash when it is disposing on change (T578115)", (assert) => {
+    QUnit.test("widget should not crash when it is disposing on change (T578115)", function(assert) {
         this.instance.option({
             value: 1,
             onValueChanged(e) {
@@ -141,7 +141,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         assert.ok(true, "there was no exceptions");
     });
 
-    QUnit.test("api value changing should hide a placeholder", (assert) => {
+    QUnit.test("api value changing should hide a placeholder", function(assert) {
         this.instance.option({
             format: "$ #0",
             placeholder: "Enter number"
@@ -157,7 +157,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
     });
 
-    QUnit.test("text option should be changed after format option change", (assert) => {
+    QUnit.test("text option should be changed after format option change", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1.23
@@ -169,7 +169,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
         assert.equal(this.instance.option("text"), "1", "text has been changed");
     });
 
-    QUnit.test("should not update value if the formated text has not been changed", (assert) => {
+    QUnit.test("should not update value if the formated text has not been changed", function(assert) {
         const done = assert.async();
 
         this.instance.option({
@@ -193,7 +193,7 @@ QUnit.module("format: api value changing", moduleConfig, () => {
 });
 
 QUnit.module("format: sign and minus button", moduleConfig, () => {
-    QUnit.test("pressing '-' button should revert the number", (assert) => {
+    QUnit.test("pressing '-' button should revert the number", function(assert) {
         this.instance.option({
             format: "#.000",
             value: 123.456
@@ -228,7 +228,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 123.456, "value has been changed after valueChange event");
     });
 
-    QUnit.test("pressing numpad minus button should revert the number", (assert) => {
+    QUnit.test("pressing numpad minus button should revert the number", function(assert) {
         const isIE = browser.msie;
         const keyName = isIE ? IE_NUMPAD_MINUS_KEY : "-";
 
@@ -254,7 +254,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
     });
 
-    QUnit.test("pressing minus with fireFox keyCode should revert the number", (assert) => {
+    QUnit.test("pressing minus with fireFox keyCode should revert the number", function(assert) {
         this.instance.option({
             format: "#.000",
             value: 123.456
@@ -264,7 +264,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.input.val(), "-123.456", "value is correct");
     });
 
-    QUnit.test("pressing '-' button should revert zero number", (assert) => {
+    QUnit.test("pressing '-' button should revert zero number", function(assert) {
         this.instance.option({
             format: "#0",
             value: 0
@@ -279,7 +279,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(1 / this.instance.option("value"), Infinity, "value is positive");
     });
 
-    QUnit.test("pressing '-' with different positive and negative parts", (assert) => {
+    QUnit.test("pressing '-' with different positive and negative parts", function(assert) {
         this.instance.option({
             format: "$ #0;($ #0)",
             value: 123
@@ -294,7 +294,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 123, "value is positive");
     });
 
-    QUnit.test("focusout after inverting sign should not lead to value changing", (assert) => {
+    QUnit.test("focusout after inverting sign should not lead to value changing", function(assert) {
         this.instance.option("value", -123);
 
         // note: keyboard mock keyDown send wrong key for '-' and can not be used here
@@ -306,7 +306,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 123, "value is correct");
     });
 
-    QUnit.test("pressing minus button should revert selected number", (assert) => {
+    QUnit.test("pressing minus button should revert selected number", function(assert) {
         if(!browser.msie) {
             this.clock.restore();
         }
@@ -322,7 +322,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 6 }, "caret is good");
     });
 
-    QUnit.test("pressing '-' should keep selection", (assert) => {
+    QUnit.test("pressing '-' should keep selection", function(assert) {
         this.instance.option({
             format: "#0.#",
             value: 123.456
@@ -351,7 +351,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is good");
     });
 
-    QUnit.test("pressing '-' correctly remove the selected part of previous value", (assert) => {
+    QUnit.test("pressing '-' correctly remove the selected part of previous value", function(assert) {
         this.instance.option({
             format: "#0.#",
             value: 123.4
@@ -366,7 +366,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.instance.option("value"), -123.4, "value has been changed after valueChange event");
     });
 
-    QUnit.test("NumberBox keeps correct selection after revert the sign", (assert) => {
+    QUnit.test("NumberBox keeps correct selection after revert the sign", function(assert) {
         this.instance.option({
             format: "#0.#;<<#0.#>>",
             value: 123.4
@@ -379,7 +379,7 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
     });
 
-    QUnit.test("NumberBox should keep selected range after the ValueChange event", (assert) => {
+    QUnit.test("NumberBox should keep selected range after the ValueChange event", function(assert) {
         this.instance.option({
             format: "#0.#;<<#0.#>>",
             value: 123.4
@@ -394,14 +394,14 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
 });
 
 QUnit.module("format: fixed point format", moduleConfig, () => {
-    QUnit.test("value should be formatted on first input", (assert) => {
+    QUnit.test("value should be formatted on first input", function(assert) {
         this.instance.option("format", "#0.00");
 
         this.keyboard.type("1");
         assert.equal(this.input.val(), "1.00", "required digits was added on first input");
     });
 
-    QUnit.test("value option should have right value after typing when format is enabled (T829935)", (assert) => {
+    QUnit.test("value option should have right value after typing when format is enabled (T829935)", function(assert) {
         this.instance.option("format", "000.00");
 
         this.keyboard.type("1234").change();
@@ -409,7 +409,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 234, "value option is right");
     });
 
-    QUnit.test("value option should have right value after inserting when format is enabled (T829935)", (assert) => {
+    QUnit.test("value option should have right value after inserting when format is enabled (T829935)", function(assert) {
         this.instance.option("format", "000.00");
 
         this.keyboard.caret({ start: 0, end: 6 }).type("12345678").change();
@@ -417,7 +417,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 678, "value option is right");
     });
 
-    QUnit.test("value option should have right value after inserting when format is enabled and decimalSeparator is ',' (T829935)", (assert) => {
+    QUnit.test("value option should have right value after inserting when format is enabled and decimalSeparator is ',' (T829935)", function(assert) {
         const oldDecimalSeparator = config().decimalSeparator;
         config({ decimalSeparator: "," });
 
@@ -432,7 +432,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         }
     });
 
-    QUnit.test("extra decimal points should be ignored", (assert) => {
+    QUnit.test("extra decimal points should be ignored", function(assert) {
         this.instance.option("format", "#0.00");
 
         this.keyboard.type("2..05");
@@ -442,7 +442,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "2.05", "extra point should be prevented");
     });
 
-    QUnit.test("value should be rounded to the low digit on input an extra float digits", (assert) => {
+    QUnit.test("value should be rounded to the low digit on input an extra float digits", function(assert) {
         this.instance.option("format", "#0.00");
 
         this.keyboard.type("2.057").change();
@@ -450,7 +450,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 2.05, "value is correct");
     });
 
-    QUnit.test("required digits should be replaced on input", (assert) => {
+    QUnit.test("required digits should be replaced on input", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1.23
@@ -460,7 +460,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "1.45", "text is correct");
     });
 
-    QUnit.test("should ignore backspace/delete key down when the caret in the start/end of input (T713045)", (assert) => {
+    QUnit.test("should ignore backspace/delete key down when the caret in the start/end of input (T713045)", function(assert) {
         this.instance.option({
             valueChangeEvent: "keyup",
             format: "#,##0",
@@ -480,7 +480,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.strictEqual(this.input.val(), "1,234");
     });
 
-    QUnit.test("removing required value should replace it to 0", (assert) => {
+    QUnit.test("removing required value should replace it to 0", function(assert) {
         this.instance.option({
             format: "#0.000",
             value: 1.234
@@ -493,7 +493,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "1.400", "delete works");
     });
 
-    QUnit.test("removing decimal point should move the caret", (assert) => {
+    QUnit.test("removing decimal point should move the caret", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1.23
@@ -503,7 +503,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret().start, 1, "caret was moved");
     });
 
-    QUnit.test("removing last integer should replace it to 0", (assert) => {
+    QUnit.test("removing last integer should replace it to 0", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1.23
@@ -513,7 +513,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "0.23", "integer was replaced to 0");
     });
 
-    QUnit.test("input with non-required digit", (assert) => {
+    QUnit.test("input with non-required digit", function(assert) {
         this.instance.option("format", "#0.##");
 
         this.keyboard.type("1");
@@ -529,7 +529,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "1.05", "extra digit should be rounded");
     });
 
-    QUnit.test("extra zeros in the end should be prevented from input", (assert) => {
+    QUnit.test("extra zeros in the end should be prevented from input", function(assert) {
         this.instance.option({
             format: "#.##",
             value: 1.52
@@ -540,7 +540,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "1.52", "extra zero input has been prevented");
     });
 
-    QUnit.test("removed digits should not be replaced to 0 when they are not required", (assert) => {
+    QUnit.test("removed digits should not be replaced to 0 when they are not required", function(assert) {
         this.instance.option({
             format: "#0.##",
             value: 1.23
@@ -553,7 +553,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "1", "decimal point was removed together with last float digit");
     });
 
-    QUnit.test("value is not changed when using the big float part", (assert) => {
+    QUnit.test("value is not changed when using the big float part", function(assert) {
         this.instance.option({
             format: "#,##0.##############################",
             value: ""
@@ -567,7 +567,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), "3.4");
     });
 
-    QUnit.test("precision should correctly round the value", (assert) => {
+    QUnit.test("precision should correctly round the value", function(assert) {
         this.instance.option({
             format: {
                 type: "fixedPoint",
@@ -581,7 +581,7 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
 });
 
 QUnit.module("format: minimum and maximum", moduleConfig, () => {
-    QUnit.test("value should be fitted into min and max range on change", (assert) => {
+    QUnit.test("value should be fitted into min and max range on change", function(assert) {
         this.instance.option({
             format: "#0.0",
             min: 10,
@@ -596,7 +596,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
     });
 
-    QUnit.test("value removing should be possible when min is specified and stubs are in the format", (assert) => {
+    QUnit.test("value removing should be possible when min is specified and stubs are in the format", function(assert) {
         this.instance.option({
             format: "#,##0 d",
             min: 5,
@@ -614,7 +614,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.strictEqual(this.instance.option("value"), 7, "value is correct");
     });
 
-    QUnit.test("changing min limit should lead to value change in masked numberbox", (assert) => {
+    QUnit.test("changing min limit should lead to value change in masked numberbox", function(assert) {
         this.instance.option({
             format: "$ #0",
             value: 5,
@@ -626,7 +626,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 6", "text has been updated");
     });
 
-    QUnit.test("changing max limit should lead to value change in masked numberbox", (assert) => {
+    QUnit.test("changing max limit should lead to value change in masked numberbox", function(assert) {
         this.instance.option({
             format: "$ #0",
             value: 5,
@@ -638,7 +638,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 4", "text has been updated");
     });
 
-    QUnit.test("invert sign should be prevented if minimum is larger than 0", (assert) => {
+    QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
         this.instance.option({
             min: 0,
             value: 4
@@ -648,14 +648,14 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "4", "reverting was prevented");
     });
 
-    QUnit.test("integer should not be longer than 15 digit", (assert) => {
+    QUnit.test("integer should not be longer than 15 digit", function(assert) {
         this.instance.option("value", 999999999999999);
         this.keyboard.caret(15).type("5");
 
         assert.equal(this.input.val(), "999999999999999", "input was prevented");
     });
 
-    QUnit.test("trailing zeros should not affect 15 digits limit", (assert) => {
+    QUnit.test("trailing zeros should not affect 15 digits limit", function(assert) {
         this.instance.option("format", "#,##0.000000");
         this.instance.option("value", 222222222.120000);
         this.keyboard.caret(12).type("8");
@@ -663,7 +663,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "222,222,222.812000", "input was not prevented");
     });
 
-    QUnit.test("leading zeros should not affect 15 digits limit", (assert) => {
+    QUnit.test("leading zeros should not affect 15 digits limit", function(assert) {
         this.instance.option("format", "000000000000000#.00");
         this.instance.option("value", 1);
         this.keyboard.caret(12).type("8");
@@ -671,14 +671,14 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "000000000008001.00", "input was not prevented");
     });
 
-    QUnit.test("negative integer should not be longer than 15 digit", (assert) => {
+    QUnit.test("negative integer should not be longer than 15 digit", function(assert) {
         this.instance.option("value", -999999999999999);
         this.keyboard.caret(16).type("5");
 
         assert.equal(this.input.val(), "-999999999999999", "input was prevented");
     });
 
-    QUnit.test("15-digit value with decimal part should be parsed", (assert) => {
+    QUnit.test("15-digit value with decimal part should be parsed", function(assert) {
         this.instance.option("format", "#0.####");
         this.instance.option("value", 9999999999.999);
         this.keyboard.caret(14).type("9");
@@ -686,7 +686,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         assert.equal(this.input.val(), "9999999999.9999", "input was not prevented");
     });
 
-    QUnit.test("boundary value should correctly apply after second try to set overflow value", (assert) => {
+    QUnit.test("boundary value should correctly apply after second try to set overflow value", function(assert) {
         this.instance.option({
             min: 1,
             max: 4,
@@ -723,7 +723,7 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
 });
 
 QUnit.module("format: arabic digit shaping", {
-    beforeEach: () => {
+    beforeEach: function() {
         moduleConfig.beforeEach.call(this);
 
         const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
@@ -757,12 +757,12 @@ QUnit.module("format: arabic digit shaping", {
         });
     },
 
-    afterEach: () => {
+    afterEach: function() {
         moduleConfig.afterEach.call(this);
         numberLocalization.resetInjection();
     }
 }, () => {
-    QUnit.test("mask should work with arabic digit shaping", (assert) => {
+    QUnit.test("mask should work with arabic digit shaping", function(assert) {
         this.keyboard
             .type("١٢٣٤٥")
             .press("backspace")
@@ -776,14 +776,14 @@ QUnit.module("format: arabic digit shaping", {
         assert.equal(this.input.val(), "-١٢٣٤", "arabic minus should work");
     });
 
-    QUnit.test("getFormatPattern should return correct format with arabic digit shaping", (assert) => {
+    QUnit.test("getFormatPattern should return correct format with arabic digit shaping", function(assert) {
         this.instance.option("format", "currency");
         assert.equal(this.instance._getFormatPattern(), "#0.##############");
     });
 });
 
 QUnit.module("format: text input", moduleConfig, () => {
-    QUnit.test("clearing numberbox via keyboard should be possible if non required format is used", (assert) => {
+    QUnit.test("clearing numberbox via keyboard should be possible if non required format is used", function(assert) {
         this.instance.option({
             format: "$ #.##",
             value: 1
@@ -798,19 +798,19 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.instance.option("value"), null, "value is correct");
     });
 
-    QUnit.test("invalid chars should be prevented on keydown", (assert) => {
+    QUnit.test("invalid chars should be prevented on keydown", function(assert) {
         this.keyboard.type("12e*3.456");
         assert.equal(this.input.val(), "123.45", "value is correct");
     });
 
-    QUnit.test("input should be correct with group separators", (assert) => {
+    QUnit.test("input should be correct with group separators", function(assert) {
         this.instance.option("format", "$ #,##0.00 d");
 
         this.keyboard.type("1234567.894");
         assert.equal(this.input.val(), "$ 1,234,567.89 d", "input is correct");
     });
 
-    QUnit.test("select and replace all text", (assert) => {
+    QUnit.test("select and replace all text", function(assert) {
         this.instance.option({
             format: "$ #.000 d",
             value: 123
@@ -824,7 +824,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret position is correct");
     });
 
-    QUnit.test("don't replace selected text after enter pressed", (assert) => {
+    QUnit.test("don't replace selected text after enter pressed", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 123.45
@@ -838,7 +838,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.input.val(), "123.45");
     });
 
-    QUnit.test("don't replace selected text after focusOut", (assert) => {
+    QUnit.test("don't replace selected text after focusOut", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 123.45
@@ -852,7 +852,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.input.val(), "123.45");
     });
 
-    QUnit.test("decimal point should move the caret before float part only", (assert) => {
+    QUnit.test("decimal point should move the caret before float part only", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 123.45
@@ -867,7 +867,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret was moved to the float part");
     });
 
-    QUnit.test("input after 0 should not move caret to float part", (assert) => {
+    QUnit.test("input after 0 should not move caret to float part", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 0
@@ -878,12 +878,12 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 1, "caret is good");
     });
 
-    QUnit.test("ctrl+v should not be prevented", (assert) => {
+    QUnit.test("ctrl+v should not be prevented", function(assert) {
         this.keyboard.keyDown("v", { ctrlKey: true });
         assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
     });
 
-    QUnit.test("decimal point input should be prevented when it is restricted by the format", (assert) => {
+    QUnit.test("decimal point input should be prevented when it is restricted by the format", function(assert) {
         this.instance.option({
             format: "#0",
             value: 123
@@ -895,7 +895,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 1, "caret should not be moved");
     });
 
-    QUnit.test("leading zeros should be replaced on input", (assert) => {
+    QUnit.test("leading zeros should be replaced on input", function(assert) {
         this.instance.option("format", "$ #0 d");
         this.instance.option("value", 0);
 
@@ -906,7 +906,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 12 d", "value is correct");
     });
 
-    QUnit.test("leading zeros should not be replaced if input is before them", (assert) => {
+    QUnit.test("leading zeros should not be replaced if input is before them", function(assert) {
         this.instance.option("format", "#0 d");
         this.instance.option("value", 0);
 
@@ -917,14 +917,14 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(this.input.val(), "120 d", "value is correct");
     });
 
-    QUnit.test("it should be possible to input decimal point when valueChangeEvent is input (T580162)", (assert) => {
+    QUnit.test("it should be possible to input decimal point when valueChangeEvent is input (T580162)", function(assert) {
         this.instance.option("valueChangeEvent", "input");
         this.keyboard.type("1.5");
 
         assert.equal(this.input.val(), "1.5", "value is correct");
     });
 
-    QUnit.test("valueChanged event fires on value apply", (assert) => {
+    QUnit.test("valueChanged event fires on value apply", function(assert) {
         if(!browser.msie) {
             // You can remove this test once issue noted below will resolved
             // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
@@ -940,7 +940,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
     });
 
-    QUnit.test("onValueChanged should have change event as a parameter", (assert) => {
+    QUnit.test("onValueChanged should have change event as a parameter", function(assert) {
         const valueChangedHandler = sinon.spy();
         this.instance.option("onValueChanged", valueChangedHandler);
 
@@ -948,7 +948,7 @@ QUnit.module("format: text input", moduleConfig, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
     });
 
-    QUnit.testInActiveWindow("caret position is not changed when the focus out event has occurred", (assert) => {
+    QUnit.testInActiveWindow("caret position is not changed when the focus out event has occurred", function(assert) {
         const _caret = this.instance._caret;
         let caretIsUpdatedOnFocusOut;
         const $input = $(this.instance.element()).find(".dx-texteditor-input");
@@ -969,7 +969,7 @@ QUnit.module("format: text input", moduleConfig, () => {
 });
 
 QUnit.module("format: incomplete value", moduleConfig, () => {
-    QUnit.test("incomplete values should not be reformatted on input", (assert) => {
+    QUnit.test("incomplete values should not be reformatted on input", function(assert) {
         this.instance.option({
             format: "#0.####",
             value: null
@@ -979,7 +979,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "0.0005", "value was typed");
     });
 
-    QUnit.test("incomplete values with stubs should not be reformatted on input", (assert) => {
+    QUnit.test("incomplete values with stubs should not be reformatted on input", function(assert) {
         this.instance.option({
             format: "$ #0.#### kg",
             value: null
@@ -989,7 +989,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 0.0005 kg", "value was typed");
     });
 
-    QUnit.test("incomplete values should not be reformatted on paste", (assert) => {
+    QUnit.test("incomplete values should not be reformatted on paste", function(assert) {
         this.instance.option({
             format: "$ #0.#### kg",
             value: null
@@ -1006,7 +1006,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 0.0005 kg", "walue has been reformatted");
     });
 
-    QUnit.test("paste of value should call valueChanged event on keyup", (assert) => {
+    QUnit.test("paste of value should call valueChanged event on keyup", function(assert) {
         const valueChangedStub = sinon.stub();
         const originalIE = browser.msie;
         const $element = $("<div>").appendTo("body");
@@ -1035,7 +1035,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
     });
 
 
-    QUnit.test("paste of value should call valueChanged event on keyup in IE", (assert) => {
+    QUnit.test("paste of value should call valueChanged event on keyup in IE", function(assert) {
         const valueChangedStub = sinon.stub();
         const originalIE = browser.msie;
         const originalVersion = browser.version;
@@ -1066,7 +1066,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         }
     });
 
-    QUnit.test("incomplete values should be limited by max precision", (assert) => {
+    QUnit.test("incomplete values should be limited by max precision", function(assert) {
         this.instance.option({
             format: "$ #0.### kg",
             value: null
@@ -1079,7 +1079,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 0 kg", "value was reformatted on enter");
     });
 
-    QUnit.test("value can be incomplete after removing via backspace", (assert) => {
+    QUnit.test("value can be incomplete after removing via backspace", function(assert) {
         this.instance.option({
             format: "$ #0.### kg",
             value: 1.2
@@ -1089,7 +1089,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 1. kg", "value has not been reformatted");
     });
 
-    QUnit.test("value can be incomplete after removing via delete", (assert) => {
+    QUnit.test("value can be incomplete after removing via delete", function(assert) {
         this.instance.option({
             format: "$ #0.### kg",
             value: 1.2
@@ -1099,7 +1099,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 1. kg", "value has not been reformatted");
     });
 
-    QUnit.test("value without float part should never be incomplete", (assert) => {
+    QUnit.test("value without float part should never be incomplete", function(assert) {
         this.instance.option({
             format: "$ #0.####",
             value: null
@@ -1110,7 +1110,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 10", "value has been reformatted");
     });
 
-    QUnit.test("zero should not be incomplete", (assert) => {
+    QUnit.test("zero should not be incomplete", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 12.34
@@ -1121,7 +1121,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "0.00", "zero has been formatted");
     });
 
-    QUnit.test("value without an integer part is supported", (assert) => {
+    QUnit.test("value without an integer part is supported", function(assert) {
         this.instance.option({
             format: "$ #.#",
             value: null
@@ -1131,7 +1131,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ .5", "point should be prevented");
     });
 
-    QUnit.test("value with more than one point should not be incomplete", (assert) => {
+    QUnit.test("value with more than one point should not be incomplete", function(assert) {
         this.instance.option({
             format: "$ #0.###",
             value: null
@@ -1141,7 +1141,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 1", "value was reformatted");
     });
 
-    QUnit.test("entering any stub in incomplete value should reformat the value", (assert) => {
+    QUnit.test("entering any stub in incomplete value should reformat the value", function(assert) {
         this.instance.option({
             format: "$ #0.###",
             value: null
@@ -1151,7 +1151,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 1.0", "stub was prevented");
     });
 
-    QUnit.test("incomplete value should be limited by min precision", (assert) => {
+    QUnit.test("incomplete value should be limited by min precision", function(assert) {
         this.instance.option({
             format: "#0.0##",
             value: 1
@@ -1161,25 +1161,25 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "1.0", "zero has not been removed");
     });
 
-    QUnit.test("incomplete values should be reformatted on enter", (assert) => {
+    QUnit.test("incomplete values should be reformatted on enter", function(assert) {
         this.keyboard.type("123.").press("enter");
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 
-    QUnit.test("incomplete value should be reformatted on enter after paste", (assert) => {
+    QUnit.test("incomplete value should be reformatted on enter after paste", function(assert) {
         this.instance.option("value", null);
         this.input.val("123.");
         this.keyboard.press("enter");
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 
-    QUnit.testInActiveWindow("incomplete values should be reformatted on focusout", (assert) => {
+    QUnit.testInActiveWindow("incomplete values should be reformatted on focusout", function(assert) {
         this.instance.option("value", 123);
         this.keyboard.caret(3).type(".").blur();
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 
-    QUnit.test("incomplete value should be reformatted on focusout after paste", (assert) => {
+    QUnit.test("incomplete value should be reformatted on focusout after paste", function(assert) {
         this.instance.option("value", null);
         this.instance.focus();
         this.input.val("123.");
@@ -1188,7 +1188,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 
-    QUnit.test("minus sign typed to the end of the incomplete value should revert sign", (assert) => {
+    QUnit.test("minus sign typed to the end of the incomplete value should revert sign", function(assert) {
         this.instance.option({
             format: "#0.##",
             value: 0
@@ -1204,7 +1204,7 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
 });
 
 QUnit.module("format: percent format", moduleConfig, () => {
-    QUnit.test("percent format should work properly on value change", (assert) => {
+    QUnit.test("percent format should work properly on value change", function(assert) {
         this.instance.option("format", "#0%");
         this.keyboard.type("45").change();
 
@@ -1212,7 +1212,7 @@ QUnit.module("format: percent format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 0.45, "value is correct");
     });
 
-    QUnit.test("escaped percent should be parsed correctly", (assert) => {
+    QUnit.test("escaped percent should be parsed correctly", function(assert) {
         this.instance.option("format", "#0'%'");
         this.keyboard.type("123").change();
 
@@ -1220,7 +1220,7 @@ QUnit.module("format: percent format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 123, "value is correct");
     });
 
-    QUnit.test("non-ldml percent format should work properly on value change", (assert) => {
+    QUnit.test("non-ldml percent format should work properly on value change", function(assert) {
         this.instance.option("value", "");
         this.instance.option("format", "percent");
         this.keyboard.type("45").change();
@@ -1229,7 +1229,7 @@ QUnit.module("format: percent format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 0.45, "value is correct");
     });
 
-    QUnit.test("input before leading zero in percent format", (assert) => {
+    QUnit.test("input before leading zero in percent format", function(assert) {
         this.instance.option("format", "#0%");
         this.instance.option("value", 0);
 
@@ -1238,7 +1238,7 @@ QUnit.module("format: percent format", moduleConfig, () => {
         assert.equal(this.input.val(), "450%", "text is correct");
     });
 
-    QUnit.test("dot should not be ignored in percent format when the value has been parsed correctly", (assert) => {
+    QUnit.test("dot should not be ignored in percent format when the value has been parsed correctly", function(assert) {
         const oldDecimalSeparator = config().decimalSeparator;
 
         config({ decimalSeparator: "," });
@@ -1257,7 +1257,7 @@ QUnit.module("format: percent format", moduleConfig, () => {
 });
 
 QUnit.module("format: removing", moduleConfig, () => {
-    QUnit.test("delete key", (assert) => {
+    QUnit.test("delete key", function(assert) {
         this.instance.option({
             format: "$ #0.00 d",
             value: 123.45
@@ -1281,7 +1281,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 23.50 d", "required digit should be replaced to 0 after removing");
     });
 
-    QUnit.test("backspace key", (assert) => {
+    QUnit.test("backspace key", function(assert) {
         this.instance.option({
             format: "$ #0.00 d",
             value: 123.45
@@ -1305,7 +1305,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 23.50 d", "required digit should be replaced to 0 after removing");
     });
 
-    QUnit.test("removing non required char with negative value", (assert) => {
+    QUnit.test("removing non required char with negative value", function(assert) {
         this.instance.option("value", -123.45);
 
         this.keyboard.caret(6).press("del");
@@ -1315,7 +1315,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "-123", "value is correct");
     });
 
-    QUnit.test("last non required zero should not be typed", (assert) => {
+    QUnit.test("last non required zero should not be typed", function(assert) {
         this.instance.option("format", "#.##");
         this.keyboard.type("1.50");
 
@@ -1325,7 +1325,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "1.5", "value was reformatted on value change");
     });
 
-    QUnit.test("removing with group separators using delete key", (assert) => {
+    QUnit.test("removing with group separators using delete key", function(assert) {
         this.instance.option({
             format: "$ #,##0.## d",
             value: 1234567890
@@ -1346,7 +1346,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is good after selection removing");
     });
 
-    QUnit.test("removing with group separators using backspace key", (assert) => {
+    QUnit.test("removing with group separators using backspace key", function(assert) {
         this.instance.option({
             format: "$ #,##0.## d",
             value: 1234567890
@@ -1367,7 +1367,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
     });
 
-    QUnit.test("removing required last char should replace it to 0", (assert) => {
+    QUnit.test("removing required last char should replace it to 0", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1
@@ -1378,7 +1378,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is good");
     });
 
-    QUnit.test("removing required last char should replace it to 0 if there are stubs before", (assert) => {
+    QUnit.test("removing required last char should replace it to 0 if there are stubs before", function(assert) {
         this.instance.option({
             format: "$#0.00",
             value: 1
@@ -1389,7 +1389,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 2, "caret is good");
     });
 
-    QUnit.test("removing required last char should replace it to 0 if percent format", (assert) => {
+    QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
         this.instance.option("format", "#0%");
         this.instance.option("value", 0.01);
         this.keyboard.caret(1).press("backspace");
@@ -1398,7 +1398,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret position is correct");
     });
 
-    QUnit.test("removing required decimal digit should replace it to 0 and move caret", (assert) => {
+    QUnit.test("removing required decimal digit should replace it to 0 and move caret", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1.23
@@ -1414,7 +1414,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
     });
 
-    QUnit.test("removing integer digit using backspace if group separator is hiding", (assert) => {
+    QUnit.test("removing integer digit using backspace if group separator is hiding", function(assert) {
         this.instance.option({
             format: "#,##0",
             value: 1234
@@ -1425,7 +1425,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
     });
 
-    QUnit.test("removing all characters should change value to 0", (assert) => {
+    QUnit.test("removing all characters should change value to 0", function(assert) {
         this.instance.option({
             format: "$#0",
             value: 1
@@ -1437,7 +1437,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
     });
 
-    QUnit.test("removing all digits but not all characters should change value to 0", (assert) => {
+    QUnit.test("removing all digits but not all characters should change value to 0", function(assert) {
         this.instance.option({
             format: "#0.0 kg",
             value: 1
@@ -1449,7 +1449,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
     });
 
-    QUnit.test("removing all digits with backspace should be possible when required zeros are in the end", (assert) => {
+    QUnit.test("removing all digits with backspace should be possible when required zeros are in the end", function(assert) {
         this.instance.option({
             format: "#0.00",
             value: 1
@@ -1464,7 +1464,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "0.00", "value is correct");
     });
 
-    QUnit.test("removing all digits should save the sign", (assert) => {
+    QUnit.test("removing all digits should save the sign", function(assert) {
         this.instance.option({
             format: "#0 kg",
             value: -1
@@ -1475,7 +1475,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.strictEqual(this.input.val(), "-0 kg", "text is correct");
     });
 
-    QUnit.test("removing last digit 0 should save the sign", (assert) => {
+    QUnit.test("removing last digit 0 should save the sign", function(assert) {
         this.instance.option({
             format: "#0 kg",
             value: -0
@@ -1486,7 +1486,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.strictEqual(this.input.val(), "-0 kg", "text is correct");
     });
 
-    QUnit.test("removing digit if decimal format", (assert) => {
+    QUnit.test("removing digit if decimal format", function(assert) {
         this.instance.option({
             format: "00000",
             value: 1234
@@ -1499,7 +1499,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is correct");
     });
 
-    QUnit.test("removing digit if decimal format with prefix", (assert) => {
+    QUnit.test("removing digit if decimal format with prefix", function(assert) {
         this.instance.option({
             format: "$00000",
             value: 1234
@@ -1512,7 +1512,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is correct");
     });
 
-    QUnit.test("removing decimal separator should be possible if float part is not required", (assert) => {
+    QUnit.test("removing decimal separator should be possible if float part is not required", function(assert) {
         this.instance.option({
             format: "#0.## kg",
             value: "12.3"
@@ -1525,7 +1525,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "12 kg", "decimal separator has been removed");
     });
 
-    QUnit.test("removing decimal separator if decimal separator is not default", (assert) => {
+    QUnit.test("removing decimal separator if decimal separator is not default", function(assert) {
         const oldDecimalSeparator = config().decimalSeparator;
 
         config({ decimalSeparator: "," });
@@ -1545,7 +1545,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         }
     });
 
-    QUnit.test("caret should be moved to the float part by '.' even when decimal separator is not '.'", (assert) => {
+    QUnit.test("caret should be moved to the float part by '.' even when decimal separator is not '.'", function(assert) {
         const oldDecimalSeparator = config().decimalSeparator;
 
         config({ decimalSeparator: "," });
@@ -1565,7 +1565,7 @@ QUnit.module("format: removing", moduleConfig, () => {
     });
 
     [",", "."].forEach((separator) => {
-        QUnit.test(`caret should be moved to the float part by "${separator}"`, (assert) => {
+        QUnit.test(`caret should be moved to the float part by "${separator}"`, function(assert) {
             this.instance.option({
                 format: {
                     type: 'fixedPoint',
@@ -1583,7 +1583,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         });
     });
 
-    QUnit.test("should parse float numbers with the ',' separator", (assert) => {
+    QUnit.test("should parse float numbers with the ',' separator", function(assert) {
         const oldDecimalSeparator = config().decimalSeparator;
         const input = this.input;
 
@@ -1604,7 +1604,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         }
     });
 
-    QUnit.test("removing a stub in the end or begin of the text should lead to remove minus sign", (assert) => {
+    QUnit.test("removing a stub in the end or begin of the text should lead to remove minus sign", function(assert) {
         this.instance.option({
             format: "$ #0.00;<<$ #0.00>>",
             value: -5
@@ -1624,7 +1624,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 6.00", "value has not been inverted after second removing");
     });
 
-    QUnit.test("minus zero should be reverted after removing minus via backspace", (assert) => {
+    QUnit.test("minus zero should be reverted after removing minus via backspace", function(assert) {
         this.instance.option({
             format: "#0.00 kg",
             value: -0
@@ -1637,7 +1637,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "0.00 kg", "value has not been reverted again");
     });
 
-    QUnit.test("removing a stub should be prevented when it leads to revert sign", (assert) => {
+    QUnit.test("removing a stub should be prevented when it leads to revert sign", function(assert) {
         this.instance.option({
             format: "#0.00 kg",
             value: -0
@@ -1647,7 +1647,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.input.val(), "0.00 kg", "value has been reverted");
     });
 
-    QUnit.test("change event should be fired after stub removed and sign reverted", (assert) => {
+    QUnit.test("change event should be fired after stub removed and sign reverted", function(assert) {
         const changeHandler = sinon.spy();
 
         this.instance.option({
@@ -1664,7 +1664,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(changeHandler.callCount, 1, "change event has not been fired if value is not changed");
     });
 
-    QUnit.test("change event should be fired after extra digits have been entered (IE bug)", (assert) => {
+    QUnit.test("change event should be fired after extra digits have been entered (IE bug)", function(assert) {
         const changeHandler = sinon.spy();
 
         this.instance.option({
@@ -1678,7 +1678,7 @@ QUnit.module("format: removing", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 123.45, "value is correct");
     });
 
-    QUnit.test("change event should not be rised when value has not been changed", (assert) => {
+    QUnit.test("change event should not be rised when value has not been changed", function(assert) {
         const changeHandler = sinon.spy();
 
         this.instance.option("value", null);
@@ -1694,7 +1694,7 @@ QUnit.module("format: removing", moduleConfig, () => {
 });
 
 QUnit.module("format: caret boundaries", moduleConfig, () => {
-    QUnit.test("right arrow limitation", (assert) => {
+    QUnit.test("right arrow limitation", function(assert) {
         this.instance.option({
             format: "#d",
             value: 1
@@ -1706,7 +1706,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.ok(this.keyboard.event.isDefaultPrevented(), "event is prevented");
     });
 
-    QUnit.test("right arrow after select all", (assert) => {
+    QUnit.test("right arrow after select all", function(assert) {
         this.instance.option({
             format: "# d",
             value: 1
@@ -1719,7 +1719,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is after last digit");
     });
 
-    QUnit.test("left arrow limitation", (assert) => {
+    QUnit.test("left arrow limitation", function(assert) {
         this.instance.option({
             format: "$#",
             value: 1
@@ -1731,7 +1731,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.ok(this.keyboard.event.isDefaultPrevented(), "event is prevented");
     });
 
-    QUnit.test("left arrow after select all", (assert) => {
+    QUnit.test("left arrow after select all", function(assert) {
         this.instance.option({
             format: "$ #0",
             value: 1
@@ -1744,7 +1744,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is before first digit");
     });
 
-    QUnit.test("home button limitation", (assert) => {
+    QUnit.test("home button limitation", function(assert) {
         this.instance.option({
             format: "$#",
             value: 1
@@ -1756,7 +1756,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is on the boundary");
     });
 
-    QUnit.test("end button limitation", (assert) => {
+    QUnit.test("end button limitation", function(assert) {
         this.instance.option({
             format: "#d",
             value: 1
@@ -1768,7 +1768,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is on the boundary");
     });
 
-    QUnit.test("shift+home and shift+end should have default behavior", (assert) => {
+    QUnit.test("shift+home and shift+end should have default behavior", function(assert) {
         this.keyboard.keyDown("home", { shiftKey: true });
         assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false);
 
@@ -1776,12 +1776,12 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false);
     });
 
-    QUnit.test("ctrl+a should have default behavior", (assert) => {
+    QUnit.test("ctrl+a should have default behavior", function(assert) {
         this.keyboard.keyDown("a", { ctrlKey: true });
         assert.deepEqual(this.keyboard.event.isDefaultPrevented(), false);
     });
 
-    QUnit.test("moving caret to closest non stub on click - forward direction", (assert) => {
+    QUnit.test("moving caret to closest non stub on click - forward direction", function(assert) {
         this.instance.option({
             format: "$ #",
             value: 1
@@ -1797,7 +1797,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
     });
 
-    QUnit.test("moving caret to closest non stub on click - backward direction", (assert) => {
+    QUnit.test("moving caret to closest non stub on click - backward direction", function(assert) {
         this.instance.option({
             format: "#d",
             value: 1
@@ -1810,7 +1810,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
     });
 
-    QUnit.test("move caret to the end when only stubs remain in the input", (assert) => {
+    QUnit.test("move caret to the end when only stubs remain in the input", function(assert) {
         this.instance.option({
             format: "$ #",
             value: 1
@@ -1826,7 +1826,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
     });
 
-    QUnit.test("move caret to the start when only stubs remain in the input", (assert) => {
+    QUnit.test("move caret to the start when only stubs remain in the input", function(assert) {
         this.instance.option({
             format: "# p",
             value: 1
@@ -1842,7 +1842,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret was adjusted");
     });
 
-    QUnit.test("caret should not move out of the boundaries when decimal separator was typed in percent format", (assert) => {
+    QUnit.test("caret should not move out of the boundaries when decimal separator was typed in percent format", function(assert) {
         this.instance.option({
             format: "#0%",
             value: 0.01
@@ -1853,7 +1853,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 1, "caret should not move when decimal part is disabled");
     });
 
-    QUnit.test("caret should not move out of the boundaries when non-available digit was typed", (assert) => {
+    QUnit.test("caret should not move out of the boundaries when non-available digit was typed", function(assert) {
         this.instance.option({
             format: "#0.00 kg",
             value: 1.23
@@ -1864,7 +1864,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 4, "caret should not move");
     });
 
-    QUnit.testInActiveWindow("caret should be before decimal separator on focusin", (assert) => {
+    QUnit.testInActiveWindow("caret should be before decimal separator on focusin", function(assert) {
         this.instance.option({
             format: "$ #0.## kg",
             value: 1.23
@@ -1880,7 +1880,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is just before decimal separator");
     });
 
-    QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", (assert) => {
+    QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", function(assert) {
         if(!browser.msie) {
             assert.expect(0);
             return;
@@ -1912,7 +1912,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         }, "caret is right after focus by click and dblclick");
     });
 
-    QUnit.testInActiveWindow("numberbox should not prevent all value selection after focus by keyboard navigation for IE", (assert) => {
+    QUnit.testInActiveWindow("numberbox should not prevent all value selection after focus by keyboard navigation for IE", function(assert) {
         if(!browser.msie) {
             assert.expect(0);
             return;
@@ -1931,7 +1931,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
 });
 
 QUnit.module("format: custom parser and formatter", moduleConfig, () => {
-    QUnit.test("custom parser and formatter should work", (assert) => {
+    QUnit.test("custom parser and formatter should work", function(assert) {
         this.instance.option({
             value: null,
             format: {
@@ -1949,5 +1949,33 @@ QUnit.module("format: custom parser and formatter", moduleConfig, () => {
 
         assert.equal(this.input.val(), "$ 1234.56", "text is correct");
         assert.equal(this.instance.option("value"), 1234.56, "value is correct");
+    });
+});
+
+QUnit.module("stubs", moduleConfig, function() {
+    [
+        { format: "123a 0,###.##", expectedText: "123a 1,234.56", expectedValue: 1234.56 },
+        { format: "123a 0,###.##", expectedText: "-123a 1,234.56", expectedValue: -1234.56 },
+        { format: "0,###.## 456b", expectedText: "1,234.56 456b", expectedValue: 1234.56 },
+        { format: "0,###.## 456b", expectedText: "-1,234.56 456b", expectedValue: -1234.56 },
+        { format: "'0'1 0,###.##", expectedText: "01 1,234.56", expectedValue: 1234.56 },
+        { format: "'0'1 0,###.##", expectedText: "-01 1,234.56", expectedValue: -1234.56 },
+        { format: "0,###.## '#'1", expectedText: "1,234.56 #1", expectedValue: 1234.56 },
+        { format: "0,###.## '#'1", expectedText: "-1,234.56 #1", expectedValue: -1234.56 },
+        { format: "0,###.##;abc(0,###.##)", expectedText: "abc(1,234.56)", expectedValue: -1234.56 }
+    ].forEach(({ format, expectedText, expectedValue }) => {
+        QUnit.test(`widget should correctly apply format="${format}", value="${expectedValue}"`, function(assert) {
+            this.instance.option({
+                value: null,
+                format
+            });
+
+            this.keyboard
+                .type(expectedValue.toString())
+                .press("enter");
+
+            assert.equal(this.input.val(), expectedText, "text is correct");
+            assert.equal(this.instance.option("value"), expectedValue, "value is correct");
+        });
     });
 });

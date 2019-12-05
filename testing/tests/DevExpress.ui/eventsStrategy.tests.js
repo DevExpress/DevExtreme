@@ -1,7 +1,7 @@
 var $ = require("jquery"),
     Widget = require("ui/widget/ui.widget"),
     registerComponent = require("core/component_registrator"),
-    DefaultEventStrategy = require("core/events_strategy");
+    EventsStrategy = require("core/events_strategy").EventsStrategy;
 
 QUnit.testStart(function() {
     var markup =
@@ -45,8 +45,8 @@ QUnit.test("setup event strategy", function(assert) {
 
     instance.on(eventName, function() {});
     instance.off(eventName, function() {});
-    assert.ok(instance.hasEvent(eventName));
-    instance.fireEvent(eventName);
+    assert.ok(instance._eventsStrategy.hasEvent(eventName));
+    instance._eventsStrategy.fireEvent(eventName);
 
     $("#element").remove();
 });
@@ -82,8 +82,8 @@ QUnit.test("setup event strategy as function", function(assert) {
 
     instance.on(eventName, function() {});
     instance.off(eventName, function() {});
-    assert.ok(instance.hasEvent(eventName));
-    instance.fireEvent(eventName);
+    assert.ok(instance._eventsStrategy.hasEvent(eventName));
+    instance._eventsStrategy.fireEvent(eventName);
 
     $("#element").remove();
 });
@@ -93,7 +93,7 @@ QUnit.test("callbacks should have correct context", function(assert) {
 
     var context = {};
     var $element = $("#element").dxWidget({
-        eventsStrategy: new DefaultEventStrategy(context)
+        eventsStrategy: new EventsStrategy(context)
     });
 
     $element.dxWidget("instance").on("disposing", function() {

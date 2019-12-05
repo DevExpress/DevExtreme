@@ -6,13 +6,13 @@ import { focusAndSelectElement, getWidgetInstance } from "./ui.grid_core.utils";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { focused } from "../widget/selectors";
-import KeyboardProcessor from "../widget/ui.keyboard_processor";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
 import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 import browser from "../../core/utils/browser";
+import { keyboard } from "../../events/";
 
 
 var ROWS_VIEW_CLASS = "rowsview",
@@ -140,7 +140,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
             eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
 
-            that._initKeyDownProcessor(that, $element, that._keyDownHandler);
+            that._initKeyDownHandler($element, e => that._keyDownHandler(e));
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
@@ -149,22 +149,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
         });
     },
 
-    _initKeyDownProcessor: function(context, element, handler) {
-        if(this._keyDownProcessor) {
-            this._keyDownProcessor.dispose();
-            this._keyDownProcessor = null;
-        }
-        this._keyDownProcessor = new KeyboardProcessor({
-            element: element,
-            context: context,
-            handler: handler
-        });
+    _initKeyDownHandler: function(element, handler) {
+        keyboard.off(this._keyDownListener);
+        this._keyDownListener = keyboard.on(element, null, handler);
     },
 
     dispose: function() {
         this.callBase();
         this._focusedView = null;
-        this._keyDownProcessor && this._keyDownProcessor.dispose();
+        keyboard.off(this._keyDownListener);
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
     },
     // #endregion Initialization
@@ -857,7 +850,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _getFocusedViewByElement: function($element) {
         var view = this.getFocusedView(),
             $view = view && $(view.element());
-        return $element.closest($view).length !== 0;
+        return $element && $element.closest($view).length !== 0;
     },
 
     _focusView: function() {
@@ -877,7 +870,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _focus: function($cell, disableFocus, isInteractiveElement) {
-        var $row = ($cell && $cell.is("td")) ? $cell.parent() : $cell;
+        const $row = ($cell && $cell.is("td")) ? $cell.parent() : $cell;
 
         if($row && isNotFocusedRow($row)) {
             return;
@@ -903,6 +896,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         $prevFocusedCell && $prevFocusedCell.is("td") && $prevFocusedCell.not($focusElement).removeAttr("tabIndex");
 
         if($focusElement) {
+            eventsEngine.one($focusElement, "blur", () => $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS));
             if(!isInteractiveElement) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, "focus");
@@ -1188,22 +1182,28 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _isLastValidCell: function(cellPosition) {
         var nextColumnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex + 1 : 0,
+            rowIndex = cellPosition.rowIndex,
             checkingPosition = {
                 columnIndex: nextColumnIndex,
-                rowIndex: cellPosition.rowIndex
+                rowIndex: rowIndex
             },
-            visibleColumnsCount = this._getVisibleColumnCount(),
-            isCheckingCellValid = this._isCellByPositionValid(checkingPosition);
+            visibleRows = this.component.getVisibleRows(),
+            row = visibleRows && visibleRows[rowIndex],
+            isLastRow = this._isLastRow(rowIndex);
 
-        if(!this._isLastRow(cellPosition.rowIndex)) {
+        if(!isLastRow) {
             return false;
         }
 
-        if(cellPosition.columnIndex === visibleColumnsCount - 1) {
+        if(row && row.rowType === "group" && cellPosition.columnIndex > 0) {
             return true;
         }
 
-        if(isCheckingCellValid) {
+        if(cellPosition.columnIndex === this._getVisibleColumnCount() - 1) {
+            return true;
+        }
+
+        if(this._isCellByPositionValid(checkingPosition)) {
             return false;
         }
 

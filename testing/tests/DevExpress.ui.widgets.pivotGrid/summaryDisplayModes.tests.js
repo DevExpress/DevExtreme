@@ -565,6 +565,29 @@ QUnit.test("Second calculation leads to same results", function(assert) {
     assert.deepEqual(this.data.values[0][6][0], value);
 });
 
+QUnit.test("Check if value is calculated", function(assert) {
+    let cell;
+    let valueInCallback;
+
+    this.descriptions.values[0].calculateSummaryValue = (e) => {
+        cell = e;
+        valueInCallback = e.isPostProcessed();
+        return e.value(true) + 1;
+    };
+
+    applyDisplaySummaryMode(this.descriptions, this.data);
+
+    assert.strictEqual(valueInCallback, false);
+    assert.strictEqual(cell.isPostProcessed(), true);
+});
+
+QUnit.test("Cell is calculated after runningTotal calculation", function(assert) {
+    this.descriptions.values[0].runningTotal = true;
+    applyRunningTotal(this.descriptions, this.data);
+
+    assert.deepEqual(this.data.values[0][6].postProcessedFlags, [true]);
+});
+
 QUnit.test("Calculate cell value with empty data", function(assert) {
     var summaryExpr = sinon.stub();
     summaryExpr.returns("calculatedValue");
@@ -1392,6 +1415,29 @@ QUnit.module("Check empty columns and rows with several dataFields", {
             values: [{ area: "data" }, { area: "data" }]
         };
     }
+});
+
+QUnit.test("Check if value is calculated", function(assert) {
+    const field1 = this.descriptions.values[0];
+    const field2 = this.descriptions.values[1];
+
+    field1.calculateSummaryValue = (e) => e.value();
+    field1.index = 0;
+    field2.index = 1;
+    let calculateIsCalled = false;
+    field2.calculateSummaryValue = (e) => {
+        if(!calculateIsCalled) {
+            // assert
+            assert.strictEqual(e.isPostProcessed(field1), true);
+            assert.strictEqual(e.isPostProcessed(field2), false);
+            assert.strictEqual(e.next("column").isPostProcessed(field1), false);
+            assert.strictEqual(e.isPostProcessed("Field1"), false);
+        }
+        calculateIsCalled = true;
+    };
+
+    // act
+    applyDisplaySummaryMode(this.descriptions, this.data);
 });
 
 QUnit.test("not empty data", function(assert) {

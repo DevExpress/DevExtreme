@@ -543,7 +543,7 @@ QUnit.test("maxHeight should affect popup content height correctly", function(as
     );
 });
 
-QUnit.test("Popup should keep nested scroll position on dimension changed", (assert) => {
+QUnit.test("Popup should keep nested scroll position on dimension changed", function(assert) {
     const SCROLLABLE_CONTAINER_CLASS = "test-scroll";
 
     $("#popup").dxPopup({
@@ -602,7 +602,7 @@ QUnit.test("width/height", function(assert) {
     assert.equal($overlayContent.outerHeight(), 567);
 });
 
-QUnit.test("popup height can be changed according to the content if height = auto", assert => {
+QUnit.test("popup height can be changed according to the content if height = auto", function(assert) {
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -639,7 +639,7 @@ QUnit.test("popup height can be changed according to the content if height = aut
     assert.strictEqual($popup.height(), (IS_IE11 ? 400 : 50), "popup with auto width can change height (except IE11)");
 });
 
-QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
+QUnit.test("popup height should support top and bottom toolbars if height = auto", function(assert) {
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -673,7 +673,7 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
     assert.strictEqual(popupContentHeight, 300 - topToolbarHeight - bottomToolbarHeight, "popup has maximum content height");
 });
 
-QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", assert => {
+QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", function(assert) {
     devices.current("desktop");
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
@@ -706,7 +706,7 @@ QUnit.test("popup height should support any maxHeight and minHeight option value
     devices.current(devices.real());
 });
 
-QUnit.test("popup overlay should have correct height strategy classes for all browsers", assert => {
+QUnit.test("popup overlay should have correct height strategy classes for all browsers", function(assert) {
     const popup = $("#popup").dxPopup({
         visible: true,
         height: "auto",
@@ -737,7 +737,7 @@ QUnit.test("popup overlay should have correct height strategy classes for all br
 });
 
 
-QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", assert => {
+QUnit.test("popup height should support TreeView with Search if height = auto (T724029)", function(assert) {
     if(IS_OLD_SAFARI) {
         assert.expect(0);
         return;
@@ -811,7 +811,7 @@ QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in saf
 
     this.instance.option("fullScreen", true);
 
-    assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class removed from body if fullScreen is changed to 'true' at runtime");
+    assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class added to the body if fullScreen is changed to 'true' at runtime");
     assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
     this.instance.hide();
 });
@@ -832,6 +832,43 @@ QUnit.test("start scroll position is saved after full screen popup hiding", func
         this.instance.hide();
 
         assert.strictEqual(window.pageYOffset, 100);
+    } finally {
+        window.scrollTo(0, 0);
+        $additionalElement.remove();
+    }
+});
+
+QUnit.test("works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScreen option is changed on showing event in safari (T825004)", function(assert) {
+    if(!IS_SAFARI) {
+        assert.expect(0);
+        return;
+    }
+    let $additionalElement;
+
+    try {
+        const $body = $("body");
+        $additionalElement = $("<div>").height(2000).appendTo($body);
+
+        this.instance.option({
+            fullScreen: false,
+            visible: false,
+            onShowing(e) {
+                e.component.option("fullScreen", true);
+            }
+        });
+
+        const $wrapper = this.instance.$content().parent();
+
+        window.scrollTo(0, 200);
+        this.instance.show();
+        this.clock.tick(500);
+
+        assert.ok($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        assert.strictEqual($wrapper.css("transform").split(',')[5], " 0)", "popup has translateY: 0");
+        this.instance.hide();
+
+        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), "class removed from body after popup hiding");
+        assert.strictEqual(window.pageYOffset, 200, "scroll position is saved");
     } finally {
         window.scrollTo(0, 0);
         $additionalElement.remove();
@@ -1451,7 +1488,7 @@ QUnit.test("popup title should be rendered before content", function(assert) {
 
 
 QUnit.module("renderGeometry", () => {
-    QUnit.test("option change", (assert) => {
+    QUnit.test("option change", function(assert) {
         const instance = $("#popup").dxPopup({
             visible: true
         }).dxPopup("instance");

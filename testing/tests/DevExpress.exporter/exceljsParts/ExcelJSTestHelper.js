@@ -30,7 +30,7 @@ class ExcelJSTestHelper {
 
         for(const propertyName in gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                if(propertyName === "groupSummaryItems") {
+                if(propertyName === "groupSummaryItems" || propertyName === "value") {
                     assert.deepEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 } else {
                     assert.strictEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
@@ -39,13 +39,13 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkAutoFilter(excelFilterEnabled, from, to, frozenArea) {
-        if(excelFilterEnabled === true) {
-            assert.deepEqual(this.worksheet.autoFilter.from, from, "worksheet.autoFilter.from");
-            assert.deepEqual(this.worksheet.autoFilter.to, to, "worksheet.autoFilter.to");
-            assert.deepEqual(this.worksheet.views, [ { state: "frozen", ySplit: frozenArea.y } ], "worksheet.views");
+    checkAutoFilter(autoFilterEnabled, autoFilter, frozenState) {
+        assert.deepEqual(this.worksheet.views, frozenState ? [frozenState] : [], "worksheet.views");
+
+        if(autoFilterEnabled === true) {
+            assert.deepEqual(this.worksheet.autoFilter, autoFilter, "worksheet.autoFilter");
         } else {
-            assert.equal(this.worksheet.autoFilter, undefined, "worksheet.autoFilter");
+            assert.deepEqual(this.worksheet.autoFilter, null, "worksheet.autoFilter");
         }
     }
 
@@ -54,7 +54,7 @@ class ExcelJSTestHelper {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
-            assert.equal(this.worksheet.getCell(row, column).value, excelCell.value, `this.worksheet.getCell(${row}, ${column}).value`);
+            assert.deepEqual(this.worksheet.getCell(row, column).value, excelCell.value, `this.worksheet.getCell(${row}, ${column}).value`);
         });
     }
 
@@ -153,6 +153,17 @@ class ExcelJSTestHelper {
                     assert.strictEqual(excelCell.master, master, `cell: ${excelCell.address}.master`);
                 }
             }
+        });
+    }
+
+    checkCellFormat(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
+            const { address, dataType, type, numberFormat } = cellArgs.excelCell;
+            const { row, column } = address;
+
+            assert.deepEqual(typeof this.worksheet.getCell(row, column).value, dataType, `typeof this.worksheet.getCell(${row}, ${column}).value`);
+            assert.deepEqual(this.worksheet.getCell(row, column).type, type, `this.worksheet.getCell(${row}, ${column}).type`);
+            assert.deepEqual(this.worksheet.getCell(row, column).numFmt, numberFormat, `this.worksheet.getCell(${row}, ${column}).numFmt`);
         });
     }
 }

@@ -1840,6 +1840,30 @@ QUnit.test("Sorting by Summary should not be allowd if paginate is true", functi
     assert.deepEqual(contextMenuArgs[0].items.map(function(i) { return i.text; }), ["Show Field Chooser"], "context menu items");
 });
 
+// T833006
+QUnit.test("load dataSource after PivotGrid dispose", function(assert) {
+    var dataSource = new PivotGridDataSource({
+        store: []
+    });
+
+    var pivotGrid = createPivotGrid({}, assert);
+
+    pivotGrid.option("dataSource", dataSource);
+    this.clock.tick();
+
+    var isLoaded = false;
+
+    // act
+    pivotGrid.dispose();
+    dataSource.load().done(function() {
+        isLoaded = true;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.ok(isLoaded, "data source is loaded");
+});
+
 QUnit.test("Sorting by Summary context menu", function(assert) {
     var contextMenuArgs = [],
         pivotGrid = createPivotGrid({
@@ -4847,12 +4871,14 @@ function getStubComponent(options) {
         option: function() {
             return options[arguments[0]];
         },
-        hasEvent: function() {
-            return false;
-        },
         _defaultActionArgs: function() {
             return {};
-        }
+        },
+        _eventsStrategy: {
+            hasEvent: function() {
+                return false;
+            }
+        },
     };
 }
 

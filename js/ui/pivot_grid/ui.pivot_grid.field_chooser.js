@@ -249,14 +249,26 @@ var FieldChooser = BaseFieldChooser.inherit({
             that._skipStateChange = false;
         };
 
-        if(that._dataSource) {
-            that._dataSource.off("changed", that._changedHandler);
-            that._dataSource = undefined;
-        }
+        that._disposeDataSource();
 
         that.callBase();
 
         that._dataSource && that._dataSource.on("changed", that._changedHandler);
+    },
+
+    _disposeDataSource: function() {
+        var that = this,
+            dataSource = that._dataSource;
+
+        if(dataSource) {
+            dataSource.off("changed", that._changedHandler);
+            that._dataSource = undefined;
+        }
+    },
+
+    _dispose: function() {
+        this._disposeDataSource();
+        this.callBase.apply(this, arguments);
     },
 
     _init: function() {

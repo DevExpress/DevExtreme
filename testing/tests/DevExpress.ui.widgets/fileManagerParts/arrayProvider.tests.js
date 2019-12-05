@@ -62,7 +62,7 @@ QUnit.module("Array File Provider", moduleConfig, () => {
 
         let pathInfo = [ { key: "F1", name: "F1" } ];
         items = this.provider.getItems(pathInfo);
-        assert.equal(3, items.length);
+        assert.equal(items.length, 3);
         assert.equal(items[0].name, "F1.1");
         assert.notOk(items[0].hasSubDirs);
         assert.equal(items[1].name, "F1.2");
@@ -292,14 +292,14 @@ QUnit.module("Array File Provider", moduleConfig, () => {
 
     test("delete directory", function(assert) {
         let fileItems = this.provider.getItems();
-        assert.equal("F1", fileItems[0].name);
-        assert.equal("F2", fileItems[1].name);
-        assert.equal(2, fileItems.length);
+        assert.equal(fileItems[0].name, "F1");
+        assert.equal(fileItems[1].name, "F2");
+        assert.equal(fileItems.length, 2);
 
         this.provider.deleteItems([ fileItems[0] ]);
         fileItems = this.provider.getItems();
-        assert.equal("F2", fileItems[0].name);
-        assert.equal(1, fileItems.length);
+        assert.equal(fileItems[0].name, "F2");
+        assert.equal(fileItems.length, 1);
     });
 
     test("throw exception if remove unexisting directory", function(assert) {

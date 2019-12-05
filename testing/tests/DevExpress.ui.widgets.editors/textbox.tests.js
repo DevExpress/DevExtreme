@@ -25,7 +25,7 @@ const SEARCHBOX_CLASS = "dx-searchbox";
 const SEARCH_ICON_CLASS = "dx-icon-search";
 
 QUnit.module("common", {}, () => {
-    QUnit.test("onContentReady fired after the widget is fully ready", assert => {
+    QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
         assert.expect(1);
 
         $("#textbox").dxTextBox({
@@ -35,7 +35,7 @@ QUnit.module("common", {}, () => {
         });
     });
 
-    QUnit.test("changing mode to 'search' should render search icon", assert => {
+    QUnit.test("changing mode to 'search' should render search icon", function(assert) {
         const element = $("#textbox").dxTextBox();
         const textBox = element.dxTextBox("instance");
 
@@ -45,7 +45,7 @@ QUnit.module("common", {}, () => {
         assert.equal(element.find("." + SEARCH_ICON_CLASS).length, 1);
     });
 
-    QUnit.test("'maxLength' option on android 2.3 and 4.1", assert => {
+    QUnit.test("'maxLength' option on android 2.3 and 4.1", function(assert) {
         const originalDevices = devices.real();
         devices.real({
             platform: "android",
@@ -73,7 +73,7 @@ QUnit.module("common", {}, () => {
         }
     });
 
-    QUnit.test("'maxLength' option on IE", assert => {
+    QUnit.test("'maxLength' option on IE", function(assert) {
         const originalIE = browser.msie;
 
         try {
@@ -94,7 +94,7 @@ QUnit.module("common", {}, () => {
         }
     });
 
-    QUnit.test("call focus() method", assert => {
+    QUnit.test("call focus() method", function(assert) {
         executeAsyncMock.setup();
         try {
             let inFocus;
@@ -116,7 +116,7 @@ QUnit.module("common", {}, () => {
         }
     });
 
-    QUnit.test("T218573 - clearButton should be hidden if mode is 'search' and the 'showClearButton' option is false", assert => {
+    QUnit.test("T218573 - clearButton should be hidden if mode is 'search' and the 'showClearButton' option is false", function(assert) {
         const $element = $("#textbox").dxTextBox({
             showClearButton: false,
             mode: "search",
@@ -129,7 +129,7 @@ QUnit.module("common", {}, () => {
         assert.equal($(".dx-clear-button-area").length, 0, "clear button is not rendered");
     });
 
-    QUnit.test("clear button should save valueChangeEvent", assert => {
+    QUnit.test("clear button should save valueChangeEvent", function(assert) {
         const valueChangedHandler = sinon.spy();
 
         const $element = $("#textbox").dxTextBox({
@@ -145,7 +145,7 @@ QUnit.module("common", {}, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
     });
 
-    QUnit.test("T810808 - should be possible to type characters in IE in TextBox with maxLength and mask", assert => {
+    QUnit.test("T810808 - should be possible to type characters in IE in TextBox with maxLength and mask", function(assert) {
         const originalIE = browser.msie;
 
         try {
@@ -162,7 +162,7 @@ QUnit.module("common", {}, () => {
         }
     });
 
-    QUnit.test("TextBox shouldn't lose last characters on change event in IE", assert => {
+    QUnit.test("TextBox shouldn't lose last characters on change event in IE", function(assert) {
         const originalIE = browser.msie;
 
         try {
@@ -190,20 +190,20 @@ QUnit.module("common", {}, () => {
 });
 
 QUnit.module("options changing", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.element = $("#textbox").dxTextBox({});
         this.input = this.element.find("." + INPUT_CLASS);
         this.instance = this.element.dxTextBox("instance");
     }
 }, () => {
-    QUnit.test("mode", (assert) => {
+    QUnit.test("mode", function(assert) {
         assert.expect(1);
 
         this.instance.option("mode", "search");
         assert.equal(this.element.find("." + INPUT_CLASS).attr("type"), "text");
     });
 
-    QUnit.test("value", (assert) => {
+    QUnit.test("value", function(assert) {
         assert.expect(2);
 
         this.instance.option("value", "123");
@@ -213,7 +213,7 @@ QUnit.module("options changing", {
         assert.equal(this.input.val(), "321");
     });
 
-    QUnit.test("disabled", (assert) => {
+    QUnit.test("disabled", function(assert) {
         assert.expect(2);
 
         this.instance.option("disabled", true);
@@ -223,7 +223,7 @@ QUnit.module("options changing", {
         assert.ok(!this.input.prop("disabled"));
     });
 
-    QUnit.test("placeholder", (assert) => {
+    QUnit.test("placeholder", function(assert) {
         assert.expect(2);
 
         this.instance.option("placeholder", "John Doe");
@@ -233,7 +233,7 @@ QUnit.module("options changing", {
         assert.equal(this.element.find("." + INPUT_CLASS).prop("placeholder") || this.element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "John Jr. Doe");
     });
 
-    QUnit.test("'maxLength' option", (assert) => {
+    QUnit.test("'maxLength' option", function(assert) {
         const originalDevices = devices.real();
         const originalIE = browser.msie;
         devices.real({
@@ -257,7 +257,7 @@ QUnit.module("options changing", {
         }
     });
 
-    QUnit.test("'maxLength' on android 2.3 and 4.1 ", (assert) => {
+    QUnit.test("'maxLength' on android 2.3 and 4.1 ", function(assert) {
         const originalDevices = devices.real();
         devices.real({
             platform: "android",
@@ -290,7 +290,7 @@ QUnit.module("options changing", {
         }
     });
 
-    QUnit.test("'maxLength' should be ignored if mask is specified", (assert) => {
+    QUnit.test("'maxLength' should be ignored if mask is specified", function(assert) {
         const originalDevices = devices.real();
         const originalIE = browser.msie;
         devices.real({
@@ -312,7 +312,7 @@ QUnit.module("options changing", {
         }
     });
 
-    QUnit.test("readOnly", (assert) => {
+    QUnit.test("readOnly", function(assert) {
         assert.expect(2);
 
         this.instance.option("readOnly", true);
@@ -322,14 +322,14 @@ QUnit.module("options changing", {
         assert.equal(this.input.prop("readOnly"), false);
     });
 
-    QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", (assert) => {
+    QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", function(assert) {
         this.instance.option("onValueChanged", () => {
             assert.ok(true);
         });
         this.instance.option("value", true);
     });
 
-    QUnit.test("options 'height' and 'width'", (assert) => {
+    QUnit.test("options 'height' and 'width'", function(assert) {
         let h = 500;
         let w = 400;
         this.instance.option({
@@ -358,13 +358,13 @@ QUnit.module("options changing", {
 });
 
 QUnit.module("widget sizing render", {}, () => {
-    QUnit.test("default", assert => {
+    QUnit.test("default", function(assert) {
         const $element = $("#textbox").dxTextBox();
 
         assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
     });
 
-    QUnit.test("constructor", assert => {
+    QUnit.test("constructor", function(assert) {
         const $element = $("#textbox").dxTextBox({ width: 400 });
         const instance = $element.dxTextBox("instance");
 
@@ -372,7 +372,7 @@ QUnit.module("widget sizing render", {}, () => {
         assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("root with custom width", assert => {
+    QUnit.test("root with custom width", function(assert) {
         const $element = $("#widthRootStyle").dxTextBox();
         const instance = $element.dxTextBox("instance");
 
@@ -380,7 +380,7 @@ QUnit.module("widget sizing render", {}, () => {
         assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("change width", assert => {
+    QUnit.test("change width", function(assert) {
         const $element = $("#textbox").dxTextBox();
         const instance = $element.dxTextBox("instance");
         const customWidth = 400;

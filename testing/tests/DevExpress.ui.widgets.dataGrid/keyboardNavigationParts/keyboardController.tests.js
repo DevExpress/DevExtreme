@@ -8,7 +8,7 @@ import keyboardNavigationModule from "ui/grid_core/ui.grid_core.keyboard_navigat
 import commonUtils from "core/utils/common";
 import typeUtils from "core/utils/type";
 import publicComponentUtils from "core/utils/public_component";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import eventsEngine from "events/core/events_engine";
 import pointerEvents from "events/pointer";
 import { MockDataController, MockColumnsController, MockEditingController } from "../../../helpers/dataGridMocks.js";
@@ -448,34 +448,6 @@ QUnit.module("Keyboard navigation", {
 
         // assert
         assert.ok(!isFocused, "headers view is not focused");
-    });
-
-    QUnit.testInActiveWindow("KeyDownProcessor is disposed when controller is initialized", function(assert) {
-        // arrange
-        var navigationController,
-            isDisposeCalled = false,
-            $rowsElement = $("<div />").append($("<tr class='dx-row'><td/></tr>"));
-
-        this.getView("rowsView").element = function() {
-            return $rowsElement;
-        };
-
-        // act
-        navigationController = new KeyboardNavigationController(this.component);
-        navigationController.init();
-
-        navigationController._keyDownProcessor = {
-            dispose: function() {
-                isDisposeCalled = true;
-            }
-        };
-
-        callViewsRenderCompleted(this.component._views);
-
-        $($rowsElement.find("td")[0]).trigger(CLICK_EVENT);
-
-        // assert
-        assert.ok(isDisposeCalled, "keyDownProcessor is disposed");
     });
 
     QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled (T311207)", function(assert) {

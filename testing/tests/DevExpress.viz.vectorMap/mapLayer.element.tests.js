@@ -473,7 +473,7 @@ QUnit.test("Proxy.coordinates", function(assert) {
 
 QUnit.test("Proxy.attribute", function(assert) {
     assert.strictEqual(this.element.proxy.attribute("prop1"), undefined, "getter");
-    assert.strictEqual(this.element.proxy.attribute("prop1", "test-1"), this.element.proxy, "return value", "setter");
+    assert.strictEqual(this.element.proxy.attribute("prop1", "test-1"), this.element.proxy, "return value - setter");
     assert.deepEqual(this.element.proxy.attribute(), { prop1: "test-1", tag: "attributes" }, "getter - all");
     assert.strictEqual(this.element.proxy.attribute("prop1"), "test-1", "getter");
 });

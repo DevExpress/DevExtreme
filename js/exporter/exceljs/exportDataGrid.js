@@ -1,4 +1,6 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isObject } from "../../core/utils/type";
+import excelFormatConverter from "../excel_format_converter";
+import { extend } from "../../core/utils/extend";
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -15,7 +17,7 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell = { row: 1, column: 1 },
-        excelFilterEnabled = false,
+        autoFilterEnabled = undefined,
         keepColumnWidths = true,
         selectedRowsOnly = false
     } = options;
@@ -62,18 +64,15 @@ function exportDataGrid(options) {
 
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
-            if(excelFilterEnabled === true) {
-                if(!isDefined(worksheet.autoFilter) && dataRowsCount > 0) {
-                    worksheet.autoFilter = cellsRange;
-                    worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
-                }
+            if(headerRowCount > 0) {
+                _setFrozen(dataProvider, worksheet, cellsRange);
+                _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled);
             }
 
             resolve(cellsRange);
         });
     });
 }
-
 
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
     const styles = dataProvider.getStyles();
@@ -86,8 +85,14 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, wrapText } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment, wrapText, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
+            let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
+            if(isDefined(numberFormat)) {
+                numberFormat = numberFormat.replace(/&quot;/g, '');
+            }
+
+            _setNumberFormat(excelCell, numberFormat);
             _setFont(excelCell, bold);
             _setAlignment(excelCell, wrapText, alignment);
         }
@@ -107,6 +112,55 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             }
         }
     }
+}
+
+function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
+    if(!isDefined(autoFilterEnabled)) {
+        autoFilterEnabled = !!component.option("export.excelFilterEnabled");
+    }
+
+    if(autoFilterEnabled) {
+        if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
+            worksheet.autoFilter = cellsRange;
+        }
+    }
+}
+
+function _setFrozen(dataProvider, worksheet, cellsRange) {
+    if(worksheet.views.length === 0) {
+        worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
+    }
+}
+
+function _setNumberFormat(excelCell, numberFormat) {
+    excelCell.numFmt = numberFormat;
+}
+
+function _tryConvertToExcelNumberFormat(format, dataType) {
+    const newFormat = _formatObjectConverter(format, dataType);
+    const currency = newFormat.currency;
+
+    format = newFormat.format;
+    dataType = newFormat.dataType;
+
+    return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
+}
+
+function _formatObjectConverter(format, dataType) {
+    var result = {
+        format: format,
+        precision: format && format.precision,
+        dataType: dataType
+    };
+
+    if(isObject(format)) {
+        return extend(result, format, {
+            format: format.formatter || format.type,
+            currency: format.currency
+        });
+    }
+
+    return result;
 }
 
 function _setFont(excelCell, bold) {

@@ -166,7 +166,7 @@ class TabsWidthTestHelper {
     });
 });
 
-QUnit.test("Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }", (assert) => {
+QUnit.test("Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }", function(assert) {
     var styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
 
     $("#qunit-fixture").html(styles);
@@ -194,7 +194,7 @@ QUnit.test("Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ wi
     $("#qunit-fixture").html("");
 });
 
-QUnit.test("Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }", (assert) => {
+QUnit.test("Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }", function(assert) {
     var styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
 
     $("#qunit-fixture").html(styles);

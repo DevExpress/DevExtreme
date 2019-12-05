@@ -4074,6 +4074,24 @@ QUnit.test("Breaks count is equal point range count if breaks length less than v
     assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 5);
 });
 
+// T835287
+QUnit.test("Auto scale breaks with large range", function(assert) {
+    this.series = [
+        this.stubSeries([[1970, 1972, 1974, 5330000000000], []])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.updateOptions({
+        type: "numeric",
+        min: 0,
+        max: 5330000000000
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 1);
+});
+
 QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
     this.series = [
         this.stubSeries([[3, 10, 35, 43, 45, 100, 40], []]),

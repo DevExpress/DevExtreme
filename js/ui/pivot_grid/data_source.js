@@ -7,7 +7,7 @@ import { inArray } from "../../core/utils/array";
 import { each, map } from "../../core/utils/iterator";
 import { when, Deferred } from "../../core/utils/deferred";
 import Class from "../../core/class";
-import EventsMixin from "../../core/events_mixin";
+import { EventsStrategy } from "../../core/events_strategy";
 import { titleize } from "../../core/utils/inflector";
 import { normalizeIndexes } from "../../core/utils/array";
 import { LocalStore } from "./local_store";
@@ -627,7 +627,6 @@ module.exports = Class.inherit((function() {
     /**
     * @name PivotGridDataSource
     * @type object
-    * @inherits EventsMixin
     * @namespace DevExpress.data
     * @module ui/pivot_grid/data_source
     * @export default
@@ -636,10 +635,11 @@ module.exports = Class.inherit((function() {
     return {
         ctor: function(options) {
             options = options || {};
+            this._eventsStrategy = new EventsStrategy(this);
 
             var that = this,
                 store = createStore(options, function(progress) {
-                    that.fireEvent("progressChanged", [progress]);
+                    that._eventsStrategy.fireEvent("progressChanged", [progress]);
                 });
 
             /**
@@ -1053,7 +1053,7 @@ module.exports = Class.inherit((function() {
 
                 that._descriptions = that._createDescriptions(field);
                 that._isFieldsModified = true;
-                that.fireEvent("fieldChanged", [field]);
+                that._eventsStrategy.fireEvent("fieldChanged", [field]);
             }
             return field;
         },
@@ -1141,7 +1141,7 @@ module.exports = Class.inherit((function() {
             that.beginLoading();
 
             d.fail(function(e) {
-                that.fireEvent("loadError", [e]);
+                that._eventsStrategy.fireEvent("loadError", [e]);
             }).always(function() {
                 that.endLoading();
             });
@@ -1244,7 +1244,7 @@ module.exports = Class.inherit((function() {
 
             var currentFieldState = getFieldsState(fields, ["caption"]);
 
-            that.fireEvent("fieldsPrepared", [fields]);
+            that._eventsStrategy.fireEvent("fieldsPrepared", [fields]);
 
             for(var i = 0; i < fields.length; i++) {
                 if(fields[i].caption !== currentFieldState[i].caption) {
@@ -1324,7 +1324,7 @@ module.exports = Class.inherit((function() {
             newLoading = this.isLoading();
 
             if(oldLoading ^ newLoading) {
-                this.fireEvent("loadingChanged", [newLoading]);
+                this._eventsStrategy.fireEvent("loadingChanged", [newLoading]);
             }
         },
 
@@ -1449,7 +1449,7 @@ module.exports = Class.inherit((function() {
 
                 let storeLoadOptions = [options];
 
-                that.fireEvent("customizeStoreLoadOptions", [storeLoadOptions, reload]);
+                that._eventsStrategy.fireEvent("customizeStoreLoadOptions", [storeLoadOptions, reload]);
 
                 if(!reload) {
                     that._processPagingCache(storeLoadOptions);
@@ -1526,7 +1526,7 @@ module.exports = Class.inherit((function() {
                 that._data = loadedData;
                 deferred !== false && when(deferred).done(function() {
                     that._isFieldsModified = false;
-                    that.fireEvent("changed");
+                    that._eventsStrategy.fireEvent("changed");
                     if(isDefined(that._data.grandTotalRowIndex)) {
                         loadedData.grandTotalRowIndex = that._data.grandTotalRowIndex;
                     }
@@ -1556,7 +1556,7 @@ module.exports = Class.inherit((function() {
                 field = that.getAreaFields(area)[path.length - 1];
 
             if(headerItem && headerItem.children) {
-                that.fireEvent("expandValueChanging", [{
+                that._eventsStrategy.fireEvent("expandValueChanging", [{
                     area: area,
                     path: path,
                     expanded: false
@@ -1647,7 +1647,7 @@ module.exports = Class.inherit((function() {
                     expanded: true,
                     needExpandData: !hasCache
                 };
-                that.fireEvent("expandValueChanging", [options]);
+                that._eventsStrategy.fireEvent("expandValueChanging", [options]);
                 if(hasCache) {
                     headerItem.children = headerItem.collapsedChildren;
                     delete headerItem.collapsedChildren;
@@ -1724,6 +1724,42 @@ module.exports = Class.inherit((function() {
         },
 
         /**
+         * @name PivotGridDataSourceMethods.on
+         * @publicName on(eventName, eventHandler)
+         * @param1 eventName:string
+         * @param2 eventHandler:function
+         * @return this
+         */
+        /**
+         * @name PivotGridDataSourceMethods.on
+         * @publicName on(events)
+         * @param1 events:object
+         * @return this
+         */
+        on(eventName, eventHandler) {
+            this._eventsStrategy.on(eventName, eventHandler);
+            return this;
+        },
+
+        /**
+         * @name PivotGridDataSourceMethods.off
+         * @publicName off(eventName)
+         * @param1 eventName:string
+         * @return this
+         */
+        /**
+         * @name PivotGridDataSourceMethods.off
+         * @publicName off(eventName, eventHandler)
+         * @param1 eventName:string
+         * @param2 eventHandler:function
+         * @return this
+         */
+        off(eventName, eventHandler) {
+            this._eventsStrategy.off(eventName, eventHandler);
+            return this;
+        },
+
+        /**
          * @name PivotGridDataSourceMethods.dispose
          * @publicName dispose()
          */
@@ -1731,7 +1767,7 @@ module.exports = Class.inherit((function() {
             var that = this,
                 delayedLoadTask = that._delayedLoadTask;
 
-            this._disposeEvents();
+            this._eventsStrategy.dispose();
             if(delayedLoadTask) {
                 delayedLoadTask.abort();
             }
@@ -1741,7 +1777,7 @@ module.exports = Class.inherit((function() {
             return !!this._isDisposed;
         }
     };
-})()).include(EventsMixin);
+})());
 
 ///#DEBUG
 module.exports.sort = exports.sort;

@@ -1,22 +1,23 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    events = require("../../events/"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    domAdapter = require("../../core/dom_adapter"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
-    KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
-    eventUtils = require("../../events/utils"),
-    hoverEvents = require("../../events/hover"),
-    feedbackEvents = require("../../events/core/emitter.feedback"),
-    clickEvent = require("../../events/click");
+    eventUtils = require("../../events/utils");
 
-var UI_FEEDBACK = "UIFeedback",
-    WIDGET_CLASS = "dx-widget",
+require("../../events/click");
+require("../../events/hover");
+require("../../events/core/emitter.feedback");
+
+const { hover, focus, active, dxClick, keyboard } = events;
+
+var WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",
     DISABLED_STATE_CLASS = "dx-state-disabled",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
@@ -24,16 +25,6 @@ var UI_FEEDBACK = "UIFeedback",
     FOCUSED_STATE_CLASS = "dx-state-focused",
     FEEDBACK_SHOW_TIMEOUT = 30,
     FEEDBACK_HIDE_TIMEOUT = 400;
-
-const EVENT_NAME = {
-    active: eventUtils.addNamespace(feedbackEvents.active, UI_FEEDBACK),
-    inactive: eventUtils.addNamespace(feedbackEvents.inactive, UI_FEEDBACK),
-    hoverStart: eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
-    hoverEnd: eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK),
-    focusIn: owner => eventUtils.addNamespace('focusin', `${owner}Focus`),
-    focusOut: owner => eventUtils.addNamespace('focusout', `${owner}Focus`),
-    beforeActivate: owner => eventUtils.addNamespace('beforeactivate', `${owner}Focus`)
-};
 
 /**
  * @name ui
@@ -141,8 +132,7 @@ var Widget = DOMComponentWithTemplate.inherit({
             * @hidden
             */
             onFocusOut: null,
-
-            _keyboardProcessor: undefined,
+            onKeyboardHandled: null,
 
             /**
             * @name ui.template
@@ -299,6 +289,7 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _dispose: function() {
         this._contentReadyAction = null;
+        this._detachKeyboardEvents();
 
         this.callBase();
     },
@@ -331,20 +322,19 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._renderAccessKey();
     },
 
-    _renderAccessKey: function() {
-        var focusTarget = this._focusTarget();
-        focusTarget.attr("accesskey", this.option("accessKey"));
+    _renderAccessKey() {
+        const $el = this._focusTarget();
+        const { accessKey } = this.option();
+        const namespace = 'UIFeedback';
 
-        var clickNamespace = eventUtils.addNamespace(clickEvent.name, UI_FEEDBACK);
-
-        eventsEngine.off(focusTarget, clickNamespace);
-
-        this.option("accessKey") && eventsEngine.on(focusTarget, clickNamespace, (function(e) {
+        $el.attr('accesskey', accessKey);
+        dxClick.off($el, { namespace });
+        accessKey && dxClick.on($el, e => {
             if(eventUtils.isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this.focus();
             }
-        }).bind(this));
+        }, { namespace });
     },
 
     _isFocusable: function() {
@@ -377,38 +367,6 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _keyboardEventBindingTarget: function() {
         return this._eventBindingTarget();
-    },
-
-    _detachFocusEvents() {
-        const $focusTarget = this._focusEventTarget();
-
-        eventsEngine.off($focusTarget, EVENT_NAME.focusIn(this.NAME));
-        eventsEngine.off($focusTarget, EVENT_NAME.focusOut(this.NAME));
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.off($focusTarget, EVENT_NAME.beforeActivate(this.NAME));
-        }
-    },
-
-    _attachFocusEvents() {
-        this._attachFocusEventsCore(
-            this._focusEventTarget(),
-            this._focusInHandler.bind(this),
-            this._focusOutHandler.bind(this),
-            { owner: this.NAME }
-        );
-    },
-
-    // NOTE: Static method
-    _attachFocusEventsCore($el, focusIn, focusOut, { owner }) {
-        eventsEngine.on($el, EVENT_NAME.focusIn(owner), focusIn);
-        eventsEngine.on($el, EVENT_NAME.focusOut(owner), focusOut);
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.on($el, EVENT_NAME.beforeActivate(owner),
-                e => $(e.target).is(selectors.focusable) || e.preventDefault()
-            );
-        }
     },
 
     _refreshFocusEvent: function() {
@@ -472,37 +430,51 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._hasFocusClass();
     },
 
+    _getKeyboardListeners() {
+        return [];
+    },
+
     _attachKeyboardEvents: function() {
-        var processor = this.option("_keyboardProcessor");
+        this._detachKeyboardEvents();
 
-        if(processor) {
-            this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
-        } else if(this.option("focusStateEnabled")) {
-            this._disposeKeyboardProcessor();
+        const { focusStateEnabled, onKeyboardHandled } = this.option();
+        const hasChildListeners = this._getKeyboardListeners().length;
+        const hasKeyboardEventHandler = !!onKeyboardHandled;
+        const shouldAttach = focusStateEnabled || hasChildListeners || hasKeyboardEventHandler;
 
-            this._keyboardProcessor = new KeyboardProcessor({
-                element: this._keyboardEventBindingTarget(),
-                handler: this._keyboardHandler,
-                focusTarget: this._focusTarget(),
-                context: this
-            });
+        if(shouldAttach) {
+            this._keyboardListenerId = keyboard.on(
+                this._keyboardEventBindingTarget(),
+                this._focusTarget(),
+                opts => this._keyboardHandler(opts)
+            );
         }
     },
 
-    _keyboardHandler: function(options) {
-        var e = options.originalEvent;
-        var keyName = options.keyName;
-        var keyCode = options.which;
+    _keyboardHandler: function(options, onlyChildProcessing) {
+        if(!onlyChildProcessing) {
+            const { originalEvent, keyName, which } = options;
+            const keys = this._supportedKeys(originalEvent);
+            const func = keys[keyName] || keys[which];
 
-        var keys = this._supportedKeys(e),
-            func = keys[keyName] || keys[keyCode];
+            if(func !== undefined) {
+                const handler = func.bind(this);
+                const result = handler(originalEvent, options);
 
-        if(func !== undefined) {
-            var handler = func.bind(this);
-            return handler(e) || false;
-        } else {
-            return true;
+                if(!result) {
+                    return false;
+                }
+            }
         }
+
+        const keyboardListeners = this._getKeyboardListeners();
+        const { onKeyboardHandled } = this.option();
+
+        keyboardListeners.forEach(listener => listener && listener._keyboardHandler(options));
+
+        onKeyboardHandled && onKeyboardHandled(options);
+
+        return true;
     },
 
     _refreshFocusState: function() {
@@ -518,90 +490,73 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._toggleFocusClass(false);
         $element.removeAttr("tabIndex");
 
-        this._disposeKeyboardProcessor();
+        this._detachKeyboardEvents();
     },
 
-    _disposeKeyboardProcessor() {
-        if(this._keyboardProcessor) {
-            this._keyboardProcessor.dispose();
-            delete this._keyboardProcessor;
-        }
+    _detachKeyboardEvents() {
+        keyboard.off(this._keyboardListenerId);
+        this._keyboardListenerId = null;
     },
 
     _attachHoverEvents() {
         const { hoverStateEnabled } = this.option();
-        const hoverableSelector = this._activeStateUnit;
+        const selector = this._activeStateUnit;
+        const namespace = 'UIFeedback';
         const $el = this._eventBindingTarget();
 
-        this._detachHoverEvents($el, hoverableSelector);
+        hover.off($el, { selector, namespace });
 
         if(hoverStateEnabled) {
-            this._attachHoverEventsCore($el, ($element, event) => {
+            hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
-                this._refreshHoveredElement($element);
-            }, event => {
+                this._refreshHoveredElement($(element));
+            }, { excludeValidators: ['readOnly'] }), event => {
                 this._hoverEndHandler(event);
                 this._forgetHoveredElement();
-            }, { selector: hoverableSelector });
+            }, { selector, namespace });
         } else {
             this._toggleHoverClass(false);
         }
     },
 
-    // NOTE: Static method
-    _attachHoverEventsCore($el, start, end, { selector }) {
-        const startAction = new Action(({ event, element }) => start($(element), event),
-            { excludeValidators: ['readOnly'] });
-
-        eventsEngine.on($el, EVENT_NAME.hoverEnd, selector, event => end(event));
-        eventsEngine.on($el, EVENT_NAME.hoverStart, selector, event => {
-            startAction.execute({ element: event.target, event });
-        });
-    },
-
-    // NOTE: Static method
-    _detachHoverEvents($el, selector) {
-        eventsEngine.off($el, EVENT_NAME.hoverStart, selector);
-        eventsEngine.off($el, EVENT_NAME.hoverEnd, selector);
-    },
-
     _attachFeedbackEvents() {
         const { activeStateEnabled } = this.option();
-        const eventBindingTarget = this._eventBindingTarget();
+        const selector = this._activeStateUnit;
+        const namespace = 'UIFeedback';
+        const $el = this._eventBindingTarget();
 
-        this._detachFeedbackEvents(eventBindingTarget, this._activeStateUnit);
+        active.off($el, { namespace, selector });
 
         if(activeStateEnabled) {
-            this._attachFeedbackEventsCore(
-                eventBindingTarget,
-                ($el, event) => this._toggleActiveState($el, true, event),
-                ($el, event) => this._toggleActiveState($el, false, event), {
-                    selector: this._activeStateUnit,
+            active.on($el,
+                new Action(({ event, element }) => this._toggleActiveState($(element), true, event)),
+                new Action(({ event, element }) => this._toggleActiveState($(element), false, event),
+                    { excludeValidators: ['disabled', 'readOnly'] }
+                ), {
                     showTimeout: this._feedbackShowTimeout,
-                    hideTimeout: this._feedbackHideTimeout
+                    hideTimeout: this._feedbackHideTimeout,
+                    selector,
+                    namespace
                 }
             );
         }
     },
 
-    // NOTE: Static method
-    _detachFeedbackEvents($el, selector) {
-        eventsEngine.off($el, EVENT_NAME.active, selector);
-        eventsEngine.off($el, EVENT_NAME.inactive, selector);
+    _detachFocusEvents() {
+        const $el = this._focusEventTarget();
+
+        focus.off($el, { namespace: `${this.NAME}Focus` });
     },
 
-    // NOTE: Static method
-    _attachFeedbackEventsCore($el, active, inactive, opts) {
-        const { selector, showTimeout, hideTimeout } = opts;
-        const feedbackAction = new Action(({ event, element }) => active(element, event));
-        const feedbackActionDisabled = new Action(({ event, element }) => inactive(element, event),
-            { excludeValidators: ['disabled', 'readOnly'] });
+    _attachFocusEvents() {
+        const $el = this._focusEventTarget();
 
-        eventsEngine.on($el, EVENT_NAME.active, selector, { timeout: showTimeout },
-            event => feedbackAction.execute({ event, element: $(event.currentTarget) })
-        );
-        eventsEngine.on($el, EVENT_NAME.inactive, selector, { timeout: hideTimeout },
-            event => feedbackActionDisabled.execute({ event, element: $(event.currentTarget) })
+        focus.on($el,
+            e => this._focusInHandler(e),
+            e => this._focusOutHandler(e), {
+                namespace: `${this.NAME}Focus`,
+                isFocusable: el => $(el).is(selectors.focusable)
+            }
         );
     },
 
@@ -677,7 +632,6 @@ var Widget = DOMComponentWithTemplate.inherit({
                 this._attachHoverEvents();
                 break;
             case "tabIndex":
-            case "_keyboardProcessor":
             case "focusStateEnabled":
                 this._refreshFocusState();
                 break;
@@ -694,6 +648,9 @@ var Widget = DOMComponentWithTemplate.inherit({
                     // TODO hiding works wrong
                     this._checkVisibilityChanged(args.value ? "shown" : "hiding");
                 }
+                break;
+            case "onKeyboardHandled":
+                this._attachKeyboardEvents();
                 break;
             case "onContentReady":
                 this._initContentReadyAction();

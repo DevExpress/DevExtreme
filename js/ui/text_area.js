@@ -5,7 +5,7 @@ import windowUtils from "../core/utils/window";
 import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
 import { isDefined } from "../core/utils/type";
-import eventUtils from "../events/utils";
+import * as eventUtils from "../events/utils";
 import pointerEvents from "../events/pointer";
 import scrollEvents from "../ui/scroll_view/ui.events.emitter.gesture.scroll";
 import sizeUtils from "../core/utils/size";

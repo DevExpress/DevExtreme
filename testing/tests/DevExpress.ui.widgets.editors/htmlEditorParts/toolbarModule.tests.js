@@ -49,7 +49,7 @@ const IMAGE_FORMAT_CLASS = "dx-image-format";
 
 
 const simpleModuleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
 
         this.$element = $("#htmlEditor");
@@ -80,13 +80,13 @@ const simpleModuleConfig = {
             }
         };
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 };
 
 const dialogModuleConfig = {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
 
         this.$element = $("#htmlEditor");
@@ -135,7 +135,7 @@ const dialogModuleConfig = {
 
         this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 };
@@ -143,7 +143,7 @@ const dialogModuleConfig = {
 const { test } = QUnit;
 
 QUnit.module("Toolbar module", simpleModuleConfig, () => {
-    test("Render toolbar without any options", (assert) => {
+    test("Render toolbar without any options", function(assert) {
         new Toolbar(this.quillMock, this.options);
 
         assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered not on the root element");
@@ -151,7 +151,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, "There are no format widgets");
     });
 
-    test("Render toolbar with items", (assert) => {
+    test("Render toolbar with items", function(assert) {
         this.options.items = ["bold"];
         new Toolbar(this.quillMock, this.options);
 
@@ -167,7 +167,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.equal($formatWidget.find(".dx-icon-bold").length, 1, "It has a bold icon");
     });
 
-    test("Render toolbar on custom container", (assert) => {
+    test("Render toolbar on custom container", function(assert) {
         this.options.items = ["bold"];
         this.options.container = this.$element;
         new Toolbar(this.quillMock, this.options);
@@ -178,7 +178,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.ok($toolbar.hasClass(TOOLBAR_CLASS), "Toolbar rendered on the custom element");
     });
 
-    test("Render toolbar with simple formats", (assert) => {
+    test("Render toolbar with simple formats", function(assert) {
         this.options.items = ["bold", "strike"];
 
         new Toolbar(this.quillMock, this.options);
@@ -188,7 +188,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.ok($formatWidgets.first().hasClass("dx-button"), "Change simple format via Button");
     });
 
-    test("Simple format handling", (assert) => {
+    test("Simple format handling", function(assert) {
         let isHandlerTriggered;
         this.quillMock.getFormat = () => {
             return { bold: false };
@@ -240,7 +240,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.equal($homeIcon.length, 1, "last button has a custom icon");
     });
 
-    test("Enum format handling", (assert) => {
+    test("Enum format handling", function(assert) {
         this.quillMock.getFormat = () => {
             return {};
         };
@@ -267,7 +267,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         );
     });
 
-    test("Enum with custom options format handling", (assert) => {
+    test("Enum with custom options format handling", function(assert) {
         this.quillMock.getFormat = () => {
             return {};
         };
@@ -299,7 +299,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.equal(placeholder, "Test", "widget has a custom placeholder");
     });
 
-    test("handle align formatting", (assert) => {
+    test("handle align formatting", function(assert) {
         this.options.items = ["alignLeft", "alignCenter", "alignRight", "alignJustify"];
 
         new Toolbar(this.quillMock, this.options);
@@ -334,7 +334,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         );
     });
 
-    test("handle codeBlock formatting", (assert) => {
+    test("handle codeBlock formatting", function(assert) {
         this.options.items = ["codeBlock"];
 
         new Toolbar(this.quillMock, this.options);
@@ -357,7 +357,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
-    test("handle orderedList formatting", (assert) => {
+    test("handle orderedList formatting", function(assert) {
         this.options.items = ["orderedList"];
 
         new Toolbar(this.quillMock, this.options);
@@ -380,7 +380,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
-    test("handle bulletList formatting", (assert) => {
+    test("handle bulletList formatting", function(assert) {
         this.options.items = ["bulletList"];
 
         new Toolbar(this.quillMock, this.options);
@@ -403,7 +403,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
-    test("Render toolbar with enum format", (assert) => {
+    test("Render toolbar with enum format", function(assert) {
         this.options.items = [{ formatName: "header", formatValues: [1, 2, 3, false] }];
 
         new Toolbar(this.quillMock, this.options);
@@ -412,7 +412,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.ok($formatWidget.hasClass(SELECTBOX_CLASS), "Change enum format via SelectBox");
     });
 
-    test("undo operation", (assert) => {
+    test("undo operation", function(assert) {
         const undoStub = sinon.stub();
         this.quillMock.history = {
             undo: undoStub,
@@ -430,7 +430,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.ok(undoStub.calledOnce, "call undo");
     });
 
-    test("redo operation", (assert) => {
+    test("redo operation", function(assert) {
         const redoStub = sinon.stub();
         this.quillMock.history = {
             redo: redoStub,
@@ -448,7 +448,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.ok(redoStub.calledOnce, "call redo");
     });
 
-    test("custom item without formatName shouldn't have format class", (assert) => {
+    test("custom item without formatName shouldn't have format class", function(assert) {
         this.options.items = ["bold", { widget: "dxButton", options: { text: "test" } }];
 
         new Toolbar(this.quillMock, this.options);
@@ -459,7 +459,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.notOk($buttons.eq(1).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Custom button");
     });
 
-    test("handle indent formatting", (assert) => {
+    test("handle indent formatting", function(assert) {
         this.options.items = ["decreaseIndent", "increaseIndent"];
 
         new Toolbar(this.quillMock, this.options);
@@ -479,7 +479,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
-    test("handle script formatting", (assert) => {
+    test("handle script formatting", function(assert) {
         this.options.items = ["superscript", "subscript"];
 
         new Toolbar(this.quillMock, this.options);
@@ -511,7 +511,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
-    test("separator item", (assert) => {
+    test("separator item", function(assert) {
         this.options.items = ["separator", { formatName: "separator", locateInMenu: "always" }];
 
         new Toolbar(this.quillMock, this.options);
@@ -527,7 +527,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.equal($menuSeparator.length, 1, "Toolbar has a menu separator item");
     });
 
-    test("toolbar should prevent default mousedown event", (assert) => {
+    test("toolbar should prevent default mousedown event", function(assert) {
         this.options.items = ["bold"];
 
         new Toolbar(this.quillMock, this.options);
@@ -541,7 +541,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             .trigger("mousedown");
     });
 
-    test("default click handler should correctly revert defined format", (assert) => {
+    test("default click handler should correctly revert defined format", function(assert) {
         this.options.items = ["bold"];
         this.quillMock.getFormat = () => { return { bold: "" }; };
 
@@ -558,7 +558,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
-    test("adaptive menu container", (assert) => {
+    test("adaptive menu container", function(assert) {
         this.options.items = [{ formatName: "strike", locateInMenu: "always" }];
 
         new Toolbar(this.quillMock, this.options);
@@ -575,7 +575,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 });
 
 QUnit.module("Active formats", simpleModuleConfig, () => {
-    test("without active formats", (assert) => {
+    test("without active formats", function(assert) {
         this.options.items = ["bold", "italic", "clear"];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
@@ -586,7 +586,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.equal($activeFormats.length, 0, "There is no active formats");
     });
 
-    test("clear formatting", (assert) => {
+    test("clear formatting", function(assert) {
         this.quillMock.getFormat = () => { return { bold: true }; };
         this.options.items = ["clear"];
 
@@ -600,7 +600,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), "Clear formats button is active because there is active format");
     });
 
-    test("simple format", (assert) => {
+    test("simple format", function(assert) {
         this.quillMock.getFormat = () => { return { bold: true }; };
         this.options.items = ["bold", "italic", "strike"];
 
@@ -612,7 +612,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.ok($activeFormats.hasClass(BOLD_FORMAT_CLASS), "it's a bold button");
     });
 
-    test("several simple format", (assert) => {
+    test("several simple format", function(assert) {
         this.quillMock.getFormat = () => { return { bold: true, italic: true }; };
         this.options.items = ["bold", "italic", "strike"];
 
@@ -626,7 +626,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
 
     });
 
-    test("alias format", (assert) => {
+    test("alias format", function(assert) {
         this.quillMock.getFormat = () => { return { "code-block": true }; };
         this.options.items = ["codeBlock"];
 
@@ -638,7 +638,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.ok($activeFormats.hasClass(CODEBLOCK_FORMAT_CLASS), "it's a code block button");
     });
 
-    test("composite format", (assert) => {
+    test("composite format", function(assert) {
         this.quillMock.getFormat = () => { return { align: "center" }; };
         this.options.items = ["alignLeft", "alignCenter", "alignRight", "alignJustify"];
 
@@ -650,7 +650,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.ok($activeFormats.hasClass(ALIGNCENTER_FORMAT_CLASS), "it's an align center button");
     });
 
-    test("color format", (assert) => {
+    test("color format", function(assert) {
         this.quillMock.getFormat = () => { return { color: "#fafafa" }; };
         this.options.items = ["color", "background", "bold"];
 
@@ -668,7 +668,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.equal($icon.get(0).style.borderBottomColor, "transparent", "icon has correct color after reset format");
     });
 
-    test("background format", (assert) => {
+    test("background format", function(assert) {
         this.quillMock.getFormat = () => { return { background: "#fafafa" }; };
         this.options.items = ["color", "background", "bold"];
 
@@ -686,7 +686,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.equal($icon.get(0).style.borderBottomColor, "transparent", "icon has correct background after reset format");
     });
 
-    test("list format", (assert) => {
+    test("list format", function(assert) {
         this.quillMock.getFormat = () => { return { list: "ordered" }; };
         this.options.items = ["orderedList", "bulletList", "bold"];
 
@@ -706,7 +706,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.ok($activeFormats.hasClass(BULLETLIST_FORMAT_CLASS), "it's a bullet list button");
     });
 
-    test("undo/redo", (assert) => {
+    test("undo/redo", function(assert) {
         this.quillMock.history = { stack: { undo: [], redo: [] } };
         this.options.items = ["undo", "redo"];
 
@@ -729,7 +729,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is enabled");
     });
 
-    test("SelectBox should display currently applied value", (assert) => {
+    test("SelectBox should display currently applied value", function(assert) {
         this.quillMock.getFormat = () => { return { size: "10px" }; };
         this.options.items = [{ formatName: "size", formatValues: ["10px", "11px"] }];
 
@@ -744,7 +744,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.strictEqual(value, "10px", "SelectBox contain selected value");
     });
 
-    test("Image format", (assert) => {
+    test("Image format", function(assert) {
         this.quillMock.getFormat = () => { return { imageSrc: "testImage" }; };
         this.options.items = ["image", "background", "bold"];
 
@@ -758,7 +758,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
 });
 
 QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
-    test("show color dialog", (assert) => {
+    test("show color dialog", function(assert) {
         this.options.items = ["color"];
         new Toolbar(this.quillMock, this.options);
         this.$element
@@ -776,7 +776,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.strictEqual($boxItemContent.css("flexBasis"), "auto", "Box item content flex-basis is 'auto'");
     });
 
-    test("show color dialog when formatted text selected", (assert) => {
+    test("show color dialog when formatted text selected", function(assert) {
         this.options.items = ["color"];
         this.quillMock.getFormat = () => { return { color: "#fafafa" }; };
 
@@ -791,7 +791,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($hexValueInput.val(), "fafafa", "Selected text color");
     });
 
-    test("change color", (assert) => {
+    test("change color", function(assert) {
         this.options.items = ["color"];
 
         new Toolbar(this.quillMock, this.options);
@@ -814,7 +814,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.deepEqual(this.log, [{ format: "color", value: "#fafafa" }], "format method with the right arguments");
     });
 
-    test("decline change color dialog", (assert) => {
+    test("decline change color dialog", function(assert) {
         this.options.items = ["color"];
 
         new Toolbar(this.quillMock, this.options);
@@ -830,7 +830,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.ok(this.focusStub.calledOnce, "focus method was called after closing the dialog");
     });
 
-    test("show background dialog", (assert) => {
+    test("show background dialog", function(assert) {
         this.options.items = ["background"];
         new Toolbar(this.quillMock, this.options);
         this.$element
@@ -846,7 +846,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($hexValueInput.val(), "000000", "Base value");
     });
 
-    test("show background dialog when formatted text selected", (assert) => {
+    test("show background dialog when formatted text selected", function(assert) {
         this.options.items = ["background"];
         this.quillMock.getFormat = () => { return { background: "#fafafa" }; };
 
@@ -861,7 +861,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($hexValueInput.val(), "fafafa", "Selected background color");
     });
 
-    test("change background", (assert) => {
+    test("change background", function(assert) {
         this.options.items = ["background"];
 
         new Toolbar(this.quillMock, this.options);
@@ -884,7 +884,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.deepEqual(this.log, [{ format: "background", value: "#fafafa" }], "format method with the right arguments");
     });
 
-    test("show image dialog", (assert) => {
+    test("show image dialog", function(assert) {
         this.options.items = ["image"];
         new Toolbar(this.quillMock, this.options);
         this.$element
@@ -900,7 +900,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
 
     });
 
-    test("show image dialog when an image selected", (assert) => {
+    test("show image dialog when an image selected", function(assert) {
         this.quillMock.getFormat = () => {
             return {
                 src: "http://test.com/test.jpg",
@@ -921,7 +921,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($fieldInputs.eq(2).val(), "100", "Height");
     });
 
-    test("decline link dialog", (assert) => {
+    test("decline link dialog", function(assert) {
         this.options.items = ["link"];
 
         new Toolbar(this.quillMock, this.options);
@@ -939,7 +939,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.ok(this.focusStub.calledTwice, "focus method was called after closing the dialog");
     });
 
-    test("change an image formatting", (assert) => {
+    test("change an image formatting", function(assert) {
         this.options.items = ["image"];
         this.quillMock.getSelection = () => { return { index: 1, length: 0 }; };
         new Toolbar(this.quillMock, this.options);
@@ -982,7 +982,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         }, "caret position has been updated");
     });
 
-    test("caret position after update an image with selection", (assert) => {
+    test("caret position after update an image with selection", function(assert) {
         this.options.items = ["image"];
         this.quillMock.getSelection = () => { return { index: 4, length: 2 }; };
         this.quillMock.getFormat = () => { return { extendedImage: "oldImage" }; };
@@ -1003,7 +1003,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         }, "caret position has been correctly updated");
     });
 
-    test("show link dialog", (assert) => {
+    test("show link dialog", function(assert) {
         this.options.items = ["link"];
         new Toolbar(this.quillMock, this.options);
         this.$element
@@ -1018,7 +1018,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal(fieldsText, "URL:Text:Open link in new window", "Check labels");
     });
 
-    test("show link dialog when a link selected", (assert) => {
+    test("show link dialog when a link selected", function(assert) {
         this.quillMock.getFormat = () => {
             return {
                 link: "http://test.com",
@@ -1044,7 +1044,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 1, "It is contains a checked CheckBox");
     });
 
-    test("show link dialog when a link selected and didn't contain a target attribute", (assert) => {
+    test("show link dialog when a link selected and didn't contain a target attribute", function(assert) {
         this.quillMock.getFormat = () => {
             return {
                 link: "http://test.com",
@@ -1070,7 +1070,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 0, "It isn't contains an checked CheckBox");
     });
 
-    test("change an link formatting", (assert) => {
+    test("change an link formatting", function(assert) {
         this.options.items = ["link"];
         new Toolbar(this.quillMock, this.options);
         this.$element
@@ -1098,7 +1098,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         }], "expected format config");
     });
 
-    test("'Text' field should be hidden when formatting embed config with the 'link' dialog", (assert) => {
+    test("'Text' field should be hidden when formatting embed config with the 'link' dialog", function(assert) {
         this.options.items = ["link"];
         this.quillMock.getSelection = () => { return { index: 0, length: 10 }; };
         this.quillMock.getText = () => "Test";

@@ -764,16 +764,18 @@ module.exports = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && ["group", "groupFooter", "detail"].every(x => x !== newItem.rowType)) {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
                         var columnIndices = [];
 
-                        for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-                            if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
-                                columnIndices.push(columnIndex);
-                            } else {
-                                var cell = oldItem.cells && oldItem.cells[columnIndex];
-                                if(cell && cell.update) {
-                                    cell.update(newItem);
+                        if(newItem.rowType !== "detail") {
+                            for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                                if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
+                                    columnIndices.push(columnIndex);
+                                } else {
+                                    var cell = oldItem.cells && oldItem.cells[columnIndex];
+                                    if(cell && cell.update) {
+                                        cell.update(newItem);
+                                    }
                                 }
                             }
                         }
@@ -1014,10 +1016,10 @@ module.exports = {
                  */
                 filter: function(filterExpr) {
                     var dataSource = this._dataSource,
-                        filter = dataSource.filter();
+                        filter = dataSource && dataSource.filter();
 
                     if(arguments.length === 0) {
-                        return dataSource ? dataSource.filter() : undefined;
+                        return filter;
                     }
 
                     filterExpr = arguments.length > 1 ? Array.prototype.slice.call(arguments, 0) : filterExpr;
@@ -1398,6 +1400,10 @@ module.exports = {
                 },
                 _disposeDataSource: function() {
                     this.setDataSource(null);
+                },
+                dispose: function() {
+                    this._disposeDataSource();
+                    this.callBase.apply(this, arguments);
                 },
 
                 /**

@@ -40,7 +40,7 @@ QUnit.module("apply current config options", (hooks) => {
         fx.off = false;
     }),
 
-    test("repaint with multiple actions", (assert) => {
+    test("repaint with multiple actions", function(assert) {
         $("#fab-one").dxSpeedDialAction();
         $("#fab-two").dxSpeedDialAction();
 
@@ -90,7 +90,7 @@ QUnit.module("apply current config options", (hooks) => {
         assert.equal($fabContent.eq(2).offset().top, 104, "right second action position");
     });
 
-    test("repaint with one action", (assert) => {
+    test("repaint with one action", function(assert) {
         $("#fab-one").dxSpeedDialAction({ icon: "trash", label: "Delete" });
         $("#fab-two").dxSpeedDialAction({ visible: false });
 

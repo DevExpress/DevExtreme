@@ -366,7 +366,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 }
                 that.updateTotalItemsCount();
             }).fail(function() {
-                dataSource.fireEvent("loadError", arguments);
+                dataSource._eventsStrategy.fireEvent("loadError", arguments);
             });
         },
         allowCollapseAll: function() {

@@ -11,7 +11,7 @@ import iteratorUtils from "../../core/utils/iterator";
 import Action from "../../core/action";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import DataHelperMixin from "../../data_helper";
 import CollectionWidgetItem from "./item";
@@ -539,10 +539,16 @@ var CollectionWidget = Widget.inherit({
             this._refreshItem($item, item);
         }
 
-        const isDisabling = property === 'disabled' && value;
+        const isDisabling = property === "disabled" && value;
 
-        if(isDisabling && $item.is(this.option('focusedElement'))) {
-            this.option('focusedElement', null);
+        if(isDisabling) {
+            this._resetItemFocus($item);
+        }
+    },
+
+    _resetItemFocus($item) {
+        if($item.is(this.option("focusedElement"))) {
+            this.option("focusedElement", null);
         }
     },
 
@@ -1010,6 +1016,7 @@ var CollectionWidget = Widget.inherit({
             watchMethod: function() {
                 return that.option("integrationOptions.watchMethod");
             },
+            owner: that,
             fieldGetter: function(field) {
                 var expr = that.option(field + "Expr"),
                     getter = compileGetter(expr);

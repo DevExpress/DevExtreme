@@ -6,6 +6,7 @@ env:
   matrix:
     - TARGET=lint
     - TARGET=ts
+    - TARGET=test CONSTEL=export
     - TARGET=test CONSTEL=misc
     - TARGET=test CONSTEL=misc JQUERY=true
     - TARGET=test CONSTEL=ui
@@ -13,6 +14,7 @@ env:
     - TARGET=test CONSTEL=ui.grid
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=viz
+    - TARGET=test BROWSER=firefox CONSTEL=export
     - TARGET=test BROWSER=firefox CONSTEL=misc
     - TARGET=test BROWSER=firefox CONSTEL=ui
     - TARGET=test BROWSER=firefox CONSTEL=ui.editors

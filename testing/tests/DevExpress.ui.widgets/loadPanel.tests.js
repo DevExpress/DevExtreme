@@ -218,7 +218,7 @@ QUnit.test("Load panel should not close on esc button when focusStateEnabled is 
     assert.ok(instance.option("visible"), "load panel stay visible after esc press");
 });
 
-QUnit.testInActiveWindow("Load panel with shading should grab focus from inputs under the shading when focusStateEnabled is true", function(assert) {
+QUnit.testInActiveWindow("Load panel with shading should grabbing focus from inputs under the shading when focusStateEnabled is true", function(assert) {
     var $input = $("<input/>").val("");
 
     try {

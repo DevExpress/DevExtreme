@@ -16,12 +16,37 @@ var createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 var setupModule = function() {
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail', 'editorFactory', 'focus', 'keyboardNavigation', 'summary', 'selection']);
+    setupDataGridModules(this, [
+        'data',
+        'virtualScrolling',
+        'columns',
+        'filterRow',
+        'search',
+        'editing',
+        'grouping',
+        'headerFilter',
+        'masterDetail',
+        'editorFactory',
+        'focus',
+        'keyboardNavigation',
+        'summary',
+        'selection',
+        'virtualColumns'
+    ]);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
         this.columnsController.init();
     };
+
+    this.options.editing = this.options.editing || {};
+    $.extend(this.options.editing, {
+        confirmDelete: true,
+        texts: {
+            confirmDeleteMessage: "Are you sure?"
+        }
+    });
+
     this.clock = sinon.useFakeTimers();
     this.editingController.getFirstEditableCellInRow = function() { return $([]); };
 };
@@ -245,6 +270,19 @@ QUnit.test("events rising on second initialize not shared dataSource", function(
     assert.ok(dataSource, 'dataSource created');
     assert.ok(dataSource._disposed, 'dataSource is disposed');
     assert.strictEqual(changedCount, 1, 'changed called');
+});
+
+QUnit.test("dataSource should be disposed after calling dispose method", function(assert) {
+    var dataSource = createDataSource([]);
+
+    this.dataController.setDataSource(dataSource);
+
+    // act
+    this.dataController.dispose();
+
+    // assert
+    assert.ok(dataSource._disposed, 'dataSource is disposed');
+    assert.strictEqual(this.dataController._dataSource, null, 'dataSourceAdapter is removed');
 });
 
 // T697860
@@ -3520,7 +3558,7 @@ var setupVirtualRenderingModule = function() {
 
     this.dataController.viewportItemSize(10);
     this.dataController.viewportSize(9);
-    this.dataController._dataSource._renderTime = 50;
+    this.dataController._dataSource._changeTime = 50;
 
     this.clock.tick();
 
@@ -4630,7 +4668,7 @@ QUnit.test("selectAll should works correctly if item count less than pageSize", 
 
     // assert
     assert.equal(this.getVisibleRows().length, 50, "visible row count");
-    assert.ok(this.totalCount(), 50, "total count");
+    assert.strictEqual(this.totalCount(), 50, "total count");
     assert.ok(this.selectionController.isSelectAll(), "select all state");
 });
 
@@ -5196,6 +5234,70 @@ QUnit.test("get combinedFilter with remote filtering", function(assert) {
     assert.deepEqual(this.getCombinedFilter(true), ["age", "=", 15]);
 });
 
+const generateColumns = (length) => {
+    const result = [];
+    for(let i = 0; i < length; i++) {
+        result.push({
+            dataField: "field" + (i + 1),
+            dataType: "string",
+            width: 100
+        });
+    }
+    return result;
+};
+
+QUnit.test("DataGrid should filter properly by filterRow value in virtual mode (T832948)", function(assert) {
+    // arrange
+    this.dataSource = new DataSource({
+        store: []
+    });
+
+    this.applyOptions({
+        width: 200,
+        columns: generateColumns(10),
+        scrolling: {
+            columnPageSize: 5,
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.columnOption("field10", "filterValue", "test");
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 6, "column rendering mode is applied");
+    assert.deepEqual(this.getCombinedFilter(true), ["field10", "contains", "test"], "combined filter");
+});
+
+QUnit.test("DataGrid should filter properly by headerFilter value in virtual mode (T832948)", function(assert) {
+    // arrange
+    this.dataSource = new DataSource({
+        store: []
+    });
+
+    this.applyOptions({
+        width: 200,
+        columns: generateColumns(10),
+        scrolling: {
+            columnPageSize: 5,
+            columnRenderingMode: "virtual"
+        }
+    });
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.columnOption("field10", "filterValues", ["test"]);
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 6, "column rendering mode is applied");
+    assert.deepEqual(this.getCombinedFilter(true), ["field10", "=", "test"], "combined filter");
+});
+
 QUnit.test("get combinedFilter for search when allowSearch false", function(assert) {
     this.dataSource = new DataSource({
         load: function() {
@@ -5550,7 +5652,7 @@ QUnit.test("clearFilter without argument", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // arrange
     that.dataController.changed.add(function() {
@@ -5603,7 +5705,7 @@ QUnit.test("clearFilter for dataSource", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob", "Bobbi"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("dataSource");
@@ -5618,7 +5720,7 @@ QUnit.test("clearFilter for dataSource", function(assert) {
     assert.deepEqual(that.dataController.filter(), null, "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob", "Bobbi"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5652,7 +5754,7 @@ QUnit.test("clearFilter for search", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("search");
@@ -5667,7 +5769,7 @@ QUnit.test("clearFilter for search", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5701,7 +5803,7 @@ QUnit.test("clearFilter for filter row", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("row");
@@ -5749,7 +5851,7 @@ QUnit.test("clearFilter for header filter", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("header");
@@ -5763,7 +5865,7 @@ QUnit.test("clearFilter for header filter", function(assert) {
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, undefined, "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // T238430
@@ -5797,7 +5899,7 @@ QUnit.test("clearFilter didn't apply by incorrect filter name", function(assert)
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 
     // act
     that.dataController.clearFilter("test");
@@ -5811,7 +5913,7 @@ QUnit.test("clearFilter didn't apply by incorrect filter name", function(assert)
     assert.ok(Array.isArray(that.dataController.filter()), "filter dataSource");
     assert.equal(columns.length, 2, "count columns");
     assert.deepEqual(columns[0].filterValues, ["Alex", "Dan", "Bob"], "filter values of the first column");
-    assert.deepEqual(columns[1].filterValue, 19, "filter values", "filter value of the second column");
+    assert.deepEqual(columns[1].filterValue, 19, "filter value of the second column");
 });
 
 // B233043
@@ -6670,6 +6772,18 @@ QUnit.test("Not apply groupInterval of the headerFilter for filterRow", function
 
     // act, assert
     assert.deepEqual(this.getCombinedFilter(true), [["birthDate", ">=", new Date(1992, 7, 6)], "and", ["birthDate", "<", new Date(1992, 7, 7)]], "filter expression");
+});
+
+// T835675
+QUnit.test("clearFilter should not fall with error if dataSource is not set", function(assert) {
+    // arrange
+    this.dataSource = undefined;
+
+    // assert
+    assert.notOk(this.dataController.getDataSource(), "no dataSource");
+
+    // act
+    this.dataController.clearFilter();
 });
 
 QUnit.module("Grouping", { beforeEach: setupModule, afterEach: teardownModule });
@@ -7575,6 +7689,73 @@ QUnit.test("Expand detail row before edit form and detail rows", function(assert
     assert.notOk(this.dataController.items()[3].isEditing, "row 3 is not editing");
 
     assert.strictEqual(this.dataController.items()[4].rowType, "data", "row 4 is detail");
+});
+
+QUnit.test("delete row with confirmDelete and confirmDeleteMessage is not empty", function(assert) {
+    // arrange
+    let removeHandlerCallCount = 0;
+    var dataSource = new DataSource({
+        key: 'id',
+        load: () => [{ id: 1 }],
+        totalCount: () => 1,
+        remove: () => ++removeHandlerCallCount
+    });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 0, "row is not deleted");
+
+    // arrange
+    this.options.editing.confirmDelete = false;
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 1, "row is deleted");
+});
+
+QUnit.test("delete row with confirmDelete and confirmDeleteMessage is empty", function(assert) {
+    // arrange
+    let removeHandlerCallCount = 0;
+    var dataSource = new DataSource({
+        key: 'id',
+        load: () => [{ id: 1 }],
+        totalCount: () => 1,
+        remove: () => ++removeHandlerCallCount
+    });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.applyOptions({
+        editing: {
+            confirmDelete: true,
+            texts: {
+                confirmDeleteMessage: ""
+            }
+        }
+    });
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 1, "row is deleted");
+
+    // arrange
+    this.options.editing.confirmDelete = false;
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 2, "row is deleted");
 });
 
 QUnit.module("Error handling", {
@@ -11085,9 +11266,9 @@ QUnit.test("collapseRow", function(assert) {
 
     // assert
     assert.ok(collapseRowResult0 && collapseRowResult0.done, "collapseRow result 0 is deferred");
-    assert.ok(collapseRowResult0.state(), "resolved", "collapseRow result 0 state is resolved");
+    assert.strictEqual(collapseRowResult0.state(), "resolved", "collapseRow result 0 state is resolved");
     assert.ok(collapseRowResult1 && collapseRowResult1.done, "collapseRow result 1 is deferred");
-    assert.ok(collapseRowResult1.state(), "resolved", "collapseRow result state 1 is resolved");
+    assert.strictEqual(collapseRowResult1.state(), "resolved", "collapseRow result state 1 is resolved");
     assert.strictEqual(this.dataController.isRowExpanded(0), false);
     assert.strictEqual(this.dataController.isRowExpanded(1), false);
     assert.strictEqual(this.dataController.isRowExpanded(2), true);

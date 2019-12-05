@@ -25,14 +25,14 @@ class TestComponent extends HierarchicalCollectionWidget {
 const createHierarchicalCollectionWidget = options => new TestComponent($("#hcw"), options);
 
 module("render", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.element = $("#hcw");
     },
-    afterEach: () => {
+    afterEach: function() {
         delete this.element;
     }
 }, () => {
-    test("Create item by custom model using expressions", (assert) => {
+    test("Create item by custom model using expressions", function(assert) {
         createHierarchicalCollectionWidget({
             displayExpr: "name",
             disabledExpr: "isDisabled",
@@ -48,7 +48,7 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(1).text()), "item 2");
     });
 
-    test("Default displayExpr: ", (assert) => {
+    test("Default displayExpr: ", function(assert) {
         createHierarchicalCollectionWidget({
             items: [{ text: "item 1" }]
         });
@@ -56,7 +56,7 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(0).text()), "item 1");
     });
 
-    test("create item by custom model using expressions set as functions", (assert) => {
+    test("create item by custom model using expressions set as functions", function(assert) {
         let condition = false,
             newItems = [{ name: "item 1" }],
             widget = createHierarchicalCollectionWidget({
@@ -72,7 +72,7 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(0).text()), "name");
     });
 
-    test("DisplayExpr as function with parameter", (assert) => {
+    test("DisplayExpr as function with parameter", function(assert) {
         createHierarchicalCollectionWidget({
             displayExpr: (itemData) => itemData && itemData.name + "!",
             items: [{ name: "Item 1" }]
@@ -81,7 +81,7 @@ module("render", {
         assert.equal($.trim(this.element.children().eq(0).text()), "Item 1!");
     });
 
-    test("DisplayExpr as non existing property", (assert) => {
+    test("DisplayExpr as non existing property", function(assert) {
         createHierarchicalCollectionWidget({
             displayExpr: "not exist",
             items: [{ name: "Item 1" }]
@@ -91,7 +91,7 @@ module("render", {
     });
 
     [null, undefined, "", {}].forEach((dataExprValue) => {
-        test(`DisplayExpr: ${dataExprValue}, items without 'text' property`, (assert) => {
+        test(`DisplayExpr: ${dataExprValue}, items without 'text' property`, function(assert) {
             try {
                 createHierarchicalCollectionWidget({
                     displayExpr: dataExprValue,
@@ -105,7 +105,7 @@ module("render", {
             }
         });
 
-        test(`DisplayExpr: ${dataExprValue}, items with 'text' property`, (assert) => {
+        test(`DisplayExpr: ${dataExprValue}, items with 'text' property`, function(assert) {
             try {
                 createHierarchicalCollectionWidget({
                     displayExpr: dataExprValue,
@@ -120,7 +120,7 @@ module("render", {
         });
     });
 
-    test("Expressions should be reinitialized if *expr option was changed", (assert) => {
+    test("Expressions should be reinitialized if *expr option was changed", function(assert) {
         const widget = createHierarchicalCollectionWidget({
                 displayExpr: "FirstName",
                 selectedExpr: "isSelected",
@@ -157,7 +157,7 @@ module("render", {
         assert.equal(widget._disabledGetter(item), false);
     });
 
-    test("Dynamic templates should be rerendered when displayExpr was changed", (assert) => {
+    test("Dynamic templates should be rerendered when displayExpr was changed", function(assert) {
         const widget = createHierarchicalCollectionWidget({
             displayExpr: "FirstName",
             items: [
@@ -177,7 +177,7 @@ module("render", {
         assert.equal($item.text(), "Smith", "item text was changed");
     });
 
-    test("Ignore dataSource paging", (assert) => {
+    test("Ignore dataSource paging", function(assert) {
         createHierarchicalCollectionWidget({
             dataSource: new DataSource({
                 store: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }],
@@ -189,7 +189,7 @@ module("render", {
         assert.equal(this.element.children().length, 3);
     });
 
-    test("Datasource should load once on hcw init", (assert) => {
+    test("Datasource should load once on hcw init", function(assert) {
         let dataSourceLoaded = sinon.spy();
 
         createHierarchicalCollectionWidget({

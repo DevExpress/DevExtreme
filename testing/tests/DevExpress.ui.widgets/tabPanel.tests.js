@@ -46,7 +46,7 @@ QUnit.module("rendering", {
     }
 });
 
-QUnit.test("container should consider tabs height", (assert) => {
+QUnit.test("container should consider tabs height", function(assert) {
     const $tabPanel = $("#tabPanel").dxTabPanel({
         items: [{ text: "test" }]
     });
@@ -57,7 +57,7 @@ QUnit.test("container should consider tabs height", (assert) => {
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
-QUnit.test("container should consider tabs height for async datasource", (assert) => {
+QUnit.test("container should consider tabs height for async datasource", function(assert) {
     const clock = sinon.useFakeTimers();
     const $tabPanel = $("#tabPanel").dxTabPanel({
         dataSource: {
@@ -80,7 +80,7 @@ QUnit.test("container should consider tabs height for async datasource", (assert
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
-QUnit.test("container should consider tabs height for async templates", (assert) => {
+QUnit.test("container should consider tabs height for async templates", function(assert) {
     const clock = sinon.useFakeTimers();
     const $tabPanel = $("#tabPanel").hide().dxTabPanel({
         items: [{ text: "test" }],
@@ -96,7 +96,7 @@ QUnit.test("container should consider tabs height for async templates", (assert)
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.5, "margin correct");
 });
 
-QUnit.test("container should consider tabs height when it rendered in hiding area", (assert) => {
+QUnit.test("container should consider tabs height when it rendered in hiding area", function(assert) {
     const $tabPanel = $("<div>").dxTabPanel({
         items: [{ text: "test" }]
     });
@@ -111,7 +111,7 @@ QUnit.test("container should consider tabs height when it rendered in hiding are
 });
 
 // T803640
-QUnit.test("content should be rendered if create widget inside deferUpdate (React)", (assert) => {
+QUnit.test("content should be rendered if create widget inside deferUpdate (React)", function(assert) {
     var $tabPanel;
 
     deferUpdate(function() {
@@ -325,7 +325,7 @@ QUnit.test("'onItemHold' and 'onTitleHold' options test", function(assert) {
     this.tabWidgetMouse.up();
 });
 
-QUnit.test("click on tab should be handled correctly when the 'deferRendering' option is true", (assert) => {
+QUnit.test("click on tab should be handled correctly when the 'deferRendering' option is true", function(assert) {
     const items = [
         { text: "Greg", title: "Name" },
         { text: "31", title: "Age" },
@@ -450,7 +450,7 @@ QUnit.module("focus policy", {
     }
 });
 
-QUnit.test("focusing empty tab should not cause infinite loop", (assert) => {
+QUnit.test("focusing empty tab should not cause infinite loop", function(assert) {
     assert.expect(0);
 
     const tabPanel = new TabPanel($("<div>").appendTo("#qunit-fixture"), {
@@ -459,7 +459,7 @@ QUnit.test("focusing empty tab should not cause infinite loop", (assert) => {
     tabPanel.focus();
 });
 
-QUnit.test("click on dxTabPanel should not scroll page to the tabs", (assert) => {
+QUnit.test("click on dxTabPanel should not scroll page to the tabs", function(assert) {
     const $tabPanel = $("<div>").appendTo("#qunit-fixture");
 
     const tabPanel = new TabPanel($tabPanel, {
@@ -550,7 +550,7 @@ if(devices.current().deviceType === "desktop") {
 
 QUnit.module("aria accessibility");
 
-QUnit.test("active tab should have aria-controls attribute pointing to active multiview item", (assert) => {
+QUnit.test("active tab should have aria-controls attribute pointing to active multiview item", function(assert) {
     const $element = $("#tabPanel").dxTabPanel({
         focusStateEnabled: true,
         items: [1, 2],
@@ -575,7 +575,7 @@ QUnit.test("active tab should have aria-controls attribute pointing to active mu
 
 QUnit.module("dataSource integration");
 
-QUnit.test("dataSource loading should be fired once", (assert) => {
+QUnit.test("dataSource loading should be fired once", function(assert) {
     const deferred = $.Deferred();
     let dataSourceLoadCalled = 0;
 

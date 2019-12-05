@@ -52,7 +52,7 @@ define(function(require, exports, module) {
 
     QUnit.module("Globalize common", null, function() {
 
-        QUnit.test("engine", assert => {
+        QUnit.test("engine", function(assert) {
             assert.equal(numberLocalization.engine(), "globalize");
             assert.equal(dateLocalization.engine(), "globalize");
             assert.equal(messageLocalization.engine(), "globalize");
@@ -432,7 +432,7 @@ define(function(require, exports, module) {
         Globalize.locale("en");
     });
 
-    QUnit.test("getCurrencySymbol and config.defaultCurrency", assert => {
+    QUnit.test("getCurrencySymbol and config.defaultCurrency", function(assert) {
         var originalConfig = config();
 
         try {
@@ -448,4 +448,16 @@ define(function(require, exports, module) {
         }
     });
 
+    var ExcelJSLocalizationFormatTests = require("../DevExpress.exporter/exceljsParts/exceljs.format.tests.js");
+
+    ExcelJSLocalizationFormatTests.default.runCurrencyTests([
+        { value: "USD", expected: "$#,##0_);\\($#,##0\\)" },
+        { value: "RUB", expected: "RUB#,##0_);\\(RUB#,##0\\)" },
+        { value: "JPY", expected: "¥#,##0_);\\(¥#,##0\\)" },
+        { value: "KPW", expected: "KPW#,##0_);\\(KPW#,##0\\)" },
+        { value: "LBP", expected: "LBP#,##0_);\\(LBP#,##0\\)" },
+        { value: "SEK", expected: "SEK#,##0_);\\(SEK#,##0\\)" }
+    ]);
 });
+
+

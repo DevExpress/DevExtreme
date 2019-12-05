@@ -122,7 +122,7 @@ QUnit.module("Selector check", () => {
     }
 
     $.each(knownCssFiles, function(i, cssFileName) {
-        test(cssFileName, (assert) => {
+        test(cssFileName, function(assert) {
             const done = assert.async();
             const frame = $("<iframe/>").appendTo("body");
 
@@ -160,7 +160,7 @@ QUnit.module("All images are defined with data-uri and will be inlined", () => {
             return rulesWithUrl;
         }
 
-        test(cssFileName, (assert) => {
+        test(cssFileName, function(assert) {
             const done = assert.async();
             const frame = $("<iframe/>").appendTo("body");
 
@@ -175,7 +175,7 @@ QUnit.module("All images are defined with data-uri and will be inlined", () => {
 });
 
 QUnit.module("dx-theme changing", () => {
-    test("Themes functions return right value after themes switching", (assert) => {
+    test("Themes functions return right value after themes switching", function(assert) {
         const genericThemeName = "generic.light",
             materialThemeName = "material.blue.light",
             linksContainer = $("<div>").addClass("links-container").appendTo("body"),
@@ -213,7 +213,7 @@ QUnit.module("dx-theme changing", () => {
         linksContainer.remove();
     });
 
-    test("Themes functions return right value if theme file loaded after ready event (T666366)", (assert) => {
+    test("Themes functions return right value if theme file loaded after ready event (T666366)", function(assert) {
         const linksContainer = $("<div>").addClass("links-container").appendTo("body");
         linksContainer.append("<link rel='dx-theme' href='style2.css' data-theme='material.blue.light' />");
 
@@ -250,7 +250,7 @@ QUnit.module("dx-theme links", (hooks) => {
         return $("link[rel=stylesheet]", frameDoc());
     }
 
-    test("should not add additional link if no dx-theme found", (assert) => {
+    test("should not add additional link if no dx-theme found", function(assert) {
         // arrange
         // act
         themes.init({ _autoInit: true, context: frameDoc() });
@@ -259,7 +259,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(realStylesheets.length, 0, "No stylesheets should be added");
     });
 
-    test("should throw if non-existing platform requested", (assert) => {
+    test("should throw if non-existing platform requested", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         // act
@@ -268,7 +268,7 @@ QUnit.module("dx-theme links", (hooks) => {
         });
     });
 
-    test("theme by platform only", (assert) => {
+    test("theme by platform only", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='myCss' data-theme='myPlatform.theme1' />");
         // act
@@ -279,7 +279,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(realStylesheets.attr("href"), "myCss");
     });
 
-    test("theme by platform and color scheme", (assert) => {
+    test("theme by platform and color scheme", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
@@ -291,7 +291,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(realStylesheets.attr("href"), "style2.css");
     });
 
-    test("change theme by string", (assert) => {
+    test("change theme by string", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
@@ -304,7 +304,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(realStylesheets.attr("href"), "style1.css");
     });
 
-    test("change theme by configuration object", (assert) => {
+    test("change theme by configuration object", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
@@ -317,7 +317,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(realStylesheets.attr("href"), "style2.css");
     });
 
-    test("method themes.ready calls a callback function after themes loading", (assert) => {
+    test("method themes.ready calls a callback function after themes loading", function(assert) {
         const done = assert.async();
 
         const url = ROOT_URL + "testing/helpers/themeMarker.css";
@@ -335,7 +335,7 @@ QUnit.module("dx-theme links", (hooks) => {
         themes.current("sampleTheme.sampleColorScheme");
     });
 
-    test("default theme is first if not specified", (assert) => {
+    test("default theme is first if not specified", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
@@ -345,7 +345,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(getFrameStyleLinks().attr("href"), "style1.css");
     });
 
-    test("default theme defined by active attribute if not specified", (assert) => {
+    test("default theme defined by active attribute if not specified", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' data-active='nonsense' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' data-active='true' />");
@@ -355,7 +355,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(getFrameStyleLinks().attr("href"), "style2.css");
     });
 
-    test("dx-theme should change compact theme to normal if compact has data-active='true' (T449216)", (assert) => {
+    test("dx-theme should change compact theme to normal if compact has data-active='true' (T449216)", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         writeToFrame("<link rel='dx-theme' href='style1.compact.css' data-theme='myPlatform.theme1.compact' data-active='true' />");
@@ -365,7 +365,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(themes.current(), "myPlatform.theme1");
     });
 
-    test("dx-theme should select active theme if theme name is incomplete (T449216)", (assert) => {
+    test("dx-theme should select active theme if theme name is incomplete (T449216)", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
         writeToFrame("<link rel='dx-theme' href='style1.compact.css' data-theme='myPlatform.theme1.compact' data-active='true' />");
@@ -376,7 +376,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(themes.current(), "myPlatform.theme1.compact");
     });
 
-    test("read current theme name", (assert) => {
+    test("read current theme name", function(assert) {
         // arrange
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='theme1' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='theme2.dark' />");
@@ -387,7 +387,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.equal(themes.current(), "theme2.dark");
     });
 
-    test("loadCallback option for init", (assert) => {
+    test("loadCallback option for init", function(assert) {
         const done = assert.async();
         const url = ROOT_URL + "testing/helpers/themeMarker.css";
         writeToFrame("<link rel=dx-theme data-theme=sampleTheme.sampleColorScheme href='" + url + "' />");
@@ -402,7 +402,7 @@ QUnit.module("dx-theme links", (hooks) => {
         });
     });
 
-    test("current theme name when theme included as simple stylesheet", (assert) => {
+    test("current theme name when theme included as simple stylesheet", function(assert) {
         const done = assert.async();
 
         const url = ROOT_URL + "testing/helpers/themeMarker.css";
@@ -414,7 +414,7 @@ QUnit.module("dx-theme links", (hooks) => {
         themes.waitForThemeLoad("sampleTheme.sampleColorScheme");
     });
 
-    test("current theme name read once", (assert) => {
+    test("current theme name read once", function(assert) {
         const done = assert.async();
         const url = ROOT_URL + "testing/helpers/themeMarker.css";
         writeToFrame("<link id='testTheme' rel='dx-theme' data-theme='sampleTheme.sampleColorScheme' href='" + url + "' />");
@@ -477,12 +477,12 @@ QUnit.module("dx-theme links", (hooks) => {
         });
     });
 
-    test("current theme name is null if without any links", (assert) => {
+    test("current theme name is null if without any links", function(assert) {
         themes.init({ context: frameDoc(), _autoInit: true });
         assert.strictEqual(themes.current(), null);
     });
 
-    test("move classes from previous viewport to new viewport", (assert) => {
+    test("move classes from previous viewport to new viewport", function(assert) {
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='mytheme' />");
         themes.init({ context: frameDoc(), theme: "mytheme" });
 
@@ -497,7 +497,7 @@ QUnit.module("dx-theme links", (hooks) => {
         assert.ok($newElement.hasClass("dx-theme-mytheme"), "theme class added");
     });
 
-    test("attachCssClasses removes classes for old theme", (assert) => {
+    test("attachCssClasses removes classes for old theme", function(assert) {
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='oldtheme' />");
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='newtheme' />");
         themes.init({ context: frameDoc(), theme: "oldtheme" });
@@ -511,7 +511,7 @@ QUnit.module("dx-theme links", (hooks) => {
     });
 
 
-    test("dx-color-scheme class for different themes", (assert) => {
+    test("dx-color-scheme class for different themes", function(assert) {
         writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='generic.light' />");
         writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light.compact' />");
         writeToFrame("<link rel='dx-theme' href='style3.css' data-theme='material.blue.light' />");
@@ -533,7 +533,7 @@ QUnit.module("dx-theme links", (hooks) => {
 QUnit.module("misc", () => {
     const DX_HAIRLINES_CLASS = "dx-hairlines";
 
-    test("attachCssClasses", (assert) => {
+    test("attachCssClasses", function(assert) {
         const attachCssClasses = themes.attachCssClasses;
         let element;
         let expectedClasses = ["dx-theme-abc", "dx-theme-abc-typography"];
@@ -553,7 +553,7 @@ QUnit.module("misc", () => {
         assert.deepEqual(element.className.split(/ /g).sort(), expectedClasses);
     });
 
-    test("detachCssClasses", (assert) => {
+    test("detachCssClasses", function(assert) {
         const element = document.createElement("DIV");
         themes.attachCssClasses(element, "abc");
 
@@ -565,7 +565,7 @@ QUnit.module("misc", () => {
 });
 
 QUnit.module("web font checker", () => {
-    test("isWebFontLoaded: font loaded", (assert) => {
+    test("isWebFontLoaded: font loaded", function(assert) {
         assert.notOk(themes.isWebFontLoaded("test text", 400));
 
         if(!document.fonts) {
@@ -587,7 +587,7 @@ QUnit.module("web font checker", () => {
 
     });
 
-    test("isWebFontLoaded does not create additional nodes", (assert) => {
+    test("isWebFontLoaded does not create additional nodes", function(assert) {
         const elementsCount = document.getElementsByTagName("*").length;
         themes.isWebFontLoaded("test text", 400);
         const afterElementsCount = document.getElementsByTagName("*").length;
@@ -595,7 +595,7 @@ QUnit.module("web font checker", () => {
         assert.equal(diff, 0, "Element's count are the same after method call");
     });
 
-    testInActiveWindow("waitWebFont: function resolve by timeout if the font is not loaded", (assert) => {
+    testInActiveWindow("waitWebFont: function resolve by timeout if the font is not loaded", function(assert) {
         const done = assert.async();
         themes.waitWebFont("test text", 400).then((success) => {
             assert.ok(true, "The font was not loaded, but waiting successfully resolved");
@@ -603,7 +603,7 @@ QUnit.module("web font checker", () => {
         });
     });
 
-    test("waitWebFont: function resolved when the font is loaded", (assert) => {
+    test("waitWebFont: function resolved when the font is loaded", function(assert) {
         if(!document.fonts) {
             assert.expect(0);
             return;

@@ -582,7 +582,8 @@ var ColorView = Editor.inherit({
 
         var editorOptions = extend({
             value: options.value,
-            onValueChanged: options.onValueChanged
+            onValueChanged: options.onValueChanged,
+            onKeyboardHandled: opts => this._keyboardHandler(opts)
         }, {
             stylingMode: this.option("stylingMode")
         });

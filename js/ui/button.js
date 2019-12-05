@@ -1,17 +1,16 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import eventsEngine from '../events/core/events_engine';
 import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import themes from './themes';
+import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
-import { addNamespace } from '../events/utils';
+import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } from '../events/';
 import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
-import { name as clickEventName } from '../events/click';
 
 /**
 * @name dxButton
@@ -27,10 +26,29 @@ class Button extends Widget {
         this._feedbackHideTimeout = 100;
     }
 
-    _clean() {
-        delete this._inkRipple;
-        delete this._$content;
-        super._clean();
+    _$content() {
+        return this.$element().find('.dx-button-content');
+    }
+
+    _$submitInput() {
+        return this.$element().find('.dx-button-submit-input');
+    }
+
+    _attachActiveEvents(active, inactive) {
+        const $el = this._eventBindingTarget();
+        const namespace = 'inkRipple';
+        const selector = this._activeStateUnit;
+
+        activeEvents.off($el, { namespace, selector });
+        activeEvents.on($el,
+            new Action(active),
+            new Action(inactive, { excludeValidators: ['disabled', 'readOnly'] }), {
+                showTimeout: this._feedbackShowTimeout,
+                hideTimeout: this._feedbackHideTimeout,
+                selector,
+                namespace
+            }
+        );
     }
 
     _defaultOptionsRules() {
@@ -188,7 +206,7 @@ class Button extends Widget {
         let needValidate = true;
         let validationStatus = 'valid';
 
-        return this._createAction(({ event: e }) => {
+        return this._createAction(({ event }) => {
             if(needValidate) {
                 const validationGroup = this._validationGroupConfig;
 
@@ -200,19 +218,20 @@ class Button extends Widget {
                     if(status === 'pending') {
                         needValidate = false;
                         this.option('disabled', true);
-                        complete.then(({ status }) =>{
-                            validationStatus = status;
+
+                        complete.then(({ status }) => {
+                            needValidate = true;
                             this.option('disabled', false);
-                            validationStatus === 'valid' && this._$submitInput.get(0).click();
+
+                            validationStatus = status;
+                            validationStatus === 'valid' && this._submitInput().click();
                         });
                     }
                 }
-            } else {
-                needValidate = true;
             }
 
-            validationStatus !== 'valid' && e.preventDefault();
-            e.stopPropagation();
+            validationStatus !== 'valid' && event.preventDefault();
+            event.stopPropagation();
         });
     }
 
@@ -291,13 +310,11 @@ class Button extends Widget {
     }
 
     _renderClick() {
-        const $element = this.$element();
-        const eventName = addNamespace(clickEventName, this.NAME);
+        const $el = this.$element();
 
-        // TODO: Remove this line in the future of beauty
-        eventsEngine.off($element, eventName);
-
-        eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
+        dxClickEvent.off($el, { namespace: this.NAME });
+        dxClickEvent.on($el, event => this._executeClickAction(event),
+            { namespace: this.NAME });
         this._updateClick();
     }
 
@@ -306,12 +323,25 @@ class Button extends Widget {
 
         if(useInkRipple) {
             const isOnlyIconButton = !text && icon || type === 'back';
-
-            this._inkRipple = inkRipple.render(isOnlyIconButton ? {
+            const _inkRipple = inkRipple.render(isOnlyIconButton ? {
                 waveSizeCoefficient: 1,
                 useHoldAnimation: false,
                 isCentered: true
             } : {});
+            const changeWaveVisibility = (event, visible) => {
+                const { activeStateEnabled } = this.option();
+
+                if(activeStateEnabled && !this._disposed) {
+                    const config = { element: this._$content(), event };
+
+                    visible ? _inkRipple.showWave(config) : _inkRipple.hideWave(config);
+                }
+            };
+
+            this._attachActiveEvents(
+                ({ event }) => changeWaveVisibility(event, true),
+                ({ event }) => changeWaveVisibility(event)
+            );
         }
     }
 
@@ -331,14 +361,15 @@ class Button extends Widget {
 
         if(useSubmitBehavior) {
             const submitAction = this._getSubmitAction();
+            const $content = this._$content();
 
-            this._$submitInput = $('<input>')
+            $('<input>')
                 .attr('type', 'submit')
                 .attr('tabindex', -1)
                 .addClass('dx-button-submit-input')
-                .appendTo(this._$content);
+                .appendTo($content);
 
-            eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+            clickEvent.on(this._$submitInput(), event => submitAction({ event }));
         }
     }
 
@@ -349,6 +380,10 @@ class Button extends Widget {
         type && $element.addClass(`dx-button-${type}`);
     }
 
+    _submitInput() {
+        return this._$submitInput().get(0);
+    }
+
     _supportedKeys() {
         const click = e => {
             e.preventDefault();
@@ -356,16 +391,6 @@ class Button extends Widget {
         };
 
         return extend(super._supportedKeys(), { space: click, enter: click });
-    }
-
-    _toggleActiveState($el, value, event) {
-        super._toggleActiveState($el, value, event);
-
-        if(this._inkRipple) {
-            const config = { element: this._$content, event };
-
-            value ? this._inkRipple.showWave(config) : this._inkRipple.hideWave(config);
-        }
     }
 
     _updateAriaLabel() {
@@ -389,18 +414,19 @@ class Button extends Widget {
             afterExecute: () => {
                 const { useSubmitBehavior } = this.option();
 
-                useSubmitBehavior && setTimeout(() => this._$submitInput.get(0).click());
+                useSubmitBehavior && setTimeout(() => this._submitInput().click());
             }
         });
     }
 
     _updateContent() {
         const $element = this.$element();
+        let $content = this._$content();
         const data = this._getContentData();
         const { template, iconPosition } = this.option();
         const { icon, text } = data;
 
-        this._$content ? this._$content.empty() : this._$content = $('<div>')
+        $content.length ? $content.empty() : $content = $('<div>')
             .addClass('dx-button-content')
             .appendTo($element);
 
@@ -411,24 +437,23 @@ class Button extends Widget {
 
         const $template = $(this._getTemplateByOption('template').render({
             model: data,
-            container: getPublicElement(this._$content),
+            container: getPublicElement($content),
             transclude: this._getAnonymousTemplateName() === template
         }));
 
         if($template.hasClass('dx-template-wrapper')) {
-            this._$content.replaceWith($template);
-            this._$content = $template;
-            this._$content.addClass('dx-button-content');
+            $template.addClass('dx-button-content');
+            $content.replaceWith($template);
         }
     }
 
     _updateSubmitInput() {
         const { useSubmitBehavior } = this.option();
+        const $submitInput = this._$submitInput();
 
         if(!useSubmitBehavior && this._$submitInput) {
-            this._$submitInput.remove();
-            this._$submitInput = null;
-        } else {
+            $submitInput.remove();
+        } else if(useSubmitBehavior && !this._$submitInput) {
             this._renderSubmitInput();
         }
     }

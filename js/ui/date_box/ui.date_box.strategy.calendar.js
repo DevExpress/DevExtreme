@@ -28,7 +28,10 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
                     if(this._widget.option("zoomLevel") === this._widget.option("maxZoomLevel")) {
                         var contouredDate = this._widget._view.option("contouredDate");
-                        contouredDate && this.dateBoxValue(contouredDate, e);
+                        var lastActionElement = this._lastActionElement;
+                        if(contouredDate && lastActionElement === "calendar") {
+                            this.dateBoxValue(contouredDate, e);
+                        }
 
                         this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
@@ -50,13 +53,16 @@ var CalendarStrategy = DateBoxStrategy.inherit({
         return Calendar;
     },
 
+    getKeyboardListener() {
+        return this._widget;
+    },
+
     _getWidgetOptions: function() {
         var disabledDates = this.dateBox.option("disabledDates");
 
         return extend(this.dateBox.option("calendarOptions"), {
             value: this.dateBoxValue() || null,
             dateSerializationFormat: null,
-            _keyboardProcessor: this._widgetKeyboardProcessor,
             min: this.dateBox.dateOption("min"),
             max: this.dateBox.dateOption("max"),
             onValueChanged: this._valueChangedHandler.bind(this),
@@ -77,6 +83,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _refreshActiveDescendant: function(e) {
+        this._lastActionElement = "calendar";
         this.dateBox.setAria("activedescendant", e.actionValue);
     },
 
@@ -98,6 +105,9 @@ var CalendarStrategy = DateBoxStrategy.inherit({
                 toolbar: position[0],
                 location: position[1] === "after" ? "before" : position[1],
                 options: {
+                    onInitialized: function(e) {
+                        e.component.registerKeyHandler("escape", this._escapeHandler.bind(this));
+                    }.bind(this),
                     onClick: (function() { this._widget._toTodayView(); }).bind(this),
                     text: messageLocalization.format("dxCalendar-todayButtonText"),
                     type: "today"
@@ -111,6 +121,11 @@ var CalendarStrategy = DateBoxStrategy.inherit({
                 collision: "flipfit flip"
             }
         });
+    },
+
+    _escapeHandler: function() {
+        this.dateBox.close();
+        this.dateBox.focus();
     },
 
     _valueChangedHandler: function(e) {
@@ -136,6 +151,8 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     textChangedHandler: function() {
+        this._lastActionElement = "input";
+
         if(this.dateBox.option("opened") && this._widget) {
             this._updateValue(true);
         }

@@ -3,7 +3,7 @@ import { toFixed } from "localization/utils";
 const { module: testModule, test } = QUnit;
 
 testModule("Localization utils", () => {
-    test("toFixed", (assert) => {
+    test("toFixed", function(assert) {
         assert.strictEqual(toFixed(4.645, 2), "4.65");
         assert.strictEqual(toFixed(4.645, 1), "4.6");
         assert.strictEqual(toFixed(4.645, 0), "5");

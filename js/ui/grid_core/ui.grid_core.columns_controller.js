@@ -797,7 +797,7 @@ module.exports = {
                         };
                     }
 
-                    let result;
+                    let result = { };
                     if(columnOptions.command) {
                         result = deepExtendArraySafe(commonColumnOptions, columnOptions);
                     } else {
@@ -806,8 +806,10 @@ module.exports = {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-
-                        result = deepExtendArraySafe({ headerId: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
+                        if(columnOptions.dataField && !columnOptions.type) {
+                            result = { headerId: `dx-col-${globalColumnId++}` };
+                        }
+                        result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
                         deepExtendArraySafe(result, commonColumnOptions);
                         deepExtendArraySafe(result, calculatedColumnOptions);
                         deepExtendArraySafe(result, columnOptions);
@@ -1397,6 +1399,12 @@ module.exports = {
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     fullOptionName = getColumnFullPath(that, column);
+
+                    if(COLUMN_INDEX_OPTIONS[optionName]) {
+                        updateIndexes(that, column);
+                        value = optionGetter(column);
+                    }
+
                     fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,
@@ -1473,7 +1481,7 @@ module.exports = {
                 return result;
             };
 
-            var getRowCount = function(that, level, bandColumnIndex) {
+            var getRowCount = function(that) {
                 var rowCount = 1,
                     bandColumnsCache = that.getBandColumnsCache(),
                     columnParentByIndex = bandColumnsCache.columnParentByIndex;
@@ -1787,7 +1795,7 @@ module.exports = {
                 },
 
                 publicMethods: function() {
-                    return ["addColumn", "deleteColumn", "columnOption", "columnCount", "clearSorting", "clearGrouping", "getVisibleColumns"];
+                    return ["addColumn", "deleteColumn", "columnOption", "columnCount", "clearSorting", "clearGrouping", "getVisibleColumns", "getVisibleColumnIndex"];
                 },
                 applyDataSource: function(dataSource, forceApplying) {
                     var that = this,
@@ -2771,7 +2779,6 @@ module.exports = {
                         i,
                         identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
                         columns = that._columns.concat(that._commandColumns),
-                        needUpdateIndexes,
                         column;
 
                     if(identifier === undefined) return;
@@ -2802,17 +2809,12 @@ module.exports = {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(isObject(option)) {
                             iteratorUtils.each(option, function(optionName, value) {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
-                        }
-                        if(needUpdateIndexes) {
-                            updateIndexes(that, column);
                         }
 
                         fireColumnsChanged(that);
@@ -2862,6 +2864,19 @@ module.exports = {
                     }
                     return -1;
                 },
+
+                /**
+                 * @name GridBaseMethods.getVisibleColumnIndex
+                 * @publicName getVisibleColumnIndex(id)
+                 * @param1 id:number|string
+                 * @return number
+                 */
+                getVisibleColumnIndex: function(id, rowIndex) {
+                    const index = this.columnOption(id, "index");
+
+                    return this.getVisibleIndex(index, rowIndex);
+                },
+
                 /**
                  * @name dxDataGridMethods.addColumn
                  * @publicName addColumn(columnOptions)

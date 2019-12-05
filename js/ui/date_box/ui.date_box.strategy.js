@@ -40,11 +40,9 @@ var DateBoxStrategy = Class.inherit({
 
     supportedKeys: noop,
 
-    customizeButtons: noop,
+    getKeyboardListener: noop,
 
-    attachKeyboardEvents: function(keyboardProcessor) {
-        this._widgetKeyboardProcessor = keyboardProcessor.attachChildProcessor();
-    },
+    customizeButtons: noop,
 
     getParsedText: function(text, format) {
         var value = dateLocalization.parse(text, format);

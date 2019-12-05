@@ -136,10 +136,11 @@
     height: 64px;
 }
 
-.dx-diagram-touchbar {
+.dx-diagram-touchbar.dx-context-menu {
     .dx-menu-items-container {
         display: block;
         height: 100%;
+        padding: 0;
     }
 
     .dx-menu-items-container::after {
@@ -153,16 +154,6 @@
         float: left;
     }
 
-    .dx-menu-separator {
-        width: 1px;
-        height: 29px;
-        margin: 0 2px;
-    }
-
-    .dx-menu-item .dx-menu-item-content {
-        padding: 5px 5px 6px;
-    }
-
     .dx-menu-item.dx-menu-item-has-text.dx-menu-item-has-icon .dx-menu-item-content .dx-icon {
         margin: 0;
     }
@@ -172,8 +163,22 @@
     }
 }
 
-.dx-diagram-touchbar-target {
+.dx-diagram-touchbar-target,
+.dx-diagram-context-toolbox-target {
     position: absolute;
     background-color: transparent;
     pointer-events: none;
+}
+
+.dx-diagram-context-toolbox-target {
+    width: 1px;
+    height: 1px;
+}
+
+.dx-diagram-context-toolbox .dx-popup-content {
+    padding: 8px;
+}
+
+.dx-diagram-context-toolbox-content {
+    width: 128px;
 }

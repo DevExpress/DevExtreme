@@ -357,7 +357,7 @@ QUnit.test("popup should be rendered if opened option is set to true on init", f
     assert.ok(popoverInstance.option("visible"), "popup is visible");
 });
 
-QUnit.test("popup should be placed into container specified in the 'container' option", (assert) => {
+QUnit.test("popup should be placed into container specified in the 'container' option", function(assert) {
     const $container = $("#dropDownMenuSecond");
     const $dropDownMenu = $container.dxDropDownMenu({
         container: $container,
@@ -369,7 +369,7 @@ QUnit.test("popup should be placed into container specified in the 'container' o
     assert.strictEqual($content.closest($container).length, 1, "Popover content located into desired container");
 });
 
-QUnit.test("popup should be placed into new container after changing the 'container' option", (assert) => {
+QUnit.test("popup should be placed into new container after changing the 'container' option", function(assert) {
     const $container = $("#dropDownMenuSecond");
     const $dropDownMenu = $container.dxDropDownMenu({
         opened: true
@@ -419,7 +419,7 @@ QUnit.test("check default position", function(assert) {
         defaultPosition = { my: "top center", at: "bottom center", collision: "fit flip", offset: { v: 4 } };
 
     assert.deepEqual(defaultPosition, instance.option("popupPosition"));
-    assert.equal(false, instance.option("usePopover"));
+    assert.notOk(instance.option("usePopover"));
 });
 
 QUnit.test("check position for LTR and RTL", function(assert) {

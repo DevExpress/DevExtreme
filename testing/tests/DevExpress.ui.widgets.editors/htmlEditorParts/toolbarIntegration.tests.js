@@ -30,16 +30,16 @@ const ORANGE_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYA
 const { test } = QUnit;
 
 QUnit.module("Toolbar integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    test("Apply simple format without focus", (assert) => {
+    test("Apply simple format without focus", function(assert) {
         const focusInStub = sinon.stub();
         const focusOutStub = sinon.stub();
 
@@ -62,7 +62,7 @@ QUnit.module("Toolbar integration", {
         assert.strictEqual(focusOutStub.callCount, 0, "editor isn't blurred");
     });
 
-    test("there is no extra focusout when applying toolbar formatting to the selected range", (assert) => {
+    test("there is no extra focusout when applying toolbar formatting to the selected range", function(assert) {
         const done = assert.async();
         const focusInStub = sinon.stub();
         const focusOutStub = sinon.stub();
@@ -86,7 +86,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("Apply simple format with selection", (assert) => {
+    test("Apply simple format with selection", function(assert) {
         const done = assert.async();
         const expected = "<p><strong>te</strong>st</p>";
         const instance = $("#htmlEditor").dxHtmlEditor({
@@ -106,7 +106,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("Apply format via color dialog located in the adaptive menu", (assert) => {
+    test("Apply format via color dialog located in the adaptive menu", function(assert) {
         const done = assert.async();
         const toolbarClickStub = sinon.stub();
         const expected = '<p><span style="color: rgb(250, 250, 250);">te</span>st</p>';
@@ -140,7 +140,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("Add a link via dialog", (assert) => {
+    test("Add a link via dialog", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
@@ -177,7 +177,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("Overflow menu button should have a correct content", (assert) => {
+    test("Overflow menu button should have a correct content", function(assert) {
         $("#htmlEditor").html("<p>test</p>").dxHtmlEditor({
             toolbar: { items: ["bold", { text: "test", showInMenu: "always" }] }
         });
@@ -190,7 +190,7 @@ QUnit.module("Toolbar integration", {
         assert.equal(buttonContent, expectedContent);
     });
 
-    test("Editor disposing should dispose external toolbar", (assert) => {
+    test("Editor disposing should dispose external toolbar", function(assert) {
         const $toolbarContainer = $("<div>").addClass("external-container");
         $("#qunit-fixture").append($toolbarContainer);
 
@@ -210,7 +210,7 @@ QUnit.module("Toolbar integration", {
         assert.notOk($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container hasn't wrapper class");
     });
 
-    test("Editor should consider toolbar height", (assert => {
+    test("Editor should consider toolbar height", (function(assert) {
         const height = 100;
         const $container = $("#htmlEditor");
         let markup = "";
@@ -231,7 +231,7 @@ QUnit.module("Toolbar integration", {
         assert.roughEqual(quillContainerHeight + toolbarHeight + bordersWidth, height, 1, "Toolbar + editor equals to the predefined height");
     }));
 
-    test("Toolbar correctly disposed after repaint", (assert) => {
+    test("Toolbar correctly disposed after repaint", function(assert) {
         const $toolbarContainer = $("<div>").addClass("external-container");
         $("#qunit-fixture").append($toolbarContainer);
 
@@ -248,7 +248,7 @@ QUnit.module("Toolbar integration", {
         assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, "Toolbar container contains the htmlEditor's toolbar");
     });
 
-    test("Toolbar should be disabled once editor is read only", (assert) => {
+    test("Toolbar should be disabled once editor is read only", function(assert) {
         $("#htmlEditor").dxHtmlEditor({
             readOnly: true,
             toolbar: { items: ["bold"] }
@@ -258,7 +258,7 @@ QUnit.module("Toolbar integration", {
         assert.ok(isToolbarDisabled);
     });
 
-    test("Toolbar should be disabled once editor is disabled", (assert) => {
+    test("Toolbar should be disabled once editor is disabled", function(assert) {
         $("#htmlEditor").dxHtmlEditor({
             disabled: true,
             toolbar: { items: ["bold"] }
@@ -268,7 +268,7 @@ QUnit.module("Toolbar integration", {
         assert.ok(isToolbarDisabled);
     });
 
-    test("Toolbar should correctly update disabled state on the option changed", (assert) => {
+    test("Toolbar should correctly update disabled state on the option changed", function(assert) {
         const editor = $("#htmlEditor").dxHtmlEditor({
             disabled: true,
             readOnly: true,
@@ -286,7 +286,7 @@ QUnit.module("Toolbar integration", {
         assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
     });
 
-    test("SelectBox should keep selected value after format applying", (assert) => {
+    test("SelectBox should keep selected value after format applying", function(assert) {
         $("#htmlEditor").dxHtmlEditor({
             toolbar: { items: [{ formatName: "size", formatValues: ["10px", "11px"] }] }
         });
@@ -306,8 +306,8 @@ QUnit.module("Toolbar integration", {
         assert.strictEqual(value, "11px", "SelectBox contain selected value");
     });
 
-    function prepareImageUpdateTest(context, caretPosition, selectionLength) {
-        return (assert) => {
+    function prepareImageUpdateTest(caretPosition, selectionLength) {
+        return function(assert) {
             const done = assert.async();
             const $container = $("#htmlEditor");
             const instance = $container.dxHtmlEditor({
@@ -326,7 +326,7 @@ QUnit.module("Toolbar integration", {
                 instance.setSelection(caretPosition, selectionLength);
             }, 100);
 
-            context.clock.tick(100);
+            this.clock.tick(100);
             $container
                 .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
                 .trigger("dxclick");
@@ -340,15 +340,15 @@ QUnit.module("Toolbar integration", {
         };
     }
 
-    test("image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(this, 1, 0));
+    test("image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(1, 0));
 
-    test("image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(this, 0, 0));
+    test("image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(0, 0));
 
-    test("selected image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(this, 1, 1));
+    test("selected image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(1, 1));
 
-    test("selected image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(this, 0, 1));
+    test("selected image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(0, 1));
 
-    test("image should be correctly updated after change a source and caret placed between two images", (assert) => {
+    test("image should be correctly updated after change a source and caret placed between two images", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const instance = $container.dxHtmlEditor({
@@ -386,7 +386,7 @@ QUnit.module("Toolbar integration", {
             .press("enter");
     });
 
-    test("link should be correctly set to an image", (assert) => {
+    test("link should be correctly set to an image", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const link = "http://test.test";
@@ -418,7 +418,7 @@ QUnit.module("Toolbar integration", {
         $okDialogButton.trigger("dxclick");
     });
 
-    test("link should be correctly added for a third", (assert) => {
+    test("link should be correctly added for a third", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
         let $urlInput;
@@ -480,7 +480,7 @@ QUnit.module("Toolbar integration", {
         this.clock.tick();
     });
 
-    test("Add a link with empty text", (assert) => {
+    test("Add a link with empty text", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
@@ -513,7 +513,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("Add a link and text without selection", (assert) => {
+    test("Add a link and text without selection", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
@@ -551,7 +551,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("Add a link with empty text and selected range", (assert) => {
+    test("Add a link with empty text and selected range", function(assert) {
         const done = assert.async();
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
@@ -589,7 +589,7 @@ QUnit.module("Toolbar integration", {
             .trigger("dxclick");
     });
 
-    test("format image and text", (assert) => {
+    test("format image and text", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const link = "http://test.test";
@@ -621,7 +621,7 @@ QUnit.module("Toolbar integration", {
         $okDialogButton.trigger("dxclick");
     });
 
-    test("replace the text of the existed link", (assert) => {
+    test("replace the text of the existed link", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
         const link = "http://test.test";
@@ -653,7 +653,7 @@ QUnit.module("Toolbar integration", {
         $okDialogButton.trigger("dxclick");
     });
 
-    test("history buttons are inactive after processing transcluded content", (assert) => {
+    test("history buttons are inactive after processing transcluded content", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor").html("<p>test</p>");
 
@@ -671,7 +671,7 @@ QUnit.module("Toolbar integration", {
         this.clock.tick();
     });
 
-    test("history buttons are inactive when editor has initial value", (assert) => {
+    test("history buttons are inactive when editor has initial value", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
 
@@ -688,7 +688,7 @@ QUnit.module("Toolbar integration", {
         }).dxHtmlEditor("instance");
     });
 
-    test("history buttons are inactive when editor hasn't initial value", (assert) => {
+    test("history buttons are inactive when editor hasn't initial value", function(assert) {
         const done = assert.async();
         const $container = $("#htmlEditor");
 
@@ -704,7 +704,7 @@ QUnit.module("Toolbar integration", {
         }).dxHtmlEditor("instance");
     });
 
-    test("Toolbar should correctly update its dimensions after changing the width of the HtmlEditor", (assert) => {
+    test("Toolbar should correctly update its dimensions after changing the width of the HtmlEditor", function(assert) {
         const $container = $("#htmlEditor");
         const instance = $container.dxHtmlEditor({
             width: 1000,

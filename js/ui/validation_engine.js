@@ -2,7 +2,7 @@ import Class from "../core/class";
 import { extend } from "../core/utils/extend";
 import { inArray } from "../core/utils/array";
 import { each } from "../core/utils/iterator";
-import EventsMixin from "../core/events_mixin";
+import { EventsStrategy } from "../core/events_strategy";
 import errors from "../core/errors";
 import { grep } from "../core/utils/common";
 import typeUtils from "../core/utils/type";
@@ -554,6 +554,7 @@ const GroupConfig = Class.inherit({
         this._pendingValidators = [];
         this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
         this._resetValidationInfo();
+        this._eventsStrategy = new EventsStrategy(this);
     },
 
     validate() {
@@ -713,7 +714,7 @@ const GroupConfig = Class.inherit({
     },
 
     _raiseValidatedEvent(result) {
-        this.fireEvent("validated", [result]);
+        this._eventsStrategy.fireEvent("validated", [result]);
     },
 
     _resetValidationInfo() {
@@ -751,8 +752,18 @@ const GroupConfig = Class.inherit({
         });
         this._pendingValidators = [];
         this._resetValidationInfo();
-    }
-}).include(EventsMixin);
+    },
+
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
+    },
+});
 
 /**
  * @name validationEngine

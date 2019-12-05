@@ -22,6 +22,7 @@ export const Consts = {
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: "dx-filemanager-breadcrumbs-parent-folder-item",
+    BREADCRUMBS_SEPARATOR_ITEM_CLASS: "dx-filemanager-breadcrumbs-separator-item",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     INACTIVE_AREA_CLASS: "dx-filemanager-inactive-area",
@@ -207,12 +208,20 @@ export class FileManagerWrapper {
         return this.getRowInDetailsView(index).find("td").eq(1);
     }
 
+    getRowsInDetailsView() {
+        return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`);
+    }
+
     getRowInDetailsView(index) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
     }
 
     getColumnCellsInDetailsView(index) {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(${index})`);
+    }
+
+    getColumnHeaderInDetailsView(index) {
+        return this._$element.find("[id*=dx-col]").eq(index);
     }
 
     getContextMenuItems(visible) {
@@ -254,7 +263,7 @@ export class FileManagerWrapper {
         const contentRect = $drawerContent[0].getBoundingClientRect();
         $splitter.trigger($.Event("dxpointermove", {
             pointerType,
-            pageX: contentRect.right + delta
+            pageX: contentRect.right - parseFloat($splitter.css('margin-left')) + delta
         }));
 
         $splitter.trigger($.Event("dxpointerup", { pointerType }));
@@ -403,7 +412,7 @@ export class FileManagerBreadcrumbsWrapper {
     }
 
     getItems() {
-        return this._$element.find(`.${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+        return this._$element.find(`.${Consts.MENU_ITEM_WITH_TEXT_CLASS}:not(.${Consts.BREADCRUMBS_SEPARATOR_ITEM_CLASS})`);
     }
 
     getItemByText(text) {

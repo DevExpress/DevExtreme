@@ -253,7 +253,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
     test("change current directory by public API", function(assert) {
         const inst = this.wrapper.getInstance();
-        assert.equal("", inst.option("currentPath"));
+        assert.equal(inst.option("currentPath"), "");
 
         const that = this;
         let onCurrentDirectoryChangedCounter = 0;
@@ -265,7 +265,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         this.clock.tick(800);
 
         assert.equal(onCurrentDirectoryChangedCounter, 1);
-        assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
+        assert.equal(inst.option("currentPath"), "Folder 1/Folder 1.1", "The option 'currentPath' was changed");
 
         const $folder1Node = that.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find("span").text(), "Folder 1");
@@ -519,6 +519,39 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Folder 1.1.1.1.1", "Target folder is selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + longPath, "breadcrumbs refrers to the target folder");
         assert.equal(this.wrapper.getDetailsItemName(1), "Special deep file.txt", "has specail file");
+    });
+
+    test("'Back' directory must have attributes of the represented directory", function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileProvider: [
+                {
+                    name: "Folder 1",
+                    isDirectory: true,
+                    items: [],
+                    dateModified: "16/06/2018"
+                }
+            ],
+            itemView: {
+                showParentFolder: true
+            }
+        });
+        this.clock.tick(400);
+
+        fileManager._getItemViewItems()
+            .then(fileInfos => {
+                const parentFolder = fileInfos[0];
+                const parentDate = parentFolder.fileItem.dateModified;
+                fileManager.option("currentPath", "Folder 1");
+                this.clock.tick(400);
+                fileManager._getItemViewItems()
+                    .then(fileInfos => {
+                        const targetFolder = fileInfos[0];
+                        assert.ok(targetFolder.fileItem.isParentFolder, "The target folder is 'back' directory");
+                        assert.notOk(parentFolder.fileItem.isParentFolder, "The parent folder regular directory");
+                        assert.equal(targetFolder.fileItem.dateModified, parentDate, "The date is correct");
+                    });
+            });
     });
 
 });

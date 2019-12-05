@@ -222,11 +222,6 @@ var BaseView = Widget.inherit({
         $newContouredCell.addClass(CALENDAR_CONTOURED_DATE_CLASS);
     },
 
-    _dispose: function() {
-        this._keyboardProcessor = undefined;
-        this.callBase();
-    },
-
     _changeValue: function(cellDate) {
         if(cellDate) {
             var value = this.option("value"),

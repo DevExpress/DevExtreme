@@ -37,7 +37,7 @@ var mockVariableWrapper = {
 const { test } = QUnit;
 
 QUnit.module("getter", () => {
-    test("it works", (assert) => {
+    test("it works", function(assert) {
         const obj = {
             a: "a",
             b: () => { return "b()"; },
@@ -62,7 +62,7 @@ QUnit.module("getter", () => {
         assert.equal(GETTER("c.a.a")(obj), "c.a.a");
     });
 
-    test("defaultValue", (assert) => {
+    test("defaultValue", function(assert) {
         const obj = {
             zero: 0,
             emptyString: "",
@@ -91,7 +91,7 @@ QUnit.module("getter", () => {
         assert.equal(GETTER("missing")(new Child, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
     });
 
-    test("complex getter", (assert) => {
+    test("complex getter", function(assert) {
         const original = {
             a: {
                 a1: "a1",
@@ -113,7 +113,7 @@ QUnit.module("getter", () => {
         assert.deepEqual(GETTER([])(original), undefined);
     });
 
-    test("functionsAsIs option", (assert) => {
+    test("functionsAsIs option", function(assert) {
         const obj = {
             b: () => {
                 return "value";
@@ -127,7 +127,7 @@ QUnit.module("getter", () => {
         assert.deepEqual(GETTER("b", "b2")(obj, { functionsAsIs: true }), { b: obj.b, b2: obj.b2 });
     });
 
-    test("square brackets in expr", (assert) => {
+    test("square brackets in expr", function(assert) {
         const obj = {
             prop: {
                 items: ["first", "second", "third"]
@@ -138,7 +138,7 @@ QUnit.module("getter", () => {
         assert.equal(GETTER("prop[items][1]")(obj), "second");
     });
 
-    test("empty results are the same", (assert) => {
+    test("empty results are the same", function(assert) {
         const monoGetter = GETTER("field1");
         const polyGetter = GETTER("field1", "field2");
 
@@ -149,7 +149,7 @@ QUnit.module("getter", () => {
         assert.strictEqual(emptyResultOfPolyGetter, undefined);
     });
 
-    test("Issue #8552", (assert) => {
+    test("Issue #8552", function(assert) {
         // https://github.com/DevExpress/DevExtreme/issues/8552
         var getter = GETTER([ "B.Id", "B.Key" ]);
         var obj = { B: { Id: "Id", Key: "Key" } };
@@ -159,14 +159,14 @@ QUnit.module("getter", () => {
 
 
 QUnit.module("getter with wrapped variables", {
-    beforeEach: () => {
+    beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);
     },
-    afterEach: () => {
+    afterEach: function() {
         variableWrapper.resetInjection();
     }
 }, () => {
-    test("wrap support", (assert) => {
+    test("wrap support", function(assert) {
         const mockWrapper = variableWrapper.wrap,
             obj = mockWrapper({
                 prop: mockWrapper({
@@ -178,7 +178,7 @@ QUnit.module("getter with wrapped variables", {
         assert.equal(getter(obj, { functionsAsIs: true }), 3);
     });
 
-    test("not unwrapped when unwrapObservables = false", (assert) => {
+    test("not unwrapped when unwrapObservables = false", function(assert) {
         const mockWrapper = variableWrapper.wrap,
             obj = {
                 prop: {
@@ -193,7 +193,7 @@ QUnit.module("getter with wrapped variables", {
 
 
 QUnit.module("setter", () => {
-    test("single-level prop", (assert) => {
+    test("single-level prop", function(assert) {
         let obj = {
             name: "Alex"
         };
@@ -205,14 +205,14 @@ QUnit.module("setter", () => {
         assert.equal(obj.age, 18);
     });
 
-    test("single-level func", (assert) => {
+    test("single-level func", function(assert) {
         let date = new Date(2012, 7, 31);
 
         SETTER("setMonth")(date, 0);
         assert.equal(date.getMonth(), 0);
     });
 
-    test("complex values are replaced (default mode)", (assert) => {
+    test("complex values are replaced (default mode)", function(assert) {
         let obj = {
             person: {
                 firstName: "John"
@@ -230,7 +230,7 @@ QUnit.module("setter", () => {
         });
     });
 
-    test("complex values are merged (merge option)", (assert) => {
+    test("complex values are merged (merge option)", function(assert) {
         let obj = {
             person: {
                 name: {
@@ -261,7 +261,7 @@ QUnit.module("setter", () => {
         });
     });
 
-    test("multi-level expression", (assert) => {
+    test("multi-level expression", function(assert) {
         let obj = {
             person: {
                 firstName: "John"
@@ -273,7 +273,7 @@ QUnit.module("setter", () => {
 
     });
 
-    test("multi-level expression with functions", (assert) => {
+    test("multi-level expression with functions", function(assert) {
         let person = {
             _firstName: "John",
             setFirstName: function(value) {
@@ -292,7 +292,7 @@ QUnit.module("setter", () => {
         assert.equal(obj._person._firstName, "Alex");
     });
 
-    test("attempt to assign scalar to self", (assert) => {
+    test("attempt to assign scalar to self", function(assert) {
         assert.throws(() => {
             SETTER()("personName", "Alex");
         });
@@ -301,13 +301,13 @@ QUnit.module("setter", () => {
         });
     });
 
-    test("able to assign to self with merge", (assert) => {
+    test("able to assign to self with merge", function(assert) {
         let target = { a: 1 };
         SETTER("this")(target, { b: 2 }, { merge: true });
         assert.deepEqual(target, { a: 1, b: 2 });
     });
 
-    test("setting a function (should use functionsAsIs)", (assert) => {
+    test("setting a function (should use functionsAsIs)", function(assert) {
         const func1 = () => { },
             func2 = () => { };
 
@@ -322,7 +322,7 @@ QUnit.module("setter", () => {
         assert.strictEqual(obj.g, func1, { functionsAsIs: true });
     });
 
-    test("square brackets in expr", (assert) => {
+    test("square brackets in expr", function(assert) {
         let obj = {
             prop: {
                 items: ["first", "second", "third"]
@@ -336,7 +336,7 @@ QUnit.module("setter", () => {
         assert.equal(obj.prop.items[0], "zero");
     });
 
-    test("merging sub-object to non-existent property", (assert) => {
+    test("merging sub-object to non-existent property", function(assert) {
         let obj = {
         };
 
@@ -346,7 +346,7 @@ QUnit.module("setter", () => {
         });
     });
 
-    test("prevent jQuery deep array extending (B239679)", (assert) => {
+    test("prevent jQuery deep array extending (B239679)", function(assert) {
         let obj = {
             sub: {
                 array: [1, 2, 3]
@@ -359,7 +359,7 @@ QUnit.module("setter", () => {
         assert.deepEqual(obj.sub.array, [9]);
     });
 
-    test("complex values are merged only when it is plain object", (assert) => {
+    test("complex values are merged only when it is plain object", function(assert) {
         const SomeClass = function(firstName, lastName) {
             this.firstName = firstName;
             this.lastName = lastName;
@@ -387,7 +387,7 @@ QUnit.module("setter", () => {
         assert.equal(obj1.sub.person.lastName, undefined);
     });
 
-    test("plain objects are cloned if previous value is null (T521407)", (assert) => {
+    test("plain objects are cloned if previous value is null (T521407)", function(assert) {
         let obj = {
             dataSource: null
         };
@@ -415,21 +415,21 @@ QUnit.module("setter", () => {
         assert.equal(dataSource1.store, "Store 1");
     });
 
-    test("non existing multi-level prop (w/ merge = false)", (assert) => {
+    test("non existing multi-level prop (w/ merge = false)", function(assert) {
         let obj = {};
 
         SETTER("prop.subProp1.subProp2")(obj, "Nested value", { merge: false });
         assert.equal(obj.prop.subProp1.subProp2, "Nested value");
     });
 
-    test("non existing multi-level prop (w/ merge = true)", (assert) => {
+    test("non existing multi-level prop (w/ merge = true)", function(assert) {
         let obj = {};
 
         SETTER("prop.subProp1.subProp2")(obj, "Nested value", { merge: true });
         assert.equal(obj.prop.subProp1.subProp2, "Nested value");
     });
 
-    test("multi-level prop instead of primitives", (assert) => {
+    test("multi-level prop instead of primitives", function(assert) {
         const primitives = [ false, 0, "", true, 1, "someValue" ];
 
         primitives.forEach((primitive) => {
@@ -444,7 +444,7 @@ QUnit.module("setter", () => {
         });
     });
 
-    test("multi-level prop instead of function", (assert) => {
+    test("multi-level prop instead of function", function(assert) {
         let called = 0;
 
         let obj = {
@@ -462,7 +462,7 @@ QUnit.module("setter", () => {
         assert.equal(called, 0);
     });
 
-    test("not existing multi-level prop assignment", (assert) => {
+    test("not existing multi-level prop assignment", function(assert) {
         assert.expect(1);
 
         let obj = {
@@ -481,14 +481,14 @@ QUnit.module("setter", () => {
 
 
 QUnit.module("setter with wrapped variables", {
-    beforeEach: () => {
+    beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);
     },
-    afterEach: () => {
+    afterEach: function() {
         variableWrapper.resetInjection();
     }
 }, () => {
-    test("wrap support", (assert) => {
+    test("wrap support", function(assert) {
         const mockWrapper = variableWrapper.wrap;
         let obj = mockWrapper({
             prop: mockWrapper({
@@ -502,7 +502,7 @@ QUnit.module("setter with wrapped variables", {
         assert.equal(obj().prop().subProp(), 5);
     });
 
-    test("not unwrapped when unwrapObservables = false", (assert) => {
+    test("not unwrapped when unwrapObservables = false", function(assert) {
         const mockWrapper = variableWrapper.wrap;
         let obj = {
             prop: {
@@ -516,7 +516,7 @@ QUnit.module("setter with wrapped variables", {
         assert.equal(obj.prop.subProp, 5);
     });
 
-    test("wrap with merge and functions unwrapping", (assert) => {
+    test("wrap with merge and functions unwrapping", function(assert) {
         const mockWrapper = variableWrapper.wrap;
         let obj = {
             prop: mockWrapper({ a: 1 })
@@ -528,7 +528,7 @@ QUnit.module("setter with wrapped variables", {
         assert.deepEqual(obj.prop(), { a: 1, b: 2 });
     });
 
-    test("multi-level prop into the wrapped value", (assert) => {
+    test("multi-level prop into the wrapped value", function(assert) {
         const mockWrapper = variableWrapper.wrap;
         let obj = mockWrapper({
             prop: mockWrapper(undefined)
@@ -539,7 +539,7 @@ QUnit.module("setter with wrapped variables", {
         assert.equal(obj().prop().subProp, "New value");
     });
 
-    test("multi-level prop instead of wrapped value without unwrapping", (assert) => {
+    test("multi-level prop instead of wrapped value without unwrapping", function(assert) {
         assert.expect(0);
         variableWrapper.inject({
             unwrap: function() {

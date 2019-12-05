@@ -5,7 +5,7 @@ import messageLocalization from "../../localization/message";
 import clickEvent from "../../events/click";
 import commonUtils from "../../core/utils/common";
 import windowUtils from "../../core/utils/window";
-import { isDefined, isPrimitive, isFunction } from "../../core/utils/type";
+import { isDefined, isPrimitive, isFunction, isString } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import { getPublicElement } from "../../core/utils/dom";
@@ -119,7 +119,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getNodeElement: function(node, cache) {
-        const normalizedKey = commonUtils.normalizeKey(node.internalFields.key);
+        const key = this._encodeString(node.internalFields.key);
         if(cache) {
             if(!cache.$nodeByKey) {
                 cache.$nodeByKey = {};
@@ -130,9 +130,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                     cache.$nodeByKey[key] = $node;
                 });
             }
-            return cache.$nodeByKey[normalizedKey] || $();
+            return cache.$nodeByKey[key] || $();
         }
-        return this.$element().find(`[${DATA_ITEM_ID}='${normalizedKey}']`);
+        const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}="${key}"]`);
+        return $(element);
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -839,7 +840,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _createDOMElement: function($nodeContainer, node) {
         const $node = $("<li>")
             .addClass(NODE_CLASS)
-            .attr(DATA_ITEM_ID, commonUtils.normalizeKey(node.internalFields.key))
+            .attr(DATA_ITEM_ID, this._encodeString(node.internalFields.key))
             .prependTo($nodeContainer);
 
         this.setAria({
@@ -867,7 +868,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _renderItems: function($nodeContainer, nodes) {
         const length = nodes.length - 1;
-
         for(let i = length; i >= 0; i--) {
             this._renderItem(i, nodes[i], $nodeContainer);
         }
@@ -940,14 +940,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderSublevel: function($node, node, childNodes) {
         const $nestedNodeContainer = this._renderNodeContainer($node, node);
 
-        this._renderItems($nestedNodeContainer, childNodes);
+        const childNodesByChildrenKeys = childNodes.filter((childNode) => { return node.internalFields.childrenKeys.indexOf(childNode.internalFields.key) !== -1; });
+        this._renderItems($nestedNodeContainer, childNodesByChildrenKeys);
 
-        if(childNodes.length && !node.internalFields.selected) {
-            const firstChild = childNodes[0];
+        if(childNodesByChildrenKeys.length && !node.internalFields.selected) {
+            const firstChild = childNodesByChildrenKeys[0];
             this._updateParentsState(firstChild, this._getNodeElement(firstChild));
         }
 
-        this._normalizeIconState($node, childNodes.length);
+        this._normalizeIconState($node, childNodesByChildrenKeys.length);
 
         if(node.internalFields.expanded) {
             $nestedNodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
@@ -1018,7 +1019,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getNodeByElement: function(itemElement) {
         const $node = $(itemElement).closest("." + NODE_CLASS);
-        const key = commonUtils.denormalizeKey($node.attr(DATA_ITEM_ID));
+        const key = this._decodeString($node.attr(DATA_ITEM_ID));
 
         return this._dataAdapter.getNodeByKey(key);
     },
@@ -1124,7 +1125,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _loadNestedItemsWithUpdate: function(node, state, e) {
         const $node = this._getNodeElement(node);
-
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
             this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
@@ -1698,6 +1698,18 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
             collapsedNode.length && this.option("focusedElement", getPublicElement(collapsedNode));
         }
+    },
+
+    _encodeString: function(value) {
+        return isString(value)
+            ? encodeURI(value)
+            : value;
+    },
+
+    _decodeString: function(value) {
+        return isString(value)
+            ? decodeURI(value)
+            : value;
     },
 
     /**

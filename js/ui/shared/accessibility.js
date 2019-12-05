@@ -1,17 +1,31 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import { extend } from "../../core/utils/extend";
 
 const FOCUS_STATE_CLASS = "dx-state-focused",
     FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    GRID_CELL_SELECTOR = ".dx-datagrid-rowsview .dx-datagrid-content .dx-row > td",
-    TREELIST_CELL_SELECTOR = ".dx-treelist-rowsview .dx-treelist-content .dx-row > td",
+    FOCUSED_ROW_SELECTOR = ".dx-row-focused",
+    GRID_ROW_SELECTOR = ".dx-datagrid-rowsview .dx-row",
+    GRID_CELL_SELECTOR = `${GRID_ROW_SELECTOR} > td`,
+    TREELIST_ROW_SELECTOR = ".dx-treelist-rowsview .dx-row",
+    TREELIST_CELL_SELECTOR = `${TREELIST_ROW_SELECTOR} > td`,
     viewItemSelectorMap = {
         groupPanel: [".dx-datagrid-group-panel .dx-group-panel-item[tabindex]"],
         columnHeaders: [".dx-datagrid-headers .dx-header-row > td.dx-datagrid-action", ".dx-treelist-headers .dx-header-row > td.dx-treelist-action"],
-        filterRow: [".dx-datagrid-headers .dx-datagrid-filter-row .dx-editor-cell input", ".dx-treelist-headers .dx-treelist-filter-row .dx-editor-cell input"],
-        rowsView: [`${GRID_CELL_SELECTOR}[tabindex]`, `${GRID_CELL_SELECTOR}`, `${TREELIST_CELL_SELECTOR}[tabindex]`, `${TREELIST_CELL_SELECTOR}`],
+        filterRow: [
+            ".dx-datagrid-headers .dx-datagrid-filter-row .dx-editor-cell .dx-texteditor-input",
+            ".dx-treelist-headers .dx-treelist-filter-row .dx-editor-cell .dx-texteditor-input"
+        ],
+        rowsView: [
+            `${FOCUSED_ROW_SELECTOR}`,
+            `${GRID_ROW_SELECTOR}[tabindex]`,
+            `${GRID_CELL_SELECTOR}[tabindex]`,
+            `${GRID_CELL_SELECTOR}`,
+            `${TREELIST_ROW_SELECTOR}[tabindex]`,
+            `${TREELIST_CELL_SELECTOR}[tabindex]`,
+            `${TREELIST_CELL_SELECTOR}`
+        ],
         footer: [".dx-datagrid-total-footer .dx-datagrid-summary-item", ".dx-treelist-total-footer .dx-treelist-summary-item"],
         filterPanel: [".dx-datagrid-filter-panel .dx-icon-filter", ".dx-treelist-filter-panel .dx-icon-filter"],
         pager: [".dx-datagrid-pager [tabindex]", ".dx-treelist-pager [tabindex]"]

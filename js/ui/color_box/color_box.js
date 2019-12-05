@@ -209,10 +209,16 @@ var ColorBox = DropDownEditor.inherit({
         var $colorView = $("<div>").appendTo(this._popup.$content());
 
         this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
+        this._colorView.registerKeyHandler("escape", this._escapeHandler.bind(this));
 
         eventsEngine.on($colorView, "focus", (function() {
             this.focus();
         }).bind(this));
+    },
+
+    _escapeHandler: function() {
+        this.close();
+        this.focus();
     },
 
     _applyNewColor: function(value) {
@@ -258,8 +264,7 @@ var ColorBox = DropDownEditor.inherit({
                 }
 
                 that._applyNewColor(args.value);
-            },
-            _keyboardProcessor: that._colorViewProcessor
+            }
         };
     },
 
@@ -313,12 +318,8 @@ var ColorBox = DropDownEditor.inherit({
         this.callBase();
     },
 
-    _attachChildKeyboardEvents: function() {
-        this._colorViewProcessor = this._keyboardProcessor.attachChildProcessor();
-        if(this._colorView) {
-            this._colorView.option("_keyboardProcessor", this._colorViewProcessor);
-            return;
-        }
+    _getKeyboardListeners() {
+        return this.callBase().concat([this._colorView]);
     },
 
     _init: function() {

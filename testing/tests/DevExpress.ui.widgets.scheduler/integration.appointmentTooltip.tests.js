@@ -332,7 +332,7 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
 
         scheduler.appointments.click(1);
 
-        assert.ok(scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
+        assert.equal(scheduler.tooltip.getContentElement().length, 1, "one tooltip was shown");
         assert.equal(scheduler.tooltip.getTitleText(), "Task 2", "tooltip title is correct");
         assert.equal(scheduler.tooltip.getDateElement().length, 1, "dates container was rendered");
         assert.equal(scheduler.tooltip.hasDeleteButton(), 1, "buttons container was rendered");
@@ -1178,7 +1178,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         module("Keyboard navigation in tooltip", () => {
             const ITEM_FOCUSED_STATE_CLASS_NAME = "dx-state-focused";
 
-            test("List should be navigate by keyboard", assert => {
+            test("List should be navigate by keyboard", function(assert) {
                 const scheduler = createScheduler();
 
                 const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
@@ -1204,7 +1204,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
                 assert.ok(checkFocusedState(1), "After press key down, second list item should focused");
             });
 
-            test("focusStateEnabled property should disable or enable navigate in list", assert => {
+            test("focusStateEnabled property should disable or enable navigate in list", function(assert) {
                 const scheduler = createScheduler();
 
                 scheduler.appointments.click();
@@ -1313,7 +1313,7 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         assert.roughEqual(getItemElement().outerHeight(), getOverlayContentElement().outerHeight(), 10, "Tooltip height should equals then list height");
     });
 
-    test("Component should draw correctly, if component append to container in appointmentTooltipTemplate", assert => {
+    test("Component should draw correctly, if component append to container in appointmentTooltipTemplate", function(assert) {
         const data = [
             {
                 text: "Website Re-Design Plan",

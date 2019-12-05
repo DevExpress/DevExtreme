@@ -17,15 +17,15 @@ import config from "core/config";
 const { module, test } = QUnit;
 
 module("runtime utils", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
 
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("executeAsync", (assert) => {
+    test("executeAsync", function(assert) {
         assert.expect(1);
 
         let called = false;
@@ -39,7 +39,7 @@ module("runtime utils", {
         this.clock.tick(60);
     });
 
-    test("executeAsync with deferred response", (assert) => {
+    test("executeAsync with deferred response", function(assert) {
         assert.expect(1);
 
         let called = false;
@@ -61,7 +61,7 @@ module("runtime utils", {
         clock.tick(60);
     });
 
-    test("executeAsync with context parameter", (assert) => {
+    test("executeAsync with context parameter", function(assert) {
         assert.expect(2);
 
         const context = {
@@ -78,7 +78,7 @@ module("runtime utils", {
         this.clock.tick(60);
     });
 
-    test("executeAsync with timeout", (assert) => {
+    test("executeAsync with timeout", function(assert) {
         let called = false;
 
         executeAsync(() => {
@@ -101,7 +101,7 @@ module("runtime utils", {
 
 
 module("findBestMatches", () => {
-    test("basic", (assert) => {
+    test("basic", function(assert) {
         const items = [
             {
                 a: 1,
@@ -151,7 +151,7 @@ module("findBestMatches", () => {
         assert.equal(filteredItems.length, 2);
     });
 
-    test("only filter fields should be considered for calculating a specificity", (assert) => {
+    test("only filter fields should be considered for calculating a specificity", function(assert) {
         const items = [{
             a: 1,
             b: 2
@@ -169,7 +169,7 @@ module("findBestMatches", () => {
         assert.equal(filteredItems.length, 2);
     });
 
-    test("filtering items by array fields", (assert) => {
+    test("filtering items by array fields", function(assert) {
         const items = [
             {
                 a: 1
@@ -225,14 +225,14 @@ module("findBestMatches", () => {
 
 
 module("defer render/update", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    test("deferRender execute immediately without deferUpdate", (assert) => {
+    test("deferRender execute immediately without deferUpdate", function(assert) {
         const logs = [];
 
         // act
@@ -253,7 +253,7 @@ module("defer render/update", {
         assert.equal(logs[2], "after inner render", "after inner render");
     });
 
-    test("deferUpdate execute immediately without deferRender", (assert) => {
+    test("deferUpdate execute immediately without deferRender", function(assert) {
         const logs = [];
 
         // act
@@ -274,7 +274,7 @@ module("defer render/update", {
         assert.equal(logs[2], "after inner update", "after inner update");
     });
 
-    test("deferRender execute delayed in deferUpdate", (assert) => {
+    test("deferRender execute delayed in deferUpdate", function(assert) {
         const logs = [];
 
         // act
@@ -301,7 +301,7 @@ module("defer render/update", {
         assert.equal(logs[4], "update deferred done", "update deferred done");
     });
 
-    test("deferUpdate execute delayed in deferRender", (assert) => {
+    test("deferUpdate execute delayed in deferRender", function(assert) {
         const logs = [];
 
         // act
@@ -328,7 +328,7 @@ module("defer render/update", {
         assert.equal(logs[4], "render deferred done", "render deferred done");
     });
 
-    test("several deferUpdate in one deferRender", (assert) => {
+    test("several deferUpdate in one deferRender", function(assert) {
         const logs = [];
 
         // act
@@ -362,7 +362,7 @@ module("defer render/update", {
         assert.equal(logs[5], "render completed");
     });
 
-    test("Return deferred in deferRender and using deferUpdater", (assert) => {
+    test("Return deferred in deferRender and using deferUpdater", function(assert) {
         const logs = [];
 
         // act
@@ -394,7 +394,7 @@ module("defer render/update", {
         assert.equal(logs[2], "render completed");
     });
 
-    test("Return deferred in deferUpdate and using deferRenderer", (assert) => {
+    test("Return deferred in deferUpdate and using deferRenderer", function(assert) {
         const logs = [];
 
         // act
@@ -429,7 +429,7 @@ module("defer render/update", {
 
 
 module("applyServerDecimalSeparator", () => {
-    test("formats the value passed according to the DevExpress.config", (assert) => {
+    test("formats the value passed according to the DevExpress.config", function(assert) {
         const originalConfig = config();
         try {
             config({ serverDecimalSeparator: "|" });
@@ -442,7 +442,7 @@ module("applyServerDecimalSeparator", () => {
 
 
 module("grep", () => {
-    test("basic", (assert) => {
+    test("basic", function(assert) {
         const array = [6, 3, 8, 2, 5];
         const object = {};
         const filterNumbers = (number) => {
@@ -465,7 +465,7 @@ module("grep", () => {
 
 
 module("equalByValue", () => {
-    test("The `equalByValue` should compare GUIDs by values", (assert) => {
+    test("The `equalByValue` should compare GUIDs by values", function(assert) {
         const guid1 = new Guid('1111');
         const guid2 = new Guid('1111');
 
@@ -504,7 +504,7 @@ module("getKeyHash", () => {
     }];
 
     TEST_VALUES.forEach(({ value, result }) => {
-        test(`getKeyHash from the ${typeof value} value`, (assert) => {
+        test(`getKeyHash from the ${typeof value} value`, function(assert) {
             assert.strictEqual(getKeyHash(value), result, "Correct hash");
         });
     });

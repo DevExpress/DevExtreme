@@ -52,7 +52,7 @@ const KEY_ESC = "Escape";
 const KEY_TAB = "Tab";
 
 QUnit.module("dxAutocomplete", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         executeAsyncMock.setup();
         Autocomplete.defaultOptions({ options: { deferRendering: false } });
@@ -69,21 +69,21 @@ QUnit.module("dxAutocomplete", {
         this.popup = this.instance._popup;
         this.keyboard = keyboardMock(this.$input);
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
         fx.off = false;
 
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("popup init", (assert) => {
+    QUnit.test("popup init", function(assert) {
         assert.ok(this.popup._wrapper().hasClass("dx-autocomplete-popup-wrapper"), "popup wrapper class set");
 
         this.instance.option("value", "i");
         assert.equal($(".dx-viewport " + "." + LIST_CLASS).length, 1, "Element has " + LIST_CLASS + " class");
     });
 
-    QUnit.test("dataSource init", assert => {
+    QUnit.test("dataSource init", function(assert) {
         const element = $("#autocomplete2").dxAutocomplete({
             value: "anotherText",
             dataSource: ["qwerty", "item 2", "item 3"]
@@ -94,7 +94,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance._dataSource.items()[0], "qwerty", "autocomplete-s dataSource initialization");
     });
 
-    QUnit.test("Resize by option", assert => {
+    QUnit.test("Resize by option", function(assert) {
         const setUpWidth = 456;
         const setUpHeight = 1000;
 
@@ -124,12 +124,12 @@ QUnit.module("dxAutocomplete", {
         const dWidth = $autocomplete.width() - initialWidth;
         const dPopupWidth = popup.option("width") - initialPopupWidth;
 
-        assert.notEqual(0, dHeight, "Height could be changed");
-        assert.notEqual(0, dWidth, "Width could be changed");
+        assert.notEqual(dHeight, 0, "Height could be changed");
+        assert.notEqual(dWidth, 0, "Width could be changed");
         assert.equal(dWidth, dPopupWidth + autocomplete.option("popupWidthExtension"), "Element and popup change width accordingly");
     });
 
-    QUnit.test("check textbox sizes", assert => {
+    QUnit.test("check textbox sizes", function(assert) {
         const element = $("#autocomplete2").dxAutocomplete({
             value: "anotherText",
             dataSource: ["qwerty", "item 2", "item 3"],
@@ -147,7 +147,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(element.height(), instance.option("height"), "textbox height is right");
     });
 
-    QUnit.test("dataSource support", (assert) => {
+    QUnit.test("dataSource support", function(assert) {
         const newData = ["item1", "item2"];
         this.instance.option("dataSource", newData);
         this.instance.option("minSearchLength", 0);
@@ -158,7 +158,7 @@ QUnit.module("dxAutocomplete", {
         assert.deepEqual(this.instance._list._dataSource.items(), ["item3", "item4"], "init with dx.data.ArrayStore");
     });
 
-    QUnit.testInActiveWindow("list showing/hiding", (assert) => {
+    QUnit.testInActiveWindow("list showing/hiding", function(assert) {
         const keyboard = this.keyboard;
         let $list;
 
@@ -188,7 +188,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal($list.is(":hidden"), true, "when we select list-s item with -enter- key, list is hidden");
     });
 
-    QUnit.test("Enter and escape key press prevent default when popup in opened", (assert) => {
+    QUnit.test("Enter and escape key press prevent default when popup in opened", function(assert) {
         assert.expect(1);
 
         let prevented = 0;
@@ -211,7 +211,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(prevented, 2, "defaults prevented on enter and escape keys");
     });
 
-    QUnit.test("Enter and escape key press does not prevent default when popup in not opened", (assert) => {
+    QUnit.test("Enter and escape key press does not prevent default when popup in not opened", function(assert) {
         assert.expect(1);
 
         let prevented = 0;
@@ -230,12 +230,12 @@ QUnit.module("dxAutocomplete", {
         assert.equal(prevented, 0, "defaults has not prevented on enter and escape keys");
     });
 
-    QUnit.test("item click sets value", (assert) => {
+    QUnit.test("item click sets value", function(assert) {
         let $list;
 
         $list = this.instance._list._$element;
 
-        assert.equal("text", this.instance.option("value"));
+        assert.equal(this.instance.option("value"), "text");
         $($list.find("." + LIST_ITEM_CLASS).first()).trigger("dxclick");
 
         assert.equal(this.instance.option("value"), "item 1", "click on list item, and it-s value replace textbox value");
@@ -243,7 +243,7 @@ QUnit.module("dxAutocomplete", {
         assert.ok(!this.$input.is(":focus"), "after select value we drop focus from input");
     });
 
-    QUnit.testInActiveWindow("open/close actions", (assert) => {
+    QUnit.testInActiveWindow("open/close actions", function(assert) {
         let openFired = 0;
         let closeFired = 0;
 
@@ -266,7 +266,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(closeFired, 1, "close fired once");
     });
 
-    QUnit.testInActiveWindow("should not open overlay if the focus has been lost (T712942)", (assert) => {
+    QUnit.testInActiveWindow("should not open overlay if the focus has been lost (T712942)", function(assert) {
         const done = assert.async();
         let isOpenFired = false;
 
@@ -298,7 +298,7 @@ QUnit.module("dxAutocomplete", {
         }, 20);
     });
 
-    QUnit.test("onEnterKey (T107163)", (assert) => {
+    QUnit.test("onEnterKey (T107163)", function(assert) {
         let enterKeyFired = 0;
 
         this.instance.option({
@@ -311,7 +311,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(enterKeyFired, 1, "onEnterKey fired once");
     });
 
-    QUnit.testInActiveWindow("minimal search length", (assert) => {
+    QUnit.testInActiveWindow("minimal search length", function(assert) {
         let $list;
 
         this.element.dxAutocomplete({
@@ -329,7 +329,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal($list.is(":hidden"), false, "when enter second char, list shows all items");
     });
 
-    QUnit.testInActiveWindow("Typing shows the list with async data source", (assert) => {
+    QUnit.testInActiveWindow("Typing shows the list with async data source", function(assert) {
         const instance = this.instance;
         const deferred = new $.Deferred();
         let searchValue;
@@ -360,7 +360,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(searchValue, "q");
     });
 
-    QUnit.test("'searchTimeout' sets interval between list filtering", (assert) => {
+    QUnit.test("'searchTimeout' sets interval between list filtering", function(assert) {
         const instance = this.instance;
 
         this.element.dxAutocomplete({
@@ -376,7 +376,7 @@ QUnit.module("dxAutocomplete", {
         assert.deepEqual(instance._dataSource.items(), ["qwerty"], "dataSource is filtered after timeout");
     });
 
-    QUnit.test("'change event' is called once", (assert) => {
+    QUnit.test("'change event' is called once", function(assert) {
         const instance = this.instance;
         this.element.dxAutocomplete({
             value: null,
@@ -392,7 +392,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance.option("value"), "item2");
     });
 
-    QUnit.testInActiveWindow("list is shown when key was pressed and there was items to show", (assert) => {
+    QUnit.testInActiveWindow("list is shown when key was pressed and there was items to show", function(assert) {
         const instance = this.instance;
         this.element.dxAutocomplete({
             value: null,
@@ -406,7 +406,7 @@ QUnit.module("dxAutocomplete", {
         assert.ok($list.is(":visible"), "when key press and input not empty, list is visible");
     });
 
-    QUnit.test("interrupt searchTimeout by new timer", (assert) => {
+    QUnit.test("interrupt searchTimeout by new timer", function(assert) {
         const instance = this.instance;
         const keyboard = this.keyboard;
         let time = 0;
@@ -438,7 +438,7 @@ QUnit.module("dxAutocomplete", {
         }
     });
 
-    QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", (assert) => {
+    QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -513,7 +513,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal($selectedItem.text(), "item 2", "when we press 'key_up', we select 'item 2'");
     });
 
-    QUnit.test("down arrow should move focus through the groups", assert => {
+    QUnit.test("down arrow should move focus through the groups", function(assert) {
         const $element = $("#widget").dxAutocomplete({
             searchExpr: "text",
             value: null,
@@ -546,7 +546,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance.option("value"), "Item 2", "value is correct");
     });
 
-    QUnit.testInActiveWindow("key_tab for autocomplete current value", (assert) => {
+    QUnit.testInActiveWindow("key_tab for autocomplete current value", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -568,7 +568,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance.option("value"), "item 1", "when press 'tab', replace input value with top list item");
     });
 
-    QUnit.test("key_up/key_down - prevent default", (assert) => {
+    QUnit.test("key_up/key_down - prevent default", function(assert) {
         assert.expect(2);
 
         const instance = this.instance;
@@ -589,7 +589,7 @@ QUnit.module("dxAutocomplete", {
             .keyDown(KEY_UP);
     });
 
-    QUnit.testInActiveWindow("enter - prevent default", (assert) => {
+    QUnit.testInActiveWindow("enter - prevent default", function(assert) {
         assert.expect(1);
 
         if(devices.real().deviceType !== "desktop") {
@@ -615,7 +615,7 @@ QUnit.module("dxAutocomplete", {
         keyboard.keyDown(KEY_ENTER);
     });
 
-    QUnit.test("try to autocomplete current value when type missing searchValue", (assert) => {
+    QUnit.test("try to autocomplete current value when type missing searchValue", function(assert) {
         const keyboard = this.keyboard;
 
         this.element.dxAutocomplete({
@@ -630,7 +630,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(this.instance.option("value"), "l", "when press 'tab' and list hidden, input value still unchanged");
     });
 
-    QUnit.testInActiveWindow("esc_key close list", (assert) => {
+    QUnit.testInActiveWindow("esc_key close list", function(assert) {
         let $list;
 
         $list = this.instance._list._$element;
@@ -643,7 +643,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal($list.is(":hidden"), true, "when press -esc- key, we hide list");
     });
 
-    QUnit.test("filter with non-default searchMode", (assert) => {
+    QUnit.test("filter with non-default searchMode", function(assert) {
         const instance = this.instance;
         const keyboard = this.keyboard;
 
@@ -657,7 +657,7 @@ QUnit.module("dxAutocomplete", {
         assert.deepEqual(instance._dataSource.items(), ["thing"], "element that starts with 't' letter was found");
     });
 
-    QUnit.test("search mode incorrect name raises exception", assert => {
+    QUnit.test("search mode incorrect name raises exception", function(assert) {
         assert.throws(() => {
             $("#autocomplete2").dxAutocomplete({
                 value: "",
@@ -679,7 +679,7 @@ QUnit.module("dxAutocomplete", {
         });
     });
 
-    QUnit.testInActiveWindow("using custom item template", assert => {
+    QUnit.testInActiveWindow("using custom item template", function(assert) {
         const element = $("#autocompleteTemplate").dxAutocomplete({
             value: "",
             dataSource: ["item 1", "item 2", "item 3"],
@@ -705,7 +705,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance.option("value"), "item 1", "send correct value to input when using custom template");
     });
 
-    QUnit.test("itemTemplate support", assert => {
+    QUnit.test("itemTemplate support", function(assert) {
         const instance = $("#autocomplete2").dxAutocomplete({
             dataSource: ["0", "1", "2"],
             itemTemplate(item) {
@@ -718,7 +718,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(items.text(), "item0item1item2");
     });
 
-    QUnit.test("valueExpr option", assert => {
+    QUnit.test("valueExpr option", function(assert) {
         const element = $("#autocomplete2").dxAutocomplete({
             value: "",
             searchTimeout: 0,
@@ -750,7 +750,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(items.eq(0).text(), "qa");
     });
 
-    QUnit.testInActiveWindow("using multifield datasource", assert => {
+    QUnit.testInActiveWindow("using multifield datasource", function(assert) {
         const element = $("#autocomplete2").dxAutocomplete({
             value: "",
             dataSource: [
@@ -785,7 +785,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance.option("value"), "ed", "send correct value to input when change 'valueExpr' option");
     });
 
-    QUnit.testInActiveWindow("using multifield datasource with template", assert => {
+    QUnit.testInActiveWindow("using multifield datasource with template", function(assert) {
         const element = $("#multifieldDS").dxAutocomplete({
             itemTemplate: "item",
             value: "",
@@ -817,7 +817,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(instance.option("value"), "item 1", "send correct value to input when using multifield datasource");
     });
 
-    QUnit.test("Manual datasource - search in datasource", (assert) => {
+    QUnit.test("Manual datasource - search in datasource", function(assert) {
         const keyboard = this.keyboard;
         let searchedString = null;
 
@@ -838,7 +838,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(searchedString, "t", "Search string should be passed to user-defined load method");
     });
 
-    QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", assert => {
+    QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", function(assert) {
         const autocomplete = $("#autocomplete2").dxAutocomplete({
             onValueChanged() {
                 assert.ok(true);
@@ -847,7 +847,7 @@ QUnit.module("dxAutocomplete", {
         autocomplete.option("value", true);
     });
 
-    QUnit.test("dxAutoComplete should not be opened when change the value from code (T141485)", (assert) => {
+    QUnit.test("dxAutoComplete should not be opened when change the value from code (T141485)", function(assert) {
         this.element.dxAutocomplete({
             dataSource: ["item1", "item2", "item3"],
             value: ""
@@ -858,7 +858,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(this.instance._popup.option("visible"), false, "drop down should not be shown");
     });
 
-    QUnit.testInActiveWindow("maxItemCount option test", assert => {
+    QUnit.testInActiveWindow("maxItemCount option test", function(assert) {
         assert.expect(2);
 
         const $autocomplete = $("#autocomplete2").dxAutocomplete({
@@ -884,7 +884,7 @@ QUnit.module("dxAutocomplete", {
         assert.equal(listItemsCount, autocompleteInstance.option("maxItemCount"), "drop down list items count is not equal to maxItemCount");
     });
 
-    QUnit.test("there should be no warnings after widget value is cleared (T386512)", assert => {
+    QUnit.test("there should be no warnings after widget value is cleared (T386512)", function(assert) {
         if(!window.console || !window.console.warn) {
             assert.ok(true, "the console object is not supported");
             return;
@@ -918,7 +918,7 @@ QUnit.module("dxAutocomplete", {
 });
 
 QUnit.module("Overlay integration", {
-    beforeEach: () => {
+    beforeEach: function() {
         executeAsyncMock.setup();
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -933,13 +933,13 @@ QUnit.module("Overlay integration", {
         this.popup = this.instance._popup.$element();
         this.keyboard = keyboardMock(this.$input);
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
         fx.off = false;
         this.clock.restore();
     }
 }, () => {
-    QUnit.testInActiveWindow("list animation jumps to end", (assert) => {
+    QUnit.testInActiveWindow("list animation jumps to end", function(assert) {
         const keyboard = this.keyboard;
         let $overlayContent;
 
@@ -956,7 +956,7 @@ QUnit.module("Overlay integration", {
         assert.equal($overlayContent.css("opacity"), 1, "when type, opacity is 1");
     });
 
-    QUnit.testInActiveWindow("popup height calculated correctly", (assert) => {
+    QUnit.testInActiveWindow("popup height calculated correctly", function(assert) {
         this.element.dxAutocomplete({
             value: "",
             dataSource: ["item 10", "item 20", "item 30"]
@@ -974,7 +974,7 @@ QUnit.module("Overlay integration", {
         assert.ok(popupHeightWithSingleItem < popupHeightWithAllItems, "height recalculated");
     });
 
-    QUnit.test("popup height is refreshed on window resize callback (B254555)", (assert) => {
+    QUnit.test("popup height is refreshed on window resize callback (B254555)", function(assert) {
         fx.off = true;
 
         const $popup = this.popup;
@@ -991,7 +991,7 @@ QUnit.module("Overlay integration", {
         assert.notEqual(testHeight, initialHeight, "initial height is restored after window resize callback");
     });
 
-    QUnit.test("popup showing calls list update (B254555)", (assert) => {
+    QUnit.test("popup showing calls list update (B254555)", function(assert) {
         fx.off = true;
         let listUpdated = 0;
 
@@ -1009,7 +1009,7 @@ QUnit.module("Overlay integration", {
         assert.equal(listUpdated, 1, "list updated once");
     });
 
-    QUnit.test("dxAutocomplete - popup list has vertical scroll when items count is small and scroll is not needed(T105434)", (assert) => {
+    QUnit.test("dxAutocomplete - popup list has vertical scroll when items count is small and scroll is not needed(T105434)", function(assert) {
         fx.off = true;
 
         const $popup = this.popup;
@@ -1025,7 +1025,7 @@ QUnit.module("Overlay integration", {
         assert.equal($scrollableContainer.outerHeight(), $popupContent.height());
     });
 
-    QUnit.testInActiveWindow("popup should not reopened on Enter key press", (assert) => {
+    QUnit.testInActiveWindow("popup should not reopened on Enter key press", function(assert) {
         assert.expect(1);
 
         fx.off = true;
@@ -1043,7 +1043,7 @@ QUnit.module("Overlay integration", {
         $(this.$input).trigger("change");
     });
 
-    QUnit.test("popup should be hidden after reset", (assert) => {
+    QUnit.test("popup should be hidden after reset", function(assert) {
         this.instance.option("value", "");
 
         this.keyboard.type("i");
@@ -1054,7 +1054,7 @@ QUnit.module("Overlay integration", {
 });
 
 QUnit.module("regressions", {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
         executeAsyncMock.setup();
         Autocomplete.defaultOptions({ options: { deferRendering: false } });
@@ -1077,14 +1077,14 @@ QUnit.module("regressions", {
         };
         this.popup = this.instance._popup;
     },
-    afterEach: () => {
+    afterEach: function() {
         executeAsyncMock.teardown();
         fx.off = false;
 
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("update input value on click", (assert) => {
+    QUnit.test("update input value on click", function(assert) {
         let $item;
         let mouse;
         let $list;
@@ -1100,7 +1100,7 @@ QUnit.module("regressions", {
         assert.equal(this.widgetValue(), "item 1", "widget value");
     });
 
-    QUnit.testInActiveWindow("update input value on press complete key", (assert) => {
+    QUnit.testInActiveWindow("update input value on press complete key", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1115,7 +1115,7 @@ QUnit.module("regressions", {
         assert.equal(this.widgetValue(), "item 1", "widget value");
     });
 
-    QUnit.testInActiveWindow("update input value on press enter key", (assert) => {
+    QUnit.testInActiveWindow("update input value on press enter key", function(assert) {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
@@ -1130,7 +1130,7 @@ QUnit.module("regressions", {
         assert.equal(this.widgetValue(), "item 1", "widget value");
     });
 
-    QUnit.testInActiveWindow("when updating value option, input.val() do not updating twice", (assert) => {
+    QUnit.testInActiveWindow("when updating value option, input.val() do not updating twice", function(assert) {
         this.keyboard.type("i");
 
         assert.equal(this.inputValue(), "i", "input value");
@@ -1152,7 +1152,7 @@ QUnit.module("regressions", {
         assert.equal(this.widgetValue(), "ite", "widget value");
     });
 
-    QUnit.test("big dataSource loading", (assert) => {
+    QUnit.test("big dataSource loading", function(assert) {
         const instance = this.instance;
         const longArray = [];
         let arrayLength = 100;
@@ -1175,7 +1175,7 @@ QUnit.module("regressions", {
         assert.equal(instance._list.$element().find(".dx-list-item").length, 10);
     });
 
-    QUnit.test("B233605 autocomplete shows on short time", (assert) => {
+    QUnit.test("B233605 autocomplete shows on short time", function(assert) {
         executeAsyncMock.teardown();
 
         const instance = this.instance;
@@ -1194,7 +1194,7 @@ QUnit.module("regressions", {
         assert.equal(showCounter, 0, "autocomplete menu should not be shown");
     });
 
-    QUnit.testInActiveWindow("B233600 dxAutocomplete - Sometimes autocomplete shows redundant items", (assert) => {
+    QUnit.testInActiveWindow("B233600 dxAutocomplete - Sometimes autocomplete shows redundant items", function(assert) {
         assert.expect(5);
 
         executeAsyncMock.teardown();
@@ -1239,7 +1239,7 @@ QUnit.module("regressions", {
         this.clock.tick(1000);
     });
 
-    QUnit.test("B233813 dxAutocomplete - custom or non existing option change, cause additional autocomplete edit input instance.", (assert) => {
+    QUnit.test("B233813 dxAutocomplete - custom or non existing option change, cause additional autocomplete edit input instance.", function(assert) {
         executeAsyncMock.teardown();
         const instance = this.instance;
         const childrenCount = this.element.children().length;
@@ -1253,7 +1253,7 @@ QUnit.module("regressions", {
         assert.equal(numEditItems, 1, "we should have only one dx-texteditor-input in dxautocomplete instance");
     });
 
-    QUnit.test("B234608 check offset for iOS devices", assert => {
+    QUnit.test("B234608 check offset for iOS devices", function(assert) {
         let popup;
         let vOffset;
 
@@ -1271,7 +1271,7 @@ QUnit.module("regressions", {
         devices.current(null);
     });
 
-    QUnit.testInActiveWindow("B234649 if item not selected and pressed enter key - close popup", (assert) => {
+    QUnit.testInActiveWindow("B234649 if item not selected and pressed enter key - close popup", function(assert) {
         let $list;
         const keyboard = this.keyboard;
 
@@ -1283,7 +1283,7 @@ QUnit.module("regressions", {
         assert.equal($list.is(":hidden"), true, "when press enter key and item not selected - hide popup");
     });
 
-    QUnit.test("B238021", (assert) => {
+    QUnit.test("B238021", function(assert) {
         let $list;
         const $input = this.$input;
 
@@ -1297,7 +1297,7 @@ QUnit.module("regressions", {
         assert.ok($list.is(":hidden"), "close menu after input losts focus");
     });
 
-    QUnit.test("onValueChanged callback", (assert) => {
+    QUnit.test("onValueChanged callback", function(assert) {
         let called = 0;
 
         this.instance.option("valueChangeEvent", "change keyup");
@@ -1317,7 +1317,7 @@ QUnit.module("regressions", {
         assert.equal(called, 6);
     });
 
-    QUnit.test("clear button should save valueChangeEvent", (assert) => {
+    QUnit.test("clear button should save valueChangeEvent", function(assert) {
         const valueChangedHandler = sinon.spy();
 
         this.instance.option({
@@ -1334,7 +1334,7 @@ QUnit.module("regressions", {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
     });
 
-    QUnit.test("item initialization scenario", assert => {
+    QUnit.test("item initialization scenario", function(assert) {
         const instance = $("#autocomplete").dxAutocomplete({
             items: ["a", "b", "c"]
         }).dxAutocomplete("instance");
@@ -1344,7 +1344,7 @@ QUnit.module("regressions", {
         assert.equal(items.text(), "abc");
     });
 
-    QUnit.test("item option change scenario", assert => {
+    QUnit.test("item option change scenario", function(assert) {
         const instance = $("#autocomplete").dxAutocomplete({
             items: ["a", "b"]
         }).dxAutocomplete("instance");
@@ -1358,7 +1358,7 @@ QUnit.module("regressions", {
         assert.equal(items.text(), "abc");
     });
 
-    QUnit.test("B251208 - dxAutocomplete: cannot select text by keyboard", (assert) => {
+    QUnit.test("B251208 - dxAutocomplete: cannot select text by keyboard", function(assert) {
         $("#autocomplete").dxAutocomplete().dxAutocomplete("instance");
 
         this.$input.val("xxx");
@@ -1373,20 +1373,20 @@ QUnit.module("regressions", {
 });
 
 QUnit.module("widget sizing render", {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test("default", assert => {
+    QUnit.test("default", function(assert) {
         const $element = $("#widget").dxAutocomplete();
 
         assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
     });
 
-    QUnit.test("constructor", assert => {
+    QUnit.test("constructor", function(assert) {
         const $element = $("#widget").dxAutocomplete({ width: 400 });
         const instance = $element.dxAutocomplete("instance");
 
@@ -1394,12 +1394,12 @@ QUnit.module("widget sizing render", {
         assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("root with custom width", assert => {
+    QUnit.test("root with custom width", function(assert) {
         const $element = $("#widthRootStyle").dxAutocomplete();
         assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("change width", assert => {
+    QUnit.test("change width", function(assert) {
         const $element = $("#widget").dxAutocomplete();
         const instance = $element.dxAutocomplete("instance");
         const customWidth = 400;
@@ -1409,7 +1409,7 @@ QUnit.module("widget sizing render", {
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.testInActiveWindow("filter is not reset", (assert) => {
+    QUnit.testInActiveWindow("filter is not reset", function(assert) {
         const $fixture = $("#qunit-fixture");
         const requiredCSS = $("<style>.dx-popup-content {padding: 0 !important;border: none !important;margin: 0 !important;</style>");
         requiredCSS.appendTo($fixture);

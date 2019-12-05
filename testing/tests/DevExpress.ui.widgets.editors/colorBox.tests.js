@@ -710,6 +710,30 @@ QUnit.testInActiveWindow("focus policy", function(assert) {
     assert.ok(this.instance.$element().hasClass(STATE_FOCUSED_CLASS), "colorView on focus reset focus to element");
 });
 
+QUnit.test("Pressing the 'Esc' key should close the dropDown", function(assert) {
+    assert.expect(5);
+    const instance = this.instance;
+
+    instance.option({
+        opened: true,
+        applyValueMode: "useButtons",
+        editAlphaChannel: true
+    });
+
+
+    $(instance.content())
+        .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+        .each((index, editorInput) => {
+            const $editorInput = $(editorInput);
+            const escapeKeyDown = $.Event("keydown", { key: "Escape" });
+
+            $($editorInput).trigger(escapeKeyDown);
+            assert.notOk(instance.option("opened"), "overlay has been closed");
+
+            instance.option("opened", true);
+        });
+});
+
 
 QUnit.module("Regressions", {
     beforeEach: function() {
@@ -790,7 +814,7 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
     assert.equal(colorBox.option("value"), "#326b8a");
 });
 
-QUnit.test("value should be reseted after popup closing when 'applyValueMode' is 'useButtons' (T806577)", (assert) => {
+QUnit.test("value should be reseted after popup closing when 'applyValueMode' is 'useButtons' (T806577)", function(assert) {
     const colorBox = $("#color-box").dxColorBox({
             value: "#aabbcc",
             applyValueMode: "useButtons",

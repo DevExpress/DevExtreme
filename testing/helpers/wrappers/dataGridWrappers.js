@@ -11,14 +11,21 @@ const HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";
 const LIST_ITEM_CLASS = "dx-list-item";
 const BUTTON_CLASS = "dx-button";
 const FOCUSED_ROW_CLASS = "dx-row-focused";
+const SELECTED_ROW_CLASS = "dx-selection";
 const DATA_GRID_PREFIX = "dx-datagrid";
 const DATA_ROW_CLASS = "dx-data-row";
 const TREELIST_PREFIX = "dx-treelist";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const NEW_ROW_CLASS = "dx-row-inserted";
-const FIXED_TABLE_CLASS = "dx-datagrid-table-fixed";
+const FIXED_CONTENT_CLASS = "dx-datagrid-content-fixed";
+const HEADER_COLUMN_INDICATORS_CLASS = "dx-column-indicators";
+const GRID_TABLE_CLASS = "dx-datagrid-table";
+const FREE_SPACE_ROW = "dx-freespace-row";
+const ROW_CLASS = "dx-row";
 
-class GridWrapper {
+class GridWrapper extends WrapperBase {
     constructor(containerSelector, widgetPrefix) {
+        super(containerSelector);
         this.pager = new PagerWrapper(containerSelector, widgetPrefix);
         this.filterPanel = new FilterPanelWrapper(containerSelector, widgetPrefix);
         this.headerPanel = new HeaderPanelWrapper(containerSelector, widgetPrefix);
@@ -27,6 +34,10 @@ class GridWrapper {
         this.rowsView = new RowsViewWrapper(containerSelector, widgetPrefix);
         this.filterBuilder = new FilterBuilderWrapper("BODY", widgetPrefix);
         this.columns = new ColumnWrapper(containerSelector, widgetPrefix);
+    }
+
+    getElement() {
+        return this.getContainer();
     }
 
     isEditorCell($cell) {
@@ -53,13 +64,19 @@ class GridElement extends WrapperBase {
     }
 }
 
+class GridTableElement extends GridElement {
+    getTable() {
+        return this.getElement().find(`.${GRID_TABLE_CLASS}`);
+    }
+}
+
 export class ColumnWrapper extends GridElement {
     getCommandButtons() {
         return this.getContainer().find("td[class*='dx-command'] .dx-link");
     }
 }
 
-export class RowsViewWrapper extends GridElement {
+export class RowsViewWrapper extends GridTableElement {
     constructor(containerSelector, widgetPrefix) {
         super(containerSelector);
         this.widgetPrefix = widgetPrefix;
@@ -70,7 +87,7 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getVirtualRowElement() {
-        return this.getContainer().find(`:not(.${FIXED_TABLE_CLASS}) .dx-virtual-row`);
+        return this.getContainer().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-virtual-row`);
     }
 
     getVirtualCell(columnIndex) {
@@ -78,19 +95,27 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getRowElement(rowIndex) {
-        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .dx-row`).eq(rowIndex);
+        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-row`).eq(rowIndex);
+    }
+
+    getFreeSpaceRow() {
+        return this.getElement().find(`.${ROW_CLASS}.${FREE_SPACE_ROW}`);
     }
 
     getFixedDataRowElement(rowIndex) {
-        return this.getElement().find(`.${FIXED_TABLE_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
+        return this.getElement().find(`.${FIXED_CONTENT_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
     }
 
     getCellElement(rowIndex, columnIndex) {
-        return this.getElement().find(".dx-data-row").eq(rowIndex).find("td").eq(columnIndex);
+        return this.getRowElement(rowIndex).find("td").eq(columnIndex);
+    }
+
+    getSelectCheckBox(rowIndex, columnIndex) {
+        return this.getCellElement(rowIndex, columnIndex).find('.dx-select-checkbox');
     }
 
     getDataRowElement(rowIndex) {
-        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
+        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
     }
 
     getDataCellElement(rowIndex, columnIndex) {
@@ -102,7 +127,7 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getDataRowElementCount() {
-        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .${DATA_ROW_CLASS}`).length;
+        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).length;
     }
 
     getRowAdaptiveElement(rowIndex) {
@@ -113,12 +138,12 @@ export class RowsViewWrapper extends GridElement {
         return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
     }
 
-    getEditorInputElement(rowIndex, columnIndex) {
-        return this.getCellElement(rowIndex, columnIndex).find(".dx-texteditor-input");
+    getEditorInput(rowIndex, columnIndex) {
+        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
     hasEditorInputElement(rowIndex, columnIndex) {
-        return this.getEditorInputElement(rowIndex, columnIndex).length > 0;
+        return this.getEditorInput(rowIndex, columnIndex).length > 0;
     }
 
     getSelectionCheckBoxElement(rowIndex) {
@@ -130,8 +155,12 @@ export class RowsViewWrapper extends GridElement {
         return this._isInnerElementVisible($row, precision);
     }
 
-    isRowFocused(rowIndex) {
+    isFocusedRow(rowIndex) {
         return this.getDataRowElement(rowIndex).hasClass(FOCUSED_ROW_CLASS);
+    }
+
+    isSelectedRow(rowIndex) {
+        return this.getDataRowElement(rowIndex).hasClass(SELECTED_ROW_CLASS);
     }
 
     isNewRow(rowIndex) {
@@ -166,18 +195,6 @@ export class RowsViewWrapper extends GridElement {
 
     hasFocusedRow() {
         return this.getFocusedRow().length > 0;
-    }
-
-    getForm() {
-        return this.getElement().find(".dx-form");
-    }
-
-    getFormEditor(index) {
-        return this.getForm().find(".dx-texteditor").eq(index);
-    }
-
-    getFormEditorInput(index) {
-        return this.getFormEditor(index).find(".dx-texteditor-input").eq(0);
     }
 }
 
@@ -247,8 +264,12 @@ export class FilterRowWrapper extends GridElement {
         return this.getContainer().find(`.${this.widgetPrefix}-filter-row`).eq(0);
     }
 
+    getTextEditor(index) {
+        return this.getElement().find(".dx-texteditor").eq(index);
+    }
+
     getTextEditorInput(index) {
-        return this.getElement().find(".dx-texteditor-input").eq(index);
+        return this.getElement().find(`.${TEXTEDITOR_INPUT_CLASS}`).eq(index);
     }
 
     getEditorCell(index) {
@@ -274,7 +295,7 @@ export class HeaderPanelWrapper extends GridElement {
     }
 }
 
-export class HeadersWrapper extends GridElement {
+export class HeadersWrapper extends GridTableElement {
     getElement() {
         return this.getContainer().find(`.${this.widgetPrefix}-headers`);
     }
@@ -289,6 +310,10 @@ export class HeadersWrapper extends GridElement {
 
     getHeaderFilterItem(rowIndex, columnIndex) {
         return this.getHeaderItem(rowIndex, columnIndex).find(".dx-header-filter");
+    }
+
+    getColumnsIndicators() {
+        return this.getElement().find(`.${HEADER_COLUMN_INDICATORS_CLASS}`);
     }
 }
 

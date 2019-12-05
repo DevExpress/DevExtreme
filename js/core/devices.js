@@ -9,7 +9,7 @@ var $ = require("../core/renderer"),
     errors = require("./errors"),
     Callbacks = require("./utils/callbacks"),
     resizeCallbacks = require("./utils/resize_callbacks"),
-    EventsMixin = require("./events_mixin"),
+    EventsStrategy = require("./events_strategy").EventsStrategy,
     SessionStorage = require("./utils/storage").sessionStorage,
     viewPort = require("./utils/view_port"),
     Config = require("./config");
@@ -152,7 +152,6 @@ var uaParsers = {
  * @name DevicesObject
  * @publicName devices
  * @section Utils
- * @inherits EventsMixin
  * @namespace DevExpress
  * @module core/devices
  * @export default
@@ -177,6 +176,7 @@ var Devices = Class.inherit({
         this._realDevice = this._getDevice();
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
+        this._eventsStrategy = new EventsStrategy(this);
 
         this.changed = Callbacks();
         if(windowUtils.hasWindow()) {
@@ -398,7 +398,7 @@ var Devices = Class.inherit({
 
         this._currentOrientation = orientation;
 
-        this.fireEvent("orientationChanged", [{
+        this._eventsStrategy.fireEvent("orientationChanged", [{
             orientation: orientation
         }]);
     },
@@ -413,8 +413,44 @@ var Devices = Class.inherit({
 
         this._changeOrientation();
 
+    },
+
+    /**
+     * @name DevicesObjectMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name DevicesObjectMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    /**
+     * @name DevicesObjectMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name DevicesObjectMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     }
-}).include(EventsMixin);
+});
 
 var devices = new Devices();
 

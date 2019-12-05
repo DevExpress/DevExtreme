@@ -3148,7 +3148,7 @@ QUnit.test("update string lookup for calculated column", function(assert) {
     assert.strictEqual(this.columnsController.getColumns()[0].dataType, 'number');
     assert.strictEqual(this.columnsController.getColumns()[0].lookup.dataType, 'string');
     assert.ok(this.columnsController.getColumns()[0].lookup.calculateCellValue, 'calculateCellValue for lookup exists');
-    assert.ok(this.columnsController.getColumns()[0].lookup.calculateCellValue(2), '123-45-67', 'calculateCellValue for lookup works correctly');
+    assert.strictEqual(this.columnsController.getColumns()[0].lookup.calculateCellValue(2), '123-45-67', 'calculateCellValue for lookup works correctly');
 });
 
 // T200352
@@ -7396,6 +7396,51 @@ QUnit.test("getVisibleColumns with rowIndex and grouped columns", function(asser
     assert.ok(!visibleColumns[0].isBand, "data column");
 });
 
+QUnit.test("getVisibleColumnIndex with rowIndex", function(assert) {
+    // arrange
+    this.applyOptions({
+        columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField2", caption: "Column 2" },
+                    { dataField: "TestField3", caption: "Column 3" }
+                ]
+            }
+        ]
+    });
+
+    // assert
+    assert.equal(this.columnsController.getVisibleColumnIndex("TestField1", 0), 0, "first column on first level");
+    assert.equal(this.columnsController.getVisibleColumnIndex("Band Column 1", 0), 1, "second column on first level");
+    assert.equal(this.columnsController.getVisibleColumnIndex("TestField2", 0), -1, "column from second level");
+
+    assert.equal(this.columnsController.getVisibleColumnIndex("TestField2", 1), 0, "first column on second level");
+    assert.equal(this.columnsController.getVisibleColumnIndex("TestField3", 1), 1, "second column on second level");
+    assert.equal(this.columnsController.getVisibleColumnIndex("TestField1", 1), -1, "column from first level");
+});
+
+QUnit.test("getVisibleColumnIndex should find columns by diffrent types of identificator", function(assert) {
+    // arrange
+    this.applyOptions({
+        columns: [
+            { dataField: "field1", caption: "Column 1" },
+            { dataField: "field2", caption: "Column 2" },
+            { name: "name1", caption: "Column 1" },
+            { dataField: "dataField1", caption: "Column 1" },
+            { dataField: "dataField1", caption: "Column 2" }
+        ]
+    });
+
+    // assert
+    assert.equal(this.columnsController.getVisibleColumnIndex("name1"), 2, "by name");
+    assert.equal(this.columnsController.getVisibleColumnIndex(3), 3, "by column index");
+    assert.equal(this.columnsController.getVisibleColumnIndex("Column 1"), 0, "first match if not unique caption");
+    assert.equal(this.columnsController.getVisibleColumnIndex("dataField1"), 3, "first match if not unique dataField");
+    assert.equal(this.columnsController.getVisibleColumnIndex("foo"), -1, "non existing key");
+    assert.equal(this.columnsController.getVisibleColumnIndex(7), -1, "non existing index");
+});
+
 // T407455
 QUnit.test("getVisibleColumns when all columns is hidden in band column", function(assert) {
     // arrange
@@ -8681,6 +8726,25 @@ QUnit.module("onOptionChanged", {
         // assert
         assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[1].caption", "test", "Field 1"], "onOptionChanged args");
     });
+
+    QUnit.test("Should be correct value in onOptionChanged callback after moving some column to the last position", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2"
+            }, {
+                dataField: "field3"
+            }]
+        });
+
+        // act
+        this.columnsController.moveColumn(0, 3);
+
+        // assert
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[0].visibleIndex", 2, 0], "onOptionChanged args");
+    });
 });
 
 QUnit.module("Customization of the command columns", {
@@ -8740,6 +8804,65 @@ QUnit.module("Customization of the command columns", {
             cellTemplate: selectCellTemplate,
             width: 200
         }, "select column");
+    });
+
+    QUnit.test("visibleColumnIndex should find index сonsidering selection", function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always"
+            },
+            columns: ["field1"]
+        });
+
+        // act, assert
+        assert.equal(this.getVisibleColumnIndex("field1"), 1, "index");
+    });
+
+    QUnit.test("visibleColumnIndex should find index сonsidering command column", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{
+                type: "buttons"
+            }, "field1"]
+        });
+
+        // act, assert
+        assert.equal(this.getVisibleColumnIndex("field1"), 1, "index");
+    });
+
+    QUnit.test("visibleColumnIndex should find index сonsidering grouping", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: ["field1", {
+                name: "field2",
+                groupIndex: 0
+            }]
+        });
+
+        // act, assert
+        assert.equal(this.getVisibleColumnIndex("field2"), 0, "grouped column is first");
+        assert.equal(this.getVisibleColumnIndex("field1"), 1, "regular column");
+    });
+
+    QUnit.test("visibleColumnIndex should find index сonsidering reordering", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{
+                name: "field1",
+                visibleIndex: 1
+            }, {
+                name: "field2",
+                visibleIndex: 0
+            }]
+        });
+
+        // act, assert
+        assert.equal(this.getVisibleColumnIndex("field2"), 0, "first column");
+        assert.equal(this.getVisibleColumnIndex("field1"), 1, "second column");
+        assert.equal(this.getVisibleColumnIndex(1), 0, "first column");
+        assert.equal(this.getVisibleColumnIndex(0), 1, "second column");
     });
 
     QUnit.test("The adaptive column", function(assert) {

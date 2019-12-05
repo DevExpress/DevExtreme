@@ -8,7 +8,7 @@ export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
-    npm i eslint eslint-plugin-spellcheck stylelint stylelint-config-standard npm-run-all
+    npm i eslint eslint-plugin-spellcheck eslint-plugin-qunit stylelint stylelint-config-standard npm-run-all
     npm run lint
 }
 
@@ -17,6 +17,7 @@ function run_ts {
     cp $target $target.current
 
     npm i
+    npm update devextreme-internal-tools
     npm ls devextreme-internal-tools
 
     npm run update-ts

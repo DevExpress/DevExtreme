@@ -26,7 +26,15 @@ const CLASS = {
     tooltip: 'dx-tooltip',
     tooltipAppointmentItemContentDate: 'dx-tooltip-appointment-item-content-date',
     tooltipAppointmentItemContentSubject: 'dx-tooltip-appointment-item-content-subject',
-    tooltipWrapper: 'dx-tooltip-wrapper'
+    tooltipWrapper: 'dx-tooltip-wrapper',
+    tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
+
+    dialog: 'dx-dialog.dx-popup',
+    dialogButton: `dx-dialog-button`,
+    navigator: `dx-scheduler-navigator`,
+    navigatorButtonNext: `dx-scheduler-navigator-next`,
+    navigatorButtonPrev: `dx-scheduler-navigator-previous`,
+    navigatorButtonCaption: `dx-scheduler-navigator-caption`
 };
 
 class Appointment {
@@ -36,8 +44,9 @@ class Appointment {
     size: { width: Promise<string>, height: Promise<string> };
     isFocused: Promise<boolean>;
 
-    constructor(scheduler: Selector, title: string, index: number = 0) {
-        this.element = scheduler.find(`.${CLASS.appointment}`).withAttribute('title', title).nth(index);
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        const element = scheduler.find(`.${CLASS.appointment}`);
+        this.element = (title ? element.withAttribute('title', title) : element).nth(index);
 
         const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
@@ -62,12 +71,14 @@ class Appointment {
     }
 }
 
-class AppointmentCollector {
+class AppointmentCollector{
     element: Selector;
     isFocused: Promise<boolean>;
 
-    constructor(scheduler: Selector, title: string, index: number = 0) {
-        this.element = scheduler.find(`.${CLASS.appointmentCollector}`).withText(title).nth(index);
+    constructor(scheduler: Selector, index: number = 0, title?: string) {
+        const element = scheduler.find(`.${CLASS.appointmentCollector}`);
+        this.element = (title ? element.withText(title) : element).nth(index);
+
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
     }
 }
@@ -87,12 +98,27 @@ class AppointmentTooltipListItem {
     }
 }
 
+class AppointmentDialog {
+    element: Selector;
+    series: Selector;
+    appointment: Selector;
+
+    constructor(scheduler: Selector) {
+        this.element = Selector(`.${CLASS.dialog}`);
+        this.series = this.element.find(`.${CLASS.dialogButton}`).nth(0);
+        this.appointment = this.element.find(`.${CLASS.dialogButton}`).nth(1);
+    }
+}
+
 class AppointmentPopup {
     element: Selector;
     wrapper: Selector;
 
     subjectElement: Selector;
     descriptionElement: Selector;
+    startDateElement: Selector;
+    endDateElement: Selector;
+    allDayElement: Selector;
 
     doneButton: Selector;
     cancelButton: Selector;
@@ -103,7 +129,10 @@ class AppointmentPopup {
         this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 
         this.subjectElement = this.wrapper.find(".dx-texteditor-input").nth(0);
+        this.startDateElement = this.wrapper.find(".dx-texteditor-input").nth(1);
+        this.endDateElement = this.wrapper.find(".dx-texteditor-input").nth(2);
         this.descriptionElement = this.wrapper.find(".dx-texteditor-input").nth(3);
+        this.allDayElement = this.wrapper.find(".dx-switch").nth(0);
 
         this.doneButton = this.wrapper.find(".dx-popup-done.dx-button");
         this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
@@ -121,10 +150,12 @@ class AppointmentPopup {
 
 class AppointmentTooltip {
     element: Selector;
+    deleteElement: Selector;
     wrapper: Selector;
 
     constructor(scheduler: Selector) {
         this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltipWrapper}`);
+        this.deleteElement = Selector(`.${CLASS.tooltipDeleteButton}`);
         this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
     }
 
@@ -139,6 +170,20 @@ class AppointmentTooltip {
         return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
             dependencies: { element, invisibleStateClass }
         })();
+    }
+}
+
+class SchedulerNavigator {
+    element: Selector;
+    nextDuration: Selector;
+    prevDuration: Selector;
+    caption: Selector;
+
+    constructor(scheduler: Selector) {
+        this.element = scheduler.find(`.${CLASS.navigator}`);
+        this.nextDuration = Selector(`.${CLASS.navigatorButtonNext}`);
+        this.prevDuration = Selector(`.${CLASS.navigatorButtonPrev}`);
+        this.caption = Selector(`.${CLASS.navigatorButtonCaption}`);
     }
 }
 
@@ -175,8 +220,12 @@ export default class Scheduler extends Widget {
             top: workSpaceScroll.scrollTop
         };
 
-        this.appointmentTooltip = new AppointmentTooltip(this.element);
         this.appointmentPopup = new AppointmentPopup(this.element);
+        this.appointmentTooltip = new AppointmentTooltip(this.element);
+    }
+
+    getDialog() {
+        return new AppointmentDialog(this.element);
     }
 
     getDateTableCell(rowIndex: number = 0, cellIndex: number = 0): Selector {
@@ -184,10 +233,30 @@ export default class Scheduler extends Widget {
     }
 
     getAppointment(title: string, index: number = 0): Appointment {
-        return new Appointment(this.element, title, index);
+        return new Appointment(this.element, index, title);
     }
 
     getAppointmentCollector(title: string, index: number = 0): AppointmentCollector {
-        return new AppointmentCollector(this.element, title, index);
+        return new AppointmentCollector(this.element, index, title);
+    }
+
+    getAppointmentByIndex(index: number = 0): Appointment {
+        return new Appointment(this.element, index);
+    }
+
+    getAppointmentCollectorByIndex(index: number = 0): AppointmentCollector {
+        return new AppointmentCollector(this.element, index);
+    }
+
+    getAppointmentCount() {
+        return this.element.find(`.${CLASS.appointment}`).count;
+    }
+
+    getAppointmentCollectorCount() {
+        return this.element.find(`.${CLASS.appointmentCollector}`).count;
+    }
+
+    getNavigator(): SchedulerNavigator {
+        return new SchedulerNavigator(this.element);
     }
 };

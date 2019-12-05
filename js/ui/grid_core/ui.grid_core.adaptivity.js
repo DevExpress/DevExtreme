@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import clickEvent from "../../events/click";
 import typeUtils from "../../core/utils/type";
 import browser from "../../core/utils/browser";

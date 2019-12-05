@@ -148,12 +148,14 @@ exports.FocusController = core.ViewController.inherit((function() {
          * @param1 key:any
          */
         navigateToRow: function(key) {
+            if(!this.option("autoNavigateToFocusedRow")) {
+                this.option("focusedRowIndex", -1);
+            }
             this._navigateToRow(key);
         },
         _navigateToRow: function(key, needFocusRow) {
             var that = this,
                 dataController = this.getController("data"),
-                rowIndex = this.option("focusedRowIndex"),
                 isAutoNavigate = that.option("autoNavigateToFocusedRow"),
                 d = new Deferred();
 
@@ -166,7 +168,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             let rowIndexByKey = that._getFocusedRowIndexByKey(key),
                 isPaginate = dataController.getDataSource().paginate();
 
-            if(!isAutoNavigate || !isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
+            if(!isAutoNavigate && needFocusRow || !isPaginate || rowIndexByKey >= 0) {
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
@@ -751,21 +753,22 @@ module.exports = {
                 _setFocusedRowElementTabIndex: function() {
                     var that = this,
                         focusedRowKey = that.option("focusedRowKey"),
-                        tabIndex = that.option("tabIndex"),
+                        tabIndex = that.option("tabIndex") || 0,
                         rowIndex = that._dataController.getRowIndexByKey(focusedRowKey),
                         columnIndex = that.option("focusedColumnIndex"),
-                        $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0),
-                        $row = $cellElements.eq(0).parent(),
-                        dataSource = that.component.getController("data")._dataSource,
-                        operationTypes = dataSource && dataSource.operationTypes();
+                        rowElement = that._findRowElementForTabIndex();
 
-                    if($row.length) {
+                    if(rowElement) {
                         that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
-                            that._scrollToElement($row);
-                            that.resizeCompleted.remove(that._scrollToFocusOnResize);
+                            rowElement = that._findRowElementForTabIndex();
+                            if(rowElement) {
+                                that._scrollToElement(rowElement);
+                                that.resizeCompleted.remove(that._scrollToFocusOnResize);
+                            }
                         };
 
-                        $row.attr("tabIndex", tabIndex);
+                        $(rowElement).attr("tabIndex", tabIndex);
+
                         if(rowIndex >= 0) {
                             if(columnIndex < 0) {
                                 columnIndex = 0;
@@ -774,12 +777,19 @@ module.exports = {
                             rowIndex += that.getController("data").getRowIndexOffset();
                             that.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
 
+                            const dataSource = that.component.getController("data")._dataSource;
+                            const operationTypes = dataSource && dataSource.operationTypes();
                             if(operationTypes && !operationTypes.paging) {
                                 that.resizeCompleted.remove(that._scrollToFocusOnResize);
                                 that.resizeCompleted.add(that._scrollToFocusOnResize);
                             }
                         }
                     }
+                },
+                _findRowElementForTabIndex: function() {
+                    const focusedRowKey = this.option("focusedRowKey");
+                    const rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
+                    return $(this.getRowElement(rowIndex >= 0 ? rowIndex : 0));
                 },
 
                 _scrollToElement: function(element) {
