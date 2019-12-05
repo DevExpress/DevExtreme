@@ -71,7 +71,14 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             hoverStateEnabled: true,
 
             parentIdExpr: "parentId",
-            expandedExpr: "expanded"
+            expandedExpr: "expanded",
+
+            /**
+             * @name CollectionWidgetOptions.selectedItemKeys
+             * @type Array<any>
+             * @fires CollectionWidgetOptions.onSelectionChanged
+             */
+            selectedItemKeys: null,
         });
     },
 
@@ -109,13 +116,17 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _initDataAdapter: function() {
         var accessors = this._createDataAdapterAccessors();
 
+        let items = this.option("items");
+        let selectedKeys = this.option("selectedItemKeys");
+        this._updateSelectedItemsBySelectedKeysOption(items, selectedKeys, accessors.getters['key']);
+
         this._dataAdapter = new HierarchicalDataAdapter(
             extend({
                 dataAccessors: {
                     getters: accessors.getters,
                     setters: accessors.setters
                 },
-                items: this.option("items")
+                items
             }, this._getDataAdapterOptions()));
     },
 
@@ -134,6 +145,17 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         }.bind(this), ["text", "html", "items", "icon"], this.option("integrationOptions.watchMethod"), {
             "text": this._displayGetter,
             "items": this._itemsGetter
+        });
+    },
+
+    _updateSelectedItemsBySelectedKeysOption: function(items, selectedKeys, keyGetter) {
+        if(this._initialized || selectedKeys === null) {
+            return;
+        }
+
+        items.forEach((item) => {
+            const itemKey = keyGetter(item);
+            item.selected = selectedKeys.indexOf(itemKey) !== -1;
         });
     },
 
