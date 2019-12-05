@@ -52,7 +52,7 @@ export default class TemplateManager {
         this._createTemplateIfNeeded = this._createTemplateIfNeeded.bind(this);
     }
 
-    static get defaultOptions() {
+    static createDefaultOptions() {
         return {
             integrationOptions: {
                 watchMethod: (fn, callback, options = {}) => {

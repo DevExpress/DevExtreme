@@ -4,7 +4,7 @@ import TemplateManager from './template_manager';
 
 const DOMComponentWithTemplate = DomComponent.inherit({
     _getDefaultOptions: function() {
-        return extend(this.callBase(), TemplateManager.defaultOptions);
+        return extend(this.callBase(), TemplateManager.createDefaultOptions());
     },
 
     _getAnonymousTemplateName: function() {
