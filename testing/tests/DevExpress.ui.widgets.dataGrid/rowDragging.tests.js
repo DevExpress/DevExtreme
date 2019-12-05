@@ -22,6 +22,7 @@ import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
+import browser from "core/utils/browser";
 import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 
 var generateData = function(rowCount) {
@@ -698,7 +699,7 @@ QUnit.test("Command drag cell should have cursor 'move' for data rows and 'defau
     assert.equal($($rowsView.getRowElement(1)).find("td").eq(2).css("cursor"), "default", "data cell in data row has default cursor");
 });
 
-QUnit.test("Command drag cell should have cursor 'grabbing' for dragging row", function(assert) {
+QUnit.test("Command drag cell should have cursor 'grabbing/pointer' for dragging row", function(assert) {
     // arrange
     let rowsView = this.createRowsView();
     rowsView.render($("#container"));
@@ -710,5 +711,6 @@ QUnit.test("Command drag cell should have cursor 'grabbing' for dragging row", f
 
     // assert
     let $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), "grabbing", "cursor is grabbing");
+    let cursor = browser.msie ? "pointer" : "grabbing";
+    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), cursor, `cursor is ${cursor}`);
 });
