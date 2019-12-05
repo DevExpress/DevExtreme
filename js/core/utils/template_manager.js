@@ -61,10 +61,9 @@ export const templateKey = (templateSource) => {
 export const defaultCreateElement = element => new Template(element);
 
 export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, skipTemplates) => {
-    const nonIntegrationTemplates = skipTemplates || [];
     let integrationTemplate = null;
 
-    if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
+    if(!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
         integrationTemplate = templates[templateSource];
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
             integrationTemplate = addOneRenderedCall(integrationTemplate);
