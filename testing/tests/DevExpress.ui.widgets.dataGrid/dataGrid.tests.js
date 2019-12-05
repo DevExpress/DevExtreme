@@ -74,6 +74,7 @@ import { keyboard } from "events/";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
+import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from "../../helpers/checkDxFontIconHelper.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -1930,26 +1931,29 @@ QUnit.test("Cursor should switch style when it was moved to columns separator if
     assert.equal(columnsSeparator.css("cursor"), "col-resize", "cursor style");
 });
 
-// T757579
-QUnit.test("Export icons must be the same size", function(assert) {
-    // arrange
+QUnit.test("export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)", function(assert) {
     $("#dataGrid").dxDataGrid({
-        dataSource: [],
-        "export": {
+        export: {
             enabled: true,
-            fileName: "Test",
             allowExportSelectedData: true
         }
     });
 
-    // act
     $(".dx-datagrid-export-button").trigger("dxclick");
-    var exportAllButton = $(".dx-icon-exportxlsx");
-    var exportSelectedButton = $(".dx-icon-exportselected");
 
-    // assert
-    assert.equal(exportAllButton.width(), exportSelectedButton.width(), "same width");
-    assert.equal(exportAllButton.height(), exportSelectedButton.height(), "same height");
+    checkDxFontIcon(assert, ".dx-icon-xlsxfile", DX_ICON_XLSX_FILE_CONTENT_CODE);
+    checkDxFontIcon(assert, ".dx-icon-exportselected", DX_ICON_EXPORT_SELECTED_CONTENT_CODE);
+});
+
+QUnit.test("export.enabled: true, allowExportSelectedData: false -> check export menu icons (T827793)", function(assert) {
+    $("#dataGrid").dxDataGrid({
+        export: {
+            enabled: true,
+            allowExportSelectedData: false
+        }
+    });
+
+    checkDxFontIcon(assert, ".dx-datagrid-export-button .dx-icon", DX_ICON_XLSX_FILE_CONTENT_CODE);
 });
 
 // T571282, T835869

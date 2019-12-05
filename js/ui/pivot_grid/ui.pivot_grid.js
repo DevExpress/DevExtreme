@@ -1258,7 +1258,7 @@ var PivotGrid = Widget.inherit({
         if(that.option("export.enabled")) {
             items.push({
                 beginGroup: true,
-                icon: "exportxlsx",
+                icon: "xlsxfile",
                 text: texts.exportToExcel,
                 onItemClick: function() {
                     that.exportToExcel();
@@ -1421,7 +1421,7 @@ var PivotGrid = Widget.inherit({
                 .appendTo($toolbarContainer)
                 .addClass("dx-pivotgrid-export-button");
             let buttonOptions = {
-                icon: "exportxlsx",
+                icon: "xlsxfile",
                 hint: this.option("texts.exportToExcel"),
                 onClick: () => {
                     this.exportToExcel();
