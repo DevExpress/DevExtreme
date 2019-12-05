@@ -1290,6 +1290,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _toggleSelectAll: function(args) {
         this._dataAdapter.toggleSelectAll(args.value);
         this._updateItemsUI();
+        this._updateSelectionOptions();
         this._fireSelectionChanged();
     },
 
