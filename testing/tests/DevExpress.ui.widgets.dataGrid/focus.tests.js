@@ -5559,7 +5559,7 @@ QUnit.test("autoNavigateToFocusedRow == false and paging", function(assert) {
     assert.equal(this.option("focusedRowKey"), "Mark2", "FocusedRowkey");
 });
 
-QUnit.test("autoNavigateToFocusedRow == false, paging, focusedRow on the current page", function(assert) {
+QUnit.test("Changing 'pageIndex' without focused row by API should not focus it by 'focusedRowIndex' if autoNavigateToFocusedRow == false", function(assert) {
     // arrange
     this.options = {
         height: 200,
@@ -5603,7 +5603,52 @@ QUnit.test("autoNavigateToFocusedRow == false, paging, focusedRow on the current
     assert.equal(this.option("focusedRowKey"), "Ben", "FocusedRowkey");
 });
 
-QUnit.testInActiveWindow("autoNavigateToFocusedRow == false, paging, focusedRow has focus", function(assert) {
+QUnit.test("Change 'pageIndex' by API without focused row should focus it by 'focusedRowIndex' if autoNavigateToFocusedRow == false and row or cell was focused", function(assert) {
+    // arrange
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowKey: "Ben",
+        // act
+        autoNavigateToFocusedRow: false,
+        keyExpr: "name",
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Ben", phone: "6666666", room: 2 },
+        { name: "Dan", phone: "553355", room: 3 },
+        { name: "Mark1", phone: "777777", room: 4 },
+        { name: "Mark2", phone: "888888", room: 5 },
+        { name: "Mark3", phone: "99999999", room: 6 }
+    ];
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+    const rowsView = this.gridView.getView("rowsView");
+    rowsView.resize();
+
+    // assert
+    assert.equal(this.option("focusedRowKey"), "Ben", "FocusedRowKey");
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex");
+
+    // act
+    $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
+
+    // act
+    this.pageIndex(1);
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex");
+    assert.equal(this.option("focusedRowKey"), "Mark1", "FocusedRowkey");
+});
+
+QUnit.testInActiveWindow("Changing 'pageIndex' with focused row by API should focus it if autoNavigateToFocusedRow == false", function(assert) {
     // arrange
     this.options = {
         focusedRowEnabled: true,
@@ -5648,7 +5693,6 @@ QUnit.testInActiveWindow("autoNavigateToFocusedRow == false, paging, focusedRow 
 QUnit.test("autoNavigateToFocusedRow == false focusedRowKey and pageIndex", function(assert) {
     // arrange
     this.options = {
-        height: 100,
         focusedRowEnabled: true,
         focusedRowKey: "Ben",
         // act
@@ -5674,7 +5718,6 @@ QUnit.test("autoNavigateToFocusedRow == false focusedRowKey and pageIndex", func
 
     this.gridView.render($("#container"));
     const rowsView = this.gridView.getView("rowsView");
-    rowsView.height(100);
     rowsView.resize();
 
     // assert
