@@ -8392,16 +8392,18 @@ QUnit.test("Pages should be loaded while scrolling fast if remoteOperations is t
 });
 
 // T815141
-QUnit.test("Virtual rows should not appear in viewport while slowly scrolling if server is slow and page size is huge", function(assert) {
+QUnit.test("Render should be sync while slowly scrolling if server is slow and page size is huge", function(assert) {
     // arrange
     var data = [],
         dataGrid,
         loadedPages = [],
         scrollable,
         responseTime = 500,
-        that = this;
+        that = this,
+        $dataGrid,
+        oldVirtualRowHeight;
 
-    for(let i = 0; i < 20; i++) {
+    for(let i = 0; i < 100; i++) {
         data.push({ field: "someData" });
     }
 
@@ -8435,15 +8437,25 @@ QUnit.test("Virtual rows should not appear in viewport while slowly scrolling if
     });
 
     that.clock.tick(1000);
+
+    $dataGrid = $(dataGrid.element());
     scrollable = dataGrid.getScrollable();
+
+    oldVirtualRowHeight = $dataGrid.find(".dx-virtual-row").first().height();
 
     for(let i = 1; i <= 10; i++) {
         // act
         scrollable.scrollTo({ y: 200 * i });
 
+        let virtualRowHeight = $dataGrid.find(".dx-virtual-row").first().height();
+
         // assert
         assert.deepEqual(loadedPages, [0, 1], "loaded pages");
-        assert.ok($(dataGrid.element()).find(".dx-virtual-row").first().height() <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+        assert.ok(virtualRowHeight <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+        assert.equal($dataGrid.find(".dx-data-row").length, 15, "data rows count");
+        assert.notEqual(virtualRowHeight, oldVirtualRowHeight, "virtual row height was changed");
+
+        oldVirtualRowHeight = virtualRowHeight;
     }
 });
 
