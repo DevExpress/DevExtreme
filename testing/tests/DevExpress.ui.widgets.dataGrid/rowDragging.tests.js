@@ -711,6 +711,6 @@ QUnit.test("Command drag cell should have cursor 'grabbing/pointer' for dragging
 
     // assert
     let $draggableElement = $("body").children(".dx-sortable-dragging");
-    let cursor = browser.msie ? "pointer" : "grabbing";
+    let cursor = browser.msie && parseInt(browser.version) <= 11 ? "pointer" : "grabbing";
     assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), cursor, `cursor is ${cursor}`);
 });

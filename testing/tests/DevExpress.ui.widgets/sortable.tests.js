@@ -199,7 +199,7 @@ QUnit.test("While dragging cursor should be 'grabbing/pointer'", function(assert
     pointerMock(this.$element.children().eq(0)).start().down().move(10, 0);
 
     // assert
-    let cursor = browser.msie ? "pointer" : "grabbing";
+    let cursor = browser.msie && parseInt(browser.version) <= 11 ? "pointer" : "grabbing";
     assert.equal($(".dx-sortable-dragging").css("cursor"), cursor, `cursor is ${cursor}`);
 });
 
