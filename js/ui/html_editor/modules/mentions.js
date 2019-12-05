@@ -3,7 +3,7 @@ import { compileGetter } from "../../../core/utils/data";
 import { isString } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 import { getPublicElement } from "../../../core/utils/dom";
-import { Event as dxEvent } from "../../../events";
+import { Event as dxEvent } from "../../../events/core/events_engine";
 
 import PopupModule from "./popup";
 import Mention from "../formats/mention";

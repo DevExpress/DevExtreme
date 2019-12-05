@@ -418,7 +418,7 @@ class ContextMenu extends MenuBase {
     }
 
     _attachKeyboardEvents() {
-        !this._keyboardProcessor && this._focusTarget().length && super._attachKeyboardEvents();
+        !this._keyboardListenerId && this._focusTarget().length && super._attachKeyboardEvents();
     }
 
     _renderContextMenuOverlay() {

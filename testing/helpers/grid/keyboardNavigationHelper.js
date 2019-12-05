@@ -1,12 +1,13 @@
 import $ from "jquery";
 import devices from "core/devices";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import {
     setupDataGridModules,
     MockDataController,
     MockColumnsController,
     MockSelectionController } from "../dataGridMocks.js";
 import pointerEvents from "events/pointer";
+import { keyboard } from "events/";
 import DataGridWrapper from "../wrappers/dataGridWrappers.js";
 
 export const dataGridWrapper = new DataGridWrapper("#container");
@@ -121,7 +122,10 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         shift = ctrl.shift;
         ctrl = ctrl.ctrl;
     }
-    this.keyboardNavigationController._keyDownProcessor.process({
+
+    const keyboardListenerId = this.keyboardNavigationController._keyDownListener;
+
+    keyboard._getProcessor(keyboardListenerId).process({
         key: KEYS[key] || key,
         keyName: key,
         ctrlKey: ctrl,

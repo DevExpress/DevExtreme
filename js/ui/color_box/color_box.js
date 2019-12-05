@@ -264,8 +264,7 @@ var ColorBox = DropDownEditor.inherit({
                 }
 
                 that._applyNewColor(args.value);
-            },
-            _keyboardProcessor: that._colorViewProcessor
+            }
         };
     },
 
@@ -319,12 +318,8 @@ var ColorBox = DropDownEditor.inherit({
         this.callBase();
     },
 
-    _attachChildKeyboardEvents: function() {
-        this._colorViewProcessor = this._keyboardProcessor.attachChildProcessor();
-        if(this._colorView) {
-            this._colorView.option("_keyboardProcessor", this._colorViewProcessor);
-            return;
-        }
+    _getKeyboardListeners() {
+        return this.callBase().concat([this._colorView]);
     },
 
     _init: function() {

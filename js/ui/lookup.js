@@ -954,15 +954,6 @@ var Lookup = DropDownList.inherit({
         this._renderSearch();
     },
 
-    _attachSearchChildProcessor: function(searchComponent) {
-        this._listKeyboardProcessor = this._listKeyboardProcessor || searchComponent._keyboardProcessor.attachChildProcessor();
-        this._setListOption("_keyboardProcessor", this._listKeyboardProcessor);
-    },
-
-    _detachSearchChildProcessor: function() {
-        this._setListOption("_keyboardProcessor", null);
-    },
-
     _renderSearch: function() {
         var isSearchEnabled = this.option("searchEnabled");
 
@@ -977,12 +968,13 @@ var Lookup = DropDownList.inherit({
             var currentDevice = devices.current(),
                 searchMode = currentDevice.android && currentDevice.version[0] >= 5 ? "text" : "search";
 
+            let isKeyboardListeningEnabled = false;
+
             this._searchBox = this._createComponent($searchBox, TextBox, {
-                onDisposing: function() {
-                    this._detachSearchChildProcessor();
-                }.bind(this),
-                onFocusIn: this._searchFocusHandler.bind(this),
-                onFocusOut: this._searchBlurHandler.bind(this),
+                onDisposing: () => isKeyboardListeningEnabled = false,
+                onFocusIn: () => isKeyboardListeningEnabled = true,
+                onFocusOut: () => isKeyboardListeningEnabled = false,
+                onKeyboardHandled: opts => isKeyboardListeningEnabled && this._list._keyboardHandler(opts),
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option("valueChangeEvent"),
@@ -995,14 +987,6 @@ var Lookup = DropDownList.inherit({
 
             this._setSearchPlaceholder();
         }
-    },
-
-    _searchFocusHandler: function(e) {
-        this._attachSearchChildProcessor(e.component);
-    },
-
-    _searchBlurHandler: function() {
-        this._detachSearchChildProcessor();
     },
 
     _removeSearch: function() {
@@ -1081,7 +1065,6 @@ var Lookup = DropDownList.inherit({
             pageLoadMode: this.option("pageLoadMode"),
             nextButtonText: this.option("nextButtonText"),
             indicateLoading: this.option("searchEnabled"),
-            _keyboardProcessor: this._listKeyboardProcessor,
             onSelectionChanged: this._getSelectionChangedHandler()
         });
     },
@@ -1106,8 +1089,6 @@ var Lookup = DropDownList.inherit({
             eventsEngine.trigger(this._$list, "focus");
         }
     },
-
-    _attachChildKeyboardEvents: commonUtils.noop,
 
     _focusTarget: function() {
         return this._$field;

@@ -6,7 +6,7 @@ import { extend } from "../../core/utils/extend";
 import registerComponent from "../../core/component_registrator";
 import tooltip from "../tooltip/ui.tooltip";
 import publisherMixin from "./ui.scheduler.publisher_mixin";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import DOMComponent from "../../core/dom_component";
 import Resizable from "../resizable";

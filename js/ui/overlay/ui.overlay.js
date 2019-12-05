@@ -24,7 +24,8 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     registerComponent = require("../../core/component_registrator"),
     Widget = require("../widget/ui.widget"),
-    KeyboardProcessor = require("../widget/ui.keyboard_processor"),
+    keyboard = require("../../events/").keyboard,
+
     selectors = require("../widget/selectors"),
     dragEvents = require("../../events/drag"),
     eventUtils = require("../../events/utils"),
@@ -1407,11 +1408,11 @@ var Overlay = Widget.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        this._keyboardProcessor = new KeyboardProcessor({
-            element: this._$content,
-            handler: this._keyboardHandler,
-            context: this
-        });
+        this._keyboardListenerId = keyboard.on(
+            this._$content,
+            null,
+            opts => this._keyboardHandler(opts)
+        );
     },
 
     _keyboardHandler: function(options) {

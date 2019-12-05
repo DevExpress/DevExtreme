@@ -1,5 +1,5 @@
 import $ from "jquery";
-import KeyboardProcessor from "ui/widget/ui.keyboard_processor";
+import KeyboardProcessor from "events/core/keyboard_processor";
 
 const { test } = QUnit;
 
@@ -35,24 +35,6 @@ QUnit.module("keyboardProcessor", {
 
     test("Calling process should invoke the handler and pass the original event, key name and ctrl status as arguments", function(assert) {
         this.processor = new KeyboardProcessor({ handler: this.createAssertionHandler(assert) });
-        this.processor.process(this.keyDownEvent);
-    });
-
-    test("keyboardProcessor should invoke the process of each childProcessor if the handler returns true", function(assert) {
-        assert.expect(2 * this.assertionHandlerAssertCount);
-        this.processor = new KeyboardProcessor({ element: this.element, handler: function() { return true; } });
-
-        const childProcessorA = this.processor.attachChildProcessor();
-        const childProcessorB = this.processor.attachChildProcessor();
-
-        childProcessorA.reinitialize(this.createAssertionHandler(assert));
-        childProcessorB.reinitialize(this.createAssertionHandler(assert));
-        this.element.trigger(this.keyDownEvent);
-    });
-
-    test("Specifying context should invoke handler in it", function(assert) {
-        const context = { keyDownHandler: function() { assert.strictEqual(this, context); } };
-        this.processor = new KeyboardProcessor({ handler: context.keyDownHandler, context: context });
         this.processor.process(this.keyDownEvent);
     });
 
