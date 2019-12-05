@@ -1,3 +1,16 @@
+const envTail = 'DEVEXTREME_TMP_TAIL';
+
+if(!process.env[envTail]) {
+    const date = new Date();
+    const padStart = (number) => ('0' + number).slice(-2);
+    const hours = padStart(date.getHours());
+    const minutes = padStart(date.getMinutes());
+
+    // We need to write the tail to the env because 'gulp-multi-process' will create multiple node processes
+    // which require this file multiple times
+    process.env[envTail] = hours + minutes;
+}
+
 const getDefaultFlavor = (label, minor, revision) => {
     return label
         ? (minor <= 2 ? 'beta' : '')
@@ -24,13 +37,7 @@ const getProductVersion = (version, revision) => {
 
 const getRevision = (revision) => {
     if(!revision) return '';
-
-    const date = new Date();
-    const padStart = (number) => ('0' + number).slice(-2);
-
-    const hours = padStart(date.getHours());
-    const minutes = padStart(date.getMinutes());
-    return revision + '-' + hours + minutes;
+    return revision + '-' + process.env[envTail];
 };
 
 module.exports = (baseVersion, dxBuildLabel, dxBuildFlavor, dxBuildRevision) => {
