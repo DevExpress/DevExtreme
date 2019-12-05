@@ -568,7 +568,7 @@ module.exports = {
                             if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
                                 focusController._focusRowByIndex();
                             }
-                        } else if(!isAutoNavigate) {
+                        } else {
                             this.option("focusedRowIndex", -1);
                         }
                     } else if(!pagingByRendering) {
