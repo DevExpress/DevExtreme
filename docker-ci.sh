@@ -42,6 +42,7 @@ function run_test {
     local runner_result=0
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
+    [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
 
     if [ "$HEADLESS" != "true" ]; then
@@ -75,6 +76,7 @@ function run_test {
                 --no-sandbox \
                 --disable-dev-shm-usage \
                 --disable-gpu \
+                --disable-extensions \
                 --user-data-dir=/tmp/chrome";
 
             if [ "$HEADLESS" == "true" ]; then
@@ -107,6 +109,8 @@ function run_test {
                     --touch-events \
                     --enable-overlay-scrollbar \
                     --enable-features=OverlayScrollbar"
+            else
+                chrome_command="$chrome_command --user-data-dir=/tmp/chrome"
             fi
 
             chrome_command="$chrome_command \"$url\""
