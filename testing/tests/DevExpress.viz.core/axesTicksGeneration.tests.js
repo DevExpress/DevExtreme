@@ -1467,6 +1467,23 @@ QUnit.test("Adjust first tick by interval", function(assert) {
     assert.deepEqual(this.axis._majorTicks.map(value)[0], -1e-40);
 });
 
+// T837583
+QUnit.test("Min value is zero", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10
+    });
+
+    this.axis.setBusinessRange({ min: 0, max: 100, linearThreshold: 1 });
+
+    // act
+    this.axis.createTicks(canvas(450));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 10, 100]);
+});
+
 QUnit.module("Logarithmic. Misc", environment);
 
 QUnit.test("endOnTick is undefined - calculate ticks inside data bounds", function(assert) {
