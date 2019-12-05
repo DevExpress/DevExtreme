@@ -5,6 +5,7 @@ import { extend } from './extend';
 import { getElementOptions, normalizeTemplateElement } from './dom';
 import devices from '../devices';
 import { Template } from '../templates/template';
+import { TemplateBase } from '../templates/template_base';
 
 export const findTemplateByDevice = (templates) => {
     const suitableTemplate = findBestMatches(
@@ -58,3 +59,17 @@ export const templateKey = (templateSource) => {
 };
 
 export const defaultCreateElement = element => new Template(element);
+
+export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, skipTemplates) => {
+    const nonIntegrationTemplates = skipTemplates || [];
+    let integrationTemplate = null;
+
+    if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
+        integrationTemplate = templates[templateSource];
+        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
+            integrationTemplate = addOneRenderedCall(integrationTemplate);
+        }
+    }
+
+    return integrationTemplate;
+};

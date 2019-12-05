@@ -4,15 +4,15 @@ import { noop } from './utils/common';
 import { extend } from './utils/extend';
 import { Error, log } from './errors';
 import { getElementOptions } from './utils/dom';
-import { TemplateBase } from './templates/template_base';
 import { FunctionTemplate } from './templates/function_template';
 import { EmptyTemplate } from './templates/empty_template';
 import { ChildDefaultTemplate } from './templates/child_default_template';
 import { camelize } from './utils/inflector';
+import { TemplateBase } from './templates/template_base';
 import {
     findTemplateByDevice, addOneRenderedCall, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource,
-    defaultCreateElement,
+    defaultCreateElement, acquireIntegrationTemplate,
 } from './utils/template_manager';
 
 const TEXT_NODE = 3;
@@ -129,9 +129,8 @@ export default class TemplateManager {
 
             return !(isTextNode && isEmptyText);
         });
-        const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
-        return !onlyJunkTemplateContent
+        return $notJunkTemplateContent.length > 0
             ? { template: this._createTemplate($anonymousTemplate), name: this._anonymousTemplateName }
             : {};
     }
@@ -178,6 +177,7 @@ export default class TemplateManager {
         });
     }
 
+    // TODO: should we extract it inti utils?
     _acquireTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates) {
         if(templateSource == null) {
             return new EmptyTemplate();
@@ -200,21 +200,7 @@ export default class TemplateManager {
             return createTemplate($(templateSource));
         }
 
-        return this._acquireStringTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates);
-    }
-
-    _acquireStringTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates) {
-        const nonIntegrationTemplates = skipTemplates || [];
-        let integrationTemplate = null;
-
-        if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
-            integrationTemplate = templates[templateSource];
-            if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
-                integrationTemplate = addOneRenderedCall(integrationTemplate);
-            }
-        }
-
-        return integrationTemplate
+        return acquireIntegrationTemplate(templateSource, templates, isAsyncTemplate, skipTemplates)
             || this._defaultTemplates[templateSource]
             || createTemplate(templateSource);
     }
