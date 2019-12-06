@@ -8445,7 +8445,7 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
     assert.strictEqual(dataGrid.getVisibleRows()[0].data.room, 120);
 });
 
-function fastScrollTest(assert, that, responseTime, expectedLoadedPages) {
+function fastScrollTest(assert, that, responseTime, scrollStep, expectedLoadedPages) {
     // arrange
     var data = [],
         dataGrid,
@@ -8482,15 +8482,15 @@ function fastScrollTest(assert, that, responseTime, expectedLoadedPages) {
         }
     });
 
-    that.clock.tick(600);
+    that.clock.tick(1000);
     scrollable = dataGrid.getScrollable();
 
     // assert
-    assert.deepEqual(loadedPages, [0, 1]);
+    assert.deepEqual(loadedPages, [0, 1], "loaded pages");
 
     // act
     for(let i = 1; i <= 5; i++) {
-        scrollable.scrollTo({ y: 700 * i });
+        scrollable.scrollTo({ y: scrollStep * i });
         that.clock.tick(10);
     }
 
@@ -8502,12 +8502,80 @@ function fastScrollTest(assert, that, responseTime, expectedLoadedPages) {
 
 // T815141
 QUnit.test("Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow", function(assert) {
-    fastScrollTest(assert, this, 300, [0, 1, 5, 6]);
+    fastScrollTest(assert, this, 500, 1200, [0, 1, 2, 8, 9]);
 });
 
 // T815141
 QUnit.test("Pages should be loaded while scrolling fast if remoteOperations is true and server is fast", function(assert) {
-    fastScrollTest(assert, this, 50, [0, 1, 2, 3, 4, 5, 6]);
+    fastScrollTest(assert, this, 50, 700, [0, 1, 2, 3, 4, 5, 6]);
+});
+
+// T815141
+QUnit.test("Render should be sync while slowly scrolling if server is slow and page size is huge", function(assert) {
+    // arrange
+    var data = [],
+        dataGrid,
+        loadedPages = [],
+        scrollable,
+        responseTime = 500,
+        that = this,
+        $dataGrid,
+        oldVirtualRowHeight;
+
+    for(let i = 0; i < 100; i++) {
+        data.push({ field: "someData" });
+    }
+
+    dataGrid = createDataGrid({
+        height: 300,
+        remoteOperations: true,
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+
+                loadedPages.push(loadOptions.skip / 100);
+
+                setTimeout(function() {
+                    d.resolve({
+                        data: data,
+                        totalCount: 1000
+                    });
+                }, responseTime);
+
+                return d.promise();
+            }
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        paging: {
+            pageSize: 100
+        }
+    });
+
+    that.clock.tick(1000);
+
+    $dataGrid = $(dataGrid.element());
+    scrollable = dataGrid.getScrollable();
+
+    oldVirtualRowHeight = $dataGrid.find(".dx-virtual-row").first().height();
+
+    for(let i = 1; i <= 10; i++) {
+        // act
+        scrollable.scrollTo({ y: 200 * i });
+
+        let virtualRowHeight = $dataGrid.find(".dx-virtual-row").first().height();
+
+        // assert
+        assert.deepEqual(loadedPages, [0, 1], "loaded pages");
+        assert.ok(virtualRowHeight <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+        assert.equal($dataGrid.find(".dx-data-row").length, 15, "data rows count");
+        assert.notEqual(virtualRowHeight, oldVirtualRowHeight, "virtual row height was changed");
+
+        oldVirtualRowHeight = virtualRowHeight;
+    }
 });
 
 // T634232
