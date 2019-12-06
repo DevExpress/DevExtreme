@@ -589,7 +589,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _selectedItemKeysOptionChange: function(keys) {
-        const diff = this.getSelectedKeysDiff(keys);
+        const diff = this._getSelectedKeysDiff(keys);
         diff.toDeselect.forEach((key) => {
             this._updateItemSelection(false, key, null, true);
         });
@@ -602,7 +602,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    getSelectedKeysDiff(newSelectedKeys) {
+    _getSelectedKeysDiff(newSelectedKeys) {
         let toSelect = [],
             toDeselect = [],
             oldSelectedKeys = this.getSelectedNodesKeys();
