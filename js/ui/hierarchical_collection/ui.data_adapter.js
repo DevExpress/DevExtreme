@@ -439,6 +439,17 @@ var DataAdapter = Class.inherit({
         }
     },
 
+    isChildKeyOrContains(key, parentKeys) {
+        let node = this.getNodeByKey(key);
+        while(node != null) {
+            if(parentKeys.indexOf(node.internalFields.key) !== -1) {
+                return true;
+            }
+            node = this.getNodeByKey(node.internalFields.parentKey);
+        }
+        return false;
+    },
+
     toggleExpansion: function(key, state) {
         var node = this.getNodeByKey(key);
         this._setFieldState(node, EXPANDED, state);

@@ -111,7 +111,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
         let items = this.option("items");
         let selectedKeys = this.option("selectedItemKeys");
-        this._initSelectionBySelectedKeysOption(items, selectedKeys, accessors.getters['key']);
+        this._setItemsSelectionBySelectedKeysOption(items, selectedKeys, accessors.getters['key']);
 
         this._dataAdapter = new HierarchicalDataAdapter(
             extend({
@@ -125,7 +125,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _getDataAdapterOptions: noop,
 
-    _initSelectionBySelectedKeysOption: noop,
+    _setItemsSelectionBySelectedKeysOption: noop,
 
     _initDynamicTemplates: function() {
         var that = this;
