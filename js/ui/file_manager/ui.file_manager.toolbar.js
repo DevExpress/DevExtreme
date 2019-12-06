@@ -6,6 +6,7 @@ import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 import Toolbar from "../toolbar";
+require("../drop_down_button");
 
 const FILE_MANAGER_TOOLBAR_CLASS = "dx-filemanager-toolbar";
 const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";

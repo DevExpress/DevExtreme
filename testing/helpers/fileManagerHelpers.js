@@ -5,6 +5,7 @@ import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 export const Consts = {
     WIDGET_CLASS: "dx-filemanager",
     TOOLBAR_CLASS: "dx-filemanager-toolbar",
+    NATIVE_TOOLBAR_CLASS: "dx-toolbar",
     GENERAL_TOOLBAR_CLASS: "dx-filemanager-general-toolbar",
     FILE_TOOLBAR_CLASS: "dx-filemanager-file-toolbar",
     CONTAINER_CLASS: "dx-filemanager-container",
@@ -33,7 +34,8 @@ export const Consts = {
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
     BUTTON_TEXT_CLASS: "dx-button-text",
-    SELECT_BOX_CLASS: "dx-selectbox",
+    DROP_DOWN_BUTTON_CLASS: "dx-dropdownbutton",
+    DROP_DOWN_BUTTON_ACTION_CLASS: "dx-dropdownbutton-action",
     TEXT_EDITOR_INPUT_CLASS: "dx-texteditor-input",
     MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
     CONTEXT_MENU_CLASS: "dx-context-menu",
@@ -135,12 +137,12 @@ export class FileManagerWrapper {
     }
 
     getToolbarElements() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.SELECT_BOX_CLASS}:visible input[type='hidden']`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getGeneralToolbarElements() {
         const _$generalToolbar = this.getToolbar().children().first();
-        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}, .${Consts.SELECT_BOX_CLASS}:visible input[type='hidden']`);
+        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarButton(text) {
