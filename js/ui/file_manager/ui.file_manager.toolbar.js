@@ -251,6 +251,8 @@ class FileManagerToolbar extends Widget {
             return { name, text, icon };
         });
 
+        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 1 : 0;
+
         return {
             cssClass: FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS,
             widget: "dxDropDownButton",
@@ -259,6 +261,7 @@ class FileManagerToolbar extends Widget {
                 keyExpr: "name",
                 selectedItemKey: this.option("itemViewMode"),
                 displayExpr: " ",
+                hint: commandItems[selectedIndex].text,
                 stylingMode: "text",
                 showArrowIcon: false,
                 useSelectMode: true,
