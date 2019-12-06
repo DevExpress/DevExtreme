@@ -1220,7 +1220,16 @@ QUnit.module("popup", moduleConfig, () => {
     });
 });
 
-QUnit.module("dataSource integration", moduleConfig, function() {
+QUnit.module("dataSource integration", {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+        fx.off = false;
+    }
+}, function() {
     QUnit.test("guid integration", function(assert) {
         const value = "6fd3d2c5-904d-4e6f-a302-3e277ef36630";
         const data = [new Guid(value)];
