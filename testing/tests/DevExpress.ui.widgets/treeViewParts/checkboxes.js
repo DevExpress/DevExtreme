@@ -404,7 +404,7 @@ QUnit.module("Checkboxes", () => {
                         wrapper.checkCallbackCallCount('onSelectionChanged', 1);
                     });
 
-                    QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true - invalid config`, function() {
+                    QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true   - invalid config`, function() {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
                             { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                             { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
@@ -434,7 +434,7 @@ QUnit.module("Checkboxes", () => {
                         wrapper.checkCallbackCallCount('onSelectionChanged', 0);
                     });
 
-                    QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll`, function() {
+                    QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll   - invalid config`, function() {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
                             { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                             { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
@@ -467,7 +467,7 @@ QUnit.module("Checkboxes", () => {
                         wrapper.checkCallbackCallCount('onSelectionChanged', 1);
                     });
 
-                    QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll`, function() {
+                    QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll   - invalid config`, function() {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: false }, [
                             { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                             { id: 2, text: "item1_1", parentId: 1, selected: true, expanded },
@@ -480,7 +480,7 @@ QUnit.module("Checkboxes", () => {
                         wrapper.checkCallbackCallCount('onSelectionChanged', 0);
                     });
 
-                    QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true`, function() {
+                    QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true   - invalid config`, function() {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
                             { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
@@ -506,7 +506,7 @@ QUnit.module("Checkboxes", () => {
                         wrapper.checkSelectedKeys(expectedKeys);
                     });
 
-                    QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll`, function() {
+                    QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll   - invalid config`, function() {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
                             { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
@@ -523,7 +523,7 @@ QUnit.module("Checkboxes", () => {
                         wrapper.checkCallbackCallCount('onSelectionChanged', 0);
                     });
 
-                    QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll`, function() {
+                    QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll   - invalid config`, function() {
                         const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
                             { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                             { id: 2, text: "item1_1", parentId: 1, selected: false, expanded },
@@ -743,7 +743,7 @@ QUnit.module("Checkboxes", () => {
                             wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 0 : 1);
                             wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 0 : 1);
                         });
-                        QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> selectItem(item1_1 key)`, function() {
+                        QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> selectItem(item1_1 key)   - invalid config`, function() {
                             const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectNodesRecursive: true }, [
                                 { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded },
                                 { id: 2, text: "item1_1", parentId: 1, selected, expanded }]);
@@ -863,7 +863,7 @@ QUnit.module("Checkboxes", () => {
                             wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 1 : 0);
                             wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 1 : 0);
                         });
-                        QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> unselectItem(item1_1 key)`, function() {
+                        QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> unselectItem(item1_1 key)   - invalid config`, function() {
                             const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'multiple', selectNodesRecursive: true }, [
                                 { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                                 { id: 2, text: "item1_1", parentId: 1, selected, expanded }]);
@@ -973,7 +973,7 @@ QUnit.module("Checkboxes", () => {
                                 wrapper.checkCallbackCallCount('onSelectionChanged', 1);
                             });
 
-                            QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectItem(item1 key)`, function() {
+                            QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectItem(item1 key)    - invalid config`, function() {
                                 const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive: selectNodesRecursive }, [
                                     { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded },
                                     { id: 2, text: "item1_1", parentId: 1, selected: true, expanded }]);
@@ -991,7 +991,7 @@ QUnit.module("Checkboxes", () => {
                                 wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
                                 wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
                             });
-                            QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectItem(item1_1 key)`, function() {
+                            QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectItem(item1_1 key)   - invalid config`, function() {
                                 const wrapper = createWrapper({ dataSourceOption, virtualModeEnabled, selectionMode: 'single', selectNodesRecursive: selectNodesRecursive }, [
                                     { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded },
                                     { id: 2, text: "item1_1", parentId: 1, selected, expanded }]);
