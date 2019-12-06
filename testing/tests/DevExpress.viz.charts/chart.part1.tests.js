@@ -30,7 +30,7 @@ QUnit.test("Theme manager with no settings", function(assert) {
     var chart = this.createChart({});
 
     assert.equal(this.createThemeManager.callCount, 1);
-    assert.deepEqual(this.createThemeManager.lastCall.args, [{ themeSection: "chart", options: chart._options, fontFields: [
+    assert.deepEqual(this.createThemeManager.lastCall.args, [{ themeSection: "chart", options: chart.option(), fontFields: [
         "legend.font",
         "legend.title.font",
         "legend.title.subtitle.font",

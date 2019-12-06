@@ -1675,7 +1675,7 @@ QUnit.test("Appointment should push correct data to the onAppointmentUpdating ev
         width: 800
     });
 
-    var stub = sinon.stub(this.instance._options, "onAppointmentUpdating");
+    var stub = sinon.stub(this.instance.option(), "onAppointmentUpdating");
     var $appointment = this.scheduler.appointments.getAppointment(0);
 
     let pointer = pointerMock($appointment).start().down().move(10, 10);

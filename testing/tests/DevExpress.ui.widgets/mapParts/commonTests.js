@@ -833,8 +833,8 @@ QUnit.test("change provider and async options", function(assert) {
     return new Promise(function(resolve) {
         new Map($("#map"), makeConfig(resolve));
     }).then(function(map) {
-        map._options.provider = "bing";
-        return new Promise(function(resolve) {
+        map._setOptionByStealth("provider", "bing");
+        return new Promise((resolve) => {
             map.option(makeConfig(resolve));
         });
     }).then(function(map) {

@@ -222,10 +222,10 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
-        this._options[optionsContainer] = extend({}, innerWidget.option());
-        innerWidget.on("optionChanged", function(e) {
-            this._options[optionsContainer] = extend({}, e.component.option());
-        }.bind(this));
+        this._setOptionByStealth(optionsContainer, extend({}, innerWidget.option()));
+        innerWidget.on("optionChanged", (e) => {
+            this._setOptionByStealth(optionsContainer, extend({}, e.component.option()));
+        });
     },
 
     _getAriaTarget: function() {
