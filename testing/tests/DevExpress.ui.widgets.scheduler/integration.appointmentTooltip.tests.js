@@ -277,40 +277,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         assert.equal(stub.calledOnce, false, 'Observer was not notified');
     });
 
-    test('Shown tooltip should have right boundary', function(assert) {
-        const tasks = [
-            {
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 11, 0, 30),
-                allDay: true
-            }
-        ];
-        const data = new DataSource({
-            store: tasks
-        });
-
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
-
-        const $firstAppointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(1),
-            firstItemData = dataUtils.data($firstAppointment[0], 'dxItemData');
-
-        scheduler.instance.showAppointmentTooltip(firstItemData, $firstAppointment);
-        assert.deepEqual(Tooltip.getInstance($('.dx-tooltip')).option('position').boundary.get(0), scheduler.instance.getWorkSpace().$element().find('.dx-scrollable-container').get(0), 'Boundary is correct');
-
-        const $secondAppointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0),
-            secondItemData = dataUtils.data($secondAppointment[0], 'dxItemData');
-
-        scheduler.instance.showAppointmentTooltip(secondItemData, $secondAppointment);
-        assert.deepEqual(Tooltip.getInstance($('.dx-tooltip')).option('position').boundary.get(0), $(scheduler.instance.$element()).get(0), 'Boundary of allDay appointment is correct');
-    });
-
-    test('\'rtlEnabled\' option value should be passed to appointmentTooltip', function(assert) {
+    test('rtlEnabled option value should be passed to appointmentTooltip', function(assert) {
         const data = new DataSource({
             store: getSampleData()
         });
@@ -511,35 +478,6 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         scheduler.appointments.click(1);
 
         assert.equal(scheduler.tooltip.getDateText(), 'February 9, 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
-    });
-
-    test('Click on tooltip-edit button should call scheduler.showAppointmentPopup and hide tooltip', function(assert) {
-        var data = new DataSource({
-            store: getSampleData()
-        });
-
-        const scheduler = createScheduler({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data
-        });
-
-        var stub = sinon.stub(scheduler.instance, 'showAppointmentPopup');
-
-        scheduler.appointments.click(1);
-        scheduler.tooltip.clickOnItem();
-
-        var args = stub.getCall(0).args;
-
-        assert.deepEqual(args[0], {
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 12, 0),
-            text: 'Task 2'
-        },
-        'showAppointmentPopup has a right appointment data arg');
-
-        assert.equal(args[1], false, 'showAppointmentPopup has a right \'createNewAppointment\' arg');
-
-        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
     });
 
     test('Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip', function(assert) {
@@ -833,25 +771,6 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         assert.ok(notifyStub.called, 'notify is called');
         assert.ok(notifyStub.withArgs('deleteAppointment').called, 'deleteAppointment is called');
         assert.notOk(notifyStub.withArgs('showAppointmentTooltip').called, 'showAppointmentTooltip isn\'t called');
-    });
-
-    test('Tooltip should has right boundary in timeline view if appointment is allDay', function(assert) {
-        const scheduler = createScheduler({
-            dataSource: [{
-                startDate: new Date(2018, 8, 24),
-                endDate: new Date(2018, 8, 25)
-            }],
-            currentView: 'timelineDay',
-            currentDate: new Date(2018, 8, 24)
-        });
-
-        scheduler.appointments.click(0);
-
-        var tooltip = Tooltip.getInstance($('.dx-tooltip')),
-            tooltipBoundary = tooltip.option('position').boundary.get(0),
-            containerBoundary = scheduler.instance.getWorkSpaceScrollableContainer().get(0);
-
-        assert.deepEqual(tooltipBoundary, containerBoundary, 'tooltip has right boundary');
     });
 
     test('the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a recurrence rule', function(assert) {
