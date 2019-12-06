@@ -134,7 +134,17 @@ export const hasTouches = e => {
     return 0;
 };
 
+// TODO: for tests
+let skipEvents = false;
+export const forceSkipEvents = () => skipEvents = true;
+export const stopEventsSkipping = () => skipEvents = false;
+
 export const needSkipEvent = e => {
+    // TODO: for tests
+    if(skipEvents) {
+        return true;
+    }
+
     // TODO: this checking used in swipeable first move handler. is it correct?
     const { target } = e;
     const $target = $(target);
