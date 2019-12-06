@@ -227,9 +227,8 @@ var Component = Class.inherit({
             this._lockUpdate();
             this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
             this._removeLockUpdate();
+            this._initialized = true;
         }
-
-        this._initialized = true;
     },
 
     /**
