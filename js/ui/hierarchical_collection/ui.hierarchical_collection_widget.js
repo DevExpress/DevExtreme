@@ -71,14 +71,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             hoverStateEnabled: true,
 
             parentIdExpr: "parentId",
-            expandedExpr: "expanded",
-
-            /**
-             * @name CollectionWidgetOptions.selectedItemKeys
-             * @type Array<any>
-             * @fires CollectionWidgetOptions.onSelectionChanged
-             */
-            selectedItemKeys: null,
+            expandedExpr: "expanded"
         });
     },
 

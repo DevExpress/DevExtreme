@@ -360,7 +360,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @type_function_param1_field4 value:boolean
              * @action
              */
-            onSelectAllValueChanged: null
+            onSelectAllValueChanged: null,
 
             /**
              * @name dxTreeViewOptions.onSelectionChanged
@@ -393,9 +393,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxTreeViewOptions.selectedItemKeys
-            * @hidden
-            */
+             * @name CollectionWidgetOptions.selectedItemKeys
+             * @type Array<any>
+             * @fires CollectionWidgetOptions.onSelectionChanged
+             */
+            selectedItemKeys: null,
 
             /**
             * @name dxTreeViewOptions.selectedIndex
