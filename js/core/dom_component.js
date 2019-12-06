@@ -191,21 +191,21 @@ const DOMComponent = Component.inherit({
     },
 
     _attachDimensionChangeHandlers() {
-        const $el = this.$element();
+        const $element = this.$element();
         const namespace = `${this.NAME}VisibilityChange`;
 
-        resizeEvent.off($el, { namespace });
-        resizeEvent.on($el, () => this._dimensionChanged(), { namespace });
+        resizeEvent.off($element, { namespace });
+        resizeEvent.on($element, () => this._dimensionChanged(), { namespace });
     },
 
     _attachVisibilityChangeHandlers() {
         if(this._isVisibilityChangeSupported()) {
-            const $el = this.$element();
+            const $element = this.$element();
             const namespace = `${this.NAME}VisibilityChange`;
 
             this._isHidden = !this._isVisible();
-            visibilityEvents.off($el, { namespace });
-            visibilityEvents.on($el,
+            visibilityEvents.off($element, { namespace });
+            visibilityEvents.on($element,
                 () => this._checkVisibilityChanged('shown'),
                 () => this._checkVisibilityChanged('hiding'),
                 { namespace }
@@ -247,7 +247,7 @@ const DOMComponent = Component.inherit({
     },
 
     _invalidate() {
-        if(!this._updateLockCount) {
+        if(this._isUpdateAllowed()) {
             throw errors.Error('E0007');
         }
 
@@ -404,19 +404,20 @@ const DOMComponent = Component.inherit({
             .join(' ');
     },
 
-    endUpdate() {
-        const requireRender = !this._initializing && !this._initialized;
-
-        this.callBase.apply(this, arguments);
-
-        if(!this._updateLockCount) {
-            if(requireRender) {
-                this._renderComponent();
-            } else if(this._requireRefresh) {
-                this._requireRefresh = false;
-                this._refresh();
-            }
+    _updateDOMComponent(requireRender) {
+        if(requireRender) {
+            this._renderComponent();
+        } else if(this._requireRefresh) {
+            this._requireRefresh = false;
+            this._refresh();
         }
+    },
+
+    endUpdate() {
+        const requireRender = this._isInitializingRequired();
+
+        this.callBase();
+        this._isUpdateAllowed() && this._updateDOMComponent(requireRender);
     },
 
     $element() {

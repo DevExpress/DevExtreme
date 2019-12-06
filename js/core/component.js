@@ -192,6 +192,46 @@ var Component = Class.inherit({
         this._disposed = true;
     },
 
+    _lockUpdate() {
+        this._updateLockCount++;
+    },
+
+    _removeLockUpdate() {
+        this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
+    },
+
+    // TODO: remake as getter after ES6 refactor
+    _isUpdateAllowed() {
+        return this._updateLockCount === 0;
+    },
+
+    // TODO: remake as getter after ES6 refactor
+    _isInitializingRequired() {
+        return !this._initializing && !this._initialized;
+    },
+
+    _commitUpdate() {
+        this.postponedOperations.callPostponedOperations();
+        if(this._isInitializingRequired()) {
+            this._commitInit();
+        }
+    },
+
+    _commitInit() {
+        this._initializing = true;
+
+        try {
+            this._init();
+        } finally {
+            this._initializing = false;
+            this._lockUpdate();
+            this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+            this._removeLockUpdate();
+        }
+
+        this._initialized = true;
+    },
+
     /**
      * @name componentmethods.instance
      * @publicName instance()
@@ -206,7 +246,7 @@ var Component = Class.inherit({
      * @publicName beginUpdate()
      */
     beginUpdate: function() {
-        this._updateLockCount++;
+        this._lockUpdate();
     },
 
     /**
@@ -214,22 +254,8 @@ var Component = Class.inherit({
      * @publicName endUpdate()
      */
     endUpdate: function() {
-        this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
-        if(!this._updateLockCount) {
-            this.postponedOperations.callPostponedOperations();
-            if(!this._initializing && !this._initialized) {
-                this._initializing = true;
-                try {
-                    this._init();
-                } finally {
-                    this._initializing = false;
-                    this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
-                    this._updateLockCount--;
-                    this._initialized = true;
-                }
-            }
-        }
+        this._removeLockUpdate();
+        this._isUpdateAllowed() && this._commitUpdate();
     },
 
     _optionChanging: noop,
