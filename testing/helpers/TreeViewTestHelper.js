@@ -82,6 +82,9 @@ class TreeViewTestWrapper {
     checkSelectedKeys(expectedSelectedKeys) {
         const actualSelectedKeys = this.instance._dataAdapter.getSelectedNodesKeys();
         assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort());
+
+        const selectedKeysFromOption = this.instance.option('selectedItemKeys');
+        assert.deepEqual(selectedKeysFromOption.sort(), expectedSelectedKeys.sort());
     }
 
     checkCallbackCallCount(eventName, expectedCallCount) {

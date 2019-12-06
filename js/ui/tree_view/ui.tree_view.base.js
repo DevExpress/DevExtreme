@@ -1204,6 +1204,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _appendItems: function(newItems) {
         this.option().items = this.option("items").concat(newItems);
         this._initDataAdapter();
+
+        this._updateSelectionOptions();
     },
 
     _updateExpandedItem: function(node, state, e) {
@@ -1944,6 +1946,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataAdapter = this._dataAdapter;
         each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
         this.repaint();
+        this._updateSelectionOptions();
     },
 
     /**
