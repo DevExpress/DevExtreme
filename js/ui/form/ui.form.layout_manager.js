@@ -124,18 +124,20 @@ const LayoutManager = Widget.inherit({
     },
 
     _syncDataWithItems: function() {
-        var that = this,
-            userItems = that.option("items");
+        const layoutData = this.option("layoutData");
+        const userItems = this.option("items");
 
         if(isDefined(userItems)) {
-            each(userItems, function(index, item) {
-                var value;
-                if(item.dataField && that._getDataByField(item.dataField) === undefined) {
+            userItems.forEach(item => {
+                if(item.dataField && this._getDataByField(item.dataField) === undefined) {
+                    let value;
                     if(item.editorOptions) {
                         value = item.editorOptions.value;
                     }
 
-                    that._updateFieldValue(item.dataField, value);
+                    if(isDefined(value) || item.dataField in layoutData) {
+                        this._updateFieldValue(item.dataField, value);
+                    }
                 }
             });
         }
