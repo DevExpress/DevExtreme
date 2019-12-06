@@ -56,8 +56,11 @@ export class CompactAppointmentsHelper {
         this.instance.showAppointmentTooltipCore(
             $button,
             $button.data("items"),
-            this.instance.raiseClickEvent.bind(this.instance),
-            this.instance.createTooltipDragBehavior.bind(this.instance)
+            {
+                clickEvent: this.instance.raiseClickEvent.bind(this.instance),
+                dragBehavior: this.instance.createTooltipDragBehavior.bind(this.instance),
+                dropDownAppointmentTemplate: this.instance.option("dropDownAppointmentTemplate")
+            }
         );
     }
 

@@ -1041,33 +1041,6 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
         assert.equal(scheduler.appointments.compact.getButtonCount(), 0, 'Compact button shouldn\'t render after click delete button');
     });
 
-    test('Templates should valid markup', function(assert) {
-        const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = 'appointment-tooltip-template-marker';
-        const DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME = 'drop-down-appointment-template';
-
-        const hasElementInTooltipItem = (className) => {
-            return scheduler.tooltip.getItemElement().html().indexOf(`<div class="${className}">`) !== -1;
-        };
-
-        const scheduler = createScheduler({
-            appointmentTooltipTemplate: () => $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME)
-        });
-
-        scheduler.appointments.click();
-        assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), '\'appointmentTooltipTemplate\' should render for cell appointment');
-
-        scheduler.appointments.compact.click();
-        assert.ok(hasElementInTooltipItem(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME), '\'appointmentTooltipTemplate\' should render for compact appointment');
-
-        scheduler.instance.option('dropDownAppointmentTemplate', () => $('<div />').addClass(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME));
-
-        scheduler.appointments.click();
-        assert.notOk(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), '\'dropDownAppointmentTemplate\' shouldn\'t render for cell appointment');
-
-        scheduler.appointments.compact.click();
-        assert.ok(hasElementInTooltipItem(DROP_DOWN_APPOINTMENT_TEMPLATE_CLASS_NAME), '\'dropDownAppointmentTemplate\' should render for compact appointment');
-    });
-
     test('appointmentTooltipTemplate method should pass valid arguments', function(assert) {
         let templateCallCount = 0;
         const scheduler = createScheduler({

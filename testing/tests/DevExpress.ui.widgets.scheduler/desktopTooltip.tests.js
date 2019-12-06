@@ -281,3 +281,30 @@ QUnit.test("Delete button should't create, editing = false", function(assert) {
 
     assert.equal(stubCreateComponent.getCall(2), undefined);
 });
+
+// deprecated option
+QUnit.test("dropDownAppointmentTemplate equal to 'dropDownAppointment'", function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = ['data1', 'data2'];
+    const item = { data: "data", currentData: "currentData", color: { done: sinon.spy() } };
+
+    tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: "dropDownAppointment" }));
+    stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
+    stubCreateComponent.getCall(1).args[2].itemTemplate(item, "index");
+
+    assert.equal(stubSetDefaultTemplate.getCall(0).args[0], "appointmentTooltip");
+    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], "appointmentTooltipTemplate");
+});
+
+QUnit.test("dropDownAppointmentTemplate equal to custom template", function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = ['data1', 'data2'];
+    const item = { data: "data", currentData: "currentData", color: { done: sinon.spy() } };
+
+    tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: "custom_template" }));
+    stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
+    stubCreateComponent.getCall(1).args[2].itemTemplate(item, "index");
+
+    assert.equal(stubSetDefaultTemplate.getCall(0).args[0], "dropDownAppointment");
+    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], "dropDownAppointmentTemplate");
+});

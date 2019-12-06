@@ -3039,9 +3039,9 @@ const Scheduler = Widget.inherit({
         }
     },
 
-    showAppointmentTooltipCore: function(target, data, clickEvent, dragBehavior) {
+    showAppointmentTooltipCore: function(target, data, options) {
         this._appointmentTooltip.show(
-            target, data, extend(this._getExtraAppointmentTooltipOptions(), { clickEvent: clickEvent, dragBehavior: dragBehavior })
+            target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
         );
     },
 
