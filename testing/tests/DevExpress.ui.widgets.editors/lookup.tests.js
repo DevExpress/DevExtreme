@@ -68,6 +68,7 @@ var OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
     LIST_GROUP_HEADER_CLASS = "dx-list-group-header",
 
+    LOOKUP_SEARCH_CLASS = "dx-lookup-search",
     LOOKUP_SEARCH_WRAPPER_CLASS = "dx-lookup-search-wrapper",
     LOOKUP_FIELD_CLASS = "dx-lookup-field",
 
@@ -1076,12 +1077,12 @@ QUnit.test("Q517035 - Setting an observable variable to null and then to a value
     lookup.option("value", null);
     lookup.option("value", 1);
 
-    assert.ok(lookup._$field.text() === "1");
+    assert.strictEqual(lookup._$field.text(), "1");
 
     lookup.option("value", null);
     lookup.option("value", 1);
 
-    assert.ok(lookup._$field.text() === "1");
+    assert.strictEqual(lookup._$field.text(), "1");
 });
 
 QUnit.test("B236077: dxLookup shouldn't render popup window with inner widgets until it's going to be shown", function(assert) {
@@ -1959,11 +1960,11 @@ QUnit.test("minSearchLength", function(assert) {
     assert.equal($(instance._$field).text(), selectedValueText);
 
     search.option("value", "abc");
-    assert.ok($list.find(".dx-list-item").filter(":visible").length === 1);
+    assert.strictEqual($list.find(".dx-list-item").filter(":visible").length, 1);
     assert.equal($(instance._$field).text(), selectedValueText);
 
     search.option("value", "ab");
-    assert.ok($list.find(".dx-list-item").filter(":visible").length === 0);
+    assert.strictEqual($list.find(".dx-list-item").filter(":visible").length, 0);
     assert.equal($(instance._$field).text(), selectedValueText);
 });
 
@@ -2477,7 +2478,7 @@ QUnit.test("Popup height should be decrease after a loading of new page and sear
 
     var listHeight = $list.outerHeight();
 
-    var $input = $(".dx-lookup-search").find("." + TEXTEDITOR_INPUT_CLASS);
+    var $input = $("." + LOOKUP_SEARCH_CLASS).find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     keyboard.type("a");
@@ -2882,7 +2883,7 @@ QUnit.test("'Home', 'End' keys does not changed default behaviour in searchField
         opened: true
     }).dxLookup("instance");
 
-    var $input = $(".dx-lookup-search input");
+    var $input = $("." + LOOKUP_SEARCH_CLASS + " input");
     var keyboard = keyboardMock($input);
 
     keyboard.keyDown("home");
@@ -2915,14 +2916,19 @@ QUnit.test("Pressing escape when focus 'cancel' button must hide the popup", fun
 });
 
 
-QUnit.module("dataSource integration");
-
-QUnit.test("search should be execute after paste", function(assert) {
-    var originalFX = fx.off;
-    fx.off = true;
-    var clock = sinon.useFakeTimers();
-    try {
-        $("#lookup").dxLookup({
+QUnit.module("dataSource integration", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+        this.$element = $("#lookup");
+    },
+    afterEach: function() {
+        this.clock.restore();
+        fx.off = false;
+    }
+}, function() {
+    QUnit.test("search should be execute after paste", function(assert) {
+        this.$element.dxLookup({
             dataSource: ["one", "two", "three"],
             opened: true,
             searchEnabled: true,
@@ -2932,13 +2938,79 @@ QUnit.test("search should be execute after paste", function(assert) {
 
         var $input = $(toSelector(POPUP_CONTENT_CLASS) + " " + toSelector(TEXTEDITOR_INPUT_CLASS));
         $($input.val("o")).trigger("input");
-        clock.tick();
+        this.clock.tick();
         assert.equal($(".dx-list-item").length, 2, "filters execute on input event");
+    });
 
-    } finally {
-        clock.restore();
-        fx.off = originalFX;
-    }
+    [
+        { loadDelay: 200, indicateLoading: false },
+        { loadDelay: 1000, indicateLoading: true }
+    ].forEach(({ loadDelay, indicateLoading }) => {
+        QUnit.test(`search with loading delay = ${loadDelay} should ${indicateLoading ? "" : "not"} lead to the load panel being displayed`, function(assert) {
+            const instance = this.$element.dxLookup({
+                dataSource: {
+                    load: () => {
+                        const d = new $.Deferred();
+
+                        setTimeout(() => {
+                            d.resolve([1, 2, 3]);
+                        }, loadDelay);
+
+                        return d;
+                    }
+                },
+                opened: true,
+                searchEnabled: true,
+                searchTimeout: 0,
+                searchMode: "contains",
+                useNativeScrolling: false
+            }).dxLookup("instance");
+
+            this.clock.tick(loadDelay);
+            const $content = $(instance.content());
+            const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+            const $loadPanel = $content.find(".dx-scrollview-loadpanel");
+            const keyboard = keyboardMock($input);
+
+            keyboard.type("2");
+            this.clock.tick(loadDelay / 2);
+            assert.strictEqual($loadPanel.is(":visible"), indicateLoading, `load panel is ${indicateLoading ? "" : "not"} visible (${loadDelay / 2}ms after the loading started)`);
+
+            this.clock.tick(loadDelay / 2);
+            assert.ok($loadPanel.is(":hidden"), "load panel is not visible when loading has been finished");
+        });
+    });
+
+    QUnit.test("dataSouce loading with delay = 1000 should not lead to the load panel being displayed when search is disabled", function(assert) {
+        const loadDelay = 1000;
+        const instance = this.$element.dxLookup({
+            dataSource: {
+                load: () => {
+                    const d = new $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([1, 2, 3]);
+                    }, loadDelay);
+
+                    return d;
+                }
+            },
+            searchEnabled: false,
+            useNativeScrolling: false,
+            opened: true
+        }).dxLookup("instance");
+
+        this.clock.tick(loadDelay);
+        const $content = $(instance.content());
+        const $loadPanel = $content.find(".dx-scrollview-loadpanel");
+
+        instance.getDataSource().load();
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(":hidden"), `load panel is not visible (${loadDelay / 2}ms after the loading started)`);
+
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(":hidden"), "load panel is not visible when loading has been finished");
+    });
 });
 
 
@@ -2964,7 +3036,7 @@ QUnit.test("Validation message", function(assert) {
 
 });
 
-QUnit.test("Validation message", function(assert) {
+QUnit.test("widget should render with 'validationError === null'", function(assert) {
     var $element = $("#widget").dxLookup(),
         instance = $element.dxLookup("instance");
 
