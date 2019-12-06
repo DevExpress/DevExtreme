@@ -412,10 +412,8 @@ $.each([
 QUnit.test("gesture should be canceled if event should be skipped", function(assert) {
     assert.expect(1);
 
-    var originalSkipEvents = eventUtils.needSkipEvent;
-
     try {
-        eventUtils.needSkipEvent = function() { return true; };
+        eventUtils.forceSkipEvents();
 
         var $element = $("#element"),
             pointer = pointerMock($element);
@@ -428,7 +426,7 @@ QUnit.test("gesture should be canceled if event should be skipped", function(ass
 
         pointer.start().down().move(20);
     } finally {
-        eventUtils.needSkipEvent = originalSkipEvents;
+        eventUtils.stopEventsSkipping();
     }
 });
 
