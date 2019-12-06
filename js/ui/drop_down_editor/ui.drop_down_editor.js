@@ -14,6 +14,7 @@ var $ = require("../../core/renderer"),
     positionUtils = require("../../animation/position"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     DropDownButton = require("./ui.drop_down_button").default,
+    Widget = require("../widget/ui.widget"),
     messageLocalization = require("../../localization/message"),
     eventUtils = require("../../events/utils"),
     TextBox = require("../text_box"),
@@ -786,7 +787,7 @@ var DropDownEditor = TextBox.inherit({
     _updatePopupWidth: commonUtils.noop,
 
     _popupOptionChanged: function(args) {
-        var options = this._getOptionsFromContainer(args);
+        var options = Widget.getOptionsFromContainer(args);
 
         this._setPopupOption(options);
 

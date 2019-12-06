@@ -1,30 +1,25 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    events = require("../../events/short"),
-    Action = require("../../core/action"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
-    selectors = require("./selectors"),
-    eventUtils = require("../../events/utils");
+import $ from '../../core/renderer';
+import Action from '../../core/action';
+import DOMComponentWithTemplate from '../../core/dom_component_with_template';
+import { active, dxClick, focus, hover, keyboard } from '../../events/short';
+import { deferRender, deferRenderer, noop } from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { focusable as focusableSelector } from './selectors';
+import { inArray } from '../../core/utils/array';
+import { isFakeClickEvent } from '../../events/utils';
+import { isPlainObject, isDefined } from '../../core/utils/type';
 
-require("../../events/click");
-require("../../events/hover");
-require("../../events/core/emitter.feedback");
+import '../../events/click';
+import '../../events/core/emitter.feedback';
+import '../../events/hover';
 
-const { hover, focus, active, dxClick, keyboard } = events;
+function setAttribute(name, value, target) {
+    name = (name === 'role' || name === 'id') ? name : `aria-${name}`;
+    value = isDefined(value) ? value.toString() : null;
 
-var WIDGET_CLASS = "dx-widget",
-    ACTIVE_STATE_CLASS = "dx-state-active",
-    DISABLED_STATE_CLASS = "dx-state-disabled",
-    INVISIBLE_STATE_CLASS = "dx-state-invisible",
-    HOVER_STATE_CLASS = "dx-state-hover",
-    FOCUSED_STATE_CLASS = "dx-state-focused",
-    FEEDBACK_SHOW_TIMEOUT = 30,
-    FEEDBACK_HIDE_TIMEOUT = 400;
+    target.attr(name, value);
+}
 
 /**
  * @name ui
@@ -45,13 +40,15 @@ var WIDGET_CLASS = "dx-widget",
 * @export default
 * @hidden
 */
-var Widget = DOMComponentWithTemplate.inherit({
+const Widget = DOMComponentWithTemplate.inherit({
+    _feedbackHideTimeout: 400,
+    _feedbackShowTimeout: 30,
 
-    _supportedKeys: function() {
+    _supportedKeys() {
         return {};
     },
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), {
 
             /**
@@ -132,7 +129,6 @@ var Widget = DOMComponentWithTemplate.inherit({
             * @hidden
             */
             onFocusOut: null,
-            onKeyboardHandled: null,
 
             /**
             * @name ui.template
@@ -173,87 +169,74 @@ var Widget = DOMComponentWithTemplate.inherit({
             * @type_function_param1 value:string
             * @type_function_return number|date
             */
+
+            onKeyboardHandled: null
         });
     },
 
-    _feedbackShowTimeout: FEEDBACK_SHOW_TIMEOUT,
-    _feedbackHideTimeout: FEEDBACK_HIDE_TIMEOUT,
-
-    _init: function() {
+    _init() {
         this.callBase();
         this._initContentReadyAction();
     },
 
-    _clearInnerOptionCache: function(optionContainer) {
-        this[optionContainer + "Cache"] = {};
+    _clearInnerOptionCache(optionContainer) {
+        this[`${optionContainer}Cache`] = {};
     },
 
-    _cacheInnerOptions: function(optionContainer, optionValue) {
-        var cacheName = optionContainer + "Cache";
+    _cacheInnerOptions(optionContainer, optionValue) {
+        const cacheName = `${optionContainer}Cache`;
+
         this[cacheName] = extend(this[cacheName], optionValue);
     },
 
-    _getOptionsFromContainer: function({ name, fullName, value }) {
-        var options = {};
+    _innerOptionChanged(innerWidget, args) {
+        const options = Widget.getOptionsFromContainer(args);
 
-        if(name === fullName) {
-            options = value;
-        } else {
-            var option = fullName.split(".").pop();
-            options[option] = value;
-        }
-
-        return options;
-    },
-
-    _innerOptionChanged: function(innerWidget, args) {
-        var options = this._getOptionsFromContainer(args);
         innerWidget && innerWidget.option(options);
         this._cacheInnerOptions(args.name, options);
     },
 
-    _getInnerOptionsCache: function(optionContainer) {
-        return this[optionContainer + "Cache"];
+    _getInnerOptionsCache(optionContainer) {
+        return this[`${optionContainer}Cache`];
     },
 
-    _initInnerOptionCache: function(optionContainer) {
+    _initInnerOptionCache(optionContainer) {
         this._clearInnerOptionCache(optionContainer);
         this._cacheInnerOptions(optionContainer, this.option(optionContainer));
     },
 
-    _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
-        this._options.silent(optionsContainer, extend({}, innerWidget.option()));
-        innerWidget.on("optionChanged", (e) => {
-            this._options.silent(optionsContainer, extend({}, e.component.option()));
-        });
+    _bindInnerWidgetOptions(innerWidget, optionsContainer) {
+        const syncOptions = () =>
+            this._options.silent(optionsContainer, extend({}, innerWidget.option()));
+
+        syncOptions();
+        innerWidget.on('optionChanged', syncOptions);
     },
 
-    _getAriaTarget: function() {
+    _getAriaTarget() {
         return this._focusTarget();
     },
 
-    _initContentReadyAction: function() {
-        this._contentReadyAction = this._createActionByOption("onContentReady", {
-            excludeValidators: ["disabled", "readOnly"]
+    _initContentReadyAction() {
+        this._contentReadyAction = this._createActionByOption('onContentReady', {
+            excludeValidators: ['disabled', 'readOnly']
         });
     },
 
-    _initMarkup: function() {
-        this.$element().addClass(WIDGET_CLASS);
+    _initMarkup() {
+        const { disabled, visible } = this.option();
 
-        this._toggleDisabledState(this.option("disabled"));
-        this._toggleVisibility(this.option("visible"));
+        this.$element().addClass('dx-widget');
 
+        this._toggleDisabledState(disabled);
+        this._toggleVisibility(visible);
         this._renderHint();
-
-        if(this._isFocusable()) {
-            this._renderFocusTarget();
-        }
+        this._isFocusable() && this._renderFocusTarget();
 
         this.callBase();
     },
 
-    _render: function() {
+    _render() {
         this.callBase();
 
         this._renderContent();
@@ -262,64 +245,52 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._attachHoverEvents();
     },
 
-    _renderHint: function() {
-        var hint = this.option("hint");
-        this.$element().attr("title", hint ? hint : null);
+    _renderHint() {
+        const { hint } = this.option();
+
+        this.$element().attr('title', hint || null);
     },
 
-    _renderContent: function() {
-        commonUtils.deferRender(() => {
-            if(this._disposed) {
-                return;
-            }
-            return this._renderContentImpl();
-        }).done(() => {
-            if(this._disposed) {
-                return;
-            }
-            this._fireContentReadyAction();
-        });
+    _renderContent() {
+        deferRender(() => !this._disposed ? this._renderContentImpl() : void 0)
+            .done(() => !this._disposed ? this._fireContentReadyAction() : void 0);
     },
 
-    _renderContentImpl: commonUtils.noop,
+    _renderContentImpl: noop,
 
-    _fireContentReadyAction: commonUtils.deferRenderer(function() {
-        this._contentReadyAction();
-    }),
+    _fireContentReadyAction: deferRenderer(function() { return this._contentReadyAction(); }),
 
-    _dispose: function() {
+    _dispose() {
         this._contentReadyAction = null;
         this._detachKeyboardEvents();
 
         this.callBase();
     },
 
-    _resetActiveState: function() {
+    _resetActiveState() {
         this._toggleActiveState(this._eventBindingTarget(), false);
     },
 
-    _clean: function() {
+    _clean() {
         this._cleanFocusState();
         this._resetActiveState();
         this.callBase();
         this.$element().empty();
     },
 
-    _toggleVisibility: function(visible) {
-        this.$element().toggleClass(INVISIBLE_STATE_CLASS, !visible);
-        this.setAria("hidden", !visible || undefined);
+    _toggleVisibility(visible) {
+        this.$element().toggleClass('dx-state-invisible', !visible);
+        this.setAria('hidden', !visible || void 0);
     },
 
-    _renderFocusState: function() {
+    _renderFocusState() {
         this._attachKeyboardEvents();
 
-        if(!this._isFocusable()) {
-            return;
+        if(this._isFocusable()) {
+            this._renderFocusTarget();
+            this._attachFocusEvents();
+            this._renderAccessKey();
         }
-
-        this._renderFocusTarget();
-        this._attachFocusEvents();
-        this._renderAccessKey();
     },
 
     _renderAccessKey() {
@@ -330,103 +301,95 @@ var Widget = DOMComponentWithTemplate.inherit({
         $el.attr('accesskey', accessKey);
         dxClick.off($el, { namespace });
         accessKey && dxClick.on($el, e => {
-            if(eventUtils.isFakeClickEvent(e)) {
+            if(isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this.focus();
             }
         }, { namespace });
     },
 
-    _isFocusable: function() {
-        return this.option("focusStateEnabled") && !this.option("disabled");
+    _isFocusable() {
+        const { focusStateEnabled, disabled } = this.option();
+
+        return focusStateEnabled && !disabled;
     },
 
-    _eventBindingTarget: function() {
+    _eventBindingTarget() {
         return this.$element();
     },
 
-    _focusTarget: function() {
+    _focusTarget() {
         return this._getActiveElement();
     },
 
-    _getActiveElement: function() {
-        var activeElement = this._eventBindingTarget();
+    _getActiveElement() {
+        const activeElement = this._eventBindingTarget();
 
         if(this._activeStateUnit) {
-            activeElement = activeElement
+            return activeElement
                 .find(this._activeStateUnit)
-                .not("." + DISABLED_STATE_CLASS);
+                .not('.dx-state-disabled');
         }
 
         return activeElement;
     },
 
-    _renderFocusTarget: function() {
-        this._focusTarget().attr("tabIndex", this.option("tabIndex"));
+    _renderFocusTarget() {
+        const { tabIndex } = this.option();
+
+        this._focusTarget().attr('tabIndex', tabIndex);
     },
 
-    _keyboardEventBindingTarget: function() {
+    _keyboardEventBindingTarget() {
         return this._eventBindingTarget();
     },
 
-    _refreshFocusEvent: function() {
+    _refreshFocusEvent() {
         this._detachFocusEvents();
         this._attachFocusEvents();
     },
 
-    _focusEventTarget: function() {
+    _focusEventTarget() {
         return this._focusTarget();
     },
 
-    _focusInHandler: function(e) {
-        if(e.isDefaultPrevented()) {
-            return;
+    _focusInHandler(event) {
+        if(!event.isDefaultPrevented()) {
+            this._createActionByOption('onFocusIn', {
+                beforeExecute: () => this._updateFocusState(event, true),
+                excludeValidators: ['readOnly']
+            })({ event });
         }
-
-        var that = this;
-
-        that._createActionByOption("onFocusIn", {
-            beforeExecute: function() {
-                that._updateFocusState(e, true);
-            },
-            excludeValidators: ["readOnly"]
-        })({ event: e });
     },
 
-    _focusOutHandler: function(e) {
-        if(e.isDefaultPrevented()) {
-            return;
+    _focusOutHandler(event) {
+        if(!event.isDefaultPrevented()) {
+            this._createActionByOption('onFocusOut', {
+                beforeExecute: () => this._updateFocusState(event, false),
+                excludeValidators: ['readOnly', 'disabled']
+            })({ event });
         }
-
-        var that = this;
-
-        that._createActionByOption("onFocusOut", {
-            beforeExecute: function() {
-                that._updateFocusState(e, false);
-            },
-            excludeValidators: ["readOnly", "disabled"]
-        })({ event: e });
     },
 
-    _updateFocusState: function(e, isFocused) {
-        var target = e.target;
-
+    _updateFocusState({ target }, isFocused) {
         if(inArray(target, this._focusTarget()) !== -1) {
             this._toggleFocusClass(isFocused, $(target));
         }
     },
 
-    _toggleFocusClass: function(isFocused, $element) {
-        var $focusTarget = $element && $element.length ? $element : this._focusTarget();
-        $focusTarget.toggleClass(FOCUSED_STATE_CLASS, isFocused);
+    _toggleFocusClass(isFocused, $element) {
+        const $focusTarget = $element && $element.length ? $element : this._focusTarget();
+
+        $focusTarget.toggleClass('dx-state-focused', isFocused);
     },
 
-    _hasFocusClass: function(element) {
-        var $focusTarget = $(element || this._focusTarget());
-        return $focusTarget.hasClass(FOCUSED_STATE_CLASS);
+    _hasFocusClass(element) {
+        const $focusTarget = $(element || this._focusTarget());
+
+        return $focusTarget.hasClass('dx-state-focused');
     },
 
-    _isFocused: function() {
+    _isFocused() {
         return this._hasFocusClass();
     },
 
@@ -434,7 +397,7 @@ var Widget = DOMComponentWithTemplate.inherit({
         return [];
     },
 
-    _attachKeyboardEvents: function() {
+    _attachKeyboardEvents() {
         this._detachKeyboardEvents();
 
         const { focusStateEnabled, onKeyboardHandled } = this.option();
@@ -451,7 +414,7 @@ var Widget = DOMComponentWithTemplate.inherit({
         }
     },
 
-    _keyboardHandler: function(options, onlyChildProcessing) {
+    _keyboardHandler(options, onlyChildProcessing) {
         if(!onlyChildProcessing) {
             const { originalEvent, keyName, which } = options;
             const keys = this._supportedKeys(originalEvent);
@@ -477,19 +440,17 @@ var Widget = DOMComponentWithTemplate.inherit({
         return true;
     },
 
-    _refreshFocusState: function() {
+    _refreshFocusState() {
         this._cleanFocusState();
         this._renderFocusState();
     },
 
-    _cleanFocusState: function() {
-        var $element = this._focusTarget();
+    _cleanFocusState() {
+        const $element = this._focusTarget();
 
-        this._detachFocusEvents();
-
+        $element.removeAttr('tabIndex');
         this._toggleFocusClass(false);
-        $element.removeAttr("tabIndex");
-
+        this._detachFocusEvents();
         this._detachKeyboardEvents();
     },
 
@@ -555,104 +516,107 @@ var Widget = DOMComponentWithTemplate.inherit({
             e => this._focusInHandler(e),
             e => this._focusOutHandler(e), {
                 namespace: `${this.NAME}Focus`,
-                isFocusable: el => $(el).is(selectors.focusable)
+                isFocusable: el => $(el).is(focusableSelector)
             }
         );
     },
 
-    _hoverStartHandler: commonUtils.noop,
+    _hoverStartHandler: noop,
+    _hoverEndHandler: noop,
 
-    _hoverEndHandler: commonUtils.noop,
-
-    _toggleActiveState: function($element, value) {
+    _toggleActiveState($element, value) {
         this._toggleHoverClass(!value);
-        $element.toggleClass(ACTIVE_STATE_CLASS, value);
+        $element.toggleClass('dx-state-active', value);
     },
 
-    _refreshHoveredElement: function(hoveredElement) {
-        var selector = this._activeStateUnit || this._eventBindingTarget();
+    _refreshHoveredElement(hoveredElement) {
+        const selector = this._activeStateUnit || this._eventBindingTarget();
+
         this._forgetHoveredElement();
         this._hoveredElement = hoveredElement.closest(selector);
         this._toggleHoverClass(true);
     },
 
-    _forgetHoveredElement: function() {
+    _forgetHoveredElement() {
         this._toggleHoverClass(false);
         delete this._hoveredElement;
     },
 
-    _toggleHoverClass: function(value) {
+    _toggleHoverClass(value) {
         if(this._hoveredElement) {
-            this._hoveredElement.toggleClass(HOVER_STATE_CLASS, value && this.option("hoverStateEnabled"));
+            const { hoverStateEnabled } = this.option();
+
+            this._hoveredElement.toggleClass('dx-state-hover', value && hoverStateEnabled);
         }
     },
 
-    _toggleDisabledState: function(value) {
-        this.$element().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    _toggleDisabledState(value) {
+        this.$element().toggleClass('dx-state-disabled', Boolean(value));
         this._toggleHoverClass(!value);
-        this.setAria("disabled", value || undefined);
+        this.setAria('disabled', value || undefined);
     },
 
-    _setWidgetOption: function(widgetName, args) {
+    _setWidgetOption(widgetName, args) {
         if(!this[widgetName]) {
             return;
         }
 
-        if(typeUtils.isPlainObject(args[0])) {
-            each(args[0], (function(option, value) {
-                this._setWidgetOption(widgetName, [option, value]);
-            }).bind(this));
+        if(isPlainObject(args[0])) {
+            each(args[0], (option, value) => this._setWidgetOption(widgetName, [option, value]));
+
             return;
         }
 
-        var optionName = args[0];
-        var value = args[1];
+        const optionName = args[0];
+        let value = args[1];
 
         if(args.length === 1) {
             value = this.option(optionName);
         }
 
-        var widgetOptionMap = this[widgetName + "OptionMap"];
+        const widgetOptionMap = this[`${widgetName}OptionMap`];
+
         this[widgetName].option(widgetOptionMap ? widgetOptionMap(optionName) : optionName, value);
     },
 
-    _optionChanged: function(args) {
-        switch(args.name) {
-            case "disabled":
-                this._toggleDisabledState(args.value);
+    _optionChanged(args) {
+        const { name, value } = args;
+
+        switch(name) {
+            case 'disabled':
+                this._toggleDisabledState(value);
                 this._refreshFocusState();
                 break;
-            case "hint":
+            case 'hint':
                 this._renderHint();
                 break;
-            case "activeStateEnabled":
+            case 'activeStateEnabled':
                 this._attachFeedbackEvents();
                 break;
-            case "hoverStateEnabled":
+            case 'hoverStateEnabled':
                 this._attachHoverEvents();
                 break;
-            case "tabIndex":
-            case "focusStateEnabled":
+            case 'tabIndex':
+            case 'focusStateEnabled':
                 this._refreshFocusState();
                 break;
-            case "onFocusIn":
-            case "onFocusOut":
+            case 'onFocusIn':
+            case 'onFocusOut':
                 break;
-            case "accessKey":
+            case 'accessKey':
                 this._renderAccessKey();
                 break;
-            case "visible":
-                var visible = args.value;
-                this._toggleVisibility(visible);
+            case 'visible':
+                this._toggleVisibility(value);
                 if(this._isVisibilityChangeSupported()) {
                     // TODO hiding works wrong
-                    this._checkVisibilityChanged(args.value ? "shown" : "hiding");
+                    this._checkVisibilityChanged(value ? 'shown' : 'hiding');
                 }
                 break;
-            case "onKeyboardHandled":
+            case 'onKeyboardHandled':
                 this._attachKeyboardEvents();
                 break;
-            case "onContentReady":
+            case 'onContentReady':
                 this._initContentReadyAction();
                 break;
             default:
@@ -660,16 +624,18 @@ var Widget = DOMComponentWithTemplate.inherit({
         }
     },
 
-    _isVisible: function() {
-        return this.callBase() && this.option("visible");
+    _isVisible() {
+        const { visible } = this.option();
+
+        return this.callBase() && visible;
     },
 
-    beginUpdate: function() {
+    beginUpdate() {
         this._ready(false);
         this.callBase();
     },
 
-    endUpdate: function() {
+    endUpdate() {
         this.callBase();
 
         if(this._initialized) {
@@ -677,49 +643,25 @@ var Widget = DOMComponentWithTemplate.inherit({
         }
     },
 
-    _ready: function(value) {
+    _ready(value) {
         if(arguments.length === 0) {
             return this._isReady;
         }
 
         this._isReady = value;
-
     },
 
-    setAria: function() {
-        var setAttribute = function(option) {
-            var attrName = (option.name === "role" || option.name === "id") ? option.name : "aria-" + option.name,
-                attrValue = option.value;
-
-            if(typeUtils.isDefined(attrValue)) {
-                attrValue = attrValue.toString();
-            } else {
-                attrValue = null;
-            }
-
-            option.target.attr(attrName, attrValue);
-        };
-
-        if(!typeUtils.isPlainObject(arguments[0])) {
-            setAttribute({
-                name: arguments[0],
-                value: arguments[1],
-                target: arguments[2] || this._getAriaTarget()
-            });
+    setAria(...args) {
+        if(!isPlainObject(args[0])) {
+            setAttribute(args[0], args[1], args[2] || this._getAriaTarget());
         } else {
-            var $target = arguments[1] || this._getAriaTarget();
+            const target = args[1] || this._getAriaTarget();
 
-            each(arguments[0], function(key, value) {
-                setAttribute({
-                    name: key,
-                    value: value,
-                    target: $target
-                });
-            });
+            each(args[0], (name, value) => setAttribute(name, value, target));
         }
     },
 
-    isReady: function() {
+    isReady() {
         return this._ready();
     },
 
@@ -727,7 +669,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     * @name WidgetMethods.repaint
     * @publicName repaint()
     */
-    repaint: function() {
+    repaint() {
         this._refresh();
     },
 
@@ -735,8 +677,8 @@ var Widget = DOMComponentWithTemplate.inherit({
     * @name WidgetMethods.focus
     * @publicName focus()
     */
-    focus: function() {
-        eventsEngine.trigger(this._focusTarget(), "focus");
+    focus() {
+        focus.trigger(this._focusTarget());
     },
 
     /**
@@ -745,16 +687,25 @@ var Widget = DOMComponentWithTemplate.inherit({
     * @param1 key:string
     * @param2 handler:function
     */
-    registerKeyHandler: function(key, handler) {
-        var currentKeys = this._supportedKeys(),
-            addingKeys = {};
+    registerKeyHandler(key, handler) {
+        const currentKeys = this._supportedKeys();
 
-        addingKeys[key] = handler;
-
-        this._supportedKeys = function() {
-            return extend(currentKeys, addingKeys);
-        };
+        this._supportedKeys = () => extend(currentKeys, { [key]: handler });
     }
 });
+
+Widget.getOptionsFromContainer = ({ name, fullName, value }) => {
+    let options = {};
+
+    if(name === fullName) {
+        options = value;
+    } else {
+        const option = fullName.split('.').pop();
+
+        options[option] = value;
+    }
+
+    return options;
+};
 
 module.exports = Widget;
