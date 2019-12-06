@@ -632,6 +632,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initStoreChangeHandlers();
     },
 
+    _initSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter) {
+        if(this._initialized || selectedKeys === null) {
+            return;
+        }
+
+        items.forEach((item) => {
+            const itemKey = keyGetter(item);
+            item.selected = selectedKeys.indexOf(itemKey) !== -1;
+        });
+    },
+
     _dataSourceChangedHandler: function(newItems) {
         const items = this.option("items");
 
