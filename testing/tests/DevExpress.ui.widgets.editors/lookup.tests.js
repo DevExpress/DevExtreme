@@ -2962,7 +2962,8 @@ QUnit.module("dataSource integration", {
                 opened: true,
                 searchEnabled: true,
                 searchTimeout: 0,
-                searchMode: "contains"
+                searchMode: "contains",
+                useNativeScrolling: false
             }).dxLookup("instance");
 
             this.clock.tick(loadDelay);
@@ -2995,6 +2996,7 @@ QUnit.module("dataSource integration", {
                 }
             },
             searchEnabled: false,
+            useNativeScrolling: false,
             opened: true
         }).dxLookup("instance");
 
