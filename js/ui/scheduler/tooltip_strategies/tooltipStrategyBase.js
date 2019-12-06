@@ -81,7 +81,6 @@ export class TooltipStrategyBase {
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) =>
                 this._renderTemplate(this._tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
-
         };
     }
 
@@ -96,11 +95,12 @@ export class TooltipStrategyBase {
     }
 
     _renderTemplate(target, data, currentData, index, color) {
+        const itemListContent = this._createItemListContent(data, currentData, color);
         this._options.setDefaultTemplate(
             this._getItemListTemplateName(),
             new FunctionTemplate(options => {
                 const $container = $(options.container);
-                $container.append(this._createItemListContent(data, currentData, color));
+                $container.append(itemListContent);
                 return $container;
             }));
 
