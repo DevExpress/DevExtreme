@@ -2977,6 +2977,36 @@ QUnit.module("dataSource integration", {
             assert.ok($loadPanel.is(":hidden"), "load panel is not visible when loading has been finished");
         });
     });
+
+    QUnit.test("dataSouce loading with delay = 1000 should not lead to the load panel being displayed when search is disabled", function(assert) {
+        const loadDelay = 1000;
+        const instance = this.$element.dxLookup({
+            dataSource: {
+                load: () => {
+                    const d = new $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([1, 2, 3]);
+                    }, loadDelay);
+
+                    return d;
+                }
+            },
+            searchEnabled: false,
+            opened: true
+        }).dxLookup("instance");
+
+        this.clock.tick(loadDelay);
+        const $content = $(instance.content());
+        const $loadPanel = $content.find(".dx-scrollview-loadpanel");
+
+        instance.getDataSource().load();
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(":hidden"), `load panel is not visible (${loadDelay / 2}ms after the loading started)`);
+
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(":hidden"), "load panel is not visible when loading has been finished");
+    });
 });
 
 
