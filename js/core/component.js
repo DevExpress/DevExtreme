@@ -212,9 +212,7 @@ var Component = Class.inherit({
 
     _commitUpdate() {
         this.postponedOperations.callPostponedOperations();
-        if(this._isInitializingRequired()) {
-            this._initializeComponent();
-        }
+        this._isInitializingRequired() && this._initializeComponent();
     },
 
     _initializeComponent() {
