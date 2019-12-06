@@ -319,7 +319,7 @@ exports.initAction = function(newAction) {
                 actions: savedActions
             }));
         } else if(savedActions.length === 1) {
-            speedDialMainItem.option(extend({}, savedActions[0].option(), {
+            speedDialMainItem.option(extend({}, savedActions[0]._getOptionByStealth(), {
                 actions: savedActions,
                 position: speedDialMainItem._getPosition()
             }));
