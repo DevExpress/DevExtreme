@@ -518,12 +518,10 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     endUpdate: function() {
-        var that = this;
-        that.callBase.apply(that, arguments);
-        if(that._isUpdateAllowed()) {
-            that._resumeChanges();
-        }
-        return that;
+        this.callBase();
+        this._isUpdateAllowed() && this._resumeChanges();
+
+        return this;
     },
 
     option: function(name) {
