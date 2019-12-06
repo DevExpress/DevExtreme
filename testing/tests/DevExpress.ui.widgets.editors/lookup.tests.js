@@ -2945,8 +2945,6 @@ QUnit.module("dataSource integration", {
         { loadDelay: 1000, indicateLoading: true }
     ].forEach(({ loadDelay, indicateLoading }) => {
         QUnit.test(`search with loading delay = ${loadDelay} should ${indicateLoading ? "" : "not"} lead to the load panel being displayed`, function(assert) {
-            const clock = sinon.useFakeTimers();
-
             const instance = this.$element.dxLookup({
                 dataSource: {
                     load: () => {
@@ -2965,18 +2963,18 @@ QUnit.module("dataSource integration", {
                 searchMode: "contains"
             }).dxLookup("instance");
 
-            clock.tick(loadDelay);
+            this.clock.tick(loadDelay);
             const $content = $(instance.content());
             const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
             const $loadPanel = $content.find(".dx-scrollview-loadpanel");
             const keyboard = keyboardMock($input);
 
             keyboard.type("2");
-            clock.tick(loadDelay / 2);
-            assert.strictEqual(!$loadPanel.hasClass("dx-state-invisible"), indicateLoading, `load panel is ${indicateLoading ? "" : "not"} visible (${loadDelay / 2}ms after the loading started)`);
+            this.clock.tick(loadDelay / 2);
+            assert.strictEqual($loadPanel.is(":visible"), indicateLoading, `load panel is ${indicateLoading ? "" : "not"} visible (${loadDelay / 2}ms after the loading started)`);
 
-            clock.tick(loadDelay / 2);
-            assert.ok($loadPanel.hasClass("dx-state-invisible"), "load panel is not visible when loading has been finished");
+            this.clock.tick(loadDelay / 2);
+            assert.ok($loadPanel.is(":hidden"), "load panel is not visible when loading has been finished");
         });
     });
 });
