@@ -196,7 +196,7 @@ var Component = Class.inherit({
         this._updateLockCount++;
     },
 
-    _removeLockUpdate() {
+    _unlockUpdate() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
     },
 
@@ -213,11 +213,11 @@ var Component = Class.inherit({
     _commitUpdate() {
         this.postponedOperations.callPostponedOperations();
         if(this._isInitializingRequired()) {
-            this._commitInit();
+            this._initializeComponent();
         }
     },
 
-    _commitInit() {
+    _initializeComponent() {
         this._initializing = true;
 
         try {
@@ -226,7 +226,7 @@ var Component = Class.inherit({
             this._initializing = false;
             this._lockUpdate();
             this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
-            this._removeLockUpdate();
+            this._unlockUpdate();
             this._initialized = true;
         }
     },
@@ -253,7 +253,7 @@ var Component = Class.inherit({
      * @publicName endUpdate()
      */
     endUpdate: function() {
-        this._removeLockUpdate();
+        this._unlockUpdate();
         this._isUpdateAllowed() && this._commitUpdate();
     },
 
