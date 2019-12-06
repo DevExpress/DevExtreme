@@ -191,21 +191,21 @@ const DOMComponent = Component.inherit({
     },
 
     _attachDimensionChangeHandlers() {
-        const $element = this.$element();
+        const $el = this.$element();
         const namespace = `${this.NAME}VisibilityChange`;
 
-        resizeEvent.off($element, { namespace });
-        resizeEvent.on($element, () => this._dimensionChanged(), { namespace });
+        resizeEvent.off($el, { namespace });
+        resizeEvent.on($el, () => this._dimensionChanged(), { namespace });
     },
 
     _attachVisibilityChangeHandlers() {
         if(this._isVisibilityChangeSupported()) {
-            const $element = this.$element();
+            const $el = this.$element();
             const namespace = `${this.NAME}VisibilityChange`;
 
             this._isHidden = !this._isVisible();
-            visibilityEvents.off($element, { namespace });
-            visibilityEvents.on($element,
+            visibilityEvents.off($el, { namespace });
+            visibilityEvents.on($el,
                 () => this._checkVisibilityChanged('shown'),
                 () => this._checkVisibilityChanged('hiding'),
                 { namespace }
