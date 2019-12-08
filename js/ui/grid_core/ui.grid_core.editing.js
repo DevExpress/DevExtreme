@@ -2596,7 +2596,7 @@ module.exports = {
                         return false;
                     }
 
-                    if(cell && cell.isEditing !== isEditing) {
+                    if(cell && cell.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
                         return true;
                     }
 
