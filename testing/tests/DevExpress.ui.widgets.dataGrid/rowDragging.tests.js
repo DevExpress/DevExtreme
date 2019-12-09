@@ -22,6 +22,7 @@ import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
+import browser from "core/utils/browser";
 import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 
 var generateData = function(rowCount) {
@@ -538,6 +539,48 @@ QUnit.test("Dragging row when there are fixed columns", function(assert) {
     assert.strictEqual($fixTable.find(".dx-data-row").children(".dx-pointer-events-none").length, 1, "fixed table has transparent column");
 });
 
+// T830034
+QUnit.test("Placeholder should not be wider than grid if horizontal scroll exists", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    $testElement.css("width", "500px");
+    this.options.columnWidth = 300;
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 115).move(0, 5);
+
+    // assert
+    assert.ok($(".dx-sortable-placeholder").width() < 501, "placeholder width");
+});
+
+// T830034
+QUnit.test("Placeholder should be placed correctly if scrollLeft > 0", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container"),
+        $placeholderElement;
+
+    $testElement.css("width", "200px");
+    this.options.columnWidth = 100;
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find(".dx-scrollable-container").scrollLeft(50);
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 115);
+
+    $placeholderElement = $(".dx-sortable-placeholder");
+
+    // assert
+    assert.ok($placeholderElement.width() < 501, "placeholder width");
+    assert.equal($placeholderElement.offset().left, 0, "placeholder offset left");
+});
 
 QUnit.module("Handle", $.extend({}, moduleConfig, {
     beforeEach: function() {
@@ -656,7 +699,7 @@ QUnit.test("Command drag cell should have cursor 'move' for data rows and 'defau
     assert.equal($($rowsView.getRowElement(1)).find("td").eq(2).css("cursor"), "default", "data cell in data row has default cursor");
 });
 
-QUnit.test("Command drag cell should have cursor 'grabbing' for dragging row", function(assert) {
+QUnit.test("Command drag cell should have cursor 'grabbing/pointer' for dragging row", function(assert) {
     // arrange
     let rowsView = this.createRowsView();
     rowsView.render($("#container"));
@@ -668,5 +711,6 @@ QUnit.test("Command drag cell should have cursor 'grabbing' for dragging row", f
 
     // assert
     let $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), "grabbing", "cursor is grabbing");
+    let cursor = browser.msie && parseInt(browser.version) <= 11 ? "pointer" : "grabbing";
+    assert.strictEqual($draggableElement.find(".dx-command-drag").eq(0).css("cursor"), cursor, `cursor is ${cursor}`);
 });

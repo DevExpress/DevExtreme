@@ -12,7 +12,7 @@ import devices from "../../core/devices";
 import registerComponent from "../../core/component_registrator";
 import DOMComponent from "../../core/dom_component";
 import selectors from "../widget/selectors";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import scrollEvents from "./ui.events.emitter.gesture.scroll";
 import simulatedStrategy from "./ui.scrollable.simulated";
 import NativeStrategy from "./ui.scrollable.native";

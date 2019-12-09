@@ -82,7 +82,8 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
-            this._clearEventTimeout(name === "hide");
+            this._clearEventsTimeouts();
+
             if(delay) {
                 this._timeouts[name] = setTimeout(function() {
                     that[name]();
@@ -538,9 +539,18 @@ var Popover = Popup.inherit({
         }
     },
 
-    _renderShadingPosition: function() {
+    _renderWrapperPosition: function() {
         if(this.option("shading")) {
             this._$wrapper.css({ top: 0, left: 0 });
+        }
+    },
+
+    _renderWrapperDimensions: function() {
+        if(this.option("shading")) {
+            this._$wrapper.css({
+                width: "100%",
+                height: "100%"
+            });
         }
     },
 
@@ -594,8 +604,13 @@ var Popover = Popup.inherit({
         return side === "left" || side === "right";
     },
 
-    _clearEventTimeout: function(visibility) {
-        clearTimeout(this._timeouts[visibility ? "show" : "hide"]);
+    _clearEventTimeout: function(name) {
+        clearTimeout(this._timeouts[name]);
+    },
+
+    _clearEventsTimeouts: function() {
+        this._clearEventTimeout("show");
+        this._clearEventTimeout("hide");
     },
 
     _clean: function() {
@@ -629,7 +644,7 @@ var Popover = Popup.inherit({
                 attachEvent(this, name);
                 break;
             case "visible":
-                this._clearEventTimeout(args.value);
+                this._clearEventTimeout(args.value ? "show" : "hide");
                 this.callBase(args);
                 break;
             default:

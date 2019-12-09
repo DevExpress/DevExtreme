@@ -2,7 +2,7 @@ import $ from "jquery";
 import devices from "core/devices";
 import fx from "animation/fx";
 import ContextMenu from "ui/context_menu";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import contextMenuEvent from "events/contextmenu";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
@@ -246,10 +246,10 @@ QUnit.module("Rendering", moduleConfig, () => {
         assert.ok(contextMenu.option("visible"), "context menu is shown after detached target been attached");
     });
 
-    QUnit.test("not create keyboardProcessor on rendering", function(assert) {
+    QUnit.test("not attach keyboard handler on rendering", function(assert) {
         const instance = new ContextMenu(this.$element, {});
 
-        assert.notOk(instance._keyboardProcessor, "keyboard processor is undefined");
+        assert.notOk(instance._keyboardListenerId);
     });
 });
 

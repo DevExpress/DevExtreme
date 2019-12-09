@@ -4,7 +4,7 @@ import eventsEngine from "../../events/core/events_engine";
 import readyCallback from "../../core/utils/ready_callbacks";
 import translator from "../../animation/translator";
 import Widget from "../widget/ui.widget";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import commonUtils from "../../core/utils/common";
 import { isPlainObject } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";

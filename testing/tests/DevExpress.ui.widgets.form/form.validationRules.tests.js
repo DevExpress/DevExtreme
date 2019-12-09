@@ -347,7 +347,7 @@ QUnit.test("Validate via 'isRequired' item option", function(assert) {
     assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
     assert.equal(form.$element().find(invalidSelector + "-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
     assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
-    assert.equal(form.$element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
+    assert.equal(form.$element().find(invalidSelector + "-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
 });
 
 QUnit.test("Validate via validationRules when rules and 'isRequired' item option are both defined", function(assert) {

@@ -130,7 +130,7 @@
     }
 
     function createComponent(name, options, id, validatorOptions) {
-        var selector = "#" + id.replace(/[^\w-]/g, "\\$&");
+        var selector = "#" + String(id).replace(/[^\w-]/g, "\\$&");
         pendingCreateComponentRoutines.push(function() {
             var $component = $(selector)[name](options);
             if($.isPlainObject(validatorOptions)) {

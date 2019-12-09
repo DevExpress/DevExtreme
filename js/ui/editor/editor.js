@@ -1,7 +1,6 @@
 import $ from "../../core/renderer";
 import dataUtils from "../../core/element_data";
 import Callbacks from "../../core/utils/callbacks";
-import commonUtils from "../../core/utils/common";
 import windowUtils from "../../core/utils/window";
 import { addNamespace, normalizeKeyName } from "../../events/utils";
 import { getDefaultAlignment } from "../../core/utils/position";
@@ -152,18 +151,10 @@ const Editor = Widget.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        if(this.option("readOnly")) {
-            return;
-        }
-
-        this.callBase();
-
-        if(this._keyboardProcessor) {
-            this._attachChildKeyboardEvents();
+        if(!this.option("readOnly")) {
+            this.callBase();
         }
     },
-
-    _attachChildKeyboardEvents: commonUtils.noop,
 
     _setOptionsByReference: function() {
         this.callBase();

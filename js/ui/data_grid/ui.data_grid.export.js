@@ -16,7 +16,7 @@ import { when, Deferred } from "../../core/utils/deferred";
 var DATAGRID_EXPORT_MENU_CLASS = "dx-datagrid-export-menu",
     DATAGRID_EXPORT_BUTTON_CLASS = "dx-datagrid-export-button",
     DATAGRID_EXPORT_ICON = "export-to",
-    DATAGRID_EXPORT_EXCEL_ICON = "exportxlsx",
+    DATAGRID_EXPORT_EXCEL_ICON = "xlsxfile",
     DATAGRID_EXPORT_SELECTED_ICON = "exportselected",
     DATAGRID_EXPORT_EXCEL_BUTTON_ICON = "export-excel-button",
 

@@ -114,12 +114,14 @@ var formatCaptionByMonths = function(lastDate, firstDate) {
 };
 
 var getMonthCaption = function(date) {
-    var firstDate = new Date(date),
-        lastDate = new Date(firstDate),
+    var firstDate = new Date(dateUtils.getFirstMonthDate(date)),
+        lastDate = new Date(dateUtils.getLastMonthDate(firstDate)),
         text;
 
     if(this.option("intervalCount") > 1) {
-        lastDate.setMonth(lastDate.getMonth() + this.option("intervalCount") - 1);
+        lastDate = new Date(firstDate);
+        lastDate.setMonth(firstDate.getMonth() + this.option("intervalCount") - 1);
+        lastDate = new Date(dateUtils.getLastMonthDate(lastDate));
 
         var isSameYear = firstDate.getYear() === lastDate.getYear(),
             lastDateText = getMonthYearFormat(lastDate),
@@ -335,13 +337,16 @@ var SchedulerNavigator = Widget.inherit({
 
     _updateButtonsState: function() {
         var min = this.option("min"),
-            max = this.option("max");
+            max = this.option("max"),
+            caption = this._getConfig().getCaption.call(this, this.option("displayedDate") || this.option("date"));
 
         min = min ? dateUtils.trimTime(min) : min;
         max = max ? dateUtils.trimTime(max) : max;
 
-        this._prev.option("disabled", min && !isNaN(min.getTime()) && this._getNextDate(-1) < min);
-        this._next.option("disabled", max && !isNaN(max.getTime()) && this._getNextDate(1) > max);
+        max && max.setHours(23, 59, 59);
+
+        this._prev.option("disabled", min && !isNaN(min.getTime()) && this._getNextDate(-1, caption.endDate) < min);
+        this._next.option("disabled", max && !isNaN(max.getTime()) && this._getNextDate(1, caption.startDate) > max);
     },
 
     _updateCurrentDate: function(direction) {
@@ -351,10 +356,10 @@ var SchedulerNavigator = Widget.inherit({
         this.notifyObserver("currentDateUpdated", date);
     },
 
-    _getNextDate: function(direction) {
+    _getNextDate: function(direction, initialDate = null) {
         var stepConfig = this._getConfig(),
             offset = stepConfig.duration * direction,
-            date = stepConfig.getDate(new Date(this.option("date")), offset);
+            date = stepConfig.getDate(new Date(initialDate || this.option("date")), offset);
 
         return date;
     },
@@ -424,8 +429,7 @@ var SchedulerNavigator = Widget.inherit({
                 this._popover.hide();
             }).bind(this),
             hasFocus: function() { return true; },
-            tabIndex: null,
-            _keyboardProcessor: this._calendarKeyboardProcessor
+            tabIndex: null
         };
     },
 
@@ -438,9 +442,12 @@ var SchedulerNavigator = Widget.inherit({
 
         this._caption.option({
             text: caption,
-            onClick: (function() {
-                this._popover.toggle();
-            }).bind(this)
+            onKeyboardHandled: opts => {
+                this.option("focusStateEnabled") &&
+                    !this.option("disabled") &&
+                    this._calendar._keyboardHandler(opts);
+            },
+            onClick: () => this._popover.toggle()
         });
     },
 
@@ -448,9 +455,6 @@ var SchedulerNavigator = Widget.inherit({
         if(!this.option("focusStateEnabled") || this.option("disabled")) {
             return;
         }
-
-        this._calendarKeyboardProcessor = this._caption._keyboardProcessor.attachChildProcessor();
-        this._setCalendarOption("_keyboardProcessor", this._calendarKeyboardProcessor);
 
         var that = this,
             executeHandler = function() {

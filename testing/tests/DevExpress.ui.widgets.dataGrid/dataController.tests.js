@@ -38,6 +38,15 @@ var setupModule = function() {
         $.extend(this.options, options);
         this.columnsController.init();
     };
+
+    this.options.editing = this.options.editing || {};
+    $.extend(this.options.editing, {
+        confirmDelete: true,
+        texts: {
+            confirmDeleteMessage: "Are you sure?"
+        }
+    });
+
     this.clock = sinon.useFakeTimers();
     this.editingController.getFirstEditableCellInRow = function() { return $([]); };
 };
@@ -3549,7 +3558,7 @@ var setupVirtualRenderingModule = function() {
 
     this.dataController.viewportItemSize(10);
     this.dataController.viewportSize(9);
-    this.dataController._dataSource._changeTime = 50;
+    this.dataController._dataSource._renderTime = 50;
 
     this.clock.tick();
 
@@ -7680,6 +7689,73 @@ QUnit.test("Expand detail row before edit form and detail rows", function(assert
     assert.notOk(this.dataController.items()[3].isEditing, "row 3 is not editing");
 
     assert.strictEqual(this.dataController.items()[4].rowType, "data", "row 4 is detail");
+});
+
+QUnit.test("delete row with confirmDelete and confirmDeleteMessage is not empty", function(assert) {
+    // arrange
+    let removeHandlerCallCount = 0;
+    var dataSource = new DataSource({
+        key: 'id',
+        load: () => [{ id: 1 }],
+        totalCount: () => 1,
+        remove: () => ++removeHandlerCallCount
+    });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 0, "row is not deleted");
+
+    // arrange
+    this.options.editing.confirmDelete = false;
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 1, "row is deleted");
+});
+
+QUnit.test("delete row with confirmDelete and confirmDeleteMessage is empty", function(assert) {
+    // arrange
+    let removeHandlerCallCount = 0;
+    var dataSource = new DataSource({
+        key: 'id',
+        load: () => [{ id: 1 }],
+        totalCount: () => 1,
+        remove: () => ++removeHandlerCallCount
+    });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.applyOptions({
+        editing: {
+            confirmDelete: true,
+            texts: {
+                confirmDeleteMessage: ""
+            }
+        }
+    });
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 1, "row is deleted");
+
+    // arrange
+    this.options.editing.confirmDelete = false;
+
+    // act
+    this.editingController.deleteRow(0);
+
+    // assert
+    assert.equal(removeHandlerCallCount, 2, "row is deleted");
 });
 
 QUnit.module("Error handling", {

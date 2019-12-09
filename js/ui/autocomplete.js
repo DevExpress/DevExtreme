@@ -161,8 +161,7 @@ var Autocomplete = DropDownList.inherit({
 
     _listConfig: function() {
         return extend(this.callBase(), {
-            pageLoadMode: "none",
-            indicateLoading: false
+            pageLoadMode: "none"
         });
     },
 

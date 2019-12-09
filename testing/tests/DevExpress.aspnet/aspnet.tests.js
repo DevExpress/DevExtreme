@@ -495,6 +495,32 @@
         }
     });
 
+    QUnit.test("T836885", function(assert) {
+        aspnet.setTemplateEngine();
+
+        try {
+            $("#qunit-fixture").html(
+                '<div id=list1></div>' +
+                '<script id="list1_itemTemplate" type="text/html">' +
+                '  <div id="<%= key %>"></div><% DevExpress.aspnet.createComponent("dxTextBox", { }, key) %>' +
+                '</script>'
+            );
+
+            // Per https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute
+            // "IDs can consist of just digits"
+            var NUMERIC_ID = 20191205;
+
+            $("#list1").dxList({
+                items: [ { key: NUMERIC_ID } ],
+                itemTemplate: $("#list1_itemTemplate")
+            });
+
+            assert.ok($("#" + NUMERIC_ID).dxTextBox("instance"));
+        } finally {
+            setTemplateEngine("default");
+        }
+    });
+
     QUnit.module("Remote validation", {
         beforeEach: function() {
             this.ajaxMock = ajaxMockAccessor();
