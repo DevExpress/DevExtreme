@@ -661,24 +661,36 @@ module.exports = {
                 _applyChangeFull: function(change) {
                     this._items = change.items.slice(0);
                 },
+                _getRowIndices: function(change) {
+                    var rowIndices = change.rowIndices.slice(0),
+                        rowIndexDelta = this.getRowIndexDelta();
+
+                    rowIndices.sort(function(a, b) { return a - b; });
+
+                    for(var i = 0; i < rowIndices.length; i++) {
+                        let correctedRowIndex = rowIndices[i];
+
+                        if(change.isExpandAdaptiveDetailRow) {
+                            correctedRowIndex += rowIndexDelta;
+                        }
+
+                        if(correctedRowIndex < 0) {
+                            rowIndices.splice(i, 1);
+                            i--;
+                        }
+                    }
+
+                    return rowIndices;
+                },
                 _applyChangeUpdate: function(change) {
                     var that = this,
                         items = change.items,
-                        rowIndices = change.rowIndices.slice(0),
+                        rowIndices = that._getRowIndices(change),
                         rowIndexDelta = that.getRowIndexDelta(),
                         repaintChangesOnly = that.option("repaintChangesOnly"),
                         prevIndex = -1,
                         rowIndexCorrection = 0,
                         changeType;
-
-                    rowIndices.sort(function(a, b) { return a - b; });
-
-                    for(var i = 0; i < rowIndices.length; i++) {
-                        if(rowIndices[i] + rowIndexDelta < 0) {
-                            rowIndices.splice(i, 1);
-                            i--;
-                        }
-                    }
 
                     change.items = [];
                     change.rowIndices = [];
