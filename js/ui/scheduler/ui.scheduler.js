@@ -1929,12 +1929,14 @@ const Scheduler = Widget.inherit({
         return {
             createComponent: that._createComponent.bind(that),
             container: that.$element(),
+            getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
             setDefaultTemplate: that.setDefaultTemplate.bind(that),
             getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
             getText: that.getText.bind(that),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
-            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment)
+            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
+            isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
         };
     },
 
@@ -1951,7 +1953,15 @@ const Scheduler = Widget.inherit({
             rtlEnabled: this.option('rtlEnabled'),
             focusStateEnabled: this.option('focusStateEnabled'),
             editing: this.option('editing'),
+            offset: this.option('_appointmentTooltipOffset'),
         };
+    },
+
+    isAppointmentInAllDayPanel: function(appointmentData) {
+        const workSpace = this._workSpace,
+            itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
+
+        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
     },
 
     getText(data, currentData) {
@@ -2872,6 +2882,9 @@ const Scheduler = Widget.inherit({
             itemElement: e.itemElement
         };
         var createClickEvent = extendFromObject(this.fire('mapAppointmentFields', config), e, false);
+        delete createClickEvent.itemData;
+        delete createClickEvent.itemIndex;
+        delete createClickEvent.itemElement;
         this._createActionByOption('onAppointmentClick')(createClickEvent);
     },
 

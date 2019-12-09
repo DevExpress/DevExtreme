@@ -17,6 +17,7 @@ const stubGetAppointmentTemplate = sinon.stub().returns("template");
 const stubGetTargetedAppointmentData = sinon.stub().returns("targetedAppointmentData");
 const stubCheckAndDeleteAppointment = sinon.stub();
 const stubGetText = sinon.stub().returns('text');
+const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
 const environment = {
     createSimpleTooltip: function(tooltipOptions) {
         return new DesktopTooltipStrategy(tooltipOptions);
@@ -29,12 +30,14 @@ const environment = {
         showAppointmentPopup: stubShowAppointmentPopup,
         getText: stubGetText,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
-        getTargetedAppointmentData: stubGetTargetedAppointmentData
+        getTargetedAppointmentData: stubGetTargetedAppointmentData,
+        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
     },
     extraOptions: {
         rtlEnabled: true,
         focusStateEnabled: true,
         editing: true,
+        offset: 'offset'
     },
     afterEach: function() {
         stubCreateComponent.reset();
@@ -63,7 +66,9 @@ QUnit.test("Show tooltip", function(assert) {
     assert.deepEqual(stubComponent.option.getCall(1).args, ["position", {
         "at": "top",
         "collision": "fit flipfit",
-        "my": "bottom"
+        "my": "bottom",
+        boundary: "<div>",
+        offset: "offset",
     }], 'tooltip has correct position');
 
     assert.ok(stubCreateComponent.calledOnce);
@@ -151,7 +156,9 @@ QUnit.test("Tooltip should update the content after call method 'show' several t
     assert.deepEqual(stubComponent.option.getCall(4).args, ["position", {
         "at": "top",
         "collision": "fit flipfit",
-        "my": "bottom"
+        "my": "bottom",
+        boundary: "<div>",
+        offset: "offset"
     }]);
 });
 

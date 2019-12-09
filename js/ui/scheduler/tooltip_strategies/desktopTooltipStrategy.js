@@ -16,8 +16,14 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         this._tooltip.option('position', {
             my: 'bottom',
             at: 'top',
+            boundary: this._getBoundary(dataList),
+            offset: this._extraOptions.offset,
             collision: 'fit flipfit',
         });
+    }
+
+    _getBoundary(dataList) {
+        return this._options.isAppointmentInAllDayPanel(dataList[0].data) ? this._options.container : this._options.getScrollableContainer();
     }
 
     _onShown() {

@@ -626,21 +626,6 @@ QUnit.test('Recurrence repeat-type editor should have default \'never\' value af
     assert.ok(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
 });
 
-QUnit.test('Disabled appointment could not be focused', function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'test does not actual for mobile devices');
-        return;
-    }
-
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: [{ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 3), disabled: true }] });
-    this.clock.tick();
-
-    var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    $appointment.trigger('focusin');
-
-    assert.notOk($appointment.hasClass('dx-state-focused'), 'Appointment is not focused');
-});
-
 QUnit.test('Appointment dates should not be normalized before sending to the details view', function(assert) {
     var startDate = 1429776000000,
         endDate = 1429794000000,
@@ -660,7 +645,7 @@ QUnit.test('Appointment dates should not be normalized before sending to the det
 
     this.clock.tick();
 
-    var spy = sinon.spy(this.instance, 'showAppointmentPopup');
+    var spy = sinon.spy(this.instance._appointmentPopup, 'show');
 
     this.scheduler.appointments.click();
     this.clock.tick(300);
@@ -673,7 +658,7 @@ QUnit.test('Appointment dates should not be normalized before sending to the det
 
         tooltip.hide();
     } finally {
-        this.instance.showAppointmentPopup.restore();
+        this.instance._appointmentPopup.show.restore();
     }
 });
 

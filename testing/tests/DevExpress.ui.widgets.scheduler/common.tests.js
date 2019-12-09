@@ -3356,13 +3356,13 @@ QUnit.testStart(function() {
         });
 
         this.scheduler.appointments.compact.click();
-        assert.notOk(this.instance._appointmentTooltip.list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
+        assert.notOk(this.instance._appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
 
         this.instance._appointmentTooltip.hide();
 
         this.instance.option('focusStateEnabled', true);
         this.scheduler.appointments.compact.click();
-        assert.ok(this.instance._appointmentTooltip.list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
+        assert.ok(this.instance._appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
     });
 
     QUnit.test('Workspace navigation by arrows should work correctly with opened dropDown appointments', function(assert) {
