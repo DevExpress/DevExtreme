@@ -1421,6 +1421,60 @@ QUnit.test("Expand/Collapse adaptive detail row after scrolling if scrolling mod
     assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 43, "Check next row key");
 });
 
+// T815886
+QUnit.test("Expand/Collapse adaptive detail row after expanding other adaptive detail row and scrolling if scrolling mode and rowRendering are virtual", function(assert) {
+    var array = [],
+        visibleRows,
+        expandedRowVisibleIndex;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ id: i, value: "text" + i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            width: 200,
+            height: 200,
+            dataSource: array,
+            keyExpr: "id",
+            columnHidingEnabled: true,
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual",
+                useNative: false
+            },
+            columns: [
+                "value",
+                { dataField: "hidden", width: 1000 }
+            ],
+        }).dxDataGrid("instance"),
+        dataController = dataGrid.getController("data");
+
+    // act
+    dataController.toggleExpandAdaptiveDetailRow(1);
+
+    dataGrid.getScrollable().scrollTo({ y: 800 });
+
+    dataController.toggleExpandAdaptiveDetailRow(28);
+
+    // arrange
+    visibleRows = dataController.getVisibleRows();
+    expandedRowVisibleIndex = dataController.getRowIndexByKey(28);
+    // assert
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, "detailAdaptive", "Adaptive row");
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 28, "Check adaptive row key");
+
+    // act
+    dataController.toggleExpandAdaptiveDetailRow(28);
+
+    // arrange
+    visibleRows = dataController.getVisibleRows();
+    expandedRowVisibleIndex = dataController.getRowIndexByKey(28);
+    // assert
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, "data", "Adaptive row");
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 29, "Check next row key");
+});
+
 // T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
     // arrange
@@ -6200,6 +6254,152 @@ QUnit.test("column widths should be synchronized when scrolling mode is virtual 
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td")[0].getBoundingClientRect().width, $dataGridTables.eq(1).find(".dx-row").first().find("td")[0].getBoundingClientRect().width);
 
     assert.equal($dataGridTables.eq(0).find(".dx-row").first().find("td")[1].getBoundingClientRect().width, $dataGridTables.eq(1).find(".dx-row").first().find("td")[1].getBoundingClientRect().width);
+});
+
+// T833061
+QUnit.test("Last row should be correct after editing other row's cell if scrolling and rendering are virtual", function(assert) {
+    // arrange
+    var dataSource = [],
+        visibleRows;
+
+    for(let i = 0; i < 40; i++) {
+        dataSource.push({ field: i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource,
+        height: 150,
+        editing: {
+            enabled: true,
+            mode: "cell",
+            allowUpdating: true
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 1500 });
+
+    dataGrid.editCell(8, 0);
+
+    visibleRows = dataGrid.getVisibleRows();
+
+    // assert
+    assert.notOk(visibleRows[-1], "no visible row with index -1");
+    assert.equal($(dataGrid.getCellElement(9, 0)).text(), "39", "last row is correct");
+});
+
+// T833061
+QUnit.test("Edit cell after editing another cell and scrolling down should work correctly if scrolling and rendering are virtual", function(assert) {
+    // arrange
+    var dataGrid,
+        dataSource = [],
+        visibleRows,
+        hasNegativeIndexes,
+        $rows,
+        $editedRow,
+        $input,
+        startValue;
+
+    for(let i = 0; i < 100; i++) {
+        dataSource.push({ field: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource,
+        height: 440,
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.editCell(8, 0);
+
+    dataGrid.getScrollable().scrollTo({ y: 1000 });
+
+    dataGrid.editCell(5, 0);
+
+    visibleRows = dataGrid.getVisibleRows();
+
+    hasNegativeIndexes = Object.keys(visibleRows).some(rowIndex => rowIndex < 0);
+
+    $rows = dataGrid.$element().find(".dx-data-row");
+
+    // assert
+    assert.notOk(hasNegativeIndexes, "no visible rows with index < 0");
+
+    startValue = parseInt($rows.eq(0).text());
+
+    assert.equal(startValue, 25, "visible row #1 is correct");
+
+    for(let i = 1; i < $rows.length; i++) {
+        if(i !== 5) {
+            assert.equal(parseInt($rows.eq(i).text()), startValue + i, `visible row's #${i + 1} text`);
+        } else {
+            $editedRow = $rows.eq(i);
+            $input = $editedRow.find("input");
+
+            assert.ok($editedRow.find(".dx-editor-cell").length, "row has editor");
+            assert.equal(parseInt($input.val()), startValue + i, `visible row's #${i + 1} input value`);
+        }
+    }
+});
+
+// T833071
+QUnit.test("Click on cell should open editor after scrolling grid down if scrolling and rendering are virtual and repaintChangesOnly is true", function(assert) {
+    // arrange
+    var dataSource = [],
+        visibleRows,
+        $rows,
+        $editorCell;
+
+    for(let i = 0; i < 100; i++) {
+        dataSource.push({ field: i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource,
+        height: 150,
+        editing: {
+            enabled: true,
+            mode: "cell",
+            allowUpdating: true
+        },
+        repaintChangesOnly: true,
+        scrolling: {
+            rowRenderingMode: "virtual",
+            mode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 3000 });
+
+    dataGrid.editCell(1, 0);
+
+    visibleRows = dataGrid.getVisibleRows();
+    $rows = dataGrid.$element().find(".dx-data-row");
+    $editorCell = $rows.eq(1).find(".dx-editor-cell");
+
+    // assert
+    assert.ok($editorCell.length, "row has editor");
+    assert.equal($editorCell.find("input").val(), "86", "input value");
+    assert.notOk(visibleRows[-1], "no visible row with index -1");
 });
 
 // T352218
