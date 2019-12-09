@@ -272,7 +272,7 @@ function isLazyDataSourceMode(wrapper) {
 
 const ROOT_ID = 0;
 configs.forEach(config => {
-    QUnit.module(`DataSource: ${config.dataSourceOption}. VirtualModeEnabled: ${config.virtualModeEnabled}. Expanded: ${config.expanded}`, () => {
+    QUnit.module(`Selection via element properties: DataSource: ${config.dataSourceOption}. VirtualModeEnabled: ${config.virtualModeEnabled}. Expanded: ${config.expanded}`, () => {
         QUnit.test(`all.selected: false, selectionMode: multiple, selectNodesRecursive: true`, function() {
             const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true }, [
                 { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
@@ -1132,6 +1132,878 @@ configs.forEach(config => {
                 });
             });
         });
+    });
+});
+
+configs.forEach(config => {
+    QUnit.module(`Selection via selectedItemKeys property: DataSource: ${config.dataSourceOption}. VirtualModeEnabled: ${config.virtualModeEnabled}. Expanded: ${config.expanded}`, () => {
+        QUnit.test(`all.selected: false, selectionMode: multiple, selectNodesRecursive: true`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
+
+            wrapper.checkSelectedKeys([]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`all.selected: false, selectionMode: multiple, selectNodesRecursive: false `, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
+
+            wrapper.checkSelectedKeys([]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`all.selected: true, SelectionMode: multiple, selectNodesRecursive: true`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [1, 2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [1, 2];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`all.selected: true, SelectionMode: multiple, selectNodesRecursive: false`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [1, 2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
+
+
+            const expectedKeys = isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [1, 2];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: true - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [1] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: false`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [1] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.checkSelectedKeys([1]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [1] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1, 2]
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll`, function(assert) {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [1] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1, 2]
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [1] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+
+            wrapper.checkSelectedKeys([1]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> selectAll -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [1] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true   - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            const expectedKeys = isLazyDataSourceMode(wrapper)
+                ? []
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+
+        QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            const expectedKeys = isLazyDataSourceMode(wrapper)
+                ? []
+                : [2];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll   - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+            const expectedKeys = isLazyDataSourceMode(wrapper)
+                ? []
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true, selectedItemKeys: [2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1, 2]
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll   - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false, selectedItemKeys: [2] }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+            const expectedKeys = isLazyDataSourceMode(wrapper)
+                ? []
+                : [2];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+        /*
+        QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true   - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> expandAll   - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: true -> selectAll -> expandAll   - invalid config`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1, 2]
+                : [1, 2, 3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: multiple, selectNodesRecursive: false -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`all.selected: false, selectionMode: single`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded }]);
+
+            wrapper.checkSelectedKeys([]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`all.selected: true, SelectionMode: single`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [2];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: single`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded: config.expanded }]);
+
+            wrapper.checkSelectedKeys([1]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: single -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+
+            wrapper.checkSelectedKeys([1]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1.selected: true, selectionMode: single -> selectAll -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: single`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [2];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: single -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single', selectNodesRecursive: false }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+
+            wrapper.checkSelectedKeys([2]);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1.selected: true, selectionMode: single -> selectAll -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single', selectNodesRecursive: false }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: false, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [2]
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: single`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: single -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            wrapper.instance.expandAll();
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? []
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 0);
+            wrapper.checkCallbacksCallOrder([]);
+        });
+
+        QUnit.test(`item1_1_1.selected: true, selectionMode: single -> selectAll -> expandAll`, function() {
+            const wrapper = createWrapper(config, { selectionMode: 'single' }, [
+                { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded },
+                { id: 3, text: "item1_1_1", parentId: 2, selected: true, expanded: config.expanded }]);
+
+            wrapper.instance.selectAll();
+            wrapper.instance.expandAll();
+
+            const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                ? [1]
+                : [3];
+
+            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+            wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+            wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+        });
+
+        [true, false].forEach((selected) => {
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> selectItem(item1 key)`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: true }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.selectItem(1);
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? [1]
+                    : [1, 2];
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 0 : 1);
+                wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 0 : 1);
+                wrapper.checkCallbacksCallOrder(selected
+                    ? []
+                    : ['onItemSelectionChanged', 'onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> selectItem(item1 key)`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: false }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded }]);
+
+                wrapper.instance.selectItem(1);
+
+                wrapper.checkSelectedKeys([1]);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 0 : 1);
+                wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 0 : 1);
+                wrapper.checkCallbacksCallOrder(selected
+                    ? []
+                    : ['onItemSelectionChanged', 'onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> selectItem(item1_1 key)   - invalid config`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: true }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+                wrapper.instance.selectItem(2);
+
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? []
+                    : [1, 2];
+
+                const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? 0
+                    : selected ? 0 : 1;
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbacksCallOrder(expectedCallsCount
+                    ? ['onItemSelectionChanged', 'onSelectionChanged']
+                    : []);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> selectItem(item1_1 key)`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: false }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.selectItem(2);
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? []
+                    : [2];
+
+                const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? 0
+                    : selected ? 0 : 1;
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbacksCallOrder(expectedCallsCount
+                    ? ['onItemSelectionChanged', 'onSelectionChanged']
+                    : []);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> selectAll`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: true, selectionMode: 'multiple' }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.selectAll();
+
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? [1]
+                    : [1, 2];
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> selectAll -> expandAll`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: true, selectionMode: 'multiple' }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.selectAll();
+                wrapper.instance.expandAll();
+
+                wrapper.checkSelectedKeys([1, 2]);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> selectAll`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: false, selectionMode: 'multiple' }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.selectAll();
+
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? [1]
+                    : [1, 2];
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> selectAll -> expandAll`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: false, selectionMode: 'multiple' }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.selectAll();
+                wrapper.instance.expandAll();
+
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? selected ? [1, 2] : [1]
+                    : [1, 2];
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> unselectItem(item1 key)`, function() {
+                const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+                wrapper.instance.unselectItem(1);
+
+                wrapper.checkSelectedKeys([]);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 1 : 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 1 : 0);
+                wrapper.checkCallbacksCallOrder(selected
+                    ? ['onItemSelectionChanged', 'onSelectionChanged']
+                    : []);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> unselectItem(item1 key)`, function() {
+                const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: config.expanded }]);
+
+                wrapper.instance.unselectItem(1);
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? []
+                    : [2];
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 1 : 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 1 : 0);
+                wrapper.checkCallbacksCallOrder(selected
+                    ? ['onItemSelectionChanged', 'onSelectionChanged']
+                    : []);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> unselectItem(item1_1 key)   - invalid config`, function() {
+                const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: true }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.unselectItem(2);
+
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? [1]
+                    : [];
+                const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? 0
+                    : 1;
+
+                wrapper.checkSelectedKeys(expectedKeys);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbacksCallOrder(expectedCallsCount
+                    ? ['onItemSelectionChanged', 'onSelectionChanged']
+                    : []);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> unselectItem(item1_1 key)`, function() {
+                const wrapper = createWrapper(config, { selectionMode: 'multiple', selectNodesRecursive: false }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.unselectItem(2);
+
+                const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                    ? 0
+                    : selected ? 1 : 0;
+
+                wrapper.checkSelectedKeys([1]);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                wrapper.checkCallbacksCallOrder(expectedCallsCount
+                    ? ['onItemSelectionChanged', 'onSelectionChanged']
+                    : []);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: true, selected: ${selected} -> unselectAll`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: true, selectionMode: 'multiple' }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.unselectAll();
+
+                wrapper.checkSelectedKeys([]);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+            });
+
+            QUnit.test(`selectionMode: multiple, selectNodesRecursive: false, selected: ${selected} -> unselectAll`, function() {
+                const wrapper = createWrapper(config, { selectNodesRecursive: false, selectionMode: 'multiple' }, [
+                    { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                    { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                wrapper.instance.unselectAll();
+
+                wrapper.checkSelectedKeys([]);
+                wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+            });
+
+            [true, false].forEach((selectNodesRecursive) => {
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> selectItem(item1 key)`, function() {
+                    const wrapper = createWrapper(config, { selectNodesRecursive, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded }]);
+
+                    wrapper.instance.selectItem(1);
+
+                    wrapper.checkSelectedKeys([1]);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', selected ? 0 : 1);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', selected ? 0 : 1);
+                    wrapper.checkCallbacksCallOrder(selected
+                        ? []
+                        : ['onItemSelectionChanged', 'onSelectionChanged']);
+                });
+
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> selectItem(item1_1 key)`, function() {
+                    const wrapper = createWrapper(config, { selectNodesRecursive, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: false, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+                    wrapper.instance.selectItem(2);
+
+                    const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? []
+                        : [2];
+                    const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? 0
+                        : selected ? 0 : 1;
+
+                    wrapper.checkSelectedKeys(expectedKeys);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                    wrapper.checkCallbacksCallOrder(expectedCallsCount
+                        ? ['onItemSelectionChanged', 'onSelectionChanged']
+                        : []);
+                });
+
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> selectAll`, function() {
+                    const wrapper = createWrapper(config, { selectNodesRecursive, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded }]);
+
+                    wrapper.instance.selectAll();
+                    const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? [1]
+                        : [2];
+
+                    wrapper.checkSelectedKeys(expectedKeys);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                    wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+                });
+
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> selectAll -> expandAll`, function() {
+                    const wrapper = createWrapper(config, { selectNodesRecursive, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded }]);
+
+                    wrapper.instance.selectAll();
+                    wrapper.instance.expandAll();
+                    const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? [1]
+                        : [2];
+
+                    wrapper.checkSelectedKeys(expectedKeys);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                    wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+                });
+
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectItem(item1 key)    - invalid config`, function() {
+                    const wrapper = createWrapper(config, { selectionMode: 'single', selectNodesRecursive: selectNodesRecursive }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected: true, expanded: config.expanded }]);
+
+                    wrapper.instance.unselectItem(1);
+
+                    const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? []
+                        : [2];
+                    const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? selected ? 1 : 0
+                        : 0;
+
+                    wrapper.checkSelectedKeys(expectedKeys);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                    wrapper.checkCallbacksCallOrder(expectedCallsCount
+                        ? ['onItemSelectionChanged', 'onSelectionChanged']
+                        : []);
+                });
+
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectItem(item1_1 key)   - invalid config`, function() {
+                    const wrapper = createWrapper(config, { selectionMode: 'single', selectNodesRecursive: selectNodesRecursive }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected, expanded: config.expanded }]);
+
+                    wrapper.instance.unselectItem(2);
+
+                    const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? [1]
+                        : selected ? [] : [1];
+                    const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                        ? 0
+                        : selected ? 1 : 0;
+
+                    wrapper.checkSelectedKeys(expectedKeys);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                    wrapper.checkCallbacksCallOrder(expectedCallsCount
+                        ? ['onItemSelectionChanged', 'onSelectionChanged']
+                        : []);
+                });
+
+                QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> unselectAll`, function() {
+                    const wrapper = createWrapper(config, { selectNodesRecursive, selectionMode: 'single' }, [
+                        { id: 1, text: "item1", parentId: ROOT_ID, selected, expanded: config.expanded },
+                        { id: 2, text: "item1_1", parentId: 1, selected: false, expanded: config.expanded }]);
+
+                    wrapper.instance.unselectAll();
+
+                    wrapper.checkSelectedKeys([]);
+                    wrapper.checkCallbackCallCount('onItemSelectionChanged', 0);
+                    wrapper.checkCallbackCallCount('onSelectionChanged', 1);
+                    wrapper.checkCallbacksCallOrder(['onSelectionChanged']);
+                });
+            });
+        });
+
+ */
     });
 });
 
