@@ -144,7 +144,7 @@ QUnit.module("default", {}, () => {
             opt2: "custom"
         });
 
-        instance._setOptionSilent("opt2", "new custom");
+        instance._setOptionWithoutOptionChange("opt2", "new custom");
 
         assert.strictEqual(instance.option("opt2"), "new custom", "option has been changed");
         const log = instance._getTraceLogByMethod("_optionChanged");

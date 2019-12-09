@@ -63,7 +63,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        this._setOptionSilent(
+        this._setOptionWithoutOptionChange(
             'integrationOptions.templates.' + name,
             this._templateManager._createTemplate(template)
         );

@@ -406,7 +406,7 @@ var Component = Class.inherit({
         }
     },
 
-    _setOptionSilent(name, value) {
+    _setOptionWithoutOptionChange(name, value) {
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
