@@ -2,6 +2,8 @@ import $ from "jquery";
 import { deserializeDate } from "core/utils/date_serialization";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
+import FileReaderMock from "./fileManager/file_reader.mock.js";
+
 export const Consts = {
     WIDGET_CLASS: "dx-filemanager",
     TOOLBAR_CLASS: "dx-filemanager-toolbar",
@@ -48,7 +50,9 @@ export const Consts = {
     DROPDOWN_MENU_LIST_CLASS: "dx-dropdownmenu-list",
     DROPDOWN_MENU_CONTENT_CLASS: "dx-scrollview-content",
     DROPDOWN_MENU_LIST_ITEM_CLASS: "dx-list-item",
-    SCROLLABLE_ClASS: "dx-scrollable"
+    SCROLLABLE_ClASS: "dx-scrollable",
+    EDITING_CONTAINER: "dx-filemanager-editing-container",
+    FILE_UPLOADER_INPUT: "dx-fileuploader-input"
 };
 const showMoreButtonText = "\u22EE";
 
@@ -191,8 +195,18 @@ export class FileManagerWrapper {
         return this.getDetailsItemList().find(`.${Consts.SCROLLABLE_ClASS}`);
     }
 
+    getDetailsItemsNames() {
+        return this._$element.find(`.${Consts.DETAILS_ITEM_NAME_CLASS}`);
+    }
+
+    getDetailsItemNamesTexts() {
+        return this.getDetailsItemsNames()
+            .map((_, name) => $(name).text())
+            .get();
+    }
+
     getDetailsItemName(index) {
-        return this._$element.find(`.${Consts.DETAILS_ITEM_NAME_CLASS}`).eq(index).text();
+        return this.getDetailsItemsNames().eq(index).text();
     }
 
     getRowActionButtonInDetailsView(index) {
@@ -222,6 +236,13 @@ export class FileManagerWrapper {
 
     getColumnHeaderInDetailsView(index) {
         return this._$element.find("[id*=dx-col]").eq(index);
+    }
+
+    getDetailsCellText(columnCaption, rowIndex) {
+        const $itemList = this.getDetailsItemList();
+        const columnIndex = $itemList.find(`.dx-header-row > td:contains('${columnCaption}')`).index();
+        const $row = this.getRowInDetailsView(rowIndex + 1);
+        return $row.children("td").eq(columnIndex).text();
     }
 
     getContextMenuItems(visible) {
@@ -283,6 +304,17 @@ export class FileManagerWrapper {
 
     getDialogButton(text) {
         return $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
+    }
+
+    getUploadInput() {
+        return $(`.${Consts.EDITING_CONTAINER} .${Consts.FILE_UPLOADER_INPUT}`);
+    }
+
+    setUploadInputFile(files) {
+        const $input = this.getUploadInput();
+        $input.val(files[0].name);
+        $input.prop("files", files);
+        $input.trigger("change");
     }
 
 }
@@ -553,16 +585,10 @@ export const createUploaderFiles = count => {
 
     for(let i = 0; i < count; i++) {
         const size = 300000 + i * 200000;
-        const file = {
-            name: `Upload file ${i}.txt`,
-            size,
-            slice: (startPos, endPos) => ({
-                fileIndex: i,
-                startPos,
-                endPos,
-                size: Math.min(endPos, size) - startPos
-            })
-        };
+        const fileName = `Upload file ${i}.txt`;
+        const content = generateString(size, i.toString());
+
+        const file = createFileObject(fileName, content);
         result.push(file);
     }
 
@@ -605,4 +631,49 @@ const createFileManagerItem = (parentPath, dataObj) => {
     return item;
 };
 
+export const createFileObject = (fileName, content) => {
+    const result = new window.Blob([content], { type: "application/octet-stream" });
+    result.name = fileName;
+    result.lastModified = (new Date()).getTime();
+    result._dxContent = content;
+    return result;
+};
 
+export const generateString = (size, content) => {
+    if(!size) {
+        return "";
+    }
+
+    let result = content;
+
+    if(result === undefined) {
+        result = "A";
+    }
+
+    if(result.length < size) {
+        const count = Math.ceil(size / result.length);
+        result = new Array(count + 1).join(result);
+    }
+
+    if(result.length > size) {
+        result = result.substr(0, size);
+    }
+
+    return result;
+};
+
+export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
+    chunkIndex = chunkIndex || 0;
+    customData = customData || {};
+    chunkSize = chunkSize || 200000;
+
+    const bytesUploaded = chunkIndex * chunkSize;
+    const chunkCount = Math.ceil(file.size / chunkSize);
+    const chunkBlob = file.slice(bytesUploaded, Math.min(file.size, bytesUploaded + chunkSize));
+
+    return { bytesUploaded, chunkCount, customData, chunkBlob, chunkIndex };
+};
+
+export const stubFileReader = object => {
+    sinon.stub(object, "_createFileReader", () => new FileReaderMock());
+};

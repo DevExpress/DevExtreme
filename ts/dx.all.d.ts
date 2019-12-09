@@ -1622,6 +1622,8 @@ declare module DevExpress.fileProvider {
     }
     /** @name ArrayFileProvider.Options */
     export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
+        /** @name ArrayFileProvider.Options.content */
+        content?: string | Function;
         /** @name ArrayFileProvider.Options.data */
         data?: Array<any>;
         /** @name ArrayFileProvider.Options.itemsExpr */

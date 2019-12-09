@@ -4,7 +4,7 @@ import { Deferred } from "core/utils/deferred";
 import ArrayFileProvider from "ui/file_manager/file_provider/array";
 import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
 import FileItemsController from "ui/file_manager/file_items_controller";
-import { createTestFileSystem, createUploaderFiles } from "../../../helpers/fileManagerHelpers.js";
+import { createTestFileSystem, createUploaderFiles, stubFileReader } from "../../../helpers/fileManagerHelpers.js";
 import TestFileProvider from "../../../helpers/fileManager/file_provider.test.js";
 import FileManagerProgressPanelMock from "../../../helpers/fileManager/notification.progress_panel.mock.js";
 import FileManagerNotificationControlMock from "../../../helpers/fileManager/notification.mock.js";
@@ -35,6 +35,8 @@ const moduleConfig = {
 const createController = (context, providerOptions) => {
     const data = createTestFileSystem();
     const arrayProvider = new ArrayFileProvider({ data });
+
+    stubFileReader(arrayProvider);
 
     const defaultConfig = {
         provider: arrayProvider

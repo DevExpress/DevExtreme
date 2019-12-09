@@ -1,9 +1,12 @@
 import $ from "jquery";
 import "ui/file_manager";
+import FileUploader from "ui/file_uploader";
 import fx from "animation/fx";
-import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
+import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from "../../../helpers/fileManagerHelpers.js";
 
 const { test } = QUnit;
+
+const FileUploaderInternals = FileUploader.__internals;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -11,6 +14,8 @@ const moduleConfig = {
 
         this.clock = sinon.useFakeTimers();
         fx.off = true;
+
+        FileUploaderInternals.changeFileInputRenderer(() => $("<div>"));
 
         this.$element = $("#fileManager").dxFileManager({
             fileProvider: fileSystem,
@@ -41,6 +46,8 @@ const moduleConfig = {
 
         this.clock.restore();
         fx.off = false;
+
+        FileUploaderInternals.resetFileInputTag();
     }
 };
 
@@ -485,6 +492,26 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.strictEqual(items[0].name, "File 1.txt", "downloadItems args is valid");
 
         fileProvider.downloadItems.restore();
+    });
+
+    test("upload file", function(assert) {
+        const fileManager = this.$element.dxFileManager("instance");
+        stubFileReader(fileManager._controller._fileProvider);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+
+        this.wrapper.getToolbarButton("Upload").filter(":visible").trigger("dxclick");
+
+        const file = createUploaderFiles(1)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const uploadedFileIndex = itemNames.indexOf(file.name);
+
+        assert.strictEqual(initialItemCount + 1, itemNames.length, "item count increased");
+        assert.ok(uploadedFileIndex > -1, "file is uploaded");
+        assert.strictEqual(this.wrapper.getDetailsCellText("File Size", uploadedFileIndex), "293 KB", "file size is correct");
     });
 
     test("copying file must be completed in progress panel and current directory must be changed to the destination", function(assert) {
