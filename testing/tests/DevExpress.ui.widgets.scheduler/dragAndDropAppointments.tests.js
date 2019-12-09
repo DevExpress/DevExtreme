@@ -456,6 +456,87 @@ module("Drag and drop appointments", moduleConfig, () => {
         }
     });
 
+    // T835049
+    QUnit.test("The appointment should have correct position after a drop when the store is asynchronous", function(assert) {
+        let data = [{
+            text: "Task 1",
+            startDate: new Date(2015, 1, 1, 11, 0),
+            endDate: new Date(2015, 1, 1, 11, 30)
+        }];
+
+        const scheduler = createWrapper({
+            editing: true,
+            height: 600,
+            views: [{ type: "timelineMonth" }],
+            currentView: "timelineMonth",
+            dataSource: {
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => d.resolve(data), 30);
+
+                    return d.promise();
+                },
+                update: (key, values) => {
+                    const d = $.Deferred();
+
+                    setTimeout(function() {
+                        $.extend(data[0], values);
+                        d.resolve(data[0]);
+                    }, 30);
+
+                    return d.promise();
+                }
+            },
+            currentDate: new Date(2015, 1, 1),
+            startDayHour: 9
+        });
+
+        this.clock.tick(30);
+
+        let $appointment = scheduler.appointments.find("Task 1").first(),
+            positionBeforeDrag = getAbsolutePosition($appointment),
+            pointer = pointerMock($appointment).start(),
+            cellWidth = scheduler.workSpace.getCellWidth();
+
+        pointer
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(cellWidth, 0);
+
+        pointer.up();
+
+        $appointment = scheduler.appointments.find("Task 1").first();
+        let positionAfterDrag = getAbsolutePosition($appointment);
+
+        assert.deepEqual(positionAfterDrag, {
+            left: positionBeforeDrag.left + cellWidth,
+            top: positionBeforeDrag.top
+        }, "appointment position is correct");
+        assert.ok($appointment.hasClass("dx-draggable-dragging"), "appointment is dragging");
+
+        this.clock.tick(30); // waiting for data update
+
+        $appointment = scheduler.appointments.find("Task 1").first();
+        positionAfterDrag = getAbsolutePosition($appointment);
+
+        assert.deepEqual(positionAfterDrag, {
+            left: positionBeforeDrag.left + cellWidth,
+            top: positionBeforeDrag.top
+        }, "appointment position is correct");
+        assert.ok($appointment.hasClass("dx-draggable-dragging"), "appointment is dragging");
+
+        this.clock.tick(30); // waiting for data loading
+
+        $appointment = scheduler.appointments.find("Task 1").first();
+        positionAfterDrag = getAbsolutePosition($appointment);
+
+        assert.deepEqual(positionAfterDrag, {
+            left: positionBeforeDrag.left + cellWidth,
+            top: positionBeforeDrag.top
+        }, "appointment position is correct");
+        assert.notOk($appointment.hasClass("dx-draggable-dragging"), "appointment isn't dragging");
+    });
+
     // T832754
     QUnit.test("The appointment should be dropped correctly after pressing Esc key", function(assert) {
         const scheduler = createWrapper({
