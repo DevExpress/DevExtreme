@@ -902,7 +902,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
             dataSource: new DataSource({
                 store: new CustomStore({
                     key: "id",
-                    load(options) {
+                    load() {
                         const res = $.Deferred();
                         setTimeout(() => {
                             res.resolve(data);
