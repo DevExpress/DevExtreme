@@ -270,12 +270,24 @@ QUnit.test("itemTemplate passed to createComponent should work correct", functio
     assert.deepEqual(stubCheckAndDeleteAppointment.getCall(0).args, [item.data, item.currentData]);
 });
 
-QUnit.test("Delete button should't create, editing = false", function(assert) {
+QUnit.test("Delete button shouldn't createed, editing = false", function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
     const item = { data: "data", currentData: "currentData", color: { done: sinon.spy() } };
 
     tooltip.show('target', dataList, extend(this.extraOptions, { editing: false }));
+    stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
+    stubCreateComponent.getCall(1).args[2].itemTemplate(item, "index");
+
+    assert.equal(stubCreateComponent.getCall(2), undefined);
+});
+
+QUnit.test("Delete button shouldn't created, appointment is disabled", function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = [{ data: 'data1', disabled: true }, { data: 'data2', disabled: true }];
+    const item = { data: dataList[0], currentData: "currentData", color: { done: sinon.spy() } };
+
+    tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, "index");
 

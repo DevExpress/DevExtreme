@@ -1051,6 +1051,19 @@ QUnit.test('Clicking on \'Repeat\' label should should focus freq editor, when r
     assert.ok($freqEditor.hasClass('dx-state-focused'), 'freq editor is focused');
 });
 
+QUnit.test('Popup should be readOnly if appointment is disabled', function(assert) {
+    this.instance._createComponent = sinon.stub().returns({
+        option: sinon.stub(),
+        initialOption: sinon.stub(),
+        show: sinon.stub()
+    });
+
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), disabled: true });
+    this.instance._createComponent.getCall(0).args[2].contentTemplate();
+
+    assert.equal(this.instance._createComponent.getCall(1).args[2].readOnly, true);
+});
+
 QUnit.test('Multiple showing appointment popup for recurrence appointments should work correctly', function(assert) {
     this.instance.showAppointmentPopup({
         text: 'Appointment 1',

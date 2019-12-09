@@ -144,7 +144,7 @@ export class TooltipStrategyBase {
         $itemElement.append(this._createItemListMarker(color));
         $itemElement.append(this._createItemListInfo(this._options.getText(data, currentData)));
 
-        if(editing && editing.allowDeleting === true || editing === true) {
+        if(!data.disabled && (editing && editing.allowDeleting === true || editing === true)) {
             $itemElement.append(this._createDeleteButton(data, currentData));
         }
 
