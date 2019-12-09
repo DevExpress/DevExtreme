@@ -1713,7 +1713,7 @@ QUnit.test("Fullstacked Spline. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Spline", function(assert) {
+QUnit.test("Fullstacked Spline. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedspline",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
@@ -1746,7 +1746,7 @@ QUnit.test("Fullstacked Area. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Area", function(assert) {
+QUnit.test("Fullstacked Area. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedarea",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
@@ -1779,7 +1779,7 @@ QUnit.test("Fullstacked SplineArea. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked SplineArea", function(assert) {
+QUnit.test("Fullstacked SplineArea. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedsplinearea",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
@@ -1812,7 +1812,7 @@ QUnit.test("Fullstacked Bar. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Bar", function(assert) {
+QUnit.test("Fullstacked Bar. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedbar",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
