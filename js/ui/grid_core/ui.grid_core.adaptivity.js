@@ -1108,6 +1108,7 @@ module.exports = {
                     var rowIndexDelta = that.getRowIndexDelta();
 
                     that.updateItems({
+                        isExpandAdaptiveDetailRow: true,
                         changeType: "update",
                         rowIndices: [oldExpandRowIndex - rowIndexDelta, newExpandRowIndex - rowIndexDelta]
                     });
