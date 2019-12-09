@@ -6,13 +6,11 @@ import { Error, log } from './errors';
 import { getElementOptions } from './utils/dom';
 import { FunctionTemplate } from './templates/function_template';
 import { EmptyTemplate } from './templates/empty_template';
-import { ChildDefaultTemplate } from './templates/child_default_template';
 import { camelize } from './utils/inflector';
-import { TemplateBase } from './templates/template_base';
 import {
-    findTemplateByDevice, addOneRenderedCall, templateKey,
+    findTemplateByDevice, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource,
-    defaultCreateElement, acquireIntegrationTemplate,
+    defaultCreateElement, acquireTemplate,
 } from './utils/template_manager';
 
 const TEXT_NODE = 3;
@@ -152,7 +150,9 @@ export default class TemplateManager {
 
     getTemplate(templateSource, templates, { isAsyncTemplate, skipTemplates }, context) {
         if(!isFunction(templateSource)) {
-            return this._acquireTemplate(templateSource, this._createTemplateIfNeeded, templates, isAsyncTemplate, skipTemplates);
+            return acquireTemplate(
+                templateSource, this._createTemplateIfNeeded, templates, isAsyncTemplate, skipTemplates, this._defaultTemplates
+            );
         }
 
         return new FunctionTemplate((options) => {
@@ -163,45 +163,17 @@ export default class TemplateManager {
             }
 
             let dispose = false;
-            const template = this._acquireTemplate(templateSourceResult, (templateSource) => {
+            const template = acquireTemplate(templateSourceResult, (templateSource) => {
                 if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
                     return new FunctionTemplate(() => templateSource);
                 }
                 dispose = true;
                 return this._createTemplate(templateSource);
-            }, templates, isAsyncTemplate, skipTemplates);
+            }, templates, isAsyncTemplate, skipTemplates, this._defaultTemplates);
 
             const result = template.render(options);
             dispose && template.dispose && template.dispose();
             return result;
         });
-    }
-
-    // TODO: should we extract it inti utils?
-    _acquireTemplate(templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates) {
-        if(templateSource == null) {
-            return new EmptyTemplate();
-        }
-
-        if(templateSource instanceof ChildDefaultTemplate) {
-            return this._defaultTemplates[templateSource.name];
-        }
-
-        if(templateSource instanceof TemplateBase) {
-            return templateSource;
-        }
-
-        // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
-        if(isFunction(templateSource.render) && !isRenderer(templateSource)) {
-            return addOneRenderedCall(templateSource);
-        }
-
-        if(templateSource.nodeType || isRenderer(templateSource)) {
-            return createTemplate($(templateSource));
-        }
-
-        return acquireIntegrationTemplate(templateSource, templates, isAsyncTemplate, skipTemplates)
-            || this._defaultTemplates[templateSource]
-            || createTemplate(templateSource);
     }
 }

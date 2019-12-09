@@ -1,11 +1,13 @@
 import $ from '../renderer';
-import { isRenderer } from './type';
+import { isRenderer, isFunction } from './type';
 import { findBestMatches } from './common';
 import { extend } from './extend';
+import { ChildDefaultTemplate } from '../templates/child_default_template';
+import { TemplateBase } from '../templates/template_base';
+import { EmptyTemplate } from '../templates/empty_template';
 import { getElementOptions, normalizeTemplateElement } from './dom';
 import devices from '../devices';
 import { Template } from '../templates/template';
-import { TemplateBase } from '../templates/template_base';
 
 export const findTemplateByDevice = (templates) => {
     const suitableTemplate = findBestMatches(
@@ -71,4 +73,31 @@ export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTem
     }
 
     return integrationTemplate;
+};
+
+export const acquireTemplate = (templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates, defaultTemplates) => {
+    if(templateSource == null) {
+        return new EmptyTemplate();
+    }
+
+    if(templateSource instanceof ChildDefaultTemplate) {
+        return defaultTemplates[templateSource.name];
+    }
+
+    if(templateSource instanceof TemplateBase) {
+        return templateSource;
+    }
+
+    // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
+    if(isFunction(templateSource.render) && !isRenderer(templateSource)) {
+        return addOneRenderedCall(templateSource);
+    }
+
+    if(templateSource.nodeType || isRenderer(templateSource)) {
+        return createTemplate($(templateSource));
+    }
+
+    return acquireIntegrationTemplate(templateSource, templates, isAsyncTemplate, skipTemplates)
+        || defaultTemplates[templateSource]
+        || createTemplate(templateSource);
 };
