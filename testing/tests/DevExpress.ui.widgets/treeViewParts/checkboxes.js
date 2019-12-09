@@ -1028,7 +1028,16 @@ QUnit.module("Checkboxes", () => {
                         const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
                             ? []
                             : [2];
+                        const expectedCallsCount = !config.expanded && isLazyDataSourceMode(wrapper)
+                            ? 0
+                            : selected ? 0 : 1;
+
                         wrapper.checkSelectedKeys(expectedKeys);
+                        wrapper.checkCallbackCallCount('onItemSelectionChanged', expectedCallsCount);
+                        wrapper.checkCallbackCallCount('onSelectionChanged', expectedCallsCount);
+                        wrapper.checkCallbacksCallOrder(expectedCallsCount
+                            ? ['onItemSelectionChanged', 'onSelectionChanged']
+                            : []);
                     });
 
                     QUnit.test(`selectionMode: single, selectNodesRecursive: ${selectNodesRecursive}, selected: ${selected} -> selectAll`, function() {
