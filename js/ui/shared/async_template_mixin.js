@@ -1,6 +1,6 @@
 module.exports = {
     _waitAsyncTemplates(callback) {
-        if(this._options.templatesRenderAsynchronously) {
+        if(this._getOptionByStealth('templatesRenderAsynchronously')) {
             this._asyncTemplatesTimers = this._asyncTemplatesTimers || [];
             const timer = setTimeout(function() {
                 callback.call(this);
