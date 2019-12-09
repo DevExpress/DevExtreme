@@ -607,13 +607,10 @@ var EditingController = modules.ViewController.inherit((function() {
             return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP ? this._getVisibleEditRowIndex() : -1;
         },
 
-        isEditCell: function(rowIndex, columnIndex) {
-            var hasEditData = !!(Array.isArray(this._editData) && this._editData.length),
-                visibleEditRowIndex = this._getVisibleEditRowIndex(),
-                rowIndexDelta = this.getController("data").getRowIndexDelta(),
-                isRowIndexCorrect = (visibleEditRowIndex === rowIndex) || (visibleEditRowIndex + rowIndexDelta === rowIndex);
+        isEditCell: function(visibleRowIndex, columnIndex) {
+            var hasEditData = !!(Array.isArray(this._editData) && this._editData.length);
 
-            return hasEditData && isRowIndexCorrect && this._editColumnIndex === columnIndex;
+            return hasEditData && this._getVisibleEditRowIndex() === visibleRowIndex && this._editColumnIndex === columnIndex;
         },
 
         getPopupContent: function() {
@@ -2731,10 +2728,10 @@ module.exports = {
 
                     return this.callBase.apply(this, arguments);
                 },
-                _isCellChanged: function(oldRow, newRow, rowIndex, columnIndex, isLiveUpdate) {
+                _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
                     var editingController = this.getController("editing"),
                         cell = oldRow.cells && oldRow.cells[columnIndex],
-                        isEditing = editingController && editingController.isEditCell(rowIndex, columnIndex);
+                        isEditing = editingController && editingController.isEditCell(visibleRowIndex, columnIndex);
 
                     if(isLiveUpdate && isEditing) {
                         return false;
