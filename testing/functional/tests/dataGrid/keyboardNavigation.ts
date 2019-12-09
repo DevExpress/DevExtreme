@@ -560,7 +560,7 @@ test("Tab key on the focused group row should be handled by default behavior (T8
     });
 });
 
-test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' if 'autoNavigateToFocused' row is false", async t => {
+test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' by pager if 'autoNavigateToFocused' row is false", async t => {
     const dataGrid = new DataGrid("#container");
     const pager = dataGrid.getPager();
 
