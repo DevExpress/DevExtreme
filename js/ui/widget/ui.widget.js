@@ -1,5 +1,6 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    events = require("../../events/"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -7,7 +8,6 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
-    KeyboardProcessor = require("./ui.keyboard_processor"),
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils");
 
@@ -15,7 +15,7 @@ require("../../events/click");
 require("../../events/hover");
 require("../../events/core/emitter.feedback");
 
-const { hover, focus, active, dxClick } = eventsEngine;
+const { hover, focus, active, dxClick, keyboard } = events;
 
 var WIDGET_CLASS = "dx-widget",
     ACTIVE_STATE_CLASS = "dx-state-active",
@@ -132,8 +132,7 @@ var Widget = DOMComponentWithTemplate.inherit({
             * @hidden
             */
             onFocusOut: null,
-
-            _keyboardProcessor: undefined,
+            onKeyboardHandled: null,
 
             /**
             * @name ui.template
@@ -223,10 +222,10 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
-        this._options[optionsContainer] = extend({}, innerWidget.option());
-        innerWidget.on("optionChanged", function(e) {
-            this._options[optionsContainer] = extend({}, e.component.option());
-        }.bind(this));
+        this._setOptionByStealth(optionsContainer, extend({}, innerWidget.option()));
+        innerWidget.on("optionChanged", (e) => {
+            this._setOptionByStealth(optionsContainer, extend({}, e.component.option()));
+        });
     },
 
     _getAriaTarget: function() {
@@ -290,6 +289,7 @@ var Widget = DOMComponentWithTemplate.inherit({
 
     _dispose: function() {
         this._contentReadyAction = null;
+        this._detachKeyboardEvents();
 
         this.callBase();
     },
@@ -430,37 +430,51 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._hasFocusClass();
     },
 
+    _getKeyboardListeners() {
+        return [];
+    },
+
     _attachKeyboardEvents: function() {
-        var processor = this.option("_keyboardProcessor");
+        this._detachKeyboardEvents();
 
-        if(processor) {
-            this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
-        } else if(this.option("focusStateEnabled")) {
-            this._disposeKeyboardProcessor();
+        const { focusStateEnabled, onKeyboardHandled } = this.option();
+        const hasChildListeners = this._getKeyboardListeners().length;
+        const hasKeyboardEventHandler = !!onKeyboardHandled;
+        const shouldAttach = focusStateEnabled || hasChildListeners || hasKeyboardEventHandler;
 
-            this._keyboardProcessor = new KeyboardProcessor({
-                element: this._keyboardEventBindingTarget(),
-                handler: this._keyboardHandler,
-                focusTarget: this._focusTarget(),
-                context: this
-            });
+        if(shouldAttach) {
+            this._keyboardListenerId = keyboard.on(
+                this._keyboardEventBindingTarget(),
+                this._focusTarget(),
+                opts => this._keyboardHandler(opts)
+            );
         }
     },
 
-    _keyboardHandler: function(options) {
-        var e = options.originalEvent;
-        var keyName = options.keyName;
-        var keyCode = options.which;
+    _keyboardHandler: function(options, onlyChildProcessing) {
+        if(!onlyChildProcessing) {
+            const { originalEvent, keyName, which } = options;
+            const keys = this._supportedKeys(originalEvent);
+            const func = keys[keyName] || keys[which];
 
-        var keys = this._supportedKeys(e),
-            func = keys[keyName] || keys[keyCode];
+            if(func !== undefined) {
+                const handler = func.bind(this);
+                const result = handler(originalEvent, options);
 
-        if(func !== undefined) {
-            var handler = func.bind(this);
-            return handler(e) || false;
-        } else {
-            return true;
+                if(!result) {
+                    return false;
+                }
+            }
         }
+
+        const keyboardListeners = this._getKeyboardListeners();
+        const { onKeyboardHandled } = this.option();
+
+        keyboardListeners.forEach(listener => listener && listener._keyboardHandler(options));
+
+        onKeyboardHandled && onKeyboardHandled(options);
+
+        return true;
     },
 
     _refreshFocusState: function() {
@@ -476,14 +490,12 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._toggleFocusClass(false);
         $element.removeAttr("tabIndex");
 
-        this._disposeKeyboardProcessor();
+        this._detachKeyboardEvents();
     },
 
-    _disposeKeyboardProcessor() {
-        if(this._keyboardProcessor) {
-            this._keyboardProcessor.dispose();
-            delete this._keyboardProcessor;
-        }
+    _detachKeyboardEvents() {
+        keyboard.off(this._keyboardListenerId);
+        this._keyboardListenerId = null;
     },
 
     _attachHoverEvents() {
@@ -620,7 +632,6 @@ var Widget = DOMComponentWithTemplate.inherit({
                 this._attachHoverEvents();
                 break;
             case "tabIndex":
-            case "_keyboardProcessor":
             case "focusStateEnabled":
                 this._refreshFocusState();
                 break;
@@ -637,6 +648,9 @@ var Widget = DOMComponentWithTemplate.inherit({
                     // TODO hiding works wrong
                     this._checkVisibilityChanged(args.value ? "shown" : "hiding");
                 }
+                break;
+            case "onKeyboardHandled":
+                this._attachKeyboardEvents();
                 break;
             case "onContentReady":
                 this._initContentReadyAction();

@@ -626,13 +626,16 @@ var Calendar = Editor.inherit({
         }
     },
 
+    _getKeyboardListeners() {
+        return this.callBase().concat([this._view]);
+    },
+
     _renderViews: function() {
         this.$element().addClass(CALENDAR_VIEW_CLASS + "-" + this.option("zoomLevel"));
 
         var currentDate = this.option("currentDate");
 
         this._view = this._renderSpecificView(currentDate);
-        this._view.option("_keyboardProcessor", this._viewKeyboardProcessor);
 
         if(windowUtils.hasWindow()) {
             var beforeDate = this._getDateByOffset(-1, currentDate);

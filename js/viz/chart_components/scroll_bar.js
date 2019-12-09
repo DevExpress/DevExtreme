@@ -1,5 +1,5 @@
 import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import { extend } from "../../core/utils/extend";
 import translator2DModule from "../translators/translator2d";
 import { isDefined } from "../../core/utils/type";

@@ -9,7 +9,7 @@ import { inArray } from "../../core/utils/array";
 import { each } from "../../core/utils/iterator";
 import themes from "../themes";
 import Editor from "../editor/editor";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import ClearButton from "./ui.text_editor.clear";
 import TextEditorButtonCollection from "./texteditor_button_collection/index";
@@ -198,6 +198,7 @@ const TextEditorBase = Editor.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field5 event:event
+            * @deprecated
             * @action
             */
             onKeyPress: null,
@@ -338,6 +339,14 @@ const TextEditorBase = Editor.inherit({
                 }
             }
         ]);
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            "onKeyPress": { since: "20.1", message: "This event is removed from the web standards and will be deprecated in modern browsers soon." }
+        });
     },
 
     _getDefaultButtons: function() {

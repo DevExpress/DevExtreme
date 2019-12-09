@@ -2457,7 +2457,7 @@ QUnit.test("Export's fake menu buttons has a correct markup", function(assert) {
     var $firstItem = renderFakeButtonSpy.getCall(0).args[1],
         $secondItem = renderFakeButtonSpy.getCall(1).args[1];
 
-    assert.equal($firstItem.find(checkingSelector.replace("dx-icon", "dx-icon.dx-icon-exportxlsx")).length, 1);
+    assert.equal($firstItem.find(checkingSelector.replace("dx-icon", "dx-icon.dx-icon-xlsxfile")).length, 1);
     assert.equal($secondItem.find(checkingSelector.replace("dx-icon", "dx-icon.dx-icon-exportselected")).length, 1);
 });
 

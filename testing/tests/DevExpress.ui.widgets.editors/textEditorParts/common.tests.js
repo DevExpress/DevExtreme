@@ -7,6 +7,8 @@ import keyboardMock from "../../../helpers/keyboardMock.js";
 import caretWorkaround from "./caretWorkaround.js";
 import themes from "ui/themes";
 import config from "core/config";
+import { noop } from "core/utils/common";
+import consoleUtils from "core/utils/console";
 
 import "ui/text_box/ui.text_editor";
 
@@ -1065,6 +1067,33 @@ QUnit.module("api", moduleConfig, () => {
 
         assert.equal(keyDownSpy.callCount, 2, "keyDown event handled twice");
         assert.equal(keyUpSpy.callCount, 2, "keyUp event handled twice");
+    });
+});
+
+QUnit.module("deprecated options", {
+    beforeEach: function() {
+        sinon.spy(consoleUtils.logger, "warn");
+    },
+    afterEach: function() {
+        consoleUtils.logger.warn.restore();
+    }
+}, () => {
+    QUnit.test("widget has no warnings if it is no user onKeyPress event subscriptions", function(assert) {
+        $("#texteditor").dxTextEditor({});
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 0, "Warning is not raised on init for widget without 'onKeyPress' handler");
+    });
+
+    QUnit.test("user onKeyPress event subscriptions fires a deprecation warning", function(assert) {
+        const textBox = $("#texteditor").dxTextEditor({
+            onKeyPress: noop
+        }).dxTextEditor("instance");
+
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 1, "Warning is raised");
+        assert.strictEqual(consoleUtils.logger.warn.getCall(0).args[0].substring(0, 5), "W0001", "Warning is correct");
+
+        textBox.option("onKeyPress", null);
+        textBox.option("onKeyPress", noop);
+        assert.strictEqual(consoleUtils.logger.warn.callCount, 3, "Warning is raised if set a new handler");
     });
 });
 

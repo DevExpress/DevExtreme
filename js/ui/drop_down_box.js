@@ -4,7 +4,6 @@ import { ensureDefined, noop, grep } from "../core/utils/common";
 import { isObject } from "../core/utils/type";
 import { map } from "../core/utils/iterator";
 import selectors from "./widget/selectors";
-import KeyboardProcessor from "./widget/ui.keyboard_processor";
 import { when, Deferred } from "../core/utils/deferred";
 import $ from "../core/renderer";
 import eventsEngine from "../events/core/events_engine";
@@ -12,6 +11,7 @@ import { extend } from "../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
 import registerComponent from "../core/component_registrator";
 import { normalizeKeyName } from "../events/utils";
+import { keyboard } from "../events/";
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
     ANONYMOUS_TEMPLATE_NAME = "content";
@@ -253,11 +253,7 @@ var DropDownBox = DropDownEditor.inherit({
         this.callBase();
 
         if(this.option("focusStateEnabled")) {
-            this._popup._keyboardProcessor.push(new KeyboardProcessor({
-                element: this.content(),
-                handler: this._popupElementTabHandler,
-                context: this
-            }));
+            keyboard.on(this.content(), null, e => this._popupElementTabHandler(e));
         }
     },
 
@@ -270,6 +266,8 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _popupConfig: function() {
+        const { focusStateEnabled } = this.option();
+
         return extend(this.callBase(), {
             width: function() {
                 return this.$element().outerWidth();
@@ -277,7 +275,8 @@ var DropDownBox = DropDownEditor.inherit({
             height: "auto",
             tabIndex: -1,
             dragEnabled: false,
-            focusStateEnabled: this.option("focusStateEnabled"),
+            focusStateEnabled,
+            onKeyboardHandled: opts => this.option("focusStateEnabled") && this._popupElementTabHandler(opts),
             maxHeight: function() {
                 return getElementMaxHeightByWindow(this.$element());
             }.bind(this)

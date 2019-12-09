@@ -1734,7 +1734,7 @@ QUnit.test("Create CrosshairCursor, not rotated", function(assert) {
     assert.ok(chart._crosshair.render.called);
 
     assert.equal(crosshairModule.Crosshair.args[0][0], chart._renderer);
-    assert.deepEqual(crosshairModule.Crosshair.args[0][1], chart._options.crosshair);
+    assert.deepEqual(crosshairModule.Crosshair.args[0][1], chart.option("crosshair"));
     assert.deepEqual(crosshairModule.Crosshair.args[0][2].canvas, chart._canvas, "canvas");
     assert.strictEqual(crosshairModule.Crosshair.args[0][2].axes[0][0], chart._argumentAxes[0]);
     assert.strictEqual(crosshairModule.Crosshair.args[0][2].axes[1][0], chart.getValueAxis());
@@ -1769,7 +1769,7 @@ QUnit.test("Create CrosshairCursor, rotated", function(assert) {
 
     assert.ok(chart._crosshair);
     assert.ok(chart._crosshair.render.called);
-    assert.deepEqual(crosshairModule.Crosshair.lastCall.args, [chart._renderer, chart._options.crosshair, { canvas: chart._canvas, axes: [chart._valueAxes, chart._argumentAxes], panes: [] }, chart._crosshairCursorGroup]);
+    assert.deepEqual(crosshairModule.Crosshair.lastCall.args, [chart._renderer, chart.option("crosshair"), { canvas: chart._canvas, axes: [chart._valueAxes, chart._argumentAxes], panes: [] }, chart._crosshairCursorGroup]);
 });
 
 QUnit.test("create crosshair, border of panes is visible", function(assert) {
@@ -1778,7 +1778,7 @@ QUnit.test("create crosshair, border of panes is visible", function(assert) {
     assert.ok(chart._crosshair);
     assert.ok(chart._crosshair.render.called);
     assert.deepEqual(crosshairModule.Crosshair.lastCall.args, [
-        chart._renderer, chart._options.crosshair, {
+        chart._renderer, chart.option("crosshair"), {
             canvas: chart._canvas,
             axes: [chart._argumentAxes, chart._valueAxes],
             panes: [{
@@ -1807,7 +1807,7 @@ QUnit.test("Update Crosshair", function(assert) {
     chart.option({ crosshair: { verticalLine: { visible: true } } });
 
     assert.ok(chart._crosshair.update.called);
-    assert.deepEqual(chart._crosshair.update.lastCall.args, [chart._options.crosshair, { canvas: chart._canvas, axes: [chart._argumentAxes, chart._valueAxes], panes: [] }]);
+    assert.deepEqual(chart._crosshair.update.lastCall.args, [chart.option("crosshair"), { canvas: chart._canvas, axes: [chart._argumentAxes, chart._valueAxes], panes: [] }]);
     assert.ok(chart._crosshair.render.called);
 });
 

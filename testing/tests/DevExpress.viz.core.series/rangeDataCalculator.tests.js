@@ -419,6 +419,36 @@ QUnit.test("Numeric. Logarithmic axis. Do not include negative numbers to range 
     assert.equal(series.getPoints()[0].hasValue(), false);
 });
 
+// T837583
+QUnit.test("Numeric. Logarithmic axis. Values contains zero value", function(assert) {
+    const data = [{ arg: 100, val1: 0, val2: 100 },
+        { arg: 1234, val1: 1, val2: 10 },
+        { arg: 10000, val1: 0, val2: 10 }];
+    const series = createSeries({ type: "rangearea", argumentAxisType: "logarithmic", valueAxisType: "logarithmic" });
+
+    series.updateData(data);
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.equal(rangeData.arg.linearThreshold, 2);
+});
+
+// T837583
+QUnit.test("Numeric. Logarithmic axis. Values contains zero value. Negative case", function(assert) {
+    const data = [{ arg: 100, val1: 0, val2: -100 },
+        { arg: 1234, val1: 1, val2: -10 },
+        { arg: 10000, val1: 0, val2: -10 }];
+    const series = createSeries({ type: "rangearea", argumentAxisType: "logarithmic", valueAxisType: "logarithmic" });
+
+    series.updateData(data);
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.equal(rangeData.arg.linearThreshold, 2);
+});
+
 QUnit.module("Process range data on updating. Simple. With null values");
 
 QUnit.test("Numeric.", function(assert) {
@@ -1713,7 +1743,7 @@ QUnit.test("Fullstacked Spline. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Spline", function(assert) {
+QUnit.test("Fullstacked Spline. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedspline",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
@@ -1746,7 +1776,7 @@ QUnit.test("Fullstacked Area. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Area", function(assert) {
+QUnit.test("Fullstacked Area. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedarea",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
@@ -1779,7 +1809,7 @@ QUnit.test("Fullstacked SplineArea. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked SplineArea", function(assert) {
+QUnit.test("Fullstacked SplineArea. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedsplinearea",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
@@ -1812,7 +1842,7 @@ QUnit.test("Fullstacked Bar. Negative points", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Bar", function(assert) {
+QUnit.test("Fullstacked Bar. Discrete data", function(assert) {
     this.testGetRangeWithDataUpdate(assert,
         "fullstackedbar",
         [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],

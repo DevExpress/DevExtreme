@@ -409,7 +409,6 @@ var DropDownMenu = Widget.inherit({
 
     _listOptions: function() {
         return {
-            _keyboardProcessor: this._listProcessor,
             pageLoadMode: "scrollBottom",
             indicateLoading: false,
             noDataText: "",
@@ -436,18 +435,8 @@ var DropDownMenu = Widget.inherit({
         delete this._deferRendering;
     },
 
-    _attachKeyboardEvents: function() {
-        this.callBase.apply(this, arguments);
-
-        this._listProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor();
-        if(this._list) {
-            this._list.option("_keyboardProcessor", this._listProcessor);
-        }
-    },
-
-    _cleanFocusState: function() {
-        this.callBase.apply(this, arguments);
-        delete this._listProcessor;
+    _getKeyboardListeners() {
+        return this.callBase().concat([this._list]);
     },
 
     _toggleVisibility: function(visible) {

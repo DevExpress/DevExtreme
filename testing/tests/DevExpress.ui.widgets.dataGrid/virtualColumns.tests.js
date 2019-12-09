@@ -296,6 +296,16 @@ QUnit.test("virtual column location if scroll position at end", function(assert)
     assert.strictEqual(this.getVisibleColumns()[0].width, 50 * 40, "virtual column width");
 });
 
+QUnit.test("getVisibleColumnIndex with virtual columns", function(assert) {
+    // arrange
+    this.setupVirtualColumns();
+    this.columnsController.setScrollPosition(50 * 50 - 400);
+
+    // assert
+    assert.equal(this.getVisibleColumnIndex("field41"), 1, "virtual column after command virtual column");
+    assert.equal(this.getVisibleColumnIndex("field1"), -1, "first column is not rendered");
+});
+
 QUnit.test("virtual column location if scroll position at middle", function(assert) {
     this.setupVirtualColumns();
     this.columnsController.setScrollPosition(50 * 25 - 400 / 2);

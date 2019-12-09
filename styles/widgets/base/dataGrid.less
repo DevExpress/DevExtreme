@@ -27,6 +27,8 @@
 
 .dx-sortable-dragging > div > .dx-gridbase-container > .dx-datagrid-rowsview {
     border-color: @datagrid-drag-header-border-color;
+    cursor: pointer;
+    cursor: grabbing;
 }
 
 .dx-datagrid-error-message() {
@@ -232,16 +234,6 @@
 
 .dx-datagrid-column-chooser {
     .dx-base-typography();
-}
-
-.dx-datagrid-export-menu {
-    .dx-menu-item .dx-icon-exportxlsx {
-        .dx-icon-sizing(16px);
-    }
-
-    .dx-menu-item .dx-icon-exportselected {
-        .dx-icon-sizing(16px);
-    }
 }
 
 .dx-datagrid-adaptive-more {

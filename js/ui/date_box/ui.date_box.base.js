@@ -462,8 +462,8 @@ var DateBox = DropDownEditor.inherit({
         };
     },
 
-    _attachChildKeyboardEvents: function() {
-        this._strategy.attachKeyboardEvents(this._keyboardProcessor);
+    _getKeyboardListeners() {
+        return this.callBase().concat([this._strategy && this._strategy.getKeyboardListener()]);
     },
 
     _renderPopup: function() {
@@ -779,7 +779,11 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "min":
             case "max":
-                this._applyInternalValidation(this.dateOption("value"));
+                if(this.option("isValid")) {
+                    this._applyInternalValidation(this.dateOption("value"));
+                } else {
+                    this._validateValue(this.dateOption("value"));
+                }
                 this._invalidate();
                 break;
             case "dateSerializationFormat":

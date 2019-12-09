@@ -13,9 +13,10 @@ import "ui/data_grid/ui.data_grid";
 import "data/odata/store";
 
 import $ from "jquery";
-import eventUtils from "events/utils";
+import * as eventUtils from "events/utils";
 import ArrayStore from "data/array_store";
 import pointerEvents from "events/pointer";
+import { keyboard } from "events/";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
 import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
@@ -59,7 +60,10 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
         shift = ctrl.shift;
         ctrl = ctrl.ctrl;
     }
-    this.keyboardNavigationController._keyDownProcessor.process({
+
+    const keyboardListenerId = this.keyboardNavigationController._keyDownListener;
+
+    keyboard._getProcessor(keyboardListenerId).process({
         key: KEYS[key],
         keyName: key,
         ctrlKey: ctrl,

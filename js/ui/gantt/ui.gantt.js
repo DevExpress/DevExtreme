@@ -91,7 +91,6 @@ class Gantt extends Widget {
             rightElement: this._$ganttView,
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        this._setInnerElementsWidth();
         this._splitter.option("initialLeftPanelWidth", this.option("taskListWidth"));
     }
     _renderBars() {
@@ -211,8 +210,6 @@ class Gantt extends Widget {
 
         const isPercentage = typeUtils.isString(leftPanelWidth) && leftPanelWidth.slice(-1) === "%";
         this._$treeList.width(isPercentage ? "100%" : leftPanelWidth);
-
-        this._splitter.setSplitterPositionLeft(leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
         this._setGanttViewOption("width", this._$ganttView.width());

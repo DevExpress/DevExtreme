@@ -390,7 +390,7 @@ var DropDownEditor = TextBox.inherit({
         var isFocused = focused(this._input());
         var $container = this._$container;
 
-        this._disposeKeyboardProcessor();
+        this._detachKeyboardEvents();
 
         // NOTE: to prevent buttons disposition
         var beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;

@@ -1235,7 +1235,7 @@ QUnit.module("popup", moduleConfig, () => {
     });
 });
 
-QUnit.module("dataSource integration", moduleConfig, () => {
+QUnit.module("dataSource integration", moduleConfig, function() {
     QUnit.test("guid integration", function(assert) {
         const value = "6fd3d2c5-904d-4e6f-a302-3e277ef36630";
         const data = [new Guid(value)];
@@ -1248,6 +1248,35 @@ QUnit.module("dataSource integration", moduleConfig, () => {
         this.clock.tick();
 
         assert.deepEqual($dropDownList.dxDropDownList("option", "selectedItem"), data[0], "value found");
+    });
+
+    QUnit.test(`dataSource loading longer than 400ms should not lead to the load panel being displayed`, function(assert) {
+        const loadDelay = 1000;
+        const instance = $("#dropDownList").dxDropDownList({
+            dataSource: {
+                load: () => {
+                    const d = new $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([1, 2, 3]);
+                    }, loadDelay);
+
+                    return d;
+                }
+            },
+            opened: true
+        }).dxDropDownList("instance");
+
+        this.clock.tick(loadDelay);
+        const $content = $(instance.content());
+        const $loadPanel = $content.find(".dx-scrollview-loadpanel");
+
+        instance.getDataSource().load();
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(":hidden"), `load panel is not visible (${loadDelay / 2}ms after the loading started)`);
+
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(":hidden"), "load panel is not visible when loading has been finished");
     });
 });
 

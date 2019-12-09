@@ -53,13 +53,16 @@ var CalendarStrategy = DateBoxStrategy.inherit({
         return Calendar;
     },
 
+    getKeyboardListener() {
+        return this._widget;
+    },
+
     _getWidgetOptions: function() {
         var disabledDates = this.dateBox.option("disabledDates");
 
         return extend(this.dateBox.option("calendarOptions"), {
             value: this.dateBoxValue() || null,
             dateSerializationFormat: null,
-            _keyboardProcessor: this._widgetKeyboardProcessor,
             min: this.dateBox.dateOption("min"),
             max: this.dateBox.dateOption("max"),
             onValueChanged: this._valueChangedHandler.bind(this),

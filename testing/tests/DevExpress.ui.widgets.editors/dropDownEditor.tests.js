@@ -700,11 +700,7 @@ QUnit.test("Enter and escape key press does not prevent default when popup in no
 QUnit.test("Escape key press should be handled by a children keyboard processor", function(assert) {
     const handler = sinon.stub();
 
-    this.dropDownEditor
-        ._keyboardProcessor
-        .attachChildProcessor()
-        .reinitialize(handler, this.dropDownEditor);
-
+    this.dropDownEditor.option('onKeyboardHandled', handler);
     this.keyboard.keyDown("esc");
 
     assert.ok(handler.calledOnce, "Children keyboard processor can process the 'esc' key pressing");

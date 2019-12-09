@@ -11,7 +11,7 @@ import iteratorUtils from "../../core/utils/iterator";
 import Action from "../../core/action";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
-import eventUtils from "../../events/utils";
+import * as eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import DataHelperMixin from "../../data_helper";
 import CollectionWidgetItem from "./item";

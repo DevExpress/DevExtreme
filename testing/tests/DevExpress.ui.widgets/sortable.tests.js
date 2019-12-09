@@ -54,6 +54,20 @@ QUnit.testStart(function() {
                 <div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
             </div>
         </div>
+        <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+        <div id="itemsWithBothScrolls" style="overflow: visible; width: 600px;">
+            <div id="item40" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
+            <div id="item41" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
+            <div id="item42" class="draggable" style="height: 50px; background: red; width: 600px;">item2</div>
+            <div id="item43" class="draggable" style="height: 50px; background: blue; width: 600px;">item3</div>
+            <div id="item44" class="draggable" style="height: 50px; background: yellow; width: 600px;">item4</div>
+            <div id="item45" class="draggable" style="height: 50px; background: red; width: 600px;">item5</div>
+            <div id="item46" class="draggable" style="height: 50px; background: blue; width: 600px;">item6</div>
+            <div id="item47" class="draggable" style="height: 50px; background: yellow; width: 600px;">item7</div>
+            <div id="item48" class="draggable" style="height: 50px; background: red; width: 600px;">item8</div>
+            <div id="item49" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
+        </div>
+    </div>
         `;
 
     $("#qunit-fixture").html(markup);
@@ -167,7 +181,7 @@ QUnit.test("Default drag template", function(assert) {
     // assert
     var $draggingElement = $(".dx-sortable-dragging");
     assert.ok($draggingElement.hasClass("dx-sortable-clone"), "clone class");
-    assert.strictEqual($draggingElement.css("z-index"), "10000", "z-index");
+    assert.strictEqual($draggingElement.css("z-index"), "2147483647", "z-index");
     assert.strictEqual($draggingElement.text(), "item1", "text is correct");
     assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
@@ -175,6 +189,18 @@ QUnit.test("Default drag template", function(assert) {
     assert.strictEqual($draggingElement.children().get(0).style.width, "300px", "width style exists in dragging item");
     assert.strictEqual($items.get(0).style.height, "", "height style does not exist in item");
     assert.strictEqual($draggingElement.children().get(0).style.height, "30px", "height style exists in dragging item");
+});
+
+QUnit.test("While dragging cursor should be 'grabbing/pointer'", function(assert) {
+    // arrange
+    this.createSortable({});
+
+    // act
+    pointerMock(this.$element.children().eq(0)).start().down().move(10, 0);
+
+    // assert
+    let cursor = browser.msie && parseInt(browser.version) <= 11 ? "pointer" : "grabbing";
+    assert.equal($(".dx-sortable-dragging").css("cursor"), cursor, `cursor is ${cursor}`);
 });
 
 QUnit.module("allowReordering", moduleConfig);
@@ -418,7 +444,7 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     $placeholder = $(".dx-sortable-placeholder");
     assert.strictEqual(items.length, 3, "item count is not changed");
     assert.equal($placeholder.length, 1, "placeholder exists");
-    assert.strictEqual($placeholder.css("z-index"), "10000", "z-index");
+    assert.strictEqual($placeholder.css("z-index"), "2147483647", "z-index");
     assert.ok($placeholder.next().hasClass("dx-sortable-dragging"), "palceholder is before dragging");
     assert.equal($placeholder.get(0).style.height, "", "placeholder height");
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
@@ -2039,33 +2065,37 @@ QUnit.test("Dragging an item to another sortable and back when it is alone in th
     assert.strictEqual(items2.first().attr("id"), "item7", "second list - first item");
 });
 
-QUnit.module("With scroll", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
+function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
+    return {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
 
-        this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
-            return window.setTimeout(callback, 10);
-        };
+            this.originalRAF = animationFrame.requestAnimationFrame;
+            animationFrame.requestAnimationFrame = function(callback) {
+                return window.setTimeout(callback, 10);
+            };
 
-        $("#qunit-fixture").addClass("qunit-fixture-visible");
-        this.$element = $("#itemsWithScroll");
-        this.$scroll = $("#scroll");
+            $("#qunit-fixture").addClass("qunit-fixture-visible");
+            this.$element = $(elementSelector);
+            this.$scroll = $(scrollSelector);
 
-        this.createSortable = (options) => {
-            return this.sortableInstance = this.$element.dxSortable(options).dxSortable("instance");
-        };
-    },
-    afterEach: function() {
-        this.clock.restore();
-        this.clock.reset();
+            this.createSortable = (options) => {
+                return this.sortableInstance = this.$element.dxSortable(options).dxSortable("instance");
+            };
+        },
+        afterEach: function() {
+            this.clock.restore();
+            this.clock.reset();
 
-        animationFrame.requestAnimationFrame = this.originalRAF;
+            animationFrame.requestAnimationFrame = this.originalRAF;
 
-        $("#qunit-fixture").removeClass("qunit-fixture-visible");
-        this.sortableInstance && this.sortableInstance.dispose();
-    }
-});
+            $("#qunit-fixture").removeClass("qunit-fixture-visible");
+            this.sortableInstance && this.sortableInstance.dispose();
+        }
+    };
+}
+
+QUnit.module("With scroll", getModuleConfigForTestsWithScroll("#itemsWithScroll", "#scroll"));
 
 QUnit.test("Placeholder position should be updated during autoscroll", function(assert) {
     // arrange
@@ -2183,4 +2213,204 @@ QUnit.test("Placeholder should not be visible outside top of scroll container", 
 
     // assert
     assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
+});
+
+QUnit.module("With both scrolls", getModuleConfigForTestsWithScroll("#itemsWithBothScrolls", "#bothScrolls"));
+
+// T830034
+QUnit.test("Placeholder width and offset should be correct if horizontal scroll exists and items have left margin", function(assert) {
+    // arrange
+    let items,
+        maxScroll = this.$scroll.prop("scrollWidth") - this.$scroll.width();
+
+    $(".draggable").css("margin-left", "40px");
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        scrollSpeed: 10
+    });
+
+    items = this.$element.children();
+
+    function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
+        // act
+        let pointer = pointerMock(items.eq(0)).start().down().move(0, targetY),
+            $placeholder;
+
+        $placeholder = $(PLACEHOLDER_SELECTOR);
+
+        // assert
+        assert.roughEqual($placeholder.width(), expectedWidth, 3, "placeholder width");
+        assert.deepEqual($placeholder.offset(), expectedOffset, "placeholder offset");
+
+        // act
+        pointer.up();
+    }
+
+    scrollTestIteration(180, 260, { left: 40, top: 200 });
+
+    this.$scroll.scrollLeft(20);
+
+    scrollTestIteration(180, 280, { left: 20, top: 200 });
+
+    this.$scroll.scrollLeft(40);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(60);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 20);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 40);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 60);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    $(".draggable").css("margin-left", "0px");
+});
+
+// T830034
+QUnit.test("Placeholder width and offset should be correct if horizontal scroll exists and items have right margin", function(assert) {
+    // arrange
+    let items,
+        maxScroll = this.$scroll.prop("scrollWidth") - this.$scroll.width();
+
+    $(".draggable").css("width", "560");
+    $(".draggable").css("margin-right", "40px");
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        scrollSpeed: 10
+    });
+
+    items = this.$element.children();
+
+    function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
+        // act
+        let pointer = pointerMock(items.eq(0)).start().down().move(0, targetY),
+            $placeholder;
+
+        $placeholder = $(PLACEHOLDER_SELECTOR);
+
+        // assert
+        assert.roughEqual($placeholder.width(), expectedWidth, 3, "placeholder width");
+        assert.deepEqual($placeholder.offset(), expectedOffset, "placeholder offset");
+
+        // act
+        pointer.up();
+    }
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(20);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(40);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(60);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 60);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 40);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 20);
+
+    scrollTestIteration(180, 280, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll);
+
+    scrollTestIteration(180, 260, { left: 0, top: 200 });
+
+    $(".draggable").css("width", "600px");
+    $(".draggable").css("margin-right", "0px");
+});
+
+// T830034
+QUnit.test("Placeholder width and offset should be correct if horizontal scroll exists and items have right and left margins", function(assert) {
+    // arrange
+    let items,
+        maxScroll = this.$scroll.prop("scrollWidth") - this.$scroll.width();
+
+    $(".draggable").css("width", "520px");
+    $(".draggable").css("margin-right", "40px");
+    $(".draggable").css("margin-left", "40px");
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        scrollSpeed: 10
+    });
+
+    items = this.$element.children();
+
+    function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
+        // act
+        let pointer = pointerMock(items.eq(0)).start().down().move(0, targetY),
+            $placeholder;
+
+        $placeholder = $(PLACEHOLDER_SELECTOR);
+
+        // assert
+        assert.roughEqual($placeholder.width(), expectedWidth, 3, "placeholder width");
+        assert.deepEqual($placeholder.offset(), expectedOffset, "placeholder offset");
+
+        // act
+        pointer.up();
+    }
+
+    scrollTestIteration(180, 260, { left: 40, top: 200 });
+
+    this.$scroll.scrollLeft(20);
+
+    scrollTestIteration(180, 280, { left: 20, top: 200 });
+
+    this.$scroll.scrollLeft(40);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(60);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 60);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 40);
+
+    scrollTestIteration(180, 300, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll - 20);
+
+    scrollTestIteration(180, 280, { left: 0, top: 200 });
+
+    this.$scroll.scrollLeft(maxScroll);
+
+    scrollTestIteration(180, 260, { left: 0, top: 200 });
+
+    $(".draggable").css("width", "600px");
+    $(".draggable").css("margin-right", "0px");
+    $(".draggable").css("margin-left", "0px");
 });

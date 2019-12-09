@@ -24,7 +24,8 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     registerComponent = require("../../core/component_registrator"),
     Widget = require("../widget/ui.widget"),
-    KeyboardProcessor = require("../widget/ui.keyboard_processor"),
+    keyboard = require("../../events/").keyboard,
+
     selectors = require("../widget/selectors"),
     dragEvents = require("../../events/drag"),
     eventUtils = require("../../events/utils"),
@@ -1271,7 +1272,7 @@ var Overlay = Widget.inherit({
     _renderGeometryImpl: function(isDimensionChanged) {
         this._stopAnimation();
         this._normalizePosition();
-        this._renderShading();
+        this._renderWrapper();
         this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
         var resultPosition = this._renderPosition();
@@ -1302,13 +1303,13 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderShading: function() {
+    _renderWrapper: function() {
         this._fixWrapperPosition();
-        this._renderShadingDimensions();
-        this._renderShadingPosition();
+        this._renderWrapperDimensions();
+        this._renderWrapperPosition();
     },
 
-    _renderShadingDimensions: function() {
+    _renderWrapperDimensions: function() {
         var wrapperWidth, wrapperHeight;
         var $container = this._getContainer();
         if(!$container) {
@@ -1330,9 +1331,10 @@ var Overlay = Widget.inherit({
         return !!$element && typeUtils.isWindow($element.get(0));
     },
 
-    _renderShadingPosition: function() {
-        if(this.option("shading")) {
-            var $container = this._getContainer();
+    _renderWrapperPosition: function() {
+        const $container = this._getContainer();
+
+        if($container) {
             positionUtils.setup(this._$wrapper, { my: "top left", at: "top left", of: $container });
         }
     },
@@ -1407,11 +1409,11 @@ var Overlay = Widget.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        this._keyboardProcessor = new KeyboardProcessor({
-            element: this._$content,
-            handler: this._keyboardHandler,
-            context: this
-        });
+        this._keyboardListenerId = keyboard.on(
+            this._$content,
+            null,
+            opts => this._keyboardHandler(opts)
+        );
     },
 
     _keyboardHandler: function(options) {

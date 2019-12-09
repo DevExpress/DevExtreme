@@ -1883,8 +1883,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: EditorOptions)
         /** @name Editor.reset() */
         reset(): void;
-        /** @name Component.resetOption(optionName) */
-        resetOption(optionName: string): void;
     }
     /** @name EmailRule */
     export interface EmailRule {
@@ -2034,6 +2032,8 @@ declare module DevExpress.ui {
     }
     /** @name GridBase.Options.editing */
     export interface GridBaseEditing {
+        /** @name GridBase.Options.editing.confirmDelete */
+        confirmDelete?: boolean;
         /** @name GridBase.Options.editing.form */
         form?: dxFormOptions;
         /** @name GridBase.Options.editing.mode */
@@ -2193,6 +2193,8 @@ declare module DevExpress.ui {
         getRowIndexByKey(key: any | string | number): number;
         /** @name GridBase.getScrollable() */
         getScrollable(): dxScrollable;
+        /** @name GridBase.getVisibleColumnIndex(id) */
+        getVisibleColumnIndex(id: number | string): number;
         /** @name GridBase.hasEditData() */
         hasEditData(): boolean;
         /** @name GridBase.hideColumnChooser() */
@@ -2880,7 +2882,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.onExporting */
         onExporting?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onFileSaving */
-        onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onFocusedCellChanged */
         onFocusedCellChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
         /** @name dxDataGrid.Options.onFocusedCellChanging */
@@ -3140,7 +3142,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.nodes */
         nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
-        onDataChanged?: ((e: any) => any);
+        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxDiagram.Options.onItemClick */
         onItemClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
         /** @name dxDiagram.Options.onItemDblClick */
@@ -3496,7 +3498,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
-        onCurrentDirectoryChanged?: ((e: any) => any);
+        onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
@@ -4027,8 +4029,6 @@ declare module DevExpress.ui {
         get(componentPath: string): any;
         /** @name dxHtmlEditor.getFormat(index, length) */
         getFormat(index: number, length: number): any;
-        /** @name DOMComponent.getInstance(element) */
-        static getInstance(element: Element | JQuery): DOMComponent;
         /** @name dxHtmlEditor.getLength() */
         getLength(): number;
         /** @name dxHtmlEditor.getQuillInstance() */
@@ -4043,8 +4043,6 @@ declare module DevExpress.ui {
         redo(): void;
         /** @name dxHtmlEditor.register(components) */
         register(modules: any): void;
-        /** @name Widget.registerKeyHandler(key, handler) */
-        registerKeyHandler(key: string, handler: Function): void;
         /** @name dxHtmlEditor.removeFormat(index, length) */
         removeFormat(index: number, length: number): void;
         /** @name dxHtmlEditor.setSelection(index, length) */
@@ -4698,7 +4696,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.onExporting */
         onExporting?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** @name dxPivotGrid.Options.onFileSaving */
-        onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name dxPivotGrid.Options.rowHeaderLayout */
         rowHeaderLayout?: 'standard' | 'tree';
         /** @name dxPivotGrid.Options.scrolling */
@@ -4987,7 +4985,7 @@ declare module DevExpress.ui {
         /** @name dxRangeSlider.Options.endName */
         endName?: string;
         /** @name dxRangeSlider.Options.onValueChanged */
-        onValueChanged?: ((e: { component?: dxRangeSlider, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onValueChanged?: ((e: { component?: dxRangeSlider, element?: DevExpress.core.dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
         /** @name dxRangeSlider.Options.start */
         start?: number;
         /** @name dxRangeSlider.Options.startName */
@@ -5528,10 +5526,6 @@ declare module DevExpress.ui {
         onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.onContentReady */
         onContentReady?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
-        /** @name dxSpeedDialAction.Options.onDisposing */
-        onDisposing?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
-        /** @name dxSpeedDialAction.Options.onInitialized */
-        onInitialized?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.visible */
         visible?: boolean;
     }
@@ -5746,6 +5740,7 @@ declare module DevExpress.ui {
         onInput?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** @name dxTextEditor.Options.onKeyDown */
         onKeyDown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+        /** @deprecated */
         /** @name dxTextEditor.Options.onKeyPress */
         onKeyPress?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** @name dxTextEditor.Options.onKeyUp */
@@ -6275,8 +6270,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxValidationGroupOptions)
         /** @name dxValidationGroup.reset() */
         reset(): void;
-        /** @name Component.resetOption(optionName) */
-        resetOption(optionName: string): void;
         /** @name dxValidationGroup.validate() */
         validate(): dxValidationGroupResult;
     }
@@ -6324,8 +6317,6 @@ declare module DevExpress.ui {
         focus(): void;
         /** @name dxValidator.reset() */
         reset(): void;
-        /** @name Component.resetOption(optionName) */
-        resetOption(optionName: string): void;
         /** @name dxValidator.validate() */
         validate(): dxValidatorResult;
     }
@@ -6687,7 +6678,7 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.onExporting */
         onExporting?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
         /** @name BaseWidget.Options.onFileSaving */
-        onFileSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** @name BaseWidget.Options.onIncidentOccurred */
         onIncidentOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** @name BaseWidget.Options.pathModified */
@@ -10044,14 +10035,10 @@ declare module DevExpress.viz {
         percent: string | number | Date;
         /** @name piePointObject.hide() */
         hide(): void;
-        /** @name basePointObject.hideTooltip() */
-        hideTooltip(): void;
         /** @name piePointObject.isVisible() */
         isVisible(): boolean;
         /** @name piePointObject.show() */
         show(): void;
-        /** @name basePointObject.showTooltip() */
-        showTooltip(): void;
     }
     /** @name polarChartSeriesObject */
     export class polarChartSeriesObject extends baseSeriesObject {

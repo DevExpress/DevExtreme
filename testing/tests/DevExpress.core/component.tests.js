@@ -28,7 +28,8 @@ const TestComponent = Component.inherit({
             deprecatedOption: { since: "14.1", message: "Use some other option instead" },
             deprecatedOptionWithSugarSyntax: { since: "14.2", alias: "deprecatedOptionAliasWithSugarSyntax" },
             "secondLevel.deprecatedOption": { since: "14.2", alias: "secondLevel.deprecatedOptionAlias" },
-            "thirdLevel.option.deprecated": { since: "15.2", alias: "thirdLevel.option.deprecatedAlias" }
+            "thirdLevel.option.deprecated": { since: "15.2", alias: "thirdLevel.option.deprecatedAlias" },
+            "onDeprecatedEvent": { since: "20.1", message: "Use another events instead" }
         });
     },
 
@@ -773,26 +774,25 @@ QUnit.module("default", {}, () => {
         }
     });
 
-    QUnit.test("dispose optionManager", function(assert) {
+    QUnit.test("dispose options", function(assert) {
         const component = new TestComponent();
         const callbacks = ["_deprecatedCallback"];
         const optionManagerCallbacks = ["_changedCallback", "_changingCallback"];
-        // TODO: refactor after rename optionManager
 
         callbacks.forEach((callback) => {
-            assert.notEqual(component._optionManager[callback], noop);
+            assert.notEqual(component._options[callback], noop);
         });
         optionManagerCallbacks.forEach((callback) => {
-            assert.notEqual(component._optionManager._optionManager[callback], noop);
+            assert.notEqual(component._options._optionManager[callback], noop);
         });
 
         component._dispose();
 
         callbacks.forEach((callback) => {
-            assert.equal(component._optionManager[callback], noop);
+            assert.equal(component._options[callback], noop);
         });
         optionManagerCallbacks.forEach((callback) => {
-            assert.equal(component._optionManager._optionManager[callback], noop);
+            assert.equal(component._options._optionManager[callback], noop);
         });
     });
 
@@ -926,6 +926,18 @@ QUnit.module("default", {}, () => {
         });
 
         assert.ok(component.hasActionSubscription("onInitialized"), "component has onInitialized subscribe");
+    });
+
+    QUnit.test("'hasActionSubscription' should not raise deprecation warning for event option", function(assert) {
+        const instance = new TestComponent();
+        const logDeprecatedWarningSpy = sinon.spy(instance, "_logDeprecatedWarning");
+
+        try {
+            instance.hasActionSubscription("onDeprecatedEvent");
+            assert.ok(logDeprecatedWarningSpy.notCalled);
+        } finally {
+            logDeprecatedWarningSpy.restore();
+        }
     });
 
     QUnit.test("changing value to NaN does not call optionChanged twice", function(assert) {

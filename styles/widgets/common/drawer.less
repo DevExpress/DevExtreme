@@ -1,7 +1,6 @@
 .dx-drawer {
     height: 100%;
     width: 100%;
-    touch-action: pinch-zoom;
 }
 
 .dx-drawer-wrapper {
@@ -99,6 +98,12 @@
 
 
     &.dx-drawer-right.dx-drawer-expand {
+        .dx-overlay-content {
+            right: 0;
+        }
+    }
+
+    &.dx-drawer-right.dx-drawer-slide {
         .dx-overlay-content {
             right: 0;
         }

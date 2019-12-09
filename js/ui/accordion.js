@@ -9,7 +9,7 @@ import { getPublicElement } from "../core/utils/dom";
 import iteratorUtils from "../core/utils/iterator";
 import { isPlainObject, isDefined } from "../core/utils/type";
 import registerComponent from "../core/component_registrator";
-import eventUtils from "../events/utils";
+import * as eventUtils from "../events/utils";
 import CollectionWidget from "./collection/ui.collection_widget.live_update";
 import { when, Deferred } from "../core/utils/deferred";
 import { BindableTemplate } from "../core/templates/bindable_template";
