@@ -1,125 +1,300 @@
-import domAdapter from '../core/dom_adapter';
-import eventsEngine from './core/events_engine';
-import KeyboardProcessor from './core/keyboard_processor';
-import { addNamespace as pureAddNamespace } from './utils';
+var eventsEngine = require("./core/events_engine");
 
-function addNamespace(event, namespace) {
-    return namespace ? pureAddNamespace(event, namespace) : event;
-}
+/**
+* @name events
+*/
 
-export const active = {
-    on: ($el, active, inactive, opts) => {
-        const { selector, showTimeout, hideTimeout, namespace } = opts;
+/**
+* @name eventsHandler
+* @publicName handler(event, extraParameters)
+* @type function
+* @param1 event:dxEvent
+* @param2 extraParameters:object
+* @return boolean
+* @hidden
+*/
 
-        eventsEngine.on($el, addNamespace('dxactive', namespace), selector, { timeout: showTimeout },
-            event => active.execute({ event, element: event.currentTarget })
-        );
-        eventsEngine.on($el, addNamespace('dxinactive', namespace), selector, { timeout: hideTimeout },
-            event => inactive.execute({ event, element: event.currentTarget })
-        );
-    },
+/**
+* @name eventsMethods.on
+* @publicName on(element, eventName, selector, data, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 selector:string
+* @param4 data:object
+* @param5 handler:function
+* @module events
+* @export on
+*/
 
-    off: ($el, { namespace, selector }) => {
-        eventsEngine.off($el, addNamespace('dxactive', namespace), selector);
-        eventsEngine.off($el, addNamespace('dxinactive', namespace), selector);
-    }
-};
+/**
+* @name eventsMethods.on
+* @publicName on(element, eventName, selector, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 selector:string
+* @param4 handler:function
+* @module events
+* @export on
+*/
 
-export const resize = {
-    on: ($el, resize, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxresize', namespace), resize);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxresize', namespace));
-    }
-};
+/**
+* @name eventsMethods.on
+* @publicName on(element, eventName, data, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 data:object
+* @param4 handler:function
+* @module events
+* @export on
+*/
 
-export const hover = {
-    on: ($el, start, end, { selector, namespace }) => {
-        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
-        eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector, event => {
-            start.execute({ element: event.target, event });
-        });
-    },
+/**
+* @name eventsMethods.on
+* @publicName on(element, eventName, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 handler:function
+* @module events
+* @export on
+*/
 
-    off: ($el, { selector, namespace }) => {
-        eventsEngine.off($el, addNamespace('dxhoverstart', namespace), selector);
-        eventsEngine.off($el, addNamespace('dxhoverend', namespace), selector);
-    }
-};
+exports.on = eventsEngine.on;
 
-export const visibility = {
-    on: ($el, shown, hiding, { namespace }) => {
-        eventsEngine.on($el, addNamespace('dxhiding', namespace), hiding);
-        eventsEngine.on($el, addNamespace('dxshown', namespace), shown);
-    },
+/**
+* @name eventsMethods.one
+* @publicName one(element, eventName, selector, data, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 selector:string
+* @param4 data:object
+* @param5 handler:function
+* @module events
+* @export one
+*/
 
-    off: ($el, { namespace }) => {
-        eventsEngine.off($el, addNamespace('dxhiding', namespace));
-        eventsEngine.off($el, addNamespace('dxshown', namespace));
-    }
-};
+/**
+* @name eventsMethods.one
+* @publicName one(element, eventName, selector, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 selector:string
+* @param4 handler:function
+* @module events
+* @export one
+*/
 
-export const focus = {
-    on: ($el, focusIn, focusOut, { namespace, isFocusable }) => {
-        eventsEngine.on($el, addNamespace('focusin', namespace), focusIn);
-        eventsEngine.on($el, addNamespace('focusout', namespace), focusOut);
+/**
+* @name eventsMethods.one
+* @publicName one(element, eventName, data, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 data:object
+* @param4 handler:function
+* @module events
+* @export one
+*/
 
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.on($el, addNamespace('beforeactivate', namespace),
-                e => isFocusable(e.target) || e.preventDefault()
-            );
-        }
-    },
+/**
+* @name eventsMethods.one
+* @publicName one(element, eventName, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 handler:function
+* @module events
+* @export one
+*/
 
-    off: ($el, { namespace }) => {
-        eventsEngine.off($el, addNamespace('focusin', namespace));
-        eventsEngine.off($el, addNamespace('focusout', namespace));
+exports.one = eventsEngine.one;
 
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.off($el, addNamespace('beforeactivate', namespace));
-        }
-    }
-};
+/**
+* @name eventsMethods.off
+* @publicName off(element, eventName, selector, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 selector:string
+* @param4 handler:function
+* @module events
+* @export off
+*/
 
-export const dxClick = {
-    on: ($el, click, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxclick', namespace), click);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxclick', namespace));
-    }
-};
+/**
+* @name eventsMethods.off
+* @publicName off(element, eventName, selector)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 selector:string
+* @module events
+* @export off
+*/
 
-export const click = {
-    on: ($el, click, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('click', namespace), click);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('click', namespace));
-    }
-};
+/**
+* @name eventsMethods.off
+* @publicName off(element, eventName, handler)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @param3 handler:function
+* @module events
+* @export off
+*/
 
-let index = 0;
-const keyboardProcessors = {};
-const generateListenerId = () => `keyboardProcessorId${index++}`;
+/**
+* @name eventsMethods.off
+* @publicName off(element, eventName)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @module events
+* @export off
+*/
 
-export const keyboard = {
-    on: (element, focusTarget, handler) => {
-        const listenerId = generateListenerId();
+/**
+* @name eventsMethods.off
+* @publicName off(element)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @module events
+* @export off
+*/
 
-        keyboardProcessors[listenerId] = new KeyboardProcessor({ element, focusTarget, handler });
+exports.off = eventsEngine.off;
 
-        return listenerId;
-    },
+/**
+* @name eventsMethods.trigger
+* @publicName trigger(element, event, extraParameters)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 event:string|event
+* @param3 extraParameters:object
+* @module events
+* @export trigger
+*/
 
-    off: listenerId => {
-        if(listenerId && keyboardProcessors[listenerId]) {
-            keyboardProcessors[listenerId].dispose();
-            delete keyboardProcessors[listenerId];
-        }
-    },
+/**
+* @name eventsMethods.trigger
+* @publicName trigger(element, event)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 event:string|event
+* @module events
+* @export trigger
+*/
 
-    // NOTE: For tests
-    _getProcessor: listenerId => keyboardProcessors[listenerId]
-};
+exports.trigger = eventsEngine.trigger;
+
+/**
+* @name eventsMethods.triggerHandler
+* @publicName triggerHandler(element, event, extraParameters)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 event:string|event
+* @param3 extraParameters:object
+* @module events
+* @export triggerHandler
+* @hidden
+*/
+/**
+* @name eventsMethods.triggerHandler
+* @publicName triggerHandler(element, event)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 event:string|event
+* @module events
+* @export triggerHandler
+* @hidden
+*/
+
+exports.triggerHandler = eventsEngine.triggerHandler;
+
+/**
+* @name dxEvent
+* @section commonObjectStructures
+*/
+
+/**
+* @name dxEventMethods.isPropagationStopped
+* @publicName isPropagationStopped()
+* @type function
+* @return boolean
+*/
+
+/**
+* @name dxEventMethods.stopPropagation
+* @publicName stopPropagation()
+* @type function
+*/
+
+/**
+* @name dxEventMethods.isImmediatePropagationStopped
+* @publicName isImmediatePropagationStopped()
+* @type function
+* @return boolean
+*/
+
+/**
+* @name dxEventMethods.stopImmediatePropagation
+* @publicName stopImmediatePropagation()
+* @type function
+*/
+
+/**
+* @name dxEventMethods.isDefaultPrevented
+* @publicName isDefaultPrevented()
+* @type function
+* @return boolean
+*/
+
+/**
+* @name dxEventMethods.preventDefault
+* @publicName preventDefault()
+* @type function
+*/
+
+/**
+* @name dxEventFields.target
+* @type Node
+*/
+
+/**
+* @name dxEventFields.currentTarget
+* @type Node
+*/
+
+/**
+* @name dxEventFields.delegateTarget
+* @type Node
+*/
+
+/**
+* @name dxEventFields.data
+* @type object
+*/
+
+/**
+* @name event
+* @type dxEvent|jQuery.Event
+* @hidden
+*/
+
+/**
+* @name events.Event
+* @type function
+* @param1 source:string|event
+* @param2 config:object
+* @return event
+* @module events
+* @export Event
+* @hidden
+*/
+
+exports.Event = eventsEngine.Event;

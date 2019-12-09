@@ -11,7 +11,7 @@ import { extend } from "../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
 import registerComponent from "../core/component_registrator";
 import { normalizeKeyName } from "../events/utils";
-import { keyboard } from "../events/";
+import { keyboard } from "../events/gates";
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
     ANONYMOUS_TEMPLATE_NAME = "content";
