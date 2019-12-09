@@ -104,7 +104,9 @@ const Component = Class.inherit({
         const { _optionChangedCallbacks, _disposingCallbacks } = options;
 
         this.NAME = publicComponentUtils.name(this.constructor);
+
         this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
+
         this._updateLockCount = 0;
 
         this._optionChangedCallbacks = _optionChangedCallbacks || Callbacks();
@@ -322,9 +324,9 @@ const Component = Class.inherit({
 
             if(!action) {
                 const beforeExecute = config.beforeExecute;
-                config.beforeExecute = (props) => {
-                    beforeExecute && beforeExecute.apply(this, args);
-                    this._eventsStrategy.fireEvent(eventName, props.args);
+                config.beforeExecute = (...props) => {
+                    beforeExecute && beforeExecute.apply(this, props);
+                    this._eventsStrategy.fireEvent(eventName, props[0].args);
                 };
                 action = this._createAction(actionFunc, config);
             }
