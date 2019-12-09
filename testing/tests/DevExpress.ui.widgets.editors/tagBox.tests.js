@@ -886,6 +886,52 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
         assert.equal(valueChangeActionSpy.called, false, "onValueChanged was not fired");
     });
 
+    QUnit.test("onValueChanged should not be fired on first popup render (T838251)", function(assert) {
+        const data = [{
+            id: 1,
+            name: "First"
+        }, {
+            id: 2,
+            name: "Second"
+        }, {
+            id: 3,
+            name: "Third"
+        }];
+        const valueChangeActionSpy = sinon.spy();
+        const instance = $("#tagBox").dxTagBox({
+            dataSource: new DataSource({
+                store: new CustomStore({
+                    key: "id",
+                    load(options) {
+                        const res = $.Deferred();
+                        setTimeout(() => {
+                            res.resolve(data);
+                        }, TIME_TO_WAIT / 4);
+                        return res.promise();
+                    },
+                    byKey(key) {
+                        const res = $.Deferred();
+                        setTimeout(() => {
+                            res.resolve(key);
+                        }, TIME_TO_WAIT / 4);
+                        return res.promise();
+                    }
+                }),
+                paging: false
+            }),
+            displayExpr: "name",
+            valueExpr: "id",
+            value: [2, 3],
+            onValueChanged: valueChangeActionSpy,
+            showSelectionControls: true,
+        }).dxTagBox("instance");
+
+        instance.open();
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.equal(valueChangeActionSpy.called, false, "onValueChanged was not fired");
+    });
+
     QUnit.test("onValueChanged should be fired when dxTagBox is readOnly", function(assert) {
         const valueChangeActionSpy = sinon.spy();
 
@@ -5095,7 +5141,7 @@ QUnit.module("performance", () => {
         $(".dx-list-select-all-checkbox").trigger("dxclick");
 
         // assert
-        assert.equal(keyGetterCounter, 613, "key getter call count");
+        assert.equal(keyGetterCounter, 614, "key getter call count");
         assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
     });
 
