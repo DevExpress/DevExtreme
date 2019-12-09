@@ -9,6 +9,8 @@ import {
 } from 'core/utils/template_manager';
 import { Template } from 'core/templates/template';
 import { TemplateBase } from 'core/templates/template_base';
+import { EmptyTemplate } from 'core/templates/empty_template';
+import { ChildDefaultTemplate } from 'core/templates/child_default_template';
 
 QUnit.module("TemplateManager utils", {
     beforeEach: function() {
@@ -113,7 +115,14 @@ QUnit.test("#acquireIntegrationTemplate", function(assert) {
 });
 
 QUnit.test("#acquireTemplate", function(assert) {
-    const template = acquireTemplate();
+    assert.ok(acquireTemplate(null) instanceof EmptyTemplate, 'should return empty template if source is null');
 
-    assert.ok(template instanceof Template, 'should return instance of Template');
+    assert.equal(
+        acquireTemplate(new ChildDefaultTemplate('templateName'), undefined, undefined, undefined, undefined, { templateName: 'defaultTemplate' }),
+        'defaultTemplate',
+        'should return default template if source is ChildDefaultTemplate'
+    );
+
+    const templateSource = new TemplateBase();
+    assert.strictEqual(acquireTemplate(templateSource), templateSource, 'should return source template if it is TemplateBase');
 });
