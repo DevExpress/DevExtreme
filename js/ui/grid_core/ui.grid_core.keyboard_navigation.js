@@ -93,7 +93,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 if(that._isNeedScroll) {
                     if($element.is(":visible") && that._focusedView && that._focusedView.getScrollable) {
-                        that._scrollToElement($element);
+                        that._focusedView.scrollToElement($element);
                         that._isNeedScroll = false;
                     }
                 }
@@ -1668,12 +1668,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _getCellElementFromTarget: function(target) {
         return $(target).closest("." + ROW_CLASS + "> td");
-    },
-
-    _scrollToElement: function($element, offset) {
-        var scrollable = this._focusedView.getScrollable();
-        scrollable && scrollable.update();
-        scrollable && scrollable.scrollToElement($element, offset);
     },
 
     _getRowsViewElement: function() {

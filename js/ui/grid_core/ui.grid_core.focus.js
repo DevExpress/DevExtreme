@@ -207,7 +207,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 let rowsView = this.getView("rowsView"),
                     rowIndex = this.getController("data").getRowIndexByKey(key),
                     rowElement = rowsView.getRow(rowIndex);
-                rowsView._scrollToElement(rowElement);
+                rowsView.scrollToElement(rowElement);
             }
         },
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
@@ -248,7 +248,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 } else {
                     let rowIndex = dataController.getRowIndexByKey(key),
                         rowsView = this.getView("rowsView");
-                    rowsView._scrollToElement(rowsView.getRow(rowIndex));
+                    rowsView.scrollToElement(rowsView.getRow(rowIndex));
                 }
 
                 deferred && deferred.resolve(focusedRowIndex);
@@ -348,7 +348,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
                 $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr("tabindex", tabIndex);
-                rowsView._scrollToElement($row);
+                rowsView.scrollToElement($row);
             }
 
             return $row;
@@ -760,7 +760,7 @@ module.exports = {
                         that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
                             rowElement = that._findRowElementForTabIndex();
                             if(rowElement) {
-                                that._scrollToElement(rowElement);
+                                that.scrollToElement(rowElement);
                                 that.resizeCompleted.remove(that._scrollToFocusOnResize);
                             }
                         };
@@ -790,9 +790,22 @@ module.exports = {
                     return $(this.getRowElement(rowIndex >= 0 ? rowIndex : 0));
                 },
 
-                _scrollToElement: function(element) {
+                scrollToElement: function($element, offset) {
                     const scrollable = this.getScrollable();
-                    scrollable && scrollable.scrollToElement(element);
+                    if(scrollable) {
+                        if(offset && (offset.left || offset.right)) {
+                            this.callBase.apply(this, arguments);
+                        } else {
+                            const $rowsView = this.element();
+                            const top = $element.position().top;
+                            const bottom = $element.height() + top;
+                            const rowsViewTop = $rowsView.position().top;
+                            const rowsViewBottom = $rowsView.height() + rowsViewTop;
+                            if(top < rowsViewTop || bottom > rowsViewBottom) {
+                                scrollable.scrollTo({ top: top - rowsViewTop });
+                            }
+                        }
+                    }
                 }
             }
         }

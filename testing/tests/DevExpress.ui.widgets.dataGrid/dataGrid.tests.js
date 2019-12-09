@@ -18540,3 +18540,53 @@ QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to a
     assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 2, "onFocusedRowChanged row.key parameter");
     assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
 });
+
+QUnit.test("DataGrid should scroll horizontally without scroll back if focused row is present and 'columnRenderingMode', 'rowRenderingMode' are virtual (T834918)", function(assert) {
+    // arrange
+    const that = this;
+    const generateData = function(columnsCount, recordsCount) {
+        let columns = [ "ID" ];
+        let data = [];
+
+        for(let i = 0; i < columnsCount; ++i) {
+            columns.push(`C_${i}`);
+        }
+
+        for(let i = 0; i < recordsCount; ++i) {
+            let item = { };
+            for(let j = 0; j < columnsCount; ++j) {
+                const columnName = columns[j];
+                const value = columnName === "ID" ? i : `${columnName}_${i}`;
+                item[columnName] = value;
+            }
+            data.push(item);
+        }
+        that.columns = columns;
+        return data;
+    };
+    const dataGrid = createDataGrid({
+        height: 200,
+        width: 200,
+        dataSource: generateData(10, 10),
+        keyExpr: "ID",
+        focusedRowEnabled: true,
+        focusedRowIndex: 4,
+        columnWidth: 90,
+        scrolling: {
+            mode: "virtual",
+            columnRenderingMode: "virtual",
+            rowRenderingMode: "virtual",
+            showScrollbar: "always"
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    const scrollable = dataGrid.getScrollable();
+    scrollable.scrollTo({ x: 300 });
+    this.clock.tick();
+
+    // assert
+    assert.equal(scrollable.scrollOffset().left, 300, "Content was scrolled");
+});
