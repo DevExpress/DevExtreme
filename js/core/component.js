@@ -1,19 +1,20 @@
-var Config = require("./config"),
-    extend = require("./utils/extend").extend,
-    Options = require("./options/index").Options,
-    convertRulesToOptions = require("./options/utils").convertRulesToOptions,
-    Class = require("./class"),
-    Action = require("./action"),
-    errors = require("./errors"),
-    commonUtils = require("./utils/common"),
-    typeUtils = require("./utils/type"),
-    Callbacks = require("./utils/callbacks"),
-    EventsStrategy = require("./events_strategy").EventsStrategy,
-    publicComponentUtils = require("./utils/public_component"),
-    PostponedOperations = require("./postponed_operations").PostponedOperations,
+import Config from './config';
+import { extend } from './utils/extend';
+import { Options } from './options/index';
+import { convertRulesToOptions } from './options/utils';
+import Class from './class';
+import Action from './action';
+import errors from './errors';
+import Callbacks from './utils/callbacks';
+import { EventsStrategy } from './events_strategy';
+import publicComponentUtils from './utils/public_component';
+import { PostponedOperations } from './postponed_operations';
+import { isFunction, isPlainObject, type, isDefined } from './utils/type';
+import { noop } from './utils/common';
 
-    isFunction = typeUtils.isFunction,
-    noop = commonUtils.noop;
+const getEventName = (actionName) => {
+    return actionName.charAt(2).toLowerCase() + actionName.substr(3);
+};
 
 /**
 * @name Component
@@ -23,7 +24,7 @@ var Config = require("./config"),
 * @namespace DevExpress
 * @hidden
 */
-var Component = Class.inherit({
+const Component = Class.inherit({
     _setDeprecatedOptions() {
         this._deprecatedOptions = {};
     },
@@ -100,14 +101,14 @@ var Component = Class.inherit({
     * @hidden
     */
     ctor(options = {}) {
+        const { _optionChangedCallbacks, _disposingCallbacks } = options;
+
         this.NAME = publicComponentUtils.name(this.constructor);
-
         this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
-
         this._updateLockCount = 0;
 
-        this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
-        this._disposingCallbacks = options._disposingCallbacks || Callbacks();
+        this._optionChangedCallbacks = _optionChangedCallbacks || Callbacks();
+        this._disposingCallbacks = _disposingCallbacks || Callbacks();
         this.postponedOperations = new PostponedOperations();
         this._createOptions(options);
     },
@@ -157,7 +158,7 @@ var Component = Class.inherit({
     },
 
     _logDeprecatedWarning(option, info) {
-        var message = info.message || ("Use the '" + info.alias + "' option instead");
+        const message = info.message || ("Use the '" + info.alias + "' option instead");
         errors.log("W0001", this.NAME, option, info.since, message);
     },
 
@@ -234,24 +235,22 @@ var Component = Class.inherit({
     _optionChanging: noop,
 
     _notifyOptionChanged(option, value, previousValue) {
-        var that = this;
-
         if(this._initialized) {
-            var optionNames = [option].concat(this._options.getAliasesByName(option));
-            for(var i = 0; i < optionNames.length; i++) {
-                var name = optionNames[i],
-                    args = {
-                        name: name.split(/[.[]/)[0],
-                        fullName: name,
-                        value: value,
-                        previousValue: previousValue
-                    };
+            const optionNames = [option].concat(this._options.getAliasesByName(option));
+            for(let i = 0; i < optionNames.length; i++) {
+                const name = optionNames[i];
+                const args = {
+                    name: name.split(/[.[]/)[0],
+                    fullName: name,
+                    value: value,
+                    previousValue: previousValue
+                };
 
-                that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
-                that._optionChangedAction(extend({}, args));
+                this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
+                this._optionChangedAction(extend({}, args));
 
-                if(!that._disposed && this._cancelOptionChange !== args.name) {
-                    that._optionChanged(args);
+                if(!this._disposed && this._cancelOptionChange !== args.name) {
+                    this._optionChanged(args);
                 }
             }
         }
@@ -275,31 +274,29 @@ var Component = Class.inherit({
     },
 
     _createAction(actionSource, config) {
-        var that = this,
-            action;
+        let action;
 
-        return function(e) {
-            if(!arguments.length) {
+        return (e) => {
+            if(!isDefined(e)) {
                 e = {};
             }
 
-            if(!typeUtils.isPlainObject(e)) {
+            if(!isPlainObject(e)) {
                 e = { actionValue: e };
             }
 
-            action = action || new Action(actionSource, extend(config, that._defaultActionConfig()));
+            action = action || new Action(actionSource, extend(config, this._defaultActionConfig()));
 
-            return action.execute.call(action, extend(e, that._defaultActionArgs()));
+            return action.execute.call(action, extend(e, this._defaultActionArgs()));
         };
     },
 
     _createActionByOption(optionName, config) {
-        var that = this,
-            action,
-            eventName,
-            actionFunc;
+        let action;
+        let eventName;
+        let actionFunc;
 
-        var result = function() {
+        let result = (...args) => {
             if(!eventName) {
                 config = config || {};
 
@@ -308,7 +305,7 @@ var Component = Class.inherit({
                 }
 
                 if(optionName.indexOf("on") === 0) {
-                    eventName = that._getEventName(optionName);
+                    eventName = getEventName(optionName);
                 }
                 ///#DEBUG
                 if(optionName.indexOf("on") !== 0) {
@@ -316,41 +313,37 @@ var Component = Class.inherit({
                 }
                 ///#ENDDEBUG
 
-                actionFunc = that.option(optionName);
+                actionFunc = this.option(optionName);
             }
 
-            if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !that._eventsStrategy.hasEvent(eventName)) {
+            if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
                 return;
             }
 
             if(!action) {
-                var beforeExecute = config.beforeExecute;
-                config.beforeExecute = function(args) {
-                    beforeExecute && beforeExecute.apply(that, arguments);
-                    that._eventsStrategy.fireEvent(eventName, args.args);
+                const beforeExecute = config.beforeExecute;
+                config.beforeExecute = (props) => {
+                    beforeExecute && beforeExecute.apply(this, args);
+                    this._eventsStrategy.fireEvent(eventName, props.args);
                 };
-                action = that._createAction(actionFunc, config);
+                action = this._createAction(actionFunc, config);
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                var beforeActionExecute = that.option("beforeActionExecute") || noop;
-                var wrappedAction = beforeActionExecute(that, action, config) || action;
-                return wrappedAction.apply(that, arguments);
+                const beforeActionExecute = this.option("beforeActionExecute") || noop;
+                const wrappedAction = beforeActionExecute(this, action, config) || action;
+                return wrappedAction.apply(this, args);
             }
 
-            return action.apply(that, arguments);
+            return action.apply(this, args);
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            var onActionCreated = that.option("onActionCreated") || noop;
-            result = onActionCreated(that, result, config) || result;
+            const onActionCreated = this.option("onActionCreated") || noop;
+            result = onActionCreated(this, result, config) || result;
         }
 
         return result;
-    },
-
-    _getEventName(actionName) {
-        return actionName.charAt(2).toLowerCase() + actionName.substr(3);
     },
 
     /**
@@ -389,9 +382,9 @@ var Component = Class.inherit({
         return this;
     },
 
-    hasActionSubscription: function(actionName) {
+    hasActionSubscription(actionName) {
         return !!this._getOptionByStealth(actionName) ||
-            this._eventsStrategy.hasEvent(this._getEventName(actionName));
+            this._eventsStrategy.hasEvent(getEventName(actionName));
     },
 
     isOptionDeprecated(name) {
@@ -413,7 +406,7 @@ var Component = Class.inherit({
     },
 
     _getOptionValue(name, context) {
-        var value = this.option(name);
+        const value = this.option(name);
 
         if(isFunction(value)) {
             return value.bind(context)();
@@ -445,7 +438,7 @@ var Component = Class.inherit({
      * @param1 options:object
      */
     option(options, value) {
-        if(arguments.length < 2 && typeUtils.type(options) !== "object") {
+        if(arguments.length < 2 && type(options) !== "object") {
             return this._options.option(options);
         } else {
             this.beginUpdate();
