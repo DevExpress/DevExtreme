@@ -590,9 +590,12 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         isEditCell: function(rowIndex, columnIndex) {
-            var hasEditData = !!(Array.isArray(this._editData) && this._editData.length);
+            var hasEditData = !!(Array.isArray(this._editData) && this._editData.length),
+                visibleEditRowIndex = this._getVisibleEditRowIndex(),
+                rowIndexDelta = this.getController("data").getRowIndexDelta(),
+                isRowIndexCorrect = (visibleEditRowIndex === rowIndex) || (visibleEditRowIndex + rowIndexDelta === rowIndex);
 
-            return hasEditData && this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
+            return hasEditData && isRowIndexCorrect && this._editColumnIndex === columnIndex;
         },
 
         getPopupContent: function() {
