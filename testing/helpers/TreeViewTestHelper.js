@@ -92,6 +92,11 @@ class TreeViewTestWrapper {
         assert.deepEqual(eventCallbackStub.callCount, expectedCallCount, `check ${eventName}`);
     }
 
+    checkCallbacksCallOrder(orderedEventNames) {
+        const stubs = orderedEventNames.map((eventName) => this.instance.option(eventName));
+        sinon.assert.callOrder.apply(sinon.assert, stubs);
+    }
+
     convertTreeToFlatList(items) {
         let itemsArray = [];
         let inOrder = (items) => {
