@@ -6166,7 +6166,6 @@ QUnit.test("Last row should be correct after editing other row's cell if scrolli
     // act
     dataGrid.getScrollable().scrollTo({ y: 1500 });
 
-    $(dataGrid.getCellElement(8, 0)).trigger(pointerEvents.up);
     dataGrid.editCell(8, 0);
 
     visibleRows = dataGrid.getVisibleRows();
@@ -6208,12 +6207,10 @@ QUnit.test("Edit cell after editing another cell and scrolling down should work 
     }).dxDataGrid("instance");
 
     // act
-    $(dataGrid.getCellElement(8, 0)).trigger(pointerEvents.up);
     dataGrid.editCell(8, 0);
 
     dataGrid.getScrollable().scrollTo({ y: 1000 });
 
-    $(dataGrid.getCellElement(5, 0)).trigger(pointerEvents.down).trigger(pointerEvents.up);
     dataGrid.editCell(5, 0);
 
     visibleRows = dataGrid.getVisibleRows();
@@ -6230,7 +6227,7 @@ QUnit.test("Edit cell after editing another cell and scrolling down should work 
     assert.equal(startValue, 25, "visible row #1 is correct");
 
     for(let i = 1; i < $rows.length; i++) {
-        if(i !== 5 && i !== 8) {
+        if(i !== 5) {
             assert.equal(parseInt($rows.eq(i).text()), startValue + i, `visible row's #${i + 1} text`);
         } else {
             $editedRow = $rows.eq(i);
@@ -6274,7 +6271,6 @@ QUnit.test("Click on cell should open editor after scrolling grid down if scroll
     // act
     dataGrid.getScrollable().scrollTo({ y: 3000 });
 
-    $(dataGrid.getCellElement(1, 0)).trigger(pointerEvents.up);
     dataGrid.editCell(1, 0);
 
     visibleRows = dataGrid.getVisibleRows();

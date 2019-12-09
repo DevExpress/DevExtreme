@@ -1077,31 +1077,31 @@ module.exports = {
                 },
 
                 toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
-                    var that = this;
+                    const that = this;
 
-                    var oldExpandRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items);
-                    var newExpandRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
+                    let oldExpandLoadedRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items),
+                        newExpandLoadedRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
 
-                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex && !alwaysExpanded) {
+                    if(oldExpandLoadedRowIndex >= 0 && oldExpandLoadedRowIndex === newExpandLoadedRowIndex && !alwaysExpanded) {
                         key = undefined;
-                        newExpandRowIndex = -1;
+                        newExpandLoadedRowIndex = -1;
                     }
 
                     that._adaptiveExpandedKey = key;
 
-                    if(oldExpandRowIndex >= 0) {
-                        oldExpandRowIndex++;
+                    if(oldExpandLoadedRowIndex >= 0) {
+                        oldExpandLoadedRowIndex++;
                     }
-                    if(newExpandRowIndex >= 0) {
-                        newExpandRowIndex++;
+                    if(newExpandLoadedRowIndex >= 0) {
+                        newExpandLoadedRowIndex++;
                     }
 
-                    var rowIndexDelta = that.getRowIndexDelta();
+                    const rowIndexDelta = that.getRowIndexDelta();
 
                     that.updateItems({
-                        isExpandAdaptiveDetailRow: true,
+                        allowInvisibleRowIndices: true,
                         changeType: "update",
-                        rowIndices: [oldExpandRowIndex - rowIndexDelta, newExpandRowIndex - rowIndexDelta]
+                        rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
                 },
 
