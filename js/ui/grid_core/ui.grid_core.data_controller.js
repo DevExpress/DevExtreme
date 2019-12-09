@@ -661,24 +661,36 @@ module.exports = {
                 _applyChangeFull: function(change) {
                     this._items = change.items.slice(0);
                 },
+                _getRowIndices: function(change) {
+                    var rowIndices = change.rowIndices.slice(0),
+                        rowIndexDelta = this.getRowIndexDelta();
+
+                    rowIndices.sort(function(a, b) { return a - b; });
+
+                    for(var i = 0; i < rowIndices.length; i++) {
+                        let correctedRowIndex = rowIndices[i];
+
+                        if(change.allowInvisibleRowIndices) {
+                            correctedRowIndex += rowIndexDelta;
+                        }
+
+                        if(correctedRowIndex < 0) {
+                            rowIndices.splice(i, 1);
+                            i--;
+                        }
+                    }
+
+                    return rowIndices;
+                },
                 _applyChangeUpdate: function(change) {
                     var that = this,
                         items = change.items,
-                        rowIndices = change.rowIndices.slice(0),
+                        rowIndices = that._getRowIndices(change),
                         rowIndexDelta = that.getRowIndexDelta(),
                         repaintChangesOnly = that.option("repaintChangesOnly"),
                         prevIndex = -1,
                         rowIndexCorrection = 0,
                         changeType;
-
-                    rowIndices.sort(function(a, b) { return a - b; });
-
-                    for(var i = 0; i < rowIndices.length; i++) {
-                        if(rowIndices[i] + rowIndexDelta < 0) {
-                            rowIndices.splice(i, 1);
-                            i--;
-                        }
-                    }
 
                     change.items = [];
                     change.rowIndices = [];
@@ -725,7 +737,7 @@ module.exports = {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
                             } else if(repaintChangesOnly && !change.isFullUpdate) {
                                 newItem.cells = oldItem.cells;
-                                columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex);
+                                columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex - rowIndexDelta);
                             }
                         } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
                             changeType = "insert";
@@ -748,7 +760,7 @@ module.exports = {
                         change.columnIndices.push(columnIndices);
                     });
                 },
-                _isCellChanged: function(oldRow, newRow, rowIndex, columnIndex, isLiveUpdate) {
+                _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
                     if(JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex])) {
                         return true;
                     }
@@ -763,12 +775,12 @@ module.exports = {
 
                     return false;
                 },
-                _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
+                _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
                     if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-                            if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
+                            if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
                                 columnIndices.push(columnIndex);
                             } else {
                                 var cell = oldItem.cells && oldItem.cells[columnIndex];
