@@ -1182,7 +1182,7 @@ const Form = Widget.inherit({
 
             if(optionFullName === "formData") {
                 if(!isDefined(args.value)) {
-                    that._setOptionByStealth("formData", args.value = {});
+                    that._optionSilent("formData", args.value = {});
                 }
 
                 that._triggerOnFieldDataChangedByDataSet(args.value);
