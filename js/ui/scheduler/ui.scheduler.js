@@ -1707,38 +1707,42 @@ const Scheduler = Widget.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
         this._initAppointmentTemplate();
 
-        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate();
-        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate();
+        this._templateManager.addDefaultTemplates({
+            appointmentTooltip: new EmptyTemplate(),
+            dropDownAppointment: new EmptyTemplate(),
+        });
+        this.callBase();
     },
 
     _initAppointmentTemplate: function() {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
 
-        this._defaultTemplates["item"] = new BindableTemplate(($container, data, model) => {
-            this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
-        }, [
-            "html",
-            "text",
-            "startDate",
-            "endDate",
-            "allDay",
-            "description",
-            "recurrenceRule",
-            "recurrenceException",
-            "startDateTimeZone",
-            "endDateTimeZone"
-        ], this.option("integrationOptions.watchMethod"), {
-            "text": createGetter(expr.textExpr),
-            "startDate": createGetter(expr.startDateExpr),
-            "endDate": createGetter(expr.endDateExpr),
-            "startDateTimeZone": createGetter(expr.startDateTimeZoneExpr),
-            "endDateTimeZone": createGetter(expr.endDateTimeZoneExpr),
-            "allDay": createGetter(expr.allDayExpr),
-            "recurrenceRule": createGetter(expr.recurrenceRuleExpr)
+        this._templateManager.addDefaultTemplates({
+            ["item"]: new BindableTemplate(($container, data, model) => {
+                this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
+            }, [
+                "html",
+                "text",
+                "startDate",
+                "endDate",
+                "allDay",
+                "description",
+                "recurrenceRule",
+                "recurrenceException",
+                "startDateTimeZone",
+                "endDateTimeZone"
+            ], this.option("integrationOptions.watchMethod"), {
+                "text": createGetter(expr.textExpr),
+                "startDate": createGetter(expr.startDateExpr),
+                "endDate": createGetter(expr.endDateExpr),
+                "startDateTimeZone": createGetter(expr.startDateTimeZoneExpr),
+                "endDateTimeZone": createGetter(expr.endDateTimeZoneExpr),
+                "allDay": createGetter(expr.allDayExpr),
+                "recurrenceRule": createGetter(expr.recurrenceRuleExpr)
+            })
         });
     },
 

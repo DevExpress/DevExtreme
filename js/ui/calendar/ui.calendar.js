@@ -444,12 +444,13 @@ var Calendar = Editor.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
-
-        this._defaultTemplates["cell"] = new FunctionTemplate(function(options) {
-            var data = options.model;
-            $(options.container).append($("<span>").text(data && data.text || String(data)));
+        this._templateManager.addDefaultTemplates({
+            cell: new FunctionTemplate(function(options) {
+                var data = options.model;
+                $(options.container).append($("<span>").text(data && data.text || String(data)));
+            })
         });
+        this.callBase();
     },
 
     _updateCurrentDate: function(date) {

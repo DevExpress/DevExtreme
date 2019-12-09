@@ -481,21 +481,22 @@ const TagBox = SelectBox.inherit({
     _initDynamicTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["tag"] = new BindableTemplate(($container, data) => {
+        this._templateManager.addDefaultTemplates({
+            tag: new BindableTemplate(($container, data) => {
+                const $tagContent = $("<div>").addClass(TAGBOX_TAG_CONTENT_CLASS);
 
-            const $tagContent = $("<div>").addClass(TAGBOX_TAG_CONTENT_CLASS);
+                $("<span>")
+                    .text(data.text || data)
+                    .appendTo($tagContent);
 
-            $("<span>")
-                .text(data.text || data)
-                .appendTo($tagContent);
+                $("<div>")
+                    .addClass(TAGBOX_TAG_REMOVE_BUTTON_CLASS)
+                    .appendTo($tagContent);
 
-            $("<div>")
-                .addClass(TAGBOX_TAG_REMOVE_BUTTON_CLASS)
-                .appendTo($tagContent);
-
-            $container.append($tagContent);
-        }, ["text"], this.option("integrationOptions.watchMethod"), {
-            "text": this._displayGetter
+                $container.append($tagContent);
+            }, ["text"], this.option("integrationOptions.watchMethod"), {
+                "text": this._displayGetter
+            })
         });
     },
 

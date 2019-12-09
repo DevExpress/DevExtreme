@@ -413,10 +413,6 @@ var Overlay = Widget.inherit({
         });
     },
 
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
-
     _wrapper: function() {
         return this._$wrapper;
     },
@@ -565,10 +561,15 @@ var Overlay = Widget.inherit({
         this.hide();
     },
 
-    _initTemplates: function() {
-        this.callBase();
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
 
-        this._defaultTemplates["content"] = new EmptyTemplate();
+    _initTemplates: function() {
+        this._templateManager.addDefaultTemplates({
+            content: new EmptyTemplate()
+        });
+        this.callBase();
     },
 
     _isTopOverlay: function() {
@@ -1045,7 +1046,7 @@ var Overlay = Widget.inherit({
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
-            transclude = this._getAnonymousTemplateName() === contentTemplateOption;
+            transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
         contentTemplate && contentTemplate.render({
             container: getPublicElement(this.$content()),
             noModel: true,

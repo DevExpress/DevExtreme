@@ -150,10 +150,6 @@ const Drawer = Widget.inherit({
         });
     },
 
-    _getAnonymousTemplateName() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
-
     _init() {
         this.callBase();
 
@@ -204,11 +200,16 @@ const Drawer = Widget.inherit({
         this._hideMenuHandler = this.hide.bind(this);
     },
 
-    _initTemplates() {
-        this.callBase();
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
 
-        this._defaultTemplates["panel"] = new EmptyTemplate();
-        this._defaultTemplates["content"] = new EmptyTemplate();
+    _initTemplates() {
+        this._templateManager.addDefaultTemplates({
+            panel: new EmptyTemplate(),
+            content: new EmptyTemplate()
+        });
+        this.callBase();
     },
 
     _initCloseOnOutsideClickHandler() {
@@ -250,7 +251,7 @@ const Drawer = Widget.inherit({
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
-            transclude = this._getAnonymousTemplateName() === contentTemplateOption;
+            transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
         contentTemplate && contentTemplate.render({
             container: this.viewContent(),
