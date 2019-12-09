@@ -108,7 +108,7 @@ class FileManagerToolbar extends Widget {
 
         this._generalToolbarVisible = true;
 
-        this._viewSwitcherPopup = $("<div>").addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS).appendTo('body');
+        this._viewSwitcherPopup = $("<div>").addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS).appendTo(this.$element().parent());
         this._generalToolbar = this._createToolbar(this.option("generalItems"));
         this._fileToolbar = this._createToolbar(this.option("fileItems"), true);
 
