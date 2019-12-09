@@ -79,8 +79,8 @@
         }
 
         .dx-toolbar .dx-filemanager-toolbar-viewmode-item .dx-button-content {
-            padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE;
-            padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE;
+            padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+            padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
         }
     }
 
@@ -194,10 +194,14 @@
     }
 }
 
-.dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
-    padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE - 1px;
-    padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING_SIDE;
-    text-overflow: clip;
+.dx-filemanager-view-switcher-popup {
+    width: 2 * @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING + @MATERIAL_BASE_ICON_SIZE;
+
+    .dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+        padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING - 1px;
+        padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+        text-overflow: clip;
+    }
 }
 
 .dx-filemanager-file-actions-button {

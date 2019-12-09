@@ -6,7 +6,7 @@ import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 import Toolbar from "../toolbar";
-require("../drop_down_button");
+import "../drop_down_button";
 
 const FILE_MANAGER_TOOLBAR_CLASS = "dx-filemanager-toolbar";
 const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";
@@ -14,6 +14,7 @@ const FILE_MANAGER_FILE_TOOLBAR_CLASS = "dx-filemanager-file-toolbar";
 const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-separator-item";
 const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-viewmode-item";
 const FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-has-large-icon";
+const FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS = "dx-filemanager-view-switcher-popup";
 
 const DEFAULT_ITEM_CONFIGS = {
     showNavPane: {
@@ -107,6 +108,7 @@ class FileManagerToolbar extends Widget {
 
         this._generalToolbarVisible = true;
 
+        this._viewSwitcherPopup = $("<div>").addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS).appendTo('body');
         this._generalToolbar = this._createToolbar(this.option("generalItems"));
         this._fileToolbar = this._createToolbar(this.option("fileItems"), true);
 
@@ -266,6 +268,9 @@ class FileManagerToolbar extends Widget {
                 stylingMode: "text",
                 showArrowIcon: false,
                 useSelectMode: true,
+                dropDownOptions: {
+                    container: this._viewSwitcherPopup
+                },
                 onItemClick: e => this._executeCommand(e.itemData.name)
             }
         };

@@ -112,9 +112,9 @@ QUnit.module("Toolbar", moduleConfig, () => {
         let $elements = this.wrapper.getToolbarElements();
         assert.equal($elements.length, 3, "has buttons");
 
-        assert.notStrictEqual($elements.eq(0).text().indexOf("New directory") !== -1, "create folder button displayed");
-        assert.notStrictEqual($elements.eq(1).text().indexOf("Upload files") !== -1, "upload files button displayed");
-        assert.notStrictEqual($elements.eq(2).val().indexOf("Details") !== -1, "view switcher displayed");
+        assert.notStrictEqual($elements.eq(0).text().indexOf("New directory"), -1, "create folder button displayed");
+        assert.notStrictEqual($elements.eq(1).text().indexOf("Upload files"), -1, "upload files button displayed");
+        assert.notStrictEqual($elements.eq(2).attr("title").indexOf("Details"), -1, "view switcher displayed");
 
         const $item = this.wrapper.findDetailsItem("File 1.txt");
         $item.trigger("dxclick");
@@ -126,11 +126,11 @@ QUnit.module("Toolbar", moduleConfig, () => {
         $elements = this.wrapper.getToolbarElements();
         assert.equal($elements.length, 5, "has buttons");
 
-        assert.notStrictEqual($elements.eq(0).text().indexOf("Move") !== -1, "move displayed");
-        assert.notStrictEqual($elements.eq(1).text().indexOf("Copy") !== -1, "copy displayed");
-        assert.notStrictEqual($elements.eq(2).text().indexOf("Rename") !== -1, "rename displayed");
-        assert.notStrictEqual($elements.eq(3).text().indexOf("Delete") !== -1, "delete button displayed");
-        assert.notStrictEqual($elements.eq(4).text().indexOf("Clear selection") !== -1, "clear selection button displayed");
+        assert.notStrictEqual($elements.eq(0).text().indexOf("Move"), -1, "move displayed");
+        assert.notStrictEqual($elements.eq(1).text().indexOf("Copy"), -1, "copy displayed");
+        assert.notStrictEqual($elements.eq(2).text().indexOf("Rename"), -1, "rename displayed");
+        assert.notStrictEqual($elements.eq(3).text().indexOf("Delete"), -1, "delete button displayed");
+        assert.notStrictEqual($elements.eq(4).text().indexOf("Clear selection"), -1, "clear selection button displayed");
     });
 
     test("toolbar updated after folder changing in details view mode", function(assert) {
