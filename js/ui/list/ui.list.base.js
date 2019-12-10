@@ -542,7 +542,9 @@ var ListBase = CollectionWidget.inherit({
 
     _modifyByChanges: function() {
         this.callBase.apply(this, arguments);
+
         this._refreshItemElements();
+        this._updateLoadingState();
     },
 
     reorderItem: function(itemElement, toItemElement) {
