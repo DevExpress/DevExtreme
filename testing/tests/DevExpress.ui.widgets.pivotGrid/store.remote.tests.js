@@ -1401,8 +1401,10 @@ QUnit.test("Error should not be thrown during filtering if there are more filter
         ],
         filterValues = [[1, 1], [1, 2], [2, 4]];
 
+    // assert
     assert.ok(filterValues.length > fields.length, "more filter values ​​than fields");
 
+    // act
     store.load({
         columns: fields,
         rows: [],
@@ -1413,6 +1415,7 @@ QUnit.test("Error should not be thrown during filtering if there are more filter
         }]
     });
 
+    // assert
     assert.deepEqual(filter,
         [
             [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 1]],
