@@ -4028,6 +4028,54 @@ QUnit.test("Enable rows hover, row position and focused row", function(assert) {
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
+// T837103
+QUnit.test("Enable rows hover with showCheckBoxesMode = onClick", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "hover is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [
+                { dataField: "i" }
+            ],
+            keyExpr: "i",
+            dataSource: [{ i: 1 }, { i: 2 }],
+            loadingTimeout: undefined,
+            hoverStateEnabled: true,
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "onClick"
+            }
+        }),
+        $rows = $dataGrid.find(".dx-data-row"),
+        $firstRow = $rows.eq(0),
+        $firstCommandColumn,
+        $firstCheckBox,
+        $secondRow = $rows.eq(1),
+        $secondCommandColumn,
+        $secondCheckBox;
+
+    // act
+    $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
+
+    $firstCommandColumn = $firstRow.find(".dx-command-select");
+    $firstCheckBox = $firstCommandColumn.find(".dx-select-checkbox");
+
+    $secondCommandColumn = $secondRow.find(".dx-command-select");
+    $secondCheckBox = $secondCommandColumn.find(".dx-select-checkbox");
+
+    // assert
+    assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "hover class");
+    assert.ok($firstCheckBox.length, "checkbox");
+    assert.notEqual($firstCommandColumn.css("overflow"), "hidden", "command column's overflow");
+
+    assert.notOk($secondRow.hasClass(DX_STATE_HOVER_CLASS), "no hover class");
+    assert.ok($secondCheckBox.length, "checkbox");
+    assert.equal($secondCommandColumn.css("overflow"), "hidden", "command column's overflow");
+});
+
 QUnit.testInActiveWindow("Focused row should be visible if page size has height more than scrollable container", function(assert) {
     // arrange
     var data = [
