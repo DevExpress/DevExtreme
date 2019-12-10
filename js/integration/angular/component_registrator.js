@@ -10,7 +10,7 @@ const each = iterator.each;
 import arrayUtils from "../../core/utils/array";
 const inArray = arrayUtils.inArray;
 import Locker from "../../core/utils/locker";
-import Widget from "../../core/dom_component_with_template";
+import Widget from "../../core/dom_component";
 import Editor from "../../ui/editor/editor";
 import { NgTemplate } from "./template";
 import ngModule from "./module";

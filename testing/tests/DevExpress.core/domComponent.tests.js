@@ -5,7 +5,6 @@ import config from "core/config";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
 import DOMComponent from "core/dom_component";
-import DomComponentWithTemplate from "core/dom_component_with_template";
 import domUtils from "core/utils/dom";
 import publicComponentUtils from "core/utils/public_component";
 
@@ -471,7 +470,7 @@ QUnit.module("default", {
     });
 
     QUnit.test("custom template should not be taken from integrationOptions when it is skipped", function(assert) {
-        const instance = new DomComponentWithTemplate("#component", {
+        const instance = new DOMComponent("#component", {
             template: "customTemplate",
             integrationOptions: {
                 skipTemplates: ["customTemplate"],
