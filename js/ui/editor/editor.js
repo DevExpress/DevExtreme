@@ -63,7 +63,7 @@ const Editor = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this._initInnerOptionCache("validationTooltipOptions");
+        this._initOptionsCache("validationTooltipOptions");
         const $element = this.$element();
         $element.addClass(DX_INVALID_BADGE_CLASS);
     },
@@ -274,7 +274,7 @@ const Editor = Widget.inherit({
                 visible: true,
                 propagateOutsideClick: true,
                 _checkParentVisibility: false
-            }, this._getInnerOptionsCache("validationTooltipOptions")));
+            }, this._getCachedOptions("validationTooltipOptions")));
 
             this._$validationMessage
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
@@ -398,7 +398,7 @@ const Editor = Widget.inherit({
                 this._renderValidationState();
                 break;
             case "validationTooltipOptions":
-                this._innerOptionChanged(this._validationMessage, args);
+                this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();

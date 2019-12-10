@@ -3,6 +3,7 @@ import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
 import { getFieldName, getParentName, convertRulesToOptions } from './utils';
+import { extend } from '../utils/extend';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
@@ -19,6 +20,7 @@ export class Options {
             optionsByReference
         );
         this._optionManager.onRelevantNamesPrepared((options, name, value, silent) => this._setRelevantNames(options, name, value, silent));
+        this._cachedOptions = {};
 
         this._rules = [];
     }
@@ -196,5 +198,22 @@ export class Options {
 
     isDeprecated(name) {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
+    }
+
+    initOptionsCache(optionName, options) {
+        this.clearCachedOptions(optionName);
+        this.cacheOptions(optionName, options);
+    }
+
+    clearCachedOptions(optionName) {
+        this._cachedOptions[optionName] = {};
+    }
+
+    cacheOptions(optionName, options) {
+        this._cachedOptions[optionName] = extend(this._cachedOptions[optionName], options);
+    }
+
+    getCachedOptions(optionName) {
+        return this._cachedOptions[optionName];
     }
 }

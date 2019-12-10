@@ -184,13 +184,8 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._initContentReadyAction();
     },
 
-    _clearInnerOptionCache: function(optionContainer) {
-        this[optionContainer + "Cache"] = {};
-    },
-
-    _cacheInnerOptions: function(optionContainer, optionValue) {
-        var cacheName = optionContainer + "Cache";
-        this[cacheName] = extend(this[cacheName], optionValue);
+    _cacheOptions: function(optionContainer, optionValue) {
+        this._options.cacheOptions(optionContainer, optionValue);
     },
 
     _getOptionsFromContainer: function({ name, fullName, value }) {
@@ -206,19 +201,18 @@ var Widget = DOMComponentWithTemplate.inherit({
         return options;
     },
 
-    _innerOptionChanged: function(innerWidget, args) {
+    _innerWidgetOptionChanged: function(innerWidget, args) {
         var options = this._getOptionsFromContainer(args);
         innerWidget && innerWidget.option(options);
-        this._cacheInnerOptions(args.name, options);
+        this._cacheOptions(args.name, options);
     },
 
-    _getInnerOptionsCache: function(optionContainer) {
-        return this[optionContainer + "Cache"];
+    _getCachedOptions: function(optionContainer) {
+        return this._options.getCachedOptions(optionContainer);
     },
 
-    _initInnerOptionCache: function(optionContainer) {
-        this._clearInnerOptionCache(optionContainer);
-        this._cacheInnerOptions(optionContainer, this.option(optionContainer));
+    _initOptionsCache: function(optionContainer) {
+        this._options.initOptionsCache(optionContainer);
     },
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
