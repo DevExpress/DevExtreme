@@ -1032,7 +1032,12 @@ const Form = Widget.inherit({
                             items: itemData.items,
                             inOneColumn
                         });
-                    }
+                    },
+                    onDisposing: ({ component }) => {
+                        // TODO: This made as a workaround for the Tabpanel in the repainChangesOnly mode
+                        const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
+                        this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
+                    },
                 });
 
                 if(this._itemsRunTimeInfo) {
@@ -1159,10 +1164,6 @@ const Form = Widget.inherit({
                     this._triggerOnFieldDataChanged(args);
                 }
             },
-            onDisposing: ({ component }) => {
-                const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
-                this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
-            },
             validationBoundary: this.option("scrollingEnabled") ? this.$element() : undefined
         };
 
@@ -1177,6 +1178,7 @@ const Form = Widget.inherit({
             cssItemClass: options.cssItemClass,
             colCountByScreen: options.colCountByScreen,
             onLayoutChanged: options.onLayoutChanged,
+            onDisposing: options.onDisposing,
             width: options.width
         });
     },
@@ -1373,7 +1375,7 @@ const Form = Widget.inherit({
             const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
-                this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
+                this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.items`);
                 const items = this._prepareItems(value, false, itemPath);
                 this._setLayoutManagerItemOption(layoutManager, optionName, items, itemPath);
                 return true;
@@ -1819,7 +1821,7 @@ const Form = Widget.inherit({
                     if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
                         let allowUpdateItems;
                         each(option, (optionName, optionValue) => {
-                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName]);
+                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
                             this._changeItemOption(item, optionName, optionValue);
                             if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
                                 allowUpdateItems = true;

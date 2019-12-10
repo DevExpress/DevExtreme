@@ -42,8 +42,8 @@ class FormTestWrapper {
         this._form.option(optionName, value);
     }
 
-    setItemOption(id, optionName, value) {
-        this._form.itemOption(id, optionName, value);
+    setItemOption() {
+        this._form.itemOption.apply(this._form, arguments);
     }
 
     selectTab(tabIndex) {
@@ -97,10 +97,10 @@ class FormTestWrapper {
         assert.strictEqual(value, expected, `${optionName} of ${tabIndex} tab`);
     }
 
-    checkEditor(id, expectedValue) {
+    checkEditorRendered(id, isEditorRendered) {
         const editor = this._form.getEditor(id);
-        assert.equal(!!editor, expectedValue, `instance editor of ${id}`);
-        if(editor && expectedValue) {
+        assert.equal(!!editor, isEditorRendered, `instance editor of ${id}`);
+        if(editor && isEditorRendered) {
             assert.notOk(editor._disposed, `editor is not disposed of ${id}`);
         }
     }
@@ -262,8 +262,8 @@ module(`Public API: option method`, () => {
 
                 testWrapper.selectTab(1);
 
-                testWrapper.checkEditor("name", !repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("lastName", true);
+                testWrapper.checkEditorRendered("name", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("lastName", true);
             });
 
             test(`Add new tab to start, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
@@ -298,11 +298,11 @@ module(`Public API: option method`, () => {
                 testWrapper.checkTabTitle(0, "title0");
                 testWrapper.checkTabTitle(1, "title1");
 
-                testWrapper.checkEditor("lastName", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("lastName", !repaintChangesOnly || !deferRendering);
 
                 testWrapper.selectTab(1);
 
-                testWrapper.checkEditor("name", true);
+                testWrapper.checkEditorRendered("name", true);
                 testWrapper.checkTabSelection(1);
             });
 
@@ -335,8 +335,8 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "title1");
-                testWrapper.checkEditor("name", true);
-                testWrapper.checkEditor("lastName", false);
+                testWrapper.checkEditorRendered("name", true);
+                testWrapper.checkEditorRendered("lastName", false);
 
                 testWrapper.checkTabSelection(0);
             });
@@ -369,8 +369,8 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "title1");
-                testWrapper.checkEditor("name", true);
-                testWrapper.checkEditor("lastName", false);
+                testWrapper.checkEditorRendered("name", true);
+                testWrapper.checkEditorRendered("lastName", false);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -402,9 +402,9 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "title2");
-                testWrapper.checkEditor("name", false);
+                testWrapper.checkEditorRendered("name", false);
 
-                testWrapper.checkEditor("lastName", true);
+                testWrapper.checkEditorRendered("lastName", true);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -444,15 +444,15 @@ module(`Public API: option method`, () => {
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(0, "new title 1");
                 testWrapper.checkTabTitle(1, "new title 2");
-                testWrapper.checkEditor("name", false);
-                testWrapper.checkEditor("lastName", false);
+                testWrapper.checkEditorRendered("name", false);
+                testWrapper.checkEditorRendered("lastName", false);
 
-                testWrapper.checkEditor("address", !deferRendering || !repaintChangesOnly);
-                testWrapper.checkEditor("city", repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", !deferRendering || !repaintChangesOnly);
+                testWrapper.checkEditorRendered("city", repaintChangesOnly || !deferRendering);
 
                 testWrapper.selectTab(1);
 
-                testWrapper.checkEditor("city", true);
+                testWrapper.checkEditorRendered("city", true);
                 testWrapper.checkTabSelection(1);
             });
 
@@ -490,8 +490,8 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "updated title");
-                testWrapper.checkEditor("lastName", true);
-                testWrapper.checkEditor("name", false);
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", false);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -532,9 +532,9 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(1, "updated title");
-                testWrapper.checkEditor("lastName", !repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("address", repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("name", false);
+                testWrapper.checkEditorRendered("lastName", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("name", false);
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
@@ -572,8 +572,8 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "updated title");
-                testWrapper.checkEditor("lastName", false);
-                testWrapper.checkEditor("name", true);
+                testWrapper.checkEditorRendered("lastName", false);
+                testWrapper.checkEditorRendered("name", true);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -614,9 +614,9 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(1, "updated title");
-                testWrapper.checkEditor("name", !repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("lastName", repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("address", false);
+                testWrapper.checkEditorRendered("name", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("lastName", repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", false);
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
@@ -658,9 +658,9 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(0, "updated title");
-                testWrapper.checkEditor("address", false);
-                testWrapper.checkEditor("lastName", true);
-                testWrapper.checkEditor("name", !deferRendering);
+                testWrapper.checkEditorRendered("address", false);
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", !deferRendering);
 
                 testWrapper.checkTabSelection(1);
             });
@@ -703,9 +703,9 @@ module(`Public API: option method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(1, "updated title");
-                testWrapper.checkEditor("address", false);
-                testWrapper.checkEditor("lastName", true);
-                testWrapper.checkEditor("name", !deferRendering);
+                testWrapper.checkEditorRendered("address", false);
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", !deferRendering);
                 testWrapper.checkTabSelection(1);
             });
         });
@@ -861,8 +861,8 @@ module(`Public API: itemOption method`, () => {
 
                 testWrapper.selectTab(1);
 
-                testWrapper.checkEditor("name", !repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("lastName", true);
+                testWrapper.checkEditorRendered("name", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("lastName", true);
             });
 
             test(`Add new tab to start, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
@@ -898,11 +898,11 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkTabTitle(0, "title0");
                 testWrapper.checkTabTitle(1, "title1");
 
-                testWrapper.checkEditor("lastName", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("lastName", !repaintChangesOnly || !deferRendering);
 
                 testWrapper.selectTab(1);
 
-                testWrapper.checkEditor("name", true);
+                testWrapper.checkEditorRendered("name", true);
                 testWrapper.checkTabSelection(1);
             });
 
@@ -936,8 +936,8 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "title1");
-                testWrapper.checkEditor("name", true);
-                testWrapper.checkEditor("lastName", false);
+                testWrapper.checkEditorRendered("name", true);
+                testWrapper.checkEditorRendered("lastName", false);
 
                 testWrapper.checkTabSelection(0);
             });
@@ -971,8 +971,8 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "title1");
-                testWrapper.checkEditor("name", true);
-                testWrapper.checkEditor("lastName", false);
+                testWrapper.checkEditorRendered("name", true);
+                testWrapper.checkEditorRendered("lastName", false);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -1005,9 +1005,9 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "title2");
-                testWrapper.checkEditor("name", false);
+                testWrapper.checkEditorRendered("name", false);
 
-                testWrapper.checkEditor("lastName", true);
+                testWrapper.checkEditorRendered("lastName", true);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -1048,15 +1048,15 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(0, "new title 1");
                 testWrapper.checkTabTitle(1, "new title 2");
-                testWrapper.checkEditor("name", false);
-                testWrapper.checkEditor("lastName", false);
+                testWrapper.checkEditorRendered("name", false);
+                testWrapper.checkEditorRendered("lastName", false);
 
-                testWrapper.checkEditor("address", !deferRendering || !repaintChangesOnly);
-                testWrapper.checkEditor("city", repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", !deferRendering || !repaintChangesOnly);
+                testWrapper.checkEditorRendered("city", repaintChangesOnly || !deferRendering);
 
                 testWrapper.selectTab(1);
 
-                testWrapper.checkEditor("city", true);
+                testWrapper.checkEditorRendered("city", true);
                 testWrapper.checkTabSelection(1);
             });
 
@@ -1095,8 +1095,8 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "updated title");
-                testWrapper.checkEditor("lastName", true);
-                testWrapper.checkEditor("name", false);
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", false);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -1138,9 +1138,9 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(1, "updated title");
-                testWrapper.checkEditor("lastName", !repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("address", repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("name", false);
+                testWrapper.checkEditorRendered("lastName", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("name", false);
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
@@ -1179,8 +1179,8 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(1);
                 testWrapper.checkTabTitle(0, "updated title");
-                testWrapper.checkEditor("lastName", false);
-                testWrapper.checkEditor("name", true);
+                testWrapper.checkEditorRendered("lastName", false);
+                testWrapper.checkEditorRendered("name", true);
                 testWrapper.checkTabSelection(0);
             });
 
@@ -1222,9 +1222,9 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(1, "updated title");
-                testWrapper.checkEditor("name", !repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("lastName", repaintChangesOnly || !deferRendering);
-                testWrapper.checkEditor("address", false);
+                testWrapper.checkEditorRendered("name", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("lastName", repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", false);
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
@@ -1267,9 +1267,9 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(0, "updated title");
-                testWrapper.checkEditor("address", false);
-                testWrapper.checkEditor("lastName", true);
-                testWrapper.checkEditor("name", !deferRendering);
+                testWrapper.checkEditorRendered("address", false);
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", !deferRendering);
 
                 testWrapper.checkTabSelection(1);
             });
@@ -1313,10 +1313,54 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkFormsReRender();
                 testWrapper.checkTabsElements(2);
                 testWrapper.checkTabTitle(1, "updated title");
-                testWrapper.checkEditor("address", false);
-                testWrapper.checkEditor("lastName", true);
-                testWrapper.checkEditor("name", !deferRendering);
+                testWrapper.checkEditorRendered("address", false);
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", !deferRendering);
                 testWrapper.checkTabSelection(1);
+            });
+
+            test(`Select first tab, add new tab, remove first tab and change title and icon for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+                const tabs = [{
+                    title: "title1",
+                    items: ["name"]
+                }];
+
+                const testWrapper = new FormTestWrapper({
+                    items: [{
+                        itemType: "tabbed",
+                        name: "tabbedItem",
+                        tabPanelOptions: {
+                            repaintChangesOnly,
+                            deferRendering
+                        },
+                        tabs
+                    }]
+                });
+
+                testWrapper.checkTabSelection(0);
+
+                tabs.push({
+                    title: "title2",
+                    items: ["lastName"]
+                });
+
+                testWrapper.setItemOption("tabbedItem", "tabs", tabs);
+
+                tabs.splice(0, 1);
+
+                testWrapper.setItemOption("tabbedItem", "tabs", tabs);
+                testWrapper.setItemOption("tabbedItem.title2", {
+                    title: "updated title",
+                    icon: "plus"
+                });
+
+                testWrapper.checkFormsReRender();
+                testWrapper.checkTabsElements(1);
+                testWrapper.checkTabTitle(0, "updated title");
+                testWrapper.checkTabIcon(0, "plus");
+                testWrapper.checkEditorRendered("lastName", true);
+                testWrapper.checkEditorRendered("name", false);
+                testWrapper.checkTabSelection(0);
             });
         });
     });
