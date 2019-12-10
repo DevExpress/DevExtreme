@@ -2913,7 +2913,7 @@ const Scheduler = Widget.inherit({
                     const event = e.event,
                         itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
-                    if(itemData) {
+                    if(itemData && !itemData.data.disabled) {
                         event.data = event.data || {};
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
 
@@ -2921,6 +2921,12 @@ const Scheduler = Widget.inherit({
                         translator.resetPosition($(dragElement));
 
                         this.hideAppointmentTooltip();
+                    }
+                },
+                onDragEnd: (e) => {
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                    if(itemData && !itemData.data.disabled) {
+                        dragBehavior.onDragEnd(e);
                     }
                 }
             });
