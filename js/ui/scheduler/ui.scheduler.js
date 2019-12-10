@@ -2614,6 +2614,10 @@ const Scheduler = Widget.inherit({
 
         this._actions["onAppointmentUpdating"](updatingOptions);
 
+        if(dragEvent && !typeUtils.isDeferred(dragEvent.cancel)) {
+            dragEvent.cancel = new Deferred();
+        }
+
         this._processActionResult(updatingOptions, function(canceled) {
             if(!canceled) {
                 this._expandAllDayPanel(appointment);
@@ -2622,9 +2626,7 @@ const Scheduler = Widget.inherit({
                     this._appointmentModel
                         .update(target, appointment)
                         .done(() => {
-                            if(dragEvent && typeUtils.isDeferred(dragEvent.cancel)) {
-                                dragEvent.cancel.resolve(false);
-                            }
+                            dragEvent && dragEvent.cancel.resolve(false);
                         })
                         .always((function(e) {
                             this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentUpdated"], appointment, e);

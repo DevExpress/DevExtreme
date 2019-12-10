@@ -9,6 +9,7 @@ import { inArray } from "../../core/utils/array";
 import { extend } from "../../core/utils/extend";
 import arrayUtils from "../../core/utils/array";
 import query from "../../data/query";
+import { Deferred } from "../../core/utils/deferred";
 
 var toMs = dateUtils.dateToMilliseconds;
 
@@ -540,11 +541,18 @@ class AppointmentModel {
     }
 
     update(target, data) {
-        var key = this._getStoreKey(target);
+        var key = this._getStoreKey(target),
+            d = new Deferred();
 
-        return this._dataSource.store().update(key, data).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+        this._dataSource.store().update(key, data)
+            .done(() => {
+                this._dataSource.load()
+                    .done(d.resolve)
+                    .fail(d.reject);
+            })
+            .fail(d.reject);
+
+        return d.promise();
     }
 
     remove(target) {
