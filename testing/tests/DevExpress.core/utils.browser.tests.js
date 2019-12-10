@@ -40,7 +40,7 @@ QUnit.test("browser is IE11", function(assert) {
 QUnit.test("browser is generic webkit", function(assert) {
     var browserObject = browser._fromUA(userAgents.webkit);
     assert.ok(browserObject.webkit, "webkit detected");
-    assert.equal(browserObject.version, '43.0.2357.124', "version was detect correctly");
+    assert.equal(browserObject.version, '537.36', "version was detect correctly");
 });
 
 QUnit.test("browser is mozilla", function(assert) {
@@ -99,5 +99,5 @@ QUnit.test("google app is chrome (mobile)", function(assert) {
     assert.notOk(browserObject.chrome, "google app is not chrome");
     assert.ok(browserObject.webkit, "google app is webkit browser");
     assert.ok(browserObject.unknown, "but google app is not known browser name");
-    assert.strictEqual(browserObject.version, "88.0.281793270", "google app version is correct");
+    assert.strictEqual(browserObject.version, "605.1.15", "webkit version is correct");
 });

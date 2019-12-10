@@ -39,13 +39,8 @@ var browserFromUA = function(ua) {
             browserVersion = browserVersion && browserVersion[1];
         } else {
             browserName = "unknown";
-            var versionRegex = /(\w*)\/([0-9.]+)/g;
-            while((browserVersion = versionRegex.exec(ua)) !== null) {
-                if(["mozilla", "applewebkit", "safari", "mobile"].indexOf(browserVersion[1]) < 0) {
-                    browserVersion = browserVersion[2];
-                    break;
-                }
-            }
+            browserVersion = /applewebkit\/([0-9.]+)/.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
         }
     }
 
