@@ -801,7 +801,7 @@ QUnit.module("next button", moduleSetup, () => {
             repaintChangesOnly: true,
             dataSource: {
                 store: ["1", "2", "3"],
-                pageSize: 3
+                pageSize: 2
             },
             pageLoadMode: "nextButton",
             searchEnabled: true
