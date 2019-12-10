@@ -796,14 +796,8 @@ module.exports = {
                         if(offset && (offset.left || offset.right)) {
                             this.callBase.apply(this, arguments);
                         } else {
-                            const $rowsView = this.element();
-                            const top = $element.position().top;
-                            const bottom = $element.height() + top;
-                            const rowsViewTop = $rowsView.position().top;
-                            const rowsViewBottom = $rowsView.height() + rowsViewTop;
-                            if(top < rowsViewTop || bottom > rowsViewBottom) {
-                                scrollable.scrollTo({ top: top - rowsViewTop });
-                            }
+                            const position = scrollable.getScrollElementPosition($element, "vertical");
+                            scrollable.scrollTo({ top: position });
                         }
                     }
                 }
