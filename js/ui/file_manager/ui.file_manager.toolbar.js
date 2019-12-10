@@ -108,9 +108,10 @@ class FileManagerToolbar extends Widget {
 
         this._generalToolbarVisible = true;
 
-        this._viewSwitcherPopup = $("<div>").addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS).appendTo(this.$element().parent());
+        this._$viewSwitcherPopup = $("<div>").addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS);
         this._generalToolbar = this._createToolbar(this.option("generalItems"));
         this._fileToolbar = this._createToolbar(this.option("fileItems"), true);
+        this._$viewSwitcherPopup.appendTo(this.$element());
 
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + " " + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
     }
@@ -269,7 +270,7 @@ class FileManagerToolbar extends Widget {
                 showArrowIcon: false,
                 useSelectMode: true,
                 dropDownOptions: {
-                    container: this._viewSwitcherPopup
+                    container: this._$viewSwitcherPopup
                 },
                 onItemClick: e => this._executeCommand(e.itemData.name)
             }
