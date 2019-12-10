@@ -1884,6 +1884,24 @@ QUnit.module("datebox and calendar integration", () => {
         assert.equal($disabledCell.text(), "13", "Correct cell is disabled");
     });
 
+    QUnit.test("disabledDates should not be called for the dates out of range(minDate, maxDate)", function(assert) {
+        let callCount = 0;
+
+        $("#dateBox").dxDateBox({
+            type: "date",
+            value: new Date(2019, 11, 10),
+            min: new Date(2019, 11, 15),
+            max: new Date(2019, 11, 20),
+            disabledDates: () => {
+                ++callCount;
+                return true;
+            },
+            opened: true
+        }).dxDateBox("instance");
+
+        assert.equal(callCount, 12, "disabledDates has been called only on enabled dates");
+    });
+
     QUnit.test("disabledDates correctly displays after optionChanged", function(assert) {
         const instance = $("#dateBox").dxDateBox({
             type: "date",
