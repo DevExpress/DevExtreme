@@ -4467,7 +4467,7 @@ QUnit.test("Focused row should be visible if set focusedRowKey", function(assert
 
     this.gridView.render($("#container"));
     rowsView = this.gridView.getView("rowsView");
-    rowsView._scrollToElement = ($row, offset) => {
+    rowsView.scrollElementTop = $row => {
         ++counter;
         assert.ok($row.find("td").eq(0).text(), "Smith", "Row");
     };
@@ -4477,7 +4477,7 @@ QUnit.test("Focused row should be visible if set focusedRowKey", function(assert
 
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    assert.ok(counter > 0, "_scrollToElement has invoked");
+    assert.ok(counter > 0, "scrollElementTop has invoked");
 });
 
 QUnit.test("Focused row should preserve on navigation to the other row in virual scrolling mode if page not loaded", function(assert) {

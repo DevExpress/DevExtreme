@@ -18288,7 +18288,7 @@ QUnit.test("DataGrid - Focus updating on refresh should be correct for focused r
             focusedRowEnabled: true
         });
 
-    dataGrid.getView("rowsView")._scrollToElement = function($row) {
+    dataGrid.getView("rowsView").scrollElementTop = function($row) {
         ++counter;
         assert.equal($row.find("td").eq(0).text(), "Zeb", "Row");
     };
@@ -18302,7 +18302,7 @@ QUnit.test("DataGrid - Focus updating on refresh should be correct for focused r
     // assert
     assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, "Cell[5, 1] is in editing mode");
     assert.ok(rowsViewWrapper.isFocusedRow(5), "Row 5 is focused");
-    assert.equal(counter, 2, "_scrollToElement called twice");
+    assert.equal(counter, 2, "scrollElementTop called twice");
 });
 
 QUnit.test("DataGrid - Focus updating on refresh should be correct for focused row if editing mode is batch (T830334)", function(assert) {
@@ -18328,7 +18328,7 @@ QUnit.test("DataGrid - Focus updating on refresh should be correct for focused r
             focusedRowEnabled: true
         });
 
-    dataGrid.getView("rowsView")._scrollToElement = function($row) {
+    dataGrid.getView("rowsView").scrollElementTop = function($row) {
         ++counter;
         assert.equal($row.find("td").eq(0).text(), "Zeb", "Row");
     };
@@ -18342,7 +18342,7 @@ QUnit.test("DataGrid - Focus updating on refresh should be correct for focused r
     // assert
     assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, "Cell[5, 1] is in editing mode");
     assert.ok(rowsViewWrapper.isFocusedRow(5), "Row 5 is focused");
-    assert.equal(counter, 2, "_scrollToElement called twice");
+    assert.equal(counter, 2, "scrollElementTop called twice");
 });
 
 QUnit.test("Popup should apply data changes after editorOptions changing (T817880)", function(assert) {
