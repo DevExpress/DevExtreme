@@ -265,8 +265,8 @@ let DropDownButton = Widget.inherit({
         this._compileDisplayGetter();
         this._initDataSource();
         this._itemsToDataSource();
-        this._initOptionsCache("buttonGroupOptions");
-        this._initOptionsCache("dropDownOptions");
+        this._options.cache("buttonGroupOptions", this.option("buttonGroupOptions"));
+        this._options.cache("dropDownOptions", this.option("dropDownOptions"));
     },
 
     _initTemplates() {
@@ -416,7 +416,7 @@ let DropDownButton = Widget.inherit({
 
                 $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
             }
-        }, this._getCachedOptions("buttonGroupOptions"));
+        }, this._options.cache("buttonGroupOptions"));
     },
 
     _renderPopupContent() {
@@ -465,7 +465,7 @@ let DropDownButton = Widget.inherit({
                     y: -1
                 }
             }
-        }, this._getCachedOptions("dropDownOptions"));
+        }, this._options.cache("dropDownOptions"));
     },
 
     _listOptions() {

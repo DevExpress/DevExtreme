@@ -1572,13 +1572,13 @@ QUnit.module("inner options cache", {}, () => {
 
         _init() {
             this.callBase();
-            this._initOptionsCache("innerComponentOptions");
+            this._options.cache("innerComponentOptions", this.option("innerComponentOptions"));
         },
 
         _renderInnerWidget() {
             return this._createComponent($("<div>"), Widget, extend({
                 defaultOption: "Test"
-            }, this._getCachedOptions("innerComponentOptions")));
+            }, this._options.cache("innerComponentOptions")));
         },
 
         _render() {

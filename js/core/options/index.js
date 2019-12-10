@@ -200,20 +200,13 @@ export class Options {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
     }
 
-    initOptionsCache(optionName, options) {
-        this.clearCachedOptions(optionName);
-        this.cacheOptions(optionName, options);
-    }
+    cache(name, options) {
+        const isGetter = arguments.length < 2;
 
-    clearCachedOptions(optionName) {
-        this._cachedOptions[optionName] = {};
-    }
-
-    cacheOptions(optionName, options) {
-        this._cachedOptions[optionName] = extend(this._cachedOptions[optionName], options);
-    }
-
-    getCachedOptions(optionName) {
-        return this._cachedOptions[optionName];
+        if(isGetter) {
+            return this._cachedOptions[name];
+        } else {
+            this._cachedOptions[name] = extend(this._cachedOptions[name], options);
+        }
     }
 }

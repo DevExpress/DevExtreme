@@ -184,10 +184,6 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._initContentReadyAction();
     },
 
-    _cacheOptions: function(optionContainer, optionValue) {
-        this._options.cacheOptions(optionContainer, optionValue);
-    },
-
     _getOptionsFromContainer: function({ name, fullName, value }) {
         var options = {};
 
@@ -204,15 +200,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     _innerWidgetOptionChanged: function(innerWidget, args) {
         var options = this._getOptionsFromContainer(args);
         innerWidget && innerWidget.option(options);
-        this._cacheOptions(args.name, options);
-    },
-
-    _getCachedOptions: function(optionContainer) {
-        return this._options.getCachedOptions(optionContainer);
-    },
-
-    _initOptionsCache: function(optionContainer) {
-        this._options.initOptionsCache(optionContainer);
+        this._options.cache(args.name, options);
     },
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
