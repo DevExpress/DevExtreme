@@ -14401,6 +14401,56 @@ QUnit.test("Reset sorting and grouping state when lookup column exists and remot
     assert.strictEqual(dataGrid.columnOption("field2", "groupIndex"), undefined, "grouping is reseted");
 });
 
+// T721368
+QUnit.test("Reset sorting and grouping state when lookup column and default grouping and sorting exist and remote data is used", function(assert) {
+    var createRemoteDataSource = function(data) {
+        return {
+            key: "id",
+            load: function() {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(data);
+                }, 0);
+
+                return d.promise();
+            }
+        };
+    };
+
+    var dataGrid = createDataGrid({
+        columns: [{
+            dataField: "id",
+            lookup: {
+                dataSource: createRemoteDataSource([{ id: 1, text: "Test 1" }]),
+                valueExpr: "id",
+                displayExpr: "text"
+            },
+            groupIndex: 0,
+            sortOrder: "asc"
+        }, "field1", "field2"],
+        dataSource: [{ id: 1 }]
+    });
+
+    // act
+    this.clock.tick(0);
+
+    dataGrid.columnOption("field1", "sortOrder", "asc");
+    dataGrid.columnOption("field2", "groupIndex", 1);
+    this.clock.tick(0);
+
+    // act
+    dataGrid.state({});
+    this.clock.tick(0);
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption("id", "sortOrder"), "asc", "sorting is reseted");
+    assert.strictEqual(dataGrid.columnOption("id", "groupIndex"), 0, "grouping is reseted");
+
+    assert.strictEqual(dataGrid.columnOption("field1", "sortOrder"), undefined, "sorting is reseted");
+    assert.strictEqual(dataGrid.columnOption("field2", "groupIndex"), undefined, "grouping is reseted");
+});
+
 // T800495
 QUnit.test("The calculateCellValue arguments should be correct after resetting the state when there is a grouped column", function(assert) {
     // arrange
@@ -14557,6 +14607,59 @@ QUnit.test("State reset should reset filtering", function(assert) {
 
     // assert
     assert.equal(dataGrid.option("filterValue"), undefined, "dataGrid's filter");
+});
+
+// T817555
+QUnit.test("State reset should return default grouping and sorting after multiple changes", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.columnOption(0, "groupIndex", undefined);
+    dataGrid.columnOption(1, "groupIndex", 0);
+
+    dataGrid.columnOption(1, "sortOrder", undefined);
+    dataGrid.columnOption(0, "sortOrder", "asc");
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was returned to default");
+    assert.equal(dataGrid.columnOption(1, "groupIndex"), undefined, "groupIndex was returned to default");
+
+    assert.equal(dataGrid.columnOption(0, "sortOrder"), undefined, "sortOrder was returned to default");
+    assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
+});
+
+// T832870
+QUnit.test("onEditorPreparing event should not be fired twice for each column if state storing and filter row are used", function(assert) {
+    var onEditorPreparingCallCount = 0;
+
+    createDataGrid({
+        columns: [{ dataField: "field1" }, { dataField: "field2" }],
+        dataSource: [{ field1: "data", field2: "data2" }],
+        onEditorPreparing: function(e) {
+            onEditorPreparingCallCount++;
+        },
+        filterRow: {
+            visible: true
+        },
+        stateStoring: {
+            enabled: true
+        }
+    });
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(onEditorPreparingCallCount, 1, "onEditorPreparing call count");
 });
 
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
