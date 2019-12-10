@@ -603,19 +603,19 @@ class Diagram extends Widget {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
         let layoutParametersOption = this.option("nodes.autoLayout");
         if(!layoutParametersOption) return undefined;
-        let parameters = (layoutParametersOption) ? {} : undefined;
-        if(layoutParametersOption) {
-            let layoutType = layoutParametersOption.type || layoutParametersOption;
-            if(layoutType === "tree") {
-                parameters.type = DataLayoutType.Tree;
-            } else if(layoutType === "layered") {
-                parameters.type = DataLayoutType.Sugiyama;
-            }
-            if(layoutParametersOption.orientation === "vertical") {
-                parameters.orientation = DataLayoutOrientation.Vertical;
-            } else if(layoutParametersOption.orientation === "horizontal") {
-                parameters.orientation = DataLayoutOrientation.Horizontal;
-            }
+        let parameters = {};
+        let layoutType = layoutParametersOption.type || layoutParametersOption;
+        if(layoutType === "tree") {
+            parameters.type = DataLayoutType.Tree;
+        } else if(layoutType === "layered") {
+            parameters.type = DataLayoutType.Sugiyama;
+        } else {
+            return undefined;
+        }
+        if(layoutParametersOption.orientation === "vertical") {
+            parameters.orientation = DataLayoutOrientation.Vertical;
+        } else if(layoutParametersOption.orientation === "horizontal") {
+            parameters.orientation = DataLayoutOrientation.Horizontal;
         }
         return parameters;
     }
