@@ -602,15 +602,13 @@ class Diagram extends Widget {
     _getDataBindingLayoutParameters() {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
         let layoutParametersOption = this.option("nodes.autoLayout");
-        if(!layoutParametersOption) return undefined;
+        if(!layoutParametersOption || layoutParametersOption === "off" || layoutParametersOption.type === "off") return undefined;
         let parameters = {};
         let layoutType = layoutParametersOption.type || layoutParametersOption;
         if(layoutType === "tree") {
             parameters.type = DataLayoutType.Tree;
         } else if(layoutType === "layered") {
             parameters.type = DataLayoutType.Sugiyama;
-        } else {
-            return undefined;
         }
         if(layoutParametersOption.orientation === "vertical") {
             parameters.orientation = DataLayoutOrientation.Vertical;
