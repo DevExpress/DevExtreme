@@ -211,10 +211,12 @@ var ActionSheet = CollectionWidget.inherit({
         * @type String
         * @hidden
         */
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
-            var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
-            $container.append(button.$element());
-        }, ["disabled", "icon", "text", "type", "onClick", "click"], this.option("integrationOptions.watchMethod"));
+        this._templateManager.addDefaultTemplates({
+            item: new BindableTemplate(function($container, data) {
+                var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
+                $container.append(button.$element());
+            }, ["disabled", "icon", "text", "type", "onClick", "click"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _itemContainer: function() {

@@ -542,7 +542,9 @@ var ListBase = CollectionWidget.inherit({
 
     _modifyByChanges: function() {
         this.callBase.apply(this, arguments);
+
         this._refreshItemElements();
+        this._updateLoadingState();
     },
 
     reorderItem: function(itemElement, toItemElement) {
@@ -655,16 +657,17 @@ var ListBase = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
-        this._defaultTemplates["group"] = new BindableTemplate(function($container, data) {
-            if(typeUtils.isPlainObject(data)) {
-                if(data.key) {
-                    $container.text(data.key);
+        this._templateManager.addDefaultTemplates({
+            group: new BindableTemplate(function($container, data) {
+                if(typeUtils.isPlainObject(data)) {
+                    if(data.key) {
+                        $container.text(data.key);
+                    }
+                } else {
+                    $container.text(String(data));
                 }
-            } else {
-                $container.text(String(data));
-            }
-        }, ["key"], this.option("integrationOptions.watchMethod"));
+            }, ["key"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {

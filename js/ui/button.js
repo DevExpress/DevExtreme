@@ -12,6 +12,8 @@ import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
 
+const ANONYMOUS_TEMPLATE_NAME = 'content';
+
 /**
 * @name dxButton
 * @inherits Widget
@@ -84,10 +86,6 @@ class Button extends Widget {
         const { validationGroup } = this.option();
 
         return validationGroup || ValidationEngine.findGroup($element, model);
-    }
-
-    _getAnonymousTemplateName() {
-        return 'content';
     }
 
     _getContentData() {
@@ -252,25 +250,30 @@ class Button extends Widget {
         this.setAria('role', 'button');
     }
 
+    _getAnonymousTemplateName() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    }
+
     _initTemplates() {
-        super._initTemplates();
+        this._templateManager.addDefaultTemplates({
+            content: new FunctionTemplate(({ model = {}, container }) => {
+                const { text, icon } = model;
+                const { iconPosition } = this.option();
+                const $icon = getImageContainer(icon);
+                const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
+                const $container = $(container);
 
-        this._defaultTemplates['content'] = new FunctionTemplate(({ model = {}, container }) => {
-            const { text, icon } = model;
-            const { iconPosition } = this.option();
-            const $icon = getImageContainer(icon);
-            const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
-            const $container = $(container);
+                $container.append($textContainer);
 
-            $container.append($textContainer);
-
-            if(iconPosition === 'left') {
-                $container.prepend($icon);
-            } else {
-                $icon.addClass('dx-icon-right');
-                $container.append($icon);
-            }
+                if(iconPosition === 'left') {
+                    $container.prepend($icon);
+                } else {
+                    $icon.addClass('dx-icon-right');
+                    $container.append($icon);
+                }
+            })
         });
+        super._initTemplates();
     }
 
     _optionChanged(args) {
@@ -438,7 +441,7 @@ class Button extends Widget {
         const $template = $(this._getTemplateByOption('template').render({
             model: data,
             container: getPublicElement($content),
-            transclude: this._getAnonymousTemplateName() === template
+            transclude: this._templateManager.anonymousTemplateName === template
         }));
 
         if($template.hasClass('dx-template-wrapper')) {

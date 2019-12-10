@@ -608,9 +608,10 @@ var Lookup = DropDownList.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
-        this._defaultTemplates["group"] = new ChildDefaultTemplate("group");
-        this._defaultTemplates["title"] = new ChildDefaultTemplate("title");
+        this._templateManager.addDefaultTemplates({
+            group: new ChildDefaultTemplate("group"),
+            title: new ChildDefaultTemplate("title"),
+        });
     },
 
     _initMarkup: function() {
@@ -1064,6 +1065,7 @@ var Lookup = DropDownList.inherit({
             onPageLoading: this.option("onPageLoading"),
             pageLoadMode: this.option("pageLoadMode"),
             nextButtonText: this.option("nextButtonText"),
+            indicateLoading: this.option("searchEnabled"),
             onSelectionChanged: this._getSelectionChangedHandler()
         });
     },

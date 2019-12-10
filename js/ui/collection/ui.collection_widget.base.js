@@ -37,6 +37,7 @@ const EMPTY_COLLECTION = "dx-empty-collection";
 const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
 const ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;
+const ANONYMOUS_TEMPLATE_NAME = 'item';
 
 const FOCUS_UP = "up";
 const FOCUS_DOWN = "down";
@@ -250,10 +251,6 @@ var CollectionWidget = Widget.inherit({
         });
     },
 
-    _getAnonymousTemplateName: function() {
-        return "item";
-    },
-
     _init: function() {
         this._compileDisplayGetter();
         this.callBase();
@@ -270,22 +267,28 @@ var CollectionWidget = Widget.inherit({
     _initTemplates: function() {
         this._initItemsFromMarkup();
 
-        this.callBase();
         this._initDefaultItemTemplate();
+        this.callBase();
+    },
+
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
     },
 
     _initDefaultItemTemplate: function() {
         var fieldsMap = this._getFieldsMap();
-        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
-            if(isPlainObject(data)) {
-                this._prepareDefaultItemTemplate(data, $container);
-            } else {
-                if(fieldsMap && isFunction(fieldsMap.text)) {
-                    data = fieldsMap.text(data);
+        this._templateManager.addDefaultTemplates({
+            item: new BindableTemplate((function($container, data) {
+                if(isPlainObject(data)) {
+                    this._prepareDefaultItemTemplate(data, $container);
+                } else {
+                    if(fieldsMap && isFunction(fieldsMap.text)) {
+                        data = fieldsMap.text(data);
+                    }
+                    $container.text(String(commonUtils.ensureDefined(data, "")));
                 }
-                $container.text(String(commonUtils.ensureDefined(data, "")));
-            }
-        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap);
+            }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap)
+        });
     },
 
     _getBindableFields: function() {

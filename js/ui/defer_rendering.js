@@ -211,7 +211,7 @@ var DeferRendering = Widget.inherit({
                 element: $element
             };
 
-        var contentTemplate = this._getTemplate(this._getAnonymousTemplateName());
+        var contentTemplate = this._getTemplate(this._templateManager.anonymousTemplateName);
 
         if(contentTemplate) {
             contentTemplate.render({

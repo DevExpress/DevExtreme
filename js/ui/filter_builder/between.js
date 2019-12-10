@@ -43,14 +43,14 @@ function editorTemplate(conditionInfo, container) {
     }));
 }
 
-function getConfig(caption) {
+function getConfig(caption, context) {
     return {
         name: "between",
         caption: caption,
         icon: "range",
         valueSeparator: SEPARATOR,
         dataTypes: ["number", "date", "datetime"],
-        editorTemplate: editorTemplate
+        editorTemplate: editorTemplate.bind(context)
     };
 }
 

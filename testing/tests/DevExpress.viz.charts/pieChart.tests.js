@@ -237,7 +237,7 @@ var environment = {
         var chart = this.createPieChart({});
 
         assert.equal(this.createThemeManager.callCount, 1);
-        assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart._options, themeSection: "pie", fontFields: [
+        assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart.option(), themeSection: "pie", fontFields: [
             "legend.font",
             "legend.title.font",
             "legend.title.subtitle.font",

@@ -70,12 +70,8 @@ QUnit.test("dxscrollinit is not fired on element without subscription", function
 QUnit.test("dxscrollinit considers events.needSkipEvent", function(assert) {
     assert.expect(0);
 
-    var originalNeedSkipEvent = eventUtils.needSkipEvent;
-
     try {
-        eventUtils.needSkipEvent = function() {
-            return true;
-        };
+        eventUtils.forceSkipEvents();
 
         var $scrollable = $("#scrollable").on(scrollEvents.init, function(e) {
             assert.ok(false, "dxscrollinit fired");
@@ -84,7 +80,7 @@ QUnit.test("dxscrollinit considers events.needSkipEvent", function(assert) {
         pointerMock($scrollable).start().down();
 
     } finally {
-        eventUtils.needSkipEvent = originalNeedSkipEvent;
+        eventUtils.stopEventsSkipping();
     }
 });
 
