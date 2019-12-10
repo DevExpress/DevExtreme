@@ -79,7 +79,7 @@ const DOMComponent = Component.inherit({
             disabled: false,
 
             integrationOptions: {}
-        }, TemplateManager.createDefaultOptions());
+        }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
     },
     /**
     * @name DOMComponentMethods.ctor
