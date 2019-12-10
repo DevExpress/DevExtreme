@@ -160,7 +160,7 @@ const Component = Class.inherit({
     },
 
     _logDeprecatedWarning(option, info) {
-        const message = info.message || (`Use the ${info.alias} option instead`);
+        const message = info.message || (`Use the '${info.alias}' option instead`);
         errors.log('W0001', this.NAME, option, info.since, message);
     },
 
@@ -311,7 +311,7 @@ const Component = Class.inherit({
                 }
                 ///#DEBUG
                 if(optionName.indexOf('on') !== 0) {
-                    throw Error(`The ${optionName} option name should start with 'on' prefix`);
+                    throw Error(`The '${optionName}' option name should start with 'on' prefix`);
                 }
                 ///#ENDDEBUG
 
