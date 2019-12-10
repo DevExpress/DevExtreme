@@ -379,12 +379,12 @@ var Calendar = Editor.inherit({
                     break;
             }
 
-            if(!this._view._isDateOutOfRange(dateForward) && !this._view.isDateDisabled(dateForward)) {
+            if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }
 
-            if(!this._view._isDateOutOfRange(dateBackward) && !offset && !this._view.isDateDisabled(dateBackward)) {
+            if(isDateBackwardInRange && !offset && !this._view.isDateDisabled(dateBackward)) {
                 currentDate = dateBackward;
                 break;
             }
