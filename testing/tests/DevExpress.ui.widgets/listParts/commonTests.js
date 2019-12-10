@@ -26,6 +26,7 @@ const LIST_ITEM_CLASS = "dx-list-item";
 const LIST_GROUP_CLASS = "dx-list-group";
 const LIST_GROUP_HEADER_CLASS = "dx-list-group-header";
 const LIST_GROUP_BODY_CLASS = "dx-list-group-body";
+const LIST_NEXT_BUTTON_CLASS = "dx-list-next-button";
 
 const toSelector = cssClass => {
     return "." + cssClass;
@@ -807,12 +808,9 @@ QUnit.module("next button", moduleSetup, () => {
             searchEnabled: true
         }).dxList("instance");
 
-        const nextButtonSelector = ".dx-list-next-button";
-        const $element = list.$element();
-
-        assert.ok($element.find(nextButtonSelector).length, "nextButton is shown");
+        assert.ok(this.element.find(toSelector(LIST_NEXT_BUTTON_CLASS)).length, "nextButton is shown");
         list.option("searchValue", "1");
-        assert.notOk($element.find(nextButtonSelector).length, "nextButton is removed");
+        assert.notOk(this.element.find(toSelector(LIST_NEXT_BUTTON_CLASS)).length, "nextButton is removed");
     });
 });
 
