@@ -3,6 +3,7 @@ import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
 import Component from './component';
+import TemplateManager from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
@@ -78,7 +79,7 @@ const DOMComponent = Component.inherit({
             disabled: false,
 
             integrationOptions: {}
-        });
+        }, TemplateManager.createDefaultOptions());
     },
     /**
     * @name DOMComponentMethods.ctor
@@ -104,6 +105,7 @@ const DOMComponent = Component.inherit({
     _init() {
         this.callBase();
         this._attachWindowResizeCallback();
+        this._initTemplateManager();
     },
 
     _setOptionsByDevice(instanceCustomRules) {
@@ -263,6 +265,7 @@ const DOMComponent = Component.inherit({
         this.callBase();
         this._clean();
         this._detachWindowResizeCallback();
+        this._templateManager && this._templateManager.dispose();
     },
 
     _detachWindowResizeCallback() {
@@ -455,8 +458,71 @@ const DOMComponent = Component.inherit({
 
             !isDefined(initialOption) && this.$element().css(optionName, '');
         }
-    }
+    },
 
+    // ===============TemplateManager====================
+    _getAnonymousTemplateName: function() {
+        return void 0;
+    },
+
+    _initTemplateManager: function() {
+        if(this._templateManager && !this._useTemplates()) return void 0;
+
+        const { integrationOptions = {} } = this.option();
+        const { createTemplate } = integrationOptions;
+
+        this._templateManager = new TemplateManager(
+            createTemplate,
+            this._getAnonymousTemplateName()
+        );
+        this._initTemplates();
+    },
+
+    _initTemplates: function() {
+        const { templates, anonymousTemplateMeta } = this._templateManager.extractTemplates(this.$element());
+        const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
+
+        templates.forEach(({ name, template }) => {
+            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
+            this._setOptionSilent(`integrationOptions.templates.${name}`, template);
+        });
+
+        if(anonymousTemplateMeta.name && !anonymousTemplate) {
+            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
+            this._setOptionSilent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
+        }
+    },
+
+    _getTemplateByOption: function(optionName) {
+        return this._getTemplate(this.option(optionName));
+    },
+
+    _getTemplate: function(templateSource) {
+        const templates = this.option('integrationOptions.templates');
+        const isAsyncTemplate = this.option('templatesRenderAsynchronously');
+        const skipTemplates = this.option('integrationOptions.skipTemplates');
+
+        return this._templateManager.getTemplate(
+            templateSource,
+            templates,
+            {
+                isAsyncTemplate,
+                skipTemplates
+            },
+            this
+        );
+    },
+
+    _saveTemplate: function(name, template) {
+        this._setOptionSilent(
+            'integrationOptions.templates.' + name,
+            this._templateManager._createTemplate(template)
+        );
+    },
+
+    _useTemplates: function() {
+        return true;
+    },
 });
 
 /**

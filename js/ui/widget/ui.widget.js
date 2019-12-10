@@ -7,7 +7,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
+    DOMComponent = require("../../core/dom_component"),
     selectors = require("./selectors"),
     eventUtils = require("../../events/utils");
 
@@ -45,7 +45,7 @@ var WIDGET_CLASS = "dx-widget",
 * @export default
 * @hidden
 */
-var Widget = DOMComponentWithTemplate.inherit({
+var Widget = DOMComponent.inherit({
 
     _supportedKeys: function() {
         return {};

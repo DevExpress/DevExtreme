@@ -24,7 +24,7 @@ const RTL_CLASS = "dx-rtl";
 
 QUnit.module("default", {
     beforeEach: function() {
-        this.TestComponentWithTemplate = DomComponentWithTemplate.inherit({
+        this.TestComponentWithTemplate = DOMComponent.inherit({
             _initTemplates() {
                 this.callBase();
                 this._templateManager.addDefaultTemplates({

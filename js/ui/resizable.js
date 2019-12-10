@@ -514,8 +514,11 @@ var Resizable = DOMComponent.inherit({
 
     _clean: function() {
         this.$element().find("." + RESIZABLE_HANDLE_CLASS).remove();
-    }
+    },
 
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 registerComponent(RESIZABLE, Resizable);
