@@ -154,33 +154,33 @@ const Component = Class.inherit({
     _init() {
         this._createOptionChangedAction();
 
-        this.on("disposing", (args) => {
+        this.on('disposing', (args) => {
             this._disposingCallbacks.fireWith(this, [args]);
         });
     },
 
     _logDeprecatedWarning(option, info) {
-        const message = info.message || ("Use the '" + info.alias + "' option instead");
-        errors.log("W0001", this.NAME, option, info.since, message);
+        const message = info.message || (`Use the ${info.alias} option instead`);
+        errors.log('W0001', this.NAME, option, info.since, message);
     },
 
     _createOptionChangedAction() {
-        this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly"] });
+        this._optionChangedAction = this._createActionByOption('onOptionChanged', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     _createDisposingAction() {
-        this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly"] });
+        this._disposingAction = this._createActionByOption('onDisposing', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     _optionChanged(args) {
         switch(args.name) {
-            case "onDisposing":
-            case "onInitialized":
+            case 'onDisposing':
+            case 'onInitialized':
                 break;
-            case "onOptionChanged":
+            case 'onOptionChanged':
                 this._createOptionChangedAction();
                 break;
-            case "defaultOptionsRules":
+            case 'defaultOptionsRules':
                 break;
         }
     },
@@ -226,7 +226,7 @@ const Component = Class.inherit({
                 } finally {
                     this._initializing = false;
                     this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+                    this._createActionByOption('onInitialized', { excludeValidators: ['disabled', 'readOnly'] })();
                     this._updateLockCount--;
                     this._initialized = true;
                 }
@@ -302,16 +302,16 @@ const Component = Class.inherit({
             if(!eventName) {
                 config = config || {};
 
-                if(typeof optionName !== "string") {
-                    throw errors.Error("E0008");
+                if(typeof optionName !== 'string') {
+                    throw errors.Error('E0008');
                 }
 
-                if(optionName.indexOf("on") === 0) {
+                if(optionName.indexOf('on') === 0) {
                     eventName = getEventName(optionName);
                 }
                 ///#DEBUG
-                if(optionName.indexOf("on") !== 0) {
-                    throw Error("The '" + optionName + "' option name should start with 'on' prefix");
+                if(optionName.indexOf('on') !== 0) {
+                    throw Error(`The ${optionName} option name should start with 'on' prefix`);
                 }
                 ///#ENDDEBUG
 
@@ -332,7 +332,7 @@ const Component = Class.inherit({
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                const beforeActionExecute = this.option("beforeActionExecute") || noop;
+                const beforeActionExecute = this.option('beforeActionExecute') || noop;
                 const wrappedAction = beforeActionExecute(this, action, config) || action;
                 return wrappedAction.apply(this, args);
             }
@@ -341,7 +341,7 @@ const Component = Class.inherit({
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            const onActionCreated = this.option("onActionCreated") || noop;
+            const onActionCreated = this.option('onActionCreated') || noop;
             result = onActionCreated(this, result, config) || result;
         }
 
@@ -440,7 +440,7 @@ const Component = Class.inherit({
      * @param1 options:object
      */
     option(options, value) {
-        if(arguments.length < 2 && type(options) !== "object") {
+        if(arguments.length < 2 && type(options) !== 'object') {
             return this._options.option(options);
         } else {
             this.beginUpdate();
