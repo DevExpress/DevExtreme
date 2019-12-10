@@ -14745,10 +14745,11 @@ QUnit.test("Reset sorting and grouping state when lookup column exists and remot
 
     dataGrid.columnOption("field1", "sortOrder", "asc");
     dataGrid.columnOption("field2", "groupIndex", 0);
+
     this.clock.tick(0);
 
-    // act
     dataGrid.state({});
+
     this.clock.tick(0);
 
     // assert
@@ -15014,7 +15015,7 @@ QUnit.test("onEditorPreparing event should not be fired twice for each column if
     this.clock.tick();
 
     // assert
-    assert.equal(onEditorPreparingCallCount, 1, "onEditorPreparing call count");
+    assert.equal(onEditorPreparingCallCount, 2, "onEditorPreparing call count");
 });
 
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
