@@ -796,7 +796,7 @@ QUnit.module("next button", moduleSetup, () => {
         assert.ok($(".dx-list-next-button", this.element).text());
     });
 
-    QUnit.test("nextButton should be removed after search if result items count is smaller than page size, repaintChangesOnly=true (T838645)", assert => {
+    QUnit.test("nextButton should be removed after search if result items count is smaller than page size, repaintChangesOnly=true (T838645)", function(assert) {
         const list = this.element.dxList({
             repaintChangesOnly: true,
             dataSource: {
