@@ -868,7 +868,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.callBase(e);
     },
 
-    scrollToElement: function($element) {
+    _scrollToElement: function($element) {
         this.callBase($element, this.getFixedColumnsOffset());
     },
 

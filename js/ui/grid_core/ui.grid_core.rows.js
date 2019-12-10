@@ -1470,7 +1470,7 @@ module.exports = {
                     }
                 },
 
-                scrollToElement: function($element, offset) {
+                _scrollToElement: function($element, offset) {
                     const scrollable = this.getScrollable();
                     scrollable && scrollable.scrollToElement($element, offset);
                 },

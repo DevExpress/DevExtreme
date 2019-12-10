@@ -93,7 +93,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 if(that._isNeedScroll) {
                     if($element.is(":visible") && that._focusedView && that._focusedView.getScrollable) {
-                        that._focusedView.scrollToElement($element);
+                        that._focusedView._scrollToElement($element);
                         that._isNeedScroll = false;
                     }
                 }
