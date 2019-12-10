@@ -596,7 +596,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         diff.toSelect.forEach((key) => {
             this._setItemSelection(true, key);
         });
-
+        this._updateSelectionOptions();
         if(diff.toDeselect.length || diff.toSelect.length) {
             this._fireSelectionChanged();
         }
