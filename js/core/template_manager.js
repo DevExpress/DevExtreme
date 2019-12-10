@@ -17,7 +17,10 @@ const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
 const TEMPLATE_SELECTOR = '[data-options*="dxTemplate"]';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
-const DEPRECATED_WIDGET_NAMES = new Set(['button', 'tabs', 'dropDownMenu']);
+const DEPRECATED_WIDGET_NAMES = new Set();
+DEPRECATED_WIDGET_NAMES.add('button');
+DEPRECATED_WIDGET_NAMES.add('tabs');
+DEPRECATED_WIDGET_NAMES.add('dropDownMenu');
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {
     let widgetName = model.widget;
     if(!widgetName) return $();
