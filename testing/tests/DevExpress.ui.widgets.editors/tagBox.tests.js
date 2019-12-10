@@ -466,7 +466,7 @@ QUnit.module("tags", moduleSetup, () => {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             })
         });
         this.clock.tick(timeToWait * 4);
@@ -917,13 +917,13 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             }),
             displayExpr: "name",
             valueExpr: "id",
             value: [2, 3],
             onValueChanged: valueChangeActionSpy,
-            showSelectionControls: true,
+            showSelectionControls: true
         }).dxTagBox("instance");
 
         instance.open();
@@ -5141,7 +5141,7 @@ QUnit.module("performance", () => {
         $(".dx-list-select-all-checkbox").trigger("dxclick");
 
         // assert
-        assert.equal(keyGetterCounter, 614, "key getter call count");
+        assert.equal(keyGetterCounter, 613, "key getter call count");
         assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
     });
 
@@ -5376,7 +5376,7 @@ QUnit.module("regression", {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             }),
             value: [data[0], data[1]]
         });
@@ -5408,7 +5408,7 @@ QUnit.module("regression", {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             }),
             value: [data[0], data[1]]
         });

@@ -1161,7 +1161,7 @@ const TagBox = SelectBox.inherit({
 
         this._updateWidgetHeight();
 
-        if(!equalByValue(this._list._getKeysByItems(e.addedItems), this.option("value"))) {
+        if(!equalByValue(this._list.option("selectedItemKeys"), this.option("value"))) {
             this.option("value", value);
         }
     },
