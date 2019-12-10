@@ -263,12 +263,12 @@ const SchedulerTableCreator = {
 
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
-                    $container.text(items[j].text);
+                    $container.text(items[j].text).attr("title", items[j].text);
                 }
 
                 const cssClass = typeUtils.isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
 
-                cell.element = $("<div>").addClass(cssClass).append($container);
+                cell.element = $container.addClass(cssClass);
 
                 cells.push(cell);
             }
