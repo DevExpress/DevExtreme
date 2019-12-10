@@ -1387,16 +1387,11 @@ QUnit.test("Filter by number with groupInterval", function(assert) {
 
 // T836053
 QUnit.test("Error should not be thrown during filtering if there are more filter values ​​than fields", function(assert) {
-    var store = new RemoteStore({
+    var filter,
+        store = new RemoteStore({
             load: function(loadOptions) {
-                assert.deepEqual(loadOptions.filter,
-                    [
-                        [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 1]],
-                        "or",
-                        [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 2]],
-                        "or",
-                        [[["OrderDate.Month", ">=", 4], "and", ["OrderDate.Month", "<", 7]], "and", ["OrderDate.Month", "=", 4]],
-                    ], "filter is correct");
+                filter = loadOptions.filter;
+
                 return $.Deferred();
             }
         }),
@@ -1417,6 +1412,15 @@ QUnit.test("Error should not be thrown during filtering if there are more filter
             levels: fields
         }]
     });
+
+    assert.deepEqual(filter,
+        [
+            [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 1]],
+            "or",
+            [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 2]],
+            "or",
+            [[["OrderDate.Month", ">=", 4], "and", ["OrderDate.Month", "<", 7]], "and", ["OrderDate.Month", "=", 4]],
+        ], "filter is correct");
 });
 
 QUnit.module("Expanding items", moduleConfig);
