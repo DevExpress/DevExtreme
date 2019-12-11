@@ -928,7 +928,7 @@ module.exports = {
 
                             if(isRefresh || change.changeType === "append" || change.changeType === "prepend") {
                                 change.cancel = true;
-                                isRefresh && rowsScrollController.reset(true);
+                                isRefresh && rowsScrollController.reset();
                                 rowsScrollController.load();
                             } else {
                                 if(change.changeType === "update") {
