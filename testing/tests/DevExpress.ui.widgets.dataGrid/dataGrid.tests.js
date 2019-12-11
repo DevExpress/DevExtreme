@@ -12395,6 +12395,43 @@ QUnit.test("Focus should return to edited cell after editing column with boolean
     assert.ok($(".dx-checkbox").eq(0).hasClass("dx-state-focused"), "first checkbox is focused");
 });
 
+// T833456
+QUnit.test("Click to boolean column should works after editing in another column", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        dataSource: [{ name: "name 1", value: false, id: 1 }],
+        keyExpr: "id",
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        repaintChangesOnly: true,
+        columns: ["name", "value"]
+    });
+    this.clock.tick();
+
+    // act
+    dataGrid.editCell(0, 0);
+
+    // act
+    var $input = $(".dx-texteditor-input").eq(0);
+    $input.val("test");
+
+    // act
+    var $checkbox = $(".dx-checkbox").eq(0);
+    $input.trigger("change");
+    $checkbox.trigger("dxpointerdown");
+    this.clock.tick();
+    $checkbox.trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    $checkbox = $(".dx-checkbox").eq(0);
+    assert.equal($checkbox.attr("aria-checked"), "true", "checkbox is checked");
+    assert.ok($checkbox.hasClass("dx-state-focused"), "checkbox is focused");
+    assert.notOk(dataGrid.hasEditData(), "changes are saved");
+});
+
 // T553067
 QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour", function(assert) {
     if(devices.real().deviceType !== "desktop") {
