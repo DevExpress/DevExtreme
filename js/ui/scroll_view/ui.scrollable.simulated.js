@@ -3,7 +3,7 @@ import domAdapter from "../../core/dom_adapter";
 import eventsEngine from "../../events/core/events_engine";
 import { titleize } from "../../core/utils/inflector";
 import { extend } from "../../core/utils/extend";
-import { hasWindow } from "../../core/utils/window";
+import { hasWindow, getWindow } from "../../core/utils/window";
 import { each, map } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
 import translator from "../../animation/translator";
@@ -34,7 +34,7 @@ const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
-const SCROLL_LINE_HEIGHT = 20;
+const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
@@ -688,20 +688,34 @@ var SimulatedStrategy = Class.inherit({
         }
         this._saveActive();
         e.preventDefault && e.preventDefault();
-        this._adjustDistance(e.delta);
+
+        this._adjustDistance(e, e.delta);
         this._eventForUserAction = e;
         this._eventHandler("move", e.delta);
     },
 
-    _adjustDistance: function(distance) {
+    _adjustDistance: function(e, distance) {
         distance.x *= this._validDirections[HORIZONTAL];
         distance.y *= this._validDirections[VERTICAL];
+
+        const devicePixelRatio = this._tryGetDevicePixelRatio();
+        if(devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
+            distance.x = Math.round(distance.x / devicePixelRatio * 100) / 100;
+            distance.y = Math.round(distance.y / devicePixelRatio * 100) / 100;
+        }
+    },
+
+    _tryGetDevicePixelRatio: function() {
+        if(hasWindow()) {
+            return getWindow().devicePixelRatio;
+        }
     },
 
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
-        this._adjustDistance(e.velocity);
+
+        this._adjustDistance(e, e.velocity);
         this._eventForUserAction = e;
         return this._eventHandler("end", e.velocity).done(this._endAction);
     },
@@ -782,9 +796,14 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _scrollByLine: function(lines) {
+        const devicePixelRatio = this._tryGetDevicePixelRatio();
+        let scrollOffset = SCROLL_LINE_HEIGHT;
+        if(devicePixelRatio) {
+            scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
+        }
         this.scrollBy({
-            top: (lines.y || 0) * -SCROLL_LINE_HEIGHT,
-            left: (lines.x || 0) * -SCROLL_LINE_HEIGHT
+            top: (lines.y || 0) * -scrollOffset,
+            left: (lines.x || 0) * -scrollOffset
         });
     },
 

@@ -391,12 +391,13 @@ QUnit.test("scroll should work on mousewheel after draging on horizontal bar", f
 if(devices.current().deviceType === "desktop") {
     ["vertical", "horizontal"].forEach((direction) => {
         class ValidateMouseWheelEventTestHelper {
-            constructor(direction) {
+            constructor(direction, useNative) {
                 this._direction = direction;
+                this._useNative = useNative;
                 this._wheelEvent = {
                     type: "dxmousewheel",
                     pointerType: "mouse",
-                    shiftKey: direction === "vertical" ? false : true
+                    shiftKey: direction === "horizontal"
                 };
 
                 this.$scrollable = this._getScrollable();
@@ -406,15 +407,35 @@ if(devices.current().deviceType === "desktop") {
 
             _getScrollable() {
                 return $("#scrollable").dxScrollable({
-                    useNative: true,
+                    useNative: this._useNative,
                     direction: this._direction
                 });
             }
 
             getEvent() { return this._wheelEvent; }
 
+            triggerWheelEvent(delta) {
+                pointerMock(this.getScrollableContainer())
+                    .start()
+                    .wheel(delta, this._direction === "horizontal");
+            }
+
             getScrollableContainer() {
                 return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            }
+
+            checkScrollOffset(delta, zoom) {
+                const scrollable = this.strategy._component;
+                const expectedOffset = { top: 25, left: 25 };
+
+                if(this._direction === "vertical") {
+                    expectedOffset.top -= delta / zoom;
+                } else {
+                    expectedOffset.left -= delta / zoom;
+                }
+
+                QUnit.assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 0.01, "scrollOffset.top");
+                QUnit.assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 0.01, "scrollOffset.left");
             }
         }
 
@@ -457,6 +478,45 @@ if(devices.current().deviceType === "desktop") {
 
             event.delta = -1;
             assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+
+        [-10, 10].forEach((wheelDelta) => {
+            QUnit.test(`WheelDelta -> browser.zoom - 100% - direction:${direction}, wheelDelta: ${wheelDelta}`, function(assert) {
+                const helper = new ValidateMouseWheelEventTestHelper(direction, false);
+                let $container = helper.getScrollableContainer();
+
+                $container.scrollTop(25);
+                $container.scrollLeft(25);
+
+                helper.strategy._tryGetDevicePixelRatio = () => 1;
+
+                helper.triggerWheelEvent(wheelDelta);
+                helper.checkScrollOffset(wheelDelta, 1);
+            });
+
+            QUnit.test(`Delta -> browser.zoom - 150% - direction:${direction}, wheelDelta: ${wheelDelta}`, function(assert) {
+                const helper = new ValidateMouseWheelEventTestHelper(direction, false);
+                let $container = helper.getScrollableContainer();
+                $container.scrollTop(25);
+                $container.scrollLeft(25);
+
+                helper.strategy._tryGetDevicePixelRatio = () => 1.5;
+
+                helper.triggerWheelEvent(wheelDelta);
+                helper.checkScrollOffset(wheelDelta, 1.5);
+            });
+
+            QUnit.test(`Delta -> browser.zoom - 75% - direction:${direction}, wheelDelta: ${wheelDelta}`, function(assert) {
+                const helper = new ValidateMouseWheelEventTestHelper(direction, false);
+                let $container = helper.getScrollableContainer();
+                $container.scrollTop(25);
+                $container.scrollLeft(25);
+
+                helper.strategy._tryGetDevicePixelRatio = () => 0.75;
+
+                helper.triggerWheelEvent(wheelDelta);
+                helper.checkScrollOffset(wheelDelta, 0.75);
+            });
         });
     });
 }
