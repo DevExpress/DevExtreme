@@ -18,13 +18,15 @@ var resizeCallbacks = (function() {
         var documentElement = domAdapter.getDocumentElement();
         return {
             width: documentElement.clientWidth,
-            height: documentElement.clientHeight
+            height: documentElement.clientHeight,
+            widthIOS: windowUtils.getWindow().innerWidth,
+            heightIOS: windowUtils.getWindow().innerHeight
         };
     };
 
     var handleResize = function() {
         var now = formatSize();
-        if(now.width === prevSize.width && now.height === prevSize.height) {
+        if(now.width === prevSize.width && now.height === prevSize.height && now.widthIOS === prevSize.widthIOS && now.heightIOS === prevSize.heightIOS) {
             return;
         }
 

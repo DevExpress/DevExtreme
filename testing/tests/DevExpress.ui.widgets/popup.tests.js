@@ -8,6 +8,7 @@ import { isRenderer } from "core/utils/type";
 import browser from "core/utils/browser";
 import { compare as compareVersions } from "core/utils/version";
 import resizeCallbacks from "core/utils/resize_callbacks";
+import windowUtils from "core/utils/window";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "common.css!";
@@ -764,6 +765,34 @@ QUnit.test("popup height should support TreeView with Search if height = auto (T
     assert.roughEqual($content.height(), treeviewContentHeight, 1, "treeview content can not be heighter than container");
 });
 
+QUnit.test("Set right content height if window.innerHeight was changed only (T834502)", function(assert) {
+    const instance = $("#popup").dxPopup({
+        showTitle: true,
+        title: "Information",
+        fullScreen: true,
+        visible: true,
+        contentTemplate: () => $("<div>").height(150)
+    }).dxPopup("instance");
+
+    const originalGetWindow = windowUtils.getWindow;
+    const $popup = instance.$content().parent();
+    const $popupContent = instance.$content();
+    const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight() || 0;
+    const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight() || 0;
+
+    try {
+        windowUtils.getWindow = function() {
+            return { innerHeight: 100, innerWidth: 200 };
+        };
+
+        window.dispatchEvent(new Event('resize'));
+
+        assert.roughEqual($popupContent.outerHeight() + topToolbarHeight + bottomToolbarHeight, 100, 1);
+    } finally {
+        windowUtils.getWindow = originalGetWindow;
+    }
+});
+
 
 QUnit.test("fullScreen", function(assert) {
     this.instance.option({
@@ -1196,7 +1225,6 @@ QUnit.test("resize callbacks", function(assert) {
     assert.equal(onResizeFired, 1, "onResize fired");
     assert.equal(onResizeEndFired, 1, "onResizeEnd fired");
 });
-
 
 QUnit.module("drag popup by title", {
     beforeEach: function() {

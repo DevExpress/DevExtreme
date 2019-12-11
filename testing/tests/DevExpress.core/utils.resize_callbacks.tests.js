@@ -1,5 +1,6 @@
-var resizeCallbacks = require("core/utils/resize_callbacks"),
-    domAdapter = require("core/dom_adapter");
+import resizeCallbacks from "core/utils/resize_callbacks";
+import domAdapter from "core/dom_adapter";
+import windowUtils from "core/utils/window";
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
@@ -84,6 +85,26 @@ QUnit.test('Callback is not called if size is not changed', function(assert) {
     this.triggerResize(false);
 
     assert.ok(!called, 'callback is not called');
+});
+
+QUnit.test('Callback is called if window innerHeight is changed (T834502)', function(assert) {
+    let callCount = 0;
+    this.callbacks.add(function() {
+        callCount++;
+    });
+    const originalGetWindow = windowUtils.getWindow;
+
+    try {
+        windowUtils.getWindow = function() {
+            return { innerHeight: 100, innerWidth: 100 };
+        };
+
+        this.triggerResize(false);
+
+        assert.strictEqual(callCount, 1, 'callback is called');
+    } finally {
+        windowUtils.getWindow = originalGetWindow;
+    }
 });
 
 QUnit.test('add', function(assert) {
