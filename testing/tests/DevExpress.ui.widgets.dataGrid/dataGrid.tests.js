@@ -17445,6 +17445,68 @@ QUnit.test("Click near selectAll doesn't generate infinite loop", function(asser
     assert.ok($($selectAllElement).find(".dx-select-checkbox").hasClass("dx-checkbox-checked"));
 });
 
+// T843852
+QUnit.test("SelectAll should not select all rows if filter by search is applied and grid has many columns", function(assert) {
+    // arrange
+    var data = [],
+        $selectAllElement,
+        onSelectionChangedSpy = sinon.spy();
+
+    for(let i = 0; i < 40; i++) {
+        let item = { id: `${i}` };
+
+        for(let j = 1; j <= 40; j++) {
+            item[`field${j}`] = "";
+        }
+
+        data.push(item);
+    }
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        columnAutoWidth: true,
+        searchPanel: { visible: true, text: "0" },
+        selection: { mode: 'multiple' },
+        dataSource: data,
+        onSelectionChanged: onSelectionChangedSpy
+    });
+
+    // act
+    $selectAllElement = $(dataGrid.element()).find(".dx-header-row .dx-command-select");
+    $selectAllElement.trigger("dxclick");
+
+    var onSelectionChangedArgs = onSelectionChangedSpy.args[0][0];
+
+    // assert
+    assert.equal(onSelectionChangedSpy.callCount, 1, "onSelectionChanged call count");
+
+    assert.deepEqual(onSelectionChangedArgs.currentSelectedRowKeys, ["0", "10", "20", "30"], "current selected row keys");
+    assert.deepEqual(onSelectionChangedArgs.selectedRowKeys, ["0", "10", "20", "30"], "selected row keys");
+    assert.equal(onSelectionChangedArgs.selectedRowsData.length, 4, "selected rows data length");
+
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), ["0", "10", "20", "30"], "selected row keys");
+
+    assert.equal($selectAllElement.find(".dx-datagrid-text-content").length, 0);
+    assert.ok($($selectAllElement).find(".dx-select-checkbox").hasClass("dx-checkbox-checked"));
+
+    // act
+    $selectAllElement.trigger("dxclick");
+    onSelectionChangedArgs = onSelectionChangedSpy.args[1][0];
+
+    // assert
+    assert.equal(onSelectionChangedSpy.callCount, 2, "onSelectionChanged call count");
+
+    assert.deepEqual(onSelectionChangedArgs.currentSelectedRowKeys, [], "current selected row keys");
+    assert.deepEqual(onSelectionChangedArgs.selectedRowKeys, [], "selected row keys");
+    assert.equal(onSelectionChangedArgs.selectedRowsData.length, 0, "selected rows data length");
+
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "selected row keys");
+
+    assert.equal($selectAllElement.find(".dx-datagrid-text-content").length, 0);
+    assert.notOk($($selectAllElement).find(".dx-select-checkbox").hasClass("dx-checkbox-checked"));
+});
+
 QUnit.module("Modules", {
     afterEach: function() {
         gridCore.unregisterModule("test");

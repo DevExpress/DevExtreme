@@ -86,10 +86,10 @@ module.exports = Class.inherit({
                 .done(function(items) {
                     var filteredItems = typeUtils.isPlainObject(items) ? items.data : items;
 
-                    if(localFilter) {
-                        filteredItems = filteredItems.filter(localFilter);
-                    } else if(needLoadAllData) {
+                    if(needLoadAllData) {
                         filteredItems = dataQuery(filteredItems).filter(remoteFilter).toArray();
+                    } else if(localFilter) {
+                        filteredItems = filteredItems.filter(localFilter);
                     }
 
                     deferred.resolve(filteredItems);
