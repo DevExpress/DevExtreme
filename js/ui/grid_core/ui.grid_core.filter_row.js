@@ -61,7 +61,7 @@ var FILTERING_TIMEOUT = 700,
 
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    BETWEEN_OPERATION_EDITORS = ["date", "datetime", "number"];
+    BETWEEN_OPERATION_DATA_TYPES = ["date", "datetime", "number"];
 
 function isOnClickApplyFilterMode(that) {
     return that.option("filterRow.applyFilter") === "onClick";
@@ -111,7 +111,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
     };
 
     var isValidFilterValue = function(filterValue, column) {
-        if(column && BETWEEN_OPERATION_EDITORS.indexOf(column.dataType) >= 0 && Array.isArray(filterValue)) {
+        if(column && BETWEEN_OPERATION_DATA_TYPES.indexOf(column.dataType) >= 0 && Array.isArray(filterValue)) {
             return false;
         }
 
