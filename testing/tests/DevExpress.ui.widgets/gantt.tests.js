@@ -321,31 +321,31 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(coreEditingSettings.enabled, false, "editing is prohibited");
     });
     test("scaleType", function(assert) {
-        const getFirstHeaderTitle = () => {
-            return this.$element.find(".dx-gantt-tsa").eq(1).find(".dx-gantt-si").first().text();
+        const isHeaderContainsText = text => {
+            return this.$element.find(".dx-gantt-tsa").eq(1).find(".dx-gantt-si").text().indexOf(text) > -1;
         };
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
-        assert.equal(getFirstHeaderTitle(), "March", "is months scale type (auto)");
+        assert.ok(isHeaderContainsText("January"), "is months scale type (auto)");
         this.instance.option("scaleType", "minutes");
-        assert.equal(getFirstHeaderTitle(), "30", "is minutes scale type");
+        assert.ok(isHeaderContainsText("30"), "is minutes scale type");
         this.instance.option("scaleType", "hours");
-        assert.equal(getFirstHeaderTitle(), "9:00 PM", "is hours scale type");
+        assert.ok(isHeaderContainsText("9:00 PM"), "is hours scale type");
         this.instance.option("scaleType", "days");
-        assert.equal(getFirstHeaderTitle(), "Sat, 23 Feb", "is days scale type");
+        assert.ok(isHeaderContainsText("Sat, 23 Feb"), "is days scale type");
         this.instance.option("scaleType", "weeks");
-        assert.equal(getFirstHeaderTitle(), "Sun, 20 Jan - Sat, 26 Jan", "is weeks scale type");
+        assert.ok(isHeaderContainsText("Sun, 20 Jan - Sat, 26 Jan"), "is weeks scale type");
         this.instance.option("scaleType", "months");
-        assert.equal(getFirstHeaderTitle(), "March", "is months scale type");
+        assert.ok(isHeaderContainsText("January"), "is months scale type");
         this.instance.option("scaleType", "quarters");
-        assert.equal(getFirstHeaderTitle(), "Q1", "is quarters scale type");
+        assert.ok(isHeaderContainsText("Q1"), "is quarters scale type");
         this.instance.option("scaleType", "years");
-        assert.equal(getFirstHeaderTitle(), "2008", "is years scale type");
+        assert.ok(isHeaderContainsText("2008"), "is years scale type");
 
         this.instance.option("tasks.dataSource", [{ "id": 0, "title": "t", "start": "2019-02-21", "end": "2019-02-26" }]);
-        assert.equal(getFirstHeaderTitle(), "2008", "is still years scale type");
+        assert.ok(isHeaderContainsText("2008"), "is still years scale type");
         this.instance.option("scaleType", "auto");
-        assert.equal(getFirstHeaderTitle(), "Sun, 10 Feb", "is days scale type (auto)");
+        assert.ok(isHeaderContainsText("Sun, 10 Feb"), "is days scale type (auto)");
     });
 });
 
