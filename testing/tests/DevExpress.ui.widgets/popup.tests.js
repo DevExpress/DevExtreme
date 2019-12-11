@@ -1226,6 +1226,7 @@ QUnit.test("resize callbacks", function(assert) {
     assert.equal(onResizeEndFired, 1, "onResizeEnd fired");
 });
 
+
 QUnit.module("drag popup by title", {
     beforeEach: function() {
         fx.off = true;
