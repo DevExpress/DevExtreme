@@ -262,10 +262,10 @@ const DOMComponent = Component.inherit({
     },
 
     _dispose() {
+        this._templateManager && this._templateManager.dispose();
         this.callBase();
         this._clean();
         this._detachWindowResizeCallback();
-        this._templateManager && this._templateManager.dispose();
     },
 
     _detachWindowResizeCallback() {
@@ -466,7 +466,7 @@ const DOMComponent = Component.inherit({
     },
 
     _initTemplateManager: function() {
-        if(/* this._templateManager && */!this._useTemplates()) return void 0; // dialog tests
+        if(this._templateManager || !this._useTemplates()) return void 0;
 
         const { integrationOptions = {} } = this.option();
         const { createTemplate } = integrationOptions;
