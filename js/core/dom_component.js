@@ -466,7 +466,7 @@ const DOMComponent = Component.inherit({
     },
 
     _initTemplateManager: function() {
-        if(this._templateManager && !this._useTemplates()) return void 0;
+        if(/* this._templateManager && */!this._useTemplates()) return void 0; // dialog tests
 
         const { integrationOptions = {} } = this.option();
         const { createTemplate } = integrationOptions;
