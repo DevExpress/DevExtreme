@@ -1394,10 +1394,10 @@ QUnit.test("Error should not be thrown during filtering if there are more filter
             }
         }),
         fields = [
-            { dataField: "OrderDate", groupInterval: "quarter", dataType: "date" },
+            { dataField: "OrderDate", groupInterval: "year", dataType: "date" },
             { dataField: "OrderDate", groupInterval: "month", dataType: "date" }
         ],
-        filterValues = [[1, 1], [1, 2], [2, 4]];
+        filterValues = [[1996, 1], [1996, 2], [1997, 4]];
 
     // assert
     assert.ok(filterValues.length > fields.length, "more filter values ​​than fields");
@@ -1405,22 +1405,23 @@ QUnit.test("Error should not be thrown during filtering if there are more filter
     // act
     store.load({
         columns: fields,
-        rows: [],
+        rows: [{ dataField: "ShipCountry" }],
         values: [{ summaryType: 'count' }],
         filters: [{
-            dataField: "OrderDate", groupName: "OrderDate", dataType: "date", filterValues: [[1, 1], [1, 2], [2, 4]],
-            levels: fields
+            dataField: "OrderDate", groupName: "OrderDate", dataType: "date",
+            levels: fields,
+            filterValues
         }]
     });
 
     // assert
     assert.deepEqual(filter,
         [
-            [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 1]],
+            [["OrderDate.Year", "=", 1996], "and", ["OrderDate.Month", "=", 1]],
             "or",
-            [[["OrderDate.Month", ">=", 1], "and", ["OrderDate.Month", "<", 4]], "and", ["OrderDate.Month", "=", 2]],
+            [["OrderDate.Year", "=", 1996], "and", ["OrderDate.Month", "=", 2]],
             "or",
-            [[["OrderDate.Month", ">=", 4], "and", ["OrderDate.Month", "<", 7]], "and", ["OrderDate.Month", "=", 4]],
+            [["OrderDate.Year", "=", 1997], "and", ["OrderDate.Month", "=", 4]],
         ], "filter is correct");
 });
 
