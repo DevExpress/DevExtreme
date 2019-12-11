@@ -8,7 +8,7 @@ import support from "core/utils/support";
 
 const stubComponent = {
     option: sinon.stub().returns("stubOption"),
-    focus: sinon.stub()
+    focus: sinon.stub(),
 };
 const stubCreateComponent = sinon.stub().returns(stubComponent);
 const stubShowAppointmentPopup = sinon.stub();
@@ -37,7 +37,8 @@ const environment = {
         rtlEnabled: true,
         focusStateEnabled: true,
         editing: true,
-        offset: 'offset'
+        offset: 'offset',
+        isCompact: false,
     },
     afterEach: function() {
         stubCreateComponent.reset();
@@ -162,7 +163,7 @@ QUnit.test("Tooltip should update the content after call method 'show' several t
     }]);
 });
 
-QUnit.test("onShown passed to createComponent should work correct", function(assert) {
+QUnit.test("onShown passed to createComponent should work correct, one element in tooltip", function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
 
@@ -171,8 +172,20 @@ QUnit.test("onShown passed to createComponent should work correct", function(ass
     stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
     stubCreateComponent.getCall(0).args[2].onShown();
 
-    assert.equal(stubComponent.option.callCount, 2);
+    assert.equal(stubComponent.option.callCount, 1);
     assert.deepEqual(stubComponent.option.getCall(0).args, ["focusStateEnabled", true]);
+});
+
+QUnit.test("onShown passed to createComponent should work correct, several elements in tooltip", function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = ['data1', 'data2'];
+
+    tooltip.show('target', dataList, extend(this.extraOptions, { isCompact: true }));
+    stubComponent.option.reset();
+    stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
+    stubCreateComponent.getCall(0).args[2].onShown();
+
+    assert.equal(stubComponent.option.callCount, 2);
     assert.deepEqual(stubComponent.option.getCall(1).args, ["focusedElement", null]);
     assert.ok(stubComponent.focus.called);
 });

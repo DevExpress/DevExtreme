@@ -28,8 +28,10 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _onShown() {
         super._onShown();
-        this._list.focus();
-        this._list.option('focusedElement', null);
+        if(this._extraOptions.isCompact) {
+            this._list.focus();
+            this._list.option('focusedElement', null);
+        }
     }
 
     _createListOption(target, dataList) {

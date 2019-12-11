@@ -59,7 +59,8 @@ export class CompactAppointmentsHelper {
             {
                 clickEvent: this.instance.raiseClickEvent.bind(this.instance),
                 dragBehavior: this.instance.createTooltipDragBehavior.bind(this.instance),
-                dropDownAppointmentTemplate: this.instance.option("dropDownAppointmentTemplate")
+                dropDownAppointmentTemplate: this.instance.option("dropDownAppointmentTemplate"),
+                isCompact: true,
             }
         );
     }
