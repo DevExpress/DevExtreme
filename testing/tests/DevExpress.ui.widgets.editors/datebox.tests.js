@@ -1899,7 +1899,7 @@ QUnit.module("datebox and calendar integration", () => {
             opened: true
         }).dxDateBox("instance");
 
-        assert.equal(callCount, 14, "disabledDates has been called only on dates in range[min, max]");
+        assert.equal(callCount, 14, "disabledDates has been called 6 times on init, 6 times on [min; max] for focusing and 2 times on min-max border dates");
     });
 
     QUnit.test("disabledDates correctly displays after optionChanged", function(assert) {
