@@ -121,6 +121,12 @@ var Accordion = CollectionWidget.inherit({
             deferRendering: true,
 
             /**
+             * @name dxAccordionOptions.dataSource
+             * @type string|Array<string,dxAccordionItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxAccordionOptions.items
              * @type Array<string, dxAccordionItem, object>
              * @fires dxAccordionOptions.onOptionChanged

@@ -513,6 +513,12 @@ class Box extends CollectionWidget {
             */
 
             /**
+             * @name dxBoxOptions.dataSource
+             * @type string|Array<string,dxBoxItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxBoxOptions.items
              * @type Array<string, dxBoxItem, object>
              * @fires dxBoxOptions.onOptionChanged

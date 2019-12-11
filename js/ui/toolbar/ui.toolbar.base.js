@@ -33,6 +33,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
 
     /**
+     * @name  dxToolbarOptions.dataSource
+     * @type string|Array<string,dxToolbarItem,object>|DataSource|DataSourceOptions
+     * @default null
+     */
+
+    /**
      * @name dxToolbarOptions.items
      * @type Array<string, dxToolbarItem, object>
      * @fires dxToolbarOptions.onOptionChanged
