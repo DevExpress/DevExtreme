@@ -6,6 +6,7 @@ import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 import Toolbar from "../toolbar";
+import "../drop_down_button";
 
 const FILE_MANAGER_TOOLBAR_CLASS = "dx-filemanager-toolbar";
 const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";
@@ -13,6 +14,7 @@ const FILE_MANAGER_FILE_TOOLBAR_CLASS = "dx-filemanager-file-toolbar";
 const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-separator-item";
 const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-viewmode-item";
 const FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-has-large-icon";
+const FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS = "dx-filemanager-view-switcher-popup";
 
 const DEFAULT_ITEM_CONFIGS = {
     showNavPane: {
@@ -106,8 +108,10 @@ class FileManagerToolbar extends Widget {
 
         this._generalToolbarVisible = true;
 
+        this._$viewSwitcherPopup = $("<div>").addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS);
         this._generalToolbar = this._createToolbar(this.option("generalItems"));
         this._fileToolbar = this._createToolbar(this.option("fileItems"), true);
+        this._$viewSwitcherPopup.appendTo(this.$element());
 
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + " " + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
     }
@@ -246,22 +250,29 @@ class FileManagerToolbar extends Widget {
     }
 
     _createViewModeItem() {
-        const commandItems = ["thumbnails", "details"].map(name => {
-            const { text } = this._commandManager.getCommandByName(name);
-            return { name, text };
+        const commandItems = ["details", "thumbnails"].map(name => {
+            const { text, icon } = this._commandManager.getCommandByName(name);
+            return { name, text, icon };
         });
 
-        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 0 : 1;
+        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 1 : 0;
 
         return {
             cssClass: FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS,
-            widget: "dxSelectBox",
+            widget: "dxDropDownButton",
             options: {
                 items: commandItems,
-                value: commandItems[selectedIndex],
-                displayExpr: "text",
-                stylingMode: "filled",
-                onValueChanged: e => this._executeCommand(e.value.name)
+                keyExpr: "name",
+                selectedItemKey: this.option("itemViewMode"),
+                displayExpr: " ",
+                hint: commandItems[selectedIndex].text,
+                stylingMode: "text",
+                showArrowIcon: false,
+                useSelectMode: true,
+                dropDownOptions: {
+                    container: this._$viewSwitcherPopup
+                },
+                onItemClick: e => this._executeCommand(e.itemData.name)
             }
         };
     }
