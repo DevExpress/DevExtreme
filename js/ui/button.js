@@ -6,7 +6,7 @@ import themes from './themes';
 import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
-import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } from '../events/gates';
+import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } from '../events/short';
 import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';

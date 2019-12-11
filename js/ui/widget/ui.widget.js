@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    events = require("../../events/gates"),
+    events = require("../../events/short"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
