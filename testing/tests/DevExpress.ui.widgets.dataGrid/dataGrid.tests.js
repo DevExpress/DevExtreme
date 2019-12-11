@@ -11859,6 +11859,33 @@ QUnit.test("The onOptionChanged event should be called once when changing column
     assert.strictEqual(onOptionChanged.callCount, 1, "onOptionChanged is called once");
 });
 
+// T837684
+QUnit.test("There are no exceptions when changing a filterValue to an array and selectedFilterOperation to 'between' for date column", function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ field: new Date(1992, 7, 6) }, { field: new Date(1992, 7, 9) }],
+        filterRow: { visible: true },
+        columns: [{ dataField: "field", dataType: "date" }]
+    });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 2, "row count");
+
+    try {
+        // act
+        dataGrid.option("columns[0].filterValue", [new Date(1992, 7, 5), new Date(1992, 7, 7)]);
+        dataGrid.option("columns[0].selectedFilterOperation", "between");
+
+        // assert
+        assert.ok(true, "no exceptions");
+        assert.strictEqual(dataGrid.getVisibleRows().length, 1, "row count");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
+});
+
 QUnit.module("API methods", baseModuleConfig);
 
 QUnit.test("get methods for grid without options", function(assert) {
