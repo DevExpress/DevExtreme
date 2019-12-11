@@ -7793,6 +7793,32 @@ QUnit.test("Stub data - do not create strips", function(assert) {
     assert.equal(renderer.stub("rect").callCount, 0);
 });
 
+// T844752
+QUnit.test("Cast start/end values of strips to type of axis", function(assert) {
+    // arrange
+    const categories = ["1", "2", "3"];
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "string",
+        isHorizontal: true,
+        categories: categories,
+        strips: [{
+            startValue: 1,
+            endValue: 2,
+            color: "#111111"
+        }]
+    });
+
+    this.axis.setBusinessRange({ categories: categories });
+    this.translator.stub("translate").withArgs("1", -1).returns(20);
+    this.translator.stub("translate").withArgs("2", 1).returns(40);
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(this.renderer.stub("rect").callCount, 1);
+});
+
 QUnit.module("XY linear axis. Draw. Strip labels", environment);
 
 QUnit.test("Styles and attributes", function(assert) {

@@ -461,8 +461,10 @@ Axis.prototype = {
 
         if(!isContinuous) {
             if(isDefined(startValue) && isDefined(endValue)) {
-                startCategoryIndex = inArray(startValue.valueOf(), categories);
-                endCategoryIndex = inArray(endValue.valueOf(), categories);
+                const parsedStartValue = this.parser(startValue);
+                const parsedEndValue = this.parser(endValue);
+                startCategoryIndex = inArray(isDefined(parsedStartValue) ? parsedStartValue.valueOf() : undefined, categories);
+                endCategoryIndex = inArray(isDefined(parsedEndValue) ? parsedEndValue.valueOf() : undefined, categories);
                 if(startCategoryIndex === -1 || endCategoryIndex === -1) {
                     return { from: 0, to: 0 };
                 }
