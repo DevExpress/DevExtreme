@@ -116,6 +116,10 @@ const ScrollViewMock = DOMComponent.inherit({
 
     scrollOffset() {
         return { top: this._pos };
+    },
+
+    _useTemplates() {
+        return false;
     }
 });
 
