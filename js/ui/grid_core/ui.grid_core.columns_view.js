@@ -35,7 +35,9 @@ var SCROLL_CONTAINER_CLASS = "scroll-container",
 
     CELL_HINT_VISIBLE = "dxCellHintVisible",
 
-    FORM_FIELD_ITEM_CONTENT_CLASS = "dx-field-item-content";
+    FORM_FIELD_ITEM_CONTENT_CLASS = "dx-field-item-content",
+
+    TABLE_WITH_SCROLLER_BORDER_CLASS = "dx-table-with-scroller-border";
 
 var appendElementTemplate = {
     render: function(options) {
@@ -1109,6 +1111,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             rtlEnabled = that.option("rtlEnabled");
 
         $element && $element.css(rtlEnabled ? { paddingLeft: width } : { paddingRight: width });
+    },
+
+    toggleScrollerBorder: function(width) {
+        let $tables = this.getTableElements(),
+            $topRenderedTable = this.option("rtlEnabled") ? $tables.last() : $tables.first();
+
+        $topRenderedTable.toggleClass(TABLE_WITH_SCROLLER_BORDER_CLASS, width > 0);
     },
 
     isScrollbarVisible: function(isHorizontal) {

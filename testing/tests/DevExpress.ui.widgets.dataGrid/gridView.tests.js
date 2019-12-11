@@ -570,9 +570,9 @@ function createGridView(options, userOptions) {
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
         }
-        assert.strictEqual(headersContainer.outerWidth() - headersTable.width(), scrollerWidth);
+        assert.strictEqual(headersContainer.outerWidth() - headersTable.outerWidth(), scrollerWidth);
         // T351379
-        assert.strictEqual(footerTable.width(), headersTable.width(), "headers and footer table widths must be equals");
+        assert.strictEqual(footerTable.width(), headersTable.outerWidth(), "headers and footer table widths must be equals");
     });
 
     QUnit.test('Scroller not shown when scrollable is false', function(assert) {
@@ -783,7 +783,7 @@ function createGridView(options, userOptions) {
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
         }
-        assert.strictEqual(headersContainer.outerWidth() - headersTable.width(), scrollerWidth);
+        assert.strictEqual(headersContainer.outerWidth() - headersTable.outerWidth(), scrollerWidth);
     });
 
     // B254732

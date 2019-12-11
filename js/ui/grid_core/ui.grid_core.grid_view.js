@@ -568,6 +568,7 @@ var ResizingController = modules.ViewController.inherit({
 
         commonUtils.deferRender(function() {
             that._columnHeadersView && that._columnHeadersView.setScrollerSpacing(vScrollbarWidth);
+            that._columnHeadersView && that._columnHeadersView.toggleScrollerBorder(vScrollbarWidth);
             that._footerView && that._footerView.setScrollerSpacing(vScrollbarWidth);
             that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
         });

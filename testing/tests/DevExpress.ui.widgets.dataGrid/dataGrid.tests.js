@@ -744,6 +744,63 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("paddingRight"), "0px");
 });
 
+QUnit.test("Additional border in header if useNative scrolling mode", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "1" }, { id: 2, name: "2" }],
+        height: 120,
+        scrolling: {
+            useNative: true
+        },
+        filterRow: {
+            visible: true
+        },
+        columns: [
+            {
+                dataField: "id",
+                fixed: true
+            },
+            "name"
+        ]
+    });
+    this.clock.tick();
+
+    // assert
+    const headerContent = $(dataGrid.element()).find(".dx-datagrid-headers").find(".dx-datagrid-table").last();
+    assert.ok(headerContent.hasClass("dx-table-with-scroller-border"), "class");
+    assert.equal(headerContent.css("border-right-width"), browser.mozilla ? "0px" : "1px", "has right border");
+    assert.equal(headerContent.css("border-left-width"), "0px", "no left border");
+});
+
+QUnit.test("Additional border in header if useNative scrolling mode with rtl enabled", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1, name: "1" }, { id: 2, name: "2" }],
+        height: 120,
+        rtlEnabled: true,
+        scrolling: {
+            useNative: true
+        },
+        filterRow: {
+            visible: true
+        },
+        columns: [
+            {
+                dataField: "id",
+                fixed: true
+            },
+            "name"
+        ]
+    });
+    this.clock.tick();
+
+    // assert
+    const headerContent = $(dataGrid.element()).find(".dx-datagrid-headers").find(".dx-datagrid-table").first();
+    assert.ok(headerContent.hasClass("dx-table-with-scroller-border"), "class");
+    assert.equal(headerContent.css("border-left-width"), browser.mozilla ? "0px" : "1px", "has left border");
+    assert.equal(headerContent.css("border-right-width"), "0px", "no right border");
+});
+
 // T608687
 QUnit.test("Horizontal scrollbar should not be shown if container height is not integer", function(assert) {
     // act
@@ -6208,7 +6265,7 @@ QUnit.test("last column should have correct width if all columns have width and 
 
     // assert
     assert.ok($dataGrid.width() > 200, "grid's width is more then column widths sum");
-    assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50, "last column have correct width");
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), browser.mozilla ? 50 : 49, "last column have correct width");
 });
 
 // T618230
