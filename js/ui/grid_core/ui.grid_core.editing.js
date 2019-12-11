@@ -1935,7 +1935,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 });
             }
 
-            if(isCustomSetCellValue && that._editForm) {
+            // T816256, T844143
+            if(isCustomSetCellValue && that._editForm && !row.isNewRow) {
                 that._editForm.validate();
             }
         },
