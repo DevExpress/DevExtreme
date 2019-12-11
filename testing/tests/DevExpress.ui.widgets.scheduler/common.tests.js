@@ -1090,6 +1090,51 @@ QUnit.testStart(function() {
         assert.equal(this.instance.getWorkSpaceScrollableScrollTop(true), 400, 'Returned value is right for allDay appt and vertical grouping');
     });
 
+    QUnit.test('Get text', function(assert) {
+        const data = [{
+            text: 'a',
+            startDate: new Date(2015, 6, 8, 8, 0),
+            endDate: new Date(2015, 6, 8, 17, 0),
+        }];
+        this.createInstance({
+            dataSource: data,
+        });
+
+        const textOption = this.instance.getText(data[0], data[0]);
+        assert.equal(textOption.text, 'a');
+        assert.equal(textOption.formatDate, '8:00 AM - 5:00 PM');
+    });
+
+    QUnit.test('Get text, all day', function(assert) {
+        const data = [{
+            text: 'a',
+            startDate: new Date(2015, 6, 8, 8, 0),
+            endDate: new Date(2015, 6, 8, 17, 0),
+            allDay: true
+        }];
+        this.createInstance({
+            dataSource: data,
+        });
+
+        const textOption = this.instance.getText(data[0], data[0]);
+        assert.equal(textOption.text, 'a');
+        assert.equal(textOption.formatDate, 'July 8');
+    });
+
+    QUnit.test('checkAndDeleteAppointment', function(assert) {
+        const data = [{
+            text: 'a',
+            startDate: new Date(2015, 6, 8, 8, 0),
+            endDate: new Date(2015, 6, 8, 17, 0),
+        }];
+        this.createInstance({
+            dataSource: data,
+        });
+
+        this.instance.checkAndDeleteAppointment(data[0], data[0]);
+
+        assert.equal(this.instance.option('dataSource').length, 0);
+    });
 })('Methods');
 
 (function() {
