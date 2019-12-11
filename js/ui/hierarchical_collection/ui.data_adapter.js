@@ -439,14 +439,18 @@ var DataAdapter = Class.inherit({
         }
     },
 
-    isChildKeyOrContains(key, parentKeys) {
+    isChildKey(key, parentKeys) {
         let node = this.getNodeByKey(key);
         while(node != null) {
+            node = this.getNodeByKey(node.internalFields.parentKey);
+            if(node == null) {
+                return false;
+            }
             if(parentKeys.indexOf(node.internalFields.key) !== -1) {
                 return true;
             }
-            node = this.getNodeByKey(node.internalFields.parentKey);
         }
+
         return false;
     },
 

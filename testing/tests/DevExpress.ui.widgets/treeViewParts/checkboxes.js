@@ -1676,13 +1676,12 @@ configs.forEach(config => {
                     { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
 
                 wrapper.instance.option('selectedItemKeys', [2]);
-
-                const expectedKeys = isLazyDataSourceMode(wrapper)
+                const expectedKeys = !config.expanded && isLazyDataSourceMode(wrapper)
                     ? []
                     : [1, 2];
 
                 const expectedCallsCount = isLazyDataSourceMode(wrapper)
-                    ? 0
+                    ? config.expanded ? 1 : 0
                     : selected ? 0 : 1;
 
                 wrapper.checkSelectedKeys(expectedKeys);

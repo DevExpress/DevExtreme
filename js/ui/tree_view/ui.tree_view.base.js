@@ -589,23 +589,26 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _selectedItemKeysOptionChange: function(keys) {
-        const diff = this._getSelectedKeysDiff(keys);
+        const oldSelectedKeys = this.getSelectedNodesKeys();
+        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
+
         diff.toDeselect.forEach((key) => {
             this._setItemSelection(false, key);
         });
         diff.toSelect.forEach((key) => {
             this._setItemSelection(true, key);
         });
+
         this._updateSelectionOptions();
-        if(diff.toDeselect.length || diff.toSelect.length) {
+        if(oldSelectedKeys !== this.option('selectedItemKeys')) {
             this._fireSelectionChanged();
         }
     },
 
-    _getSelectedKeysDiff(newSelectedKeys) {
+    _getSelectedKeysDiff(oldSelectedKeys, newSelectedKeys) {
         let toSelect = [],
             toDeselect = [],
-            oldSelectedKeys = this.getSelectedNodesKeys();
+            isRecursiveSelection = this._isRecursiveSelection();
 
         newSelectedKeys.forEach((newKey) => {
             if(oldSelectedKeys.indexOf(newKey) !== -1) {
@@ -613,11 +616,23 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
             toSelect.push(newKey);
         });
+
         oldSelectedKeys.forEach((oldKey) => {
-            if(this._dataAdapter.isChildKeyOrContains(oldKey, newSelectedKeys)) {
+            if(newSelectedKeys.indexOf(oldKey) !== -1) {
                 return;
             }
-            toDeselect.push(oldKey);
+
+            let isFind = false;
+            if(isRecursiveSelection) {
+                if(this._dataAdapter.isChildKey(oldKey, newSelectedKeys)) {
+                    return;
+                }
+                isFind = newSelectedKeys.some((newKey) => this._dataAdapter.isChildKey(newKey, [oldKey]));
+            }
+
+            if(!isFind) {
+                toDeselect.push(oldKey);
+            }
         });
 
         return { toSelect, toDeselect };
