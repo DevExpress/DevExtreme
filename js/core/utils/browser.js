@@ -6,7 +6,6 @@ var webkitRegExp = /(webkit)[ /]([\w.]+)/,
     ieRegExp = /(msie) (\d{1,2}\.\d)/,
     ie11RegExp = /(trident).*rv:(\d{1,2}\.\d)/,
     msEdge = /(edge)\/((\d+)?[\w.]+)/,
-    safari = /(safari)/i,
     mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
 
 var browserFromUA = function(ua) {
@@ -28,15 +27,19 @@ var browserFromUA = function(ua) {
 
         if(ua.indexOf("chrome") >= 0 || ua.indexOf("crios") >= 0) {
             browserName = "chrome";
-            browserVersion = /(?:Chrome|CriOS)\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = /(?:chrome|crios)\/(\d+\.\d+)/.exec(ua);
             browserVersion = browserVersion && browserVersion[1];
         } else if(ua.indexOf("fxios") >= 0) {
             browserName = "mozilla";
-            browserVersion = /FxiOS\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = /fxios\/(\d+\.\d+)/.exec(ua);
             browserVersion = browserVersion && browserVersion[1];
-        } else if(safari.exec(ua)) {
+        } else if(ua.indexOf("safari") >= 0 && /version|phantomjs/.test(ua)) {
             browserName = "safari";
-            browserVersion = /Version\/([0-9.]+)/i.exec(ua);
+            browserVersion = /(?:version|phantomjs)\/([0-9.]+)/.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        } else {
+            browserName = "unknown";
+            browserVersion = /applewebkit\/([0-9.]+)/.exec(ua);
             browserVersion = browserVersion && browserVersion[1];
         }
     }
