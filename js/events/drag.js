@@ -286,7 +286,7 @@ var DragEmitter = GestureEmitter.inherit({
             return false;
         }
 
-        if(config.checkDropTarget && !config.checkDropTarget($target)) {
+        if(config.checkDropTarget && !config.checkDropTarget($target, e)) {
             return false;
         }
 

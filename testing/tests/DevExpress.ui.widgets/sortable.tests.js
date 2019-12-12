@@ -1394,6 +1394,63 @@ QUnit.test("onAdd, onRemove - check itemData arg", function(assert) {
     assert.deepEqual(onRemoveSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragEnd event arguments");
 });
 
+// T835349
+QUnit.test("The onAdd event should be fired when there is horizontal scrolling", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy();
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        data: "x",
+        group: "shared"
+    }, $("#itemsWithBothScrolls"));
+
+    this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        data: "y",
+        moveItemOnDrop: true,
+        onAdd: onAddSpy
+    }, $("#items2"));
+
+    // act
+    let $sourceElement = $(sortable1.element()).children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 0).move(10, 0).up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd event is called once");
+});
+
+// T835349
+QUnit.test("The onAdd event should be fired when there is vertical scrolling", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy();
+
+    $("#scroll").css("top", "300px");
+    $("#bothScrolls").css("height", "300px");
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        data: "x",
+        group: "shared"
+    }, $("#itemsWithBothScrolls"));
+
+    this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        data: "y",
+        moveItemOnDrop: true,
+        onAdd: onAddSpy
+    }, $("#scroll"));
+
+    // act
+    let $sourceElement = $(sortable1.element()).children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(0, 350).move(0, 10).up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd event is called once");
+});
+
 
 QUnit.module("Cross-Component Drag and Drop", crossComponentModuleConfig);
 
