@@ -311,7 +311,7 @@ var Switch = Editor.inherit({
     _validateValue: function() {
         var check = this.option("value");
         if(typeof check !== "boolean") {
-            this._optionSilent("value", !!check);
+            this._options.silent("value", !!check);
         }
     },
 

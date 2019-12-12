@@ -34,11 +34,11 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
 
         templates.forEach(({ name, template }) => {
-            this._optionSilent(`integrationOptions.templates.${name}`, template);
+            this._options.silent(`integrationOptions.templates.${name}`, template);
         });
 
         if(anonymousTemplateMeta.name && !anonymousTemplate) {
-            this._optionSilent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
+            this._options.silent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
         }
     },
 

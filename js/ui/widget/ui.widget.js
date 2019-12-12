@@ -222,9 +222,9 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
-        this._optionSilent(optionsContainer, extend({}, innerWidget.option()));
+        this._options.silent(optionsContainer, extend({}, innerWidget.option()));
         innerWidget.on("optionChanged", (e) => {
-            this._optionSilent(optionsContainer, extend({}, e.component.option()));
+            this._options.silent(optionsContainer, extend({}, e.component.option()));
         });
     },
 

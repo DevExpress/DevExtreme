@@ -390,20 +390,12 @@ var Component = Class.inherit({
     },
 
     hasActionSubscription: function(actionName) {
-        return !!this._optionSilent(actionName) ||
+        return !!this._options.silent(actionName) ||
             this._eventsStrategy.hasEvent(this._getEventName(actionName));
     },
 
     isOptionDeprecated(name) {
         return this._options.isDeprecated(name);
-    },
-
-    _optionSilent(options, value) {
-        if(arguments.length < 2 && typeUtils.type(options) !== "object") {
-            return this._options.silent(options);
-        } else {
-            this._options.silent(options, value);
-        }
     },
 
     _setOptionWithoutOptionChange(name, value) {
