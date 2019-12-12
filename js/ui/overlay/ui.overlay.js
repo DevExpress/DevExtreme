@@ -1604,10 +1604,6 @@ var Overlay = Widget.inherit({
         return this._$content;
     },
 
-    $wrapper: function() {
-        return this._$wrapper;
-    },
-
     /**
     * @name dxOverlaymethods.show
     * @publicName show()
