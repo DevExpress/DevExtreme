@@ -4,7 +4,6 @@ var eol = require('gulp-eol');
 var replace = require('gulp-replace');
 var merge = require('merge-stream');
 var file = require('gulp-file');
-var fs = require('fs');
 var path = require('path');
 var ts = require('gulp-typescript');
 var through = require('through2');
@@ -124,8 +123,7 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
         return file(name, content, { src: true });
     });
 
-
-    fs.writeFileSync(path.join(packagePath, 'bundles/dx.all.js'), '// This file is required to compile devextreme-angular');
+    tsModules.push(file('bundles/dx.all.js', '// This file is required to compile devextreme-angular', { src: true }));
 
     return merge(
         gulp.src('artifacts/ts/dx.all.d.ts')
