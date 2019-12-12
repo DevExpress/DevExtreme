@@ -123,6 +123,7 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
         return file(name, content, { src: true });
     });
 
+    tsModules.push(file('bundles/dx.all.js', '// This file is required to compile devextreme-angular', { src: true }));
 
     return merge(
         gulp.src('artifacts/ts/dx.all.d.ts')
