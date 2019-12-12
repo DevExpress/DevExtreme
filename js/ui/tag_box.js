@@ -1162,7 +1162,10 @@ const TagBox = SelectBox.inherit({
         });
 
         this._updateWidgetHeight();
-        this.option("value", value);
+
+        if(!equalByValue(this._list.option("selectedItemKeys"), this.option("value"))) {
+            this.option("value", value);
+        }
     },
 
     _removeTag: function(value, item) {

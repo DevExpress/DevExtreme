@@ -466,7 +466,7 @@ QUnit.module("tags", moduleSetup, () => {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             })
         });
         this.clock.tick(timeToWait * 4);
@@ -881,6 +881,52 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
             onValueChanged: valueChangeActionSpy
         });
 
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.equal(valueChangeActionSpy.called, false, "onValueChanged was not fired");
+    });
+
+    QUnit.test("onValueChanged should not be fired on first popup render (T838251)", (assert) => {
+        const data = [{
+            id: 1,
+            name: "First"
+        }, {
+            id: 2,
+            name: "Second"
+        }, {
+            id: 3,
+            name: "Third"
+        }];
+        const valueChangeActionSpy = sinon.spy();
+        const instance = $("#tagBox").dxTagBox({
+            dataSource: new DataSource({
+                store: new CustomStore({
+                    key: "id",
+                    load() {
+                        const res = $.Deferred();
+                        setTimeout(() => {
+                            res.resolve(data);
+                        }, TIME_TO_WAIT / 4);
+                        return res.promise();
+                    },
+                    byKey(key) {
+                        const res = $.Deferred();
+                        setTimeout(() => {
+                            res.resolve(key);
+                        }, TIME_TO_WAIT / 4);
+                        return res.promise();
+                    }
+                }),
+                paginate: false
+            }),
+            displayExpr: "name",
+            valueExpr: "id",
+            value: [2, 3],
+            onValueChanged: valueChangeActionSpy,
+            showSelectionControls: true
+        }).dxTagBox("instance");
+
+        instance.open();
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal(valueChangeActionSpy.called, false, "onValueChanged was not fired");
@@ -5330,7 +5376,7 @@ QUnit.module("regression", {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             }),
             value: [data[0], data[1]]
         });
@@ -5362,7 +5408,7 @@ QUnit.module("regression", {
                         return res.promise();
                     }
                 }),
-                paging: false
+                paginate: false
             }),
             value: [data[0], data[1]]
         });
