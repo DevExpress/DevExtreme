@@ -1,3 +1,4 @@
+import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import domAdapter from "core/dom_adapter";
 import windowUtils from "core/utils/window";
@@ -5,15 +6,12 @@ import windowUtils from "core/utils/window";
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
         var test = this;
-        test.__originalDocumentElementGetter = domAdapter.getDocumentElement;
+        test.__originalWindowElementGetter = windowUtils.getWindow;
         test.width = 400;
         test.height = 300;
 
-        domAdapter.getDocumentElement = function() {
-            return {
-                clientWidth: test.width,
-                clientHeight: test.height
-            };
+        windowUtils.getWindow = function() {
+            return $.extend(test.__originalWindowElementGetter(), { innerHeight: test.height, innerWidth: test.width });
         };
 
         test.__originalListener = domAdapter.listen;
@@ -40,9 +38,10 @@ QUnit.module('resizeCallbacks', {
         this.triggerResize(); //  to reset size cache
     },
     afterEach: function() {
-        domAdapter.getDocumentElement = this.__originalDocumentElementGetter;
+        windowUtils.getWindow = this.__originalWindowElementGetter;
         domAdapter.listen = this.__originalListener;
         delete this.__originalDocumentElementGetter;
+        delete this.__originalWindowElementGetter;
         delete this.__originalListener;
         delete this.width;
         delete this.height;
@@ -88,22 +87,17 @@ QUnit.test('Callback is not called if size is not changed', function(assert) {
 });
 
 QUnit.test('Callback is called if window innerHeight is changed (T834502)', function(assert) {
-    let callCount = 0;
-    this.callbacks.add(function() {
-        callCount++;
-    });
-    const originalGetWindow = windowUtils.getWindow;
+    const spy = sinon.spy();
+    this.callbacks.add(spy);
 
     try {
-        windowUtils.getWindow = function() {
-            return { innerHeight: 100, innerWidth: 100 };
-        };
+        sinon.stub(windowUtils, "getWindow").returns({ innerHeight: 100, innerWidth: 200 });
 
         this.triggerResize(false);
 
-        assert.strictEqual(callCount, 1, 'callback is called');
+        assert.strictEqual(spy.callCount, 1, 'callback is called');
     } finally {
-        windowUtils.getWindow = originalGetWindow;
+        windowUtils.getWindow.restore();
     }
 });
 

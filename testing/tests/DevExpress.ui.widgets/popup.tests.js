@@ -774,22 +774,19 @@ QUnit.test("Set right content height if window.innerHeight was changed only (T83
         contentTemplate: () => $("<div>").height(150)
     }).dxPopup("instance");
 
-    const originalGetWindow = windowUtils.getWindow;
     const $popup = instance.$content().parent();
     const $popupContent = instance.$content();
     const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight() || 0;
     const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight() || 0;
 
     try {
-        windowUtils.getWindow = function() {
-            return { innerHeight: 100, innerWidth: 200 };
-        };
+        sinon.stub(windowUtils, "getWindow").returns({ innerHeight: 100, innerWidth: 200 });
 
-        window.dispatchEvent(new Event('resize'));
+        resizeCallbacks.fire();
 
         assert.roughEqual($popupContent.outerHeight() + topToolbarHeight + bottomToolbarHeight, 100, 1);
     } finally {
-        windowUtils.getWindow = originalGetWindow;
+        windowUtils.getWindow.restore();
     }
 });
 

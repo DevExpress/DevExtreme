@@ -15,18 +15,16 @@ var resizeCallbacks = (function() {
     }
 
     var formatSize = function() {
-        var documentElement = domAdapter.getDocumentElement();
+        var window = windowUtils.getWindow();
         return {
-            width: documentElement.clientWidth,
-            height: documentElement.clientHeight,
-            widthIOS: windowUtils.getWindow().innerWidth,
-            heightIOS: windowUtils.getWindow().innerHeight
+            width: window.innerWidth,
+            height: window.innerHeight,
         };
     };
 
     var handleResize = function() {
         var now = formatSize();
-        if(now.width === prevSize.width && now.height === prevSize.height && now.widthIOS === prevSize.widthIOS && now.heightIOS === prevSize.heightIOS) {
+        if(now.width === prevSize.width && now.height === prevSize.height) {
             return;
         }
 
