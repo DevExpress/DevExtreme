@@ -298,7 +298,7 @@ const Component = Class.inherit({
         let eventName;
         let actionFunc;
 
-        let result = (...args) => {
+        const result = (...args) => {
             if(!eventName) {
                 config = config || {};
 
@@ -340,12 +340,13 @@ const Component = Class.inherit({
             return action.apply(this, args);
         };
 
-        if(!Config().wrapActionsBeforeExecute) {
-            const onActionCreated = this.option('onActionCreated') || noop;
-            result = onActionCreated(this, result, config) || result;
+        if(Config().wrapActionsBeforeExecute) {
+            return result;
         }
 
-        return result;
+        const onActionCreated = this.option('onActionCreated') || noop;
+
+        return onActionCreated(this, result, config) || result;
     },
 
     /**
