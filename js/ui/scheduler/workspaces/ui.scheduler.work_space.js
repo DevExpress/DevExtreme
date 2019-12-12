@@ -2307,7 +2307,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount),
             cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight(),
             leftOffset = this._isRTL() || this.option("crossScrollingEnabled") ? 0 : this.getWorkSpaceLeftOffset(),
-            topIndex = Math.floor(coordinates.top / cellHeight),
+            topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight)),
             leftIndex = Math.floor((coordinates.left + 5 - leftOffset) / cellWidth);
 
         if(this._isRTL()) {
