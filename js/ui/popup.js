@@ -53,6 +53,10 @@ var IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 var IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 var HEIGHT_STRATEGIES = { static: "", inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
+var getElement = function(value) {
+    return value && $(value.target || value);
+};
+
 var getButtonPlace = function(name) {
 
     var device = devices.current(),
@@ -620,6 +624,23 @@ var Popup = Overlay.inherit({
                 this._$bottom.removeClass(className);
             }
         }).bind(this));
+    },
+
+    _getContainer: function() {
+        if(this.option("fullScreen")) {
+            return getElement(window);
+        }
+
+        var position = this._position,
+            container = this.option("container"),
+            positionOf = null;
+
+        if(!container && position) {
+            var isEvent = !!(position.of && position.of.preventDefault);
+            positionOf = isEvent ? window : (position.of || window);
+        }
+
+        return getElement(container || positionOf);
     },
 
     _getDragTarget: function() {

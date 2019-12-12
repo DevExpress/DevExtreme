@@ -1340,10 +1340,6 @@ var Overlay = Widget.inherit({
     },
 
     _getContainer: function() {
-        if(this.option("fullScreen")) {
-            return getElement(window);
-        }
-
         var position = this._position,
             container = this.option("container"),
             positionOf = null;

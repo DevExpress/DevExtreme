@@ -797,13 +797,13 @@ QUnit.test("overlay wrapper should have correct size when fullScreen is enabled 
         height: 200
     });
 
-    const popup = $("#popup").dxPopup({
+    $("#popup").dxPopup({
         fullScreen: true,
         visible: true,
         container: "#container"
     });
 
-    const $overlayWrapper = popup.find(toSelector(OVERLAY_WRAPPER_CLASS));
+    const $overlayWrapper = $(toSelector(OVERLAY_WRAPPER_CLASS));
 
     assert.equal($overlayWrapper.outerWidth(), $(document.body).outerWidth(), "wrapper has correct width");
     assert.equal($overlayWrapper.outerHeight(), $(document.body).outerHeight(), "wrapper has correct height");
