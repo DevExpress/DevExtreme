@@ -1202,6 +1202,17 @@ QUnit.test("Can be validated negatively with a custom message from validationCal
                     d.reject(customMessage);
                     return d.promise();
                 })
+            },
+            {
+                type: "async",
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject({
+                        isValid: true,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
             }
         ],
         result = testAsyncRules(rules, value, assert),
@@ -1211,6 +1222,10 @@ QUnit.test("Can be validated negatively with a custom message from validationCal
         assert.equal(res.brokenRules[0].message, customMessage);
         assert.equal(res.brokenRules[1].message, customMessage);
         assert.equal(res.brokenRules[2].message, customMessage);
+
+        // the fourth rule should be broken even if it was rejected with isValid === true
+        assert.equal(res.brokenRules[3].message, customMessage);
+
         done();
     });
 });
