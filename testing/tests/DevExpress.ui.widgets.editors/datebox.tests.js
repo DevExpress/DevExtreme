@@ -1889,6 +1889,7 @@ QUnit.module("datebox and calendar integration", () => {
 
         $("#dateBox").dxDateBox({
             type: "date",
+            pickerType: "calendar",
             value: new Date(2019, 11, 10),
             min: new Date(2019, 11, 15),
             max: new Date(2019, 11, 20),
