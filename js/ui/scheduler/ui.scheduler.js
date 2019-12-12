@@ -1085,46 +1085,6 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerAppointment.endDateTimeZone
                 * @type String
                 */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate
-                * @type object
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.text
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.startDate
-                * @type Date
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.endDate
-                * @type Date
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.description
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.recurrenceRule
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.recurrenceException
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.allDay
-                * @type Boolean
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.startDateTimeZone
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.endDateTimeZone
-                * @type String
-                */
         });
     },
 
