@@ -116,6 +116,12 @@ const MultiView = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxMultiViewOptions.dataSource
+             * @type string|Array<string,dxMultiViewItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxMultiViewOptions.items
              * @type Array<string, dxMultiViewItem, object>
              * @fires dxMultiViewOptions.onOptionChanged

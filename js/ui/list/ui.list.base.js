@@ -389,6 +389,12 @@ var ListBase = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxListOptions.dataSource
+             * @type string|Array<string,dxListItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxListOptions.items
              * @type Array<string, dxListItem, object>
              * @fires dxListOptions.onOptionChanged

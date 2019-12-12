@@ -2514,6 +2514,8 @@ declare module DevExpress.ui {
         animationDuration?: number;
         /** @name dxAccordion.Options.collapsible */
         collapsible?: boolean;
+        /** @name dxAccordion.Options.dataSource */
+        dataSource?: string | Array<string | dxAccordionItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxAccordion.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxAccordion.Options.focusStateEnabled */
@@ -2559,6 +2561,8 @@ declare module DevExpress.ui {
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** @name dxActionSheet.Options.cancelText */
         cancelText?: string;
+        /** @name dxActionSheet.Options.dataSource */
+        dataSource?: string | Array<string | dxActionSheetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxActionSheet.Options.items */
         items?: Array<string | dxActionSheetItem | any>;
         /** @name dxActionSheet.Options.onCancelClick */
@@ -2618,6 +2622,8 @@ declare module DevExpress.ui {
         align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
         /** @name dxBox.Options.crossAlign */
         crossAlign?: 'center' | 'end' | 'start' | 'stretch';
+        /** @name dxBox.Options.dataSource */
+        dataSource?: string | Array<string | dxBoxItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxBox.Options.direction */
         direction?: 'col' | 'row';
         /** @name dxBox.Options.items */
@@ -2668,13 +2674,6 @@ declare module DevExpress.ui {
     export class dxButton extends Widget {
         constructor(element: Element, options?: dxButtonOptions)
         constructor(element: JQuery, options?: dxButtonOptions)
-    }
-    /** @name dxButtonDefaultTemplate */
-    export interface dxButtonDefaultTemplate {
-        /** @name dxButtonDefaultTemplate.icon */
-        icon?: string;
-        /** @name dxButtonDefaultTemplate.text */
-        text?: string;
     }
     /** @name dxButtonGroup.Options */
     export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
@@ -2756,15 +2755,6 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxCalendarOptions)
         constructor(element: JQuery, options?: dxCalendarOptions)
     }
-    /** @name dxCalendarCellTemplate */
-    export interface dxCalendarCellTemplate {
-        /** @name dxCalendarCellTemplate.date */
-        date?: Date;
-        /** @name dxCalendarCellTemplate.text */
-        text?: string;
-        /** @name dxCalendarCellTemplate.view */
-        view?: 'month' | 'year' | 'decade' | 'century';
-    }
     /** @name dxCheckBox.Options */
     export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
         /** @name dxCheckBox.Options.activeStateEnabled */
@@ -2811,6 +2801,8 @@ declare module DevExpress.ui {
     export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
         /** @name dxContextMenu.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
+        /** @name dxContextMenu.Options.dataSource */
+        dataSource?: string | Array<dxContextMenuItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxContextMenu.Options.items */
         items?: Array<dxContextMenuItem>;
         /** @name dxContextMenu.Options.onHidden */
@@ -3908,6 +3900,8 @@ declare module DevExpress.ui {
         animationDuration?: number;
         /** @name dxGallery.Options.animationEnabled */
         animationEnabled?: boolean;
+        /** @name dxGallery.Options.dataSource */
+        dataSource?: string | Array<string | dxGalleryItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxGallery.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxGallery.Options.indicatorEnabled */
@@ -4123,6 +4117,8 @@ declare module DevExpress.ui {
         bounceEnabled?: boolean;
         /** @name dxList.Options.collapsibleGroups */
         collapsibleGroups?: boolean;
+        /** @name dxList.Options.dataSource */
+        dataSource?: string | Array<string | dxListItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxList.Options.displayExpr */
         displayExpr?: string | ((item: any) => string);
         /** @name dxList.Options.focusStateEnabled */
@@ -4459,6 +4455,8 @@ declare module DevExpress.ui {
     export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
         /** @name dxMenu.Options.adaptivityEnabled */
         adaptivityEnabled?: boolean;
+        /** @name dxMenu.Options.dataSource */
+        dataSource?: string | Array<dxMenuItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxMenu.Options.hideSubmenuOnMouseLeave */
         hideSubmenuOnMouseLeave?: boolean;
         /** @name dxMenu.Options.items */
@@ -4491,6 +4489,8 @@ declare module DevExpress.ui {
         animation?: { hide?: animationConfig, show?: animationConfig };
         /** @name dxMenuBase.Options.cssClass */
         cssClass?: string;
+        /** @name dxMenuBase.Options.dataSource */
+        dataSource?: string | Array<dxMenuBaseItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxMenuBase.Options.items */
         items?: Array<dxMenuBaseItem>;
         /** @name dxMenuBase.Options.selectByClick */
@@ -4539,6 +4539,8 @@ declare module DevExpress.ui {
     export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
         /** @name dxMultiView.Options.animationEnabled */
         animationEnabled?: boolean;
+        /** @name dxMultiView.Options.dataSource */
+        dataSource?: string | Array<string | dxMultiViewItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxMultiView.Options.deferRendering */
         deferRendering?: boolean;
         /** @name dxMultiView.Options.focusStateEnabled */
@@ -5047,6 +5049,8 @@ declare module DevExpress.ui {
     export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
         /** @name dxResponsiveBox.Options.cols */
         cols?: Array<{ baseSize?: number | 'auto', ratio?: number, screen?: string, shrink?: number }>;
+        /** @name dxResponsiveBox.Options.dataSource */
+        dataSource?: string | Array<string | dxResponsiveBoxItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxResponsiveBox.Options.height */
         height?: number | string | (() => number | string);
         /** @name dxResponsiveBox.Options.items */
@@ -5255,27 +5259,6 @@ declare module DevExpress.ui {
         /** @name dxSchedulerAppointment.visible */
         visible?: boolean;
     }
-    /** @name dxSchedulerAppointmentTooltipTemplate */
-    export interface dxSchedulerAppointmentTooltipTemplate {
-        /** @name dxSchedulerAppointmentTooltipTemplate.allDay */
-        allDay?: boolean;
-        /** @name dxSchedulerAppointmentTooltipTemplate.description */
-        description?: string;
-        /** @name dxSchedulerAppointmentTooltipTemplate.endDate */
-        endDate?: Date;
-        /** @name dxSchedulerAppointmentTooltipTemplate.endDateTimeZone */
-        endDateTimeZone?: string;
-        /** @name dxSchedulerAppointmentTooltipTemplate.recurrenceException */
-        recurrenceException?: string;
-        /** @name dxSchedulerAppointmentTooltipTemplate.recurrenceRule */
-        recurrenceRule?: string;
-        /** @name dxSchedulerAppointmentTooltipTemplate.startDate */
-        startDate?: Date;
-        /** @name dxSchedulerAppointmentTooltipTemplate.startDateTimeZone */
-        startDateTimeZone?: string;
-        /** @name dxSchedulerAppointmentTooltipTemplate.text */
-        text?: string;
-    }
     /** @name dxScrollView.Options */
     export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
         /** @name dxScrollView.Options.onPullDown */
@@ -5384,6 +5367,8 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxSlideOut.Options.contentTemplate */
         contentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxSlideOut.Options.dataSource */
+        dataSource?: string | Array<string | dxSlideOutItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxSlideOut.Options.items */
         items?: Array<string | dxSlideOutItem | any>;
         /** @name dxSlideOut.Options.menuGroupTemplate */
@@ -5573,6 +5558,8 @@ declare module DevExpress.ui {
     export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
         /** @name dxTabPanel.Options.animationEnabled */
         animationEnabled?: boolean;
+        /** @name dxTabPanel.Options.dataSource */
+        dataSource?: string | Array<string | dxTabPanelItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxTabPanel.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTabPanel.Options.hoverStateEnabled */
@@ -5616,6 +5603,8 @@ declare module DevExpress.ui {
     }
     /** @name dxTabs.Options */
     export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
+        /** @name dxTabs.Options.dataSource */
+        dataSource?: string | Array<string | dxTabsItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxTabs.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTabs.Options.hoverStateEnabled */
@@ -5800,6 +5789,8 @@ declare module DevExpress.ui {
         baseItemHeight?: number;
         /** @name dxTileView.Options.baseItemWidth */
         baseItemWidth?: number;
+        /** @name dxTileView.Options.dataSource */
+        dataSource?: string | Array<string | dxTileViewItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxTileView.Options.direction */
         direction?: 'horizontal' | 'vertical';
         /** @name dxTileView.Options.focusStateEnabled */
@@ -5872,6 +5863,8 @@ declare module DevExpress.ui {
     }
     /** @name dxToolbar.Options */
     export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
+        /** @name dxToolbar.Options.dataSource */
+        dataSource?: string | Array<string | dxToolbarItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxToolbar.Options.items */
         items?: Array<string | dxToolbarItem | any>;
         /** @name dxToolbar.Options.menuItemTemplate */
@@ -6141,6 +6134,8 @@ declare module DevExpress.ui {
         animationEnabled?: boolean;
         /** @name dxTreeView.Options.createChildren */
         createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
+        /** @name dxTreeView.Options.dataSource */
+        dataSource?: string | Array<dxTreeViewItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxTreeView.Options.dataStructure */
         dataStructure?: 'plain' | 'tree';
         /** @name dxTreeView.Options.expandAllEnabled */

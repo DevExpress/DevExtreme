@@ -186,24 +186,6 @@ var Calendar = Editor.inherit({
             * @hidden true
             * @action
             */
-
-            /**
-            * @name dxCalendarCellTemplate
-            * @type object
-            */
-            /**
-            * @name dxCalendarCellTemplate.text
-            * @type String
-            */
-            /**
-            * @name dxCalendarCellTemplate.date
-            * @type Date
-            */
-            /**
-            * @name dxCalendarCellTemplate.view
-            * @type String
-            * @acceptValues 'month'|'year'|'decade'|'century'
-            */
         });
     },
 
