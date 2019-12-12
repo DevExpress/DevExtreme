@@ -805,8 +805,8 @@ QUnit.test("overlay wrapper should have correct size when fullScreen is enabled 
 
     const $overlayWrapper = $(toSelector(OVERLAY_WRAPPER_CLASS));
 
-    assert.equal($overlayWrapper.outerWidth(), $(document.body).outerWidth(), "wrapper has correct width");
-    assert.equal($overlayWrapper.outerHeight(), $(document.body).outerHeight(), "wrapper has correct height");
+    assert.equal($overlayWrapper.outerWidth(), $(window).innerWidth(), "wrapper has correct width");
+    assert.equal($overlayWrapper.outerHeight(), $(window).innerHeight(), "wrapper has correct height");
 });
 
 QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in safari (T714801)", function(assert) {
