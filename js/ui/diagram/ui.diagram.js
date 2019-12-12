@@ -19,6 +19,7 @@ import EdgesOptions from "./ui.diagram.edges";
 import Tooltip from "../tooltip";
 import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
+import domUtils from "../../core/utils/dom";
 import eventsEngine from "../../events/core/events_engine";
 import * as eventUtils from "../../events/utils";
 import messageLocalization from "../../localization/message";
@@ -658,8 +659,10 @@ class Diagram extends Widget {
         }
 
         if(Array.isArray(customShapes)) {
+            var that = this;
             this._diagramInstance.addCustomShapes(customShapes.map(
                 function(s) {
+                    var template = that._getTemplate(s.template);
                     return {
                         category: s.category,
                         type: s.type,
@@ -672,6 +675,11 @@ class Diagram extends Widget {
                         svgHeight: s.backgroundImageHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
+                        minWidth: s.minWidth,
+                        minHeight: s.minHeight,
+                        maxWidth: s.maxWidth,
+                        maxHeight: s.maxHeight,
+                        allowResize: s.allowResize,
                         defaultText: s.defaultText,
                         allowEditText: s.allowEditText,
                         textLeft: s.textLeft,
@@ -686,7 +694,17 @@ class Diagram extends Widget {
                         imageHeight: s.imageHeight,
                         connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
                             return { 'x': pt.x, 'y': pt.y };
-                        })
+                        }),
+                        createTemplate: template && function(container, item) {
+                            template.render({
+                                model: item,
+                                container: domUtils.getPublicElement($(container))
+                            });
+                        },
+                        templateLeft: s.templateLeft,
+                        templateTop: s.templateTop,
+                        templateWidth: s.templateWidth,
+                        templateHeight: s.templateHeight
                     };
                 }
             ));
@@ -1441,6 +1459,26 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.minWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.minHeight
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.maxWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.maxHeight
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.allowResize
+                * @type Boolean
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.defaultText
                 * @type String
                 */
@@ -1498,6 +1536,29 @@ class Diagram extends Widget {
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.connectionPoints.y
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.template
+                * @type template|function
+                * @type_function_param1 container:dxElement
+                * @type_function_param2 data:object
+                * @type_function_param2_field1 item:dxDiagramItem
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.templateLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.templateTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.templateWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.templateHeight
                 * @type Number
                 */
             ],
