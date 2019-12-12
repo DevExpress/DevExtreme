@@ -631,16 +631,7 @@ var Popup = Overlay.inherit({
             return getElement(window);
         }
 
-        var position = this._position,
-            container = this.option("container"),
-            positionOf = null;
-
-        if(!container && position) {
-            var isEvent = !!(position.of && position.of.preventDefault);
-            positionOf = isEvent ? window : (position.of || window);
-        }
-
-        return getElement(container || positionOf);
+        return this.callBase();
     },
 
     _getDragTarget: function() {
