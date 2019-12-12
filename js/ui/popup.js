@@ -53,10 +53,6 @@ var IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 var IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 var HEIGHT_STRATEGIES = { static: "", inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
-var getElement = function(value) {
-    return value && $(value.target || value);
-};
-
 var getButtonPlace = function(name) {
 
     var device = devices.current(),
@@ -628,7 +624,7 @@ var Popup = Overlay.inherit({
 
     _getContainer: function() {
         if(this.option("fullScreen")) {
-            return getElement(window);
+            return $(window);
         }
 
         return this.callBase();
