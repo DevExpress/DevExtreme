@@ -404,8 +404,8 @@ const DOMComponent = Component.inherit({
             .join(' ');
     },
 
-    _updateDOMComponent(requireRender) {
-        if(requireRender) {
+    _updateDOMComponent(renderRequired) {
+        if(renderRequired) {
             this._renderComponent();
         } else if(this._requireRefresh) {
             this._requireRefresh = false;
@@ -414,10 +414,10 @@ const DOMComponent = Component.inherit({
     },
 
     endUpdate() {
-        const requireRender = this._isInitializingRequired();
+        const renderRequired = this._isInitializingRequired();
 
         this.callBase();
-        this._isUpdateAllowed() && this._updateDOMComponent(requireRender);
+        this._isUpdateAllowed() && this._updateDOMComponent(renderRequired);
     },
 
     $element() {
