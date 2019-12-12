@@ -6971,7 +6971,8 @@ QUnit.test("Changing the current row data in the setCellValue should not be appl
     assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
 });
 
-QUnit.test("Cell validating is setCellValue is set and editing mode is form", function(assert) {
+// T816256
+QUnit.test("Validation state should not be reseted after change value for column with setCellValue if editing mode is form", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -7005,6 +7006,47 @@ QUnit.test("Cell validating is setCellValue is set and editing mode is form", fu
 
     // assert
     assert.ok($testElement.find("tbody > tr").first().find(".dx-texteditor").first().hasClass("dx-invalid"));
+});
+
+// T844143
+QUnit.test("Validation should not occur for new row after change value for column with setCellValue if editing mode is form", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $('#container'),
+        validationCallback = sinon.spy(() => false);
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true
+    };
+
+    that.options.columns = [{
+        dataField: "name",
+        setCellValue: (newData, value) => newData[this.dataField] = value
+    }, {
+        dataField: "age",
+        validationRules: [{
+            type: "custom",
+            validationCallback: validationCallback
+        }]
+    }];
+
+
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.addRow();
+
+    var $targetInput = $(that.getCellElement(0, 0)).find('input').first();
+
+    // act
+    $targetInput.val('Test name');
+    $targetInput.trigger('change');
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(validationCallback.callCount, 0, "validation is not occurs");
 });
 
 QUnit.test('cellValue', function(assert) {
