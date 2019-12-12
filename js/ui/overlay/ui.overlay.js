@@ -1340,6 +1340,10 @@ var Overlay = Widget.inherit({
     },
 
     _getContainer: function() {
+        if(this.option("fullScreen")) {
+            return getElement(window);
+        }
+
         var position = this._position,
             container = this.option("container"),
             positionOf = null;
@@ -1598,6 +1602,10 @@ var Overlay = Widget.inherit({
 
     $content: function() {
         return this._$content;
+    },
+
+    $wrapper: function() {
+        return this._$wrapper;
     },
 
     /**
