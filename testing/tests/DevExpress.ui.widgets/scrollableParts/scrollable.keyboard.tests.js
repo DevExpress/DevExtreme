@@ -267,55 +267,108 @@ QUnit.testInActiveWindow("arrows was not handled when focus on input element", f
     }
 });
 
-[true, false].forEach((useNativeMode) => {
-    ["vertical", "horizontal"].forEach((scrollbarDirection) => {
-        function checkScrollLocation($scrollable, expectedLocation) {
-            let $scroll = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
-            let scrollLocation = translator.locate($scroll);
-            QUnit.assert.deepEqual(scrollLocation, expectedLocation, "scroll location");
-        }
 
-        QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}`, (assert) => {
-            if(devices.real().deviceType !== "desktop") {
-                assert.ok(true, "mobile device does not support tabindex on div element");
-                return;
+if(devices.real().deviceType === "desktop") {
+    [true, false].forEach((useNativeMode) => {
+        ["vertical", "horizontal"].forEach((scrollbarDirection) => {
+            function checkScrollLocation($scrollable, expectedLocation) {
+                let $scroll = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
+                let scrollLocation = translator.locate($scroll);
+                QUnit.assert.deepEqual(scrollLocation, expectedLocation, "scroll location");
             }
 
-            let done = assert.async();
+            QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
+                if(devices.real().deviceType !== "desktop") {
+                    assert.ok(true, "mobile device does not support tabindex on div element");
+                    return;
+                }
 
-            const scrollableContainerSize = 200;
-            const $scrollable = $("#scrollable_container").dxScrollable({
-                height: scrollableContainerSize,
-                width: scrollableContainerSize,
-                useNative: useNativeMode,
-                direction: scrollbarDirection,
-                showScrollbar: "always",
-                useSimulatedScrollbar: true
-            });
+                let done = assert.async();
 
-            let $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
-            let $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
-
-            if(scrollbarDirection === "horizontal") {
-                $contentContainer1.css("display", "inline-block");
-                $contentContainer2.css("display", "inline-block");
-            }
-
-            return new Promise(function(resolve) {
-                $scrollable.dxScrollable("option", "onScroll", function() {
-                    setTimeout(() => {
-                        checkScrollLocation($scrollable, scrollbarDirection === "vertical" ? { top: 100, left: 0 } : { top: 0, left: 100 });
-                        done();
-                    });
-                    resolve();
+                const scrollableContainerSize = 200;
+                const $scrollable = $("#scrollable_container").dxScrollable({
+                    height: scrollableContainerSize,
+                    width: scrollableContainerSize,
+                    useNative: useNativeMode,
+                    direction: scrollbarDirection,
+                    showScrollbar: "always",
+                    useSimulatedScrollbar: true
                 });
 
-                checkScrollLocation($scrollable, { top: 0, left: 0 });
+                let $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
+                let $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
 
-                const keyboard = keyboardMock($contentContainer1);
-                $contentContainer2.focus();
-                keyboard.keyDown("tab");
+                if(scrollbarDirection === "horizontal") {
+                    $contentContainer1.css("display", "inline-block");
+                    $contentContainer2.css("display", "inline-block");
+                }
+
+                return new Promise(function(resolve) {
+                    $scrollable.dxScrollable("option", "onScroll", function() {
+                        setTimeout(() => {
+                            checkScrollLocation($scrollable, scrollbarDirection === "vertical" ? { top: 100, left: 0 } : { top: 0, left: 100 });
+                            done();
+                        });
+                        resolve();
+                    });
+
+                    checkScrollLocation($scrollable, { top: 0, left: 0 });
+
+                    const keyboard = keyboardMock($contentContainer1);
+                    $contentContainer2.focus();
+                    keyboard.keyDown("tab");
+                });
             });
         });
     });
-});
+
+    [1, 1.5, 0.25].forEach((browserZoom) => {
+        ["up", "down", "left", "right"].forEach((key) => {
+            QUnit.testInActiveWindow(`Offset after press "${key}" key with browser zoom - ${browserZoom * 100}%: useNative - ${false}, direction: "both"`, function(assert) {
+                var $scrollable = $("#scrollable");
+                $scrollable.children().width(1000);
+                $scrollable.children().height(1000);
+
+                $scrollable.dxScrollable({
+                    height: 400,
+                    width: 400,
+                    useNative: false,
+                    direction: "both",
+                    showScrollbar: "always"
+                });
+
+                const scrollable = $scrollable.dxScrollable("instance");
+                const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+
+                scrollable.scrollTo({ top: 200, left: 200 });
+
+                $container.focus();
+                $container.attr("tabIndex", 1);
+
+                scrollable._strategy._tryGetDevicePixelRatio = () => browserZoom;
+
+                keyboardMock($container).keyDown(key);
+
+                const expectedOffset = { top: 200, left: 200 };
+                const delta = SCROLL_LINE_HEIGHT / browserZoom;
+
+                if(key === "down") {
+                    expectedOffset.top += delta;
+                }
+                if(key === "up") {
+                    expectedOffset.top -= delta;
+                }
+                if(key === "left") {
+                    expectedOffset.left -= delta;
+                }
+                if(key === "right") {
+                    expectedOffset.left += delta;
+                }
+
+                assert.roughEqual(scrollable.scrollOffset().top, expectedOffset.top, 0.01, `scrollOffset.top`);
+                assert.roughEqual(scrollable.scrollOffset().left, expectedOffset.left, 0.01, `scrollOffset.left`);
+            });
+        });
+    });
+}
+
