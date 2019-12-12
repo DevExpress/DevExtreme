@@ -1171,27 +1171,65 @@ QUnit.test("Can be validated negatively with custom message", function(assert) {
 
 QUnit.test("Can be validated negatively with a custom message from validationCallback", function(assert) {
     const customMessage = "Value does not satisfy our custom validation scenario",
-        customCallback = sinon.spy(function() {
-            const d = new Deferred();
-            d.resolve({
-                isValid: false,
-                message: customMessage
-            });
-            return d.promise();
-        }),
         value = "Some custom value",
-        rule = {
-            type: "async",
-            validationCallback: customCallback
-        },
-        result = testAsyncRules([rule], value, assert),
+        rules = [
+            {
+                type: "async",
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.resolve({
+                        isValid: false,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
+            },
+            {
+                type: "async",
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject({
+                        isValid: false,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
+            },
+            {
+                type: "async",
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject(customMessage);
+                    return d.promise();
+                })
+            },
+            {
+                type: "async",
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject({
+                        isValid: true,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
+            }
+        ],
+        result = testAsyncRules(rules, value, assert),
         done = assert.async();
 
     result.complete.then((res) => {
         assert.equal(res.brokenRules[0].message, customMessage);
+        assert.equal(res.brokenRules[1].message, customMessage);
+        assert.equal(res.brokenRules[2].message, customMessage);
+
+        // the fourth rule should be broken even if it was rejected with isValid === true
+        assert.equal(res.brokenRules[3].message, customMessage);
+
         done();
     });
 });
+
 
 QUnit.test("Default message with name", function(assert) {
     const customCallback = sinon.spy(function() {
