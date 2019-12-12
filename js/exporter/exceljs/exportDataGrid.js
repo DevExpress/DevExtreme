@@ -78,7 +78,7 @@ function exportDataGrid(options) {
             }
 
             if(Object.keys(worksheetViewSettings).length > 0) {
-                worksheet.views[0] = worksheetViewSettings;
+                worksheet.views = [worksheetViewSettings];
             }
 
             resolve(cellsRange);
