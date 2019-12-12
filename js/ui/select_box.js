@@ -67,18 +67,20 @@ var SelectBox = DropDownList.inherit({
 
                 parent.tab && parent.tab.apply(this, arguments);
             },
-            upArrow: function() {
+            upArrow: function(e) {
                 if(parent.upArrow && parent.upArrow.apply(this, arguments)) {
                     if(!this.option("opened")) {
-                        this._setNextValue(-1);
+                        e.step = -1;
+                        this._setNextValue(e);
                     }
                     return true;
                 }
             },
-            downArrow: function() {
+            downArrow: function(e) {
                 if(parent.downArrow && parent.downArrow.apply(this, arguments)) {
                     if(!this.option("opened")) {
-                        this._setNextValue(1);
+                        e.step = 1;
+                        this._setNextValue(e);
                     }
                     return true;
                 }
@@ -387,14 +389,15 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
-    _setNextItem: function(step) {
-        var item = this._calcNextItem(step),
+    _setNextItem: function(e) {
+        var item = this._calcNextItem(e.step),
             value = this._valueGetter(item);
 
+        this._saveValueChangeEvent(e);
         this._setValue(value);
     },
 
-    _setNextValue: function(step) {
+    _setNextValue: function(e) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
             ? new Deferred().resolve()
             : this._dataSource.load();
@@ -405,13 +408,13 @@ var SelectBox = DropDownList.inherit({
                 isLastPage = this._dataSource.isLastPage(),
                 isLastItem = selectedIndex === this._items().length - 1;
 
-            if(hasPages && !isLastPage && isLastItem && step > 0) {
+            if(hasPages && !isLastPage && isLastItem && e.step > 0) {
                 if(!this._popup) {
                     this._createPopup();
                 }
-                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+                this._list._loadNextPage().done(this._setNextItem.bind(this, e));
             } else {
-                this._setNextItem(step);
+                this._setNextItem(e);
             }
         }).bind(this));
     },
