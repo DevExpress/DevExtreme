@@ -68,6 +68,11 @@ class ContextMenu extends MenuBase {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
+             * @name dxContextMenuOptions.dataSource
+             * @type string|Array<dxContextMenuItem>|DataSource|DataSourceOptions
+             * @default null
+             */
+            /**
             * @name dxContextMenuOptions.items
             * @type Array<dxContextMenuItem>
             */

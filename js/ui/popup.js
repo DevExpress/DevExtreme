@@ -622,6 +622,14 @@ var Popup = Overlay.inherit({
         }).bind(this));
     },
 
+    _getContainer: function() {
+        if(this.option("fullScreen")) {
+            return $(window);
+        }
+
+        return this.callBase();
+    },
+
     _getDragTarget: function() {
         return this.topToolbar();
     },

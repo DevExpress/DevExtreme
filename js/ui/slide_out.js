@@ -42,6 +42,12 @@ var SlideOut = CollectionWidget.inherit({
         return extend(this.callBase(), {
 
             /**
+             * @name dxSlideOutOptions.dataSource
+             * @type string|Array<string,dxSlideOutItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxSlideOutOptions.items
              * @type Array<string, dxSlideOutItem, object>
              * @fires dxSlideOutOptions.onOptionChanged

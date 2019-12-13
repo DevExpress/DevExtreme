@@ -24,7 +24,7 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     registerComponent = require("../../core/component_registrator"),
     Widget = require("../widget/ui.widget"),
-    keyboard = require("../../events/").keyboard,
+    keyboard = require("../../events/short").keyboard,
 
     selectors = require("../widget/selectors"),
     dragEvents = require("../../events/drag"),

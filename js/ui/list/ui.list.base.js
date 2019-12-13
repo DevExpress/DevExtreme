@@ -389,6 +389,12 @@ var ListBase = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxListOptions.dataSource
+             * @type string|Array<string,dxListItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxListOptions.items
              * @type Array<string, dxListItem, object>
              * @fires dxListOptions.onOptionChanged
@@ -542,7 +548,9 @@ var ListBase = CollectionWidget.inherit({
 
     _modifyByChanges: function() {
         this.callBase.apply(this, arguments);
+
         this._refreshItemElements();
+        this._updateLoadingState();
     },
 
     reorderItem: function(itemElement, toItemElement) {

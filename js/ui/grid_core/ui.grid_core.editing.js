@@ -607,10 +607,10 @@ var EditingController = modules.ViewController.inherit((function() {
             return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP ? this._getVisibleEditRowIndex() : -1;
         },
 
-        isEditCell: function(rowIndex, columnIndex) {
+        isEditCell: function(visibleRowIndex, columnIndex) {
             var hasEditData = !!(Array.isArray(this._editData) && this._editData.length);
 
-            return hasEditData && this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
+            return hasEditData && this._getVisibleEditRowIndex() === visibleRowIndex && this._editColumnIndex === columnIndex;
         },
 
         getPopupContent: function() {
@@ -1940,7 +1940,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 });
             }
 
-            if(isCustomSetCellValue && that._editForm) {
+            // T816256, T844143
+            if(isCustomSetCellValue && that._editForm && !row.isNewRow) {
                 that._editForm.validate();
             }
         },
@@ -2735,16 +2736,16 @@ module.exports = {
 
                     return this.callBase.apply(this, arguments);
                 },
-                _isCellChanged: function(oldRow, newRow, rowIndex, columnIndex, isLiveUpdate) {
+                _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
                     var editingController = this.getController("editing"),
                         cell = oldRow.cells && oldRow.cells[columnIndex],
-                        isEditing = editingController && editingController.isEditCell(rowIndex, columnIndex);
+                        isEditing = editingController && editingController.isEditCell(visibleRowIndex, columnIndex);
 
                     if(isLiveUpdate && isEditing) {
                         return false;
                     }
 
-                    if(cell && cell.isEditing !== isEditing) {
+                    if(cell && cell.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
                         return true;
                     }
 

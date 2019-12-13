@@ -1470,6 +1470,11 @@ module.exports = {
                     }
                 },
 
+                _scrollToElement: function($element, offset) {
+                    const scrollable = this.getScrollable();
+                    scrollable && scrollable.scrollToElement($element, offset);
+                },
+
                 optionChanged: function(args) {
                     var that = this;
 
