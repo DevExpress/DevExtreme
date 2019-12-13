@@ -943,7 +943,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row, rightToLeft: true });
                     helper.checkFont(expectedCells);
