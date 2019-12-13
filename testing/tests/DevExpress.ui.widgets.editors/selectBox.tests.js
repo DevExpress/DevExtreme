@@ -3803,7 +3803,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
     });
 
     ["ArrowDown", "ArrowUp"].forEach((key) => {
-        QUnit.test(`${key} should trigger onValueChanged with right e.event when dropDown is closed (T844170)`, function(assert) {
+        QUnit.test(`${key} should trigger onValueChanged with right e.event when dropDown is closed (T844170)`, assert => {
             const $element = $("#selectBox").dxSelectBox({
                     dataSource: [0, 1, 2],
                     value: 1,
@@ -3820,7 +3820,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         });
     });
 
-    QUnit.test("upArrow and downArrow on textbox change value after change dataSource", function(assert) {
+    QUnit.test("upArrow and downArrow on textbox change value after change dataSource", assert => {
         const $element = $("#selectBox").dxSelectBox({
                 dataSource: [0, 1, 2],
                 value: 1,
