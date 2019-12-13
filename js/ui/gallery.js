@@ -212,6 +212,12 @@ var Gallery = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxGalleryOptions.dataSource
+             * @type string|Array<string,dxGalleryItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxGalleryOptions.items
              * @type Array<string, dxGalleryItem, object>
              * @fires dxGalleryOptions.onOptionChanged

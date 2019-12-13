@@ -38,12 +38,12 @@ class FileProvider {
          * @name FileProviderOptions.sizeExpr
          * @type string|function(fileItem)
          */
-        this._sizeGetter = compileGetter(options.sizeExpr || "size");
+        this._sizeGetter = compileGetter(this._getSizeExpr(options));
         /**
          * @name FileProviderOptions.dateModifiedExpr
          * @type string|function(fileItem)
          */
-        this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || "dateModified");
+        this._dateModifiedGetter = compileGetter(this._getDateModifiedExpr(options));
         /**
          * @name FileProviderOptions.thumbnailExpr
          * @type string|function(fileItem)
@@ -153,6 +153,14 @@ class FileProvider {
 
     _getIsDirExpr(options) {
         return options.isDirectoryExpr || "isDirectory";
+    }
+
+    _getSizeExpr(options) {
+        return options.sizeExpr || "size";
+    }
+
+    _getDateModifiedExpr(options) {
+        return options.dateModifiedExpr || "dateModified";
     }
 
 }

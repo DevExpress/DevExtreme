@@ -7,7 +7,7 @@ import {
     MockColumnsController,
     MockSelectionController } from "../dataGridMocks.js";
 import pointerEvents from "events/pointer";
-import { keyboard } from "events/";
+import { keyboard } from "events/short";
 import DataGridWrapper from "../wrappers/dataGridWrappers.js";
 
 export const dataGridWrapper = new DataGridWrapper("#container");

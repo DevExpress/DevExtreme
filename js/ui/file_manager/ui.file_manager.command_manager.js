@@ -68,12 +68,14 @@ export class FileManagerCommandManager {
             {
                 name: "thumbnails",
                 text: messageLocalization.format("dxFileManager-commandThumbnails"),
+                icon: "mediumiconslayout",
                 enabled: true,
                 noFileItemRequired: true
             },
             {
                 name: "details",
                 text: messageLocalization.format("dxFileManager-commandDetails"),
+                icon: "detailslayout",
                 enabled: true,
                 noFileItemRequired: true
             },

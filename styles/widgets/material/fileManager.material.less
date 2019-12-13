@@ -77,6 +77,11 @@
                 }
             }
         }
+
+        .dx-toolbar .dx-filemanager-toolbar-viewmode-item .dx-button-content {
+            padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+            padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+        }
     }
 
     .dx-filemanager-container {
@@ -186,6 +191,16 @@
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
         }
+    }
+}
+
+.dx-filemanager-view-switcher-popup {
+    width: 2 * @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING + @MATERIAL_BASE_ICON_SIZE;
+
+    .dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+        padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING - 1px;
+        padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+        text-overflow: clip;
     }
 }
 
