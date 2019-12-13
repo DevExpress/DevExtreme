@@ -2811,7 +2811,9 @@ module.exports = {
                         editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
-                        editingController.showHighlighting($cell, true);
+                        let skipValidation = parameters.row.isNewRow;
+
+                        editingController.showHighlighting($cell, skipValidation);
                     }
 
                     this.callBase.apply(this, arguments);
