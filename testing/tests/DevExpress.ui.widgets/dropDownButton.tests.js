@@ -286,10 +286,6 @@ QUnit.module("popup integration", {
     });
 
     QUnit.test("popup should be positioned correctly if rtlEnabled is true", function(assert) {
-        const getPopupContentRect = instance => {
-            return $(getPopup(instance).content()).get(0).getBoundingClientRect();
-        };
-
         const $dropDownButton = $("#dropDownButton").dxDropDownButton({
             opened: true,
             dropDownOptions: {
@@ -301,11 +297,11 @@ QUnit.module("popup integration", {
         const instance = $dropDownButton.dxDropDownButton("instance"),
             dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
 
-        let popupContentElementRect = getPopupContentRect(instance);
+        let popupContentElementRect = getPopup(instance).content().getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is correct, rtlEnabled = false");
 
         instance.option("rtlEnabled", true);
-        popupContentElementRect = getPopupContentRect(instance);
+        popupContentElementRect = getPopup(instance).content().getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is correct, rtlEnabled = true");
     });
 
