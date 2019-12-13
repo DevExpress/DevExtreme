@@ -158,10 +158,6 @@ class ExcelJSTestHelper {
 
     checkCellFormat(cellsArray) {
         this._iterateCells(cellsArray, (cellArgs) => {
-            if(!("numberFormat" in cellArgs.excelCell)) {
-                cellArgs.excelCell.numberFormat = "@";
-            }
-
             const { address, dataType, type, numberFormat } = cellArgs.excelCell;
             const { row, column } = address;
 

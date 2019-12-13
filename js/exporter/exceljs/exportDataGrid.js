@@ -90,8 +90,6 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
                 numberFormat = numberFormat.replace(/&quot;/g, '');
-            } else {
-                numberFormat = "@";
             }
 
             _setNumberFormat(excelCell, numberFormat);
