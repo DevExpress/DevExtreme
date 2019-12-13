@@ -124,5 +124,36 @@ QUnit.test("#acquireTemplate", function(assert) {
     );
 
     const templateSource = new TemplateBase();
-    assert.strictEqual(acquireTemplate(templateSource), templateSource, 'should return source template if it is TemplateBase');
+    assert.strictEqual(acquireTemplate(templateSource), templateSource, 'should return source template if it is TemplateBase instance');
+
+    const render = sinon.spy();
+    const nextTemplate = acquireTemplate({ render });
+    nextTemplate.render('options');
+    assert.ok(render.calledWith('options'), 'should add render call if template render is a function and template is not renderer');
+
+    const createTemplate = sinon.stub().returns('value');
+    const isRenderer = sinon.stub(type, 'isRenderer').returns(true);
+
+    const result = acquireTemplate({ render }, createTemplate);
+    assert.strictEqual(createTemplate.callCount, 1, 'should call `createTemplate` if template is renderer');
+    assert.strictEqual(result, 'value', 'should return result if template is renderer');
+
+    isRenderer.restore();
+
+    const result2 = acquireTemplate({ nodeType: true }, createTemplate);
+    assert.strictEqual(createTemplate.callCount, 2, 'should call `createTemplate` if template has nodeType');
+    assert.strictEqual(result2, 'value', 'should return result if template has nodeTType');
+
+    isRenderer.returns(false);
+
+    const result3 = acquireTemplate('templateSource', createTemplate, { templateSource: 'result3' }, true);
+    assert.strictEqual(result3, 'result3', 'should call `acquireIntegrationTemplate` and return right result');
+
+    const result4 = acquireTemplate('templateSource', createTemplate, { templateSource: false }, true, [], { templateSource: 'result4' });
+    assert.strictEqual(result4, 'result4', 'should use default templates if `acquireIntegrationTemplate` doesn`t return result');
+
+    createTemplate.returns('result5');
+    const result5 = acquireTemplate('templateSource', createTemplate, { templateSource: false }, true, [], { templateSource: false });
+    assert.strictEqual(result5, 'result5', 'should call `createTemplate` if all conditions above are false');
+    assert.strictEqual(createTemplate.callCount, 3, 'should call `createTemplate` if template has nodeType');
 });
