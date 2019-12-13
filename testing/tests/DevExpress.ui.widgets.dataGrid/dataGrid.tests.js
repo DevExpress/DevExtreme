@@ -985,6 +985,51 @@ QUnit.test("DataGrid - CustomStore.load should contain the 'select' parameter af
     this.clock.tick();
 });
 
+
+// T843705
+QUnit.test("DataSource should be reset after changing remoteOperations", function(assert) {
+    // arrange
+    var storeLoadOptions,
+        dataSource = new DataSource({
+            load: function(loadOptions) {
+                storeLoadOptions = loadOptions;
+
+                return $.Deferred().resolve([
+                    { name: 'Alex', age: 19 },
+                    { name: 'Dan', age: 25 }
+                ], {
+                    totalCount: 2
+                });
+            }
+        }),
+        dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance"),
+        options = {
+            dataSource,
+            loadingTimeout: undefined,
+            paging: {
+                pageSize: 2
+            },
+            remoteOperations: true
+        };
+
+    dataGrid.option(options);
+
+    // assert
+    assert.deepEqual(storeLoadOptions, {
+        filter: undefined,
+        group: null,
+        requireTotalCount: true,
+        searchExpr: undefined,
+        searchOperation: "contains",
+        searchValue: null,
+        skip: 0,
+        sort: null,
+        take: 2,
+        userData: {}
+    }, "loadOptions");
+});
+
+
 // T553981
 QUnit.test("Row expand state should not be changed on row click when scrolling mode is 'infinite'", function(assert) {
     // arrange

@@ -282,8 +282,11 @@ module.exports = {
                         case "repaintChangesOnly":
                         case "highlightChanges":
                         case "loadingTimeout":
+                            handled();
+                            break;
                         case "remoteOperations":
                             handled();
+                            that.reset();
                             break;
                         case "keyExpr":
                         case "dataSource":
