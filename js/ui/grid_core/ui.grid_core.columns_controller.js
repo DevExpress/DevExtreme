@@ -2977,13 +2977,12 @@ module.exports = {
                     that._hasUserState = !!state;
 
                     updateColumnChanges(that, "filtering");
-                    updateColumnChanges(that, "grouping");
 
                     that.init();
 
                     if(dataSource) {
-                        dataSource.sort(null);
-                        dataSource.group(null);
+                        dataSource.sort(that.getSortDataSourceParameters());
+                        dataSource.group(that.getGroupDataSourceParameters());
                     }
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {
