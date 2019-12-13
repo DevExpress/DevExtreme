@@ -247,7 +247,7 @@ const DOMComponent = Component.inherit({
     },
 
     _invalidate() {
-        if(!this._updateLockCount) {
+        if(this._isUpdateAllowed()) {
             throw errors.Error('E0007');
         }
 
@@ -404,19 +404,20 @@ const DOMComponent = Component.inherit({
             .join(' ');
     },
 
-    endUpdate() {
-        const requireRender = !this._initializing && !this._initialized;
-
-        this.callBase.apply(this, arguments);
-
-        if(!this._updateLockCount) {
-            if(requireRender) {
-                this._renderComponent();
-            } else if(this._requireRefresh) {
-                this._requireRefresh = false;
-                this._refresh();
-            }
+    _updateDOMComponent(renderRequired) {
+        if(renderRequired) {
+            this._renderComponent();
+        } else if(this._requireRefresh) {
+            this._requireRefresh = false;
+            this._refresh();
         }
+    },
+
+    endUpdate() {
+        const renderRequired = this._isInitializingRequired();
+
+        this.callBase();
+        this._isUpdateAllowed() && this._updateDOMComponent(renderRequired);
     },
 
     $element() {
