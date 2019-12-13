@@ -20,6 +20,64 @@ const {
 
 testStart(() => initTestMarkup());
 
+const zoomModuleConfig = {
+    beforeEach() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach() {
+        fx.off = false;
+        window.document.body.style.zoom = 'normal';
+        this.clock.restore();
+    }
+};
+
+module("Browser zoom", zoomModuleConfig, () => {
+    if(!isDesktopEnvironment()) {
+        return;
+    }
+
+    const views = ["day", "week"];
+    const createDataSource = () => [{
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 25, 9, 30),
+        endDate: new Date(2017, 4, 25, 11, 30)
+    }];
+
+    QUnit.test("Appointment should drag to above cell in browser zoom case(T833310)", function(assert) {
+        const scheduler = createWrapper({
+            views: views,
+            currentView: views[0],
+            dataSource: createDataSource(),
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600
+        });
+
+        window.document.body.style.zoom = '125%';
+
+        views.forEach(view => {
+            scheduler.option("currentView", view);
+            scheduler.option("dataSource", createDataSource());
+
+            let appointment = scheduler.appointments.getAppointment();
+
+            assert.equal(scheduler.appointments.getDateText(), "9:30 AM - 11:30 AM", `appointment should have correct date on init in ${view}  view`);
+
+            const offset = appointment.offset();
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(offset.left, offset.top)
+                .move(0, -30);
+            pointer.up();
+
+            assert.equal(scheduler.appointments.getDateText(), "9:00 AM - 11:00 AM", `appointment should move to previous cell in ${view} view`);
+        });
+    });
+});
+
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
