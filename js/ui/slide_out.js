@@ -42,6 +42,12 @@ var SlideOut = CollectionWidget.inherit({
         return extend(this.callBase(), {
 
             /**
+             * @name dxSlideOutOptions.dataSource
+             * @type string|Array<string,dxSlideOutItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxSlideOutOptions.items
              * @type Array<string, dxSlideOutItem, object>
              * @fires dxSlideOutOptions.onOptionChanged
@@ -192,10 +198,11 @@ var SlideOut = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
-        this._defaultTemplates["menuItem"] = new ChildDefaultTemplate("item");
-        this._defaultTemplates["menuGroup"] = new ChildDefaultTemplate("group");
-        this._defaultTemplates["content"] = new EmptyTemplate();
+        this._templateManager.addDefaultTemplates({
+            menuItem: new ChildDefaultTemplate("item"),
+            menuGroup: new ChildDefaultTemplate("group"),
+            content: new EmptyTemplate()
+        });
     },
 
     _initEditStrategy: function() {

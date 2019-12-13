@@ -11,7 +11,7 @@ import { extend } from "../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
 import registerComponent from "../core/component_registrator";
 import { normalizeKeyName } from "../events/utils";
-import { keyboard } from "../events/";
+import { keyboard } from "../events/short";
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
     ANONYMOUS_TEMPLATE_NAME = "content";
@@ -47,10 +47,6 @@ var DropDownBox = DropDownEditor.inherit({
 
     _getElements: function() {
         return $(this.content()).find("*");
-    },
-
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
     },
 
     _getDefaultOptions: function() {
@@ -145,6 +141,14 @@ var DropDownBox = DropDownEditor.inherit({
             },
             useHiddenSubmitElement: true
         });
+    },
+
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
+
+    _initTemplates: function() {
+        this.callBase();
     },
 
     _initMarkup: function() {

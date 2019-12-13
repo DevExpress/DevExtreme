@@ -18,7 +18,6 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
 const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
         this.callBase();
-
         /**
          * @name dxButtonGroupItem
          * @inherits CollectionWidgetItem
@@ -41,13 +40,15 @@ const ButtonCollection = CollectionWidget.inherit({
          * @name dxButtonGroupItem.html
          * @hidden
          */
-        this._defaultTemplates["item"] = new BindableTemplate((($container, data, model) => {
-            this._prepareItemStyles($container);
-            this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
-                _templateData: model,
-                template: model.template || this.option("buttonTemplate")
-            }));
-        }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
+        this._templateManager.addDefaultTemplates({
+            item: new BindableTemplate((($container, data, model) => {
+                this._prepareItemStyles($container);
+                this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
+                    _templateData: model,
+                    template: model.template || this.option("buttonTemplate")
+                }));
+            }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _getBasicButtonOptions() {
@@ -291,8 +292,8 @@ const ButtonGroup = Widget.inherit({
     },
 
     _syncSelectionOptions() {
-        this._setOptionSilent("selectedItems", this._buttonsCollection.option("selectedItems"));
-        this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
+        this._setOptionWithoutOptionChange("selectedItems", this._buttonsCollection.option("selectedItems"));
+        this._setOptionWithoutOptionChange("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
     _optionChanged(args) {

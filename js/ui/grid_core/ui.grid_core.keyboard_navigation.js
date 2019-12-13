@@ -12,7 +12,7 @@ import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
 import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 import browser from "../../core/utils/browser";
-import { keyboard } from "../../events/";
+import { keyboard } from "../../events/short";
 
 
 var ROWS_VIEW_CLASS = "rowsview",
@@ -93,7 +93,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 if(that._isNeedScroll) {
                     if($element.is(":visible") && that._focusedView && that._focusedView.getScrollable) {
-                        that._scrollToElement($element);
+                        that._focusedView._scrollToElement($element);
                         that._isNeedScroll = false;
                     }
                 }
@@ -1661,12 +1661,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _getCellElementFromTarget: function(target) {
         return $(target).closest("." + ROW_CLASS + "> td");
-    },
-
-    _scrollToElement: function($element, offset) {
-        var scrollable = this._focusedView.getScrollable();
-        scrollable && scrollable.update();
-        scrollable && scrollable.scrollToElement($element, offset);
     },
 
     _getRowsViewElement: function() {

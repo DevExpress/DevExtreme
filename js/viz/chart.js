@@ -1378,7 +1378,7 @@ var dxChart = AdvancedChart.inherit({
 
     option() {
         const option = this.callBase.apply(this, arguments);
-        const valueAxis = this._getOptionByStealth("valueAxis");
+        const valueAxis = this._options.silent("valueAxis");
 
         if(type(valueAxis) === "array") {
             for(let i = 0; i < valueAxis.length; i++) {

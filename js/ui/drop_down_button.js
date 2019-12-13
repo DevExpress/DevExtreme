@@ -199,7 +199,7 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.dataSource
-             * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
+             * @type string|Array<dxDropDownButtonItem, object>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -270,17 +270,19 @@ let DropDownButton = Widget.inherit({
     },
 
     _initTemplates() {
-        this.callBase();
-        this._defaultTemplates["content"] = new FunctionTemplate((options) => {
-            const $popupContent = $(options.container);
-            const $listContainer = $("<div>").appendTo($popupContent);
-            this._list = this._createComponent($listContainer, List, this._listOptions());
+        this._templateManager.addDefaultTemplates({
+            content: new FunctionTemplate((options) => {
+                const $popupContent = $(options.container);
+                const $listContainer = $("<div>").appendTo($popupContent);
+                this._list = this._createComponent($listContainer, List, this._listOptions());
 
-            this._list.registerKeyHandler("escape", this._escHandler.bind(this));
-            this._list.registerKeyHandler("tab", this._escHandler.bind(this));
-            this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
-            this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
+                this._list.registerKeyHandler("escape", this._escHandler.bind(this));
+                this._list.registerKeyHandler("tab", this._escHandler.bind(this));
+                this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
+                this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
+            })
         });
+        this.callBase();
     },
 
     _itemsToDataSource: function() {
@@ -602,7 +604,7 @@ let DropDownButton = Widget.inherit({
             });
         }
 
-        this._setOptionSilent("selectedItem", selectedItem);
+        this._setOptionWithoutOptionChange("selectedItem", selectedItem);
     },
 
     _clean() {

@@ -15,6 +15,13 @@ var $ = require("jquery"),
     stubLegend = vizMocks.stubClass(Legend);
 
 var dxFunnel = require("viz/funnel/funnel");
+dxFunnel.addPlugin({
+    name: "tracker-test",
+    init: function() {
+        this._renderer.root.element = $("<div id='root'>").appendTo("#test-container")[0];
+    },
+    dispose() {}
+});
 dxFunnel.addPlugin(trackerModule.plugin);
 dxFunnel.addPlugin(labels.plugin);
 dxFunnel.addPlugin(legendModule.plugin);
@@ -23,7 +30,6 @@ var trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         var that = this;
         common.environment.beforeEach.apply(this, arguments);
-        this.renderer.root.element = $("<div>").appendTo("#test-container")[0];
         this.legend = new stubLegend();
         sinon.stub(labelModule, "Label", function() {
             var stub = new stubLabel();

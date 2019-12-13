@@ -36,6 +36,8 @@ var DRAGGABLE = "dxDraggable",
 var targetDraggable,
     sourceDraggable;
 
+const ANONYMOUS_TEMPLATE_NAME = 'content';
+
 class ScrollHelper {
     constructor(orientation, component) {
         this._preventScroll = true;
@@ -169,6 +171,21 @@ class ScrollHelper {
         this._$scrollable = null;
         this._scrollSpeed = 0;
         this._preventScroll = true;
+    }
+
+    isOutsideScrollable(target, event) {
+        const component = this._component;
+
+        if(!component._$scrollable || !target.closest(component._$scrollable).length) {
+            return false;
+        }
+
+        const scrollableSize = component._$scrollable.get(0).getBoundingClientRect();
+        const start = scrollableSize[this._limitProps.start];
+        const size = scrollableSize[this._sizeAttr];
+        const location = this._sizeAttr === "width" ? event.pageX : event.pageY;
+
+        return location < start || location > (start + size);
     }
 }
 
@@ -512,9 +529,13 @@ var Draggable = DOMComponentWithTemplate.inherit({
             data = {
                 direction: this.option("dragDirection"),
                 immediate: this.option("immediate"),
-                checkDropTarget: () => {
+                checkDropTarget: (target, event) => {
                     var targetGroup = this.option("group"),
                         sourceGroup = this._getSourceDraggable().option("group");
+
+                    if(this._verticalScrollHelper.isOutsideScrollable(target, event) || this._horizontalScrollHelper.isOutsideScrollable(target, event)) {
+                        return false;
+                    }
 
                     return sourceGroup && sourceGroup === targetGroup;
                 }
@@ -780,9 +801,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             top: startPosition.top + offset.y
         });
 
-        if(this.option("autoScroll")) {
-            this._updateScrollable(e);
-        }
+        this._updateScrollable(e);
 
         let eventArgs = this._getEventArgs(e);
         this._getAction("onDragMove")(eventArgs);
@@ -797,15 +816,30 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _updateScrollable: function(e) {
         var that = this,
-            $window = $(window),
-            mousePosition = {
-                x: e.pageX - $window.scrollLeft(),
-                y: e.pageY - $window.scrollTop()
-            },
-            allObjects = that.getElementsFromPoint(mousePosition);
+            $sourceElement = that._getSourceElement();
 
-        that._verticalScrollHelper && that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
-        that._horizontalScrollHelper && that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+        that._$scrollable = null;
+        $sourceElement.parents().toArray().some(function(element) {
+            let $element = $(element);
+
+            if(that._horizontalScrollHelper.isScrollable($element) || that._verticalScrollHelper.isScrollable($element)) {
+                that._$scrollable = $element;
+
+                return true;
+            }
+        });
+
+        if(that.option("autoScroll")) {
+            let $window = $(window),
+                mousePosition = {
+                    x: e.pageX - $window.scrollLeft(),
+                    y: e.pageY - $window.scrollTop()
+                },
+                allObjects = that.getElementsFromPoint(mousePosition);
+
+            that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
+            that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+        }
     },
 
     getElementsFromPoint: function(position) {
@@ -930,21 +964,23 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _getAnonymousTemplateName: function() {
-        return "content";
+        return ANONYMOUS_TEMPLATE_NAME;
     },
 
     _initTemplates: function() {
         if(!this.option("contentTemplate")) return;
 
+        this._templateManager.addDefaultTemplates({
+            content: new EmptyTemplate()
+        });
         this.callBase.apply(this, arguments);
-        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _render: function() {
         this.callBase();
         this.$element().addClass(this._addWidgetPrefix());
 
-        const transclude = this._getAnonymousTemplateName() === this.option("contentTemplate"),
+        const transclude = this._templateManager.anonymousTemplateName === this.option("contentTemplate"),
             template = this._getTemplateByOption("contentTemplate");
 
         if(template) {

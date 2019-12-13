@@ -7,6 +7,16 @@ var common = require("./commonParts/common.js"),
     clickEventName = require("events/click").name,
     pointerEvents = require("events/pointer");
 
+var dxTreeMap = require("viz/tree_map/tree_map");
+
+dxTreeMap.addPlugin({
+    name: "tracker-test",
+    init: function() {
+        this._renderer.root.element = $("<div id='root'>").appendTo("#test-container")[0];
+    },
+    dispose() {}
+});
+
 // Actually testing "data" applying is bad because it is totally internal part. But it allows to test events in a slightly simple way -
 // by triggering events on custom divs with data. Otherwise we would have to create widgets with real renderers, search the DOM for
 // a required element and trigger event on it. Of course it is more correct but also more "heavy" way.

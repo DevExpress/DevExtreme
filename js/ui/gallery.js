@@ -212,6 +212,12 @@ var Gallery = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxGalleryOptions.dataSource
+             * @type string|Array<string,dxGalleryItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxGalleryOptions.items
              * @type Array<string, dxGalleryItem, object>
              * @fires dxGalleryOptions.onOptionChanged
@@ -270,20 +276,22 @@ var Gallery = CollectionWidget.inherit({
         * @hidden
         */
 
-        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
-            var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
+        this._templateManager.addDefaultTemplates({
+            item: new BindableTemplate((function($container, data) {
+                var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
-            if(typeUtils.isPlainObject(data)) {
-                this._prepareDefaultItemTemplate(data, $container);
+                if(typeUtils.isPlainObject(data)) {
+                    this._prepareDefaultItemTemplate(data, $container);
 
-                $img.attr({
-                    'src': data.imageSrc,
-                    'alt': data.imageAlt
-                }).appendTo($container);
-            } else {
-                $img.attr('src', String(data)).appendTo($container);
-            }
-        }).bind(this), ["imageSrc", "imageAlt", "text", "html"], this.option("integrationOptions.watchMethod"));
+                    $img.attr({
+                        'src': data.imageSrc,
+                        'alt': data.imageAlt
+                    }).appendTo($container);
+                } else {
+                    $img.attr('src', String(data)).appendTo($container);
+                }
+            }).bind(this), ["imageSrc", "imageAlt", "text", "html"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _dataSourceOptions: function() {

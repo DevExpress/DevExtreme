@@ -1085,46 +1085,6 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerAppointment.endDateTimeZone
                 * @type String
                 */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate
-                * @type object
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.text
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.startDate
-                * @type Date
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.endDate
-                * @type Date
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.description
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.recurrenceRule
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.recurrenceException
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.allDay
-                * @type Boolean
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.startDateTimeZone
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointmentTooltipTemplate.endDateTimeZone
-                * @type String
-                */
         });
     },
 
@@ -1707,38 +1667,42 @@ const Scheduler = Widget.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
         this._initAppointmentTemplate();
 
-        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate();
-        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate();
+        this._templateManager.addDefaultTemplates({
+            appointmentTooltip: new EmptyTemplate(),
+            dropDownAppointment: new EmptyTemplate(),
+        });
+        this.callBase();
     },
 
     _initAppointmentTemplate: function() {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
 
-        this._defaultTemplates["item"] = new BindableTemplate(($container, data, model) => {
-            this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
-        }, [
-            "html",
-            "text",
-            "startDate",
-            "endDate",
-            "allDay",
-            "description",
-            "recurrenceRule",
-            "recurrenceException",
-            "startDateTimeZone",
-            "endDateTimeZone"
-        ], this.option("integrationOptions.watchMethod"), {
-            "text": createGetter(expr.textExpr),
-            "startDate": createGetter(expr.startDateExpr),
-            "endDate": createGetter(expr.endDateExpr),
-            "startDateTimeZone": createGetter(expr.startDateTimeZoneExpr),
-            "endDateTimeZone": createGetter(expr.endDateTimeZoneExpr),
-            "allDay": createGetter(expr.allDayExpr),
-            "recurrenceRule": createGetter(expr.recurrenceRuleExpr)
+        this._templateManager.addDefaultTemplates({
+            ["item"]: new BindableTemplate(($container, data, model) => {
+                this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
+            }, [
+                "html",
+                "text",
+                "startDate",
+                "endDate",
+                "allDay",
+                "description",
+                "recurrenceRule",
+                "recurrenceException",
+                "startDateTimeZone",
+                "endDateTimeZone"
+            ], this.option("integrationOptions.watchMethod"), {
+                "text": createGetter(expr.textExpr),
+                "startDate": createGetter(expr.startDateExpr),
+                "endDate": createGetter(expr.endDateExpr),
+                "startDateTimeZone": createGetter(expr.startDateTimeZoneExpr),
+                "endDateTimeZone": createGetter(expr.endDateTimeZoneExpr),
+                "allDay": createGetter(expr.allDayExpr),
+                "recurrenceRule": createGetter(expr.recurrenceRuleExpr)
+            })
         });
     },
 
@@ -2614,6 +2578,10 @@ const Scheduler = Widget.inherit({
 
         this._actions["onAppointmentUpdating"](updatingOptions);
 
+        if(dragEvent && !typeUtils.isDeferred(dragEvent.cancel)) {
+            dragEvent.cancel = new Deferred();
+        }
+
         this._processActionResult(updatingOptions, function(canceled) {
             if(!canceled) {
                 this._expandAllDayPanel(appointment);
@@ -2622,9 +2590,7 @@ const Scheduler = Widget.inherit({
                     this._appointmentModel
                         .update(target, appointment)
                         .done(() => {
-                            if(dragEvent && typeUtils.isDeferred(dragEvent.cancel)) {
-                                dragEvent.cancel.resolve(false);
-                            }
+                            dragEvent && dragEvent.cancel.resolve(false);
                         })
                         .always((function(e) {
                             this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentUpdated"], appointment, e);

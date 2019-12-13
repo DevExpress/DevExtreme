@@ -554,19 +554,7 @@ var Sortable = Draggable.inherit({
     _makeWidthCorrection: function($item, width) {
         var that = this;
 
-        var hasScrollable = $item.parents().toArray().some(function(element) {
-            let $element = $(element);
-
-            if(that._horizontalScrollHelper.isScrollable($element)) {
-                that._$scrollable = $element;
-
-                return true;
-            }
-        });
-
-        if(!hasScrollable) {
-            that._$scrollable = null;
-        } else if(that._$scrollable.width() < width) {
+        if(that._$scrollable && that._$scrollable.width() < width) {
             let scrollableWidth = that._$scrollable.width(),
                 offsetLeft = $item.offset().left - that._$scrollable.offset().left,
                 offsetRight = scrollableWidth - $item.outerWidth() - offsetLeft;

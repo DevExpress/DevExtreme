@@ -37,11 +37,11 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _updateDataAdapter: function() {
-        this._setOptionSilent("expandNodesRecursive", false);
+        this._setOptionWithoutOptionChange("expandNodesRecursive", false);
 
         this._initDataAdapter();
 
-        this._setOptionSilent("expandNodesRecursive", true);
+        this._setOptionWithoutOptionChange("expandNodesRecursive", true);
     },
 
     _getDataAdapterOptions: function() {

@@ -42,7 +42,7 @@ QUnit.module("option changed", {
         assert.equal(buttons[1].option("hoverStateEnabled"), false, "second button");
     });
 
-    QUnit.test("change hover state for all buttons", function(assert) {
+    QUnit.test("change focus state for all buttons", function(assert) {
         this.buttonGroup.option("focusStateEnabled", false);
         const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
 

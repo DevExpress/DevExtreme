@@ -150,10 +150,6 @@ var SlideOutView = Widget.inherit({
         ]);
     },
 
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
-
     _init: function() {
         this.callBase();
         this.$element().addClass(SLIDEOUTVIEW_CLASS);
@@ -167,11 +163,16 @@ var SlideOutView = Widget.inherit({
         this._hideMenuHandler = this.hideMenu.bind(this);
     },
 
-    _initTemplates: function() {
-        this.callBase();
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
+    },
 
-        this._defaultTemplates["menu"] = new EmptyTemplate();
-        this._defaultTemplates["content"] = new EmptyTemplate();
+    _initTemplates: function() {
+        this._templateManager.addDefaultTemplates({
+            menu: new EmptyTemplate(),
+            content: new EmptyTemplate()
+        });
+        this.callBase();
     },
 
     _initMarkup: function() {
@@ -190,7 +191,7 @@ var SlideOutView = Widget.inherit({
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
-            transclude = this._getAnonymousTemplateName() === contentTemplateOption;
+            transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
         contentTemplate && contentTemplate.render({
             container: this.content(),

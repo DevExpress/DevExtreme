@@ -75,7 +75,8 @@ QUnit.testStart(function() {
 
 var SORTABLE_CLASS = "dx-sortable",
     PLACEHOLDER_CLASS = "dx-sortable-placeholder",
-    PLACEHOLDER_SELECTOR = `.${PLACEHOLDER_CLASS}`;
+    PLACEHOLDER_SELECTOR = `.${PLACEHOLDER_CLASS}`,
+    MAX_INTEGER = 2147483647;
 
 var moduleConfig = {
     beforeEach: function() {
@@ -181,7 +182,7 @@ QUnit.test("Default drag template", function(assert) {
     // assert
     var $draggingElement = $(".dx-sortable-dragging");
     assert.ok($draggingElement.hasClass("dx-sortable-clone"), "clone class");
-    assert.strictEqual($draggingElement.css("z-index"), "2147483647", "z-index");
+    assert.equal($draggingElement.css("z-index"), MAX_INTEGER, "z-index");
     assert.strictEqual($draggingElement.text(), "item1", "text is correct");
     assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
@@ -444,7 +445,7 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     $placeholder = $(".dx-sortable-placeholder");
     assert.strictEqual(items.length, 3, "item count is not changed");
     assert.equal($placeholder.length, 1, "placeholder exists");
-    assert.strictEqual($placeholder.css("z-index"), "2147483647", "z-index");
+    assert.equal($placeholder.css("z-index"), MAX_INTEGER, "z-index");
     assert.ok($placeholder.next().hasClass("dx-sortable-dragging"), "palceholder is before dragging");
     assert.equal($placeholder.get(0).style.height, "", "placeholder height");
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
@@ -1392,6 +1393,63 @@ QUnit.test("onAdd, onRemove - check itemData arg", function(assert) {
     // assert
     assert.deepEqual(onAddSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragMove event arguments");
     assert.deepEqual(onRemoveSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragEnd event arguments");
+});
+
+// T835349
+QUnit.test("The onAdd event should be fired when there is horizontal scrolling", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy();
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        data: "x",
+        group: "shared"
+    }, $("#itemsWithBothScrolls"));
+
+    this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        data: "y",
+        moveItemOnDrop: true,
+        onAdd: onAddSpy
+    }, $("#items2"));
+
+    // act
+    let $sourceElement = $(sortable1.element()).children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 0).move(10, 0).up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd event is called once");
+});
+
+// T835349
+QUnit.test("The onAdd event should be fired when there is vertical scrolling", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy();
+
+    $("#scroll").css("top", "300px");
+    $("#bothScrolls").css("height", "300px");
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        data: "x",
+        group: "shared"
+    }, $("#itemsWithBothScrolls"));
+
+    this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        data: "y",
+        moveItemOnDrop: true,
+        onAdd: onAddSpy
+    }, $("#scroll"));
+
+    // act
+    let $sourceElement = $(sortable1.element()).children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(0, 350).move(0, 10).up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd event is called once");
 });
 
 

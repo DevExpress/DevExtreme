@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    events = require("../../events/"),
+    events = require("../../events/short"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -222,9 +222,9 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
-        this._setOptionByStealth(optionsContainer, extend({}, innerWidget.option()));
+        this._options.silent(optionsContainer, extend({}, innerWidget.option()));
         innerWidget.on("optionChanged", (e) => {
-            this._setOptionByStealth(optionsContainer, extend({}, e.component.option()));
+            this._options.silent(optionsContainer, extend({}, e.component.option()));
         });
     },
 

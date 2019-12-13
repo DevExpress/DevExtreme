@@ -35,6 +35,12 @@ var TabPanel = MultiView.inherit({
             */
 
             /**
+             * @name dxTabPanelOptions.dataSource
+             * @type string|Array<string,dxTabPanelItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxTabPanelOptions.items
              * @type Array<string, dxTabPanelItem, object>
              * @fires dxTabPanelOptions.onOptionChanged
@@ -206,23 +212,24 @@ var TabPanel = MultiView.inherit({
 
     _initTemplates: function() {
         this.callBase();
+        this._templateManager.addDefaultTemplates({
+            title: new BindableTemplate(function($container, data) {
+                if(isPlainObject(data)) {
+                    if(isDefined(data.title) && !isPlainObject(data.title)) {
+                        $container.text(data.title);
+                    }
 
-        this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
-            if(isPlainObject(data)) {
-                if(isDefined(data.title) && !isPlainObject(data.title)) {
-                    $container.text(data.title);
+                    const $iconElement = getImageContainer(data.icon);
+                    $iconElement && $iconElement.prependTo($container);
+                } else {
+                    if(isDefined(data)) {
+                        $container.text(String(data));
+                    }
                 }
 
-                const $iconElement = getImageContainer(data.icon);
-                $iconElement && $iconElement.prependTo($container);
-            } else {
-                if(isDefined(data)) {
-                    $container.text(String(data));
-                }
-            }
-
-            $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
-        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
+                $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
+            }, ["title", "icon"], this.option("integrationOptions.watchMethod"))
+        });
     },
 
     _createTitleActions: function() {

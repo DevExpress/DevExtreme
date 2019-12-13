@@ -33,6 +33,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
 
     /**
+     * @name  dxToolbarOptions.dataSource
+     * @type string|Array<string,dxToolbarItem,object>|DataSource|DataSourceOptions
+     * @default null
+     */
+
+    /**
      * @name dxToolbarOptions.items
      * @type Array<string, dxToolbarItem, object>
      * @fires dxToolbarOptions.onOptionChanged
@@ -64,7 +70,6 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
         var template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
                 if(data.text) {
@@ -97,8 +102,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             });
         }.bind(this), ["text", "html", "widget", "options"], this.option("integrationOptions.watchMethod"));
 
-        this._defaultTemplates["item"] = template;
-        this._defaultTemplates["menuItem"] = template;
+        this._templateManager.addDefaultTemplates({
+            item: template,
+            menuItem: template,
+        });
     },
 
     _getDefaultOptions: function() {

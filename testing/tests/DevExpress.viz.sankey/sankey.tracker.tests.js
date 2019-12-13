@@ -9,6 +9,13 @@ import domAdapter from "core/dom_adapter";
 
 
 import dxSankey from "viz/sankey/sankey";
+dxSankey.addPlugin({
+    name: "tracker-test",
+    init: function() {
+        this._renderer.root.element = $("<div id='root'>").appendTo("#test-container")[0];
+    },
+    dispose() {}
+});
 dxSankey.addPlugin(trackerModule.plugin);
 dxSankey.addPlugin(tooltipModule.plugin);
 setTooltipCustomOptions(dxSankey);
@@ -16,8 +23,6 @@ setTooltipCustomOptions(dxSankey);
 var trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         common.environment.beforeEach.apply(this, arguments);
-        this.renderer.root.element = $("<div>").appendTo("#test-container")[0];
-
         this.linksGroupIndex = 0;
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;

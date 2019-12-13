@@ -164,6 +164,11 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @hidden
             */
             /**
+             * @name dxResponsiveBoxOptions.dataSource
+             * @type string|Array<string,dxResponsiveBoxItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+            /**
              * @name dxResponsiveBoxOptions.items
              * @type Array<string, dxResponsiveBoxItem, object>
              * @fires dxResponsiveBoxOptions.onOptionChanged
@@ -177,7 +182,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _init: function() {
         if(!this.option("screenByWidth")) {
-            this._setOptionByStealth("screenByWidth", windowUtils.defaultScreenFactorFunc);
+            this._options.silent("screenByWidth", windowUtils.defaultScreenFactorFunc);
         }
 
         this.callBase();

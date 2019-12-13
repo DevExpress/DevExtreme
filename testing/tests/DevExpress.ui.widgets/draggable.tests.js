@@ -41,7 +41,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var DRAGGABLE_CLASS = "dx-draggable";
+var DRAGGABLE_CLASS = "dx-draggable",
+    MAX_INTEGER = 2147483647;
 
 var setupDraggable = function(that, $element) {
     $("#qunit-fixture").addClass("qunit-fixture-visible");
@@ -1051,7 +1052,7 @@ QUnit.test("Clone an element when dragging", function(assert) {
     assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "original element hasn't dragging class");
     assert.notOk($cloneElement.hasClass("dx-draggable-source"), "cloned element hasn't source class");
     assert.ok($cloneElement.parent().hasClass("dx-draggable-clone"), "cloned element has dragging class");
-    assert.strictEqual($cloneElement.parent().css("z-index"), "2147483647", "z-index of the cloned element");
+    assert.equal($cloneElement.parent().css("z-index"), MAX_INTEGER, "z-index of the cloned element");
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
 });
