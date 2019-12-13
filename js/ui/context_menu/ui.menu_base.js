@@ -671,7 +671,7 @@ class MenuBase extends HierarchicalCollectionWidget {
             this.selectItem(args.itemData);
         } else {
             this._fireSelectionChangeEvent(null, this.option("selectedItem"));
-            this._setOptionSilent("selectedItem", null);
+            this._setOptionWithoutOptionChange("selectedItem", null);
         }
 
     }
@@ -771,7 +771,7 @@ class MenuBase extends HierarchicalCollectionWidget {
             }
             this._toggleItemSelection(node, true);
             this._updateSelectedItems(selectedItem, itemData);
-            this._setOptionSilent("selectedItem", itemData);
+            this._setOptionWithoutOptionChange("selectedItem", itemData);
         }
     }
 
@@ -788,7 +788,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         if(node.internalFields.selected) {
             this._toggleItemSelection(node, false);
             this._updateSelectedItems(selectedItem, null);
-            this._setOptionSilent("selectedItem", null);
+            this._setOptionWithoutOptionChange("selectedItem", null);
         }
 
     }

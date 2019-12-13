@@ -147,7 +147,7 @@ exports.plugin = {
     },
     extenders: {
         _dataSourceLoadingChangedHandler(isLoading) {
-            if(isLoading && (this._getOptionByStealth("loadingIndicator") || {}).enabled) {
+            if(isLoading && (this._options.silent("loadingIndicator") || {}).enabled) {
                 this._loadingIndicator.show();
             }
         },

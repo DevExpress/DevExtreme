@@ -78,7 +78,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     _renderCloseIcon() {
         this._$closeIcon = this._renderButtonIcon(
             this._$closeIcon,
-            this._getOptionByStealth("closeIcon"),
+            this._options.silent("closeIcon"),
             FAB_CLOSE_ICON_CLASS);
 
         this._$closeIcon.addClass(INVISIBLE_STATE_CLASS);
@@ -102,7 +102,7 @@ class SpeedDialMainItem extends SpeedDialItem {
         const visibleActions = speedDialMainItem._getVisibleActions(actions);
 
         return visibleActions.length === 1 ?
-            extend(visibleActions[0]._getOptionByStealth(), { position: this._getPosition() }) :
+            extend(visibleActions[0]._options.silent(), { position: this._getPosition() }) :
             extend(this._getDefaultOptions(), { visible: visibleActions.length !== 0 });
     }
 
@@ -165,21 +165,21 @@ class SpeedDialMainItem extends SpeedDialItem {
                 this._clickHandler();
             });
 
-            action._setOptionByStealth("actionComponent", action);
-            action._setOptionByStealth("parentPosition", this._getPosition());
-            action._setOptionByStealth("actionVisible", action._getOptionByStealth("visible"));
+            action._options.silent("actionComponent", action);
+            action._options.silent("parentPosition", this._getPosition());
+            action._options.silent("actionVisible", action._options.silent("visible"));
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._getOptionByStealth(), { visible: false })));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options.silent(), { visible: false })));
         }
     }
 
     _getActionAnimation(action, index, lastActionIndex) {
         const actionAnimationDelay = 30;
 
-        action._setOptionByStealth("animation.show.delay", actionAnimationDelay * index);
-        action._setOptionByStealth("animation.hide.delay", actionAnimationDelay * (lastActionIndex - index));
+        action._options.silent("animation.show.delay", actionAnimationDelay * index);
+        action._options.silent("animation.hide.delay", actionAnimationDelay * (lastActionIndex - index));
 
-        return action._getOptionByStealth("animation");
+        return action._options.silent("animation");
     }
 
     _getDirectionIndex(actions, direction) {
@@ -205,14 +205,14 @@ class SpeedDialMainItem extends SpeedDialItem {
     _getActionPosition(actions, index) {
         const action = actions[index];
         const actionOffsetXValue = this.initialOption("childOffset");
-        const actionOffsetX = action._getOptionByStealth("label") && !this._$label ?
+        const actionOffsetX = action._options.silent("label") && !this._$label ?
             (this._isPositionLeft(this._getPosition()) ? actionOffsetXValue : -actionOffsetXValue) :
             0;
 
         const actionOffsetYValue = this.initialOption("indent") + this.initialOption("childIndent") * index;
         const actionOffsetY = this._getDirectionIndex(actions, this.option("direction")) * actionOffsetYValue;
 
-        const actionPositionAtMy = action._getOptionByStealth("label") ?
+        const actionPositionAtMy = action._options.silent("label") ?
             (this._isPositionLeft(this._getPosition()) ? "left" : "right") :
             "center";
 
@@ -282,7 +282,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
 exports.initAction = function(newAction) {
     // TODO: workaround for Angular/React/Vue
-    delete newAction._getOptionByStealth("onInitializing");
+    delete newAction._options.silent("onInitializing");
 
     let isActionExist = false;
     if(!speedDialMainItem) {
@@ -290,7 +290,7 @@ exports.initAction = function(newAction) {
             .appendTo(getSwatchContainer(newAction.$element()));
 
         speedDialMainItem = newAction._createComponent($fabMainElement, SpeedDialMainItem,
-            extend({}, newAction._getOptionByStealth(), {
+            extend({}, newAction._options.silent(), {
                 actions: [ newAction ]
             })
         );
@@ -298,13 +298,13 @@ exports.initAction = function(newAction) {
         const savedActions = speedDialMainItem.option("actions");
 
         savedActions.forEach(action => {
-            if(action._getOptionByStealth("id") === newAction._getOptionByStealth("id")) {
+            if(action._options.silent("id") === newAction._options.silent("id")) {
                 isActionExist = true;
                 return newAction;
             }
         });
 
-        delete speedDialMainItem._getOptionByStealth("position");
+        delete speedDialMainItem._options.silent("position");
 
         if(!isActionExist) {
             if(speedDialMainItem._getVisibleActions(savedActions).length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
@@ -319,7 +319,7 @@ exports.initAction = function(newAction) {
                 actions: savedActions
             }));
         } else if(savedActions.length === 1) {
-            speedDialMainItem.option(extend({}, savedActions[0]._getOptionByStealth(), {
+            speedDialMainItem.option(extend({}, savedActions[0]._options.silent(), {
                 actions: savedActions,
                 position: speedDialMainItem._getPosition()
             }));
@@ -339,7 +339,7 @@ exports.disposeAction = function(actionId) {
 
 
     savedActions = savedActions.filter(action => {
-        return action._getOptionByStealth("id") !== actionId;
+        return action._options.silent("id") !== actionId;
     });
 
     if(savedActionsCount === savedActions.length) return;
@@ -349,7 +349,7 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem.$element().remove();
         speedDialMainItem = null;
     } else if(savedActions.length === 1) {
-        speedDialMainItem.option(extend({}, savedActions[0]._getOptionByStealth(), {
+        speedDialMainItem.option(extend({}, savedActions[0]._options.silent(), {
             actions: savedActions
         }));
     } else {

@@ -507,7 +507,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     beginUpdate: function() {
         var that = this;
         // The "_initialized" flag is checked because first time "beginUpdate" is called in the constructor.
-        if(that._initialized && that._updateLockCount === 0) {
+        if(that._initialized && that._isUpdateAllowed()) {
             that._onBeginUpdate();
             that._suspendChanges();
         }
@@ -516,12 +516,10 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     endUpdate: function() {
-        var that = this;
-        that.callBase.apply(that, arguments);
-        if(that._updateLockCount === 0) {
-            that._resumeChanges();
-        }
-        return that;
+        this.callBase();
+        this._isUpdateAllowed() && this._resumeChanges();
+
+        return this;
     },
 
     option: function(name) {

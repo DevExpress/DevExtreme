@@ -856,6 +856,37 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Data - 1 row & 4 columns, values as formula string" + testCaption, function(assert) {
+                const done = assert.async();
+                const ds = [{ f1: "@123", f2: "=123", f3: "-123", f4: "+123" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap, numberFormat: "@" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap, numberFormat: "@" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap, numberFormat: "@" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap, numberFormat: "@" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
+                    done();
+                });
+            });
+
             QUnit.test("Data - 1 column & 3 rows, paging[enabled: true; pageSize: 1]" + testCaption, function(assert) {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1" }, { f1: "f2_1" }, { f1: "f3_1" }];
