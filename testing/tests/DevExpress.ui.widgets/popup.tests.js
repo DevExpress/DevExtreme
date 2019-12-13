@@ -18,7 +18,7 @@ const IS_SAFARI = !!browser.safari;
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<style>\
             html, body {\
                 height: 100%;\
@@ -32,6 +32,7 @@ QUnit.testStart(function() {
         </style>\
         \
         <div id="popup"></div>\
+        <div id="container"></div>\
         \
         <div id="popupWithAnonymousTmpl">\
             <div class="testContent">TestContent</div>\
@@ -73,10 +74,11 @@ viewPort($("#qunit-fixture").addClass("dx-viewport"));
 
 executeAsyncMock.setup();
 
-var POPUP_CLASS = "dx-popup",
+const POPUP_CLASS = "dx-popup",
     POPUP_WRAPPER_CLASS = "dx-popup-wrapper",
     POPUP_CONTENT_CLASS = "dx-popup-content",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
+    OVERLAY_WRAPPER_CLASS = "dx-overlay-wrapper",
     POPUP_BOTTOM_CLASS = "dx-popup-bottom",
     POPUP_FULL_SCREEN_CLASS = "dx-popup-fullscreen",
     POPUP_TITLE_CLASS = "dx-popup-title",
@@ -90,7 +92,7 @@ var POPUP_CLASS = "dx-popup",
 
     viewport = function() { return $(".dx-viewport"); };
 
-var toSelector = function(cssClass) {
+const toSelector = function(cssClass) {
     return "." + cssClass;
 };
 
@@ -98,19 +100,19 @@ var toSelector = function(cssClass) {
 QUnit.module("basic");
 
 QUnit.test("markup init", function(assert) {
-    var $element = $("#popup").dxPopup();
+    const $element = $("#popup").dxPopup();
     assert.ok($element.hasClass(POPUP_CLASS));
 
     $element.dxPopup("show");
 
-    var $container = viewport().find(toSelector(POPUP_WRAPPER_CLASS)).children();
+    const $container = viewport().find(toSelector(POPUP_WRAPPER_CLASS)).children();
     assert.ok($container.hasClass(OVERLAY_CONTENT_CLASS));
     assert.ok($container.children(':eq(0)').hasClass(POPUP_TITLE_CLASS));
     assert.ok($container.children(':eq(1)').hasClass(POPUP_CONTENT_CLASS));
 });
 
 QUnit.test("content", function(assert) {
-    var instance = $("#popup").dxPopup({
+    const instance = $("#popup").dxPopup({
         visible: true
     }).dxPopup("instance");
 
@@ -120,7 +122,7 @@ QUnit.test("content", function(assert) {
 QUnit.test("popup wrapper should have 'fixed' or 'absolute' position in fullscreen", function(assert) {
     $("#popup").dxPopup({ fullScreen: true, visible: true });
 
-    var $wrapper = $("." + POPUP_WRAPPER_CLASS);
+    const $wrapper = $("." + POPUP_WRAPPER_CLASS);
 
     assert.ok(($wrapper.css("position") === "fixed") || ($wrapper.css("position") === "absolute"), "popup wrapper position type is correct");
 });
@@ -128,14 +130,14 @@ QUnit.test("popup wrapper should have 'fixed' or 'absolute' position in fullscre
 QUnit.test("shading has width and height if enabled", function(assert) {
     $("#popup").dxPopup({ visible: true });
 
-    var $wrapper = $("." + POPUP_WRAPPER_CLASS);
+    const $wrapper = $("." + POPUP_WRAPPER_CLASS);
 
     assert.equal($wrapper.outerHeight(), $(document.body).outerHeight(), "height is 100%");
     assert.equal($wrapper.outerWidth(), $(document.body).outerWidth(), "width is 100%");
 });
 
 QUnit.test("default options", function(assert) {
-    var $popup = $("#popup").dxPopup({ title: 'Any header', visible: true }),
+    const $popup = $("#popup").dxPopup({ title: 'Any header', visible: true }),
         instance = $popup.dxPopup("instance"),
         $overlayContent = instance.$content().parent();
 
@@ -147,7 +149,7 @@ QUnit.test("default options", function(assert) {
 });
 
 QUnit.test("content template", function(assert) {
-    var $popup = $("#popupWithContentTmpl").dxPopup({ visible: true }),
+    const $popup = $("#popupWithContentTmpl").dxPopup({ visible: true }),
         instance = $popup.dxPopup("instance"),
         $content = instance.$content();
 
@@ -159,7 +161,7 @@ QUnit.test("content template", function(assert) {
 });
 
 QUnit.test("title and content template", function(assert) {
-    var $popup = $("#popupWithTitleAndContentTmpl").dxPopup({ visible: true }),
+    const $popup = $("#popupWithTitleAndContentTmpl").dxPopup({ visible: true }),
         instance = $popup.dxPopup("instance"),
         $title = $(toSelector(POPUP_TITLE_CLASS), viewport()),
         $content = instance.$content();
@@ -176,20 +178,21 @@ QUnit.test("title and content template", function(assert) {
 QUnit.test("custom titleTemplate option", function(assert) {
     $("#popupWithTitleTemplate").dxPopup({ titleTemplate: 'customTitle', visible: true });
 
-    var $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+    const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
     assert.equal($.trim($title.text()), "testTitle", "title text is correct");
 });
 
 QUnit.test("done button is located after cancel button in non-win8 device", function(assert) {
     devices.current("androidPhone");
 
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             toolbarItems: [{ shortcut: "done" }, { shortcut: "cancel" }],
             animation: null,
             visible: true
         }),
-        instance = $popup.dxPopup("instance"),
-        $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
+        instance = $popup.dxPopup("instance");
+
+    let $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
 
     assert.equal($popupBottom.text(), "CancelOK", "buttons order is correct");
 
@@ -201,7 +204,7 @@ QUnit.test("done button is located after cancel button in non-win8 device", func
 
 QUnit.test("buttons should be rendered correctly after toolbar was repainted", function(assert) {
     devices.current("desktop");
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             visible: true,
             toolbarItems: [
                 { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
@@ -218,7 +221,7 @@ QUnit.test("buttons should be rendered correctly after toolbar was repainted", f
 });
 
 QUnit.test("Check that title do not render twice or more, Q553652", function(assert) {
-    var $popup = $("#popup").dxPopup({ visible: true, title: "test" }),
+    const $popup = $("#popup").dxPopup({ visible: true, title: "test" }),
         instance = $popup.dxPopup("instance");
 
     assert.equal(instance.option("title"), "test", "title is test");
@@ -233,14 +236,14 @@ QUnit.test("Check that title do not render twice or more, Q553652", function(ass
 });
 
 QUnit.test("close button is not shown when title is not displayed", function(assert) {
-    var $popup = $("#popup").dxPopup({ visible: true, closeButton: true, showTitle: false }),
+    const $popup = $("#popup").dxPopup({ visible: true, closeButton: true, showTitle: false }),
         $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, $popup);
 
     assert.equal($closeButton.length, 0, "close button element");
 });
 
 QUnit.test("close button is shown when title changes", function(assert) {
-    var popup = $("#popup").dxPopup({ visible: true, showTitle: true, showCloseButton: true }).dxPopup("instance");
+    const popup = $("#popup").dxPopup({ visible: true, showTitle: true, showCloseButton: true }).dxPopup("instance");
     popup.option("title", "new title");
     assert.ok($('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, popup._$title).length);
 });
@@ -251,7 +254,7 @@ QUnit.test("popup top toolbar rendering", function(assert) {
         toolbarItems: [{ text: "top text", toolbar: "top", location: "center" }]
     });
 
-    var $popupWrapper = $("." + POPUP_WRAPPER_CLASS),
+    const $popupWrapper = $("." + POPUP_WRAPPER_CLASS),
         $titleToolbar = $popupWrapper.find("." + POPUP_TITLE_CLASS);
 
     assert.ok($titleToolbar.hasClass("dx-toolbar"), "top toolbar is present");
@@ -264,7 +267,7 @@ QUnit.test("popup bottom toolbar rendering", function(assert) {
         toolbarItems: [{ text: "bottom text", toolbar: "bottom", location: "center" }]
     });
 
-    var $popupWrapper = $("." + POPUP_WRAPPER_CLASS),
+    const $popupWrapper = $("." + POPUP_WRAPPER_CLASS),
         $bottomToolbar = $popupWrapper.find("." + POPUP_BOTTOM_CLASS);
 
     assert.ok($bottomToolbar.hasClass("dx-toolbar"), "bottom toolbar is present");
@@ -278,7 +281,7 @@ QUnit.test("buttons rendering when aliases are specified", function(assert) {
         toolbarItems: [{ shortcut: "cancel" }, { shortcut: "done" }, { shortcut: "clear" }]
     });
 
-    var $popupWrapper = $("." + POPUP_WRAPPER_CLASS);
+    const $popupWrapper = $("." + POPUP_WRAPPER_CLASS);
 
     assert.equal($popupWrapper.find(".dx-button").length, 3, "all buttons are rendered");
 });
@@ -290,7 +293,7 @@ QUnit.test("shortcut buttons are placed in specified location", function(assert)
         toolbarItems: [{ shortcut: "done", location: "after" }]
     });
 
-    var $button = $("." + POPUP_BOTTOM_CLASS).find(".dx-toolbar-after").find(".dx-popup-done");
+    const $button = $("." + POPUP_BOTTOM_CLASS).find(".dx-toolbar-after").find(".dx-popup-done");
 
     assert.equal($button.length, 1, "done button is at correct location");
     devices.current(devices.real());
@@ -302,17 +305,17 @@ QUnit.test("items should be rendered with toolbarItems.toolbar='top' as default"
         toolbarItems: [{ text: "sample", location: "center" }]
     });
 
-    var $popupWrapper = $("." + POPUP_WRAPPER_CLASS),
+    const $popupWrapper = $("." + POPUP_WRAPPER_CLASS),
         $titleToolbar = $popupWrapper.find("." + POPUP_TITLE_CLASS);
 
-    var instance = $("#popup").dxPopup("instance");
+    const instance = $("#popup").dxPopup("instance");
 
     assert.equal(instance.option("toolbarItems")[0].toolbar, "top", "toolbar property was set correctly");
     assert.equal($titleToolbar.text(), "sample", "top toolbar has correct content");
 });
 
 QUnit.test("toolbar must receive 'rtlEnabled' option from dxPopup", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             visible: true,
             rtlEnabled: true,
             toolbarItems: [
@@ -328,7 +331,7 @@ QUnit.test("toolbar must receive 'rtlEnabled' option from dxPopup", function(ass
 });
 
 QUnit.test("toolbar must receive 'rtlEnabled' from dxPopup after optionChanged", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             visible: true,
             rtlEnabled: true,
             deferRendering: false,
@@ -341,13 +344,13 @@ QUnit.test("toolbar must receive 'rtlEnabled' from dxPopup after optionChanged",
         instance = $popup.dxPopup("instance");
 
     instance.option("rtlEnabled", false);
-    var toolbarInstance = instance.$content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
+    const toolbarInstance = instance.$content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
 
     assert.notOk(toolbarInstance.option("rtlEnabled"), "toolbar's 'rtlEnabled' option is false");
 });
 
 QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButtons' is set", function(assert) {
-    var popupInstance = $("#popup").dxPopup({
+    const popupInstance = $("#popup").dxPopup({
         visible: true,
         useDefaultToolbarButtons: true,
         deferRendering: false,
@@ -362,7 +365,7 @@ QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButt
         }]
     }).dxPopup("instance");
 
-    var toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
+    const toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
 
     assert.ok(toolbarButtons.eq(0).hasClass("dx-button-danger"), "button has custom class");
     assert.ok(toolbarButtons.eq(1).hasClass("dx-button-default"), "button default class is 'default', not normal");
@@ -370,7 +373,7 @@ QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButt
 
 QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarButtons' is set", function(assert) {
     devices.current("desktop");
-    var popupInstance = $("#popup").dxPopup({
+    const popupInstance = $("#popup").dxPopup({
         visible: true,
         useFlatToolbarButtons: true,
         deferRendering: false,
@@ -384,7 +387,7 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
         }]
     }).dxPopup("instance");
 
-    var toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
+    const toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
 
     assert.ok(toolbarButtons.eq(0).hasClass("dx-button-mode-text"), "shortcut has dx-button-mode-text class");
     assert.ok(toolbarButtons.eq(1).hasClass("dx-button-mode-text"), "button has dx-button-mode-text class");
@@ -403,7 +406,7 @@ QUnit.module("dimensions", {
 
 QUnit.test("content must not overlap bottom buttons", function(assert) {
     devices.current("desktop");
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             toolbarItems: [{ shortcut: "cancel" }, { shortcut: "done" }, { shortcut: "clear" }],
             showCloseButton: true,
             visible: true
@@ -417,7 +420,7 @@ QUnit.test("content must not overlap bottom buttons", function(assert) {
 });
 
 QUnit.test("dimensions should be shrunk correctly with height = auto specified", function(assert) {
-    var $content = $("#popup").dxPopup({
+    const $content = $("#popup").dxPopup({
         visible: true,
         width: "auto",
         height: "auto",
@@ -426,15 +429,15 @@ QUnit.test("dimensions should be shrunk correctly with height = auto specified",
         }
     }).dxPopup("instance").$content();
 
-    var popupContentHeight = $content.height();
-    var addedContent = $("<div>").width(200).height(200);
+    const popupContentHeight = $content.height();
+    const addedContent = $("<div>").width(200).height(200);
     $content.append(addedContent);
 
     assert.equal($content.height(), popupContentHeight + addedContent.height());
 });
 
 QUnit.test("dxPopup should render custom template with render function that returns dom node", function(assert) {
-    var $content = $("#popup").dxPopup({
+    const $content = $("#popup").dxPopup({
         visible: true,
         width: "auto",
         height: "auto",
@@ -442,7 +445,7 @@ QUnit.test("dxPopup should render custom template with render function that retu
             templates: {
                 "title": {
                     render: function(args) {
-                        var $element = $("<span>")
+                        const $element = $("<span>")
                             .addClass("dx-template-wrapper")
                             .text("text");
 
@@ -458,12 +461,12 @@ QUnit.test("dxPopup should render custom template with render function that retu
 });
 
 QUnit.test("dimensions should be shrunk correctly with floating heights", function(assert) {
-    var floatingTemplate = function() {
-        var $result = $("<div>").width(20);
+    const floatingTemplate = function() {
+        const $result = $("<div>").width(20);
         $result.get(0).style.height = '20.2px';
         return $result;
     };
-    var $content = $("<div>").appendTo("#qunit-fixture").dxPopup({
+    const $content = $("<div>").appendTo("#qunit-fixture").dxPopup({
         visible: true,
         width: "auto",
         height: "auto",
@@ -475,20 +478,20 @@ QUnit.test("dimensions should be shrunk correctly with floating heights", functi
         bottomTemplate: floatingTemplate
     }).dxPopup("instance").$content();
 
-    var contentPaddings = $content.outerHeight() - $content.height(),
+    const contentPaddings = $content.outerHeight() - $content.height(),
         computedContentHeight = $content.get(0).getBoundingClientRect().height - contentPaddings;
 
-    var realContentHeight = floatingTemplate().appendTo("#qunit-fixture").get(0).getBoundingClientRect().height;
+    const realContentHeight = floatingTemplate().appendTo("#qunit-fixture").get(0).getBoundingClientRect().height;
     assert.ok(Math.abs(computedContentHeight - realContentHeight) < 0.02, computedContentHeight + " " + realContentHeight);
 });
 
 QUnit.test("content height change should be correctly handled", function(assert) {
-    var instance = $("#popup").dxPopup({
+    const instance = $("#popup").dxPopup({
         "height": 100,
         "visible": true
     }).dxPopup("instance");
 
-    var $popupContent = instance.$content(),
+    const $popupContent = instance.$content(),
         $overlayContent = $popupContent.parent(),
         $contentElement = $("<div>").height(50);
 
@@ -498,7 +501,7 @@ QUnit.test("content height change should be correctly handled", function(assert)
 });
 
 QUnit.test("minHeight should affect popup content height correctly", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             visible: true,
             width: "auto",
             height: "auto",
@@ -521,7 +524,7 @@ QUnit.test("minHeight should affect popup content height correctly", function(as
 });
 
 QUnit.test("maxHeight should affect popup content height correctly", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             visible: true,
             width: "auto",
             height: "auto",
@@ -589,11 +592,11 @@ QUnit.module("options changed callbacks", {
 });
 
 QUnit.test("width/height", function(assert) {
-    var instance = this.instance;
+    const instance = this.instance;
 
     instance.show();
 
-    var $overlayContent = instance.$content().parent();
+    const $overlayContent = instance.$content().parent();
 
     instance.option("width", 345);
     assert.equal($overlayContent.outerWidth(), 345);
@@ -773,7 +776,7 @@ QUnit.test("fullScreen", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.$content().parent();
+    const $overlayContent = this.instance.$content().parent();
 
     assert.equal($overlayContent.outerWidth(), $(document.body).outerWidth(), "wrapper has 100% width");
     assert.equal($overlayContent.outerHeight(), $(document.body).outerHeight(), "wrapper has 100% height");
@@ -788,6 +791,24 @@ QUnit.test("fullScreen", function(assert) {
     assert.ok($overlayContent.hasClass(POPUP_NORMAL_CLASS), "normal class is added");
 });
 
+QUnit.test("overlay wrapper should have correct size when fullScreen is enabled (T844343)", function(assert) {
+    $("#container").css({
+        width: 200,
+        height: 200
+    });
+
+    $("#popup").dxPopup({
+        fullScreen: true,
+        visible: true,
+        container: "#container"
+    });
+
+    const $overlayWrapper = $(toSelector(OVERLAY_WRAPPER_CLASS));
+
+    assert.equal($overlayWrapper.outerWidth(), $(window).innerWidth(), "wrapper has correct width");
+    assert.equal($overlayWrapper.outerHeight(), $(window).innerHeight(), "wrapper has correct height");
+});
+
 QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in safari (T714801)", function(assert) {
     this.instance.option({
         fullScreen: true,
@@ -798,7 +819,7 @@ QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in saf
     const $wrapper = this.instance.$content().parent().parent();
 
     assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI);
-    assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct");
+    assert.strictEqual($wrapper.css("position"), "fixed", "popup wrapper position type is correct");
 
     this.instance.hide();
     assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), "class removed from body after popup hiding");
@@ -812,7 +833,7 @@ QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in saf
     this.instance.option("fullScreen", true);
 
     assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class added to the body if fullScreen is changed to 'true' at runtime");
-    assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
+    assert.strictEqual($wrapper.css("position"), "fixed", "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
     this.instance.hide();
 });
 
@@ -883,11 +904,11 @@ QUnit.test("PopupContent doesn't disappear while fullScreen option changing", fu
         visible: true
     });
 
-    var popupContent = this.instance.$content();
+    const popupContent = this.instance.$content();
 
     $("<iframe>").attr("src", "about:blank").appendTo(popupContent);
 
-    var iFrame = document.getElementsByTagName('iframe')[0],
+    const iFrame = document.getElementsByTagName('iframe')[0],
         iFrameDoc = iFrame.contentWindow.document,
         element = document.createElement('div');
 
@@ -895,7 +916,7 @@ QUnit.test("PopupContent doesn't disappear while fullScreen option changing", fu
         iFrameDoc.write("<body></body>");
     }
 
-    var body = iFrameDoc.getElementsByTagName('body')[0];
+    let body = iFrameDoc.getElementsByTagName('body')[0];
 
     body.appendChild(element);
     this.instance.option("fullScreen", true);
@@ -913,7 +934,7 @@ QUnit.test("fullScreen with disabled shading", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.$content().parent(),
+    const $overlayContent = this.instance.$content().parent(),
         $wrapper = $overlayContent.parent().get(0);
 
     assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), "wrappers width specified");
@@ -933,7 +954,7 @@ QUnit.test("showTitle option", function(assert) {
         opened: true
     });
 
-    var $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+    let $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
     assert.ok(!!$title.length, "show title by default");
 
     this.instance.option("showTitle", false);
@@ -957,7 +978,7 @@ $.each(["cancel", "clear", "done"], function(_, buttonType) {
         this.instance.option("toolbarItems", [{ shortcut: buttonType }]);
         this.instance.show();
 
-        var $bottomBar = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find("." + POPUP_BOTTOM_CLASS),
+        const $bottomBar = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find("." + POPUP_BOTTOM_CLASS),
             $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find(".dx-button.dx-popup-" + buttonType);
 
         assert.equal($bottomBar.length, 1, "Bottom bar rendered");
@@ -968,7 +989,7 @@ $.each(["cancel", "clear", "done"], function(_, buttonType) {
 });
 
 QUnit.test("buttons close button", function(assert) {
-    var $popup = $("#popup").dxPopup({ visible: true, showCloseButton: true }),
+    const $popup = $("#popup").dxPopup({ visible: true, showCloseButton: true }),
         instance = $popup.dxPopup("instance"),
         $title = $(toSelector(POPUP_TITLE_CLASS), viewport()),
         $closeButton = $(toSelector(POPUP_TITLE_CLOSEBUTTON_CLASS), viewport());
@@ -981,7 +1002,7 @@ QUnit.test("buttons close button", function(assert) {
 });
 
 QUnit.test("showCloseButton option", function(assert) {
-    var $popup = $("#popup").dxPopup({ visible: true, toolbarItems: [] }),
+    let $popup = $("#popup").dxPopup({ visible: true, toolbarItems: [] }),
         instance = $popup.dxPopup("instance"),
         $closeButton = $popup.find("." + POPUP_TITLE_CLOSEBUTTON_CLASS);
     assert.ok($closeButton.length, "Need to show close button by default");
@@ -1000,8 +1021,8 @@ QUnit.test("hide popup when close button is clicked", function(assert) {
     this.instance.option("visible", "true");
     this.instance.option("showCloseButton", true);
 
-    var $closeButton = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS),
-        isHideCalled = 0;
+    const $closeButton = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+    let isHideCalled = 0;
 
     this.instance.hide = function() {
         isHideCalled++;
@@ -1013,7 +1034,7 @@ QUnit.test("hide popup when close button is clicked", function(assert) {
 
 $.each(["cancel", "clear", "done"], function(_, buttonType) {
     QUnit.test("fire specific action and hide popup" + buttonType + " button is clicked", function(assert) {
-        var buttonClickFired = 0,
+        let buttonClickFired = 0,
             popupHideFired = 0;
 
         this.instance.option("toolbarItems", [{ shortcut: buttonType, onClick: function() { buttonClickFired++; } }]);
@@ -1022,7 +1043,7 @@ $.each(["cancel", "clear", "done"], function(_, buttonType) {
         };
         this.instance.show();
 
-        var $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find(".dx-button.dx-popup-" + buttonType);
+        const $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find(".dx-button.dx-popup-" + buttonType);
 
         $button.trigger("dxclick");
         assert.equal(buttonClickFired, 1, "button click action fired");
@@ -1033,8 +1054,8 @@ $.each(["cancel", "clear", "done"], function(_, buttonType) {
 QUnit.test("buttons", function(assert) {
     this.instance.option("visible", true);
 
-    var $container = this.instance.$content().parent();
-    var $popupTitle = $container.find("." + POPUP_TITLE_CLASS),
+    const $container = this.instance.$content().parent();
+    let $popupTitle = $container.find("." + POPUP_TITLE_CLASS),
         $popupBottom = $container.find("." + POPUP_BOTTOM_CLASS);
 
     assert.ok(!$popupTitle.hasClass(".dx-toolbar"), "top toolbar is not initialized when buttons is empty");
@@ -1064,12 +1085,12 @@ QUnit.test("buttons", function(assert) {
 });
 
 QUnit.test("buttons aliases change affects container classes", function(assert) {
-    var popup = $("#popup").dxPopup({
+    const popup = $("#popup").dxPopup({
         visible: true,
         toolbarItems: [{ shortcut: "cancel" }]
     }).dxPopup("instance");
 
-    var $popupBottom = this.instance.$content().parent().find("." + POPUP_BOTTOM_CLASS);
+    let $popupBottom = this.instance.$content().parent().find("." + POPUP_BOTTOM_CLASS);
     assert.ok($popupBottom.hasClass("dx-popup-cancel"), "popup bottom has cancel class");
 
     popup.option("toolbarItems", [{ shortcut: "done" }]);
@@ -1085,7 +1106,7 @@ QUnit.test("empty item should not be rendered in top toolbar", function(assert) 
         showCloseButton: false
     });
 
-    var $toolbarItems = $("." + POPUP_TITLE_CLASS).find(".dx-item");
+    const $toolbarItems = $("." + POPUP_TITLE_CLASS).find(".dx-item");
 
     assert.equal($toolbarItems.length, 0, "no items are rendered inside top toolbar");
 });
@@ -1117,7 +1138,7 @@ QUnit.test("toolBar should not update geometry after partial update of its items
         toolbarItems: [{ widget: "dxButton", options: { text: "test 2 top" }, toolbar: "bottom", location: "after" }]
     });
 
-    var renderGeometrySpy = sinon.spy(this.instance, "_renderGeometry");
+    const renderGeometrySpy = sinon.spy(this.instance, "_renderGeometry");
 
     this.instance.option("toolbarItems[0].options", { text: "test", disabled: true });
     assert.ok(renderGeometrySpy.notCalled, "renderGeometry is not called on partial update of a widget");
@@ -1137,7 +1158,7 @@ QUnit.module("resize", {
 });
 
 QUnit.test("popup content should update height after resize", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             resizeEnabled: true,
             showTitle: false,
             visible: true,
@@ -1154,7 +1175,7 @@ QUnit.test("popup content should update height after resize", function(assert) {
 });
 
 QUnit.test("popup content position should be reset after show/hide", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             resizeEnabled: true,
             height: "auto"
         }),
@@ -1163,7 +1184,7 @@ QUnit.test("popup content position should be reset after show/hide", function(as
 
     popup.$content().append($("<div>").height(10));
     popup.show();
-    var $handle = $overlayContent.find(".dx-resizable-handle-corner-bottom-right"),
+    const $handle = $overlayContent.find(".dx-resizable-handle-corner-bottom-right"),
         pointer = pointerMock($handle),
         position = $overlayContent.offset();
     pointer.start().dragStart().drag(-100, -100).dragEnd();
@@ -1174,7 +1195,7 @@ QUnit.test("popup content position should be reset after show/hide", function(as
 });
 
 QUnit.test("resize callbacks", function(assert) {
-    var onResizeStartFired = 0,
+    let onResizeStartFired = 0,
         onResizeFired = 0,
         onResizeEndFired = 0,
 
@@ -1208,7 +1229,7 @@ QUnit.module("drag popup by title", {
 });
 
 QUnit.test("class should be added if drag is enabled", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             dragEnabled: true,
             visible: true
         }),
@@ -1222,7 +1243,7 @@ QUnit.test("class should be added if drag is enabled", function(assert) {
 });
 
 QUnit.test("popup should be dragged by title", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             dragEnabled: true,
             visible: true
         }),
@@ -1241,7 +1262,7 @@ QUnit.test("popup should be dragged by title", function(assert) {
 });
 
 QUnit.test("popup shouldn't be dragged by content", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             dragEnabled: true,
             visible: true
         }),
@@ -1259,7 +1280,7 @@ QUnit.test("popup shouldn't be dragged by content", function(assert) {
 });
 
 QUnit.test("popup should be dragged if title was changed", function(assert) {
-    var $popup = $("#popup").dxPopup({
+    const $popup = $("#popup").dxPopup({
             dragEnabled: true,
             visible: true
         }),
@@ -1269,7 +1290,7 @@ QUnit.test("popup should be dragged if title was changed", function(assert) {
 
     popup.option("title", "newTitle");
 
-    var $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS)),
+    const $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS)),
         pointer = pointerMock($title);
 
     pointer.start().dragStart().drag(50, 50).dragEnd();
@@ -1290,24 +1311,24 @@ QUnit.module("rendering", {
 });
 
 QUnit.test("anonymous content template rendering", function(assert) {
-    var $inner = $("#popupWithAnonymousTmpl .testContent");
-    var $popup = $("#popupWithAnonymousTmpl").dxPopup({
+    const $inner = $("#popupWithAnonymousTmpl .testContent");
+    const $popup = $("#popupWithAnonymousTmpl").dxPopup({
         visible: true
     });
 
-    var $content = $popup.dxPopup("$content");
+    const $content = $popup.dxPopup("$content");
 
     assert.equal($.trim($content.text()), "TestContent", "content rendered");
     assert.equal($content.find(".testContent").get(0), $inner[0], "content should not lost the link");
 });
 
 QUnit.test("custom content template is applied even if there is 'content' template in popup", function(assert) {
-    var $popup = $("#popupWithCustomAndContentTemplate").dxPopup({
+    const $popup = $("#popupWithCustomAndContentTemplate").dxPopup({
         contentTemplate: 'custom',
         visible: true
     });
 
-    var $content = $popup.dxPopup("$content");
+    const $content = $popup.dxPopup("$content");
 
     assert.equal($.trim($content.text()), "TestContent", "content is correct");
 });
@@ -1327,7 +1348,7 @@ QUnit.test("title toolbar with buttons when 'showTitle' is false", function(asse
         opened: true
     });
 
-    var $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+    const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
 
     assert.equal($title.length, 1, "title toolbar is rendered");
     assert.equal($title.find(".dx-toolbar-button").length, 1, "button is rendered in title toolbar");
@@ -1357,7 +1378,7 @@ QUnit.test("dx-popup-fullscreen-width class should be attached when width is equ
 });
 
 QUnit.test("popup with toolbar should have compactMode option for the bottom toolbar", function(assert) {
-    var popup = $("#popup").dxPopup({
+    const popup = $("#popup").dxPopup({
         toolbarItems: [
             {
                 shortcut: "done",
@@ -1378,10 +1399,10 @@ QUnit.module("templates");
 QUnit.test("titleTemplate test", function(assert) {
     assert.expect(6);
 
-    var $element = $("#popup").dxPopup({
+    const $element = $("#popup").dxPopup({
             visible: true,
             titleTemplate: function(titleElement) {
-                var result = "<div class='test-title-renderer'>";
+                let result = "<div class='test-title-renderer'>";
                 result += "<h1>Title</h1>";
                 result += "</div>";
 
@@ -1403,7 +1424,7 @@ QUnit.test("titleTemplate test", function(assert) {
     instance.option("titleTemplate", function(titleElement) {
         assert.equal($(titleElement).get(0), $popupContent.find("." + POPUP_TITLE_CLASS).get(0));
 
-        var result = "<div class='changed-test-title-renderer'>";
+        let result = "<div class='changed-test-title-renderer'>";
         result += "<h1>Title</h1>";
         result += "</div>";
 
@@ -1414,11 +1435,11 @@ QUnit.test("titleTemplate test", function(assert) {
 });
 
 QUnit.test("'bottomTemplate' options test", function(assert) {
-    var $element = $("#popup").dxPopup({
+    const $element = $("#popup").dxPopup({
             visible: true,
             toolbarItems: [{ text: "bottom text", toolbar: "bottom", location: "center" }],
             bottomTemplate: function(titleElement) {
-                var result = "<div class='test-bottom-renderer'>";
+                let result = "<div class='test-bottom-renderer'>";
                 result += "<h1>bottom</h1>";
                 result += "</div>";
 
@@ -1433,7 +1454,7 @@ QUnit.test("'bottomTemplate' options test", function(assert) {
     instance.option("bottomTemplate", function(titleElement) {
         assert.equal($(titleElement).get(0), $popupContent.find("." + POPUP_BOTTOM_CLASS).get(0));
 
-        var result = "<div class='changed-test-bottom-renderer'>";
+        let result = "<div class='changed-test-bottom-renderer'>";
         result += "<h1>bottom</h1>";
         result += "</div>";
 
@@ -1451,13 +1472,13 @@ QUnit.test("title should be rendered if custom 'titleTemplate' is specified and 
         showCloseButton: false
     });
 
-    var $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+    const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
     assert.equal($title.length, 1, "title is rendered");
     assert.equal($title.text(), "testTitle", "title template is rendered correctly");
 });
 
 QUnit.test("popup title should be rendered before content", function(assert) {
-    var contentIsRendered = false;
+    let contentIsRendered = false;
 
     $("#popupWithTitleTemplate").dxPopup({
         visible: true,
