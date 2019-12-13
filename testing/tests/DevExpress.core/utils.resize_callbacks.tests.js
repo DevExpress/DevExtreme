@@ -98,6 +98,7 @@ QUnit.test('Callback is called if window innerHeight is changed (T834502)', func
         assert.strictEqual(spy.callCount, 1, 'callback is called');
     } finally {
         windowUtils.getWindow.restore();
+        this.callbacks.remove(spy);
     }
 });
 
