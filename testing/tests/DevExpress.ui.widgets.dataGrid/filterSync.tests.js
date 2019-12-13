@@ -212,6 +212,52 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnOption("field", "filterValue"), undefined);
     });
 
+    // T844517
+    QUnit.test("clearFilter() clears column's bufferedFilterValue", function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: {
+                store: []
+            },
+            columns: [{ dataField: "field", dataType: "number", bufferedFilterValue: 123 }]
+        });
+
+        // assert
+        assert.equal(this.columnOption(0, "bufferedFilterValue"), 123, "bufferedFilterValue was applied");
+
+        // act
+        this.dataController.clearFilter();
+
+        // assert
+        assert.equal(this.columnOption(0, "bufferedFilterValue"), null, "bufferedFilterValue was cleared");
+    });
+
+    // T844517
+    QUnit.test("clearFilter() clears column's bufferedFilterValue if it was applied in runtime", function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: {
+                store: []
+            },
+            columns: [{ dataField: "field", dataType: "number" }]
+        });
+
+        // assert
+        assert.equal(this.columnOption(0, "bufferedFilterValue"), null, "init bufferedFilterValue");
+
+        // act
+        this.columnOption(0, "bufferedFilterValue", 123);
+
+        // assert
+        assert.equal(this.columnOption(0, "bufferedFilterValue"), 123, "bufferedFilterValue was applied");
+
+        // act
+        this.dataController.clearFilter();
+
+        // assert
+        assert.equal(this.columnOption(0, "bufferedFilterValue"), null, "bufferedFilterValue was cleared");
+    });
+
     // T659816
     QUnit.test("clearFilter() clears filterValue", function(assert) {
         var dataSourceFilter = ["field", "=", 0];

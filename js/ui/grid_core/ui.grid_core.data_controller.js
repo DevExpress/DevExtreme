@@ -1074,6 +1074,7 @@ module.exports = {
                         that.filter(null);
                         that.searchByText("");
                         clearColumnOption("filterValue");
+                        clearColumnOption("bufferedFilterValue");
                         clearColumnOption("filterValues");
                     }
 
