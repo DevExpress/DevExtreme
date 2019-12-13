@@ -79,7 +79,9 @@ export const focus = {
         if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
             eventsEngine.off($el, addNamespace('beforeactivate', namespace));
         }
-    }
+    },
+
+    trigger: $el => eventsEngine.trigger($el, 'focus')
 };
 
 export const dxClick = {
