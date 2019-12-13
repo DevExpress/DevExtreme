@@ -1010,7 +1010,7 @@ const Form = Widget.inherit({
         return item.items || [];
     },
 
-    _itemTabbedTemplate(item, e, $container) {
+    _itemTabbedTemplate: function(item, e, $container) {
         const $tabPanel = $("<div>").appendTo($container);
         const tabPanelOptions = extend({}, item.tabPanelOptions, {
             dataSource: item.tabs,
@@ -1018,7 +1018,6 @@ const Form = Widget.inherit({
             itemTemplate: (itemData, e, container) => {
                 const $container = $(container);
                 const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
-
                 const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(itemData), $container, {
                     colCount: itemData.colCount,
                     alignItemLabels: alignItemLabels,
@@ -1034,7 +1033,6 @@ const Form = Widget.inherit({
                         });
                     },
                     onDisposing: ({ component }) => {
-                        // TODO: This made as a workaround for the Tabpanel in the repainChangesOnly mode
                         const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
                         this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
                     },
@@ -1375,7 +1373,7 @@ const Form = Widget.inherit({
             const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
-                this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.items`);
+                this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
                 const items = this._prepareItems(value, false, itemPath);
                 this._setLayoutManagerItemOption(layoutManager, optionName, items, itemPath);
                 return true;

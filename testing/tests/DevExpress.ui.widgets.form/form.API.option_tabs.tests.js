@@ -708,6 +708,51 @@ module(`Public API: option method`, () => {
                 testWrapper.checkEditorRendered("name", !deferRendering);
                 testWrapper.checkTabSelection(1);
             });
+
+            test(`Select first tab, add new tab, select last tab, change title of last tab and change items for parent group, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+                const tabs = [{
+                    title: "title1",
+                    items: ["name"]
+                }];
+
+                const testWrapper = new FormTestWrapper({
+                    items: [{
+                        itemType: "group",
+                        items: [{
+                            itemType: "tabbed",
+                            tabPanelOptions: {
+                                repaintChangesOnly,
+                                deferRendering
+                            },
+                            tabs
+                        }]
+                    }]
+                });
+
+                testWrapper.checkTabSelection(0);
+
+                tabs.push({
+                    title: "title2",
+                    items: ["address"]
+                });
+                testWrapper.setOption("items[0].items[0].tabs", tabs);
+                testWrapper.selectTab(1);
+
+                testWrapper.checkFormsReRender();
+                testWrapper.checkTabsElements(2);
+                testWrapper.checkTabSelection(1);
+                testWrapper.checkEditorRendered("name", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", true);
+
+                testWrapper.setOption("items[0].items[0].tabs[1].title", "title1");
+                testWrapper.setOption("items[0].items", ["city"]);
+
+                testWrapper.checkFormsReRender();
+                testWrapper.checkTabsElements(0);
+                testWrapper.checkEditorRendered("city", true);
+                testWrapper.checkEditorRendered("name", false);
+                testWrapper.checkEditorRendered("address", false);
+            });
         });
     });
 });
@@ -1361,6 +1406,53 @@ module(`Public API: itemOption method`, () => {
                 testWrapper.checkEditorRendered("lastName", true);
                 testWrapper.checkEditorRendered("name", false);
                 testWrapper.checkTabSelection(0);
+            });
+
+            test(`Select first tab, add new tab, select last tab, change title of last tab and change items for parent group, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+                const tabs = [{
+                    title: "title1",
+                    items: ["name"]
+                }];
+
+                const testWrapper = new FormTestWrapper({
+                    items: [{
+                        itemType: "group",
+                        name: "group1",
+                        items: [{
+                            itemType: "tabbed",
+                            name: "tabbedItem",
+                            tabPanelOptions: {
+                                repaintChangesOnly,
+                                deferRendering
+                            },
+                            tabs
+                        }]
+                    }]
+                });
+
+                testWrapper.checkTabSelection(0);
+
+                tabs.push({
+                    title: "title2",
+                    items: ["address"]
+                });
+                testWrapper.setItemOption("group1.tabbedItem", "tabs", tabs);
+                testWrapper.selectTab(1);
+
+                testWrapper.checkFormsReRender();
+                testWrapper.checkTabsElements(2);
+                testWrapper.checkTabSelection(1);
+                testWrapper.checkEditorRendered("name", !repaintChangesOnly || !deferRendering);
+                testWrapper.checkEditorRendered("address", true);
+
+                testWrapper.setItemOption("group1.tabbedItem.title2", "title", "title1");
+                testWrapper.setItemOption("group1", "items", ["city"]);
+
+                testWrapper.checkFormsReRender();
+                testWrapper.checkTabsElements(0);
+                testWrapper.checkEditorRendered("city", true);
+                testWrapper.checkEditorRendered("name", false);
+                testWrapper.checkEditorRendered("address", false);
             });
         });
     });
