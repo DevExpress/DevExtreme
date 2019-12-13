@@ -1,3 +1,5 @@
+@MAX_INTEGER: 2147483647;
+
 .dx-sortable {
     overflow: hidden;
     .user-select(none);
@@ -9,7 +11,7 @@
     left: 0;
     box-sizing: border-box;
     opacity: 0.9;
-    z-index: 2147483647;
+    z-index: @MAX_INTEGER;
 }
 
 .dx-sortable-dragging {
@@ -31,7 +33,7 @@
     left: 0;
     border: 1px solid transparent;
     box-sizing: border-box;
-    z-index: 2147483647;
+    z-index: @MAX_INTEGER;
 }
 
 .dx-sortable-placeholder-inside {
