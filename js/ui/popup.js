@@ -707,7 +707,10 @@ var Popup = Overlay.inherit({
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
-                var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
+                var overlayHeight = this.option("fullScreen")
+                    ? Math.min(overlayContent.getBoundingClientRect().height, windowUtils.getWindow().innerHeight)
+                    : overlayContent.getBoundingClientRect().height;
+                var contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
                 cssStyles = {
                     height: Math.max(0, contentHeight),
                     minHeight: "auto",
