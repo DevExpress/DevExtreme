@@ -283,7 +283,50 @@ QUnit.module("popup integration", {
         instance.option("opened", true);
         assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
         assert.equal($popupContent.outerWidth(), 810, "width are equal after option change");
+    });
 
+    QUnit.test("popup should be positioned right if rtlEnabled is true", function(assert) {
+        const getPopupContentRect = instance => {
+            return $(getPopup(instance).content()).get(0).getBoundingClientRect();
+        };
+
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            opened: true,
+            dropDownOptions: {
+                width: 200,
+                "position.collision": "none"
+            },
+        });
+
+        const instance = $dropDownButton.dxDropDownButton("instance"),
+            dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
+
+        let popupContentElementRect = getPopupContentRect(instance);
+        assert.equal(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is right, rtlEnabled = false");
+
+        instance.option("rtlEnabled", true);
+        popupContentElementRect = getPopupContentRect(instance);
+        assert.equal(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is right, rtlEnabled = true");
+    });
+
+    QUnit.test("popup should open/close correctly after rtlEnabled option change", function(assert) {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            opened: true
+        });
+
+        const instance = $dropDownButton.dxDropDownButton("instance"),
+            popup = getPopup(instance);
+
+        assert.ok(popup.option("visible"), "popup is visible");
+
+        instance.option("rtlEnabled", true);
+        assert.ok(popup.option("visible"), "popup is visible");
+
+        $dropDownButton.click();
+        assert.ok(popup.option("visible"), "popup is not visible");
+
+        $dropDownButton.click();
+        assert.ok(popup.option("visible"), "popup is not visible");
     });
 
     QUnit.test("popup width should change if content is truncated", function(assert) {
