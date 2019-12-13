@@ -355,8 +355,6 @@ testModule("option", moduleConfig, () => {
             visible: true
         }).dxOverlay("instance");
 
-        assert.ok(overlay.option("visible"), "overlay is visible");
-
         overlay.option("rtlEnabled", true);
         assert.ok(overlay.option("visible"), "overlay is visible after rtlEnabled option change");
     });
