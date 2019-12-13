@@ -460,12 +460,11 @@ const DOMComponent = Component.inherit({
         }
     },
 
-    // ===============TemplateManager====================
-    _getAnonymousTemplateName: function() {
+    _getAnonymousTemplateName() {
         return void 0;
     },
 
-    _initTemplateManager: function() {
+    _initTemplateManager() {
         if(this._templateManager || !this._useTemplates()) return void 0;
 
         const { integrationOptions = {} } = this.option();
@@ -478,7 +477,7 @@ const DOMComponent = Component.inherit({
         this._initTemplates();
     },
 
-    _initTemplates: function() {
+    _initTemplates() {
         const { templates, anonymousTemplateMeta } = this._templateManager.extractTemplates(this.$element());
         const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
 
@@ -493,11 +492,11 @@ const DOMComponent = Component.inherit({
         }
     },
 
-    _getTemplateByOption: function(optionName) {
+    _getTemplateByOption(optionName) {
         return this._getTemplate(this.option(optionName));
     },
 
-    _getTemplate: function(templateSource) {
+    _getTemplate(templateSource) {
         const templates = this.option('integrationOptions.templates');
         const isAsyncTemplate = this.option('templatesRenderAsynchronously');
         const skipTemplates = this.option('integrationOptions.skipTemplates');
@@ -513,14 +512,14 @@ const DOMComponent = Component.inherit({
         );
     },
 
-    _saveTemplate: function(name, template) {
+    _saveTemplate(name, template) {
         this._setOptionSilent(
             'integrationOptions.templates.' + name,
             this._templateManager._createTemplate(template)
         );
     },
 
-    _useTemplates: function() {
+    _useTemplates() {
         return true;
     },
 });
