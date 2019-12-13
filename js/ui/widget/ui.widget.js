@@ -50,6 +50,8 @@ const Widget = DOMComponent.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
+            _hoveredElement: null,
+            _isActive: false,
 
             /**
              * @name WidgetOptions.disabled
@@ -470,13 +472,11 @@ const Widget = DOMComponent.inherit({
         if(hoverStateEnabled) {
             hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
-                this._refreshHoveredElement($(element));
+                this.option('_hoveredElement', $(element));
             }, { excludeValidators: ['readOnly'] }), event => {
+                this.option('_hoveredElement', null);
                 this._hoverEndHandler(event);
-                this._forgetHoveredElement();
             }, { selector, namespace });
-        } else {
-            this._toggleHoverClass(false);
         }
     },
 
@@ -525,34 +525,32 @@ const Widget = DOMComponent.inherit({
     _hoverEndHandler: noop,
 
     _toggleActiveState($element, value) {
-        this._toggleHoverClass(!value);
+        this.option('_isActive', value);
         $element.toggleClass('dx-state-active', value);
     },
 
-    _refreshHoveredElement(hoveredElement) {
-        const selector = this._activeStateUnit || this._eventBindingTarget();
+    _updatedHover() {
+        const hoveredElement = this._options.silent('_hoveredElement');
 
-        this._forgetHoveredElement();
-        this._hoveredElement = hoveredElement.closest(selector);
-        this._toggleHoverClass(true);
+        this._hover(hoveredElement, hoveredElement);
     },
 
-    _forgetHoveredElement() {
-        this._toggleHoverClass(false);
-        delete this._hoveredElement;
-    },
+    _hover($el, $previous) {
+        const { hoverStateEnabled, disabled, _isActive } = this.option();
+        const findHoverTarget = $el => $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
 
-    _toggleHoverClass(value) {
-        if(this._hoveredElement) {
-            const { hoverStateEnabled } = this.option();
+        $previous = findHoverTarget($previous);
+        $previous && $previous.toggleClass('dx-state-hover', false);
 
-            this._hoveredElement.toggleClass('dx-state-hover', value && hoverStateEnabled);
+        if($el && hoverStateEnabled && !disabled && !_isActive) {
+            const newHoveredElement = findHoverTarget($el);
+
+            newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
         }
     },
 
     _toggleDisabledState(value) {
         this.$element().toggleClass('dx-state-disabled', Boolean(value));
-        this._toggleHoverClass(!value);
         this.setAria('disabled', value || undefined);
     },
 
@@ -580,11 +578,12 @@ const Widget = DOMComponent.inherit({
     },
 
     _optionChanged(args) {
-        const { name, value } = args;
+        const { name, value, previousValue } = args;
 
         switch(name) {
             case 'disabled':
                 this._toggleDisabledState(value);
+                this._updatedHover();
                 this._refreshFocusState();
                 break;
             case 'hint':
@@ -595,6 +594,7 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'hoverStateEnabled':
                 this._attachHoverEvents();
+                this._updatedHover();
                 break;
             case 'tabIndex':
             case 'focusStateEnabled':
@@ -605,6 +605,12 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'accessKey':
                 this._renderAccessKey();
+                break;
+            case '_hoveredElement':
+                this._hover(value, previousValue);
+                break;
+            case '_isActive':
+                this._updatedHover();
                 break;
             case 'visible':
                 this._toggleVisibility(value);
