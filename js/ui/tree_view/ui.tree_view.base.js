@@ -145,6 +145,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name  dxTreeViewOptions.dataSource
+            * @type string|Array<dxTreeViewItem>|DataSource|DataSourceOptions
+            * @default null
+            */
+            /**
             * @name dxTreeViewOptions.items
             * @type Array<dxTreeViewItem>
             */

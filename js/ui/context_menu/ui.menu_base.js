@@ -40,7 +40,11 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-
+            /**
+             * @name dxMenuBaseOptions.dataSource
+             * @type string|Array<dxMenuBaseItem>|DataSource|DataSourceOptions
+             * @default null
+             */
             /**
             * @name dxMenuBaseOptions.items
             * @type Array<dxMenuBaseItem>

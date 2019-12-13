@@ -118,6 +118,12 @@ const Tabs = CollectionWidget.inherit({
              */
 
             /**
+             * @name dxTabsOptions.dataSource
+             * @type string|Array<string,dxTabsItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxTabsOptions.items
              * @type Array<string, dxTabsItem, object>
              * @fires dxTabsOptions.onOptionChanged
