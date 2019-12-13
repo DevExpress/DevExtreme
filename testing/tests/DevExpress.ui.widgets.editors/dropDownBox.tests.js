@@ -399,6 +399,26 @@ QUnit.module("popup options", moduleConfig, () => {
         assert.equal($popupContent.outerWidth(), 200, "popup width customization has been cancelled");
     });
 
+    QUnit.test("popup should be positioned correctly if rtlEnabled is true", function(assert) {
+        const instance = new DropDownBox(this.$element, {
+            opened: true,
+            width: 100,
+            dropDownOptions: {
+                width: 200,
+                "position.collision": "none"
+            },
+        });
+
+        const dropDownButtonElementRect = this.$element.get(0).getBoundingClientRect();
+
+        let popupContentElementRect = instance.content().getBoundingClientRect();
+        assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is correct, rtlEnabled = false");
+
+        instance.option("rtlEnabled", true);
+        popupContentElementRect = instance.content().getBoundingClientRect();
+        assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is correct, rtlEnabled = true");
+    });
+
     QUnit.test("two way binding should work with dropDownOptions", function(assert) {
         const instance = new DropDownBox(this.$element, { opened: true });
         const popup = instance._popup;
