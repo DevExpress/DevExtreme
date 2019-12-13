@@ -1324,8 +1324,8 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "F1", alignment: alignCenterWrap, type: ExcelJS.ValueType.String, dataType: "string", font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "F1", alignment: alignCenterWrap, type: ExcelJS.ValueType.String, dataType: "string", font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "1", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: undefined, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: undefined, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                    { excelCell: { value: "1", type: ExcelJS.ValueType.String, dataType: "string", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
@@ -1774,7 +1774,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 const expectedCells = [[
                     { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { value: ds[0].f1, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object", numberFormat: undefined }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                     { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
                     { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
                 ]];
@@ -1916,7 +1916,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 const expectedCells = [[
                     { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { value: ds[0].f1, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object", numberFormat: undefined }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                     { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
                     { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
                 ]];
@@ -2176,11 +2176,11 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: undefined, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: undefined, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: undefined, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: undefined, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: undefined, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);

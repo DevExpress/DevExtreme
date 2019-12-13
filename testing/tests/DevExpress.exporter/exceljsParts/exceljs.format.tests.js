@@ -49,7 +49,7 @@ const ExcelJSLocalizationFormatTests = {
 
                     const expectedCells = [[
                         { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: currency.expected }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                        { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                        { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object", numberFormat: undefined }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                         { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: currency.expected }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
                         { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: currency.expected }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
                         { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: currency.expected }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
