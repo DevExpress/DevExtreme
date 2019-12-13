@@ -1,4 +1,4 @@
-import { isDefined, isObject } from "../../core/utils/type";
+import { isDefined, isString, isObject } from "../../core/utils/type";
 import excelFormatConverter from "../excel_format_converter";
 import { extend } from "../../core/utils/extend";
 
@@ -90,6 +90,8 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
                 numberFormat = numberFormat.replace(/&quot;/g, '');
+            } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
+                numberFormat = "@";
             }
 
             _setNumberFormat(excelCell, numberFormat);
