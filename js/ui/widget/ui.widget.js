@@ -651,13 +651,13 @@ const Widget = DOMComponentWithTemplate.inherit({
         this._isReady = value;
     },
 
-    setAria(...args) {
-        if(!isPlainObject(args[0])) {
-            setAttribute(args[0], args[1], args[2] || this._getAriaTarget());
+    setAria(arg1, arg2, arg3) {
+        if(!isPlainObject(arg1)) {
+            setAttribute(arg1, arg2, arg3 || this._getAriaTarget());
         } else {
-            const target = args[1] || this._getAriaTarget();
+            const target = arg2 || this._getAriaTarget();
 
-            each(args[0], (name, value) => setAttribute(name, value, target));
+            each(arg1, (name, value) => setAttribute(name, value, target));
         }
     },
 
