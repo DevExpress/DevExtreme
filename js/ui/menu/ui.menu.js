@@ -57,6 +57,11 @@ class Menu extends MenuBase {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
+             * @name dxMenuOptions.dataSource
+             * @type string|Array<dxMenuItem>|DataSource|DataSourceOptions
+             * @default null
+             */
+            /**
             * @name dxMenuOptions.items
             * @type Array<dxMenuItem>
             */
