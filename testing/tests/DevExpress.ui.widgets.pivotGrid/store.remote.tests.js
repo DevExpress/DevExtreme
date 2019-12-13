@@ -875,7 +875,6 @@ QUnit.test("Set default formatter for group fields with groupInterval", function
 
 });
 
-
 QUnit.module("Mock tests");
 
 QUnit.test("Mock should group values correctly", function(assert) {
@@ -1384,6 +1383,48 @@ QUnit.test("Filter by number with groupInterval", function(assert) {
         rows: [],
         values: [{ summaryType: 'count' }]
     });
+});
+
+// T836053
+QUnit.test("Error should not be thrown during filtering if there are more filter values ​​than fields", function(assert) {
+    var filter,
+        store = new RemoteStore({
+            load: function(loadOptions) {
+                filter = loadOptions.filter;
+
+                return $.Deferred();
+            }
+        }),
+        fields = [
+            { dataField: "OrderDate", groupInterval: "year", dataType: "date" },
+            { dataField: "OrderDate", groupInterval: "month", dataType: "date" }
+        ],
+        filterValues = [[1996, 1], [1996, 2], [1997, 4]];
+
+    // assert
+    assert.ok(filterValues.length > fields.length, "more filter values ​​than fields");
+
+    // act
+    store.load({
+        columns: fields,
+        rows: [{ dataField: "ShipCountry" }],
+        values: [{ summaryType: 'count' }],
+        filters: [{
+            dataField: "OrderDate", groupName: "OrderDate", dataType: "date",
+            levels: fields,
+            filterValues
+        }]
+    });
+
+    // assert
+    assert.deepEqual(filter,
+        [
+            [["OrderDate.Year", "=", 1996], "and", ["OrderDate.Month", "=", 1]],
+            "or",
+            [["OrderDate.Year", "=", 1996], "and", ["OrderDate.Month", "=", 2]],
+            "or",
+            [["OrderDate.Year", "=", 1997], "and", ["OrderDate.Month", "=", 4]],
+        ], "filter is correct");
 });
 
 QUnit.module("Expanding items", moduleConfig);
