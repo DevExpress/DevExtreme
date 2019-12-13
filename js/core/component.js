@@ -131,6 +131,8 @@ var Component = Class.inherit({
                 (option, info) => this._logDeprecatedWarning(option, info));
             this._options.onChanged(
                 (name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
+            this._options.onStartChange(() => this.beginUpdate());
+            this._options.onEndChange(() => this.endUpdate());
             this._options.addRules(this._defaultOptionsRules());
 
             if(options && options.onInitializing) {
@@ -446,15 +448,9 @@ var Component = Class.inherit({
      */
     option(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== "object") {
-            return this._options.option(options);
+            return this._options.option(options, undefined, true);
         } else {
-            this.beginUpdate();
-
-            try {
-                this._options.option(options, value);
-            } finally {
-                this.endUpdate();
-            }
+            this._options.option(options, value);
         }
     },
 

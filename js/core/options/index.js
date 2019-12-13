@@ -7,6 +7,8 @@ import { getFieldName, getParentName, convertRulesToOptions } from './utils';
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
         this._deprecatedCallback;
+        this._startChangeCallback;
+        this._endChangeCallback;
 
         this._default = defaultOptions;
         this._deprecated = deprecatedOptions;
@@ -97,7 +99,7 @@ export class Options {
     }
 
     _normalizeName(name, silent) {
-        if(name && !silent) {
+        if(this._deprecatedNames.length && name && !silent) {
             for(let i = 0; i < this._deprecatedNames.length; i++) {
                 if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];
@@ -126,6 +128,8 @@ export class Options {
 
     dispose() {
         this._deprecatedCallback = noop;
+        this._startChangeCallback = noop;
+        this._endChangeCallback = noop;
         this._optionManager.dispose();
     }
 
@@ -141,8 +145,16 @@ export class Options {
         this._deprecatedCallback = callBack;
     }
 
+    onStartChange(callBack) {
+        this._startChangeCallback = callBack;
+    }
+
+    onEndChange(callBack) {
+        this._endChangeCallback = callBack;
+    }
+
     isInitial(name) {
-        const value = this.option(name);
+        const value = this.silent(name);
         const initialValue = this.initial(name);
         const areFunctions = isFunction(value) && isFunction(initialValue);
 
@@ -155,13 +167,16 @@ export class Options {
         return this._initial[name];
     }
 
-    option(options, value) {
-        const isGetter = arguments.length < 2 && type(options) !== 'object';
-
+    option(options, value, isGetter) {
         if(isGetter) {
             return this._optionManager.get(undefined, this._normalizeName(options));
         } else {
-            this._optionManager.set(options, value);
+            this._startChangeCallback();
+            try {
+                this._optionManager.set(options, value);
+            } finally {
+                this._endChangeCallback();
+            }
         }
     }
 
