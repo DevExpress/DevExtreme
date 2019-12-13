@@ -385,8 +385,8 @@ const Component = Class.inherit({
         return this;
     },
 
-    hasActionSubscription(actionName) {
-        return !!this._getOptionByStealth(actionName) ||
+    hasActionSubscription: function(actionName) {
+        return !!this._options.silent(actionName) ||
             this._eventsStrategy.hasEvent(getEventName(actionName));
     },
 
@@ -394,15 +394,7 @@ const Component = Class.inherit({
         return this._options.isDeprecated(name);
     },
 
-    _getOptionByStealth(name) {
-        return this._options.silent(name);
-    },
-
-    _setOptionByStealth(options, value) {
-        this._options.silent(options, value);
-    },
-
-    _setOptionSilent(name, value) {
+    _setOptionWithoutOptionChange(name, value) {
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
