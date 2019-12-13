@@ -59,6 +59,7 @@ class FileManagerContextMenu extends Widget {
         } else {
             position.my = "left top";
             position.at = "left bottom";
+            position.boundaryOffset = "1";
         }
 
         this._contextMenu.option({
