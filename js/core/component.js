@@ -387,7 +387,7 @@ const Component = Class.inherit({
 
     hasActionSubscription: function(actionName) {
         return !!this._options.silent(actionName) ||
-            this._eventsStrategy.hasEvent(this._getEventName(actionName));
+            this._eventsStrategy.hasEvent(getEventName(actionName));
     },
 
     isOptionDeprecated(name) {
