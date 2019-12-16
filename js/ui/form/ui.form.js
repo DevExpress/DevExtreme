@@ -1031,11 +1031,7 @@ const Form = Widget.inherit({
                             items: itemData.items,
                             inOneColumn
                         });
-                    },
-                    onDisposing: ({ component }) => {
-                        const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
-                        this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
-                    },
+                    }
                 });
 
                 if(this._itemsRunTimeInfo) {
@@ -1171,12 +1167,15 @@ const Form = Widget.inherit({
                 this._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
                 options.onContentReady && options.onContentReady(args);
             },
+            onDisposing: ({ component }) => {
+                const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
+                this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
+            },
             colCount: options.colCount,
             alignItemLabels: options.alignItemLabels,
             cssItemClass: options.cssItemClass,
             colCountByScreen: options.colCountByScreen,
             onLayoutChanged: options.onLayoutChanged,
-            onDisposing: options.onDisposing,
             width: options.width
         });
     },
