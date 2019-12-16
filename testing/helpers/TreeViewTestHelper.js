@@ -89,8 +89,8 @@ class TreeViewTestWrapper {
         assert.deepEqual(selectedKeysFromOption.sort(), expectedSelectedKeys.sort(), 'selectedItemKeys property' + (additionalErrorMessage || ''));
     }
 
-    checkCallbacks(expectedEventNames) {
-        assert.deepEqual(this.calledEventNames, expectedEventNames, 'called events');
+    checkCallbacks(expectedEventNames, additionalErrorMessage) {
+        assert.deepEqual(this.calledEventNames, expectedEventNames, 'called events' + (additionalErrorMessage || ''));
     }
 
     convertTreeToFlatList(items) {
