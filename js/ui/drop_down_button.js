@@ -473,7 +473,7 @@ let DropDownButton = Widget.inherit({
         const selectedItemKey = this.option("selectedItemKey");
         return {
             selectionMode: "single",
-            wrapItemText: true,
+            wrapItemText: this.option("wrapItemText"),
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
             showItemDataTitle: true,

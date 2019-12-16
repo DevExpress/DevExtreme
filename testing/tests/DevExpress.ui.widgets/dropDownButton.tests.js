@@ -490,6 +490,21 @@ QUnit.module("list integration", {}, () => {
         assert.notOk($itemContainer.hasClass("dx-wrap-item-text"), "class was removed");
     });
 
+    [true, false].forEach(wrapItemText => {
+        QUnit.test("wrapItemText option should be synchronized with dxList wrapItemText option (T846124)", function(assert) {
+            const dropDownButton = new DropDownButton("#dropDownButton", {
+                deferRendering: false,
+                wrapItemText
+            });
+
+            const list = getList(dropDownButton);
+            assert.strictEqual(list.option("wrapItemText"), dropDownButton.option("wrapItemText"), `list option is correct when dropDownButton wrapItemText is ${wrapItemText} on init`);
+
+            dropDownButton.option("wrapItemText", !wrapItemText);
+            assert.strictEqual(list.option("wrapItemText"), dropDownButton.option("wrapItemText"), "list option is correct after dropDownButton wrapItemText option value change");
+        });
+    });
+
     QUnit.test("list selection should depend on selectedItemKey option", function(assert) {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1" }, { key: 2, name: "Item 2" }],
