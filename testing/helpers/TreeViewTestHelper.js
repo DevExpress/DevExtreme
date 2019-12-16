@@ -20,12 +20,14 @@ const { assert } = QUnit;
 class TreeViewTestWrapper {
     constructor(options) {
         if(!options.onItemSelectionChanged) {
-            options.onItemSelectionChanged = sinon.stub();
-        }
-        if(!options.onSelectionChanged) {
-            options.onSelectionChanged = sinon.stub();
+            options.onItemSelectionChanged = () => this.calledEventNames.push('itemSelectionChanged');
         }
 
+        if(!options.onSelectionChanged) {
+            options.onSelectionChanged = () => this.calledEventNames.push('selectionChanged');
+        }
+
+        this.calledEventNames = [];
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option("showCheckBoxesMode") === "normal";
     }
@@ -79,22 +81,16 @@ class TreeViewTestWrapper {
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
-    checkSelectedKeys(expectedSelectedKeys) {
+    checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
         const actualSelectedKeys = this.instance.getSelectedNodesKeys();
-        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method');
+        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method' + additionalErrorMessage);
 
         const selectedKeysFromOption = this.instance.option('selectedItemKeys');
-        assert.deepEqual(selectedKeysFromOption.sort(), expectedSelectedKeys.sort(), 'selectedItemKeys property');
+        assert.deepEqual(selectedKeysFromOption.sort(), expectedSelectedKeys.sort(), 'selectedItemKeys property' + additionalErrorMessage);
     }
 
-    checkCallbackCallCount(eventName, expectedCallCount) {
-        const eventCallbackStub = this.instance.option(eventName);
-        assert.deepEqual(eventCallbackStub.callCount, expectedCallCount, `check ${eventName}`);
-    }
-
-    checkCallbacksCallOrder(orderedEventNames) {
-        const stubs = orderedEventNames.map((eventName) => this.instance.option(eventName));
-        sinon.assert.callOrder.apply(sinon.assert, stubs);
+    checkCallbacks(expectedEventNames) {
+        assert.deepEqual(this.calledEventNames, expectedEventNames, 'called events');
     }
 
     convertTreeToFlatList(items) {
