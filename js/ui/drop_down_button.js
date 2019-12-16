@@ -433,6 +433,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _popupOptions() {
+        const horizontalAlignment = this.option("rtlEnabled") ? "right" : "left";
         return extend({
             dragEnabled: false,
             focusStateEnabled: false,
@@ -457,8 +458,8 @@ let DropDownButton = Widget.inherit({
             position: {
                 of: this.$element(),
                 collision: "flipfit",
-                my: "top left",
-                at: "bottom left",
+                my: "top " + horizontalAlignment,
+                at: "bottom " + horizontalAlignment,
                 offset: {
                     y: -1
                 }
