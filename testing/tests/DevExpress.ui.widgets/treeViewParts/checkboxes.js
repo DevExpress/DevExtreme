@@ -331,14 +331,14 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
             if(config.selectNodesRecursive) {
                 expectedKeys = [1, 2];
             }
 
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`all.selected: false -> selectItem(1) -> expandAll`, function(assert) {
@@ -358,7 +358,7 @@ configs.forEach(config => {
                     expectedKeys = [1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
             if(config.selectionMode === 'multiple') {
@@ -369,7 +369,7 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             // check via property
@@ -388,13 +388,13 @@ configs.forEach(config => {
                     expectedKeys = [1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
             if(config.selectionMode === 'multiple' && config.selectNodesRecursive) {
                 expectedKeys = [1, 2];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys items');
         });
 
         QUnit.test(`all.selected: false -> selectItem(2) -> expandAll`, function(assert) {
@@ -414,10 +414,10 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             // check via property
@@ -437,10 +437,10 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`all.selected: true`, function(assert) {
@@ -459,7 +459,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             // check via property
@@ -472,7 +472,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`all.selected: true -> expandAll`, function(assert) {
@@ -489,7 +489,7 @@ configs.forEach(config => {
             wrapper.instance.expandAll();
 
             let expectedKeys = [1, 2];
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             // check via property
@@ -504,7 +504,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`all.selected: true -> unselectAll -> expandAll`, function(assert) {
@@ -520,14 +520,9 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
-            if(!config.expanded && isLazyDataSourceMode(wrapper)) {
-                // unexpected result
-                expectedKeys = [];
-            }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
-
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [2];
@@ -535,18 +530,18 @@ configs.forEach(config => {
                     expectedKeys = [1, 2];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             // check via property
             wrapper = createWrapper(config, { selectedItemKeys: [1, 2] }, [
                 { id: 1, text: "item1", parentId: ROOT_ID, expanded: config.expanded },
                 { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
-            wrapper.instance.option('selectedItemKeys', []);
+            wrapper.instance.option('selectedItemKeys', [], ' - check via selectedItemKeys option');
             wrapper.instance.expandAll();
 
             expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`all.selected: true -> unselectItem(1) -> expandAll`, function(assert) {
@@ -673,7 +668,7 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [1] }, [
@@ -694,7 +689,7 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1.selected: true -> selectAll -> expandAll`, function(assert) {
@@ -714,7 +709,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -725,7 +720,7 @@ configs.forEach(config => {
                     expectedKeys = [1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [1] }, [
@@ -740,7 +735,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -751,7 +746,7 @@ configs.forEach(config => {
                     expectedKeys = [1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1.selected: true -> unselectAll -> expandAll`, function(assert) {
@@ -763,10 +758,10 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
 
@@ -778,10 +773,10 @@ configs.forEach(config => {
             wrapper.instance.option('selectedItemKeys', []);
 
             expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
 
@@ -801,7 +796,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -819,7 +814,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
 
@@ -845,7 +840,7 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -865,7 +860,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1.selected: true -> selectAll -> expandAll`, function(assert) {
@@ -885,7 +880,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
 
@@ -893,7 +888,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1, 2];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -907,7 +902,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
             expectedKeys = [1, 2, 3];
@@ -920,7 +915,7 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1.selected: true -> unselectAll -> expandAll`, function(assert) {
@@ -932,7 +927,7 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
 
@@ -943,7 +938,7 @@ configs.forEach(config => {
                     expectedKeys = [1, 2];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -954,10 +949,10 @@ configs.forEach(config => {
             wrapper.instance.option('selectedItemKeys', []);
 
             expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1_1.selected: true`, function() {
@@ -976,7 +971,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [3] }, [
@@ -994,7 +989,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1_1.selected: true -> expandAll`, function() {
@@ -1015,7 +1010,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [3] }, [
@@ -1035,7 +1030,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1_1.selected: true -> selectAll -> expandAll`, function(assert) {
@@ -1055,7 +1050,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -1066,7 +1061,7 @@ configs.forEach(config => {
                     expectedKeys = [1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [3] }, [
@@ -1080,7 +1075,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [1];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
 
             wrapper.instance.expandAll();
             expectedKeys = [1, 2, 3];
@@ -1093,7 +1088,7 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
         });
     });
 });
