@@ -266,4 +266,9 @@ export class SchedulerTestWrapper {
         $(`#${TEST_ROOT_ELEMENT_ID}`).css("top", 0);
         $(`#${TEST_ROOT_ELEMENT_ID}`).css("left", 0);
     }
+
+    hideControl() {
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("top", "");
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("left", "");
+    }
 }

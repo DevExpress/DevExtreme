@@ -55,6 +55,7 @@ module("Browser zoom", zoomModuleConfig, () => {
             height: 600
         });
 
+        scheduler.drawControl();
         window.document.body.style.zoom = '125%';
 
         views.forEach(view => {
@@ -75,6 +76,8 @@ module("Browser zoom", zoomModuleConfig, () => {
 
             assert.equal(scheduler.appointments.getDateText(), "9:00 AM - 11:00 AM", `appointment should move to previous cell in ${view} view`);
         });
+
+        scheduler.hideControl();
     });
 });
 
