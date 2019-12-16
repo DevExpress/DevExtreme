@@ -6,9 +6,11 @@
         "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
-            "globalReturn": true
+            "globalReturn": true,
+            "jsx": true
         }
     },
+    
     "plugins": [
         "spellcheck"
     ],
@@ -378,6 +380,7 @@
                     "postfixes",
                     "postprocess",
                     "pre",
+                    "preact",
                     "preload",
                     "prepend",
                     "prerender",

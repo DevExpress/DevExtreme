@@ -8,7 +8,7 @@ var notify = require('gulp-notify');
 
 var context = require('./context.js');
 
-var SRC = 'js/**/*.*';
+var SRC = 'js/**/*.js*';
 var TESTS_PATH = 'testing';
 var TESTS_SRC = TESTS_PATH + '/**/*.js';
 

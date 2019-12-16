@@ -1,5 +1,9 @@
 {
     "presets": ["env"],
-    "plugins": ["transform-es2015-modules-commonjs", "add-module-exports"],
-    "ignore": ["**/*.json", "**/sinon.js"]
+    "plugins": [
+        "transform-es2015-modules-commonjs",
+         "add-module-exports",
+        ["transform-react-jsx", { "pragma": "Preact.h" }]
+    ],
+    "ignore": ["**/*.json", "**/sinon.js", "**/*.tsx"]
 }
