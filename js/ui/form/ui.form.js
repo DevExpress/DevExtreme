@@ -913,9 +913,13 @@ const Form = Widget.inherit({
         if(items) {
             let result = [];
             for(let i = 0; i < items.length; i++) {
-                const item = items[i];
+                let item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
                 const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
+
+                if(isString(item)) {
+                    item = { dataField: item };
+                }
 
                 if(isObject(item)) {
                     const itemCopy = extend({}, item);
@@ -1006,7 +1010,7 @@ const Form = Widget.inherit({
         return item.items || [];
     },
 
-    _itemTabbedTemplate(item, e, $container) {
+    _itemTabbedTemplate: function(item, e, $container) {
         const $tabPanel = $("<div>").appendTo($container);
         const tabPanelOptions = extend({}, item.tabPanelOptions, {
             dataSource: item.tabs,
@@ -1014,7 +1018,6 @@ const Form = Widget.inherit({
             itemTemplate: (itemData, e, container) => {
                 const $container = $(container);
                 const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
-
                 const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(itemData), $container, {
                     colCount: itemData.colCount,
                     alignItemLabels: alignItemLabels,
@@ -1045,11 +1048,22 @@ const Form = Widget.inherit({
                 }
             }
         });
-
+        const tryUpdateTabPanelInstance = (items, instance) => {
+            if(Array.isArray(items)) {
+                items.forEach(item => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, {
+                    widgetInstance: instance
+                }));
+            }
+        };
         const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
-        if(item.tabs) {
-            item.tabs.forEach(tab => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(tab.guid, { widgetInstance: tabPanel }));
-        }
+
+        tabPanel.on("optionChanged", e => {
+            if(e.fullName === "dataSource") {
+                tryUpdateTabPanelInstance(e.value, e.component);
+            }
+        });
+
+        tryUpdateTabPanelInstance([{ guid: item.guid }, ...item.tabs], tabPanel);
     },
 
     _itemGroupTemplate: function(item, e, $container) {
@@ -1124,35 +1138,38 @@ const Form = Widget.inherit({
     },
 
     _getLayoutManagerConfig: function(items, options) {
-        var that = this,
-            baseConfig = {
-                form: that,
-                validationGroup: that._getValidationGroup(),
-                showRequiredMark: that.option("showRequiredMark"),
-                showOptionalMark: that.option("showOptionalMark"),
-                requiredMark: that.option("requiredMark"),
-                optionalMark: that.option("optionalMark"),
-                requiredMessage: that.option("requiredMessage"),
-                screenByWidth: that.option("screenByWidth"),
-                layoutData: that.option("formData"),
-                labelLocation: that.option("labelLocation"),
-                customizeItem: that.option("customizeItem"),
-                minColWidth: that.option("minColWidth"),
-                showColonAfterLabel: that.option("showColonAfterLabel"),
-                onEditorEnterKey: that.option("onEditorEnterKey"),
-                onFieldDataChanged: function(args) {
-                    if(!that._isDataUpdating) {
-                        that._triggerOnFieldDataChanged(args);
-                    }
-                },
-                validationBoundary: that.option("scrollingEnabled") ? that.$element() : undefined
-            };
+        const baseConfig = {
+            form: this,
+            validationGroup: this._getValidationGroup(),
+            showRequiredMark: this.option("showRequiredMark"),
+            showOptionalMark: this.option("showOptionalMark"),
+            requiredMark: this.option("requiredMark"),
+            optionalMark: this.option("optionalMark"),
+            requiredMessage: this.option("requiredMessage"),
+            screenByWidth: this.option("screenByWidth"),
+            layoutData: this.option("formData"),
+            labelLocation: this.option("labelLocation"),
+            customizeItem: this.option("customizeItem"),
+            minColWidth: this.option("minColWidth"),
+            showColonAfterLabel: this.option("showColonAfterLabel"),
+            onEditorEnterKey: this.option("onEditorEnterKey"),
+            onFieldDataChanged: args => {
+                if(!this._isDataUpdating) {
+                    this._triggerOnFieldDataChanged(args);
+                }
+            },
+            validationBoundary: this.option("scrollingEnabled") ? this.$element() : undefined
+        };
 
         return extend(baseConfig, {
             items: items,
-            onContentReady: function(args) {
-                that._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
+            onContentReady: args => {
+                this._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
                 options.onContentReady && options.onContentReady(args);
+            },
+            onDisposing: ({ component }) => {
+                const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
+                this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
             },
             colCount: options.colCount,
             alignItemLabels: options.alignItemLabels,
@@ -1290,7 +1307,11 @@ const Form = Widget.inherit({
         return result;
     },
 
-    _tryCreateItemOptionAction: function(optionName, item, value, previousValue) {
+    _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
+        if(optionName === "tabs") {
+            this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.tabs`);
+            value = this._prepareItems(value, true, itemPath, true);
+        }
         return tryCreateItemOptionAction(optionName, {
             item,
             value,
@@ -1392,7 +1413,7 @@ const Form = Widget.inherit({
             const item = this.option(itemPath);
             const optionNameWithoutPath = args.fullName.replace(itemPath + ".", "");
             const simpleOptionName = optionNameWithoutPath.split(".")[0].replace(/\[\d+]/, "");
-            const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue);
+            const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
 
             if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
                 if(item) {
@@ -1784,7 +1805,7 @@ const Form = Widget.inherit({
             case 1:
                 return item;
             case 3: {
-                const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option]);
+                const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option], path);
                 this._changeItemOption(item, option, value);
                 const fullName = getFullOptionName(path, option);
                 if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(fullName, value)) {
@@ -1797,7 +1818,7 @@ const Form = Widget.inherit({
                     if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
                         let allowUpdateItems;
                         each(option, (optionName, optionValue) => {
-                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName]);
+                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
                             this._changeItemOption(item, optionName, optionValue);
                             if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
                                 allowUpdateItems = true;
