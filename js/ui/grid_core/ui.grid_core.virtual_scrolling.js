@@ -190,7 +190,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         resetPagesCache: function(isLiveUpdate) {
             if(!isLiveUpdate) {
-                this._virtualScrollController.reset();
+                this._virtualScrollController.reset(true);
             }
             this.callBase.apply(this, arguments);
         },
