@@ -14317,7 +14317,47 @@ QUnit.testInActiveWindow("Focus on lookup column should be preserved after chang
     assert.ok($(this.getCellElement(0, 1)).find(".dx-selectbox").hasClass("dx-state-focused"), "second cell is focused");
 });
 
-//
+// T822877
+QUnit.testInActiveWindow("Focus on column with setCellValue should be preserved after changing a value if fixed columns are exist", function(assert) {
+    // arrange
+    this.options.keyboardNavigation = {
+        enabled: true
+    };
+    this.options.dataSource.store = [{ name: "Bob", state: 1 }];
+    this.options.columns = [{
+        dataField: "state",
+        setCellValue: function(rowData, value) {
+            rowData.state = value;
+        }
+    }, {
+        dataField: "name",
+        fixed: true
+    }];
+    this.setupModules(this);
+    this.keyboardNavigationController.component.$element = function() {
+        return $(".dx-datagrid").parent();
+    };
+    this.rowsView.render($('#container'));
+
+    this.editRow(0);
+    this.clock.tick();
+
+    this.keyboardNavigationController.focus(this.getCellElement(0, 0));
+    this.clock.tick();
+
+    // assert
+    var $editorElement = $(this.getCellElement(0, 0)).find(".dx-numberbox").first();
+    assert.ok($editorElement.hasClass("dx-state-focused"), "first editor is focused");
+
+    // act
+    $editorElement.trigger("dxpointerdown");
+    $editorElement.dxNumberBox("instance").option("value", 2);
+    this.clock.tick();
+
+    // assert
+    assert.ok($(this.getCellElement(0, 0)).find(".dx-numberbox").hasClass("dx-state-focused"), "first editor is focused");
+});
+
 QUnit.test("getCellElement returns correct editor with form editing and enabled masterDetail", function(assert) {
     var that = this,
         $editorElements,
