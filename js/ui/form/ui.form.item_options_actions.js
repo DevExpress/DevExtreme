@@ -30,6 +30,18 @@ class TabOptionItemOptionAction extends ItemOptionAction {
     }
 }
 
+class TabsOptionItemOptionAction extends ItemOptionAction {
+    tryExecute() {
+        const tabPanel = this.findInstance();
+        if(tabPanel) {
+            const { value } = this._options;
+            tabPanel.option("dataSource", value);
+            return true;
+        }
+        return false;
+    }
+}
+
 class ValidationRulesItemOptionAction extends ItemOptionAction {
     tryExecute() {
         const { item } = this._options;
@@ -76,6 +88,8 @@ const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
         case "tabTemplate":
         case "title":
             return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
+        case "tabs":
+            return new TabsOptionItemOptionAction(itemActionOptions);
         default:
             return null;
     }
