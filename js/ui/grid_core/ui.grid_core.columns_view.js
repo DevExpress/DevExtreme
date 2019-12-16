@@ -1106,18 +1106,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     getName: function() { },
 
     setScrollerSpacing: function(width) {
-        var that = this,
-            $element = that.element(),
-            rtlEnabled = that.option("rtlEnabled");
+        let $element = this.element(),
+            rtlEnabled = this.option("rtlEnabled");
 
-        $element && $element.css(rtlEnabled ? { paddingLeft: width } : { paddingRight: width });
+        $element && $element.css({
+            paddingLeft: rtlEnabled ? width : "",
+            paddingRight: rtlEnabled ? "" : width
+        });
     },
 
     toggleScrollerBorder: function(width) {
         let $tables = this.getTableElements(),
-            $topRenderedTable = this.option("rtlEnabled") ? $tables.last() : $tables.first();
+            $table = this.option("rtlEnabled") ? $tables.last() : $tables.first(),
+            $element = this.option("rtlEnabled") && this._fixedTableElement ? $table : $table.parent();
 
-        $topRenderedTable.toggleClass(TABLE_WITH_SCROLLER_BORDER_CLASS, width > 0);
+        $element.toggleClass(TABLE_WITH_SCROLLER_BORDER_CLASS, width > 0);
     },
 
     isScrollbarVisible: function(isHorizontal) {
