@@ -759,16 +759,16 @@ QUnit.test("Clear scroller spacer while switch rtlEnabled (T838716)", function(a
     let $headerView = dataGrid.getView("columnHeadersView").element();
 
     // assert
-    assert.strictEqual($headerView.css("paddingRight"), "19px", "has right padding");
-    assert.strictEqual($headerView.css("paddingLeft"), "0px", "no left padding");
+    assert.ok(parseInt($headerView.css("paddingRight")) > 0, "has right padding");
+    assert.ok(parseInt($headerView.css("paddingLeft")) === 0, "no left padding");
 
     // act
     dataGrid.option("rtlEnabled", true);
     this.clock.tick();
 
     // assert
-    assert.strictEqual($headerView.css("paddingLeft"), "19px", "has left padding");
-    assert.strictEqual($headerView.css("paddingRight"), "0px", "no right padding");
+    assert.ok(parseInt($headerView.css("paddingLeft")) > 0, "has left padding");
+    assert.ok(parseInt($headerView.css("paddingRight")) === 0, "no right padding");
 });
 
 QUnit.test("Additional border in header if useNative scrolling mode (T838716)", function(assert) {
@@ -804,17 +804,19 @@ QUnit.test("Additional border in header if useNative scrolling mode (T838716)", 
             // assert
             let headerView = dataGrid.getView("columnHeadersView"),
                 $tables = headerView.getTableElements(),
-                $element = rtlEnabled ? $tables.last() : $tables.first();
+                $element = rtlEnabled ? $tables.last() : $tables.first(),
+                hasScroller = dataGrid.getView("rowsView").getScrollbarWidth() > 0;
 
-            if (!(rtlEnabled && fixed)) {
+            if(!(rtlEnabled && fixed)) {
                 $element = $element.parent();
             }
 
             let drawBorderSide = rtlEnabled ? "borderLeftWidth" : "borderRightWidth";
             let anotherSide = rtlEnabled ? "borderRightWidth" : "borderLeftWidth";
 
-            assert.ok($element.hasClass("dx-table-with-scroller-border"), "class");
-            assert.equal($element.css(drawBorderSide), browser.mozilla ? "0px" : "1px", `has ${drawBorderSide}`);
+            let minBorderWidth = browser.mozilla || !hasScroller ? 0 : 0.5;
+            assert.equal($element.hasClass("dx-table-with-scroller-border"), hasScroller, "class");
+            assert.ok(parseFloat($element.css(drawBorderSide)) >= minBorderWidth, `has ${drawBorderSide}`);
             assert.equal($element.css(anotherSide), "0px", `no ${anotherSide}`);
         });
     });
