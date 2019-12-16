@@ -9,7 +9,7 @@ import Callbacks from './utils/callbacks';
 import { EventsStrategy } from './events_strategy';
 import publicComponentUtils from './utils/public_component';
 import { PostponedOperations } from './postponed_operations';
-import { isFunction, isPlainObject, type, isDefined } from './utils/type';
+import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 
 const getEventName = (actionName) => {
@@ -457,12 +457,8 @@ const Component = Class.inherit({
      * @publicName option(options)
      * @param1 options:object
      */
-    option(options, value) {
-        if(arguments.length < 2 && type(options) !== "object") {
-            return this._options.option(options, undefined, true);
-        } else {
-            this._options.option(options, value);
-        }
+    option(...args) {
+        return this._options.option(...args);
     },
 
     /**

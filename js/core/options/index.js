@@ -167,7 +167,9 @@ export class Options {
         return this._initial[name];
     }
 
-    option(options, value, isGetter) {
+    option(options, value) {
+        const isGetter = arguments.length < 2 && type(options) !== 'object';
+
         if(isGetter) {
             return this._optionManager.get(undefined, this._normalizeName(options));
         } else {
