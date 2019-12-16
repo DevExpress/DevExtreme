@@ -411,11 +411,11 @@ QUnit.module("popup options", moduleConfig, () => {
 
         const dropDownButtonElementRect = this.$element.get(0).getBoundingClientRect();
 
-        let popupContentElementRect = instance.content().getBoundingClientRect();
+        let popupContentElementRect = $(instance.content()).get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is correct, rtlEnabled = false");
 
         instance.option("rtlEnabled", true);
-        popupContentElementRect = instance.content().getBoundingClientRect();
+        popupContentElementRect = $(instance.content()).get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is correct, rtlEnabled = true");
     });
 
