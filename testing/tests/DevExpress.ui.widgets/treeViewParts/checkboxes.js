@@ -332,18 +332,18 @@ configs.forEach(config => {
             wrapper.instance.option('selectedItemKeys', [1, 2]);
 
             expectedKeys = [1, 2];
-            let expectedCalls = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+            let expectedCallbacks = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1];
-                expectedCalls = ['itemSelectionChanged', 'selectionChanged'];
+                expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             }
 
             if(config.selectNodesRecursive) {
-                expectedCalls = ['itemSelectionChanged', 'selectionChanged'];
+                expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
-            wrapper.checkCallbacks(expectedCalls, ' - check via dataSource items');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via dataSource items');
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
@@ -426,7 +426,7 @@ configs.forEach(config => {
             wrapper.instance.selectItem(2);
 
             let expectedKeys = [2];
-            let expectedCalls = ['itemSelectionChanged', 'selectionChanged'];
+            let expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2];
@@ -435,10 +435,10 @@ configs.forEach(config => {
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [];
-                expectedCalls = [];
+                expectedCallbacks = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
-            wrapper.checkCallbacks(expectedCalls, ' - check via dataSource items');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via dataSource items');
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
@@ -454,7 +454,7 @@ configs.forEach(config => {
             wrapper.instance.option('selectedItemKeys', [2]);
 
             expectedKeys = [2];
-            expectedCalls = ['itemSelectionChanged', 'selectionChanged'];
+            expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2];
@@ -463,10 +463,10 @@ configs.forEach(config => {
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [];
-                expectedCalls = [];
+                expectedCallbacks = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
-            wrapper.checkCallbacks(expectedCalls, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via selectedItemKeys option');
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
@@ -577,12 +577,12 @@ configs.forEach(config => {
                 { id: 2, text: "item1_1", parentId: 1, expanded: config.expanded }]);
 
             wrapper.instance.option('selectedItemKeys', []);
-            let expectedCalls = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+            let expectedCallbacks = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
             if(config.selectNodesRecursive || isLazyDataSourceMode(wrapper) && !config.Expanded) {
-                expectedCalls = ['itemSelectionChanged', 'selectionChanged'];
+                expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             }
             wrapper.checkSelectedKeys([], ' - check via selectedItemKeys option');
-            wrapper.checkCallbacks(expectedCalls, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via selectedItemKeys option');
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
@@ -641,17 +641,17 @@ configs.forEach(config => {
             wrapper.instance.unselectItem(2);
 
             let expectedKeys = [1],
-                expectedCalls = ['itemSelectionChanged', 'selectionChanged'];
+                expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectNodesRecursive) {
                 expectedKeys = [];
             }
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1];
-                expectedCalls = [];
+                expectedCallbacks = [];
             }
             wrapper.checkSelectedKeys(expectedKeys);
-            wrapper.checkCallbacks(expectedCalls);
+            wrapper.checkCallbacks(expectedCallbacks);
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
@@ -764,6 +764,8 @@ configs.forEach(config => {
                 expectedKeys = [1];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -775,6 +777,7 @@ configs.forEach(config => {
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [1] }, [
@@ -785,11 +788,18 @@ configs.forEach(config => {
             wrapper.instance.option('selectedItemKeys', [1, 2, 3]);
 
             expectedKeys = [1, 2, 3];
+            let expectedCallbacks = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1];
+                expectedCallbacks = [];
+            }
+            if(config.selectNodesRecursive) {
+                expectedCallbacks = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via selectedItemKeys option');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -801,6 +811,7 @@ configs.forEach(config => {
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1.selected: true -> unselectAll -> expandAll`, function(assert) {
@@ -813,9 +824,12 @@ configs.forEach(config => {
 
             let expectedKeys = [];
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check  via dataSource items');
             wrapper.instance.dispose();
 
 
@@ -828,9 +842,12 @@ configs.forEach(config => {
 
             expectedKeys = [];
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks(['itemSelectionChanged', 'selectionChanged'], ' - check  via dataSource items');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
 
@@ -851,6 +868,7 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -869,6 +887,7 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
 
@@ -895,6 +914,7 @@ configs.forEach(config => {
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -915,6 +935,7 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1.selected: true -> selectAll -> expandAll`, function(assert) {
@@ -935,6 +956,8 @@ configs.forEach(config => {
                 expectedKeys = [1];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks(['selectionChanged'], ' - check via  dataSource items');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
 
@@ -943,6 +966,7 @@ configs.forEach(config => {
                 expectedKeys = [1, 2];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check via  dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -952,11 +976,28 @@ configs.forEach(config => {
 
             wrapper.instance.option('selectedItemKeys', [1, 2, 3]);
             expectedKeys = [1, 2, 3];
-            if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+            let expectedCallbacks = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+            if(config.selectNodesRecursive) {
                 // unexpected result
-                expectedKeys = [1];
+                expectedCallbacks = [];
             }
+            if(isLazyDataSourceMode(wrapper)) {
+                if(!config.expanded) {
+                    // unexpected result
+                    expectedKeys = [1];
+                    expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
+                } else {
+                    // unexpected result
+                    expectedCallbacks = config.selectNodesRecursive
+                        ? ['itemSelectionChanged', 'selectionChanged']
+                        : ['itemSelectionChanged', 'itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                }
+
+            }
+
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via selectedItemKeys option');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             expectedKeys = [1, 2, 3];
@@ -970,6 +1011,7 @@ configs.forEach(config => {
             }
 
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1.selected: true -> unselectAll -> expandAll`, function(assert) {
@@ -982,9 +1024,10 @@ configs.forEach(config => {
 
             let expectedKeys = [];
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
-
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [2];
@@ -993,6 +1036,7 @@ configs.forEach(config => {
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([]);
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [2] }, [
@@ -1003,10 +1047,18 @@ configs.forEach(config => {
             wrapper.instance.option('selectedItemKeys', []);
 
             expectedKeys = [];
+            let expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
+            if(isLazyDataSourceMode(wrapper)) {
+                // unexpected result
+                expectedCallbacks = [];
+            }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via selectedItemKeys option');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([]);
         });
 
         QUnit.test(`item1_1_1.selected: true`, function() {
@@ -1026,6 +1078,8 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check via dataSource items');
+            wrapper.clearCallbacksCalls();
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [3] }, [
@@ -1044,6 +1098,7 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1_1.selected: true -> expandAll`, function() {
@@ -1065,6 +1120,7 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([], ' - check via dataSource items');
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [3] }, [
@@ -1085,6 +1141,7 @@ configs.forEach(config => {
                 expectedKeys = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
 
         QUnit.test(`item1_1_1.selected: true -> selectAll -> expandAll`, function(assert) {
@@ -1105,6 +1162,8 @@ configs.forEach(config => {
                 expectedKeys = [1];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
+            wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -1116,6 +1175,7 @@ configs.forEach(config => {
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkCallbacks([]);
             wrapper.instance.dispose();
 
             wrapper = createWrapper(config, { selectedItemKeys: [3] }, [
@@ -1125,12 +1185,27 @@ configs.forEach(config => {
 
             wrapper.instance.option('selectedItemKeys', [1, 2, 3]);
             expectedKeys = [1, 2, 3];
-            if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+            let expectedCallbacks = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+            if(config.selectNodesRecursive) {
                 // unexpected result
-                expectedKeys = [1];
+                expectedCallbacks = [];
+            }
+            if(isLazyDataSourceMode(wrapper)) {
+                if(!config.expanded) {
+                    // unexpected result
+                    expectedKeys = [1];
+                    expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
+                } else {
+                    // unexpected result
+                    expectedCallbacks = config.selectNodesRecursive
+                        ? ['itemSelectionChanged', 'selectionChanged']
+                        : ['itemSelectionChanged', 'itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                }
+
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
-
+            wrapper.checkCallbacks(expectedCallbacks, ' - check via selectedItemKeys option');
+            wrapper.clearCallbacksCalls();
             wrapper.instance.expandAll();
             expectedKeys = [1, 2, 3];
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -1143,6 +1218,7 @@ configs.forEach(config => {
             }
 
             wrapper.checkSelectedKeys(expectedKeys, ' - check via selectedItemKeys option');
+            wrapper.checkCallbacks([], ' - check via selectedItemKeys option');
         });
     });
 });
