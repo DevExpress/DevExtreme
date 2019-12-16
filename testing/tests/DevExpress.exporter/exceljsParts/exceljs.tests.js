@@ -955,6 +955,38 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Data - 2 column & 2 rows, grid.rtlEnabled: true" + testCaption, function(assert) {
+                const done = assert.async();
+                const ds = [{ f1: "1", f2: "2" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    rtlEnabled: true,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row, rightToLeft: true });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
             QUnit.test("Data - 2 dataGrid X 2 column & 2 rows" + testCaption, function(assert) {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
@@ -3146,7 +3178,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
-                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row });
+                    helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: "frozen", ySplit: topLeft.row, rightToLeft: true });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -3553,7 +3585,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
-                    helper.checkAutoFilter(autoFilterEnabled, null);
+                    helper.checkAutoFilter(autoFilterEnabled, null, { "rightToLeft": true });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
