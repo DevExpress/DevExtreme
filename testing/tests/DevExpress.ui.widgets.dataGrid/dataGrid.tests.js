@@ -744,59 +744,78 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("paddingRight"), "0px");
 });
 
+QUnit.test("Clear scroller spacer while switch rtlEnabled (T838716)", function(assert) {
+    // arrange
+    let dataGrid = createDataGrid({
+        dataSource: [{ id: 0 }, { id: 1 }],
+        height: 70,
+        rtlEnabled: false,
+        scrolling: {
+            useNative: true
+        }
+    });
+    this.clock.tick();
+
+    let $headerView = dataGrid.getView("columnHeadersView").element();
+
+    // assert
+    assert.strictEqual($headerView.css("paddingRight"), "19px", "has right padding");
+    assert.strictEqual($headerView.css("paddingLeft"), "0px", "no left padding");
+
+    // act
+    dataGrid.option("rtlEnabled", true);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($headerView.css("paddingLeft"), "19px", "has left padding");
+    assert.strictEqual($headerView.css("paddingRight"), "0px", "no right padding");
+});
+
 QUnit.test("Additional border in header if useNative scrolling mode (T838716)", function(assert) {
-    [undefined, 100, 300].forEach(columnWidth => {
-        [true, false].forEach(rtlEnabled => {
-            [true, false].forEach(columnAutoWidth => {
-                [true, false].forEach(firstColumnFixed => {
-                    [true, false].forEach(secondColumnFixed => {
+    [true, false].forEach(rtlEnabled => {
+        [true, false].forEach(fixed => {
 
-                        // arrange
-                        let dataGrid = createDataGrid({
-                            dataSource: [{ id: 0, name: "Alex" }, { id: 1, name: "John" }],
-                            height: 120,
-                            width: 500,
-                            columnAutoWidth: columnAutoWidth,
-                            rtlEnabled: rtlEnabled,
-                            scrolling: {
-                                useNative: true
-                            },
-                            filterRow: {
-                                visible: true
-                            },
-                            columns: [
-                                {
-                                    dataField: "id",
-                                    fixed: firstColumnFixed,
-                                    width: columnWidth,
-                                },
-                                {
-                                    dataField: "name",
-                                    fixed: secondColumnFixed,
-                                    width: columnWidth
-                                }
-                            ]
-                        });
-                        this.clock.tick();
+            let columnWidth = fixed ? 300 : undefined;
 
-                        // assert
-                        let headerView = dataGrid._views["columnHeadersView"],
-                            $tables = headerView.getTableElements(),
-                            $element = rtlEnabled ? $tables.last() : $tables.first();
-
-                        if(!(rtlEnabled && headerView._fixedTableElement)) {
-                            $element = $element.parent();
-                        }
-
-                        let drawBorderSide = rtlEnabled ? "borderLeftWidth" : "borderRightWidth";
-                        let anotherSide = rtlEnabled ? "borderRightWidth" : "borderLeftWidth";
-
-                        assert.ok($element.hasClass("dx-table-with-scroller-border"), "class");
-                        assert.equal($element.css(drawBorderSide), browser.mozilla ? "0px" : "1px", `has ${drawBorderSide}`);
-                        assert.equal($element.css(anotherSide), "0px", `no ${anotherSide}`);
-                    });
-                });
+            // arrange
+            let dataGrid = createDataGrid({
+                dataSource: [{ id: 0, name: "Alex" }, { id: 1, name: "John" }],
+                height: 70,
+                width: 500,
+                columnAutoWidth: true,
+                rtlEnabled: rtlEnabled,
+                scrolling: {
+                    useNative: true
+                },
+                columns: [
+                    {
+                        dataField: "id",
+                        width: columnWidth,
+                    },
+                    {
+                        dataField: "name",
+                        fixed: fixed,
+                        width: columnWidth
+                    }
+                ]
             });
+            this.clock.tick();
+
+            // assert
+            let headerView = dataGrid.getView("columnHeadersView"),
+                $tables = headerView.getTableElements(),
+                $element = rtlEnabled ? $tables.last() : $tables.first();
+
+            if (!(rtlEnabled && fixed)) {
+                $element = $element.parent();
+            }
+
+            let drawBorderSide = rtlEnabled ? "borderLeftWidth" : "borderRightWidth";
+            let anotherSide = rtlEnabled ? "borderRightWidth" : "borderLeftWidth";
+
+            assert.ok($element.hasClass("dx-table-with-scroller-border"), "class");
+            assert.equal($element.css(drawBorderSide), browser.mozilla ? "0px" : "1px", `has ${drawBorderSide}`);
+            assert.equal($element.css(anotherSide), "0px", `no ${anotherSide}`);
         });
     });
 });
