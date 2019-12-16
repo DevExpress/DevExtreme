@@ -1785,7 +1785,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 
     _createFormData(fieldName, fieldValue) {
         const formData = new window.FormData();
-        formData.append(fieldName, fieldValue);
+        formData.append(fieldName, fieldValue, fieldValue.name);
         return formData;
     }
 
