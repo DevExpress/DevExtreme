@@ -143,6 +143,12 @@ var ActionSheet = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxActionSheetOptions.dataSource
+             * @type string|Array<string,dxActionSheetItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxActionSheetOptions.items
              * @type Array<string, dxActionSheetItem, object>
              * @fires dxActionSheetOptions.onOptionChanged

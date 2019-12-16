@@ -39,8 +39,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkAutoFilter(autoFilterEnabled, autoFilter, frozenState) {
-        assert.deepEqual(this.worksheet.views, frozenState ? [frozenState] : [], "worksheet.views");
+    checkAutoFilter(autoFilterEnabled, autoFilter, worksheetViews) {
+        assert.deepEqual(this.worksheet.views, worksheetViews ? [worksheetViews] : [], "worksheet.views");
 
         if(autoFilterEnabled === true) {
             assert.deepEqual(this.worksheet.autoFilter, autoFilter, "worksheet.autoFilter");

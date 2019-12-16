@@ -11,7 +11,7 @@ import { extend } from "../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
 import registerComponent from "../core/component_registrator";
 import { normalizeKeyName } from "../events/utils";
-import { keyboard } from "../events/";
+import { keyboard } from "../events/short";
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
     ANONYMOUS_TEMPLATE_NAME = "content";
@@ -267,6 +267,7 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupConfig: function() {
         const { focusStateEnabled } = this.option();
+        const horizontalAlignment = this.option("rtlEnabled") ? "right" : "left";
 
         return extend(this.callBase(), {
             width: function() {
@@ -276,6 +277,15 @@ var DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,
+            position: {
+                of: this.$element(),
+                collision: "flipfit",
+                my: "top " + horizontalAlignment,
+                at: "bottom " + horizontalAlignment,
+                offset: {
+                    y: -1
+                }
+            },
             onKeyboardHandled: opts => this.option("focusStateEnabled") && this._popupElementTabHandler(opts),
             maxHeight: function() {
                 return getElementMaxHeightByWindow(this.$element());

@@ -1940,7 +1940,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 });
             }
 
-            if(isCustomSetCellValue && that._editForm) {
+            // T816256, T844143
+            if(isCustomSetCellValue && that._editForm && !row.isNewRow) {
                 that._editForm.validate();
             }
         },
@@ -2744,7 +2745,7 @@ module.exports = {
                         return false;
                     }
 
-                    if(cell && cell.isEditing !== isEditing) {
+                    if(cell && cell.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
                         return true;
                     }
 

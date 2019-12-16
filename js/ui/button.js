@@ -6,7 +6,7 @@ import themes from './themes';
 import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
-import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } from '../events/';
+import { active as activeEvents, click as clickEvent, dxClick as dxClickEvent } from '../events/short';
 import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
@@ -184,19 +184,6 @@ class Button extends Widget {
             * @default 'contained'
             */
             stylingMode: 'contained'
-
-            /**
-            * @name dxButtonDefaultTemplate
-            * @type object
-            */
-            /**
-            * @name dxButtonDefaultTemplate.text
-            * @type String
-            */
-            /**
-            * @name dxButtonDefaultTemplate.icon
-            * @type String
-            */
         });
     }
 

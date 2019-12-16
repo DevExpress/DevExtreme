@@ -989,7 +989,7 @@ var BaseChart = BaseWidget.inherit({
         const that = this;
         const optionSetter = coreDataUtils.compileSetter(fullName);
 
-        optionSetter(that._getOptionByStealth(), value, {
+        optionSetter(that._options.silent(), value, {
             functionsAsIs: true,
             merge: !that._getOptionsByReference()[fullName]
         });
@@ -1005,7 +1005,7 @@ var BaseChart = BaseWidget.inherit({
 
     _applyChanges() {
         const that = this;
-        that._themeManager.update(that._getOptionByStealth());
+        that._themeManager.update(that._options.silent());
         that.callBase.apply(that, arguments);
     },
 

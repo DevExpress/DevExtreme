@@ -4,6 +4,9 @@ import "ui/file_manager";
 import ArrayFileProvider from "ui/file_manager/file_provider/array";
 import { FileManagerRootItem } from "ui/file_manager/file_provider/file_provider";
 import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
+import { fileSaver } from "exporter/file_saver";
+
+import { createUploaderFiles, createUploadInfo } from "../../../helpers/fileManagerHelpers.js";
 
 const moduleConfig = {
 
@@ -47,7 +50,19 @@ const moduleConfig = {
         };
 
         this.provider = new ArrayFileProvider(this.options);
+
+        sinon.stub(fileSaver, "saveAs", (fileName, format, data) => {
+            if(fileSaver._onTestSaveAs) {
+                fileSaver._onTestSaveAs(fileName, format, data);
+            }
+        });
     },
+
+    afterEach: function() {
+        fileSaver.saveAs.restore();
+        fileSaver._onTestSaveAs = null;
+    }
+
 };
 
 QUnit.module("Array File Provider", moduleConfig, () => {
@@ -317,6 +332,81 @@ QUnit.module("Array File Provider", moduleConfig, () => {
         }
         assert.equal(errorCount, 1);
         assert.equal(errorId, ErrorCode.DirectoryNotFound);
+    });
+
+    test("upload file", function(assert) {
+        const done1 = assert.async();
+        const done2 = assert.async();
+
+        const dir = new FileManagerRootItem();
+        const initialCount = this.provider.getItems().length;
+
+        const file = createUploaderFiles(1)[0];
+        let uploadInfo = createUploadInfo(file);
+
+        this.provider.uploadFileChunk(file, uploadInfo, dir)
+            .then(() => {
+                done1();
+
+                uploadInfo = createUploadInfo(file, 1, uploadInfo.customData);
+                return this.provider.uploadFileChunk(file, uploadInfo, dir);
+            })
+            .then(() => {
+                done2();
+
+                const items = this.provider.getItems();
+                const uploadedFile = items.filter(item => item.name === file.name && !item.isDirectory)[0];
+
+                assert.strictEqual(items.length, initialCount + 1, "item count increased");
+                assert.ok(uploadedFile, "file uploaded");
+                assert.strictEqual(window.atob(uploadedFile.dataItem.content), file._dxContent, "uploaded file has correct content");
+            });
+    });
+
+    test("download single file", function(assert) {
+        const content = "Test content 1";
+        const done = assert.async();
+
+        fileSaver._onTestSaveAs = (fileName, format, data) => {
+            done();
+            assert.strictEqual(fileName, file.name, "file name is correct");
+            assert.strictEqual(data.size, content.length, "file size is correct");
+        };
+
+        const pathInfo = [
+            { key: "F1", name: "F1" },
+            { key: "F1/F1.2", name: "F1.2" }
+        ];
+        const file = this.provider.getItems(pathInfo)[0];
+
+        file.dataItem.content = window.btoa(content);
+
+        this.provider.downloadItems([ file ]);
+    });
+
+    test("download multiple files", function(assert) {
+        const done = assert.async();
+
+        fileSaver._onTestSaveAs = (fileName, format, data) => {
+            done();
+            assert.strictEqual(fileName, "files.zip", "file name is correct");
+            assert.strictEqual(data.size, 254, "file size is correct");
+        };
+
+        this.options.data[0].items[1].items.push({
+            name: "File1.2.2.txt",
+            content: window.btoa("Test content 2")
+        });
+
+        const pathInfo = [
+            { key: "F1", name: "F1" },
+            { key: "F1/F1.2", name: "F1.2" }
+        ];
+        const files = this.provider.getItems(pathInfo);
+
+        files[0].dataItem.content = window.btoa("Test content 1");
+
+        this.provider.downloadItems(files);
     });
 
 });

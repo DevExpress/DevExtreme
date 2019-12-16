@@ -68,6 +68,11 @@ class ContextMenu extends MenuBase {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
+             * @name dxContextMenuOptions.dataSource
+             * @type string|Array<dxContextMenuItem>|DataSource|DataSourceOptions
+             * @default null
+             */
+            /**
             * @name dxContextMenuOptions.items
             * @type Array<dxContextMenuItem>
             */
@@ -576,7 +581,7 @@ class ContextMenu extends MenuBase {
         this._actions.onHiding(arg);
         if(!arg.cancel) {
             this._hideAllShownSubmenus();
-            this._setOptionSilent("visible", false);
+            this._setOptionWithoutOptionChange("visible", false);
         }
     }
 
@@ -907,7 +912,7 @@ class ContextMenu extends MenuBase {
                 this._renderItems(this._dataAdapter.getRootNodes());
             }
 
-            this._setOptionSilent("visible", true);
+            this._setOptionWithoutOptionChange("visible", true);
             this._overlay.option("position", position);
             promise = this._overlay.show();
             event && event.stopPropagation();
@@ -985,7 +990,7 @@ class ContextMenu extends MenuBase {
 
         if(this._overlay) {
             promise = this._overlay.hide();
-            this._setOptionSilent("visible", false);
+            this._setOptionWithoutOptionChange("visible", false);
         }
 
         this._cleanAriaAttributes();

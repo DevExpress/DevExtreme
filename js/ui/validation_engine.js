@@ -341,7 +341,17 @@ class AsyncRuleValidator extends CustomRuleValidator {
         promise.then(function(res) {
             deferred.resolve(res);
         }, function(err) {
-            deferred.resolve(typeUtils.isDefined(err) ? err : false);
+            let res = {
+                isValid: false
+            };
+            if(typeUtils.isDefined(err)) {
+                if(typeUtils.isString(err)) {
+                    res.message = err;
+                } else if(typeUtils.isObject(err) && typeUtils.isDefined(err.message) && typeUtils.isString(err.message)) {
+                    res.message = err.message;
+                }
+            }
+            deferred.resolve(res);
         });
         return deferred.promise();
     }

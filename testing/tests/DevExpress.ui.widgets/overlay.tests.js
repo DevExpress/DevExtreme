@@ -350,6 +350,15 @@ testModule("option", moduleConfig, () => {
         assert.strictEqual(contentRenderSpy.callCount, 2, "must invalidate content when RTL changed");
     });
 
+    QUnit.test("overlay should not change visibility after rtlEnabled option change", function(assert) {
+        const overlay = $("#overlay").dxOverlay({
+            visible: true
+        }).dxOverlay("instance");
+
+        overlay.option("rtlEnabled", true);
+        assert.ok(overlay.option("visible"), "overlay is visible after rtlEnabled option change");
+    });
+
     test("disabled", function(assert) {
         const $overlay = $("#overlay").dxOverlay({
             disabled: true

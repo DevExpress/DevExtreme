@@ -59,7 +59,9 @@ var FILTERING_TIMEOUT = 700,
     FILTER_RANGE_CONTENT_CLASS = "dx-filter-range-content",
     FILTER_MODIFIED_CLASS = "dx-filter-modified",
 
-    EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])";
+    EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
+
+    BETWEEN_OPERATION_DATA_TYPES = ["date", "datetime", "number"];
 
 function isOnClickApplyFilterMode(that) {
     return that.option("filterRow.applyFilter") === "onClick";
@@ -108,6 +110,13 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         }
     };
 
+    var isValidFilterValue = function(filterValue, column) {
+        if(column && BETWEEN_OPERATION_DATA_TYPES.indexOf(column.dataType) >= 0 && Array.isArray(filterValue)) {
+            return false;
+        }
+
+        return filterValue !== undefined;
+    };
 
     var getFilterValue = function(that, columnIndex, $editorContainer) {
         var column = that._columnsController.columnOption(columnIndex),
@@ -123,7 +132,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             }
         }
 
-        return !isFilterRange && filterValue !== undefined ? filterValue : null;
+        return !isFilterRange && isValidFilterValue(filterValue, column) ? filterValue : null;
     };
 
     var normalizeFilterValue = function(that, filterValue, column, $editorContainer) {
