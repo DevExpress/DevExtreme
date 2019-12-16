@@ -282,16 +282,14 @@ module.exports = {
                         case "repaintChangesOnly":
                         case "highlightChanges":
                         case "loadingTimeout":
-                        case "remoteOperations":
                             handled();
                             break;
+                        case "remoteOperations":
                         case "keyExpr":
                         case "dataSource":
                         case "scrolling":
                             handled();
-                            if(!that.skipProcessingPagingChange(args.fullName)) {
-                                that.reset();
-                            }
+                            that.reset();
                             break;
                         case "paging":
                             dataSource = that.dataSource();
