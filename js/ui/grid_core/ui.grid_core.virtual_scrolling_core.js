@@ -664,9 +664,12 @@ exports.VirtualScrollController = Class.inherit((function() {
             return itemsCount;
         },
 
-        reset: function() {
+        reset: function(isRefresh) {
             this._loadingPageIndexes = {};
             this._cache = [];
+            if(!isRefresh) {
+                this._itemSizes = {};
+            }
         },
 
         subscribeToWindowScrollEvents: function($element) {
