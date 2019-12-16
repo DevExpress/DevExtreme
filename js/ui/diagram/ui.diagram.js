@@ -170,19 +170,22 @@ class Diagram extends Widget {
     _createTooltips($container, targets) {
         targets.each((index, element) => {
             var $target = $(element);
-            const $tooltip = $("<div>")
-                .html($target.attr("title"))
-                .appendTo($container);
-            this._createComponent($tooltip, Tooltip, {
-                target: $target.get(0),
-                showEvent: "mouseenter",
-                hideEvent: "mouseleave",
-                position: "top",
-                animation: {
-                    show: { type: "fade", from: 0, to: 1, delay: 500 },
-                    hide: { type: "fade", from: 1, to: 0, delay: 100 }
-                }
-            });
+            const title = $target.attr("title");
+            if(title) {
+                const $tooltip = $("<div>")
+                    .html(title)
+                    .appendTo($container);
+                this._createComponent($tooltip, Tooltip, {
+                    target: $target.get(0),
+                    showEvent: "mouseenter",
+                    hideEvent: "mouseleave",
+                    position: "top",
+                    animation: {
+                        show: { type: "fade", from: 0, to: 1, delay: 500 },
+                        hide: { type: "fade", from: 1, to: 0, delay: 100 }
+                    }
+                });
+            }
         });
 
     }
