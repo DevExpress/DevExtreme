@@ -93,6 +93,10 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.calledEventNames, expectedEventNames, 'called events' + (additionalErrorMessage || ''));
     }
 
+    clearCallbacksCalls() {
+        this.calledEventNames = [];
+    }
+
     convertTreeToFlatList(items) {
         let itemsArray = [];
         let inOrder = (items) => {
