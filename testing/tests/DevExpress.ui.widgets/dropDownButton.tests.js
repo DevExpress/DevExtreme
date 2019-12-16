@@ -297,11 +297,11 @@ QUnit.module("popup integration", {
         const instance = $dropDownButton.dxDropDownButton("instance"),
             dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
 
-        let popupContentElementRect = getPopup(instance).content().getBoundingClientRect();
+        let popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is correct, rtlEnabled = false");
 
         instance.option("rtlEnabled", true);
-        popupContentElementRect = getPopup(instance).content().getBoundingClientRect();
+        popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is correct, rtlEnabled = true");
     });
 
