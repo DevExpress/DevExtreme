@@ -955,6 +955,49 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Data - 2 column & 2 rows, dataSource as promise" + testCaption, function(assert) {
+                const done = assert.async();
+                const ds = [{ f1: "1", f2: "2" }];
+
+                var def = $.Deferred();
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: {
+                        load: function() {
+                            setTimeout(function() {
+                                def.resolve(ds);
+                            }, 200);
+
+                            return def.promise();
+                        }
+                    },
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                $.when(def).done(() => {
+                    const expectedCells = [[
+                        { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                        { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                    ], [
+                        { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                        { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                    ]];
+
+                    helper._extendExpectedCells(expectedCells, topLeft);
+
+                    exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                        helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                        helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: "frozen", ySplit: topLeft.row });
+                        helper.checkFont(expectedCells);
+                        helper.checkAlignment(expectedCells);
+                        helper.checkValues(expectedCells);
+                        helper.checkMergeCells(expectedCells, topLeft);
+                        helper.checkOutlineLevel([0, 0], topLeft.row);
+                        helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                        done();
+                    });
+                });
+            });
+
             QUnit.test("Data - 2 column & 2 rows, grid.rtlEnabled: true" + testCaption, function(assert) {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
