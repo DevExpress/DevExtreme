@@ -285,16 +285,11 @@ module.exports = {
                             handled();
                             break;
                         case "remoteOperations":
-                            handled();
-                            that.reset();
-                            break;
                         case "keyExpr":
                         case "dataSource":
                         case "scrolling":
                             handled();
-                            if(!that.skipProcessingPagingChange(args.fullName)) {
-                                that.reset();
-                            }
+                            that.reset();
                             break;
                         case "paging":
                             dataSource = that.dataSource();
