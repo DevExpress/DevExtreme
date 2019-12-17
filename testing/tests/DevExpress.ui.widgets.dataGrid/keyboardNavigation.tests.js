@@ -5007,7 +5007,7 @@ QUnit.module("Rows view", {
 
         this.clock = sinon.useFakeTimers();
     },
-    tearDown: function() {
+    afterEach: function() {
         this.clock.restore();
     }
 });
