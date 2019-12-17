@@ -985,6 +985,51 @@ QUnit.test("DataGrid - CustomStore.load should contain the 'select' parameter af
     this.clock.tick();
 });
 
+
+// T843705
+QUnit.test("DataSource should be reset after changing remoteOperations", function(assert) {
+    // arrange
+    var storeLoadOptions,
+        dataSource = new DataSource({
+            load: function(loadOptions) {
+                storeLoadOptions = loadOptions;
+
+                return $.Deferred().resolve([
+                    { name: 'Alex', age: 19 },
+                    { name: 'Dan', age: 25 }
+                ], {
+                    totalCount: 2
+                });
+            }
+        }),
+        dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance"),
+        options = {
+            dataSource,
+            loadingTimeout: undefined,
+            paging: {
+                pageSize: 2
+            },
+            remoteOperations: true
+        };
+
+    dataGrid.option(options);
+
+    // assert
+    assert.deepEqual(storeLoadOptions, {
+        filter: undefined,
+        group: null,
+        requireTotalCount: true,
+        searchExpr: undefined,
+        searchOperation: "contains",
+        searchValue: null,
+        skip: 0,
+        sort: null,
+        take: 2,
+        userData: {}
+    }, "loadOptions");
+});
+
+
 // T553981
 QUnit.test("Row expand state should not be changed on row click when scrolling mode is 'infinite'", function(assert) {
     // arrange
@@ -13018,6 +13063,70 @@ QUnit.test("scroll position should not be changed after change sorting if row co
     // assert
     assert.equal(dataGrid.getVisibleRows()[0].data.id, 20 * 1000 + 1, "first visible row is correct");
     assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, "scroll top is not changed");
+});
+
+// T838096
+QUnit.test("group position should not be changed after expanding if virtual scrolling is enabled", function(assert) {
+    // arrange, act
+    const data = [
+        { id: 1, group: 1 },
+        { id: 2, group: 1 },
+        { id: 3, group: 1 },
+        { id: 4, group: 1 },
+        { id: 5, group: 1 },
+        { id: 6, group: 1 },
+        { id: 7, group: 1 },
+        { id: 8, group: 1 },
+        { id: 9, group: 1 },
+        { id: 10, group: 1 },
+        { id: 11, group: 2 }
+    ];
+
+    const dataGrid = createDataGrid({
+        height: 200,
+        keyExpr: "id",
+        dataSource: data,
+        loadingTimeout: undefined,
+        paging: {
+            pageSize: 5
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false,
+            updateTimeout: 0
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        columns: ["id", {
+            dataField: "group",
+            groupIndex: 0
+        }],
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).css("height", 50);
+            }
+        }
+    });
+
+    dataGrid.expandRow([1]);
+    dataGrid.getScrollable().scrollTo({ top: 10000 });
+
+    const getGroup2PositionTop = function() {
+        var $group2Element = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey([2])));
+        return $group2Element.position().top;
+    };
+
+    const group2PositionTop = getGroup2PositionTop();
+
+    // act
+    dataGrid.expandRow([2]);
+
+    // assert
+    assert.ok(dataGrid.getRowIndexByKey(11) > 0, "data item in last group is visible");
+    assert.ok(dataGrid.getScrollable().scrollTop() > 0, "content is scrolled");
+    assert.ok(group2PositionTop, "group 2 position is defined");
+    assert.roughEqual(getGroup2PositionTop(), group2PositionTop, 1, "group 2 offset is not changed");
 });
 
 QUnit.test("top visible row should not be changed after refresh virtual scrolling is enabled without rowRenderingMode", function(assert) {

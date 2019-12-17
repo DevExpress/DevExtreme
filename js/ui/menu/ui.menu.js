@@ -644,7 +644,7 @@ class Menu extends MenuBase {
 
         selectedItem && this._clearSelectionInSubmenus(selectedItem[0], submenu);
         this._clearRootSelection();
-        this._setOptionSilent("selectedItem", selectedItem);
+        this._setOptionWithoutOptionChange("selectedItem", selectedItem);
     }
 
     _clearSelectionInSubmenus(item, targetSubmenu) {

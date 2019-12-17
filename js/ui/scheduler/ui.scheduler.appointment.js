@@ -220,7 +220,11 @@ var Appointment = DOMComponent.inherit({
         if(this.option("allowResize") && !this.option("isCompact")) {
             this._createComponent(this.$element(), Resizable, extend(this._createResizingConfig(), this.option("resizableConfig")));
         }
-    }
+    },
+
+    _useTemplates: function() {
+        return false;
+    },
 
 }).include(publisherMixin);
 

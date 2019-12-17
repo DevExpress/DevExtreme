@@ -12,7 +12,7 @@ var $ = require("../../core/renderer"),
     themeManagerModule = require("../core/base_theme_manager"),
 
     _floor = Math.floor,
-    DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
+    DOMComponent = require("../../core/dom_component"),
     helpers = require("./helpers"),
     _parseScalar = require("./utils").parseScalar,
     errors = require("./errors_warnings"),
@@ -28,7 +28,7 @@ var $ = require("../../core/renderer"),
 
     SIZED_ELEMENT_CLASS = "dx-sized-element",
 
-    _option = DOMComponentWithTemplate.prototype.option;
+    _option = DOMComponent.prototype.option;
 
 function getTrue() {
     return true;
@@ -122,7 +122,7 @@ var getEmptyComponent = function() {
         }
     };
 
-    var EmptyComponent = DOMComponentWithTemplate.inherit(emptyComponentConfig);
+    var EmptyComponent = DOMComponent.inherit(emptyComponentConfig);
     var originalInherit = EmptyComponent.inherit;
 
     EmptyComponent.inherit = function(config) {
@@ -144,7 +144,7 @@ function sizeIsValid(value) {
     return typeUtils.isDefined(value) && value > 0;
 }
 
-module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.inherit({
+module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
         "onIncidentOccurred": { name: "incidentOccurred" },
         "onDrawn": { name: "drawn" }
@@ -507,7 +507,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     beginUpdate: function() {
         var that = this;
         // The "_initialized" flag is checked because first time "beginUpdate" is called in the constructor.
-        if(that._initialized && that._updateLockCount === 0) {
+        if(that._initialized && that._isUpdateAllowed()) {
             that._onBeginUpdate();
             that._suspendChanges();
         }
@@ -516,12 +516,10 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     endUpdate: function() {
-        var that = this;
-        that.callBase.apply(that, arguments);
-        if(that._updateLockCount === 0) {
-            that._resumeChanges();
-        }
-        return that;
+        this.callBase();
+        this._isUpdateAllowed() && this._resumeChanges();
+
+        return this;
     },
 
     option: function(name) {

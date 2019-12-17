@@ -124,18 +124,20 @@ const LayoutManager = Widget.inherit({
     },
 
     _syncDataWithItems: function() {
-        var that = this,
-            userItems = that.option("items");
+        const layoutData = this.option("layoutData");
+        const userItems = this.option("items");
 
         if(isDefined(userItems)) {
-            each(userItems, function(index, item) {
-                var value;
-                if(item.dataField && that._getDataByField(item.dataField) === undefined) {
+            userItems.forEach(item => {
+                if(item.dataField && this._getDataByField(item.dataField) === undefined) {
+                    let value;
                     if(item.editorOptions) {
                         value = item.editorOptions.value;
                     }
 
-                    that._updateFieldValue(item.dataField, value);
+                    if(isDefined(value) || item.dataField in layoutData) {
+                        this._updateFieldValue(item.dataField, value);
+                    }
                 }
             });
         }
@@ -1101,7 +1103,7 @@ const LayoutManager = Widget.inherit({
 
     _resetWidget(instance) {
         const defaultOptions = instance._getDefaultOptions();
-        instance._setOptionSilent("value", defaultOptions.value);
+        instance._setOptionWithoutOptionChange("value", defaultOptions.value);
         instance.option("isValid", true);
     },
 
@@ -1191,7 +1193,7 @@ const LayoutManager = Widget.inherit({
     linkEditorToDataField(editorInstance, dataField) {
         this.on("optionChanged", args => {
             if(args.fullName === `layoutData.${dataField}`) {
-                editorInstance._setOptionSilent("value", args.value);
+                editorInstance._setOptionWithoutOptionChange("value", args.value);
             }
         });
         editorInstance.on("valueChanged", args => {

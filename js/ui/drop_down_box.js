@@ -267,6 +267,7 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupConfig: function() {
         const { focusStateEnabled } = this.option();
+        const horizontalAlignment = this.option("rtlEnabled") ? "right" : "left";
 
         return extend(this.callBase(), {
             width: function() {
@@ -276,6 +277,15 @@ var DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,
+            position: {
+                of: this.$element(),
+                collision: "flipfit",
+                my: "top " + horizontalAlignment,
+                at: "bottom " + horizontalAlignment,
+                offset: {
+                    y: -1
+                }
+            },
             onKeyboardHandled: opts => this.option("focusStateEnabled") && this._popupElementTabHandler(opts),
             maxHeight: function() {
                 return getElementMaxHeightByWindow(this.$element());

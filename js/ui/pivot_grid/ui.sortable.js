@@ -512,7 +512,11 @@ var Sortable = DOMComponent.inherit({
             default:
                 that.callBase(args);
         }
-    }
+    },
+
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 ///#DEBUG

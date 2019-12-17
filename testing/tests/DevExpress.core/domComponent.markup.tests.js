@@ -14,7 +14,11 @@ var RTL_CLASS = "dx-rtl";
 
 QUnit.module("Markup tests", {
     beforeEach: function(module) {
-        this.TestComponent = DOMComponent.inherit({});
+        this.TestComponent = DOMComponent.inherit({
+            _useTemplates() {
+                return false;
+            }
+        });
 
         registerComponent("TestComponent", nameSpace, this.TestComponent);
     },

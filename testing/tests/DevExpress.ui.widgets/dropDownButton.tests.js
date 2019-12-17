@@ -283,7 +283,26 @@ QUnit.module("popup integration", {
         instance.option("opened", true);
         assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
         assert.equal($popupContent.outerWidth(), 810, "width are equal after option change");
+    });
 
+    QUnit.test("popup should be positioned correctly if rtlEnabled is true", function(assert) {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            opened: true,
+            dropDownOptions: {
+                width: 200,
+                "position.collision": "none"
+            },
+        });
+
+        const instance = $dropDownButton.dxDropDownButton("instance"),
+            dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
+
+        let popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
+        assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is correct, rtlEnabled = false");
+
+        instance.option("rtlEnabled", true);
+        popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
+        assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is correct, rtlEnabled = true");
     });
 
     QUnit.test("popup width should change if content is truncated", function(assert) {

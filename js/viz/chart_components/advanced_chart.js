@@ -675,7 +675,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _setCustomVisualRange(axesName, index, value) {
         const that = this;
-        const options = that._getOptionByStealth(axesName);
+        const options = that._options.silent(axesName);
 
         if(!options) {
             return;

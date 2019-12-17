@@ -67,18 +67,18 @@ var SelectBox = DropDownList.inherit({
 
                 parent.tab && parent.tab.apply(this, arguments);
             },
-            upArrow: function() {
+            upArrow: function(e) {
                 if(parent.upArrow && parent.upArrow.apply(this, arguments)) {
                     if(!this.option("opened")) {
-                        this._setNextValue(-1);
+                        this._setNextValue(e);
                     }
                     return true;
                 }
             },
-            downArrow: function() {
+            downArrow: function(e) {
                 if(parent.downArrow && parent.downArrow.apply(this, arguments)) {
                     if(!this.option("opened")) {
-                        this._setNextValue(1);
+                        this._setNextValue(e);
                     }
                     return true;
                 }
@@ -394,7 +394,7 @@ var SelectBox = DropDownList.inherit({
         this._setValue(value);
     },
 
-    _setNextValue: function(step) {
+    _setNextValue: function(e) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
             ? new Deferred().resolve()
             : this._dataSource.load();
@@ -404,6 +404,9 @@ var SelectBox = DropDownList.inherit({
                 hasPages = this._dataSource.pageSize(),
                 isLastPage = this._dataSource.isLastPage(),
                 isLastItem = selectedIndex === this._items().length - 1;
+
+            this._saveValueChangeEvent(e);
+            const step = e.key === "ArrowDown" ? 1 : -1;
 
             if(hasPages && !isLastPage && isLastItem && step > 0) {
                 if(!this._popup) {

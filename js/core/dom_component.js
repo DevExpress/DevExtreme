@@ -3,6 +3,7 @@ import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
 import Component from './component';
+import TemplateManager from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
@@ -78,7 +79,7 @@ const DOMComponent = Component.inherit({
             disabled: false,
 
             integrationOptions: {}
-        });
+        }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
     },
     /**
     * @name DOMComponentMethods.ctor
@@ -104,6 +105,7 @@ const DOMComponent = Component.inherit({
     _init() {
         this.callBase();
         this._attachWindowResizeCallback();
+        this._initTemplateManager();
     },
 
     _setOptionsByDevice(instanceCustomRules) {
@@ -247,7 +249,7 @@ const DOMComponent = Component.inherit({
     },
 
     _invalidate() {
-        if(!this._updateLockCount) {
+        if(this._isUpdateAllowed()) {
             throw errors.Error('E0007');
         }
 
@@ -260,6 +262,7 @@ const DOMComponent = Component.inherit({
     },
 
     _dispose() {
+        this._templateManager && this._templateManager.dispose();
         this.callBase();
         this._clean();
         this._detachWindowResizeCallback();
@@ -404,19 +407,20 @@ const DOMComponent = Component.inherit({
             .join(' ');
     },
 
-    endUpdate() {
-        const requireRender = !this._initializing && !this._initialized;
-
-        this.callBase.apply(this, arguments);
-
-        if(!this._updateLockCount) {
-            if(requireRender) {
-                this._renderComponent();
-            } else if(this._requireRefresh) {
-                this._requireRefresh = false;
-                this._refresh();
-            }
+    _updateDOMComponent(renderRequired) {
+        if(renderRequired) {
+            this._renderComponent();
+        } else if(this._requireRefresh) {
+            this._requireRefresh = false;
+            this._refresh();
         }
+    },
+
+    endUpdate() {
+        const renderRequired = this._isInitializingRequired();
+
+        this.callBase();
+        this._isUpdateAllowed() && this._updateDOMComponent(renderRequired);
     },
 
     $element() {
@@ -455,8 +459,68 @@ const DOMComponent = Component.inherit({
 
             !isDefined(initialOption) && this.$element().css(optionName, '');
         }
-    }
+    },
 
+    _getAnonymousTemplateName() {
+        return void 0;
+    },
+
+    _initTemplateManager() {
+        if(this._templateManager || !this._useTemplates()) return void 0;
+
+        const { integrationOptions = {} } = this.option();
+        const { createTemplate } = integrationOptions;
+
+        this._templateManager = new TemplateManager(
+            createTemplate,
+            this._getAnonymousTemplateName()
+        );
+        this._initTemplates();
+    },
+
+    _initTemplates() {
+        const { templates, anonymousTemplateMeta } = this._templateManager.extractTemplates(this.$element());
+        const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
+
+        templates.forEach(({ name, template }) => {
+            this._options.silent(`integrationOptions.templates.${name}`, template);
+        });
+
+        if(anonymousTemplateMeta.name && !anonymousTemplate) {
+            this._options.silent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
+        }
+    },
+
+    _getTemplateByOption(optionName) {
+        return this._getTemplate(this.option(optionName));
+    },
+
+    _getTemplate(templateSource) {
+        const templates = this.option('integrationOptions.templates');
+        const isAsyncTemplate = this.option('templatesRenderAsynchronously');
+        const skipTemplates = this.option('integrationOptions.skipTemplates');
+
+        return this._templateManager.getTemplate(
+            templateSource,
+            templates,
+            {
+                isAsyncTemplate,
+                skipTemplates
+            },
+            this
+        );
+    },
+
+    _saveTemplate(name, template) {
+        this._setOptionWithoutOptionChange(
+            'integrationOptions.templates.' + name,
+            this._templateManager._createTemplate(template)
+        );
+    },
+
+    _useTemplates() {
+        return true;
+    },
 });
 
 /**

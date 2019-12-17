@@ -723,7 +723,11 @@ var Scrollable = DOMComponent.inherit({
         if(!this.option("updateManually")) {
             this.update();
         }
-    }
+    },
+
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 registerComponent(SCROLLABLE, Scrollable);

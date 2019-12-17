@@ -194,6 +194,43 @@ const Component = Class.inherit({
         this._disposed = true;
     },
 
+    _lockUpdate() {
+        this._updateLockCount++;
+    },
+
+    _unlockUpdate() {
+        this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
+    },
+
+    // TODO: remake as getter after ES6 refactor
+    _isUpdateAllowed() {
+        return this._updateLockCount === 0;
+    },
+
+    // TODO: remake as getter after ES6 refactor
+    _isInitializingRequired() {
+        return !this._initializing && !this._initialized;
+    },
+
+    _commitUpdate() {
+        this.postponedOperations.callPostponedOperations();
+        this._isInitializingRequired() && this._initializeComponent();
+    },
+
+    _initializeComponent() {
+        this._initializing = true;
+
+        try {
+            this._init();
+        } finally {
+            this._initializing = false;
+            this._lockUpdate();
+            this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+            this._unlockUpdate();
+            this._initialized = true;
+        }
+    },
+
     /**
      * @name componentmethods.instance
      * @publicName instance()
@@ -207,31 +244,17 @@ const Component = Class.inherit({
      * @name componentmethods.beginupdate
      * @publicName beginUpdate()
      */
-    beginUpdate() {
-        this._updateLockCount++;
+    beginUpdate: function() {
+        this._lockUpdate();
     },
 
     /**
      * @name componentmethods.endupdate
      * @publicName endUpdate()
      */
-    endUpdate() {
-        this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
-        if(!this._updateLockCount) {
-            this.postponedOperations.callPostponedOperations();
-            if(!this._initializing && !this._initialized) {
-                this._initializing = true;
-                try {
-                    this._init();
-                } finally {
-                    this._initializing = false;
-                    this._updateLockCount++;
-                    this._createActionByOption('onInitialized', { excludeValidators: ['disabled', 'readOnly'] })();
-                    this._updateLockCount--;
-                    this._initialized = true;
-                }
-            }
-        }
+    endUpdate: function() {
+        this._unlockUpdate();
+        this._isUpdateAllowed() && this._commitUpdate();
     },
 
     _optionChanging: noop,
@@ -385,8 +408,8 @@ const Component = Class.inherit({
         return this;
     },
 
-    hasActionSubscription(actionName) {
-        return !!this._getOptionByStealth(actionName) ||
+    hasActionSubscription: function(actionName) {
+        return !!this._options.silent(actionName) ||
             this._eventsStrategy.hasEvent(getEventName(actionName));
     },
 
@@ -394,15 +417,7 @@ const Component = Class.inherit({
         return this._options.isDeprecated(name);
     },
 
-    _getOptionByStealth(name) {
-        return this._options.silent(name);
-    },
-
-    _setOptionByStealth(options, value) {
-        this._options.silent(options, value);
-    },
-
-    _setOptionSilent(name, value) {
+    _setOptionWithoutOptionChange(name, value) {
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
