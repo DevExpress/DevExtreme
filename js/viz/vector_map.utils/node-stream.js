@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-vars, no-var, one-var*/
 
 function wrapBuffer(buffer) {
     return buffer;
@@ -24,7 +24,7 @@ function f64LE(stream, position) {
     return stream.readDoubleLE(position);
 }
 
-const fs = require('fs');
+var fs = require('fs');
 function sendRequest(path, callback) {
     fs.readFile(path, callback);
 }
