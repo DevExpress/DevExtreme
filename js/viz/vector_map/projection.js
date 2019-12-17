@@ -1,4 +1,4 @@
-var projectionModule = require("./projection.main"),
+var projectionModule = require('./projection.main'),
     projection = projectionModule.projection,
 
     _min = Math.min,
@@ -24,7 +24,7 @@ function clamp(value, threshold) {
 }
 
 // https://en.wikipedia.org/wiki/Mercator_projection
-projection.add("mercator", projection({
+projection.add('mercator', projection({
     aspectRatio: 1,
 
     to: function(coordinates) {
@@ -43,7 +43,7 @@ projection.add("mercator", projection({
 }));
 
 // https://en.wikipedia.org/wiki/Equirectangular_projection
-projection.add("equirectangular", projection({
+projection.add('equirectangular', projection({
     aspectRatio: 2,
 
     to: function(coordinates) {
@@ -62,7 +62,7 @@ projection.add("equirectangular", projection({
 }));
 
 // https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection
-projection.add("lambert", projection({
+projection.add('lambert', projection({
     aspectRatio: 2,
 
     to: function(coordinates) {
@@ -81,7 +81,7 @@ projection.add("lambert", projection({
 }));
 
 // https://en.wikipedia.org/wiki/Miller_cylindrical_projection
-projection.add("miller", projection({
+projection.add('miller', projection({
     aspectRatio: 1,
 
     to: function(coordinates) {

@@ -1,57 +1,57 @@
-var escapeRegExp = require("../../core/utils/common").escapeRegExp;
+var escapeRegExp = require('../../core/utils/common').escapeRegExp;
 
 var FORMAT_TYPES = {
-    "3": "abbreviated",
-    "4": "wide",
-    "5": "narrow"
+    '3': 'abbreviated',
+    '4': 'wide',
+    '5': 'narrow'
 };
 
 var monthRegExpGenerator = function(count, dateParts) {
     if(count > 2) {
         return Object.keys(FORMAT_TYPES).map(function(count) {
-            return ["format", "standalone"].map(function(type) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], type).join("|");
-            }).join("|");
-        }).join("|");
+            return ['format', 'standalone'].map(function(type) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], type).join('|');
+            }).join('|');
+        }).join('|');
     }
-    return "0?[1-9]|1[012]";
+    return '0?[1-9]|1[012]';
 };
 
 var PATTERN_REGEXPS = {
     y: function(count) {
-        return "[0-9]+";
+        return '[0-9]+';
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
     Q: function(count, dateParts) {
         if(count > 2) {
-            return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").join("|");
+            return dateParts.getQuarterNames(FORMAT_TYPES[count], 'format').join('|');
         }
-        return "0?[1-4]";
+        return '0?[1-4]';
     },
     E: function(count, dateParts) {
-        return "\\D*";
+        return '\\D*';
     },
     a: function(count, dateParts) {
-        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
+        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format').join('|');
     },
     d: function(count) {
-        return "0?[1-9]|[12][0-9]|3[01]";
+        return '0?[1-9]|[12][0-9]|3[01]';
     },
     H: function(count) {
-        return "0?[0-9]|1[0-9]|2[0-3]";
+        return '0?[0-9]|1[0-9]|2[0-3]';
     },
     h: function(count) {
-        return "0?[1-9]|1[012]";
+        return '0?[1-9]|1[012]';
     },
     m: function(count) {
-        return "0?[0-9]|[1-5][0-9]";
+        return '0?[0-9]|[1-5][0-9]';
     },
     s: function(count) {
-        return "0?[0-9]|[1-5][0-9]";
+        return '0?[0-9]|[1-5][0-9]';
     },
     S: function(count) {
-        return "[0-9]{1," + count + "}";
+        return '[0-9]{1,' + count + '}';
     }
 };
 
@@ -63,7 +63,7 @@ var caseInsensitiveIndexOf = function(array, value) {
 
 var monthPatternParser = function(text, count, dateParts) {
     if(count > 2) {
-        return ["format", "standalone"].map(function(type) {
+        return ['format', 'standalone'].map(function(type) {
             return Object.keys(FORMAT_TYPES).map(function(count) {
                 var monthNames = dateParts.getMonthNames(FORMAT_TYPES[count], type);
                 return caseInsensitiveIndexOf(monthNames, text);
@@ -89,16 +89,16 @@ var PATTERN_PARSERS = {
     L: monthPatternParser,
     Q: function(text, count, dateParts) {
         if(count > 2) {
-            return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").indexOf(text);
+            return dateParts.getQuarterNames(FORMAT_TYPES[count], 'format').indexOf(text);
         }
         return parseNumber(text) - 1;
     },
     E: function(text, count, dateParts) {
-        var dayNames = dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format");
+        var dayNames = dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format');
         return caseInsensitiveIndexOf(dayNames, text);
     },
     a: function(text, count, dateParts) {
-        var periodNames = dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format");
+        var periodNames = dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format');
         return caseInsensitiveIndexOf(periodNames, text);
     },
     d: parseNumber,
@@ -110,18 +110,18 @@ var PATTERN_PARSERS = {
         count = Math.max(count, 3);
         text = text.slice(0, 3);
         while(count < 3) {
-            text = text + "0";
+            text = text + '0';
             count++;
         }
         return parseNumber(text);
     }
 };
 
-var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
+var ORDERED_PATTERNS = ['y', 'M', 'd', 'h', 'm', 's', 'S'];
 var PATTERN_SETTERS = {
-    y: "setFullYear",
-    M: "setMonth",
-    L: "setMonth",
+    y: 'setFullYear',
+    M: 'setMonth',
+    L: 'setMonth',
     a: function(date, value) {
         var hours = date.getHours();
         if(!value && hours === 12) {
@@ -130,12 +130,12 @@ var PATTERN_SETTERS = {
             date.setHours(hours + 12);
         }
     },
-    d: "setDate",
-    H: "setHours",
-    h: "setHours",
-    m: "setMinutes",
-    s: "setSeconds",
-    S: "setMilliseconds"
+    d: 'setDate',
+    H: 'setHours',
+    h: 'setHours',
+    m: 'setMinutes',
+    s: 'setSeconds',
+    S: 'setMilliseconds'
 };
 
 var getSameCharCount = function(text, index) {
@@ -151,7 +151,7 @@ var getSameCharCount = function(text, index) {
 };
 
 var createPattern = function(char, count) {
-    var result = "";
+    var result = '';
     for(var i = 0; i < count; i++) {
         result += char;
     }
@@ -159,27 +159,27 @@ var createPattern = function(char, count) {
 };
 
 var getRegExpInfo = function(format, dateParts) {
-    var regexpText = "",
-        stubText = "",
+    var regexpText = '',
+        stubText = '',
         isEscaping,
         patterns = [];
 
     var addPreviousStub = function() {
         if(stubText) {
-            patterns.push("'" + stubText + "'");
-            regexpText += escapeRegExp(stubText) + ")";
-            stubText = "";
+            patterns.push('\'' + stubText + '\'');
+            regexpText += escapeRegExp(stubText) + ')';
+            stubText = '';
         }
     };
 
     for(var i = 0; i < format.length; i++) {
         var char = format[i],
-            isEscapeChar = char === "'",
+            isEscapeChar = char === '\'',
             regexpPart = PATTERN_REGEXPS[char];
 
         if(isEscapeChar) {
             isEscaping = !isEscaping;
-            if(format[i - 1] !== "'") {
+            if(format[i - 1] !== '\'') {
                 continue;
             }
         }
@@ -191,11 +191,11 @@ var getRegExpInfo = function(format, dateParts) {
             addPreviousStub();
             patterns.push(pattern);
 
-            regexpText += "(" + regexpPart(count, dateParts) + ")";
+            regexpText += '(' + regexpPart(count, dateParts) + ')';
             i += count - 1;
         } else {
             if(!stubText) {
-                regexpText += "(";
+                regexpText += '(';
             }
             stubText += char;
         }
@@ -205,7 +205,7 @@ var getRegExpInfo = function(format, dateParts) {
 
     return {
         patterns: patterns,
-        regexp: new RegExp("^" + regexpText + "$", "i")
+        regexp: new RegExp('^' + regexpText + '$', 'i')
     };
 };
 
@@ -230,17 +230,17 @@ var setPatternPart = function(date, pattern, text, dateParts) {
 
 var setPatternPartFromNow = function(date, pattern, now) {
     var setterName = PATTERN_SETTERS[pattern],
-        getterName = "g" + setterName.substr(1);
+        getterName = 'g' + setterName.substr(1);
 
     date[setterName](now[getterName]());
 };
 
 var getShortPatterns = function(fullPatterns) {
     return fullPatterns.map(function(pattern) {
-        if(pattern[0] === "'") {
-            return "";
+        if(pattern[0] === '\'') {
+            return '';
         } else {
-            return pattern[0] === "H" ? "h" : pattern[0];
+            return pattern[0] === 'H' ? 'h' : pattern[0];
         }
     });
 };

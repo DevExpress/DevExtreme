@@ -9,14 +9,14 @@ function parseShape(stream, errors) {
         timeStart = new Date();
         header = parseShapeHeader(stream);
     } catch(e) {
-        errors.push("shp: header parsing error: " + e.message + " / " + e.description);
+        errors.push('shp: header parsing error: ' + e.message + ' / ' + e.description);
         return;
     }
     if(header.fileCode !== 9994) {
-        errors.push("shp: file code: " + header.fileCode + " / expected: 9994");
+        errors.push('shp: file code: ' + header.fileCode + ' / expected: 9994');
     }
     if(header.version !== 1000) {
-        errors.push("shp: file version: " + header.version + " / expected: 1000");
+        errors.push('shp: file version: ' + header.version + ' / expected: 1000');
     }
     try {
         while(stream.pos() < header.fileLength) {
@@ -28,11 +28,11 @@ function parseShape(stream, errors) {
             }
         }
         if(stream.pos() !== header.fileLength) {
-            errors.push("shp: file length: " + header.fileLength + " / actual: " + stream.pos());
+            errors.push('shp: file length: ' + header.fileLength + ' / actual: ' + stream.pos());
         }
         timeEnd = new Date();
     } catch(e) {
-        errors.push("shp: records parsing error: " + e.message + " / " + e.description);
+        errors.push('shp: records parsing error: ' + e.message + ' / ' + e.description);
     }
 
     return {
@@ -181,20 +181,20 @@ function readMultiPatchShape(stream, record) {
 }
 
 var SHP_TYPES = {
-    0: "Null",
-    1: "Point",
-    3: "PolyLine",
-    5: "Polygon",
-    8: "MultiPoint",
-    11: "PointZ",
-    13: "PolyLineZ",
-    15: "PolygonZ",
-    18: "MultiPointZ",
-    21: "PointM",
-    23: "PolyLineM",
-    25: "PolygonM",
-    28: "MultiPointM",
-    31: "MultiPatch"
+    0: 'Null',
+    1: 'Point',
+    3: 'PolyLine',
+    5: 'Polygon',
+    8: 'MultiPoint',
+    11: 'PointZ',
+    13: 'PolyLineZ',
+    15: 'PolygonZ',
+    18: 'MultiPointZ',
+    21: 'PointM',
+    23: 'PolyLineM',
+    25: 'PolygonM',
+    28: 'MultiPointM',
+    31: 'MultiPatch'
 };
 
 var SHP_RECORD_PARSERS = {
@@ -215,20 +215,20 @@ var SHP_RECORD_PARSERS = {
 };
 
 var SHP_TYPE_TO_GEOJSON_TYPE_MAP = {
-    "Null": "Null",
-    "Point": "Point",
-    "PolyLine": "MultiLineString",
-    "Polygon": "Polygon",
-    "MultiPoint": "MultiPoint",
-    "PointZ": "Point",
-    "PolyLineZ": "MultiLineString",
-    "PolygonZ": "Polygon",
-    "MultiPointZ": "MultiPoint",
-    "PointM": "Point",
-    "PolyLineM": "MultiLineString",
-    "PolygonM": "Polygon",
-    "MultiPointM": "MultiPoint",
-    "MultiPatch": "MultiPatch"
+    'Null': 'Null',
+    'Point': 'Point',
+    'PolyLine': 'MultiLineString',
+    'Polygon': 'Polygon',
+    'MultiPoint': 'MultiPoint',
+    'PointZ': 'Point',
+    'PolyLineZ': 'MultiLineString',
+    'PolygonZ': 'Polygon',
+    'MultiPointZ': 'MultiPoint',
+    'PointM': 'Point',
+    'PolyLineM': 'MultiLineString',
+    'PolygonM': 'Polygon',
+    'MultiPointM': 'MultiPoint',
+    'MultiPatch': 'MultiPatch'
 };
 
 function parseShapeHeader(stream) {
@@ -317,15 +317,15 @@ function parseShapeRecord(stream, generalType, errors) {
     record.geoJSON_type = SHP_TYPE_TO_GEOJSON_TYPE_MAP[record.type];
     if(record.type) {
         if(record.type !== generalType) {
-            errors.push("shp: shape #" + record.number + " type: " + record.type + " / expected: " + generalType);
+            errors.push('shp: shape #' + record.number + ' type: ' + record.type + ' / expected: ' + generalType);
         }
         SHP_RECORD_PARSERS[type](stream, record);
         pos = stream.pos() - pos;
         if(pos !== length) {
-            errors.push("shp: shape #" + record.number + " length: " + length + " / actual: " + pos);
+            errors.push('shp: shape #' + record.number + ' length: ' + length + ' / actual: ' + pos);
         }
     } else {
-        errors.push("shp: shape #" + record.number + " type: " + type + " / unknown");
+        errors.push('shp: shape #' + record.number + ' type: ' + type + ' / unknown');
         record = null;
     }
     return record;

@@ -1,5 +1,5 @@
-import { extend } from "./utils/extend";
-import DomComponent from "./dom_component";
+import { extend } from './utils/extend';
+import DomComponent from './dom_component';
 import TemplateManager from './template_manager';
 
 const DOMComponentWithTemplate = DomComponent.inherit({

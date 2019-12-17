@@ -1,6 +1,6 @@
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
-    equalByValue = require("../../core/utils/common").equalByValue,
+var $ = require('../../core/renderer'),
+    Class = require('../../core/class'),
+    equalByValue = require('../../core/utils/common').equalByValue,
     abstract = Class.abstract;
 
 
@@ -96,13 +96,13 @@ var EditStrategy = Class.inherit({
     deleteItemAtIndex: abstract,
 
     itemPlacementFunc: function(movingIndex, destinationIndex) {
-        return this._itemsFromSameParent(movingIndex, destinationIndex) && movingIndex < destinationIndex ? "after" : "before";
+        return this._itemsFromSameParent(movingIndex, destinationIndex) && movingIndex < destinationIndex ? 'after' : 'before';
     },
 
     moveItemAtIndexToIndex: abstract,
 
     _isNormalizedItemIndex: function(index) {
-        return (typeof index === "number") && Math.round(index) === index;
+        return (typeof index === 'number') && Math.round(index) === index;
     },
 
     _isDOMNode: function(value) {

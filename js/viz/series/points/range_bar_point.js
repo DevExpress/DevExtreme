@@ -1,7 +1,7 @@
-var noop = require("../../../core/utils/common").noop,
-    extend = require("../../../core/utils/extend").extend,
-    barPoint = require("./bar_point"),
-    rangeSymbolPointMethods = require("./range_symbol_point"),
+var noop = require('../../../core/utils/common').noop,
+    extend = require('../../../core/utils/extend').extend,
+    barPoint = require('./bar_point'),
+    rangeSymbolPointMethods = require('./range_symbol_point'),
     _extend = extend;
 
 module.exports = _extend({}, barPoint, {
@@ -12,7 +12,7 @@ module.exports = _extend({}, barPoint, {
     clearVisibility: function() {
         var graphic = this.graphic;
 
-        if(graphic && graphic.attr("visibility")) {
+        if(graphic && graphic.attr('visibility')) {
             graphic.attr({ visibility: null });
         }
     },
@@ -20,8 +20,8 @@ module.exports = _extend({}, barPoint, {
     setInvisibility: function() {
         var graphic = this.graphic;
 
-        if(graphic && graphic.attr("visibility") !== "hidden") {
-            graphic.attr({ visibility: "hidden" });
+        if(graphic && graphic.attr('visibility') !== 'hidden') {
+            graphic.attr({ visibility: 'hidden' });
         }
         this._topLabel.draw(false);
         this._bottomLabel.draw(false);
@@ -83,7 +83,7 @@ module.exports = _extend({}, barPoint, {
     _getLabelCoords: rangeSymbolPointMethods._getLabelCoords,
 
     _getGraphicBBox: function(location) {
-        var isTop = location === "top",
+        var isTop = location === 'top',
             bBox = barPoint._getGraphicBBox.call(this);
 
         if(!this._options.rotated) {

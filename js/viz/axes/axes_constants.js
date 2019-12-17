@@ -1,18 +1,18 @@
-var _map = require("../core/utils").map;
+var _map = require('../core/utils').map;
 
 module.exports = {
-    logarithmic: "logarithmic",
-    discrete: "discrete",
-    numeric: "numeric",
+    logarithmic: 'logarithmic',
+    discrete: 'discrete',
+    numeric: 'numeric',
 
-    left: "left",
-    right: "right",
-    top: "top",
-    bottom: "bottom",
-    center: "center",
+    left: 'left',
+    right: 'right',
+    top: 'top',
+    bottom: 'bottom',
+    center: 'center',
 
-    horizontal: "horizontal",
-    vertical: "vertical",
+    horizontal: 'horizontal',
+    vertical: 'vertical',
 
     convertTicksToValues: function(ticks) {
         return _map(ticks || [], function(item) {
@@ -21,7 +21,7 @@ module.exports = {
     },
 
     validateOverlappingMode: function(mode) {
-        return mode === "ignore" || mode === "none" ? mode : "hide";
+        return mode === 'ignore' || mode === 'none' ? mode : 'hide';
     },
 
     getTicksCountInRange: function(ticks, valueKey, range) {
@@ -47,10 +47,10 @@ module.exports = {
             hasHorizontalOverlapping,
             hasVerticalOverlapping;
 
-        if(alignment === "left") {
+        if(alignment === 'left') {
             x1 += width1 / 2;
             x2 += width2 / 2;
-        } else if(alignment === "right") {
+        } else if(alignment === 'right') {
             x1 -= width1 / 2;
             x2 -= width2 / 2;
         }

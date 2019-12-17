@@ -1,3 +1,3 @@
-var angular = require("angular");
+var angular = require('angular');
 
-module.exports = angular.module("dx", []);
+module.exports = angular.module('dx', []);

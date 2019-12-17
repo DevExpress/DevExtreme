@@ -1,30 +1,30 @@
-import gridCore from "./ui.data_grid.core";
-import focusModule from "../grid_core/ui.grid_core.focus";
-import { Deferred } from "../../core/utils/deferred";
-import { isDefined } from "../../core/utils/type";
-import { equalByValue } from "../../core/utils/common";
-import { createGroupFilter } from "./ui.data_grid.utils";
-import { compileGetter } from "../../core/utils/data";
-import { extend } from "../../core/utils/extend";
+import gridCore from './ui.data_grid.core';
+import focusModule from '../grid_core/ui.grid_core.focus';
+import { Deferred } from '../../core/utils/deferred';
+import { isDefined } from '../../core/utils/type';
+import { equalByValue } from '../../core/utils/common';
+import { createGroupFilter } from './ui.data_grid.utils';
+import { compileGetter } from '../../core/utils/data';
+import { extend } from '../../core/utils/extend';
 
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
-gridCore.registerModule("focus", extend(true, {}, focusModule, {
+gridCore.registerModule('focus', extend(true, {}, focusModule, {
     extenders: {
         controllers: {
             data: {
                 changeRowExpand: function(path) {
-                    if(this.option("focusedRowEnabled") && Array.isArray(path) && this.isRowExpanded(path)) {
+                    if(this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
                         if(this._isFocusedRowInsideGroup(path)) {
-                            this.option("focusedRowKey", path);
+                            this.option('focusedRowKey', path);
                         }
                     }
 
                     return this.callBase.apply(this, arguments);
                 },
                 _isFocusedRowInsideGroup: function(path) {
-                    var columnsController = this.getController("columns"),
-                        focusedRowKey = this.option("focusedRowKey"),
+                    var columnsController = this.getController('columns'),
+                        focusedRowKey = this.option('focusedRowKey'),
                         rowIndex = this.getRowIndexByKey(focusedRowKey),
                         focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex],
                         groups = columnsController.getGroupDataSourceParameters(true),
@@ -115,8 +115,8 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                 _calculateExpandedRowGlobalIndex: function(deferred, key, groupPath, group) {
                     var groupFilter = createGroupFilter(groupPath, { group: group }),
                         dataSource = this._dataSource,
-                        scrollingMode = this.option("scrolling.mode"),
-                        isVirtualScrolling = scrollingMode === "virtual" || scrollingMode === "infinite",
+                        scrollingMode = this.option('scrolling.mode'),
+                        isVirtualScrolling = scrollingMode === 'virtual' || scrollingMode === 'infinite',
                         pageSize = dataSource.pageSize(),
                         groupOffset;
 

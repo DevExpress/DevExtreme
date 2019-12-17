@@ -1,38 +1,38 @@
-import $ from "../core/renderer";
-import Widget from "./widget/ui.widget";
-import domAdapter from "../core/dom_adapter";
-import eventsEngine from "../events/core/events_engine";
-import pointerEvents from "../events/pointer";
-import { addNamespace } from "../events/utils";
-import { isString } from "../core/utils/type";
+import $ from '../core/renderer';
+import Widget from './widget/ui.widget';
+import domAdapter from '../core/dom_adapter';
+import eventsEngine from '../events/core/events_engine';
+import pointerEvents from '../events/pointer';
+import { addNamespace } from '../events/utils';
+import { isString } from '../core/utils/type';
 
-const SPLITTER_CLASS = "dx-splitter";
+const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_WRAPPER_CLASS = `${SPLITTER_CLASS}-wrapper`;
 const SPLITTER_INACTIVE_CLASS = `${SPLITTER_CLASS}-inactive`;
 const SPLITTER_BORDER_CLASS = `${SPLITTER_CLASS}-border`;
 const SPLITTER_INITIAL_STATE_CLASS = `${SPLITTER_CLASS}-initial`;
 
-const STATE_DISABLED_CLASS = "dx-state-disabled";
+const STATE_DISABLED_CLASS = 'dx-state-disabled';
 
-const SPLITTER_MODULE_NAMESPACE = "dxSplitterResizing";
+const SPLITTER_MODULE_NAMESPACE = 'dxSplitterResizing';
 const SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE);
 const SPLITTER_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, SPLITTER_MODULE_NAMESPACE);
 const SPLITTER_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, SPLITTER_MODULE_NAMESPACE);
 
 export default class SplitterControl extends Widget {
     _initMarkup() {
-        this._$container = this.option("container");
-        this._$leftElement = this.option("leftElement");
-        this._$rightElement = this.option("rightElement");
-        this._onApplyPanelSize = this._createActionByOption("onApplyPanelSize");
+        this._$container = this.option('container');
+        this._$leftElement = this.option('leftElement');
+        this._$rightElement = this.option('rightElement');
+        this._onApplyPanelSize = this._createActionByOption('onApplyPanelSize');
 
         this.$element()
             .addClass(SPLITTER_WRAPPER_CLASS)
             .addClass(SPLITTER_INITIAL_STATE_CLASS);
-        this._$splitterBorder = $("<div>")
+        this._$splitterBorder = $('<div>')
             .addClass(SPLITTER_BORDER_CLASS)
             .appendTo(this.$element());
-        this._$splitter = $("<div>")
+        this._$splitter = $('<div>')
             .addClass(SPLITTER_CLASS)
             .addClass(SPLITTER_INACTIVE_CLASS)
             .appendTo(this._$splitterBorder);
@@ -72,8 +72,8 @@ export default class SplitterControl extends Widget {
 
         const rightPanelWidth = 100 - this._leftPanelPercentageWidth;
         this._onApplyPanelSize({
-            leftPanelWidth: this._leftPanelPercentageWidth + "%",
-            rightPanelWidth: rightPanelWidth + "%"
+            leftPanelWidth: this._leftPanelPercentageWidth + '%',
+            rightPanelWidth: rightPanelWidth + '%'
         });
         this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth - this.getSplitterOffset());
     }
@@ -118,7 +118,7 @@ export default class SplitterControl extends Widget {
     }
 
     _isPercentValue(value) {
-        return isString(value) && value.slice(-1) === "%";
+        return isString(value) && value.slice(-1) === '%';
     }
 
     getSplitterOffset() {
@@ -134,7 +134,7 @@ export default class SplitterControl extends Widget {
     }
 
     toggleState(isActive) {
-        const classAction = isActive ? "removeClass" : "addClass";
+        const classAction = isActive ? 'removeClass' : 'addClass';
         this.$element()[classAction](STATE_DISABLED_CLASS);
         this._$splitter[classAction](STATE_DISABLED_CLASS);
     }
@@ -145,7 +145,7 @@ export default class SplitterControl extends Widget {
 
     setSplitterPositionLeft(splitterPositionLeft, needUpdatePanels) {
         splitterPositionLeft = splitterPositionLeft || this._$leftElement.get(0).clientWidth - this.getSplitterOffset();
-        this.$element().css("left", splitterPositionLeft);
+        this.$element().css('left', splitterPositionLeft);
         if(!needUpdatePanels) {
             return;
         }
@@ -160,11 +160,11 @@ export default class SplitterControl extends Widget {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "initialLeftPanelWidth":
+            case 'initialLeftPanelWidth':
                 this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(args.value);
                 this._dimensionChanged();
                 break;
-            case "leftElement":
+            case 'leftElement':
                 this.repaint();
                 break;
             default:

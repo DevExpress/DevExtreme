@@ -1,30 +1,30 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
 
-import Widget from "../widget/ui.widget";
-import Button from "../button";
+import Widget from '../widget/ui.widget';
+import Button from '../button';
 
-const FILE_MANAGER_FILE_ACTIONS_BUTTON = "dx-filemanager-file-actions-button";
-const FILE_MANAGER_FILE_ACTIONS_BUTTON_ACTIVATED = "dx-filemanager-file-actions-button-activated";
-const ACTIVE_STATE_CLASS = "dx-state-active";
+const FILE_MANAGER_FILE_ACTIONS_BUTTON = 'dx-filemanager-file-actions-button';
+const FILE_MANAGER_FILE_ACTIONS_BUTTON_ACTIVATED = 'dx-filemanager-file-actions-button-activated';
+const ACTIVE_STATE_CLASS = 'dx-state-active';
 
 class FileManagerFileActionsButton extends Widget {
 
     _initMarkup() {
         this._createClickAction();
 
-        const $button = $("<div>");
+        const $button = $('<div>');
 
         this.$element()
             .append($button)
             .addClass(FILE_MANAGER_FILE_ACTIONS_BUTTON);
 
         this._button = this._createComponent($button, Button, {
-            text: "&vellip;",
-            stylingMode: "text",
+            text: '&vellip;',
+            stylingMode: 'text',
             onClick: e => this._raiseClick(e),
             template: () => {
-                return $("<i>").html("&vellip;");
+                return $('<i>').html('&vellip;');
             }
         });
 
@@ -32,7 +32,7 @@ class FileManagerFileActionsButton extends Widget {
     }
 
     _createClickAction() {
-        this._clickAction = this._createActionByOption("onClick");
+        this._clickAction = this._createActionByOption('onClick');
     }
 
     _raiseClick(e) {
@@ -41,7 +41,7 @@ class FileManagerFileActionsButton extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            cssClass: "",
+            cssClass: '',
             onClick: null
         });
     }
@@ -50,10 +50,10 @@ class FileManagerFileActionsButton extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "cssClass":
+            case 'cssClass':
                 this.repaint();
                 break;
-            case "onClick":
+            case 'onClick':
                 this._createClickAction();
                 break;
             default:

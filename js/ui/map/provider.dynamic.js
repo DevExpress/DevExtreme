@@ -1,7 +1,7 @@
-var Promise = require("../../core/polyfills/promise"),
-    extend = require("../../core/utils/extend").extend,
-    iteratorUtils = require("../../core/utils/iterator"),
-    Provider = require("./provider"),
+var Promise = require('../../core/polyfills/promise'),
+    extend = require('../../core/utils/extend').extend,
+    iteratorUtils = require('../../core/utils/iterator'),
+    Provider = require('./provider'),
     abstract = Provider.abstract;
 
 var DynamicProvider = Provider.inherit({
@@ -207,7 +207,7 @@ var DynamicProvider = Provider.inherit({
 
         this._clearBounds();
 
-        if(!this._option("autoAdjust")) {
+        if(!this._option('autoAdjust')) {
             return;
         }
 

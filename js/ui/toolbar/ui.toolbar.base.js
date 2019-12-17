@@ -1,33 +1,33 @@
-import $ from "../../core/renderer";
-import themes from "../themes";
-import commonUtils from "../../core/utils/common";
-import { isPlainObject } from "../../core/utils/type";
-import registerComponent from "../../core/component_registrator";
-import { inArray } from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import AsyncCollectionWidget from "../collection/ui.collection_widget.async";
-import Promise from "../../core/polyfills/promise";
-import { BindableTemplate } from "../../core/templates/bindable_template";
-import fx from "../../animation/fx";
+import $ from '../../core/renderer';
+import themes from '../themes';
+import commonUtils from '../../core/utils/common';
+import { isPlainObject } from '../../core/utils/type';
+import registerComponent from '../../core/component_registrator';
+import { inArray } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import AsyncCollectionWidget from '../collection/ui.collection_widget.async';
+import Promise from '../../core/polyfills/promise';
+import { BindableTemplate } from '../../core/templates/bindable_template';
+import fx from '../../animation/fx';
 
-const TOOLBAR_CLASS = "dx-toolbar";
-const TOOLBAR_BEFORE_CLASS = "dx-toolbar-before";
-const TOOLBAR_CENTER_CLASS = "dx-toolbar-center";
-const TOOLBAR_AFTER_CLASS = "dx-toolbar-after";
-const TOOLBAR_BOTTOM_CLASS = "dx-toolbar-bottom";
-const TOOLBAR_MINI_CLASS = "dx-toolbar-mini";
-const TOOLBAR_ITEM_CLASS = "dx-toolbar-item";
-const TOOLBAR_LABEL_CLASS = "dx-toolbar-label";
-const TOOLBAR_BUTTON_CLASS = "dx-toolbar-button";
-const TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container";
-const TOOLBAR_GROUP_CLASS = "dx-toolbar-group";
-const TOOLBAR_COMPACT_CLASS = "dx-toolbar-compact";
-const TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS;
-const TEXT_BUTTON_MODE = "text";
-const DEFAULT_BUTTON_TYPE = "default";
+const TOOLBAR_CLASS = 'dx-toolbar';
+const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
+const TOOLBAR_CENTER_CLASS = 'dx-toolbar-center';
+const TOOLBAR_AFTER_CLASS = 'dx-toolbar-after';
+const TOOLBAR_BOTTOM_CLASS = 'dx-toolbar-bottom';
+const TOOLBAR_MINI_CLASS = 'dx-toolbar-mini';
+const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
+const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
+const TOOLBAR_BUTTON_CLASS = 'dx-toolbar-button';
+const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
+const TOOLBAR_GROUP_CLASS = 'dx-toolbar-group';
+const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';
+const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
+const TEXT_BUTTON_MODE = 'text';
+const DEFAULT_BUTTON_TYPE = 'default';
 
-const TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
+const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
 var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
@@ -65,7 +65,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _getSynchronizableOptionsForCreateComponent: function() {
-        return this.callBase().filter(item => item !== "disabled");
+        return this.callBase().filter(item => item !== 'disabled');
     },
 
     _initTemplates: function() {
@@ -73,20 +73,20 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         var template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
                 if(data.text) {
-                    $container.text(data.text).wrapInner("<div>");
+                    $container.text(data.text).wrapInner('<div>');
                 }
 
                 if(data.html) {
                     $container.html(data.html);
                 }
 
-                if(data.widget === "dxButton") {
-                    if(this.option("useFlatButtons")) {
+                if(data.widget === 'dxButton') {
+                    if(this.option('useFlatButtons')) {
                         data.options = data.options || {};
                         data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
                     }
 
-                    if(this.option("useDefaultButtons")) {
+                    if(this.option('useDefaultButtons')) {
                         data.options = data.options || {};
                         data.options.type = data.options.type || DEFAULT_BUTTON_TYPE;
                     }
@@ -95,12 +95,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 $container.text(String(data));
             }
 
-            this._getTemplate("dx-polymorph-widget").render({
+            this._getTemplate('dx-polymorph-widget').render({
                 container: $container,
                 model: rawModel,
                 parent: this
             });
-        }.bind(this), ["text", "html", "widget", "options"], this.option("integrationOptions.watchMethod"));
+        }.bind(this), ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
 
         this._templateManager.addDefaultTemplates({
             item: template,
@@ -110,7 +110,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            renderAs: "topToolbar",
+            renderAs: 'topToolbar',
 
             grouped: false,
 
@@ -134,10 +134,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
     _itemContainer: function() {
         return this._$toolbarItemsContainer.find([
-            "." + TOOLBAR_BEFORE_CLASS,
-            "." + TOOLBAR_CENTER_CLASS,
-            "." + TOOLBAR_AFTER_CLASS
-        ].join(","));
+            '.' + TOOLBAR_BEFORE_CLASS,
+            '.' + TOOLBAR_CENTER_CLASS,
+            '.' + TOOLBAR_AFTER_CLASS
+        ].join(','));
     },
 
     _itemClass: function() {
@@ -163,7 +163,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
         this.callBase();
 
-        this.setAria("role", "toolbar");
+        this.setAria('role', 'toolbar');
     },
 
     _waitParentAnimationFinished: function() {
@@ -210,9 +210,9 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     _renderToolbar: function() {
         this.$element()
             .addClass(TOOLBAR_CLASS)
-            .toggleClass(TOOLBAR_BOTTOM_CLASS, this.option("renderAs") === "bottomToolbar");
+            .toggleClass(TOOLBAR_BOTTOM_CLASS, this.option('renderAs') === 'bottomToolbar');
 
-        this._$toolbarItemsContainer = $("<div>")
+        this._$toolbarItemsContainer = $('<div>')
             .addClass(TOOLBAR_ITEMS_CONTAINER_CLASS)
             .appendTo(this.$element());
     },
@@ -220,12 +220,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     _renderSections: function() {
         var $container = this._$toolbarItemsContainer,
             that = this;
-        each(["before", "center", "after"], function() {
-            var sectionClass = "dx-toolbar-" + this,
-                $section = $container.find("." + sectionClass);
+        each(['before', 'center', 'after'], function() {
+            var sectionClass = 'dx-toolbar-' + this,
+                $section = $container.find('.' + sectionClass);
 
             if(!$section.length) {
-                that["_$" + this + "Section"] = $section = $("<div>")
+                that['_$' + this + 'Section'] = $section = $('<div>')
                     .addClass(sectionClass)
                     .appendTo($container);
             }
@@ -237,7 +237,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         const promises = [];
         $labels.each((_, label) => {
             const text = $(label).text();
-            const fontWeight = $(label).css("fontWeight");
+            const fontWeight = $(label).css('fontWeight');
             promises.push(themes.waitWebFont(text, fontWeight));
         });
         return Promise.all(promises);
@@ -247,8 +247,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         elementWidth = elementWidth || this.$element().width();
 
         this._$centerSection.css({
-            margin: "0 auto",
-            float: "none"
+            margin: '0 auto',
+            float: 'none'
         });
 
         var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
@@ -279,14 +279,14 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             this._alignSection(this._$beforeSection, sectionMaxWidth);
         } else {
             var labelPaddings = $label.outerWidth() - $label.width();
-            $label.css("maxWidth", sectionMaxWidth - labelPaddings);
+            $label.css('maxWidth', sectionMaxWidth - labelPaddings);
         }
     },
 
     _alignCenterSection: function(beforeRect, afterRect, elementWidth) {
         this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
 
-        var isRTL = this.option("rtlEnabled"),
+        var isRTL = this.option('rtlEnabled'),
             leftRect = isRTL ? afterRect : beforeRect,
             rightRect = isRTL ? beforeRect : afterRect,
             centerRect = this._$centerSection.get(0).getBoundingClientRect();
@@ -295,7 +295,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             this._$centerSection.css({
                 marginLeft: leftRect.width,
                 marginRight: rightRect.width,
-                float: leftRect.width > rightRect.width ? "none" : "right"
+                float: leftRect.width > rightRect.width ? 'none' : 'right'
             });
         }
     },
@@ -326,7 +326,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 labelMaxWidth;
 
             if(expanding) {
-                $label.css("maxWidth", "inherit");
+                $label.css('maxWidth', 'inherit');
             }
 
             var possibleLabelWidth = Math.ceil(expanding ? getRealLabelWidth(labels[i]) : currentLabelWidth);
@@ -336,11 +336,11 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 difference = difference - possibleLabelWidth;
             } else {
                 labelMaxWidth = expanding ? currentLabelWidth + difference : currentLabelWidth - difference;
-                $label.css("maxWidth", labelMaxWidth);
+                $label.css('maxWidth', labelMaxWidth);
                 break;
             }
 
-            $label.css("maxWidth", labelMaxWidth);
+            $label.css('maxWidth', labelMaxWidth);
         }
     },
 
@@ -348,7 +348,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         var $element = this.$element();
         $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
-        if(this.option("compactMode") && this._getSummaryItemsWidth(this.itemElements(), true) > $element.width()) {
+        if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > $element.width()) {
             $element.addClass(TOOLBAR_COMPACT_CLASS);
         }
     },
@@ -374,8 +374,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
-        var location = item.location || "center",
-            container = itemContainer || this["_$" + location + "Section"],
+        var location = item.location || 'center',
+            container = itemContainer || this['_$' + location + 'Section'],
             itemHasText = !!(item.text || item.html),
             itemElement = this.callBase(index, item, container, $after);
 
@@ -390,10 +390,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     _renderGroupedItems: function() {
         var that = this;
 
-        each(this.option("items"), function(groupIndex, group) {
+        each(this.option('items'), function(groupIndex, group) {
             var groupItems = group.items,
-                $container = $("<div>").addClass(TOOLBAR_GROUP_CLASS),
-                location = group.location || "center";
+                $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS),
+                location = group.location || 'center';
 
             if(!groupItems || !groupItems.length) {
                 return;
@@ -403,17 +403,17 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
                 that._renderItem(itemIndex, item, $container, null);
             });
 
-            that._$toolbarItemsContainer.find(".dx-toolbar-" + location).append($container);
+            that._$toolbarItemsContainer.find('.dx-toolbar-' + location).append($container);
         });
     },
 
     _renderItems: function(items) {
-        var grouped = this.option("grouped") && items.length && items[0].items;
+        var grouped = this.option('grouped') && items.length && items[0].items;
         grouped ? this._renderGroupedItems() : this.callBase(items);
     },
 
     _getToolbarItems: function() {
-        return this.option("items") || [];
+        return this.option('items') || [];
     },
 
     _renderContentImpl: function() {
@@ -460,19 +460,19 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         var name = args.name;
 
         switch(name) {
-            case "width":
+            case 'width':
                 this.callBase.apply(this, arguments);
                 this._dimensionChanged();
                 break;
-            case "renderAs":
-            case "useFlatButtons":
-            case "useDefaultButtons":
+            case 'renderAs':
+            case 'useFlatButtons':
+            case 'useDefaultButtons':
                 this._invalidate();
                 break;
-            case "compactMode":
+            case 'compactMode':
                 this._applyCompactMode();
                 break;
-            case "grouped":
+            case 'grouped':
                 break;
             default:
                 this.callBase.apply(this, arguments);
@@ -497,6 +497,6 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     */
 });
 
-registerComponent("dxToolbarBase", ToolbarBase);
+registerComponent('dxToolbarBase', ToolbarBase);
 
 module.exports = ToolbarBase;

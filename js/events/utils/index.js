@@ -1,69 +1,69 @@
-import $ from "../../core/renderer";
-import mappedAddNamespace from "./add_namespace";
-import eventsEngine, { Event } from "../core/events_engine";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { focused } from "../../ui/widget/selectors";
+import $ from '../../core/renderer';
+import mappedAddNamespace from './add_namespace';
+import eventsEngine, { Event } from '../core/events_engine';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { focused } from '../../ui/widget/selectors';
 
 const KEY_MAP = {
-    "backspace": "backspace",
-    "tab": "tab",
-    "enter": "enter",
-    "escape": "escape",
-    "pageup": "pageUp",
-    "pagedown": "pageDown",
-    "end": "end",
-    "home": "home",
-    "arrowleft": "leftArrow",
-    "arrowup": "upArrow",
-    "arrowright": "rightArrow",
-    "arrowdown": "downArrow",
-    "delete": "del",
-    " ": "space",
-    "f": "F",
-    "a": "A",
-    "*": "asterisk",
-    "-": "minus",
-    "alt": "alt",
-    "control": "control",
-    "shift": "shift",
+    'backspace': 'backspace',
+    'tab': 'tab',
+    'enter': 'enter',
+    'escape': 'escape',
+    'pageup': 'pageUp',
+    'pagedown': 'pageDown',
+    'end': 'end',
+    'home': 'home',
+    'arrowleft': 'leftArrow',
+    'arrowup': 'upArrow',
+    'arrowright': 'rightArrow',
+    'arrowdown': 'downArrow',
+    'delete': 'del',
+    ' ': 'space',
+    'f': 'F',
+    'a': 'A',
+    '*': 'asterisk',
+    '-': 'minus',
+    'alt': 'alt',
+    'control': 'control',
+    'shift': 'shift',
     // IE11:
-    "left": "leftArrow",
-    "up": "upArrow",
-    "right": "rightArrow",
-    "down": "downArrow",
-    "multiply": "asterisk",
-    "spacebar": "space",
-    "del": "del",
-    "subtract": "minus",
-    "esc": "escape"
+    'left': 'leftArrow',
+    'up': 'upArrow',
+    'right': 'rightArrow',
+    'down': 'downArrow',
+    'multiply': 'asterisk',
+    'spacebar': 'space',
+    'del': 'del',
+    'subtract': 'minus',
+    'esc': 'escape'
 };
 
 const LEGACY_KEY_CODES = {
     // iOS 10.2 and lower didn't supports KeyboardEvent.key
-    "8": "backspace",
-    "9": "tab",
-    "13": "enter",
-    "27": "escape",
-    "33": "pageUp",
-    "34": "pageDown",
-    "35": "end",
-    "36": "home",
-    "37": "leftArrow",
-    "38": "upArrow",
-    "39": "rightArrow",
-    "40": "downArrow",
-    "46": "del",
-    "32": "space",
-    "70": "F",
-    "65": "A",
-    "106": "asterisk",
-    "109": "minus",
-    "189": "minus",
-    "173": "minus",
-    "16": "shift",
-    "17": "control",
-    "18": "alt"
+    '8': 'backspace',
+    '9': 'tab',
+    '13': 'enter',
+    '27': 'escape',
+    '33': 'pageUp',
+    '34': 'pageDown',
+    '35': 'end',
+    '36': 'home',
+    '37': 'leftArrow',
+    '38': 'upArrow',
+    '39': 'rightArrow',
+    '40': 'downArrow',
+    '46': 'del',
+    '32': 'space',
+    '70': 'F',
+    '65': 'A',
+    '106': 'asterisk',
+    '109': 'minus',
+    '189': 'minus',
+    '173': 'minus',
+    '16': 'shift',
+    '17': 'control',
+    '18': 'alt'
 };
 
 const EVENT_SOURCES_REGEX = {
@@ -76,12 +76,12 @@ const EVENT_SOURCES_REGEX = {
 
 let fixMethod = e => e;
 const copyEvent = originalEvent => fixMethod(Event(originalEvent, originalEvent), originalEvent);
-const isDxEvent = e => eventSource(e) === "dx";
-const isNativeMouseEvent = e => eventSource(e) === "mouse";
-const isNativeTouchEvent = e => eventSource(e) === "touch";
+const isDxEvent = e => eventSource(e) === 'dx';
+const isNativeMouseEvent = e => eventSource(e) === 'mouse';
+const isNativeTouchEvent = e => eventSource(e) === 'touch';
 
 export const eventSource = ({ type }) => {
-    let result = "other";
+    let result = 'other';
 
     each(EVENT_SOURCES_REGEX, function(key) {
         if(this.test(type)) {
@@ -94,17 +94,17 @@ export const eventSource = ({ type }) => {
     return result;
 };
 
-export const isPointerEvent = e => eventSource(e) === "pointer";
+export const isPointerEvent = e => eventSource(e) === 'pointer';
 
 export const isMouseEvent = e => isNativeMouseEvent(e) ||
-    ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "mouse");
+    ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === 'mouse');
 
-export const isDxMouseWheelEvent = e => e && e.type === "dxmousewheel";
+export const isDxMouseWheelEvent = e => e && e.type === 'dxmousewheel';
 
 export const isTouchEvent = e => isNativeTouchEvent(e) ||
-    ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
+    ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === 'touch');
 
-export const isKeyboardEvent = e => eventSource(e) === "keyboard";
+export const isKeyboardEvent = e => eventSource(e) === 'keyboard';
 
 export const isFakeClickEvent = ({ screenX, offsetX, pageX }) => screenX === 0 && !offsetX && pageX === 0;
 
@@ -148,26 +148,26 @@ export const needSkipEvent = e => {
     // TODO: this checking used in swipeable first move handler. is it correct?
     const { target } = e;
     const $target = $(target);
-    const touchInInput = $target.is("input, textarea, select");
+    const touchInInput = $target.is('input, textarea, select');
 
-    if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
+    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event')) {
         return true;
     }
 
     if(isDxMouseWheelEvent(e)) {
-        const isTextArea = $target.is("textarea") && $target.hasClass("dx-texteditor-input");
+        const isTextArea = $target.is('textarea') && $target.hasClass('dx-texteditor-input');
 
         if(isTextArea) {
             return false;
         }
 
-        const isContentEditable = target.isContentEditable || target.hasAttribute("contenteditable");
+        const isContentEditable = target.isContentEditable || target.hasAttribute('contenteditable');
 
         if(isContentEditable) {
             return false;
         }
 
-        const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
+        const isInputFocused = $target.is('input[type=\'number\'], textarea, select') && $target.is(':focus');
 
         return isInputFocused;
     }

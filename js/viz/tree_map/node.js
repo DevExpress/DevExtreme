@@ -1,4 +1,4 @@
-var _extend = require("../../core/utils/extend").extend;
+var _extend = require('../../core/utils/extend').extend;
 
 function Node() { }
 
@@ -51,7 +51,7 @@ function updateLeaf(content, attrs) {
 }
 
 function updateGroup(content, attrs) {
-    content.outer.attr({ stroke: attrs.stroke, "stroke-width": attrs["stroke-width"], "stroke-opacity": attrs["stroke-opacity"] });
+    content.outer.attr({ stroke: attrs.stroke, 'stroke-width': attrs['stroke-width'], 'stroke-opacity': attrs['stroke-opacity'] });
     content.inner.smartAttr({ fill: attrs.fill, opacity: attrs.opacity, hatching: attrs.hatching });
 }
 

@@ -1,32 +1,32 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    EditDecorator = require("./ui.list.edit.decorator"),
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    noop = require('../../core/utils/common').noop,
+    EditDecorator = require('./ui.list.edit.decorator'),
     abstract = EditDecorator.abstract,
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    feedbackEvents = require("../../events/core/emitter.feedback");
+    eventUtils = require('../../events/utils'),
+    pointerEvents = require('../../events/pointer'),
+    feedbackEvents = require('../../events/core/emitter.feedback');
 
-var LIST_EDIT_DECORATOR = "dxListEditDecorator",
+var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
     POINTER_DOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR),
     ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR),
 
-    LIST_ITEM_CONTENT_CLASS = "dx-list-item-content",
+    LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content',
 
-    SWITCHABLE_DELETE_READY_CLASS = "dx-list-switchable-delete-ready",
-    SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-shield-positioning",
-    SWITCHABLE_DELETE_TOP_SHIELD_CLASS = "dx-list-switchable-delete-top-shield",
-    SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = "dx-list-switchable-delete-bottom-shield",
-    SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-item-shield-positioning",
-    SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = "dx-list-switchable-delete-item-content-shield",
-    SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container";
+    SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready',
+    SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-shield-positioning',
+    SWITCHABLE_DELETE_TOP_SHIELD_CLASS = 'dx-list-switchable-delete-top-shield',
+    SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = 'dx-list-switchable-delete-bottom-shield',
+    SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-item-shield-positioning',
+    SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = 'dx-list-switchable-delete-item-content-shield',
+    SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
 
 var SwitchableEditDecorator = EditDecorator.inherit({
 
     _init: function() {
-        this._$topShield = $("<div>").addClass(SWITCHABLE_DELETE_TOP_SHIELD_CLASS);
-        this._$bottomShield = $("<div>").addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
-        this._$itemContentShield = $("<div>").addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
+        this._$topShield = $('<div>').addClass(SWITCHABLE_DELETE_TOP_SHIELD_CLASS);
+        this._$bottomShield = $('<div>').addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
+        this._$itemContentShield = $('<div>').addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
 
         eventsEngine.on(this._$topShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
         eventsEngine.on(this._$bottomShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
@@ -97,7 +97,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     _toggleContentShield: function($itemElement, enabled) {
         if(enabled) {
             $itemElement
-                .find("." + LIST_ITEM_CONTENT_CLASS)
+                .find('.' + LIST_ITEM_CONTENT_CLASS)
                 .first()
                 .append(this._$itemContentShield);
         } else {
@@ -106,12 +106,12 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _toggleScrolling: function(readyToDelete) {
-        var scrollView = this._list.$element().dxScrollView("instance");
+        var scrollView = this._list.$element().dxScrollView('instance');
 
         if(readyToDelete) {
-            scrollView.on("start", this._cancelScrolling);
+            scrollView.on('start', this._cancelScrolling);
         } else {
-            scrollView.off("start", this._cancelScrolling);
+            scrollView.off('start', this._cancelScrolling);
         }
     },
 
@@ -165,14 +165,14 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     _getDeleteButtonContainer: function($itemElement) {
         $itemElement = $itemElement || this._$readyToDeleteItem;
 
-        return $itemElement.children("." + SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS);
+        return $itemElement.children('.' + SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS);
     },
 
     _deleteItem: function($itemElement) {
         $itemElement = $itemElement || this._$readyToDeleteItem;
         this._getDeleteButtonContainer($itemElement).detach();
 
-        if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             return;
         }
 
@@ -181,7 +181,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _isRtlEnabled: function() {
-        return this._list.option("rtlEnabled");
+        return this._list.option('rtlEnabled');
     },
 
     dispose: function() {
