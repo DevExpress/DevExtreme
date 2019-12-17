@@ -124,7 +124,7 @@ export default class FormItemsRunTimeInfo {
 
     removeItemsByPathStartWith(path) {
         const keys = Object.keys(this._map);
-        const filteredKeys = keys.filter(key => this._map[key].path.startsWith(path));
+        const filteredKeys = keys.filter(key => this._map[key].path.indexOf(path, 0) > -1);
         filteredKeys.forEach(key => this.removeItemByKey(key));
     }
 }
