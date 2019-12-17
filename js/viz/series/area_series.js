@@ -1,13 +1,13 @@
 // there are area, steparea, stackedarea, fullstackedarea, splinearea
-var objectUtils = require("../../core/utils/object"),
-    extend = require("../../core/utils/extend").extend,
-    scatterSeries = require("./scatter_series").chart,
-    lineSeries = require("./line_series"),
+var objectUtils = require('../../core/utils/object'),
+    extend = require('../../core/utils/extend').extend,
+    scatterSeries = require('./scatter_series').chart,
+    lineSeries = require('./line_series'),
     chartLineSeries = lineSeries.chart.line,
     polarLineSeries = lineSeries.polar.line,
-    _map = require("../core/utils").map,
+    _map = require('../core/utils').map,
     _extend = extend,
-    calculateBezierPoints = lineSeries.chart["spline"]._calculateBezierPoints;
+    calculateBezierPoints = lineSeries.chart['spline']._calculateBezierPoints;
 
 exports.chart = {};
 exports.polar = {};
@@ -25,7 +25,7 @@ var baseAreaMethods = {
     },
 
     getValueRangeInitialValue: function() {
-        if(this.valueAxisType !== "logarithmic" && this.valueType !== "datetime" && this.showZero !== false) {
+        if(this.valueAxisType !== 'logarithmic' && this.valueType !== 'datetime' && this.showZero !== false) {
             return 0;
         } else {
             return scatterSeries.getValueRangeInitialValue.call(this);
@@ -58,7 +58,7 @@ var baseAreaMethods = {
 
     _drawElement: function(segment) {
         return {
-            line: this._bordersGroup && this._createBorderElement(segment.line, { "stroke-width": this._styles.normal.border["stroke-width"] }).append(this._bordersGroup),
+            line: this._bordersGroup && this._createBorderElement(segment.line, { 'stroke-width': this._styles.normal.border['stroke-width'] }).append(this._bordersGroup),
             area: this._createMainElement(segment.area).append(this._elementsGroup)
         };
     },
@@ -69,7 +69,7 @@ var baseAreaMethods = {
         that._elementsGroup && that._elementsGroup.smartAttr(style.elements);
         that._bordersGroup && that._bordersGroup.attr(style.border);
         (that._graphics || []).forEach(function(graphic) {
-            graphic.line && graphic.line.attr({ 'stroke-width': style.border["stroke-width"] }).sharp();
+            graphic.line && graphic.line.attr({ 'stroke-width': style.border['stroke-width'] }).sharp();
         });
     },
 
@@ -77,13 +77,13 @@ var baseAreaMethods = {
         var borderOptions = options.border || {},
             borderStyle = chartLineSeries._parseLineOptions(borderOptions, defaultBorderColor);
 
-        borderStyle.stroke = (borderOptions.visible && borderStyle["stroke-width"]) ? borderStyle.stroke : "none";
-        borderStyle["stroke-width"] = borderStyle["stroke-width"] || 1;
+        borderStyle.stroke = (borderOptions.visible && borderStyle['stroke-width']) ? borderStyle.stroke : 'none';
+        borderStyle['stroke-width'] = borderStyle['stroke-width'] || 1;
 
         return {
             border: borderStyle,
             elements: {
-                stroke: "none",
+                stroke: 'none',
                 fill: options.color || defaultColor,
                 hatching: options.hatching,
                 opacity: options.opacity
@@ -97,11 +97,11 @@ var baseAreaMethods = {
     },
 
     _createMainElement: function(points, settings) {
-        return this._renderer.path(points, "area").attr(settings);
+        return this._renderer.path(points, 'area').attr(settings);
     },
 
     _getTrackerSettings: function(segment) {
-        return { "stroke-width": segment.singlePointSegment ? this._defaultTrackerWidth : 0 };
+        return { 'stroke-width': segment.singlePointSegment ? this._defaultTrackerWidth : 0 };
     },
 
     _getMainPointsFromSegment: function(segment) {
@@ -117,7 +117,7 @@ function createAreaPoints(points) {
     }));
 }
 
-var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMethods, {
+var areaSeries = exports.chart['area'] = _extend({}, chartLineSeries, baseAreaMethods, {
     _prepareSegment(points, rotated) {
         const that = this;
         const processedPoints = that._processSinglePointsAreaSegment(points, rotated);
@@ -149,7 +149,7 @@ var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMe
         if(points && points.length === 1) {
             var p = points[0],
                 p1 = objectUtils.clone(p);
-            p1[rotated ? "y" : "x"] += 1;
+            p1[rotated ? 'y' : 'x'] += 1;
             p1.argument = null;
             return [p, p1];
         }
@@ -157,7 +157,7 @@ var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMe
     }
 });
 
-exports.polar["area"] = _extend({}, polarLineSeries, baseAreaMethods, {
+exports.polar['area'] = _extend({}, polarLineSeries, baseAreaMethods, {
     _prepareSegment: function(points, rotated, lastSegment) {
         lastSegment && polarLineSeries._closeSegment.call(this, points);
 
@@ -168,17 +168,17 @@ exports.polar["area"] = _extend({}, polarLineSeries, baseAreaMethods, {
     }
 });
 
-exports.chart["steparea"] = _extend({}, areaSeries, {
+exports.chart['steparea'] = _extend({}, areaSeries, {
     _prepareSegment: function(points, rotated) {
-        var stepLineSeries = lineSeries.chart["stepline"];
+        var stepLineSeries = lineSeries.chart['stepline'];
         points = areaSeries._processSinglePointsAreaSegment(points, rotated);
         return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints.call(this, points), rotated);
     },
 
-    getSeriesPairCoord: lineSeries.chart["stepline"].getSeriesPairCoord
+    getSeriesPairCoord: lineSeries.chart['stepline'].getSeriesPairCoord
 });
 
-exports.chart["splinearea"] = _extend({}, areaSeries, {
+exports.chart['splinearea'] = _extend({}, areaSeries, {
     _areaPointsToSplineAreaPoints: function(areaPoints) {
         var previousMiddlePoint = areaPoints[areaPoints.length / 2 - 1],
             middlePoint = areaPoints[areaPoints.length / 2];
@@ -209,14 +209,14 @@ exports.chart["splinearea"] = _extend({}, areaSeries, {
     },
 
     _createMainElement: function(points, settings) {
-        return this._renderer.path(points, "bezierarea").attr(settings);
+        return this._renderer.path(points, 'bezierarea').attr(settings);
     },
 
-    _createBorderElement: lineSeries.chart["spline"]._createMainElement,
+    _createBorderElement: lineSeries.chart['spline']._createMainElement,
 
-    getSeriesPairCoord: lineSeries.chart["spline"].getSeriesPairCoord,
+    getSeriesPairCoord: lineSeries.chart['spline'].getSeriesPairCoord,
 
-    getNearestPointsByCoord: lineSeries.chart["spline"].getNearestPointsByCoord,
+    getNearestPointsByCoord: lineSeries.chart['spline'].getNearestPointsByCoord,
 
-    obtainCubicBezierTCoef: lineSeries.chart["spline"].obtainCubicBezierTCoef
+    obtainCubicBezierTCoef: lineSeries.chart['spline'].obtainCubicBezierTCoef
 });

@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
 
-import messageLocalization from "../../localization/message";
+import messageLocalization from '../../localization/message';
 
-import FileManagerDialogBase from "./ui.file_manager.dialog.js";
-import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
+import FileManagerDialogBase from './ui.file_manager.dialog.js';
+import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
 
-const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = "dx-filemanager-dialog-folder-chooser";
-const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = "dx-filemanager-dialog-folder-chooser-popup";
+const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = 'dx-filemanager-dialog-folder-chooser';
+const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = 'dx-filemanager-dialog-folder-chooser-popup';
 
 class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
@@ -18,8 +18,8 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
-            title: messageLocalization.format("dxFileManager-dialogDirectoryChooserTitle"),
-            buttonText: messageLocalization.format("dxFileManager-dialogDirectoryChooserButtonText"),
+            title: messageLocalization.format('dxFileManager-dialogDirectoryChooserTitle'),
+            buttonText: messageLocalization.format('dxFileManager-dialogDirectoryChooserButtonText'),
             contentCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER,
             popupCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP
         });
@@ -28,8 +28,8 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     _createContentTemplate(element) {
         super._createContentTemplate(element);
 
-        this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
-            getDirectories: this.option("getDirectories"),
+        this._filesTreeView = this._createComponent($('<div>'), FileManagerFilesTreeView, {
+            getDirectories: this.option('getDirectories'),
             getCurrentDirectory: this._getDialogSelectedDirectory.bind(this),
             onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this)
         });
@@ -48,7 +48,7 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogSelectedDirectory() {
-        return this._selectedDirectoryInfo || this.option("getCurrentDirectory")();
+        return this._selectedDirectoryInfo || this.option('getCurrentDirectory')();
     }
 
     _onFilesTreeViewDirectoryClick({ itemData }) {

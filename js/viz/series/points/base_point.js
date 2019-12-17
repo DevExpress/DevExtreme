@@ -1,24 +1,24 @@
 var mixins = {},
-    statesConsts = require("../../components/consts").states,
-    symbolPoint = require("./symbol_point"),
-    barPoint = require("./bar_point"),
-    bubblePoint = require("./bubble_point"),
-    piePoint = require("./pie_point"),
-    rangeSymbolPoint = require("./range_symbol_point"),
-    rangeBarPoint = require("./range_bar_point"),
-    candlestickPoint = require("./candlestick_point"),
-    stockPoint = require("./stock_point"),
-    polarPoints = require("./polar_point"),
-    _normalizeEnum = require("../../core/utils").normalizeEnum,
-    extend = require("../../../core/utils/extend").extend,
+    statesConsts = require('../../components/consts').states,
+    symbolPoint = require('./symbol_point'),
+    barPoint = require('./bar_point'),
+    bubblePoint = require('./bubble_point'),
+    piePoint = require('./pie_point'),
+    rangeSymbolPoint = require('./range_symbol_point'),
+    rangeBarPoint = require('./range_bar_point'),
+    candlestickPoint = require('./candlestick_point'),
+    stockPoint = require('./stock_point'),
+    polarPoints = require('./polar_point'),
+    _normalizeEnum = require('../../core/utils').normalizeEnum,
+    extend = require('../../../core/utils/extend').extend,
     _extend = extend,
-    _isDefined = require("../../../core/utils/type").isDefined,
-    _noop = require("../../../core/utils/common").noop,
-    SYMBOL_POINT = "symbolPoint",
-    POLAR_SYMBOL_POINT = "polarSymbolPoint",
-    BAR_POINT = "barPoint",
-    POLAR_BAR_POINT = "polarBarPoint",
-    PIE_POINT = "piePoint",
+    _isDefined = require('../../../core/utils/type').isDefined,
+    _noop = require('../../../core/utils/common').noop,
+    SYMBOL_POINT = 'symbolPoint',
+    POLAR_SYMBOL_POINT = 'polarSymbolPoint',
+    BAR_POINT = 'barPoint',
+    POLAR_BAR_POINT = 'polarBarPoint',
+    PIE_POINT = 'piePoint',
     SELECTED_STATE = statesConsts.selectedMark,
     HOVER_STATE = statesConsts.hoverMark,
     NORMAL_STATE = statesConsts.normalMark,
@@ -28,46 +28,46 @@ var mixins = {},
 
     pointTypes = {
         chart: {
-            "scatter": SYMBOL_POINT,
-            "line": SYMBOL_POINT,
-            "spline": SYMBOL_POINT,
-            "stepline": SYMBOL_POINT,
-            "stackedline": SYMBOL_POINT,
-            "fullstackedline": SYMBOL_POINT,
-            "stackedspline": SYMBOL_POINT,
-            "fullstackedspline": SYMBOL_POINT,
-            "stackedsplinearea": SYMBOL_POINT,
-            "fullstackedsplinearea": SYMBOL_POINT,
-            "area": SYMBOL_POINT,
-            "splinearea": SYMBOL_POINT,
-            "steparea": SYMBOL_POINT,
-            "stackedarea": SYMBOL_POINT,
-            "fullstackedarea": SYMBOL_POINT,
-            "rangearea": "rangeSymbolPoint",
-            "bar": BAR_POINT,
-            "stackedbar": BAR_POINT,
-            "fullstackedbar": BAR_POINT,
-            "rangebar": "rangeBarPoint",
-            "bubble": "bubblePoint",
-            "stock": "stockPoint",
-            "candlestick": "candlestickPoint"
+            'scatter': SYMBOL_POINT,
+            'line': SYMBOL_POINT,
+            'spline': SYMBOL_POINT,
+            'stepline': SYMBOL_POINT,
+            'stackedline': SYMBOL_POINT,
+            'fullstackedline': SYMBOL_POINT,
+            'stackedspline': SYMBOL_POINT,
+            'fullstackedspline': SYMBOL_POINT,
+            'stackedsplinearea': SYMBOL_POINT,
+            'fullstackedsplinearea': SYMBOL_POINT,
+            'area': SYMBOL_POINT,
+            'splinearea': SYMBOL_POINT,
+            'steparea': SYMBOL_POINT,
+            'stackedarea': SYMBOL_POINT,
+            'fullstackedarea': SYMBOL_POINT,
+            'rangearea': 'rangeSymbolPoint',
+            'bar': BAR_POINT,
+            'stackedbar': BAR_POINT,
+            'fullstackedbar': BAR_POINT,
+            'rangebar': 'rangeBarPoint',
+            'bubble': 'bubblePoint',
+            'stock': 'stockPoint',
+            'candlestick': 'candlestickPoint'
         },
         pie: {
-            "pie": PIE_POINT,
-            "doughnut": PIE_POINT,
-            "donut": PIE_POINT
+            'pie': PIE_POINT,
+            'doughnut': PIE_POINT,
+            'donut': PIE_POINT
         },
         polar: {
-            "scatter": POLAR_SYMBOL_POINT,
-            "line": POLAR_SYMBOL_POINT,
-            "area": POLAR_SYMBOL_POINT,
-            "bar": POLAR_BAR_POINT,
-            "stackedbar": POLAR_BAR_POINT
+            'scatter': POLAR_SYMBOL_POINT,
+            'line': POLAR_SYMBOL_POINT,
+            'area': POLAR_SYMBOL_POINT,
+            'bar': POLAR_BAR_POINT,
+            'stackedbar': POLAR_BAR_POINT
         }
     };
 
 function isNoneMode(mode) {
-    return _normalizeEnum(mode) === "none";
+    return _normalizeEnum(mode) === 'none';
 }
 
 function Point(series, dataItem, options) {
@@ -210,7 +210,7 @@ Point.prototype = {
             if(that.series.autoHidePointMarkers && style !== SELECTION && style !== HOVER) {
                 that.deleteMarker();
             } else {
-                if(style === "normal") {
+                if(style === 'normal') {
                     that.clearMarker();
                 } else {
                     that.graphic.toForeground();
@@ -267,8 +267,8 @@ Point.prototype = {
     },
 
     _checkLabelsChanging: function(oldType, newType) {
-        var isNewRange = ~newType.indexOf("range"),
-            isOldRange = ~oldType.indexOf("range");
+        var isNewRange = ~newType.indexOf('range'),
+            isOldRange = ~oldType.indexOf('range');
 
         return (isOldRange && !isNewRange) || (!isOldRange && isNewRange);
     },
@@ -475,12 +475,12 @@ Point.prototype = {
                 if(!point.isVisible()) return;
                 const formatObject = point._getFormatObject(tooltip);
                 tooltipStackPointsFormatObject.push(formatObject);
-                sharedTooltipValuesArray.push(formatObject.seriesName + ": " + formatObject.valueText);
+                sharedTooltipValuesArray.push(formatObject.seriesName + ': ' + formatObject.valueText);
             });
 
             _extend(tooltipFormatObject, {
                 points: tooltipStackPointsFormatObject,
-                valueText: sharedTooltipValuesArray.join("\n"),
+                valueText: sharedTooltipValuesArray.join('\n'),
                 stackName: that.series.getStackName() || null
             });
         }
@@ -501,7 +501,7 @@ Point.prototype = {
         var that = this,
             minValue = isFinite(that.minValue) ? that.minValue : 0;
         if(_isDefined(holeValue)) {
-            if(position === "left") {
+            if(position === 'left') {
                 that.leftHole = that.value - holeValue;
                 that.minLeftHole = minValue - holeValue;
             } else {

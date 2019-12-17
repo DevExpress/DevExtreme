@@ -1,29 +1,29 @@
-const assert = require("chai").assert;
-const LessTemplateLoader = require("../modules/less-template-loader");
-const lessCompiler = require("less/lib/less-node");
+const assert = require('chai').assert;
+const LessTemplateLoader = require('../modules/less-template-loader');
+const lessCompiler = require('less/lib/less-node');
 
 const metadata = [ {
-    "Name": "10. Text color",
-    "Key": "@base-text-color",
+    'Name': '10. Text color',
+    'Key': '@base-text-color',
 }, {
-    "Name": "20. Base background color",
-    "Key": "@base-bg",
+    'Name': '20. Base background color',
+    'Key': '@base-bg',
 }, {
-    "Key": "@datagrid-base-color"
+    'Key': '@datagrid-base-color'
 }, {
-    "Key": "@treelist-base-color"
+    'Key': '@treelist-base-color'
 }];
 
 
-const emptyHeader = () => { return ""; };
+const emptyHeader = () => { return ''; };
 
-describe("Migration LessTemplateLoader", () => {
+describe('Migration LessTemplateLoader', () => {
 
-    it("compileLess", () => {
+    it('compileLess', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
         };
 
@@ -40,16 +40,16 @@ describe("Migration LessTemplateLoader", () => {
         let metadataVariables = {};
 
         metadata.forEach(metaItem => {
-            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+            metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {
-            "base-bg": "#fff",
-            "base-text-color": "#000",
-            "datagrid-base-color": "red",
-            "treelist-base-color": "green"
+            'base-bg': '#fff',
+            'base-text-color': '#000',
+            'datagrid-base-color': 'red',
+            'treelist-base-color': 'green'
         }, metadataVariables).then(data => {
             assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;

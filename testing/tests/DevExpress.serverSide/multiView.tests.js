@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/multiView.markup.tests.js");
+require('../DevExpress.ui.widgets/multiView.markup.tests.js');

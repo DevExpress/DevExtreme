@@ -1,42 +1,42 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    registerComponent = require("../core/component_registrator"),
-    commonUtils = require("../core/utils/common"),
-    typeUtils = require("../core/utils/type"),
-    windowUtils = require("../core/utils/window"),
-    extend = require("../core/utils/extend").extend,
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    fx = require("../animation/fx"),
-    clickEvent = require("../events/click"),
-    translator = require("../animation/translator"),
-    devices = require("../core/devices"),
-    Widget = require("./widget/ui.widget"),
-    eventUtils = require("../events/utils"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit"),
-    Swipeable = require("../events/gesture/swipeable"),
-    BindableTemplate = require("../core/templates/bindable_template").BindableTemplate,
-    Deferred = require("../core/utils/deferred").Deferred;
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    registerComponent = require('../core/component_registrator'),
+    commonUtils = require('../core/utils/common'),
+    typeUtils = require('../core/utils/type'),
+    windowUtils = require('../core/utils/window'),
+    extend = require('../core/utils/extend').extend,
+    getPublicElement = require('../core/utils/dom').getPublicElement,
+    fx = require('../animation/fx'),
+    clickEvent = require('../events/click'),
+    translator = require('../animation/translator'),
+    devices = require('../core/devices'),
+    Widget = require('./widget/ui.widget'),
+    eventUtils = require('../events/utils'),
+    CollectionWidget = require('./collection/ui.collection_widget.edit'),
+    Swipeable = require('../events/gesture/swipeable'),
+    BindableTemplate = require('../core/templates/bindable_template').BindableTemplate,
+    Deferred = require('../core/utils/deferred').Deferred;
 
-var GALLERY_CLASS = "dx-gallery",
-    GALLERY_WRAPPER_CLASS = GALLERY_CLASS + "-wrapper",
-    GALLERY_LOOP_CLASS = "dx-gallery-loop",
-    GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + "-container",
-    GALLERY_ACTIVE_CLASS = GALLERY_CLASS + "-active",
+var GALLERY_CLASS = 'dx-gallery',
+    GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper',
+    GALLERY_LOOP_CLASS = 'dx-gallery-loop',
+    GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + '-container',
+    GALLERY_ACTIVE_CLASS = GALLERY_CLASS + '-active',
 
-    GALLERY_ITEM_CLASS = GALLERY_CLASS + "-item",
-    GALLERY_INVISIBLE_ITEM_CLASS = GALLERY_CLASS + "-item-invisible",
-    GALLERY_LOOP_ITEM_CLASS = GALLERY_ITEM_CLASS + "-loop",
-    GALLERY_ITEM_SELECTOR = "." + GALLERY_ITEM_CLASS,
-    GALLERY_ITEM_SELECTED_CLASS = GALLERY_ITEM_CLASS + "-selected",
+    GALLERY_ITEM_CLASS = GALLERY_CLASS + '-item',
+    GALLERY_INVISIBLE_ITEM_CLASS = GALLERY_CLASS + '-item-invisible',
+    GALLERY_LOOP_ITEM_CLASS = GALLERY_ITEM_CLASS + '-loop',
+    GALLERY_ITEM_SELECTOR = '.' + GALLERY_ITEM_CLASS,
+    GALLERY_ITEM_SELECTED_CLASS = GALLERY_ITEM_CLASS + '-selected',
 
-    GALLERY_INDICATOR_CLASS = GALLERY_CLASS + "-indicator",
-    GALLERY_INDICATOR_ITEM_CLASS = GALLERY_INDICATOR_CLASS + "-item",
-    GALLERY_INDICATOR_ITEM_SELECTOR = "." + GALLERY_INDICATOR_ITEM_CLASS,
-    GALLERY_INDICATOR_ITEM_SELECTED_CLASS = GALLERY_INDICATOR_ITEM_CLASS + "-selected",
+    GALLERY_INDICATOR_CLASS = GALLERY_CLASS + '-indicator',
+    GALLERY_INDICATOR_ITEM_CLASS = GALLERY_INDICATOR_CLASS + '-item',
+    GALLERY_INDICATOR_ITEM_SELECTOR = '.' + GALLERY_INDICATOR_ITEM_CLASS,
+    GALLERY_INDICATOR_ITEM_SELECTED_CLASS = GALLERY_INDICATOR_ITEM_CLASS + '-selected',
 
-    GALLERY_IMAGE_CLASS = "dx-gallery-item-image",
+    GALLERY_IMAGE_CLASS = 'dx-gallery-item-image',
 
-    GALLERY_ITEM_DATA_KEY = "dxGalleryItemData",
+    GALLERY_ITEM_DATA_KEY = 'dxGalleryItemData',
 
     MAX_CALC_ERROR = 1;
 
@@ -49,7 +49,7 @@ var GalleryNavButton = Widget.inherit({
     },
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            direction: "next",
+            direction: 'next',
             onClick: null,
             hoverStateEnabled: true,
             activeStateEnabled: true
@@ -63,18 +63,18 @@ var GalleryNavButton = Widget.inherit({
             $element = this.$element(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        $element.addClass(GALLERY_CLASS + "-nav-button-" + this.option("direction"));
+        $element.addClass(GALLERY_CLASS + '-nav-button-' + this.option('direction'));
 
         eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, function(e) {
-            that._createActionByOption("onClick")({ event: e });
+            that._createActionByOption('onClick')({ event: e });
         });
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onClick":
-            case "direction":
+            case 'onClick':
+            case 'direction':
                 this._invalidate();
                 break;
             default:
@@ -223,10 +223,10 @@ var Gallery = CollectionWidget.inherit({
              * @fires dxGalleryOptions.onOptionChanged
              */
 
-            _itemAttributes: { role: "option" },
+            _itemAttributes: { role: 'option' },
             loopItemFocus: false,
             selectOnFocus: true,
-            selectionMode: "single",
+            selectionMode: 'single',
             selectionRequired: true,
             selectionByClick: false
         });
@@ -236,7 +236,7 @@ var Gallery = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -253,7 +253,7 @@ var Gallery = CollectionWidget.inherit({
     _init: function() {
         this.callBase();
 
-        this.option("loopItemFocus", this.option("loop"));
+        this.option('loopItemFocus', this.option('loop'));
     },
 
     _initTemplates: function() {
@@ -276,7 +276,7 @@ var Gallery = CollectionWidget.inherit({
         * @hidden
         */
 
-        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
+        this._defaultTemplates['item'] = new BindableTemplate((function($container, data) {
             var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
             if(typeUtils.isPlainObject(data)) {
@@ -289,7 +289,7 @@ var Gallery = CollectionWidget.inherit({
             } else {
                 $img.attr('src', String(data)).appendTo($container);
             }
-        }).bind(this), ["imageSrc", "imageAlt", "text", "html"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ['imageSrc', 'imageAlt', 'text', 'html'], this.option('integrationOptions.watchMethod'));
     },
 
     _dataSourceOptions: function() {
@@ -311,9 +311,9 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _actualItemWidth: function() {
-        var isWrapAround = this.option("wrapAround");
+        var isWrapAround = this.option('wrapAround');
 
-        if(this.option("stretchImages")) {
+        if(this.option('stretchImages')) {
             var itemPerPage = isWrapAround ? this._itemsPerPage() + 1 : this._itemsPerPage();
             return 1 / itemPerPage;
         }
@@ -328,7 +328,7 @@ var Gallery = CollectionWidget.inherit({
     _itemPercentWidth: function() {
         var percentWidth,
             elementWidth = this.$element().outerWidth(),
-            initialItemWidth = this.option("initialItemWidth");
+            initialItemWidth = this.option('initialItemWidth');
 
         if(initialItemWidth && initialItemWidth <= elementWidth) {
             percentWidth = initialItemWidth / elementWidth;
@@ -350,11 +350,11 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _itemsCount: function() {
-        return (this.option("items") || []).length;
+        return (this.option('items') || []).length;
     },
 
     _offsetDirection: function() {
-        return this.option("rtlEnabled") ? -1 : 1;
+        return this.option('rtlEnabled') ? -1 : 1;
     },
 
     _initMarkup: function() {
@@ -362,13 +362,13 @@ var Gallery = CollectionWidget.inherit({
         this._renderItemsContainer();
 
         this.$element().addClass(GALLERY_CLASS);
-        this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
+        this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option('loop'));
 
         this.callBase();
 
         this.setAria({
-            "role": "listbox",
-            "label": "gallery"
+            'role': 'listbox',
+            'label': 'gallery'
         });
     },
 
@@ -393,7 +393,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _dimensionChanged: function() {
-        var selectedIndex = this.option("selectedIndex") || 0;
+        var selectedIndex = this.option('selectedIndex') || 0;
 
         this._stopItemAnimations();
         this._clearCacheWidth();
@@ -408,24 +408,24 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderDragHandler: function() {
-        var eventName = eventUtils.addNamespace("dragstart", this.NAME);
+        var eventName = eventUtils.addNamespace('dragstart', this.NAME);
 
         eventsEngine.off(this.$element(), eventName);
-        eventsEngine.on(this.$element(), eventName, "img", function() { return false; });
+        eventsEngine.on(this.$element(), eventName, 'img', function() { return false; });
     },
 
     _renderWrapper: function() {
         if(this._$wrapper) {
             return;
         }
-        this._$wrapper = $("<div>")
+        this._$wrapper = $('<div>')
             .addClass(GALLERY_WRAPPER_CLASS)
             .appendTo(this.$element());
     },
 
     _renderItems: function(items) {
         if(!windowUtils.hasWindow()) {
-            var selectedIndex = this.option("selectedIndex");
+            var selectedIndex = this.option('selectedIndex');
 
             items = items.length > selectedIndex ? items.slice(selectedIndex, selectedIndex + 1) : items.slice(0, 1);
         }
@@ -438,17 +438,17 @@ var Gallery = CollectionWidget.inherit({
         if(this._$container) {
             return;
         }
-        this._$container = $("<div>")
+        this._$container = $('<div>')
             .addClass(GALLERY_ITEM_CONTAINER_CLASS)
             .appendTo(this._$wrapper);
     },
 
     _cloneDuplicateItems: function() {
-        if(!this.option("loop")) {
+        if(!this.option('loop')) {
             return;
         }
 
-        var items = this.option("items") || [],
+        var items = this.option('items') || [],
             itemsCount = items.length,
             lastItemIndex = itemsCount - 1,
             i;
@@ -476,18 +476,18 @@ var Gallery = CollectionWidget.inherit({
             $(item)
                 .clone(true)
                 .addClass(GALLERY_LOOP_ITEM_CLASS)
-                .css("margin", 0)
+                .css('margin', 0)
                 .appendTo($container);
         }
     },
 
     _getRealItems: function() {
-        var selector = "." + GALLERY_ITEM_CLASS + ":not(." + GALLERY_LOOP_ITEM_CLASS + ")";
+        var selector = '.' + GALLERY_ITEM_CLASS + ':not(.' + GALLERY_LOOP_ITEM_CLASS + ')';
         return this.$element().find(selector);
     },
 
     _getLoopedItems: function() {
-        return this.$element().find("." + GALLERY_LOOP_ITEM_CLASS);
+        return this.$element().find('.' + GALLERY_LOOP_ITEM_CLASS);
     },
 
     _emptyMessageContainer: function() {
@@ -503,7 +503,7 @@ var Gallery = CollectionWidget.inherit({
         }
 
         $items.each(function(index) {
-            $($items[index]).outerWidth(itemWidth * 100 + "%");
+            $($items[index]).outerWidth(itemWidth * 100 + '%');
         });
     },
 
@@ -511,14 +511,14 @@ var Gallery = CollectionWidget.inherit({
         var itemWidth = this._actualItemWidth(),
             itemsCount = this._itemsCount(),
             itemsPerPage = this._itemsPerPage(),
-            loopItemsCount = this.$element().find("." + GALLERY_LOOP_ITEM_CLASS).length,
+            loopItemsCount = this.$element().find('.' + GALLERY_LOOP_ITEM_CLASS).length,
             lastItemDuplicateIndex = itemsCount + loopItemsCount - 1,
-            offsetRatio = this.option("wrapAround") ? 0.5 : 0,
+            offsetRatio = this.option('wrapAround') ? 0.5 : 0,
             freeSpace = this._itemFreeSpace(),
             isGapBetweenImages = !!freeSpace,
-            rtlEnabled = this.option("rtlEnabled"),
-            selectedIndex = this.option("selectedIndex"),
-            side = rtlEnabled ? "Right" : "Left";
+            rtlEnabled = this.option('rtlEnabled'),
+            selectedIndex = this.option('selectedIndex'),
+            side = rtlEnabled ? 'Right' : 'Left';
 
         this._itemElements().each(function(index) {
             var realIndex = index,
@@ -530,15 +530,15 @@ var Gallery = CollectionWidget.inherit({
 
             if(!isLoopItem && realIndex !== 0) {
                 if(isGapBetweenImages) {
-                    $(this).css("margin" + side, freeSpace * 100 + "%");
+                    $(this).css('margin' + side, freeSpace * 100 + '%');
                 }
                 return;
             }
 
             var itemPosition = itemWidth * (realIndex + offsetRatio) + freeSpace * (realIndex + 1 - offsetRatio),
-                property = isLoopItem ? side.toLowerCase() : "margin" + side;
+                property = isLoopItem ? side.toLowerCase() : 'margin' + side;
 
-            $(this).css(property, itemPosition * 100 + "%");
+            $(this).css(property, itemPosition * 100 + '%');
         });
 
         this._relocateItems(selectedIndex, selectedIndex, true);
@@ -547,7 +547,7 @@ var Gallery = CollectionWidget.inherit({
     _itemFreeSpace: function() {
         var itemsPerPage = this._itemsPerPage();
 
-        if(this.option("wrapAround")) {
+        if(this.option('wrapAround')) {
             itemsPerPage = itemsPerPage + 1;
         }
 
@@ -599,9 +599,9 @@ var Gallery = CollectionWidget.inherit({
             animationComplete = new Deferred();
 
         fx.animate(this._$container, extend({
-            type: "slide",
+            type: 'slide',
             to: { left: targetPosition * this._elementWidth() },
-            duration: that.option("animationDuration"),
+            duration: that.option('animationDuration'),
             complete: function() {
                 if(that._needMoveContainerForward()) {
                     translator.move($container, { left: 0, top: 0 });
@@ -642,17 +642,17 @@ var Gallery = CollectionWidget.inherit({
 
     _reviseDimensions: function() {
         var that = this,
-            $firstItem = that._itemElements().first().find(".dx-item-content");
+            $firstItem = that._itemElements().first().find('.dx-item-content');
 
-        if(!$firstItem || $firstItem.is(":hidden")) {
+        if(!$firstItem || $firstItem.is(':hidden')) {
             return;
         }
 
-        if(!that.option("height")) {
-            that.option("height", $firstItem.outerHeight());
+        if(!that.option('height')) {
+            that.option('height', $firstItem.outerHeight());
         }
-        if(!that.option("width")) {
-            that.option("width", $firstItem.outerWidth());
+        if(!that.option('width')) {
+            that.option('width', $firstItem.outerWidth());
         }
 
         this._dimensionChanged();
@@ -661,16 +661,16 @@ var Gallery = CollectionWidget.inherit({
     _renderIndicator: function() {
         this._cleanIndicators();
 
-        if(!this.option("showIndicator")) {
+        if(!this.option('showIndicator')) {
             return;
         }
 
-        var indicator = this._$indicator = $("<div>")
+        var indicator = this._$indicator = $('<div>')
             .addClass(GALLERY_INDICATOR_CLASS)
             .appendTo(this._$wrapper);
 
         for(var i = 0; i < this._pagesCount(); i++) {
-            $("<div>").addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
+            $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
         }
 
         this._renderSelectedPageIndicator();
@@ -683,7 +683,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderSelectedItem: function() {
-        var selectedIndex = this.option("selectedIndex");
+        var selectedIndex = this.option('selectedIndex');
 
         this._itemElements()
             .removeClass(GALLERY_ITEM_SELECTED_CLASS)
@@ -692,13 +692,13 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderItemVisibility: function() {
-        if(this.option("initialItemWidth") || this.option("wrapAround")) {
+        if(this.option('initialItemWidth') || this.option('wrapAround')) {
             this._releaseInvisibleItems();
             return;
         }
 
         this._itemElements().each((function(index, item) {
-            if(this.option("selectedIndex") === index) {
+            if(this.option('selectedIndex') === index) {
                 $(item).removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
             } else {
                 $(item).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
@@ -722,7 +722,7 @@ var Gallery = CollectionWidget.inherit({
             return;
         }
 
-        var itemIndex = this.option("selectedIndex"),
+        var itemIndex = this.option('selectedIndex'),
             lastIndex = this._pagesCount() - 1,
             pageIndex = Math.ceil(itemIndex / this._itemsPerPage());
 
@@ -737,10 +737,10 @@ var Gallery = CollectionWidget.inherit({
 
     _renderUserInteraction: function() {
         var rootElement = this.$element(),
-            swipeEnabled = this.option("swipeEnabled") && this._itemsCount() > 1;
+            swipeEnabled = this.option('swipeEnabled') && this._itemsCount() > 1;
 
         this._createComponent(rootElement, Swipeable, {
-            disabled: this.option("disabled") || !swipeEnabled,
+            disabled: this.option('disabled') || !swipeEnabled,
             onStart: this._swipeStartHandler.bind(this),
             onUpdated: this._swipeUpdateHandler.bind(this),
             onEnd: this._swipeEndHandler.bind(this),
@@ -759,7 +759,7 @@ var Gallery = CollectionWidget.inherit({
         var e = args.event,
             instance = args.component;
 
-        if(!instance.option("indicatorEnabled")) {
+        if(!instance.option('indicatorEnabled')) {
             return;
         }
 
@@ -768,29 +768,29 @@ var Gallery = CollectionWidget.inherit({
 
         instance._needLongMove = true;
 
-        instance.option("selectedIndex", itemIndex);
+        instance.option('selectedIndex', itemIndex);
         instance._loadNextPageIfNeeded(itemIndex);
     },
 
     _renderNavButtons: function() {
         var that = this;
 
-        if(!that.option("showNavButtons")) {
+        if(!that.option('showNavButtons')) {
             that._cleanNavButtons();
             return;
         }
 
-        that._prevNavButton = $("<div>").appendTo(this._$wrapper);
+        that._prevNavButton = $('<div>').appendTo(this._$wrapper);
         that._createComponent(that._prevNavButton, GalleryNavButton, {
-            direction: "prev",
+            direction: 'prev',
             onClick: function() {
                 that._prevPage();
             }
         });
 
-        that._nextNavButton = $("<div>").appendTo(this._$wrapper);
+        that._nextNavButton = $('<div>').appendTo(this._$wrapper);
         that._createComponent(that._nextNavButton, GalleryNavButton, {
-            direction: "next",
+            direction: 'next',
             onClick: function() {
                 that._nextPage();
             }
@@ -801,7 +801,7 @@ var Gallery = CollectionWidget.inherit({
 
     _prevPage: function() {
         var visiblePageSize = this._itemsPerPage(),
-            newSelectedIndex = this.option("selectedIndex") - visiblePageSize;
+            newSelectedIndex = this.option('selectedIndex') - visiblePageSize;
 
         if(newSelectedIndex === -visiblePageSize && visiblePageSize === this._itemsCount()) {
             return this._relocateItems(newSelectedIndex, 0);
@@ -812,7 +812,7 @@ var Gallery = CollectionWidget.inherit({
 
     _nextPage: function() {
         var visiblePageSize = this._itemsPerPage(),
-            newSelectedIndex = this.option("selectedIndex") + visiblePageSize;
+            newSelectedIndex = this.option('selectedIndex') + visiblePageSize;
 
         if(newSelectedIndex === visiblePageSize && visiblePageSize === this._itemsCount()) {
             return this._relocateItems(newSelectedIndex, 0);
@@ -822,7 +822,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _loadNextPageIfNeeded: function(selectedIndex) {
-        selectedIndex = selectedIndex === undefined ? this.option("selectedIndex") : selectedIndex;
+        selectedIndex = selectedIndex === undefined ? this.option('selectedIndex') : selectedIndex;
         if(
             this._dataSource &&
             this._dataSource.paginate() &&
@@ -842,7 +842,7 @@ var Gallery = CollectionWidget.inherit({
     _shouldLoadNextPage: function(selectedIndex) {
         var visiblePageSize = this._itemsPerPage();
 
-        return selectedIndex + 2 * visiblePageSize > this.option("items").length;
+        return selectedIndex + 2 * visiblePageSize > this.option('items').length;
     },
 
     _allowDynamicItemsAppend: function() {
@@ -879,12 +879,12 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderNavButtonsVisibility: function() {
-        if(!this.option("showNavButtons") || !this._prevNavButton || !this._nextNavButton) {
+        if(!this.option('showNavButtons') || !this._prevNavButton || !this._nextNavButton) {
             return;
         }
 
-        var selectedIndex = this.option("selectedIndex"),
-            loop = this.option("loop"),
+        var selectedIndex = this.option('selectedIndex'),
+            loop = this.option('loop'),
             itemsCount = this._itemsCount();
 
         this._prevNavButton.show();
@@ -918,7 +918,7 @@ var Gallery = CollectionWidget.inherit({
 
     _setupSlideShow: function() {
         var that = this,
-            slideshowDelay = that.option("slideshowDelay");
+            slideshowDelay = that.option('slideshowDelay');
 
         clearTimeout(that._slideshowTimer);
 
@@ -963,11 +963,11 @@ var Gallery = CollectionWidget.inherit({
         this._stopItemAnimations();
         this._startSwipe();
         this._userInteraction = true;
-        if(!this.option("loop")) {
-            var selectedIndex = this.option("selectedIndex"),
+        if(!this.option('loop')) {
+            var selectedIndex = this.option('selectedIndex'),
                 startOffset = itemsCount - selectedIndex - this._itemsPerPage(),
                 endOffset = selectedIndex,
-                rtlEnabled = this.option("rtlEnabled");
+                rtlEnabled = this.option('rtlEnabled');
 
             e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
             e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
@@ -979,9 +979,9 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        var wrapAroundRatio = this.option("wrapAround") ? 1 : 0;
+        var wrapAroundRatio = this.option('wrapAround') ? 1 : 0;
 
-        var offset = this._offsetDirection() * e.event.offset * (this._itemsPerPage() + wrapAroundRatio) - this.option("selectedIndex");
+        var offset = this._offsetDirection() * e.event.offset * (this._itemsPerPage() + wrapAroundRatio) - this.option('selectedIndex');
 
         if(offset < 0) {
             this._loadNextPageIfNeeded(Math.ceil(Math.abs(offset)));
@@ -992,7 +992,7 @@ var Gallery = CollectionWidget.inherit({
 
     _swipeEndHandler: function(e) {
         var targetOffset = e.event.targetOffset * this._offsetDirection() * this._itemsPerPage(),
-            selectedIndex = this.option("selectedIndex"),
+            selectedIndex = this.option('selectedIndex'),
             newIndex = this._fitIndex(selectedIndex - targetOffset),
             paginatedIndex = this._fitPaginatedIndex(newIndex);
 
@@ -1011,14 +1011,14 @@ var Gallery = CollectionWidget.inherit({
             return;
         }
 
-        this.option("selectedIndex", paginatedIndex);
+        this.option('selectedIndex', paginatedIndex);
     },
 
     _setFocusOnSelect: function() {
         this._userInteraction = true;
 
-        var selectedItem = this.itemElements().filter("." + GALLERY_ITEM_SELECTED_CLASS);
-        this.option("focusedElement", getPublicElement(selectedItem));
+        var selectedItem = this.itemElements().filter('.' + GALLERY_ITEM_SELECTED_CLASS);
+        this.option('focusedElement', getPublicElement(selectedItem));
         this._userInteraction = false;
     },
 
@@ -1037,7 +1037,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _fitIndex: function(index) {
-        if(!this.option("loop")) {
+        if(!this.option('loop')) {
             return index;
         }
 
@@ -1090,7 +1090,7 @@ var Gallery = CollectionWidget.inherit({
         var indexOffset = this._calculateIndexOffset(newIndex, prevIndex);
 
 
-        this._renderContainerPosition(indexOffset, true, this.option("animationEnabled") && !withoutAnimation).done(function() {
+        this._renderContainerPosition(indexOffset, true, this.option('animationEnabled') && !withoutAnimation).done(function() {
             this._setFocusOnSelect();
             this._userInteraction = false;
             this._setupSlideShow();
@@ -1120,8 +1120,8 @@ var Gallery = CollectionWidget.inherit({
 
         this.callBase.apply(this, arguments);
 
-        var index = this.itemElements().index($(this.option("focusedElement")));
-        this.goToItem(index, this.option("animationEnabled"));
+        var index = this.itemElements().index($(this.option('focusedElement')));
+        this.goToItem(index, this.option('animationEnabled'));
     },
 
     _visibilityChanged: function(visible) {
@@ -1137,7 +1137,7 @@ var Gallery = CollectionWidget.inherit({
 
         var indexOffset = lastIndex - newIndex;
 
-        if(this.option("loop") && !this._needLongMove && this._goToGhostItem) {
+        if(this.option('loop') && !this._needLongMove && this._goToGhostItem) {
             if(this._isItemOnFirstPage(newIndex) && this._isItemOnLastPage(lastIndex)) {
                 indexOffset = -this._itemsPerPage();
             } else if(this._isItemOnLastPage(newIndex) && this._isItemOnFirstPage(lastIndex)) {
@@ -1163,19 +1163,19 @@ var Gallery = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "width":
-            case "initialItemWidth":
+            case 'width':
+            case 'initialItemWidth':
                 this.callBase.apply(this, arguments);
                 this._dimensionChanged();
                 break;
-            case "animationDuration":
+            case 'animationDuration':
                 this._renderNavButtonsVisibility();
                 break;
-            case "animationEnabled":
+            case 'animationEnabled':
                 break;
-            case "loop":
+            case 'loop':
                 this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
-                this.option("loopItemFocus", args.value);
+                this.option('loopItemFocus', args.value);
 
                 if(windowUtils.hasWindow()) {
                     this._cloneDuplicateItems();
@@ -1183,25 +1183,25 @@ var Gallery = CollectionWidget.inherit({
                     this._renderNavButtonsVisibility();
                 }
                 break;
-            case "showIndicator":
+            case 'showIndicator':
                 this._renderIndicator();
                 break;
-            case "showNavButtons":
+            case 'showNavButtons':
                 this._renderNavButtons();
                 break;
-            case "slideshowDelay":
+            case 'slideshowDelay':
                 this._setupSlideShow();
                 break;
-            case "wrapAround":
-            case "stretchImages":
+            case 'wrapAround':
+            case 'stretchImages':
                 if(windowUtils.hasWindow()) {
                     this._renderItemSizes();
                     this._renderItemPositions();
                     this._renderItemVisibility();
                 }
                 break;
-            case "swipeEnabled":
-            case "indicatorEnabled":
+            case 'swipeEnabled':
+            case 'indicatorEnabled':
                 this._renderUserInteraction();
                 break;
             default:
@@ -1217,7 +1217,7 @@ var Gallery = CollectionWidget.inherit({
     * @return Promise<void>
     */
     goToItem: function(itemIndex, animation) {
-        var selectedIndex = this.option("selectedIndex"),
+        var selectedIndex = this.option('selectedIndex'),
             itemsCount = this._itemsCount();
 
         if(animation !== undefined) {
@@ -1232,7 +1232,7 @@ var Gallery = CollectionWidget.inherit({
             return this._deferredAnimate.resolveWith(this).promise();
         }
 
-        this.option("selectedIndex", itemIndex);
+        this.option('selectedIndex', itemIndex);
         return this._deferredAnimate.promise();
     },
 
@@ -1243,7 +1243,7 @@ var Gallery = CollectionWidget.inherit({
     * @return Promise<void>
     */
     prevItem: function(animation) {
-        return this.goToItem(this.option("selectedIndex") - 1, animation);
+        return this.goToItem(this.option('selectedIndex') - 1, animation);
     },
 
     /**
@@ -1253,10 +1253,10 @@ var Gallery = CollectionWidget.inherit({
     * @return Promise<void>
     */
     nextItem: function(animation) {
-        return this.goToItem(this.option("selectedIndex") + 1, animation);
+        return this.goToItem(this.option('selectedIndex') + 1, animation);
     }
 });
 
-registerComponent("dxGallery", Gallery);
+registerComponent('dxGallery', Gallery);
 
 module.exports = Gallery;

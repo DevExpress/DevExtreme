@@ -1,14 +1,14 @@
-var dxBaseGauge = require("./base_gauge").dxBaseGauge,
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
+var dxBaseGauge = require('./base_gauge').dxBaseGauge,
+    typeUtils = require('../../core/utils/type'),
+    each = require('../../core/utils/iterator').each,
+    extend = require('../../core/utils/extend').extend,
     _isDefined = typeUtils.isDefined,
     _isArray = Array.isArray,
     _isNumber = typeUtils.isNumeric,
-    axisModule = require("../axes/base_axis"),
-    _map = require("../core/utils").map,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    _compareArrays = require("./base_gauge").compareArrays,
+    axisModule = require('../axes/base_axis'),
+    _map = require('../core/utils').map,
+    _normalizeEnum = require('../core/utils').normalizeEnum,
+    _compareArrays = require('./base_gauge').compareArrays,
 
     _isFinite = isFinite,
     _Number = Number,
@@ -17,11 +17,11 @@ var dxBaseGauge = require("./base_gauge").dxBaseGauge,
 
     _extend = extend,
     _each = each,
-    _noop = require("../../core/utils/common").noop,
+    _noop = require('../../core/utils/common').noop,
     SHIFT_ANGLE = 90,
 
-    OPTION_VALUE = "value",
-    OPTION_SUBVALUES = "subvalues",
+    OPTION_VALUE = 'value',
+    OPTION_SUBVALUES = 'subvalues',
     DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 5,
     DEFAULT_NUMBER_MULTIPLIERS = [1, 2, 5];
 
@@ -58,20 +58,20 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _fontFields: [
-        'scale.label.font', 'valueIndicators.rangebar.text.font', 'valueIndicators.textcloud.text.font', "indicator.text.font"
+        'scale.label.font', 'valueIndicators.rangebar.text.font', 'valueIndicators.textcloud.text.font', 'indicator.text.font'
     ],
 
     _initScale: function() {
         var that = this;
 
-        that._scaleGroup = that._renderer.g().attr({ "class": "dxg-scale" }).linkOn(that._renderer.root, "scale");
+        that._scaleGroup = that._renderer.g().attr({ 'class': 'dxg-scale' }).linkOn(that._renderer.root, 'scale');
         that._scale = new axisModule.Axis({
             incidentOccurred: that._incidentOccurred,
             renderer: that._renderer,
             axesContainerGroup: that._scaleGroup,
             axisType: that._scaleTypes.type,
             drawingType: that._scaleTypes.drawingType,
-            widgetClass: "dxg"
+            widgetClass: 'dxg'
         });
     },
 
@@ -97,9 +97,9 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _setupDomainCore: function() {
         var that = this,
-            scaleOption = that.option("scale") || {},
-            startValue = that.option("startValue"),
-            endValue = that.option("endValue");
+            scaleOption = that.option('scale') || {},
+            startValue = that.option('startValue'),
+            endValue = that.option('endValue');
 
         startValue = _isNumber(startValue) ? _Number(startValue) : (_isNumber(scaleOption.startValue) ? _Number(scaleOption.startValue) : 0);
         endValue = _isNumber(endValue) ? _Number(endValue) : (_isNumber(scaleOption.endValue) ? _Number(scaleOption.endValue) : 100);
@@ -155,7 +155,7 @@ exports.dxGauge = dxBaseGauge.inherit({
             scaleOptions = that._prepareScaleSettings(),
             elements;
 
-        that._rangeContainer.render(_extend(that._getOption("rangeContainer"), { vertical: that._area.vertical }));
+        that._rangeContainer.render(_extend(that._getOption('rangeContainer'), { vertical: that._area.vertical }));
         that._renderScale(scaleOptions);
 
         elements = _map([that._rangeContainer].concat(that._prepareValueIndicators()), function(element) {
@@ -175,8 +175,8 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _prepareScaleSettings: function() {
         var that = this,
-            userOptions = that.option("scale"),
-            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), userOptions);
+            userOptions = that.option('scale'),
+            scaleOptions = extend(true, {}, that._themeManager.theme('scale'), userOptions);
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;
@@ -211,8 +211,8 @@ exports.dxGauge = dxBaseGauge.inherit({
         scaleOptions.skipViewportExtending = true;
         that._scale.updateOptions(scaleOptions);
         that._scale.setBusinessRange({
-            axisType: "continuous",
-            dataType: "numeric",
+            axisType: 'continuous',
+            dataType: 'numeric',
             min: min,
             max: max,
             invert: invert
@@ -234,7 +234,7 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _prepareIndicatorSettings: function(options, defaultTypeField) {
         var that = this,
-            theme = that._themeManager.theme("valueIndicators"),
+            theme = that._themeManager.theme('valueIndicators'),
             type = _normalizeEnum(options.type || that._themeManager.theme(defaultTypeField)),
             settings = _extend(true, {}, theme._default, theme[type], options);
         settings.type = type;
@@ -264,13 +264,13 @@ exports.dxGauge = dxBaseGauge.inherit({
     _prepareValueIndicator: function() {
         var that = this,
             target = that._valueIndicator,
-            settings = that._prepareIndicatorSettings(that.option("valueIndicator") || {}, "valueIndicatorType");
+            settings = that._prepareIndicatorSettings(that.option('valueIndicator') || {}, 'valueIndicatorType');
         if(target && target.type !== settings.type) {
             target.dispose();
             target = null;
         }
         if(!target) {
-            target = that._valueIndicator = that._createIndicator(settings.type, that._renderer.root, "dxg-value-indicator", "value-indicator");
+            target = that._valueIndicator = that._createIndicator(settings.type, that._renderer.root, 'dxg-value-indicator', 'value-indicator');
         }
         target.render(settings);
     },
@@ -280,7 +280,7 @@ exports.dxGauge = dxBaseGauge.inherit({
             root = that._renderer.root;
         return new ValueIndicatorsSet({
             createIndicator: function(type, i) {
-                return that._createIndicator(type, root, "dxg-subvalue-indicator", "subvalue-indicator", i);
+                return that._createIndicator(type, root, 'dxg-subvalue-indicator', 'subvalue-indicator', i);
             },
             createPalette: function(palette) {
                 return that._themeManager.createPalette(palette);
@@ -291,7 +291,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     _prepareSubvalueIndicators: function() {
         var that = this,
             target = that._subvalueIndicatorsSet,
-            settings = that._prepareIndicatorSettings(that.option("subvalueIndicator") || {}, "subvalueIndicatorType"),
+            settings = that._prepareIndicatorSettings(that.option('subvalueIndicator') || {}, 'subvalueIndicatorType'),
             isRecreate,
             dummy;
         if(!target) {
@@ -378,17 +378,17 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _optionChangesMap: {
-        scale: "DOMAIN",
-        rangeContainer: "MOSTLY_TOTAL",
-        valueIndicator: "MOSTLY_TOTAL",
-        subvalueIndicator: "MOSTLY_TOTAL",
-        containerBackgroundColor: "MOSTLY_TOTAL",
-        value: "VALUE",
-        subvalues: "SUBVALUES",
-        valueIndicators: "MOSTLY_TOTAL"
+        scale: 'DOMAIN',
+        rangeContainer: 'MOSTLY_TOTAL',
+        valueIndicator: 'MOSTLY_TOTAL',
+        subvalueIndicator: 'MOSTLY_TOTAL',
+        containerBackgroundColor: 'MOSTLY_TOTAL',
+        value: 'VALUE',
+        subvalues: 'SUBVALUES',
+        valueIndicators: 'MOSTLY_TOTAL'
     },
 
-    _customChangesOrder: ["VALUE", "SUBVALUES"],
+    _customChangesOrder: ['VALUE', 'SUBVALUES'],
 
     _change_VALUE: function() {
         this._changeValue(this.option(OPTION_VALUE));
@@ -433,7 +433,7 @@ function setupValues(that, fieldName, optionItems) {
 
 function selectMode(gauge) {
     if(gauge.option(OPTION_VALUE) === undefined && gauge.option(OPTION_SUBVALUES) === undefined) {
-        if(gauge.option("valueIndicators") !== undefined) {
+        if(gauge.option('valueIndicators') !== undefined) {
             disableDefaultMode(gauge);
             selectHardMode(gauge);
         }
@@ -447,11 +447,11 @@ function disableDefaultMode(that) {
 
 function selectHardMode(that) {
     that._indicatorValues = [];
-    setupValues(that, "_indicatorValues", that.option("valueIndicators"));
+    setupValues(that, '_indicatorValues', that.option('valueIndicators'));
     that._valueIndicators = [];
     var _applyMostlyTotalChange = that._applyMostlyTotalChange;
     that._applyMostlyTotalChange = function() {
-        setupValues(this, "_indicatorValues", this.option("valueIndicators"));
+        setupValues(this, '_indicatorValues', this.option('valueIndicators'));
         _applyMostlyTotalChange.call(this);
     };
     that._updateActiveElements = updateActiveElements_hardMode;
@@ -471,7 +471,7 @@ function updateActiveElements_hardMode() {
 function prepareValueIndicators_hardMode() {
     var that = this,
         valueIndicators = that._valueIndicators || [],
-        userOptions = that.option("valueIndicators"),
+        userOptions = that.option('valueIndicators'),
         optionList = [], i = 0, ii;
     for(ii = _isArray(userOptions) ? userOptions.length : 0; i < ii; ++i) {
         optionList.push(userOptions[i]);
@@ -486,13 +486,13 @@ function prepareValueIndicators_hardMode() {
             valueIndicator && valueIndicator.dispose();
             return;
         }
-        var settings = that._prepareIndicatorSettings(userSettings, "valueIndicatorType");
+        var settings = that._prepareIndicatorSettings(userSettings, 'valueIndicatorType');
         if(valueIndicator && valueIndicator.type !== settings.type) {
             valueIndicator.dispose();
             valueIndicator = null;
         }
         if(!valueIndicator) {
-            valueIndicator = that._createIndicator(settings.type, that._renderer.root, "dxg-value-indicator", "value-indicator", i, true);
+            valueIndicator = that._createIndicator(settings.type, that._renderer.root, 'dxg-value-indicator', 'value-indicator', i, true);
         }
         if(valueIndicator) {
             valueIndicator.index = i;

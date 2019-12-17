@@ -1,6 +1,6 @@
-var vizMocks = require("../../helpers/vizMocks.js"),
-    circularIndicatorsModule = require("viz/gauges/circular_indicators"),
-    Translator1D = require("viz/translators/translator1d").Translator1D;
+var vizMocks = require('../../helpers/vizMocks.js'),
+    circularIndicatorsModule = require('viz/gauges/circular_indicators'),
+    Translator1D = require('viz/translators/translator1d').Translator1D;
 
 var needle,
     renderer,
@@ -18,7 +18,7 @@ QUnit.module('RectangleNeedle', {
             detach: function(arg) { this.detached = arg; }
         };
         var translator = new Translator1D(0, 100, 180, 0);
-        needle = new circularIndicatorsModule["rectangleneedle"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
+        needle = new circularIndicatorsModule['rectangleneedle']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
             y: 100,
@@ -155,7 +155,7 @@ QUnit.module('TriangleNeedle', {
             detach: function(arg) { this.detached = arg; }
         };
         translator = new Translator1D(0, 100, 180, 0);
-        needle = new circularIndicatorsModule["triangleneedle"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
+        needle = new circularIndicatorsModule['triangleneedle']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
             y: 100,
@@ -247,7 +247,7 @@ QUnit.module('TwoColorRectangleNeedle', {
             detach: function(arg) { this.detached = arg; }
         };
         translator = new Translator1D(0, 100, 180, 0);
-        needle = new circularIndicatorsModule["twocolorneedle"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
+        needle = new circularIndicatorsModule['twocolorneedle']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
             y: 100,

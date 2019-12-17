@@ -1,30 +1,30 @@
-const assert = require("chai").assert;
-const LessTemplateLoader = require("../modules/less-template-loader");
-const themeName = "generic";
-const colorScheme = "light";
-const lessCompiler = require("less/lib/less-node");
+const assert = require('chai').assert;
+const LessTemplateLoader = require('../modules/less-template-loader');
+const themeName = 'generic';
+const colorScheme = 'light';
+const lessCompiler = require('less/lib/less-node');
 
 const metadata = [{
-    "Name": "50. Background color",
-    "Key": "@base-bg",
-    "Group": "base.common"
+    'Name': '50. Background color',
+    'Key': '@base-bg',
+    'Group': 'base.common'
 }, {
-    "Name": "1. Font family",
-    "Key": "@base-font-family",
-    "Group": "base.typography"
+    'Name': '1. Font family',
+    'Key': '@base-font-family',
+    'Group': 'base.typography'
 }, {
-    "Name": "2. Text Color",
-    "Key": "@base-text-color",
-    "Group": "base.typography"
+    'Name': '2. Text Color',
+    'Key': '@base-text-color',
+    'Group': 'base.typography'
 }];
 
-const emptyHeader = () => { return ""; };
+const emptyHeader = () => { return ''; };
 
 
 const scssCompiler = {
     render: (scss) => {
         return new Promise((resolve, reject) => {
-            require("node-sass").render({
+            require('node-sass').render({
                 data: scss
             }, (error, result) => {
                 if(error) {
@@ -37,9 +37,9 @@ const scssCompiler = {
     }
 };
 
-describe("LessTemplateLoader", () => {
-    it("analyzeBootstrapTheme - bootstrap 3", () => {
-        let lessFileContent = "@body-bg: #000;";
+describe('LessTemplateLoader', () => {
+    it('analyzeBootstrapTheme - bootstrap 3', () => {
+        let lessFileContent = '@body-bg: #000;';
         let config = {
             isBootstrap: true,
             bootstrapVersion: 3,
@@ -47,11 +47,11 @@ describe("LessTemplateLoader", () => {
             reader: () => {
                 // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
-                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;div { color: @base-bg; }');
                 });
             }
         };
-        let bootstrapMetadata = require("../data/bootstrap-metadata/bootstrap-metadata.js");
+        let bootstrapMetadata = require('../data/bootstrap-metadata/bootstrap-metadata.js');
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.analyzeBootstrapTheme(
@@ -61,30 +61,30 @@ describe("LessTemplateLoader", () => {
             bootstrapMetadata,
             lessFileContent,
             config.bootstrapVersion).then(data => {
-            assert.equal(data.compiledMetadata["@base-bg"], "#000");
-            assert.equal(data.compiledMetadata["@base-font-family"], "'default'");
-            assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
-            assert.equal(data.css, "div {\n  color: #000;\n}\n");
+            assert.equal(data.compiledMetadata['@base-bg'], '#000');
+            assert.equal(data.compiledMetadata['@base-font-family'], '\'default\'');
+            assert.equal(data.compiledMetadata['@base-text-color'], '#0f0');
+            assert.equal(data.css, 'div {\n  color: #000;\n}\n');
         });
     });
 
-    it("analyzeBootstrapTheme - bootstrap 4", () => {
-        let sassFileContent = "$body-bg: #000;";
+    it('analyzeBootstrapTheme - bootstrap 4', () => {
+        let sassFileContent = '$body-bg: #000;';
         let config = {
             isBootstrap: true,
             bootstrapVersion: 4,
             lessCompiler: lessCompiler,
             sassCompiler: scssCompiler,
             reader: (filename) => {
-                let content = "";
+                let content = '';
                 switch(filename) {
-                    case "devextreme-themebuilder/data/less/bundles/dx.light.less":
-                        content = "@base-bg: #fff;@base-font-family:'default';@base-text-color: #fff;div { color: @base-bg; background: @base-text-color; }";
+                    case 'devextreme-themebuilder/data/less/bundles/dx.light.less':
+                        content = '@base-bg: #fff;@base-font-family:\'default\';@base-text-color: #fff;div { color: @base-bg; background: @base-text-color; }';
                         break;
-                    case "bootstrap/scss/_variables.scss":
-                        content = "$gray-900: #212529 !default;$body-color: $gray-900 !default;";
+                    case 'bootstrap/scss/_variables.scss':
+                        content = '$gray-900: #212529 !default;$body-color: $gray-900 !default;';
                         break;
-                    case "bootstrap/scss/_functions.scss":
+                    case 'bootstrap/scss/_functions.scss':
                         break;
                 }
 
@@ -93,7 +93,7 @@ describe("LessTemplateLoader", () => {
                 });
             }
         };
-        let bootstrapMetadata = require("../data/bootstrap-metadata/bootstrap4-metadata.js");
+        let bootstrapMetadata = require('../data/bootstrap-metadata/bootstrap4-metadata.js');
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.analyzeBootstrapTheme(
@@ -103,21 +103,21 @@ describe("LessTemplateLoader", () => {
             bootstrapMetadata,
             sassFileContent,
             config.bootstrapVersion).then((data) => {
-            assert.equal(data.compiledMetadata["@base-bg"], "#000");
-            assert.equal(data.compiledMetadata["@base-font-family"], "'default'");
-            assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
-            assert.equal(data.css, "div {\n  color: #000;\n  background: #212529;\n}\n");
+            assert.equal(data.compiledMetadata['@base-bg'], '#000');
+            assert.equal(data.compiledMetadata['@base-font-family'], '\'default\'');
+            assert.equal(data.compiledMetadata['@base-text-color'], '#212529');
+            assert.equal(data.css, 'div {\n  color: #000;\n  background: #212529;\n}\n');
         });
     });
 
-    it("load - variable change", () => {
+    it('load - variable change', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: () => {
                 // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
-                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;div { color: @base-bg; }');
                 });
             }
         };
@@ -128,24 +128,24 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata,
-            [{ key: "@base-bg", value: "green" }]).then(data => {
-            assert.equal(data.compiledMetadata["@base-bg"], "green");
-            assert.equal(data.compiledMetadata["@base-font-family"], "'default'");
-            assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
-            assert.equal(data.css, "div {\n  color: green;\n}\n");
+            [{ key: '@base-bg', value: 'green' }]).then(data => {
+            assert.equal(data.compiledMetadata['@base-bg'], 'green');
+            assert.equal(data.compiledMetadata['@base-font-family'], '\'default\'');
+            assert.equal(data.compiledMetadata['@base-text-color'], '#0f0');
+            assert.equal(data.css, 'div {\n  color: green;\n}\n');
         });
     });
 
-    it("load - variable change, color swatch", () => {
+    it('load - variable change, color swatch', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
-                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;div { color: @base-bg; }');
                 });
             }
         };
@@ -156,17 +156,17 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata,
-            [{ key: "@base-bg", value: "green" }]).then(data => {
-            assert.equal(data.compiledMetadata["@base-bg"], "green");
-            assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
+            [{ key: '@base-bg', value: 'green' }]).then(data => {
+            assert.equal(data.compiledMetadata['@base-bg'], 'green');
+            assert.equal(data.css, '.dx-swatch-my-custom div {\n  color: green;\n}\n\n');
         });
     });
 
-    it("load - variable change, color swatch, typography and special classes", () => {
+    it('load - variable change, color swatch, typography and special classes', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 // data/less/bundles/dx.light.less
@@ -204,14 +204,14 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - default less path", () => {
+    it('load - default less path', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: path => {
-                assert.equal(path, "devextreme-themebuilder/data/less/bundles/dx.light.less");
+                assert.equal(path, 'devextreme-themebuilder/data/less/bundles/dx.light.less');
                 return new Promise(resolve => {
-                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;div { color: @base-bg; }');
                 });
             }
         };
@@ -222,19 +222,19 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata,
-            [{ key: "@base-bg", value: "green" }]
+            [{ key: '@base-bg', value: 'green' }]
         );
     });
 
-    it("load - custom less path", () => {
+    it('load - custom less path', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            lessPath: "my/custom/path/",
+            lessPath: 'my/custom/path/',
             reader: path => {
-                assert.equal(path, "my/custom/path/bundles/dx.light.less");
+                assert.equal(path, 'my/custom/path/bundles/dx.light.less');
                 return new Promise(resolve => {
-                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;div { color: @base-bg; }');
                 });
             }
         };
@@ -245,15 +245,15 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata,
-            [{ key: "@base-bg", value: "green" }]
+            [{ key: '@base-bg', value: 'green' }]
         );
     });
 
-    it("compileLess", () => {
+    it('compileLess', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
         };
 
@@ -270,7 +270,7 @@ describe("LessTemplateLoader", () => {
         let metadataVariables = {};
 
         metadata.forEach(metaItem => {
-            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+            metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
         let lessTemplateLoader = new LessTemplateLoader(config);
@@ -290,7 +290,7 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("compileScss", () => {
+    it('compileScss', () => {
         let config = {
             sassCompiler: scssCompiler
         };
@@ -308,8 +308,8 @@ describe("LessTemplateLoader", () => {
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileScss(scss, {
-            "base-bg": "$body-bg",
-            "base-text-color": "$body-color"
+            'base-bg': '$body-bg',
+            'base-text-color': '$body-color'
         }).then(data => {
 
             assert.equal(data.css, `div {
@@ -330,17 +330,17 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("_makeInfoHeader", () => {
-        let lessTemplateLoader = new LessTemplateLoader({}, "18.2.0");
-        let expectedHeader = "/*\n* Generated by the DevExpress ThemeBuilder\n* Version: 18.2.0\n* http://js.devexpress.com/ThemeBuilder/\n*/\n\n";
+    it('_makeInfoHeader', () => {
+        let lessTemplateLoader = new LessTemplateLoader({}, '18.2.0');
+        let expectedHeader = '/*\n* Generated by the DevExpress ThemeBuilder\n* Version: 18.2.0\n* http://js.devexpress.com/ThemeBuilder/\n*/\n\n';
         assert.equal(lessTemplateLoader._makeInfoHeader(), expectedHeader);
     });
 
-    it("load - change color scheme in theme marker", () => {
+    it('load - change color scheme in theme marker', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 // data/less/bundles/dx.light.less
@@ -382,10 +382,10 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("compile less with options", () => {
-        const compilerWithOptions = require("less/lib/less-node");
+    it('compile less with options', () => {
+        const compilerWithOptions = require('less/lib/less-node');
         compilerWithOptions.options = {
-            "rootpath": "modified_path/"
+            'rootpath': 'modified_path/'
         };
 
         let config = {
@@ -406,7 +406,7 @@ describe("LessTemplateLoader", () => {
         let metadataVariables = {};
 
         metadata.forEach(metaItem => {
-            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+            metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
         let lessTemplateLoader = new LessTemplateLoader(config);
@@ -422,11 +422,11 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - do not change the order of cascade's classes by swatch class (T692470) - checkbox case", () => {
+    it('load - do not change the order of cascade\'s classes by swatch class (T692470) - checkbox case', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 return new Promise(resolve => {
@@ -455,11 +455,11 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - do not change the order of cascade's classes by swatch class (T692470) - underlined editor case", () => {
+    it('load - do not change the order of cascade\'s classes by swatch class (T692470) - underlined editor case', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 return new Promise(resolve => {
@@ -491,11 +491,11 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case", () => {
+    it('load - do not change the order of cascade\'s classes by swatch class (T692470) - tabs case', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 return new Promise(resolve => {
@@ -523,11 +523,11 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case with extra selector", () => {
+    it('load - do not change the order of cascade\'s classes by swatch class (T692470) - tabs case with extra selector', () => {
         let config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
             reader: () => {
                 return new Promise(resolve => {
@@ -555,14 +555,14 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("compileLess should add prefixes for some css properties according to browsers (T718724)", () => {
-        const packageJson = require("../package.json");
-        packageJson.browserslist = ["ie <= 10"];
+    it('compileLess should add prefixes for some css properties according to browsers (T718724)', () => {
+        const packageJson = require('../package.json');
+        packageJson.browserslist = ['ie <= 10'];
 
         const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom"
+            outColorScheme: 'my-custom'
         };
 
         const less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
@@ -571,7 +571,7 @@ describe("LessTemplateLoader", () => {
         const metadataVariables = {};
 
         metadata.forEach(metaItem => {
-            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+            metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
         const lessTemplateLoader = new LessTemplateLoader(config);
@@ -585,15 +585,15 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - the result contains passed version", () => {
-        const version = "1.0.0";
+    it('load - the result contains passed version', () => {
+        const version = '1.0.0';
         const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: () => {
                 // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
-                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;");
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;');
                 });
             }
         };

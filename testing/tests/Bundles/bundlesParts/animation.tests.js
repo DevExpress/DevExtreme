@@ -1,13 +1,13 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
-QUnit.test("animation", function(assert) {
+QUnit.test('animation', function(assert) {
 
     $.each([
-        "fx",
-        "animationPresets",
-        "TransitionExecutor"
+        'fx',
+        'animationPresets',
+        'TransitionExecutor'
     ], function(_, namespace) {
-        assert.ok(DevExpress[namespace], "DevExpress." + namespace + " present");
+        assert.ok(DevExpress[namespace], 'DevExpress.' + namespace + ' present');
     });
 
 });

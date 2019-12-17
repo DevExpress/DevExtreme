@@ -1,16 +1,16 @@
-import modules from "./ui.grid_core.modules";
-import Pager from "../pager";
-import { inArray } from "../../core/utils/array";
-import { isDefined } from "../../core/utils/type";
-import { hasWindow } from "../../core/utils/window";
+import modules from './ui.grid_core.modules';
+import Pager from '../pager';
+import { inArray } from '../../core/utils/array';
+import { isDefined } from '../../core/utils/type';
+import { hasWindow } from '../../core/utils/window';
 
-var PAGER_CLASS = "pager",
+var PAGER_CLASS = 'pager',
     MAX_PAGES_COUNT = 10;
 
 var PagerView = modules.View.inherit({
     init: function() {
         var that = this,
-            dataController = that.getController("data");
+            dataController = that.getController('data');
 
         that._isVisible = false;
 
@@ -26,7 +26,7 @@ var PagerView = modules.View.inherit({
                 } else {
                     that.render();
                 }
-            } else if(!e || e.changeType !== "update" && e.changeType !== "updateSelection") {
+            } else if(!e || e.changeType !== 'update' && e.changeType !== 'updateSelection') {
                 that.render();
             }
         });
@@ -34,15 +34,15 @@ var PagerView = modules.View.inherit({
 
     _getPager: function() {
         var $element = this.element();
-        return $element && $element.data("dxPager");
+        return $element && $element.data('dxPager');
     },
 
     _renderCore: function() {
         var that = this,
             $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS)),
-            pagerOptions = that.option("pager") || {},
-            dataController = that.getController("data"),
-            keyboardController = that.getController("keyboardNavigation"),
+            pagerOptions = that.option('pager') || {},
+            dataController = that.getController('data'),
+            keyboardController = that.getController('keyboardNavigation'),
             options = {
                 maxPagesCount: MAX_PAGES_COUNT,
                 pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
@@ -67,9 +67,9 @@ var PagerView = modules.View.inherit({
                         dataController.pageSize(pageSize);
                     });
                 },
-                onKeyDown: e => keyboardController && keyboardController.executeAction("onKeyDown", e),
-                useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation"),
-                useKeyboard: this.option("keyboardNavigation.enabled")
+                onKeyDown: e => keyboardController && keyboardController.executeAction('onKeyDown', e),
+                useLegacyKeyboardNavigation: this.option('useLegacyKeyboardNavigation'),
+                useKeyboard: this.option('keyboardNavigation.enabled')
             };
 
         if(isDefined(pagerOptions.infoText)) {
@@ -81,8 +81,8 @@ var PagerView = modules.View.inherit({
 
     getPageSizes: function() {
         var that = this,
-            dataController = that.getController("data"),
-            pagerOptions = that.option("pager"),
+            dataController = that.getController('data'),
+            pagerOptions = that.option('pager'),
             allowedPageSizes = pagerOptions && pagerOptions.allowedPageSizes,
             pageSize = dataController.pageSize();
 
@@ -101,16 +101,16 @@ var PagerView = modules.View.inherit({
 
     isVisible: function() {
         var that = this,
-            dataController = that.getController("data"),
-            pagerOptions = that.option("pager"),
+            dataController = that.getController('data'),
+            pagerOptions = that.option('pager'),
             pagerVisible = pagerOptions && pagerOptions.visible,
-            scrolling = that.option("scrolling");
+            scrolling = that.option('scrolling');
 
         if(that._isVisible) {
             return true;
         }
-        if(pagerVisible === "auto") {
-            if(scrolling && (scrolling.mode === "virtual" || scrolling.mode === "infinite")) {
+        if(pagerVisible === 'auto') {
+            if(scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
                 pagerVisible = false;
             } else {
                 pagerVisible = dataController.pageCount() > 1 || (dataController.isLoaded() && !dataController.hasKnownLastPage());
@@ -127,11 +127,11 @@ var PagerView = modules.View.inherit({
     optionChanged: function(args) {
         var that = this,
             name = args.name,
-            isPager = name === "pager",
-            isPaging = name === "paging",
-            isDataSource = name === "dataSource",
-            isScrolling = name === "scrolling",
-            dataController = that.getController("data");
+            isPager = name === 'pager',
+            isPaging = name === 'paging',
+            isDataSource = name === 'dataSource',
+            isScrolling = name === 'scrolling',
+            dataController = that.getController('data');
 
         if(isPager || isPaging || isScrolling || isDataSource) {
             args.handled = true;
@@ -169,7 +169,7 @@ module.exports = {
                  * @name GridBaseOptions.pager.visible
                  * @type boolean
                  */
-                visible: "auto",
+                visible: 'auto',
                 /**
                  * @name GridBaseOptions.pager.showPageSizeSelector
                  * @type boolean
@@ -180,7 +180,7 @@ module.exports = {
                  * @name GridBaseOptions.pager.allowedPageSizes
                  * @type Array<number>
                 */
-                allowedPageSizes: "auto"
+                allowedPageSizes: 'auto'
                 /**
                  * @name GridBaseOptions.pager.showNavigationButtons
                  * @type boolean

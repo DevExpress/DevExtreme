@@ -24,7 +24,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 
         _generateDataItem: function(node, options) {
             return {
-                rowType: "data",
+                rowType: 'data',
                 node: node,
                 key: node.key,
                 data: node.data,
@@ -38,10 +38,10 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         init: function() {
-            this.createAction("onRowExpanding");
-            this.createAction("onRowExpanded");
-            this.createAction("onRowCollapsing");
-            this.createAction("onRowCollapsed");
+            this.createAction('onRowExpanding');
+            this.createAction('onRowExpanded');
+            this.createAction('onRowCollapsing');
+            this.createAction('onRowCollapsed');
 
             this.callBase.apply(this, arguments);
         },
@@ -63,7 +63,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadDescendants", "forEachNode"]);
+            return this.callBase().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
         },
 
         changeRowExpand: function(key) {
@@ -74,11 +74,11 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                     },
                     isExpanded = this.isRowExpanded(key);
 
-                that.executeAction(isExpanded ? "onRowCollapsing" : "onRowExpanding", args);
+                that.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
 
                 if(!args.cancel) {
                     return that._dataSource.changeRowExpand(key).done(function() {
-                        that.executeAction(isExpanded ? "onRowCollapsed" : "onRowExpanded", args);
+                        that.executeAction(isExpanded ? 'onRowCollapsed' : 'onRowExpanded', args);
                     });
                 }
             }
@@ -133,27 +133,27 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 
         optionChanged: function(args) {
             switch(args.name) {
-                case "rootValue":
-                case "parentIdExpr":
-                case "itemsExpr":
-                case "filterMode":
-                case "expandNodesOnFiltering":
-                case "autoExpandAll":
-                case "hasItemsExpr":
-                case "dataStructure":
+                case 'rootValue':
+                case 'parentIdExpr':
+                case 'itemsExpr':
+                case 'filterMode':
+                case 'expandNodesOnFiltering':
+                case 'autoExpandAll':
+                case 'hasItemsExpr':
+                case 'dataStructure':
                     this._columnsController.reset();
                     this._items = [];
                     this._refreshDataSource();
                     args.handled = true;
                     break;
-                case "expandedRowKeys":
-                case "onNodesInitialized":
+                case 'expandedRowKeys':
+                case 'onNodesInitialized':
                     if(this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
                         this._loadOnOptionChange();
                     }
                     args.handled = true;
                     break;
-                case "maxFilterLengthInRequest":
+                case 'maxFilterLengthInRequest':
                     args.handled = true;
                     break;
                 default:
@@ -226,7 +226,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
     };
 })());
 
-treeListCore.registerModule("data", {
+treeListCore.registerModule('data', {
     defaultOptions: function() {
         return extend({}, dataControllerModule.defaultOptions(), {
             /**
@@ -234,7 +234,7 @@ treeListCore.registerModule("data", {
             * @type string|function
             * @default "items"
             */
-            itemsExpr: "items",
+            itemsExpr: 'items',
             /**
             * @name dxTreeListOptions.keyExpr
             * @type string|function
@@ -249,7 +249,7 @@ treeListCore.registerModule("data", {
             * @type string|function
             * @default "parentId"
             */
-            parentIdExpr: "parentId",
+            parentIdExpr: 'parentId',
             /**
             * @name dxTreeListOptions.rootValue
             * @type any
@@ -261,7 +261,7 @@ treeListCore.registerModule("data", {
             * @type Enums.TreeListDataStructure
             * @default "plain"
             */
-            dataStructure: "plain",
+            dataStructure: 'plain',
             /**
             * @name dxTreeListOptions.expandedRowKeys
             * @type Array<any>
@@ -274,7 +274,7 @@ treeListCore.registerModule("data", {
             * @type Enums.TreeListFilterMode
             * @default "withAncestors"
             */
-            filterMode: "withAncestors",
+            filterMode: 'withAncestors',
             /**
             * @name dxTreeListOptions.expandNodesOnFiltering
             * @type boolean

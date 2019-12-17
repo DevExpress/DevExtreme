@@ -21,24 +21,24 @@ GestureHandler.prototype = {
         var that = this,
             isActive = false;
         that._offTracker = tracker.on({
-            "start": function(arg) {
+            'start': function(arg) {
                 // TODO: This is an implicit dependency on the ControlBar which must be removed
-                isActive = arg.data.name !== "control-bar";
+                isActive = arg.data.name !== 'control-bar';
                 if(isActive) {
                     that._processStart(arg);
                 }
             },
-            "move": function(arg) {
+            'move': function(arg) {
                 if(isActive) {
                     that._processMove(arg);
                 }
             },
-            "end": function() {
+            'end': function() {
                 if(isActive) {
                     that._processEnd();
                 }
             },
-            "zoom": function(arg) {
+            'zoom': function(arg) {
                 that._processZoom(arg);
             }
 
@@ -62,7 +62,7 @@ GestureHandler.prototype = {
     _processMove: function(arg) {
         var that = this;
         if(that._centeringEnabled) {
-            that._renderer.root.attr({ cursor: "move" });
+            that._renderer.root.attr({ cursor: 'move' });
             that._projection.moveCenter([that._x - arg.x, that._y - arg.y]);
             that._x = arg.x;
             that._y = arg.y;
@@ -71,7 +71,7 @@ GestureHandler.prototype = {
 
     _processEnd: function() {
         if(this._centeringEnabled) {
-            this._renderer.root.attr({ cursor: "default" });
+            this._renderer.root.attr({ cursor: 'default' });
             this._projection.endMoveCenter();
         }
     },

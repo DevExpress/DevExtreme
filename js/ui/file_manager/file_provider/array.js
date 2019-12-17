@@ -1,13 +1,13 @@
-import { find } from "../../../core/utils/array";
-import { ensureDefined } from "../../../core/utils/common";
-import { compileGetter, compileSetter } from "../../../core/utils/data";
-import Guid from "../../../core/guid";
-import typeUtils from "../../../core/utils/type";
-import { errors } from "../../../data/errors";
+import { find } from '../../../core/utils/array';
+import { ensureDefined } from '../../../core/utils/common';
+import { compileGetter, compileSetter } from '../../../core/utils/data';
+import Guid from '../../../core/guid';
+import typeUtils from '../../../core/utils/type';
+import { errors } from '../../../data/errors';
 
-import { FileProvider } from "./file_provider";
-import { ErrorCode } from "../ui.file_manager.common";
-import { pathCombine } from "../ui.file_manager.utils";
+import { FileProvider } from './file_provider';
+import { ErrorCode } from '../ui.file_manager.common';
+import { pathCombine } from '../ui.file_manager.utils';
 
 /**
 * @name ArrayFileProvider
@@ -25,7 +25,7 @@ class ArrayFileProvider extends FileProvider {
 
         const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errors.Error("E4006");
+            throw errors.Error('E4006');
         }
 
         /**
@@ -36,7 +36,7 @@ class ArrayFileProvider extends FileProvider {
          * @name ArrayFileProviderOptions.itemsExpr
          * @type string|function(fileItem)
          */
-        const itemsExpr = options.itemsExpr || "items";
+        const itemsExpr = options.itemsExpr || 'items';
         this._subFileItemsGetter = compileGetter(itemsExpr);
         this._subFileItemsSetter = this._getSetter(itemsExpr);
 
@@ -113,7 +113,7 @@ class ArrayFileProvider extends FileProvider {
     _checkAbilityToMoveOrCopyItem(item, destinationDir) {
         const itemKey = this._getKeyFromDataObject(item.dataItem, item.parentPath);
         const pathInfo = destinationDir.getFullPathInfo();
-        let currentPath = "";
+        let currentPath = '';
 
         pathInfo.forEach(info => {
             currentPath = pathCombine(currentPath, info.name);
@@ -203,7 +203,7 @@ class ArrayFileProvider extends FileProvider {
             pathInfo = [ ];
         }
 
-        let currentPath = "";
+        let currentPath = '';
         let fileItemObj = null;
         let fileItemObjects = this._data;
         for(let i = 0; i < pathInfo.length && (i === 0 || fileItemObj); i++) {

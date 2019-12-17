@@ -1,17 +1,17 @@
-var devices = require("../../core/devices"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    BaseStrategy = require("./base");
+var devices = require('../../core/devices'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    BaseStrategy = require('./base');
 
 var eventMap = {
-    "dxpointerdown": "touchstart",
-    "dxpointermove": "touchmove",
-    "dxpointerup": "touchend",
-    "dxpointercancel": "touchcancel",
-    "dxpointerover": "",
-    "dxpointerout": "",
-    "dxpointerenter": "",
-    "dxpointerleave": ""
+    'dxpointerdown': 'touchstart',
+    'dxpointermove': 'touchmove',
+    'dxpointerup': 'touchend',
+    'dxpointercancel': 'touchcancel',
+    'dxpointerover': '',
+    'dxpointerout': '',
+    'dxpointerenter': '',
+    'dxpointerleave': ''
 };
 
 
@@ -31,7 +31,7 @@ var normalizeTouchEvent = function(e) {
 };
 
 var skipTouchWithSameIdentifier = function(pointerEvent) {
-    return devices.real().platform === "ios" && (pointerEvent === "dxpointerdown" || pointerEvent === "dxpointerup");
+    return devices.real().platform === 'ios' && (pointerEvent === 'dxpointerdown' || pointerEvent === 'dxpointerup');
 };
 
 var TouchStrategy = BaseStrategy.inherit({

@@ -1,5 +1,5 @@
-import HorizontalMonthLineAppointmentsStrategy from "./ui.scheduler.appointments.strategy.horizontal_month_line";
-import { extend } from "../../../core/utils/extend";
+import HorizontalMonthLineAppointmentsStrategy from './ui.scheduler.appointments.strategy.horizontal_month_line';
+import { extend } from '../../../core/utils/extend';
 
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_APPOINTMENT_MIN_OFFSET = 26,
@@ -21,8 +21,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
             currentPartTop = appointmentSettings.top + this.getDefaultCellHeight(),
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
-        if(this.instance._groupOrientation === "vertical") {
-            left += this.instance.fire("getWorkSpaceDateTableOffset");
+        if(this.instance._groupOrientation === 'vertical') {
+            left += this.instance.fire('getWorkSpaceDateTableOffset');
         }
         for(var i = 0; i < longPartCount; i++) {
             if(totalWidth > maxAppointmentWidth) {
@@ -34,7 +34,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
                 left: left,
                 height: height,
                 width: fullWeekAppointmentWidth,
-                appointmentReduced: "body",
+                appointmentReduced: 'body',
                 rowIndex: ++appointmentSettings.rowIndex,
                 cellIndex: 0
             }));
@@ -53,7 +53,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
                 left: left,
                 height: height,
                 width: tailWidth,
-                appointmentReduced: "tail",
+                appointmentReduced: 'tail',
                 rowIndex: ++appointmentSettings.rowIndex,
                 cellIndex: 0
             }));
@@ -67,7 +67,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _getFullWeekAppointmentWidth(groupIndex) {
-        this.instance.fire("getFullWeekAppointmentWidth", {
+        this.instance.fire('getFullWeekAppointmentWidth', {
             groupIndex: groupIndex,
             callback: (function(width) {
                 this._maxFullWeekAppointmentWidth = width;
@@ -127,7 +127,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     getDropDownAppointmentWidth(intervalCount) {
-        if(this.instance.fire("isAdaptive")) {
+        if(this.instance.fire('isAdaptive')) {
             return this.getDropDownButtonAdaptiveSize();
         }
         var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;

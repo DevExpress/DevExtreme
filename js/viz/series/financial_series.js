@@ -1,11 +1,11 @@
 // there are stock, candlestick
-var scatterSeries = require("./scatter_series").chart,
-    barSeries = require("./bar_series").chart.bar,
-    _extend = require("../../core/utils/extend").extend,
+var scatterSeries = require('./scatter_series').chart,
+    barSeries = require('./bar_series').chart.bar,
+    _extend = require('../../core/utils/extend').extend,
 
-    _isDefined = require("../../core/utils/type").isDefined,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    _noop = require("../../core/utils/common").noop,
+    _isDefined = require('../../core/utils/type').isDefined,
+    _normalizeEnum = require('../core/utils').normalizeEnum,
+    _noop = require('../../core/utils/common').noop,
 
     DEFAULT_FINANCIAL_POINT_SIZE = 10;
 
@@ -13,7 +13,7 @@ exports.stock = _extend({}, scatterSeries, {
     _animate: _noop,
 
     _applyMarkerClipRect: function(settings) {
-        settings["clip-path"] = this._forceClipping ? this._paneClipRectID : this._widePaneClipRectID;
+        settings['clip-path'] = this._forceClipping ? this._paneClipRectID : this._widePaneClipRectID;
     },
 
     _updatePointsVisibility: barSeries._updatePointsVisibility,
@@ -30,18 +30,18 @@ exports.stock = _extend({}, scatterSeries, {
         var that = this,
             markersGroup = that._markersGroup,
             styles = that._createPointStyles(that._getMarkerGroupOptions()),
-            defaultStyle = _extend(styles.normal, { "class": "default-markers" }),
-            defaultPositiveStyle = _extend(styles.positive.normal, { "class": "default-positive-markers" }),
-            reductionStyle = _extend(styles.reduction.normal, { "class": "reduction-markers" }),
-            reductionPositiveStyle = _extend(styles.reductionPositive.normal, { "class": "reduction-positive-markers" }),
-            markerSettings = { "class": "dxc-markers" };
+            defaultStyle = _extend(styles.normal, { 'class': 'default-markers' }),
+            defaultPositiveStyle = _extend(styles.positive.normal, { 'class': 'default-positive-markers' }),
+            reductionStyle = _extend(styles.reduction.normal, { 'class': 'reduction-markers' }),
+            reductionPositiveStyle = _extend(styles.reductionPositive.normal, { 'class': 'reduction-positive-markers' }),
+            markerSettings = { 'class': 'dxc-markers' };
 
         that._applyMarkerClipRect(markerSettings);
         markersGroup.attr(markerSettings);
-        that._createGroup("defaultMarkersGroup", markersGroup, markersGroup, defaultStyle);
-        that._createGroup("reductionMarkersGroup", markersGroup, markersGroup, reductionStyle);
-        that._createGroup("defaultPositiveMarkersGroup", markersGroup, markersGroup, defaultPositiveStyle);
-        that._createGroup("reductionPositiveMarkersGroup", markersGroup, markersGroup, reductionPositiveStyle);
+        that._createGroup('defaultMarkersGroup', markersGroup, markersGroup, defaultStyle);
+        that._createGroup('reductionMarkersGroup', markersGroup, markersGroup, reductionStyle);
+        that._createGroup('defaultPositiveMarkersGroup', markersGroup, markersGroup, defaultPositiveStyle);
+        that._createGroup('reductionPositiveMarkersGroup', markersGroup, markersGroup, reductionPositiveStyle);
     },
 
     _setGroupsSettings: function() {
@@ -60,7 +60,7 @@ exports.stock = _extend({}, scatterSeries, {
                     creatingPointOptions.styles.positive.normal =
                     creatingPointOptions.styles.reduction.normal =
                     creatingPointOptions.styles.reductionPositive.normal = {
-                        "stroke-width": defaultPointOptions.styles && defaultPointOptions.styles.normal && defaultPointOptions.styles.normal["stroke-width"]
+                        'stroke-width': defaultPointOptions.styles && defaultPointOptions.styles.normal && defaultPointOptions.styles.normal['stroke-width']
                     };
         }
 
@@ -93,18 +93,18 @@ exports.stock = _extend({}, scatterSeries, {
         that.level = that._options.reduction.level;
 
         switch(_normalizeEnum(that.level)) {
-            case "open":
+            case 'open':
                 level = openValueField;
                 break;
-            case "high":
+            case 'high':
                 level = highValueField;
                 break;
-            case "low":
+            case 'low':
                 level = lowValueField;
                 break;
             default:
                 level = closeValueField;
-                that.level = "close";
+                that.level = 'close';
                 break;
         }
 
@@ -139,7 +139,7 @@ exports.stock = _extend({}, scatterSeries, {
     _parsePointStyle: function(style, defaultColor, innerColor) {
         return {
             stroke: style.color || defaultColor,
-            "stroke-width": style.width,
+            'stroke-width': style.width,
             fill: style.color || innerColor
         };
     },
@@ -191,10 +191,10 @@ exports.stock = _extend({}, scatterSeries, {
         delete this._predefinedPointOptions;
     },
 
-    _defaultAggregator: "ohlc",
+    _defaultAggregator: 'ohlc',
 
     _aggregators: {
-        "ohlc": ({ intervalStart, data }, series) => {
+        'ohlc': ({ intervalStart, data }, series) => {
             if(!data.length) {
                 return;
             }
@@ -231,11 +231,11 @@ exports.stock = _extend({}, scatterSeries, {
 
     getValueFields: function() {
         var options = this._options;
-        return [options.openValueField || "open", options.highValueField || "high", options.lowValueField || "low", options.closeValueField || "close"];
+        return [options.openValueField || 'open', options.highValueField || 'high', options.lowValueField || 'low', options.closeValueField || 'close'];
     },
 
     getArgumentField: function() {
-        return this._options.argumentField || "date";
+        return this._options.argumentField || 'date';
     },
 
     _patchMarginOptions: function(options) {
@@ -243,7 +243,7 @@ exports.stock = _extend({}, scatterSeries, {
             styles = pointOptions.styles,
             border = [styles.normal, styles.hover, styles.selection]
                 .reduce(function(max, style) {
-                    return Math.max(max, style["stroke-width"]);
+                    return Math.max(max, style['stroke-width']);
                 }, 0);
 
         options.size = DEFAULT_FINANCIAL_POINT_SIZE + border;

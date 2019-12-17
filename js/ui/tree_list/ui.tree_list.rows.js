@@ -2,28 +2,28 @@ import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
 import rowsViewModule from '../grid_core/ui.grid_core.rows';
 
-var TREELIST_TEXT_CONTENT = "dx-treelist-text-content",
-    TREELIST_EXPAND_ICON_CONTAINER_CLASS = "dx-treelist-icon-container",
-    TREELIST_CELL_EXPANDABLE_CLASS = "dx-treelist-cell-expandable",
-    TREELIST_EMPTY_SPACE = "dx-treelist-empty-space",
-    TREELIST_EXPANDED_CLASS = "dx-treelist-expanded",
-    TREELIST_COLLAPSED_CLASS = "dx-treelist-collapsed";
+var TREELIST_TEXT_CONTENT = 'dx-treelist-text-content',
+    TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container',
+    TREELIST_CELL_EXPANDABLE_CLASS = 'dx-treelist-cell-expandable',
+    TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space',
+    TREELIST_EXPANDED_CLASS = 'dx-treelist-expanded',
+    TREELIST_COLLAPSED_CLASS = 'dx-treelist-collapsed';
 
 exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
     var createCellContent = function($container) {
-        return $("<div>")
+        return $('<div>')
             .addClass(TREELIST_TEXT_CONTENT)
             .appendTo($container);
     };
 
     var createIcon = function(hasIcon, isExpanded) {
-        var $iconElement = $("<div>").addClass(TREELIST_EMPTY_SPACE);
+        var $iconElement = $('<div>').addClass(TREELIST_EMPTY_SPACE);
 
         if(hasIcon) {
             $iconElement
                 .toggleClass(TREELIST_EXPANDED_CLASS, isExpanded)
                 .toggleClass(TREELIST_COLLAPSED_CLASS, !isExpanded)
-                .append($("<span>"));
+                .append($('<span>'));
         }
 
         return $iconElement;
@@ -39,7 +39,7 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
 
     return {
         _renderExpandIcon: function($container, options) {
-            var $iconContainer = $("<div>")
+            var $iconContainer = $('<div>')
                 .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                 .appendTo($container);
 
@@ -111,10 +111,10 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
                 $rowElement = this.callBase.apply(this, arguments);
 
             if(node) {
-                this.setAria("level", row.level, $rowElement);
+                this.setAria('level', row.level, $rowElement);
 
                 if(node.hasChildren) {
-                    this.setAria("expanded", row.isExpanded, $rowElement);
+                    this.setAria('expanded', row.isExpanded, $rowElement);
                 }
             }
 
@@ -122,13 +122,13 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         },
 
         isExpandIcon: function($targetElement) {
-            return !!$targetElement.closest("." + TREELIST_EXPANDED_CLASS + ", ." + TREELIST_COLLAPSED_CLASS).length;
+            return !!$targetElement.closest('.' + TREELIST_EXPANDED_CLASS + ', .' + TREELIST_COLLAPSED_CLASS).length;
         }
     };
 })());
 
 
-treeListCore.registerModule("rows", {
+treeListCore.registerModule('rows', {
     defaultOptions: rowsViewModule.defaultOptions,
     views: {
         rowsView: exports.RowsView

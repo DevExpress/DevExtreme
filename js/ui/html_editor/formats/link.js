@@ -1,8 +1,8 @@
-import { getQuill } from "../quill_importer";
-import { isObject } from "../../../core/utils/type";
+import { getQuill } from '../quill_importer';
+import { isObject } from '../../../core/utils/type';
 
 const quill = getQuill();
-const Link = quill.import("formats/link");
+const Link = quill.import('formats/link');
 
 class ExtLink extends Link {
     static create(data) {
@@ -14,7 +14,7 @@ class ExtLink extends Link {
                 node.innerText = data.text;
             }
             if(!data.target) {
-                node.removeAttribute("target");
+                node.removeAttribute('target');
             }
         }
 
@@ -23,8 +23,8 @@ class ExtLink extends Link {
 
     static formats(domNode) {
         return {
-            href: domNode.getAttribute("href"),
-            target: domNode.getAttribute("target")
+            href: domNode.getAttribute('href'),
+            target: domNode.getAttribute('target')
         };
     }
 
@@ -39,16 +39,16 @@ class ExtLink extends Link {
     }
 
     format(name, value) {
-        if(name === "link" && isObject(value)) {
+        if(name === 'link' && isObject(value)) {
             if(value.text) {
                 this.domNode.innerText = value.text;
             }
             if(value.target) {
-                this.domNode.setAttribute("target", "_blank");
+                this.domNode.setAttribute('target', '_blank');
             } else {
-                this.domNode.removeAttribute("target");
+                this.domNode.removeAttribute('target');
             }
-            this.domNode.setAttribute("href", value.href);
+            this.domNode.setAttribute('href', value.href);
         } else {
             super.format(name, value);
         }
@@ -56,9 +56,9 @@ class ExtLink extends Link {
 
     static value(domNode) {
         return {
-            href: domNode.getAttribute("href"),
+            href: domNode.getAttribute('href'),
             text: domNode.innerText,
-            target: !!domNode.getAttribute("target")
+            target: !!domNode.getAttribute('target')
         };
     }
 }

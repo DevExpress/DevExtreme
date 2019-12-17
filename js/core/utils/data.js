@@ -1,30 +1,30 @@
-var errors = require("../errors"),
-    Class = require("../class"),
-    objectUtils = require("./object"),
-    typeUtils = require("./type"),
-    each = require("./iterator").each,
-    variableWrapper = require("./variable_wrapper"),
+var errors = require('../errors'),
+    Class = require('../class'),
+    objectUtils = require('./object'),
+    typeUtils = require('./type'),
+    each = require('./iterator').each,
+    variableWrapper = require('./variable_wrapper'),
     unwrapVariable = variableWrapper.unwrap,
     isWrapped = variableWrapper.isWrapped,
     assign = variableWrapper.assign;
 
 var bracketsToDots = function(expr) {
     return expr
-        .replace(/\[/g, ".")
-        .replace(/\]/g, "");
+        .replace(/\[/g, '.')
+        .replace(/\]/g, '');
 };
 
 var readPropValue = function(obj, propName, options) {
     options = options || { };
-    if(propName === "this") {
+    if(propName === 'this') {
         return unwrap(obj, options);
     }
     return unwrap(obj[propName], options);
 };
 
 var assignPropValue = function(obj, propName, value, options) {
-    if(propName === "this") {
-        throw new errors.Error("E4016");
+    if(propName === 'this') {
+        throw new errors.Error('E4016');
     }
 
     var propValue = obj[propName];
@@ -50,19 +50,19 @@ var compileGetter = function(expr) {
         expr = [].slice.call(arguments);
     }
 
-    if(!expr || expr === "this") {
+    if(!expr || expr === 'this') {
         return function(obj) { return obj; };
     }
 
-    if(typeof expr === "string") {
+    if(typeof expr === 'string') {
         expr = bracketsToDots(expr);
 
-        var path = expr.split(".");
+        var path = expr.split('.');
 
         return function(obj, options) {
             options = prepareOptions(options);
             var functionAsIs = options.functionsAsIs,
-                hasDefaultValue = "defaultValue" in options,
+                hasDefaultValue = 'defaultValue' in options,
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
@@ -124,7 +124,7 @@ var combineGetters = function(getters) {
             }
 
             current = (result || (result = {}));
-            path = name.split(".");
+            path = name.split('.');
             last = path.length - 1;
 
             for(i = 0; i < last; i++) {
@@ -153,7 +153,7 @@ var ensurePropValueDefined = function(obj, propName, value, options) {
 };
 
 var compileSetter = function(expr) {
-    expr = bracketsToDots(expr || "this").split(".");
+    expr = bracketsToDots(expr || 'this').split('.');
     var lastLevelIndex = expr.length - 1;
 
     return function(obj, value, options) {
@@ -193,7 +193,7 @@ var toComparable = function(value, caseSensitive) {
         return value.valueOf();
     }
 
-    if(!caseSensitive && typeof value === "string") {
+    if(!caseSensitive && typeof value === 'string') {
         return value.toLowerCase();
     }
 

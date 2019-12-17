@@ -1,13 +1,13 @@
-var noop = require("../../core/utils/common").noop,
-    commonModule = require("./common"),
+var noop = require('../../core/utils/common').noop,
+    commonModule = require('./common'),
     animationSettings = commonModule.utils.animationSettings,
     emptySliderMarkerText = commonModule.consts.emptySliderMarkerText,
-    Slider = require("./slider"),
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    typeUtils = require("../../core/utils/type"),
+    Slider = require('./slider'),
+    _normalizeEnum = require('../core/utils').normalizeEnum,
+    typeUtils = require('../../core/utils/type'),
     isNumeric = typeUtils.isNumeric,
-    vizUtils = require("../core/utils"),
-    adjust = require("../../core/utils/math").adjust;
+    vizUtils = require('../core/utils'),
+    adjust = require('../../core/utils/math').adjust;
 
 function buildRectPoints(left, top, right, bottom) {
     return [left, top, right, top, right, bottom, left, bottom];
@@ -68,10 +68,10 @@ function SlidersController(params) {
     var that = this,
         sliderParams = { renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator };
     that._params = params;
-    that._areaTracker = params.renderer.path(null, "area").attr({ "class": "area-tracker", fill: "#000000", opacity: 0.0001 }).append(params.trackersGroup);
-    that._selectedAreaTracker = params.renderer.path(null, "area").attr({ "class": "selected-area-tracker", fill: "#000000", opacity: 0.0001 }).append(params.trackersGroup);
+    that._areaTracker = params.renderer.path(null, 'area').attr({ 'class': 'area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
+    that._selectedAreaTracker = params.renderer.path(null, 'area').attr({ 'class': 'selected-area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
     // Shutter is appended before sliders because later (when they will be foregrounded) it will be at any case located before them.
-    that._shutter = params.renderer.path(null, "area").append(params.root);
+    that._shutter = params.renderer.path(null, 'area').append(params.root);
     that._sliders = [new Slider(sliderParams, 0), new Slider(sliderParams, 1)];
     // It seems that there is no special reasons to suppress first event - it was accidentally suppressed.
     // Let it stay so for now.
@@ -126,7 +126,7 @@ SlidersController.prototype = {
         that._shutterOffset = sliderHandleOptions.width / 2;
         that._updateSelectedView(shutterOptions, selectedRangeColor);
 
-        that._isOnMoving = _normalizeEnum(behavior.callValueChanged) === "onmoving";
+        that._isOnMoving = _normalizeEnum(behavior.callValueChanged) === 'onmoving';
 
         that._updateSelectedRange();
         // This is placing sliders and shutter into initial position. They all will be animated from that position when "setSelectedRange" is called.
@@ -134,14 +134,14 @@ SlidersController.prototype = {
     },
 
     _updateSelectedView: function(shutterOptions, selectedRangeColor) {
-        var settings = { fill: null, "fill-opacity": null, stroke: null, "stroke-width": null };
+        var settings = { fill: null, 'fill-opacity': null, stroke: null, 'stroke-width': null };
         if(this._isCompactMode) {
             settings.stroke = selectedRangeColor;
-            settings["stroke-width"] = 3;
-            settings.sharp = "v";
+            settings['stroke-width'] = 3;
+            settings.sharp = 'v';
         } else {
             settings.fill = shutterOptions.color;
-            settings["fill-opacity"] = shutterOptions.opacity;
+            settings['fill-opacity'] = shutterOptions.opacity;
         }
         this._shutter.attr(settings);
     },
@@ -183,7 +183,7 @@ SlidersController.prototype = {
             position1 = that._sliders[0].getPosition(),
             position2 = that._sliders[1].getPosition();
         that._selectedAreaTracker.attr({ points: buildRectPoints(position1, that._verticalRange[0], position2, that._verticalRange[1]) }).css({
-            cursor: Math.abs(that._params.translator.getScreenRange()[1] - that._params.translator.getScreenRange()[0] - position2 + position1) < 0.001 ? "default" : "pointer"
+            cursor: Math.abs(that._params.translator.getScreenRange()[1] - that._params.translator.getScreenRange()[0] - position2 + position1) < 0.001 ? 'default' : 'pointer'
         });
     },
 
@@ -219,7 +219,7 @@ SlidersController.prototype = {
         const that = this;
         const translator = that._params.translator;
         const businessRange = translator.getBusinessRange();
-        const compare = businessRange.axisType === "discrete" ? function(a, b) {
+        const compare = businessRange.axisType === 'discrete' ? function(a, b) {
             return a < b;
         } : function(a, b) {
             return a <= b;

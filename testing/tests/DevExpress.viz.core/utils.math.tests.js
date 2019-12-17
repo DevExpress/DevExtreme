@@ -1,4 +1,4 @@
-var vizUtils = require("viz/core/utils");
+var vizUtils = require('viz/core/utils');
 
 var EPSILON = 1E-8,
     PI = Math.PI;
@@ -93,9 +93,9 @@ QUnit.test('getCosAndSin', function(assert) {
 });
 
 
-QUnit.test("getDistance", function(assert) {
-    assert.equal(vizUtils.getDistance(0, 0, 3, 4), 5, "egypt triangle");
-    assert.equal(vizUtils.getDistance(3, 4, 0, 0), 5, "egypt triangle");
+QUnit.test('getDistance', function(assert) {
+    assert.equal(vizUtils.getDistance(0, 0, 3, 4), 5, 'egypt triangle');
+    assert.equal(vizUtils.getDistance(3, 4, 0, 0), 5, 'egypt triangle');
     assert.equal(vizUtils.getDistance(20, 20, 10, 10), Math.sqrt(200));
 });
 
@@ -268,7 +268,7 @@ QUnit.test('getAppropriateFormat - [0.1E-6, 1.1E-6]', function(assert) {
     testGetAppropriateFormat(assert, 0.1E-6, 1.1E-6, 100000, 'exponential', 3);
 });
 
-QUnit.test("getLog", function(assert) {
+QUnit.test('getLog', function(assert) {
     assert.roughEqual(vizUtils.getLog(10, 10), 1, 1E-8);
     assert.roughEqual(vizUtils.getLog(1, 10), 0, 1E-8);
 

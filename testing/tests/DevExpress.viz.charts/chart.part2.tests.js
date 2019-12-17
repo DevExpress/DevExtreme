@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    commons = require("./chartParts/commons.js"),
-    vizUtils = require("viz/core/utils"),
-    chartMocks = require("../../helpers/chartMocks.js"),
+var $ = require('jquery'),
+    commons = require('./chartParts/commons.js'),
+    vizUtils = require('viz/core/utils'),
+    chartMocks = require('../../helpers/chartMocks.js'),
     MockSeries = chartMocks.MockSeries,
     commonMethodsForTests = chartMocks.commonMethodsForTests;
 
-require("../../helpers/chartMocks.js");
+require('../../helpers/chartMocks.js');
 
-$('<div id="chartContainer">').appendTo("#qunit-fixture");
+$('<div id="chartContainer">').appendTo('#qunit-fixture');
 
-QUnit.module("dxChart Business Ranges", commons.environment);
+QUnit.module('dxChart Business Ranges', commons.environment);
 
-QUnit.test("Pass rotation info to Business range (rotated = true)", function(assert) {
+QUnit.test('Pass rotation info to Business range (rotated = true)', function(assert) {
     var chart = this.createChart({
         rotated: true,
         argumentAxis: { mockRange: {} }
@@ -20,7 +20,7 @@ QUnit.test("Pass rotation info to Business range (rotated = true)", function(ass
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, true);
 });
 
-QUnit.test("Pass rotation info to Business range (rotated = false)", function(assert) {
+QUnit.test('Pass rotation info to Business range (rotated = false)', function(assert) {
     var chart = this.createChart({
         argumentAxis: { mockRange: {} }
     });
@@ -29,7 +29,7 @@ QUnit.test("Pass rotation info to Business range (rotated = false)", function(as
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
 });
 
-QUnit.test("Calculate business range for continuous without indent", function(assert) {
+QUnit.test('Calculate business range for continuous without indent', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -40,7 +40,7 @@ QUnit.test("Calculate business range for continuous without indent", function(as
     }));
     var chart = this.createChart({
         series: {
-            type: "line"
+            type: 'line'
         },
         valueAxis: {
             minValueMargin: 0,
@@ -59,7 +59,7 @@ QUnit.test("Calculate business range for continuous without indent", function(as
     assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 10);
 });
 
-QUnit.test("Calculate business range for continuous with default indent", function(assert) {
+QUnit.test('Calculate business range for continuous with default indent', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -70,7 +70,7 @@ QUnit.test("Calculate business range for continuous with default indent", functi
     }));
     var chart = this.createChart({
         series: {
-            type: "line"
+            type: 'line'
         }
     });
 
@@ -81,7 +81,7 @@ QUnit.test("Calculate business range for continuous with default indent", functi
     assert.equal(range.max, 9);
 });
 
-QUnit.test("Calculate business range for categories from Axis and continuous values from Series", function(assert) {
+QUnit.test('Calculate business range for categories from Axis and continuous values from Series', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -92,7 +92,7 @@ QUnit.test("Calculate business range for categories from Axis and continuous val
     }));
     var chart = this.createChart({
         series: {
-            type: "line"
+            type: 'line'
         }
     });
 
@@ -100,7 +100,7 @@ QUnit.test("Calculate business range for categories from Axis and continuous val
     assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 9);
 });
 
-QUnit.test("Two ranges for two panes - data from series, indents from common axis", function(assert) {
+QUnit.test('Two ranges for two panes - data from series, indents from common axis', function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
@@ -122,12 +122,12 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
     var chart = this.createChart({
         series: [{
             // doesn't matter as range goes from predefined series above
-            pane: "topPane",
-            type: "line"
+            pane: 'topPane',
+            type: 'line'
         }, {
             // doesn't matter as range goes from predefined series above
-            pane: "otherPane",
-            type: "line"
+            pane: 'otherPane',
+            type: 'line'
         }],
         valueAxis: {
             minValueMargin: 0,
@@ -141,10 +141,10 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
         },
         panes: [
             {
-                name: "topPane",
-                position: "top"
+                name: 'topPane',
+                position: 'top'
             }, {
-                name: "otherPane"
+                name: 'otherPane'
             }
         ]
 
@@ -153,29 +153,29 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
 
     var range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
-        pane: "topPane",
+        pane: 'topPane',
         min: 0,
         max: 10
     });
 
     var range2 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
     assertRange(assert, range2, {
-        pane: "otherPane",
+        pane: 'otherPane',
         min: 101,
         max: 151
     });
 });
 
-QUnit.test("Two Series, one of them is not visible", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ visible: false, range: { arg: { categories: ["A", "B", "C"] } } }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["D", "E", "F"] } } }));
+QUnit.test('Two Series, one of them is not visible', function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ visible: false, range: { arg: { categories: ['A', 'B', 'C'] } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ['D', 'E', 'F'] } } }));
 
     var chart = this.createChart({
-        dataSource: [{ arg: "A", val: 1 }, { arg: "B", val: 2 }, { arg: "C", val: 3 }, { arg: "D", val: 1 }, { arg: "E", val: 2 }, { arg: "F", val: 3 }],
-        series: [{ type: "line" }, { type: "line" }]
+        dataSource: [{ arg: 'A', val: 1 }, { arg: 'B', val: 2 }, { arg: 'C', val: 3 }, { arg: 'D', val: 1 }, { arg: 'E', val: 2 }, { arg: 'F', val: 3 }],
+        series: [{ type: 'line' }, { type: 'line' }]
     });
 
-    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["D", "E", "F"]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ['D', 'E', 'F']);
 });
 
 var assertRange = commonMethodsForTests.assertRange;
@@ -183,9 +183,9 @@ var assertRange = commonMethodsForTests.assertRange;
 // /////////////////////////////////////////////////////
 // ////      Canvas creation
 // /////////////////////////////////////////////////////
-QUnit.module("dxChart Canvas", commons.environment);
+QUnit.module('dxChart Canvas', commons.environment);
 
-QUnit.test("Canvas creation from options", function(assert) {
+QUnit.test('Canvas creation from options', function(assert) {
 
     var chartOptions = {
         left: 80,
@@ -197,7 +197,7 @@ QUnit.test("Canvas creation from options", function(assert) {
     chartMocks.seriesMockData.series.push(stubSeries);
     var chart = this.createChart({
         margin: chartOptions,
-        series: [{ type: "line" }]
+        series: [{ type: 'line' }]
     });
 
     assert.ok(chart._canvas);
@@ -209,22 +209,22 @@ QUnit.test("Canvas creation from options", function(assert) {
     assert.equal(chart._canvas.bottom, 80);
 });
 
-QUnit.test("Canvas creation from default", function(assert) {
+QUnit.test('Canvas creation from default', function(assert) {
     var chart = this.createChart({
     });
 
     assert.ok(chart._canvas);
     // get it from container"s width and height
     assert.equal(chart._canvas.width, 300);
-    assert.equal(chart._canvas.height, 150, "True height of container");
+    assert.equal(chart._canvas.height, 150, 'True height of container');
     // get it from default canvas" settings
 
     // assert.ok(chart.canvas.marginsThemeApplied);
 });
 
-QUnit.test("Canvas creation, default container size", function(assert) {
+QUnit.test('Canvas creation, default container size', function(assert) {
     var css = { width: this.$container.width(), height: this.$container.height() };
-    this.$container.css("height", 0);
+    this.$container.css('height', 0);
     var chart = this.createChart({
     });
 
@@ -233,8 +233,8 @@ QUnit.test("Canvas creation, default container size", function(assert) {
     assert.equal(chart._canvas.height, 400);
 });
 
-QUnit.test("Canvas creation, zero container width", function(assert) {
-    this.$container.css({ width: "0px", height: "100px" });
+QUnit.test('Canvas creation, zero container width', function(assert) {
+    this.$container.css({ width: '0px', height: '100px' });
     var chart = this.createChart({
     });
 
@@ -243,8 +243,8 @@ QUnit.test("Canvas creation, zero container width", function(assert) {
     assert.equal(chart._canvas.height, 100);
 });
 
-QUnit.test("Canvas creation, zero container size", function(assert) {
-    this.$container.css({ width: "0px", height: "0px" });
+QUnit.test('Canvas creation, zero container size', function(assert) {
+    this.$container.css({ width: '0px', height: '0px' });
     var chart = this.createChart({
     });
 
@@ -252,7 +252,7 @@ QUnit.test("Canvas creation, zero container size", function(assert) {
     assert.ok(chart._canvas);
 });
 
-QUnit.test("Canvas creation, custom container size", function(assert) {
+QUnit.test('Canvas creation, custom container size', function(assert) {
     var css = { width: this.$container.width(), height: this.$container.height() };
 
     var chart = this.createChart({
@@ -266,7 +266,7 @@ QUnit.test("Canvas creation, custom container size", function(assert) {
     assert.equal(this.$container.height(), css.height);
 });
 
-QUnit.test("Canvas creation, custom negative width option", function(assert) {
+QUnit.test('Canvas creation, custom negative width option', function(assert) {
     var css = { width: this.$container.width(), height: this.$container.height() };
 
     var chart = this.createChart({
@@ -281,7 +281,7 @@ QUnit.test("Canvas creation, custom negative width option", function(assert) {
     assert.equal(this.$container.height(), css.height);
 });
 
-QUnit.test("Canvas creation, custom negative height option", function(assert) {
+QUnit.test('Canvas creation, custom negative height option', function(assert) {
     var css = { width: this.$container.width(), height: this.$container.height() };
 
     var chart = this.createChart({
@@ -296,7 +296,7 @@ QUnit.test("Canvas creation, custom negative height option", function(assert) {
     assert.equal(this.$container.height(), css.height);
 });
 
-QUnit.test("Canvas creation, custom container size with zero width and height", function(assert) {
+QUnit.test('Canvas creation, custom container size with zero width and height', function(assert) {
     var chart = this.createChart({
         size: { width: 0, height: 0 }
     });
@@ -304,7 +304,7 @@ QUnit.test("Canvas creation, custom container size with zero width and height", 
     assert.ok(chart._canvas);
 });
 
-QUnit.test("Canvas creation from options merged with default", function(assert) {
+QUnit.test('Canvas creation from options merged with default', function(assert) {
 
     var chartOptions = {
         // width: 800,
@@ -327,38 +327,38 @@ QUnit.test("Canvas creation from options merged with default", function(assert) 
     assert.equal(chart._canvas.bottom, 0);
 });
 
-QUnit.test("Single pane canvas creation from default", function(assert) {
+QUnit.test('Single pane canvas creation from default', function(assert) {
     var chart = this.createChart({
     });
 
     assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 1, "Two panes exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
+    assert.strictEqual(chart.panes.length, 1, 'Two panes exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
 
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "default", "Default pane was created with no options");
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'default', 'Default pane was created with no options');
 });
 
-QUnit.test("Two panes canvas creation", function(assert) {
+QUnit.test('Two panes canvas creation', function(assert) {
     var chart = this.createChart({
         panes: [{
-            name: "topPane"
+            name: 'topPane'
         }, {
-            name: "bottomPane"
+            name: 'bottomPane'
         }
         ]
     });
 
     assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 2, "Single pane exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "topPane", "Top pane from user options");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, "bottomPane", "Bottom pane from user options");
+    assert.strictEqual(chart.panes.length, 2, 'Single pane exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'topPane', 'Top pane from user options');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'bottomPane', 'Bottom pane from user options');
     // assert.ok(chart.canvas.marginsThemeApplied);
 });
 
-QUnit.test("Two panes canvas creation. All Border visible", function(assert) {
+QUnit.test('Two panes canvas creation. All Border visible', function(assert) {
     var chart = this.createChart({
         commonPaneSettings: {
             border: {
@@ -366,48 +366,48 @@ QUnit.test("Two panes canvas creation. All Border visible", function(assert) {
             }
         },
         panes: [{
-            name: "topPane"
+            name: 'topPane'
         }, {
-            name: "bottomPane"
+            name: 'bottomPane'
         }
         ]
     });
     assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 2, "Single pane exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "topPane", "Top pane from user options");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, "bottomPane", "Bottom pane from user options");
+    assert.strictEqual(chart.panes.length, 2, 'Single pane exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'topPane', 'Top pane from user options');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'bottomPane', 'Bottom pane from user options');
 
 });
 
-QUnit.test("Two panes canvas creation. Top Border visible", function(assert) {
+QUnit.test('Two panes canvas creation. Top Border visible', function(assert) {
     var chart = this.createChart({
         panes: [{
-            name: "topPane",
+            name: 'topPane',
             border: {
                 visible: true
             }
         }, {
-            name: "bottomPane"
+            name: 'bottomPane'
         }
         ]
     });
     assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 2, "Single pane exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "topPane", "Top pane from user options");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, "bottomPane", "Bottom pane from user options");
+    assert.strictEqual(chart.panes.length, 2, 'Single pane exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'topPane', 'Top pane from user options');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'bottomPane', 'Bottom pane from user options');
 });
 
-QUnit.test("Two panes canvas creation. Bottom Border visible", function(assert) {
+QUnit.test('Two panes canvas creation. Bottom Border visible', function(assert) {
     var chart = this.createChart({
         panes: [{
-            name: "topPane"
+            name: 'topPane'
 
         }, {
-            name: "bottomPane",
+            name: 'bottomPane',
             border: {
                 visible: true
             }
@@ -415,42 +415,42 @@ QUnit.test("Two panes canvas creation. Bottom Border visible", function(assert) 
         ]
     });
     assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 2, "Single pane exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "topPane", "Top pane from user options");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, "bottomPane", "Bottom pane from user options");
+    assert.strictEqual(chart.panes.length, 2, 'Single pane exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'topPane', 'Top pane from user options');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'bottomPane', 'Bottom pane from user options');
 });
 
-QUnit.test("Two panes canvas creation. Top Border visible. Rotated", function(assert) {
-    var chart = this.createChart({
-        rotated: true,
-        panes: [{
-            name: "topPane",
-            border: {
-                visible: true
-            }
-        }, {
-            name: "bottomPane"
-        }
-        ]
-    });
-    assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 2, "Single pane exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "bottomPane", "Top pane from user options");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, "topPane", "Bottom pane from user options");
-});
-
-QUnit.test("Two panes canvas creation. Bottom Border visible. Rotated", function(assert) {
+QUnit.test('Two panes canvas creation. Top Border visible. Rotated', function(assert) {
     var chart = this.createChart({
         rotated: true,
         panes: [{
-            name: "topPane"
+            name: 'topPane',
+            border: {
+                visible: true
+            }
+        }, {
+            name: 'bottomPane'
+        }
+        ]
+    });
+    assert.ok(chart.panes);
+    assert.strictEqual(chart.panes.length, 2, 'Single pane exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'bottomPane', 'Top pane from user options');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'topPane', 'Bottom pane from user options');
+});
+
+QUnit.test('Two panes canvas creation. Bottom Border visible. Rotated', function(assert) {
+    var chart = this.createChart({
+        rotated: true,
+        panes: [{
+            name: 'topPane'
 
         }, {
-            name: "bottomPane",
+            name: 'bottomPane',
             border: {
                 visible: true
             }
@@ -458,124 +458,124 @@ QUnit.test("Two panes canvas creation. Bottom Border visible. Rotated", function
         ]
     });
     assert.ok(chart.panes);
-    assert.strictEqual(chart.panes.length, 2, "Single pane exists");
-    assert.ok(chart.layoutManager, "layoutManager created");
-    assert.ok(vizUtils.updatePanesCanvases.called, "Panes were created");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, "bottomPane", "Top pane from user options");
-    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, "topPane", "Bottom pane from user options");
+    assert.strictEqual(chart.panes.length, 2, 'Single pane exists');
+    assert.ok(chart.layoutManager, 'layoutManager created');
+    assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'bottomPane', 'Top pane from user options');
+    assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'topPane', 'Bottom pane from user options');
 
 });
 // /////////////////////////////////////////////////////
 // ////      Panes creation
 // /////////////////////////////////////////////////////
-QUnit.module("Panes creation", commons.environment);
+QUnit.module('Panes creation', commons.environment);
 
-QUnit.test("by default - default pane created", function(assert) {
+QUnit.test('by default - default pane created', function(assert) {
     var chart = this.createChart({});
 
     assert.equal(chart.panes.length, 1);
-    assert.equal(chart.panes[0].name, "default");
+    assert.equal(chart.panes[0].name, 'default');
 });
 
-QUnit.test("panes is empty object - default pane created", function(assert) {
+QUnit.test('panes is empty object - default pane created', function(assert) {
     var chart = this.createChart({
         panes: {}
     });
 
     assert.equal(chart.panes.length, 1);
-    assert.equal(chart.panes[0].name, "default0");
+    assert.equal(chart.panes[0].name, 'default0');
 });
 
-QUnit.test("panes is object - pane created", function(assert) {
+QUnit.test('panes is object - pane created', function(assert) {
     var chart = this.createChart({
-        panes: { name: "my new pane" }
+        panes: { name: 'my new pane' }
     });
 
     assert.equal(chart.panes.length, 1);
-    assert.equal(chart.panes[0].name, "my new pane");
+    assert.equal(chart.panes[0].name, 'my new pane');
 });
 
-QUnit.test("panes is empty array - default pane created", function(assert) {
+QUnit.test('panes is empty array - default pane created', function(assert) {
     var chart = this.createChart({
         panes: []
     });
 
     assert.equal(chart.panes.length, 1);
-    assert.equal(chart.panes[0].name, "default");
+    assert.equal(chart.panes[0].name, 'default');
 });
 
-QUnit.test("panes is array with one object - pane created", function(assert) {
+QUnit.test('panes is array with one object - pane created', function(assert) {
     var chart = this.createChart({
-        panes: [{ name: "my new pane" }]
+        panes: [{ name: 'my new pane' }]
     });
 
     assert.equal(chart.panes.length, 1);
-    assert.equal(chart.panes[0].name, "my new pane");
+    assert.equal(chart.panes[0].name, 'my new pane');
 });
 
-QUnit.test("panes is array with two object - two panes created", function(assert) {
+QUnit.test('panes is array with two object - two panes created', function(assert) {
     var chart = this.createChart({
         panes: [
-            { name: "my new pane 1" },
-            { name: "my new pane 2" }
+            { name: 'my new pane 1' },
+            { name: 'my new pane 2' }
         ]
     });
 
     assert.equal(chart.panes.length, 2);
-    assert.equal(chart.panes[0].name, "my new pane 1");
-    assert.equal(chart.panes[1].name, "my new pane 2");
+    assert.equal(chart.panes[0].name, 'my new pane 1');
+    assert.equal(chart.panes[1].name, 'my new pane 2');
 });
 
-QUnit.test("panes specified without names - panes created with default names", function(assert) {
+QUnit.test('panes specified without names - panes created with default names', function(assert) {
     var chart = this.createChart({
         panes: [
-            { someOption: "some value" },
-            { someOption: "some value" }
+            { someOption: 'some value' },
+            { someOption: 'some value' }
         ]
     });
 
     assert.equal(chart.panes.length, 2);
-    assert.equal(chart.panes[0].name, "default0");
-    assert.equal(chart.panes[1].name, "default1");
+    assert.equal(chart.panes[0].name, 'default0');
+    assert.equal(chart.panes[1].name, 'default1');
 });
 
-QUnit.module("Panes creation. defaultPane", commons.environment);
+QUnit.module('Panes creation. defaultPane', commons.environment);
 
-QUnit.test("single pane - defaultPane is only pane", function(assert) {
+QUnit.test('single pane - defaultPane is only pane', function(assert) {
     var chart = this.createChart({});
 
-    assert.strictEqual(chart.defaultPane, "default");
+    assert.strictEqual(chart.defaultPane, 'default');
 });
 
-QUnit.test("multiple panes - defaultPane is the last pane", function(assert) {
+QUnit.test('multiple panes - defaultPane is the last pane', function(assert) {
     var chart = this.createChart({
-        panes: [{ name: "pane 1" }, { name: "pane 2" }]
+        panes: [{ name: 'pane 1' }, { name: 'pane 2' }]
     });
 
-    assert.strictEqual(chart.defaultPane, "pane 2");
+    assert.strictEqual(chart.defaultPane, 'pane 2');
 });
 
-QUnit.test("defaultPane specified, there is pane with givenName - defaultPane is that pane", function(assert) {
+QUnit.test('defaultPane specified, there is pane with givenName - defaultPane is that pane', function(assert) {
     var chart = this.createChart({
-        defaultPane: "pane 1",
-        panes: [{ name: "pane 1" }, { name: "pane 2" }]
+        defaultPane: 'pane 1',
+        panes: [{ name: 'pane 1' }, { name: 'pane 2' }]
     });
 
-    assert.strictEqual(chart.defaultPane, "pane 1");
+    assert.strictEqual(chart.defaultPane, 'pane 1');
 });
 
-QUnit.test("defaultPane specified, no panes with givenName - defaultPane is the last pane", function(assert) {
+QUnit.test('defaultPane specified, no panes with givenName - defaultPane is the last pane', function(assert) {
     var chart = this.createChart({
-        defaultPane: "some pane name",
-        panes: [{ name: "pane 1" }, { name: "pane 2" }]
+        defaultPane: 'some pane name',
+        panes: [{ name: 'pane 1' }, { name: 'pane 2' }]
     });
 
-    assert.strictEqual(chart.defaultPane, "pane 2");
+    assert.strictEqual(chart.defaultPane, 'pane 2');
 });
 
-QUnit.module("Merge marginOptions", commons.environment);
+QUnit.module('Merge marginOptions', commons.environment);
 
-QUnit.test("Pass merged marginOptions to axes", function(assert) {
+QUnit.test('Pass merged marginOptions to axes', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: false,
@@ -611,7 +611,7 @@ QUnit.test("Pass merged marginOptions to axes", function(assert) {
     });
 });
 
-QUnit.test("Merge options witout size", function(assert) {
+QUnit.test('Merge options witout size', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({}));
 
     var chart = this.createChart({
@@ -621,7 +621,7 @@ QUnit.test("Merge options witout size", function(assert) {
     assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0].size, 0);
 });
 
-QUnit.test("Pass merged marginOptions to axes when two value axis", function(assert) {
+QUnit.test('Pass merged marginOptions to axes when two value axis', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: false,
@@ -640,25 +640,25 @@ QUnit.test("Pass merged marginOptions to axes when two value axis", function(ass
 
     var chart = this.createChart({
         series: [{
-            axis: "axis1"
+            axis: 'axis1'
         }, {
-            axis: "axis2"
+            axis: 'axis2'
         }],
         valueAxis: [{
-            name: "axis1"
+            name: 'axis1'
         }, {
-            name: "axis2"
+            name: 'axis2'
         }]
     });
 
-    assert.deepEqual(chart.getValueAxis("axis1").setMarginOptions.lastCall.args[0], {
+    assert.deepEqual(chart.getValueAxis('axis1').setMarginOptions.lastCall.args[0], {
         checkInterval: false,
         size: 8,
         percentStick: false,
         sizePointNormalState: 0
     });
 
-    assert.deepEqual(chart.getValueAxis("axis2").setMarginOptions.lastCall.args[0], {
+    assert.deepEqual(chart.getValueAxis('axis2').setMarginOptions.lastCall.args[0], {
         checkInterval: true,
         size: 5,
         percentStick: true,
@@ -673,7 +673,7 @@ QUnit.test("Pass merged marginOptions to axes when two value axis", function(ass
     });
 });
 
-QUnit.test("Process margin for bubble", function(assert) {
+QUnit.test('Process margin for bubble', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             processBubbleSize: true
@@ -683,10 +683,10 @@ QUnit.test("Process margin for bubble", function(assert) {
     var chart = this.createChart({
         series: [{}],
         panes: [{
-            name: "pane1"
+            name: 'pane1'
         },
         {
-            name: "pane2"
+            name: 'pane2'
         }],
         maxBubbleSize: 0.2,
         size: {
@@ -698,7 +698,7 @@ QUnit.test("Process margin for bubble", function(assert) {
     assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0].size, 80);
 });
 
-QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
+QUnit.test('Process margin for bubble. Rotated chart', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             processBubbleSize: true
@@ -709,10 +709,10 @@ QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
         series: [{}],
         rotated: true,
         panes: [{
-            name: "pane1"
+            name: 'pane1'
         },
         {
-            name: "pane2"
+            name: 'pane2'
         }],
         maxBubbleSize: 0.2,
         size: {
@@ -724,7 +724,7 @@ QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
     assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0].size, 100);
 });
 
-QUnit.test("pointSize merging", function(assert) {
+QUnit.test('pointSize merging', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({
         marginOptions: {
             checkInterval: false,

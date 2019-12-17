@@ -1,4 +1,4 @@
-var extend = require("../../core/utils/extend").extend;
+var extend = require('../../core/utils/extend').extend;
 
 exports.registry = {};
 

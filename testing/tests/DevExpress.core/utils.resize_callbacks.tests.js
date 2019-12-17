@@ -1,5 +1,5 @@
-var resizeCallbacks = require("core/utils/resize_callbacks"),
-    domAdapter = require("core/dom_adapter");
+var resizeCallbacks = require('core/utils/resize_callbacks'),
+    domAdapter = require('core/dom_adapter');
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
@@ -19,7 +19,7 @@ QUnit.module('resizeCallbacks', {
 
         var resizeHandlers = [];
         domAdapter.listen = function(element, event, handler) {
-            if(element.window === element && event === "resize") {
+            if(element.window === element && event === 'resize') {
                 resizeHandlers.push(handler);
             }
         };
