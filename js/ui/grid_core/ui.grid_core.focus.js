@@ -565,7 +565,11 @@ module.exports = {
                         });
                     } else if(paging) {
                         if(isAutoNavigate) {
-                            if(!isVirtualScrolling && this.option('focusedRowIndex') >= 0) {
+                            const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
+                            const isValidRowIndexByKey = rowIndexByKey >= 0;
+                            const focusedRowIndex = this.option('focusedRowIndex');
+                            const needFocusRowByIndex = focusedRowIndex >= 0 && (focusedRowIndex === rowIndexByKey || !isValidRowIndexByKey);
+                            if(!isVirtualScrolling && needFocusRowByIndex) {
                                 focusController._focusRowByIndex();
                             }
                         } else {
