@@ -118,6 +118,7 @@ class Gantt extends Widget {
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
+            timeMarkers: this.option('timeMarkers'),
             bars: this._bars,
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
@@ -430,6 +431,28 @@ class Gantt extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
+            * @name dxGanttTimeMarker
+            * @type object
+            */
+            /**
+            * @name dxGanttTimeMarker.dateTime
+            * @type Date|number|string|function
+            * @type_function_return Date|number|string
+            * @default undefined
+            */
+            /**
+            /**
+            * @name dxGanttTimeMarker.title
+            * @type string
+            * @default undefined
+            */
+            /**
+            * @name dxGanttTimeMarker.cssClass
+            * @type string
+            * @default undefined
+            */
+
+            /**
             * @name dxGanttOptions.tasks
             * @type Object
             * @default null
@@ -623,6 +646,12 @@ class Gantt extends Widget {
             */
             showRowLines: true,
             /**
+            * @name dxGanttOptions.timeMarkers
+            * @type Array<dxGanttTimeMarker>
+            * @default undefined
+            */
+            timeMarkers: undefined,
+            /**
             * @name dxGanttOptions.scaleType
             * @type Enums.GanttScaleType
             * @default "auto"
@@ -736,6 +765,9 @@ class Gantt extends Widget {
             case 'showRowLines':
                 this._setTreeListOption('showRowLines', args.value);
                 this._setGanttViewOption('showRowLines', args.value);
+                break;
+            case 'timeMarkers':
+                this._setGanttViewOption('timeMarkers', args.value);
                 break;
             case 'scaleType':
                 this._setGanttViewOption('scaleType', args.value);

@@ -26,6 +26,7 @@ const TREELIST_SELECTOR = '.dx-treelist',
     SPLITTER_SELECTOR = '.dx-splitter',
     POPUP_SELECTOR = '.dx-popup-normal',
     GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR = '.dx-gantt-hb',
+    TIME_MARKER_SELECTOR = '.dx-gantt-tm',
     OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper',
     CONTEXT_MENU_SELECTOR = '.dx-context-menu',
     INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
@@ -618,5 +619,37 @@ QUnit.module('Context Menu', moduleConfig, () => {
         var $cellElement = $(this.instance._treeList.getCellElement(0, 0));
         $cellElement.trigger('contextmenu');
         assert.equal(getContextMenuElement().length, 2, 'menu is visible after right click in tree list');
+    });
+});
+
+QUnit.module('Time Markers', moduleConfig, () => {
+    test('render', function(assert) {
+        const timeMarkers = [
+            { dateTime: tasks[0].start, title: 'Start' },
+            { dateTime: new Date(2019, 2, 1) },
+            { dateTime: () => tasks[tasks.length - 1].end, title: 'End', cssClass: 'end' }
+        ];
+        const options = {
+            tasks: { dataSource: tasks },
+            timeMarkers: timeMarkers
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($timeMarkers.length, timeMarkers.length, 'all time markers are rendered');
+        assert.ok($timeMarkers.eq(2).hasClass(timeMarkers[2].cssClass), 'custom cssClass rendered');
+        assert.equal($timeMarkers.eq(0).attr('title'), timeMarkers[0].title, 'title rendered');
+    });
+    test('changing', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+
+        let $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($timeMarkers.length, 0, 'gantt has not time markers');
+
+        this.instance.option('timeMarkers', [{ dateTime: tasks[0].start, title: 'Start' }]);
+        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($timeMarkers.length, 1, 'gantt has a time marker');
     });
 });
