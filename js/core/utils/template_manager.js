@@ -9,7 +9,7 @@ import { getElementOptions, normalizeTemplateElement } from './dom';
 import devices from '../devices';
 import { Template } from '../templates/template';
 
-const findTemplateByDevice = (templates) => {
+export const findTemplateByDevice = (templates) => {
     const suitableTemplate = findBestMatches(
         devices.current(),
         templates,
@@ -25,7 +25,7 @@ const findTemplateByDevice = (templates) => {
     return suitableTemplate;
 };
 
-const addOneRenderedCall = (template) => {
+export const addOneRenderedCall = (template) => {
     const render = template.render.bind(template);
     return extend({}, template, {
         render(options) {
@@ -36,7 +36,7 @@ const addOneRenderedCall = (template) => {
     });
 };
 
-const getNormalizedTemplateArgs = (options) => {
+export const getNormalizedTemplateArgs = (options) => {
     const args = [];
 
     if('model' in options) {
@@ -50,19 +50,19 @@ const getNormalizedTemplateArgs = (options) => {
     return args;
 };
 
-const validateTemplateSource = (templateSource) => {
+export const validateTemplateSource = (templateSource) => {
     return typeof templateSource === 'string'
         ? normalizeTemplateElement(templateSource)
         : templateSource;
 };
 
-const templateKey = (templateSource) => {
+export const templateKey = (templateSource) => {
     return (isRenderer(templateSource) && templateSource[0]) || templateSource;
 };
 
-const defaultCreateElement = element => new Template(element);
+export const defaultCreateElement = element => new Template(element);
 
-const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, skipTemplates) => {
+export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, skipTemplates) => {
     let integrationTemplate = null;
 
     if(!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
@@ -75,7 +75,7 @@ const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, 
     return integrationTemplate;
 };
 
-const acquireTemplate = (templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates, defaultTemplates) => {
+export const acquireTemplate = (templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates, defaultTemplates) => {
     if(templateSource == null) {
         return new EmptyTemplate();
     }
@@ -100,15 +100,4 @@ const acquireTemplate = (templateSource, createTemplate, templates, isAsyncTempl
     return acquireIntegrationTemplate(templateSource, templates, isAsyncTemplate, skipTemplates)
         || defaultTemplates[templateSource]
         || createTemplate(templateSource);
-};
-
-module.exports = {
-    acquireTemplate,
-    findTemplateByDevice,
-    acquireIntegrationTemplate,
-    defaultCreateElement,
-    templateKey,
-    validateTemplateSource,
-    getNormalizedTemplateArgs,
-    addOneRenderedCall,
 };
