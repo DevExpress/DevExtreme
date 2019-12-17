@@ -1,7 +1,7 @@
-import { Deferred } from "core/utils/deferred";
+import { Deferred } from 'core/utils/deferred';
 
-import { FileProvider } from "ui/file_manager/file_provider/file_provider";
-import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
+import { FileProvider } from 'ui/file_manager/file_provider/file_provider';
+import { ErrorCode } from 'ui/file_manager/ui.file_manager.common';
 
 const DEFAULT_DELAY = 2000;
 
@@ -12,8 +12,8 @@ export default class TestFileProvider extends FileProvider {
 
         this._provider = options.provider;
 
-        this._requestMode = options.requestMode || "multiple";
-        this._raiseErrorMode = options.raiseErrorMode || "none";
+        this._requestMode = options.requestMode || 'multiple';
+        this._raiseErrorMode = options.raiseErrorMode || 'none';
         this._onRaiseError = options.onRaiseError;
     }
 
@@ -132,7 +132,7 @@ export default class TestFileProvider extends FileProvider {
     _raiseError(item, index) {
         if(!this._needRaiseError()) {
             return;
-        } else if(this._raiseErrorMode === "always") {
+        } else if(this._raiseErrorMode === 'always') {
             this._raiseErrorCore(item);
         }
 
@@ -174,19 +174,19 @@ export default class TestFileProvider extends FileProvider {
     }
 
     _needRaiseError() {
-        return this._raiseErrorMode !== "none";
+        return this._raiseErrorMode !== 'none';
     }
 
     _useDefaultRequestMode() {
-        return this._requestModeIs("default");
+        return this._requestModeIs('default');
     }
 
     _useSingleRequestMode() {
-        return this._requestModeIs("single");
+        return this._requestModeIs('single');
     }
 
     _useMultipleRequestMode() {
-        return this._requestModeIs("multiple");
+        return this._requestModeIs('multiple');
     }
 
     _requestModeIs(value) {

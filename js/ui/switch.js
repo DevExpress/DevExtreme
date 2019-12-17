@@ -1,27 +1,27 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    devices = require("../core/devices"),
-    extend = require("../core/utils/extend").extend,
-    inkRipple = require("./widget/utils.ink_ripple"),
-    registerComponent = require("../core/component_registrator"),
-    Editor = require("./editor/editor"),
-    eventUtils = require("../events/utils"),
-    feedbackEvents = require("../events/core/emitter.feedback"),
-    themes = require("./themes"),
-    fx = require("../animation/fx"),
-    messageLocalization = require("../localization/message"),
-    clickEvent = require("../events/click"),
-    Swipeable = require("../events/gesture/swipeable"),
-    Deferred = require("../core/utils/deferred").Deferred;
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    devices = require('../core/devices'),
+    extend = require('../core/utils/extend').extend,
+    inkRipple = require('./widget/utils.ink_ripple'),
+    registerComponent = require('../core/component_registrator'),
+    Editor = require('./editor/editor'),
+    eventUtils = require('../events/utils'),
+    feedbackEvents = require('../events/core/emitter.feedback'),
+    themes = require('./themes'),
+    fx = require('../animation/fx'),
+    messageLocalization = require('../localization/message'),
+    clickEvent = require('../events/click'),
+    Swipeable = require('../events/gesture/swipeable'),
+    Deferred = require('../core/utils/deferred').Deferred;
 
-var SWITCH_CLASS = "dx-switch",
-    SWITCH_WRAPPER_CLASS = SWITCH_CLASS + "-wrapper",
-    SWITCH_CONTAINER_CLASS = SWITCH_CLASS + "-container",
-    SWITCH_INNER_CLASS = SWITCH_CLASS + "-inner",
-    SWITCH_HANDLE_CLASS = SWITCH_CLASS + "-handle",
-    SWITCH_ON_VALUE_CLASS = SWITCH_CLASS + "-on-value",
-    SWITCH_ON_CLASS = SWITCH_CLASS + "-on",
-    SWITCH_OFF_CLASS = SWITCH_CLASS + "-off",
+var SWITCH_CLASS = 'dx-switch',
+    SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper',
+    SWITCH_CONTAINER_CLASS = SWITCH_CLASS + '-container',
+    SWITCH_INNER_CLASS = SWITCH_CLASS + '-inner',
+    SWITCH_HANDLE_CLASS = SWITCH_CLASS + '-handle',
+    SWITCH_ON_VALUE_CLASS = SWITCH_CLASS + '-on-value',
+    SWITCH_ON_CLASS = SWITCH_CLASS + '-on',
+    SWITCH_OFF_CLASS = SWITCH_CLASS + '-off',
 
     SWITCH_ANIMATION_DURATION = 100;
 
@@ -34,7 +34,7 @@ var SWITCH_CLASS = "dx-switch",
 */
 var Switch = Editor.inherit({
     _supportedKeys: function() {
-        var isRTL = this.option("rtlEnabled");
+        var isRTL = this.option('rtlEnabled');
 
         var click = function(e) {
                 e.preventDefault();
@@ -74,14 +74,14 @@ var Switch = Editor.inherit({
             * @type string
             * @default "ON"
             */
-            switchedOnText: this._getLocalizationMessage("On"),
+            switchedOnText: this._getLocalizationMessage('On'),
 
             /**
             * @name dxSwitchOptions.switchedOffText
             * @type string
             * @default "OFF"
             */
-            switchedOffText: this._getLocalizationMessage("Off"),
+            switchedOffText: this._getLocalizationMessage('Off'),
 
             /**
             * @name dxSwitchOptions.value
@@ -107,7 +107,7 @@ var Switch = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -138,21 +138,21 @@ var Switch = Editor.inherit({
              * @type string
              * @deprecated dxSwitchOptions.switchedOnText
              */
-            onText: { since: "18.2", alias: "switchedOnText" },
+            onText: { since: '18.2', alias: 'switchedOnText' },
 
             /**
              * @name dxSwitchOptions.offText
              * @type string
              * @deprecated dxSwitchOptions.switchedOffText
              */
-            offText: { since: "18.2", alias: "switchedOffText" }
+            offText: { since: '18.2', alias: 'switchedOffText' }
         });
     },
 
     _getLocalizationMessage: function(state) {
         // todo: remove this method when deprecated dxSwitchOptions.switchedOnText/switchedOffText will be removed
-        var newMessage = messageLocalization.format("dxSwitch-switched" + state + "Text"),
-            oldMessage = messageLocalization.format("dxSwitch-" + state.toLowerCase() + "Text");
+        var newMessage = messageLocalization.format('dxSwitch-switched' + state + 'Text'),
+            oldMessage = messageLocalization.format('dxSwitch-' + state.toLowerCase() + 'Text');
 
         return newMessage || oldMessage;
     },
@@ -162,7 +162,7 @@ var Switch = Editor.inherit({
 
     _initMarkup: function() {
         this._renderContainers();
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
 
         this.$element()
             .addClass(SWITCH_CLASS)
@@ -172,7 +172,7 @@ var Switch = Editor.inherit({
 
         this._renderClick();
 
-        this.setAria("role", "button");
+        this.setAria('role', 'button');
 
         this._renderSwipeable();
 
@@ -185,38 +185,38 @@ var Switch = Editor.inherit({
 
     _getInnerOffset: function(value, offset) {
         var ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
-        return 100 * ratio + "%";
+        return 100 * ratio + '%';
     },
 
     _getHandleOffset: function(value, offset) {
-        if(this.option("rtlEnabled")) {
+        if(this.option('rtlEnabled')) {
             value = !value;
         }
 
         if(value) {
             var calcValue = -100 + 100 * (-offset);
-            return calcValue + "%";
+            return calcValue + '%';
         } else {
-            return 100 * (-offset) + "%";
+            return 100 * (-offset) + '%';
         }
     },
 
     _renderSwitchInner: function() {
-        this._$switchInner = $("<div>")
+        this._$switchInner = $('<div>')
             .addClass(SWITCH_INNER_CLASS)
             .appendTo(this._$switchContainer);
 
-        this._$handle = $("<div>")
+        this._$handle = $('<div>')
             .addClass(SWITCH_HANDLE_CLASS)
             .appendTo(this._$switchInner);
     },
 
     _renderLabels: function() {
-        this._$labelOn = $("<div>")
+        this._$labelOn = $('<div>')
             .addClass(SWITCH_ON_CLASS)
             .prependTo(this._$switchInner);
 
-        this._$labelOff = $("<div>")
+        this._$labelOff = $('<div>')
             .addClass(SWITCH_OFF_CLASS)
             .appendTo(this._$switchInner);
 
@@ -224,10 +224,10 @@ var Switch = Editor.inherit({
     },
 
     _renderContainers: function() {
-        this._$switchContainer = $("<div>")
+        this._$switchContainer = $('<div>')
             .addClass(SWITCH_CONTAINER_CLASS);
 
-        this._$switchWrapper = $("<div>")
+        this._$switchWrapper = $('<div>')
             .addClass(SWITCH_WRAPPER_CLASS)
             .append(this._$switchContainer);
     },
@@ -248,8 +248,8 @@ var Switch = Editor.inherit({
     },
 
     _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
+        this._$submitElement = $('<input>')
+            .attr('type', 'hidden')
             .appendTo(this.$element());
     },
 
@@ -295,23 +295,23 @@ var Switch = Editor.inherit({
     },
 
     _offsetDirection: function() {
-        return this.option("rtlEnabled") ? -1 : 1;
+        return this.option('rtlEnabled') ? -1 : 1;
     },
 
     _renderPosition: function(state, swipeOffset) {
         var innerOffset = this._getInnerOffset(state, swipeOffset),
             handleOffset = this._getHandleOffset(state, swipeOffset);
 
-        if(this.option("_animateHandle")) {
-            this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
-            this._$handle.css("transform", " translateX(" + handleOffset + ")");
+        if(this.option('_animateHandle')) {
+            this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
+            this._$handle.css('transform', ' translateX(' + handleOffset + ')');
         }
     },
 
     _validateValue: function() {
-        var check = this.option("value");
-        if(typeof check !== "boolean") {
-            this._options["value"] = !!check;
+        var check = this.option('value');
+        if(typeof check !== 'boolean') {
+            this._options['value'] = !!check;
         }
     },
 
@@ -335,11 +335,11 @@ var Switch = Editor.inherit({
             return;
         }
 
-        this._animateValue(!this.option("value"));
+        this._animateValue(!this.option('value'));
     },
 
     _animateValue: function(value) {
-        var startValue = this.option("value"),
+        var startValue = this.option('value'),
             endValue = value;
 
         if(startValue === endValue) {
@@ -359,10 +359,10 @@ var Switch = Editor.inherit({
             fromHandleConfig = {},
             toHandlerConfig = {};
 
-        fromInnerConfig["transform"] = " translateX(" + fromInnerOffset + ")";
-        toInnerConfig["transform"] = " translateX(" + toInnerOffset + ")";
-        fromHandleConfig["transform"] = " translateX(" + fromHandleOffset + ")";
-        toHandlerConfig["transform"] = " translateX(" + toHandleOffset + ")";
+        fromInnerConfig['transform'] = ' translateX(' + fromInnerOffset + ')';
+        toInnerConfig['transform'] = ' translateX(' + toInnerOffset + ')';
+        fromHandleConfig['transform'] = ' translateX(' + fromHandleOffset + ')';
+        toHandlerConfig['transform'] = ' translateX(' + toHandleOffset + ')';
 
         this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, endValue);
 
@@ -378,14 +378,14 @@ var Switch = Editor.inherit({
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._animating = false;
-                that.option("value", endValue);
+                that.option('value', endValue);
             }
         });
     },
 
     _swipeStartHandler: function(e) {
-        var state = this.option("value"),
-            rtlEnabled = this.option("rtlEnabled"),
+        var state = this.option('value'),
+            rtlEnabled = this.option('rtlEnabled'),
             maxOffOffset = rtlEnabled ? 0 : 1,
             maxOnOffset = rtlEnabled ? 1 : 0;
 
@@ -395,11 +395,11 @@ var Switch = Editor.inherit({
 
         this._feedbackDeferred = new Deferred();
         feedbackEvents.lock(this._feedbackDeferred);
-        this._toggleActiveState(this.$element(), this.option("activeStateEnabled"));
+        this._toggleActiveState(this.$element(), this.option('activeStateEnabled'));
     },
 
     _swipeUpdateHandler: function(e) {
-        this._renderPosition(this.option("value"), e.event.offset);
+        this._renderPosition(this.option('value'), e.event.offset);
     },
 
     _swipeEndHandler: function(e) {
@@ -408,11 +408,11 @@ var Switch = Editor.inherit({
             toInnerConfig = {},
             toHandleConfig = {};
 
-        var innerOffset = this._getInnerOffset(that.option("value"), e.event.targetOffset),
-            handleOffset = this._getHandleOffset(that.option("value"), e.event.targetOffset);
+        var innerOffset = this._getInnerOffset(that.option('value'), e.event.targetOffset),
+            handleOffset = this._getHandleOffset(that.option('value'), e.event.targetOffset);
 
-        toInnerConfig["transform"] = " translateX(" + innerOffset + ")";
-        toHandleConfig["transform"] = " translateX(" + handleOffset + ")";
+        toInnerConfig['transform'] = ' translateX(' + innerOffset + ')';
+        toHandleConfig['transform'] = ' translateX(' + handleOffset + ')';
 
         fx.animate(this._$handle, {
             to: toHandleConfig,
@@ -424,8 +424,8 @@ var Switch = Editor.inherit({
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._swiping = false;
-                var pos = that.option("value") + offsetDirection * e.event.targetOffset;
-                that.option("value", Boolean(pos));
+                var pos = that.option('value') + offsetDirection * e.event.targetOffset;
+                that.option('value', Boolean(pos));
                 that._feedbackDeferred.resolve();
                 that._toggleActiveState(that.$element(), false);
             }
@@ -435,20 +435,20 @@ var Switch = Editor.inherit({
     _renderValue: function() {
         this._validateValue();
 
-        var val = this.option("value");
+        var val = this.option('value');
         this._renderPosition(val, 0);
 
         this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, val);
         this._getSubmitElement().val(val);
         this.setAria({
-            "pressed": val,
-            "label": val ? this.option("switchedOnText") : this.option("switchedOffText")
+            'pressed': val,
+            'label': val ? this.option('switchedOnText') : this.option('switchedOffText')
         });
     },
 
     _setLabelsText: function() {
-        this._$labelOn && this._$labelOn.text(this.option("switchedOnText"));
-        this._$labelOff && this._$labelOff.text(this.option("switchedOffText"));
+        this._$labelOn && this._$labelOn.text(this.option('switchedOnText'));
+        this._$labelOff && this._$labelOff.text(this.option('switchedOffText'));
     },
 
     _visibilityChanged: function(visible) {
@@ -459,22 +459,22 @@ var Switch = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "useInkRipple":
+            case 'useInkRipple':
                 this._invalidate();
                 break;
-            case "width":
+            case 'width':
                 delete this._marginBound;
                 this._refresh();
                 break;
-            case "switchedOnText":
-            case "switchedOffText":
+            case 'switchedOnText':
+            case 'switchedOffText':
                 this._setLabelsText();
                 break;
-            case "value":
+            case 'value':
                 this._renderValue();
                 this.callBase(args);
                 break;
-            case "_animateHandle":
+            case '_animateHandle':
                 break;
             default:
                 this.callBase(args);
@@ -487,6 +487,6 @@ var Switch = Editor.inherit({
     }
 });
 
-registerComponent("dxSwitch", Switch);
+registerComponent('dxSwitch', Switch);
 
 module.exports = Switch;

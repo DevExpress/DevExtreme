@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    ko = require('knockout');
 
-require("ui/tabs");
-require("integration/knockout");
+require('ui/tabs');
+require('integration/knockout');
 
-QUnit.test("regression: B250529", function(assert) {
+QUnit.test('regression: B250529', function(assert) {
     var itemClickFired = false;
 
     var vm = {
@@ -17,11 +17,11 @@ QUnit.test("regression: B250529", function(assert) {
         }
     };
 
-    var markup = $("<div></div>").attr("data-bind", "dxTabs: options").appendTo("#qunit-fixture");
+    var markup = $('<div></div>').attr('data-bind', 'dxTabs: options').appendTo('#qunit-fixture');
     ko.applyBindings(vm, markup[0]);
 
-    markup.find(".dx-tab").eq(1).trigger("dxclick");
+    markup.find('.dx-tab').eq(1).trigger('dxclick');
 
-    assert.equal(vm.options.selectedIndex(), 1, "ensure that selected tab is changed");
-    assert.equal(itemClickFired, true, "ensure that 'onItemClick' is fired");
+    assert.equal(vm.options.selectedIndex(), 1, 'ensure that selected tab is changed');
+    assert.equal(itemClickFired, true, 'ensure that \'onItemClick\' is fired');
 });

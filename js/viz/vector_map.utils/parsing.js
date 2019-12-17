@@ -5,7 +5,7 @@ function noop() { }
 function eigen(x) { return x; }
 
 function isFunction(target) {
-    return typeof target === "function";
+    return typeof target === 'function';
 }
 
 function wrapSource(source) {
@@ -74,10 +74,10 @@ function parseCore(source, roundCoordinates, errors) {
 
     if(features.length) {
         result = {
-            type: "FeatureCollection",
+            type: 'FeatureCollection',
             features: features
         };
-        result["bbox"] = shapeData.bBox;
+        result['bbox'] = shapeData.bBox;
     } else {
         result = null;
     }
@@ -92,7 +92,7 @@ function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
     for(i = 0; i < ii; ++i) {
         shape = shapeData[i] || {};
         features[i] = {
-            type: "Feature",
+            type: 'Feature',
             geometry: {
                 type: shape.geoJSON_type || null,
                 coordinates: shape.coordinates ? roundCoordinates(shape.coordinates) : []
@@ -104,7 +104,7 @@ function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
 }
 
 function createCoordinatesRounder(precision) {
-    var factor = Number("1E" + precision);
+    var factor = Number('1E' + precision);
     function round(x) {
         return Math.round(x * factor) / factor;
     }
@@ -116,11 +116,11 @@ function createCoordinatesRounder(precision) {
 
 function buildParseArgs(source) {
     source = source || {};
-    return ["shp", "dbf"].map(function(key) {
+    return ['shp', 'dbf'].map(function(key) {
         return function(done) {
             if(source.substr) {
-                key = "." + key;
-                sendRequest(source + (source.substr(-key.length).toLowerCase() === key ? "" : key), function(e, response) {
+                key = '.' + key;
+                sendRequest(source + (source.substr(-key.length).toLowerCase() === key ? '' : key), function(e, response) {
                     done(e, response);
                 });
             } else {

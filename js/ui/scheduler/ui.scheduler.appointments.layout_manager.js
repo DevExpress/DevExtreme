@@ -1,16 +1,16 @@
-import { equalByValue } from "../../core/utils/common";
-import VerticalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.vertical";
-import HorizontalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal";
-import HorizontalMonthLineAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line";
-import HorizontalMonthAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month";
-import AgendaAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.agenda";
+import { equalByValue } from '../../core/utils/common';
+import VerticalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.vertical';
+import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
+import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
+import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
+import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
 
 const RENDERING_STRATEGIES = {
-    "horizontal": HorizontalAppointmentsStrategy,
-    "horizontalMonth": HorizontalMonthAppointmentsStrategy,
-    "horizontalMonthLine": HorizontalMonthLineAppointmentsStrategy,
-    "vertical": VerticalAppointmentsStrategy,
-    "agenda": AgendaAppointmentsStrategy
+    'horizontal': HorizontalAppointmentsStrategy,
+    'horizontalMonth': HorizontalMonthAppointmentsStrategy,
+    'horizontalMonthLine': HorizontalMonthLineAppointmentsStrategy,
+    'vertical': VerticalAppointmentsStrategy,
+    'agenda': AgendaAppointmentsStrategy
 };
 
 class AppointmentLayoutManager {
@@ -62,7 +62,7 @@ class AppointmentLayoutManager {
 
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
-                settings.direction = this.renderingStrategy === "vertical" && !settings.allDay ? "vertical" : "horizontal";
+                settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
             });
 
             return {
@@ -126,7 +126,7 @@ class AppointmentLayoutManager {
     }
 
     getRepaintedAppointments(appointmentList, oldAppointmentList) {
-        if(oldAppointmentList.length === 0 || this.renderingStrategy === "agenda") {
+        if(oldAppointmentList.length === 0 || this.renderingStrategy === 'agenda') {
             return appointmentList;
         }
 

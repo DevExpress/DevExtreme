@@ -1,9 +1,9 @@
-import $ from "jquery";
-import renderer from "core/renderer";
-import resizeCallbacks from "core/utils/resize_callbacks";
-import "ui/file_manager";
-import fx from "animation/fx";
-import { FileManagerWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
+import $ from 'jquery';
+import renderer from 'core/renderer';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import 'ui/file_manager';
+import fx from 'animation/fx';
+import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
 
@@ -35,8 +35,8 @@ const moduleConfig = {
             return that.originalHeight.apply(renderer.fn, arguments);
         };
 
-        this.$element = $("#fileManager")
-            .css("width", 350)
+        this.$element = $('#fileManager')
+            .css('width', 350)
             .dxFileManager({
                 fileProvider: createTestFileSystem(),
                 permissions: {
@@ -66,14 +66,14 @@ const moduleConfig = {
 
 };
 
-QUnit.module("Adaptivity", moduleConfig, () => {
+QUnit.module('Adaptivity', moduleConfig, () => {
 
-    test("show dirs button visible on small screen", function(assert) {
-        let $showDirsButton = this.wrapper.getToolbar().find(".dx-icon-menu:visible");
-        assert.equal($showDirsButton.length, 1, "show dirs panel button visible");
+    test('show dirs button visible on small screen', function(assert) {
+        let $showDirsButton = this.wrapper.getToolbar().find('.dx-icon-menu:visible');
+        assert.equal($showDirsButton.length, 1, 'show dirs panel button visible');
 
-        let folders = this.wrapper.getFolderNodes().filter(":visible");
-        assert.ok(folders.length > 3, "dirs tree visible");
+        let folders = this.wrapper.getFolderNodes().filter(':visible');
+        assert.ok(folders.length > 3, 'dirs tree visible');
 
         this.currentWidth = 900;
         this.currentHeight = 800;
@@ -81,19 +81,19 @@ QUnit.module("Adaptivity", moduleConfig, () => {
         resizeCallbacks.fire();
         this.clock.tick(400);
 
-        $showDirsButton = this.wrapper.getToolbar().find(".dx-icon-menu:visible");
-        assert.equal($showDirsButton.length, 0, "show dirs panel button hidden");
+        $showDirsButton = this.wrapper.getToolbar().find('.dx-icon-menu:visible');
+        assert.equal($showDirsButton.length, 0, 'show dirs panel button hidden');
 
-        folders = this.wrapper.getFolderNodes().filter(":visible");
-        assert.ok(folders.length > 3, "dirs tree visible");
+        folders = this.wrapper.getFolderNodes().filter(':visible');
+        assert.ok(folders.length > 3, 'dirs tree visible');
     });
 
-    test("dialog size corrent on different window size", function(assert) {
-        this.wrapper.getToolbarButton("Copy").trigger("dxclick");
+    test('dialog size corrent on different window size', function(assert) {
+        this.wrapper.getToolbarButton('Copy').trigger('dxclick');
         this.clock.tick(400);
 
-        let $dialog = $(".dx-filemanager-dialog-folder-chooser:visible");
-        assert.equal($dialog.length, 1, "dialog is shown");
+        let $dialog = $('.dx-filemanager-dialog-folder-chooser:visible');
+        assert.equal($dialog.length, 1, 'dialog is shown');
 
         const dialogWidth = $dialog.get(0).offsetWidth;
         const dialogHeight = $dialog.get(0).offsetHeight;
@@ -104,25 +104,25 @@ QUnit.module("Adaptivity", moduleConfig, () => {
         resizeCallbacks.fire();
         this.clock.tick(400);
 
-        assert.ok($dialog.get(0).offsetWidth <= dialogWidth, "dialog width decreased");
-        assert.ok($dialog.get(0).offsetHeight <= dialogHeight, "dialog height decreased");
+        assert.ok($dialog.get(0).offsetWidth <= dialogWidth, 'dialog width decreased');
+        assert.ok($dialog.get(0).offsetHeight <= dialogHeight, 'dialog height decreased');
     });
 
-    test("splitter should be disabled on small screens", function(assert) {
-        $("#fileManager").css("width", "100%");
+    test('splitter should be disabled on small screens', function(assert) {
+        $('#fileManager').css('width', '100%');
         this.wrapper.getInstance().repaint();
 
-        assert.ok(this.wrapper.getSplitter().length, "Splitter was rendered");
-        assert.notOk(this.wrapper.isSplitterActive(), "Splitter is disabled");
+        assert.ok(this.wrapper.getSplitter().length, 'Splitter was rendered');
+        assert.notOk(this.wrapper.isSplitterActive(), 'Splitter is disabled');
 
         this.currentWidth = 900;
         resizeCallbacks.fire();
         this.clock.tick(400);
-        assert.ok(this.wrapper.isSplitterActive(), "Splitter is active");
+        assert.ok(this.wrapper.isSplitterActive(), 'Splitter is active');
 
         const oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
         this.wrapper.moveSplitter(100);
-        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, "Left panel has correct size");
+        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, 'Left panel has correct size');
     });
 
 });

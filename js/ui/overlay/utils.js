@@ -1,5 +1,5 @@
-import $ from "../../core/renderer";
-import { getWindow } from "../../core/utils/window";
+import $ from '../../core/renderer';
+import { getWindow } from '../../core/utils/window';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 

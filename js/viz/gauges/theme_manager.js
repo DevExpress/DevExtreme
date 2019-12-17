@@ -1,6 +1,6 @@
-var extend = require("../../core/utils/extend").extend,
+var extend = require('../../core/utils/extend').extend,
     _extend = extend,
-    BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager;
+    BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager;
 
 var ThemeManager = BaseThemeManager.inherit({
     ctor(options) {

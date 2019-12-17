@@ -1,35 +1,35 @@
-var WHITE = "#ffffff",
-    BLACK = "#000000",
-    LIGHT_GREY = "#d3d3d3",
-    GREY_GREEN = "#303030",
-    SOME_GREY = "#2b2b2b",
-    RED = "#ff0000",
-    PRIMARY_TITLE_COLOR = "#232323",
-    SECONDARY_TITLE_COLOR = "#767676",
+var WHITE = '#ffffff',
+    BLACK = '#000000',
+    LIGHT_GREY = '#d3d3d3',
+    GREY_GREEN = '#303030',
+    SOME_GREY = '#2b2b2b',
+    RED = '#ff0000',
+    PRIMARY_TITLE_COLOR = '#232323',
+    SECONDARY_TITLE_COLOR = '#767676',
 
-    NONE = "none",
-    SOLID = "solid",
-    TOP = "top",
-    RIGHT = "right",
-    BOTTOM = "bottom",
-    LEFT = "left",
-    CENTER = "center",
-    INSIDE = "inside",
-    OUTSIDE = "outside",
+    NONE = 'none',
+    SOLID = 'solid',
+    TOP = 'top',
+    RIGHT = 'right',
+    BOTTOM = 'bottom',
+    LEFT = 'left',
+    CENTER = 'center',
+    INSIDE = 'inside',
+    OUTSIDE = 'outside',
 
-    themeModule = require("../../themes"),
+    themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias;
 
 registerTheme({
-    name: "generic.light",
+    name: 'generic.light',
     isDefault: true,
     font: {
         color: SECONDARY_TITLE_COLOR,
-        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+        family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
         weight: 400,
         size: 12,
-        cursor: "default"
+        cursor: 'default'
     },
     redrawOnResize: true,
     backgroundColor: WHITE,
@@ -41,7 +41,7 @@ registerTheme({
         backgroundColor: WHITE,
         font: {
             size: 28,
-            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+            family: '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
             weight: 200
         },
         subtitle: {
@@ -49,16 +49,16 @@ registerTheme({
                 size: 16
             },
             offset: 0,
-            wordWrap: "normal",
-            textOverflow: "ellipsis"
+            wordWrap: 'normal',
+            textOverflow: 'ellipsis'
         },
-        wordWrap: "normal",
-        textOverflow: "ellipsis"
+        wordWrap: 'normal',
+        textOverflow: 'ellipsis'
     },
     loadingIndicator: {
-        text: "Loading..."
+        text: 'Loading...'
     },
-    "export": {
+    'export': {
         backgroundColor: WHITE,
         margin: 10,
         font: {
@@ -73,25 +73,25 @@ registerTheme({
                 right: 10,
                 bottom: 8
             },
-            "default": {
-                color: "#333",
-                borderColor: "#ddd",
+            'default': {
+                color: '#333',
+                borderColor: '#ddd',
                 backgroundColor: WHITE
             },
             hover: {
-                color: "#333",
-                borderColor: "#bebebe",
-                backgroundColor: "#e6e6e6"
+                color: '#333',
+                borderColor: '#bebebe',
+                backgroundColor: '#e6e6e6'
             },
             focus: {
                 color: BLACK,
-                borderColor: "#9d9d9d",
-                backgroundColor: "#e6e6e6"
+                borderColor: '#9d9d9d',
+                backgroundColor: '#e6e6e6'
             },
             active: {
-                color: "#333",
-                borderColor: "#9d9d9d",
-                backgroundColor: "#d4d4d4"
+                color: '#333',
+                borderColor: '#9d9d9d',
+                backgroundColor: '#d4d4d4'
             }
         },
         shadowColor: LIGHT_GREY
@@ -111,7 +111,7 @@ registerTheme({
         arrowLength: 10,
         paddingLeftRight: 18,
         paddingTopBottom: 15,
-        textAlignment: "center",
+        textAlignment: 'center',
         shared: false,
         location: CENTER,
         shadow: {
@@ -123,7 +123,7 @@ registerTheme({
         }
     },
     legend: {
-        hoverMode: "includePoints",
+        hoverMode: 'includePoints',
         verticalAlignment: TOP,
         horizontalAlignment: RIGHT,
         position: OUTSIDE,
@@ -159,18 +159,18 @@ registerTheme({
                 font: {
                     size: 14
                 },
-                wordWrap: "none",
-                textOverflow: "ellipsis"
+                wordWrap: 'none',
+                textOverflow: 'ellipsis'
             },
-            wordWrap: "none",
-            textOverflow: "ellipsis"
+            wordWrap: 'none',
+            textOverflow: 'ellipsis'
         }
     },
-    "chart:common": {
+    'chart:common': {
         animation: {
             enabled: true,
             duration: 1000,
-            easing: "easeOutCubic",
+            easing: 'easeOutCubic',
             maxPointCountSupported: 300
         },
         commonSeriesSettings: {
@@ -180,8 +180,8 @@ registerTheme({
             },
             showInLegend: true,
             visible: true,
-            hoverMode: "nearestPoint",
-            selectionMode: "includePoints",
+            hoverMode: 'nearestPoint',
+            selectionMode: 'includePoints',
             hoverStyle: {
                 hatching: {
                     direction: RIGHT,
@@ -207,7 +207,7 @@ registerTheme({
                 }
             },
             valueErrorBar: {
-                displayMode: "auto",
+                displayMode: 'auto',
                 value: 1,
                 color: BLACK,
                 lineWidth: 2,
@@ -239,8 +239,8 @@ registerTheme({
                 }
             }
         },
-        seriesSelectionMode: "single",
-        pointSelectionMode: "single",
+        seriesSelectionMode: 'single',
+        pointSelectionMode: 'single',
         equalRowHeight: true,
         dataPrepareSettings: {
             checkTypeForAllData: false,
@@ -262,12 +262,12 @@ registerTheme({
         },
         resolveLabelOverlapping: NONE
     },
-    "chart:common:axis": {
+    'chart:common:axis': {
         visible: true,
         valueMarginsEnabled: true,
         placeholderSize: null,
         logarithmBase: 10,
-        discreteAxisDivisionMode: "betweenLabels",
+        discreteAxisDivisionMode: 'betweenLabels',
         width: 1,
         label: {
             visible: true
@@ -313,21 +313,21 @@ registerTheme({
     },
     chart: {
         commonSeriesSettings: {
-            type: "line",
-            stack: "default",
+            type: 'line',
+            stack: 'default',
             aggregation: {
                 enabled: undefined
             },
-            "point": {
+            'point': {
                 visible: true,
-                symbol: "circle",
+                symbol: 'circle',
                 size: 12,
                 border: {
                     visible: false,
                     width: 1
                 },
-                hoverMode: "onlyPoint",
-                selectionMode: "onlyPoint",
+                hoverMode: 'onlyPoint',
+                selectionMode: 'onlyPoint',
                 hoverStyle: {
                     border: {
                         visible: true,
@@ -341,9 +341,9 @@ registerTheme({
                     }
                 }
             },
-            "scatter": {
+            'scatter': {
             },
-            "line": {
+            'line': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -356,7 +356,7 @@ registerTheme({
                     width: 3
                 }
             },
-            "stackedline": {
+            'stackedline': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -369,7 +369,7 @@ registerTheme({
                     width: 3
                 }
             },
-            "stackedspline": {
+            'stackedspline': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -382,7 +382,7 @@ registerTheme({
                     width: 3
                 }
             },
-            "fullstackedline": {
+            'fullstackedline': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -395,7 +395,7 @@ registerTheme({
                     width: 3
                 }
             },
-            "fullstackedspline": {
+            'fullstackedspline': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -408,7 +408,7 @@ registerTheme({
                     width: 3
                 }
             },
-            "stepline": {
+            'stepline': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -421,31 +421,31 @@ registerTheme({
                     width: 3
                 }
             },
-            "area": {
+            'area': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "stackedarea": {
+            'stackedarea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "fullstackedarea": {
+            'fullstackedarea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "fullstackedsplinearea": {
+            'fullstackedsplinearea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "steparea": {
+            'steparea': {
                 border: {
                     visible: true,
                     width: 2
@@ -467,7 +467,7 @@ registerTheme({
                 },
                 opacity: 0.5
             },
-            "spline": {
+            'spline': {
                 width: 2,
                 hoverStyle: {
                     width: 3,
@@ -479,19 +479,19 @@ registerTheme({
                     width: 3
                 }
             },
-            "splinearea": {
+            'splinearea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "stackedsplinearea": {
+            'stackedsplinearea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "bar": {
+            'bar': {
                 cornerRadius: 0,
                 point: {
                     hoverStyle: {
@@ -506,7 +506,7 @@ registerTheme({
                     }
                 }
             },
-            "stackedbar": {
+            'stackedbar': {
                 cornerRadius: 0,
                 point: {
                     hoverStyle: {
@@ -524,7 +524,7 @@ registerTheme({
                     position: INSIDE
                 }
             },
-            "fullstackedbar": {
+            'fullstackedbar': {
                 cornerRadius: 0,
                 point: {
                     hoverStyle: {
@@ -542,7 +542,7 @@ registerTheme({
                     position: INSIDE
                 }
             },
-            "rangebar": {
+            'rangebar': {
                 cornerRadius: 0,
                 point: {
                     hoverStyle: {
@@ -557,20 +557,20 @@ registerTheme({
                     }
                 }
             },
-            "rangearea": {
+            'rangearea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "rangesplinearea": {
+            'rangesplinearea': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
 
-            "bubble": {
+            'bubble': {
                 opacity: 0.5,
                 point: {
                     hoverStyle: {
@@ -585,7 +585,7 @@ registerTheme({
                     }
                 }
             },
-            "candlestick": {
+            'candlestick': {
                 width: 1,
                 reduction: {
                     color: RED
@@ -605,7 +605,7 @@ registerTheme({
                     }
                 }
             },
-            "stock": {
+            'stock': {
                 width: 1,
                 reduction: {
                     color: RED
@@ -628,7 +628,7 @@ registerTheme({
         },
         crosshair: {
             enabled: false,
-            color: "#f05b41",
+            color: '#f05b41',
             width: 1,
             dashStyle: SOLID,
             label: {
@@ -648,13 +648,13 @@ registerTheme({
         commonAxisSettings: {
             multipleAxesSpacing: 5,
             forceUserTickInterval: false,
-            breakStyle: { width: 5, color: "#ababab", line: "waved" },
+            breakStyle: { width: 5, color: '#ababab', line: 'waved' },
             label: {
-                displayMode: "standard",
-                overlappingBehavior: "hide",
+                displayMode: 'standard',
+                overlappingBehavior: 'hide',
                 indentFromAxis: 10,
-                wordWrap: "normal",
-                textOverflow: "none"
+                wordWrap: 'normal',
+                textOverflow: 'none'
             },
             title: {
                 font: {
@@ -737,7 +737,7 @@ registerTheme({
         scrollBar: {
             visible: false,
             offset: 5,
-            color: "gray",
+            color: 'gray',
             width: 10
         },
         adjustOnZoom: true,
@@ -753,21 +753,21 @@ registerTheme({
         maxBubbleSize: 0.2,
         zoomAndPan: {
             dragBoxStyle: {
-                color: "#2a2a2a",
+                color: '#2a2a2a',
                 opacity: 0.2
             },
-            panKey: "shift",
+            panKey: 'shift',
             allowMouseWheel: true,
             allowTouchGestures: true
         },
         commonAnnotationSettings: {
             font: {
-                color: "#333333"
+                color: '#333333'
             },
             tooltipEnabled: true,
             border: {
                 width: 1,
-                color: "#dddddd",
+                color: '#dddddd',
                 dashStyle: SOLID,
                 visible: true
             },
@@ -788,15 +788,15 @@ registerTheme({
                 width: 30,
                 height: 30
             },
-            wordWrap: "normal",
-            textOverflow: "ellipsis",
+            wordWrap: 'normal',
+            textOverflow: 'ellipsis',
             allowDragging: false
         }
     },
     pie: {
         innerRadius: 0.5,
         minDiameter: 0.5,
-        type: "pie",
+        type: 'pie',
         dataPrepareSettings: {
             _skipArgumentSorting: true
         },
@@ -895,12 +895,12 @@ registerTheme({
                 }
             },
             label: {
-                textOverflow: "ellipsis",
-                wordWrap: "normal"
+                textOverflow: 'ellipsis',
+                wordWrap: 'normal'
             }
         },
         legend: {
-            hoverMode: "allArgumentPoints",
+            hoverMode: 'allArgumentPoints',
             backgroundColor: NONE
         },
         adaptiveLayout: {
@@ -924,8 +924,8 @@ registerTheme({
             label: {
                 visible: true,
                 alignment: CENTER,
-                hideFirstOrLast: "last",
-                overlappingBehavior: "hide"
+                hideFirstOrLast: 'last',
+                overlappingBehavior: 'hide'
             },
             position: TOP,
             endOnTick: false
@@ -933,16 +933,16 @@ registerTheme({
         rangeContainer: {
             offset: 0,
             width: 5,
-            backgroundColor: "#808080"
+            backgroundColor: '#808080'
         },
         valueIndicators: {
             _default: {
-                color: "#c2c2c2"
+                color: '#c2c2c2'
             },
-            "rangebar": {
+            'rangebar': {
                 space: 2,
                 size: 10,
-                color: "#cbc5cf",
+                color: '#cbc5cf',
                 backgroundColor: NONE,
                 text: {
                     indent: 0,
@@ -952,20 +952,20 @@ registerTheme({
                     }
                 }
             },
-            "twocolorneedle": {
-                secondColor: "#e18e92"
+            'twocolorneedle': {
+                secondColor: '#e18e92'
             },
-            "trianglemarker": {
+            'trianglemarker': {
                 space: 2,
                 length: 14,
                 width: 13,
-                color: "#8798a5"
+                color: '#8798a5'
             },
-            "textcloud": {
+            'textcloud': {
                 arrowLength: 5,
                 horizontalOffset: 6,
                 verticalOffset: 3,
-                color: "#679ec5",
+                color: '#679ec5',
                 text: {
                     font: {
                         color: WHITE,
@@ -997,10 +997,10 @@ registerTheme({
             rangeContainer: {
                 orientation: OUTSIDE
             },
-            valueIndicatorType: "rectangleneedle",
-            subvalueIndicatorType: "trianglemarker",
+            valueIndicatorType: 'rectangleneedle',
+            subvalueIndicatorType: 'trianglemarker',
             valueIndicators: {
-                _type: "rectangleneedle",
+                _type: 'rectangleneedle',
                 _default: {
                     offset: 20,
                     indentFromCenter: 0,
@@ -1009,20 +1009,20 @@ registerTheme({
                     spindleGapSize: 10,
                     beginAdaptingAtRadius: 50
                 },
-                "triangleneedle": {
+                'triangleneedle': {
                     width: 4
                 },
-                "twocolorneedle": {
+                'twocolorneedle': {
                     space: 2,
                     secondFraction: 0.4
                 },
-                "rangebar": {
+                'rangebar': {
                     offset: 30
                 },
-                "trianglemarker": {
+                'trianglemarker': {
                     offset: 6
                 },
-                "textcloud": {
+                'textcloud': {
                     offset: -6
                 }
             }
@@ -1040,29 +1040,29 @@ registerTheme({
                 horizontalOrientation: RIGHT,
                 verticalOrientation: BOTTOM
             },
-            valueIndicatorType: "rangebar",
-            subvalueIndicatorType: "trianglemarker",
+            valueIndicatorType: 'rangebar',
+            subvalueIndicatorType: 'trianglemarker',
             valueIndicators: {
-                _type: "rectangle",
+                _type: 'rectangle',
                 _default: {
                     offset: 2.5,
                     length: 15,
                     width: 15
                 },
-                "rectangle": {
+                'rectangle': {
                     width: 10
                 },
-                "rangebar": {
+                'rangebar': {
                     offset: 10,
                     horizontalOrientation: RIGHT,
                     verticalOrientation: BOTTOM
                 },
-                "trianglemarker": {
+                'trianglemarker': {
                     offset: 10,
                     horizontalOrientation: LEFT,
                     verticalOrientation: TOP
                 },
-                "textcloud": {
+                'textcloud': {
                     offset: -1,
                     horizontalOrientation: LEFT,
                     verticalOrientation: TOP
@@ -1071,10 +1071,10 @@ registerTheme({
         }
     },
     barGauge: {
-        backgroundColor: "#e0e0e0",
+        backgroundColor: '#e0e0e0',
         relativeInnerRadius: 0.3,
         barSpacing: 4,
-        resolveLabelOverlapping: "hide",
+        resolveLabelOverlapping: 'hide',
         label: {
             indent: 20,
             connectorWidth: 2,
@@ -1106,7 +1106,7 @@ registerTheme({
             opacity: 0.1,
             showCustomBoundaryTicks: true,
             label: {
-                overlappingBehavior: "hide",
+                overlappingBehavior: 'hide',
                 alignment: CENTER,
                 visible: true,
                 topIndent: 7,
@@ -1130,7 +1130,7 @@ registerTheme({
             },
             marker: {
                 width: 1,
-                color: "#000000",
+                color: '#000000',
                 opacity: 0.1,
                 visible: true,
                 separatorHeight: 33,
@@ -1141,15 +1141,15 @@ registerTheme({
             },
             logarithmBase: 10,
             workWeek: [1, 2, 3, 4, 5],
-            breakStyle: { width: 5, color: "#ababab", line: "waved" },
+            breakStyle: { width: 5, color: '#ababab', line: 'waved' },
             endOnTick: false
         },
-        selectedRangeColor: "#606060",
+        selectedRangeColor: '#606060',
         sliderMarker: {
             visible: true,
             paddingTopBottom: 2,
             paddingLeftRight: 4,
-            color: "#606060",
+            color: '#606060',
             invalidRangeColor: RED,
             font: {
                 color: WHITE,
@@ -1165,10 +1165,10 @@ registerTheme({
             opacity: 0.75
         },
         background: {
-            color: "#c0bae1",
+            color: '#c0bae1',
             visible: true,
             image: {
-                location: "full"
+                location: 'full'
             }
         },
         behavior: {
@@ -1177,7 +1177,7 @@ registerTheme({
             moveSelectedRangeByClick: true,
             manualRangeSelectionEnabled: true,
             allowSlidersSwap: true,
-            callValueChanged: "onMovingComplete"
+            callValueChanged: 'onMovingComplete'
         },
         redrawOnResize: true,
         chart: {
@@ -1192,7 +1192,7 @@ registerTheme({
                 logarithmBase: 10
             },
             commonSeriesSettings: {
-                type: "area",
+                type: 'area',
                 aggregation: {
                     enabled: undefined
                 },
@@ -1213,57 +1213,57 @@ registerTheme({
         },
         background: {
             borderWidth: 1,
-            borderColor: "#cacaca"
+            borderColor: '#cacaca'
         },
         layer: {
             label: {
                 enabled: false,
                 stroke: WHITE,
-                "stroke-width": 1,
-                "stroke-opacity": 0.7,
+                'stroke-width': 1,
+                'stroke-opacity': 0.7,
                 font: {
                     color: SOME_GREY,
                     size: 12
                 }
             }
         },
-        "layer:area": {
+        'layer:area': {
             borderWidth: 1,
             borderColor: WHITE,
-            color: "#d2d2d2",
+            color: '#d2d2d2',
             hoveredBorderColor: GREY_GREEN,
             selectedBorderWidth: 2,
             selectedBorderColor: GREY_GREEN,
             label: {
-                "stroke-width": 2,
+                'stroke-width': 2,
                 font: {
                     size: 16
                 }
             }
         },
-        "layer:line": {
+        'layer:line': {
             borderWidth: 2,
-            color: "#ba8365",
-            hoveredColor: "#a94813",
+            color: '#ba8365',
+            hoveredColor: '#a94813',
             selectedBorderWidth: 3,
-            selectedColor: "#e55100",
+            selectedColor: '#e55100',
             label: {
-                "stroke-width": 2,
+                'stroke-width': 2,
                 font: {
                     size: 16
                 }
             }
         },
-        "layer:marker": {
+        'layer:marker': {
             label: {
                 enabled: true,
-                "stroke-width": 1,
+                'stroke-width': 1,
                 font: {
                     size: 12
                 }
             }
         },
-        "layer:marker:dot": {
+        'layer:marker:dot': {
             borderWidth: 2,
             borderColor: WHITE,
             size: 8,
@@ -1273,7 +1273,7 @@ registerTheme({
             backOpacity: 0.32,
             shadow: true
         },
-        "layer:marker:bubble": {
+        'layer:marker:bubble': {
             minSize: 20,
             maxSize: 50,
             hoveredBorderWidth: 1,
@@ -1281,14 +1281,14 @@ registerTheme({
             selectedBorderWidth: 2,
             selectedBorderColor: GREY_GREEN
         },
-        "layer:marker:pie": {
+        'layer:marker:pie': {
             size: 50,
             hoveredBorderWidth: 1,
             hoveredBorderColor: GREY_GREEN,
             selectedBorderWidth: 2,
             selectedBorderColor: GREY_GREEN
         },
-        "layer:marker:image": {
+        'layer:marker:image': {
             size: 20
         },
         legend: {
@@ -1303,7 +1303,7 @@ registerTheme({
             paddingTopBottom: 12
         },
         controlBar: {
-            borderColor: "#5d5d5d",
+            borderColor: '#5d5d5d',
             borderWidth: 3,
             color: WHITE,
             margin: 20,
@@ -1320,15 +1320,15 @@ registerTheme({
             border: {
                 width: 1,
                 opacity: 0.2,
-                color: "#000000"
+                color: '#000000'
             },
-            color: "#5f8b95",
+            color: '#5f8b95',
             hoverStyle: {
                 hatching: {
                     opacity: 0.75,
                     step: 6,
                     width: 2,
-                    direction: "right"
+                    direction: 'right'
                 },
                 border: {
                 }
@@ -1338,7 +1338,7 @@ registerTheme({
                     opacity: 0.5,
                     step: 6,
                     width: 2,
-                    direction: "right"
+                    direction: 'right'
                 },
                 border: {
                     opacity: 1
@@ -1348,11 +1348,11 @@ registerTheme({
                 visible: true,
                 paddingLeftRight: 5,
                 paddingTopBottom: 4,
-                stroke: "#000000",
-                "stroke-width": 1,
-                "stroke-opacity": 0.3,
+                stroke: '#000000',
+                'stroke-width': 1,
+                'stroke-opacity': 0.3,
                 font: {
-                    color: "#ffffff",
+                    color: '#ffffff',
                     weight: 300
                 },
                 shadow: {
@@ -1360,10 +1360,10 @@ registerTheme({
                     offsetX: 0,
                     offsetY: 1,
                     blur: 1,
-                    color: "#000000"
+                    color: '#000000'
                 },
-                wordWrap: "normal",
-                textOverflow: "ellipsis"
+                wordWrap: 'normal',
+                textOverflow: 'ellipsis'
             }
         },
         group: {
@@ -1371,13 +1371,13 @@ registerTheme({
             border: {
                 width: 1
             },
-            color: "#eeeeee",
+            color: '#eeeeee',
             hoverStyle: {
                 hatching: {
                     opacity: 0,
                     step: 6,
                     width: 2,
-                    direction: "right"
+                    direction: 'right'
                 },
                 border: {
                 }
@@ -1387,7 +1387,7 @@ registerTheme({
                     opacity: 0,
                     step: 6,
                     width: 2,
-                    direction: "right"
+                    direction: 'right'
                 },
                 border: {
                 }
@@ -1400,7 +1400,7 @@ registerTheme({
                     color: SECONDARY_TITLE_COLOR,
                     weight: 600
                 },
-                textOverflow: "ellipsis"
+                textOverflow: 'ellipsis'
             }
         },
 
@@ -1416,22 +1416,22 @@ registerTheme({
         }
     },
     sparkline: {
-        lineColor: "#666666",
+        lineColor: '#666666',
         lineWidth: 2,
         areaOpacity: 0.2,
-        minColor: "#e8c267",
-        maxColor: "#e55253",
-        barPositiveColor: "#a9a9a9",
-        barNegativeColor: "#d7d7d7",
-        winColor: "#a9a9a9",
-        lossColor: "#d7d7d7",
-        firstLastColor: "#666666",
-        pointSymbol: "circle",
+        minColor: '#e8c267',
+        maxColor: '#e55253',
+        barPositiveColor: '#a9a9a9',
+        barNegativeColor: '#d7d7d7',
+        winColor: '#a9a9a9',
+        lossColor: '#d7d7d7',
+        firstLastColor: '#666666',
+        pointSymbol: 'circle',
         pointColor: WHITE,
         pointSize: 4,
-        type: "line",
-        argumentField: "arg",
-        valueField: "val",
+        type: 'line',
+        argumentField: 'arg',
+        valueField: 'val',
         winlossThreshold: 0,
         showFirstLast: true,
         showMinMax: false,
@@ -1440,8 +1440,8 @@ registerTheme({
         }
     },
     bullet: {
-        color: "#e8c267",
-        targetColor: "#666666",
+        color: '#e8c267',
+        targetColor: '#666666',
         targetWidth: 4,
         showTarget: true,
         showZeroLevel: true,
@@ -1451,18 +1451,18 @@ registerTheme({
     },
     polar: {
         commonSeriesSettings: {
-            type: "scatter",
+            type: 'scatter',
             closed: true,
-            "point": {
+            'point': {
                 visible: true,
-                symbol: "circle",
+                symbol: 'circle',
                 size: 12,
                 border: {
                     visible: false,
                     width: 1
                 },
-                hoverMode: "onlyPoint",
-                selectionMode: "onlyPoint",
+                hoverMode: 'onlyPoint',
+                selectionMode: 'onlyPoint',
                 hoverStyle: {
                     border: {
                         visible: true,
@@ -1478,9 +1478,9 @@ registerTheme({
                     size: 12
                 }
             },
-            "scatter": {
+            'scatter': {
             },
-            "line": {
+            'line': {
                 width: 2,
                 dashStyle: SOLID,
                 hoverStyle: {
@@ -1493,19 +1493,19 @@ registerTheme({
                     width: 3
                 }
             },
-            "area": {
+            'area': {
                 point: {
                     visible: false
                 },
                 opacity: 0.5
             },
-            "stackedline": {
+            'stackedline': {
                 width: 2
             },
-            "bar": {
+            'bar': {
                 opacity: 0.8
             },
-            "stackedbar": {
+            'stackedbar': {
                 opacity: 0.8
             }
         },
@@ -1520,7 +1520,7 @@ registerTheme({
             visible: true,
             forceUserTickInterval: false,
             label: {
-                overlappingBehavior: "hide",
+                overlappingBehavior: 'hide',
                 indentFromAxis: 5
             },
             grid: {
@@ -1567,11 +1567,11 @@ registerTheme({
     },
     funnel: {
         sortData: true,
-        valueField: "val",
-        colorField: "color",
-        argumentField: "arg",
+        valueField: 'val',
+        colorField: 'color',
+        argumentField: 'arg',
         hoverEnabled: true,
-        selectionMode: "single",
+        selectionMode: 'single',
         item: {
             border: {
                 visible: false,
@@ -1615,26 +1615,26 @@ registerTheme({
         },
         tooltip: {
             customizeTooltip: function(info) {
-                return { text: info.item.argument + " " + info.valueText };
+                return { text: info.item.argument + ' ' + info.valueText };
             }
         },
         inverted: false,
-        algorithm: "dynamicSlope",
+        algorithm: 'dynamicSlope',
         neckWidth: 0,
         neckHeight: 0,
-        resolveLabelOverlapping: "shift",
+        resolveLabelOverlapping: 'shift',
         label: {
-            textOverflow: "ellipsis",
-            wordWrap: "normal",
+            textOverflow: 'ellipsis',
+            wordWrap: 'normal',
             visible: true,
             horizontalAlignment: RIGHT,
             horizontalOffset: 0,
             verticalOffset: 0,
             showForZeroValues: false,
             customizeText: function(info) {
-                return info.item.argument + " " + info.valueText;
+                return info.item.argument + ' ' + info.valueText;
             },
-            position: "columns",
+            position: 'columns',
             font: {
                 color: WHITE
             },
@@ -1666,7 +1666,7 @@ registerTheme({
             visible: true,
             horizontalOffset: 8,
             verticalOffset: 0,
-            overlappingBehavior: "ellipsis",
+            overlappingBehavior: 'ellipsis',
             useNodeColors: false,
             font: {
                 color: BLACK,
@@ -1723,8 +1723,8 @@ registerTheme({
             },
         },
         link: {
-            color: "#888888",
-            colorMode: "none",
+            color: '#888888',
+            colorMode: 'none',
             opacity: 0.3,
             border: {
                 color: WHITE,
@@ -1745,4 +1745,4 @@ registerTheme({
     }
 });
 
-registerThemeAlias("generic.light.compact", "generic.light");
+registerThemeAlias('generic.light.compact', 'generic.light');

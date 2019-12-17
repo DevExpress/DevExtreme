@@ -1,7 +1,7 @@
-import $ from "../../core/renderer";
-import { isDefined } from "../../core/utils/type";
-import browser from "../../core/utils/browser";
-import domAdapter from "../../core/dom_adapter";
+import $ from '../../core/renderer';
+import { isDefined } from '../../core/utils/type';
+import browser from '../../core/utils/browser';
+import domAdapter from '../../core/dom_adapter';
 
 const isFocusingOnCaretChange = browser.msie || browser.safari;
 

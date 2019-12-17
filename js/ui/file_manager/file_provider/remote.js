@@ -1,17 +1,17 @@
-import $ from "../../../core/renderer";
-import ajax from "../../../core/utils/ajax";
-import { ensureDefined, noop } from "../../../core/utils/common";
-import Guid from "../../../core/guid";
-import { getWindow } from "../../../core/utils/window";
-import { each } from "../../../core/utils/iterator";
-import { Deferred } from "../../../core/utils/deferred";
-import eventsEngine from "../../../events/core/events_engine";
+import $ from '../../../core/renderer';
+import ajax from '../../../core/utils/ajax';
+import { ensureDefined, noop } from '../../../core/utils/common';
+import Guid from '../../../core/guid';
+import { getWindow } from '../../../core/utils/window';
+import { each } from '../../../core/utils/iterator';
+import { Deferred } from '../../../core/utils/deferred';
+import eventsEngine from '../../../events/core/events_engine';
 
-import { FileProvider } from "./file_provider";
-import { compileGetter } from "../../../core/utils/data";
+import { FileProvider } from './file_provider';
+import { compileGetter } from '../../../core/utils/data';
 
 const window = getWindow();
-const FILE_CHUNK_BLOB_NAME = "chunk";
+const FILE_CHUNK_BLOB_NAME = 'chunk';
 
 /**
 * @name RemoteFileProvider
@@ -35,7 +35,7 @@ class RemoteFileProvider extends FileProvider {
          * @name RemoteFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)
          */
-        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
+        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 
     getItems(pathInfo) {
@@ -44,14 +44,14 @@ class RemoteFileProvider extends FileProvider {
     }
 
     renameItem(item, name) {
-        return this._executeRequest("Rename", {
+        return this._executeRequest('Rename', {
             pathInfo: item.getFullPathInfo(),
             name
         });
     }
 
     createFolder(parentDir, name) {
-        return this._executeRequest("CreateDir", {
+        return this._executeRequest('CreateDir', {
             pathInfo: parentDir.getFullPathInfo(),
             name
         }).done(() => {
@@ -62,18 +62,18 @@ class RemoteFileProvider extends FileProvider {
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest("Remove", { pathInfo: item.getFullPathInfo() }));
+        return items.map(item => this._executeRequest('Remove', { pathInfo: item.getFullPathInfo() }));
     }
 
     moveItems(items, destinationDirectory) {
-        return items.map(item => this._executeRequest("Move", {
+        return items.map(item => this._executeRequest('Move', {
             sourcePathInfo: item.getFullPathInfo(),
             destinationPathInfo: destinationDirectory.getFullPathInfo()
         }));
     }
 
     copyItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest("Copy", {
+        return items.map(item => this._executeRequest('Copy', {
             sourcePathInfo: item.getFullPathInfo(),
             destinationPathInfo: destinationFolder.getFullPathInfo()
         }));
@@ -97,14 +97,14 @@ class RemoteFileProvider extends FileProvider {
 
         const formData = new window.FormData();
         formData.append(FILE_CHUNK_BLOB_NAME, chunksInfo.chunkBlob);
-        formData.append("arguments", JSON.stringify(args));
-        formData.append("command", "UploadChunk");
+        formData.append('arguments', JSON.stringify(args));
+        formData.append('command', 'UploadChunk');
 
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._endpointUrl,
-            method: "POST",
-            dataType: "json",
+            method: 'POST',
+            dataType: 'json',
             data: formData,
             upload: {
                 onprogress: noop,
@@ -122,30 +122,30 @@ class RemoteFileProvider extends FileProvider {
     }
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
-        return this._executeRequest("AbortUpload", { uploadId: chunksInfo.customData.uploadId });
+        return this._executeRequest('AbortUpload', { uploadId: chunksInfo.customData.uploadId });
     }
 
     downloadItems(items) {
         const args = this._getDownloadArgs(items);
 
-        const $form = $("<form>")
-            .css({ display: "none" })
+        const $form = $('<form>')
+            .css({ display: 'none' })
             .attr({
-                method: "post",
+                method: 'post',
                 action: args.url
             });
 
-        ["command", "arguments"].forEach(name => {
-            $("<input>").attr({
-                type: "hidden",
+        ['command', 'arguments'].forEach(name => {
+            $('<input>').attr({
+                type: 'hidden',
                 name,
                 value: args[name]
             }).appendTo($form);
         });
 
-        $form.appendTo("body");
+        $form.appendTo('body');
 
-        eventsEngine.trigger($form, "submit");
+        eventsEngine.trigger($form, 'submit');
 
         setTimeout(() => $form.remove());
     }
@@ -154,13 +154,13 @@ class RemoteFileProvider extends FileProvider {
         const args = this._getDownloadArgs(items);
 
         const formData = new window.FormData();
-        formData.append("command", args.command);
-        formData.append("arguments", args.arguments);
+        formData.append('command', args.command);
+        formData.append('arguments', args.arguments);
 
         return ajax.sendRequest({
             url: args.url,
-            method: "POST",
-            responseType: "arraybuffer",
+            method: 'POST',
+            responseType: 'arraybuffer',
             data: formData,
             upload: {
                 onprogress: noop,
@@ -178,7 +178,7 @@ class RemoteFileProvider extends FileProvider {
         return {
             url: this._endpointUrl,
             arguments: argsStr,
-            command: "Download"
+            command: 'Download'
         };
     }
 
@@ -187,17 +187,17 @@ class RemoteFileProvider extends FileProvider {
     }
 
     _getEntriesByPath(pathInfo) {
-        return this._executeRequest("GetDirContents", { pathInfo });
+        return this._executeRequest('GetDirContents', { pathInfo });
     }
 
     _executeRequest(command, args) {
-        const method = command === "GetDirContents" ? "GET" : "POST";
+        const method = command === 'GetDirContents' ? 'GET' : 'POST';
 
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._getEndpointUrl(command, args),
             method,
-            dataType: "json",
+            dataType: 'json',
             cache: false
         }).then(result => {
             !result.success && deferred.reject(result) || deferred.resolve(result);
@@ -211,7 +211,7 @@ class RemoteFileProvider extends FileProvider {
             command,
             arguments: JSON.stringify(args)
         });
-        const separator = this._endpointUrl && this._endpointUrl.indexOf("?") > 0 ? "&" : "?";
+        const separator = this._endpointUrl && this._endpointUrl.indexOf('?') > 0 ? '&' : '?';
         return this._endpointUrl + separator + queryString;
     }
 
@@ -228,7 +228,7 @@ class RemoteFileProvider extends FileProvider {
             }
 
             if(value === null) {
-                value = "";
+                value = '';
             }
 
             if(Array.isArray(value)) {
@@ -239,7 +239,7 @@ class RemoteFileProvider extends FileProvider {
             }
         }
 
-        return pairs.join("&");
+        return pairs.join('&');
     }
 
     _processQueryStringArrayParam(key, array, pairs) {
@@ -250,16 +250,16 @@ class RemoteFileProvider extends FileProvider {
     }
 
     _getQueryStringPair(key, value) {
-        return encodeURIComponent(key) + "=" + encodeURIComponent(value);
+        return encodeURIComponent(key) + '=' + encodeURIComponent(value);
     }
 
     _hasSubDirs(dataObj) {
         const hasSubDirs = this._hasSubDirsGetter(dataObj);
-        return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
+        return typeof hasSubDirs === 'boolean' ? hasSubDirs : true;
     }
 
     _getKeyExpr(options) {
-        return options.keyExpr || "key";
+        return options.keyExpr || 'key';
     }
 
 }

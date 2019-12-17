@@ -1,56 +1,56 @@
-var testGlobalExports = require("../../helpers/publicModulesHelper.js"),
-    AdvancedChartModule = require("viz/chart_components/advanced_chart"),
-    baseChartModule = require("viz/chart_components/base_chart"),
-    CrosshairModule = require("viz/chart_components/crosshair"),
-    LayoutManagerModule = require("viz/chart_components/layout_manager"),
-    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer"),
-    ScrollBarModule = require("viz/chart_components/scroll_bar"),
-    trackerModule = require("viz/chart_components/tracker");
+var testGlobalExports = require('../../helpers/publicModulesHelper.js'),
+    AdvancedChartModule = require('viz/chart_components/advanced_chart'),
+    baseChartModule = require('viz/chart_components/base_chart'),
+    CrosshairModule = require('viz/chart_components/crosshair'),
+    LayoutManagerModule = require('viz/chart_components/layout_manager'),
+    multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer'),
+    ScrollBarModule = require('viz/chart_components/scroll_bar'),
+    trackerModule = require('viz/chart_components/tracker');
 
-require("viz/chart");
-require("viz/pie_chart");
-require("viz/polar_chart");
+require('viz/chart');
+require('viz/pie_chart');
+require('viz/polar_chart');
 
 testGlobalExports({
-    "AdvancedChart module": AdvancedChartModule
+    'AdvancedChart module': AdvancedChartModule
 }, {
-    "AdvancedChart": AdvancedChartModule.AdvancedChart
+    'AdvancedChart': AdvancedChartModule.AdvancedChart
 });
 
 testGlobalExports({
-    "baseChart module": baseChartModule
+    'baseChart module': baseChartModule
 }, {
-    "overlapping": baseChartModule.overlapping,
-    "BaseChart": baseChartModule.BaseChart
+    'overlapping': baseChartModule.overlapping,
+    'BaseChart': baseChartModule.BaseChart
 });
 
 testGlobalExports({
-    "Crosshair module": CrosshairModule
+    'Crosshair module': CrosshairModule
 }, {
-    "Crosshair": CrosshairModule.Crosshair
+    'Crosshair': CrosshairModule.Crosshair
 });
 
 testGlobalExports({
-    "LayoutManager module": LayoutManagerModule
+    'LayoutManager module': LayoutManagerModule
 }, {
-    "LayoutManager": LayoutManagerModule.LayoutManager
+    'LayoutManager': LayoutManagerModule.LayoutManager
 });
 
 testGlobalExports({
-    "multiAxesSynchronizer module": multiAxesSynchronizer
+    'multiAxesSynchronizer module': multiAxesSynchronizer
 }, {
-    "synchronize": multiAxesSynchronizer.synchronize
+    'synchronize': multiAxesSynchronizer.synchronize
 });
 
 testGlobalExports({
-    "ScrollBar module": ScrollBarModule
+    'ScrollBar module': ScrollBarModule
 }, {
-    "ScrollBar": ScrollBarModule.ScrollBar
+    'ScrollBar': ScrollBarModule.ScrollBar
 });
 
 testGlobalExports({
-    "tracker module": trackerModule
+    'tracker module': trackerModule
 }, {
-    "ChartTracker": trackerModule.ChartTracker,
-    "PieTracker": trackerModule.PieTracker
+    'ChartTracker': trackerModule.ChartTracker,
+    'PieTracker': trackerModule.PieTracker
 });

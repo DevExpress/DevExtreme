@@ -1,18 +1,18 @@
-import $ from "jquery";
-import domUtils from "core/utils/dom";
+import $ from 'jquery';
+import domUtils from 'core/utils/dom';
 
-import "ui/tab_panel";
-import "common.css!css";
+import 'ui/tab_panel';
+import 'common.css!css';
 
-const TABS_ITEM_CLASS = "dx-tab";
-const TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
+const TABS_ITEM_CLASS = 'dx-tab';
+const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 
-QUnit.module("Tabs width");
+QUnit.module('Tabs width');
 
 class TabPanelWidthTestHelper {
     constructor(assert, setWidthApproach) {
-        this.$container = $("<div id='container'>");
-        this.$tabPanel = $("<div>");
+        this.$container = $('<div id=\'container\'>');
+        this.$tabPanel = $('<div>');
         this.assert = assert;
         this.setWidthApproach = setWidthApproach;
     }
@@ -22,15 +22,15 @@ class TabPanelWidthTestHelper {
 
         this.tabPanel = this.$tabPanel.dxTabPanel({
             items: [
-                { title: "title" },
-                { title: "long title example" }
+                { title: 'title' },
+                { title: 'long title example' }
             ],
             showNavButtons: true,
             scrollingEnabled: true,
             width: this._isOptionApproach() ? width : undefined
-        }).dxTabPanel("instance");
+        }).dxTabPanel('instance');
 
-        this.$container.appendTo("#qunit-fixture");
+        this.$container.appendTo('#qunit-fixture');
 
         if(!this._isOptionApproach()) {
             this.setContainerWidth(width);
@@ -40,11 +40,11 @@ class TabPanelWidthTestHelper {
     }
 
     _isOptionApproach() {
-        return this.setWidthApproach === "option";
+        return this.setWidthApproach === 'option';
     }
 
     setContainerWidth(width) {
-        this.$container[0].setAttribute("style", `width:${width}px`);
+        this.$container[0].setAttribute('style', `width:${width}px`);
     }
 
     createTabPanel(options) {
@@ -55,17 +55,17 @@ class TabPanelWidthTestHelper {
     checkTabPanel(options) {
         let tabs = this.tabPanel._tabs;
 
-        this.assert.equal(this.tabPanel.option("width"), this._isOptionApproach() ? options.width : undefined);
-        this.assert.equal(tabs.option("width"), undefined);
+        this.assert.equal(this.tabPanel.option('width'), this._isOptionApproach() ? options.width : undefined);
+        this.assert.equal(tabs.option('width'), undefined);
         this.assert.equal(tabs.$element().outerWidth(), options.width);
         this.assert.equal(this.$tabPanel.outerWidth(), options.width);
 
         if(options.width > 250) {
-            this.assert.ok(this._getTabItem(0).width() > 190, this._getTabItem(0).width() + " > 190");
-            this.assert.ok(this._getTabItem(1).width() > 190, this._getTabItem(1).width() + " > 190");
+            this.assert.ok(this._getTabItem(0).width() > 190, this._getTabItem(0).width() + ' > 190');
+            this.assert.ok(this._getTabItem(1).width() > 190, this._getTabItem(1).width() + ' > 190');
         } else {
-            this.assert.ok(this._getTabItem(0).width() < 70, this._getTabItem(0).width() + " < 70");
-            this.assert.ok(this._getTabItem(1).width() > 100, this._getTabItem(1).width() + " > 100");
+            this.assert.ok(this._getTabItem(0).width() < 70, this._getTabItem(0).width() + ' < 70');
+            this.assert.ok(this._getTabItem(1).width() > 100, this._getTabItem(1).width() + ' > 100');
         }
 
         this.assert.equal(this.$tabPanel.find(`.${TABS_NAV_BUTTON_CLASS}`).length, options.expectNavButtons, `${options.expectNavButtons} navigation buttons should be rendered`);
@@ -77,14 +77,14 @@ class TabPanelWidthTestHelper {
 
     setWidth(width) {
         switch(this.setWidthApproach) {
-            case "option":
-                this.tabPanel.option("width", width);
+            case 'option':
+                this.tabPanel.option('width', width);
                 break;
-            case "container":
+            case 'container':
                 this.setContainerWidth(width);
                 this.tabPanel.repaint();
                 break;
-            case "resizeBrowser":
+            case 'resizeBrowser':
                 this.setContainerWidth(width);
                 domUtils.triggerResizeEvent(this.$container);
                 break;
@@ -92,7 +92,7 @@ class TabPanelWidthTestHelper {
     }
 }
 
-["resizeBrowser", "container", "option"].forEach((setWidthApproach) => {
+['resizeBrowser', 'container', 'option'].forEach((setWidthApproach) => {
     const config = `, change ${setWidthApproach}.width`;
 
     QUnit.test(`Tabpanel with fixed tabs, resize to show navigation button tabs${config}`, (assert) => {

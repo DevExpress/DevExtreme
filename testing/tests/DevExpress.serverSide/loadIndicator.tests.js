@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/loadIndicator.markup.tests.js");
+require('../DevExpress.ui.widgets/loadIndicator.markup.tests.js');

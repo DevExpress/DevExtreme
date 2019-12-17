@@ -1,16 +1,16 @@
-import { pieSeriesSpacing as seriesSpacing, states } from "./components/consts";
-import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from "./core/utils";
-import { extend as _extend } from "../core/utils/extend";
-import { isNumeric } from "../core/utils/type";
-import { each as _each } from "../core/utils/iterator";
-import rangeModule from "./translators/range";
-import registerComponent from "../core/component_registrator";
-import { BaseChart, overlapping } from "./chart_components/base_chart";
-import { noop as _noop } from "../core/utils/common";
-import translator1DModule from "./translators/translator1d";
-import { patchFontOptions } from "./core/utils";
+import { pieSeriesSpacing as seriesSpacing, states } from './components/consts';
+import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from './core/utils';
+import { extend as _extend } from '../core/utils/extend';
+import { isNumeric } from '../core/utils/type';
+import { each as _each } from '../core/utils/iterator';
+import rangeModule from './translators/range';
+import registerComponent from '../core/component_registrator';
+import { BaseChart, overlapping } from './chart_components/base_chart';
+import { noop as _noop } from '../core/utils/common';
+import translator1DModule from './translators/translator1d';
+import { patchFontOptions } from './core/utils';
 
-const OPTIONS_FOR_REFRESH_SERIES = ["startAngle", "innerRadius", "segmentsDirection", "type"],
+const OPTIONS_FOR_REFRESH_SERIES = ['startAngle', 'innerRadius', 'segmentsDirection', 'type'],
     NORMAL_STATE = states.normalMark,
     MAX_RESOLVE_ITERATION_COUNT = 5,
     LEGEND_ACTIONS = [states.resetItem, states.applyHover, states.applySelected, states.applySelected];
@@ -38,19 +38,19 @@ function correctPercentValue(value) {
 }
 
 var dxPieChart = BaseChart.inherit({
-    _themeSection: "pie",
+    _themeSection: 'pie',
 
     _layoutManagerOptions: function() {
         return _extend(true, {}, this.callBase(), {
-            piePercentage: correctPercentValue(this._themeManager.getOptions("diameter")),
-            minPiePercentage: correctPercentValue(this._themeManager.getOptions("minDiameter"))
+            piePercentage: correctPercentValue(this._themeManager.getOptions('diameter')),
+            minPiePercentage: correctPercentValue(this._themeManager.getOptions('minDiameter'))
         });
     },
 
     _optionChangesMap: {
-        diameter: "REINIT",
-        minDiameter: "REINIT",
-        sizeGroup: "REINIT"
+        diameter: 'REINIT',
+        minDiameter: 'REINIT',
+        sizeGroup: 'REINIT'
     },
 
     _disposeCore: function() {
@@ -64,7 +64,7 @@ var dxPieChart = BaseChart.inherit({
         this._groupsData = {
             groups: [{
                 series: series,
-                valueOptions: { valueType: "numeric" }
+                valueOptions: { valueType: 'numeric' }
             }],
             argumentOptions: series[0] && series[0].getOptions()
         };
@@ -257,7 +257,7 @@ var dxPieChart = BaseChart.inherit({
     },
 
     _renderExtraElements() {
-        let template = this.option("centerTemplate");
+        let template = this.option('centerTemplate');
 
         if(this._centerTemplateGroup) {
             this._centerTemplateGroup.clear();
@@ -268,7 +268,7 @@ var dxPieChart = BaseChart.inherit({
         }
 
         if(!this._centerTemplateGroup) {
-            this._centerTemplateGroup = this._renderer.g().attr({ class: "dxc-hole-template" }).css(patchFontOptions(this._themeManager._font));
+            this._centerTemplateGroup = this._renderer.g().attr({ class: 'dxc-hole-template' }).css(patchFontOptions(this._themeManager._font));
         }
         this._centerTemplateGroup.append(this._renderer.root);
 
@@ -315,7 +315,7 @@ var dxPieChart = BaseChart.inherit({
         let wordWrapApplied;
         do {
             labelsWereOverlapped = this._resolveLabelOverlapping(resolveLabelOverlapping);
-            wordWrapApplied = this._adjustSeriesLabels(resolveLabelOverlapping === "shift");
+            wordWrapApplied = this._adjustSeriesLabels(resolveLabelOverlapping === 'shift');
         } while((labelsWereOverlapped || wordWrapApplied) && ++iterationCount < MAX_RESOLVE_ITERATION_COUNT);
     },
 
@@ -327,7 +327,7 @@ var dxPieChart = BaseChart.inherit({
 
     _resolveLabelOverlappingShift: function() {
         var that = this,
-            inverseDirection = that.option("segmentsDirection") === "anticlockwise",
+            inverseDirection = that.option('segmentsDirection') === 'anticlockwise',
             seriesByPosition = that.series.reduce(function(r, s) {
                 (r[s.getOptions().label.position] || r.outside).push(s);
                 return r;
@@ -392,15 +392,15 @@ var dxPieChart = BaseChart.inherit({
         this._abstractSeries = null;
     },
 
-    _legendDataField: "point",
+    _legendDataField: 'point',
 
-    _legendItemTextField: "argument",
+    _legendItemTextField: 'argument',
 
     _applyPointMarkersAutoHiding: _noop,
 
     _renderTrackers: _noop,
 
-    _trackerType: "PieTracker",
+    _trackerType: 'PieTracker',
 
     _createScrollBar: _noop,
 
@@ -429,15 +429,15 @@ var dxPieChart = BaseChart.inherit({
     _getExtraOptions: function() {
         var that = this;
         return {
-            startAngle: that.option("startAngle"),
-            innerRadius: that.option("innerRadius"),
-            segmentsDirection: that.option("segmentsDirection"),
-            type: that.option("type")
+            startAngle: that.option('startAngle'),
+            innerRadius: that.option('innerRadius'),
+            segmentsDirection: that.option('segmentsDirection'),
+            type: that.option('type')
         };
     },
 
     getSizeGroup: function() {
-        return this._themeManager.getOptions("sizeGroup");
+        return this._themeManager.getOptions('sizeGroup');
     },
 
     getSizeGroupLayout: function() {
@@ -446,10 +446,10 @@ var dxPieChart = BaseChart.inherit({
 });
 
 _each(OPTIONS_FOR_REFRESH_SERIES, function(_, name) {
-    dxPieChart.prototype._optionChangesMap[name] = "REFRESH_SERIES_DATA_INIT";
+    dxPieChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_DATA_INIT';
 });
 
-registerComponent("dxPieChart", dxPieChart);
+registerComponent('dxPieChart', dxPieChart);
 
 module.exports = dxPieChart;
 

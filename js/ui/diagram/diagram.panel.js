@@ -1,11 +1,11 @@
-import $ from "../../core/renderer";
-import Widget from "../widget/ui.widget";
-import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
-import pointerEvents from "../../events/pointer";
+import $ from '../../core/renderer';
+import Widget from '../widget/ui.widget';
+import eventsEngine from '../../events/core/events_engine';
+import eventUtils from '../../events/utils';
+import pointerEvents from '../../events/pointer';
 
-const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, "dxDiagramPanel");
-const PREVENT_REFOCUS_SELECTOR = ".dx-textbox";
+const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, 'dxDiagramPanel');
+const PREVENT_REFOCUS_SELECTOR = '.dx-textbox';
 
 class DiagramPanel extends Widget {
     _init() {
@@ -25,11 +25,11 @@ class DiagramPanel extends Widget {
         });
     }
     _createOnPointerUpAction() {
-        this._onPointerUpAction = this._createActionByOption("onPointerUp");
+        this._onPointerUpAction = this._createActionByOption('onPointerUp');
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "onPointerUp":
+            case 'onPointerUp':
                 this._createOnPointerUpAction();
                 break;
             default:

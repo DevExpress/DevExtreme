@@ -1,31 +1,31 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import modules from "./ui.grid_core.modules";
-import clickEvent from "../../events/click";
-import pointerEvents from "../../events/pointer";
-import positionUtils from "../../animation/position";
-import { addNamespace, fireEvent, normalizeKeyName } from "../../events/utils";
-import browser from "../../core/utils/browser";
-import { extend } from "../../core/utils/extend";
-import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
-import { isElementInCurrentGrid } from "./ui.grid_core.utils";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import modules from './ui.grid_core.modules';
+import clickEvent from '../../events/click';
+import pointerEvents from '../../events/pointer';
+import positionUtils from '../../animation/position';
+import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
+import browser from '../../core/utils/browser';
+import { extend } from '../../core/utils/extend';
+import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
+import { isElementInCurrentGrid } from './ui.grid_core.utils';
 
-var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    FOCUS_OVERLAY_CLASS = "focus-overlay",
-    CONTENT_CLASS = "content",
-    FOCUSED_ELEMENT_CLASS = "dx-focused",
-    ROW_CLASS = "dx-row",
-    MODULE_NAMESPACE = "dxDataGridEditorFactory",
-    UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, "focusin", clickEvent.name].join(" "), MODULE_NAMESPACE),
-    POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
-    POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    DX_HIDDEN = "dx-hidden";
+var EDITOR_INLINE_BLOCK = 'dx-editor-inline-block',
+    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
+    FOCUS_OVERLAY_CLASS = 'focus-overlay',
+    CONTENT_CLASS = 'content',
+    FOCUSED_ELEMENT_CLASS = 'dx-focused',
+    ROW_CLASS = 'dx-row',
+    MODULE_NAMESPACE = 'dxDataGridEditorFactory',
+    UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEvent.name].join(' '), MODULE_NAMESPACE),
+    POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target',
+    POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none',
+    DX_HIDDEN = 'dx-hidden';
 
 var EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
-        const rowSelector = this.option("focusedRowEnabled") ? "tr[tabindex]:focus" : "tr[tabindex]:not(.dx-data-row):focus",
+        const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus',
             focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus`;
 
         // T181706
@@ -33,7 +33,7 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _getFocusCellSelector: function() {
-        return ".dx-row > td";
+        return '.dx-row > td';
     },
 
     _updateFocusCore: function() {
@@ -48,7 +48,7 @@ var EditorFactory = modules.ViewController.inherit({
 
             if($focus.length) {
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
-                    $focusCell = $focus.closest(this._getFocusCellSelector() + ", ." + CELL_FOCUS_DISABLED_CLASS);
+                    $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
                     hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
                     $focus = $focusCell;
                 }
@@ -83,7 +83,7 @@ var EditorFactory = modules.ViewController.inherit({
     _updateFocusOverlaySize: function($element, position) {
         $element.hide();
 
-        const location = positionUtils.calculate($element, extend({ collision: "fit" }, position));
+        const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
         if(location.h.oversize > 0) {
             $element.outerWidth($element.outerWidth() - location.h.oversize);
@@ -97,7 +97,7 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     callbackNames: function() {
-        return ["focused"];
+        return ['focused'];
     },
 
     focus: function($element, hideBorder) {
@@ -134,15 +134,15 @@ var EditorFactory = modules.ViewController.inherit({
         }
 
         if(!that._$focusOverlay) {
-            that._$focusOverlay = $("<div>").addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS);
+            that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + ' ' + POINTER_EVENTS_TARGET_CLASS);
         }
 
         if(hideBorder) {
             that._$focusOverlay.addClass(DX_HIDDEN);
         } else if($element.length) {
             // align "left bottom" for IE, align "right bottom" for Mozilla
-            var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
-                $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS)),
+            var align = browser.msie ? 'left bottom' : browser.mozilla ? 'right bottom' : 'left top',
+                $content = $element.closest('.' + that.addWidgetPrefix(CONTENT_CLASS)),
                 elemCoord = $element[0].getBoundingClientRect();
 
             that._$focusOverlay
@@ -162,7 +162,7 @@ var EditorFactory = modules.ViewController.inherit({
             that._updateFocusOverlaySize(that._$focusOverlay, focusOverlayPosition);
             positionUtils.setup(that._$focusOverlay, focusOverlayPosition);
 
-            that._$focusOverlay.css("visibility", "visible"); // for ios
+            that._$focusOverlay.css('visibility', 'visible'); // for ios
         }
     },
 
@@ -181,8 +181,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     init: function() {
-        this.createAction("onEditorPreparing", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
-        this.createAction("onEditorPrepared", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
+        this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+        this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
         eventsEngine.on(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
@@ -196,8 +196,8 @@ var EditorFactory = modules.ViewController.inherit({
 
         if($container) {
             // T179518
-            eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
-                if(normalizeKeyName(e) === "tab") {
+            eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), function(e) {
+                if(normalizeKeyName(e) === 'tab') {
                     that._updateFocusHandler(e);
                 }
             });
@@ -225,8 +225,8 @@ var EditorFactory = modules.ViewController.inherit({
 
         $currentTarget.removeClass(DX_HIDDEN);
 
-        if(e.type === clickEvent.name && element.tagName === "INPUT") {
-            eventsEngine.trigger($(element), "focus");
+        if(e.type === clickEvent.name && element.tagName === 'INPUT') {
+            eventsEngine.trigger($(element), 'focus');
         }
     },
 
@@ -333,7 +333,7 @@ module.exports = {
                     this.callBase(args);
 
                     if(this.isResizing()) {
-                        this.getController("editorFactory").loseFocus();
+                        this.getController('editorFactory').loseFocus();
                     }
                 }
             }

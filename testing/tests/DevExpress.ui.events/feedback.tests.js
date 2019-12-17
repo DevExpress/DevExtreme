@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    devices = require("core/devices"),
-    feedbackEvents = require("events/core/emitter.feedback"),
-    pointerMock = require("../../helpers/pointerMock.js");
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    devices = require('core/devices'),
+    feedbackEvents = require('events/core/emitter.feedback'),
+    pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
     var markup =
@@ -14,10 +14,10 @@ QUnit.testStart(function() {
             <div id="anotherNeighbor" class="item"></div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("feedback touch", {
+QUnit.module('feedback touch', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -27,8 +27,8 @@ QUnit.module("feedback touch", {
     }
 });
 
-QUnit.test("dxactive should be fired after pointerdown with timeout", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxactive should be fired after pointerdown with timeout', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         activeFired = 0;
 
@@ -36,14 +36,14 @@ QUnit.test("dxactive should be fired after pointerdown with timeout", function(a
         activeFired++;
     });
 
-    pointer.start("touch").down();
-    assert.equal(activeFired, 0, "active does'n fired immediately after pointerdown");
+    pointer.start('touch').down();
+    assert.equal(activeFired, 0, 'active does\'n fired immediately after pointerdown');
     this.clock.tick(10);
-    assert.equal(activeFired, 1, "active fired after timeout");
+    assert.equal(activeFired, 1, 'active fired after timeout');
 });
 
-QUnit.test("dxinactive should be fired after pointerup with timeout", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should be fired after pointerup with timeout', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -51,14 +51,14 @@ QUnit.test("dxinactive should be fired after pointerup with timeout", function(a
         inactiveFired++;
     });
 
-    pointer.start("touch").down().up();
-    assert.equal(inactiveFired, 0, "inactive does'n fired immediately after pointerup");
+    pointer.start('touch').down().up();
+    assert.equal(inactiveFired, 0, 'inactive does\'n fired immediately after pointerup');
     this.clock.tick(100);
-    assert.equal(inactiveFired, 1, "inactive fired after timeout");
+    assert.equal(inactiveFired, 1, 'inactive fired after timeout');
 });
 
-QUnit.test("dxactive should be fired after pointerup if active timeout is not finished", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxactive should be fired after pointerup if active timeout is not finished', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         activeFired = 0;
 
@@ -66,14 +66,14 @@ QUnit.test("dxactive should be fired after pointerup if active timeout is not fi
         activeFired++;
     });
 
-    pointer.start("touch").down().up();
-    assert.equal(activeFired, 1, "active fired immediately after pointerup");
+    pointer.start('touch').down().up();
+    assert.equal(activeFired, 1, 'active fired immediately after pointerup');
     this.clock.tick(10);
-    assert.equal(activeFired, 1, "active does not fired after timeout");
+    assert.equal(activeFired, 1, 'active does not fired after timeout');
 });
 
-QUnit.test("dxactive should not be fired after pointerup if active timeout is finished", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxactive should not be fired after pointerup if active timeout is finished', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         activeFired = 0;
 
@@ -81,77 +81,77 @@ QUnit.test("dxactive should not be fired after pointerup if active timeout is fi
         activeFired++;
     });
 
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     this.clock.tick(10);
     pointer.up();
-    assert.equal(activeFired, 1, "active does not fired after timeout");
+    assert.equal(activeFired, 1, 'active does not fired after timeout');
 });
 
-QUnit.test("dxactive should not bubble", function(assert) {
-    var $element = $("#element"),
-        $container = $("#container"),
+QUnit.test('dxactive should not bubble', function(assert) {
+    var $element = $('#element'),
+        $container = $('#container'),
         pointer = pointerMock($element);
 
     $container.on(feedbackEvents.active, { timeout: 10 }, function() {
-        assert.ok(false, "active fired on parent");
+        assert.ok(false, 'active fired on parent');
     });
 
     $element.on(feedbackEvents.active, { timeout: 10 }, function() {
-        assert.ok(true, "active fired on child");
+        assert.ok(true, 'active fired on child');
     });
 
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     this.clock.tick(10);
 });
 
-QUnit.test("dxinactive should be fired immediately after several pointerdown", function(assert) {
+QUnit.test('dxinactive should be fired immediately after several pointerdown', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element"),
+    var $element = $('#element'),
         pointer = pointerMock($element);
 
     $element.on(feedbackEvents.inactive, { timeout: 100 }, function() {
-        assert.ok(true, "inactive fired immediately");
+        assert.ok(true, 'inactive fired immediately');
     });
 
-    pointer.start("touch").down().up().down();
+    pointer.start('touch').down().up().down();
     this.clock.tick(100);
 });
 
-QUnit.test("dxinactive should be fired immediately after pointerdown on another element", function(assert) {
+QUnit.test('dxinactive should be fired immediately after pointerdown on another element', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element"),
-        $neighbor = $("#neighbor");
+    var $element = $('#element'),
+        $neighbor = $('#neighbor');
 
     $element.on(feedbackEvents.inactive, { timeout: 100 }, function() {
-        assert.ok(true, "inactive fired immediately");
+        assert.ok(true, 'inactive fired immediately');
     });
     $neighbor.on(feedbackEvents.active, noop);
 
-    pointerMock($element).start("touch").down().up();
-    pointerMock($neighbor).start("touch").down();
+    pointerMock($element).start('touch').down().up();
+    pointerMock($neighbor).start('touch').down();
 });
 
-QUnit.test("dxactive should be fired on parent element if child was active before", function(assert) {
+QUnit.test('dxactive should be fired on parent element if child was active before', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element"),
-        $elementContent = $("#elementContent");
+    var $element = $('#element'),
+        $elementContent = $('#elementContent');
 
     $element.on(feedbackEvents.active, { timeout: 100 }, function() {
-        assert.ok(true, "active fired");
+        assert.ok(true, 'active fired');
     });
     $elementContent.on(feedbackEvents.active, { timeout: 100 }, noop);
 
-    pointerMock($elementContent).start("touch").down().up();
-    pointerMock($element).start("touch").down();
+    pointerMock($elementContent).start('touch').down().up();
+    pointerMock($element).start('touch').down();
     this.clock.tick(100);
 });
 
-QUnit.test("dxinactive should not be fired on parent element if child is activated", function(assert) {
-    var $element = $("#element"),
-        $elementContent = $("#elementContent"),
+QUnit.test('dxinactive should not be fired on parent element if child is activated', function(assert) {
+    var $element = $('#element'),
+        $elementContent = $('#elementContent'),
         inactiveFiredCount = 0;
 
     $element.on(feedbackEvents.inactive, { timeout: 100 }, function() {
@@ -159,47 +159,47 @@ QUnit.test("dxinactive should not be fired on parent element if child is activat
     });
     $elementContent.on(feedbackEvents.inactive, { timeout: 100 }, noop);
 
-    pointerMock($element).start("touch").down().up();
-    pointerMock($elementContent).start("touch").down().up();
+    pointerMock($element).start('touch').down().up();
+    pointerMock($elementContent).start('touch').down().up();
     this.clock.tick(100);
-    assert.equal(inactiveFiredCount, 1, "inactive on parent fired once");
+    assert.equal(inactiveFiredCount, 1, 'inactive on parent fired once');
 });
 
-QUnit.test("dxinactive should be fired after other dxinactive unsubscribed", function(assert) {
+QUnit.test('dxinactive should be fired after other dxinactive unsubscribed', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element"),
-        $neighbor = $("#neighbor"),
-        $anotherNeighbor = $("#anotherNeighbor");
+    var $element = $('#element'),
+        $neighbor = $('#neighbor'),
+        $anotherNeighbor = $('#anotherNeighbor');
 
     $element.on(feedbackEvents.inactive, { timeout: 100 }, function() {
-        assert.ok(true, "inactive fired");
+        assert.ok(true, 'inactive fired');
     });
     $neighbor.on(feedbackEvents.inactive, { timeout: 100 }, noop);
     $anotherNeighbor.on(feedbackEvents.inactive, { timeout: 100 }, noop);
 
-    pointerMock($element).start("touch").down().up();
+    pointerMock($element).start('touch').down().up();
     $anotherNeighbor.off(feedbackEvents.inactive);
-    pointerMock($neighbor).start("touch").down().up();
+    pointerMock($neighbor).start('touch').down().up();
 });
 
-QUnit.test("dxinactive should not be fired immediately after other dxinactive unsubscribed", function(assert) {
+QUnit.test('dxinactive should not be fired immediately after other dxinactive unsubscribed', function(assert) {
     assert.expect(0);
 
-    var $element = $("#element"),
-        $anotherNeighbor = $("#anotherNeighbor");
+    var $element = $('#element'),
+        $anotherNeighbor = $('#anotherNeighbor');
 
     $element.on(feedbackEvents.inactive, { timeout: 100 }, function() {
-        assert.ok(false, "inactive not fired");
+        assert.ok(false, 'inactive not fired');
     });
     $anotherNeighbor.on(feedbackEvents.inactive, { timeout: 100 }, noop);
 
-    pointerMock($element).start("touch").down().up();
+    pointerMock($element).start('touch').down().up();
     $anotherNeighbor.off(feedbackEvents.inactive);
 });
 
 
-QUnit.module("feedback mouse", {
+QUnit.module('feedback mouse', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -209,8 +209,8 @@ QUnit.module("feedback mouse", {
     }
 });
 
-QUnit.test("dxactive should be fired after mousedown without timeout", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxactive should be fired after mousedown without timeout', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         activeFired = 0;
 
@@ -218,13 +218,13 @@ QUnit.test("dxactive should be fired after mousedown without timeout", function(
         activeFired++;
     });
 
-    pointer.start("mouse").down();
+    pointer.start('mouse').down();
     this.clock.tick(0);
-    assert.equal(activeFired, 1, "active fired immediately");
+    assert.equal(activeFired, 1, 'active fired immediately');
 });
 
-QUnit.test("dxinactive should be fired after mouseup without timeout", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should be fired after mouseup without timeout', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -232,32 +232,32 @@ QUnit.test("dxinactive should be fired after mouseup without timeout", function(
         inactiveFired++;
     });
 
-    pointer.start("mouse").down().up();
+    pointer.start('mouse').down().up();
     this.clock.tick(0);
-    assert.equal(inactiveFired, 1, "inactive fired immediately");
+    assert.equal(inactiveFired, 1, 'inactive fired immediately');
 });
 
-QUnit.test("dxactive should be fired on parent element if child was active before", function(assert) {
+QUnit.test('dxactive should be fired on parent element if child was active before', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element"),
-        $elementContent = $("#elementContent");
+    var $element = $('#element'),
+        $elementContent = $('#elementContent');
 
     $element.on(feedbackEvents.active, { timeout: 100 }, function() {
-        assert.ok(true, "active fired");
+        assert.ok(true, 'active fired');
     });
     $elementContent.on(feedbackEvents.active, { timeout: 100 }, noop);
 
-    pointerMock($elementContent).start("mouse").down().up();
-    pointerMock($element).start("mouse").down();
+    pointerMock($elementContent).start('mouse').down().up();
+    pointerMock($element).start('mouse').down();
     this.clock.tick(0);
 });
 
 
-QUnit.module("feedback simulator", {
+QUnit.module('feedback simulator', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.isSimulator = sinon.stub(devices, "isSimulator", function() { return true; });
+        this.isSimulator = sinon.stub(devices, 'isSimulator', function() { return true; });
     },
 
     afterEach: function() {
@@ -266,8 +266,8 @@ QUnit.module("feedback simulator", {
     }
 });
 
-QUnit.test("dxactive should be fired after mousedown with timeout", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxactive should be fired after mousedown with timeout', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         activeFired = 0;
 
@@ -275,14 +275,14 @@ QUnit.test("dxactive should be fired after mousedown with timeout", function(ass
         activeFired++;
     });
 
-    pointer.start("mouse").down();
-    assert.equal(activeFired, 0, "active does'n fired immediately after pointerdown");
+    pointer.start('mouse').down();
+    assert.equal(activeFired, 0, 'active does\'n fired immediately after pointerdown');
     this.clock.tick(10);
-    assert.equal(activeFired, 1, "active fired after timeout");
+    assert.equal(activeFired, 1, 'active fired after timeout');
 });
 
-QUnit.test("dxinactive should be fired after mouseup with timeout", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should be fired after mouseup with timeout', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -290,14 +290,14 @@ QUnit.test("dxinactive should be fired after mouseup with timeout", function(ass
         inactiveFired++;
     });
 
-    pointer.start("mouse").down().up();
-    assert.equal(inactiveFired, 0, "inactive does'n fired immediately after pointerup");
+    pointer.start('mouse').down().up();
+    assert.equal(inactiveFired, 0, 'inactive does\'n fired immediately after pointerup');
     this.clock.tick(100);
-    assert.equal(inactiveFired, 1, "inactive fired after timeout");
+    assert.equal(inactiveFired, 1, 'inactive fired after timeout');
 });
 
 
-QUnit.module("delegated feedback touch", {
+QUnit.module('delegated feedback touch', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -307,106 +307,106 @@ QUnit.module("delegated feedback touch", {
     }
 });
 
-QUnit.test("dxactive should have correct currentTarget", function(assert) {
+QUnit.test('dxactive should have correct currentTarget', function(assert) {
     assert.expect(1);
 
-    var $container = $("#container"),
-        $items = $container.find(".item"),
+    var $container = $('#container'),
+        $items = $container.find('.item'),
         $item = $items.eq(0);
 
-    $container.on("dxactive", ".item", { timeout: 0 }, function(e) {
-        assert.equal(e.currentTarget, $item.get(0), "current target correct");
+    $container.on('dxactive', '.item', { timeout: 0 }, function(e) {
+        assert.equal(e.currentTarget, $item.get(0), 'current target correct');
     });
 
-    pointerMock($item).start("touch").down();
+    pointerMock($item).start('touch').down();
     this.clock.tick(0);
 });
 
-QUnit.test("dxinactive should have correct currentTarget", function(assert) {
+QUnit.test('dxinactive should have correct currentTarget', function(assert) {
     assert.expect(1);
 
-    var $container = $("#container"),
-        $items = $container.find(".item"),
+    var $container = $('#container'),
+        $items = $container.find('.item'),
         $item = $items.eq(0);
 
-    $container.on("dxinactive", ".item", { timeout: 0 }, function(e) {
-        assert.equal(e.currentTarget, $item.get(0), "current target correct");
+    $container.on('dxinactive', '.item', { timeout: 0 }, function(e) {
+        assert.equal(e.currentTarget, $item.get(0), 'current target correct');
     });
 
-    pointerMock($item).start("touch").down().up();
+    pointerMock($item).start('touch').down().up();
     this.clock.tick(0);
 });
 
-QUnit.test("dxactive should have correct currentTarget if timeout is not finished", function(assert) {
+QUnit.test('dxactive should have correct currentTarget if timeout is not finished', function(assert) {
     assert.expect(1);
 
-    var $container = $("#container"),
-        $items = $container.find(".item"),
+    var $container = $('#container'),
+        $items = $container.find('.item'),
         $item = $items.eq(0);
 
-    $container.on("dxactive", ".item", { timeout: 100 }, function(e) {
-        assert.equal(e.currentTarget, $item.get(0), "current target correct");
+    $container.on('dxactive', '.item', { timeout: 100 }, function(e) {
+        assert.equal(e.currentTarget, $item.get(0), 'current target correct');
     });
 
-    pointerMock($item).start("touch").down().up();
+    pointerMock($item).start('touch').down().up();
 });
 
-QUnit.test("dxinactive should have correct currentTarget if timeout is not finished", function(assert) {
+QUnit.test('dxinactive should have correct currentTarget if timeout is not finished', function(assert) {
     assert.expect(1);
 
-    var $container = $("#container"),
-        $items = $container.find(".item"),
+    var $container = $('#container'),
+        $items = $container.find('.item'),
         $item = $items.eq(0);
 
-    $container.on(feedbackEvents.inactive, ".item", { timeout: 100 }, function(e) {
-        assert.equal(e.currentTarget, $item.get(0), "current target correct");
+    $container.on(feedbackEvents.inactive, '.item', { timeout: 100 }, function(e) {
+        assert.equal(e.currentTarget, $item.get(0), 'current target correct');
     });
 
-    pointerMock($item).start("touch").down().up().down();
+    pointerMock($item).start('touch').down().up().down();
 });
 
-QUnit.test("dxinactive should have correct currentTarget if timeout is not finished and target is changed", function(assert) {
+QUnit.test('dxinactive should have correct currentTarget if timeout is not finished and target is changed', function(assert) {
     assert.expect(1);
 
-    var $container = $("#container"),
-        $items = $container.find(".item");
+    var $container = $('#container'),
+        $items = $container.find('.item');
 
-    $container.on(feedbackEvents.inactive, ".item", { timeout: 100 }, function(e) {
-        assert.equal(e.currentTarget, $items.eq(0).get(0), "current target correct");
+    $container.on(feedbackEvents.inactive, '.item', { timeout: 100 }, function(e) {
+        assert.equal(e.currentTarget, $items.eq(0).get(0), 'current target correct');
     });
 
-    pointerMock($items.eq(0)).start("touch").down().up();
-    pointerMock($items.eq(1)).start("touch").down();
+    pointerMock($items.eq(0)).start('touch').down().up();
+    pointerMock($items.eq(1)).start('touch').down();
 });
 
-QUnit.test("dxactive should be fired after remove DOM node", function(assert) {
-    var $elementContent = $("#elementContent"),
-        $container = $("#container");
+QUnit.test('dxactive should be fired after remove DOM node', function(assert) {
+    var $elementContent = $('#elementContent'),
+        $container = $('#container');
 
-    $container.on(feedbackEvents.active, ".item", { timeout: 10 }, function() {
-        assert.ok(true, "active fired");
+    $container.on(feedbackEvents.active, '.item', { timeout: 10 }, function() {
+        assert.ok(true, 'active fired');
     });
 
-    pointerMock($elementContent).start("touch").down();
+    pointerMock($elementContent).start('touch').down();
     $elementContent.detach();
     this.clock.tick(10);
 });
 
-QUnit.test("dxinactive should be fired after remove DOM node", function(assert) {
-    var $elementContent = $("#elementContent"),
-        $container = $("#container");
+QUnit.test('dxinactive should be fired after remove DOM node', function(assert) {
+    var $elementContent = $('#elementContent'),
+        $container = $('#container');
 
-    $container.on(feedbackEvents.inactive, ".item", { timeout: 10 }, function() {
-        assert.ok(true, "inactive fired");
+    $container.on(feedbackEvents.inactive, '.item', { timeout: 10 }, function() {
+        assert.ok(true, 'inactive fired');
     });
 
-    pointerMock($elementContent).start("touch").down().up();
+    pointerMock($elementContent).start('touch').down().up();
     $elementContent.detach();
     this.clock.tick(10);
 });
 
 
-QUnit.module("feedback lock", {
+QUnit.module('feedback lock', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -416,13 +416,13 @@ QUnit.module("feedback lock", {
     }
 });
 
-QUnit.test("lockfeedback should not fail if active emitter not present", function(assert) {
+QUnit.test('lockfeedback should not fail if active emitter not present', function(assert) {
     assert.expect(0);
     feedbackEvents.lock($.Deferred().promise());
 });
 
-QUnit.test("dxinactive should not be fired after timeout if event is locked", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should not be fired after timeout if event is locked', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -430,15 +430,15 @@ QUnit.test("dxinactive should not be fired after timeout if event is locked", fu
         inactiveFired++;
     });
 
-    pointer.start("touch").down().up();
+    pointer.start('touch').down().up();
     this.clock.tick(99);
     feedbackEvents.lock($.Deferred());
     this.clock.tick(1);
-    assert.equal(inactiveFired, 0, "inactive not fired after timeout");
+    assert.equal(inactiveFired, 0, 'inactive not fired after timeout');
 });
 
-QUnit.test("dxinactive should be fired after lock released if event is locked", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should be fired after lock released if event is locked', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -446,15 +446,15 @@ QUnit.test("dxinactive should be fired after lock released if event is locked", 
         inactiveFired++;
     });
 
-    pointer.start("touch").down().up();
+    pointer.start('touch').down().up();
     this.clock.tick(99);
     feedbackEvents.lock($.Deferred().resolve());
     this.clock.tick(1);
-    assert.equal(inactiveFired, 1, "inactive fired after lock release");
+    assert.equal(inactiveFired, 1, 'inactive fired after lock release');
 });
 
-QUnit.test("dxinactive should not be fired after timeout if event is locked during gesture", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should not be fired after timeout if event is locked during gesture', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -463,28 +463,28 @@ QUnit.test("dxinactive should not be fired after timeout if event is locked duri
         inactiveFired++;
     });
 
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     this.clock.tick(1);
     feedbackEvents.lock($.Deferred());
     pointer.up();
     this.clock.tick(100);
-    assert.equal(inactiveFired, 0, "inactive not fired after timeout");
+    assert.equal(inactiveFired, 0, 'inactive not fired after timeout');
 });
 
-QUnit.test("dxactive should be fired after lock immediately", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxactive should be fired after lock immediately', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element);
 
     $element.on(feedbackEvents.active, { timeout: 100 }, function() {
         assert.ok(true);
     });
 
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     feedbackEvents.lock($.Deferred());
 });
 
-QUnit.test("dxinactive should be fired after lock released if event is locked during gesture", function(assert) {
-    var $element = $("#element"),
+QUnit.test('dxinactive should be fired after lock released if event is locked during gesture', function(assert) {
+    var $element = $('#element'),
         pointer = pointerMock($element),
         inactiveFired = 0;
 
@@ -492,17 +492,17 @@ QUnit.test("dxinactive should be fired after lock released if event is locked du
         inactiveFired++;
     });
 
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     this.clock.tick(1);
     feedbackEvents.lock($.Deferred().resolve());
     pointer.up();
     this.clock.tick(100);
-    assert.equal(inactiveFired, 1, "inactive fired after lock release");
+    assert.equal(inactiveFired, 1, 'inactive fired after lock release');
 });
 
-QUnit.test("locked dxinactive should not be fired after new active emitter activate", function(assert) {
-    var $element = $("#element"),
-        $neighbor = $("#neighbor"),
+QUnit.test('locked dxinactive should not be fired after new active emitter activate', function(assert) {
+    var $element = $('#element'),
+        $neighbor = $('#neighbor'),
         inactiveFired = 0;
 
     $element.on(feedbackEvents.inactive, { timeout: 100 }, function() {
@@ -510,35 +510,35 @@ QUnit.test("locked dxinactive should not be fired after new active emitter activ
     });
     $neighbor.on(feedbackEvents.inactive, { timeout: 100 }, noop);
 
-    pointerMock($element).start("touch").down().up();
+    pointerMock($element).start('touch').down().up();
     feedbackEvents.lock($.Deferred());
-    pointerMock($neighbor).start("touch").down().up();
-    assert.equal(inactiveFired, 0, "inactive not fired");
+    pointerMock($neighbor).start('touch').down().up();
+    assert.equal(inactiveFired, 0, 'inactive not fired');
 });
 
-QUnit.test("dxinactive should be fired after each lock release", function(assert) {
-    var $container = $("#container"),
-        $items = $container.find(".item"),
+QUnit.test('dxinactive should be fired after each lock release', function(assert) {
+    var $container = $('#container'),
+        $items = $container.find('.item'),
         targets = [];
 
-    $container.on(feedbackEvents.inactive, ".item", { timeout: 100 }, function(e) {
+    $container.on(feedbackEvents.inactive, '.item', { timeout: 100 }, function(e) {
         targets.push(e.target);
     });
 
     var deferred = $.Deferred();
-    pointerMock($items.eq(0)).start("touch").down().up();
+    pointerMock($items.eq(0)).start('touch').down().up();
     feedbackEvents.lock(deferred);
 
-    pointerMock($items.eq(1)).start("touch").down().up();
+    pointerMock($items.eq(1)).start('touch').down().up();
     feedbackEvents.lock(deferred);
 
     deferred.resolve();
-    assert.deepEqual(targets, [$items[0], $items[1]], "inactive not fired");
+    assert.deepEqual(targets, [$items[0], $items[1]], 'inactive not fired');
 });
 
-QUnit.test("dxinactive should be fired on child element if parent with feedback present", function(assert) {
-    var $element = $("#element"),
-        $elementContent = $("#elementContent"),
+QUnit.test('dxinactive should be fired on child element if parent with feedback present', function(assert) {
+    var $element = $('#element'),
+        $elementContent = $('#elementContent'),
         inactiveFired = 0,
         deferred = $.Deferred();
 
@@ -547,34 +547,34 @@ QUnit.test("dxinactive should be fired on child element if parent with feedback 
         inactiveFired++;
     });
 
-    pointerMock($elementContent).start("touch").down().up();
+    pointerMock($elementContent).start('touch').down().up();
     feedbackEvents.lock(deferred);
     this.clock.tick(100);
-    assert.equal(inactiveFired, 0, "inactive not fired");
+    assert.equal(inactiveFired, 0, 'inactive not fired');
     deferred.resolve();
-    assert.equal(inactiveFired, 1, "inactive not fired");
+    assert.equal(inactiveFired, 1, 'inactive not fired');
 });
 
-QUnit.test("dxinactive should be fired after unlock neighbor element", function(assert) {
+QUnit.test('dxinactive should be fired after unlock neighbor element', function(assert) {
     assert.expect(1);
 
-    var $container = $("#container"),
-        $items = $container.find(".item"),
+    var $container = $('#container'),
+        $items = $container.find('.item'),
         inactiveFired = 0,
         deferred = $.Deferred();
 
-    $container.on(feedbackEvents.inactive, ".item", { timeout: 100 }, function(e) {
+    $container.on(feedbackEvents.inactive, '.item', { timeout: 100 }, function(e) {
         inactiveFired++;
     });
 
-    pointerMock($items.eq(0)).start("touch").down().up();
+    pointerMock($items.eq(0)).start('touch').down().up();
     feedbackEvents.lock(deferred);
 
-    pointerMock($items.eq(1)).start("touch").down().up();
+    pointerMock($items.eq(1)).start('touch').down().up();
 
-    pointerMock($items.eq(2)).start("touch").down().up();
+    pointerMock($items.eq(2)).start('touch').down().up();
     deferred.resolve();
     this.clock.tick(100);
 
-    assert.equal(inactiveFired, 3, "inactive fired");
+    assert.equal(inactiveFired, 3, 'inactive fired');
 });

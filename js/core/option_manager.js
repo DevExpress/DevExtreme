@@ -1,8 +1,8 @@
-import coreDataUtils from "./utils/data";
-import { equals } from "./utils/comparator";
-import typeUtils from "./utils/type";
-import { noop } from "./utils/common";
-import { extend } from "./utils/extend";
+import coreDataUtils from './utils/data';
+import { equals } from './utils/comparator';
+import typeUtils from './utils/type';
+import { noop } from './utils/common';
+import { extend } from './utils/extend';
 
 let cachedDeprecateNames = [];
 let cachedGetters = {};
@@ -45,12 +45,12 @@ export class OptionManager {
     }
 
     _setField(options, fullName, value) {
-        let fieldName = "";
+        let fieldName = '';
         let fieldObject;
 
         do {
             if(fieldName) {
-                fieldName = "." + fieldName;
+                fieldName = '.' + fieldName;
             }
 
             fieldName = this._getFieldName(fullName) + fieldName;
@@ -128,7 +128,7 @@ export class OptionManager {
     _prepareRelevantNames(options, name, value) {
         if(typeUtils.isPlainObject(value)) {
             for(const valueName in value) {
-                this._prepareRelevantNames(options, name + "." + valueName, value[valueName]);
+                this._prepareRelevantNames(options, name + '.' + valueName, value[valueName]);
             }
         }
 

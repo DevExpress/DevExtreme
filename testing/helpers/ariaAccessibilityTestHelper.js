@@ -1,19 +1,19 @@
-import $ from "jquery";
-import { isDefined } from "core/utils/type";
+import $ from 'jquery';
+import { isDefined } from 'core/utils/type';
 
 const { assert } = QUnit;
 
-const ITEM_CLASS = "dx-item";
-const TREEVIEW_NODE_CLASS = "dx-treeview-node";
+const ITEM_CLASS = 'dx-item';
+const TREEVIEW_NODE_CLASS = 'dx-treeview-node';
 
 class ariaAccessibilityTestHelper {
     constructor(args) {
         const { createWidget } = args;
 
         this.createWidget = (options = {}) => {
-            this.$widget = $("<div>").appendTo("#qunit-fixture");
+            this.$widget = $('<div>').appendTo('#qunit-fixture');
             this.widget = createWidget(this.$widget, options);
-            this.isCheckBoxMode = this.widget.option("showCheckBoxesMode") === "normal";
+            this.isCheckBoxMode = this.widget.option('showCheckBoxesMode') === 'normal';
             this.$items = this.getItems();
 
             if(this.widget.getFocusedItemId) {
@@ -24,7 +24,7 @@ class ariaAccessibilityTestHelper {
 
     getItems() {
         if(this.widget._itemContainer) {
-            this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
+            this.$itemContainer = this.widget._itemContainer(this.widget.option('searchEnabled'));
 
             return this.$itemContainer.find(`.${ITEM_CLASS}`);
         }
@@ -52,7 +52,7 @@ class ariaAccessibilityTestHelper {
 
     checkAttributes($target, expectedAttributes, prefix) {
         const element = $target.get(0);
-        const skipAttributes = ["class", "style", "onclick"];
+        const skipAttributes = ['class', 'style', 'onclick'];
         const attributeNames = this._getAttributeNames(element).filter(name => skipAttributes.indexOf(name) === -1).map(name => name.toLowerCase());
 
         assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, `${prefix || ''}.attributes.count`);
@@ -71,10 +71,10 @@ class ariaAccessibilityTestHelper {
         if(isDefined(focusedItemIndex) && index === focusedItemIndex) {
             itemAttributes.id = this.focusedItemId;
         }
-        if("role" in options) {
+        if('role' in options) {
             itemAttributes.role = role;
         }
-        if("tabindex" in options) {
+        if('tabindex' in options) {
             itemAttributes.tabindex = tabindex;
         }
 
@@ -85,8 +85,8 @@ class ariaAccessibilityTestHelper {
         const $checkBox = this.getItems().eq(index).prev();
 
         this.checkAttributes($checkBox, {
-            role: "checkbox",
-            "aria-checked": $checkBox.hasClass("dx-checkbox-indeterminate") ? "mixed" : defaultValue
+            role: 'checkbox',
+            'aria-checked': $checkBox.hasClass('dx-checkbox-indeterminate') ? 'mixed' : defaultValue
         }, `checkbox[${index}]`);
     }
 
@@ -96,15 +96,15 @@ class ariaAccessibilityTestHelper {
         const node = this.widget._getNode($item);
 
         let nodeAttributes = {
-            role: "treeitem",
-            "data-item-id": node.id.toString(),
-            "aria-level": $item.parents(".dx-treeview-node").length.toString(),
-            "aria-expanded": node.internalFields.expanded.toString(),
-            "aria-label": $item.text()
+            role: 'treeitem',
+            'data-item-id': node.id.toString(),
+            'aria-level': $item.parents('.dx-treeview-node').length.toString(),
+            'aria-expanded': node.internalFields.expanded.toString(),
+            'aria-label': $item.text()
         };
 
         if(isDefined(node.internalFields.selected)) {
-            nodeAttributes["aria-selected"] = node.internalFields.selected.toString();
+            nodeAttributes['aria-selected'] = node.internalFields.selected.toString();
         }
 
         if(isDefined(focusedNodeIndex) && index === focusedNodeIndex) {
@@ -115,9 +115,9 @@ class ariaAccessibilityTestHelper {
     }
 
     _checkGroupNodeAttributes(index) {
-        const $nodeContainer = this.getItems().eq(index).closest(".dx-treeview-node-container").eq(0);
+        const $nodeContainer = this.getItems().eq(index).closest('.dx-treeview-node-container').eq(0);
 
-        this.checkAttributes($nodeContainer, { role: "group" }, `nodeContainer[${index}]`);
+        this.checkAttributes($nodeContainer, { role: 'group' }, `nodeContainer[${index}]`);
     }
 
     _checkAttribute(options, index, defaultValue) {
@@ -136,12 +136,12 @@ class ariaAccessibilityTestHelper {
 
     checkItemsAttributes(selectedIndexes, options = {}) {
         selectedIndexes.forEach((index) => {
-            this._checkAttribute(options, index, "true");
+            this._checkAttribute(options, index, 'true');
         });
 
         this.getItems().each((index) => {
             if(selectedIndexes.indexOf(index) === -1) {
-                this._checkAttribute(options, index, "false");
+                this._checkAttribute(options, index, 'false');
             }
         });
     }

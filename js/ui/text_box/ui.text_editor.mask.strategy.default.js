@@ -1,17 +1,17 @@
-import BaseMaskStrategy from "./ui.text_editor.mask.strategy.base";
-import { getChar } from "../../events/utils";
-import Promise from "../../core/polyfills/promise";
+import BaseMaskStrategy from './ui.text_editor.mask.strategy.base';
+import { getChar } from '../../events/utils';
+import Promise from '../../core/polyfills/promise';
 
-const BACKSPACE_INPUT_TYPE = "deleteContentBackward";
-const EMPTY_CHAR = " ";
+const BACKSPACE_INPUT_TYPE = 'deleteContentBackward';
+const EMPTY_CHAR = ' ';
 
 class DefaultMaskStrategy extends BaseMaskStrategy {
     _getStrategyName() {
-        return "default";
+        return 'default';
     }
 
     getHandleEventNames() {
-        return [...super.getHandleEventNames(), "keyPress"];
+        return [...super.getHandleEventNames(), 'keyPress'];
     }
 
     _keyPressHandler(event) {

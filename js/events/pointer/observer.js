@@ -1,11 +1,11 @@
-var each = require("../../core/utils/iterator").each,
-    readyCallbacks = require("../../core/utils/ready_callbacks"),
-    domAdapter = require("../../core/dom_adapter");
+var each = require('../../core/utils/iterator').each,
+    readyCallbacks = require('../../core/utils/ready_callbacks'),
+    domAdapter = require('../../core/dom_adapter');
 
 var addEventsListener = function(events, handler) {
     readyCallbacks.add(function() {
         events
-            .split(" ")
+            .split(' ')
             .forEach(function(event) {
                 domAdapter.listen(domAdapter.getDocument(), event, handler, true);
             });
@@ -51,10 +51,10 @@ var Observer = function(eventMap, pointerEquals, onPointerAdding) {
         pointers[getPointerIndex(e)] = e;
     };
 
-    addEventsListener(eventMap["dxpointerdown"], addPointer);
-    addEventsListener(eventMap["dxpointermove"], updatePointer);
-    addEventsListener(eventMap["dxpointerup"], removePointer);
-    addEventsListener(eventMap["dxpointercancel"], removePointer);
+    addEventsListener(eventMap['dxpointerdown'], addPointer);
+    addEventsListener(eventMap['dxpointermove'], updatePointer);
+    addEventsListener(eventMap['dxpointerup'], removePointer);
+    addEventsListener(eventMap['dxpointercancel'], removePointer);
 
     this.pointers = function() {
         return pointers;

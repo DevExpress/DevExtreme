@@ -1,18 +1,18 @@
 /* global currentTest, createTestContainer */
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    translator2DModule = require("viz/translators/translator2d"),
-    tooltipModule = require("viz/core/tooltip"),
-    BaseWidget = require("viz/core/base_widget");
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    translator2DModule = require('viz/translators/translator2d'),
+    tooltipModule = require('viz/core/tooltip'),
+    BaseWidget = require('viz/core/base_widget');
 
-require("viz/bullet");
+require('viz/bullet');
 
-$("<div>")
-    .attr("id", "container")
+$('<div>')
+    .attr('id', 'container')
     .css({ width: 250, height: 30 })
-    .appendTo("#qunit-fixture");
+    .appendTo('#qunit-fixture');
 
 var StubTranslator,
     StubTooltip = vizMocks.Tooltip;
@@ -56,7 +56,7 @@ var environment = {
     },
     createBullet: function(options, container) {
         container = container || this.$container;
-        return container.dxBullet(options).dxBullet("instance");
+        return container.dxBullet(options).dxBullet('instance');
     }
 };
 
@@ -105,7 +105,7 @@ QUnit.test('Create canvas when margin option is defined', function(assert) {
     assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
     assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
     assert.equal(this.renderer.resize.callCount, 1);
-    assert.deepEqual(this.renderer.stub("resize").firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
+    assert.deepEqual(this.renderer.stub('resize').firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
 });
 
 QUnit.test('Create canvas when container size is defined', function(assert) {
@@ -115,8 +115,8 @@ QUnit.test('Create canvas when container size is defined', function(assert) {
         valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
-    assert.equal(this.renderer.stub("resize").callCount, 1);
-    assert.deepEqual(this.renderer.stub("resize").firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
+    assert.equal(this.renderer.stub('resize').callCount, 1);
+    assert.deepEqual(this.renderer.stub('resize').firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
 });
 
 QUnit.module('Range', environment);
@@ -129,13 +129,13 @@ QUnit.test('Create range when all value options are defined', function(assert) {
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.test('Create range without min level', function(assert) {
@@ -146,13 +146,13 @@ QUnit.test('Create range without min level', function(assert) {
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.test('Create range without max level when target > value', function(assert) {
@@ -163,13 +163,13 @@ QUnit.test('Create range without max level when target > value', function(assert
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 20, 'Max arg should be like target');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.test('Create range without max level when value > target', function(assert) {
@@ -180,13 +180,13 @@ QUnit.test('Create range without max level when value > target', function(assert
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 20, 'Max arg should be like target');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.test('Create range without value', function(assert) {
@@ -197,13 +197,13 @@ QUnit.test('Create range without value', function(assert) {
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.test('Create range without target', function(assert) {
@@ -214,13 +214,13 @@ QUnit.test('Create range without target', function(assert) {
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.test('Create range when all value are negative', function(assert) {
@@ -231,13 +231,13 @@ QUnit.test('Create range when all value are negative', function(assert) {
 
     assert.equal(argTranslator.update.lastCall.args[0].min, -30, 'Min arg should be like endScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 0, 'Max arg should be like startScaleValue');
-    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, 'continuous', 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, 'numeric', 'Arg DataType provided');
 
     assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
     assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
-    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
-    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, 'continuous', 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, 'numeric', 'Val DataType provided');
 });
 
 QUnit.module('Prepare options', environment);
@@ -275,10 +275,10 @@ QUnit.test('Tooltip is not created on widget creation', function(assert) {
     var bullet = this.createBullet({});
 
     assert.equal(tooltipModule.Tooltip.callCount, 0);
-    assert.ok(!("_tooltip" in bullet));
+    assert.ok(!('_tooltip' in bullet));
     assert.strictEqual(this.renderer.root.attr.callCount, 2);
-    assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ "pointer-events": "visible" }]);
-    assert.deepEqual(this.renderer.root.attr.getCall(1).args, ["pointer-events"]);
+    assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ 'pointer-events': 'visible' }]);
+    assert.deepEqual(this.renderer.root.attr.getCall(1).args, ['pointer-events']);
 });
 
 QUnit.module('Structure', environment);
@@ -289,23 +289,23 @@ QUnit.test('Groups structure', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
-    assert.ok(renderer.stub("path").getCall(0).returnValue.sharp.calledOnce);
-    assert.ok(renderer.stub("path").getCall(0).returnValue.sharp.lastCall.calledAfter(renderer.stub("path").getCall(0).returnValue.attr.lastCall));
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
+    assert.ok(renderer.stub('path').getCall(0).returnValue.sharp.calledOnce);
+    assert.ok(renderer.stub('path').getCall(0).returnValue.sharp.lastCall.calledAfter(renderer.stub('path').getCall(0).returnValue.attr.lastCall));
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
-    assert.ok(renderer.stub("path").getCall(1).returnValue.sharp.calledOnce);
-    assert.ok(renderer.stub("path").getCall(1).returnValue.sharp.lastCall.calledAfter(renderer.stub("path").getCall(1).returnValue.attr.lastCall));
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
+    assert.ok(renderer.stub('path').getCall(1).returnValue.sharp.calledOnce);
+    assert.ok(renderer.stub('path').getCall(1).returnValue.sharp.lastCall.calledAfter(renderer.stub('path').getCall(1).returnValue.attr.lastCall));
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when zero level is not in interval', function(assert) {
@@ -314,19 +314,19 @@ QUnit.test('Groups structure when zero level is not in interval', function(asser
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").callCount, 0);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').callCount, 0);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when zero level is not visible', function(assert) {
@@ -335,19 +335,19 @@ QUnit.test('Groups structure when zero level is not visible', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").callCount, 0);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').callCount, 0);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when target is not in interval', function(assert) {
@@ -356,19 +356,19 @@ QUnit.test('Groups structure when target is not in interval', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").callCount, 0);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').callCount, 0);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when target is not visible', function(assert) {
@@ -377,19 +377,19 @@ QUnit.test('Groups structure when target is not visible', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").callCount, 0);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').callCount, 0);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when empty bullet', function(assert) {
@@ -405,19 +405,19 @@ QUnit.test('Groups structure when value is string', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when value is incorrect string', function(assert) {
@@ -433,19 +433,19 @@ QUnit.test('Groups structure when value is null', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when target is string', function(assert) {
@@ -454,19 +454,19 @@ QUnit.test('Groups structure when target is string', function(assert) {
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when target < 0 and startScaleValue is not defined, value < 0. target < value', function(assert) {
@@ -475,19 +475,19 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined,
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when target < 0 and startScaleValue is not defined, value < 0. target < value', function(assert) {
@@ -496,19 +496,19 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined,
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when target < 0 and startScaleValue is not defined', function(assert) {
@@ -517,19 +517,19 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined'
     var renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
-    assert.equal(renderer.stub("path").callCount, 3);
+    assert.equal(renderer.stub('path').callCount, 3);
 
-    assert.equal(renderer.stub("path").getCall(0).args[1], 'line', 'zero level');
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(0).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(0).args[1], 'line', 'zero level');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(0).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(1).args[1], 'line', 'target');
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(1).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(1).args[1], 'line', 'target');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(1).returnValue.stub('append').lastCall.args[0], renderer.root);
 
-    assert.equal(renderer.stub("path").getCall(2).args[1], 'line');
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("attr").firstCall.args[0]["stroke-linecap"], "square");
-    assert.equal(renderer.stub("path").getCall(2).returnValue.stub("append").lastCall.args[0], renderer.root);
+    assert.equal(renderer.stub('path').getCall(2).args[1], 'line');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('attr').firstCall.args[0]['stroke-linecap'], 'square');
+    assert.equal(renderer.stub('path').getCall(2).returnValue.stub('append').lastCall.args[0], renderer.root);
 });
 
 QUnit.test('Groups structure when minScaleValue = endScaleValue', function(assert) {
@@ -542,9 +542,9 @@ QUnit.test('Groups structure when minScaleValue = endScaleValue', function(asser
 QUnit.module('Get params', environment);
 
 QUnit.test('Get target params', function(assert) {
-    this.translatorX.stub("translate").onCall(2).returns("x1");
-    this.translatorY.stub("translate").onCall(2).returns("y1");
-    this.translatorY.stub("translate").onCall(3).returns("y2");
+    this.translatorX.stub('translate').onCall(2).returns('x1');
+    this.translatorY.stub('translate').onCall(2).returns('y1');
+    this.translatorY.stub('translate').onCall(3).returns('y2');
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 20, targetColor: '#000000', targetWidth: 2 });
 
@@ -555,23 +555,23 @@ QUnit.test('Get target params', function(assert) {
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-target", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-target', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        stroke: "#000000",
-        "stroke-width": 2,
-        points: ["x1", "y1", "x1", "y2"]
+        stroke: '#000000',
+        'stroke-width': 2,
+        points: ['x1', 'y1', 'x1', 'y2']
     });
-    assert.deepEqual(this.translatorX.translate.getCall(2).args, [10], "translatorX is called");
-    assert.deepEqual(this.translatorY.translate.getCall(2).args, [0.02], "translatorY is called first time");
-    assert.deepEqual(this.translatorY.translate.getCall(3).args, [0.98], "translatorY is called second time");
+    assert.deepEqual(this.translatorX.translate.getCall(2).args, [10], 'translatorX is called');
+    assert.deepEqual(this.translatorY.translate.getCall(2).args, [0.02], 'translatorY is called first time');
+    assert.deepEqual(this.translatorY.translate.getCall(3).args, [0.98], 'translatorY is called second time');
 });
 
 QUnit.test('Get bar value params when all values are positive', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 20, color: '#FFFF00' });
 
@@ -582,24 +582,24 @@ QUnit.test('Get bar value params when all values are positive', function(assert)
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [5], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [5], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when all values are positive and inverted', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 0, startScaleValue: 20, color: '#FFFF00' });
 
@@ -610,24 +610,24 @@ QUnit.test('Get bar value params when all values are positive and inverted', fun
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [5], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [5], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when value = 0', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: 0, target: 10, endScaleValue: 20, color: '#FFFF00' });
 
@@ -638,24 +638,24 @@ QUnit.test('Get bar value params when value = 0', function(assert) {
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [0], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [0], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when max level > 0 and value < max level', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: 15, target: 10, endScaleValue: 10, startScaleValue: -10, color: '#FFFF00' });
 
@@ -666,24 +666,24 @@ QUnit.test('Get bar value params when max level > 0 and value < max level', func
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [10], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [10], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when min level > 0', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: 15, target: 10, endScaleValue: 20, startScaleValue: 5, color: '#FFFF00' });
 
@@ -694,24 +694,24 @@ QUnit.test('Get bar value params when min level > 0', function(assert) {
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [5], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [15], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [5], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [15], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when min level < 0 and value < min level', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: -15, target: 10, endScaleValue: 20, startScaleValue: -10, color: '#FFFF00' });
 
@@ -722,24 +722,24 @@ QUnit.test('Get bar value params when min level < 0 and value < min level', func
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-10], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-10], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when max level < 0', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: -15, target: -10, endScaleValue: -5, startScaleValue: -20, color: '#FFFF00' });
 
@@ -750,24 +750,24 @@ QUnit.test('Get bar value params when max level < 0', function(assert) {
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [-5], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-15], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [-5], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-15], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when all values are negative', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: -10, target: -5, endScaleValue: 0, startScaleValue: -15, color: '#FFFF00' });
 
@@ -778,24 +778,24 @@ QUnit.test('Get bar value params when all values are negative', function(assert)
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-10], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-10], 'translatorX is called twice');
 });
 
 QUnit.test('Get bar value params when all values are negative and inverted', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: -10, target: -5, endScaleValue: 0, startScaleValue: -15, color: '#FFFF00', inverted: true });
 
@@ -806,24 +806,24 @@ QUnit.test('Get bar value params when all values are negative and inverted', fun
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-10], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [0], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-10], 'translatorX is called twice');
 });
 
 QUnit.test('T180366. Get bar value params when value < start scale value and end scale value', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: 20, target: 10, endScaleValue: 90, startScaleValue: 67, color: '#FFFF00' });
 
@@ -834,24 +834,24 @@ QUnit.test('T180366. Get bar value params when value < start scale value and end
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [67], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [67], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [67], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [67], 'translatorX is called twice');
 });
 
 QUnit.test('T180366. Get bar value params when value > start scale value and end scale value', function(assert) {
-    this.translatorX.stub("translate").onCall(0).returns("x1");
-    this.translatorX.stub("translate").onCall(1).returns("x2");
-    this.translatorY.stub("translate").onCall(0).returns("y2");
-    this.translatorY.stub("translate").onCall(1).returns("y1");
+    this.translatorX.stub('translate').onCall(0).returns('x1');
+    this.translatorX.stub('translate').onCall(1).returns('x2');
+    this.translatorY.stub('translate').onCall(0).returns('y2');
+    this.translatorY.stub('translate').onCall(1).returns('y1');
 
     this.createBullet({ value: -20, target: 10, endScaleValue: -67, startScaleValue: -90, color: '#FFFF00' });
 
@@ -862,23 +862,23 @@ QUnit.test('T180366. Get bar value params when value > start scale value and end
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-bar-value", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-bar-value', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        fill: "#FFFF00",
-        points: ["x1", "y1", "x2", "y1", "x2", "y2", "x1", "y2"]
+        fill: '#FFFF00',
+        points: ['x1', 'y1', 'x2', 'y1', 'x2', 'y2', 'x1', 'y2']
     });
 
-    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], "translatorY is called twice");
-    assert.deepEqual(this.translatorX.translate.getCall(0).args, [-67], "translatorX is called once");
-    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-67], "translatorX is called twice");
+    assert.deepEqual(this.translatorY.translate.getCall(0).args, [0.1], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(1).args, [0.9], 'translatorY is called twice');
+    assert.deepEqual(this.translatorX.translate.getCall(0).args, [-67], 'translatorX is called once');
+    assert.deepEqual(this.translatorX.translate.getCall(1).args, [-67], 'translatorX is called twice');
 });
 
 QUnit.test('Get zero level params', function(assert) {
-    this.translatorX.stub("translate").onCall(3).returns("x1");
-    this.translatorY.stub("translate").onCall(4).returns("y1");
-    this.translatorY.stub("translate").onCall(5).returns("y2");
+    this.translatorX.stub('translate').onCall(3).returns('x1');
+    this.translatorY.stub('translate').onCall(4).returns('y1');
+    this.translatorY.stub('translate').onCall(5).returns('y2');
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 20 });
 
@@ -889,17 +889,17 @@ QUnit.test('Get zero level params', function(assert) {
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
 
-    assert.deepEqual(creatingParams[0], { "class": "dxb-zero-level", "stroke-linecap": "square" }, "creating params");
+    assert.deepEqual(creatingParams[0], { 'class': 'dxb-zero-level', 'stroke-linecap': 'square' }, 'creating params');
 
     assert.deepEqual(drawingParams[0], {
-        stroke: "#666666",
-        points: ["x1", "y1", "x1", "y2"],
-        "stroke-width": 1
+        stroke: '#666666',
+        points: ['x1', 'y1', 'x1', 'y2'],
+        'stroke-width': 1
     });
 
-    assert.deepEqual(this.translatorX.translate.getCall(3).args, [0], "translatorX is called");
-    assert.deepEqual(this.translatorY.translate.getCall(4).args, [0.02], "translatorY is called once");
-    assert.deepEqual(this.translatorY.translate.getCall(5).args, [0.98], "translatorY is called twice");
+    assert.deepEqual(this.translatorX.translate.getCall(3).args, [0], 'translatorX is called');
+    assert.deepEqual(this.translatorY.translate.getCall(4).args, [0.02], 'translatorY is called once');
+    assert.deepEqual(this.translatorY.translate.getCall(5).args, [0.98], 'translatorY is called twice');
 });
 
 QUnit.module('Options changed', environment);
@@ -926,8 +926,8 @@ QUnit.test('Refresh', function(assert) {
     assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas width should have new value');
     assert.deepEqual(valTranslator.update.lastCall.args[1].height, 40, 'Canvas height should have new value');
 
-    assert.equal(this.renderer.stub("resize").callCount, 2);
-    assert.deepEqual(this.renderer.stub("resize").lastCall.args, [300, 40], 'Pass new width and height to renderer');
+    assert.equal(this.renderer.stub('resize').callCount, 2);
+    assert.deepEqual(this.renderer.stub('resize').lastCall.args, [300, 40], 'Pass new width and height to renderer');
 });
 
 QUnit.test('Change size of container', function(assert) {
@@ -948,8 +948,8 @@ QUnit.test('Change size of container', function(assert) {
     assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas should have new width');
     assert.deepEqual(valTranslator.update.lastCall.args[1].height, 100, 'Canvas should have new height');
 
-    assert.equal(this.renderer.stub("resize").callCount, 2);
-    assert.deepEqual(this.renderer.stub("resize").lastCall.args, [300, 100], 'Pass new width and height to renderer');
+    assert.equal(this.renderer.stub('resize').callCount, 2);
+    assert.deepEqual(this.renderer.stub('resize').lastCall.args, [300, 100], 'Pass new width and height to renderer');
 });
 
 QUnit.test('B239673 - Tooltip does not update location after resize', function(assert) {
@@ -1159,7 +1159,7 @@ QUnit.test('call drawn in BaseWidget', function(assert) {
 QUnit.test('drawn is called after resize', function(assert) {
     var bullet = this.createBullet({});
     this.resetTranslators();
-    bullet.option("size", { width: 300 });
+    bullet.option('size', { width: 300 });
 
     assert.strictEqual(BaseWidget.prototype._drawn.calledTwice, true);
 });

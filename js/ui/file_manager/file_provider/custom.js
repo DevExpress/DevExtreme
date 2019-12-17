@@ -1,9 +1,9 @@
-import { ensureDefined, noop } from "../../../core/utils/common";
-import { isFunction } from "../../../core/utils/type";
-import { when } from "../../../core/utils/deferred";
-import { compileGetter } from "../../../core/utils/data";
+import { ensureDefined, noop } from '../../../core/utils/common';
+import { isFunction } from '../../../core/utils/type';
+import { when } from '../../../core/utils/deferred';
+import { compileGetter } from '../../../core/utils/data';
 
-import { FileProvider } from "./file_provider";
+import { FileProvider } from './file_provider';
 
 /**
 * @name CustomFileProvider
@@ -23,7 +23,7 @@ class CustomFileProvider extends FileProvider {
          * @name CustomFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)
          */
-        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
+        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
 
         /**
          * @name CustomFileProviderOptions.getItems
@@ -139,11 +139,11 @@ class CustomFileProvider extends FileProvider {
 
     _hasSubDirs(dataObj) {
         const hasSubDirs = this._hasSubDirsGetter(dataObj);
-        return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
+        return typeof hasSubDirs === 'boolean' ? hasSubDirs : true;
     }
 
     _getKeyExpr(options) {
-        return options.keyExpr || "key";
+        return options.keyExpr || 'key';
     }
 
     _ensureFunction(functionObject, defaultFunction) {
