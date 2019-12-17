@@ -622,6 +622,14 @@ var Popup = Overlay.inherit({
         }).bind(this));
     },
 
+    _getContainer: function() {
+        if(this.option("fullScreen")) {
+            return $(window);
+        }
+
+        return this.callBase();
+    },
+
     _getDragTarget: function() {
         return this.topToolbar();
     },
@@ -700,7 +708,10 @@ var Popup = Overlay.inherit({
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
             if(!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
-                var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
+                var overlayHeight = this.option("fullScreen")
+                    ? Math.min(overlayContent.getBoundingClientRect().height, windowUtils.getWindow().innerHeight)
+                    : overlayContent.getBoundingClientRect().height;
+                var contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
                 cssStyles = {
                     height: Math.max(0, contentHeight),
                     minHeight: "auto",

@@ -292,8 +292,8 @@ const ButtonGroup = Widget.inherit({
     },
 
     _syncSelectionOptions() {
-        this._setOptionSilent("selectedItems", this._buttonsCollection.option("selectedItems"));
-        this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
+        this._setOptionWithoutOptionChange("selectedItems", this._buttonsCollection.option("selectedItems"));
+        this._setOptionWithoutOptionChange("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
     _optionChanged(args) {

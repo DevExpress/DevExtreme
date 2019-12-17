@@ -306,9 +306,9 @@ var RangeSlider = Slider.inherit({
         valStart = Math.max(min, Math.min(valStart, max));
         valEnd = Math.max(valStart, Math.min(valEnd, max));
 
-        this._setOptionSilent("start", valStart);
-        this._setOptionSilent("end", valEnd);
-        this._setOptionSilent("value", [valStart, valEnd]);
+        this._setOptionWithoutOptionChange("start", valStart);
+        this._setOptionWithoutOptionChange("end", valEnd);
+        this._setOptionWithoutOptionChange("value", [valStart, valEnd]);
 
         this._$submitStartElement.val(applyServerDecimalSeparator(valStart));
         this._$submitEndElement.val(applyServerDecimalSeparator(valEnd));
@@ -347,8 +347,8 @@ var RangeSlider = Slider.inherit({
                     break;
                 }
 
-                this._setOptionSilent("start", args.value[0]);
-                this._setOptionSilent("end", args.value[1]);
+                this._setOptionWithoutOptionChange("start", args.value[0]);
+                this._setOptionWithoutOptionChange("end", args.value[1]);
 
                 this._renderValue();
 

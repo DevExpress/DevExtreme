@@ -663,7 +663,6 @@ var Scrollable = DOMComponent.inherit({
     * @param1 element:Node|jQuery
     */
     scrollToElement: function(element, offset) {
-        offset = offset || {};
         var $element = $(element);
         var elementInsideContent = this.$content().find(element).length;
         var elementIsInsideContent = ($element.parents("." + SCROLLABLE_CLASS).length - $element.parents("." + SCROLLABLE_CONTENT_CLASS).length) === 0;
@@ -675,16 +674,17 @@ var Scrollable = DOMComponent.inherit({
         var direction = this.option("direction");
 
         if(direction !== VERTICAL) {
-            scrollPosition.left = this._scrollToElementPosition($element, HORIZONTAL, offset);
+            scrollPosition.left = this.getScrollElementPosition($element, HORIZONTAL, offset);
         }
         if(direction !== HORIZONTAL) {
-            scrollPosition.top = this._scrollToElementPosition($element, VERTICAL, offset);
+            scrollPosition.top = this.getScrollElementPosition($element, VERTICAL, offset);
         }
 
         this.scrollTo(scrollPosition);
     },
 
-    _scrollToElementPosition: function($element, direction, offset) {
+    getScrollElementPosition: function($element, direction, offset) {
+        offset = offset || {};
         var isVertical = direction === VERTICAL;
         var startOffset = (isVertical ? offset.top : offset.left) || 0;
         var endOffset = (isVertical ? offset.bottom : offset.right) || 0;

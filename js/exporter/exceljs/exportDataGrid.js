@@ -1,4 +1,4 @@
-import { isDefined, isObject } from "../../core/utils/type";
+import { isDefined, isString, isObject } from "../../core/utils/type";
 import excelFormatConverter from "../excel_format_converter";
 import { extend } from "../../core/utils/extend";
 
@@ -64,9 +64,21 @@ function exportDataGrid(options) {
 
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
+            let worksheetViewSettings = worksheet.views[0] || {};
+
+            if(component.option("rtlEnabled")) {
+                worksheetViewSettings.rightToLeft = true;
+            }
+
             if(headerRowCount > 0) {
-                _setFrozen(dataProvider, worksheet, cellsRange);
+                if(Object.keys(worksheetViewSettings).indexOf("state") === -1) {
+                    extend(worksheetViewSettings, { state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 });
+                }
                 _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled);
+            }
+
+            if(Object.keys(worksheetViewSettings).length > 0) {
+                worksheet.views = [worksheetViewSettings];
             }
 
             resolve(cellsRange);
@@ -90,6 +102,8 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
                 numberFormat = numberFormat.replace(/&quot;/g, '');
+            } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
+                numberFormat = "@";
             }
 
             _setNumberFormat(excelCell, numberFormat);
@@ -123,12 +137,6 @@ function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilt
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
             worksheet.autoFilter = cellsRange;
         }
-    }
-}
-
-function _setFrozen(dataProvider, worksheet, cellsRange) {
-    if(worksheet.views.length === 0) {
-        worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
     }
 }
 

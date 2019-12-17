@@ -868,6 +868,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.callBase(e);
     },
 
+    _scrollToElement: function($element) {
+        this.callBase($element, this.getFixedColumnsOffset());
+    },
+
     dispose: function() {
         this.callBase.apply(this, arguments);
         clearTimeout(this._fixedScrollTimeout);
@@ -1038,14 +1042,6 @@ module.exports = {
                         }
 
                         return this.callBase(pointsByColumns, currentX, deltaX);
-                    }
-                },
-
-                keyboardNavigation: {
-                    _scrollToElement: function($element) {
-                        var focusedView = this.getFocusedView();
-
-                        this.callBase($element, focusedView && focusedView.getFixedColumnsOffset());
                     }
                 }
             };

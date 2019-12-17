@@ -462,6 +462,20 @@ QUnit.test("scrollToElement", function(assert) {
     assert.roughEqual(scrollable.scrollTop(), $wrapper.height() + $item.outerHeight() - scrollable.clientHeight(), 0.5);
 });
 
+QUnit.test("getScrollElementPosition", function(assert) {
+    const $scrollable = $("#scrollable").height(50);
+    const $item = $("<div>").height(25).appendTo($scrollable);
+
+    $scrollable.dxScrollable({
+        direction: "vertical"
+    });
+
+    const scrollable = $scrollable.dxScrollable("instance");
+    const position = scrollable.getScrollElementPosition($item, "vertical");
+
+    assert.equal(position, $item.offset().top - $scrollable.offset().top - $item.height());
+});
+
 QUnit.test("scrollToElement when item height is greater than scroll height", function(assert) {
     var $scrollable = $("#scrollable").height(50);
     var $wrapper = $scrollable.wrapInner("<div>").children().eq(0);

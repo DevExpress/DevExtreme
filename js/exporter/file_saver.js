@@ -36,7 +36,12 @@ exports.fileSaver = {
     _revokeObjectURLTimeout: 30000,
 
     _getDataUri: function(format, data) {
-        return "data:" + MIME_TYPES[format] + ";base64," + data;
+        const mimeType = this._getMimeType(format);
+        return `data:${mimeType};base64,${data}`;
+    },
+
+    _getMimeType: function(format) {
+        return MIME_TYPES[format] || "application/octet-stream";
     },
 
     _linkDownloader: function(fileName, href) {
@@ -65,13 +70,20 @@ exports.fileSaver = {
     },
 
     _saveByProxy: function(proxyUrl, fileName, format, data) {
-        return this._formDownloader(proxyUrl, fileName, MIME_TYPES[format], data);
+        const contentType = this._getMimeType(format);
+        return this._formDownloader(proxyUrl, fileName, contentType, data);
     },
 
     _winJSBlobSave: function(blob, fileName, format) {
         var savePicker = new Windows.Storage.Pickers.FileSavePicker();
         savePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.documentsLibrary;
-        savePicker.fileTypeChoices.insert(MIME_TYPES[format], ["." + FILE_EXTESIONS[format]]);
+
+        const fileExtension = FILE_EXTESIONS[format];
+        if(fileExtension) {
+            const mimeType = this._getMimeType(format);
+            savePicker.fileTypeChoices.insert(mimeType, ["." + fileExtension]);
+        }
+
         savePicker.suggestedFileName = fileName;
 
         savePicker.pickSaveFileAsync().then(function(file) {
@@ -129,7 +141,10 @@ exports.fileSaver = {
     },
 
     saveAs: function(fileName, format, data, proxyURL, forceProxy) {
-        fileName += "." + FILE_EXTESIONS[format];
+        const fileExtension = FILE_EXTESIONS[format];
+        if(fileExtension) {
+            fileName += "." + fileExtension;
+        }
 
         if(typeUtils.isDefined(proxyURL)) {
             errors.log("W0001", "Export", "proxyURL", "19.2", "This option is no longer required");

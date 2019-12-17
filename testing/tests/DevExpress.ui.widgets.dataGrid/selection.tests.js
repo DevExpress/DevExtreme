@@ -29,7 +29,7 @@ var createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 var setupModule = function() {
-    setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow']);
+    setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'search']);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -2889,6 +2889,71 @@ QUnit.test("get isSelected rows after Select All when dataSource has no key", fu
         { id: 6, value: 'value6' },
         { id: 7, value: 'value7' }
     ]);
+});
+
+// T843852
+QUnit.test("SelectAll should not select all rows if filter by search is applied and grid has many columns", function(assert) {
+    // arrange
+    var data = [],
+        onSelectionChangedSpy = sinon.spy(),
+        columns = ["id"];
+
+    for(let i = 0; i <= 10; i++) {
+        let item = { id: `${i}` };
+
+        columns.push(`field${i}`);
+
+        for(let j = 1; j <= 10; j++) {
+            let field = `field${j}`;
+
+            item[field] = "";
+        }
+
+        data.push(item);
+    }
+
+    this.dataSource = createDataSource(data, { key: "id" });
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    this.applyOptions({
+        columns,
+        loadingTimeout: undefined,
+        selection: {
+            mode: 'multiple',
+            maxFilterLengthInRequest: 10
+        },
+        searchPanel: { visible: true, text: "0" },
+        onSelectionChanged: onSelectionChangedSpy
+    });
+
+    // act
+    this.selectionController.selectAll();
+
+    var onSelectionChangedArgs = onSelectionChangedSpy.args[0][0];
+
+    // assert
+    assert.equal(onSelectionChangedSpy.callCount, 1, "onSelectionChanged call count");
+
+    assert.deepEqual(onSelectionChangedArgs.currentSelectedRowKeys, ["0", "10"], "current selected row keys");
+    assert.deepEqual(onSelectionChangedArgs.selectedRowKeys, ["0", "10"], "selected row keys");
+    assert.equal(onSelectionChangedArgs.selectedRowsData.length, 2, "selected rows data length");
+
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), ["0", "10"], "selected row keys");
+
+    // act
+    this.selectionController.deselectAll();
+
+    onSelectionChangedArgs = onSelectionChangedSpy.args[1][0];
+
+    // assert
+    assert.equal(onSelectionChangedSpy.callCount, 2, "onSelectionChanged call count");
+
+    assert.deepEqual(onSelectionChangedArgs.currentSelectedRowKeys, [], "current selected row keys");
+    assert.deepEqual(onSelectionChangedArgs.selectedRowKeys, [], "selected row keys");
+    assert.equal(onSelectionChangedArgs.selectedRowsData.length, 0, "selected rows data length");
+
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [], "selected row keys");
 });
 
 QUnit.module("Selection when grouping", {

@@ -31,10 +31,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 args.handled = true;
             } else if(args.name === "focusedRowEnabled") {
                 args.handled = true;
-            } else if(args.name === "skipFocusedRowNavigation") {
-                args.handled = true;
             } else if(args.name === "autoNavigateToFocusedRow") {
-                this.option("skipFocusedRowNavigation", !args.value);
                 args.handled = true;
             } else {
                 this.callBase(args);
@@ -159,8 +156,6 @@ exports.FocusController = core.ViewController.inherit((function() {
                 isAutoNavigate = that.option("autoNavigateToFocusedRow"),
                 d = new Deferred();
 
-            that.option("skipFocusedRowNavigation", !needFocusRow);
-
             if(key === undefined || !dataController.dataSource()) {
                 return d.reject().promise();
             }
@@ -189,9 +184,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                             that._navigateTo(key, d, needFocusRow);
                         }).fail(d.reject);
                     }
-                })
-                    .always(() => that.option("skipFocusedRowNavigation", false))
-                    .fail(d.reject);
+                }).fail(d.reject);
             }
 
             return d.promise();
@@ -214,7 +207,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 let rowsView = this.getView("rowsView"),
                     rowIndex = this.getController("data").getRowIndexByKey(key),
                     rowElement = rowsView.getRow(rowIndex);
-                rowsView._scrollToElement(rowElement);
+                rowsView.scrollToElementVertically(rowElement);
             }
         },
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
@@ -255,7 +248,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 } else {
                     let rowIndex = dataController.getRowIndexByKey(key),
                         rowsView = this.getView("rowsView");
-                    rowsView._scrollToElement(rowsView.getRow(rowIndex));
+                    rowsView.scrollToElementVertically(rowsView.getRow(rowIndex));
                 }
 
                 deferred && deferred.resolve(focusedRowIndex);
@@ -355,7 +348,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
                 $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr("tabindex", tabIndex);
-                rowsView._scrollToElement($row);
+                rowsView.scrollToElementVertically($row);
             }
 
             return $row;
@@ -526,10 +519,9 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var isPartialUpdateWithDeleting,
-                        skipFocusedRowNavigation = this.option("skipFocusedRowNavigation");
+                    let isPartialUpdateWithDeleting;
 
-                    if(this.option("focusedRowEnabled") && !skipFocusedRowNavigation && this._dataSource) {
+                    if(this.option("focusedRowEnabled") && this._dataSource) {
                         let isPartialUpdate = e.changeType === "update" && e.repaintChangesOnly;
 
                         isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf("remove") >= 0;
@@ -555,10 +547,12 @@ module.exports = {
                         operationTypes = this._dataSource.operationTypes() || {},
                         focusController = this.getController("focus"),
                         reload = operationTypes.reload,
-                        isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
+                        keyboardController = this.getController("keyboardNavigation"),
+                        isVirtualScrolling = keyboardController._isVirtualScrolling(),
                         focusedRowKey = this.option("focusedRowKey"),
                         paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex,
-                        pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
+                        pagingByRendering = renderingPageIndex !== prevRenderingPageIndex,
+                        isAutoNavigate = this.option("autoNavigateToFocusedRow");
 
                     this._prevPageIndex = pageIndex;
                     this._prevRenderingPageIndex = renderingPageIndex;
@@ -570,8 +564,12 @@ module.exports = {
                             }
                         });
                     } else if(paging) {
-                        if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
-                            focusController._focusRowByIndex();
+                        if(isAutoNavigate) {
+                            if(!isVirtualScrolling && this.option("focusedRowIndex") >= 0) {
+                                focusController._focusRowByIndex();
+                            }
+                        } else {
+                            this.option("focusedRowIndex", -1);
                         }
                     } else if(!pagingByRendering) {
                         focusController._focusRowByKeyOrIndex();
@@ -762,7 +760,7 @@ module.exports = {
                         that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
                             rowElement = that._findRowElementForTabIndex();
                             if(rowElement) {
-                                that._scrollToElement(rowElement);
+                                that.scrollToElementVertically(rowElement);
                                 that.resizeCompleted.remove(that._scrollToFocusOnResize);
                             }
                         };
@@ -792,9 +790,12 @@ module.exports = {
                     return $(this.getRowElement(rowIndex >= 0 ? rowIndex : 0));
                 },
 
-                _scrollToElement: function(element) {
+                scrollToElementVertically: function($element) {
                     const scrollable = this.getScrollable();
-                    scrollable && scrollable.scrollToElement(element);
+                    if(scrollable) {
+                        const position = scrollable.getScrollElementPosition($element, "vertical");
+                        scrollable.scrollTo({ top: position });
+                    }
                 }
             }
         }

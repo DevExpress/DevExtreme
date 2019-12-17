@@ -109,6 +109,11 @@ class FormTestWrapper {
         QUnit.assert.strictEqual(labelText, `${expectedLabel}:`, `label of ${id}`);
     }
 
+    checkEditorInstanceRemoved(id) {
+        const editor = this._form.getEditor(id);
+        QUnit.assert.notOk(!!editor, `editor of ${id} doesn't contains in the Form`);
+    }
+
     checkLabelText(itemSelector, expectedText) {
         const labelText = $(itemSelector).find(".dx-field-item-label-text").text();
         QUnit.assert.strictEqual(labelText, `${expectedText}:`, "text of label");
@@ -233,6 +238,7 @@ module("Group item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setOption("items[1]", "items", [{
             dataField: "dataField3",
@@ -241,6 +247,8 @@ module("Group item. Use the option method", function() {
         testWrapper.checkLayoutManagerRendering([false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:[{itemType: 'group', items: ['dataField2']}]}] }, change visible of first group)`, function() {
@@ -313,6 +321,7 @@ module("Group item. Use the option method", function() {
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkItemElement(".group1", true, "second group item element");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setOption("items[1]", "items", [{
             itemType: "group",
@@ -326,6 +335,8 @@ module("Group item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkItemElement(".group3", true, "third group item element");
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:[{itemType: 'group', items: ['dataField2']}]}] }, change visible of dataField2)`, function() {
@@ -414,6 +425,7 @@ module("Group item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setOption("items[1].items[0]", "items", [{
             dataField: "dataField3",
@@ -422,6 +434,8 @@ module("Group item. Use the option method", function() {
         testWrapper.checkLayoutManagerRendering([false, false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:['dataField2']}, {itemType: 'group', items:['dataField3']}] }, change visible of dataField2 and dataField3)`, function() {
@@ -501,6 +515,7 @@ module("Group item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setOption("items[2]", "items",
             ["dataField21", "dataField22"].map(dataField => ({
@@ -512,6 +527,7 @@ module("Group item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField21", "dataField22"]`);
         testWrapper.checkSimpleItem("dataField21", "", "Data Field 21");
         testWrapper.checkSimpleItem("dataField22", "", "Data Field 22");
+        testWrapper.checkEditorInstanceRemoved("dataField3");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:['dataField2']}, {itemType: 'group', items:['dataField3']}] }, change options of dataField2 and dataField3)`, function() {
@@ -618,6 +634,7 @@ module("Tabbed item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setOption("items[1].tabs[0]", "items", [{
             dataField: "dataField3",
@@ -626,6 +643,8 @@ module("Tabbed item. Use the option method", function() {
         testWrapper.checkLayoutManagerRendering([false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'tabbed', tabs:[{items: 'dataField2'}]}] }, change editorOptions of dataField2)`, function() {
@@ -720,6 +739,7 @@ module("Tabbed item. Use the option method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setOption(id, "items", [{
             dataField: "dataField3",
@@ -728,6 +748,8 @@ module("Tabbed item. Use the option method", function() {
         testWrapper.checkLayoutManagerRendering([false, false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'tabbed', tabs:[{items: [{itemType: 'group', items:['dataField2']}]}]}] }, change editorOptions of dataField2)`, function() {
@@ -905,6 +927,7 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("group1", "items", [{
             dataField: "dataField3",
@@ -913,6 +936,8 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkLayoutManagerRendering([false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:['dataField2']}] }, change items of group, change visible of dataField12)`, function() {
@@ -1018,6 +1043,7 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkItemElement(".group1", true, "second group item element");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("group1", "items", [{
             itemType: "group",
@@ -1031,6 +1057,8 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkItemElement(".group3", true, "third group item element");
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:[{itemType: 'group', items: ['dataField2']}]}] }, change visible of dataField2)`, function() {
@@ -1094,6 +1122,7 @@ module("Group item. Use the itemOption method", function() {
             }))
         );
         testWrapper.checkLayoutManagerRendering([false, false, true], `items: [dataField11, dataField12]`);
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("group2.dataField11", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, false, true], "visible: false");
@@ -1156,6 +1185,7 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("group2", "items", [{
             dataField: "dataField3",
@@ -1164,6 +1194,8 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkLayoutManagerRendering([false, false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:['dataField2']}, {itemType: 'group', items:['dataField3']}] }, change visible of dataField2 and dataField3)`, function() {
@@ -1245,6 +1277,7 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("group2", "items",
             ["dataField21", "dataField22"].map(dataField => ({
@@ -1256,6 +1289,7 @@ module("Group item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField21", "dataField22"]`);
         testWrapper.checkSimpleItem("dataField21", "", "Data Field 21");
         testWrapper.checkSimpleItem("dataField22", "", "Data Field 22");
+        testWrapper.checkEditorInstanceRemoved("dataField3");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'group', items:['dataField2']}, {itemType: 'group', items:['dataField3']}] }, change options of dataField2 and dataField3)`, function() {
@@ -1365,6 +1399,7 @@ module("Tabbed item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("tab1", "items", [{
             dataField: "dataField3",
@@ -1373,6 +1408,8 @@ module("Tabbed item. Use the itemOption method", function() {
         testWrapper.checkLayoutManagerRendering([false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'tabbed', tabs:[{items: 'dataField2'}]}] }, change editorOptions of dataField2)`, function() {
@@ -1470,6 +1507,7 @@ module("Tabbed item. Use the itemOption method", function() {
         testWrapper.checkFormsReRender(`items: ["dataField11", "dataField12"]`);
         testWrapper.checkSimpleItem("dataField11", "", "Data Field 11");
         testWrapper.checkSimpleItem("dataField12", "", "Data Field 12");
+        testWrapper.checkEditorInstanceRemoved("dataField2");
 
         testWrapper.setItemOption("tab1.group1", "items", [{
             dataField: "dataField3",
@@ -1478,6 +1516,8 @@ module("Tabbed item. Use the itemOption method", function() {
         testWrapper.checkLayoutManagerRendering([false, false, true], `items: ["dataField3"]`);
         testWrapper.checkFormsReRender(`items: ["dataField3"]`);
         testWrapper.checkSimpleItem("dataField3", "", "Data Field 3");
+        testWrapper.checkEditorInstanceRemoved("dataField11");
+        testWrapper.checkEditorInstanceRemoved("dataField12");
     });
 
     test(`Set { formData: {'DataField1', 'DataField2'}, items: ['dataField1', {itemType: 'tabbed', tabs:[{items: [{itemType: 'group', items:['dataField2']}]}]}] }, change editorOptions of dataField2")`, function() {

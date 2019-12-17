@@ -13,7 +13,7 @@ import { grep, noop } from './utils/common';
 import { inArray } from './utils/array';
 import { isString, isDefined } from './utils/type';
 import { hasWindow } from '../core/utils/window';
-import { resize as resizeEvent, visibility as visibilityEvents } from '../events/';
+import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
 
 const { abstract } = Component;
 
@@ -249,7 +249,7 @@ const DOMComponent = Component.inherit({
     },
 
     _invalidate() {
-        if(!this._updateLockCount) {
+        if(this._isUpdateAllowed()) {
             throw errors.Error('E0007');
         }
 
@@ -407,19 +407,20 @@ const DOMComponent = Component.inherit({
             .join(' ');
     },
 
-    endUpdate() {
-        const requireRender = !this._initializing && !this._initialized;
-
-        this.callBase.apply(this, arguments);
-
-        if(!this._updateLockCount) {
-            if(requireRender) {
-                this._renderComponent();
-            } else if(this._requireRefresh) {
-                this._requireRefresh = false;
-                this._refresh();
-            }
+    _updateDOMComponent(renderRequired) {
+        if(renderRequired) {
+            this._renderComponent();
+        } else if(this._requireRefresh) {
+            this._requireRefresh = false;
+            this._refresh();
         }
+    },
+
+    endUpdate() {
+        const renderRequired = this._isInitializingRequired();
+
+        this.callBase();
+        this._isUpdateAllowed() && this._updateDOMComponent(renderRequired);
     },
 
     $element() {
@@ -482,13 +483,11 @@ const DOMComponent = Component.inherit({
         const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
 
         templates.forEach(({ name, template }) => {
-            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
-            this._setOptionSilent(`integrationOptions.templates.${name}`, template);
+            this._options.silent(`integrationOptions.templates.${name}`, template);
         });
 
         if(anonymousTemplateMeta.name && !anonymousTemplate) {
-            // TODO: we should use `silent` instead of `this._setOptionSilent` method here
-            this._setOptionSilent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
+            this._options.silent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
         }
     },
 
@@ -513,7 +512,7 @@ const DOMComponent = Component.inherit({
     },
 
     _saveTemplate(name, template) {
-        this._setOptionSilent(
+        this._setOptionWithoutOptionChange(
             'integrationOptions.templates.' + name,
             this._templateManager._createTemplate(template)
         );

@@ -2,7 +2,7 @@ const { test } = QUnit;
 
 import FileItemsController from "ui/file_manager/file_items_controller";
 import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
-import { createUploaderFiles } from "../../../helpers/fileManagerHelpers.js";
+import { createUploaderFiles, createUploadInfo, stubFileReader } from "../../../helpers/fileManagerHelpers.js";
 import { isString } from "core/utils/type";
 
 const moduleConfig = {
@@ -25,6 +25,8 @@ const moduleConfig = {
     }
 
 };
+
+const stubFileReaderInProvider = controller => stubFileReader(controller._fileProvider);
 
 QUnit.module("FileItemsController tests", moduleConfig, () => {
 
@@ -398,6 +400,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             maxUploadFileSize: 400000
         });
 
+        stubFileReaderInProvider(this.controller);
+
         const files = createUploaderFiles(2);
 
         const done1 = assert.async();
@@ -406,10 +410,10 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
         this.controller
             .getDirectories(currentDir)
-            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => this.controller.uploadFileChunk(files[0], createUploadInfo(files[0]), currentDir.fileItem))
             .then(() => {
                 done1();
-                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
                         return error.errorId === ErrorCode.MaxFileSizeExceeded;
@@ -426,6 +430,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             allowedFileExtensions: [ ".tiff" ]
         });
 
+        stubFileReaderInProvider(this.controller);
+
         const files = createUploaderFiles(2);
         files[0].name = "Test file 1.tiff";
 
@@ -435,10 +441,10 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
         this.controller
             .getDirectories(currentDir)
-            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => this.controller.uploadFileChunk(files[0], createUploadInfo(files[0]), currentDir.fileItem))
             .then(() => {
                 done1();
-                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
                         return error.errorId === ErrorCode.WrongFileExtension;

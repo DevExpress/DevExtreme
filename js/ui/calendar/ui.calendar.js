@@ -186,24 +186,6 @@ var Calendar = Editor.inherit({
             * @hidden true
             * @action
             */
-
-            /**
-            * @name dxCalendarCellTemplate
-            * @type object
-            */
-            /**
-            * @name dxCalendarCellTemplate.text
-            * @type String
-            */
-            /**
-            * @name dxCalendarCellTemplate.date
-            * @type Date
-            */
-            /**
-            * @name dxCalendarCellTemplate.view
-            * @type String
-            * @acceptValues 'month'|'year'|'decade'|'century'
-            */
         });
     },
 
@@ -352,15 +334,14 @@ var Calendar = Editor.inherit({
             maxDate = this._getMaxDate(),
             minDate = this._getMinDate(),
             zoomLevel = this.option("zoomLevel"),
-            currentDateInRange = inRange(currentDate, minDate, maxDate),
+            isCurrentDateInRange = inRange(currentDate, minDate, maxDate),
             dateForward = new Date(currentDate),
             dateBackward = new Date(currentDate),
-            dateForwardInRange = currentDateInRange,
-            dateBackwardInRange = currentDateInRange;
+            isDateForwardInRange = isCurrentDateInRange,
+            isDateBackwardInRange = isCurrentDateInRange,
+            step = offset || 1;
 
-        while((!offset && (dateForwardInRange || dateBackwardInRange)) || (offset && dateForwardInRange)) {
-            var step = offset || 1;
-
+        while((!offset && (isDateForwardInRange || isDateBackwardInRange)) || (offset && isDateForwardInRange)) {
             switch(zoomLevel) {
                 case ZOOM_LEVEL.MONTH:
                     dateForward.setDate(dateForward.getDate() + step);
@@ -380,18 +361,18 @@ var Calendar = Editor.inherit({
                     break;
             }
 
-            if(!this._view.isDateDisabled(dateForward)) {
+            if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }
 
-            if(!offset && !this._view.isDateDisabled(dateBackward)) {
+            if(isDateBackwardInRange && !offset && !this._view.isDateDisabled(dateBackward)) {
                 currentDate = dateBackward;
                 break;
             }
 
-            dateBackwardInRange = inRange(dateBackward, minDate, maxDate);
-            dateForwardInRange = inRange(dateForward, minDate, maxDate);
+            isDateBackwardInRange = inRange(dateBackward, minDate, maxDate);
+            isDateForwardInRange = inRange(dateForward, minDate, maxDate);
         }
 
         this.option("currentDate", currentDate);
