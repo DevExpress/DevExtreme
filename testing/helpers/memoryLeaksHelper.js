@@ -3,7 +3,7 @@
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             root.memoryLeaksHelper = module.exports = factory(
-                require("jquery")
+                require('jquery')
             );
         });
     } else {
@@ -16,8 +16,8 @@
     var exports = {};
 
     exports.createTestNode = function() {
-        var testNode = $("<div />");
-        testNode.appendTo("body");
+        var testNode = $('<div />');
+        testNode.appendTo('body');
         return testNode;
     };
 
@@ -26,22 +26,22 @@
     };
 
     exports.getAllPossibleEventTargets = function() {
-        return $(document).find("*").addBack().add(window);
+        return $(document).find('*').addBack().add(window);
     };
 
     exports.getAllEventSubscriptions = function() {
         var eventSubscriptions = {},
             anEvent;
         exports.getAllPossibleEventTargets().each(function() {
-            for(anEvent in $._data(this, "events")) {
-                eventSubscriptions[anEvent] = $._data(this, "events")[anEvent].length;
+            for(anEvent in $._data(this, 'events')) {
+                eventSubscriptions[anEvent] = $._data(this, 'events')[anEvent].length;
             }
         });
         return eventSubscriptions;
     };
 
     exports.compareDomElements = function(originalDomElements, newDomElements, ignorePatterns) {
-        var errorMessage = "",
+        var errorMessage = '',
             addedElements = {},
             isIgnored;
 
@@ -49,7 +49,7 @@
             isIgnored = function(element) {
                 var result = false;
                 $.each(ignorePatterns, function(tagName, pattern) {
-                    result = result || ((element.tagName || "").toLowerCase() === tagName.toLowerCase() && pattern.test(element.innerHTML));
+                    result = result || ((element.tagName || '').toLowerCase() === tagName.toLowerCase() && pattern.test(element.innerHTML));
                 });
                 return result;
             };
@@ -66,14 +66,14 @@
         $.each(originalDomElements, function() { diffElement(this, -1); });
         $.each(addedElements, function(index, value) {
             if(value) {
-                errorMessage += (value > 0 ? '+' : '') + value + ' ' + index + "\n";
+                errorMessage += (value > 0 ? '+' : '') + value + ' ' + index + '\n';
             }
         });
         return errorMessage;
     };
 
     exports.componentCanBeTriviallyInstantiated = function(componentName) {
-        return $.inArray(componentName, ["dxDashboardViewer"]) === -1;
+        return $.inArray(componentName, ['dxDashboardViewer']) === -1;
     };
 
     exports.getComponentOptions = function(componentName) {

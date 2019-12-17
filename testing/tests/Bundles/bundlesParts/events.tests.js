@@ -1,36 +1,36 @@
-var $ = require("jquery");
-var special = require("../../../helpers/eventHelper.js").special;
+var $ = require('jquery');
+var special = require('../../../helpers/eventHelper.js').special;
 
-QUnit.test("events", function(assert) {
+QUnit.test('events', function(assert) {
 
     $.each([
-        "dxclick",
+        'dxclick',
 
-        "dxcontextmenu",
+        'dxcontextmenu',
 
-        "dxdblclick",
+        'dxdblclick',
 
-        "dxdrag",
+        'dxdrag',
 
-        "dxhold",
+        'dxhold',
 
-        "dxhoverstart",
-        "dxhoverend",
+        'dxhoverstart',
+        'dxhoverend',
 
-        "dxpointerdown",
-        "dxpointerup",
-        "dxpointermove",
-        "dxpointercancel",
-        "dxpointerenter",
-        "dxpointerleave",
-        "dxpointerover",
-        "dxpointerout",
+        'dxpointerdown',
+        'dxpointerup',
+        'dxpointermove',
+        'dxpointercancel',
+        'dxpointerenter',
+        'dxpointerleave',
+        'dxpointerover',
+        'dxpointerout',
 
-        "dxswipe",
+        'dxswipe',
 
-        "dxtransform"
+        'dxtransform'
     ], function(_, namespace) {
-        assert.ok(special[namespace], namespace + " event present");
+        assert.ok(special[namespace], namespace + ' event present');
     });
 
 });

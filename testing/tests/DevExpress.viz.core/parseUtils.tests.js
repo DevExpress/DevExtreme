@@ -1,8 +1,8 @@
-var noop = require("core/utils/common").noop,
-    config = require("core/config"),
-    parseUtils = require("viz/components/parse_utils");
+var noop = require('core/utils/common').noop,
+    config = require('core/config'),
+    parseUtils = require('viz/components/parse_utils');
 
-QUnit.module("valueType");
+QUnit.module('valueType');
 
 QUnit.test('check type = "numeric"', function(assert) {
     var result = parseUtils.correctValueType('numeric');
@@ -133,7 +133,7 @@ QUnit.test('datetime parser with ISO8601 without forceIsoDateParsing', function(
 
     try {
         var parser = parseUtils.getParser('datetime');
-        var stringDate = "2017-03-02T11:12:30";
+        var stringDate = '2017-03-02T11:12:30';
 
         var result = parser(stringDate);
 
@@ -150,7 +150,7 @@ QUnit.test('datetime parser with ISO8601 with forceIsoDateParsing', function(ass
 
     try {
         var parser = parseUtils.getParser('datetime');
-        var stringDate = "2017-03-02T11:12:30";
+        var stringDate = '2017-03-02T11:12:30';
 
         var result = parser(stringDate);
 

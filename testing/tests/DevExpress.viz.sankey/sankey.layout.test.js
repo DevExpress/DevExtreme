@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    common = require("./commonParts/common.js"),
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    common = require('./commonParts/common.js'),
     environment = common.environment,
     createSankey = common.createSankey,
-    titleModule = require("viz/core/title"),
-    exportModule = require("viz/core/export"),
-    dxSankey = require("viz/sankey/sankey");
+    titleModule = require('viz/core/title'),
+    exportModule = require('viz/core/export'),
+    dxSankey = require('viz/sankey/sankey');
 
 dxSankey.addPlugin(titleModule.plugin);
 dxSankey.addPlugin(exportModule.plugin);
@@ -13,8 +13,8 @@ dxSankey.addPlugin(exportModule.plugin);
 function stubTitle() {
     var that = this;
     that.title = new vizMocks.Title();
-    that.title.stub("measure").returns([200, 50]);
-    sinon.stub(titleModule, "Title", function() {
+    that.title.stub('measure').returns([200, 50]);
+    sinon.stub(titleModule, 'Title', function() {
         return that.title;
     });
 }
@@ -22,8 +22,8 @@ function stubTitle() {
 function stubExport() {
     var that = this;
     that.export = new vizMocks.ExportMenu();
-    that.export.stub("measure").returns([50, 50]);
-    sinon.stub(exportModule, "ExportMenu", function() {
+    that.export.stub('measure').returns([50, 50]);
+    sinon.stub(exportModule, 'ExportMenu', function() {
         return that.export;
     });
 }
@@ -33,10 +33,10 @@ function restore() {
     exportModule.ExportMenu.restore();
 }
 
-QUnit.module("Layout Sankey element", $.extend({}, environment, {
+QUnit.module('Layout Sankey element', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        $("#test-container").css({
+        $('#test-container').css({
             width: 1000,
             height: 600
         });
@@ -44,9 +44,9 @@ QUnit.module("Layout Sankey element", $.extend({}, environment, {
         stubTitle.call(this);
         stubExport.call(this);
 
-        this.title.stub("layoutOptions").returns({
-            horizontalAlignment: "center",
-            verticalAlignment: "top"
+        this.title.stub('layoutOptions').returns({
+            horizontalAlignment: 'center',
+            verticalAlignment: 'top'
         });
 
     },
@@ -56,30 +56,30 @@ QUnit.module("Layout Sankey element", $.extend({}, environment, {
     }
 }));
 
-QUnit.test("Tilte with legend and labels", function(assert) {
+QUnit.test('Tilte with legend and labels', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-        title: "Title"
+        title: 'Title'
     });
 
-    assert.deepEqual(this.title.move.lastCall.args[0], [400, 0, 600, 50], "title rect");
+    assert.deepEqual(this.title.move.lastCall.args[0], [400, 0, 600, 50], 'title rect');
 });
 
-QUnit.test("Title with export button", function(assert) {
-    this.export.stub("layoutOptions").returns({ horizontalAlignment: "right", verticalAlignment: "top", weak: true });
+QUnit.test('Title with export button', function(assert) {
+    this.export.stub('layoutOptions').returns({ horizontalAlignment: 'right', verticalAlignment: 'top', weak: true });
 
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
-    assert.deepEqual(this.title.move.lastCall.args[0], [400, 0, 600, 50], "title rect");
-    assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], "export rect");
+    assert.deepEqual(this.title.move.lastCall.args[0], [400, 0, 600, 50], 'title rect');
+    assert.deepEqual(this.export.move.lastCall.args[0], [950, 0, 1000, 50], 'export rect');
 });
 
-QUnit.module("Adaptive Layout", $.extend({}, environment, {
+QUnit.module('Adaptive Layout', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        $("#test-container").css({
+        $('#test-container').css({
             width: 800,
             height: 600
         });
@@ -87,8 +87,8 @@ QUnit.module("Adaptive Layout", $.extend({}, environment, {
         stubTitle.call(this);
         stubExport.call(this);
 
-        this.title.stub("measure").returns([150, 120]);
-        this.export.stub("measure").returns([100, 150]);
+        this.title.stub('measure').returns([150, 120]);
+        this.export.stub('measure').returns([100, 150]);
     },
 
     afterEach: function() {
@@ -97,10 +97,10 @@ QUnit.module("Adaptive Layout", $.extend({}, environment, {
     }
 }));
 
-QUnit.test("hide title", function(assert) {
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
+QUnit.test('hide title', function(assert) {
+    this.title.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top'
     });
     createSankey({
         adaptiveLayout: {
@@ -115,10 +115,10 @@ QUnit.test("hide title", function(assert) {
 });
 
 
-QUnit.test("hide export menu", function(assert) {
-    this.export.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
+QUnit.test('hide export menu', function(assert) {
+    this.export.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top'
     });
 
     createSankey({
@@ -132,14 +132,14 @@ QUnit.test("hide export menu", function(assert) {
     assert.ok(this.export.freeSpace.called);
 });
 
-QUnit.test("hide pair elements: title and export", function(assert) {
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
+QUnit.test('hide pair elements: title and export', function(assert) {
+    this.title.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top'
     });
-    this.export.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
+    this.export.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top',
         weak: true
     });
 

@@ -1,10 +1,10 @@
-import registerComponent from "../../core/component_registrator";
-import { extend } from "../../core/utils/extend";
-import Guid from "../../core/guid";
-import readyCallbacks from "../../core/utils/ready_callbacks";
-import Widget from "../widget/ui.widget";
-import { initAction, disposeAction } from "./speed_dial_main_item";
-import { getSwatchContainer } from "../widget/swatch_container";
+import registerComponent from '../../core/component_registrator';
+import { extend } from '../../core/utils/extend';
+import Guid from '../../core/guid';
+import readyCallbacks from '../../core/utils/ready_callbacks';
+import Widget from '../widget/ui.widget';
+import { initAction, disposeAction } from './speed_dial_main_item';
+import { getSwatchContainer } from '../widget/swatch_container';
 
 const ready = readyCallbacks.add;
 
@@ -16,7 +16,7 @@ class SpeedDialAction extends Widget {
             * @type string
             * @default ""
             */
-            icon: "",
+            icon: '',
 
             /**
             * @name dxSpeedDialActionOptions.onClick
@@ -36,7 +36,7 @@ class SpeedDialAction extends Widget {
             * @type string
             * @default ""
             */
-            label: "",
+            label: '',
 
             /**
             * @name dxSpeedDialActionOptions.visible
@@ -80,9 +80,9 @@ class SpeedDialAction extends Widget {
             hoverStateEnabled: true,
             animation: {
                 show: {
-                    type: "pop",
+                    type: 'pop',
                     duration: 200,
-                    easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
                     from: {
                         scale: 0,
                         opacity: 0
@@ -93,9 +93,9 @@ class SpeedDialAction extends Widget {
                     }
                 },
                 hide: {
-                    type: "pop",
+                    type: 'pop',
                     duration: 200,
-                    easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
                     from: {
                         scale: 1,
                         opacity: 1
@@ -111,15 +111,15 @@ class SpeedDialAction extends Widget {
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "onClick":
-            case "icon":
-            case "label":
-            case "visible":
-            case "index":
+            case 'onClick':
+            case 'icon':
+            case 'label':
+            case 'visible':
+            case 'index':
                 initAction(this);
                 break;
-            case "animation":
-            case "id":
+            case 'animation':
+            case 'id':
                 break;
             default:
                 super._optionChanged(args);
@@ -141,7 +141,7 @@ class SpeedDialAction extends Widget {
     }
 }
 
-registerComponent("dxSpeedDialAction", SpeedDialAction);
+registerComponent('dxSpeedDialAction', SpeedDialAction);
 
 module.exports = SpeedDialAction;
 

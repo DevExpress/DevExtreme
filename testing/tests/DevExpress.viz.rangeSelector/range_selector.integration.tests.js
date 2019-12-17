@@ -1,44 +1,44 @@
-import $ from "jquery";
-import "viz/range_selector/range_selector";
-import { DataSource } from "data/data_source/data_source";
+import $ from 'jquery';
+import 'viz/range_selector/range_selector';
+import { DataSource } from 'data/data_source/data_source';
 
 QUnit.testStart(function() {
     var markup =
         '<div id="container" style="width: 300px; height: 150px"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("Render", function(hook) {
+QUnit.module('Render', function(hook) {
     hook.beforeEach(function() {
-        this.rangeSelector = $("#container").dxRangeSelector({
+        this.rangeSelector = $('#container').dxRangeSelector({
             scale: {
                 startValue: 1,
                 endValue: 11
             }
-        }).dxRangeSelector("instance");
+        }).dxRangeSelector('instance');
     });
 
-    QUnit.test("Check scale sharp", function(assert) {
+    QUnit.test('Check scale sharp', function(assert) {
         var lastTickIndex = this.rangeSelector._axis._axis._majorTicks.length - 1;
-        assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharp, "v");
+        assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharp, 'v');
         assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharpDirection, 1);
-        assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharp, "h");
+        assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharp, 'h');
         assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharpDirection, 1);
     });
 });
 
-QUnit.module("Value", function(hook) {
+QUnit.module('Value', function(hook) {
     hook.beforeEach(function() {
-        this.rangeSelector = $("#container").dxRangeSelector({
+        this.rangeSelector = $('#container').dxRangeSelector({
             scale: {
                 startValue: 1,
                 endValue: 11
             }
-        }).dxRangeSelector("instance");
+        }).dxRangeSelector('instance');
     });
 
-    QUnit.test("value option on widget starting", function(assert) {
+    QUnit.test('value option on widget starting', function(assert) {
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
     });
 
@@ -47,19 +47,19 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
     });
 
-    QUnit.test("Range when value is changed", function(assert) {
-        this.rangeSelector.option("value", [3, 7]);
+    QUnit.test('Range when value is changed', function(assert) {
+        this.rangeSelector.option('value', [3, 7]);
 
         assert.deepEqual(this.rangeSelector.getValue(), [3, 7]);
     });
 
-    QUnit.test("Reset selected range", function(assert) {
-        this.rangeSelector.option("value", [3, 5]);
+    QUnit.test('Reset selected range', function(assert) {
+        this.rangeSelector.option('value', [3, 5]);
         this.rangeSelector.setValue([]);
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
     });
 
-    QUnit.test("Reset selected range. incidentOccurred is not called", function(assert) {
+    QUnit.test('Reset selected range. incidentOccurred is not called', function(assert) {
         var incidentOccurred = sinon.spy();
         this.rangeSelector.option({ onIncidentOccurred: incidentOccurred });
         this.rangeSelector.setValue([]);
@@ -67,29 +67,29 @@ QUnit.module("Value", function(hook) {
         assert.equal(incidentOccurred.callCount, 0);
     });
 
-    QUnit.test("Set value with event", function(assert) {
+    QUnit.test('Set value with event', function(assert) {
         var valueChanged = sinon.spy();
-        this.rangeSelector.on("valueChanged", valueChanged);
+        this.rangeSelector.on('valueChanged', valueChanged);
 
         this.rangeSelector.setValue([1, 2], { isEvent: true });
 
         assert.deepEqual(valueChanged.lastCall.args[0].event, { isEvent: true });
     });
 
-    QUnit.test("range when value and scale are changed", function(assert) {
-        this.rangeSelector.option("value", [3, 7]);
-        this.rangeSelector.option("scale", { startValue: 1, endValue: 11 });
+    QUnit.test('range when value and scale are changed', function(assert) {
+        this.rangeSelector.option('value', [3, 7]);
+        this.rangeSelector.option('scale', { startValue: 1, endValue: 11 });
 
         assert.deepEqual(this.rangeSelector.getValue(), [3, 7]);
     });
 
-    QUnit.test("range after resize", function(assert) {
-        this.rangeSelector.option("value", [3, 5]);
-        this.rangeSelector.option("size", { width: 100, height: 300 });
+    QUnit.test('range after resize', function(assert) {
+        this.rangeSelector.option('value', [3, 5]);
+        this.rangeSelector.option('size', { width: 100, height: 300 });
         assert.deepEqual(this.rangeSelector.getValue(), [3, 5]);
     });
 
-    QUnit.test("range on setValue and update scale, value option", function(assert) {
+    QUnit.test('range on setValue and update scale, value option', function(assert) {
         this.rangeSelector.option({ value: [2, 3] });
         this.rangeSelector.setValue([4, 8]);
         this.rangeSelector.option({ scale: { startValue: 1, endValue: 10 } });
@@ -97,7 +97,7 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(this.rangeSelector.getValue(), [4, 8]);
     });
 
-    QUnit.test("refresh range after update data source", function(assert) {
+    QUnit.test('refresh range after update data source', function(assert) {
         this.rangeSelector.option({ dataSource: [{ arg: 0 }, { arg: 30 }], scale: { startValue: null, endValue: null } });
         var value = this.rangeSelector.getValue();
 
@@ -105,7 +105,7 @@ QUnit.module("Value", function(hook) {
         assert.roughEqual(value[1], 30, 1E-8);
     });
 
-    QUnit.test("set range with dataSource", function(assert) {
+    QUnit.test('set range with dataSource', function(assert) {
         this.rangeSelector.option({
             dataSource: [{ arg: 0 }, { arg: 30 }],
             value: [5, 10]
@@ -113,41 +113,41 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(this.rangeSelector.getValue(), [5, 10]);
     });
 
-    QUnit.test("set one of the value", function(assert) {
+    QUnit.test('set one of the value', function(assert) {
         this.rangeSelector.option({
             value: [undefined, 10]
         });
         assert.deepEqual(this.rangeSelector.getValue(), [1, 10]);
     });
 
-    QUnit.test("parse custom value option, invalid value", function(assert) {
+    QUnit.test('parse custom value option, invalid value', function(assert) {
         var spy = sinon.spy();
         this.rangeSelector.option({
             scale: {
-                valueType: "numeric",
+                valueType: 'numeric',
             },
-            value: ["a", "b"],
+            value: ['a', 'b'],
             onIncidentOccurred: spy
         });
 
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
         assert.equal(spy.callCount, 1);
-        assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
-        assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
+        assert.deepEqual(spy.getCall(0).args[0].target.id, 'E2203');
+        assert.deepEqual(spy.getCall(0).args[0].target.text, 'The range you are trying to set is invalid');
     });
 
-    QUnit.test("parse custom value option, with dataSource, valid value", function(assert) {
+    QUnit.test('parse custom value option, with dataSource, valid value', function(assert) {
         var spy = sinon.spy();
         this.rangeSelector.option({
             dataSource: this.dataSource,
             scale: {
-                valueType: "numeric",
+                valueType: 'numeric',
             },
-            value: ["2", "5"],
+            value: ['2', '5'],
             chart: {
                 series: [
-                    { argumentField: "x", valueField: "y1" },
-                    { argumentField: "x", valueField: "y2" }
+                    { argumentField: 'x', valueField: 'y1' },
+                    { argumentField: 'x', valueField: 'y2' }
                 ]
             },
             onIncidentOccurred: spy
@@ -157,18 +157,18 @@ QUnit.module("Value", function(hook) {
         assert.ok(!spy.called);
     });
 
-    QUnit.test("parse custom value option, with dataSource, invalid value", function(assert) {
+    QUnit.test('parse custom value option, with dataSource, invalid value', function(assert) {
         var spy = sinon.spy();
         this.rangeSelector.option({
             dataSource: this.dataSource,
             scale: {
-                valueType: "numeric",
+                valueType: 'numeric',
             },
-            value: ["a", "b"],
+            value: ['a', 'b'],
             chart: {
                 series: [
-                    { argumentField: "x", valueField: "y1" },
-                    { argumentField: "x", valueField: "y2" }
+                    { argumentField: 'x', valueField: 'y1' },
+                    { argumentField: 'x', valueField: 'y2' }
                 ]
             },
             onIncidentOccurred: spy
@@ -176,11 +176,11 @@ QUnit.module("Value", function(hook) {
 
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
         assert.equal(spy.callCount, 1);
-        assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
-        assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
+        assert.deepEqual(spy.getCall(0).args[0].target.id, 'E2203');
+        assert.deepEqual(spy.getCall(0).args[0].target.text, 'The range you are trying to set is invalid');
     });
 
-    QUnit.test("Warnings rising on using setValue method", function(assert) {
+    QUnit.test('Warnings rising on using setValue method', function(assert) {
         var spy = sinon.spy();
         this.rangeSelector.option({
             onIncidentOccurred: spy
@@ -188,44 +188,44 @@ QUnit.module("Value", function(hook) {
 
         this.rangeSelector.setValue([1, 12]);
 
-        assert.strictEqual(spy.getCall(0).args[0].target.id, "E2203");
+        assert.strictEqual(spy.getCall(0).args[0].target.id, 'E2203');
     });
 
-    QUnit.test("Set value using visualRange object", function(assert) {
+    QUnit.test('Set value using visualRange object', function(assert) {
         this.rangeSelector.setValue({ startValue: 5, endValue: 7 });
         assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
-        assert.deepEqual(this.rangeSelector.option("value"), [5, 7]);
+        assert.deepEqual(this.rangeSelector.option('value'), [5, 7]);
     });
 
-    QUnit.test("Set value via option using visualRange object", function(assert) {
-        this.rangeSelector.option("value", { startValue: 5, endValue: 7 });
+    QUnit.test('Set value via option using visualRange object', function(assert) {
+        this.rangeSelector.option('value', { startValue: 5, endValue: 7 });
         assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
-        assert.deepEqual(this.rangeSelector.option("value"), { startValue: 5, endValue: 7 });
+        assert.deepEqual(this.rangeSelector.option('value'), { startValue: 5, endValue: 7 });
     });
 
-    QUnit.test("Change value when options is set by object", function(assert) {
-        this.rangeSelector.option("value", { startValue: 5, endValue: 7 });
+    QUnit.test('Change value when options is set by object', function(assert) {
+        this.rangeSelector.option('value', { startValue: 5, endValue: 7 });
         this.rangeSelector.setValue([8, 9]);
         assert.deepEqual(this.rangeSelector.getValue(), [8, 9]);
-        assert.deepEqual(this.rangeSelector.option("value"), { startValue: 8, endValue: 9 });
+        assert.deepEqual(this.rangeSelector.option('value'), { startValue: 8, endValue: 9 });
     });
 
-    QUnit.test("Set value using visualRange only length field in visualRange object", function(assert) {
+    QUnit.test('Set value using visualRange only length field in visualRange object', function(assert) {
         this.rangeSelector.setValue({ length: 2 });
         assert.deepEqual(this.rangeSelector.getValue(), [9, 11]);
     });
 
-    QUnit.test("Set value using visualRange object with start and length", function(assert) {
+    QUnit.test('Set value using visualRange object with start and length', function(assert) {
         this.rangeSelector.setValue({ startValue: 5, length: 2 });
         assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
     });
 
-    QUnit.test("Set value using visualRange object with end and length", function(assert) {
+    QUnit.test('Set value using visualRange object with end and length', function(assert) {
         this.rangeSelector.setValue({ endValue: 5, length: 2 });
         assert.deepEqual(this.rangeSelector.getValue(), [3, 5]);
     });
 
-    QUnit.test("Set value using visualRange object with start and length. datetime", function(assert) {
+    QUnit.test('Set value using visualRange object with start and length. datetime', function(assert) {
         this.rangeSelector.option({
             scale: {
                 startValue: new Date(2018, 0, 1),
@@ -236,11 +236,11 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(this.rangeSelector.getValue(), [new Date(2022, 0, 1), new Date(2024, 0, 1)]);
     });
 
-    QUnit.test("Set value using visualRange only length field in visualRange object. logarithmic", function(assert) {
+    QUnit.test('Set value using visualRange only length field in visualRange object. logarithmic', function(assert) {
         this.rangeSelector.option({
             value: { length: 2 },
             scale: {
-                type: "logarithmic",
+                type: 'logarithmic',
                 startValue: 100,
                 endValue: 100000
             }
@@ -248,18 +248,18 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(this.rangeSelector.getValue(), [1000, 100000]);
     });
 
-    QUnit.test("Set value using visualRange only length field in visualRange object. discrete", function(assert) {
+    QUnit.test('Set value using visualRange only length field in visualRange object. discrete', function(assert) {
         this.rangeSelector.option({
             value: { length: 2 },
             scale: {
-                type: "discrete",
-                categories: ["a", "b", "c", "d"]
+                type: 'discrete',
+                categories: ['a', 'b', 'c', 'd']
             }
         });
-        assert.deepEqual(this.rangeSelector.getValue(), ["c", "d"]);
+        assert.deepEqual(this.rangeSelector.getValue(), ['c', 'd']);
     });
 
-    QUnit.test("Value can't go out from scale", function(assert) {
+    QUnit.test('Value can\'t go out from scale', function(assert) {
         this.rangeSelector.option({
             scale:
             {
@@ -275,39 +275,39 @@ QUnit.module("Value", function(hook) {
     });
 });
 
-QUnit.module("T465345, onOptionChanged", function(hook) {
+QUnit.module('T465345, onOptionChanged', function(hook) {
     hook.beforeEach(function() {
         this.optionChanged = sinon.spy();
-        this.rangeSelector = $("#container").dxRangeSelector({
+        this.rangeSelector = $('#container').dxRangeSelector({
             onOptionChanged: this.optionChanged,
             scale: {
                 startValue: 1,
                 endValue: 11
             }
-        }).dxRangeSelector("instance");
+        }).dxRangeSelector('instance');
     });
 
-    QUnit.test("Triggered when 'value' changed", function(assert) {
-        this.rangeSelector.option("value", [5, 8]);
+    QUnit.test('Triggered when \'value\' changed', function(assert) {
+        this.rangeSelector.option('value', [5, 8]);
 
         assert.ok(this.optionChanged.called);
     });
 
-    QUnit.test("Triggered when 'setValue' method was called", function(assert) {
+    QUnit.test('Triggered when \'setValue\' method was called', function(assert) {
         this.rangeSelector.setValue([5, 8]);
 
         assert.ok(this.optionChanged.called);
     });
 });
 
-QUnit.module("T413379, 'value' option", function(hook) {
+QUnit.module('T413379, \'value\' option', function(hook) {
     hook.beforeEach(function() {
         this.incidentOccurred = sinon.spy();
-        this.rangeSelector = $("#container").dxRangeSelector({
+        this.rangeSelector = $('#container').dxRangeSelector({
             chart: {
                 series: [{
-                    argumentField: "arg",
-                    valueField: "val"
+                    argumentField: 'arg',
+                    valueField: 'val'
                 }]
             },
             dataSource: [{
@@ -323,17 +323,17 @@ QUnit.module("T413379, 'value' option", function(hook) {
             },
             value: [4, 5],
             onIncidentOccurred: this.incidentOccurred
-        }).dxRangeSelector("instance");
+        }).dxRangeSelector('instance');
     });
 
-    QUnit.test("Reset value twice times without updating of the dataSource", function(assert) {
+    QUnit.test('Reset value twice times without updating of the dataSource', function(assert) {
         this.rangeSelector.option({ value: [null, null], chart: { series: null } });
         this.rangeSelector.option({ value: [null, null], chart: { series: null } });
 
         assert.equal(this.incidentOccurred.callCount, 0);
     });
 
-    QUnit.test("Reset value and dataSource", function(assert) {
+    QUnit.test('Reset value and dataSource', function(assert) {
         this.rangeSelector.option({ dataSource: null, value: [null, null], chart: { series: null } });
         this.rangeSelector.option({ dataSource: null, value: [null, null], chart: { series: null } });
 
@@ -341,10 +341,10 @@ QUnit.module("T413379, 'value' option", function(hook) {
     });
 });
 
-QUnit.module("onValueChanged event", function(assert) {
-    QUnit.test("Not triggered on widget creation", function(assert) {
+QUnit.module('onValueChanged event', function(assert) {
+    QUnit.test('Not triggered on widget creation', function(assert) {
         var called = false;
-        $("#container").dxRangeSelector({
+        $('#container').dxRangeSelector({
             scale: { startValue: 1, endValue: 9 },
             value: { startValue: 2, endValue: 3 },
             onValueChanged: function() {
@@ -355,13 +355,13 @@ QUnit.module("onValueChanged event", function(assert) {
         assert.strictEqual(called, false);
     });
 
-    QUnit.test("Triggered on widget update after widget has been created with empty data", function(assert) {
+    QUnit.test('Triggered on widget update after widget has been created with empty data', function(assert) {
         var valueChanged = sinon.spy();
-        $("#container").dxRangeSelector({
+        $('#container').dxRangeSelector({
             onValueChanged: valueChanged
         });
 
-        $("#container").dxRangeSelector({
+        $('#container').dxRangeSelector({
             scale: { startValue: 1, endValue: 2 }
         });
 
@@ -369,9 +369,9 @@ QUnit.module("onValueChanged event", function(assert) {
     });
 
 
-    QUnit.test("Triggered only once on axis' date marker click", function(assert) {
+    QUnit.test('Triggered only once on axis\' date marker click', function(assert) {
         var valueChanged = sinon.spy();
-        $("#container").width(600).dxRangeSelector({
+        $('#container').width(600).dxRangeSelector({
             scale: {
                 startValue: new Date(2011, 1, 1),
                 endValue: new Date(2011, 6, 1)
@@ -379,15 +379,15 @@ QUnit.module("onValueChanged event", function(assert) {
             onValueChanged: valueChanged
         });
 
-        $("#container .dxrs-range-selector-elements path:nth-last-child(3)").trigger("dxpointerdown", { eventArgs: true });
+        $('#container .dxrs-range-selector-elements path:nth-last-child(3)').trigger('dxpointerdown', { eventArgs: true });
 
         assert.strictEqual(valueChanged.callCount, 1);
-        assert.strictEqual(valueChanged.lastCall.args[0].event.type, "dxpointerdown");
+        assert.strictEqual(valueChanged.lastCall.args[0].event.type, 'dxpointerdown');
     });
 
-    QUnit.test("Triggered with value and previousValue", function(assert) {
+    QUnit.test('Triggered with value and previousValue', function(assert) {
         var valueChanged = sinon.spy();
-        $("#container").width(600).dxRangeSelector({
+        $('#container').width(600).dxRangeSelector({
             scale: {
                 startValue: 1,
                 endValue: 11
@@ -395,19 +395,19 @@ QUnit.module("onValueChanged event", function(assert) {
             onValueChanged: valueChanged
         });
 
-        $("#container").dxRangeSelector({
+        $('#container').dxRangeSelector({
             value: [4, 5]
         });
 
-        assert.deepEqual(valueChanged.lastCall.args[0].value, [4, 5], "value");
-        assert.deepEqual(valueChanged.lastCall.args[0].previousValue, [1, 11], "previousValue");
+        assert.deepEqual(valueChanged.lastCall.args[0].value, [4, 5], 'value');
+        assert.deepEqual(valueChanged.lastCall.args[0].previousValue, [1, 11], 'previousValue');
         assert.strictEqual(valueChanged.lastCall.args[0].event, undefined);
     });
 
-    QUnit.test("onValueChanged not raised on start when dataSource and value are used ", function(assert) {
+    QUnit.test('onValueChanged not raised on start when dataSource and value are used ', function(assert) {
         var eventHandler = sinon.stub();
 
-        $("#container").dxRangeSelector({
+        $('#container').dxRangeSelector({
             dataSource: [{ arg: 0 }, { arg: 30 }],
             value: [3, 10],
             onValueChanged: eventHandler,
@@ -418,40 +418,40 @@ QUnit.module("onValueChanged event", function(assert) {
     });
 
     // T717643
-    QUnit.test("Do not rise valueChanged handler on change scale range", function(assert) {
+    QUnit.test('Do not rise valueChanged handler on change scale range', function(assert) {
         // arrange
         var eventHandler = sinon.stub();
-        var rangeSelector = $("#container").dxRangeSelector({
+        var rangeSelector = $('#container').dxRangeSelector({
             scale: {
                 startValue: 0,
                 endValue: 40000000
             },
             onValueChanged: eventHandler
-        }).dxRangeSelector("instance");
+        }).dxRangeSelector('instance');
 
 
-        rangeSelector.option("scale.endValue", 25000);
+        rangeSelector.option('scale.endValue', 25000);
         eventHandler.reset();
 
         // act
-        rangeSelector.option("scale.endValue", 40000000);
+        rangeSelector.option('scale.endValue', 40000000);
 
         // assert
         assert.strictEqual(eventHandler.callCount, 0);
     });
 });
 
-QUnit.module("Begin/end update functionality", function() {
+QUnit.module('Begin/end update functionality', function() {
     // T372059, T369460
-    QUnit.test("Update is began during processing option change and ended some time after it", function(assert) {
-        var widget = $("#container").dxRangeSelector().dxRangeSelector("instance");
-        widget.option("onDrawn", function() {
-            widget.option("onDrawn", null); // Only event after "dataSource" update is required for test scenario.
+    QUnit.test('Update is began during processing option change and ended some time after it', function(assert) {
+        var widget = $('#container').dxRangeSelector().dxRangeSelector('instance');
+        widget.option('onDrawn', function() {
+            widget.option('onDrawn', null); // Only event after "dataSource" update is required for test scenario.
             widget.beginUpdate();
         });
-        widget.option("dataSource", [{ arg: 10, val: 1 }, { arg: 20, val: 2 }]);
+        widget.option('dataSource', [{ arg: 10, val: 1 }, { arg: 20, val: 2 }]);
 
-        widget.option("value", [11, 12]);
+        widget.option('value', [11, 12]);
         widget.endUpdate();
 
         assert.deepEqual(widget.getValue(), [11, 12]);
@@ -459,24 +459,24 @@ QUnit.module("Begin/end update functionality", function() {
 
     // "drawn" itself is not the point - the idea is that if during processing a change some option (whose corresponding change precedes the change
     // being processed) is changed then only that preceding change should be processed during next step.
-    QUnit.test("Option changes are processed once when a preceding option is changed during processing succeeding option change", function(assert) {
-        var widget = $("#container").dxRangeSelector().dxRangeSelector("instance"),
+    QUnit.test('Option changes are processed once when a preceding option is changed during processing succeeding option change', function(assert) {
+        var widget = $('#container').dxRangeSelector().dxRangeSelector('instance'),
             count = 0;
-        widget.on("drawn", function() {
-            widget.option("theme", "generic.dark");
+        widget.on('drawn', function() {
+            widget.option('theme', 'generic.dark');
             ++count;
         });
 
-        widget.option("scale", { startValue: 0, endValue: 10 });
+        widget.option('scale', { startValue: 0, endValue: 10 });
 
-        assert.strictEqual(count, 2, "one because of 'scale' and one because of 'theme'");
+        assert.strictEqual(count, 2, 'one because of \'scale\' and one because of \'theme\'');
     });
 });
 
-QUnit.module("Misc");
+QUnit.module('Misc');
 
-QUnit.test("Range selector with aggregation", function(assert) {
-    var rangeSelector = $("#container").dxRangeSelector({
+QUnit.test('Range selector with aggregation', function(assert) {
+    var rangeSelector = $('#container').dxRangeSelector({
         dataSource: [{
             arg: 0.5,
             val: 1
@@ -492,13 +492,13 @@ QUnit.test("Range selector with aggregation", function(assert) {
                 }
             }]
         }
-    }).dxRangeSelector("instance");
+    }).dxRangeSelector('instance');
 
     assert.deepEqual(rangeSelector.getValue(), [0, 2]);
 });
 
-QUnit.test("Range selector with aggregation when dataSource is set after widget creation", function(assert) {
-    var rangeSelector = $("#container").dxRangeSelector({
+QUnit.test('Range selector with aggregation when dataSource is set after widget creation', function(assert) {
+    var rangeSelector = $('#container').dxRangeSelector({
         dataSource: [],
         chart: {
             series: [{
@@ -510,7 +510,7 @@ QUnit.test("Range selector with aggregation when dataSource is set after widget 
         scale: {
             aggregationInterval: 10
         }
-    }).dxRangeSelector("instance");
+    }).dxRangeSelector('instance');
 
     // act
     rangeSelector.option({
@@ -526,8 +526,8 @@ QUnit.test("Range selector with aggregation when dataSource is set after widget 
     assert.deepEqual(rangeSelector.getValue(), [50, 90]);
 });
 
-QUnit.test("Range selector with stacked series", function(assert) {
-    var rangeSelector = $("#container").dxRangeSelector({
+QUnit.test('Range selector with stacked series', function(assert) {
+    var rangeSelector = $('#container').dxRangeSelector({
         dataSource: [{
             arg: 0.5,
             val1: 1,
@@ -540,43 +540,43 @@ QUnit.test("Range selector with stacked series", function(assert) {
 
         chart: {
             series: [{
-                type: "stackedbar",
-                valueField: "val1"
+                type: 'stackedbar',
+                valueField: 'val1'
             }, {
-                type: "stackedbar",
-                valueField: "val2"
+                type: 'stackedbar',
+                valueField: 'val2'
             }]
         }
-    }).dxRangeSelector("instance");
+    }).dxRangeSelector('instance');
 
     assert.deepEqual(rangeSelector.getValue(), [0.5, 2.5]);
 });
 
-QUnit.module("selectedRangeUpdateMode", {
+QUnit.module('selectedRangeUpdateMode', {
     createRangeSelector: function(options) {
-        return $("#container").dxRangeSelector(options).dxRangeSelector("instance");
+        return $('#container').dxRangeSelector(options).dxRangeSelector('instance');
     }
 });
 
-QUnit.test("Auto mode. Reset behavior", function(assert) {
+QUnit.test('Auto mode. Reset behavior', function(assert) {
     var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
     var rangeSelector = this.createRangeSelector({
-        selectedRangeUpdateMode: "auto",
+        selectedRangeUpdateMode: 'auto',
         dataSource: dataSource,
         chart: { series: [{}] }
     });
 
     dataSource.push({ arg: 11, val: 11 });
 
-    rangeSelector.option("dataSource", dataSource);
+    rangeSelector.option('dataSource', dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [1, 11]);
 });
 
-QUnit.test("Auto mode. Shift behavior", function(assert) {
+QUnit.test('Auto mode. Shift behavior', function(assert) {
     var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
     var rangeSelector = this.createRangeSelector({
-        selectedRangeUpdateMode: "auto",
+        selectedRangeUpdateMode: 'auto',
         dataSource: dataSource,
         chart: { series: [{}] }
     });
@@ -584,15 +584,15 @@ QUnit.test("Auto mode. Shift behavior", function(assert) {
     rangeSelector.setValue([5, 10]);
     dataSource.push({ arg: 11, val: 11 });
 
-    rangeSelector.option("dataSource", dataSource);
+    rangeSelector.option('dataSource', dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [6, 11]);
 });
 
-QUnit.test("Auto mode. Keep behavior", function(assert) {
+QUnit.test('Auto mode. Keep behavior', function(assert) {
     var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
     var rangeSelector = this.createRangeSelector({
-        selectedRangeUpdateMode: "auto",
+        selectedRangeUpdateMode: 'auto',
         dataSource: dataSource,
         chart: { series: [{}] }
     });
@@ -600,30 +600,30 @@ QUnit.test("Auto mode. Keep behavior", function(assert) {
     rangeSelector.setValue([5, 7]);
     dataSource.push({ arg: 11, val: 11 });
 
-    rangeSelector.option("dataSource", dataSource);
+    rangeSelector.option('dataSource', dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [5, 7]);
 });
 
-QUnit.test("Reset mode", function(assert) {
+QUnit.test('Reset mode', function(assert) {
     var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
     var rangeSelector = this.createRangeSelector({
-        selectedRangeUpdateMode: "reset",
+        selectedRangeUpdateMode: 'reset',
         dataSource: dataSource,
         chart: { series: [{}] }
     });
 
     dataSource.push({ arg: 11, val: 11 });
 
-    rangeSelector.option("dataSource", dataSource);
+    rangeSelector.option('dataSource', dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [1, 11]);
 });
 
-QUnit.test("Shift mode", function(assert) {
+QUnit.test('Shift mode', function(assert) {
     var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
     var rangeSelector = this.createRangeSelector({
-        selectedRangeUpdateMode: "shift",
+        selectedRangeUpdateMode: 'shift',
         dataSource: dataSource,
         chart: { series: [{}] }
     });
@@ -631,15 +631,15 @@ QUnit.test("Shift mode", function(assert) {
     rangeSelector.setValue([5, 10]);
     dataSource.push({ arg: 11, val: 11 });
 
-    rangeSelector.option("dataSource", dataSource);
+    rangeSelector.option('dataSource', dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [6, 11]);
 });
 
-QUnit.test("Keep mode", function(assert) {
+QUnit.test('Keep mode', function(assert) {
     var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
     var rangeSelector = this.createRangeSelector({
-        selectedRangeUpdateMode: "keep",
+        selectedRangeUpdateMode: 'keep',
         dataSource: dataSource,
         chart: { series: [{}] }
     });
@@ -647,24 +647,24 @@ QUnit.test("Keep mode", function(assert) {
     rangeSelector.setValue([5, 7]);
     dataSource.push({ arg: 11, val: 11 });
 
-    rangeSelector.option("dataSource", dataSource);
+    rangeSelector.option('dataSource', dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [5, 7]);
 });
 
-QUnit.test("There is no error when date scale and bar series", function(assert) {
+QUnit.test('There is no error when date scale and bar series', function(assert) {
     var rangeSelector = this.createRangeSelector({
         scale: {
             valueType: 'datetime',
             type: 'discrete'
         },
         dataSource: [{
-            arg: "2017-01-01",
+            arg: '2017-01-01',
             value: 4
         }],
         chart: {
             series: {
-                type: "bar"
+                type: 'bar'
             }
         }
     });
@@ -673,7 +673,7 @@ QUnit.test("There is no error when date scale and bar series", function(assert) 
 });
 
 // T696409
-QUnit.test("RS with DX dataSource", function(assert) {
+QUnit.test('RS with DX dataSource', function(assert) {
     var done = assert.async(1),
         rangeSelector = this.createRangeSelector({
             chart: { series: [{}] },
@@ -698,11 +698,11 @@ QUnit.test("RS with DX dataSource", function(assert) {
         });
 });
 
-QUnit.test("Scale from dataSource. calculate linearThreshold", function(assert) {
+QUnit.test('Scale from dataSource. calculate linearThreshold', function(assert) {
     var rangeSelector = this.createRangeSelector({
         dataSource: [{ arg: -100, val: 1 }, { arg: -0.0001, val: 1 }, { arg: 1000, val: 1 }],
         scale: {
-            type: "logarithmic"
+            type: 'logarithmic'
         }
     });
 

@@ -1,14 +1,14 @@
-var Class = require("../core/class"),
+var Class = require('../core/class'),
     abstract = Class.abstract,
-    EventsMixin = require("../core/events_mixin"),
-    each = require("../core/utils/iterator").each,
-    errorsModule = require("./errors"),
-    dataUtils = require("./utils"),
-    compileGetter = require("../core/utils/data").compileGetter,
-    storeHelper = require("./store_helper"),
+    EventsMixin = require('../core/events_mixin'),
+    each = require('../core/utils/iterator').each,
+    errorsModule = require('./errors'),
+    dataUtils = require('./utils'),
+    compileGetter = require('../core/utils/data').compileGetter,
+    storeHelper = require('./store_helper'),
     queryByOptions = storeHelper.queryByOptions,
-    Deferred = require("../core/utils/deferred").Deferred,
-    noop = require("../core/utils/common").noop,
+    Deferred = require('../core/utils/deferred').Deferred,
+    noop = require('../core/utils/common').noop,
 
     storeImpl = {};
 
@@ -34,7 +34,7 @@ var Store = Class.inherit({
                  * @type_function_param1 result:Array<any>
                  * @action
                  */
-                "onLoaded",
+                'onLoaded',
 
                 /**
                  * @name StoreOptions.onLoading
@@ -42,7 +42,7 @@ var Store = Class.inherit({
                  * @type_function_param1 loadOptions:LoadOptions
                  * @action
                  */
-                "onLoading",
+                'onLoading',
 
                 /**
                  * @name StoreOptions.onInserted
@@ -51,7 +51,7 @@ var Store = Class.inherit({
                  * @type_function_param2 key:object|string|number
                  * @action
                  */
-                "onInserted",
+                'onInserted',
 
                 /**
                  * @name StoreOptions.onInserting
@@ -59,7 +59,7 @@ var Store = Class.inherit({
                  * @type_function_param1 values:object
                  * @action
                  */
-                "onInserting",
+                'onInserting',
 
                 /**
                  * @name StoreOptions.onUpdated
@@ -68,7 +68,7 @@ var Store = Class.inherit({
                  * @type_function_param2 values:object
                  * @action
                  */
-                "onUpdated",
+                'onUpdated',
 
                 /**
                  * @name StoreOptions.onUpdating
@@ -77,7 +77,7 @@ var Store = Class.inherit({
                  * @type_function_param2 values:object
                  * @action
                  */
-                "onUpdating",
+                'onUpdating',
 
                 /**
                  * @name StoreOptions.onPush
@@ -85,7 +85,7 @@ var Store = Class.inherit({
                  * @type_function_param1 changes:Array<any>
                  * @action
                  */
-                "onPush",
+                'onPush',
 
                 /**
                  * @name StoreOptions.onRemoved
@@ -93,7 +93,7 @@ var Store = Class.inherit({
                  * @type_function_param1 key:object|string|number
                  * @action
                  */
-                "onRemoved",
+                'onRemoved',
 
                 /**
                  * @name StoreOptions.onRemoving
@@ -101,21 +101,21 @@ var Store = Class.inherit({
                  * @type_function_param1 key:object|string|number
                  * @action
                  */
-                "onRemoving",
+                'onRemoving',
 
                 /**
                  * @name StoreOptions.onModified
                  * @type function
                  * @action
                  */
-                "onModified",
+                'onModified',
 
                 /**
                  * @name StoreOptions.onModifying
                  * @type function
                  * @action
                  */
-                "onModifying"
+                'onModifying'
             ],
             function(_, optionName) {
                 if(optionName in options) {
@@ -167,7 +167,7 @@ var Store = Class.inherit({
 
     _requireKey: function() {
         if(!this.key()) {
-            throw errorsModule.errors.Error("E4005");
+            throw errorsModule.errors.Error('E4005');
         }
     },
     /**
@@ -186,10 +186,10 @@ var Store = Class.inherit({
 
         options = options || {};
 
-        this.fireEvent("loading", [options]);
+        this.fireEvent('loading', [options]);
 
         return this._withLock(this._loadImpl(options)).done(function(result) {
-            that.fireEvent("loaded", [result, options]);
+            that.fireEvent('loaded', [result, options]);
         });
     },
 
@@ -256,12 +256,12 @@ var Store = Class.inherit({
     insert: function(values) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("inserting", [values]);
+        that.fireEvent('modifying');
+        that.fireEvent('inserting', [values]);
 
         return that._addFailHandlers(that._insertImpl(values).done(function(callbackValues, callbackKey) {
-            that.fireEvent("inserted", [callbackValues, callbackKey]);
-            that.fireEvent("modified");
+            that.fireEvent('inserted', [callbackValues, callbackKey]);
+            that.fireEvent('modified');
         }));
     },
 
@@ -277,12 +277,12 @@ var Store = Class.inherit({
     update: function(key, values) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("updating", [key, values]);
+        that.fireEvent('modifying');
+        that.fireEvent('updating', [key, values]);
 
         return that._addFailHandlers(that._updateImpl(key, values).done(function() {
-            that.fireEvent("updated", [key, values]);
-            that.fireEvent("modified");
+            that.fireEvent('updated', [key, values]);
+            that.fireEvent('modified');
         }));
     },
 
@@ -295,7 +295,7 @@ var Store = Class.inherit({
     */
     push: function(changes) {
         this._pushImpl(changes);
-        this.fireEvent("push", [changes]);
+        this.fireEvent('push', [changes]);
     },
 
     _pushImpl: noop,
@@ -309,12 +309,12 @@ var Store = Class.inherit({
     remove: function(key) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("removing", [key]);
+        that.fireEvent('modifying');
+        that.fireEvent('removing', [key]);
 
         return that._addFailHandlers(that._removeImpl(key).done(function(callbackKey) {
-            that.fireEvent("removed", [callbackKey]);
-            that.fireEvent("modified");
+            that.fireEvent('removed', [callbackKey]);
+            that.fireEvent('modified');
         }));
     },
 
@@ -327,7 +327,7 @@ var Store = Class.inherit({
 
 Store.create = function(alias, options) {
     if(!(alias in storeImpl)) {
-        throw errorsModule.errors.Error("E4020", alias);
+        throw errorsModule.errors.Error('E4020', alias);
     }
 
     return new storeImpl[alias](options);

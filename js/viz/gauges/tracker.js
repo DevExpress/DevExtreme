@@ -1,26 +1,26 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    Class = require("../../core/class"),
-    domAdapter = require("../../core/dom_adapter"),
-    ready = require("../../core/utils/ready_callbacks").add,
-    wheelEvent = require("../../events/core/wheel"),
+var eventsEngine = require('../../events/core/events_engine'),
+    Class = require('../../core/class'),
+    domAdapter = require('../../core/dom_adapter'),
+    ready = require('../../core/utils/ready_callbacks').add,
+    wheelEvent = require('../../events/core/wheel'),
 
     TOOLTIP_HIDE_DELAY = 100;
 
 var Tracker = Class.inherit({
     ctor: function(parameters) {
         ///#DEBUG
-        var debug = require("../../core/utils/console").debug;
+        var debug = require('../../core/utils/console').debug;
         debug.assertParam(parameters, 'parameters');
         debug.assertParam(parameters.renderer, 'parameters.renderer');
         debug.assertParam(parameters.container, 'parameters.container');
         ///#ENDDEBUG
         var that = this;
-        that._element = parameters.renderer.g().attr({ 'class': 'dxg-tracker', stroke: 'none', "stroke-width": 0, fill: '#000000', opacity: 0.0001 }).linkOn(parameters.container, { name: "tracker", after: "peripheral" });
+        that._element = parameters.renderer.g().attr({ 'class': 'dxg-tracker', stroke: 'none', 'stroke-width': 0, fill: '#000000', opacity: 0.0001 }).linkOn(parameters.container, { name: 'tracker', after: 'peripheral' });
 
         that._showTooltipCallback = function() {
             var target = that._tooltipEvent.target,
-                data_target = target["gauge-data-target"],
-                data_info = target["gauge-data-info"];
+                data_target = target['gauge-data-target'],
+                data_info = target['gauge-data-info'];
 
             that._targetEvent = null; //  Internal state must be reset strictly BEFORE callback is invoked
             if(that._tooltipTarget !== target && that._callbacks['tooltip-show'](data_target, data_info)) {
@@ -65,7 +65,7 @@ var Tracker = Class.inherit({
     },
 
     attach: function(element, target, info) {
-        element.data({ "gauge-data-target": target, "gauge-data-info": info }).append(this._element);
+        element.data({ 'gauge-data-target': target, 'gauge-data-info': info }).append(this._element);
         return this;
     },
 

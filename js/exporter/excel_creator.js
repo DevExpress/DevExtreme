@@ -1,54 +1,54 @@
-import Class from "../core/class";
-import { getWindow } from "../core/utils/window";
-import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from "../core/utils/type";
-import { extend } from "../core/utils/extend";
-import errors from "../ui/widget/ui.errors";
-import stringUtils from "../core/utils/string";
-import JSZip from "jszip";
-import fileSaver from "./file_saver";
-import excelFormatConverter from "./excel_format_converter";
-import ExcelFile from "./excel/excel.file";
-import { Deferred } from "../core/utils/deferred";
+import Class from '../core/class';
+import { getWindow } from '../core/utils/window';
+import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import errors from '../ui/widget/ui.errors';
+import stringUtils from '../core/utils/string';
+import JSZip from 'jszip';
+import fileSaver from './file_saver';
+import excelFormatConverter from './excel_format_converter';
+import ExcelFile from './excel/excel.file';
+import { Deferred } from '../core/utils/deferred';
 
-const XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-const GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>";
-const SINGLE_SHEET_PR_XML = "<sheetPr/>";
-const BASE_STYLE_XML2 = "<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\">" +
-                     "<color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/>" +
-                     "</bottom></border></borders><cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>";
-const OPEN_XML_FORMAT_URL = "http://schemas.openxmlformats.org";
-const RELATIONSHIP_PART_NAME = "rels";
-const XL_FOLDER_NAME = "xl";
-const WORKBOOK_FILE_NAME = "workbook.xml";
-const CONTENTTYPES_FILE_NAME = "[Content_Types].xml";
-const SHAREDSTRING_FILE_NAME = "sharedStrings.xml";
-const STYLE_FILE_NAME = "styles.xml";
-const WORKSHEETS_FOLDER = "worksheets";
-const WORKSHEET_FILE_NAME = "sheet1.xml";
+const XML_TAG = '<?xml version="1.0" encoding="utf-8"?>';
+const GROUP_SHEET_PR_XML = '<sheetPr><outlinePr summaryBelow="0"/></sheetPr>';
+const SINGLE_SHEET_PR_XML = '<sheetPr/>';
+const BASE_STYLE_XML2 = '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin">' +
+                     '<color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/>' +
+                     '</bottom></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>';
+const OPEN_XML_FORMAT_URL = 'http://schemas.openxmlformats.org';
+const RELATIONSHIP_PART_NAME = 'rels';
+const XL_FOLDER_NAME = 'xl';
+const WORKBOOK_FILE_NAME = 'workbook.xml';
+const CONTENTTYPES_FILE_NAME = '[Content_Types].xml';
+const SHAREDSTRING_FILE_NAME = 'sharedStrings.xml';
+const STYLE_FILE_NAME = 'styles.xml';
+const WORKSHEETS_FOLDER = 'worksheets';
+const WORKSHEET_FILE_NAME = 'sheet1.xml';
 const WORKSHEET_HEADER_XML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
         'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
         'mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">';
 const VALID_TYPES = {
     // §18.18.11, ST_CellType (Cell Type)
-    "boolean": "b",
-    "date": "d",
-    "number": "n",
-    "string": "s"
+    'boolean': 'b',
+    'date': 'd',
+    'number': 'n',
+    'string': 's'
 };
 const EXCEL_START_TIME = Date.UTC(1899, 11, 30);
 const DAYS_COUNT_BEFORE_29_FEB_1900 = 60;
 
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 const UNSUPPORTED_FORMAT_MAPPING = {
-    quarter: "shortDate",
-    quarterAndYear: "shortDate",
-    minute: "longTime",
-    millisecond: "longTime"
+    quarter: 'shortDate',
+    quarterAndYear: 'shortDate',
+    minute: 'longTime',
+    millisecond: 'longTime'
 };
 
 var ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
-        var result = "<" + tagName,
+        var result = '<' + tagName,
             i,
             length = attributes.length,
             attr;
@@ -56,11 +56,11 @@ var ExcelCreator = Class.inherit({
         for(i = 0; i < length; i++) {
             attr = attributes[i];
             if(attr.value !== undefined) {
-                result = result + " " + attr.name + "=\"" + attr.value + "\"";
+                result = result + ' ' + attr.name + '="' + attr.value + '"';
             }
         }
 
-        return isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
+        return isDefined(content) ? result + '>' + content + '</' + tagName + '>' : result + ' />';
     },
 
     _convertToExcelCellRef: function(zeroBasedRowIndex, zeroBasedCellIndex) {
@@ -102,18 +102,18 @@ var ExcelCreator = Class.inherit({
 
     _tryGetExcelCellDataType: function(object) {
         if(isDefined(object)) {
-            if((typeof object === "number")) {
+            if((typeof object === 'number')) {
                 if(isFinite(object)) {
-                    return VALID_TYPES["number"];
+                    return VALID_TYPES['number'];
                 } else {
-                    return VALID_TYPES["string"];
+                    return VALID_TYPES['string'];
                 }
             } else if(isString(object)) {
-                return VALID_TYPES["string"];
+                return VALID_TYPES['string'];
             } else if(isDate(object)) {
-                return VALID_TYPES["number"];
+                return VALID_TYPES['number'];
             } else if(isBoolean(object)) {
-                return VALID_TYPES["boolean"];
+                return VALID_TYPES['boolean'];
             }
         }
     },
@@ -142,7 +142,7 @@ var ExcelCreator = Class.inherit({
         currency = newFormat.currency;
         dataType = newFormat.dataType;
 
-        if(isDefined(format) && dataType === "date") {
+        if(isDefined(format) && dataType === 'date') {
             format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
         }
 
@@ -289,7 +289,7 @@ var ExcelCreator = Class.inherit({
                     });
 
                     if(modifiedExcelCell.value !== value) {
-                        if(typeof modifiedExcelCell.value !== typeof value || (typeof modifiedExcelCell.value === "number") && !isFinite(modifiedExcelCell.value)) {
+                        if(typeof modifiedExcelCell.value !== typeof value || (typeof modifiedExcelCell.value === 'number') && !isFinite(modifiedExcelCell.value)) {
                             const cellDataType = this._tryGetExcelCellDataType(modifiedExcelCell.value);
                             if(isDefined(cellDataType)) {
                                 cellData.type = cellDataType;
@@ -365,9 +365,9 @@ var ExcelCreator = Class.inherit({
                 font: fonts[Number(!!style.bold)],
                 numberFormat,
                 alignment: {
-                    vertical: "top",
+                    vertical: 'top',
                     wrapText: !!style.wrapText,
-                    horizontal: style.alignment || "left"
+                    horizontal: style.alignment || 'left'
                 }
             });
         });
@@ -379,48 +379,48 @@ var ExcelCreator = Class.inherit({
     },
 
     _createXMLRelationships: function(xmlRelationships) {
-        return this._getXMLTag("Relationships", [{
-            name: "xmlns",
-            value: OPEN_XML_FORMAT_URL + "/package/2006/relationships"
+        return this._getXMLTag('Relationships', [{
+            name: 'xmlns',
+            value: OPEN_XML_FORMAT_URL + '/package/2006/relationships'
         }], xmlRelationships);
     },
 
     _createXMLRelationship: function(id, type, target) {
-        return this._getXMLTag("Relationship", [
-            { name: "Id", value: "rId" + id },
-            { name: "Type", value: OPEN_XML_FORMAT_URL + "/officeDocument/2006/relationships/" + type },
-            { name: "Target", value: target }
+        return this._getXMLTag('Relationship', [
+            { name: 'Id', value: 'rId' + id },
+            { name: 'Type', value: OPEN_XML_FORMAT_URL + '/officeDocument/2006/relationships/' + type },
+            { name: 'Target', value: target }
         ]);
     },
 
     _getWorkbookContent: function() {
-        var content = "<bookViews><workbookView xWindow=\"0\" yWindow=\"0\" windowWidth=\"0\" windowHeight=\"0\"/>" +
-                      "</bookViews><sheets><sheet name=\"Sheet\" sheetId=\"1\" r:id=\"rId1\" /></sheets><definedNames>" +
-                      "<definedName name=\"_xlnm.Print_Titles\" localSheetId=\"0\">Sheet!$1:$1</definedName>" +
-                      "<definedName name=\"_xlnm._FilterDatabase\" hidden=\"0\" localSheetId=\"0\">Sheet!$A$1:$F$6332</definedName></definedNames>";
-        return XML_TAG + this._getXMLTag("workbook", [{
-            name: "xmlns:r",
-            value: OPEN_XML_FORMAT_URL + "/officeDocument/2006/relationships"
+        var content = '<bookViews><workbookView xWindow="0" yWindow="0" windowWidth="0" windowHeight="0"/>' +
+                      '</bookViews><sheets><sheet name="Sheet" sheetId="1" r:id="rId1" /></sheets><definedNames>' +
+                      '<definedName name="_xlnm.Print_Titles" localSheetId="0">Sheet!$1:$1</definedName>' +
+                      '<definedName name="_xlnm._FilterDatabase" hidden="0" localSheetId="0">Sheet!$A$1:$F$6332</definedName></definedNames>';
+        return XML_TAG + this._getXMLTag('workbook', [{
+            name: 'xmlns:r',
+            value: OPEN_XML_FORMAT_URL + '/officeDocument/2006/relationships'
         }, {
-            name: "xmlns",
-            value: OPEN_XML_FORMAT_URL + "/spreadsheetml/2006/main"
+            name: 'xmlns',
+            value: OPEN_XML_FORMAT_URL + '/spreadsheetml/2006/main'
         }], content);
     },
 
     _getContentTypesContent: function() {
-        return XML_TAG + "<Types xmlns=\"" + OPEN_XML_FORMAT_URL + "/package/2006/content-types\"><Default Extension=\"rels\" " +
-                         "ContentType=\"application/vnd.openxmlformats-package.relationships+xml\" /><Default Extension=\"xml\" " +
-                         "ContentType=\"application/xml\" /><Override PartName=\"/xl/worksheets/sheet1.xml\" " +
-                         "ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\" />" +
-                         "<Override PartName=\"/xl/styles.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml\" />" +
-                         "<Override PartName=\"/xl/sharedStrings.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml\" />" +
-                         "<Override PartName=\"/xl/workbook.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\" /></Types>";
+        return XML_TAG + '<Types xmlns="' + OPEN_XML_FORMAT_URL + '/package/2006/content-types"><Default Extension="rels" ' +
+                         'ContentType="application/vnd.openxmlformats-package.relationships+xml" /><Default Extension="xml" ' +
+                         'ContentType="application/xml" /><Override PartName="/xl/worksheets/sheet1.xml" ' +
+                         'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" />' +
+                         '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml" />' +
+                         '<Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml" />' +
+                         '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" /></Types>';
     },
 
     _generateStylesXML: function() {
         var that = this,
             folder = that._zip.folder(XL_FOLDER_NAME),
-            XML = "";
+            XML = '';
 
         XML = XML + this._excelFile.generateNumberFormatsXml();
         XML = XML + this._excelFile.generateFontsXml();
@@ -429,13 +429,13 @@ var ExcelCreator = Class.inherit({
 
         XML = XML + this._excelFile.generateCellFormatsXml();
 
-        XML = XML + that._getXMLTag("cellStyles", [{ name: "count", value: 1 }], that._getXMLTag("cellStyle", [
-            { name: "name", value: "Normal" },
-            { name: "xfId", value: 0 },
-            { name: "builtinId", value: 0 }
+        XML = XML + that._getXMLTag('cellStyles', [{ name: 'count', value: 1 }], that._getXMLTag('cellStyle', [
+            { name: 'name', value: 'Normal' },
+            { name: 'xfId', value: 0 },
+            { name: 'builtinId', value: 0 }
         ]));
 
-        XML = XML_TAG + that._getXMLTag("styleSheet", [{ name: "xmlns", value: OPEN_XML_FORMAT_URL + "/spreadsheetml/2006/main" }], XML);
+        XML = XML_TAG + that._getXMLTag('styleSheet', [{ name: 'xmlns', value: OPEN_XML_FORMAT_URL + '/spreadsheetml/2006/main' }], XML);
         folder.file(STYLE_FILE_NAME, XML);
 
         that._styleArray = [];
@@ -448,13 +448,13 @@ var ExcelCreator = Class.inherit({
             sharedStringXml = XML_TAG;
 
         for(stringIndex = 0; stringIndex < stringsLength; stringIndex++) {
-            this._stringArray[stringIndex] = this._getXMLTag("si", [], this._getXMLTag("t", [], this._stringArray[stringIndex]));
+            this._stringArray[stringIndex] = this._getXMLTag('si', [], this._getXMLTag('t', [], this._stringArray[stringIndex]));
         }
-        sharedStringXml = sharedStringXml + this._getXMLTag("sst", [
-            { name: "xmlns", value: OPEN_XML_FORMAT_URL + "/spreadsheetml/2006/main" },
-            { name: "count", value: this._stringArray.length },
-            { name: "uniqueCount", value: this._stringArray.length }
-        ], this._stringArray.join(""));
+        sharedStringXml = sharedStringXml + this._getXMLTag('sst', [
+            { name: 'xmlns', value: OPEN_XML_FORMAT_URL + '/spreadsheetml/2006/main' },
+            { name: 'count', value: this._stringArray.length },
+            { name: 'uniqueCount', value: this._stringArray.length }
+        ], this._stringArray.join(''));
 
         folder.file(SHAREDSTRING_FILE_NAME, sharedStringXml);
 
@@ -462,38 +462,38 @@ var ExcelCreator = Class.inherit({
     },
 
     _getPaneXML: function() {
-        var attributes = [{ name: "activePane", value: "bottomLeft" }, { name: "state", value: "frozen" }],
+        var attributes = [{ name: 'activePane', value: 'bottomLeft' }, { name: 'state', value: 'frozen' }],
             frozenArea = this._dataProvider.getFrozenArea();
 
-        if(!(frozenArea.x || frozenArea.y)) return "";
+        if(!(frozenArea.x || frozenArea.y)) return '';
 
         if(frozenArea.x) {
-            attributes.push({ name: "xSplit", value: frozenArea.x });
+            attributes.push({ name: 'xSplit', value: frozenArea.x });
         }
         if(frozenArea.y) {
-            attributes.push({ name: "ySplit", value: frozenArea.y });
+            attributes.push({ name: 'ySplit', value: frozenArea.y });
         }
 
-        attributes.push({ name: "topLeftCell", value: this._convertToExcelCellRefAndTrackMaxIndex(frozenArea.y, frozenArea.x) });
+        attributes.push({ name: 'topLeftCell', value: this._convertToExcelCellRefAndTrackMaxIndex(frozenArea.y, frozenArea.x) });
 
-        return this._getXMLTag("pane", attributes);
+        return this._getXMLTag('pane', attributes);
     },
 
     _getAutoFilterXML: function(maxCellIndex) {
         if(this._options.autoFilterEnabled) {
             // 18.3.1.2 autoFilter (AutoFilter Settings)
-            return "<autoFilter ref=\"A" + this._dataProvider.getHeaderRowCount() + ":" + maxCellIndex + "\" />";
+            return '<autoFilter ref="A' + this._dataProvider.getHeaderRowCount() + ':' + maxCellIndex + '" />';
         }
 
-        return "";
+        return '';
     },
 
     _getIgnoredErrorsXML: function(maxCellIndex) {
         if(this._options.ignoreErrors) {
-            return "<ignoredErrors><ignoredError sqref=\"A1:" + maxCellIndex + "\" numberStoredAsText=\"1\" /></ignoredErrors>";
+            return '<ignoredErrors><ignoredError sqref="A1:' + maxCellIndex + '" numberStoredAsText="1" /></ignoredErrors>';
         }
 
-        return "";
+        return '';
     },
 
     _generateWorksheetXML: function() {
@@ -506,7 +506,7 @@ var ExcelCreator = Class.inherit({
             rowsLength = this._cellsArray.length,
             cellsLength,
             colsLength = this._colsArray.length,
-            rSpans = "1:" + colsLength,
+            rSpans = '1:' + colsLength,
             headerRowCount = this._dataProvider.getHeaderRowCount ? this._dataProvider.getHeaderRowCount() : 1,
             xmlResult = [WORKSHEET_HEADER_XML];
 
@@ -522,14 +522,14 @@ var ExcelCreator = Class.inherit({
         xmlResult.push(' x14ac:dyDescent="0.25"/>');
 
         for(colIndex = 0; colIndex < colsLength; colIndex++) {
-            this._colsArray[colIndex] = this._getXMLTag("col", [
-                { name: "width", value: this._colsArray[colIndex] },
-                { name: "min", value: Number(colIndex) + 1 },
-                { name: "max", value: Number(colIndex) + 1 }
+            this._colsArray[colIndex] = this._getXMLTag('col', [
+                { name: 'width', value: this._colsArray[colIndex] },
+                { name: 'min', value: Number(colIndex) + 1 },
+                { name: 'max', value: Number(colIndex) + 1 }
             ]);
         }
 
-        xmlResult.push(this._getXMLTag("cols", [], this._colsArray.join("")) + "<sheetData>");
+        xmlResult.push(this._getXMLTag('cols', [], this._colsArray.join('')) + '<sheetData>');
 
         for(rowIndex = 0; rowIndex < rowsLength; rowIndex++) {
             xmlCells = [];
@@ -539,41 +539,41 @@ var ExcelCreator = Class.inherit({
                 rowIndex = Number(rowIndex);
                 cellData = this._cellsArray[rowIndex][colIndex];
 
-                xmlCells.push(this._getXMLTag("c", [ // 18.3.1.4 c (Cell)
-                    { name: "r", value: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex, colIndex) },
-                    { name: "s", value: cellData.style },
-                    { name: "t", value: cellData.type } // 18.18.11 ST_CellType (Cell Type)
-                ], (isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
+                xmlCells.push(this._getXMLTag('c', [ // 18.3.1.4 c (Cell)
+                    { name: 'r', value: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex, colIndex) },
+                    { name: 's', value: cellData.style },
+                    { name: 't', value: cellData.type } // 18.18.11 ST_CellType (Cell Type)
+                ], (isDefined(cellData.value)) ? this._getXMLTag('v', [], cellData.value) : null));
             }
-            xmlRows.push(this._getXMLTag("row", [
-                { name: "r", value: Number(rowIndex) + 1 },
-                { name: "spans", value: rSpans },
+            xmlRows.push(this._getXMLTag('row', [
+                { name: 'r', value: Number(rowIndex) + 1 },
+                { name: 'spans', value: rSpans },
                 {
-                    name: "outlineLevel",
+                    name: 'outlineLevel',
                     value: (rowIndex >= headerRowCount) ? this._dataProvider.getGroupLevel(rowIndex) : 0
                 },
-                { name: "x14ac:dyDescent", value: "0.25" }
-            ], xmlCells.join("")));
+                { name: 'x14ac:dyDescent', value: '0.25' }
+            ], xmlCells.join('')));
 
             this._cellsArray[rowIndex] = null;
             if(xmlRows.length > 10000) {
-                xmlResult.push(xmlRows.join(""));
+                xmlResult.push(xmlRows.join(''));
                 xmlRows = [];
             }
         }
 
-        xmlResult.push(xmlRows.join(""));
+        xmlResult.push(xmlRows.join(''));
         xmlRows = [];
 
         rightBottomCellRef = this._convertToExcelCellRef(this._maxRowIndex, this._maxColumnIndex);
         xmlResult.push(
-            "</sheetData>" +
+            '</sheetData>' +
             this._getAutoFilterXML(rightBottomCellRef) +
             this._generateMergingXML() +
             this._getIgnoredErrorsXML(rightBottomCellRef) +
-            "</worksheet>");
+            '</worksheet>');
 
-        this._zip.folder(XL_FOLDER_NAME).folder(WORKSHEETS_FOLDER).file(WORKSHEET_FILE_NAME, xmlResult.join(""));
+        this._zip.folder(XL_FOLDER_NAME).folder(WORKSHEETS_FOLDER).file(WORKSHEET_FILE_NAME, xmlResult.join(''));
 
         this._colsArray = [];
         this._cellsArray = [];
@@ -617,23 +617,23 @@ var ExcelCreator = Class.inherit({
 
         mergeArrayLength = mergeArray.length;
         for(mergeIndex = 0; mergeIndex < mergeArrayLength; mergeIndex++) {
-            mergeXML = mergeXML + this._getXMLTag("mergeCell", [{ name: "ref", value: mergeArray[mergeIndex].start + ":" + mergeArray[mergeIndex].end }]);
+            mergeXML = mergeXML + this._getXMLTag('mergeCell', [{ name: 'ref', value: mergeArray[mergeIndex].start + ':' + mergeArray[mergeIndex].end }]);
         }
 
-        return mergeXML.length ? this._getXMLTag("mergeCells", [{ name: "count", value: mergeArrayLength }], mergeXML) : "";
+        return mergeXML.length ? this._getXMLTag('mergeCells', [{ name: 'count', value: mergeArrayLength }], mergeXML) : '';
     },
 
     _generateCommonXML: function() {
-        var relsFileContent = XML_TAG + this._createXMLRelationships(this._createXMLRelationship(1, "officeDocument", "xl/" + WORKBOOK_FILE_NAME)),
+        var relsFileContent = XML_TAG + this._createXMLRelationships(this._createXMLRelationship(1, 'officeDocument', 'xl/' + WORKBOOK_FILE_NAME)),
             xmlRelationships,
             folder = this._zip.folder(XL_FOLDER_NAME),
             relsXML = XML_TAG;
 
-        this._zip.folder("_" + RELATIONSHIP_PART_NAME).file("." + RELATIONSHIP_PART_NAME, relsFileContent);
-        xmlRelationships = this._createXMLRelationship(1, "worksheet", "worksheets/" + WORKSHEET_FILE_NAME) + this._createXMLRelationship(2, "styles", STYLE_FILE_NAME) + this._createXMLRelationship(3, "sharedStrings", SHAREDSTRING_FILE_NAME);
+        this._zip.folder('_' + RELATIONSHIP_PART_NAME).file('.' + RELATIONSHIP_PART_NAME, relsFileContent);
+        xmlRelationships = this._createXMLRelationship(1, 'worksheet', 'worksheets/' + WORKSHEET_FILE_NAME) + this._createXMLRelationship(2, 'styles', STYLE_FILE_NAME) + this._createXMLRelationship(3, 'sharedStrings', SHAREDSTRING_FILE_NAME);
         relsXML = relsXML + this._createXMLRelationships(xmlRelationships);
 
-        folder.folder("_" + RELATIONSHIP_PART_NAME).file(WORKBOOK_FILE_NAME + ".rels", relsXML);
+        folder.folder('_' + RELATIONSHIP_PART_NAME).file(WORKBOOK_FILE_NAME + '.rels', relsXML);
         folder.file(WORKBOOK_FILE_NAME, this._getWorkbookContent());
 
         this._zip.file(CONTENTTYPES_FILE_NAME, this._getContentTypesContent());
@@ -675,7 +675,7 @@ var ExcelCreator = Class.inherit({
 
     _checkZipState: function() {
         if(!this._zip) {
-            throw errors.Error("E1041", "JSZip");
+            throw errors.Error('E1041', 'JSZip');
         }
     },
 
@@ -685,9 +685,9 @@ var ExcelCreator = Class.inherit({
 
     getData: function(isBlob) {
         const options = {
-            type: isBlob ? "blob" : "base64",
-            compression: "DEFLATE",
-            mimeType: fileSaver.MIME_TYPES["EXCEL"]
+            type: isBlob ? 'blob' : 'base64',
+            compression: 'DEFLATE',
+            mimeType: fileSaver.MIME_TYPES['EXCEL']
         };
         const deferred = new Deferred();
 

@@ -1,11 +1,11 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-import "common.css!";
+import 'common.css!';
 
 QUnit.testStart(() => {
     var markup = '<div id="htmlEditor"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-import "./htmlEditorParts/converterController.tests.js";
+import './htmlEditorParts/converterController.tests.js';

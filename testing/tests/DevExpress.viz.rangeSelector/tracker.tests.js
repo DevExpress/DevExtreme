@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    pointerEvents = require("events/pointer"),
-    trackerModule = require("viz/range_selector/tracker");
+var $ = require('jquery'),
+    pointerEvents = require('events/pointer'),
+    trackerModule = require('viz/range_selector/tracker');
 
 QUnit.testStart(function() {
     var markup =
@@ -9,7 +9,7 @@ QUnit.testStart(function() {
         <div id="slider-1"></div>\
         <div id="slider-2"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 function createHandler() {
@@ -20,10 +20,10 @@ function createHandler() {
 
 function Controller(test) {
     this.test = test;
-    test.$slider1 = $("#slider-1");
-    test.$slider2 = $("#slider-2");
-    test.$areaTracker = $("#area");
-    test.$selectedAreaTracker = $("#selected-area");
+    test.$slider1 = $('#slider-1');
+    test.$slider2 = $('#slider-2');
+    test.$areaTracker = $('#area');
+    test.$selectedAreaTracker = $('#selected-area');
 }
 Controller.prototype.getTrackerTargets = function() {
     return {
@@ -52,9 +52,9 @@ var environment = {
 
     update: function(options) {
         options = options || {};
-        this.tracker.update(!("enabled" in options) || options.enabled, {
-            moveSelectedRangeByClick: !("moveSelectedRangeByClick" in options) || options.moveSelectedRangeByClick,
-            manualRangeSelectionEnabled: !("manualRangeSelectionEnabled" in options) || options.manualRangeSelectionEnabled
+        this.tracker.update(!('enabled' in options) || options.enabled, {
+            moveSelectedRangeByClick: !('moveSelectedRangeByClick' in options) || options.moveSelectedRangeByClick,
+            manualRangeSelectionEnabled: !('manualRangeSelectionEnabled' in options) || options.manualRangeSelectionEnabled
         });
     },
 
@@ -78,61 +78,61 @@ var environment = {
     }
 };
 
-QUnit.module("Move selected area", $.extend({}, environment, {
+QUnit.module('Move selected area', $.extend({}, environment, {
     init: function(controller) {
         this.moveSelectedArea = controller.moveSelectedArea = sinon.spy();
     }
 }));
 
-QUnit.test("Performed", function(assert) {
-    this.trigger(this.$areaTracker, "down", 200);
-    var event = this.trigger(null, "up", 195);
+QUnit.test('Performed', function(assert) {
+    this.trigger(this.$areaTracker, 'down', 200);
+    var event = this.trigger(null, 'up', 195);
 
     assert.deepEqual(this.moveSelectedArea.lastCall.args, [170, event]);
 });
 
-QUnit.test("Performed (touch)", function(assert) {
-    this.trigger(this.$areaTracker, "down", 200, true);
-    var event = this.trigger(null, "up", 195, true);
+QUnit.test('Performed (touch)', function(assert) {
+    this.trigger(this.$areaTracker, 'down', 200, true);
+    var event = this.trigger(null, 'up', 195, true);
 
     assert.deepEqual(this.moveSelectedArea.lastCall.args, [170, event]);
 });
 
-QUnit.test("Canceled by pointer distance", function(assert) {
-    this.trigger(this.$areaTracker, "down", 200);
-    this.trigger(null, "up", 211);
+QUnit.test('Canceled by pointer distance', function(assert) {
+    this.trigger(this.$areaTracker, 'down', 200);
+    this.trigger(null, 'up', 211);
 
     assert.strictEqual(this.moveSelectedArea.lastCall, null);
 });
 
-QUnit.test("Disabled by total option", function(assert) {
+QUnit.test('Disabled by total option', function(assert) {
     this.update({ enabled: false });
-    this.trigger(this.$areaTracker, "down", 200);
-    this.trigger(null, "up", 195);
+    this.trigger(this.$areaTracker, 'down', 200);
+    this.trigger(null, 'up', 195);
 
     assert.strictEqual(this.moveSelectedArea.lastCall, null);
 });
 
-QUnit.test("Disabled by option", function(assert) {
+QUnit.test('Disabled by option', function(assert) {
     this.update({ moveSelectedRangeByClick: false });
-    this.trigger(this.$areaTracker, "down", 200);
-    this.trigger(null, "up", 195);
+    this.trigger(this.$areaTracker, 'down', 200);
+    this.trigger(null, 'up', 195);
 
     assert.strictEqual(this.moveSelectedArea.lastCall, null);
 });
 
-QUnit.module("Placing one slider and moving other", $.extend({}, environment, {
+QUnit.module('Placing one slider and moving other', $.extend({}, environment, {
     init: function(controller) {
         this.placeSliderAndBeginMoving = controller.placeSliderAndBeginMoving = sinon.spy(createHandler);
     }
 }));
 
-QUnit.test("Performed", function(assert) {
-    this.trigger(this.$areaTracker, "down", 200);
-    var startEvent = this.trigger(null, "move", 215);
-    var firstEvent = this.trigger(null, "move", 220);
-    var secondEvent = this.trigger(null, "move", 225);
-    var endEvent = this.trigger(null, "up", 230);
+QUnit.test('Performed', function(assert) {
+    this.trigger(this.$areaTracker, 'down', 200);
+    var startEvent = this.trigger(null, 'move', 215);
+    var firstEvent = this.trigger(null, 'move', 220);
+    var secondEvent = this.trigger(null, 'move', 225);
+    var endEvent = this.trigger(null, 'up', 230);
 
     assert.deepEqual(this.placeSliderAndBeginMoving.lastCall.args, [175, 190, startEvent]);
     var handler = this.placeSliderAndBeginMoving.lastCall.returnValue;
@@ -141,12 +141,12 @@ QUnit.test("Performed", function(assert) {
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Performed (touch)", function(assert) {
-    this.trigger(this.$areaTracker, "down", 200, true);
-    var startEvent = this.trigger(null, "move", 215, true);
-    var firstEvent = this.trigger(null, "move", 220, true);
-    var secondEvent = this.trigger(null, "move", 225, true);
-    var endEvent = this.trigger(null, "up", 230, true);
+QUnit.test('Performed (touch)', function(assert) {
+    this.trigger(this.$areaTracker, 'down', 200, true);
+    var startEvent = this.trigger(null, 'move', 215, true);
+    var firstEvent = this.trigger(null, 'move', 220, true);
+    var secondEvent = this.trigger(null, 'move', 225, true);
+    var endEvent = this.trigger(null, 'up', 230, true);
 
     assert.deepEqual(this.placeSliderAndBeginMoving.lastCall.args, [175, 190, startEvent]);
     var handler = this.placeSliderAndBeginMoving.lastCall.returnValue;
@@ -155,11 +155,11 @@ QUnit.test("Performed (touch)", function(assert) {
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Completed on move when non left button is pressed", function(assert) {
-    this.trigger(this.$areaTracker, "down", 200);
-    var startEvent = this.trigger(null, "move", 215);
-    var event = this.trigger(null, "move", 220);
-    var endEvent = this.trigger(null, "move", 225, false, true);
+QUnit.test('Completed on move when non left button is pressed', function(assert) {
+    this.trigger(this.$areaTracker, 'down', 200);
+    var startEvent = this.trigger(null, 'move', 215);
+    var event = this.trigger(null, 'move', 220);
+    var endEvent = this.trigger(null, 'move', 225, false, true);
 
     assert.deepEqual(this.placeSliderAndBeginMoving.lastCall.args, [175, 190, startEvent]);
     var handler = this.placeSliderAndBeginMoving.lastCall.returnValue;
@@ -167,33 +167,33 @@ QUnit.test("Completed on move when non left button is pressed", function(assert)
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Disabled by total option", function(assert) {
+QUnit.test('Disabled by total option', function(assert) {
     this.update({ enabled: false });
-    this.trigger(this.$areaTracker, "down", 200);
-    this.trigger(null, "move", 215);
+    this.trigger(this.$areaTracker, 'down', 200);
+    this.trigger(null, 'move', 215);
 
     assert.strictEqual(this.placeSliderAndBeginMoving.lastCall, null);
 });
 
-QUnit.test("Disabled by option", function(assert) {
+QUnit.test('Disabled by option', function(assert) {
     this.update({ manualRangeSelectionEnabled: false });
-    this.trigger(this.$areaTracker, "down", 200);
-    this.trigger(null, "move", 215);
+    this.trigger(this.$areaTracker, 'down', 200);
+    this.trigger(null, 'move', 215);
 
     assert.strictEqual(this.placeSliderAndBeginMoving.lastCall, null);
 });
 
-QUnit.module("Moving selected area", $.extend({}, environment, {
+QUnit.module('Moving selected area', $.extend({}, environment, {
     init: function(controller) {
         this.beginSelectedAreaMoving = controller.beginSelectedAreaMoving = sinon.spy(createHandler);
     }
 }));
 
-QUnit.test("Performed", function(assert) {
-    this.trigger(this.$selectedAreaTracker, "down", 200);
-    var firstEvent = this.trigger(null, "move", 210);
-    var secondEvent = this.trigger(null, "move", 250);
-    var endEvent = this.trigger(null, "up", 280);
+QUnit.test('Performed', function(assert) {
+    this.trigger(this.$selectedAreaTracker, 'down', 200);
+    var firstEvent = this.trigger(null, 'move', 210);
+    var secondEvent = this.trigger(null, 'move', 250);
+    var endEvent = this.trigger(null, 'up', 280);
 
     assert.deepEqual(this.beginSelectedAreaMoving.lastCall.args, [175]);
     var handler = this.beginSelectedAreaMoving.lastCall.returnValue;
@@ -202,11 +202,11 @@ QUnit.test("Performed", function(assert) {
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Performed (touch)", function(assert) {
-    this.trigger(this.$selectedAreaTracker, "down", 200, true);
-    var firstEvent = this.trigger(null, "move", 210, true);
-    var secondEvent = this.trigger(null, "move", 250, true);
-    var endEvent = this.trigger(null, "up", 280, true);
+QUnit.test('Performed (touch)', function(assert) {
+    this.trigger(this.$selectedAreaTracker, 'down', 200, true);
+    var firstEvent = this.trigger(null, 'move', 210, true);
+    var secondEvent = this.trigger(null, 'move', 250, true);
+    var endEvent = this.trigger(null, 'up', 280, true);
 
     assert.deepEqual(this.beginSelectedAreaMoving.lastCall.args, [175]);
     var handler = this.beginSelectedAreaMoving.lastCall.returnValue;
@@ -215,10 +215,10 @@ QUnit.test("Performed (touch)", function(assert) {
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Completed on move when non left button is pressed", function(assert) {
-    this.trigger(this.$selectedAreaTracker, "down", 200);
-    var firstEvent = this.trigger(null, "move", 210);
-    var endEvent = this.trigger(null, "move", 250, false, true);
+QUnit.test('Completed on move when non left button is pressed', function(assert) {
+    this.trigger(this.$selectedAreaTracker, 'down', 200);
+    var firstEvent = this.trigger(null, 'move', 210);
+    var endEvent = this.trigger(null, 'move', 250, false, true);
 
     assert.deepEqual(this.beginSelectedAreaMoving.lastCall.args, [175]);
     var handler = this.beginSelectedAreaMoving.lastCall.returnValue;
@@ -226,36 +226,36 @@ QUnit.test("Completed on move when non left button is pressed", function(assert)
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Default prevention and propagation stopping on down", function(assert) {
-    var $eventDown = this.trigger(this.$selectedAreaTracker, "down", 200),
-        $eventMove = this.trigger(null, "move", 250);
+QUnit.test('Default prevention and propagation stopping on down', function(assert) {
+    var $eventDown = this.trigger(this.$selectedAreaTracker, 'down', 200),
+        $eventMove = this.trigger(null, 'move', 250);
 
-    assert.strictEqual($eventDown.isDefaultPrevented(), true, "prevent default - down");
-    assert.strictEqual($eventDown.isPropagationStopped(), true, "stop propagation - down");
-    assert.strictEqual($eventMove.isDefaultPrevented(), true, "prevent default - move");
-    assert.strictEqual($eventMove.isPropagationStopped(), false, "stop propagation - move");
+    assert.strictEqual($eventDown.isDefaultPrevented(), true, 'prevent default - down');
+    assert.strictEqual($eventDown.isPropagationStopped(), true, 'stop propagation - down');
+    assert.strictEqual($eventMove.isDefaultPrevented(), true, 'prevent default - move');
+    assert.strictEqual($eventMove.isPropagationStopped(), false, 'stop propagation - move');
 });
 
-QUnit.test("Disabled by total option", function(assert) {
+QUnit.test('Disabled by total option', function(assert) {
     this.update({ enabled: false });
-    this.trigger(this.$selectedAreaTracker, "down", 200);
-    this.trigger(null, "move", 215);
+    this.trigger(this.$selectedAreaTracker, 'down', 200);
+    this.trigger(null, 'move', 215);
 
     assert.strictEqual(this.beginSelectedAreaMoving.lastCall, null);
 });
 
-QUnit.module("Slider moving", $.extend({}, environment, {
+QUnit.module('Slider moving', $.extend({}, environment, {
     init: function(controller) {
         this.beginSliderMoving = controller.beginSliderMoving = sinon.spy(createHandler);
         this.foregroundSlider = controller.foregroundSlider = sinon.spy();
     }
 }));
 
-QUnit.test("Performed", function(assert) {
-    this.trigger(this.$slider1, "down", 200);
-    var firstEvent = this.trigger(null, "move", 210);
-    var secondEvent = this.trigger(null, "move", 250);
-    var endEvent = this.trigger(null, "up", 280);
+QUnit.test('Performed', function(assert) {
+    this.trigger(this.$slider1, 'down', 200);
+    var firstEvent = this.trigger(null, 'move', 210);
+    var secondEvent = this.trigger(null, 'move', 250);
+    var endEvent = this.trigger(null, 'up', 280);
 
     assert.deepEqual(this.beginSliderMoving.lastCall.args, [0, 175]);
     var handler = this.beginSliderMoving.lastCall.returnValue;
@@ -264,11 +264,11 @@ QUnit.test("Performed", function(assert) {
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Performed (touch)", function(assert) {
-    this.trigger(this.$slider2, "down", 200, true);
-    var firstEvent = this.trigger(null, "move", 210, true);
-    var secondEvent = this.trigger(null, "move", 250, true);
-    var endEvent = this.trigger(null, "up", 280, true);
+QUnit.test('Performed (touch)', function(assert) {
+    this.trigger(this.$slider2, 'down', 200, true);
+    var firstEvent = this.trigger(null, 'move', 210, true);
+    var secondEvent = this.trigger(null, 'move', 250, true);
+    var endEvent = this.trigger(null, 'up', 280, true);
 
     assert.deepEqual(this.beginSliderMoving.lastCall.args, [1, 175]);
     var handler = this.beginSliderMoving.lastCall.returnValue;
@@ -277,10 +277,10 @@ QUnit.test("Performed (touch)", function(assert) {
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Completed on move when non left button is pressed", function(assert) {
-    this.trigger(this.$slider1, "down", 200);
-    var event = this.trigger(null, "move", 210);
-    var endEvent = this.trigger(null, "move", 250, false, true);
+QUnit.test('Completed on move when non left button is pressed', function(assert) {
+    this.trigger(this.$slider1, 'down', 200);
+    var event = this.trigger(null, 'move', 210);
+    var endEvent = this.trigger(null, 'move', 250, false, true);
 
     assert.deepEqual(this.beginSliderMoving.lastCall.args, [0, 175]);
     var handler = this.beginSliderMoving.lastCall.returnValue;
@@ -288,27 +288,27 @@ QUnit.test("Completed on move when non left button is pressed", function(assert)
     assert.deepEqual(handler.complete.lastCall.args, [endEvent]);
 });
 
-QUnit.test("Default prevention and propagation stopping on down", function(assert) {
-    var $eventDown = this.trigger(this.$slider2, "down", 200),
-        $eventMove = this.trigger(null, "move", 250);
+QUnit.test('Default prevention and propagation stopping on down', function(assert) {
+    var $eventDown = this.trigger(this.$slider2, 'down', 200),
+        $eventMove = this.trigger(null, 'move', 250);
 
-    assert.strictEqual($eventDown.isDefaultPrevented(), true, "prevent default - down");
-    assert.strictEqual($eventDown.isPropagationStopped(), true, "stop propagation - down");
-    assert.strictEqual($eventMove.isDefaultPrevented(), true, "prevent default - move");
-    assert.strictEqual($eventMove.isPropagationStopped(), false, "stop propagation - move");
+    assert.strictEqual($eventDown.isDefaultPrevented(), true, 'prevent default - down');
+    assert.strictEqual($eventDown.isPropagationStopped(), true, 'stop propagation - down');
+    assert.strictEqual($eventMove.isDefaultPrevented(), true, 'prevent default - move');
+    assert.strictEqual($eventMove.isPropagationStopped(), false, 'stop propagation - move');
 });
 
-QUnit.test("Disabled by total option", function(assert) {
+QUnit.test('Disabled by total option', function(assert) {
     this.update({ enabled: false });
-    this.trigger(this.$slider1, "down", 200);
-    this.trigger(null, "move", 215);
+    this.trigger(this.$slider1, 'down', 200);
+    this.trigger(null, 'move', 215);
 
     assert.strictEqual(this.beginSliderMoving.lastCall, null);
 });
 
-QUnit.test("Slider is foregrounded on move", function(assert) {
-    this.trigger(this.$slider1, "move", 210);
-    this.trigger(this.$slider2, "move", 220);
+QUnit.test('Slider is foregrounded on move', function(assert) {
+    this.trigger(this.$slider1, 'move', 210);
+    this.trigger(this.$slider2, 'move', 220);
 
     assert.deepEqual(this.foregroundSlider.getCall(0).args, [0]);
     assert.deepEqual(this.foregroundSlider.getCall(1).args, [1]);

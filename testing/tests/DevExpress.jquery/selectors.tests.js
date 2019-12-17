@@ -1,7 +1,7 @@
 define(function(require) {
-    var $ = require("jquery");
+    var $ = require('jquery');
 
-    if(QUnit.urlParams["nojquery"]) {
+    if(QUnit.urlParams['nojquery']) {
         return;
     }
 
@@ -46,34 +46,34 @@ define(function(require) {
 			<input class="hidden-visibility" type="text" value="" />\
 			<object class="hidden-visibility"></object>';
 
-        $("#qunit-fixture").html(markup);
+        $('#qunit-fixture').html(markup);
     });
 
-    var selectors = require("ui/widget/selectors");
+    var selectors = require('ui/widget/selectors');
 
-    QUnit.test("focusable", function(assert) {
-        var focusableContainer = $(".focusable");
+    QUnit.test('focusable', function(assert) {
+        var focusableContainer = $('.focusable');
         focusableContainer.each(function(index, item) {
             assert.ok($(item).is(selectors.focusable));
         });
     });
 
-    QUnit.test("tabbable", function(assert) {
-        var focusableContainer = $(".tabbable");
+    QUnit.test('tabbable', function(assert) {
+        var focusableContainer = $('.tabbable');
         focusableContainer.each(function(index, item) {
             assert.ok($(item).is(selectors.tabbable));
         });
     });
 
-    QUnit.test("not focusable", function(assert) {
-        var focusableContainer = $(".notfocusable, .hidden-display, .hidden-visibility");
+    QUnit.test('not focusable', function(assert) {
+        var focusableContainer = $('.notfocusable, .hidden-display, .hidden-visibility');
         focusableContainer.each(function(index, item) {
             assert.ok(!$(item).is(selectors.focusable));
         });
     });
 
-    QUnit.test("not tabbable", function(assert) {
-        var focusableContainer = $(".nottabbable, .hidden-display, .hidden-visibility");
+    QUnit.test('not tabbable', function(assert) {
+        var focusableContainer = $('.nottabbable, .hidden-display, .hidden-visibility');
         focusableContainer.each(function(index, item) {
             assert.ok(!$(item).is(selectors.tabbable));
         });

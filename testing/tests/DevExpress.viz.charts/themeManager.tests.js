@@ -1,13 +1,13 @@
-var $ = require("jquery"),
-    themeManagerModule = require("viz/components/chart_theme_manager"),
+var $ = require('jquery'),
+    themeManagerModule = require('viz/components/chart_theme_manager'),
     backgroundColor = '#ffffff',
     defaultColor = '#1db2f5',
-    paletteModule = require("viz/palette"),
-    themeModule = require("viz/themes");
+    paletteModule = require('viz/palette'),
+    themeModule = require('viz/themes');
 
 function createThemeManager(options, themeGroupName) {
     return new themeManagerModule.ThemeManager({
-        themeSection: themeGroupName || "chart",
+        themeSection: themeGroupName || 'chart',
         options: options,
         fontFields: options.fontFields || []
     });
@@ -15,7 +15,7 @@ function createThemeManager(options, themeGroupName) {
 
 (function series() {
     // for T249903, TODO - kill it after removing ctor of chart theme manager
-    QUnit.module("Cache", {
+    QUnit.module('Cache', {
         cache: themeModule.widgetsCache,
 
         create: function() {
@@ -23,7 +23,7 @@ function createThemeManager(options, themeGroupName) {
         }
     });
 
-    QUnit.test("Adding and removing", function(assert) {
+    QUnit.test('Adding and removing', function(assert) {
         var item = this.create(),
             k;
         $.each(this.cache, function(i) {
@@ -35,7 +35,7 @@ function createThemeManager(options, themeGroupName) {
         assert.strictEqual(this.cache[k], undefined);
     });
 
-    QUnit.module("Get options - series", {
+    QUnit.module('Get options - series', {
         afterEach: function() {
             paletteModule.currentPalette(null);
         }
@@ -43,11 +43,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme - default', function(assert) {
         // arrange
-        var themeManager = createThemeManager({ fontFields: ["commonSeriesSettings.label.font"] });
+        var themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {
-            type: "unknown"
+        var theme = themeManager.getOptions('series', {
+            type: 'unknown'
         });
         // assert series theme
         assert.equal(theme.containerBackgroundColor, backgroundColor);
@@ -78,12 +78,12 @@ function createThemeManager(options, themeGroupName) {
                     width: 4
                 }
             },
-            hoverMode: "onlyPoint",
-            selectionMode: "onlyPoint"
-        }, "theme.point");
+            hoverMode: 'onlyPoint',
+            selectionMode: 'onlyPoint'
+        }, 'theme.point');
         assert.deepEqual(theme.hoverStyle, {
             hatching: {
-                direction: "right",
+                direction: 'right',
                 width: 2,
                 step: 6,
                 opacity: 0.75
@@ -92,10 +92,10 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 3
             }
-        }, "theme.hoverStyle");
+        }, 'theme.hoverStyle');
         assert.deepEqual(theme.selectionStyle, {
             hatching: {
-                direction: "right",
+                direction: 'right',
                 width: 2,
                 step: 6,
                 opacity: 0.5
@@ -104,19 +104,19 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 3
             }
-        }, "theme.selectionStyle");
+        }, 'theme.selectionStyle');
         assert.deepEqual(theme.label, {
-            alignment: "center",
+            alignment: 'center',
             font: {
                 color: '#ffffff',
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
                 weight: 400,
                 size: 12,
                 cursor: 'default'
             },
             horizontalOffset: 0,
             showForZeroValues: true,
-            position: "outside",
+            position: 'outside',
             radialOffset: 0,
             rotationAngle: 0,
             verticalOffset: 0,
@@ -131,18 +131,18 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 1
             }
-        }, "theme.label");
+        }, 'theme.label');
         assert.equal(theme.widgetType, 'chart');
     });
 
 
     QUnit.test('First series theme - area', function(assert) {
         // arrange
-        var themeManager = createThemeManager({ fontFields: ["commonSeriesSettings.label.font"] });
+        var themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {
-            type: "area"
+        var theme = themeManager.getOptions('series', {
+            type: 'area'
         });
         // assert series theme
         assert.equal(theme.containerBackgroundColor, backgroundColor);
@@ -171,12 +171,12 @@ function createThemeManager(options, themeGroupName) {
                     width: 4
                 }
             },
-            hoverMode: "onlyPoint",
-            selectionMode: "onlyPoint"
-        }, "theme.point");
+            hoverMode: 'onlyPoint',
+            selectionMode: 'onlyPoint'
+        }, 'theme.point');
         assert.deepEqual(theme.hoverStyle, {
             hatching: {
-                direction: "right",
+                direction: 'right',
                 width: 2,
                 step: 6,
                 opacity: 0.75
@@ -185,10 +185,10 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 3
             }
-        }, "theme.hoverStyle");
+        }, 'theme.hoverStyle');
         assert.deepEqual(theme.selectionStyle, {
             hatching: {
-                direction: "right",
+                direction: 'right',
                 width: 2,
                 step: 6,
                 opacity: 0.5
@@ -197,25 +197,25 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 3
             }
-        }, "theme.selectionStyle");
+        }, 'theme.selectionStyle');
         assert.deepEqual(theme.label, {
             font: {
                 color: '#ffffff',
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
                 weight: 400,
                 size: 12,
                 cursor: 'default'
             },
-            alignment: "center",
+            alignment: 'center',
             horizontalOffset: 0,
-            position: "outside",
+            position: 'outside',
             radialOffset: 0,
             rotationAngle: 0,
             verticalOffset: 0,
             showForZeroValues: true,
             visible: false,
             border: {
-                color: "#d3d3d3",
+                color: '#d3d3d3',
                 visible: false,
                 width: 1,
                 dashStyle: 'solid'
@@ -224,61 +224,61 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 1
             }
-        }, "theme.label");
+        }, 'theme.label');
         assert.equal(theme.widgetType, 'chart');
     });
 
     QUnit.test('Pass series count to palette', function(assert) {
         // arrange
         var themeManager = createThemeManager({
-            palette: ["red", "green"]
+            palette: ['red', 'green']
         });
         themeManager.setTheme({});
         // act
-        themeManager.getOptions("series", {
-            type: "line"
+        themeManager.getOptions('series', {
+            type: 'line'
         }, 3);
 
-        themeManager.getOptions("series", {
-            type: "line"
+        themeManager.getOptions('series', {
+            type: 'line'
         }, 3);
 
-        var theme = themeManager.getOptions("series", {
-            type: "line"
+        var theme = themeManager.getOptions('series', {
+            type: 'line'
         }, 3);
 
-        assert.strictEqual(theme.mainSeriesColor, "#804000");
+        assert.strictEqual(theme.mainSeriesColor, '#804000');
     });
 
     QUnit.test('Pass paletteExtensionMode to palette params', function(assert) {
         // arrange
         var themeManager = createThemeManager({
-            palette: ["red", "green"],
-            paletteExtensionMode: "alternate"
+            palette: ['red', 'green'],
+            paletteExtensionMode: 'alternate'
         });
         themeManager.setTheme({});
         // act
-        themeManager.getOptions("series", {
-            type: "line"
+        themeManager.getOptions('series', {
+            type: 'line'
         }, 3);
 
-        themeManager.getOptions("series", {
-            type: "line"
+        themeManager.getOptions('series', {
+            type: 'line'
         }, 3);
 
-        var theme = themeManager.getOptions("series", {
-            type: "line"
+        var theme = themeManager.getOptions('series', {
+            type: 'line'
         }, 3);
 
-        assert.strictEqual(theme.mainSeriesColor, "#ff3232");
+        assert.strictEqual(theme.mainSeriesColor, '#ff3232');
     });
 
     QUnit.test('First series theme', function(assert) {
         // arrange
-        var themeManager = createThemeManager({ fontFields: ["commonSeriesSettings.label.font"] });
+        var themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
         // assert series theme
         assert.equal(theme.containerBackgroundColor, backgroundColor);
         assert.equal(theme.color, undefined);
@@ -306,12 +306,12 @@ function createThemeManager(options, themeGroupName) {
                     width: 4
                 }
             },
-            hoverMode: "onlyPoint",
-            selectionMode: "onlyPoint"
-        }, "theme.point");
+            hoverMode: 'onlyPoint',
+            selectionMode: 'onlyPoint'
+        }, 'theme.point');
         assert.deepEqual(theme.hoverStyle, {
             hatching: {
-                direction: "none",
+                direction: 'none',
                 width: 2,
                 step: 6,
                 opacity: 0.75
@@ -321,10 +321,10 @@ function createThemeManager(options, themeGroupName) {
                 width: 3
             },
             width: 3
-        }, "theme.hoverStyle");
+        }, 'theme.hoverStyle');
         assert.deepEqual(theme.selectionStyle, {
             hatching: {
-                direction: "right",
+                direction: 'right',
                 width: 2,
                 step: 6,
                 opacity: 0.5
@@ -334,18 +334,18 @@ function createThemeManager(options, themeGroupName) {
                 width: 3
             },
             width: 3
-        }, "theme.selectionStyle");
+        }, 'theme.selectionStyle');
         assert.deepEqual(theme.label, {
             font: {
                 color: '#ffffff',
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
                 weight: 400,
                 size: 12,
                 cursor: 'default'
             },
-            alignment: "center",
+            alignment: 'center',
             horizontalOffset: 0,
-            position: "outside",
+            position: 'outside',
             radialOffset: 0,
             rotationAngle: 0,
             verticalOffset: 0,
@@ -361,7 +361,7 @@ function createThemeManager(options, themeGroupName) {
                 visible: false,
                 width: 1
             }
-        }, "theme.label");
+        }, 'theme.label');
         assert.equal(theme.widgetType, 'chart');
     });
 
@@ -375,7 +375,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
 
         // act
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
         // assert series theme
         assert.ok(theme);
         assert.equal(theme.mainSeriesColor, '#60a69f');
@@ -402,10 +402,10 @@ function createThemeManager(options, themeGroupName) {
 
         // act
         options.palette = ['#ffffff'];
-        themeManager.resetOptions("palette");
+        themeManager.resetOptions('palette');
         themeManager.updatePalette();
         // assert series theme
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
         assert.ok(theme.point);
@@ -427,7 +427,7 @@ function createThemeManager(options, themeGroupName) {
             });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
         });
         // assert series theme
 
@@ -459,7 +459,7 @@ function createThemeManager(options, themeGroupName) {
         };
         var themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
         // assert series theme
         assert.equal(theme.mainSeriesColor, '#0f0f0f');
@@ -477,7 +477,7 @@ function createThemeManager(options, themeGroupName) {
         };
         var themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
         // assert series theme
         assert.equal(theme.mainSeriesColor, '#f0f0f0');
@@ -494,7 +494,7 @@ function createThemeManager(options, themeGroupName) {
         };
         var themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
         // assert series theme
         assert.ok(theme);
@@ -521,7 +521,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
 
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
         });
         // assert series theme
         assert.ok(theme);
@@ -545,7 +545,7 @@ function createThemeManager(options, themeGroupName) {
             customColor = '#777777';
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             color: customColor
         });
         // assert series theme
@@ -592,7 +592,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", { color: 'customColor' });
+        var theme = themeManager.getOptions('series', { color: 'customColor' });
         // assert series theme
 
         assert.ok(theme);
@@ -612,7 +612,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'area',
             color: 'customColor'
         });
@@ -635,7 +635,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'AREa',
             color: 'customColor'
         });
@@ -662,7 +662,7 @@ function createThemeManager(options, themeGroupName) {
             }, commonSeriesThemeTemplate)
         };
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'line'
         });
         // assert series theme
@@ -689,7 +689,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: mergedCommonSeriesSettings };
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'line'
         });
         // assert series theme
@@ -716,7 +716,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
         // assert series theme
 
         assert.ok(theme);
@@ -752,7 +752,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
         // act
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
         // assert series theme
 
         assert.ok(theme);
@@ -771,111 +771,111 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.point.selectionStyle.border.color, undefined);
     });
 
-    QUnit.test("resolveLabelsOverlapping pass to series", function(assert) {
+    QUnit.test('resolveLabelsOverlapping pass to series', function(assert) {
         var themeManager = createThemeManager({
             resolveLabelsOverlapping: true
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
         assert.ok(theme);
         assert.equal(theme.resolveLabelsOverlapping, true);
     });
 
-    QUnit.test("Merge useAggregation with series.aggregation.enabled (undefined)", function(assert) {
+    QUnit.test('Merge useAggregation with series.aggregation.enabled (undefined)', function(assert) {
         var themeManager = createThemeManager({
             useAggregation: true
-        }, "chart");
+        }, 'chart');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, true);
     });
 
-    QUnit.test("Merge useAggregation with series.aggregation.enabled (defined)", function(assert) {
+    QUnit.test('Merge useAggregation with series.aggregation.enabled (defined)', function(assert) {
         var themeManager = createThemeManager({
             useAggregation: false
-        }, "chart");
+        }, 'chart');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", { aggregation: { enabled: true } });
+        var theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, true);
     });
 
-    QUnit.test("Merge series.aggregation.enabled whith chart type (pie)", function(assert) {
-        var themeManager = createThemeManager({}, "pie");
+    QUnit.test('Merge series.aggregation.enabled whith chart type (pie)', function(assert) {
+        var themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", { aggregation: { enabled: true } });
+        var theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, false);
     });
 
-    QUnit.test("Merge series.aggregation.enabled whith chart type (polar)", function(assert) {
-        var themeManager = createThemeManager({}, "polar");
+    QUnit.test('Merge series.aggregation.enabled whith chart type (polar)', function(assert) {
+        var themeManager = createThemeManager({}, 'polar');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", { aggregation: { enabled: true } });
+        var theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, false);
     });
 
-    QUnit.test("Get seriesTemplate. Option is not set", function(assert) {
+    QUnit.test('Get seriesTemplate. Option is not set', function(assert) {
         var themeManager = createThemeManager({
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("seriesTemplate");
+        var theme = themeManager.getOptions('seriesTemplate');
 
         assert.ok(!theme);
     });
 
-    QUnit.test("Get seriesTemplate. Option is set", function(assert) {
+    QUnit.test('Get seriesTemplate. Option is set', function(assert) {
         var themeManager = createThemeManager({
             seriesTemplate: {}
         });
         themeManager.setTheme({});
-        var value = themeManager.getOptions("seriesTemplate");
+        var value = themeManager.getOptions('seriesTemplate');
 
         assert.deepEqual(value, {
-            nameField: "series"
+            nameField: 'series'
         });
     });
 
-    QUnit.test("Get seriesTemplate. Option with custom nameField", function(assert) {
+    QUnit.test('Get seriesTemplate. Option with custom nameField', function(assert) {
         var themeManager = createThemeManager({
             seriesTemplate: {
-                nameField: "custom"
+                nameField: 'custom'
             }
         });
         themeManager.setTheme({});
-        var value = themeManager.getOptions("seriesTemplate");
+        var value = themeManager.getOptions('seriesTemplate');
 
         assert.deepEqual(value, {
-            nameField: "custom"
+            nameField: 'custom'
         });
     });
 
-    QUnit.test("Do not pass name field to series config if series template is not used", function(assert) {
+    QUnit.test('Do not pass name field to series config if series template is not used', function(assert) {
         var themeManager = createThemeManager({
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
         assert.ok(!theme.nameField);
     });
 
-    QUnit.test("Pass name field to series config if series template is used", function(assert) {
+    QUnit.test('Pass name field to series config if series template is used', function(assert) {
         var themeManager = createThemeManager({
             seriesTemplate: {
-                nameField: "name"
+                nameField: 'name'
             }
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions("series", {});
+        var theme = themeManager.getOptions('series', {});
 
-        assert.equal(theme.nameField, "name");
+        assert.equal(theme.nameField, 'name');
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in series options field', function(assert) {
@@ -900,7 +900,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
         // act
-        var theme = themeManager.getOptions("series", { type: 'bar' });
+        var theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -928,7 +928,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'bar',
             color: '#000000',
             border: {
@@ -1002,7 +1002,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'bubble',
             color: '#000000',
             border: {
@@ -1087,7 +1087,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", { type: 'bar' });
+        var theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -1120,7 +1120,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", { type: 'bar' });
+        var theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -1151,7 +1151,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", { type: 'bar' });
+        var theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -1168,13 +1168,13 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
-        var lineTheme = themeManager.getOptions("series", { type: "line", label: { position: "inside" } }),
-            splineTheme = themeManager.getOptions("series", { type: "spline", label: { position: "inside" } }),
-            stepLineTheme = themeManager.getOptions("series", { type: "stepline", label: { position: "inside" } }),
-            scatterTheme = themeManager.getOptions("series", { type: "scatter", label: { position: "inside" } }),
-            stackedAreaTheme = themeManager.getOptions("series", { type: "stackedarea", label: { position: "inside" } }),
-            barTheme = themeManager.getOptions("series", { type: "bar", label: { position: "inside" } }),
-            rangeAreaTheme = themeManager.getOptions("series", { type: "rangearea", label: { position: "inside" } });
+        var lineTheme = themeManager.getOptions('series', { type: 'line', label: { position: 'inside' } }),
+            splineTheme = themeManager.getOptions('series', { type: 'spline', label: { position: 'inside' } }),
+            stepLineTheme = themeManager.getOptions('series', { type: 'stepline', label: { position: 'inside' } }),
+            scatterTheme = themeManager.getOptions('series', { type: 'scatter', label: { position: 'inside' } }),
+            stackedAreaTheme = themeManager.getOptions('series', { type: 'stackedarea', label: { position: 'inside' } }),
+            barTheme = themeManager.getOptions('series', { type: 'bar', label: { position: 'inside' } }),
+            rangeAreaTheme = themeManager.getOptions('series', { type: 'rangearea', label: { position: 'inside' } });
 
         assert.equal(lineTheme.label.position, 'outside');
         assert.equal(splineTheme.label.position, 'outside');
@@ -1193,7 +1193,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'scatter',
             visible: true,
             point: {
@@ -1203,8 +1203,8 @@ function createThemeManager(options, themeGroupName) {
         // assert series theme
 
         assert.ok(theme);
-        assert.ok(theme.visible, "series visibility");
-        assert.ok(!theme.point.visible, "point visibility");
+        assert.ok(theme.visible, 'series visibility');
+        assert.ok(!theme.point.visible, 'point visibility');
     });
 
     QUnit.test('Check visible option for scatter. Series visible = false', function(assert) {
@@ -1215,7 +1215,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions("series", {
+        var theme = themeManager.getOptions('series', {
             type: 'scatter',
             visible: false,
             point: {
@@ -1225,8 +1225,8 @@ function createThemeManager(options, themeGroupName) {
         // assert series theme
 
         assert.ok(theme);
-        assert.ok(!theme.visible, "series visibility");
-        assert.ok(theme.point.visible, "point visibility");
+        assert.ok(!theme.visible, 'series visibility');
+        assert.ok(theme.point.visible, 'point visibility');
     });
 
     QUnit.test('Theme chart manager for custom theme group', function(assert) {
@@ -1254,7 +1254,7 @@ function createThemeManager(options, themeGroupName) {
 
 (function chart() {
 
-    QUnit.module("Theme Manager - pie theme");
+    QUnit.module('Theme Manager - pie theme');
 
     QUnit.test('applyPieSeriesTheme with userOptions & commonSettings & commonUserSettings. B237181', function(assert) {
         // arrange
@@ -1276,7 +1276,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "pie");
+        }, 'pie');
         themeManager.setTheme({});
         themeManager._theme = {
             commonSeriesSettings: {
@@ -1289,7 +1289,7 @@ function createThemeManager(options, themeGroupName) {
             }
         };
         // act
-        var theme = themeManager.getOptions("series",
+        var theme = themeManager.getOptions('series',
             {
                 type: 'pie',
                 border: {
@@ -1310,10 +1310,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, type - donut', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, "pie");
+        var themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", { type: 'donut' }, true);
+        var theme = themeManager.getOptions('series', { type: 'donut' }, true);
         // assert pie theme
         assert.ok(theme);
         assert.ok(!theme.border.visible);
@@ -1331,10 +1331,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, type - doughnut', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, "pie");
+        var themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions("series", { type: 'doughnut' }, true);
+        var theme = themeManager.getOptions('series', { type: 'doughnut' }, true);
         // assert pie theme
         assert.ok(theme);
         assert.ok(!theme.border.visible);
@@ -1352,11 +1352,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, donut theme equal doughnut theme', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, "pie");
+        var themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
         // act
-        var doughnutTheme = themeManager.getOptions("series", { type: 'doughnut' }, true);
-        var donutTheme = themeManager.getOptions("series", { type: 'donut' }, true);
+        var doughnutTheme = themeManager.getOptions('series', { type: 'doughnut' }, true);
+        var donutTheme = themeManager.getOptions('series', { type: 'donut' }, true);
 
         // types have differences
         doughnutTheme.type = null;
@@ -1373,7 +1373,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(donutTheme, doughnutTheme, 'Donut theme should be equal doughnut theme');
     });
 
-    QUnit.test("applyPieSeriesTheme, type in root", function(assert) {
+    QUnit.test('applyPieSeriesTheme, type in root', function(assert) {
         // arrange
         var themeManager = createThemeManager({
             commonSeriesSettings: {
@@ -1393,10 +1393,10 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "pie");
+        }, 'pie');
         themeManager.setTheme({});
         themeManager._theme = {
-            type: "pie",
+            type: 'pie',
             commonSeriesSettings: {
                 border: {
                     visible: false
@@ -1407,7 +1407,7 @@ function createThemeManager(options, themeGroupName) {
             }
         };
         // act
-        var theme = themeManager.getOptions("series",
+        var theme = themeManager.getOptions('series',
             {
                 border: {
                     color: '#ffffff'
@@ -1425,7 +1425,7 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.selectionStyle.border.width, 3, 'Selection border width was applied');
     });
 
-    QUnit.module("Theme Manager - pie", {
+    QUnit.module('Theme Manager - pie', {
         beforeEach: function() {
             this.borderColor = themeModule.themes['generic.light'].pie.commonSeriesSettings.pie.border.color;
             this.hoverStyleColor = themeModule.themes['generic.light'].pie.commonSeriesSettings.pie.hoverStyle.color;
@@ -1449,66 +1449,66 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('series options for pie. mainSeriesColor. resetPalette', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, "pie");
+        var themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({
-            palette: "office"
+            palette: 'office'
         });
-        var seriesSettings = themeManager.getOptions("series", { type: "pie" });
+        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
-        assert.strictEqual(seriesSettings.mainSeriesColor("a", 1), "#5f8b95");
-        assert.strictEqual(seriesSettings.mainSeriesColor("b", 2), "#ba4d51");
+        assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
+        assert.strictEqual(seriesSettings.mainSeriesColor('b', 2), '#ba4d51');
         themeManager.resetPalette();
 
-        assert.strictEqual(seriesSettings.mainSeriesColor("a", 1), "#5f8b95");
-        assert.strictEqual(seriesSettings.mainSeriesColor("b", 2), "#ba4d51");
-        assert.strictEqual(seriesSettings.mainSeriesColor("c", 3), "#af8a53");
+        assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
+        assert.strictEqual(seriesSettings.mainSeriesColor('b', 2), '#ba4d51');
+        assert.strictEqual(seriesSettings.mainSeriesColor('c', 3), '#af8a53');
     });
 
-    QUnit.test("series options for pie. mainSeriesColor", function(assert) {
+    QUnit.test('series options for pie. mainSeriesColor', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, "pie");
+        var themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({
-            palette: "office"
+            palette: 'office'
         });
-        var seriesSettings = themeManager.getOptions("series", { type: "pie" });
+        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
-        assert.strictEqual(seriesSettings.mainSeriesColor("a", 1), "#5f8b95");
-        assert.strictEqual(seriesSettings.mainSeriesColor("b", 2), "#ba4d51");
+        assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
+        assert.strictEqual(seriesSettings.mainSeriesColor('b', 2), '#ba4d51');
 
-        assert.strictEqual(seriesSettings.mainSeriesColor("a", 1), "#5f8b95");
-        assert.strictEqual(seriesSettings.mainSeriesColor("c", 3), "#af8a53");
+        assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
+        assert.strictEqual(seriesSettings.mainSeriesColor('c', 3), '#af8a53');
     });
 
     QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor', function(assert) {
         // arrange
         var themeManager = createThemeManager({
-            palette: ["red", "green"],
-        }, "pie");
+            palette: ['red', 'green'],
+        }, 'pie');
         themeManager.setTheme({});
-        var seriesSettings = themeManager.getOptions("series", { type: "pie" });
+        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
-        assert.strictEqual(seriesSettings.mainSeriesColor("a", 1, 3), "red");
-        assert.strictEqual(seriesSettings.mainSeriesColor("b", 2, 3), "green");
-        assert.strictEqual(seriesSettings.mainSeriesColor("c", 3, 3), "#804000");
+        assert.strictEqual(seriesSettings.mainSeriesColor('a', 1, 3), 'red');
+        assert.strictEqual(seriesSettings.mainSeriesColor('b', 2, 3), 'green');
+        assert.strictEqual(seriesSettings.mainSeriesColor('c', 3, 3), '#804000');
     });
 
     QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor. numeric argument', function(assert) {
         // arrange
         var themeManager = createThemeManager({
-            palette: ["red", "green"],
-        }, "pie");
+            palette: ['red', 'green'],
+        }, 'pie');
         themeManager.setTheme({});
-        var seriesSettings = themeManager.getOptions("series", { type: "pie" });
+        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
-        assert.strictEqual(seriesSettings.mainSeriesColor(0, 1, 3), "red");
-        assert.strictEqual(seriesSettings.mainSeriesColor(1, 0, 3), "green");
+        assert.strictEqual(seriesSettings.mainSeriesColor(0, 1, 3), 'red');
+        assert.strictEqual(seriesSettings.mainSeriesColor(1, 0, 3), 'green');
     });
 
-    QUnit.module("Theme Manager - life cycle");
+    QUnit.module('Theme Manager - life cycle');
 
     QUnit.test('Disposing', function(assert) {
         var paletteDisposed,
@@ -1545,31 +1545,31 @@ function createThemeManager(options, themeGroupName) {
                         rtl: false
                     }
                 }
-            }, "generic");
+            }, 'generic');
         }
     });
 
-    QUnit.test("Do not patch theme", function(assert) {
+    QUnit.test('Do not patch theme', function(assert) {
         // act
         var options = { theme: 'rtlTheme' },
             themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
 
         // assert
-        assert.deepEqual(themeManager.getOptions("someOption"), { rtl: false });
+        assert.deepEqual(themeManager.getOptions('someOption'), { rtl: false });
     });
 
-    QUnit.test("Patch theme based on user options", function(assert) {
+    QUnit.test('Patch theme based on user options', function(assert) {
         // act
         var options = { theme: 'rtlTheme', rtlEnabled: true },
             themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme, true);
 
         // assert
-        assert.deepEqual(themeManager.getOptions("someOption"), { rtl: true });
+        assert.deepEqual(themeManager.getOptions('someOption'), { rtl: true });
     });
 
-    QUnit.test("Patch theme based on theme", function(assert) {
+    QUnit.test('Patch theme based on theme', function(assert) {
         themeModule.registerTheme({
             name: 'rtlTheme1',
             chart: {
@@ -1583,7 +1583,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "generic");
+        }, 'generic');
 
         // act
         var options = { theme: 'rtlTheme1' },
@@ -1591,10 +1591,10 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme(options.theme);
 
         // assert
-        assert.deepEqual(themeManager.getOptions("someOption"), { rtl: true });
+        assert.deepEqual(themeManager.getOptions('someOption'), { rtl: true });
     });
 
-    QUnit.test("Do not patch theme (theme is rtl, options is ltr)", function(assert) {
+    QUnit.test('Do not patch theme (theme is rtl, options is ltr)', function(assert) {
         themeModule.registerTheme({
             name: 'rtlTheme1',
             chart: {
@@ -1608,7 +1608,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "generic");
+        }, 'generic');
 
         // act
         var options = { theme: 'rtlTheme1', rtlEnabled: false },
@@ -1616,10 +1616,10 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme(options.theme, false);
 
         // assert
-        assert.deepEqual(themeManager.getOptions("someOption"), { rtl: false });
+        assert.deepEqual(themeManager.getOptions('someOption'), { rtl: false });
     });
 
-    QUnit.test("Apply rtl on theme resetting", function(assert) {
+    QUnit.test('Apply rtl on theme resetting', function(assert) {
         themeModule.registerTheme({
             name: 'rtlTheme1',
             chart: {
@@ -1633,7 +1633,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "generic");
+        }, 'generic');
 
         var themeManager = createThemeManager({ theme: 'rtlTheme' });
         themeManager.setTheme('rtlTheme1');
@@ -1641,7 +1641,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme('rtlTheme1');
 
         // assert
-        assert.deepEqual(themeManager.getOptions("someOption"), { rtl: true });
+        assert.deepEqual(themeManager.getOptions('someOption'), { rtl: true });
     });
 }());
 
@@ -1649,14 +1649,14 @@ function createThemeManager(options, themeGroupName) {
     themeModule.registerTheme({
         name: 'getOptionsTheme',
         chart: {
-            firstLevelOption1: "from theme1",
-            firstLevelOption2: "from theme2",
+            firstLevelOption1: 'from theme1',
+            firstLevelOption2: 'from theme2',
             firstLevelObject: {
-                value1: "from theme1",
-                value2: "from theme2"
+                value1: 'from theme1',
+                value2: 'from theme2'
             },
             commonSeriesSettings: {
-                type: "themeType"
+                type: 'themeType'
             },
             commonAxisSettings: {
                 userCommonAxisSettings: false,
@@ -1684,12 +1684,12 @@ function createThemeManager(options, themeGroupName) {
                 valueAxisTheme: true
             }
         }
-    }, "generic");
+    }, 'generic');
 
-    QUnit.module("getOptions", {
+    QUnit.module('getOptions', {
         beforeEach: function() {
             this.getOptions = function(options) {
-                return $.extend(true, { theme: "getOptionsTheme" }, options);
+                return $.extend(true, { theme: 'getOptionsTheme' }, options);
             };
         },
         afterEach: function() {
@@ -1697,128 +1697,128 @@ function createThemeManager(options, themeGroupName) {
         }
     });
 
-    QUnit.test("getOptions", function(assert) {
+    QUnit.test('getOptions', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
-            firstLevelOption2: "from user",
+            firstLevelOption2: 'from user',
             firstLevelObject: {
-                value1: "from user",
-                value3: "from user3"
+                value1: 'from user',
+                value3: 'from user3'
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
-        assert.strictEqual(themeManager.getOptions("firstLevelOption1"), "from theme1");
-        assert.strictEqual(themeManager.getOptions("firstLevelOption2"), "from user");
-        assert.deepEqual(themeManager.getOptions("firstLevelObject"), {
-            value1: "from user",
-            value2: "from theme2",
-            value3: "from user3"
+        assert.strictEqual(themeManager.getOptions('firstLevelOption1'), 'from theme1');
+        assert.strictEqual(themeManager.getOptions('firstLevelOption2'), 'from user');
+        assert.deepEqual(themeManager.getOptions('firstLevelObject'), {
+            value1: 'from user',
+            value2: 'from theme2',
+            value3: 'from user3'
         });
     });
 
-    QUnit.test("getOptions. false", function(assert) {
+    QUnit.test('getOptions. false', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             firstLevelOption2: false,
         }));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
-        assert.strictEqual(themeManager.getOptions("firstLevelOption2"), false);
+        assert.strictEqual(themeManager.getOptions('firstLevelOption2'), false);
     });
 
-    QUnit.test("setTheme after getOptions", function(assert) {
+    QUnit.test('setTheme after getOptions', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
-            firstLevelOption2: "from user",
+            firstLevelOption2: 'from user',
             firstLevelObject: {
-                value1: "from user",
-                value3: "from user3"
+                value1: 'from user',
+                value3: 'from user3'
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        themeManager.getOptions("firstLevelOption1"), "from theme1";
+        themeManager.setTheme('getOptionsTheme');
+        themeManager.getOptions('firstLevelOption1'), 'from theme1';
 
-        themeManager.setTheme("default");
+        themeManager.setTheme('default');
 
-        assert.strictEqual(themeManager.getOptions("firstLevelOption1"), undefined);
+        assert.strictEqual(themeManager.getOptions('firstLevelOption1'), undefined);
     });
 
-    QUnit.test("Save getOptions result", function(assert) {
+    QUnit.test('Save getOptions result', function(assert) {
         var options = this.getOptions({
-                firstLevelOption2: "from user",
+                firstLevelOption2: 'from user',
                 firstLevelObject: {
-                    value1: "from user",
-                    value3: "from user3"
+                    value1: 'from user',
+                    value3: 'from user3'
                 }
             }),
             themeManager = createThemeManager(options);
-        themeManager.setTheme("getOptionsTheme");
-        var result1 = themeManager.getOptions("firstLevelOption1"),
-            result2 = themeManager.getOptions("firstLevelObject");
+        themeManager.setTheme('getOptionsTheme');
+        var result1 = themeManager.getOptions('firstLevelOption1'),
+            result2 = themeManager.getOptions('firstLevelObject');
 
         themeManager.update({});
 
-        assert.strictEqual(themeManager.getOptions("firstLevelOption1"), result1);
-        assert.deepEqual(themeManager.getOptions("firstLevelObject"), result2);
+        assert.strictEqual(themeManager.getOptions('firstLevelOption1'), result1);
+        assert.deepEqual(themeManager.getOptions('firstLevelObject'), result2);
     });
 
-    QUnit.test("Reset saved getOptions result", function(assert) {
+    QUnit.test('Reset saved getOptions result', function(assert) {
         var options = this.getOptions({
-                firstLevelOption2: "from user",
+                firstLevelOption2: 'from user',
                 firstLevelObject: {
-                    value1: "from user",
-                    value3: "from user3"
+                    value1: 'from user',
+                    value3: 'from user3'
                 }
             }),
             themeManager = createThemeManager(options);
-        themeManager.setTheme("getOptionsTheme");
-        var result1 = themeManager.getOptions("firstLevelOption2"),
-            result2 = themeManager.getOptions("firstLevelObject");
-        options.firstLevelOption2 = "new value";
+        themeManager.setTheme('getOptionsTheme');
+        var result1 = themeManager.getOptions('firstLevelOption2'),
+            result2 = themeManager.getOptions('firstLevelObject');
+        options.firstLevelOption2 = 'new value';
         themeManager.update(options);
 
-        themeManager.resetOptions("firstLevelOption2");
+        themeManager.resetOptions('firstLevelOption2');
 
-        assert.ok(themeManager.getOptions("firstLevelOption2") !== result1);
-        assert.deepEqual(themeManager.getOptions("firstLevelObject"), result2);
+        assert.ok(themeManager.getOptions('firstLevelOption2') !== result1);
+        assert.deepEqual(themeManager.getOptions('firstLevelObject'), result2);
 
-        assert.strictEqual(themeManager.getOptions("firstLevelOption2"), "new value");
+        assert.strictEqual(themeManager.getOptions('firstLevelOption2'), 'new value');
     });
 
-    QUnit.test("calculate series type from theme", function(assert) {
+    QUnit.test('calculate series type from theme', function(assert) {
         var themeManager = createThemeManager(this.getOptions({}));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
-        assert.strictEqual(themeManager.getOptions("series", {}).type, "themetype");
-        assert.strictEqual(themeManager.getOptions("series", { type: "usertype" }).type, "usertype");
+        assert.strictEqual(themeManager.getOptions('series', {}).type, 'themetype');
+        assert.strictEqual(themeManager.getOptions('series', { type: 'usertype' }).type, 'usertype');
 
     });
 
-    QUnit.test("calculate series type from commonSeriesSettings", function(assert) {
+    QUnit.test('calculate series type from commonSeriesSettings', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonSeriesSettings: {
-                type: "commonType"
+                type: 'commonType'
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
-        assert.strictEqual(themeManager.getOptions("series", {}).type, "commontype");
-        assert.strictEqual(themeManager.getOptions("series", { type: "usertype" }).type, "usertype");
+        assert.strictEqual(themeManager.getOptions('series', {}).type, 'commontype');
+        assert.strictEqual(themeManager.getOptions('series', { type: 'usertype' }).type, 'usertype');
 
     });
 
-    QUnit.test("Process crosshair label font options", function(assert) {
-        var themeManager = createThemeManager(this.getOptions({ crosshair: {}, fontFields: ["crosshair.label.font"] }));
-        themeManager.setTheme("getOptionsTheme");
+    QUnit.test('Process crosshair label font options', function(assert) {
+        var themeManager = createThemeManager(this.getOptions({ crosshair: {}, fontFields: ['crosshair.label.font'] }));
+        themeManager.setTheme('getOptionsTheme');
 
-        assert.deepEqual(themeManager.getOptions("crosshair").label.font, {
-            color: "#ffffff",
-            cursor: "default",
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
+        assert.deepEqual(themeManager.getOptions('crosshair').label.font, {
+            color: '#ffffff',
+            cursor: 'default',
+            family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
             size: 12,
             weight: 400
         });
     });
 
-    QUnit.test("Axis options. Value Axis", function(assert) {
+    QUnit.test('Axis options. Value Axis', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
@@ -1841,8 +1841,8 @@ function createThemeManager(options, themeGroupName) {
                 horizontalAxisUser: true
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("valueAxis", { myOptions: true });
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('valueAxis', { myOptions: true });
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1857,7 +1857,7 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(!result.argumentAxisTheme);
     });
 
-    QUnit.test("Axis options. Value Axis.Rotated", function(assert) {
+    QUnit.test('Axis options. Value Axis.Rotated', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
@@ -1880,8 +1880,8 @@ function createThemeManager(options, themeGroupName) {
                 horizontalAxisUser: true
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("valueAxis", { myOptions: true }, true);
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('valueAxis', { myOptions: true }, true);
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1895,7 +1895,7 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(!result.argumentAxisTheme);
     });
 
-    QUnit.test("Axis options. Argument Axis", function(assert) {
+    QUnit.test('Axis options. Argument Axis', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
@@ -1918,8 +1918,8 @@ function createThemeManager(options, themeGroupName) {
                 horizontalAxisUser: true
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("argumentAxis", { myOptions: true });
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('argumentAxis', { myOptions: true });
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1932,7 +1932,7 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(!result.valueAxisTheme);
     });
 
-    QUnit.test("Axis options. Argument Axis.Rotated", function(assert) {
+    QUnit.test('Axis options. Argument Axis.Rotated', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
@@ -1956,8 +1956,8 @@ function createThemeManager(options, themeGroupName) {
                 horizontalAxisUser: true
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("argumentAxis", { myOptions: true }, true);
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('argumentAxis', { myOptions: true }, true);
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1970,34 +1970,34 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(!result.valueAxisTheme);
     });
 
-    QUnit.test("Axis options. Process string", function(assert) {
+    QUnit.test('Axis options. Process string', function(assert) {
         var themeManager = createThemeManager(this.getOptions({}));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("argumentAxis", { title: "axis" });
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('argumentAxis', { title: 'axis' });
 
-        assert.strictEqual(result.title.text, "axis");
+        assert.strictEqual(result.title.text, 'axis');
     });
 
-    QUnit.test("Axis options. Process string. commonAxisSettings", function(assert) {
+    QUnit.test('Axis options. Process string. commonAxisSettings', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
-                title: "axis"
+                title: 'axis'
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("argumentAxis", {});
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('argumentAxis', {});
 
-        assert.strictEqual(result.title.text, "axis");
+        assert.strictEqual(result.title.text, 'axis');
     });
 
     QUnit.test('Invalid logarithmic type', function(assert) {
         var themeManager = createThemeManager(this.getOptions({}));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
         var doAssert = function(options, type, base, error, entity) {
             assert.equal(options.type, type, 'type of ' + entity);
             assert.equal(options.logarithmBase, base, 'logarithmicBase of ' + entity);
-            assert.equal(options.logarithmBaseError, error, "error flag incorrect " + entity);
+            assert.equal(options.logarithmBaseError, error, 'error flag incorrect ' + entity);
         };
 
         doAssert(themeManager.getOptions('argumentAxis', {
@@ -2026,7 +2026,7 @@ function createThemeManager(options, themeGroupName) {
         }), 'logarithmic', 10, true, 'valueAxis[3]');
     });
 
-    QUnit.test("Axis options. Argument Axis. workWeek option", function(assert) {
+    QUnit.test('Axis options. Argument Axis. workWeek option', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 workWeek: [0]
@@ -2041,21 +2041,21 @@ function createThemeManager(options, themeGroupName) {
                 workWeek: [3]
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
-        var result = themeManager.getOptions("argumentAxis", { workWeek: [1, 2] });
+        var result = themeManager.getOptions('argumentAxis', { workWeek: [1, 2] });
 
         assert.deepEqual(result.workWeek, [1, 2]);
     });
 
-    QUnit.test("Axis options. Get axis options without passing user options", function(assert) {
+    QUnit.test('Axis options. Get axis options without passing user options', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 common: true
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        var result = themeManager.getOptions("argumentAxis");
+        themeManager.setTheme('getOptionsTheme');
+        var result = themeManager.getOptions('argumentAxis');
 
         assert.ok(result.common);
     });
@@ -2069,10 +2069,10 @@ function createThemeManager(options, themeGroupName) {
                 }
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
         // act
-        var result = themeManager.getOptions("valueAxis", {});
+        var result = themeManager.getOptions('valueAxis', {});
 
         // assert
         assert.ok(result.label, 'Axis have option label');
@@ -2083,9 +2083,9 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('set label alignment in axisSettings ', function(assert) {
         var themeManager = createThemeManager(this.getOptions({}));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
         // act
-        var result = themeManager.getOptions("valueAxis", {
+        var result = themeManager.getOptions('valueAxis', {
             label: {
                 rotationAngle: -90,
                 alignment: 'right'
@@ -2102,10 +2102,10 @@ function createThemeManager(options, themeGroupName) {
         var themeManager = createThemeManager(this.getOptions({
             animation: true
         }));
-        themeManager.setTheme("getOptionsTheme");
-        assert.deepEqual(themeManager.getOptions("animation"), {
+        themeManager.setTheme('getOptionsTheme');
+        assert.deepEqual(themeManager.getOptions('animation'), {
             duration: 1000,
-            easing: "easeOutCubic",
+            easing: 'easeOutCubic',
             enabled: true,
             maxPointCountSupported: 300
         });
@@ -2116,10 +2116,10 @@ function createThemeManager(options, themeGroupName) {
         var themeManager = createThemeManager(this.getOptions({
             animation: false
         }));
-        themeManager.setTheme("getOptionsTheme");
-        assert.deepEqual(themeManager.getOptions("animation"), {
+        themeManager.setTheme('getOptionsTheme');
+        assert.deepEqual(themeManager.getOptions('animation'), {
             duration: 1000,
-            easing: "easeOutCubic",
+            easing: 'easeOutCubic',
             enabled: false,
             maxPointCountSupported: 300
         });
@@ -2129,10 +2129,10 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('Animation. undefined', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
         }));
-        themeManager.setTheme("getOptionsTheme");
-        assert.deepEqual(themeManager.getOptions("animation"), {
+        themeManager.setTheme('getOptionsTheme');
+        assert.deepEqual(themeManager.getOptions('animation'), {
             duration: 1000,
-            easing: "easeOutCubic",
+            easing: 'easeOutCubic',
             enabled: true,
             maxPointCountSupported: 300
         });
@@ -2143,15 +2143,15 @@ function createThemeManager(options, themeGroupName) {
         var themeManager = createThemeManager(this.getOptions({
             animation: {
                 duration: 2000,
-                easing: "myeasing",
+                easing: 'myeasing',
                 enabled: true,
                 maxPointCountSupported: 400
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
-        assert.deepEqual(themeManager.getOptions("animation"), {
+        themeManager.setTheme('getOptionsTheme');
+        assert.deepEqual(themeManager.getOptions('animation'), {
             duration: 2000,
-            easing: "myeasing",
+            easing: 'myeasing',
             enabled: true,
             maxPointCountSupported: 400
         });
@@ -2160,7 +2160,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('get valueAxis for rangeSelector', function(assert) {
         var themeManager = createThemeManager(this.getOptions({}));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
 
         var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
@@ -2178,7 +2178,7 @@ function createThemeManager(options, themeGroupName) {
                 someField: 'someValue'
             }
         }));
-        themeManager.setTheme("getOptionsTheme");
+        themeManager.setTheme('getOptionsTheme');
         var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
         assert.equal(valueOptions.endOnTick, undefined);
@@ -2192,32 +2192,32 @@ function createThemeManager(options, themeGroupName) {
 })();
 
 (function zoomAndPan() {
-    QUnit.module("Get options - zoomAndPan");
+    QUnit.module('Get options - zoomAndPan');
 
-    QUnit.test("Ignore deprecated options if new options are used", function(assert) {
+    QUnit.test('Ignore deprecated options if new options are used', function(assert) {
         var themeManager = createThemeManager({
             zoomAndPan: {
-                argumentAxis: "none",
-                valueAxis: "none"
+                argumentAxis: 'none',
+                valueAxis: 'none'
             },
-            zoomingMode: "all",
-            scrollingMode: "all"
+            zoomingMode: 'all',
+            scrollingMode: 'all'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                dragToZoom: "dragToZoomValue",
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                dragToZoom: 'dragToZoomValue',
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2225,34 +2225,34 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: true, pan: false, zoom: false },
             dragToZoom: true,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: true,
             allowTouchGestures: true
         });
     });
 
-    QUnit.test("No user options. scrollingMode=all allows argument axis panning by mouse and touch", function(assert) {
+    QUnit.test('No user options. scrollingMode=all allows argument axis panning by mouse and touch', function(assert) {
         var themeManager = createThemeManager({
-            scrollingMode: "all"
+            scrollingMode: 'all'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2260,34 +2260,34 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: false, pan: true, zoom: false },
             dragToZoom: false,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: false,
             allowTouchGestures: true
         });
     });
 
-    QUnit.test("No user options. scrollingMode=mouse allows argument axis panning by mouse only", function(assert) {
+    QUnit.test('No user options. scrollingMode=mouse allows argument axis panning by mouse only', function(assert) {
         var themeManager = createThemeManager({
-            scrollingMode: "mouse"
+            scrollingMode: 'mouse'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2295,34 +2295,34 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: false, pan: true, zoom: false },
             dragToZoom: false,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: false,
             allowTouchGestures: false
         });
     });
 
-    QUnit.test("No user options. scrollingMode=touch allows argument axis panning by mouse and touch", function(assert) {
+    QUnit.test('No user options. scrollingMode=touch allows argument axis panning by mouse and touch', function(assert) {
         var themeManager = createThemeManager({
-            scrollingMode: "touch"
+            scrollingMode: 'touch'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2330,34 +2330,34 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: false, pan: true, zoom: false },
             dragToZoom: false,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: false,
             allowTouchGestures: true
         });
     });
 
-    QUnit.test("No user options. zoomingMode=all allows argument axis zooming by mousewheel and touch", function(assert) {
+    QUnit.test('No user options. zoomingMode=all allows argument axis zooming by mousewheel and touch', function(assert) {
         var themeManager = createThemeManager({
-            zoomingMode: "all"
+            zoomingMode: 'all'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2365,34 +2365,34 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: false, pan: false, zoom: true },
             dragToZoom: false,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: true,
             allowTouchGestures: true
         });
     });
 
-    QUnit.test("No user options. zoomingMode=mouse allows argument axis zooming by mousewheel only", function(assert) {
+    QUnit.test('No user options. zoomingMode=mouse allows argument axis zooming by mousewheel only', function(assert) {
         var themeManager = createThemeManager({
-            zoomingMode: "mouse"
+            zoomingMode: 'mouse'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2400,34 +2400,34 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: false, pan: false, zoom: true },
             dragToZoom: false,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: true,
             allowTouchGestures: false
         });
     });
 
-    QUnit.test("No user options. zoomingMode=touch allows argument axis zooming by touch only", function(assert) {
+    QUnit.test('No user options. zoomingMode=touch allows argument axis zooming by touch only', function(assert) {
         var themeManager = createThemeManager({
-            zoomingMode: "touch"
+            zoomingMode: 'touch'
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowTouchGestures: "allowTouchGesturesValue",
-                allowMouseWheel: "allowMouseWheelValue",
+                allowTouchGestures: 'allowTouchGesturesValue',
+                allowMouseWheel: 'allowMouseWheelValue',
                 dragBoxStyle: {
-                    color: "dragBoxColor",
-                    opacity: "dragBoxOpacity"
+                    color: 'dragBoxColor',
+                    opacity: 'dragBoxOpacity'
                 },
-                panKey: "panKeyValue"
+                panKey: 'panKeyValue'
             }
         });
 
         // act
-        var theme = themeManager.getOptions("zoomAndPan");
+        var theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2435,11 +2435,11 @@ function createThemeManager(options, themeGroupName) {
             argumentAxis: { none: false, pan: false, zoom: true },
             dragToZoom: false,
             dragBoxStyle: {
-                class: "dxc-shutter",
-                fill: "dragBoxColor",
-                opacity: "dragBoxOpacity"
+                class: 'dxc-shutter',
+                fill: 'dragBoxColor',
+                opacity: 'dragBoxOpacity'
             },
-            panKey: "panKeyValue",
+            panKey: 'panKeyValue',
             allowMouseWheel: false,
             allowTouchGestures: true
         });

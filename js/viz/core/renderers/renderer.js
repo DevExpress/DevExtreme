@@ -1,14 +1,14 @@
-import $ from "../../../core/renderer";
-import domAdapter from "../../../core/dom_adapter";
-import windowUtils from "../../../core/utils/window";
-import callOnce from "../../../core/utils/call_once";
+import $ from '../../../core/renderer';
+import domAdapter from '../../../core/dom_adapter';
+import windowUtils from '../../../core/utils/window';
+import callOnce from '../../../core/utils/call_once';
 
-import eventsEngine from "../../../events/core/events_engine";
-import browser from "../../../core/utils/browser";
-import { getSvgMarkup } from "../../../core/utils/svg";
-import animation from "./animation";
-import { normalizeBBox, rotateBBox, normalizeEnum } from "../utils";
-import { isDefined } from "../../../core/utils/type";
+import eventsEngine from '../../../events/core/events_engine';
+import browser from '../../../core/utils/browser';
+import { getSvgMarkup } from '../../../core/utils/svg';
+import animation from './animation';
+import { normalizeBBox, rotateBBox, normalizeEnum } from '../utils';
+import { isDefined } from '../../../core/utils/type';
 
 const window = windowUtils.getWindow();
 
@@ -19,32 +19,32 @@ const SHARPING_CORRECTION = 0.5;
 const ARC_COORD_PREC = 5;
 
 let pxAddingExceptions = {
-    "column-count": true,
-    "fill-opacity": true,
-    "flex-grow": true,
-    "flex-shrink": true,
-    "font-weight": true,
-    "line-height": true,
-    "opacity": true,
-    "order": true,
-    "orphans": true,
-    "widows": true,
-    "z-index": true,
-    "zoom": true
+    'column-count': true,
+    'fill-opacity': true,
+    'flex-grow': true,
+    'flex-shrink': true,
+    'font-weight': true,
+    'line-height': true,
+    'opacity': true,
+    'order': true,
+    'orphans': true,
+    'widows': true,
+    'z-index': true,
+    'zoom': true
 };
 
-const KEY_TEXT = "text";
-const KEY_STROKE = "stroke";
-const KEY_STROKE_WIDTH = "stroke-width";
-const KEY_STROKE_OPACITY = "stroke-opacity";
-const KEY_FONT_SIZE = "font-size";
-const KEY_FONT_STYLE = "font-style";
-const KEY_FONT_WEIGHT = "font-weight";
-const KEY_TEXT_DECORATION = "text-decoration";
-const KEY_TEXTS_ALIGNMENT = "textsAlignment";
-const NONE = "none";
+const KEY_TEXT = 'text';
+const KEY_STROKE = 'stroke';
+const KEY_STROKE_WIDTH = 'stroke-width';
+const KEY_STROKE_OPACITY = 'stroke-opacity';
+const KEY_FONT_SIZE = 'font-size';
+const KEY_FONT_STYLE = 'font-style';
+const KEY_FONT_WEIGHT = 'font-weight';
+const KEY_TEXT_DECORATION = 'text-decoration';
+const KEY_TEXTS_ALIGNMENT = 'textsAlignment';
+const NONE = 'none';
 const DEFAULT_FONT_SIZE = 12;
-const ELLIPSIS = "...";
+const ELLIPSIS = '...';
 
 let objectCreate = (function() {
     if(!Object.create) {
@@ -63,14 +63,14 @@ let objectCreate = (function() {
 let DEFAULTS = {
     scaleX: 1,
     scaleY: 1,
-    "pointer-events": null
+    'pointer-events': null
 };
 
 let getBackup = callOnce(function() {
-    let backupContainer = domAdapter.createElement("div"),
+    let backupContainer = domAdapter.createElement('div'),
         backupCounter = 0;
-    backupContainer.style.left = "-9999px";
-    backupContainer.style.position = "absolute";
+    backupContainer.style.left = '-9999px';
+    backupContainer.style.position = 'absolute';
 
     return {
         backupContainer: backupContainer,
@@ -96,19 +96,19 @@ function restoreRoot(root, container) {
 
 let getNextDefsSvgId = (function() {
     let numDefsSvgElements = 1;
-    return function() { return "DevExpress_" + numDefsSvgElements++; };
+    return function() { return 'DevExpress_' + numDefsSvgElements++; };
 })();
 
 function isObjectArgument(value) {
-    return value && (typeof value !== "string");
+    return value && (typeof value !== 'string');
 }
 
 function createElement(tagName) {
-    return domAdapter.createElementNS("http://www.w3.org/2000/svg", tagName);
+    return domAdapter.createElementNS('http://www.w3.org/2000/svg', tagName);
 }
 
 function getFuncIri(id, pathModified) {
-    return id !== null ? "url(" + (pathModified ? window.location.href.split("#")[0] : "") + "#" + id + ")" : id;
+    return id !== null ? 'url(' + (pathModified ? window.location.href.split('#')[0] : '') + '#' + id + ')' : id;
 }
 
 module.exports.getFuncIri = getFuncIri;
@@ -138,20 +138,20 @@ function getBoundingClientRect(element) {
 }
 
 let preserveAspectRatioMap = {
-    "full": NONE,
-    "lefttop": "xMinYMin",
-    "leftcenter": "xMinYMid",
-    "leftbottom": "xMinYMax",
-    "centertop": "xMidYMin",
-    "center": "xMidYMid",
-    "centerbottom": "xMidYMax",
-    "righttop": "xMaxYMin",
-    "rightcenter": "xMaxYMid",
-    "rightbottom": "xMaxYMax"
+    'full': NONE,
+    'lefttop': 'xMinYMin',
+    'leftcenter': 'xMinYMid',
+    'leftbottom': 'xMinYMax',
+    'centertop': 'xMidYMin',
+    'center': 'xMidYMid',
+    'centerbottom': 'xMidYMax',
+    'righttop': 'xMaxYMin',
+    'rightcenter': 'xMaxYMid',
+    'rightbottom': 'xMaxYMax'
 };
 
 function processHatchingAttrs(element, attrs) {
-    if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== "none") {
+    if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== 'none') {
         attrs = extend({}, attrs);
         attrs.fill = element._hatching = element.renderer.lockHatching(attrs.fill, attrs.hatching, element._hatching);
         delete attrs.hatching;
@@ -208,34 +208,34 @@ function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
         cos(endAngle),
         sin(endAngle),
         isCircle,
-        floor(abs(endAngle - startAngle) / PI) % 2 ? "1" : "0",
+        floor(abs(endAngle - startAngle) / PI) % 2 ? '1' : '0',
         noArc
     ];
 }
 
 let buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
     return [
-        "M", (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
-        "A", outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
-        (isCircle ? "M" : "L"), (x + innerR * endAngleCos).toFixed(5), (y - innerR * endAngleSin).toFixed(ARC_COORD_PREC),
-        "A", innerR.toFixed(ARC_COORD_PREC), innerR.toFixed(ARC_COORD_PREC), 0, longFlag, 1, (x + innerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - innerR * startAngleSin).toFixed(ARC_COORD_PREC),
-        "Z"
-    ].join(" ");
+        'M', (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
+        'A', outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
+        (isCircle ? 'M' : 'L'), (x + innerR * endAngleCos).toFixed(5), (y - innerR * endAngleSin).toFixed(ARC_COORD_PREC),
+        'A', innerR.toFixed(ARC_COORD_PREC), innerR.toFixed(ARC_COORD_PREC), 0, longFlag, 1, (x + innerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - innerR * startAngleSin).toFixed(ARC_COORD_PREC),
+        'Z'
+    ].join(' ');
 };
 
 function buildPathSegments(points, type) {
-    let list = [["M", 0, 0]];
+    let list = [['M', 0, 0]];
     switch(type) {
-        case "line":
+        case 'line':
             list = buildLineSegments(points);
             break;
-        case "area":
+        case 'area':
             list = buildLineSegments(points, true);
             break;
-        case "bezier":
+        case 'bezier':
             list = buildCurveSegments(points);
             break;
-        case "bezierarea":
+        case 'bezierarea':
             list = buildCurveSegments(points, true);
             break;
     }
@@ -273,18 +273,18 @@ function buildSimpleLineSegment(points, close, list) {
         // backward compatibility
         if(points[0].x !== undefined) {
             for(; i < ii;) {
-                list[k++] = ["L", points[i].x, points[i++].y];
+                list[k++] = ['L', points[i].x, points[i++].y];
             }
         } else {
             for(; i < ii;) {
-                list[k++] = ["L", points[i++], points[i++]];
+                list[k++] = ['L', points[i++], points[i++]];
             }
         }
-        list[k0][0] = "M";
+        list[k0][0] = 'M';
     } else {
-        list[k] = ["M", 0, 0];
+        list[k] = ['M', 0, 0];
     }
-    close && list.push(["Z"]);
+    close && list.push(['Z']);
     return list;
 }
 
@@ -295,10 +295,10 @@ function buildSimpleCurveSegment(points, close, list) {
     if(ii) {
         // backward compatibility
         if(points[0].x !== undefined) {
-            list[k++] = ["M", points[0].x, points[0].y];
+            list[k++] = ['M', points[0].x, points[0].y];
             for(i = 1; i < ii;) {
                 list[k++] = [
-                    "C",
+                    'C',
                     points[i].x,
                     points[i++].y,
                     points[i].x,
@@ -308,10 +308,10 @@ function buildSimpleCurveSegment(points, close, list) {
                 ];
             }
         } else {
-            list[k++] = ["M", points[0], points[1]];
+            list[k++] = ['M', points[0], points[1]];
             for(i = 2; i < ii;) {
                 list[k++] = [
-                    "C",
+                    'C',
                     points[i++],
                     points[i++],
                     points[i++],
@@ -322,9 +322,9 @@ function buildSimpleCurveSegment(points, close, list) {
             }
         }
     } else {
-        list[k] = ["M", 0, 0];
+        list[k] = ['M', 0, 0];
     }
-    close && list.push(["Z"]);
+    close && list.push(['Z']);
     return list;
 }
 
@@ -342,7 +342,7 @@ function combinePathParam(segments) {
             d[k++] = segment[j];
         }
     }
-    return d.join(" ");
+    return d.join(' ');
 }
 
 function compensateSegments(oldSegments, newSegments, type) {
@@ -350,7 +350,7 @@ function compensateSegments(oldSegments, newSegments, type) {
         newLength = newSegments.length,
         i,
         originalNewSegments,
-        makeEqualSegments = (type.indexOf("area") !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
+        makeEqualSegments = (type.indexOf('area') !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
 
     if(oldLength === 0) {
         for(i = 0; i < newLength; i++) {
@@ -369,13 +369,13 @@ function prepareConstSegment(constSeg, type) {
     let x = constSeg[constSeg.length - 2],
         y = constSeg[constSeg.length - 1];
     switch(type) {
-        case "line":
-        case "area":
-            constSeg[0] = "L";
+        case 'line':
+        case 'area':
+            constSeg[0] = 'L';
             break;
-        case "bezier":
-        case "bezierarea":
-            constSeg[0] = "C";
+        case 'bezier':
+        case 'bezierarea':
+            constSeg[0] = 'C';
             constSeg[1] = constSeg[3] = constSeg[5] = x;
             constSeg[2] = constSeg[4] = constSeg[6] = y;
             break;
@@ -415,7 +415,7 @@ function makeEqualAreaSegments(short, long, type) {
 
 function baseCss(that, styles) {
     let elemStyles = that._styles,
-        str = "",
+        str = '',
         key,
         value;
 
@@ -423,8 +423,8 @@ function baseCss(that, styles) {
     for(key in styles) {
         value = styles[key];
         if(isDefined(value)) {
-            value += typeof value === "number" && !pxAddingExceptions[key] ? "px" : "";
-            elemStyles[key] = value !== "" ? value : null;
+            value += typeof value === 'number' && !pxAddingExceptions[key] ? 'px' : '';
+            elemStyles[key] = value !== '' ? value : null;
         }
     }
     // NOTE: Seems that [].concat is not faster when there are only few entries in the `styles` (and in most cases there are few of them)
@@ -432,10 +432,10 @@ function baseCss(that, styles) {
         // The alternative is to *delete* entries in the previous cycle, but it is *delete*!
         value = elemStyles[key];
         if(value) {
-            str += key + ":" + value + ";";
+            str += key + ':' + value + ';';
         }
     }
-    str && that.element.setAttribute("style", str);
+    str && that.element.setAttribute('style', str);
     return that;
 }
 
@@ -443,7 +443,7 @@ function fixFuncIri(wrapper, attribute) {
     let element = wrapper.element,
         id = wrapper.attr(attribute);
 
-    if(id && id.indexOf("DevExpress") !== -1) {
+    if(id && id.indexOf('DevExpress') !== -1) {
         element.removeAttribute(attribute);
         element.setAttribute(attribute, getFuncIri(id, wrapper.renderer.pathModified));
     }
@@ -482,15 +482,15 @@ function baseAttr(that, attrs) {
         }
         settings[key] = value;
 
-        if(key === "align") {
-            key = "text-anchor";
-            value = { left: rtl ? "end" : "start", center: "middle", right: rtl ? "start" : "end" }[value] || null;
-        } else if(key === "dashStyle") {
+        if(key === 'align') {
+            key = 'text-anchor';
+            value = { left: rtl ? 'end' : 'start', center: 'middle', right: rtl ? 'start' : 'end' }[value] || null;
+        } else if(key === 'dashStyle') {
             recalculateDashStyle = true;
             continue;
         } else if(key === KEY_STROKE_WIDTH) {
             recalculateDashStyle = true;
-        } else if(value && (key === "fill" || key === "clip-path" || key === "filter") && value.indexOf("DevExpress") === 0) {
+        } else if(value && (key === 'fill' || key === 'clip-path' || key === 'filter') && value.indexOf('DevExpress') === 0) {
             that._addFixIRICallback();
             value = getFuncIri(value, renderer.pathModified);
         } else if(/^(translate(X|Y)|rotate[XY]?|scale(X|Y)|sharp|sharpDirection)$/i.test(key)) {
@@ -507,22 +507,22 @@ function baseAttr(that, attrs) {
         }
     }
 
-    if(recalculateDashStyle && ("dashStyle" in settings)) {
+    if(recalculateDashStyle && ('dashStyle' in settings)) {
         value = settings.dashStyle;
-        sw = (("_originalSW" in that) ? that._originalSW : settings[KEY_STROKE_WIDTH]) || 1;
-        key = "stroke-dasharray";
+        sw = (('_originalSW' in that) ? that._originalSW : settings[KEY_STROKE_WIDTH]) || 1;
+        key = 'stroke-dasharray';
 
-        value = value === null ? "" : normalizeEnum(value);
+        value = value === null ? '' : normalizeEnum(value);
 
-        if(value === "" || value === "solid" || value === NONE) {
+        if(value === '' || value === 'solid' || value === NONE) {
             that.element.removeAttribute(key);
         } else {
-            value = value.replace(/longdash/g, "8,3,").replace(/dash/g, "4,3,").replace(/dot/g, "1,3,").replace(/,$/, "").split(",");
+            value = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '').split(',');
             i = value.length;
             while(i--) {
                 value[i] = parseInt((value[i])) * sw;
             }
-            that.element.setAttribute(key, value.join(","));
+            that.element.setAttribute(key, value.join(','));
         }
     }
 
@@ -540,7 +540,7 @@ function pathAttr(attrs) {
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
         segments = attrs.segments;
-        if("points" in attrs) {
+        if('points' in attrs) {
             segments = buildPathSegments(attrs.points, that.type);
             delete attrs.points;
         }
@@ -559,13 +559,13 @@ function arcAttr(attrs) {
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
-        if("x" in attrs || "y" in attrs || "innerRadius" in attrs || "outerRadius" in attrs || "startAngle" in attrs || "endAngle" in attrs) {
-            settings.x = x = "x" in attrs ? attrs.x : settings.x; delete attrs.x;
-            settings.y = y = "y" in attrs ? attrs.y : settings.y; delete attrs.y;
-            settings.innerRadius = innerRadius = "innerRadius" in attrs ? attrs.innerRadius : settings.innerRadius; delete attrs.innerRadius;
-            settings.outerRadius = outerRadius = "outerRadius" in attrs ? attrs.outerRadius : settings.outerRadius; delete attrs.outerRadius;
-            settings.startAngle = startAngle = "startAngle" in attrs ? attrs.startAngle : settings.startAngle; delete attrs.startAngle;
-            settings.endAngle = endAngle = "endAngle" in attrs ? attrs.endAngle : settings.endAngle; delete attrs.endAngle;
+        if('x' in attrs || 'y' in attrs || 'innerRadius' in attrs || 'outerRadius' in attrs || 'startAngle' in attrs || 'endAngle' in attrs) {
+            settings.x = x = 'x' in attrs ? attrs.x : settings.x; delete attrs.x;
+            settings.y = y = 'y' in attrs ? attrs.y : settings.y; delete attrs.y;
+            settings.innerRadius = innerRadius = 'innerRadius' in attrs ? attrs.innerRadius : settings.innerRadius; delete attrs.innerRadius;
+            settings.outerRadius = outerRadius = 'outerRadius' in attrs ? attrs.outerRadius : settings.outerRadius; delete attrs.outerRadius;
+            settings.startAngle = startAngle = 'startAngle' in attrs ? attrs.startAngle : settings.startAngle; delete attrs.startAngle;
+            settings.endAngle = endAngle = 'endAngle' in attrs ? attrs.endAngle : settings.endAngle; delete attrs.endAngle;
 
             attrs.d = buildArcPath.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
         }
@@ -607,7 +607,7 @@ function rectAttr(attrs) {
             (((sw || 0) !== newSW) || !(newSW === 0 && sw === undefined)) && (attrs[KEY_STROKE_WIDTH] = newSW);
         }
 
-        if("sharp" in attrs) {
+        if('sharp' in attrs) {
             delete attrs.sharp;
         }
     }
@@ -658,7 +658,7 @@ function textAttr(attrs) {
         createTextNodes(that, settings.text, isStroked);
         that._hasEllipsis = false;
     }
-    if(isResetRequired || attrs["x"] !== undefined || attrs["y"] !== undefined) {
+    if(isResetRequired || attrs['x'] !== undefined || attrs['y'] !== undefined) {
         locateTextNodes(that);
     }
     if(isStroked) {
@@ -685,21 +685,21 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
 
     if(node.wholeText !== undefined) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
-    } else if(node.tagName === "BR") {
+    } else if(node.tagName === 'BR') {
         ++line;
     } else if(domAdapter.isElementNode(node)) {
         extend(style = {}, parentStyle);
         switch(node.tagName) {
-            case "B":
-            case "STRONG":
-                style[KEY_FONT_WEIGHT] = "bold";
+            case 'B':
+            case 'STRONG':
+                style[KEY_FONT_WEIGHT] = 'bold';
                 break;
-            case "I":
-            case "EM":
-                style[KEY_FONT_STYLE] = "italic";
+            case 'I':
+            case 'EM':
+                style[KEY_FONT_STYLE] = 'italic';
                 break;
-            case "U":
-                style[KEY_TEXT_DECORATION] = "underline";
+            case 'U':
+                style[KEY_TEXT_DECORATION] = 'underline';
                 break;
         }
         realStyle = node.style;
@@ -739,7 +739,7 @@ function removeExtraAttrs(html) {
     return html.replace(findTagAttrs, function(allTagAttrs, p1, p2, p3) {
         p2 = (p2 && p2.match(findStyleAndClassAttrs) || []).map(function(str) {
             return str;
-        }).join(" ");
+        }).join(' ');
 
         return p1 + p2 + p3;
     });
@@ -747,15 +747,15 @@ function removeExtraAttrs(html) {
 
 function parseHTML(text) {
     let items = [],
-        div = domAdapter.createElement("div");
-    div.innerHTML = text.replace(/\r/g, "").replace(/\n/g, "<br/>");
-    orderHtmlTree(items, 0, div, {}, "");
+        div = domAdapter.createElement('div');
+    div.innerHTML = text.replace(/\r/g, '').replace(/\n/g, '<br/>');
+    orderHtmlTree(items, 0, div, {}, '');
     adjustLineHeights(items);
     return items;
 }
 
 function parseMultiline(text) {
-    let texts = text.replace(/\r/g, "").split(/\n/g),
+    let texts = text.replace(/\r/g, '').split(/\n/g),
         i = 0,
         items = [];
     for(; i < texts.length; i++) {
@@ -768,10 +768,10 @@ function createTspans(items, element, fieldName) {
     let i, ii, item;
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
-        item[fieldName] = createElement("tspan");
+        item[fieldName] = createElement('tspan');
         item[fieldName].appendChild(domAdapter.createTextNode(item.value));
         item.style && baseCss({ element: item[fieldName], _styles: {} }, item.style);
-        item.className && item[fieldName].setAttribute("class", item.className); // EXPERIMENTAL
+        item.className && item[fieldName].setAttribute('class', item.className); // EXPERIMENTAL
         element.appendChild(item[fieldName]);
     }
 }
@@ -834,14 +834,14 @@ function cloneAndRemoveAttrs(node) {
     let clone;
     if(node) {
         clone = node.cloneNode();
-        clone.removeAttribute("y");
-        clone.removeAttribute("x");
+        clone.removeAttribute('y');
+        clone.removeAttribute('x');
     }
     return clone || node;
 }
 
 function detachAndStoreTitleElements(element) {
-    const titleElements = domAdapter.querySelectorAll(element, "title");
+    const titleElements = domAdapter.querySelectorAll(element, 'title');
 
     for(let i = 0; i < titleElements.length; i++) {
         element.removeChild(titleElements[i]);
@@ -883,7 +883,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 
         this._texts = lines.reduce((texts, line) => {
             return texts.concat(line.parts);
-        }, []).filter(t => t.value !== "").map(t => {
+        }, []).filter(t => t.value !== '').map(t => {
             t.stroke && t.tspan.parentNode.appendChild(t.stroke);
             return t;
         }).map(t => {
@@ -897,7 +897,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
         if(this._texts) {
             locateTextNodes(this);
         } else {
-            this.element.textContent = "";
+            this.element.textContent = '';
             textIsEmpty = true;
         }
     }
@@ -959,8 +959,8 @@ function prepareLines(element, texts, maxWidth) {
 
 function getSpaceBreakIndex(text, maxWidth) {
     const initialIndices = text.startBox > 0 ? [0] : [];
-    const spaceIndices = text.value.split("").reduce((indices, char, index) => {
-        if(char === " ") {
+    const spaceIndices = text.value.split('').reduce((indices, char, index) => {
+        if(char === ' ') {
             indices.push(index);
         }
         return indices;
@@ -983,7 +983,7 @@ function getWordBreakIndex(text, maxWidth) {
 }
 
 function getEllipsisString(ellipsisMaxWidth, { hideOverflowEllipsis }) {
-    return hideOverflowEllipsis && ellipsisMaxWidth === 0 ? "" : ELLIPSIS;
+    return hideOverflowEllipsis && ellipsisMaxWidth === 0 ? '' : ELLIPSIS;
 }
 
 function setEllipsis(text, ellipsisMaxWidth, options) {
@@ -1003,17 +1003,17 @@ function setEllipsis(text, ellipsisMaxWidth, options) {
 function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     const wholeText = text.value;
     let breakIndex;
-    if(options.wordWrap !== "none") {
-        breakIndex = options.wordWrap === "normal" ? getSpaceBreakIndex(text, maxWidth) : getWordBreakIndex(text, maxWidth);
+    if(options.wordWrap !== 'none') {
+        breakIndex = options.wordWrap === 'normal' ? getSpaceBreakIndex(text, maxWidth) : getWordBreakIndex(text, maxWidth);
     }
 
     let restLines = [];
     let restText;
 
     if(isFinite(breakIndex)) {
-        setNewText(text, breakIndex, "");
+        setNewText(text, breakIndex, '');
 
-        const newTextOffset = wholeText[breakIndex] === " " ? 1 : 0;
+        const newTextOffset = wholeText[breakIndex] === ' ' ? 1 : 0;
 
         const restString = wholeText.slice(breakIndex + newTextOffset);
         if(restString.length) {
@@ -1044,11 +1044,11 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     }
 
     if(text.value.length) {
-        if(options.textOverflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+        if(options.textOverflow === 'ellipsis' && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
             setEllipsis(text, ellipsisMaxWidth, options);
         }
 
-        if(options.textOverflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+        if(options.textOverflow === 'hide' && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
             return [];
         }
     } else {
@@ -1074,7 +1074,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
     const textOverflow = options.textOverflow;
     if(!isFinite(maxHeight)
         || Number(maxHeight) === 0
-        || textOverflow === "none"
+        || textOverflow === 'none'
     ) {
         return lines;
     }
@@ -1087,7 +1087,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
             l.parts.forEach(item => {
                 removeTextSpan(item);
             });
-            if(textOverflow === "ellipsis") {
+            if(textOverflow === 'ellipsis') {
                 const prevLine = arr[index - 1];
                 if(prevLine) {
                     const text = prevLine.parts[prevLine.parts.length - 1];
@@ -1104,7 +1104,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
         return [lines, commonHeight];
     }, [[], 0]);
 
-    if(textOverflow === "hide" && result[1] > maxHeight) {
+    if(textOverflow === 'hide' && result[1] > maxHeight) {
         result[0].forEach(l => {
             l.parts.forEach(item => {
                 removeTextSpan(item);
@@ -1120,8 +1120,8 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
     if(!texts) {
         const textValue = element.textContent;
         const text = { value: textValue, height: 0, line: 0 };
-        element.textContent = "";
-        createTspans([text], element, "tspan");
+        element.textContent = '';
+        createTspans([text], element, 'tspan');
 
         texts = [text];
     }
@@ -1136,7 +1136,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
             lines.push({ commonLength: text.value.length, parts: [text] });
         } else {
             text.startBox = startBox;
-            if(startBox > ellipsisMaxWidth && options.wordWrap === "none" && options.textOverflow === "ellipsis") {
+            if(startBox > ellipsisMaxWidth && options.wordWrap === 'none' && options.textOverflow === 'ellipsis') {
                 removeTextSpan(text);
                 return [lines, startBox, endBox, stop, lineNumber];
             }
@@ -1185,8 +1185,8 @@ function createTextNodes(wrapper, text, isStroked) {
 
     if(text === null) return;
 
-    text = "" + text;
-    if(!wrapper.renderer.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf("&") !== -1)) {
+    text = '' + text;
+    if(!wrapper.renderer.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf('&') !== -1)) {
         parsedHtml = removeExtraAttrs(text);
         items = parseHTML(parsedHtml);
         ///#DEBUG
@@ -1203,7 +1203,7 @@ function createTextNodes(wrapper, text, isStroked) {
             if(isStroked) {
                 createTspans(items, wrapper.element, KEY_STROKE);
             }
-            createTspans(items, wrapper.element, "tspan");
+            createTspans(items, wrapper.element, 'tspan');
         }
     } else {
         wrapper.element.appendChild(domAdapter.createTextNode(text));
@@ -1226,32 +1226,32 @@ function locateTextNodes(wrapper) {
         lineHeight = wrapper._getLineHeight(),
         i, ii,
         item = items[0];
-    setTextNodeAttribute(item, "x", x);
-    setTextNodeAttribute(item, "y", wrapper._settings.y);
+    setTextNodeAttribute(item, 'x', x);
+    setTextNodeAttribute(item, 'y', wrapper._settings.y);
     for(i = 1, ii = items.length; i < ii; ++i) {
         item = items[i];
         if(parseFloat(item.height) >= 0) {
-            setTextNodeAttribute(item, "x", x);
+            setTextNodeAttribute(item, 'x', x);
             const height = getItemLineHeight(item, lineHeight);
-            setTextNodeAttribute(item, "dy", height); // T177039
+            setTextNodeAttribute(item, 'dy', height); // T177039
         }
     }
 }
 
 function alignTextNodes(wrapper, alignment) {
-    if(!wrapper._texts || alignment === "center") {
+    if(!wrapper._texts || alignment === 'center') {
         return;
     }
 
     const items = wrapper._texts;
-    const direction = alignment === "left" ? -1 : 1;
+    const direction = alignment === 'left' ? -1 : 1;
     const maxTextWidth = Math.max.apply(Math, items.map(t => { return getTextWidth(t); }));
 
     for(let i = 0; i < items.length; i++) {
         const item = items[i];
         const textWidth = getTextWidth(item);
         if(maxTextWidth !== 0 && maxTextWidth !== textWidth) {
-            setTextNodeAttribute(item, "dx", direction * round(((maxTextWidth - textWidth) / 2) * 10) / 10);
+            setTextNodeAttribute(item, 'dx', direction * round(((maxTextWidth - textWidth) / 2) * 10) / 10);
         }
     }
 }
@@ -1277,7 +1277,7 @@ function strokeTextNodes(wrapper) {
         tspan.setAttribute(KEY_STROKE, stroke);
         tspan.setAttribute(KEY_STROKE_WIDTH, strokeWidth);
         tspan.setAttribute(KEY_STROKE_OPACITY, strokeOpacity);
-        tspan.setAttribute("stroke-linejoin", "round");
+        tspan.setAttribute('stroke-linejoin', 'round');
     }
 }
 
@@ -1310,7 +1310,7 @@ function baseAnimate(that, params, options, complete) {
                 animationParams.transform = animationParams.transform || { from: {}, to: {} };
                 animationParams.transform.from[key] = key in settings ? Number(settings[key].toFixed(3)) : defaults[key]; // T338486
                 animationParams.transform.to[key] = value;
-            } else if(key === "arc" || key === "segments") {
+            } else if(key === 'arc' || key === 'segments') {
                 animationParams[key] = value;
             } else {
                 animationParams[key] = {
@@ -1335,7 +1335,7 @@ function pathAnimate(params, options, complete) {
         newSegments,
         endSegments;
 
-    if(that.renderer.animationEnabled() && "points" in params) {
+    if(that.renderer.animationEnabled() && 'points' in params) {
         newSegments = buildPathSegments(params.points, that.type);
         endSegments = compensateSegments(curSegments, newSegments, that.type);
 
@@ -1352,7 +1352,7 @@ function arcAnimate(params, options, complete) {
         arcParams = { from: {}, to: {} };
 
     if(that.renderer.animationEnabled() &&
-        ("x" in params || "y" in params || "innerRadius" in params || "outerRadius" in params || "startAngle" in params || "endAngle" in params)) {
+        ('x' in params || 'y' in params || 'innerRadius' in params || 'outerRadius' in params || 'startAngle' in params || 'endAngle' in params)) {
 
         arcParams.from.x = settings.x || 0;
         arcParams.from.y = settings.y || 0;
@@ -1361,12 +1361,12 @@ function arcAnimate(params, options, complete) {
         arcParams.from.startAngle = settings.startAngle || 0;
         arcParams.from.endAngle = settings.endAngle || 0;
 
-        arcParams.to.x = "x" in params ? params.x : settings.x; delete params.x;
-        arcParams.to.y = "y" in params ? params.y : settings.y; delete params.y;
-        arcParams.to.innerRadius = "innerRadius" in params ? params.innerRadius : settings.innerRadius; delete params.innerRadius;
-        arcParams.to.outerRadius = "outerRadius" in params ? params.outerRadius : settings.outerRadius; delete params.outerRadius;
-        arcParams.to.startAngle = "startAngle" in params ? params.startAngle : settings.startAngle; delete params.startAngle;
-        arcParams.to.endAngle = "endAngle" in params ? params.endAngle : settings.endAngle; delete params.endAngle;
+        arcParams.to.x = 'x' in params ? params.x : settings.x; delete params.x;
+        arcParams.to.y = 'y' in params ? params.y : settings.y; delete params.y;
+        arcParams.to.innerRadius = 'innerRadius' in params ? params.innerRadius : settings.innerRadius; delete params.innerRadius;
+        arcParams.to.outerRadius = 'outerRadius' in params ? params.outerRadius : settings.outerRadius; delete params.outerRadius;
+        arcParams.to.startAngle = 'startAngle' in params ? params.startAngle : settings.startAngle; delete params.startAngle;
+        arcParams.to.endAngle = 'endAngle' in params ? params.endAngle : settings.endAngle; delete params.endAngle;
 
         params.arc = arcParams;
     }
@@ -1405,8 +1405,8 @@ function SvgElement(renderer, tagName, type) {
     that._settings = {};
     that._styles = {};
 
-    if(tagName === "path") {
-        that.type = type || "line";
+    if(tagName === 'path') {
+        that.type = type || 'line';
     }
 }
 
@@ -1426,9 +1426,9 @@ SvgElement.prototype = {
     _addFixIRICallback: function() {
         let that = this,
             fn = function() {
-                fixFuncIri(that, "fill");
-                fixFuncIri(that, "clip-path");
-                fixFuncIri(that, "filter");
+                fixFuncIri(that, 'fill');
+                fixFuncIri(that, 'clip-path');
+                fixFuncIri(that, 'filter');
             };
 
         that.element._fixFuncIri = fn;
@@ -1486,7 +1486,7 @@ SvgElement.prototype = {
             }
         }
         if(count > 0) {
-            throw new Error("There are non disposed links!");
+            throw new Error('There are non disposed links!');
         }
     },
     ///#ENDDEBUG
@@ -1586,34 +1586,34 @@ SvgElement.prototype = {
         const sharpMode = tr.sharp;
         const trDirection = tr.sharpDirection || 1;
         const strokeOdd = tr[KEY_STROKE_WIDTH] % 2;
-        const correctionX = (strokeOdd && (sharpMode === "h" || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
-        const correctionY = (strokeOdd && (sharpMode === "v" || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
+        const correctionX = (strokeOdd && (sharpMode === 'h' || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
+        const correctionY = (strokeOdd && (sharpMode === 'v' || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
 
-        transformations.push("translate(" + ((tr.translateX || 0) + correctionX) + "," + ((tr.translateY || 0) + correctionY) + ")");
+        transformations.push('translate(' + ((tr.translateX || 0) + correctionX) + ',' + ((tr.translateY || 0) + correctionY) + ')');
 
         if(tr.rotate) {
-            if("rotateX" in tr) {
+            if('rotateX' in tr) {
                 rotateX = tr.rotateX;
             } else {
                 rotateX = tr.x;
             }
 
-            if("rotateY" in tr) {
+            if('rotateY' in tr) {
                 rotateY = tr.rotateY;
             } else {
                 rotateY = tr.y;
             }
 
-            transformations.push("rotate(" + tr.rotate + "," + (rotateX || 0) + "," + (rotateY || 0) + ")");
+            transformations.push('rotate(' + tr.rotate + ',' + (rotateX || 0) + ',' + (rotateY || 0) + ')');
         }
         scaleXDefined = isDefined(tr.scaleX);
         scaleYDefined = isDefined(tr.scaleY);
         if(scaleXDefined || scaleYDefined) {
-            transformations.push("scale(" + (scaleXDefined ? tr.scaleX : 1) + "," + (scaleYDefined ? tr.scaleY : 1) + ")");
+            transformations.push('scale(' + (scaleXDefined ? tr.scaleX : 1) + ',' + (scaleYDefined ? tr.scaleY : 1) + ')');
         }
 
         if(transformations.length) {
-            this.element.setAttribute("transform", transformations.join(" "));
+            this.element.setAttribute('transform', transformations.join(' '));
         }
     },
 
@@ -1665,8 +1665,8 @@ SvgElement.prototype = {
 
         if(transformation.rotate) {
             bBox = rotateBBox(bBox, [
-                (("rotateX" in transformation) ? transformation.rotateX : transformation.x) || 0,
-                (("rotateY" in transformation) ? transformation.rotateY : transformation.y) || 0
+                (('rotateX' in transformation) ? transformation.rotateX : transformation.x) || 0,
+                (('rotateY' in transformation) ? transformation.rotateY : transformation.y) || 0
             ], -transformation.rotate); // Angle is transformed from svg to right-handed cartesian space
         } else {
             bBox = normalizeBBox(bBox);
@@ -1732,7 +1732,7 @@ SvgElement.prototype = {
 
 // PathSvgElement
 function PathSvgElement(renderer, type) {
-    SvgElement.call(this, renderer, "path", type);
+    SvgElement.call(this, renderer, 'path', type);
 }
 exports.PathSvgElement = PathSvgElement;
 
@@ -1747,7 +1747,7 @@ extend(PathSvgElement.prototype, {
 
 // ArcSvgElement
 function ArcSvgElement(renderer) {
-    SvgElement.call(this, renderer, "path", "arc");
+    SvgElement.call(this, renderer, 'path', 'arc');
 }
 exports.ArcSvgElement = ArcSvgElement;
 
@@ -1762,7 +1762,7 @@ extend(ArcSvgElement.prototype, {
 
 // RectSvgElement
 function RectSvgElement(renderer) {
-    SvgElement.call(this, renderer, "rect");
+    SvgElement.call(this, renderer, 'rect');
 }
 exports.RectSvgElement = RectSvgElement;
 
@@ -1776,8 +1776,8 @@ extend(RectSvgElement.prototype, {
 
 // TextSvgElement
 function TextSvgElement(renderer) {
-    SvgElement.call(this, renderer, "text");
-    this.css({ "white-space": "pre" });
+    SvgElement.call(this, renderer, 'text');
+    this.css({ 'white-space': 'pre' });
 }
 exports.TextSvgElement = TextSvgElement;
 
@@ -1831,22 +1831,22 @@ function unlinkItem(target) {
 
 function Renderer(options) {
     let that = this;
-    that.root = that._createElement("svg", {
-        xmlns: "http://www.w3.org/2000/svg",
-        version: "1.1",
+    that.root = that._createElement('svg', {
+        xmlns: 'http://www.w3.org/2000/svg',
+        version: '1.1',
 
         // Backward compatibility
         fill: NONE,
         stroke: NONE,
-        "stroke-width": 0
-    }).attr({ "class": options.cssClass }).css({
-        "line-height": "normal", // T179515
-        "-ms-user-select": NONE,
-        "-moz-user-select": NONE,
-        "-webkit-user-select": NONE,
-        "-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)",
-        display: "block",
-        overflow: "hidden"
+        'stroke-width': 0
+    }).attr({ 'class': options.cssClass }).css({
+        'line-height': 'normal', // T179515
+        '-ms-user-select': NONE,
+        '-moz-user-select': NONE,
+        '-webkit-user-select': NONE,
+        '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
+        display: 'block',
+        overflow: 'hidden'
     });
 
     that._init();
@@ -1865,10 +1865,10 @@ Renderer.prototype = {
 
     _init: function() {
         let that = this;
-        that._defs = that._createElement("defs").append(that.root);
+        that._defs = that._createElement('defs').append(that.root);
 
         that._animationController = new animation.AnimationController(that.root.element);
-        that._animation = { enabled: true, duration: 1000, easing: "easeOutCubic" };
+        that._animation = { enabled: true, duration: 1000, easing: 'easeOutCubic' };
     },
 
     fixPlacement: function() {
@@ -1882,7 +1882,7 @@ Renderer.prototype = {
 
         if(browser.msie) {
             this.root.css({
-                transform: "translate(" + -dx + "px," + -dy + "px)"
+                transform: 'translate(' + -dx + 'px,' + -dy + 'px)'
             });
         } else if(browser.mozilla) {
             this.root.move(-dx, -dy);
@@ -1895,7 +1895,7 @@ Renderer.prototype = {
         }
 
         if(browser.msie) {
-            this.root.css({ transform: "" });
+            this.root.css({ transform: '' });
         } else if(browser.mozilla) {
             this.root.attr({ transform: null });
         }
@@ -1908,7 +1908,7 @@ Renderer.prototype = {
 
         that.updateAnimationOptions(options.animation || {});
 
-        that.root.attr({ direction: that.rtl ? "rtl" : "ltr" });
+        that.root.attr({ direction: that.rtl ? 'rtl' : 'ltr' });
         return that;
     },
 
@@ -1921,7 +1921,7 @@ Renderer.prototype = {
     lock: function() {
         let that = this;
         if(that._locker === 0) {
-            that._backed = !that._$container.is(":visible");
+            that._backed = !that._$container.is(':visible');
             if(that._backed) {
                 backupRoot(that.root);
             }
@@ -1975,7 +1975,7 @@ Renderer.prototype = {
     },
 
     stopAllAnimations: function(lock) {
-        this._animationController[lock ? "lock" : "stop"]();
+        this._animationController[lock ? 'lock' : 'stop']();
         return this;
     },
 
@@ -2005,24 +2005,24 @@ Renderer.prototype = {
     },
 
     simpleRect: function() {
-        return this._createElement("rect");
+        return this._createElement('rect');
     },
 
     circle: function(x, y, r) {
-        return this._createElement("circle", { cx: x || 0, cy: y || 0, r: r || 0 });
+        return this._createElement('circle', { cx: x || 0, cy: y || 0, r: r || 0 });
     },
 
     g: function() {
-        return this._createElement("g");
+        return this._createElement('g');
     },
 
     image: function(x, y, w, h, href, location) {
-        let image = this._createElement("image", {
+        let image = this._createElement('image', {
             x: x || 0, y: y || 0, width: w || 0, height: h || 0,
             preserveAspectRatio: preserveAspectRatioMap[normalizeEnum(location)] || NONE
         });
 
-        image.element.setAttributeNS("http://www.w3.org/1999/xlink", "href", href || "");
+        image.element.setAttributeNS('http://www.w3.org/1999/xlink', 'href', href || '');
         return image;
     },
 
@@ -2048,11 +2048,11 @@ Renderer.prototype = {
         let gradient,
             id = getNextDefsSvgId(),
             that = this;
-        gradient = that._createElement("linearGradient", { id: id }).append(that._defs);
+        gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
         gradient.id = id;
 
         stops.forEach((stop) => {
-            that._createElement("stop", { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
+            that._createElement('stop', { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
         });
 
         return gradient;
@@ -2074,15 +2074,15 @@ Renderer.prototype = {
 
         id = _id || getNextDefsSvgId();
 
-        d = (normalizeEnum(hatching.direction) === "right" ?
-            "M " + stepTo2 + " " + (-stepTo2) + " L " + (-stepTo2) + " " + stepTo2 + " M 0 " + step + " L " + step + " 0 M " + stepBy15 + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15
-            : "M 0 0 L " + step + " " + step + " M " + (-stepTo2) + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15 + " M " + stepTo2 + " " + (-stepTo2) + " L " + stepBy15 + " " + stepTo2);
+        d = (normalizeEnum(hatching.direction) === 'right' ?
+            'M ' + stepTo2 + ' ' + (-stepTo2) + ' L ' + (-stepTo2) + ' ' + stepTo2 + ' M 0 ' + step + ' L ' + step + ' 0 M ' + stepBy15 + ' ' + stepTo2 + ' L ' + stepTo2 + ' ' + stepBy15
+            : 'M 0 0 L ' + step + ' ' + step + ' M ' + (-stepTo2) + ' ' + stepTo2 + ' L ' + stepTo2 + ' ' + stepBy15 + ' M ' + stepTo2 + ' ' + (-stepTo2) + ' L ' + stepBy15 + ' ' + stepTo2);
 
-        pattern = that._createElement("pattern", { id: id, width: step, height: step, patternUnits: "userSpaceOnUse" }).append(that._defs);
+        pattern = that._createElement('pattern', { id: id, width: step, height: step, patternUnits: 'userSpaceOnUse' }).append(that._defs);
         pattern.id = id;
 
         rect = that.rect(0, 0, step, step).attr({ fill: color, opacity: hatching.opacity }).append(pattern);
-        path = (new exports.PathSvgElement(this)).attr({ d: d, "stroke-width": hatching.width || 1, stroke: color }).append(pattern);
+        path = (new exports.PathSvgElement(this)).attr({ d: d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
 
         ///#DEBUG
         pattern.rect = rect;
@@ -2105,7 +2105,7 @@ Renderer.prototype = {
     clipShape: function(method, methodArgs) {
         const that = this;
         const id = getNextDefsSvgId();
-        let clipPath = that._createElement("clipPath", { id: id }).append(that._defs);
+        let clipPath = that._createElement('clipPath', { id: id }).append(that._defs);
         const shape = method.apply(that, methodArgs).append(clipPath);
         shape.id = id;
 
@@ -2113,7 +2113,7 @@ Renderer.prototype = {
         shape.clipPath = clipPath;
         ///#ENDDEBUG
 
-        shape.remove = function() { throw "Not implemented"; };
+        shape.remove = function() { throw 'Not implemented'; };
         shape.dispose = function() {
             clipPath.dispose();
             clipPath = null;
@@ -2136,12 +2136,12 @@ Renderer.prototype = {
     shadowFilter: function(x, y, width, height, offsetX, offsetY, blur, color, opacity) {
         let that = this,
             id = getNextDefsSvgId(),
-            filter = that._createElement("filter", { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs),
-            gaussianBlur = that._createElement("feGaussianBlur", { "in": "SourceGraphic", "result": "gaussianBlurResult", "stdDeviation": blur || 0 }).append(filter),
-            offset = that._createElement("feOffset", { "in": "gaussianBlurResult", "result": "offsetResult", "dx": offsetX || 0, "dy": offsetY || 0 }).append(filter),
-            flood = that._createElement("feFlood", { "result": "floodResult", "flood-color": color || "", "flood-opacity": opacity }).append(filter),
-            composite = that._createElement("feComposite", { "in": "floodResult", "in2": "offsetResult", "operator": "in", "result": "compositeResult" }).append(filter),
-            finalComposite = that._createElement("feComposite", { "in": "SourceGraphic", "in2": "compositeResult", "operator": "over" }).append(filter);
+            filter = that._createElement('filter', { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs),
+            gaussianBlur = that._createElement('feGaussianBlur', { 'in': 'SourceGraphic', 'result': 'gaussianBlurResult', 'stdDeviation': blur || 0 }).append(filter),
+            offset = that._createElement('feOffset', { 'in': 'gaussianBlurResult', 'result': 'offsetResult', 'dx': offsetX || 0, 'dy': offsetY || 0 }).append(filter),
+            flood = that._createElement('feFlood', { 'result': 'floodResult', 'flood-color': color || '', 'flood-opacity': opacity }).append(filter),
+            composite = that._createElement('feComposite', { 'in': 'floodResult', 'in2': 'offsetResult', 'operator': 'in', 'result': 'compositeResult' }).append(filter),
+            finalComposite = that._createElement('feComposite', { 'in': 'SourceGraphic', 'in2': 'compositeResult', 'operator': 'over' }).append(filter);
 
         filter.id = id;
         filter.gaussianBlur = gaussianBlur;
@@ -2156,20 +2156,20 @@ Renderer.prototype = {
                 offsetAttrs = {},
                 floodAttrs = {};
 
-            ("x" in attrs) && (filterAttrs.x = attrs.x);
-            ("y" in attrs) && (filterAttrs.y = attrs.y);
-            ("width" in attrs) && (filterAttrs.width = attrs.width);
-            ("height" in attrs) && (filterAttrs.height = attrs.height);
+            ('x' in attrs) && (filterAttrs.x = attrs.x);
+            ('y' in attrs) && (filterAttrs.y = attrs.y);
+            ('width' in attrs) && (filterAttrs.width = attrs.width);
+            ('height' in attrs) && (filterAttrs.height = attrs.height);
             baseAttr(that, filterAttrs);
 
-            ("blur" in attrs) && that.gaussianBlur.attr({ "stdDeviation": attrs.blur });
+            ('blur' in attrs) && that.gaussianBlur.attr({ 'stdDeviation': attrs.blur });
 
-            ("offsetX" in attrs) && (offsetAttrs.dx = attrs.offsetX);
-            ("offsetY" in attrs) && (offsetAttrs.dy = attrs.offsetY);
+            ('offsetX' in attrs) && (offsetAttrs.dx = attrs.offsetX);
+            ('offsetY' in attrs) && (offsetAttrs.dy = attrs.offsetY);
             that.offset.attr(offsetAttrs);
 
-            ("color" in attrs) && (floodAttrs["flood-color"] = attrs.color);
-            ("opacity" in attrs) && (floodAttrs["flood-opacity"] = attrs.opacity);
+            ('color' in attrs) && (floodAttrs['flood-color'] = attrs.color);
+            ('opacity' in attrs) && (floodAttrs['flood-opacity'] = attrs.opacity);
             that.flood.attr(floodAttrs);
 
             return that;
@@ -2181,17 +2181,17 @@ Renderer.prototype = {
     brightFilter: function(type, slope) {
         let that = this,
             id = getNextDefsSvgId(),
-            filter = that._createElement("filter", { id: id }).append(that._defs),
-            componentTransferElement = that._createElement("feComponentTransfer").append(filter),
+            filter = that._createElement('filter', { id: id }).append(that._defs),
+            componentTransferElement = that._createElement('feComponentTransfer').append(filter),
             attrs = {
                 type: type,
                 slope: slope
             };
 
         filter.id = id;
-        that._createElement("feFuncR", attrs).append(componentTransferElement);
-        that._createElement("feFuncG", attrs).append(componentTransferElement);
-        that._createElement("feFuncB", attrs).append(componentTransferElement);
+        that._createElement('feFuncR', attrs).append(componentTransferElement);
+        that._createElement('feFuncG', attrs).append(componentTransferElement);
+        that._createElement('feFuncB', attrs).append(componentTransferElement);
         return filter;
     },
 
@@ -2202,10 +2202,10 @@ Renderer.prototype = {
 
         let that = this,
             id = getNextDefsSvgId(),
-            filter = that._createElement("filter", { id: id }).append(that._defs);
+            filter = that._createElement('filter', { id: id }).append(that._defs);
 
-        that._createElement("feColorMatrix")
-            .attr({ type: "matrix", values: "0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 0.6 0" })
+        that._createElement('feColorMatrix')
+            .attr({ type: 'matrix', values: '0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 0.6 0' })
             .append(filter);
 
         filter.id = id;
@@ -2239,7 +2239,7 @@ Renderer.prototype = {
             }
             storageItem = storage.byHash[hash];
             if(!storageItem) {
-                pattern = this.pattern(color, hatching, storage.baseId + "-hatching-" + storage.nextId++);
+                pattern = this.pattern(color, hatching, storage.baseId + '-hatching-' + storage.nextId++);
                 storageItem = storage.byHash[hash] = { pattern: pattern, count: 0 };
                 storage.refToHash[pattern.id] = hash;
             }
@@ -2263,7 +2263,7 @@ Renderer.prototype = {
 };
 
 function getHatchingHash(color, hatching) {
-    return "@" + color + "::" + hatching.step + ":" + hatching.width + ":" + hatching.opacity + ":" + hatching.direction;
+    return '@' + color + '::' + hatching.step + ':' + hatching.width + ':' + hatching.opacity + ':' + hatching.direction;
 }
 
 // paths modifier

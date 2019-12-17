@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-var baseConfig = require("./webpack.config.js");
+var baseConfig = require('./webpack.config.js');
 
 module.exports = Object.assign({
     watch: true,

@@ -5,4 +5,4 @@
 * @module ui/number_box
 * @export default
 */
-module.exports = require("./number_box/number_box");
+module.exports = require('./number_box/number_box');

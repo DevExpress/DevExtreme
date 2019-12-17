@@ -1,4 +1,4 @@
-var inArray = require("../core/utils/array").inArray;
+var inArray = require('../core/utils/array').inArray;
 
 var hideCallback = (function() {
     var callbacks = [];

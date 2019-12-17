@@ -1,43 +1,43 @@
-var $ = require("../core/renderer"),
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    inflector = require("../core/utils/inflector"),
-    iteratorUtils = require("../core/utils/iterator"),
-    isDefined = require("../core/utils/type").isDefined,
-    extend = require("../core/utils/extend").extend,
-    windowUtils = require("../core/utils/window"),
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    deferRender = require("../core/utils/common").deferRender,
-    ScrollView = require("./scroll_view"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit");
+var $ = require('../core/renderer'),
+    devices = require('../core/devices'),
+    registerComponent = require('../core/component_registrator'),
+    inflector = require('../core/utils/inflector'),
+    iteratorUtils = require('../core/utils/iterator'),
+    isDefined = require('../core/utils/type').isDefined,
+    extend = require('../core/utils/extend').extend,
+    windowUtils = require('../core/utils/window'),
+    getPublicElement = require('../core/utils/dom').getPublicElement,
+    deferRender = require('../core/utils/common').deferRender,
+    ScrollView = require('./scroll_view'),
+    CollectionWidget = require('./collection/ui.collection_widget.edit');
 
-var TILEVIEW_CLASS = "dx-tileview",
-    TILEVIEW_CONTAINER_CLASS = "dx-tileview-wrapper",
-    TILEVIEW_ITEM_CLASS = "dx-tile",
-    TILEVIEW_ITEM_SELECTOR = "." + TILEVIEW_ITEM_CLASS,
+var TILEVIEW_CLASS = 'dx-tileview',
+    TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper',
+    TILEVIEW_ITEM_CLASS = 'dx-tile',
+    TILEVIEW_ITEM_SELECTOR = '.' + TILEVIEW_ITEM_CLASS,
 
-    TILEVIEW_ITEM_DATA_KEY = "dxTileData";
+    TILEVIEW_ITEM_DATA_KEY = 'dxTileData';
 
 var CONFIGS = {
-    "horizontal": {
-        itemMainRatio: "widthRatio",
-        itemCrossRatio: "heightRatio",
-        baseItemMainDimension: "baseItemWidth",
-        baseItemCrossDimension: "baseItemHeight",
-        mainDimension: "width",
-        crossDimension: "height",
-        mainPosition: "left",
-        crossPosition: "top"
+    'horizontal': {
+        itemMainRatio: 'widthRatio',
+        itemCrossRatio: 'heightRatio',
+        baseItemMainDimension: 'baseItemWidth',
+        baseItemCrossDimension: 'baseItemHeight',
+        mainDimension: 'width',
+        crossDimension: 'height',
+        mainPosition: 'left',
+        crossPosition: 'top'
     },
-    "vertical": {
-        itemMainRatio: "heightRatio",
-        itemCrossRatio: "widthRatio",
-        baseItemMainDimension: "baseItemHeight",
-        baseItemCrossDimension: "baseItemWidth",
-        mainDimension: "height",
-        crossDimension: "width",
-        mainPosition: "top",
-        crossPosition: "left"
+    'vertical': {
+        itemMainRatio: 'heightRatio',
+        itemCrossRatio: 'widthRatio',
+        baseItemMainDimension: 'baseItemHeight',
+        baseItemCrossDimension: 'baseItemWidth',
+        mainDimension: 'height',
+        crossDimension: 'width',
+        mainPosition: 'top',
+        crossPosition: 'left'
     }
 };
 
@@ -72,7 +72,7 @@ var TileView = CollectionWidget.inherit({
             * @type Enums.Orientation
             * @default 'horizontal'
             */
-            direction: "horizontal",
+            direction: 'horizontal',
 
             /**
              * @name dxTileViewOptions.hoverStateEnabled
@@ -187,7 +187,7 @@ var TileView = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -227,7 +227,7 @@ var TileView = CollectionWidget.inherit({
             return;
         }
 
-        if(isLoading && this.option("indicateLoading")) {
+        if(isLoading && this.option('indicateLoading')) {
             scrollView.startLoading();
         } else {
             scrollView.finishLoading();
@@ -235,23 +235,23 @@ var TileView = CollectionWidget.inherit({
     },
 
     _hideLoadingIfLoadIndicationOff: function() {
-        if(!this.option("indicateLoading")) {
+        if(!this.option('indicateLoading')) {
             this._dataSourceLoadingChangedHandler(false);
         }
     },
 
     _initScrollView: function() {
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
-            direction: this.option("direction"),
+            direction: this.option('direction'),
             scrollByContent: true,
             useKeyboard: false,
-            showScrollbar: this.option("showScrollbar")
+            showScrollbar: this.option('showScrollbar')
         });
 
         this._$container = $(this._scrollView.content());
         this._$container.addClass(TILEVIEW_CONTAINER_CLASS);
 
-        this._scrollView.option("onUpdated", this._renderGeometry.bind(this));
+        this._scrollView.option('onUpdated', this._renderGeometry.bind(this));
     },
 
     _initMarkup: function() {
@@ -267,7 +267,7 @@ var TileView = CollectionWidget.inherit({
     },
 
     _updateScrollView: function() {
-        this._scrollView.option("direction", this.option("direction"));
+        this._scrollView.option('direction', this.option('direction'));
         this._scrollView.update();
         this._indicateLoadingIfAlreadyStarted();
     },
@@ -279,11 +279,11 @@ var TileView = CollectionWidget.inherit({
     },
 
     _renderGeometry: function() {
-        this._config = CONFIGS[this.option("direction")];
+        this._config = CONFIGS[this.option('direction')];
 
-        var items = this.option("items") || [],
+        var items = this.option('items') || [],
             config = this._config,
-            itemMargin = this.option("itemMargin"),
+            itemMargin = this.option('itemMargin'),
             maxItemCrossRatio = Math.max.apply(Math, iteratorUtils.map(items || [], function(item) {
                 return Math.round(item[config.itemCrossRatio] || 1);
             }));
@@ -406,10 +406,10 @@ var TileView = CollectionWidget.inherit({
             itemRatioCross = item[config.itemCrossRatio],
             baseItemCross = this.option(config.baseItemCrossDimension),
             baseItemMain = this.option(config.baseItemMainDimension),
-            itemMargin = this.option("itemMargin");
+            itemMargin = this.option('itemMargin');
 
 
-        var cssProps = { display: (itemRatioMain <= 0 || itemRatioCross <= 0) ? "none" : "" },
+        var cssProps = { display: (itemRatioMain <= 0 || itemRatioCross <= 0) ? 'none' : '' },
             mainDimension = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin,
             crossDimension = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
         cssProps[config.mainDimension] = mainDimension < 0 ? 0 : mainDimension;
@@ -417,9 +417,9 @@ var TileView = CollectionWidget.inherit({
         cssProps[config.mainPosition] = itemPositionMain * baseItemMain + (itemPositionMain + 1) * itemMargin;
         cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
 
-        if(this.option("rtlEnabled")) {
+        if(this.option('rtlEnabled')) {
             var offsetCorrection = this._$container.width(),
-                baseItemWidth = this.option("baseItemWidth"),
+                baseItemWidth = this.option('baseItemWidth'),
                 itemPositionX = itemPosition.left,
                 offsetPosition = itemPositionX * baseItemWidth,
                 itemBaseOffset = baseItemWidth + itemMargin,
@@ -433,16 +433,16 @@ var TileView = CollectionWidget.inherit({
     },
 
     _moveFocus: function(location) {
-        var FOCUS_UP = "up",
-            FOCUS_DOWN = "down",
-            FOCUS_LEFT = this.option("rtlEnabled") ? "right" : "left",
-            FOCUS_RIGHT = this.option("rtlEnabled") ? "left" : "right",
-            FOCUS_PAGE_UP = "pageup",
-            FOCUS_PAGE_DOWN = "pagedown";
+        var FOCUS_UP = 'up',
+            FOCUS_DOWN = 'down',
+            FOCUS_LEFT = this.option('rtlEnabled') ? 'right' : 'left',
+            FOCUS_RIGHT = this.option('rtlEnabled') ? 'left' : 'right',
+            FOCUS_PAGE_UP = 'pageup',
+            FOCUS_PAGE_DOWN = 'pagedown';
 
-        var horizontalDirection = this.option("direction") === "horizontal",
+        var horizontalDirection = this.option('direction') === 'horizontal',
             cells = this._cells,
-            index = $(this.option("focusedElement")).index(),
+            index = $(this.option('focusedElement')).index(),
             targetCol = this._itemsPositions[index].left,
             targetRow = this._itemsPositions[index].top;
 
@@ -505,7 +505,7 @@ var TileView = CollectionWidget.inherit({
         }
 
         var $newTarget = this._itemElements().eq(newTargetIndex);
-        this.option("focusedElement", getPublicElement($newTarget));
+        this.option('focusedElement', getPublicElement($newTarget));
         this._scrollToItem($newTarget);
     },
 
@@ -515,8 +515,8 @@ var TileView = CollectionWidget.inherit({
         }
 
         var config = this._config,
-            outerMainProp = "outer" + inflector.captionize(config.mainDimension),
-            itemMargin = this.option("itemMargin"),
+            outerMainProp = 'outer' + inflector.captionize(config.mainDimension),
+            itemMargin = this.option('itemMargin'),
             itemPosition = $itemElement.position()[config.mainPosition],
             itemDimension = $itemElement[outerMainProp](),
             itemTail = itemPosition + itemDimension,
@@ -536,34 +536,34 @@ var TileView = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "items":
+            case 'items':
                 this.callBase(args);
                 this._renderGeometry();
                 this._updateScrollView();
                 break;
-            case "showScrollbar":
+            case 'showScrollbar':
                 this._initScrollView();
                 break;
-            case "disabled":
-                this._scrollView.option("disabled", args.value);
+            case 'disabled':
+                this._scrollView.option('disabled', args.value);
                 this.callBase(args);
                 break;
-            case "baseItemWidth":
-            case "baseItemHeight":
-            case "itemMargin":
+            case 'baseItemWidth':
+            case 'baseItemHeight':
+            case 'itemMargin':
                 this._renderGeometry();
                 break;
-            case "width":
-            case "height":
+            case 'width':
+            case 'height':
                 this.callBase(args);
                 this._renderGeometry();
                 this._updateScrollView();
                 break;
-            case "direction":
+            case 'direction':
                 this._renderGeometry();
                 this._updateScrollView();
                 break;
-            case "indicateLoading":
+            case 'indicateLoading':
                 this._hideLoadingIfLoadIndicationOff();
                 break;
             default:
@@ -582,6 +582,6 @@ var TileView = CollectionWidget.inherit({
 
 });
 
-registerComponent("dxTileView", TileView);
+registerComponent('dxTileView', TileView);
 
 module.exports = TileView;

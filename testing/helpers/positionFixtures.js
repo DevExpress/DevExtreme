@@ -1,7 +1,7 @@
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.fixtures = module.exports = factory(require("jquery"));
+            root.fixtures = module.exports = factory(require('jquery'));
         });
     } else {
         root.fixtures = factory(root.jQuery);
@@ -11,18 +11,18 @@
     var fixtures = {
         simple: {
             create: function() {
-                $("<div id=where>").css({
-                    position: "absolute",
+                $('<div id=where>').css({
+                    position: 'absolute',
                     width: 100,
                     height: 100,
-                    background: "blue",
+                    background: 'blue',
                     top: 200,
                     left: 200
                 }).appendTo(document.body);
 
-                $("<div id=what>").css({
-                    position: "absolute",
-                    background: "orange",
+                $('<div id=what>').css({
+                    position: 'absolute',
+                    background: 'orange',
                     width: 50,
                     height: 50,
                     top: 0,
@@ -31,8 +31,8 @@
             },
 
             drop: function() {
-                $("#where").remove();
-                $("#what").remove();
+                $('#where').remove();
+                $('#what').remove();
             }
         },
 
@@ -40,12 +40,12 @@
             create: function() {
                 fixtures.simple.create();
 
-                $("#where").css({
+                $('#where').css({
                     top: 100,
                     left: 100
                 });
 
-                $("#what").css({
+                $('#what').css({
                     width: 10,
                     height: 10
                 });
@@ -59,66 +59,66 @@
         differentTargets: {
             create: function() {
                 fixtures.simple.create();
-                $("<div id=there>").css({
-                    position: "absolute",
+                $('<div id=there>').css({
+                    position: 'absolute',
                     width: 100,
                     height: 100,
-                    background: "red",
+                    background: 'red',
                     top: 50,
                     left: 50
                 }).appendTo(document.body);
             },
             drop: function() {
                 fixtures.simple.drop();
-                $("#there").remove();
+                $('#there').remove();
             }
         },
 
         separatePositionedContainers: {
             create: function() {
                 fixtures.simple.create();
-                $("<div id=whereWrapper>").css({
-                    position: "absolute",
+                $('<div id=whereWrapper>').css({
+                    position: 'absolute',
                     top: 100,
                     left: 100
-                }).append($("#where")).appendTo(document.body);
+                }).append($('#where')).appendTo(document.body);
 
-                $("<div id=whatWrapper>").css({
-                    position: "absolute",
+                $('<div id=whatWrapper>').css({
+                    position: 'absolute',
                     top: 400,
                     left: 200
-                }).append($("#what")).appendTo(document.body);
+                }).append($('#what')).appendTo(document.body);
             },
 
             drop: function() {
-                $("#whereWrapper").remove();
-                $("#whatWrapper").remove();
+                $('#whereWrapper').remove();
+                $('#whatWrapper').remove();
             }
         },
 
         customBoundary: {
             create: function() {
-                var b = $("<div id=boundary>").css({
-                    position: "absolute",
-                    background: "green",
+                var b = $('<div id=boundary>').css({
+                    position: 'absolute',
+                    background: 'green',
                     width: 300,
                     height: 300,
                     left: 10,
                     top: 10
                 }).appendTo(document.body);
 
-                $("<div id=where>").css({
-                    position: "absolute",
+                $('<div id=where>').css({
+                    position: 'absolute',
                     width: 100,
                     height: 100,
-                    background: "blue",
+                    background: 'blue',
                     top: 100,
                     left: 100
                 }).appendTo(b);
 
-                $("<div id=what>").css({
-                    position: "absolute",
-                    background: "orange",
+                $('<div id=what>').css({
+                    position: 'absolute',
+                    background: 'orange',
                     width: 100,
                     height: 100,
                     top: 0,
@@ -127,16 +127,16 @@
             },
 
             drop: function() {
-                $("#where").remove();
-                $("#what").remove();
-                $("#boundary").remove();
+                $('#where').remove();
+                $('#what').remove();
+                $('#boundary').remove();
             }
         },
 
         customBoundaryWithLeftTopOffset: {
             create: function() {
                 fixtures.customBoundary.create();
-                $("#where").css({
+                $('#where').css({
                     left: 50,
                     top: 50
                 });
@@ -150,7 +150,7 @@
         collisionTopLeft: {
             create: function() {
                 fixtures.simple.create();
-                $("#where").css({
+                $('#where').css({
                     top: 0,
                     left: 0
                 });
@@ -165,7 +165,7 @@
             create: function() {
                 fixtures.simple.create();
                 var win = $(window);
-                var where = $("#where");
+                var where = $('#where');
                 where.css({
                     top: 0,
                     left: win.scrollLeft() + win.width() - where.outerWidth()
@@ -181,7 +181,7 @@
             create: function() {
                 fixtures.simple.create();
                 var win = $(window);
-                var where = $("#where");
+                var where = $('#where');
                 where.css({
                     top: win.scrollTop() + win.height() - where.outerHeight(),
                     left: 0
@@ -197,7 +197,7 @@
             create: function() {
                 fixtures.simple.create();
                 var win = $(window);
-                var where = $("#where");
+                var where = $('#where');
                 where.css({
                     top: win.scrollTop() + win.height() - where.outerHeight(),
                     left: win.scrollLeft() + win.width() - where.outerWidth()
@@ -212,7 +212,7 @@
         collisionSmallWindow: {
             create: function() {
                 fixtures.simple.create();
-                $("#where").css({
+                $('#where').css({
                     width: $(window).width(),
                     height: $(window).height(),
                     top: 0,

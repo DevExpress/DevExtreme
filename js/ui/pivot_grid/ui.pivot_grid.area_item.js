@@ -1,10 +1,10 @@
-import $ from "../../core/renderer";
-import Class from "../../core/class";
-import { getPublicElement } from "../../core/utils/dom";
-import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
+import $ from '../../core/renderer';
+import Class from '../../core/class';
+import { getPublicElement } from '../../core/utils/dom';
+import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 
-var PIVOTGRID_EXPAND_CLASS = "dx-expand";
+var PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
 var getRealElementWidth = function(element) {
     let width = 0;
@@ -74,10 +74,10 @@ exports.AreaItem = Class.inherit({
     },
 
     _getCellText: function(cell, encodeHtml) {
-        var cellText = cell.isWhiteSpace ? "&nbsp" : cell.text || "&nbsp";
+        var cellText = cell.isWhiteSpace ? '&nbsp' : cell.text || '&nbsp';
 
-        if(encodeHtml && (cellText.indexOf("<") !== -1 || cellText.indexOf(">") !== -1)) {
-            cellText = $("<div>").text(cellText).html();
+        if(encodeHtml && (cellText.indexOf('<') !== -1 || cellText.indexOf('>') !== -1)) {
+            cellText = $('<div>').text(cellText).html();
         }
 
         return cellText;
@@ -89,19 +89,19 @@ exports.AreaItem = Class.inherit({
 
     _applyCustomStyles: function(options) {
         if(options.cell.width) {
-            options.cssArray.push("min-width:" + options.cell.width + "px");
+            options.cssArray.push('min-width:' + options.cell.width + 'px');
         }
         if(options.cell.sorted) {
-            options.classArray.push("dx-pivotgrid-sorted");
+            options.classArray.push('dx-pivotgrid-sorted');
         }
     },
 
     _getMainElementMarkup: function() {
-        return "<tbody>";
+        return '<tbody>';
     },
 
     _getCloseMainElementMarkup: function() {
-        return "</tbody>";
+        return '</tbody>';
     },
 
     _renderTableContent: function(tableElement, data) {
@@ -114,17 +114,17 @@ exports.AreaItem = Class.inherit({
             rowElement,
             cellElement,
             cellText,
-            rtlEnabled = that.option("rtlEnabled"),
+            rtlEnabled = that.option('rtlEnabled'),
             markupArray = [],
-            encodeHtml = that.option("encodeHtml"),
+            encodeHtml = that.option('encodeHtml'),
             rowClassNames,
-            colspan = "colspan='",
-            rowspan = "rowspan='";
+            colspan = 'colspan=\'',
+            rowspan = 'rowspan=\'';
 
-        tableElement.data("area", that._getAreaName());
-        tableElement.data("data", data);
+        tableElement.data('area', that._getAreaName());
+        tableElement.data('data', data);
 
-        tableElement.css("width", "");
+        tableElement.css('width', '');
 
         markupArray.push(that._getMainElementMarkup());
 
@@ -133,7 +133,7 @@ exports.AreaItem = Class.inherit({
             var columnMarkupArray = [];
             rowClassNames = [];
 
-            markupArray.push("<tr ");
+            markupArray.push('<tr ');
 
             for(j = 0; j < row.length; j++) {
 
@@ -141,12 +141,12 @@ exports.AreaItem = Class.inherit({
 
                 this._getRowClassNames(i, cell, rowClassNames);
 
-                columnMarkupArray.push("<td ");
+                columnMarkupArray.push('<td ');
 
 
                 if(cell) {
-                    cell.rowspan && columnMarkupArray.push(rowspan + (cell.rowspan || 1) + "'");
-                    cell.colspan && columnMarkupArray.push(colspan + (cell.colspan || 1) + "'");
+                    cell.rowspan && columnMarkupArray.push(rowspan + (cell.rowspan || 1) + '\'');
+                    cell.colspan && columnMarkupArray.push(colspan + (cell.colspan || 1) + '\'');
 
                     var styleOptions = {
                         cellElement: cellElement,
@@ -164,67 +164,67 @@ exports.AreaItem = Class.inherit({
                     that._applyCustomStyles(styleOptions);
 
                     if(styleOptions.cssArray.length) {
-                        columnMarkupArray.push("style='");
-                        columnMarkupArray.push(styleOptions.cssArray.join(";"));
-                        columnMarkupArray.push("'");
+                        columnMarkupArray.push('style=\'');
+                        columnMarkupArray.push(styleOptions.cssArray.join(';'));
+                        columnMarkupArray.push('\'');
                     }
 
                     if(styleOptions.classArray.length) {
-                        columnMarkupArray.push("class='");
-                        columnMarkupArray.push(styleOptions.classArray.join(" "));
-                        columnMarkupArray.push("'");
+                        columnMarkupArray.push('class=\'');
+                        columnMarkupArray.push(styleOptions.classArray.join(' '));
+                        columnMarkupArray.push('\'');
                     }
 
-                    columnMarkupArray.push(">");
+                    columnMarkupArray.push('>');
 
                     if(isDefined(cell.expanded)) {
-                        columnMarkupArray.push("<div class='dx-expand-icon-container'><span class='" + PIVOTGRID_EXPAND_CLASS + "'></span></div>");
+                        columnMarkupArray.push('<div class=\'dx-expand-icon-container\'><span class=\'' + PIVOTGRID_EXPAND_CLASS + '\'></span></div>');
                     }
 
                     cellText = this._getCellText(cell, encodeHtml);
 
                 } else {
-                    cellText = "";
+                    cellText = '';
                 }
 
-                columnMarkupArray.push("<span ");
+                columnMarkupArray.push('<span ');
 
                 if(isDefined(cell.wordWrapEnabled)) {
-                    columnMarkupArray.push("style='white-space:", cell.wordWrapEnabled ? "normal" : "nowrap", ";'");
+                    columnMarkupArray.push('style=\'white-space:', cell.wordWrapEnabled ? 'normal' : 'nowrap', ';\'');
                 }
 
-                columnMarkupArray.push(">" + cellText + "</span>");
+                columnMarkupArray.push('>' + cellText + '</span>');
 
                 if(cell.sorted) {
-                    columnMarkupArray.push("<span class='dx-icon-sorted'></span>");
+                    columnMarkupArray.push('<span class=\'dx-icon-sorted\'></span>');
                 }
 
-                columnMarkupArray.push("</td>");
+                columnMarkupArray.push('</td>');
             }
 
             if(rowClassNames.length) {
-                markupArray.push("class='");
-                markupArray.push(rowClassNames.join(" "));
-                markupArray.push("'");
+                markupArray.push('class=\'');
+                markupArray.push(rowClassNames.join(' '));
+                markupArray.push('\'');
             }
-            markupArray.push(">");
-            markupArray.push(columnMarkupArray.join(""));
-            markupArray.push("</tr>");
+            markupArray.push('>');
+            markupArray.push(columnMarkupArray.join(''));
+            markupArray.push('</tr>');
         }
 
         markupArray.push(this._getCloseMainElementMarkup());
 
-        tableElement.append(markupArray.join(""));
+        tableElement.append(markupArray.join(''));
 
         this._triggerOnCellPrepared(tableElement, data);
     },
 
     _triggerOnCellPrepared: function(tableElement, data) {
         var that = this,
-            rowElements = tableElement.find("tr"),
+            rowElements = tableElement.find('tr'),
             areaName = that._getAreaName(),
-            onCellPrepared = that.option("onCellPrepared"),
-            hasEvent = that.component.hasEvent("cellPrepared"),
+            onCellPrepared = that.option('onCellPrepared'),
+            hasEvent = that.component.hasEvent('cellPrepared'),
             rowElement,
             $cellElement,
             onCellPreparedArgs,
@@ -250,7 +250,7 @@ exports.AreaItem = Class.inherit({
                         cell: cell
                     };
                     if(hasEvent) {
-                        that.component._trigger("onCellPrepared", onCellPreparedArgs);
+                        that.component._trigger('onCellPrepared', onCellPreparedArgs);
                     } else {
                         onCellPrepared(extend(onCellPreparedArgs, defaultActionArgs));
                     }
@@ -441,7 +441,7 @@ exports.AreaItem = Class.inherit({
     },
 
     _setTableCss: function(styles) {
-        if(this.option("rtlEnabled")) {
+        if(this.option('rtlEnabled')) {
             styles.right = styles.left;
             delete styles.left;
         }
@@ -455,17 +455,17 @@ exports.AreaItem = Class.inherit({
             height: params.height
         });
 
-        this.groupElement().addClass("dx-virtual-mode");
+        this.groupElement().addClass('dx-virtual-mode');
     },
 
     disableVirtualMode: function() {
-        this.groupElement().removeClass("dx-virtual-mode");
+        this.groupElement().removeClass('dx-virtual-mode');
     },
 
     _renderVirtualContent: function() {
         var that = this;
-        if(!that._virtualContent && that.option("scrolling.mode") === "virtual") {
-            that._virtualContent = $("<div>").addClass("dx-virtual-content").insertBefore(that._tableElement);
+        if(!that._virtualContent && that.option('scrolling.mode') === 'virtual') {
+            that._virtualContent = $('<div>').addClass('dx-virtual-content').insertBefore(that._tableElement);
         }
     },
 
@@ -477,41 +477,41 @@ exports.AreaItem = Class.inherit({
         that._fakeTable = null;
 
         that.disableVirtualMode();
-        that.groupWidth("100%");
-        that.groupHeight("auto");
+        that.groupWidth('100%');
+        that.groupHeight('auto');
 
         that.resetColumnsWidth();
 
         if(tableElement) {
             for(var i = 0; i < tableElement.rows.length; i++) {
-                tableElement.rows[i].style.height = "";
+                tableElement.rows[i].style.height = '';
             }
-            tableElement.style.height = "";
-            tableElement.style.width = "100%";
+            tableElement.style.height = '';
+            tableElement.style.width = '100%';
         }
     },
 
     _updateFakeTableVisibility: function() {
         var that = this,
             tableElement = that.tableElement()[0],
-            horizontalOffsetName = that.option("rtlEnabled") ? "right" : "left",
+            horizontalOffsetName = that.option('rtlEnabled') ? 'right' : 'left',
             fakeTableElement = that._fakeTable[0];
 
         if(tableElement.style.top === fakeTableElement.style.top && fakeTableElement.style[horizontalOffsetName] === tableElement.style[horizontalOffsetName]) {
-            that._fakeTable.addClass("dx-hidden");
+            that._fakeTable.addClass('dx-hidden');
         } else {
-            that._fakeTable.removeClass("dx-hidden");
+            that._fakeTable.removeClass('dx-hidden');
         }
     },
 
     _moveFakeTableHorizontally: function(scrollPos) {
         var that = this,
-            rtlEnabled = that.option("rtlEnabled"),
-            offsetStyleName = rtlEnabled ? "right" : "left",
+            rtlEnabled = that.option('rtlEnabled'),
+            offsetStyleName = rtlEnabled ? 'right' : 'left',
             tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]),
             offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
         if(parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
-            that._fakeTable[0].style[offsetStyleName] = offset + "px";
+            that._fakeTable[0].style[offsetStyleName] = offset + 'px';
         }
     },
 
@@ -521,7 +521,7 @@ exports.AreaItem = Class.inherit({
             offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that._groupHeight);
 
         if(parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
-            that._fakeTable[0].style.top = offsetTop + "px";
+            that._fakeTable[0].style.top = offsetTop + 'px';
         }
     },
 
@@ -535,7 +535,7 @@ exports.AreaItem = Class.inherit({
         if(!that._fakeTable) {
             that._fakeTable = that.tableElement()
                 .clone()
-                .addClass("dx-pivot-grid-fake-table")
+                .addClass('dx-pivot-grid-fake-table')
                 .appendTo(that._virtualContent);
         }
     },
@@ -575,7 +575,7 @@ exports.AreaItem = Class.inherit({
 
         if(scrollable) {
             scrollable.on(eventName, function(e) {
-                if(that.option("rtlEnabled") && isDefined(e.scrollOffset.left)) {
+                if(that.option('rtlEnabled') && isDefined(e.scrollOffset.left)) {
                     e.scrollOffset.left = scrollable.$content().width() - scrollable._container().width() - e.scrollOffset.left;
                 }
                 handler(e);
@@ -596,10 +596,10 @@ exports.AreaItem = Class.inherit({
             scrollablePos = pos;
 
         if(scrollable) {
-            if(this.option("rtlEnabled")) {
-                if(this._getAreaName() === "column") {
+            if(this.option('rtlEnabled')) {
+                if(this._getAreaName() === 'column') {
                     scrollablePos = scrollable.$content().width() - scrollable._container().width() - pos;
-                } else if(this._getAreaName() === "data") {
+                } else if(this._getAreaName() === 'data') {
                     scrollablePos = { x: scrollable.$content().width() - scrollable._container().width() - pos.x, y: pos.y };
                 }
             }
@@ -635,6 +635,6 @@ exports.AreaItem = Class.inherit({
 
     getData: function() {
         var tableElement = this._tableElement;
-        return tableElement ? tableElement.data("data") : [];
+        return tableElement ? tableElement.data('data') : [];
     }
 });

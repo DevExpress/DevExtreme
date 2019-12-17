@@ -1,10 +1,10 @@
-import { each } from "../../core/utils/iterator";
+import { each } from '../../core/utils/iterator';
 
-const PATH_SEPARATOR = "/";
+const PATH_SEPARATOR = '/';
 
 const getFileExtension = path => {
-    const index = path.lastIndexOf(".");
-    return index !== -1 ? path.substr(index) : "";
+    const index = path.lastIndexOf('.');
+    return index !== -1 ? path.substr(index) : '';
 };
 
 const getName = path => {
@@ -14,15 +14,15 @@ const getName = path => {
 
 const getParentPath = path => {
     const index = path.lastIndexOf(PATH_SEPARATOR);
-    return index !== -1 ? path.substr(0, index) : "";
+    return index !== -1 ? path.substr(0, index) : '';
 };
 
 const getPathParts = (path, includeFullPath) => {
-    if(!path || path === "/") {
+    if(!path || path === '/') {
         return [];
     }
     const result = [];
-    let pathPart = "";
+    let pathPart = '';
 
     for(let i = 0; i < path.length; i++) {
         let char = path.charAt(i);
@@ -31,7 +31,7 @@ const getPathParts = (path, includeFullPath) => {
             if(nextChar !== PATH_SEPARATOR) {
                 if(pathPart) {
                     result.push(pathPart);
-                    pathPart = "";
+                    pathPart = '';
                 }
                 char = nextChar;
             }
@@ -46,7 +46,7 @@ const getPathParts = (path, includeFullPath) => {
 
     if(includeFullPath) {
         for(let i = 0; i < result.length; i++) {
-            result[i] = pathCombine(i === 0 ? "" : result[i - 1], result[i]);
+            result[i] = pathCombine(i === 0 ? '' : result[i - 1], result[i]);
         }
     }
 
@@ -54,11 +54,11 @@ const getPathParts = (path, includeFullPath) => {
 };
 
 const getEscapedFileName = function(fileName) {
-    return fileName.replace(/\//g, "//");
+    return fileName.replace(/\//g, '//');
 };
 
 const pathCombine = function() {
-    let result = "";
+    let result = '';
 
     each(arguments, (_, arg) => {
         if(arg) {
@@ -74,7 +74,7 @@ const pathCombine = function() {
 };
 
 const getDisplayFileSize = function(byteSize) {
-    const sizesTitles = [ "B", "KB", "MB", "GB", "TB" ];
+    const sizesTitles = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
     let index = 0;
     let displaySize = byteSize;
     while(displaySize >= 1024 && index <= sizesTitles.length - 1) {

@@ -1,24 +1,24 @@
-import $ from "../core/renderer";
-import eventsEngine from "../events/core/events_engine";
-import windowUtils from "../core/utils/window";
-import { extend } from "./utils/extend";
-import config from "./config";
-import errors from "./errors";
-import { getPublicElement } from "../core/utils/dom";
-import windowResizeCallbacks from "../core/utils/resize_callbacks";
-import commonUtils from "./utils/common";
-import { each } from "./utils/iterator";
-import { isString, isDefined } from "./utils/type";
-import { inArray } from "./utils/array";
-import publicComponentUtils from "./utils/public_component";
-import dataUtils from "./element_data";
-import Component from "./component";
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import windowUtils from '../core/utils/window';
+import { extend } from './utils/extend';
+import config from './config';
+import errors from './errors';
+import { getPublicElement } from '../core/utils/dom';
+import windowResizeCallbacks from '../core/utils/resize_callbacks';
+import commonUtils from './utils/common';
+import { each } from './utils/iterator';
+import { isString, isDefined } from './utils/type';
+import { inArray } from './utils/array';
+import publicComponentUtils from './utils/public_component';
+import dataUtils from './element_data';
+import Component from './component';
 
 const { abstract } = Component;
 
-const RTL_DIRECTION_CLASS = "dx-rtl";
-const VISIBILITY_CHANGE_CLASS = "dx-visibility-change-handler";
-const VISIBILITY_CHANGE_EVENTNAMESPACE = "VisibilityChange";
+const RTL_DIRECTION_CLASS = 'dx-rtl';
+const VISIBILITY_CHANGE_CLASS = 'dx-visibility-change-handler';
+const VISIBILITY_CHANGE_EVENTNAMESPACE = 'VisibilityChange';
 
 /**
  * @name DOMComponent
@@ -99,7 +99,7 @@ var DOMComponent = Component.inherit({
     },
 
     _getSynchronizableOptionsForCreateComponent: function() {
-        return ["rtlEnabled", "disabled", "templatesRenderAsynchronously"];
+        return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
     },
 
     _visibilityChanged: abstract,
@@ -142,7 +142,7 @@ var DOMComponent = Component.inherit({
 
     _initMarkup: function() {
         this._renderElementAttributes();
-        this._toggleRTLDirection(this.option("rtlEnabled"));
+        this._toggleRTLDirection(this.option('rtlEnabled'));
         this._renderVisibilityChange();
         this._renderDimensions();
     },
@@ -152,7 +152,7 @@ var DOMComponent = Component.inherit({
     },
 
     _renderElementAttributes: function() {
-        var attributes = extend({}, this.option("elementAttr")),
+        var attributes = extend({}, this.option('elementAttr')),
             classNames = attributes.class;
 
         delete attributes.class;
@@ -177,13 +177,13 @@ var DOMComponent = Component.inherit({
     _renderDimensions: function() {
         var $element = this.$element();
         var element = $element.get(0);
-        var width = this._getOptionValue("width", element);
-        var height = this._getOptionValue("height", element);
+        var width = this._getOptionValue('width', element);
+        var height = this._getOptionValue('height', element);
 
         if(this._isCssUpdateRequired(element, height, width)) {
             $element.css({
-                width: width === null ? "" : width,
-                height: height === null ? "" : height
+                width: width === null ? '' : width,
+                height: height === null ? '' : height
             });
         }
     },
@@ -194,7 +194,7 @@ var DOMComponent = Component.inherit({
 
     _attachDimensionChangeHandlers: function() {
         var that = this;
-        var resizeEventName = "dxresize." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+        var resizeEventName = 'dxresize.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
 
         eventsEngine.off(that.$element(), resizeEventName);
@@ -208,29 +208,29 @@ var DOMComponent = Component.inherit({
             return;
         }
         var that = this;
-        var hidingEventName = "dxhiding." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
-        var shownEventName = "dxshown." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+        var hidingEventName = 'dxhiding.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+        var shownEventName = 'dxshown.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
         that._isHidden = !that._isVisible();
         eventsEngine.off(that.$element(), hidingEventName);
         eventsEngine.on(that.$element(), hidingEventName, function() {
-            that._checkVisibilityChanged("hiding");
+            that._checkVisibilityChanged('hiding');
         });
         eventsEngine.off(that.$element(), shownEventName);
         eventsEngine.on(that.$element(), shownEventName, function() {
-            that._checkVisibilityChanged("shown");
+            that._checkVisibilityChanged('shown');
         });
     },
 
     _isVisible: function() {
-        return this.$element().is(":visible");
+        return this.$element().is(':visible');
     },
 
     _checkVisibilityChanged: function(event) {
-        if(event === "hiding" && this._isVisible() && !this._isHidden) {
+        if(event === 'hiding' && this._isVisible() && !this._isHidden) {
             this._visibilityChanged(false);
             this._isHidden = true;
-        } else if(event === "shown" && this._isVisible() && this._isHidden) {
+        } else if(event === 'shown' && this._isVisible() && this._isHidden) {
             this._isHidden = false;
             this._visibilityChanged(true);
         }
@@ -243,13 +243,13 @@ var DOMComponent = Component.inherit({
     _clean: commonUtils.noop,
 
     _modelByElement: function() {
-        var modelByElement = this.option("modelByElement") || commonUtils.noop;
+        var modelByElement = this.option('modelByElement') || commonUtils.noop;
         return modelByElement(this.$element());
     },
 
     _invalidate: function() {
         if(!this._updateLockCount) {
-            throw errors.Error("E0007");
+            throw errors.Error('E0007');
         }
 
         this._requireRefresh = true;
@@ -285,9 +285,9 @@ var DOMComponent = Component.inherit({
             return !(value in config);
         });
 
-        var nestedComponentOptions = that.option("nestedComponentOptions") || commonUtils.noop;
+        var nestedComponentOptions = that.option('nestedComponentOptions') || commonUtils.noop;
         var nestedComponentConfig = extend({
-            integrationOptions: this.option("integrationOptions"),
+            integrationOptions: this.option('integrationOptions'),
         }, nestedComponentOptions(this));
 
         synchronizableOptions.forEach((optionName) => {
@@ -299,7 +299,7 @@ var DOMComponent = Component.inherit({
         var instance;
         if(isString(component)) {
             var $element = $(element)[component](config);
-            instance = $element[component]("instance");
+            instance = $element[component]('instance');
         } else if(element) {
             instance = component.getInstance(element);
             if(instance) {
@@ -315,10 +315,10 @@ var DOMComponent = Component.inherit({
                 }
             };
 
-            that.on("optionChanged", optionChangedHandler);
+            that.on('optionChanged', optionChangedHandler);
 
-            instance.on("disposing", function() {
-                that.off("optionChanged", optionChangedHandler);
+            instance.on('disposing', function() {
+                that.off('optionChanged', optionChangedHandler);
             });
         }
 
@@ -357,18 +357,18 @@ var DOMComponent = Component.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "width":
-            case "height":
+            case 'width':
+            case 'height':
                 this._renderDimensions();
                 break;
-            case "rtlEnabled":
+            case 'rtlEnabled':
                 this._invalidate();
                 break;
-            case "elementAttr":
+            case 'elementAttr':
                 this._renderElementAttributes();
                 break;
-            case "disabled":
-            case "integrationOptions":
+            case 'disabled':
+            case 'integrationOptions':
                 break;
             default:
                 this.callBase(args);
@@ -388,21 +388,21 @@ var DOMComponent = Component.inherit({
 
             var attributeName = attribute.name;
 
-            if(attributeName.indexOf("aria-") === 0 ||
-                attributeName.indexOf("dx-") !== -1 ||
-                attributeName === "role" ||
-                attributeName === "style" ||
-                attributeName === "tabindex") {
+            if(attributeName.indexOf('aria-') === 0 ||
+                attributeName.indexOf('dx-') !== -1 ||
+                attributeName === 'role' ||
+                attributeName === 'style' ||
+                attributeName === 'tabindex') {
                 element.removeAttribute(attributeName);
             }
         }
     },
 
     _removeClasses: function(element) {
-        var classes = element.className.split(" ").filter(function(cssClass) {
-            return cssClass.lastIndexOf("dx-", 0) !== 0;
+        var classes = element.className.split(' ').filter(function(cssClass) {
+            return cssClass.lastIndexOf('dx-', 0) !== 0;
         });
-        element.className = classes.join(" ");
+        element.className = classes.join(' ');
     },
 
     endUpdate: function() {
@@ -440,7 +440,7 @@ var DOMComponent = Component.inherit({
     dispose: function() {
         var element = this.$element().get(0);
         dataUtils.cleanDataRecursive(element, true);
-        element.textContent = "";
+        element.textContent = '';
         this._removeAttributes(element);
         this._removeClasses(element);
     },
@@ -448,8 +448,8 @@ var DOMComponent = Component.inherit({
     resetOption(optionName) {
         this.callBase(optionName);
 
-        if((optionName === "width" || optionName === "height") && !isDefined(this.initialOption(optionName))) {
-            this.$element().css(optionName, "");
+        if((optionName === 'width' || optionName === 'height') && !isDefined(this.initialOption(optionName))) {
+            this.$element().css(optionName, '');
         }
     }
 

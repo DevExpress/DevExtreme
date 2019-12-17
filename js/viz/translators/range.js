@@ -1,16 +1,16 @@
-var typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
+var typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
     _isDefined = typeUtils.isDefined,
     _isDate = typeUtils.isDate,
     _isFunction = typeUtils.isFunction,
-    unique = require("../core/utils").unique,
+    unique = require('../core/utils').unique,
 
-    minSelector = "min",
-    maxSelector = "max",
-    minVisibleSelector = "minVisible",
-    maxVisibleSelector = "maxVisible",
-    baseSelector = "base",
-    axisTypeSelector = "axisType",
+    minSelector = 'min',
+    maxSelector = 'max',
+    minVisibleSelector = 'minVisible',
+    maxVisibleSelector = 'maxVisible',
+    baseSelector = 'base',
+    axisTypeSelector = 'axisType',
     _Range;
 
 function otherLessThan(thisValue, otherValue) {
@@ -57,14 +57,14 @@ _Range.prototype = {
             that[field] = that[field] || otherRange[field];
         };
 
-        checkField("invert");
+        checkField('invert');
         checkField(axisTypeSelector);
-        checkField("dataType");
-        checkField("isSpacedMargin"),
-        checkField("checkMinDataVisibility");
-        checkField("checkMaxDataVisibility");
+        checkField('dataType');
+        checkField('isSpacedMargin'),
+        checkField('checkMinDataVisibility');
+        checkField('checkMaxDataVisibility');
 
-        if(that[axisTypeSelector] === "logarithmic") {
+        if(that[axisTypeSelector] === 'logarithmic') {
             checkField(baseSelector);
         } else {
             that[baseSelector] = undefined;
@@ -72,14 +72,14 @@ _Range.prototype = {
 
         compareAndReplaceByField(minSelector, otherLessThan);
         compareAndReplaceByField(maxSelector, otherGreaterThan);
-        if(that[axisTypeSelector] === "discrete") {
+        if(that[axisTypeSelector] === 'discrete') {
             checkField(minVisibleSelector);
             checkField(maxVisibleSelector);
         } else {
             compareAndReplaceByField(minVisibleSelector, otherLessThan);
             compareAndReplaceByField(maxVisibleSelector, otherGreaterThan);
         }
-        compareAndReplaceByField("interval", otherLessThan);
+        compareAndReplaceByField('interval', otherLessThan);
 
         controlValuesByVisibleBounds(minSelector, minVisibleSelector, otherLessThan);
         controlValuesByVisibleBounds(minSelector, maxVisibleSelector, otherLessThan);
@@ -92,9 +92,9 @@ _Range.prototype = {
             that.categories = otherCategories ? unique(categories.concat(otherCategories)) : categories;
         }
 
-        if(that[axisTypeSelector] === "logarithmic") {
-            checkField("allowNegatives");
-            compareAndReplaceByField("linearThreshold", otherLessThan);
+        if(that[axisTypeSelector] === 'logarithmic') {
+            checkField('allowNegatives');
+            compareAndReplaceByField('linearThreshold', otherLessThan);
         }
 
         return that;
@@ -107,7 +107,7 @@ _Range.prototype = {
     correctValueZeroLevel: function() {
         var that = this;
 
-        if(that[axisTypeSelector] === "logarithmic" || _isDate(that[maxSelector]) || _isDate(that[minSelector])) {
+        if(that[axisTypeSelector] === 'logarithmic' || _isDate(that[maxSelector]) || _isDate(that[minSelector])) {
             return that;
         }
 
@@ -133,7 +133,7 @@ _Range.prototype = {
         } else {
             let notAFunction = !_isFunction(sort);
 
-            if(notAFunction && this.dataType !== "string") {
+            if(notAFunction && this.dataType !== 'string') {
                 sort = (a, b) => a.valueOf() - b.valueOf();
             } else if(notAFunction) {
                 sort = false;

@@ -1,12 +1,12 @@
-import devices from "core/devices";
-import browser from "core/utils/browser";
-import typeUtils from "core/utils/type";
+import devices from 'core/devices';
+import browser from 'core/utils/browser';
+import typeUtils from 'core/utils/type';
 
 export function testInChromeOnDesktopActiveWindow(name, testCallback) {
-    if(devices.real().deviceType === "desktop" && browser.webkit) {
+    if(devices.real().deviceType === 'desktop' && browser.webkit) {
         QUnit.testInActiveWindow.call(null, name, testCallback);
     } else {
-        QUnit.skip.call(null, name + " [testInChromeOnDesktopActiveWindow]", testCallback);
+        QUnit.skip.call(null, name + ' [testInChromeOnDesktopActiveWindow]', testCallback);
     }
 }
 

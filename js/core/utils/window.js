@@ -1,8 +1,8 @@
 /* global window */
 
-var domAdapter = require("../dom_adapter");
+var domAdapter = require('../dom_adapter');
 
-var hasWindow = typeof window !== "undefined";
+var hasWindow = typeof window !== 'undefined';
 var windowObject = hasWindow && window;
 
 if(!windowObject) {
@@ -25,26 +25,26 @@ module.exports = {
 
     defaultScreenFactorFunc: function(width) {
         if(width < 768) {
-            return "xs";
+            return 'xs';
         } else if(width < 992) {
-            return "sm";
+            return 'sm';
         } else if(width < 1200) {
-            return "md";
+            return 'md';
         } else {
-            return "lg";
+            return 'lg';
         }
     },
 
     getCurrentScreenFactor: function(screenFactorCallback) {
         var screenFactorFunc = screenFactorCallback || this.defaultScreenFactorFunc;
-        var windowWidth = domAdapter.getDocumentElement()["clientWidth"];
+        var windowWidth = domAdapter.getDocumentElement()['clientWidth'];
 
         return screenFactorFunc(windowWidth);
     },
 
     getNavigator: function() {
         return this.hasWindow() ? windowObject.navigator : {
-            userAgent: ""
+            userAgent: ''
         };
     }
 };

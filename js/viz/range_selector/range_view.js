@@ -30,7 +30,7 @@ function merge(a, b) {
 function RangeView(params) {
     this._params = params;
     this._clipRect = params.renderer.clipRect();
-    params.root.attr({ "clip-path": this._clipRect.id });
+    params.root.attr({ 'clip-path': this._clipRect.id });
 }
 
 RangeView.prototype = {
@@ -52,7 +52,7 @@ RangeView.prototype = {
                         // Seems that "backgroundTheme.color" is never used and so can be removed both from here and from themes
                         // TODO: Check it (special attention to WidgetsGallery) and remove the option
                         fill: merge(backgroundOption.color, backgroundTheme.color),
-                        "class": "dx-range-selector-background"
+                        'class': 'dx-range-selector-background'
                     }).append(root);
                 }
                 if(backgroundOption.image && backgroundOption.image.url) {
@@ -62,7 +62,7 @@ RangeView.prototype = {
                 }
             }
             if(seriesDataSource && seriesDataSource.isShowChart()) {
-                seriesGroup = renderer.g().attr({ "class": "dxrs-series-group" }).append(root);
+                seriesGroup = renderer.g().attr({ 'class': 'dxrs-series-group' }).append(root);
                 drawSeriesView(seriesGroup, seriesDataSource, canvas, isAnimationEnabled);
             }
         }

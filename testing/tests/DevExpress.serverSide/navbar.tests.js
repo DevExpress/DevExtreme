@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/navBar.markup.tests.js");
+require('../DevExpress.ui.widgets/navBar.markup.tests.js');
