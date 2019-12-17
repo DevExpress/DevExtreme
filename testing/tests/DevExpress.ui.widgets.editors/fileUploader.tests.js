@@ -599,7 +599,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
                 assert.equal(e.bytesLoaded, loadedBytes, 'total loaded bytes size is correct');
                 assert.equal(progressBar.option('value'), loadedBytes, 'progressBar value is correct');
                 assert.equal(e.segmentSize, request.loadedSize, 'loaded segment bytes size is correct');
-                assert.equal(e.component.option('progress'), Math.round(loadedBytes / fakeContentFile.size * 100), 'component progress value is correct');
+                assert.equal(e.component.option('progress'), Math.floor(loadedBytes / fakeContentFile.size * 100), 'component progress value is correct');
 
                 assert.ok(this.xhrMock.getInstanceAt(index), 'request ' + index + ' is created');
                 index++;
@@ -608,11 +608,13 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
                 isUploaded = true;
             }
         });
+        const instance = $fileUploader.dxFileUploader('instance');
         simulateFileChoose($fileUploader, [fakeContentFile]);
 
-        const expectedCallsCount = Math.ceil(fakeContentFile.size / $($fileUploader).dxFileUploader('instance').option('chunkSize'));
+        const expectedCallsCount = Math.ceil(fakeContentFile.size / instance.option('chunkSize'));
         assert.equal(index, expectedCallsCount, 'count of calls onProgress event is valid');
         assert.ok(isUploaded, 'file is uploaded');
+        assert.equal(instance.option('progress'), 100, 'component progress value is correct');
     });
     QUnit.test('onFileAborted event should be raised if canceled uploading', function(assert) {
         let isUploadAborted = false;
@@ -1704,7 +1706,7 @@ QUnit.test('the \'progress\' option should reflect file upload progress', functi
             loadedSize += this.xhrMock.getInstanceAt(j).loadedSize;
         }
 
-        currentProgress = loadedSize / totalSize * 100;
+        currentProgress = Math.floor(loadedSize * 100 / totalSize);
 
         assert.equal(instance.option('progress'), currentProgress, 'progress is correct on step ' + i);
         this.clock.tick(this.xhrMock.PROGRESS_INTERVAL);
@@ -1713,9 +1715,9 @@ QUnit.test('the \'progress\' option should reflect file upload progress', functi
     simulateFileChoose($element, fakeFile);
 
     loadedSize = this.xhrMock.getInstanceAt(files.length).loadedSize;
-    currentProgress = loadedSize * 100 / fakeFile.size;
+    currentProgress = Math.floor(loadedSize * 100 / fakeFile.size);
 
-    assert.equal(instance.option('progress'), Math.round(currentProgress), 'progress is correct after value change');
+    assert.equal(instance.option('progress'), currentProgress, 'progress is correct after value change');
 });
 
 QUnit.test('the \'progress\' option should be reset to 0 when new files are selected after old files has been uploaded', function(assert) {
@@ -1776,7 +1778,7 @@ QUnit.test('T246244 - the \'progress\' option should be recalculated when upload
     $firstFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
     $secondFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
-    assert.equal(instance.option('progress'), 67, 'two files are uploaded');
+    assert.equal(instance.option('progress'), 66, 'two files are uploaded');
 
     $secondFile.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS).trigger('dxclick');
     assert.equal(instance.option('progress'), 50, 'uploaded file removing leads to progress recalculation');
@@ -1801,7 +1803,7 @@ QUnit.test('T246244 - the \'progress\' option should be recalculated when upload
     $firstFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
     $secondFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
-    assert.equal(instance.option('progress'), 40, 'one file is uploaded and the other one is uploading');
+    assert.equal(instance.option('progress'), 39, 'one file is uploaded and the other one is uploading');
 
     $secondFile.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS).trigger('dxclick');
     assert.equal(instance.option('progress'), 50, 'uploading file removing leads to progress recalculation');
@@ -1966,6 +1968,8 @@ QUnit.test('the \'onProgress\' option with multiple files', function(assert) {
 
 QUnit.test('the \'onProgress\' option event fields', function(assert) {
     const stepSize = fakeFile.size * this.xhrMock.PROGRESS_INTERVAL / this.xhrMock.LOAD_TIMEOUT,
+        firstSegment = Math.floor(stepSize),
+        twoSegments = Math.floor(2 * stepSize),
         onProgressHandler = sinon.spy(),
         $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
@@ -1975,16 +1979,16 @@ QUnit.test('the \'onProgress\' option event fields', function(assert) {
     simulateFileChoose($element, fakeFile);
     let args = onProgressHandler.getCall(0).args[0];
 
-    assert.equal(args.segmentSize, stepSize, 'segment size is correct');
-    assert.equal(args.bytesLoaded, stepSize, 'bytes loaded size is correct');
+    assert.equal(args.segmentSize, firstSegment, 'segment size is correct');
+    assert.equal(args.bytesLoaded, firstSegment, 'bytes loaded size is correct');
     assert.equal(args.bytesTotal, args.event.total, 'bytes total size is correct');
     assert.ok(args.bytesTotal, 'bytes total is defined');
 
     this.clock.tick(this.xhrMock.PROGRESS_INTERVAL);
     args = onProgressHandler.getCall(1).args[0];
 
-    assert.equal(args.segmentSize, stepSize, 'segment size is correct after progress interval');
-    assert.equal(args.bytesLoaded, 2 * stepSize, 'bytes loaded size is correct after progress interval');
+    assert.equal(args.segmentSize, twoSegments - firstSegment, 'segment size is correct after progress interval');
+    assert.equal(args.bytesLoaded, twoSegments, 'bytes loaded size is correct after progress interval');
     assert.equal(args.bytesTotal, args.event.total, 'bytes total size is correct');
     assert.ok(args.bytesTotal, 'bytes total is defined');
 });
