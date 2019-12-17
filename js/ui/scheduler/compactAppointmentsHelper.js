@@ -55,7 +55,7 @@ export class CompactAppointmentsHelper {
         const $button = $(e.element);
         this.instance.showAppointmentTooltipCore(
             $button,
-            $button.data("items"),
+            $button.data('items'),
             {
                 clickEvent: this.instance.raiseClickEvent.bind(this.instance),
                 dragBehavior: this.instance.createTooltipDragBehavior.bind(this.instance),
