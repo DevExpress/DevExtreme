@@ -16,6 +16,9 @@ QUnit.testStart(function() {
             .draggable {
                 height: 30px;
             }
+            .default {
+                cursor: default;
+            }
         </style>
         <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
             <div id="item1" class="draggable" style="background: yellow;">item1</div>
@@ -201,7 +204,23 @@ QUnit.test('While dragging cursor should be \'grabbing/pointer\'', function(asse
 
     // assert
     let cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
-    assert.equal($('.dx-sortable-dragging').css('cursor'), cursor, `cursor is ${cursor}`);
+    assert.equal($('.dx-sortable-dragging').children().first().css('cursor'), cursor, `cursor is ${cursor}`);
+});
+
+QUnit.test('The selector is specific enough to override the style applied to handle element', function(assert) {
+    // arrange
+    $('<div>Drag</div>').addClass('default').appendTo(this.$element);
+
+    this.createSortable({
+        handle: '.default'
+    });
+
+    // act
+    pointerMock(this.$element.find('.default').eq(0)).start().down().move(10, 0);
+
+    // assert
+    let cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
+    assert.equal($('.dx-sortable-dragging').find('.default').eq(0).css('cursor'), cursor, `cursor is ${cursor}`);
 });
 
 QUnit.module('allowReordering', moduleConfig);
