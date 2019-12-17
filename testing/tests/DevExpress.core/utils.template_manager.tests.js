@@ -12,7 +12,7 @@ import { TemplateBase } from 'core/templates/template_base';
 import { EmptyTemplate } from 'core/templates/empty_template';
 import { ChildDefaultTemplate } from 'core/templates/child_default_template';
 
-QUnit.module("TemplateManager utils", {
+QUnit.module('TemplateManager utils', {
     beforeEach: function() {
         const $ = renderer;
         this.$remove = sinon.stub($.fn, 'remove');
@@ -22,44 +22,44 @@ QUnit.module("TemplateManager utils", {
     }
 });
 
-QUnit.test("#validateTemplateSource", function(assert) {
+QUnit.test('#validateTemplateSource', function(assert) {
     const normalize = sinon.stub(domUtils, 'normalizeTemplateElement');
 
-    assert.strictEqual(validateTemplateSource(1), 1, "should return value if it is not a string");
-    assert.notOk(normalize.called, "should not normalize template element if value is a string");
+    assert.strictEqual(validateTemplateSource(1), 1, 'should return value if it is not a string');
+    assert.notOk(normalize.called, 'should not normalize template element if value is a string');
 
     validateTemplateSource('template');
-    assert.ok(normalize.called, "should normalize template element if value is a string");
+    assert.ok(normalize.called, 'should normalize template element if value is a string');
 
     normalize.restore();
 });
 
-QUnit.test("#templateKey", function(assert) {
+QUnit.test('#templateKey', function(assert) {
     const templateSource = ['template'];
     const isRenderer = sinon.stub(type, 'isRenderer');
 
     isRenderer.returns(true);
-    assert.strictEqual(templateKey(templateSource), 'template', "should return value if it is not a renderer function");
+    assert.strictEqual(templateKey(templateSource), 'template', 'should return value if it is not a renderer function');
 
     isRenderer.returns(false);
-    assert.strictEqual(templateKey(templateSource), templateSource, "should return a first array item if if is a renderer function");
+    assert.strictEqual(templateKey(templateSource), templateSource, 'should return a first array item if if is a renderer function');
 
     isRenderer.restore();
 });
 
-QUnit.test("#findTemplateByDevice", function(assert) {
+QUnit.test('#findTemplateByDevice', function(assert) {
     const findBestMatches = sinon.stub(common, 'findBestMatches').returns('bestTemplate');
     const templates = ['template1', 'b', 'template2'];
 
     const result = findTemplateByDevice(templates);
 
-    assert.strictEqual(result, 'b', "should return best matches");
-    assert.strictEqual(this.$remove.callCount, 2, "should return calls remove method only for non best matches");
+    assert.strictEqual(result, 'b', 'should return best matches');
+    assert.strictEqual(this.$remove.callCount, 2, 'should return calls remove method only for non best matches');
 
     findBestMatches.restore();
 });
 
-QUnit.test("#addOneRenderedCall", function(assert) {
+QUnit.test('#addOneRenderedCall', function(assert) {
     const render = sinon.spy();
     const template = { render, customField: 'customField' };
     const nextTemplate = addOneRenderedCall(template);
@@ -70,7 +70,7 @@ QUnit.test("#addOneRenderedCall", function(assert) {
     assert.ok(render.calledWith('options'), 'should call old `render` method');
 });
 
-QUnit.test("#getNormalizedTemplateArgs", function(assert) {
+QUnit.test('#getNormalizedTemplateArgs', function(assert) {
     const options = { model: 'model', index: 'index', container: 'container' };
     const normalizeArgs = getNormalizedTemplateArgs(options);
 
@@ -80,13 +80,13 @@ QUnit.test("#getNormalizedTemplateArgs", function(assert) {
     assert.strictEqual(normalizeArgs[3], undefined, 'should not append something else');
 });
 
-QUnit.test("#defaultCreateElement", function(assert) {
+QUnit.test('#defaultCreateElement', function(assert) {
     const template = defaultCreateElement();
 
     assert.ok(template instanceof Template, 'should return instance of Template');
 });
 
-QUnit.test("#acquireIntegrationTemplate", function(assert) {
+QUnit.test('#acquireIntegrationTemplate', function(assert) {
     const onRendered = sinon.spy();
     const templateSource = 'templateSource';
     const templates = { templateSource: new TemplateBase() };
@@ -114,7 +114,7 @@ QUnit.test("#acquireIntegrationTemplate", function(assert) {
     );
 });
 
-QUnit.test("#acquireTemplate", function(assert) {
+QUnit.test('#acquireTemplate', function(assert) {
     assert.ok(acquireTemplate(null) instanceof EmptyTemplate, 'should return empty template if source is null');
 
     assert.equal(
