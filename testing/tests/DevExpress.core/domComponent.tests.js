@@ -5,6 +5,7 @@ import config from "core/config";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
 import DOMComponent from "core/dom_component";
+import TemplateManager from "core/template_manager";
 import domUtils from "core/utils/dom";
 import publicComponentUtils from "core/utils/public_component";
 
@@ -521,6 +522,27 @@ QUnit.module("default", {
 
         instance.option("rtlEnabled", true);
         assert.ok($element.hasClass(RTL_CLASS));
+    });
+
+    QUnit.test("create the TemplateManager module instance", function(assert) {
+        const $element = $("#component").TestComponent();
+        const instance = $element.TestComponent("instance");
+
+        assert.ok(instance._templateManager instanceof TemplateManager);
+    });
+
+    QUnit.test("should not create TemplateManager module instance if template functionality is not set", function(assert) {
+        const ComponentWithoutTemplates = DOMComponent.inherit({
+            _useTemplates() {
+                return false;
+            }
+        });
+        registerComponent('ComponentWithoutTemplates', nameSpace, ComponentWithoutTemplates);
+
+        const $element = $("#component").ComponentWithoutTemplates();
+        const instance = $element.ComponentWithoutTemplates("instance");
+
+        assert.ok(typeof instance._templateManager, 'undefined');
     });
 
     QUnit.test("init option 'rtl' is true", function(assert) {
