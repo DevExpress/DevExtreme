@@ -38,7 +38,7 @@ const environment = {
         focusStateEnabled: true,
         editing: true,
         offset: 'offset',
-        isCompact: false,
+        isButtonClick: false,
     },
     afterEach: function() {
         stubCreateComponent.reset();
@@ -180,7 +180,7 @@ QUnit.test("onShown passed to createComponent should work correct, several eleme
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
 
-    tooltip.show('target', dataList, extend(this.extraOptions, { isCompact: true }));
+    tooltip.show('target', dataList, extend(this.extraOptions, { isButtonClick: true }));
     stubComponent.option.reset();
     stubCreateComponent.getCall(0).args[2].contentTemplate("<div>");
     stubCreateComponent.getCall(0).args[2].onShown();

@@ -28,7 +28,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _onShown() {
         super._onShown();
-        if(this._extraOptions.isCompact) {
+        if(this._extraOptions.isButtonClick) {
             this._list.focus();
             this._list.option('focusedElement', null);
         }
