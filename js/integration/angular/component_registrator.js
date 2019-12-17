@@ -10,7 +10,6 @@ const each = iterator.each;
 import arrayUtils from "../../core/utils/array";
 const inArray = arrayUtils.inArray;
 import Locker from "../../core/utils/locker";
-import Widget from "../../core/dom_component_with_template";
 import Editor from "../../ui/editor/editor";
 import { NgTemplate } from "./template";
 import ngModule from "./module";
@@ -32,6 +31,30 @@ const safeApply = (func, scope) => {
         return func(scope);
     } else {
         return scope.$apply(() => func(scope));
+    }
+};
+
+const getClassMethod = (initClass, methodName) => {
+    const hasParentProperty = Object.prototype.hasOwnProperty.bind(initClass)("parent");
+    const isES6Class = !hasParentProperty && initClass.parent;
+
+    if(isES6Class) {
+        const baseClass = Object.getPrototypeOf(initClass);
+
+        return baseClass.prototype[methodName]
+            ? () => baseClass.prototype[methodName]()
+            : getClassMethod(baseClass, methodName);
+    } else {
+        const method = initClass.parent.prototype[methodName];
+        if(method) {
+            return () => method();
+        }
+
+        if(!method || !initClass.parent.subclassOf) {
+            return () => undefined;
+        }
+
+        return getClassMethod(initClass.parent, methodName);
     }
 };
 
@@ -566,7 +589,10 @@ const registerComponentDirective = name => {
 
         compile($element) {
             const componentClass = registeredComponents[name];
-            const $content = componentClass.subclassOf(Widget) ? $element.contents().detach() : null;
+            const useTemplates = componentClass.prototype._useTemplates
+                ? componentClass.prototype._useTemplates()
+                : getClassMethod(componentClass, '_useTemplates')();
+            const $content = useTemplates ? $element.contents().detach() : null;
 
             return (scope, $element, attrs, ngModelController, transcludeFn) => {
                 $element.append($content);

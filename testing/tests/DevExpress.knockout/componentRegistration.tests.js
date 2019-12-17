@@ -53,6 +53,9 @@ QUnit.module(
                     $.extend(this._deprecatedOptions, {
                         "checked": { alias: "value" }
                     });
+                },
+                _useTemplates() {
+                    return false;
                 }
             });
 
@@ -518,7 +521,11 @@ QUnit.module(
         });
 
         QUnit.test("KO integration don't breaks defaultOptions", function(assert) {
-            var TestDOMComponent = DOMComponent.inherit();
+            var TestDOMComponent = DOMComponent.inherit({
+                _useTemplates() {
+                    return false;
+                }
+            });
 
             registerComponent("TestDOMComponent", TestDOMComponent);
 
@@ -1070,6 +1077,9 @@ QUnit.module(
             var TestComponent = DOMComponent.inherit({
                 _defaultOptions: function() {
                     return { text: "", array: [], obj: null };
+                },
+                _useTemplates() {
+                    return false;
                 }
             });
 
@@ -1119,6 +1129,9 @@ QUnit.module(
                 NAME: "TestComponent",
                 _dispose: function() {
                     this.__disposed__ = true;
+                },
+                _useTemplates() {
+                    return false;
                 }
             });
 
@@ -1146,6 +1159,9 @@ QUnit.module(
                         _dispose: function() {
                             this.__disposeCount__ = this.__disposeCount__ || 0;
                             this.__disposeCount__++;
+                        },
+                        _useTemplates() {
+                            return false;
                         }
                     })
                 );
@@ -1236,6 +1252,9 @@ QUnit.module(
 
                 trigger: function(e) {
                     this._createActionByOption("onHandler")(e);
+                },
+                _useTemplates() {
+                    return false;
                 }
             }));
 
@@ -1377,7 +1396,7 @@ QUnit.module("predicate for manual option binding control", {
             }
         });
 
-        registerComponent("dxTest", DOMComponent.inherit());
+        registerComponent("dxTest", DOMComponent.inherit({ _useTemplates() { return false; } }));
 
         this.$component = $("<div></div>")
             .attr("data-bind", "dxTest: $data")
