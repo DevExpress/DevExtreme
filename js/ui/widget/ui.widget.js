@@ -535,15 +535,18 @@ const Widget = DOMComponent.inherit({
         this._hover(hoveredElement, hoveredElement);
     },
 
+    _findHoverTarget($el) {
+        return $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
+    },
+
     _hover($el, $previous) {
         const { hoverStateEnabled, disabled, isActive } = this.option();
-        const findHoverTarget = $el => $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
 
-        $previous = findHoverTarget($previous);
+        $previous = this._findHoverTarget($previous);
         $previous && $previous.toggleClass('dx-state-hover', false);
 
         if($el && hoverStateEnabled && !disabled && !isActive) {
-            const newHoveredElement = findHoverTarget($el);
+            const newHoveredElement = this._findHoverTarget($el);
 
             newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
         }
