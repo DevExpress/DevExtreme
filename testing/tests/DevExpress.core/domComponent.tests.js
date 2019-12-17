@@ -524,14 +524,12 @@ QUnit.module('default', {
         assert.ok($element.hasClass(RTL_CLASS));
     });
 
-    QUnit.test('create the TemplateManager module instance', function(assert) {
+    QUnit.test('use the TemplateManager module for templates', function(assert) {
         const $element = $('#component').TestComponent();
         const instance = $element.TestComponent('instance');
 
-        assert.ok(instance._templateManager instanceof TemplateManager);
-    });
+        assert.ok(instance._templateManager instanceof TemplateManager, 'create instance');
 
-    QUnit.test('should not create TemplateManager module instance if template functionality is not set', function(assert) {
         const ComponentWithoutTemplates = DOMComponent.inherit({
             _useTemplates() {
                 return false;
@@ -539,10 +537,13 @@ QUnit.module('default', {
         });
         registerComponent('ComponentWithoutTemplates', nameSpace, ComponentWithoutTemplates);
 
-        const $element = $('#component').ComponentWithoutTemplates();
-        const instance = $element.ComponentWithoutTemplates('instance');
+        const $element2 = $('#component').ComponentWithoutTemplates();
+        const instance2 = $element2.ComponentWithoutTemplates('instance');
 
-        assert.ok(typeof instance._templateManager, 'undefined');
+        assert.ok(
+            typeof instance2._templateManager,
+            'should not create TemplateManager module instance if template functionality is not set'
+        );
     });
 
     QUnit.test('init option \'rtl\' is true', function(assert) {
