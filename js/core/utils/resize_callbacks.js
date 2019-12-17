@@ -15,10 +15,10 @@ var resizeCallbacks = (function() {
     }
 
     var formatSize = function() {
-        var documentElement = domAdapter.getDocumentElement();
+        var window = windowUtils.getWindow();
         return {
-            width: documentElement.clientWidth,
-            height: documentElement.clientHeight
+            width: window.innerWidth,
+            height: window.innerHeight,
         };
     };
 
