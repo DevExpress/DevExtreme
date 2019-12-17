@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var path = require('path');
 var rename = require('gulp-rename');
 var template = require('gulp-template');
+var lint = require('gulp-eslint');
 var fs = require('fs');
 
 var headerPipes = require('./header-pipes.js');
@@ -130,6 +131,8 @@ gulp.task('localization-generated-sources', gulp.parallel([
             .pipe(template({
                 json: serializeObject(source.data)
             }))
+            .pipe(lint({ fix: true }))
+            .pipe(lint.format())
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));
     };

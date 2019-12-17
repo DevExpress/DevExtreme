@@ -30,6 +30,7 @@
   "dependencies": {
     "devexpress-diagram": "0.2.7",
     "devexpress-gantt": "0.1.1",
+    "gulp-eslint": "^6.0.0",
     "jszip": "^2.0.0 || ^3.0.0",
     "quill": "^1.3.7",
     "showdown": "^1.8.6",
