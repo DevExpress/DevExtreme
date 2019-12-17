@@ -1373,7 +1373,7 @@ const Scheduler = Widget.inherit({
                 break;
             case 'editing':
                 this._initEditing();
-                var editing = this._editing;
+                const editing = this._editing;
 
                 this._bringEditingModeToAppointments(editing);
 

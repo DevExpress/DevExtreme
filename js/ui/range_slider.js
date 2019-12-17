@@ -352,8 +352,8 @@ const RangeSlider = Slider.inherit({
 
                 this._renderValue();
 
-                var start = this.option('start');
-                var end = this.option('end');
+                const start = this.option('start');
+                const end = this.option('end');
 
                 this._createActionByOption('onValueChanged', {
                     excludeValidators: ['disabled', 'readOnly']

@@ -675,7 +675,7 @@ QUnit.test('There is no error when date scale and bar series', function(assert) 
 // T696409
 QUnit.test('RS with DX dataSource', function(assert) {
     const done = assert.async(1);
-    var rangeSelector = this.createRangeSelector({
+    const rangeSelector = this.createRangeSelector({
         chart: { series: [{}] },
         value: [2, 4],
         onValueChanged: function(e) {

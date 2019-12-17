@@ -28,40 +28,38 @@ module.exports = function(baseErrors, errors) {
         }
     };
 
-    var combineMessage = function(args) {
+    function combineMessage(args) {
         const id = args[0];
         args = args.slice(1);
         return formatMessage(id, formatDetails(id, args));
-    };
+    }
 
-    var formatDetails = function(id, args) {
+    function formatDetails(id, args) {
         args = [exports.ERROR_MESSAGES[id]].concat(args);
         return stringUtils.format.apply(this, args).replace(/\.*\s*?$/, '');
-    };
+    }
 
-    var formatMessage = function(id, details) {
+    function formatMessage(id, details) {
         return stringUtils.format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
-    };
+    }
 
-    var makeError = function(args) {
-        let id; let details; let message; let url;
-
-        id = args[0];
+    function makeError(args) {
+        const id = args[0];
         args = args.slice(1);
-        details = formatDetails(id, args);
-        url = getErrorUrl(id);
-        message = formatMessage(id, details);
+        const details = formatDetails(id, args);
+        const url = getErrorUrl(id);
+        const message = formatMessage(id, details);
 
         return extend(new Error(message), {
             __id: id,
             __details: details,
             url: url
         });
-    };
+    }
 
-    var getErrorUrl = function(id) {
+    function getErrorUrl(id) {
         return ERROR_URL + id;
-    };
+    }
 
     return exports;
 

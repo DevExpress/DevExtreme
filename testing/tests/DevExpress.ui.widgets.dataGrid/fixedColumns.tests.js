@@ -1297,7 +1297,7 @@ QUnit.test('Synchronize position fixed table with main table', function(assert) 
     assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
     assert.equal($fixTable.position().top, 0, 'fixed table - position top');
 
-    var scrollChanged = function() {
+    const scrollChanged = function() {
         // assert
         assert.equal($fixTable.position().top, -20, 'fixed table - position top');
         that.rowsView.scrollChanged.remove(scrollChanged);
@@ -1346,7 +1346,7 @@ QUnit.test('Synchronize position fixed table with main table when scrolling mode
     assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
     assert.equal($fixTable.position().top, 0, 'fixed table - position top');
 
-    var scrollChanged = function(e) {
+    const scrollChanged = function(e) {
         // assert
         assert.ok($fixTable.position().top < 0, 'position top is defined');
         assert.ok($table.find('.dx-virtual-row').eq(0).height() > 0, 'virtual row has height');
@@ -1964,7 +1964,7 @@ QUnit.testInActiveWindow('Scrolling to focused cell when it is fixed', function(
     $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
     $cell = $fixedTable.find('tbody > tr:not(.dx-freespace-row)').last().children().first();
 
-    var scrollChanged = function(e) {
+    const scrollChanged = function(e) {
         that.rowsView.scrollChanged.remove(scrollChanged);
         scrollTop = $fixedTable.parent().scrollTop();
         assert.ok(scrollTop > 500, 'scroll top of the fixed table');
@@ -1999,7 +1999,7 @@ if(browser.mozilla) {
         $cell = $fixedTable.find('tbody > tr:not(.dx-freespace-row)').last().children().first();
 
         const dateStart = new Date();
-        var scrollChanged = function(e) {
+        const scrollChanged = function(e) {
             that.rowsView.scrollChanged.remove(scrollChanged);
             assert.ok(new Date() - dateStart >= 60, 'scrolling has delay');
             done();

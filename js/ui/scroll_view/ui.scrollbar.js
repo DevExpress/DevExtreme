@@ -26,6 +26,8 @@ const SCROLLBAR_VISIBLE = {
     never: 'never'
 };
 
+let activeScrollbar = null;
+
 const Scrollbar = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -248,8 +250,6 @@ const Scrollbar = Widget.inherit({
         this._adjustVisibility() && this.option('visible', true);
     })
 });
-
-var activeScrollbar = null;
 
 readyCallback.add(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {

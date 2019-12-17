@@ -208,7 +208,7 @@ export default CollectionWidget.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'items':
-                var isItemsUpdated = this._partialRefresh(args.value);
+                const isItemsUpdated = this._partialRefresh(args.value);
                 if(!isItemsUpdated) {
                     this.callBase(args);
                 }

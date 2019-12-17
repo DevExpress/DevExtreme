@@ -4,7 +4,7 @@ const ready = readyCallbacks.add;
 const changeCallback = require('./callbacks')();
 let $originalViewPort = $();
 
-var value = (function() {
+const value = (function() {
     let $current;
 
     return function(element) {

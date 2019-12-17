@@ -41,7 +41,7 @@ function getCrossCoord(rect, coord, indexOffset) {
 
 // We could always conside center of label as label point (with appropriate connector path clipping). In that case we do not depend neither on background nor on rotation.
 
-var barPointStrategy = {
+const barPointStrategy = {
     isLabelInside: function(labelPoint, figure) {
         const xc = labelPoint.x + labelPoint.width / 2;
         const yc = labelPoint.y + labelPoint.height / 2;

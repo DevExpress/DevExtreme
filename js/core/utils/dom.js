@@ -143,7 +143,7 @@ const extractTemplateMarkup = function(element) {
     }
 };
 
-var normalizeTemplateElement = function(element) {
+const normalizeTemplateElement = function(element) {
     let $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
         : $('<div>').html(element).contents();

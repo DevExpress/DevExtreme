@@ -163,19 +163,7 @@ const getFullOffsetRight = function($element) {
         $element.innerWidth());
 };
 
-const testVerticalAlign = function($parent, inputSelector, isContainer, testVerticalOffsetFlag) {
-    const $label = $parent.find(LABEL);
-    const $value = $parent.find(inputSelector);
-
-    if(testVerticalOffsetFlag) {
-        testVerticalOffset($label, $value);
-    }
-
-    const $valueContainer = isContainer ? $value : $value.parent();
-    testBaselineOffset($label, $valueContainer);
-};
-
-var testVerticalOffset = function($label, $value) {
+const testVerticalOffset = function($label, $value) {
     const isIE9 = document.all && !document.atob;
     const labelOffset = Math.round($label.offset().top - parseInt($label.css('margin-top')) - isIE9 ? parseInt($label.css('borderTopWidth')) : 0);
     const valueOffset = Math.round($value.offset().top - parseInt($value.css('margin-top')) - isIE9 ? parseInt($value.css('borderTopWidth')) : 0);
@@ -183,7 +171,7 @@ var testVerticalOffset = function($label, $value) {
     QUnit.assert.equal(labelOffset, valueOffset, 'Top offset equal');
 };
 
-var testBaselineOffset = function($labelContainer, $valueContainer) {
+const testBaselineOffset = function($labelContainer, $valueContainer) {
     let $imgForLabel;
     let $imgForInput;
 
@@ -199,6 +187,17 @@ var testBaselineOffset = function($labelContainer, $valueContainer) {
     }
 };
 
+const testVerticalAlign = function($parent, inputSelector, isContainer, testVerticalOffsetFlag) {
+    const $label = $parent.find(LABEL);
+    const $value = $parent.find(inputSelector);
+
+    if(testVerticalOffsetFlag) {
+        testVerticalOffset($label, $value);
+    }
+
+    const $valueContainer = isContainer ? $value : $value.parent();
+    testBaselineOffset($label, $valueContainer);
+};
 
 module.exports = function(themeName, options) {
     if(!checkThatTestingIsPossible()) {

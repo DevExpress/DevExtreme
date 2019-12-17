@@ -276,7 +276,7 @@ const Devices = Class.inherit({
             result.push('dx-device-' + realDevice.platform + '-' + realDevice.version[0]);
         }
 
-        if(devices.isSimulator()) {
+        if(this.isSimulator()) {
             result.push('dx-simulator');
         }
 
@@ -452,7 +452,7 @@ const Devices = Class.inherit({
     }
 });
 
-var devices = new Devices();
+const devices = new Devices();
 
 viewPort.changeCallback.add(function(viewPort, prevViewport) {
     devices.detachCssClasses(prevViewport);

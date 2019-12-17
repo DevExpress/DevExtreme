@@ -4,7 +4,7 @@
 * @type object
 * @inherits basePointObject
 */
-var piePointObject = {
+const piePointObject = {
     /**
     * @name piePointObjectFields.percent
     * @type string|number|date
@@ -34,7 +34,7 @@ var piePointObject = {
 * @type object
 * @inherits baseSeriesObject
 */
-var pieChartSeriesObject = {
+const pieChartSeriesObject = {
     /**
     * @name pieChartSeriesObjectMethods.hover
     * @publicName hover()
@@ -61,7 +61,7 @@ var pieChartSeriesObject = {
 * @type object
 * @inherits BaseLegendItem
 */
-var legendItem = {
+const legendItem = {
     /**
     * @name PieChartLegendItem.text
     * @type any

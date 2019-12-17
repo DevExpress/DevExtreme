@@ -63,7 +63,7 @@ function addChange(settings) {
 }
 
 function createChainExecutor() {
-    var executeChain = function() {
+    const executeChain = function() {
         let i;
         const ii = executeChain._chain.length;
         let result;

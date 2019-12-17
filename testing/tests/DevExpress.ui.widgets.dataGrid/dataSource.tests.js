@@ -38,7 +38,7 @@ const createDataSource = function(options) {
     const dataSourceAdapter = dataGridStub.dataController._createDataSourceAdapter(dataSource);
 
     const origItems = dataSourceAdapter.items;
-    var processItems = function(items) {
+    const processItems = function(items) {
         for(let i = 0; i < items.length; i++) {
             if(typeof items[i] === 'object') {
                 if('items' in items[i] && items[i].items !== null) {
@@ -78,7 +78,7 @@ QUnit.module('Grid DataSource', {
 
 QUnit.test('page index parallel change', function(assert) {
     const loadingPages = [];
-    var source = createDataSource({
+    const source = createDataSource({
         store: {
             onLoading: function(options) {
                 loadingPages.push(source.pageIndex());
@@ -2632,7 +2632,7 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
         options.load = options.load || function(loadOptions) {
             const d = $.Deferred();
 
-            var removeDataItems = function(items, groupCount) {
+            const removeDataItems = function(items, groupCount) {
                 if(!groupCount) return;
                 for(let i = 0; i < items.length; i++) {
                     if(groupCount > 1) {

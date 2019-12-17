@@ -120,7 +120,7 @@ QUnit.test('disabled tab can\'t be selected by click', function(assert) {
 QUnit.test('regression: wrong selectedIndex in tab mouseup handler', function(assert) {
     let selectedIndex;
 
-    var tabsEl = $('#tabs').dxTabs({
+    const tabsEl = $('#tabs').dxTabs({
         onSelectionChanged: function() {
             selectedIndex = tabsEl.dxTabs('instance').option('selectedIndex');
         },
@@ -138,7 +138,7 @@ QUnit.test('regression: wrong selectedIndex in tab mouseup handler', function(as
 QUnit.test('select action should not be triggered when disabled item is disabled', function(assert) {
     let selectedIndex;
 
-    var tabsEl = $('#tabs').dxTabs({
+    const tabsEl = $('#tabs').dxTabs({
         onSelectionChanged: function(e) {
             selectedIndex = tabsEl.dxTabs('instance').option('selectedIndex');
         },

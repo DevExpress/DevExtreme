@@ -33,7 +33,7 @@ const DynamicProvider = Provider.inherit({
 
             // NOTE: setTimeout is needed by providers to correctly initialize bounds
             return new Promise(function(resolve) {
-                var timeout = setTimeout(function() {
+                const timeout = setTimeout(function() {
                     clearTimeout(timeout);
                     resolve();
                 });

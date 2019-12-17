@@ -28,6 +28,10 @@ const polynomBezier = function(x1, y1, x2, y2) {
         return t * (Cy + t * (By + t * Ay));
     };
 
+    const derivativeX = function(t) {
+        return Cx + t * (2 * Bx + t * 3 * Ax);
+    };
+
     const findXFor = function(t) {
         let x = t;
         let i = 0;
@@ -44,10 +48,6 @@ const polynomBezier = function(x1, y1, x2, y2) {
         }
 
         return x;
-    };
-
-    var derivativeX = function(t) {
-        return Cx + t * (2 * Bx + t * 3 * Ax);
     };
 
     return function(t) {

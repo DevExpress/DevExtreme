@@ -229,8 +229,8 @@ const SliderHandle = Widget.inherit({
             case 'value':
                 this._renderValue();
 
-                var value = this._getFormattedValue(args.value);
-                var previousValue = this._getFormattedValue(args.previousValue);
+                const value = this._getFormattedValue(args.value);
+                const previousValue = this._getFormattedValue(args.previousValue);
                 this._ensureTooltipIsCentered(value, previousValue);
 
                 this.setAria('valuenow', args.value);

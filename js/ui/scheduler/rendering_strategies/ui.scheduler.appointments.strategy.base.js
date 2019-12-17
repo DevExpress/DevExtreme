@@ -340,7 +340,7 @@ class BaseRenderingStrategy {
 
         for(let i = 0; i < sortedArray.length; i++) {
             const current = sortedArray[i];
-            var j;
+            let j;
 
             if(current.isStart) {
                 position = undefined;

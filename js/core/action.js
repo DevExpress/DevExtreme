@@ -6,7 +6,7 @@ const each = require('./utils/iterator').each;
 const Class = require('./class');
 const errors = require('./errors');
 
-var Action = Class.inherit({
+const Action = Class.inherit({
 
     ctor: function(action, config) {
         config = config || {};

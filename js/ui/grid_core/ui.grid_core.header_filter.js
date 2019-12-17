@@ -248,7 +248,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
             if(column) {
                 const visibleIndex = columnsController.getVisibleIndex(columnIndex);
                 const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
-                var $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
+                const $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
                 this.showHeaderFilterMenuBase({
                     columnElement: $columnElement,

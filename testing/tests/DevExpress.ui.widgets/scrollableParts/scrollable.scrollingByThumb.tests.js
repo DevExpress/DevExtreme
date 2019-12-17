@@ -314,7 +314,7 @@ QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
     const containerHeight = 50;
     const contentHeight = 100;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         scrollByThumb: true,
         useNative: false,
         onEnd: function() {

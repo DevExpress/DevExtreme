@@ -800,7 +800,7 @@ QUnit.test('\'boundOffsets\' option as function', function(assert) {
         h: 1,
         v: -2
     };
-    var draggable = this.createDraggable({
+    const draggable = this.createDraggable({
         boundary: $area,
         boundOffset: function() {
             assert.strictEqual(this, draggable);

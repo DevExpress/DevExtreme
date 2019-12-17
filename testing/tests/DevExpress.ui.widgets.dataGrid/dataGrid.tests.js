@@ -2573,7 +2573,7 @@ QUnit.test('Change column width via columnOption method (T628065)', function(ass
 
 QUnit.skip('Change column sortOrder via option method with canceling in onOptionChanged handler', function(assert) {
     // arrange
-    var dataGrid = $('#dataGrid').dxDataGrid({
+    const dataGrid = $('#dataGrid').dxDataGrid({
         loadingTimeout: undefined,
         dataSource: [],
         columns: [{ dataField: 'column1', sortOrder: 'asc' }],
@@ -2595,7 +2595,7 @@ QUnit.skip('Change column sortOrder via option method with canceling in onOption
 // T734761
 QUnit.skip('Change column sortOrder via columnOption method with canceling in onOptionChanged handler', function(assert) {
     // arrange
-    var dataGrid = $('#dataGrid').dxDataGrid({
+    const dataGrid = $('#dataGrid').dxDataGrid({
         loadingTimeout: undefined,
         dataSource: [],
         columns: [{ dataField: 'column1', sortOrder: 'asc' }],
@@ -2638,7 +2638,7 @@ QUnit.test('column width as string should works correctly', function(assert) {
 QUnit.test('Indexes after option change should be normalized before onOptionChanged callback', function(assert) {
     // arrange
     let onOptionChangedCallCount = 0;
-    var grid = $('#dataGrid').dxDataGrid({
+    const grid = $('#dataGrid').dxDataGrid({
         loadingTimeout: undefined,
         allowColumnReordering: true,
         dataSource: [{}],
@@ -12973,6 +12973,7 @@ QUnit.test('contentReady should be fired asynchronously if scrolling mode is vir
 QUnit.test('synchronous render and asynchronous updateDimensions during paging if virtual scrolling is enabled', function(assert) {
     // arrange, act
 
+    let contentReadyCount = 0;
     const array = [];
     for(let i = 0; i < 50; i++) {
         array.push({ test: i });
@@ -13000,8 +13001,6 @@ QUnit.test('synchronous render and asynchronous updateDimensions during paging i
     const resizingController = dataGrid.getController('resizing');
 
     sinon.spy(resizingController, 'updateDimensions');
-
-    var contentReadyCount = 0;
 
     // act
     dataGrid.pageIndex(5);
@@ -16279,7 +16278,7 @@ QUnit.test('Stop watch in cellPrepared event for editor if repaintChangesOnly', 
         repaintChangesOnly: true,
         onCellPrepared: function(e) {
             if(e.isEditing) {
-                var stopWatch = e.watch(function() {
+                const stopWatch = e.watch(function() {
                     return e.column.calculateCellValue(e.data);
                 }, function() {
                     watchUpdateCount++;

@@ -165,7 +165,7 @@ const DataConverter = Class.inherit({
         let result = null;
         const that = this;
 
-        var getByKey = function(data, key) {
+        const getByKey = function(data, key) {
             each(data, function(_, element) {
                 const currentElementKey = element.internalFields && element.internalFields.key || that._dataAccessors.getters.key(element);
                 const items = that._dataAccessors.getters.items(element);

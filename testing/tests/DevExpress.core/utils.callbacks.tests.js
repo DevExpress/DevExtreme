@@ -37,10 +37,11 @@ QUnit.test('Call all of the Callbacks with the argument', function(assert) {
 
 QUnit.test('Fired method', function(assert) {
     // arrange
-    this.Callbacks.add(function(param) {});
+
+    this.Callbacks.add(function() {});
 
     // assert
-    assert.ok(!this.Callbacks.fired(), 'Callback not fired at start');
+    assert.notOk(this.Callbacks.fired(), 'Callback not fired yet');
 
     // act
     this.Callbacks.fire();
@@ -48,7 +49,6 @@ QUnit.test('Fired method', function(assert) {
     // assert
     assert.ok(this.Callbacks.fired(), 'Callback fired');
 });
-
 
 QUnit.test('Call all Callbacks in a list with the given context', function(assert) {
     // arrange
@@ -119,18 +119,18 @@ QUnit.test('Remove a callback from a callback list when firing', function(assert
     const callBack1 = function() {
         callOrder.push(1);
     };
+    const callBack3 = function() {
+        callOrder.push(3);
+    };
     const callBack2 = function() {
         callOrder.push(2);
         that.Callbacks.remove(callBack3);
-    };
-    var callBack3 = function() {
-        callOrder.push(3);
     };
     const callBack4 = function() {
         callOrder.push(4);
         that.Callbacks.remove(callBack1);
     };
-    var callBack5 = function() {
+    const callBack5 = function() {
         callOrder.push(5);
         that.Callbacks.remove(callBack5);
         that.Callbacks.fire();
@@ -217,21 +217,6 @@ QUnit.test('Base strategy', function(assert) {
         { callback: 2, params: 2 },
         { callback: 3, params: 2 }
     ]);
-});
-
-QUnit.test('Fired method', function(assert) {
-    // arrange
-
-    this.Callbacks.add(function() {});
-
-    // assert
-    assert.notOk(this.Callbacks.fired(), 'Callback not fired yet');
-
-    // act
-    this.Callbacks.fire();
-
-    // assert
-    assert.ok(this.Callbacks.fired(), 'Callback fired');
 });
 
 QUnit.module('Flags', {
@@ -368,18 +353,18 @@ QUnit.test('Remove a callback from a callback list when firing for sync strategy
     const callBack1 = function() {
         callOrder.push(1);
     };
+    const callBack3 = function() {
+        callOrder.push(3);
+    };
     const callBack2 = function() {
         callOrder.push(2);
         that.Callbacks.remove(callBack3);
-    };
-    var callBack3 = function() {
-        callOrder.push(3);
     };
     const callBack4 = function() {
         callOrder.push(4);
         that.Callbacks.remove(callBack1);
     };
-    var callBack5 = function() {
+    const callBack5 = function() {
         callOrder.push(5);
         that.Callbacks.remove(callBack5);
         that.Callbacks.fire();

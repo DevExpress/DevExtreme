@@ -58,19 +58,15 @@ const getEventName = function(that, optionName) {
 
     return getEventNameByOption(optionValue);
 };
-var getEventNameByOption = function(optionValue) {
+function getEventNameByOption(optionValue) {
     return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
-};
+}
 const getEventDelay = function(that, optionName) {
     const optionValue = that.option(optionName);
 
     return typeUtils.isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    let delay;
-    let action;
-    let handler;
-    let eventName;
     const target = that.option('target');
     const isSelector = typeUtils.isString(target);
     const event = getEventName(that, name + 'Event');
@@ -79,9 +75,9 @@ const attachEvent = function(that, name) {
         return;
     }
 
-    eventName = eventUtils.addNamespace(event, that.NAME);
-    action = that._createAction((function() {
-        delay = getEventDelay(that, name + 'Event');
+    const eventName = eventUtils.addNamespace(event, that.NAME);
+    const action = that._createAction((function() {
+        const delay = getEventDelay(that, name + 'Event');
         this._clearEventsTimeouts();
 
         if(delay) {
@@ -93,7 +89,7 @@ const attachEvent = function(that, name) {
         }
     }).bind(that), { validatingTargetName: 'target' });
 
-    handler = function(e) {
+    const handler = function(e) {
         action({ event: e, target: $(e.currentTarget) });
     };
 
@@ -619,6 +615,9 @@ const Popover = Popup.inherit({
     },
 
     _optionChanged: function(args) {
+        const name = args.name.substring(0, 4);
+        const event = getEventNameByOption(args.previousValue);
+
         switch(args.name) {
             case 'boundaryOffset':
             case 'arrowPosition':
@@ -636,8 +635,6 @@ const Popover = Popup.inherit({
                 break;
             case 'showEvent':
             case 'hideEvent':
-                var name = args.name.substring(0, 4);
-                var event = getEventNameByOption(args.previousValue);
 
                 this.hide();
                 detachEvent(this, this.option('target'), name, event);

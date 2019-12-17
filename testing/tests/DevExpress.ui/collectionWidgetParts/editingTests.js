@@ -1742,7 +1742,7 @@ module('deleting with confirmation', () => {
 
     test('deleteItem should delete item without confirmation if item is already deleting', function(assert) {
         const $element = $('#cmp');
-        var instance = new TestComponent($element, {
+        const instance = new TestComponent($element, {
             items: ['0'],
             onItemDeleting: function(e) {
                 instance.deleteItem(0);

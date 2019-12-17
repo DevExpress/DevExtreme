@@ -275,12 +275,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
             switch(args.name) {
                 case 'selection':
-                    var oldSelectionMode = that._selectionMode;
+                    const oldSelectionMode = that._selectionMode;
 
                     that.init();
 
-                    var selectionMode = that._selectionMode;
-                    var selectedRowKeys = that.option('selectedRowKeys');
+                    const selectionMode = that._selectionMode;
+                    let selectedRowKeys = that.option('selectedRowKeys');
 
                     if(oldSelectionMode !== selectionMode) {
                         if(selectionMode === 'single') {
@@ -304,7 +304,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     args.handled = true;
                     break;
                 case 'selectedRowKeys':
-                    var value = args.value || [];
+                    const value = args.value || [];
                     if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
                         that.selectRows(value);
                     }

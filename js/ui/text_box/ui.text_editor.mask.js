@@ -47,18 +47,18 @@ const buildInMaskRules = {
     }
 };
 
-var isNumericChar = function(char) {
+function isNumericChar(char) {
     return /[0-9]/.test(char);
-};
+}
 
-var isLiteralChar = function(char) {
+function isLiteralChar(char) {
     const code = char.charCodeAt();
     return (64 < code && code < 91 || 96 < code && code < 123 || code > 127);
-};
+}
 
-var isSpaceChar = function(char) {
+function isSpaceChar(char) {
     return char === ' ';
-};
+}
 
 const TextEditorMask = TextEditorBase.inherit({
 

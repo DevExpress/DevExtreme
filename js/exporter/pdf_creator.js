@@ -12,7 +12,7 @@ const imageEndTemplate = '\r\nendstream\r\nendobj\r\n';
 const trailerTemplate = 'trailer\r\n<<\r\n/Size 8\r\n/Root 7 0 R\r\n/Info 6 0 R\r\n>>\r\nstartxref\r\n_length_\r\n%%EOF';
 const xrefTemplate = 'xref\r\n0 8\r\n0000000000 65535 f\r\n0000000241 00000 n\r\n0000000010 00000 n\r\n_main_ 00000 n\r\n0000000089 00000 n\r\n_image_ 00000 n\r\n_info_ 00000 n\r\n0000000143 00000 n\r\n';
 
-var pad = function(str, len) {
+const pad = function(str, len) {
     return str.length < len ? pad('0' + str, len) : str;
 };
 
@@ -35,11 +35,11 @@ let composePdfString = function(imageString, options, curDate) {
     return mainContent + xref + trailer;
 };
 
-var getXref = function(mainPageLength, contentLength, infoLength) {
+function getXref(mainPageLength, contentLength, infoLength) {
     return xrefTemplate.replace('_main_', pad(mainPageLength + '', 10))
         .replace('_info_', pad((mainPageLength + contentLength) + '', 10))
         .replace('_image_', pad((mainPageLength + contentLength + infoLength) + '', 10));
-};
+}
 
 let getCurDate = function() {
     return new Date();

@@ -203,7 +203,7 @@ QUnit.test('resize / when size is not set', function(assert) {
     assert.ok(true, 'no errors');
 });
 
-var StubLegend = vizMocks.stubClass(legendModule._TESTS_Legend, null, {
+const StubLegend = vizMocks.stubClass(legendModule._TESTS_Legend, null, {
     $constructor: function() {
         StubLegend.items.push(this);
     }

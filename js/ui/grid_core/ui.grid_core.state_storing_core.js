@@ -11,7 +11,7 @@ import { fromPromise } from '../../core/utils/deferred';
 
 const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
-var parseDates = function(state) {
+const parseDates = function(state) {
     if(!state) return;
     each(state, function(key, value) {
         let date;

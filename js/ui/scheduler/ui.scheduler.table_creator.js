@@ -64,9 +64,9 @@ const SchedulerTableCreator = {
                 }
 
 
-                var cellDataObject;
-                var dataKey;
-                var dataValue;
+                let cellDataObject;
+                let dataKey;
+                let dataValue;
 
                 if(options.getCellData) {
                     cellDataObject = options.getCellData(td, i, j, groupIndex);
@@ -401,7 +401,7 @@ const SchedulerTableCreator = {
 
                 $container.addClass(cssClasses.groupHeaderContentClass);
 
-                var cssClass;
+                let cssClass;
 
                 if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
                     cssClass = cssClasses.groupHeaderClass(j);

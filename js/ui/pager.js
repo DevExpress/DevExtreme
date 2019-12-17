@@ -256,7 +256,7 @@ const Pager = Widget.inherit({
 
     _updatePagesTabIndices: function() {
         const $selectedPage = this.selectedPage._$page;
-        var updatePageIndices = () => {
+        const updatePageIndices = () => {
             const buttons = $(this.element()).find('[role=button]:not(.dx-button-disable)');
             each(buttons, (_, element) => $(element).attr('tabindex', 0));
             eventsEngine.off($selectedPage, 'focus', updatePageIndices);
@@ -664,7 +664,7 @@ const Pager = Widget.inherit({
                 this._toggleVisibility(args.value);
                 break;
             case 'pageIndex':
-                var pageIndexChanged = this.option('pageIndexChanged');
+                const pageIndexChanged = this.option('pageIndexChanged');
                 if(pageIndexChanged) {
                     pageIndexChanged(args.value);
                 }
@@ -679,7 +679,7 @@ const Pager = Widget.inherit({
                 this._updatePages();
                 break;
             case 'pageSize':
-                var pageSizeChanged = this.option('pageSizeChanged');
+                const pageSizeChanged = this.option('pageSizeChanged');
                 if(pageSizeChanged) {
                     pageSizeChanged(args.value);
                 }

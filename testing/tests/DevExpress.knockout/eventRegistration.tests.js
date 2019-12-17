@@ -60,7 +60,7 @@ $.each([
     QUnit.test('\'' + eventName + '\' event triggers', function(assert) {
         const $element = $('<div data-bind="{\'' + eventName + '\' : handler}"></div>').appendTo('#qunit-fixture');
         let triggered = 0;
-        var vm = {
+        const vm = {
             handler: function(data, e) {
                 triggered++;
                 assert.strictEqual(data, vm, 'data event specified correctly');
@@ -109,7 +109,7 @@ QUnit.module('event bindings', {
 QUnit.test('event handler context', function(assert) {
     assert.expect(1);
 
-    var vm = {
+    const vm = {
         handle: function() {
             assert.equal(this, vm, 'viewmodel is context');
         }

@@ -8,7 +8,7 @@
     }
 }(window, function($) {
 
-    var fixtures = {
+    const fixtures = {
         simple: {
             create: function() {
                 $('<div id=where>').css({

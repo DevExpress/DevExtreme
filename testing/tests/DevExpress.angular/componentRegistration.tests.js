@@ -771,7 +771,7 @@ QUnit.test('Lockers works correctly when widget options changed using action (T3
 
     angular.bootstrap(this.$container, ['testApp']);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
     const instance = $markup.dxMyComponent('instance');
 
     assert.equal(instance.option('testOption'), true, 'binding worked');

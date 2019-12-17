@@ -122,7 +122,7 @@ QUnit.test('content', function(assert) {
 
 QUnit.test('scrollBy with plain object', function(assert) {
     const distance = 10;
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
@@ -137,7 +137,7 @@ QUnit.test('scrollBy with plain object', function(assert) {
 
 QUnit.test('scrollBy with numeric', function(assert) {
     const distance = 10;
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
@@ -183,7 +183,7 @@ QUnit.test('scrollBy to location', function(assert) {
     const distance = 10;
     let wasFirstMove = false;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             if(wasFirstMove) {
@@ -204,7 +204,7 @@ QUnit.test('scrollBy to location with dynamic content', function(assert) {
     const distance = 10;
     let wasFirstMove = false;
 
-    var $scrollable = $('#scrollable').empty().dxScrollable({
+    const $scrollable = $('#scrollable').empty().dxScrollable({
         useNative: false,
         onEnd: function() {
             if(wasFirstMove) {
@@ -228,7 +228,7 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
     const distance = 10;
     let wasFirstMove = false;
 
-    var $scrollable = $('#scrollable').empty().dxScrollable({
+    const $scrollable = $('#scrollable').empty().dxScrollable({
         useNative: false,
         updateManually: true,
         onEnd: function() {
@@ -271,7 +271,7 @@ QUnit.test('scrollTo to location', function(assert) {
 QUnit.test('scrollTo to location with dynamic content', function(assert) {
     let wasFirstMove = false;
 
-    var $scrollable = $('#scrollable').empty().append($('<div>').height(150)).dxScrollable({
+    const $scrollable = $('#scrollable').empty().append($('<div>').height(150)).dxScrollable({
         useNative: false,
         onEnd: function() {
             if(wasFirstMove) {

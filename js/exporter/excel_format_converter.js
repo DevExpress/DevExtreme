@@ -28,7 +28,7 @@ const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
 const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
 const ANY_REGEXP = /./g;
 
-var excelFormatConverter = module.exports = {
+const excelFormatConverter = module.exports = {
     _applyPrecision: function(format, precision) {
         let result;
         let i;

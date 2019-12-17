@@ -1610,7 +1610,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         switch(location) {
             case FOCUS_UP:
-                var $prevItem = this._prevItem($items);
+                const $prevItem = this._prevItem($items);
 
                 this.option('focusedElement', getPublicElement($prevItem));
                 if(e.shiftKey && this._showCheckboxes()) {
@@ -1618,7 +1618,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
                 break;
             case FOCUS_DOWN:
-                var $nextItem = this._nextItem($items);
+                const $nextItem = this._nextItem($items);
 
                 this.option('focusedElement', getPublicElement($nextItem));
                 if(e.shiftKey && this._showCheckboxes()) {
@@ -1626,7 +1626,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 }
                 break;
             case FOCUS_FIRST:
-                var $firstItem = $items.first();
+                const $firstItem = $items.first();
 
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
@@ -1635,7 +1635,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.option('focusedElement', getPublicElement($firstItem));
                 break;
             case FOCUS_LAST:
-                var $lastItem = $items.last();
+                const $lastItem = $items.last();
 
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));

@@ -74,7 +74,7 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         return Array.isArray(keyExpr) ? keys.map(key => keyOf(key)) : keys;
     };
 
-    var functionFilter = function(equalKeys, keyOf, equalByReference, keyExpr, item) {
+    function functionFilter(equalKeys, keyOf, equalByReference, keyExpr, item) {
         const key = keyOf(item);
         let keyHash;
         let i;
@@ -96,16 +96,16 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
             }
         }
         return !!isSelectAll;
-    };
+    }
 
-    var getFilterForPlainKey = function(keyExpr, keyValue) {
+    function getFilterForPlainKey(keyExpr, keyValue) {
         if(keyValue === undefined) {
             return;
         }
         return [keyExpr, isSelectAll ? '<>' : '=', keyValue];
-    };
+    }
 
-    var getFilterForCompositeKey = function(keyExpr, itemKeyValue) {
+    function getFilterForCompositeKey(keyExpr, itemKeyValue) {
         const filterExpr = [];
 
         for(let i = 0, length = keyExpr.length; i < length; i++) {
@@ -125,7 +125,7 @@ const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         }
 
         return filterExpr;
-    };
+    }
 };
 
 exports.SelectionFilterCreator = SelectionFilterCreator;

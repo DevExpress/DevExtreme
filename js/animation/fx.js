@@ -147,7 +147,6 @@ const TransitionAnimationStrategy = {
         const transitionEndFired = new Deferred();
         const simulatedTransitionEndFired = new Deferred();
         let simulatedEndEventTimer;
-        let waitForJSCompleteTimer;
         const transitionEndEventName = support.transitionEndEventName() + '.dxFX';
 
         config.transitionAnimation.cleanup = function() {
@@ -169,7 +168,7 @@ const TransitionAnimationStrategy = {
             deferred.reject();
         });
 
-        waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
+        const waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
             simulatedEndEventTimer = setTimeout(function() {
                 simulatedTransitionEndFired.reject();
             }, config.duration + config.delay + fx._simulatedTransitionEndDelay /* T255863 */);
@@ -378,7 +377,7 @@ const FrameAnimationStrategy = {
     },
 
     _calcStepValue: function(frameAnimation, currentDuration) {
-        var calcValueRecursively = function(from, to) {
+        const calcValueRecursively = function(from, to) {
             const result = Array.isArray(to) ? [] : {};
 
             const calcEasedValue = function(propName) {
@@ -642,7 +641,7 @@ const defaultCssConfig = {
     delay: 0
 };
 
-const setupAnimationOnElement = function() {
+function setupAnimationOnElement() {
     const animation = this;
     const $element = animation.element;
     const config = animation.config;
@@ -665,7 +664,7 @@ const setupAnimationOnElement = function() {
         const element = getPublicElement($element);
         config.start.apply(this, [element, config]);
     }
-};
+}
 
 const onElementAnimationComplete = function(animation) {
     const $element = animation.element;
@@ -760,7 +759,7 @@ const animate = function(element, config) {
     return animation.deferred.promise();
 };
 
-var pushInAnimationQueue = function($element, animation) {
+function pushInAnimationQueue($element, animation) {
     const queueData = getAnimQueueData($element);
     writeAnimQueueData($element, queueData);
     queueData.push(animation);
@@ -768,25 +767,25 @@ var pushInAnimationQueue = function($element, animation) {
     if(!isAnimating($element)) {
         shiftFromAnimationQueue($element, queueData);
     }
-};
+}
 
-var getAnimQueueData = function($element) {
+function getAnimQueueData($element) {
     return $element.data(ANIM_QUEUE_KEY) || [];
-};
+}
 
-var writeAnimQueueData = function($element, queueData) {
+function writeAnimQueueData($element, queueData) {
     $element.data(ANIM_QUEUE_KEY, queueData);
-};
+}
 
 const destroyAnimQueueData = function($element) {
     $element.removeData(ANIM_QUEUE_KEY);
 };
 
-var isAnimating = function($element) {
+function isAnimating($element) {
     return !!$element.data(ANIM_DATA_KEY);
-};
+}
 
-var shiftFromAnimationQueue = function($element, queueData) {
+function shiftFromAnimationQueue($element, queueData) {
     queueData = getAnimQueueData($element);
     if(!queueData.length) {
         return;
@@ -802,9 +801,9 @@ var shiftFromAnimationQueue = function($element, queueData) {
             shiftFromAnimationQueue($element);
         }
     });
-};
+}
 
-var executeAnimation = function(animation) {
+function executeAnimation(animation) {
     animation.setup();
     if(fx.off || animation.isSynchronous) {
         animation.start();
@@ -815,9 +814,9 @@ var executeAnimation = function(animation) {
     }
 
     return animation.deferred.promise();
-};
+}
 
-var setupPosition = function($element, config) {
+function setupPosition($element, config) {
     if(!config || !config.position) {
         return;
     }
@@ -843,15 +842,15 @@ var setupPosition = function($element, config) {
     });
 
     delete config.position;
-};
+}
 
-var setProps = function($element, props) {
+function setProps($element, props) {
     iteratorUtils.each(props, function(key, value) {
         try {
             $element.css(key, typeUtils.isFunction(value) ? value() : value);
         } catch(e) { }
     });
-};
+}
 
 const stop = function(element, jumpToEnd) {
     const $element = $(element);
@@ -884,7 +883,7 @@ const stop = function(element, jumpToEnd) {
 * @namespace DevExpress
 * @export default
 */
-var fx = {
+const fx = {
     off: false,
     animationTypes: animationConfigurators,
     /**

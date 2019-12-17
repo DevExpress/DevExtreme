@@ -997,7 +997,7 @@ module.exports = {
                 _renderTable: function(options) {
                     const that = this;
                     const $table = that.callBase(options);
-                    var resizeCompletedHandler = function() {
+                    const resizeCompletedHandler = function() {
                         const scrollableInstance = that.getScrollable();
                         if(scrollableInstance && that.element().closest(getWindow().document).length) {
                             that.resizeCompleted.remove(resizeCompletedHandler);

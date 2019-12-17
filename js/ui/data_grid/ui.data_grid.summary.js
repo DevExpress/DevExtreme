@@ -207,7 +207,7 @@ const SummaryDataSourceAdapterExtender = (function() {
 })();
 
 const SummaryDataSourceAdapterClientExtender = (function() {
-    var applyAddedData = function(data, insertedData, groupLevel) {
+    const applyAddedData = function(data, insertedData, groupLevel) {
         if(groupLevel) {
             return applyAddedData(data, insertedData.map(item => {
                 return { items: [item] };
@@ -217,7 +217,7 @@ const SummaryDataSourceAdapterClientExtender = (function() {
         return data.concat(insertedData);
     };
 
-    var applyRemovedData = function(data, removedData, groupLevel) {
+    const applyRemovedData = function(data, removedData, groupLevel) {
         if(groupLevel) {
             return data.map(data => {
                 const updatedData = {};
@@ -268,7 +268,7 @@ const SummaryDataSourceAdapterClientExtender = (function() {
         return calculator ? calculator.totalAggregates() : [];
     };
 
-    var sortGroupsBySummaryCore = function(items, groups, sortByGroups) {
+    const sortGroupsBySummaryCore = function(items, groups, sortByGroups) {
         if(!items || !groups.length) return items;
 
         const group = groups[0];

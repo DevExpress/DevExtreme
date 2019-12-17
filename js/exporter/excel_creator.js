@@ -46,7 +46,7 @@ const UNSUPPORTED_FORMAT_MAPPING = {
     millisecond: 'longTime'
 };
 
-var ExcelCreator = Class.inherit({
+const ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
         let result = '<' + tagName;
         let i;

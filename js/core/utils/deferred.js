@@ -17,7 +17,7 @@ const deferredConfig = [{
     handler: 'progress'
 }];
 
-var Deferred = function() {
+let Deferred = function() {
     const that = this;
     this._state = 'pending';
     this._promise = {};

@@ -2746,7 +2746,7 @@ QUnit.test('Search with filterMode is \'fullBranch\' when remote data source', f
 QUnit.test('FullBranch mode. Expansion of the filtered node should work when expandNodesOnFiltering is false', function(assert) {
     // arrange
     /* eslint-disable */
-    var data = new ArrayStore([
+    const data = new ArrayStore([
         { id: 1, parentId: 0, test: "Test 1" },
             { id: 2, parentId: 1, test: "Test 2" },
                 { id: 3, parentId: 2, test: "Test 3" },
@@ -2789,7 +2789,7 @@ QUnit.test('FullBranch mode. Expansion of the filtered node should work when exp
 QUnit.test('FullBranch mode. The order of nodes should not be changed after expanding nodes when expandNodesOnFiltering is false', function(assert) {
     // arrange
     /* eslint-disable */
-    var store = new ArrayStore([
+    const store = new ArrayStore([
         { id: 1, parentId: 0, test: "Test 1" },
             { id: 2, parentId: 1, test: "Test 2" },
                 { id: 3, parentId: 2, test: "Test 3" },
@@ -2837,7 +2837,7 @@ QUnit.test('FullBranch mode. The order of nodes should not be changed after expa
 QUnit.test('FullBranch mode. Children of filtered nodes should not be collapsed after sorting', function(assert) {
     // arrange
     /* eslint-disable */
-    var store = new ArrayStore([
+    const store = new ArrayStore([
         { id: 1, parentId: 0, test: "Test 1" },
             { id: 2, parentId: 1, test: "Test 2" },
                 { id: 3, parentId: 2, test: "Test 3" },
@@ -2884,7 +2884,7 @@ QUnit.test('The filter query should be correct after resetting the filter value'
     let items;
     let filter;
     /* eslint-disable */
-        var store = new ArrayStore([
+        const store = new ArrayStore([
             { id: 1, parentId: 0, name: "Name 3", age: 19 },
                 { id: 4, parentId: 1, name: "Name 6", age: 16 },
                 { id: 5, parentId: 1, name: "Name 5", age: 15 },

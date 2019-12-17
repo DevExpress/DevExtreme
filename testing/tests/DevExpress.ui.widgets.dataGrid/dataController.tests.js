@@ -9,6 +9,8 @@ import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGrid
 
 import 'ui/data_grid/ui.data_grid';
 
+const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 const createDataSource = function(data, storeOptions, dataSourceOptions) {
     const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
     const dataSource = new DataSource($.extend(true, { store: arrayStore, requireTotalCount: true, _preferSync: true }, dataSourceOptions));
@@ -749,7 +751,6 @@ QUnit.test('Using focusedRowEnabled should not set sorting for the not sorted co
         pageSize: 2,
         asyncLoadEnabled: false
     });
-    let dataIndexGetter;
 
     this.applyOptions({
         dataSource: dataSource,
@@ -758,7 +759,7 @@ QUnit.test('Using focusedRowEnabled should not set sorting for the not sorted co
 
     // act
     this.dataController._refreshDataSource();
-    dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
+    const dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
     this.dataController._dataSource.getDataIndexGetter();
     assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], 'Sort parameters');
     // assert
@@ -1097,7 +1098,6 @@ QUnit.test('Get page index by simple key if combined filter present and remote o
 
 QUnit.test('Get page index by composite key if combined filter present', function(assert) {
     // arrange
-    let dataController;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Bob', age: 25 },
@@ -1116,7 +1116,7 @@ QUnit.test('Get page index by composite key if combined filter present', functio
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getPageIndexByKey({ name: 'Bob', age: 24 }).done(function(pageIndex) {
@@ -1127,7 +1127,6 @@ QUnit.test('Get page index by composite key if combined filter present', functio
 
 QUnit.test('Get row index if group by one column and simple key (group sizes are similar and equals to the pageSize)', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -1148,7 +1147,7 @@ QUnit.test('Get row index if group by one column and simple key (group sizes are
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Mark').done(function(globalRowIndex) {
@@ -1190,7 +1189,6 @@ QUnit.test('Get row index if group by one column and simple key (group sizes are
 
 QUnit.test('Get row index if group by one column and simple key', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -1212,7 +1210,7 @@ QUnit.test('Get row index if group by one column and simple key', function(asser
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
@@ -1258,7 +1256,6 @@ QUnit.test('Get row index if group by one column and simple key', function(asser
 
 QUnit.test('Get row index if group by one column and simple key and remote operations', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -1281,7 +1278,7 @@ QUnit.test('Get row index if group by one column and simple key and remote opera
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
@@ -1327,7 +1324,6 @@ QUnit.test('Get row index if group by one column and simple key and remote opera
 
 QUnit.test('Get row index if group by one column and simple key and OData', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -1350,7 +1346,7 @@ QUnit.test('Get row index if group by one column and simple key and OData', func
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
@@ -1396,7 +1392,6 @@ QUnit.test('Get row index if group by one column and simple key and OData', func
 
 QUnit.test('Get row index if group by two columns and simple key', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30, g0: 0 },
@@ -1418,7 +1413,7 @@ QUnit.test('Get row index if group by two columns and simple key', function(asse
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
@@ -1464,7 +1459,6 @@ QUnit.test('Get row index if group by two columns and simple key', function(asse
 
 QUnit.test('Get row index if group by two columns and simple key and remote operations', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30, g0: 0 },
@@ -1487,7 +1481,7 @@ QUnit.test('Get row index if group by two columns and simple key and remote oper
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
@@ -1537,7 +1531,6 @@ QUnit.test('Get row index if group by two columns and simple key and remote oper
 
 QUnit.test('Get row index if group by two columns and simple key and OData', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30, g0: 0 },
@@ -1560,7 +1553,7 @@ QUnit.test('Get row index if group by two columns and simple key and OData', fun
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
@@ -1606,7 +1599,6 @@ QUnit.test('Get row index if group by two columns and simple key and OData', fun
 
 QUnit.test('Get row index if group by one column, simple key and virtual scrolling', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -1629,7 +1621,7 @@ QUnit.test('Get row index if group by one column, simple key and virtual scrolli
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
@@ -1674,7 +1666,6 @@ QUnit.test('Get row index if group by one column, simple key and virtual scrolli
 
 QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30, g0: 0 },
@@ -1697,7 +1688,7 @@ QUnit.test('Get row index if group by two columns, simple key and virtual scroll
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
@@ -1742,7 +1733,6 @@ QUnit.test('Get row index if group by two columns, simple key and virtual scroll
 
 QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
     // arrange
-    let dataController;
     let foundRowCount = 0;
     const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30, g0: 0 },
@@ -1765,7 +1755,7 @@ QUnit.test('Get row index if group by two columns, simple key and virtual scroll
     });
 
     // act
-    dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._refreshDataSource();
     // assert
     dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
@@ -2704,7 +2694,6 @@ QUnit.test('Set remoteOperations option to true', function(assert) {
 // T541798
 QUnit.test('Apply sorting by the lookup column with calculateSortValue when the first load', function(assert) {
     // arrange
-    let items;
     const array = [
         { State: 1 },
         { State: 2 },
@@ -2741,7 +2730,7 @@ QUnit.test('Apply sorting by the lookup column with calculateSortValue when the 
     this.dataController._refreshDataSource();
 
     // assert
-    items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count item');
     assert.deepEqual(items[0].data, { State: 3 });
     assert.deepEqual(items[1].data, { State: 2 });
@@ -3858,8 +3847,6 @@ QUnit.test('Search should work correctly when rowRenderingMode is set to \'virtu
 
 // =================================
 // scrollingDataSource tests
-
-var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 QUnit.module('Virtual scrolling (ScrollingDataSource)', {
     beforeEach: function() {
@@ -5524,8 +5511,6 @@ QUnit.test('get combinedFilter with argument for date value with ISO8601 parsing
 
     try {
         // arrange
-        let filter;
-
         this.dataSource = new DataSource({
             load: function() {
                 return [{ date: '2016-03-02T10:59:00' }];
@@ -5543,7 +5528,7 @@ QUnit.test('get combinedFilter with argument for date value with ISO8601 parsing
         this.dataSource.load();
 
         // assert
-        filter = this.getCombinedFilter(true);
+        const filter = this.getCombinedFilter(true);
         assert.deepEqual(filter, [['date', '>=', '2016-01-01T00:00:00'], 'and', ['date', '<', '2017-01-01T00:00:00']], 'filter with serialized dates');
     } finally {
         config().forceIsoDateParsing = defaultForceIsoDateParsing;
@@ -5556,8 +5541,6 @@ QUnit.test('get combinedFilter with argument for date value without ISO8601 pars
 
     try {
         // arrange
-        let filter;
-
         this.dataSource = new DataSource({
             load: function() {
                 return [{ date: '2016-03-02T10:59:00' }];
@@ -5575,7 +5558,7 @@ QUnit.test('get combinedFilter with argument for date value without ISO8601 pars
         this.dataSource.load();
 
         // assert
-        filter = this.getCombinedFilter(true);
+        const filter = this.getCombinedFilter(true);
         assert.deepEqual(filter, [['date', '>=', new Date(2016, 0, 1)], 'and', ['date', '<', new Date(2017, 0, 1)]], 'filter with serialized dates');
     } finally {
         config().forceIsoDateParsing = defaultForceIsoDateParsing;
@@ -5622,7 +5605,6 @@ QUnit.test('changing filterType without filterValues do not rise changed event',
 QUnit.test('clearFilter without argument', function(assert) {
     // arrange
     const that = this;
-    let items;
     let columns;
     let countCallChanged = 0;
 
@@ -5644,7 +5626,7 @@ QUnit.test('clearFilter without argument', function(assert) {
     that.clock.tick();
 
     // assert
-    items = that.dataController.items();
+    const items = that.dataController.items();
     columns = that.columnsController.getColumns();
     assert.equal(items.length, 1, 'count items');
     assert.deepEqual(items[0].data, { name: 'Bob', age: 19 }, 'data item');
@@ -6188,14 +6170,12 @@ QUnit.test('Filtering with additional filter when dataController\'s filter expre
         { name: 'Alla', age: 21, birthDate: new Date(1993, 5, 2), state: 0, processed: false },
         { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20), state: 1, processed: true }
     ]);
-    let columnFilterItemsCount;
-
     this.dataController.setDataSource(dataSource);
     dataSource.load();
     this.columnsController.columnOption('name', 'filterValue', 'Al');
 
     // act
-    columnFilterItemsCount = this.dataController.items().length;
+    const columnFilterItemsCount = this.dataController.items().length;
 
     this.dataController.filter(function(item) {
         return item.age < 20;

@@ -16,7 +16,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         }, true, false, updateGroups, updateGroups);
     };
 
-    var processGroupItems = function(that, items, groupsCount, expandedInfo, path, isCustomLoading, isLastGroupExpanded) {
+    const processGroupItems = function(that, items, groupsCount, expandedInfo, path, isCustomLoading, isLastGroupExpanded) {
         let i;
         let item;
         let groupInfo;
@@ -84,7 +84,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         }
     };
 
-    var updateGroupInfos = function(that, options, items, loadedGroupCount, groupIndex, path, parentIndex) {
+    const updateGroupInfos = function(that, options, items, loadedGroupCount, groupIndex, path, parentIndex) {
         let item;
         const groupCount = options.group ? options.group.length : 0;
         const isLastGroupLevel = groupCount === loadedGroupCount;
@@ -148,7 +148,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         return totalOffset;
     };
 
-    var getContinuationGroupCount = function(groupOffset, pageSize, groupSize, groupIndex) {
+    function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
         groupIndex = groupIndex || 0;
         if(pageSize > 1 && groupSize > 0) {
             let pageOffset = (groupOffset - Math.floor(groupOffset / pageSize) * pageSize) || pageSize;
@@ -159,7 +159,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
             return Math.floor(pageOffset / (pageSize - groupIndex - 1));
         }
         return 0;
-    };
+    }
 
     ///#DEBUG
     exports.getContinuationGroupCount = getContinuationGroupCount;
@@ -387,7 +387,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                     groupInfo.skipChildrenTotalCount = 0;
                 });
                 foreachExpandedGroups(that, function(groupInfo, parents) {
-                    let skip;
                     let take;
                     let takeCorrection = 0;
                     let parentTakeCorrection = 0;
@@ -399,7 +398,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
                     callback && callback(groupInfo, totalOffset);
 
-                    skip = options.skip - totalOffset;
+                    const skip = options.skip - totalOffset;
                     if(totalOffset <= options.skip + options.take && groupInfoCount) {
                         take = options.take;
 

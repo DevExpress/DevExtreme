@@ -8,7 +8,8 @@ const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
 
 const patchCleanData = function() {
     afterCleanData(function(nodes) {
-        for(var i = 0; i < nodes.length; i++) {
+        let i;
+        for(i = 0; i < nodes.length; i++) {
             nodes[i].cleanedByJquery = true;
         }
 

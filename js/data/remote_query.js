@@ -5,7 +5,7 @@ const isFunction = require('../core/utils/type').isFunction;
 const Deferred = require('../core/utils/deferred').Deferred;
 const arrayQueryImpl = require('./array_query');
 
-var remoteQueryImpl = function(url, queryOptions, tasks) {
+const remoteQueryImpl = function(url, queryOptions, tasks) {
     tasks = tasks || [];
     queryOptions = queryOptions || {};
 

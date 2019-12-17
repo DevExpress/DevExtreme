@@ -203,7 +203,7 @@ const base64_encode = function(input) {
     return result;
 };
 
-var stringToByteArray = function(str) {
+function stringToByteArray(str) {
     const bytes = [];
     let code; let i;
 
@@ -221,7 +221,7 @@ var stringToByteArray = function(str) {
         }
     }
     return bytes;
-};
+}
 
 const isUnaryOperation = function(crit) {
     return crit[0] === '!' && Array.isArray(crit[1]);

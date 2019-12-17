@@ -87,38 +87,38 @@ const getWaveStyleConfig = function(args, config) {
     };
 };
 
-var showWave = function(args, config) {
+function showWave(args, config) {
     const $wave = getWaves(config.element, args.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
 
     args.hidingTimeout && clearTimeout(args.hidingTimeout);
     hideSelectedWave($wave);
     $wave.css(getWaveStyleConfig(args, config));
     args.showingTimeout = setTimeout(showingWaveHandler.bind(this, args, $wave), 0);
-};
+}
 
-var showingWaveHandler = function(args, $wave) {
+function showingWaveHandler(args, $wave) {
     const durationCss = args.durations.showingScale + 'ms';
 
     $wave
         .addClass(INKRIPPLE_SHOWING_CLASS)
         .css('transitionDuration', durationCss);
-};
+}
 
-var getDurations = function(useHoldAnimation) {
+function getDurations(useHoldAnimation) {
     return {
         showingScale: useHoldAnimation ? HOLD_ANIMATION_DURATION : ANIMATION_DURATION,
         hidingScale: ANIMATION_DURATION,
         hidingOpacity: ANIMATION_DURATION
     };
-};
+}
 
-var hideSelectedWave = function($wave) {
+function hideSelectedWave($wave) {
     $wave
         .removeClass(INKRIPPLE_HIDING_CLASS)
         .css('transitionDuration', '');
-};
+}
 
-var hideWave = function(args, config) {
+function hideWave(args, config) {
     args.showingTimeout && clearTimeout(args.showingTimeout);
 
     const $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
@@ -132,7 +132,7 @@ var hideWave = function(args, config) {
 
     const animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
     args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);
-};
+}
 
 module.exports = {
     render: render

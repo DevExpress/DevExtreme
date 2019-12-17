@@ -192,7 +192,7 @@ const GoogleProvider = DynamicProvider.inherit({
                     disableDefaultUI: !showDefaultUI
                 });
 
-                var listener = google.maps.event.addListener(this._map, 'idle', function() {
+                const listener = google.maps.event.addListener(this._map, 'idle', function() {
                     resolve(listener);
                 });
             }.bind(this));

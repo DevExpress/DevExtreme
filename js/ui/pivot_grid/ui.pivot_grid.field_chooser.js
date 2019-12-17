@@ -570,7 +570,7 @@ const FieldChooser = BaseFieldChooser.inherit({
     _renderFieldsTreeView: function(container) {
         const that = this;
         const dataSource = that._dataSource;
-        var treeView = that._createComponent(container, TreeView, {
+        const treeView = that._createComponent(container, TreeView, {
             dataSource: that._createFieldsDataSource(dataSource),
             showCheckBoxesMode: 'normal',
             searchEnabled: that.option('allowSearch'),

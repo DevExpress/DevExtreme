@@ -219,7 +219,7 @@ const Sortable = DOMComponent.inherit({
 
     _getItemOffset: function(isVertical, itemsOffset, e) {
         for(let i = 0; i < itemsOffset.length; i++) {
-            var shouldInsert;
+            let shouldInsert;
             const sameLine = e.pageY < itemsOffset[i].posVertical;
 
             if(isVertical) {

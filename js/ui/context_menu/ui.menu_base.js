@@ -694,8 +694,8 @@ class MenuBase extends HierarchicalCollectionWidget {
             case 'showSubmenuMode':
                 break;
             case 'selectedItem':
-                var node = this._dataAdapter.getNodeByItem(args.value);
-                var selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
+                const node = this._dataAdapter.getNodeByItem(args.value);
+                const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
 
                 if(node && node.internalFields.key !== selectedKey) {
                     if(node.selectable === false) break;

@@ -37,6 +37,49 @@ function correctPercentValue(value) {
     return value;
 }
 
+const pieSizeEqualizer = (function() {
+    function equalize(group, allPies) {
+        const pies = allPies.filter(p => p._isVisible() && p.getSizeGroup() === group);
+        const minRadius = Math.min.apply(null, pies.map(p => p.getSizeGroupLayout().radius));
+        const minPie = pies.filter(p => p.getSizeGroupLayout().radius === minRadius);
+
+        pies.forEach(p => p.render({
+            force: true,
+            sizeGroupLayout: minPie.length ? minPie[0].getSizeGroupLayout() : {}
+        }));
+    }
+
+    function removeFromList(list, item) {
+        return list.filter(function(li) { return li !== item; });
+    }
+
+    function addToList(list, item) {
+        return removeFromList(list, item).concat(item);
+    }
+
+    let pies = [];
+    let timers = {};
+
+    return {
+        queue: function(pie) {
+            const group = pie.getSizeGroup();
+            pies = addToList(pies, pie);
+
+            clearTimeout(timers[group]);
+            timers[group] = setTimeout(function() {
+                equalize(group, pies);
+            });
+        },
+        remove: function(pie) {
+            pies = removeFromList(pies, pie);
+
+            if(!pies.length) {
+                timers = {};
+            }
+        }
+    };
+})();
+
 const dxPieChart = BaseChart.inherit({
     _themeSection: 'pie',
 
@@ -452,46 +495,3 @@ _each(OPTIONS_FOR_REFRESH_SERIES, function(_, name) {
 registerComponent('dxPieChart', dxPieChart);
 
 module.exports = dxPieChart;
-
-var pieSizeEqualizer = (function() {
-    function equalize(group, allPies) {
-        const pies = allPies.filter(p => p._isVisible() && p.getSizeGroup() === group);
-        const minRadius = Math.min.apply(null, pies.map(p => p.getSizeGroupLayout().radius));
-        const minPie = pies.filter(p => p.getSizeGroupLayout().radius === minRadius);
-
-        pies.forEach(p => p.render({
-            force: true,
-            sizeGroupLayout: minPie.length ? minPie[0].getSizeGroupLayout() : {}
-        }));
-    }
-
-    function removeFromList(list, item) {
-        return list.filter(function(li) { return li !== item; });
-    }
-
-    function addToList(list, item) {
-        return removeFromList(list, item).concat(item);
-    }
-
-    let pies = [];
-    let timers = {};
-
-    return {
-        queue: function(pie) {
-            const group = pie.getSizeGroup();
-            pies = addToList(pies, pie);
-
-            clearTimeout(timers[group]);
-            timers[group] = setTimeout(function() {
-                equalize(group, pies);
-            });
-        },
-        remove: function(pie) {
-            pies = removeFromList(pies, pie);
-
-            if(!pies.length) {
-                timers = {};
-            }
-        }
-    };
-})();

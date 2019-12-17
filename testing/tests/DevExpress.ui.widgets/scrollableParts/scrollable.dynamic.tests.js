@@ -71,7 +71,7 @@ QUnit.test('moving scrollable moves content', function(assert) {
 });
 
 QUnit.test('inertia', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             location = getScrollOffset($scrollable);
@@ -179,7 +179,7 @@ QUnit.test('stop inertia on click', function(assert) {
     const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
     const distance = moveDistance + inertiaDistance;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onStop: function() {
             const location = getScrollOffset($scrollable);
@@ -208,7 +208,7 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
         setTimeout(callback, 0);
     };
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onStop: function() {
             const $scroll = $scrollable.find('.dx-scrollable-scroll');
@@ -233,7 +233,7 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
 QUnit.test('bounce top', function(assert) {
     assert.expect(1);
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
@@ -311,7 +311,7 @@ QUnit.test('stop bounce on click', function(assert) {
     const moveDistance = -10;
     const moveDuration = 10;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onStop: function() {
             const location = getScrollOffset($scrollable);
@@ -345,7 +345,7 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     const moveDistance = -10;
     const moveDuration = 10;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onStop: function() {
             const location = getScrollOffset($scrollable);
@@ -377,7 +377,7 @@ QUnit.test('bounce elastic', function(assert) {
     const moveDistance = 10;
     let wasFirstMove = false;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
 

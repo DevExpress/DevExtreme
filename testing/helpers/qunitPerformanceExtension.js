@@ -27,7 +27,7 @@
         });
     }
 
-    var loadJSON = function(path, onSuccess, onError) {
+    function loadJSON(path, onSuccess, onError) {
         $.ajax({
             type: 'GET',
             url: path,
@@ -38,7 +38,7 @@
                 onError(result);
             }
         });
-    };
+    }
 
     ChromeRemote.prototype.connect = function(url) {
         if(this.ws) return;
@@ -147,7 +147,7 @@
                 }
             };
 
-            var collectEndData = function() {
+            const collectEndData = function() {
                 $(chrome).off('Tracing.dataCollected', collectData);
                 $(chrome).off('Tracing.tracingComplete', collectEndData);
 

@@ -213,13 +213,13 @@ exports.VirtualScrollController = Class.inherit((function() {
         return result;
     };
 
-    var getBeginPageIndex = function(that) {
+    function getBeginPageIndex(that) {
         return that._cache.length ? that._cache[0].pageIndex : -1;
-    };
+    }
 
-    var getEndPageIndex = function(that) {
+    function getEndPageIndex(that) {
         return that._cache.length ? that._cache[that._cache.length - 1].pageIndex : -1;
-    };
+    }
 
     const fireChanged = function(that, changed, args) {
         that._isChangedFiring = true;

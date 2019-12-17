@@ -222,7 +222,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
                 if(needFocusRow) {
-                    var triggerUpdateFocusedRow = function() {
+                    const triggerUpdateFocusedRow = function() {
                         that.component.off('contentReady', triggerUpdateFocusedRow);
                         that._triggerUpdateFocusedRow(key, deferred);
                     };

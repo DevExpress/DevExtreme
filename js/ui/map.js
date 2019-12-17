@@ -423,7 +423,7 @@ const Map = Widget.inherit({
 
         this._saveRendered('markers');
         this._saveRendered('routes');
-        this._provider = new PROVIDERS[this.option('provider')](this, this._$container);
+        this._provider = new (PROVIDERS[this.option('provider')])(this, this._$container);
         this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
     },
 
@@ -496,7 +496,7 @@ const Map = Widget.inherit({
             case 'routes':
                 this._checkOption(name);
 
-                var prevValue = this._rendered[name];
+                const prevValue = this._rendered[name];
                 this._saveRendered(name);
                 this._queueAsyncAction(
                     'update' + inflector.titleize(name),

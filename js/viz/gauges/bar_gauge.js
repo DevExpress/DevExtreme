@@ -28,6 +28,7 @@ const _noop = commonUtils.noop;
 const _extend = extend;
 
 const OPTION_VALUES = 'values';
+let BarWrapper;
 
 const dxBarGauge = dxBaseGauge.inherit({
     _rootClass: 'dxbg-bar-gauge',
@@ -162,11 +163,10 @@ const dxBarGauge = dxBaseGauge.inherit({
     _renderBars: function() {
         const that = this;
         const options = _extend({}, that._themeManager.theme(), that.option());
-        let relativeInnerRadius;
         let radius;
         const area = that._area;
 
-        relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1 ? _Number(options.relativeInnerRadius) : 0.1;
+        const relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1 ? _Number(options.relativeInnerRadius) : 0.1;
         radius = area.radius;
         if(that._context.textEnabled) { //  B253614
             that._textIndent = _round(_min(that._textIndent, radius / 2));
@@ -191,24 +191,21 @@ const dxBarGauge = dxBaseGauge.inherit({
         const that = this;
         let radius = that._outerRadius - that._innerRadius;
         const context = that._context;
-        let spacing;
-        let colors;
-        let unitOffset;
         let i;
 
         const count = that._bars.length;
 
         that._beginValueChanging();
         context.barSize = count > 0 ? _max((radius - (count - 1) * that._barSpacing) / count, 1) : 0;
-        spacing = count > 1 ? _max(_min((radius - count * context.barSize) / (count - 1), that._barSpacing), 0) : 0;
+        const spacing = count > 1 ? _max(_min((radius - count * context.barSize) / (count - 1), that._barSpacing), 0) : 0;
         const _count = _min(_floor((radius + spacing) / context.barSize), count);
         that._setBarsCount(count);
         radius = that._outerRadius;
         context.textRadius = radius;
         context.textIndent = that._textIndent;
         that._palette.reset();
-        unitOffset = context.barSize + spacing;
-        colors = that._palette.generateColors(_count);
+        const unitOffset = context.barSize + spacing;
+        const colors = that._palette.generateColors(_count);
         for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
                 radius: radius,
@@ -420,7 +417,7 @@ const dxBarGauge = dxBaseGauge.inherit({
     }
 });
 
-var BarWrapper = function(index, context) {
+BarWrapper = function(index, context) {
     const that = this;
     that._context = context;
     that._tracker = context.renderer.arc().attr({ 'stroke-linejoin': 'round' });

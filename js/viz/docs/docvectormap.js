@@ -4,7 +4,7 @@
 * @module viz/vector_map
 * @export default
 */
-var dxVectorMap = {
+const dxVectorMap = {
     /**
     * @name dxVectorMapOptions.margin
     * @hidden

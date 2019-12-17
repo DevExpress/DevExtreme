@@ -36,7 +36,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
     }
 
     return function(value) {
-        var tick = {
+        const tick = {
             value: value,
 
             updateValue(newValue) {

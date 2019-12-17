@@ -723,8 +723,8 @@ QUnit.test('dxclick should triggers only on left mouse button click', function(a
         return;
     }
 
+    let triggered = 0;
     const $element = $('#element').on('dxclick', function(e) { triggered++; });
-    var triggered = 0;
 
 
     $element.trigger($.Event('click', { which: 1 }));

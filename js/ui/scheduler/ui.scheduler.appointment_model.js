@@ -161,6 +161,9 @@ class AppointmentModel {
 
     _filterAppointmentByResources(appointment, resources) {
         let result = false;
+        let i;
+        let len;
+        let resourceName;
 
         const checkAppointmentResourceValues = () => {
             const resourceGetter = this._dataAccessors.getter.resources[resourceName];
@@ -182,8 +185,8 @@ class AppointmentModel {
             return false;
         };
 
-        for(var i = 0, len = resources.length; i < len; i++) {
-            var resourceName = resources[i].name;
+        for(i = 0, len = resources.length; i < len; i++) {
+            resourceName = resources[i].name;
 
             result = checkAppointmentResourceValues.call(this);
 

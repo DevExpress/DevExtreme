@@ -33,7 +33,7 @@ const dateParser = function(text, skipISO8601Parsing) {
     return result;
 };
 
-var parseISO8601String = function(text) {
+function parseISO8601String(text) {
     let parts = text.match(ISO8601_PATTERN);
 
     const timePart = function(part) {
@@ -76,7 +76,7 @@ var parseISO8601String = function(text) {
     }
 
     return new Date(year, month, day, hour, minute, second, millisecond);
-};
+}
 
 const getIso8601Format = function(text, useUtc) {
     let parts = text.match(ISO8601_PATTERN);

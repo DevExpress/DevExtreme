@@ -349,6 +349,7 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
         const cellTemplateOpt = options.cellTemplate;
 
         this._$rows = [];
+        let i;
 
         const fillTableBody = (function(rowIndex, rowSize) {
             if(rowSize) {
@@ -387,7 +388,7 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
             }
         }).bind(this);
 
-        for(var i = 0; i < this._rows.length; i++) {
+        for(i = 0; i < this._rows.length; i++) {
             each(this._rows[i], fillTableBody);
             this._setLastRowClass();
         }

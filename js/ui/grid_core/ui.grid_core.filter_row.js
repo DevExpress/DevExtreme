@@ -98,11 +98,11 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         return result;
     };
 
-    var getColumnFilterValue = function(that, column) {
+    function getColumnFilterValue(that, column) {
         if(column) {
             return isOnClickApplyFilterMode(that) && column.bufferedFilterValue !== undefined ? column.bufferedFilterValue : column.filterValue;
         }
-    };
+    }
 
     const getColumnSelectedFilterOperation = function(that, column) {
         if(column) {
@@ -380,8 +380,6 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             const that = this;
             const column = options.column;
             const $cell = $(cell);
-            let $container;
-            let $editorContainer;
 
             if(that.component.option('showColumnHeaders')) {
                 that.setAria('describedby', column.headerId, $cell);
@@ -389,8 +387,8 @@ const ColumnHeadersViewFilterRowExtender = (function() {
             that.setAria('label', messageLocalization.format('dxDataGrid-ariaFilterCell'), $cell);
 
             $cell.addClass(EDITOR_CELL_CLASS);
-            $container = $('<div>').appendTo($cell);
-            $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
+            const $container = $('<div>').appendTo($cell);
+            const $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
 
             if(getColumnSelectedFilterOperation(that, column) === 'between') {
                 that._renderFilterRangeContent($cell, column);

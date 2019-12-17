@@ -67,6 +67,95 @@ function createAxis(isHorizontal) {
     };
 }
 
+// for ie11
+const menuEvents = {
+    'contextmenu.sparkline-tooltip': function(event) {
+        if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
+            event.preventDefault();
+        }
+    },
+    'MSHoldVisual.sparkline-tooltip': function(event) {
+        event.preventDefault();
+    }
+};
+
+const mouseEvents = {
+    'mouseover.sparkline-tooltip': function(event) {
+        isPointerDownCalled = false;
+        const widget = event.data.widget;
+        widget._x = event.pageX;
+        widget._y = event.pageY;
+        widget._tooltipTracker.off(mouseMoveEvents).on(mouseMoveEvents, event.data);
+        widget._showTooltip();
+    },
+    'mouseout.sparkline-tooltip': function(event) {
+        if(isPointerDownCalled) {
+            return;
+        }
+        const widget = event.data.widget;
+        widget._tooltipTracker.off(mouseMoveEvents);
+        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
+    }
+};
+
+const mouseMoveEvents = {
+    'mousemove.sparkline-tooltip': function(event) {
+        const widget = event.data.widget;
+        widget._x = event.pageX;
+        widget._y = event.pageY;
+        widget._showTooltip();
+    }
+};
+
+let active_touch_tooltip_widget = null;
+const touchStartTooltipProcessing = function(event) {
+    let widget = active_touch_tooltip_widget;
+    if(widget && widget !== event.data.widget) {
+        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
+    }
+    widget = active_touch_tooltip_widget = event.data.widget;
+    widget._showTooltip();
+    widget._touch = true;
+};
+const touchStartDocumentProcessing = function() {
+    const widget = active_touch_tooltip_widget;
+    if(widget) {
+        if(!widget._touch) {
+            widget._hideTooltip(DEFAULT_EVENTS_DELAY);
+            active_touch_tooltip_widget = null;
+        }
+        widget._touch = null;
+    }
+};
+const touchEndDocumentProcessing = function() {
+    const widget = active_touch_tooltip_widget;
+    if(widget) {
+        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
+        active_touch_tooltip_widget = null;
+    }
+};
+let isPointerDownCalled = false;
+
+
+const touchEvents = {
+    'pointerdown.sparkline-tooltip': touchStartTooltipProcessing,
+    'touchstart.sparkline-tooltip': touchStartTooltipProcessing
+};
+ready(function() {
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
+        'pointerdown.sparkline-tooltip': function() {
+            isPointerDownCalled = true;
+            touchStartDocumentProcessing();
+        },
+        'touchstart.sparkline-tooltip': touchStartDocumentProcessing,
+        'pointerup.sparkline-tooltip': touchEndDocumentProcessing,
+        'touchend.sparkline-tooltip': touchEndDocumentProcessing
+    });
+});
+
+/* eslint-disable-next-line */
+let _initTooltip;
+
 const BaseSparkline = BaseWidget.inherit({
     _getLayoutItems: _noop,
     _useLinks: false,
@@ -210,92 +299,6 @@ const BaseSparkline = BaseWidget.inherit({
     }
 });
 
-// for ie11
-var menuEvents = {
-    'contextmenu.sparkline-tooltip': function(event) {
-        if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
-            event.preventDefault();
-        }
-    },
-    'MSHoldVisual.sparkline-tooltip': function(event) {
-        event.preventDefault();
-    }
-};
-
-var mouseEvents = {
-    'mouseover.sparkline-tooltip': function(event) {
-        isPointerDownCalled = false;
-        const widget = event.data.widget;
-        widget._x = event.pageX;
-        widget._y = event.pageY;
-        widget._tooltipTracker.off(mouseMoveEvents).on(mouseMoveEvents, event.data);
-        widget._showTooltip();
-    },
-    'mouseout.sparkline-tooltip': function(event) {
-        if(isPointerDownCalled) {
-            return;
-        }
-        const widget = event.data.widget;
-        widget._tooltipTracker.off(mouseMoveEvents);
-        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-    }
-};
-
-var mouseMoveEvents = {
-    'mousemove.sparkline-tooltip': function(event) {
-        const widget = event.data.widget;
-        widget._x = event.pageX;
-        widget._y = event.pageY;
-        widget._showTooltip();
-    }
-};
-
-let active_touch_tooltip_widget = null;
-const touchStartTooltipProcessing = function(event) {
-    let widget = active_touch_tooltip_widget;
-    if(widget && widget !== event.data.widget) {
-        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-    }
-    widget = active_touch_tooltip_widget = event.data.widget;
-    widget._showTooltip();
-    widget._touch = true;
-};
-const touchStartDocumentProcessing = function() {
-    const widget = active_touch_tooltip_widget;
-    if(widget) {
-        if(!widget._touch) {
-            widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-            active_touch_tooltip_widget = null;
-        }
-        widget._touch = null;
-    }
-};
-const touchEndDocumentProcessing = function() {
-    const widget = active_touch_tooltip_widget;
-    if(widget) {
-        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-        active_touch_tooltip_widget = null;
-    }
-};
-var isPointerDownCalled = false;
-
-
-var touchEvents = {
-    'pointerdown.sparkline-tooltip': touchStartTooltipProcessing,
-    'touchstart.sparkline-tooltip': touchStartTooltipProcessing
-};
-ready(function() {
-    eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
-        'pointerdown.sparkline-tooltip': function() {
-            isPointerDownCalled = true;
-            touchStartDocumentProcessing();
-        },
-        'touchstart.sparkline-tooltip': touchStartDocumentProcessing,
-        'pointerup.sparkline-tooltip': touchEndDocumentProcessing,
-        'touchend.sparkline-tooltip': touchEndDocumentProcessing
-    });
-});
-
 module.exports = BaseSparkline;
 
 ///#DEBUG
@@ -308,7 +311,7 @@ module.exports._DEBUG_reset = function() {
 BaseSparkline.addPlugin(require('../core/tooltip').plugin);
 
 // These are sparklines specifics on using tooltip - they cannot be omitted because of tooltip laziness.
-var _initTooltip = BaseSparkline.prototype._initTooltip;
+_initTooltip = BaseSparkline.prototype._initTooltip;
 BaseSparkline.prototype._initTooltip = _noop;
 const _disposeTooltip = BaseSparkline.prototype._disposeTooltip;
 BaseSparkline.prototype._disposeTooltip = function() {

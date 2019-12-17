@@ -139,7 +139,7 @@ QUnit.module('Misc');
 // In the customer's issue it is somehow accomplished by actions code. In the test (for simplicity) it is done manually.
 // On "beginUpdate" chart comes to invalid state and later crashes on "endUpdate".
 QUnit.test('There should be no crash when chart updating is began after option is changed and ended some time later', function(assert) {
-    var chart = $('#chart').dxChart({
+    const chart = $('#chart').dxChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: {},
         onIncidentOccurred: function(e) {

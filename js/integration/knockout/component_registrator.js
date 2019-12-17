@@ -201,13 +201,13 @@ const registerComponentKoBinding = function(componentName, componentClass) {
                 }
             };
 
-            var unwrapModel = function(model, propertyPath) {
+            function unwrapModel(model, propertyPath) {
                 for(const propertyName in model) {
                     if(Object.prototype.hasOwnProperty.call(model, propertyName)) {
                         unwrapModelValue(model, propertyName, propertyPath ? [propertyPath, propertyName].join('.') : propertyName);
                     }
                 }
-            };
+            }
 
             createComponent();
 

@@ -2907,7 +2907,7 @@ QUnit.test('getScrollPath for columns', function(assert) {
     // act
     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
 
-    var scrollAction = function(e) {
+    const scrollAction = function(e) {
         const scrollPath = pivotGrid.getScrollPath('column');
         // assert
         assert.ok(pivotGrid.hasScroll('column'));
@@ -3137,7 +3137,7 @@ QUnit.test('Horizontal scroll position after scroll when rtl is enabled', functi
     const dataAreaScrollable = pivotGrid._dataArea._getScrollable();
     const columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
 
-    var scrollAssert = function() {
+    const scrollAssert = function() {
         dataAreaScrollable.off('scroll', scrollAssert);
 
         // assert
@@ -3176,7 +3176,7 @@ QUnit.test('Fix horizontal scroll position after scroll when rtl is enabled', fu
 
     const dataAreaScrollable = pivotGrid._dataArea._getScrollable();
 
-    var assertFunction = function(e) {
+    const assertFunction = function(e) {
         if(e.scrollOffset.top === 10) {
             assert.equal(dataAreaScrollable.scrollLeft(), 100);
             dataAreaScrollable.off('scroll', assertFunction);
@@ -3184,7 +3184,7 @@ QUnit.test('Fix horizontal scroll position after scroll when rtl is enabled', fu
         }
     };
 
-    var scrollAssert = function() {
+    const scrollAssert = function() {
         dataAreaScrollable.off('scroll', scrollAssert);
         dataAreaScrollable.on('scroll', assertFunction);
 
@@ -3248,7 +3248,7 @@ QUnit.test('T243287. Scroll position after updateDimensions', function(assert) {
     const columnWidths = pivotGrid._columnsArea.getColumnsWidth();
     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
 
-    var scrollAction = function(e) {
+    const scrollAction = function(e) {
         const columnsScrollPosition = pivotGrid._columnsArea.groupElement().dxScrollable('instance').scrollLeft();
         const dataScrollPosition = scrollable.scrollLeft();
         // act

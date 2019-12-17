@@ -201,7 +201,7 @@ QUnit.test('top position calculation', function(assert) {
 });
 
 QUnit.test('bottom position calculation', function(assert) {
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onEnd: function() {
@@ -229,7 +229,7 @@ QUnit.module('actions', moduleConfig);
 QUnit.test('onPullDown action', function(assert) {
     let firstScroll = true;
     const offset = 10;
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function(e) {
@@ -446,7 +446,7 @@ QUnit.module('dynamic', moduleConfig);
 QUnit.test('pulling down', function(assert) {
     assert.expect(1);
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function() {
@@ -467,7 +467,7 @@ QUnit.test('pulling down', function(assert) {
 QUnit.test('pulling down without release', function(assert) {
     assert.expect(1);
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         onPullDown: noop,
         inertiaEnabled: false,
@@ -611,7 +611,7 @@ QUnit.test('release cause release state', function(assert) {
 
     const clock = this.clock;
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function() {
@@ -732,7 +732,7 @@ QUnit.test('scrollview locked while pulldown loading', function(assert) {
 QUnit.test('scrollview onReachBottom action fired when bottom position is reached', function(assert) {
     assert.expect(1);
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onReachBottom: function() {
@@ -839,7 +839,7 @@ QUnit.test('release after loading cause bounce to the bottom bound', function(as
 
     const clock = this.clock;
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onReachBottom: function() {
@@ -883,7 +883,7 @@ QUnit.test('pull down doesn\'t show loading panel', function(assert) {
 
     let isLoadPanelVisible;
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function() {
@@ -1049,7 +1049,7 @@ QUnit.test('release', function(assert) {
 
     const clock = this.clock;
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function() {
@@ -1096,7 +1096,7 @@ QUnit.test('release with preventReachBottom', function(assert) {
 
     const clock = this.clock;
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function() {
@@ -1155,7 +1155,7 @@ QUnit.test('release fires update', function(assert) {
 QUnit.test('release calls update', function(assert) {
     assert.expect(1);
 
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onPullDown: function() {
@@ -1259,7 +1259,7 @@ QUnit.test('toggleLoading', function(assert) {
 });
 
 QUnit.test('toggleLoading turns off reachBottom behavior', function(assert) {
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: false,
         inertiaEnabled: false,
         onReachBottom: function(e) {
@@ -1648,7 +1648,7 @@ QUnit.test('pulled down adds ready state', function(assert) {
 });
 
 QUnit.test('onPullDown action', function(assert) {
-    var $scrollView = $('#scrollView').dxScrollView({
+    const $scrollView = $('#scrollView').dxScrollView({
         useNative: true,
         refreshStrategy: 'pullDown',
         onPullDown: function() {

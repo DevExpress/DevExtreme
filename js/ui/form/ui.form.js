@@ -1570,7 +1570,7 @@ const Form = Widget.inherit({
                 const name = item.name || item.caption || item.title;
                 const isGroupWithName = isDefined(name);
                 const nameWithoutSpaces = getTextWithoutSpaces(name);
-                var pathNode;
+                let pathNode;
 
                 item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
 

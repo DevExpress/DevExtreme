@@ -822,7 +822,7 @@ module.exports = {
                 }
             };
 
-            var createColumnsFromOptions = function(that, columnsOptions, bandColumn) {
+            const createColumnsFromOptions = function(that, columnsOptions, bandColumn) {
                 let result = [];
 
                 if(columnsOptions) {
@@ -861,7 +861,7 @@ module.exports = {
                 return result;
             };
 
-            var getChildrenByBandColumn = function(columnIndex, columnChildrenByIndex, recursive) {
+            const getChildrenByBandColumn = function(columnIndex, columnChildrenByIndex, recursive) {
                 let column;
                 let result = [];
                 const children = columnChildrenByIndex[columnIndex];
@@ -935,7 +935,7 @@ module.exports = {
                 return result.join('.');
             };
 
-            var calculateColspan = function(that, columnID) {
+            const calculateColspan = function(that, columnID) {
                 let colspan = 0;
                 const columns = that.getChildrenByBandColumn(columnID, true);
 
@@ -1174,9 +1174,9 @@ module.exports = {
                 return groupIndex;
             };
 
-            var checkUserStateColumn = function(column, userStateColumn) {
+            function checkUserStateColumn(column, userStateColumn) {
                 return column && userStateColumn && userStateColumn.name === column.name && (userStateColumn.dataField === column.dataField || column.name);
-            };
+            }
 
             const applyUserState = function(that) {
                 const columnsUserState = that._columnsUserState;
@@ -1289,11 +1289,11 @@ module.exports = {
                 that.resetColumnsCache();
             };
 
-            var assignColumns = function(that, columns) {
+            function assignColumns(that, columns) {
                 that._columns = columns;
                 resetColumnsCache(that);
                 that.updateColumnDataTypes();
-            };
+            }
 
             const updateColumnChanges = function(that, changeType, optionName, columnIndex) {
                 const columnChanges = that._columnChanges || {
@@ -1375,7 +1375,6 @@ module.exports = {
             const columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 const optionGetter = dataCoreUtils.compileGetter(optionName);
                 const columnIndex = column.index;
-                let prevValue;
                 let optionSetter;
                 let columns;
                 let changeType;
@@ -1385,7 +1384,7 @@ module.exports = {
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
                 }
-                prevValue = optionGetter(column, { functionsAsIs: true });
+                const prevValue = optionGetter(column, { functionsAsIs: true });
                 if(prevValue !== value) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';
@@ -1435,9 +1434,9 @@ module.exports = {
                 }
             };
 
-            var isSortOrderValid = function(sortOrder) {
+            function isSortOrderValid(sortOrder) {
                 return sortOrder === 'asc' || sortOrder === 'desc';
-            };
+            }
 
             const addExpandColumn = function(that) {
                 const options = that._getExpandColumnOptions();
@@ -1462,7 +1461,7 @@ module.exports = {
                 data[path[dotCount]] = value;
             };
 
-            var getDataColumns = function(columns, rowIndex, bandColumnID) {
+            const getDataColumns = function(columns, rowIndex, bandColumnID) {
                 const result = [];
 
                 rowIndex = rowIndex || 0;
@@ -1497,6 +1496,8 @@ module.exports = {
 
                 return rowCount;
             };
+
+            const isCustomCommandColumn = (that, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
 
             const getFixedPosition = function(that, column) {
                 const rtlEnabled = that.option('rtlEnabled');
@@ -1595,8 +1596,6 @@ module.exports = {
                 return result;
             };
 
-            var isCustomCommandColumn = (that, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
-
             const isColumnFixed = (that, column) => isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing();
 
             const convertOwnerBandToColumnReference = (columns) => {
@@ -1607,7 +1606,9 @@ module.exports = {
                 });
             };
 
-            var resetBandColumnsCache = (that) => that._bandColumnsCache = undefined;
+            function resetBandColumnsCache(that) {
+                that._bandColumnsCache = undefined;
+            }
 
             return {
                 _getExpandColumnOptions: function() {
@@ -1629,7 +1630,7 @@ module.exports = {
                     let groupsCount;
                     let items = [];
 
-                    var getFirstItemsCore = function(items, groupsCount) {
+                    const getFirstItemsCore = function(items, groupsCount) {
                         let i;
                         let childItems;
 

@@ -249,9 +249,8 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     const translator = createTranslator(translatorData, allOptions);
     const orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions);
     const mergedOptions = $.extend(true, {}, allOptions);
-    let axis;
 
-    axis = new axisModule.Axis({
+    const axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
         stripsGroup: allOptions.stripsGroup,
         labelAxesGroup: allOptions.labelAxesGroup,
@@ -284,6 +283,45 @@ function restoreItem(itemKey, moduleName) {
     moduleName[itemKey] = sourceItemsToMocking[itemKey];
     sourceItemsToMocking[itemKey] = null;
 }
+
+const MockSeriesFamily = Class.inherit({
+    ctor: function(options) {
+        this.options = options;
+        this.addedSeries = [];
+    },
+    updateOptions: function(options) {
+        this.options = options;
+    },
+    dispose: function() {
+        this.disposed = true;
+    },
+    adjustSeriesValues: function() {
+        this.adjustedValues = true;
+
+        this.allSeriesHavePoints = (this.addedSeries || [])
+            .reduce(function(r, s) { return r.concat(s); }, [])
+            .reduce(function(r, s) {
+
+                return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
+            }, true);
+    },
+    adjustSeriesDimensions: function() {
+        this.adjustedDimensions = true;
+    },
+    add: function(series) {
+        this.addedSeries.push(series);
+        series.parentFamily = this;
+    },
+    updateSeriesValues: function() {
+        this.updatedValues = true;
+    },
+    resetMock: function() {
+        this.disposed = null;
+        this.adjustedValues = null;
+        this.adjustedDimensions = null;
+        this.updatedValues = null;
+    }
+});
 
 export const insertMockFactory = function insertMockFactory() {
     seriesMockData = {
@@ -1047,45 +1085,6 @@ export const MockAxis = function(renderOptions) {
         handleZoomEnd: sinon.spy()
     };
 };
-
-var MockSeriesFamily = Class.inherit({
-    ctor: function(options) {
-        this.options = options;
-        this.addedSeries = [];
-    },
-    updateOptions: function(options) {
-        this.options = options;
-    },
-    dispose: function() {
-        this.disposed = true;
-    },
-    adjustSeriesValues: function() {
-        this.adjustedValues = true;
-
-        this.allSeriesHavePoints = (this.addedSeries || [])
-            .reduce(function(r, s) { return r.concat(s); }, [])
-            .reduce(function(r, s) {
-
-                return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
-            }, true);
-    },
-    adjustSeriesDimensions: function() {
-        this.adjustedDimensions = true;
-    },
-    add: function(series) {
-        this.addedSeries.push(series);
-        series.parentFamily = this;
-    },
-    updateSeriesValues: function() {
-        this.updatedValues = true;
-    },
-    resetMock: function() {
-        this.disposed = null;
-        this.adjustedValues = null;
-        this.adjustedDimensions = null;
-        this.updatedValues = null;
-    }
-});
 
 export const checkTextSpecial = function(i, text, x, y, attr) {
     const assert = currentAssert();

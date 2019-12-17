@@ -94,9 +94,9 @@ const getCaretAfterFormat = function(text, formatted, caret, format) {
     }
 };
 
-var isSeparatorBasedString = function(text) {
+function isSeparatorBasedString(text) {
     return text.length === 1 && !!text.match(/^[,.][0-9]*$/g);
-};
+}
 
 const isCaretInBoundaries = function(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
@@ -105,7 +105,7 @@ const isCaretInBoundaries = function(caret, text, format) {
     return caret.start >= boundaries.start && caret.end <= boundaries.end;
 };
 
-var getCaretInBoundaries = function(caret, text, format) {
+function getCaretInBoundaries(caret, text, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const boundaries = getCaretBoundaries(text, format);
@@ -115,7 +115,7 @@ var getCaretInBoundaries = function(caret, text, format) {
     };
 
     return adjustedCaret;
-};
+}
 
 const getCaretOffset = function(previousText, newText, format) {
     const previousBoundaries = getCaretBoundaries(previousText, format);

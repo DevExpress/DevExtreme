@@ -14,7 +14,9 @@ function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastP
         return;
     }
 
-    for(var colIndex = startIndex; colIndex < row.length; colIndex++) {
+    let colIndex;
+
+    for(colIndex = startIndex; colIndex < row.length; colIndex++) {
         const cell = row[colIndex];
         const visibleIndex = colIndex + offsets[rowIndex];
         const colspan = cell.colspan || 1;

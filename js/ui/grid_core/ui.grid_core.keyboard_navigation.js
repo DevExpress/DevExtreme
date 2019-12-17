@@ -1602,7 +1602,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const scrollable = this.getView('rowsView').getScrollable();
 
         if(that._focusedCellPosition) {
-            var scrollHandler = function() {
+            const scrollHandler = function() {
                 scrollable.off('scroll', scrollHandler);
                 setTimeout(that.restoreFocusableElement.bind(that, rowIndex, $event));
             };

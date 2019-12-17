@@ -117,7 +117,7 @@ ready(function() {
 * @inherits Widget
 * @hidden
 */
-var Overlay = Widget.inherit({
+const Overlay = Widget.inherit({
 
     _supportedKeys: function() {
         const offsetSize = 5;

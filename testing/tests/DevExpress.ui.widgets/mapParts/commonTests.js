@@ -416,7 +416,7 @@ QUnit.test('markers option change should not render incorrect markers', function
 
     const done = assert.async();
 
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'googleStatic',
         onMarkerAdded: function() {
             addedMarkers++;
@@ -766,7 +766,7 @@ QUnit.test('routes option change should not render incorrect routes', function(a
 
     const done = assert.async();
 
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'googleStatic',
         onRouteAdded: function() {
             addedRoutes++;

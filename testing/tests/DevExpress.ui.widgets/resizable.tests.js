@@ -816,7 +816,7 @@ QUnit.test('resizing with \'window\' area that have a scroll offset', function(a
 QUnit.module('actions');
 
 QUnit.test('onResizeStart action should be fired on resize start', function(assert) {
-    var $resizable = $('#resizable').dxResizable({
+    const $resizable = $('#resizable').dxResizable({
         onResizeStart: function(e) {
             assert.ok(true, 'onResizeStart action fired');
 
@@ -833,7 +833,7 @@ QUnit.test('onResizeStart action should be fired on resize start', function(asse
 QUnit.test('onResize action should be fired during resize', function(assert) {
     assert.expect(3);
 
-    var $resizable = $('#resizable').dxResizable({
+    const $resizable = $('#resizable').dxResizable({
         onResize: function(e) {
             assert.ok(true, 'onResize action fired');
 
@@ -891,7 +891,7 @@ QUnit.test('onResize action should be fired with correct args when oversizing', 
 });
 
 QUnit.test('onResizeEnd action should be fired after end resize', function(assert) {
-    var $resizable = $('#resizable').dxResizable({
+    const $resizable = $('#resizable').dxResizable({
         onResizeEnd: function(e) {
             assert.ok(true, 'onResizeEnd action fired');
 

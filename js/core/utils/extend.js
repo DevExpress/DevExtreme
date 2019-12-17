@@ -13,7 +13,7 @@ const extendFromObject = function(target, source, overrideExistingValues) {
     return target;
 };
 
-var extend = function(target) {
+const extend = function(target) {
     target = target || {};
 
     let i = 1;
@@ -35,7 +35,7 @@ var extend = function(target) {
             const targetValue = target[key];
             const sourceValue = source[key];
             let sourceValueIsArray = false;
-            var clone;
+            let clone;
 
             if(key === '__proto__' || target === sourceValue) {
                 continue;

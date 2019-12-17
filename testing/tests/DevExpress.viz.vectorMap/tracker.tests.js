@@ -17,6 +17,30 @@ $('#qunit-fixture').append('<div id="test-root"></div>');
 
 animationFrame.requestAnimationFrame = animationFrame.cancelAnimationFrame = noop;
 
+const EVENTS = {
+    'start': {
+        'mouse': 'mousedown',
+        'touch': 'touchstart',
+        'MSPointer': 'MSPointerDown',
+        'pointer': 'pointerdown'
+    },
+    'move': {
+        'mouse': 'mousemove',
+        'touch': 'touchmove',
+        'MSPointer': 'MSPointerMove',
+        'pointer': 'pointermove'
+    },
+    'end': {
+        'mouse': 'mouseup',
+        'touch': 'touchend',
+        'MSPointer': 'MSPointerUp',
+        'pointer': 'pointerup'
+    },
+    'wheel': {
+        'mouse': document['onwheel'] !== undefined ? 'wheel' : 'mousewheel'
+    }
+};
+
 const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
@@ -141,30 +165,6 @@ QUnit.test('Event emitter methods are injected', function(assert) {
         assert.strictEqual(tracker[name], method, name);
     });
 });
-
-var EVENTS = {
-    'start': {
-        'mouse': 'mousedown',
-        'touch': 'touchstart',
-        'MSPointer': 'MSPointerDown',
-        'pointer': 'pointerdown'
-    },
-    'move': {
-        'mouse': 'mousemove',
-        'touch': 'touchmove',
-        'MSPointer': 'MSPointerMove',
-        'pointer': 'pointermove'
-    },
-    'end': {
-        'mouse': 'mouseup',
-        'touch': 'touchend',
-        'MSPointer': 'MSPointerUp',
-        'pointer': 'pointerup'
-    },
-    'wheel': {
-        'mouse': document['onwheel'] !== undefined ? 'wheel' : 'mousewheel'
-    }
-};
 
 // T249548, T322560
 QUnit.module('Default prevention', $.extend({}, environment, {

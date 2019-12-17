@@ -322,7 +322,7 @@ export default class ResourceManager {
 
     createResourcesTree(groups) {
         let leafIndex = 0;
-        var groupIndex = groupIndex || 0;
+        const groupIndex = groupIndex || 0;
 
         function make(group, groupIndex, result, parent) {
             result = result || [];

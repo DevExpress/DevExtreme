@@ -115,7 +115,7 @@ module.exports = Class.inherit((function() {
         }
     };
 
-    var getHeaderItemsLastIndex = function(headerItems, grandTotalIndex) {
+    const getHeaderItemsLastIndex = function(headerItems, grandTotalIndex) {
         let i;
         let lastIndex = -1;
         let headerItem;

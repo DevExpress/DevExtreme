@@ -323,7 +323,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         for(let i = 0; i < labels.length; i++) {
             const $label = $(labels[i]);
             const currentLabelWidth = Math.ceil(getRealLabelWidth(labels[i]));
-            var labelMaxWidth;
+            let labelMaxWidth;
 
             if(expanding) {
                 $label.css('maxWidth', 'inherit');

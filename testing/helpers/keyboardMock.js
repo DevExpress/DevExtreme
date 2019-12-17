@@ -367,11 +367,11 @@ let focused;
                         that.keyPress(keyValue);
                         if(shortcuts[key]) {
                             const oldValue = $element.val();
-                            that.beforeInput(data);
+                            that.beforeInput();
                             const inputType = shortcuts[key](element) || 'insertText';
                             const newValue = $element.val();
                             if(newValue !== oldValue) {
-                                var data = inputType === 'deleteContentBackward' ? null : newValue;
+                                const data = inputType === 'deleteContentBackward' ? null : newValue;
                                 that.input(data, inputType);
                             }
                         }

@@ -7,11 +7,9 @@ const styleUtils = require('./utils/style');
 const sizeUtils = require('./utils/size');
 const htmlParser = require('./utils/html_parser');
 
-let renderer = function(selector, context) {
-    return new initRender(selector, context);
-};
+let renderer;
 
-var initRender = function(selector, context) {
+const initRender = function(selector, context) {
     if(!selector) {
         this.length = 0;
         return this;
@@ -45,6 +43,9 @@ var initRender = function(selector, context) {
     return renderer(selector.toArray ? selector.toArray() : [selector]);
 };
 
+renderer = function(selector, context) {
+    return new initRender(selector, context);
+};
 renderer.fn = { dxRenderer: true };
 initRender.prototype = renderer.fn;
 

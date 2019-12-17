@@ -305,7 +305,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             });
 
             if(!that.option('legacyRendering') && dataController.pageIndex() > 0) {
-                var resizeHandler = function() {
+                const resizeHandler = function() {
                     that.resizeCompleted.remove(resizeHandler);
                     that.scrollToPage(dataController.pageIndex());
                 };

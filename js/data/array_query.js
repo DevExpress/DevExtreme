@@ -124,7 +124,7 @@ const defaultCompare = function(xValue, yValue) {
     return 0;
 };
 
-var SortIterator = Iterator.inherit({
+const SortIterator = Iterator.inherit({
 
     ctor: function(iter, getter, desc, compare) {
         if(!(iter instanceof MapIterator)) {
@@ -221,7 +221,7 @@ var SortIterator = Iterator.inherit({
 });
 
 
-var compileCriteria = (function() {
+const compileCriteria = (function() {
 
     const compileGroup = function(crit) {
         const ops = [];
@@ -484,7 +484,7 @@ const SliceIterator = WrappedIterator.inherit({
 
 });
 
-var arrayQueryImpl = function(iter, queryOptions) {
+const arrayQueryImpl = function(iter, queryOptions) {
     queryOptions = queryOptions || {};
 
     if(!(iter instanceof Iterator)) {
@@ -553,9 +553,9 @@ var arrayQueryImpl = function(iter, queryOptions) {
         return select(compileGetter(name));
     };
 
-    var chainQuery = function(iter) {
+    function chainQuery(iter) {
         return arrayQueryImpl(iter, queryOptions);
-    };
+    }
 
     return {
         toArray: function() {

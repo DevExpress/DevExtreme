@@ -28,6 +28,8 @@ const DEFAULT_FONT_SIZE = '10px';
 const DEFAULT_FONT_FAMILY = 'sans-serif';
 const DEFAULT_TEXT_COLOR = '#000';
 
+let parseAttributes;
+
 function createCanvas(width, height, margin) {
     const canvas = $('<canvas>')[0];
 
@@ -50,23 +52,17 @@ function arcTo(x1, y1, x2, y2, radius, largeArcFlag, clockwise, context) {
     const cBy = (y1 + y2) / 2;
     let aB = _atan2(y1 - y2, x1 - x2);
     const k = largeArcFlag ? 1 : -1;
-    let opSide;
-    let adjSide;
-    let centerX;
-    let centerY;
-    let startAngle;
-    let endAngle;
 
     aB += 90 * (PI / 180) * (clockwise ? 1 : -1);
 
-    opSide = _sqrt(_pow(x2 - x1, 2) + _pow(y2 - y1, 2)) / 2;
-    adjSide = _sqrt(_abs(_pow(radius, 2) - _pow(opSide, 2)));
+    const opSide = _sqrt(_pow(x2 - x1, 2) + _pow(y2 - y1, 2)) / 2;
+    const adjSide = _sqrt(_abs(_pow(radius, 2) - _pow(opSide, 2)));
 
-    centerX = cBx + k * (adjSide * _cos(aB));
-    centerY = cBy + k * (adjSide * _sin(aB));
+    const centerX = cBx + k * (adjSide * _cos(aB));
+    const centerY = cBy + k * (adjSide * _sin(aB));
 
-    startAngle = _atan2(y1 - centerY, x1 - centerX);
-    endAngle = _atan2(y2 - centerY, x2 - centerX);
+    const startAngle = _atan2(y1 - centerY, x1 - centerX);
+    const endAngle = _atan2(y2 - centerY, x2 - centerX);
 
     context.arc(centerX, centerY, radius, startAngle, endAngle, !clockwise);
 }
@@ -682,7 +678,7 @@ function fillElement(context, options, shared) {
     }
 }
 
-var parseAttributes = function(attributes) {
+parseAttributes = function(attributes) {
     const newAttributes = {};
     let attr;
 

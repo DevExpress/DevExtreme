@@ -1144,7 +1144,7 @@ module.exports = {
                     const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
 
                     if(!this._isInsideEditForm($nextCell) && $nextCell && isCellOrBatchMode) {
-                        var focusHandler = function() {
+                        const focusHandler = function() {
                             eventsEngine.off($nextCell, 'focus', focusHandler);
                             eventsEngine.trigger($nextCell, 'dxclick');
                         };

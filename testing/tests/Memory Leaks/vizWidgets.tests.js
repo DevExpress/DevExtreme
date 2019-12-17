@@ -38,7 +38,7 @@ const linearGaugeTestSignature = {
         });
     }
 };
-var widgets = {
+const widgets = {
     'dxChart': chartTestsSignature,
 
     'dxPieChart': {

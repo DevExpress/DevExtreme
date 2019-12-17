@@ -6,6 +6,22 @@ const wheelEvent = require('../../events/core/wheel');
 
 const TOOLTIP_HIDE_DELAY = 100;
 
+const tooltipMouseEvents = {
+    'mouseover.gauge-tooltip': handleTooltipMouseOver,
+    'mouseout.gauge-tooltip': handleTooltipMouseOut
+};
+
+const tooltipMouseMoveEvents = {
+    'mousemove.gauge-tooltip': handleTooltipMouseMove
+};
+
+const tooltipMouseWheelEvents = {};
+tooltipMouseWheelEvents[wheelEvent.name + '.gauge-tooltip'] = handleTooltipMouseWheel;
+
+const tooltipTouchEvents = {
+    'touchstart.gauge-tooltip': handleTooltipTouchStart
+};
+
 const Tracker = Class.inherit({
     ctor: function(parameters) {
         ///#DEBUG
@@ -118,22 +134,6 @@ const Tracker = Class.inherit({
         }
     }
 });
-
-var tooltipMouseEvents = {
-    'mouseover.gauge-tooltip': handleTooltipMouseOver,
-    'mouseout.gauge-tooltip': handleTooltipMouseOut
-};
-
-const tooltipMouseMoveEvents = {
-    'mousemove.gauge-tooltip': handleTooltipMouseMove
-};
-
-var tooltipMouseWheelEvents = {};
-tooltipMouseWheelEvents[wheelEvent.name + '.gauge-tooltip'] = handleTooltipMouseWheel;
-
-var tooltipTouchEvents = {
-    'touchstart.gauge-tooltip': handleTooltipTouchStart
-};
 
 function handleTooltipMouseOver(event) {
     const tracker = event.data.tracker;

@@ -362,7 +362,7 @@ const onGroupingMenuItemClick = function(column, params) {
 
     switch(params.itemData.value) {
         case 'group':
-            var groups = columnsController._dataSource.group() || [];
+            const groups = columnsController._dataSource.group() || [];
 
             columnsController.columnOption(column.dataField, 'groupIndex', groups.length);
             break;

@@ -2,6 +2,8 @@ const _extend = require('../../core/utils/extend').extend;
 
 function Node() { }
 
+const updateTile = [updateLeaf, updateGroup];
+
 _extend(Node.prototype, {
     value: 0,
 
@@ -43,8 +45,6 @@ _extend(Node.prototype, {
         updateTile[Number(this.isNode())](this.tile, this._getState());
     }
 });
-
-var updateTile = [updateLeaf, updateGroup];
 
 function updateLeaf(content, attrs) {
     content.smartAttr(attrs);

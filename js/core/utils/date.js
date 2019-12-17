@@ -10,7 +10,7 @@ const isDefined = typeUtils.isDefined;
 
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
-var toMilliseconds = function(value) {
+const toMilliseconds = function(value) {
     switch(value) {
         case 'millisecond':
             return 1;
@@ -100,12 +100,12 @@ const dateToMilliseconds = function(tickInterval) {
     return milliseconds;
 };
 
-var convertDateUnitToMilliseconds = function(dateUnit, count) {
+function convertDateUnitToMilliseconds(dateUnit, count) {
     return toMilliseconds(dateUnit) * count;
-};
+}
 
 // refactor for performance
-var getDateUnitInterval = function(tickInterval) {
+function getDateUnitInterval(tickInterval) {
     let maxInterval = -1;
     let i;
 
@@ -125,7 +125,7 @@ var getDateUnitInterval = function(tickInterval) {
         return dateUnitIntervals[maxInterval];
     }
     return '';
-};
+}
 
 // T375972
 const tickIntervalToFormatMap = {
@@ -154,7 +154,7 @@ const getFirstQuarterMonth = function(month) {
     return getQuarter(month) * 3;
 };
 
-const correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, firstDayOfWeek) {
+function correctDateWithUnitBeginning(date, dateInterval, withCorrection, firstDayOfWeek) {
     date = new Date(date.getTime());
     const oldDate = new Date(date.getTime());
     let firstQuarterMonth;
@@ -200,14 +200,14 @@ const correctDateWithUnitBeginning = function(date, dateInterval, withCorrection
         fixTimezoneGap(oldDate, date);
     }
     return date;
-};
+}
 
-const trimTime = function(date) {
-    return dateUtils.correctDateWithUnitBeginning(date, 'day');
-};
+function trimTime(date) {
+    return correctDateWithUnitBeginning(date, 'day');
+}
 
 const setToDayEnd = function(date) {
-    const result = dateUtils.trimTime(date);
+    const result = trimTime(date);
 
     result.setDate(result.getDate() + 1);
     return new Date(result.getTime() - 1);
@@ -215,10 +215,9 @@ const setToDayEnd = function(date) {
 
 
 const getDatesDifferences = function(date1, date2) {
-    let differences;
     let counter = 0;
 
-    differences = {
+    const differences = {
         year: date1.getFullYear() !== date2.getFullYear(),
         month: date1.getMonth() !== date2.getMonth(),
         day: date1.getDate() !== date2.getDate(),
@@ -359,14 +358,10 @@ const getViewMaxBoundaryDate = function(viewType, date) {
     return resultDate;
 };
 
-var getLastMonthDay = function(date) {
+function getLastMonthDay(date) {
     const resultDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return resultDate.getDate();
-};
-
-const sameView = function(view, date1, date2) {
-    return dateUtils[camelize('same ' + view)](date1, date2);
-};
+}
 
 const getViewUp = function(typeView) {
     switch(typeView) {
@@ -413,7 +408,7 @@ const getDifferenceInMonthForCells = function(typeView) {
     return difference;
 };
 
-var getDateIntervalByString = function(intervalString) {
+function getDateIntervalByString(intervalString) {
     const result = {};
     switch(intervalString) {
         case 'year':
@@ -445,19 +440,19 @@ var getDateIntervalByString = function(intervalString) {
             break;
     }
     return result;
-};
+}
 
-const sameDate = function(date1, date2) {
+function sameDate(date1, date2) {
     return sameMonthAndYear(date1, date2) && date1.getDate() === date2.getDate();
-};
+}
 
-var sameMonthAndYear = function(date1, date2) {
+function sameMonthAndYear(date1, date2) {
     return sameYear(date1, date2) && date1.getMonth() === date2.getMonth();
-};
+}
 
-var sameYear = function(date1, date2) {
+function sameYear(date1, date2) {
     return date1 && date2 && date1.getFullYear() === date2.getFullYear();
-};
+}
 
 const sameDecade = function(date1, date2) {
     if(!isDefined(date1) || !isDefined(date2)) return;
@@ -477,13 +472,13 @@ const sameCentury = function(date1, date2) {
     return date1 && date2 && startCenturyDate1 === startCenturyDate2;
 };
 
-var getFirstDecadeInCentury = function(date) {
+function getFirstDecadeInCentury(date) {
     return date && date.getFullYear() - date.getFullYear() % 100;
-};
+}
 
-var getFirstYearInDecade = function(date) {
+function getFirstYearInDecade(date) {
     return date && date.getFullYear() - date.getFullYear() % 10;
-};
+}
 
 const getShortDateFormat = function() {
     return 'yyyy/MM/dd';
@@ -501,14 +496,14 @@ const getLastMonthDate = function(date) {
     return newDate;
 };
 
-var getFirstWeekDate = function(date, firstDayOfWeek) {
+function getFirstWeekDate(date, firstDayOfWeek) {
     const delta = (date.getDay() - firstDayOfWeek + 7) % 7;
 
     const result = new Date(date);
     result.setDate(date.getDate() - delta);
 
     return result;
-};
+}
 
 const normalizeDateByWeek = function(date, currentDate) {
     const differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day');
@@ -552,7 +547,7 @@ const roundDateByStartDayHour = function(date, startDayHour) {
     return result;
 };
 
-var normalizeDate = function(date, min, max) {
+function normalizeDate(date, min, max) {
     let normalizedDate = date;
 
     if(!isDefined(date)) {
@@ -568,29 +563,27 @@ var normalizeDate = function(date, min, max) {
     }
 
     return normalizedDate;
-};
+}
 
-var fixTimezoneGap = function(oldDate, newDate) {
+function fixTimezoneGap(oldDate, newDate) {
     // NOTE: T182866
     if(!isDefined(oldDate)) {
         return;
     }
 
     const diff = newDate.getHours() - oldDate.getHours();
-    let sign;
-    let trial;
 
     if(diff === 0) {
         return;
     }
 
-    sign = (diff === 1 || diff === -23) ? -1 : 1;
-    trial = new Date(newDate.getTime() + sign * 3600000);
+    const sign = (diff === 1 || diff === -23) ? -1 : 1;
+    const trial = new Date(newDate.getTime() + sign * 3600000);
 
     if(sign > 0 || trial.getDate() === newDate.getDate()) {
         newDate.setTime(trial.getTime());
     }
-};
+}
 
 const roundToHour = function(date) {
     date.setHours(date.getHours() + 1);
@@ -599,9 +592,9 @@ const roundToHour = function(date) {
     return date;
 };
 
-var getTimezonesDifference = function(min, max) {
+function getTimezonesDifference(min, max) {
     return (max.getTimezoneOffset() - min.getTimezoneOffset()) * 60 * 1000;
-};
+}
 
 const makeDate = function(date) {
     // TODO: will be useful later for work with different timezones
@@ -621,7 +614,7 @@ const getDatesOfInterval = function(startDate, endDate, step) {
     return result;
 };
 
-var dateUtils = {
+const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
     convertMillisecondsToDateUnits: convertMillisecondsToDateUnits,
@@ -647,7 +640,6 @@ var dateUtils = {
     sameYear: sameYear,
     sameDecade: sameDecade,
     sameCentury: sameCentury,
-    sameView: sameView,
     getDifferenceInMonth: getDifferenceInMonth,
     getDifferenceInMonthForCells: getDifferenceInMonthForCells,
     getFirstYearInDecade: getFirstYearInDecade,
@@ -678,6 +670,10 @@ var dateUtils = {
     getDatesInterval: getDatesInterval,
 
     getDatesOfInterval: getDatesOfInterval
+};
+
+dateUtils.sameView = function(view, date1, date2) {
+    return dateUtils[camelize('same ' + view)](date1, date2);
 };
 
 module.exports = dateUtils;

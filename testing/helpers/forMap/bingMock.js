@@ -84,7 +84,7 @@ Microsoft.Maps = {
                         return;
                     }
 
-                    var lastDirectionPoints = Microsoft.lastDirectionPoints;
+                    const lastDirectionPoints = Microsoft.lastDirectionPoints;
                     setTimeout(function() {
                         callback({
                             routeSummary: [{

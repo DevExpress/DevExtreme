@@ -293,7 +293,7 @@
                     }
 
                     info.originalCallback = info.args[0];
-                    var callbackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                    const callbackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
@@ -354,7 +354,7 @@
                 }
 
                 info.originalCallback = info.args[0];
-                var callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                const callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
                     afterCall: function() {
                         if(!logEnabled) {
                             return;

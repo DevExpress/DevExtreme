@@ -198,6 +198,24 @@ function guessTypeByData(sample) {
     return type;
 }
 
+const emptyStrategy = {
+    setup: _noop,
+
+    reset: _noop,
+
+    arrange: _noop,
+
+    updateGrouping: _noop,
+
+    getDefaultColor: _noop
+};
+
+const strategiesByType = {};
+const strategiesByGeometry = {};
+const strategiesByElementType = {};
+let groupByColor;
+let groupBySize;
+
 let selectStrategy = function(options, data) {
     let type = _normalizeEnum(options.type);
     let elementType = _normalizeEnum(options.elementType);
@@ -225,19 +243,6 @@ function applyElementState(figure, styles, state, field) {
     figure[field].attr(styles[field][state]);
 }
 
-var emptyStrategy = {
-    setup: _noop,
-
-    reset: _noop,
-
-    arrange: _noop,
-
-    updateGrouping: _noop,
-
-    getDefaultColor: _noop
-};
-
-var strategiesByType = {};
 strategiesByType[TYPE_AREA] = {
     projectLabel: projectAreaLabel,
 
@@ -372,17 +377,16 @@ strategiesByType[TYPE_MARKER] = {
     }
 };
 
-var strategiesByGeometry = {};
 strategiesByGeometry[TYPE_AREA] = function(sample) {
     const coordinates = sample.coordinates;
     return { project: coordinates[0] && coordinates[0][0] && coordinates[0][0][0] && typeof coordinates[0][0][0][0] === 'number' ? projectMultiPolygon : projectPolygon };
 };
+
 strategiesByGeometry[TYPE_LINE] = function(sample) {
     const coordinates = sample.coordinates;
     return { project: coordinates[0] && coordinates[0][0] && typeof coordinates[0][0][0] === 'number' ? projectPolygon : projectLineString };
 };
 
-var strategiesByElementType = {};
 strategiesByElementType[TYPE_MARKER] = {
     _default: 'dot',
 
@@ -468,10 +472,6 @@ strategiesByElementType[TYPE_MARKER] = {
             const dataField = settings.dataField;
             const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
             const maxSize = settings.maxSize > minSize ? _Number(settings.maxSize) : minSize;
-            let minValue;
-            let maxValue;
-            let deltaValue;
-            let deltaSize;
 
             if(settings.sizeGroups) {
                 return;
@@ -480,10 +480,10 @@ strategiesByElementType[TYPE_MARKER] = {
             for(i = 0; i < ii; ++i) {
                 values[i] = _max(getDataValue(handles[i].proxy, dataField) || 0, 0);
             }
-            minValue = _min.apply(null, values);
-            maxValue = _max.apply(null, values);
-            deltaValue = (maxValue - minValue) || 1;
-            deltaSize = maxSize - minSize;
+            const minValue = _min.apply(null, values);
+            const maxValue = _max.apply(null, values);
+            const deltaValue = (maxValue - minValue) || 1;
+            const deltaSize = maxSize - minSize;
             for(i = 0; i < ii; ++i) {
                 handles[i]._settings.size = minSize + deltaSize * (values[i] - minValue) / deltaValue;
             }
@@ -788,7 +788,7 @@ function dropGrouping(context) {
     context.grouping = {};
 }
 
-var groupByColor = function(context) {
+groupByColor = function(context) {
     performGrouping(context, context.settings.colorGroups, 'color', context.settings.colorGroupingField, function(count) {
         const _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count);
         let i;
@@ -800,7 +800,7 @@ var groupByColor = function(context) {
     });
 };
 
-var groupBySize = function(context, valueCallback) {
+groupBySize = function(context, valueCallback) {
     const settings = context.settings;
     performGrouping(context, settings.sizeGroups, 'size', valueCallback || settings.sizeGroupingField, function(count) {
         const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
@@ -832,7 +832,7 @@ function hasFlag(flags, flag) {
 }
 
 function createLayerProxy(layer, name, index) {
-    var proxy = {
+    const proxy = {
         index: index,
 
         name: name,
@@ -856,6 +856,8 @@ function createLayerProxy(layer, name, index) {
     };
     return proxy;
 }
+
+let MapLayerElement;
 
 let MapLayer = function(params, container, name, index) {
     const that = this;
@@ -1155,7 +1157,7 @@ MapLayer.prototype = _extend({
 }, DataHelperMixin);
 
 function createProxy(handle, coords, attrs) {
-    var proxy = {
+    const proxy = {
         coordinates: function() {
             return coords;
         },
@@ -1186,7 +1188,7 @@ function createProxy(handle, coords, attrs) {
     return proxy;
 }
 
-var MapLayerElement = function(context, index, geometry, attributes) {
+MapLayerElement = function(context, index, geometry, attributes) {
     const that = this;
     const proxy = that.proxy = createProxy(that, geometry.coordinates, _extend({}, attributes));
     that._ctx = context;
@@ -1431,7 +1433,6 @@ function calculateLineStringData(coordinates) {
     let max0 = v2[0];
     let min1 = v2[1];
     let max1 = v2[1];
-    let t;
 
     for(i = 1; i < ii; ++i) {
         v1 = v2;
@@ -1446,7 +1447,7 @@ function calculateLineStringData(coordinates) {
     i = findGroupingIndex(totalLength / 2, items);
     v1 = coordinates[i];
     v2 = coordinates[i + 1];
-    t = (totalLength / 2 - items[i]) / (items[i + 1] - items[i]);
+    const t = (totalLength / 2 - items[i]) / (items[i + 1] - items[i]);
     return ii ? [
         [
             v1[0] * (1 - t) + v2[0] * t,

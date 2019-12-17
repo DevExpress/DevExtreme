@@ -12,7 +12,7 @@ const getWheelEventName = callOnce(function() {
     return domAdapter.hasDocumentProperty('onwheel') ? 'wheel' : 'mousewheel';
 });
 
-var wheel = {
+const wheel = {
 
     setup: function(element) {
         const $element = $(element);

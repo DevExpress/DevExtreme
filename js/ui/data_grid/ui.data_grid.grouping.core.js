@@ -99,7 +99,7 @@ exports.GroupingHelper = Class.inherit((function() {
         });
     };
 
-    var cleanGroupsInfo = function(groupsInfo, groupIndex, groupsCount) {
+    const cleanGroupsInfo = function(groupsInfo, groupIndex, groupsCount) {
         let i;
 
         for(i = 0; i < groupsInfo.length; i++) {
@@ -111,7 +111,7 @@ exports.GroupingHelper = Class.inherit((function() {
         }
     };
 
-    var calculateItemsCount = function(that, items, groupsCount) {
+    const calculateItemsCount = function(that, items, groupsCount) {
         let i;
         let result = 0;
 

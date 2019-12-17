@@ -36,6 +36,7 @@ const WHEEL_COOLDOWN = 50;
 const WHEEL_DIRECTION_COOLDOWN = 300;
 
 let EVENTS;
+let Focus;
 
 setupEvents();
 
@@ -104,13 +105,11 @@ Tracker.prototype = {
 
     _moveDrag: function(event, data) {
         const state = this._dragState;
-        let coords;
-        let threshold;
 
         if(!state) { return; }
 
-        coords = getEventCoords(event);
-        threshold = isTouchEvent(event) ? DRAG_COORD_THRESHOLD_TOUCH : DRAG_COORD_THRESHOLD_MOUSE;
+        const coords = getEventCoords(event);
+        const threshold = isTouchEvent(event) ? DRAG_COORD_THRESHOLD_TOUCH : DRAG_COORD_THRESHOLD_MOUSE;
         if(state.active || _abs(coords.x - state.x) > threshold || _abs(coords.y - state.y) > threshold) {
             state.x = coords.x;
             state.y = coords.y;
@@ -132,8 +131,6 @@ Tracker.prototype = {
         const that = this;
         const lock = that._wheelLock;
         const time = _now();
-        let delta;
-        let coords;
 
         if(time - lock.time <= WHEEL_COOLDOWN) { return; }
         // T136650
@@ -141,11 +138,11 @@ Tracker.prototype = {
             lock.dir = 0;
         }
         // T107589, T136650
-        delta = adjustWheelDelta(event.delta / 120 || 0, lock);
+        const delta = adjustWheelDelta(event.delta / 120 || 0, lock);
 
         if(delta === 0) { return; }
 
-        coords = getEventCoords(event);
+        const coords = getEventCoords(event);
         that._fire(EVENT_ZOOM, { delta: delta, x: coords.x, y: coords.y });
         lock.time = lock.dirTime = time;
     },
@@ -405,7 +402,7 @@ Tracker.prototype = {
     }
 };
 
-var Focus = function(fire) {
+Focus = function(fire) {
     let that = this;
     let _activeData = null;
     let _data = null;

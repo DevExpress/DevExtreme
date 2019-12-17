@@ -26,10 +26,10 @@ const focusable = function(element, tabIndex) {
     return isFocusable;
 };
 
-var visible = function(element) {
+function visible(element) {
     const $element = $(element);
     return $element.is(':visible') && $element.css('visibility') !== 'hidden' && $element.parents().css('visibility') !== 'hidden';
-};
+}
 
 module.exports = {
     focusable: function(index, element) {

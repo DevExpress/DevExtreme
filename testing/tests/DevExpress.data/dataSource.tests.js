@@ -1534,7 +1534,7 @@ QUnit.test('paging with continuation token', function(assert) {
     }
 
 
-    var source = new DataSource({
+    const source = new DataSource({
         pageSize: null, // means page size varies
 
         load: function(options) {

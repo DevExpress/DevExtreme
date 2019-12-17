@@ -11,6 +11,15 @@ const wrapToArray = function(entity) {
     return Array.isArray(entity) ? entity : [entity];
 };
 
+const inArray = function(value, object) {
+    if(!object) {
+        return -1;
+    }
+    const array = Array.isArray(object) ? object : object.toArray();
+
+    return array.indexOf(value);
+};
+
 const intersection = function(a, b) {
     if(!Array.isArray(a) || a.length === 0 ||
        !Array.isArray(b) || b.length === 0) {
@@ -103,15 +112,6 @@ const normalizeIndexes = function(items, indexParameterName, currentItem, needIn
     }
 
     return parameterIndex;
-};
-
-var inArray = function(value, object) {
-    if(!object) {
-        return -1;
-    }
-    const array = Array.isArray(object) ? object : object.toArray();
-
-    return array.indexOf(value);
 };
 
 const merge = function(array1, array2) {

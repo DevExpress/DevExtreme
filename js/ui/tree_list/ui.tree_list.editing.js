@@ -158,7 +158,7 @@ const validateClick = function(e) {
     return !needToCallOriginalClickHandler.call(this, e, originalClickHandler);
 };
 
-var needToCallOriginalClickHandler = function(e, originalClickHandler) {
+function needToCallOriginalClickHandler(e, originalClickHandler) {
     const $targetElement = $(e.event.target);
 
     if(!$targetElement.closest('.' + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length) {
@@ -167,7 +167,7 @@ var needToCallOriginalClickHandler = function(e, originalClickHandler) {
     }
 
     return false;
-};
+}
 
 const RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
     _renderCellCommandContent: function($container, options) {

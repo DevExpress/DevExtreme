@@ -28,7 +28,7 @@ const getStringFormat = function(format) {
     return null;
 };
 
-var dateUtils = {
+const dateUtils = {
 
     SUPPORTED_FORMATS: ['date', 'time', 'datetime'],
 

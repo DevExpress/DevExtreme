@@ -53,7 +53,71 @@ const special = (function() {
     };
 }());
 
-var applyForEach = function(args, method) {
+const eventsEngine = injector({
+    on: getHandler(normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
+        const handlersController = getHandlersController(element, eventName);
+        handlersController.addHandler(handler, selector, data);
+    }))),
+
+    one: getHandler(normalizeOnArguments(function(element, eventName, selector, data, handler) {
+        const oneTimeHandler = function() {
+            eventsEngine.off(element, eventName, selector, oneTimeHandler);
+            handler.apply(this, arguments);
+        };
+
+        eventsEngine.on(element, eventName, selector, data, oneTimeHandler);
+    })),
+
+    off: getHandler(normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
+        const handlersController = getHandlersController(element, eventName);
+        handlersController.removeHandler(handler, selector);
+    }))),
+
+    trigger: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
+        const eventName = event.type;
+        const handlersController = getHandlersController(element, event.type);
+
+        special.callMethod(eventName, 'trigger', element, [ event, extraParameters ]);
+        handlersController.callHandlers(event, extraParameters);
+
+        const noBubble = special.getField(eventName, 'noBubble')
+            || event.isPropagationStopped()
+            || NO_BUBBLE_EVENTS.indexOf(eventName) !== -1;
+
+        if(!noBubble) {
+            const parents = [];
+            const getParents = function(element) {
+                const parent = element.parentNode;
+                if(parent) {
+                    parents.push(parent);
+                    getParents(parent);
+                }
+            };
+            getParents(element);
+            parents.push(window);
+
+            let i = 0;
+
+            while(parents[i] && !event.isPropagationStopped()) {
+                const parentDataByEvent = getHandlersController(parents[i], event.type);
+                parentDataByEvent.callHandlers(extend(event, { currentTarget: parents[i] }), extraParameters);
+                i++;
+            }
+        }
+
+        if(element.nodeType || isWindow(element)) {
+            special.callMethod(eventName, '_default', element, [ event, extraParameters ]);
+            callNativeMethod(eventName, element);
+        }
+    })),
+
+    triggerHandler: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
+        const handlersController = getHandlersController(element, event.type);
+        handlersController.callHandlers(event, extraParameters);
+    }))
+});
+
+function applyForEach(args, method) {
     const element = args[0];
 
     if(!element) {
@@ -72,15 +136,15 @@ var applyForEach = function(args, method) {
     } else {
         throw errors.Error('E0025');
     }
-};
+}
 
-const getHandler = function(method) {
+function getHandler(method) {
     return function() {
         applyForEach(arguments, method);
     };
-};
+}
 
-const detectPassiveEventHandlersSupport = function() {
+function detectPassiveEventHandlersSupport() {
     let isSupported = false;
 
     try {
@@ -95,11 +159,11 @@ const detectPassiveEventHandlersSupport = function() {
     } catch(e) { }
 
     return isSupported;
-};
+}
 
 const passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
 
-const getHandlersController = function(element, eventName) {
+function getHandlersController(element, eventName) {
     let elementData = elementDataMap.get(element);
 
     eventName = eventName || '';
@@ -283,24 +347,24 @@ const getHandlersController = function(element, eventName) {
             }
         }
     };
-};
+}
 
-var getNativeHandler = function(subscribeName) {
+function getNativeHandler(subscribeName) {
     return function(event, extraParameters) {
         const handlersController = getHandlersController(this, subscribeName);
         event = eventsEngine.Event(event);
         handlersController.callHandlers(event, extraParameters);
     };
-};
+}
 
-var isSubset = function(original, checked) {
+function isSubset(original, checked) {
     for(let i = 0; i < checked.length; i++) {
         if(original.indexOf(checked[i]) < 0) return false;
     }
     return true;
-};
+}
 
-const normalizeOnArguments = function(callback) {
+function normalizeOnArguments(callback) {
     return function(element, eventName, selector, data, handler) {
         if(!handler) {
             handler = data;
@@ -319,7 +383,7 @@ const normalizeOnArguments = function(callback) {
 
         callback(element, eventName, selector, data, handler);
     };
-};
+}
 
 const normalizeOffArguments = function(callback) {
     return function(element, eventName, selector, handler) {
@@ -382,7 +446,7 @@ const normalizeEventArguments = function(callback) {
     };
 };
 
-const iterate = function(callback) {
+function iterate(callback) {
     const iterateEventNames = function(element, eventName) {
         if(eventName && eventName.indexOf(' ') > -1) {
             const args = Array.prototype.slice.call(arguments, 0);
@@ -408,7 +472,7 @@ const iterate = function(callback) {
             iterateEventNames.apply(this, arguments);
         }
     };
-};
+}
 
 const callNativeMethod = function(eventName, element) {
     const nativeMethodName = NATIVE_EVENTS_TO_TRIGGER[eventName] || eventName;
@@ -447,70 +511,6 @@ const calculateWhich = function(event) {
 
     return event.which;
 };
-
-var eventsEngine = injector({
-    on: getHandler(normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
-        const handlersController = getHandlersController(element, eventName);
-        handlersController.addHandler(handler, selector, data);
-    }))),
-
-    one: getHandler(normalizeOnArguments(function(element, eventName, selector, data, handler) {
-        var oneTimeHandler = function() {
-            eventsEngine.off(element, eventName, selector, oneTimeHandler);
-            handler.apply(this, arguments);
-        };
-
-        eventsEngine.on(element, eventName, selector, data, oneTimeHandler);
-    })),
-
-    off: getHandler(normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
-        const handlersController = getHandlersController(element, eventName);
-        handlersController.removeHandler(handler, selector);
-    }))),
-
-    trigger: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
-        const eventName = event.type;
-        const handlersController = getHandlersController(element, event.type);
-
-        special.callMethod(eventName, 'trigger', element, [ event, extraParameters ]);
-        handlersController.callHandlers(event, extraParameters);
-
-        const noBubble = special.getField(eventName, 'noBubble')
-            || event.isPropagationStopped()
-            || NO_BUBBLE_EVENTS.indexOf(eventName) !== -1;
-
-        if(!noBubble) {
-            const parents = [];
-            var getParents = function(element) {
-                const parent = element.parentNode;
-                if(parent) {
-                    parents.push(parent);
-                    getParents(parent);
-                }
-            };
-            getParents(element);
-            parents.push(window);
-
-            let i = 0;
-
-            while(parents[i] && !event.isPropagationStopped()) {
-                const parentDataByEvent = getHandlersController(parents[i], event.type);
-                parentDataByEvent.callHandlers(extend(event, { currentTarget: parents[i] }), extraParameters);
-                i++;
-            }
-        }
-
-        if(element.nodeType || isWindow(element)) {
-            special.callMethod(eventName, '_default', element, [ event, extraParameters ]);
-            callNativeMethod(eventName, element);
-        }
-    })),
-
-    triggerHandler: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
-        const handlersController = getHandlersController(element, event.type);
-        handlersController.callHandlers(event, extraParameters);
-    }))
-});
 
 const initEvent = function(EventClass) {
     if(EventClass) {
@@ -571,7 +571,7 @@ initEvent(normalizeEventArguments(function(src, config) {
     that.guid = ++guid;
 }));
 
-var addProperty = function(propName, hook, eventInstance) {
+function addProperty(propName, hook, eventInstance) {
     Object.defineProperty(eventInstance || eventsEngine.Event.prototype, propName, {
         enumerable: true,
         configurable: true,
@@ -589,7 +589,7 @@ var addProperty = function(propName, hook, eventInstance) {
             });
         }
     });
-};
+}
 
 hookTouchProps(addProperty);
 

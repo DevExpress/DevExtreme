@@ -31,7 +31,7 @@ exports.sendRequest = function(options) {
 let foreachTreeAsyncDate = new Date();
 
 function createForeachTreeFunc(isAsync) {
-    var foreachTreeFunc = function(items, callback, parentAtFirst, members, index, isChildrenProcessing) {
+    const foreachTreeFunc = function(items, callback, parentAtFirst, members, index, isChildrenProcessing) {
         members = members || [];
         items = items || [];
 
@@ -316,6 +316,7 @@ exports.getFiltersByPath = function(fields, path) {
 
 exports.storeDrillDownMixin = {
     createDrillDownDataSource: function(descriptions, params) {
+        const items = this.getDrillDownItems(descriptions, params);
         function createCustomStoreMethod(methodName) {
             return function(options) {
                 let d;
@@ -334,7 +335,6 @@ exports.storeDrillDownMixin = {
             };
         }
 
-        var items = this.getDrillDownItems(descriptions, params);
         let arrayStore;
         const dataSource = new DataSource({
             load: createCustomStoreMethod('load'),

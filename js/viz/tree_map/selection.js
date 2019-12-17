@@ -46,11 +46,10 @@ require('./tree_map.base').addChange({
     handler: function() {
         const that = this;
         const option = _normalizeEnum(that._getOption('selectionMode', true));
-        let mode;
         const selectionList = that._selectionList;
         let tmp;
 
-        mode = option === 'none' ? MODE_NONE : (option === 'multiple' ? MODE_MULTIPLE : MODE_SINGLE);
+        const mode = option === 'none' ? MODE_NONE : (option === 'multiple' ? MODE_MULTIPLE : MODE_SINGLE);
         if(mode === MODE_SINGLE && selectionList.length > 1) {
             tmp = selectionList.pop();
             that.clearSelection();
@@ -71,6 +70,8 @@ expand(proto, '_applyTilesAppearance', function() {
     }
 });
 
+const tileToFront = [leafToFront, groupToFront];
+
 function bringSelectedTilesToForeground(nodes, selectionList) {
     let i;
     const ii = selectionList.length;
@@ -81,8 +82,6 @@ function bringSelectedTilesToForeground(nodes, selectionList) {
         tileToFront[Number(node.isNode())](node.tile);
     }
 }
-
-var tileToFront = [leafToFront, groupToFront];
 
 function leafToFront(content) {
     content.toForeground();

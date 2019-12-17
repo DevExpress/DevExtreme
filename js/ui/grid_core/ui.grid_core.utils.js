@@ -72,9 +72,9 @@ module.exports = (function() {
         return selector1 === selector2;
     };
 
-    var isDateType = function(dataType) {
+    function isDateType(dataType) {
         return dataType === 'date' || dataType === 'datetime';
-    };
+    }
 
     const setEmptyText = function($container) {
         $container.get(0).textContent = '\u00A0';
@@ -292,11 +292,9 @@ module.exports = (function() {
 
         normalizeSortingInfo: function(sort) {
             sort = sort || [];
-
-            let result;
             let i;
+            const result = normalizeSortingInfo(sort);
 
-            result = normalizeSortingInfo(sort);
             for(i = 0; i < sort.length; i++) {
                 if(sort && sort[i] && sort[i].isExpanded !== undefined) {
                     result[i].isExpanded = sort[i].isExpanded;
@@ -495,8 +493,9 @@ module.exports = (function() {
 
         getLastResizableColumnIndex: function(columns, resultWidths) {
             const hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
+            let lastColumnIndex;
 
-            for(var lastColumnIndex = columns.length - 1; columns[lastColumnIndex]; lastColumnIndex--) {
+            for(lastColumnIndex = columns.length - 1; columns[lastColumnIndex]; lastColumnIndex--) {
                 const column = columns[lastColumnIndex];
                 const width = resultWidths && resultWidths[lastColumnIndex];
                 const allowResizing = !hasResizableColumns || column.allowResizing !== false;

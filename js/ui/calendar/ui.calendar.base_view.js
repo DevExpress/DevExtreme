@@ -86,6 +86,9 @@ const BaseView = Widget.inherit({
                 row.appendChild(cell);
             };
 
+        let cellDate = this._getFirstCellData();
+        let row;
+
         function renderCell(cellIndex) {
             // T425127
             if(prevCellDate) {
@@ -139,12 +142,11 @@ const BaseView = Widget.inherit({
             cellDate = that._getNextCellData(cellDate);
         }
 
-        var cellDate = this._getFirstCellData();
         const colCount = this.option('colCount');
         let prevCellDate;
 
         for(let indexRow = 0, len = this.option('rowCount'); indexRow < len; indexRow++) {
-            var row = domAdapter.createElement('tr');
+            row = domAdapter.createElement('tr');
             this.$body.get(0).appendChild(row);
             this._iterateCells(colCount, renderCell);
         }

@@ -228,9 +228,9 @@ const getRequestOptions = function(options, headers) {
     };
 };
 
-var getMethod = function(options) {
+function getMethod(options) {
     return (options.method || 'GET').toUpperCase();
-};
+}
 
 const getRequestHeaders = function(options) {
     const headers = options.headers || {};

@@ -13,37 +13,33 @@ const locate = function($element) {
         top: translate.y
     };
 };
-
-const move = function($element, position) {
-    const left = position.left;
-    const top = position.top;
-    let translate;
-
-    if(left === undefined) {
-        translate = getTranslate($element);
-        translate.y = top || 0;
-    } else if(top === undefined) {
-        translate = getTranslate($element);
-        translate.x = left || 0;
-    } else {
-        translate = { x: left || 0, y: top || 0, z: 0 };
-        cacheTranslate($element, translate);
-    }
-
-    $element.css({
-        transform: getTranslateCss(translate)
-    });
-
-    if(isPercentValue(left) || isPercentValue(top)) {
-        clearCache($element);
-    }
-};
-
-var isPercentValue = function(value) {
+function isPercentValue(value) {
     return type(value) === 'string' && value[value.length - 1] === '%';
+}
+
+function cacheTranslate($element, translate) {
+    if($element.length) {
+        dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
+    }
+}
+
+const clearCache = function($element) {
+    if($element.length) {
+        dataUtils.removeData($element.get(0), TRANSLATOR_DATA_KEY);
+    }
 };
 
-var getTranslate = function($element) {
+const getTranslateCss = function(translate) {
+    translate.x = translate.x || 0;
+    translate.y = translate.y || 0;
+
+    const xValueString = isPercentValue(translate.x) ? translate.x : translate.x + 'px';
+    const yValueString = isPercentValue(translate.y) ? translate.y : translate.y + 'px';
+
+    return 'translate(' + xValueString + ', ' + yValueString + ')';
+};
+
+const getTranslate = function($element) {
     let result = $element.length ? dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
@@ -75,15 +71,28 @@ var getTranslate = function($element) {
     return result;
 };
 
-var cacheTranslate = function($element, translate) {
-    if($element.length) {
-        dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
-    }
-};
+const move = function($element, position) {
+    const left = position.left;
+    const top = position.top;
+    let translate;
 
-var clearCache = function($element) {
-    if($element.length) {
-        dataUtils.removeData($element.get(0), TRANSLATOR_DATA_KEY);
+    if(left === undefined) {
+        translate = getTranslate($element);
+        translate.y = top || 0;
+    } else if(top === undefined) {
+        translate = getTranslate($element);
+        translate.x = left || 0;
+    } else {
+        translate = { x: left || 0, y: top || 0, z: 0 };
+        cacheTranslate($element, translate);
+    }
+
+    $element.css({
+        transform: getTranslateCss(translate)
+    });
+
+    if(isPercentValue(left) || isPercentValue(top)) {
+        clearCache($element);
     }
 };
 
@@ -126,16 +135,6 @@ const parseTranslate = function(translateString) {
     };
 
     return result;
-};
-
-var getTranslateCss = function(translate) {
-    translate.x = translate.x || 0;
-    translate.y = translate.y || 0;
-
-    const xValueString = isPercentValue(translate.x) ? translate.x : translate.x + 'px';
-    const yValueString = isPercentValue(translate.y) ? translate.y : translate.y + 'px';
-
-    return 'translate(' + xValueString + ', ' + yValueString + ')';
 };
 
 exports.move = move;

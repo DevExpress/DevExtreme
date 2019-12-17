@@ -134,7 +134,6 @@ exports.DataController = Class.inherit((function() {
         };
 
         const addInfoItem = function(info, options) {
-            let itemInfo;
             const breadth = (options.lastIndex - options.index) || 1;
             const addInfoItemCore = function(info, infoItem, itemIndex, depthIndex, isHorizontal) {
                 const index = isHorizontal ? depthIndex : itemIndex;
@@ -148,7 +147,7 @@ exports.DataController = Class.inherit((function() {
                 }
             };
 
-            itemInfo = createInfoItem(options.headerItem, breadth, options.isHorizontal, options.isTree);
+            const itemInfo = createInfoItem(options.headerItem, breadth, options.isHorizontal, options.isTree);
             addInfoItemCore(info, itemInfo, options.index, options.depth, options.isHorizontal);
             if(!options.headerItem.children || options.headerItem.children.length === 0) {
                 return options.lastIndex + 1;
@@ -317,7 +316,7 @@ exports.DataController = Class.inherit((function() {
             return d;
         }
 
-        var addMetricHeaderItems = function(headerItems, cellDescriptions, options) {
+        function addMetricHeaderItems(headerItems, cellDescriptions, options) {
             foreachTree(headerItems, function(items) {
                 const item = items[0];
                 let i;
@@ -351,9 +350,9 @@ exports.DataController = Class.inherit((function() {
                     }
                 }
             });
-        };
+        }
 
-        var addAdditionalTotalHeaderItems = function(headerItems, headerDescriptions, showTotalsPrior, isTree) {
+        function addAdditionalTotalHeaderItems(headerItems, headerDescriptions, showTotalsPrior, isTree) {
             showTotalsPrior = showTotalsPrior || isTree;
 
             foreachTree(headerItems, function(items, index) {
@@ -374,9 +373,9 @@ exports.DataController = Class.inherit((function() {
                     }
                 }
             });
-        };
+        }
 
-        var removeEmptyParent = function(items, index) {
+        const removeEmptyParent = function(items, index) {
             const parent = items[index + 1];
 
             if(!items[index].children.length && parent && parent.children) {
@@ -386,7 +385,7 @@ exports.DataController = Class.inherit((function() {
 
         };
 
-        var removeHiddenItems = function(headerItems) {
+        function removeHiddenItems(headerItems) {
             foreachTree([{ children: headerItems }], function(items, index) {
                 const item = items[0];
                 const parentChildren = (items[1] ? items[1].children : headerItems) || [];
@@ -401,7 +400,7 @@ exports.DataController = Class.inherit((function() {
                     removeEmptyParent(items, 1);
                 }
             });
-        };
+        }
 
         const fillHeaderInfo = function(info, viewHeaderItems, depthSize, isHorizontal, isTree) {
             let lastIndex = 0;
@@ -493,13 +492,12 @@ exports.DataController = Class.inherit((function() {
 
                 if(columnInfo.isLast && dataField) {
                     let cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex];
-                    let cellValue;
 
                     if(!Array.isArray(cell)) {
                         cell = [cell];
                     }
 
-                    cellValue = cell[dataIndex];
+                    const cellValue = cell[dataIndex];
 
                     row[columnIndex] = {
                         /**
@@ -1046,11 +1044,8 @@ exports.DataController = Class.inherit((function() {
             const hiddenValues = getHiddenValues(dataFields);
             const hiddenGrandTotals = getHiddenGrandTotalsTotals(dataFields, columnFields);
             const grandTotalsAreHiddenForNotAllDataFields = dataFields.length > 0 ? hiddenGrandTotals.length !== dataFields.length : true;
-            const notifyProgress = function(progress) {
-                this.progress = progress;
-                that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
-            };
-            var rowOptions = {
+
+            const rowOptions = {
                 isEmptyGrandTotal: data.isEmptyGrandTotalRow,
                 texts: options.texts || {},
                 hiddenTotals: hiddenTotals,
@@ -1064,10 +1059,9 @@ exports.DataController = Class.inherit((function() {
                 layout: options.rowHeaderLayout,
                 fields: rowFields,
                 dataFields: dataFields,
-                progress: 0,
-                notifyProgress: notifyProgress
+                progress: 0
             };
-            var columnOptions = {
+            const columnOptions = {
                 isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
                 texts: options.texts || {},
                 hiddenTotals: hiddenTotals,
@@ -1080,9 +1074,16 @@ exports.DataController = Class.inherit((function() {
                 showEmpty: !options.hideEmptySummaryCells,
                 fields: columnFields,
                 dataFields: dataFields,
-                progress: 0,
-                notifyProgress: notifyProgress
+                progress: 0
             };
+
+            const notifyProgress = function(progress) {
+                this.progress = progress;
+                that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
+            };
+
+            rowOptions.notifyProgress = notifyProgress;
+            columnOptions.notifyProgress = notifyProgress;
 
             if(!isDefined(data.grandTotalRowIndex)) {
                 data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowOptions).length;

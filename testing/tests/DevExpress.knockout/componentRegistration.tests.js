@@ -103,7 +103,7 @@ QUnit.module(
                 .appendTo(FIXTURE_ELEMENT);
 
             let count = 0;
-            var vm = {
+            const vm = {
                 obj: ko.observable({}),
                 dependentOption: ko.observable('initial state'),
                 optionChangedHandler: function() {
@@ -574,7 +574,7 @@ QUnit.module(
                 .attr('data-bind', 'dxTestWidget: { option1: myValue, onContentReady: onContentReady }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 onContentReady: function() {
                     vm.myValue('new value');
                 },
@@ -617,7 +617,7 @@ QUnit.module(
                 value: value\
             }\'></div>').appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 dataSource: ['1', '2'],
                 onValueChanged: function() {
                     assert.equal(vm.value(), '1');

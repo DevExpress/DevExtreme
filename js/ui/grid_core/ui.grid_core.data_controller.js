@@ -412,7 +412,7 @@ module.exports = {
                     let filterApplied;
 
                     // B255430
-                    var updateItemsHandler = function() {
+                    const updateItemsHandler = function() {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
                         that.updateItems();
                     };
@@ -1093,7 +1093,7 @@ module.exports = {
                 _fireDataSourceChanged: function() {
                     const that = this;
 
-                    var changedHandler = function() {
+                    const changedHandler = function() {
                         that.changed.remove(changedHandler);
                         that.dataSourceChanged.fire();
                     };

@@ -784,7 +784,7 @@ const FilterBuilder = Widget.inherit({
         const that = this;
         const availableOperations = utils.getAvailableOperations(field, this.option('filterOperationDescriptions'), this._customOperations);
         let currentOperation = utils.getOperationFromAvailable(utils.getOperationValue(condition), availableOperations);
-        var $operationButton = this._createButtonWithMenu({
+        const $operationButton = this._createButtonWithMenu({
             caption: currentOperation.text,
             menu: {
                 items: availableOperations,
@@ -840,7 +840,7 @@ const FilterBuilder = Widget.inherit({
             return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
         };
 
-        var $fieldButton = this._createButtonWithMenu({
+        const $fieldButton = this._createButtonWithMenu({
             caption: getFullCaption(item, items),
             menu: {
                 items: items,
@@ -983,6 +983,8 @@ const FilterBuilder = Widget.inherit({
     },
 
     _addDocumentKeyUp: function($editor, handler) {
+        let isComposing = false; // IME Composing going on
+        let hasCompositionJustEnded = false; // Used to swallow keyup event related to compositionend
         const document = domAdapter.getDocument();
         const documentKeyUpHandler = (e) => {
             if(isComposing || hasCompositionJustEnded) {
@@ -993,9 +995,6 @@ const FilterBuilder = Widget.inherit({
             handler(e);
         };
         eventsEngine.on(document, 'keyup', documentKeyUpHandler);
-
-        var isComposing = false; // IME Composing going on
-        var hasCompositionJustEnded = false; // Used to swallow keyup event related to compositionend
 
         const input = $editor.find('input');
         eventsEngine.on(input, 'compositionstart', () => {

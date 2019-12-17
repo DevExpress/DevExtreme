@@ -49,7 +49,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         return resultSkip;
     };
 
-    var processGroupItems = function(that, items, path, offset, skipFirstItem, take) {
+    const processGroupItems = function(that, items, path, offset, skipFirstItem, take) {
         let i;
         let item;
         let offsetInfo;
@@ -129,7 +129,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         return true;
     };
 
-    var updateGroupOffsets = function(that, items, path, offset, additionalGroupInfo) {
+    const updateGroupOffsets = function(that, items, path, offset, additionalGroupInfo) {
         let i;
         let item;
 
@@ -190,7 +190,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         return combineFilters([filter, storeLoadOptions.filter]);
     };
 
-    var getGroupCount = function(item, groupCount) {
+    const getGroupCount = function(item, groupCount) {
         let count = item.count || item.items.length;
         let i;
 

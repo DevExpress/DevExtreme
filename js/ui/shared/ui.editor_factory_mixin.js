@@ -143,7 +143,7 @@ const EditorFactoryMixin = (function() {
         }
     };
 
-    var prepareSelectBox = function(options) {
+    function prepareSelectBox(options) {
         const lookup = options.lookup;
         let displayGetter;
         let dataSource;
@@ -200,9 +200,9 @@ const EditorFactoryMixin = (function() {
                 }
             }, options);
         }
-    };
+    }
 
-    var prepareCheckBox = function(options) {
+    function prepareCheckBox(options) {
         options.editorName = 'dxCheckBox';
         options.editorOptions = getResultConfig({
             value: typeUtils.isDefined(options.value) ? options.value : undefined,
@@ -213,7 +213,7 @@ const EditorFactoryMixin = (function() {
                 options.setValue && options.setValue(e.value, e /* for selection */);
             },
         }, options);
-    };
+    }
 
     const createEditorCore = function(that, options) {
         const $editorElement = $(options.editorElement);
@@ -249,8 +249,6 @@ const EditorFactoryMixin = (function() {
     };
     return {
         createEditor: function($container, options) {
-            let editorName;
-
             options.cancel = false;
             options.editorElement = getPublicElement($container);
 
@@ -278,7 +276,7 @@ const EditorFactoryMixin = (function() {
                 }
             }
 
-            editorName = options.editorName;
+            const editorName = options.editorName;
             this.executeAction('onEditorPreparing', options);
 
             if(options.cancel) {

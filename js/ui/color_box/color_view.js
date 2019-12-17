@@ -99,14 +99,14 @@ const ColorView = Editor.inherit({
             that._currentColor.hsv.v = value;
             updatePaletteValue();
         };
-        var updatePaletteValue = function() {
+        function updatePaletteValue() {
             that._placePaletteHandle();
             that._updateColorFromHsv(
                 that._currentColor.hsv.h,
                 that._currentColor.hsv.s,
                 that._currentColor.hsv.v
             );
-        };
+        }
         const getHueScaleStep = function(e) {
             let step = 360 / (that._hueScaleWrapperHeight - that._hueScaleHandleHeight);
             if(e.shiftKey) {

@@ -36,7 +36,7 @@ const isString = function(object) {
     return typeof object === 'string';
 };
 
-var isNumeric = function(object) {
+const isNumeric = function(object) {
     return ((typeof object === 'number') && isFinite(object) || !isNaN(object - parseFloat(object)));
 };
 

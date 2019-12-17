@@ -125,7 +125,7 @@ const compileCriteria = (function() {
         return bag.join(' ' + groupOperator + ' ');
     };
 
-    var compileCore = function(criteria) {
+    function compileCore(criteria) {
         if(Array.isArray(criteria[0])) {
             return compileGroup(criteria);
         }
@@ -135,7 +135,7 @@ const compileCriteria = (function() {
         }
 
         return compileBinary(criteria);
-    };
+    }
 
     return function(criteria, version, types, filterToLower) {
         fieldTypes = types;
@@ -161,7 +161,7 @@ const createODataQueryAdapter = function(queryOptions) {
         return _skip || _take !== undefined;
     };
 
-    var hasFunction = function(criterion) {
+    const hasFunction = function(criterion) {
         for(let i = 0; i < criterion.length; i++) {
             if(isFunction(criterion[i])) {
                 return true;
@@ -268,7 +268,7 @@ const createODataQueryAdapter = function(queryOptions) {
             for(let i = 0; i < args.length; i++) {
                 const getter = args[i][0];
                 const desc = !!args[i][1];
-                var rule;
+                let rule;
 
                 if(typeof getter !== 'string') {
                     return false;

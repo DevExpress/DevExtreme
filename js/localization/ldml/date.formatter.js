@@ -11,7 +11,7 @@ const FORMAT_TYPES = {
     '5': 'narrow'
 };
 
-var LDML_FORMATTERS = {
+const LDML_FORMATTERS = {
     y: function(date, count, useUtc) {
         let year = date[useUtc ? 'getUTCFullYear' : 'getFullYear']();
         if(count === 2) {

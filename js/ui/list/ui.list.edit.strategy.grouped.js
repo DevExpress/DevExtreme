@@ -100,7 +100,8 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
     getKeysByItems: function(items) {
         let plainItems = [];
-        for(var i = 0; i < items.length; i++) {
+        let i;
+        for(i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
                 plainItems = plainItems.concat(items[i].items);
             } else {

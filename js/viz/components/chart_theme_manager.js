@@ -84,7 +84,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
     };
 
 
-    var applyParticularTheme = {
+    const applyParticularTheme = {
         base: mergeOptions,
         argumentAxis: applyParticularAxisOptions,
         valueAxisRangeSelector: function() {
@@ -98,7 +98,6 @@ const ThemeManager = BaseThemeManager.inherit((function() {
             const themeCommonSettings = theme.commonSeriesSettings;
             const widgetType = that._themeSection.split('.').slice(-1)[0];
             const type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === 'pie' && theme.type)); // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
-            let settings;
             const palette = that.palette;
             const isBar = ~type.indexOf('bar');
             const isLine = ~type.indexOf('line');
@@ -118,7 +117,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
                 userOptions.visible = seriesVisibility;
             }
 
-            settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+            const settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
 
             settings.aggregation.enabled = widgetType === 'chart' && normalizeAggregationEnabled(settings.aggregation, that.getOptions('useAggregation'));
             settings.type = type;
@@ -209,9 +208,9 @@ const ThemeManager = BaseThemeManager.inherit((function() {
         }
     };
 
-    var normalizeAggregationEnabled = function(aggregation, useAggregation) {
+    function normalizeAggregationEnabled(aggregation, useAggregation) {
         return !!(!_isDefined(aggregation.enabled) ? useAggregation : aggregation.enabled);
-    };
+    }
 
     return {
         _themeSection: 'chart',

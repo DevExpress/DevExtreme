@@ -426,7 +426,7 @@ QUnit.test('Form is not crashed when numberbox is used (T369550)', function(asse
 
 QUnit.test('Form items should have correct model', function(assert) {
     assert.expect(1);
-    var viewModel = {
+    const viewModel = {
         formData: {},
         items: [{
             itemType: 'button',

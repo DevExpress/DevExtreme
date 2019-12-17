@@ -67,7 +67,7 @@ const ListBase = CollectionWidget.inherit({
             that.scrollToItem($item);
         };
 
-        var getEdgeVisibleItem = function(direction) {
+        function getEdgeVisibleItem(direction) {
             const scrollTop = that.scrollTop();
             const containerHeight = that.$element().height();
 
@@ -94,9 +94,9 @@ const ListBase = CollectionWidget.inherit({
             }
 
             return $item;
-        };
+        }
 
-        var scrollListTo = function($item, direction) {
+        function scrollListTo($item, direction) {
             let resultPosition = $item.position().top;
 
             if(direction === 'prev') {
@@ -104,7 +104,7 @@ const ListBase = CollectionWidget.inherit({
             }
 
             that.scrollTo(resultPosition);
-        };
+        }
 
         return extend(this.callBase(), {
             leftArrow: commonUtils.noop,

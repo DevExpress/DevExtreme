@@ -16,9 +16,9 @@ const widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
     }
 };
 
-exports.getAugmentationOptionsPath = (widgetPath) => widgetNameByPath(widgetPath) ? getWidgetOptionsPath(widgetPath) : '';
+const getWidgetOptionsPath = (widgetPath) => `${widgetPath}Options`;
 
-var getWidgetOptionsPath = (widgetPath) => `${widgetPath}Options`;
+exports.getAugmentationOptionsPath = (widgetPath) => widgetNameByPath(widgetPath) ? getWidgetOptionsPath(widgetPath) : '';
 
 exports.generateJQueryAugmentation = function(globalWidgetPath) {
     const widgetName = widgetNameByPath(globalWidgetPath);

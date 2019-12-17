@@ -109,7 +109,7 @@ function generateDateBreaksForWeekend(min, max, weekendDayIndices) {
 
             if(dayBetweenWeekend(weekend, day)) {
                 const from = new Date(currentDate);
-                var to;
+                let to;
 
                 currentDate.setDate(date + getDaysDistance(day, weekend.end));
 

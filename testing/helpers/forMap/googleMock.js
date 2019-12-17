@@ -1,6 +1,6 @@
 /* global jQuery */
 
-var google = window.google = {
+const google = window.google = {
     maps: {
         event: {
             trigger: function(_, name) {

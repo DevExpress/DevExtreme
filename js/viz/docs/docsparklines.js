@@ -4,7 +4,7 @@
 * @hidden
 * @inherits BaseWidget
 */
-var BaseSparkline = {
+const BaseSparkline = {
     /**
     * @name BaseSparklineOptions.redrawOnResize
     * @hidden
@@ -90,7 +90,7 @@ var BaseSparkline = {
 * @module viz/sparkline
 * @export default
 */
-var dxSparkline = {
+const dxSparkline = {
    /**
    * @name dxSparkLineOptions.dataSource
    * @extends CommonVizDataSource
@@ -230,7 +230,7 @@ var dxSparkline = {
 * @module viz/bullet
 * @export default
 */
-var dxBullet = {
+const dxBullet = {
     /**
     * @name dxBulletOptions.value
     * @type number

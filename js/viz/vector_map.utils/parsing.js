@@ -87,7 +87,7 @@ function parseCore(source, roundCoordinates, errors) {
 function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
     const features = [];
     let i;
-    var ii = features.length = ii = Math.max(shapeData.length, dataBaseFileData.length);
+    let ii = features.length = ii = Math.max(shapeData.length, dataBaseFileData.length);
     let shape;
     for(i = 0; i < ii; ++i) {
         shape = shapeData[i] || {};

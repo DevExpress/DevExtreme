@@ -106,7 +106,7 @@ QUnit.test('Date time format as function converting', function(assert) {
         return text;
     }
 
-    var expected = {
+    const expected = {
         '[$-9]AM/PM H:mm:ss': function(value) { return expected['[$-9]AM/PM'](value) + ' ' + expected['[$-9]H:mm:ss'](value); },
         '[$-9]yyyy \\d\\e MM \\d\\e dd': function(value) { return expected['[$-9]yyyy'](value) + ' de ' + expected['[$-9]MM'](value) + ' de ' + expected['[$-9]dd'](value); },
         '[$-9]H:mm:ss': function(value) { return value.getHours().toString() + ':' + leftPad(value.getMinutes().toString(), 2, '0') + ':' + leftPad(value.getSeconds().toString(), 2, '0'); },

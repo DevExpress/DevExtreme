@@ -216,7 +216,7 @@ const ajaxOptionsForRequest = function(protocolVersion, request, options) {
     }
 };
 
-var sendRequest = function(protocolVersion, request, options) {
+const sendRequest = function(protocolVersion, request, options) {
     const d = new Deferred();
     const ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
@@ -334,7 +334,7 @@ const errorFromResponse = function(obj, textStatus, ajaxOptions) {
     return null;
 };
 
-var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOptions) {
+function interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions) {
     const error = errorFromResponse(obj, textStatus, ajaxOptions);
     let value;
 
@@ -355,9 +355,9 @@ var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOption
     transformTypes(value, transformOptions);
 
     return value;
-};
+}
 
-var interpretVerboseJsonFormat = function(obj) {
+function interpretVerboseJsonFormat(obj) {
     let data = obj.d;
     if(!isDefined(data)) {
         return { error: Error('Malformed or unsupported JSON response received') };
@@ -372,9 +372,9 @@ var interpretVerboseJsonFormat = function(obj) {
         nextUrl: obj.d.__next,
         count: parseInt(obj.d.__count, 10)
     };
-};
+}
 
-var interpretLightJsonFormat = function(obj) {
+function interpretLightJsonFormat(obj) {
     let data = obj;
 
     if(isDefined(data.value)) {
@@ -386,7 +386,7 @@ var interpretLightJsonFormat = function(obj) {
         nextUrl: obj['@odata.nextLink'],
         count: parseInt(obj['@odata.count'], 10)
     };
-};
+}
 
 // Serialization and parsing
 
@@ -417,7 +417,7 @@ const EdmLiteral = Class.inherit({
     }
 });
 
-var transformTypes = function(obj, options) {
+function transformTypes(obj, options) {
     options = options || {};
 
     each(obj, function(key, value) {
@@ -446,7 +446,7 @@ var transformTypes = function(obj, options) {
             }
         }
     });
-};
+}
 
 const serializeDate = function(date) {
     return 'datetime\'' + formatISO8601(date, true, true) + '\'';
@@ -464,7 +464,7 @@ const serializePropName = function(propName) {
     return propName.replace(/\./g, '/');
 };
 
-var serializeValueV4 = function(value) {
+const serializeValueV4 = function(value) {
     if(value instanceof Date) {
         return formatISO8601(value, false, false);
     }
@@ -479,7 +479,7 @@ var serializeValueV4 = function(value) {
     return serializeValueV2(value);
 };
 
-var serializeValueV2 = function(value) {
+function serializeValueV2(value) {
     if(value instanceof Date) {
         return serializeDate(value);
     }
@@ -493,7 +493,7 @@ var serializeValueV2 = function(value) {
         return serializeString(value);
     }
     return String(value);
-};
+}
 
 const serializeValue = function(value, protocolVersion) {
     switch(protocolVersion) {
@@ -616,7 +616,7 @@ const generateExpand = function(oDataVersion, expand, select) {
 
     const generatorV4 = function() {
         const format = function(hash) {
-            var formatCore = function(hash) {
+            const formatCore = function(hash) {
                 let result = '';
                 const selectValue = [];
                 const expandValue = [];
@@ -661,7 +661,7 @@ const generateExpand = function(oDataVersion, expand, select) {
         };
 
         const parseTree = function(exprs, root, stepper) {
-            var parseCore = function(exprParts, root, stepper) {
+            const parseCore = function(exprParts, root, stepper) {
                 const result = stepper(root, exprParts.shift(), exprParts);
                 if(result === false) {
                     return;

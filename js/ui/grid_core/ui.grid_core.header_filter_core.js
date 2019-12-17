@@ -75,7 +75,7 @@ exports.HeaderFilterView = modules.View.inherit({
         const isSelectAll = !list.option('searchValue') && !options.isFilterBuilder && list.$element().find('.dx-checkbox').eq(0).hasClass('dx-checkbox-checked');
         const filterValues = [];
 
-        var fillSelectedItemKeys = function(filterValues, items, isExclude) {
+        const fillSelectedItemKeys = function(filterValues, items, isExclude) {
             each(items, function(_, item) {
                 if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
                     const hasChildrenWithSelection = item.items && item.items.some((item) => item.selected !== undefined);

@@ -1,7 +1,7 @@
 const callOnce = function(handler) {
     let result;
 
-    var wrappedHandler = function() {
+    let wrappedHandler = function() {
         result = handler.apply(this, arguments);
         wrappedHandler = function() {
             return result;

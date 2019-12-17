@@ -40,7 +40,7 @@ const getMonthYearFormat = function(date) {
     return dateLocalization.getMonthNames('abbreviated')[date.getMonth()] + ' ' + dateLocalization.format(date, 'year');
 };
 
-var getCaptionFormat = function(short, intervalCount, duration) {
+const getCaptionFormat = function(short, intervalCount, duration) {
     const dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
         if(intervalCount > 1) {
@@ -95,7 +95,7 @@ const getWeekCaption = function(date, shift, rejectWeekend) {
     };
 };
 
-var formatCaptionByMonths = function(lastDate, firstDate) {
+function formatCaptionByMonths(lastDate, firstDate) {
     const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
     const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
     const useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat');
@@ -111,7 +111,7 @@ var formatCaptionByMonths = function(lastDate, firstDate) {
     }
 
     return firstDateText + '-' + lastDateText;
-};
+}
 
 const getMonthCaption = function(date) {
     const firstDate = new Date(dateUtils.getFirstMonthDate(date));

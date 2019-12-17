@@ -30,7 +30,7 @@ function baseOperation(grid) {
         return parentText ? parentText + '/' + itemText : itemText;
     };
 
-    var getSelectedItemsTexts = function(items, parentText) {
+    const getSelectedItemsTexts = function(items, parentText) {
         let result = [];
         items.forEach(function(item) {
             if(item.items) {

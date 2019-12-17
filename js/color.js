@@ -226,6 +226,8 @@ const standardColorTypes = [
     }
 ];
 
+const _round = Math.round;
+
 function Color(value) {
     this.baseColor = value;
     let color;
@@ -321,20 +323,15 @@ function toHsvFromRgb(r, g, b) {
 }
 
 function hsvToRgb(h, s, v) {
-    let vDec;
-    let vInc;
-    let vMin;
-    let index;
-    let a;
+    const index = Math.floor((h % 360) / 60);
+    const vMin = ((100 - s) * v) / 100;
+    const a = (v - vMin) * ((h % 60) / 60);
+    const vInc = vMin + a;
+    const vDec = v - a;
+
     let r;
     let g;
     let b;
-
-    index = Math.floor((h % 360) / 60);
-    vMin = ((100 - s) * v) / 100;
-    a = (v - vMin) * ((h % 60) / 60);
-    vInc = vMin + a;
-    vDec = v - a;
 
     switch(index) {
         /* eslint-disable no-multi-spaces */
@@ -471,8 +468,6 @@ function isIntegerBetweenMinAndMax(number, min, max) {
 
     return true;
 }
-
-var _round = Math.round;
 
 Color.prototype = {
     constructor: Color,

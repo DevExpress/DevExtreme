@@ -71,7 +71,7 @@ const summaryDictionary = {
         return percentOfGrandTotal(e);
     }
 };
-var getPrevCellCrossGroup = function(cell, direction) {
+const getPrevCellCrossGroup = function(cell, direction) {
     if(!cell || !cell.parent(direction)) {
         return;
     }

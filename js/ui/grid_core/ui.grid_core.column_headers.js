@@ -45,17 +45,16 @@ module.exports = {
     views: {
         columnHeadersView: columnsView.ColumnsView.inherit((function() {
             const createCellContent = function(that, $cell, options) {
-                let showColumnLines;
                 const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
                 that.setAria('role', 'presentation', $cellContent);
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
-                showColumnLines = that.option('showColumnLines');
+                const showColumnLines = that.option('showColumnLines');
                 return $cellContent[(showColumnLines || options.column.alignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
-            var addCssClassesToCellContent = function(that, $cell, column, $cellContent) {
+            function addCssClassesToCellContent(that, $cell, column, $cellContent) {
                 const $indicatorElements = that._getIndicatorElements($cell, true);
                 const $visibleIndicatorElements = that._getIndicatorElements($cell);
                 const indicatorCount = $indicatorElements && $indicatorElements.length;
@@ -69,7 +68,7 @@ module.exports = {
                     .toggleClass(SORT_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('sort')).length)
                     .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$visibleIndicatorElements.children().filter('.' + that._getIndicatorClassName('sortIndex')).length)
                     .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('headerFilter')).length);
-            };
+            }
 
             return {
                 _createTable: function() {

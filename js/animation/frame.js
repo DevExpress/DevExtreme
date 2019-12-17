@@ -36,7 +36,7 @@ const setAnimationFrameMethods = callOnce(function() {
         const canceledRequests = {};
 
         request = function(callback) {
-            var requestId = nativeRequest.call(window, function() {
+            const requestId = nativeRequest.call(window, function() {
                 try {
                     if(requestId in canceledRequests) {
                         return;

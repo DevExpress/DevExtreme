@@ -221,7 +221,6 @@ const dxTreeMap = require('../core/base_widget').inherit({
     _buildNodes: function() {
         const that = this;
         const root = that._root = that._topNode = new Node();
-        let processedData;
 
         root._id = 0;
         root.parent = {};
@@ -231,7 +230,7 @@ const dxTreeMap = require('../core/base_widget').inherit({
         root.label = null;
         that._nodes = [root];
         that._handlers.beginBuildNodes();
-        processedData = that._processDataSourceItems(that._dataSourceItems() || []);
+        const processedData = that._processDataSourceItems(that._dataSourceItems() || []);
         traverseDataItems(root, processedData.items, 0, {
             itemsField: !processedData.isPlain && that._getOption('childrenField', true) || 'items',
             valueField: that._getOption('valueField', true) || 'value',
@@ -412,11 +411,10 @@ const dxTreeMap = require('../core/base_widget').inherit({
     _getTextBBox: function(fontOptions) {
         const renderer = this._renderer;
         const text = this._textForCalculations || renderer.text('0', 0, 0);
-        let bBox;
 
         this._textForCalculations = text;
         text.css(_patchFontOptions(fontOptions)).append(renderer.root);
-        bBox = text.getBBox();
+        const bBox = text.getBBox();
         text.remove();
         return bBox;
     }
@@ -472,14 +470,14 @@ function processNodes(context, root, process) {
     }
 }
 
+const createTile = [createLeaf, createGroup];
+
 function processTileAppearance(context, node) {
     node.color = node.data[context.colorField] || context.getColor(node) || node.parent.color;
     node.updateStyles();
     node.tile = (!node.ctx.forceReset && node.tile) || createTile[Number(node.isNode())](context, node);
     node.applyState();
 }
-
-var createTile = [createLeaf, createGroup];
 
 function createLeaf(context, node) {
     const tile = context.renderer.simpleRect().append(context.group);

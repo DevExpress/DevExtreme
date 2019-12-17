@@ -178,7 +178,9 @@ const EditingController = modules.ViewController.inherit((function() {
         return result;
     };
 
-    var getButtonName = (button) => typeUtils.isObject(button) ? button.name : button;
+    function getButtonName(button) {
+        typeUtils.isObject(button) ? button.name : button;
+    }
 
     const getEditorType = (item) => {
         const column = item.column;
@@ -186,7 +188,7 @@ const EditingController = modules.ViewController.inherit((function() {
         return item.isCustomEditorType ? item.editorType : column.formItem && column.formItem.editorType;
     };
 
-    var forEachFormItems = (items, callBack) => {
+    const forEachFormItems = (items, callBack) => {
         items.forEach((item) => {
             if(item.items || item.tabs) {
                 forEachFormItems(item.items || item.tabs, callBack);
@@ -670,13 +672,12 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
             let key;
             let item;
-            let editData;
             let dataRowIndex = -1;
             let rowIndexOffset;
 
             this.update(changeType);
 
-            editData = this._editData;
+            const editData = this._editData;
             for(let i = 0; i < editData.length; i++) {
                 key = editData[i].key;
 
@@ -706,11 +707,10 @@ const EditingController = modules.ViewController.inherit((function() {
             let data;
             let editMode;
             let editData;
-            let editIndex;
             const columns = options.visibleColumns;
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
 
-            editIndex = getIndexByKey(key, that._editData);
+            const editIndex = getIndexByKey(key, that._editData);
 
             if(editIndex >= 0) {
                 editMode = getEditMode(that);
@@ -771,19 +771,17 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getInsertKey: function(parentKey) {
             const that = this;
-            let insertKey;
             const dataController = that._dataController;
             const rows = dataController.items();
-            let row;
             const editMode = getEditMode(that);
 
-            insertKey = {
+            const insertKey = {
                 parentKey,
                 pageIndex: dataController.pageIndex(),
                 rowIndex: that._getInsertRowIndex(parentKey)
             };
 
-            row = rows[insertKey.rowIndex];
+            const row = rows[insertKey.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
                 insertKey.rowIndex++;
@@ -2016,7 +2014,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const column = item.column;
             const editorType = getEditorType(item);
             const rowData = detailCellOptions.row && detailCellOptions.row.data;
-            var cellOptions = extend({}, detailCellOptions, {
+            const cellOptions = extend({}, detailCellOptions, {
                 data: rowData,
                 cellElement: null,
                 isOnForm: true,
@@ -2662,11 +2660,10 @@ module.exports = {
                     this.callBase();
                 },
                 reload: function(full, repaintChangesOnly) {
-                    let d;
                     const editingController = this.getController('editing');
 
                     !repaintChangesOnly && this._editingController.refresh();
-                    d = this.callBase.apply(this, arguments);
+                    const d = this.callBase.apply(this, arguments);
 
                     return d && d.done(function() {
                         editingController.resetRowAndPageIndices(true);
