@@ -3215,7 +3215,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input).type('1');
-        $input.trigger('focusout');
+        // $input.trigger('focusout');
         $('.dx-list-item').trigger('dxclick');
 
         assert.equal(instance.option('selectedItems').length, 1, 'selected items count');

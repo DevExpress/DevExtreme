@@ -590,9 +590,17 @@ var SelectBox = DropDownList.inherit({
         if(!this._preventNestedFocusEvent(e)) {
             this._clearSearchTimer();
             this._restoreInputText();
+
+            if(!this._isOverlayNestedTarget(e.relatedTarget) && this._isEditable()) {
+                this._searchCanceled();
+            }
         }
 
         this.callBase(e);
+    },
+
+    _isOverlayNestedTarget: function(target) {
+        return !!(this.content() && $(this.content()).parent().find(target).length);
     },
 
     _clearTextValue: function() {
