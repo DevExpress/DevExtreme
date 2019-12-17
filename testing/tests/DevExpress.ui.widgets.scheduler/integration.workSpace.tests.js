@@ -1928,7 +1928,7 @@ QUnit.test('Recurrent appointment with tail on next week has most top coordinate
     assert.ok(coords.top === 0, 'Appointment tail has most top coordinate');
 });
 
-QUnit.test('Workspace view has correct viewEndDate with empty groups and groupByDate = true (T815379)', function(assert) {
+QUnit.test('Workspace view has correct endViewDate with empty groups and groupByDate = true (T815379)', function(assert) {
     this.createInstance({
         dataSource: [],
         views: ['week'],
@@ -1949,5 +1949,48 @@ QUnit.test('Workspace view has correct viewEndDate with empty groups and groupBy
         height: 700
     });
 
-    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), 'Appointment tail has most top coordinate');
+    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), 'View has corrent endViewDate');
+});
+
+QUnit.test('Workspace view group header cells have same height as table cells (T837711)', function(assert) {
+    var priorityData = [
+        {
+            text: 'Low Priority',
+            id: 1
+        }, {
+            text: 'High Priority',
+            id: 2
+        }, {
+            text: 'High PriorityHigh PriorityHigh PriorityHigh PriorityHigh Priority Priority',
+            id: 5
+        }, {
+            text: 'High PriorityHighPriorityHighPriorityHighPriorityHighPriorityHigh Priority',
+            id: 6
+        }
+    ];
+
+    this.createInstance({
+        dataSource: [],
+        views: ['timelineMonth'],
+        currentView: 'timelineMonth',
+        currentDate: new Date(2018, 4, 21),
+        crossScrollingEnabled: true,
+        groups: ['priority'],
+        resources: [{
+            fieldExpr: 'priority',
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: 'Priority'
+        }],
+        height: 700
+    });
+
+    let headerCells = $('.dx-scheduler-group-header');
+
+    let firstHeaderCell = headerCells.eq(0),
+        fourthHeaderCell = headerCells.eq(3),
+        dateTableCell = $('.dx-scheduler-date-table-cell').eq(0);
+
+    assert.equal(firstHeaderCell.innerHeight(), fourthHeaderCell.innerHeight(), 'Header cells have same height');
+    assert.equal(firstHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');
 });
