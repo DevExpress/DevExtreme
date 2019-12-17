@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import TemplateManager from "core/template_manager";
 import { Template } from 'core/templates/template';
+import utilsTemplateManager from 'core/utils/template_manager';
+import { FunctionTemplate } from 'core/templates/function_template';
 
 QUnit.module("TemplateManager");
 
@@ -29,7 +31,7 @@ QUnit.test("should define custom createElement function", function(assert) {
 });
 
 QUnit.test("#defaultOptions", function(assert) {
-    const defaultOptions = TemplateManager.defaultOptions;
+    const defaultOptions = TemplateManager.createDefaultOptions();
 
     assert.ok(defaultOptions.integrationOptions, "integrationOptions are defined");
     assert.ok(defaultOptions.integrationOptions.watchMethod, "watchMethod is defined");
@@ -67,7 +69,7 @@ QUnit.test("#dispose", function(assert) {
 
 QUnit.module("TemplateManager method #extractTemplates");
 
-QUnit.test("should work", function(assert) {
+QUnit.test("should work without templates", function(assert) {
     const element = $('<div>');
     const templateManager = new TemplateManager();
 
@@ -81,7 +83,53 @@ QUnit.test("should extract defined templates", function(assert) {
     const templateManager = new TemplateManager();
 
     const { templates, anonymousTemplateMeta } = templateManager.extractTemplates(element);
-    assert.equal(templates.length, 1, "should return array without templates");
+    assert.equal(templates.length, 1, "should return array with template");
     assert.equal(Object.keys(anonymousTemplateMeta).length, 0, "should return empty meta object");
 });
 
+QUnit.test("should extract anonymous template", function(assert) {
+    const createElement = sinon.stub().returns('element');
+    const element = $('<div><div>123</div></div>');
+    const templateManager = new TemplateManager(createElement);
+
+    const { templates, anonymousTemplateMeta } = templateManager.extractTemplates(element);
+    assert.equal(templates.length, 0, "should return array without predefined templates");
+
+    assert.equal(anonymousTemplateMeta.name, 'template', "should return anonymous template name");
+    assert.equal(anonymousTemplateMeta.template, 'element', "should return anonymous template");
+    assert.equal(element.children().length, 0, "initial element should not has children");
+});
+
+QUnit.module("TemplateManager method #getTemplate", {
+    beforeEach: function() {
+        this.acquireTemplate = sinon.stub(utilsTemplateManager, 'acquireTemplate').returns('acquireTemplate result');
+    },
+    afterEach: function() {
+        this.acquireTemplate.restore();
+    }
+});
+
+QUnit.test("should work if template source is not a function", function(assert) {
+    const templates = { item: () => 'item' };
+    const templateSource = 'item';
+    const templateManager = new TemplateManager();
+
+    const template = templateManager.getTemplate(templateSource, templates, { isAsyncTemplate: false, skipTemplates: [] }, {});
+    assert.strictEqual(this.acquireTemplate.callCount, 1, "should call acquireTemplate only once");
+    assert.strictEqual(template, 'acquireTemplate result', "should return acquireTemplate result");
+});
+
+QUnit.test("should work if template source is a function", function(assert) {
+    const templates = { item: () => 'item' };
+    const templateSource = () => 'item';
+    const templateManager = new TemplateManager();
+    const options = { options: 'options' };
+    const render = sinon.spy();
+    this.acquireTemplate.returns({ render });
+
+    const template = templateManager.getTemplate(templateSource, templates, { isAsyncTemplate: false, skipTemplates: [] }, {});
+    assert.ok(template instanceof FunctionTemplate, "should return FunctionTemplate instance");
+
+    template._renderCore(options);
+    assert.ok(render.calledWith(options), "should called the `acquireTemplate` function with right args");
+});
