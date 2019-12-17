@@ -675,14 +675,23 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initStoreChangeHandlers();
     },
 
-    _setItemsSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter) {
+    _initSelectedItemsBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
         if(this._initialized || selectedKeys === null) {
             return;
         }
 
+        this._setItemsSelectionBySelectedKeysOption(items, selectedKeys, keyGetter, itemGetter);
+    },
+
+    _setItemsSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
         items.forEach((item) => {
             const itemKey = keyGetter(item);
             item.selected = selectedKeys.indexOf(itemKey) !== -1;
+
+            let children = itemGetter(item);
+            if(children && children.length) {
+                this._setItemsSelectionBySelectedKeysOption(children, selectedKeys, keyGetter, itemGetter);
+            }
         });
     },
 
@@ -1494,15 +1503,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _updateSelectionOptions: function() {
         const selectedNodes = this.getSelectedNodesKeys();
         this._setOptionSilent("selectedItemKeys", selectedNodes);
-
-        let items = [];
-        each(selectedNodes, (index, key) => {
-            let node = this._dataAdapter.getNodeByKey(key);
-            let itemData = this._dataAdapter.getPublicNode(node).itemData;
-            items.push(itemData);
-        });
-
-        this._setOptionSilent("selectedItems", items);
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1959,6 +1959,66 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     getSelectedNodesKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
+    },
+
+    /**
+     * @name dxTreeViewMethods.getSelectedNodes
+     * @publicName getNodes()
+     * @return Array<dxTreeViewNode>
+     */
+    /**
+     * @name dxTreeViewNode
+     * @type object
+     */
+    /**
+     * @name dxTreeViewNode.children
+     * @type Array<dxTreeViewNode>
+     */
+
+    /**
+     * @name dxTreeViewNode.disabled
+     * @type boolean
+     */
+
+    /**
+     * @name dxTreeViewNode.expanded
+     * @type boolean
+     */
+
+    /**
+     * @name dxTreeViewNode.itemData
+     * @type object
+     */
+
+    /**
+     * @name dxTreeViewNode.key
+     * @type any
+     */
+
+    /**
+     * @name dxTreeViewNode.parent
+     * @type dxTreeViewNode
+     */
+
+    /**
+     * @name dxTreeViewNode.selected
+     * @type boolean
+     */
+
+    /**
+     * @name dxTreeViewNode.text
+     * @type string
+     */
+    getSelectedNodes: function() {
+        let items = [];
+
+        each(this.getSelectedNodesKeys(), (index, key) => {
+            let node = this._dataAdapter.getNodeByKey(key);
+            let publicNode = this._dataAdapter.getPublicNode(node);
+            items.push(publicNode);
+        });
+
+        return items;
     },
 
     /**

@@ -314,6 +314,7 @@ configs.forEach(config => {
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
+            expectedKeys = [1, 2];
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1];
