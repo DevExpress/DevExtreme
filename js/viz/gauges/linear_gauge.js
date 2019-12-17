@@ -1,16 +1,16 @@
-var _each = require("../../core/utils/iterator").each,
+var _each = require('../../core/utils/iterator').each,
     _max = Math.max,
     _min = Math.min,
     _round = Math.round,
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    objectUtils = require("../../core/utils/object"),
-    dxBaseGauge = require("./base_gauge").dxBaseGauge,
-    dxGauge = require("./common").dxGauge,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    linearIndicatorsModule = require("./linear_indicators"),
-    createIndicatorCreator = require("./common").createIndicatorCreator,
-    LinearRangeContainer = require("./linear_range_container");
+    registerComponent = require('../../core/component_registrator'),
+    extend = require('../../core/utils/extend').extend,
+    objectUtils = require('../../core/utils/object'),
+    dxBaseGauge = require('./base_gauge').dxBaseGauge,
+    dxGauge = require('./common').dxGauge,
+    _normalizeEnum = require('../core/utils').normalizeEnum,
+    linearIndicatorsModule = require('./linear_indicators'),
+    createIndicatorCreator = require('./common').createIndicatorCreator,
+    LinearRangeContainer = require('./linear_range_container');
 
 var dxLinearGauge = dxGauge.inherit({
     _rootClass: 'dxg-linear-gauge',
@@ -21,8 +21,8 @@ var dxLinearGauge = dxGauge.inherit({
     },
     _gridSpacingFactor: 25,
     _scaleTypes: {
-        type: "xyAxes",
-        drawingType: "linear"
+        type: 'xyAxes',
+        drawingType: 'linear'
     },
 
     _getTicksOrientation: function(scaleOptions) {
@@ -32,7 +32,7 @@ var dxLinearGauge = dxGauge.inherit({
     _getThemeManagerOptions() {
         let options = this.callBase.apply(this, arguments);
 
-        options.subTheme = "_linear";
+        options.subTheme = '_linear';
         return options;
     },
 
@@ -67,8 +67,8 @@ var dxLinearGauge = dxGauge.inherit({
             isHorizontal = scaleOptions.isHorizontal,
             scale = that._scale;
 
-        canvas[isHorizontal ? "left" : "top"] = that._area[isHorizontal ? "startCoord" : "endCoord"];
-        canvas[isHorizontal ? "right" : "bottom"] = canvas[isHorizontal ? "width" : "height"] - that._area[isHorizontal ? "endCoord" : "startCoord"];
+        canvas[isHorizontal ? 'left' : 'top'] = that._area[isHorizontal ? 'startCoord' : 'endCoord'];
+        canvas[isHorizontal ? 'right' : 'bottom'] = canvas[isHorizontal ? 'width' : 'height'] - that._area[isHorizontal ? 'endCoord' : 'startCoord'];
 
         scale.draw(canvas);
         scale.shift({ left: -layout.x, top: -layout.y });
@@ -93,24 +93,24 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _getScaleLayoutValue: function() {
-        return this._area[this._area.vertical ? "x" : "y"];
+        return this._area[this._area.vertical ? 'x' : 'y'];
     },
 
     _getTicksCoefficients: function(options) {
         var coefs = { inner: 0, outer: 1 };
 
         if(this._area.vertical) {
-            if(options.horizontalOrientation === "left") {
+            if(options.horizontalOrientation === 'left') {
                 coefs.inner = 1;
                 coefs.outer = 0;
-            } else if(options.horizontalOrientation === "center") {
+            } else if(options.horizontalOrientation === 'center') {
                 coefs.inner = coefs.outer = 0.5;
             }
         } else {
-            if(options.verticalOrientation === "top") {
+            if(options.verticalOrientation === 'top') {
                 coefs.inner = 1;
                 coefs.outer = 0;
-            } else if(options.verticalOrientation === "center") {
+            } else if(options.verticalOrientation === 'center') {
                 coefs.inner = coefs.outer = 0.5;
             }
         }
@@ -121,11 +121,11 @@ var dxLinearGauge = dxGauge.inherit({
     _correctScaleIndents: function(result, indentFromTick, textParams) {
         var vertical = this._area.vertical;
         if(indentFromTick >= 0) {
-            result.max += indentFromTick + textParams[vertical ? "width" : "height"];
+            result.max += indentFromTick + textParams[vertical ? 'width' : 'height'];
         } else {
-            result.min -= -indentFromTick + textParams[vertical ? "width" : "height"];
+            result.min -= -indentFromTick + textParams[vertical ? 'width' : 'height'];
         }
-        result.indent = textParams[vertical ? "height" : "width"] / 2;
+        result.indent = textParams[vertical ? 'height' : 'width'] / 2;
     },
 
     _measureMainElements: function(elements, scaleMeasurement) {
@@ -232,16 +232,16 @@ var indicators = dxLinearGauge.prototype._factory.indicators = {};
 dxLinearGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
 indicators._default = linearIndicatorsModule._default;
-indicators["rectangle"] = linearIndicatorsModule["rectangle"];
-indicators["rhombus"] = linearIndicatorsModule["rhombus"];
-indicators["circle"] = linearIndicatorsModule["circle"];
-indicators["trianglemarker"] = linearIndicatorsModule["trianglemarker"];
-indicators["textcloud"] = linearIndicatorsModule["textcloud"];
-indicators["rangebar"] = linearIndicatorsModule["rangebar"];
+indicators['rectangle'] = linearIndicatorsModule['rectangle'];
+indicators['rhombus'] = linearIndicatorsModule['rhombus'];
+indicators['circle'] = linearIndicatorsModule['circle'];
+indicators['trianglemarker'] = linearIndicatorsModule['trianglemarker'];
+indicators['textcloud'] = linearIndicatorsModule['textcloud'];
+indicators['rangebar'] = linearIndicatorsModule['rangebar'];
 
 dxLinearGauge.prototype._factory.RangeContainer = LinearRangeContainer;
 
 
-registerComponent("dxLinearGauge", dxLinearGauge);
+registerComponent('dxLinearGauge', dxLinearGauge);
 
 module.exports = dxLinearGauge;

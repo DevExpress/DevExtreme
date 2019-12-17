@@ -8,7 +8,7 @@ var prettify = require('gulp-jsbeautifier');
 var context = require('./context.js');
 
 var removeDebug = lazyPipe().pipe(function() {
-    return replace(/\/{2,}#DEBUG[\s\S]*?\/{2,}#ENDDEBUG/g, "");
+    return replace(/\/{2,}#DEBUG[\s\S]*?\/{2,}#ENDDEBUG/g, '');
 });
 
 function saveLicenseComments(node, comment) {

@@ -1,10 +1,10 @@
-var noop = require("core/utils/common").noop,
-    themeModule = require("viz/themes"),
-    ThemeManager = require("viz/gauges/theme_manager").ThemeManager;
+var noop = require('core/utils/common').noop,
+    themeModule = require('viz/themes'),
+    ThemeManager = require('viz/gauges/theme_manager').ThemeManager;
 
 QUnit.module('ThemeManager', {
     createThemeManager: function() {
-        return new ThemeManager({ themeSection: "gauge" });
+        return new ThemeManager({ themeSection: 'gauge' });
     }
 });
 

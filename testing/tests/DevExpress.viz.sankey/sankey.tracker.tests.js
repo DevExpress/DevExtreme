@@ -1,14 +1,14 @@
-import $ from "jquery";
-import common, { createSankey, environment } from "./commonParts/common.js";
-import trackerModule from "viz/sankey/tracker";
-import tooltipModule from "viz/core/tooltip";
-import { name as clickEventName } from "events/click";
-import pointerEvents from "events/pointer";
-import { setTooltipCustomOptions } from "viz/sankey/tooltip";
-import domAdapter from "core/dom_adapter";
+import $ from 'jquery';
+import common, { createSankey, environment } from './commonParts/common.js';
+import trackerModule from 'viz/sankey/tracker';
+import tooltipModule from 'viz/core/tooltip';
+import { name as clickEventName } from 'events/click';
+import pointerEvents from 'events/pointer';
+import { setTooltipCustomOptions } from 'viz/sankey/tooltip';
+import domAdapter from 'core/dom_adapter';
 
 
-import dxSankey from "viz/sankey/sankey";
+import dxSankey from 'viz/sankey/sankey';
 dxSankey.addPlugin(trackerModule.plugin);
 dxSankey.addPlugin(tooltipModule.plugin);
 setTooltipCustomOptions(dxSankey);
@@ -16,7 +16,7 @@ setTooltipCustomOptions(dxSankey);
 var trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         common.environment.beforeEach.apply(this, arguments);
-        this.renderer.root.element = $("<div>").appendTo("#test-container")[0];
+        this.renderer.root.element = $('<div>').appendTo('#test-container')[0];
 
         this.linksGroupIndex = 0;
         this.nodesGroupIndex = 1;
@@ -28,15 +28,15 @@ var trackerEnvironment = $.extend({}, environment, {
     },
 
     trigger: function(name, data, options) {
-        var $target = $("<div>").appendTo(this.renderer.root.element);
+        var $target = $('<div>').appendTo(this.renderer.root.element);
         $target[0][trackerModule._TESTS_dataKey] = data;
         $target.trigger($.Event(name, options));
     }
 });
 
-QUnit.module("Initialization", trackerEnvironment);
+QUnit.module('Initialization', trackerEnvironment);
 
-QUnit.test("Set data for items", function(assert) {
+QUnit.test('Set data for items', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
     });
@@ -55,51 +55,51 @@ QUnit.test("Set data for items", function(assert) {
     assert.deepEqual(this.link(1)[1].data.lastCall.args, [trackerModule._TESTS_dataKey, 4]);
 });
 
-QUnit.module("Events", trackerEnvironment);
+QUnit.module('Events', trackerEnvironment);
 
-QUnit.test("Node hover on. Get item by tracker data", function(assert) {
+QUnit.test('Node hover on. Get item by tracker data', function(assert) {
     var widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
     this.trigger(pointerEvents.move, 2);
 
-    assert.strictEqual(widget.getAllNodes()[0].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, "node state");
+    assert.strictEqual(widget.getAllNodes()[0].isHovered(), false, 'node state');
+    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, 'node state');
+    assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, 'node state');
 
-    assert.strictEqual(widget.getAllLinks()[0].isAdjacentNodeHovered(), true, "adjacent links hovered");
-    assert.strictEqual(widget.getAllLinks()[1].isAdjacentNodeHovered(), true, "adjacent links hovered");
+    assert.strictEqual(widget.getAllLinks()[0].isAdjacentNodeHovered(), true, 'adjacent links hovered');
+    assert.strictEqual(widget.getAllLinks()[1].isAdjacentNodeHovered(), true, 'adjacent links hovered');
 });
 
-QUnit.test("Link hover on. Get item by tracker data", function(assert) {
+QUnit.test('Link hover on. Get item by tracker data', function(assert) {
     var widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
     this.trigger(pointerEvents.move, 3);
 
-    assert.strictEqual(widget.getAllNodes()[0].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllNodes()[2].isHovered(), false, "node state");
+    assert.strictEqual(widget.getAllNodes()[0].isHovered(), false, 'node state');
+    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, 'node state');
+    assert.strictEqual(widget.getAllNodes()[2].isHovered(), false, 'node state');
 
-    assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, "link state");
-    assert.strictEqual(widget.getAllLinks()[1].isHovered(), false, "link state");
+    assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, 'link state');
+    assert.strictEqual(widget.getAllLinks()[1].isHovered(), false, 'link state');
 });
 
-QUnit.test("Hover off", function(assert) {
+QUnit.test('Hover off', function(assert) {
     var widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
     this.trigger(pointerEvents.move, 2);
-    assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, "node is hovered");
+    assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, 'node is hovered');
 
     this.trigger(pointerEvents.move, 3);
-    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, "node is not hovered");
-    assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, "link is hovered");
+    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, 'node is not hovered');
+    assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, 'link is hovered');
 });
 
-QUnit.test("Click on node", function(assert) {
+QUnit.test('Click on node', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
     var spy = sinon.spy(),
         widget = createSankey({
@@ -109,11 +109,11 @@ QUnit.test("Click on node", function(assert) {
 
     this.trigger(clickEventName, 2, { pageX: 400, pageY: 300 });
 
-    assert.strictEqual(spy.callCount, 1, "call count");
-    assert.strictEqual(spy.lastCall.args[0].target, widget.getAllNodes()[2], "target");
+    assert.strictEqual(spy.callCount, 1, 'call count');
+    assert.strictEqual(spy.lastCall.args[0].target, widget.getAllNodes()[2], 'target');
 });
 
-QUnit.test("Click on link", function(assert) {
+QUnit.test('Click on link', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
     var spy = sinon.spy(),
         widget = createSankey({
@@ -124,14 +124,14 @@ QUnit.test("Click on link", function(assert) {
 
     this.trigger(clickEventName, 3, { pageX: 200, pageY: 200 });
 
-    assert.strictEqual(spy.callCount, 1, "call count");
-    assert.strictEqual(spy.lastCall.args[0].target, widget.getAllLinks()[0], "target");
+    assert.strictEqual(spy.callCount, 1, 'call count');
+    assert.strictEqual(spy.lastCall.args[0].target, widget.getAllLinks()[0], 'target');
 
 });
 
-QUnit.module("Tooltip", trackerEnvironment);
+QUnit.module('Tooltip', trackerEnvironment);
 
-QUnit.test("Show tooltip on hovered node", function(assert) {
+QUnit.test('Show tooltip on hovered node', function(assert) {
     var widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -139,14 +139,14 @@ QUnit.test("Show tooltip on hovered node", function(assert) {
         }
     });
 
-    sinon.spy(widget.getAllNodes()[2], "showTooltip");
+    sinon.spy(widget.getAllNodes()[2], 'showTooltip');
 
     this.trigger(pointerEvents.move, 2);
 
     assert.ok(widget.getAllNodes()[2].showTooltip.called);
 });
 
-QUnit.test("Show tooltip on hovered link", function(assert) {
+QUnit.test('Show tooltip on hovered link', function(assert) {
     var widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -154,14 +154,14 @@ QUnit.test("Show tooltip on hovered link", function(assert) {
         }
     });
 
-    sinon.spy(widget.getAllLinks()[0], "showTooltip");
+    sinon.spy(widget.getAllLinks()[0], 'showTooltip');
 
     this.trigger(pointerEvents.move, 3);
 
     assert.ok(widget.getAllLinks()[0].showTooltip.called);
 });
 
-QUnit.test("Show custom tooltip (text) on hovered node", function(assert) {
+QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
     var stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -176,7 +176,7 @@ QUnit.test("Show custom tooltip (text) on hovered node", function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
+QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
     var stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -191,7 +191,7 @@ QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
 });
 
-QUnit.test("Show custom tooltip (html) on hovered node", function(assert) {
+QUnit.test('Show custom tooltip (html) on hovered node', function(assert) {
     var stub = sinon.stub().returns({ html: 'custom html' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -206,7 +206,7 @@ QUnit.test("Show custom tooltip (html) on hovered node", function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test("Show custom tooltip (html) on hovered link", function(assert) {
+QUnit.test('Show custom tooltip (html) on hovered link', function(assert) {
     var stub = sinon.stub().returns({ html: 'custom html' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -222,7 +222,7 @@ QUnit.test("Show custom tooltip (html) on hovered link", function(assert) {
 });
 
 
-QUnit.test("Tooltip with template. Hover node - call node template", function(assert) {
+QUnit.test('Tooltip with template. Hover node - call node template', function(assert) {
     const nodeTooltipTemplate = sinon.spy();
     const linkTooltipTemplate = sinon.spy();
     createSankey({
@@ -242,7 +242,7 @@ QUnit.test("Tooltip with template. Hover node - call node template", function(as
     assert.equal(linkTooltipTemplate.callCount, 0);
 });
 
-QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
+QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
     const nodeTooltipTemplate = sinon.spy();
     const linkTooltipTemplate = sinon.spy();
     createSankey({
@@ -262,8 +262,8 @@ QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
     assert.equal(nodeTooltipTemplate.callCount, 0);
 });
 
-QUnit.test("Set skip template in tooltip cusomizeObject if templates are not defined", function(assert) {
-    const customizeLinkTooltip = sinon.spy(() => ({ html: "html" }));
+QUnit.test('Set skip template in tooltip cusomizeObject if templates are not defined', function(assert) {
+    const customizeLinkTooltip = sinon.spy(() => ({ html: 'html' }));
     const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -274,5 +274,5 @@ QUnit.test("Set skip template in tooltip cusomizeObject if templates are not def
 
     this.trigger(pointerEvents.move, 3, { pageX: 100, pageY: 100 });
 
-    assert.equal(sankey._tooltip._textHtml.html(), "html");
+    assert.equal(sankey._tooltip._textHtml.html(), 'html');
 });

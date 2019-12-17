@@ -1,11 +1,11 @@
-var noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    mathUtils = require("../../core/utils/math"),
-    dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
-    domAdapter = require("../../core/dom_adapter"),
-    Color = require("../../color"),
+var noop = require('../../core/utils/common').noop,
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    mathUtils = require('../../core/utils/math'),
+    dateToMilliseconds = require('../../core/utils/date').dateToMilliseconds,
+    domAdapter = require('../../core/dom_adapter'),
+    Color = require('../../color'),
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
     isExponential = typeUtils.isExponential,
@@ -131,7 +131,7 @@ var roundValue = function(value, precision) {
 };
 
 var getPower = function(value) {
-    return value.toExponential().split("e")[1];
+    return value.toExponential().split('e')[1];
 };
 
 function map(array, callback) {
@@ -257,16 +257,16 @@ extend(exports, {
         each(options || {}, function(key, value) {
             if(/^(cursor)$/i.test(key)) {
                 // TODO check other properties, add tests
-            } else if(key === "opacity") {
+            } else if(key === 'opacity') {
                 value = null;
-            } else if(key === "color") {
-                key = "fill";
-                if("opacity" in options) {
+            } else if(key === 'color') {
+                key = 'fill';
+                if('opacity' in options) {
                     const color = new Color(value);
                     value = `rgba(${color.r},${color.g},${color.b},${options.opacity})`;
                 }
             } else {
-                key = "font-" + key;
+                key = 'font-' + key;
             }
             fontOptions[key] = value;
         });
@@ -378,14 +378,14 @@ extend(exports, {
             let unit = 0;
             let parsedHeight = parseFloat(height) || undefined;
 
-            if(typeUtils.isString(height) && height.indexOf("px") > -1 ||
+            if(typeUtils.isString(height) && height.indexOf('px') > -1 ||
                 typeUtils.isNumeric(height) && height > 1) {
                 parsedHeight = _round(parsedHeight);
                 unit = 1;
             }
 
             if(!unit && parsedHeight) {
-                if(typeUtils.isString(height) && height.indexOf("%") > -1) {
+                if(typeUtils.isString(height) && height.indexOf('%') > -1) {
                     parsedHeight = parsedHeight / 100;
                 } else if(parsedHeight < 0) {
                     parsedHeight = parsedHeight < -1 ? 1 : _math.abs(parsedHeight);
@@ -418,8 +418,8 @@ extend(exports, {
         const padding = PANE_PADDING;
         const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
         let usefulSpace = paneSpace - padding * (panes.length - 1);
-        const startName = rotated ? "left" : "top";
-        const endName = rotated ? "right" : "bottom";
+        const startName = rotated ? 'left' : 'top';
+        const endName = rotated ? 'right' : 'bottom';
 
         const totalCustomSpace = panes.reduce((prev, cur) => prev + (cur.unit ? cur.height : 0), 0);
         usefulSpace -= totalCustomSpace;
@@ -488,13 +488,13 @@ function convertVisualRangeObject(visualRange, convertToVisualRange) {
 
 function getAddFunction(range, correctZeroLevel) {
     // T170398
-    if(range.dataType === "datetime") {
+    if(range.dataType === 'datetime') {
         return function(rangeValue, marginValue, sign = 1) {
             return new Date(rangeValue.getTime() + sign * marginValue);
         };
     }
 
-    if(range.axisType === "logarithmic") {
+    if(range.axisType === 'logarithmic') {
         return function(rangeValue, marginValue, sign = 1) {
             var log = getLogExt(rangeValue, range.base) + sign * marginValue;
             return raiseToExt(log, range.base);
@@ -510,7 +510,7 @@ function getAddFunction(range, correctZeroLevel) {
 function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     const minDefined = typeUtils.isDefined(visualRange.startValue);
     const maxDefined = typeUtils.isDefined(visualRange.endValue);
-    const nonDiscrete = options.axisType !== "discrete";
+    const nonDiscrete = options.axisType !== 'discrete';
 
     dataRange = dataRange || wholeRange;
 
@@ -530,7 +530,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
 
     if(isDefined(rangeLength)) {
         if(nonDiscrete) {
-            if(options.dataType === "datetime" && !isNumber(rangeLength)) {
+            if(options.dataType === 'datetime' && !isNumber(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
             }
 

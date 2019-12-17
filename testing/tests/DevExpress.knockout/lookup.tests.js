@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    fx = require('animation/fx'),
+    executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
+    ko = require('knockout');
 
-require("ui/lookup");
-require("integration/knockout");
+require('ui/lookup');
+require('integration/knockout');
 
 QUnit.testStart(function() {
     var markup =
@@ -16,20 +16,20 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'item\' }">Template</div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-var LIST_CLASS = "dx-list";
+var LIST_CLASS = 'dx-list';
 
 var toSelector = function(val) {
-    return "." + val;
+    return '.' + val;
 };
 
 var openPopupWithList = function(lookup) {
-    $(lookup._$field).trigger("dxclick");
+    $(lookup._$field).trigger('dxclick');
 };
 
-QUnit.module("list options", {
+QUnit.module('list options', {
     beforeEach: function() {
         fx.off = true;
         executeAsyncMock.setup();
@@ -42,28 +42,28 @@ QUnit.module("list options", {
     }
 });
 
-QUnit.test("lookup should delegate templates to child widgets (T131530)", function(assert) {
-    var $lookup = $("#T131530");
+QUnit.test('lookup should delegate templates to child widgets (T131530)', function(assert) {
+    var $lookup = $('#T131530');
     ko.applyBindings({}, $lookup.get(0));
 
-    var lookup = $lookup.dxLookup("instance");
+    var lookup = $lookup.dxLookup('instance');
 
     openPopupWithList(lookup);
 
     var $list = $(toSelector(LIST_CLASS));
 
-    assert.equal($.trim($list.find(".dx-list-item").text()), "TemplateTemplate");
+    assert.equal($.trim($list.find('.dx-list-item').text()), 'TemplateTemplate');
 });
 
-QUnit.test("lookup with item template", function(assert) {
-    var $lookup = $("#lookupWithItemTemplate");
+QUnit.test('lookup with item template', function(assert) {
+    var $lookup = $('#lookupWithItemTemplate');
     ko.applyBindings({}, $lookup.get(0));
 
-    var lookup = $lookup.dxLookup("instance");
+    var lookup = $lookup.dxLookup('instance');
 
     openPopupWithList(lookup);
 
     var $list = $(toSelector(LIST_CLASS));
 
-    assert.equal($.trim($list.find(".dx-list-item").text()), "Template");
+    assert.equal($.trim($list.find('.dx-list-item').text()), 'Template');
 });

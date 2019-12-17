@@ -1,8 +1,8 @@
 /* global currentTest */
 
-var vizMocks = require("../../helpers/vizMocks.js"),
-    linearIndicatorsModule = require("viz/gauges/linear_indicators"),
-    Translator1D = require("viz/translators/translator1d").Translator1D;
+var vizMocks = require('../../helpers/vizMocks.js'),
+    linearIndicatorsModule = require('viz/gauges/linear_indicators'),
+    Translator1D = require('viz/translators/translator1d').Translator1D;
 
 var rangeBar,
     renderer,
@@ -19,7 +19,7 @@ QUnit.module('LinearRangeBar', {
             detach: function(arg) { this.detached = arg; }
         };
         var translator = new Translator1D(0, 100, 300, 400);
-        rangeBar = new linearIndicatorsModule["rangebar"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
+        rangeBar = new linearIndicatorsModule['rangebar']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
             y: 100
@@ -43,7 +43,7 @@ QUnit.module('LinearRangeBar', {
             baseValue: 50,
             currentValue: 25
         };
-        var baseCreateText = renderer.stub("text");
+        var baseCreateText = renderer.stub('text');
         renderer.text = sinon.spy(function() {
             var text = baseCreateText.apply(this, arguments);
             text.getBBox = sinon.spy(function() { return { x: -20, y: -10, width: 40, height: 16 }; });
@@ -216,7 +216,7 @@ QUnit.test('render - horizontal, top, with text', function(assert) {
         points: [325, 100, 325, 109, 327, 109, 327, 100],
         'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
     assert.ok(rangeBar._line.sharp.lastCall.calledAfter(rangeBar._line.attr.lastCall), '_line is sharped');
@@ -242,7 +242,7 @@ QUnit.test('render - horizontal, bottom, with text', function(assert) {
         points: [325, 100, 325, 91, 327, 91, 327, 100],
         'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
     assert.ok(rangeBar._line.sharp.lastCall.calledAfter(rangeBar._line.attr.lastCall), '_line is sharped');
@@ -267,7 +267,7 @@ QUnit.test('render - vertical, left, with text', function(assert) {
         points: [200, 325, 200, 327, 209, 327, 209, 325],
         'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
     assert.ok(rangeBar._line.sharp.lastCall.calledAfter(rangeBar._line.attr.lastCall), '_line is sharped');
@@ -294,7 +294,7 @@ QUnit.test('render - vertical, right, with text', function(assert) {
         points: [200, 325, 200, 327, 191, 327, 191, 325],
         'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
     assert.ok(rangeBar._line.sharp.lastCall.calledAfter(rangeBar._line.attr.lastCall), '_line is sharped');
@@ -319,7 +319,7 @@ QUnit.test('render - currentValue and baseValue are reversed, with text', functi
         points: [373, 100, 373, 109, 375, 109, 375, 100],
         'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
     assert.ok(rangeBar._line.sharp.lastCall.calledAfter(rangeBar._line.attr.lastCall), '_line is sharped');

@@ -1,4 +1,4 @@
-import { ensureDefined } from "../../core/utils/common";
+import { ensureDefined } from '../../core/utils/common';
 
 let baseZIndex = 1500;
 let zIndexStack = [];

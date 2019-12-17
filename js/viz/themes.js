@@ -1,7 +1,7 @@
-var extend = require("../core/utils/extend").extend,
-    each = require("../core/utils/iterator").each,
-    vizUtils = require("./core/utils"),
-    uiThemes = require("../ui/themes"),
+var extend = require('../core/utils/extend').extend,
+    each = require('../core/utils/iterator').each,
+    vizUtils = require('./core/utils'),
+    uiThemes = require('../ui/themes'),
     themes = {},
     themesMapping = {},
     themesSchemeMapping = {},
@@ -89,12 +89,12 @@ function mergeObject(target, field, source, sourceValue) {
 function patchTheme(theme) {
     theme = _extend(true, {
         loadingIndicator: { font: {} },
-        "export": { font: {} },
+        'export': { font: {} },
         legend: { font: {}, border: {} },
         title: { font: {} },
         tooltip: { font: {} },
-        "chart:common": {},
-        "chart:common:axis": { grid: {}, minorGrid: {}, tick: {}, minorTick: {}, title: { font: {} }, label: { font: {} } },
+        'chart:common': {},
+        'chart:common:axis': { grid: {}, minorGrid: {}, tick: {}, minorTick: {}, title: { font: {} }, label: { font: {} } },
         chart: { commonSeriesSettings: { candlestick: {} } },
         pie: {},
         polar: {},
@@ -109,49 +109,49 @@ function patchTheme(theme) {
         bullet: {}
     }, theme);
 
-    mergeScalar(theme.loadingIndicator, "backgroundColor", theme);
-    mergeScalar(theme.chart.commonSeriesSettings.candlestick, "innerColor", null, theme.backgroundColor);
-    mergeScalar(theme.map.background, "color", null, theme.backgroundColor);
-    mergeScalar(theme.title.font, "color", null, theme.primaryTitleColor);
-    mergeObject(theme.title, "subtitle", null, theme.title);
-    mergeScalar(theme.legend.font, "color", null, theme.secondaryTitleColor);
-    mergeScalar(theme.legend.border, "color", null, theme.gridColor);
+    mergeScalar(theme.loadingIndicator, 'backgroundColor', theme);
+    mergeScalar(theme.chart.commonSeriesSettings.candlestick, 'innerColor', null, theme.backgroundColor);
+    mergeScalar(theme.map.background, 'color', null, theme.backgroundColor);
+    mergeScalar(theme.title.font, 'color', null, theme.primaryTitleColor);
+    mergeObject(theme.title, 'subtitle', null, theme.title);
+    mergeScalar(theme.legend.font, 'color', null, theme.secondaryTitleColor);
+    mergeScalar(theme.legend.border, 'color', null, theme.gridColor);
     patchAxes(theme);
-    _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector", "sparkline", "bullet", "sankey"], function(_, section) {
-        mergeScalar(theme[section], "redrawOnResize", theme);
-        mergeScalar(theme[section], "containerBackgroundColor", null, theme.backgroundColor);
-        mergeObject(theme[section], "tooltip", theme);
-        mergeObject(theme[section], "export", theme);
+    _each(['chart', 'pie', 'polar', 'gauge', 'barGauge', 'map', 'treeMap', 'funnel', 'rangeSelector', 'sparkline', 'bullet', 'sankey'], function(_, section) {
+        mergeScalar(theme[section], 'redrawOnResize', theme);
+        mergeScalar(theme[section], 'containerBackgroundColor', null, theme.backgroundColor);
+        mergeObject(theme[section], 'tooltip', theme);
+        mergeObject(theme[section], 'export', theme);
     });
-    _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector", "sankey"], function(_, section) {
-        mergeObject(theme[section], "loadingIndicator", theme);
-        mergeObject(theme[section], "legend", theme);
-        mergeObject(theme[section], "title", theme);
+    _each(['chart', 'pie', 'polar', 'gauge', 'barGauge', 'map', 'treeMap', 'funnel', 'rangeSelector', 'sankey'], function(_, section) {
+        mergeObject(theme[section], 'loadingIndicator', theme);
+        mergeObject(theme[section], 'legend', theme);
+        mergeObject(theme[section], 'title', theme);
     });
 
-    _each(["chart", "pie", "polar"], function(_, section) {
-        mergeObject(theme, section, null, theme["chart:common"]);
+    _each(['chart', 'pie', 'polar'], function(_, section) {
+        mergeObject(theme, section, null, theme['chart:common']);
     });
-    _each(["chart", "polar"], function(_, section) {
+    _each(['chart', 'polar'], function(_, section) {
         theme[section] = theme[section] || {};
-        mergeObject(theme[section], "commonAxisSettings", null, theme["chart:common:axis"]);
+        mergeObject(theme[section], 'commonAxisSettings', null, theme['chart:common:axis']);
     });
-    mergeObject(theme.rangeSelector.chart, "commonSeriesSettings", theme.chart);
-    mergeObject(theme.rangeSelector.chart, "dataPrepareSettings", theme.chart);
+    mergeObject(theme.rangeSelector.chart, 'commonSeriesSettings', theme.chart);
+    mergeObject(theme.rangeSelector.chart, 'dataPrepareSettings', theme.chart);
 
-    mergeScalar(theme.treeMap.group.border, "color", null, theme.gridColor);
-    mergeScalar(theme.treeMap.tile.selectionStyle.border, "color", null, theme.primaryTitleColor);
-    mergeScalar(theme.treeMap.group.selectionStyle.border, "color", null, theme.primaryTitleColor);
+    mergeScalar(theme.treeMap.group.border, 'color', null, theme.gridColor);
+    mergeScalar(theme.treeMap.tile.selectionStyle.border, 'color', null, theme.primaryTitleColor);
+    mergeScalar(theme.treeMap.group.selectionStyle.border, 'color', null, theme.primaryTitleColor);
 
-    mergeScalar(theme.map.legend, "backgroundColor", theme);
+    mergeScalar(theme.map.legend, 'backgroundColor', theme);
     patchMapLayers(theme);
 
     return theme;
 }
 
 function patchAxes(theme) {
-    var commonAxisSettings = theme["chart:common:axis"],
-        colorFieldName = "color";
+    var commonAxisSettings = theme['chart:common:axis'],
+        colorFieldName = 'color';
     _each([commonAxisSettings.grid, commonAxisSettings.minorGrid], function(_, obj) {
         mergeScalar(obj, colorFieldName, null, theme.gridColor);
     });
@@ -167,11 +167,11 @@ function patchAxes(theme) {
 
 function patchMapLayers(theme) {
     var map = theme.map;
-    _each(["area", "line", "marker"], function(_, section) {
-        mergeObject(map, "layer:" + section, null, map.layer);
+    _each(['area', 'line', 'marker'], function(_, section) {
+        mergeObject(map, 'layer:' + section, null, map.layer);
     });
-    _each(["dot", "bubble", "pie", "image"], function(_, section) {
-        mergeObject(map, "layer:marker:" + section, null, map["layer:marker"]);
+    _each(['dot', 'bubble', 'pie', 'image'], function(_, section) {
+        mergeObject(map, 'layer:marker:' + section, null, map['layer:marker']);
     });
 }
 

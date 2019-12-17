@@ -1,33 +1,33 @@
 /* global Windows */
-import $ from "../core/renderer";
-import domAdapter from "../core/dom_adapter";
-import windowUtils from "../core/utils/window";
-import eventsEngine from "../events/core/events_engine";
-import errors from "../ui/widget/ui.errors";
-import typeUtils from "../core/utils/type";
-import { logger } from "../core/utils/console";
+import $ from '../core/renderer';
+import domAdapter from '../core/dom_adapter';
+import windowUtils from '../core/utils/window';
+import eventsEngine from '../events/core/events_engine';
+import errors from '../ui/widget/ui.errors';
+import typeUtils from '../core/utils/type';
+import { logger } from '../core/utils/console';
 
 const window = windowUtils.getWindow();
 const navigator = windowUtils.getNavigator();
 
 const FILE_EXTESIONS = {
-    EXCEL: "xlsx",
-    CSS: "css",
-    PNG: "png",
-    JPEG: "jpeg",
-    GIF: "gif",
-    SVG: "svg",
-    PDF: "pdf"
+    EXCEL: 'xlsx',
+    CSS: 'css',
+    PNG: 'png',
+    JPEG: 'jpeg',
+    GIF: 'gif',
+    SVG: 'svg',
+    PDF: 'pdf'
 };
 
 const MIME_TYPES = exports.MIME_TYPES = {
-    CSS: "text/css",
-    EXCEL: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    PNG: "image/png",
-    JPEG: "image/jpeg",
-    GIF: "image/gif",
-    SVG: "image/svg+xml",
-    PDF: "application/pdf"
+    CSS: 'text/css',
+    EXCEL: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    PNG: 'image/png',
+    JPEG: 'image/jpeg',
+    GIF: 'image/gif',
+    SVG: 'image/svg+xml',
+    PDF: 'application/pdf'
 };
 
 // Use github.com/eligrey/FileSaver.js library instead this method
@@ -36,29 +36,29 @@ exports.fileSaver = {
     _revokeObjectURLTimeout: 30000,
 
     _getDataUri: function(format, data) {
-        return "data:" + MIME_TYPES[format] + ";base64," + data;
+        return 'data:' + MIME_TYPES[format] + ';base64,' + data;
     },
 
     _linkDownloader: function(fileName, href) {
         var exportLinkElement = domAdapter.createElement('a');
         exportLinkElement.download = fileName;
         exportLinkElement.href = href;
-        exportLinkElement.target = "_blank"; // cors policy
+        exportLinkElement.target = '_blank'; // cors policy
 
         return exportLinkElement;
     },
 
     _formDownloader: function(proxyUrl, fileName, contentType, data) {
-        var formAttributes = { method: "post", action: proxyUrl, enctype: "multipart/form-data" },
-            exportForm = $("<form>").css({ "display": "none" }).attr(formAttributes);
+        var formAttributes = { method: 'post', action: proxyUrl, enctype: 'multipart/form-data' },
+            exportForm = $('<form>').css({ 'display': 'none' }).attr(formAttributes);
 
-        exportForm.append("<input type=\"hidden\" name=\"fileName\" value=\"" + fileName + "\" />");
-        exportForm.append("<input type=\"hidden\" name=\"contentType\" value=\"" + contentType + "\" />");
-        exportForm.append("<input type=\"hidden\" name=\"data\" value=\"" + data + "\" />");
-        exportForm.appendTo("body");
-        eventsEngine.trigger(exportForm, "submit");
+        exportForm.append('<input type="hidden" name="fileName" value="' + fileName + '" />');
+        exportForm.append('<input type="hidden" name="contentType" value="' + contentType + '" />');
+        exportForm.append('<input type="hidden" name="data" value="' + data + '" />');
+        exportForm.appendTo('body');
+        eventsEngine.trigger(exportForm, 'submit');
 
-        if(eventsEngine.trigger(exportForm, "submit")) exportForm.remove();
+        if(eventsEngine.trigger(exportForm, 'submit')) exportForm.remove();
         ///#DEBUG
         return exportForm;
         ///#ENDDEBUG
@@ -71,7 +71,7 @@ exports.fileSaver = {
     _winJSBlobSave: function(blob, fileName, format) {
         var savePicker = new Windows.Storage.Pickers.FileSavePicker();
         savePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.documentsLibrary;
-        savePicker.fileTypeChoices.insert(MIME_TYPES[format], ["." + FILE_EXTESIONS[format]]);
+        savePicker.fileTypeChoices.insert(MIME_TYPES[format], ['.' + FILE_EXTESIONS[format]]);
         savePicker.suggestedFileName = fileName;
 
         savePicker.pickSaveFileAsync().then(function(file) {
@@ -123,16 +123,16 @@ exports.fileSaver = {
 
                 this._click(downloadLink);
             } else {
-                logger.warn("window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL is not defined");
+                logger.warn('window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL is not defined');
             }
         }
     },
 
     saveAs: function(fileName, format, data, proxyURL, forceProxy) {
-        fileName += "." + FILE_EXTESIONS[format];
+        fileName += '.' + FILE_EXTESIONS[format];
 
         if(typeUtils.isDefined(proxyURL)) {
-            errors.log("W0001", "Export", "proxyURL", "19.2", "This option is no longer required");
+            errors.log('W0001', 'Export', 'proxyURL', '19.2', 'This option is no longer required');
         }
 
         if(forceProxy) {
@@ -143,7 +143,7 @@ exports.fileSaver = {
             if(typeUtils.isDefined(proxyURL) && !typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
                 this._saveByProxy(proxyURL, fileName, format, data);
             } else {
-                if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log("E1034");
+                if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log('E1034');
 
                 var downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
                 this._click(downloadLink);

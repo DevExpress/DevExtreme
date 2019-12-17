@@ -7,7 +7,7 @@ QUnit.testStart(function() {
     </div>\
 ';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 import 'common.css!';
@@ -24,7 +24,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupTreeListModules(this, ["data", "columns", "columnHeaders", "rows", "gridView"],
+    setupTreeListModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView'],
         {
             initViews: true,
             controllers: {
@@ -37,40 +37,40 @@ function createGridView(options, userOptions) {
         });
 
     this.$element = function() {
-        return $("#treeList");
+        return $('#treeList');
     };
 
     return this._views.gridView;
 }
 
-QUnit.module("Synchronize columns", {
+QUnit.module('Synchronize columns', {
     beforeEach: function() {
         this.createGridView = createGridView;
     }
 });
 
-QUnit.test("Synchronization widths of columns when 'columnAutoWidth' option is enabled", function(assert) {
+QUnit.test('Synchronization widths of columns when \'columnAutoWidth\' option is enabled', function(assert) {
     // arrange
     var done = assert.async(),
         $cellElement,
         realWidth = 0,
         columnsController = new MockColumnsController([
             {
-                caption: "Column 1",
+                caption: 'Column 1',
                 cellTemplate: function($container, options) {
-                    return $("<div/>", { css: { display: "inline-block" } }).text(options.value);
+                    return $('<div/>', { css: { display: 'inline-block' } }).text(options.value);
                 }
             },
-            { caption: "Column 2" }
+            { caption: 'Column 2' }
         ]),
         dataController = new MockDataController({
-            items: [{ rowType: "data", values: ["Test Test Test Test Test Test Test Test Test", "Test"], node: { hasChildren: true }, level: 0 }]
+            items: [{ rowType: 'data', values: ['Test Test Test Test Test Test Test Test Test', 'Test'], node: { hasChildren: true }, level: 0 }]
         }),
         gridView = this.createGridView({
             columnsController: columnsController,
             dataController: dataController
         }, { columnAutoWidth: true }),
-        $testElement = $("<div />").width(350).appendTo($("#treeList"));
+        $testElement = $('<div />').width(350).appendTo($('#treeList'));
 
     // act
     gridView.render($testElement);
@@ -82,12 +82,12 @@ QUnit.test("Synchronization widths of columns when 'columnAutoWidth' option is e
     // assert
     // wait for a font to load
     setTimeout(function() {
-        $cellElement = $testElement.find(".dx-treelist-rowsview").find("tbody > tr").first().children().first();
+        $cellElement = $testElement.find('.dx-treelist-rowsview').find('tbody > tr').first().children().first();
         $.each($cellElement.children(), function() {
             realWidth += $(this).outerWidth();
         });
 
-        assert.ok($cellElement.width() >= Math.round(realWidth), "correct width of first column");
+        assert.ok($cellElement.width() >= Math.round(realWidth), 'correct width of first column');
         done();
     });
 });

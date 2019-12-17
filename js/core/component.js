@@ -1,20 +1,20 @@
-var Config = require("./config"),
-    extend = require("./utils/extend").extend,
-    optionManager = require("./option_manager").OptionManager,
-    bracketsToDots = require("./utils/data").bracketsToDots,
-    Class = require("./class"),
-    Action = require("./action"),
-    errors = require("./errors"),
-    commonUtils = require("./utils/common"),
-    typeUtils = require("./utils/type"),
-    objectUtils = require("./utils/object"),
-    deferredUtils = require("../core/utils/deferred"),
+var Config = require('./config'),
+    extend = require('./utils/extend').extend,
+    optionManager = require('./option_manager').OptionManager,
+    bracketsToDots = require('./utils/data').bracketsToDots,
+    Class = require('./class'),
+    Action = require('./action'),
+    errors = require('./errors'),
+    commonUtils = require('./utils/common'),
+    typeUtils = require('./utils/type'),
+    objectUtils = require('./utils/object'),
+    deferredUtils = require('../core/utils/deferred'),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
-    Callbacks = require("./utils/callbacks"),
-    EventsMixin = require("./events_mixin"),
-    publicComponentUtils = require("./utils/public_component"),
-    devices = require("./devices"),
+    Callbacks = require('./utils/callbacks'),
+    EventsMixin = require('./events_mixin'),
+    publicComponentUtils = require('./utils/public_component'),
+    devices = require('./devices'),
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
 
@@ -65,7 +65,7 @@ class PostponedOperations {
 }
 
 const normalizeOptions = (options, value) => {
-    if(typeof options !== "string") return options;
+    if(typeof options !== 'string') return options;
 
     const result = {};
     result[options] = value;
@@ -254,33 +254,33 @@ var Component = Class.inherit({
     _init: function() {
         this._createOptionChangedAction();
 
-        this.on("disposing", function(args) {
+        this.on('disposing', function(args) {
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
     },
 
     _logDeprecatedWarning(option, info) {
-        var message = info.message || ("Use the '" + info.alias + "' option instead");
-        errors.log("W0001", this.NAME, option, info.since, message);
+        var message = info.message || ('Use the \'' + info.alias + '\' option instead');
+        errors.log('W0001', this.NAME, option, info.since, message);
     },
 
     _createOptionChangedAction: function() {
-        this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly"] });
+        this._optionChangedAction = this._createActionByOption('onOptionChanged', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     _createDisposingAction: function() {
-        this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly"] });
+        this._disposingAction = this._createActionByOption('onDisposing', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onDisposing":
-            case "onInitialized":
+            case 'onDisposing':
+            case 'onInitialized':
                 break;
-            case "onOptionChanged":
+            case 'onOptionChanged':
                 this._createOptionChangedAction();
                 break;
-            case "defaultOptionsRules":
+            case 'defaultOptionsRules':
                 break;
         }
     },
@@ -326,7 +326,7 @@ var Component = Class.inherit({
                 } finally {
                     this._initializing = false;
                     this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+                    this._createActionByOption('onInitialized', { excludeValidators: ['disabled', 'readOnly'] })();
                     this._updateLockCount--;
                     this._initialized = true;
                 }
@@ -363,7 +363,7 @@ var Component = Class.inherit({
     initialOption: function(optionName) {
         if(!this._initialOptions) {
             this._initialOptions = this._getDefaultOptions();
-            const rulesOptions = this._getOptionByRules(this._getOptionByStealth("defaultOptionsRules"));
+            const rulesOptions = this._getOptionByRules(this._getOptionByStealth('defaultOptionsRules'));
             this._optionManager.setValueByReference(this._initialOptions, rulesOptions);
         }
 
@@ -412,16 +412,16 @@ var Component = Class.inherit({
             if(!eventName) {
                 config = config || {};
 
-                if(typeof optionName !== "string") {
-                    throw errors.Error("E0008");
+                if(typeof optionName !== 'string') {
+                    throw errors.Error('E0008');
                 }
 
-                if(optionName.indexOf("on") === 0) {
+                if(optionName.indexOf('on') === 0) {
                     eventName = that._getEventName(optionName);
                 }
                 ///#DEBUG
-                if(optionName.indexOf("on") !== 0) {
-                    throw Error("The '" + optionName + "' option name should start with 'on' prefix");
+                if(optionName.indexOf('on') !== 0) {
+                    throw Error('The \'' + optionName + '\' option name should start with \'on\' prefix');
                 }
                 ///#ENDDEBUG
 
@@ -442,7 +442,7 @@ var Component = Class.inherit({
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                var beforeActionExecute = that.option("beforeActionExecute") || noop;
+                var beforeActionExecute = that.option('beforeActionExecute') || noop;
                 var wrappedAction = beforeActionExecute(that, action, config) || action;
                 return wrappedAction.apply(that, arguments);
             }
@@ -451,7 +451,7 @@ var Component = Class.inherit({
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            var onActionCreated = that.option("onActionCreated") || noop;
+            var onActionCreated = that.option('onActionCreated') || noop;
             result = onActionCreated(that, result, config) || result;
         }
 
@@ -519,7 +519,7 @@ var Component = Class.inherit({
      * @param1 options:object
      */
     option: function(options, value) {
-        if(arguments.length < 2 && typeUtils.type(options) !== "object") {
+        if(arguments.length < 2 && typeUtils.type(options) !== 'object') {
             return this._optionManager.getValue(options);
         }
 
@@ -545,7 +545,7 @@ var Component = Class.inherit({
         let defaultValue;
         if(name.search(/\.|\[/) !== -1) {
             name = bracketsToDots(name);
-            const fullPath = name.split(".");
+            const fullPath = name.split('.');
             fullPath.forEach((path) => {
                 defaultValue = defaultValue ? defaultValue[path] : this.initialOption(path);
             });

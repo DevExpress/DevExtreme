@@ -1,17 +1,17 @@
 /* global createTestContainer */
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    dxCircularGauge = require("viz/circular_gauge"),
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    dxCircularGauge = require('viz/circular_gauge'),
     factory = dxCircularGauge.prototype._factory,
-    axisModule = require("viz/axes/base_axis"),
-    Class = require("core/class"),
-    rendererModule = require("viz/core/renderers/renderer");
+    axisModule = require('viz/axes/base_axis'),
+    Class = require('core/class'),
+    rendererModule = require('viz/core/renderers/renderer');
 
-$('<div id="test-container">').appendTo("#qunit-fixture");
+$('<div id="test-container">').appendTo('#qunit-fixture');
 
 factory.RangeContainer = function(parameters) {
-    parameters.className = "test-range-container";
+    parameters.className = 'test-range-container';
     var item = new TestElement(parameters);
     item.measure = function(layout) {
         return {
@@ -24,7 +24,7 @@ factory.RangeContainer = function(parameters) {
 
 factory.createIndicator = function(parameters) {
     var item = new TestPointerElement(parameters);
-    if(parameters.className === "dxg-value-indicator") {
+    if(parameters.className === 'dxg-value-indicator') {
         item.measure = function(layout) {
             return {
                 max: layout.radius,
@@ -32,7 +32,7 @@ factory.createIndicator = function(parameters) {
                 inverseVerticalOffset: this.options.inverseVerticalOffset
             };
         };
-    } else if(parameters.className === "dxg-subvalue-indicator") {
+    } else if(parameters.className === 'dxg-subvalue-indicator') {
         item.measure = function(layout) {
             return {
                 min: layout.radius,
@@ -54,7 +54,7 @@ var TestElement = Class.inherit({
         this.incidentOccurred = parameters.incidentOccurred;
         this.tracker = parameters.tracker;
         this.className = parameters.className;
-        this.root = this.renderer.g().attr({ "class": parameters.className });
+        this.root = this.renderer.g().attr({ 'class': parameters.className });
     },
 
     dispose: function() {
@@ -63,7 +63,7 @@ var TestElement = Class.inherit({
     },
 
     render: function(options) {
-        this.root = this.root || this.renderer.g().attr({ "class": this.className });
+        this.root = this.root || this.renderer.g().attr({ 'class': this.className });
         this.options = this._options = options;
         this.enabled = true;
         this.root.append(this.owner || this.container);
@@ -104,7 +104,7 @@ var TestPointerElement = TestElement.inherit({
 (function circularGauge() {
     rendererModule.Renderer = sinon.stub();
 
-    sinon.stub(axisModule, "Axis", function(parameters) {
+    sinon.stub(axisModule, 'Axis', function(parameters) {
         var axis = new vizMocks.Axis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,
@@ -115,7 +115,7 @@ var TestPointerElement = TestElement.inherit({
             minorTick: {},
             label: {}
         });
-        axis.stub("getCanvas").returns({});
+        axis.stub('getCanvas').returns({});
         axis.getCenter = sinon.stub().returns({ x: 100, y: 100 });
         return axis;
     });
@@ -123,7 +123,7 @@ var TestPointerElement = TestElement.inherit({
     var environment = {
         beforeEach: function() {
             this.renderer = new vizMocks.Renderer();
-            this.container = createTestContainer("#test-container", { width: 800, height: 600 });
+            this.container = createTestContainer('#test-container', { width: 800, height: 600 });
             rendererModule.Renderer.onCall(0).returns(this.renderer);
             var tooltipRender = new vizMocks.Renderer();
             rendererModule.Renderer.onCall(1).returns(tooltipRender);
@@ -145,37 +145,37 @@ var TestPointerElement = TestElement.inherit({
         height: 600
     };
 
-    QUnit.module("General", environment);
+    QUnit.module('General', environment);
 
-    QUnit.test("Gauge creation", function(assert) {
+    QUnit.test('Gauge creation', function(assert) {
         new dxCircularGauge(this.container, {});
 
         var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.strictEqual(rendererModule.Renderer.firstCall.args[0]["cssClass"], "dxg dxg-circular-gauge", "root class");
+        assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxg dxg-circular-gauge', 'root class');
 
-        assert.ok(scale.setBusinessRange.lastCall.args[0], "range for scale");
-        assert.deepEqual(scale.draw.getCall(0).args[0], canvas, "canvas for scale");
+        assert.ok(scale.setBusinessRange.lastCall.args[0], 'range for scale');
+        assert.deepEqual(scale.draw.getCall(0).args[0], canvas, 'canvas for scale');
 
-        assert.deepEqual(scale.updateOptions.getCall(0).args[0].startAngle, -135, "start angle");
-        assert.deepEqual(scale.updateOptions.getCall(0).args[0].endAngle, 135, "end angle");
+        assert.deepEqual(scale.updateOptions.getCall(0).args[0].startAngle, -135, 'start angle');
+        assert.deepEqual(scale.updateOptions.getCall(0).args[0].endAngle, 135, 'end angle');
     });
 
-    QUnit.test("Ticks indent with positive value. Outside orientation of ticks", function(assert) {
+    QUnit.test('Ticks indent with positive value. Outside orientation of ticks', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
-                orientation: "outside",
+                orientation: 'outside',
                 label: {
                     indentFromTick: 10
                 }
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 15, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 15, 'indent');
     });
 
     // T677202
-    QUnit.test("Default ticks indent when they are invisible", function(assert) {
+    QUnit.test('Default ticks indent when they are invisible', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
                 tick: {
@@ -185,75 +185,75 @@ var TestPointerElement = TestElement.inherit({
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 10, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 10, 'indent');
     });
 
-    QUnit.test("Ticks indent with positive value. Inside orientation of ticks", function(assert) {
+    QUnit.test('Ticks indent with positive value. Inside orientation of ticks', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
-                orientation: "inside",
+                orientation: 'inside',
                 label: {
                     indentFromTick: 10
                 }
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 10, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 10, 'indent');
     });
 
-    QUnit.test("Ticks indent with positive value. Center orientation of ticks", function(assert) {
+    QUnit.test('Ticks indent with positive value. Center orientation of ticks', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
-                orientation: "center",
+                orientation: 'center',
                 label: {
                     indentFromTick: 10
                 }
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 12.5, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 12.5, 'indent');
     });
 
-    QUnit.test("Ticks indent with negative value. Outside orientation of ticks", function(assert) {
+    QUnit.test('Ticks indent with negative value. Outside orientation of ticks', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
-                orientation: "outside",
+                orientation: 'outside',
                 label: {
                     indentFromTick: -10
                 }
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -45, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -45, 'indent');
     });
 
-    QUnit.test("Ticks indent with negative value. Inside orientation of ticks", function(assert) {
+    QUnit.test('Ticks indent with negative value. Inside orientation of ticks', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
-                orientation: "inside",
+                orientation: 'inside',
                 label: {
                     indentFromTick: -10
                 }
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -40, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -40, 'indent');
     });
 
-    QUnit.test("Ticks indent with negative value. Center orientation of ticks", function(assert) {
+    QUnit.test('Ticks indent with negative value. Center orientation of ticks', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
-                orientation: "center",
+                orientation: 'center',
                 label: {
                     indentFromTick: -10
                 }
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -42.5, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -42.5, 'indent');
     });
 
-    QUnit.test("Ticks indent with zero value", function(assert) {
+    QUnit.test('Ticks indent with zero value', function(assert) {
         new dxCircularGauge(this.container, {
             scale: {
                 label: {
@@ -262,10 +262,10 @@ var TestPointerElement = TestElement.inherit({
             }
         });
 
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 5, "indent");
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 5, 'indent');
     });
 
-    QUnit.module("dxCircularGauge - positioning of elements", {
+    QUnit.module('dxCircularGauge - positioning of elements', {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
             this.check = function(assert, options, expected) {
@@ -296,31 +296,31 @@ var TestPointerElement = TestElement.inherit({
                     subvalues: [10, 20]
                 }, options));
 
-                assert.strictEqual(gauge._translator.getCodomainStart(), expected.start, "translator codomain start");
-                assert.strictEqual(gauge._translator.getCodomainEnd(), expected.end, "translator codomain end");
+                assert.strictEqual(gauge._translator.getCodomainStart(), expected.start, 'translator codomain start');
+                assert.strictEqual(gauge._translator.getCodomainEnd(), expected.end, 'translator codomain end');
 
-                assert.strictEqual(gauge._rangeContainer._options.x, expected.x, "range container x");
-                assert.strictEqual(gauge._rangeContainer._options.y, expected.y, "range container y");
-                assert.strictEqual(gauge._rangeContainer._options.radius, expected.radius - 20, "range container radius");
+                assert.strictEqual(gauge._rangeContainer._options.x, expected.x, 'range container x');
+                assert.strictEqual(gauge._rangeContainer._options.y, expected.y, 'range container y');
+                assert.strictEqual(gauge._rangeContainer._options.radius, expected.radius - 20, 'range container radius');
 
-                assert.strictEqual(gauge._valueIndicator.options.x, expected.x, "main pointer x");
-                assert.strictEqual(gauge._valueIndicator.options.y, expected.y, "main pointer y");
-                assert.strictEqual(gauge._valueIndicator.options.radius, expected.radius - 30, "main pointer radius");
+                assert.strictEqual(gauge._valueIndicator.options.x, expected.x, 'main pointer x');
+                assert.strictEqual(gauge._valueIndicator.options.y, expected.y, 'main pointer y');
+                assert.strictEqual(gauge._valueIndicator.options.radius, expected.radius - 30, 'main pointer radius');
 
-                assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, expected.x, "sub pointers set x");
-                assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, expected.y, "sub pointers set y");
-                assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, "sub pointers set radius");
+                assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, expected.x, 'sub pointers set x');
+                assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, expected.y, 'sub pointers set y');
+                assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, 'sub pointers set radius');
 
                 var scale = axisModule.Axis.getCall(0).returnValue;
-                assert.deepEqual(scale.shift.getCall(0).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], "shift scale");
-                assert.equal(scale.draw.callCount, 2, "draw scale");
-                assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
+                assert.deepEqual(scale.shift.getCall(0).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], 'shift scale');
+                assert.equal(scale.draw.callCount, 2, 'draw scale');
+                assert.equal(scale.measureLabels.callCount, 2, 'measure labels of scale');
                 assert.deepEqual(scale.measureLabels.getCall(0).args[0], canvas);
                 assert.deepEqual(scale.measureLabels.getCall(1).args[0], canvas);
                 assert.deepEqual(scale.draw.lastCall.args[0], {
                     width: expected.radius * 2,
                     height: expected.radius * 2
-                }, "new radius");
+                }, 'new radius');
             };
         },
         afterEach: function() {
@@ -328,102 +328,102 @@ var TestPointerElement = TestElement.inherit({
         }
     });
 
-    QUnit.test("Default", function(assert) {
+    QUnit.test('Default', function(assert) {
         this.check(assert, null, { x: 400, y: 348, radius: 311, start: 225, end: -45 });
     });
 
-    QUnit.test("Half circle - up", function(assert) {
+    QUnit.test('Half circle - up', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: "180", endAngle: "0" }
+            geometry: { startAngle: '180', endAngle: '0' }
         }, { x: 400, y: 489, radius: 355, start: 180, end: 0 });
     });
 
-    QUnit.test("Half circle - down", function(assert) {
+    QUnit.test('Half circle - down', function(assert) {
         this.check(assert, {
             geometry: { startAngle: 0, endAngle: 180 }
         }, { x: 400, y: 111, radius: 355, start: 0, end: -180 });
     });
 
-    QUnit.test("Half circle - left", function(assert) {
+    QUnit.test('Half circle - left', function(assert) {
         this.check(assert, {
             geometry: { startAngle: -90, endAngle: 90 }
         }, { x: 547, y: 300, radius: 263, start: 270, end: 90 });
     });
 
-    QUnit.test("Half circle - right", function(assert) {
+    QUnit.test('Half circle - right', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: 90, endAngle: "-90" }
+            geometry: { startAngle: 90, endAngle: '-90' }
         }, { x: 254, y: 300, radius: 263, start: 90, end: -90 });
     });
 
-    QUnit.test("Quarter circle - I", function(assert) {
+    QUnit.test('Quarter circle - I', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: "90", endAngle: 360 }
+            geometry: { startAngle: '90', endAngle: 360 }
         }, { x: 111, y: 586, radius: 549, start: 90, end: 0 });
     });
 
-    QUnit.test("Quarter circle - II", function(assert) {
+    QUnit.test('Quarter circle - II', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: "-180", endAngle: "-270" }
+            geometry: { startAngle: '-180', endAngle: '-270' }
         }, { x: 690, y: 586, radius: 549, start: 180, end: 90 });
     });
 
-    QUnit.test("Quarter circle - III", function(assert) {
+    QUnit.test('Quarter circle - III', function(assert) {
         this.check(assert, {
             geometry: { startAngle: -90, endAngle: 180 }
         }, { x: 690, y: 14, radius: 549, start: 270, end: 180 });
     });
 
-    QUnit.test("Quarter circle - IV", function(assert) {
+    QUnit.test('Quarter circle - IV', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: "720", endAngle: 270 }
+            geometry: { startAngle: '720', endAngle: 270 }
         }, { x: 111, y: 14, radius: 549, start: 0, end: -90 });
     });
 
-    QUnit.test("Full circle", function(assert) {
+    QUnit.test('Full circle', function(assert) {
         this.check(assert, {
             geometry: { startAngle: 0, endAngle: 0 }
         }, { x: 400, y: 300, radius: 263, start: 0, end: -360 });
     });
 
-    QUnit.test("[150; -80]", function(assert) {
+    QUnit.test('[150; -80]', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: 150, endAngle: "-80" }
+            geometry: { startAngle: 150, endAngle: '-80' }
         }, { x: 381, y: 302, radius: 265, start: 150, end: -80 });
     });
 
-    QUnit.test("[90; 180]", function(assert) {
+    QUnit.test('[90; 180]', function(assert) {
         this.check(assert, {
             geometry: { startAngle: 90, endAngle: 180 }
         }, { x: 400, y: 300, radius: 263, start: 90, end: -180 });
     });
 
-    QUnit.test("[-20; 160]", function(assert) {
+    QUnit.test('[-20; 160]', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: "-20", endAngle: "160" }
+            geometry: { startAngle: '-20', endAngle: '160' }
         }, { x: 412, y: 174, radius: 367, start: 340, end: 160 });
     });
 
-    QUnit.test("[test, undefined] (validation)", function(assert) {
+    QUnit.test('[test, undefined] (validation)', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: "test", endAngle: undefined }
+            geometry: { startAngle: 'test', endAngle: undefined }
         }, { x: 400, y: 348, radius: 311, start: 225, end: -45 });
     });
 
-    QUnit.test("[{}, 90] (validation)", function(assert) {
+    QUnit.test('[{}, 90] (validation)', function(assert) {
         this.check(assert, {
             geometry: { startAngle: {}, endAngle: 90 }
         }, { x: 571, y: 348, radius: 311, start: 225, end: 90 });
     });
 
-    QUnit.test("[-80, a] (validation)", function(assert) {
+    QUnit.test('[-80, a] (validation)', function(assert) {
         this.check(assert, {
-            geometry: { startAngle: -80, endAngle: "a" }
+            geometry: { startAngle: -80, endAngle: 'a' }
         }, { x: 400, y: 300, radius: 263, start: 280, end: -45 });
     });
 
     //  B232105
-    QUnit.test("Offset validation", function(assert) {
+    QUnit.test('Offset validation', function(assert) {
         var gauge = new dxCircularGauge(this.container, {
             scale: {
                 size: 10,
@@ -433,7 +433,7 @@ var TestPointerElement = TestElement.inherit({
                 inverseVerticalOffset: 12
             },
             rangeContainer: {
-                offset: "test",
+                offset: 'test',
                 size: 8
             },
             valueIndicator: {
@@ -454,27 +454,27 @@ var TestPointerElement = TestElement.inherit({
             y = 348,
             radius = 316;
 
-        assert.strictEqual(gauge._rangeContainer._options.x, x, "range container x");
-        assert.strictEqual(gauge._rangeContainer._options.y, y, "range container y");
-        assert.strictEqual(gauge._rangeContainer._options.radius, radius, "range container radius");
+        assert.strictEqual(gauge._rangeContainer._options.x, x, 'range container x');
+        assert.strictEqual(gauge._rangeContainer._options.y, y, 'range container y');
+        assert.strictEqual(gauge._rangeContainer._options.radius, radius, 'range container radius');
 
-        assert.strictEqual(gauge._valueIndicator.options.x, x, "main pointer x");
-        assert.strictEqual(gauge._valueIndicator.options.y, y, "main pointer y");
-        assert.strictEqual(gauge._valueIndicator.options.radius, radius, "main pointer radius");
+        assert.strictEqual(gauge._valueIndicator.options.x, x, 'main pointer x');
+        assert.strictEqual(gauge._valueIndicator.options.y, y, 'main pointer y');
+        assert.strictEqual(gauge._valueIndicator.options.radius, radius, 'main pointer radius');
 
-        assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, x, "sub pointers set x");
-        assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, y, "sub pointers set y");
-        assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, radius, "sub pointers set radius");
+        assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, x, 'sub pointers set x');
+        assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, y, 'sub pointers set y');
+        assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, radius, 'sub pointers set radius');
     });
 
     //  B238939, B238978
-    QUnit.test("[123; 123]", function(assert) {
+    QUnit.test('[123; 123]', function(assert) {
         this.check(assert, {
             geometry: { startAngle: 123, endAngle: 123 }
         }, { x: 400, y: 300, radius: 263, start: 123, end: -237 });
     });
 
-    QUnit.test("Default after apply subvalues", function(assert) {
+    QUnit.test('Default after apply subvalues', function(assert) {
         var gauge = new dxCircularGauge(this.container, {
             scale: {
                 size: 10,
@@ -501,29 +501,29 @@ var TestPointerElement = TestElement.inherit({
             value: 50
         });
 
-        gauge.option("subvalues", [10, 20]);
+        gauge.option('subvalues', [10, 20]);
 
         var expected = { x: 400, y: 348, radius: 311, start: 225, end: -45 };
 
-        assert.strictEqual(gauge._translator.getCodomainStart(), expected.start, "translator codomain start");
-        assert.strictEqual(gauge._translator.getCodomainEnd(), expected.end, "translator codomain end");
+        assert.strictEqual(gauge._translator.getCodomainStart(), expected.start, 'translator codomain start');
+        assert.strictEqual(gauge._translator.getCodomainEnd(), expected.end, 'translator codomain end');
 
-        assert.strictEqual(gauge._rangeContainer._options.x, expected.x, "range container x");
-        assert.strictEqual(gauge._rangeContainer._options.y, expected.y, "range container y");
-        assert.strictEqual(gauge._rangeContainer._options.radius, expected.radius - 20, "range container radius");
+        assert.strictEqual(gauge._rangeContainer._options.x, expected.x, 'range container x');
+        assert.strictEqual(gauge._rangeContainer._options.y, expected.y, 'range container y');
+        assert.strictEqual(gauge._rangeContainer._options.radius, expected.radius - 20, 'range container radius');
 
-        assert.strictEqual(gauge._valueIndicator.options.x, expected.x, "main pointer x");
-        assert.strictEqual(gauge._valueIndicator.options.y, expected.y, "main pointer y");
-        assert.strictEqual(gauge._valueIndicator.options.radius, expected.radius - 30, "main pointer radius");
+        assert.strictEqual(gauge._valueIndicator.options.x, expected.x, 'main pointer x');
+        assert.strictEqual(gauge._valueIndicator.options.y, expected.y, 'main pointer y');
+        assert.strictEqual(gauge._valueIndicator.options.radius, expected.radius - 30, 'main pointer radius');
 
-        assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, expected.x, "sub pointers set x");
-        assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, expected.y, "sub pointers set y");
-        assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, "sub pointers set radius");
+        assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, expected.x, 'sub pointers set x');
+        assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, expected.y, 'sub pointers set y');
+        assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, 'sub pointers set radius');
 
         var scale = axisModule.Axis.getCall(0).returnValue;
-        assert.deepEqual(scale.shift.getCall(1).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], "shift scale");
-        assert.equal(scale.draw.callCount, 6, "draw scale");
-        assert.equal(scale.measureLabels.callCount, 6, "measure labels of scale");
+        assert.deepEqual(scale.shift.getCall(1).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], 'shift scale');
+        assert.equal(scale.draw.callCount, 6, 'draw scale');
+        assert.equal(scale.measureLabels.callCount, 6, 'measure labels of scale');
         assert.deepEqual(scale.measureLabels.getCall(0).args[0], canvas);
         assert.deepEqual(scale.measureLabels.getCall(1).args[0], canvas);
         assert.deepEqual(scale.measureLabels.getCall(2).args[0], canvas);
@@ -533,7 +533,7 @@ var TestPointerElement = TestElement.inherit({
         assert.deepEqual(scale.draw.getCall(1).args[0], {
             width: expected.radius * 2,
             height: expected.radius * 2
-        }, "new radius");
-        assert.deepEqual(gauge._canvas, canvas, "gauge canvas is not changed");
+        }, 'new radius');
+        assert.deepEqual(gauge._canvas, canvas, 'gauge canvas is not changed');
     });
 })();

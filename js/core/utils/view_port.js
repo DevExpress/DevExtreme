@@ -1,7 +1,7 @@
-var $ = require("../renderer"),
-    readyCallbacks = require("./ready_callbacks"),
+var $ = require('../renderer'),
+    readyCallbacks = require('./ready_callbacks'),
     ready = readyCallbacks.add,
-    changeCallback = require("./callbacks")(),
+    changeCallback = require('./callbacks')(),
     $originalViewPort = $();
 
 var value = (function() {
@@ -16,13 +16,13 @@ var value = (function() {
         $originalViewPort = $element;
         var isNewViewportFound = !!$element.length;
         var prevViewPort = value();
-        $current = isNewViewportFound ? $element : $("body");
+        $current = isNewViewportFound ? $element : $('body');
         changeCallback.fire(isNewViewportFound ? value() : $(), prevViewPort);
     };
 })();
 
 ready(function() {
-    value(".dx-viewport");
+    value('.dx-viewport');
 });
 
 exports.value = value;

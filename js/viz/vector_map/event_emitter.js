@@ -1,4 +1,4 @@
-var Callbacks = require("../../core/utils/callbacks");
+var Callbacks = require('../../core/utils/callbacks');
 
 var eventEmitterMethods = {
     _initEvents: function() {

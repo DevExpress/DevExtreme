@@ -1,6 +1,6 @@
-var DefaultEventsStrategy = require("./events_strategy"),
-    each = require("./utils/iterator").each,
-    isPlainObject = require("./utils/type").isPlainObject;
+var DefaultEventsStrategy = require('./events_strategy'),
+    each = require('./utils/iterator').each,
+    isPlainObject = require('./utils/type').isPlainObject;
 
 /**
  * @name EventsMixin
@@ -15,7 +15,7 @@ module.exports = {
     },
 
     setEventsStrategy: function(strategy) {
-        if(typeof strategy === "function") {
+        if(typeof strategy === 'function') {
             strategy = strategy(this);
         }
 

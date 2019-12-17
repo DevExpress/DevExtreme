@@ -1,5 +1,5 @@
-var isDefined = require("../../core/utils/type").isDefined,
-    adjust = require("../../core/utils/math").adjust,
+var isDefined = require('../../core/utils/type').isDefined,
+    adjust = require('../../core/utils/math').adjust,
     round = Math.round;
 
 function getValue(value) { return value; }

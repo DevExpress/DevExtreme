@@ -1,9 +1,9 @@
-import iteratorUtils from "../core/utils/iterator";
+import iteratorUtils from '../core/utils/iterator';
 
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const PERIODS = ["AM", "PM"];
-const QUARTERS = ["Q1", "Q2", "Q3", "Q4"];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const PERIODS = ['AM', 'PM'];
+const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 
 // TODO: optimize
 const cutCaptions = (captions, format) => {

@@ -12,7 +12,7 @@ function parseDBF(stream, errors) {
         records = parseDataBaseFileRecords(stream, header.numberOfRecords, header.recordLength, parseData, errors);
         timeEnd = new Date();
     } catch(e) {
-        errors.push("dbf: parsing error: " + e.message + " / " + e.description);
+        errors.push('dbf: parsing error: ' + e.message + ' / ' + e.description);
     }
     return { records: records, errors: errors, time: timeEnd - timeStart };
 }
@@ -34,7 +34,7 @@ function parseDataBaseFileHeader(stream, errors) {
     }
     term = stream.ui8();
     if(term !== 13) {
-        errors.push("dbf: header terminator: " + term + " / expected: 13");
+        errors.push('dbf: header terminator: ' + term + ' / expected: 13');
     }
     return header;
 }
@@ -57,7 +57,7 @@ function parseFieldDescriptor(stream) {
 }
 
 var DBF_FIELD_PARSERS = {
-    "C": function(stream, length) {
+    'C': function(stream, length) {
         var str = getAsciiString(stream, length);
 
         try {
@@ -66,11 +66,11 @@ var DBF_FIELD_PARSERS = {
 
         return str.trim();
     },
-    "N": function(stream, length) {
+    'N': function(stream, length) {
         var str = getAsciiString(stream, length);
         return parseFloat(str, 10);
     },
-    "D": function(stream, length) {
+    'D': function(stream, length) {
         var str = getAsciiString(stream, length);
         return new Date(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));
     }
@@ -96,13 +96,13 @@ function prepareDataBaseFileRecordParseData(header, errors) {
         };
         if(!item.parser) {
             item.parser = DBF_FIELD_PARSER_DEFAULT;
-            errors.push("dbf: field " + field.name + " type: " + field.type + " / unknown");
+            errors.push('dbf: field ' + field.name + ' type: ' + field.type + ' / unknown');
         }
         totalLength += field.length;
         list.push(item);
     }
     if(totalLength + 1 !== header.recordLength) {
-        errors.push("dbf: record length: " + header.recordLength + " / actual: " + (totalLength + 1));
+        errors.push('dbf: record length: ' + header.recordLength + ' / actual: ' + (totalLength + 1));
     }
     return list;
 }
@@ -125,7 +125,7 @@ function parseDataBaseFileRecords(stream, recordCount, recordLength, parseData, 
         }
         pos = stream.pos() - pos;
         if(pos !== recordLength) {
-            errors.push("dbf: record #" + (i + 1) + " length: " + recordLength + " / actual: " + pos);
+            errors.push('dbf: record #' + (i + 1) + ' length: ' + recordLength + ' / actual: ' + pos);
         }
         records.push(record);
     }

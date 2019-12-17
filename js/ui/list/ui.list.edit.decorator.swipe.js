@@ -1,13 +1,13 @@
-var translator = require("../../animation/translator"),
-    fx = require("../../animation/fx"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    EditDecorator = require("./ui.list.edit.decorator"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var translator = require('../../animation/translator'),
+    fx = require('../../animation/fx'),
+    registerDecorator = require('./ui.list.edit.decorator_registry').register,
+    EditDecorator = require('./ui.list.edit.decorator'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 
 registerDecorator(
-    "delete",
-    "swipe",
+    'delete',
+    'swipe',
     EditDecorator.inherit({
 
         _shouldHandleSwipe: true,
@@ -19,7 +19,7 @@ registerDecorator(
             if(animate) {
                 fx.animate($itemElement, {
                     to: { left: itemOffset },
-                    type: "slide",
+                    type: 'slide',
                     complete: function() {
                         deferred.resolve($itemElement, offset);
                     }

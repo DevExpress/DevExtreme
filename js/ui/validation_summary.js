@@ -1,14 +1,14 @@
-import registerComponent from "../core/component_registrator";
-import eventsEngine from "../events/core/events_engine";
-import { grep } from "../core/utils/common";
-import { extend } from "../core/utils/extend";
-import iteratorUtils from "../core/utils/iterator";
-import ValidationEngine from "./validation_engine";
-import CollectionWidget from "./collection/ui.collection_widget.edit";
+import registerComponent from '../core/component_registrator';
+import eventsEngine from '../events/core/events_engine';
+import { grep } from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import iteratorUtils from '../core/utils/iterator';
+import ValidationEngine from './validation_engine';
+import CollectionWidget from './collection/ui.collection_widget.edit';
 
-const VALIDATION_SUMMARY_CLASS = "dx-validationsummary",
-    ITEM_CLASS = VALIDATION_SUMMARY_CLASS + "-item",
-    ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + "-item-data";
+const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary',
+    ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item',
+    ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
 
 /**
 * @name dxValidationSummary
@@ -167,12 +167,12 @@ const ValidationSummary = CollectionWidget.inherit({
         this._validationGroup = group;
 
         this.groupSubscription = this._groupValidationHandler.bind(this);
-        groupConfig.on("validated", this.groupSubscription);
+        groupConfig.on('validated', this.groupSubscription);
     },
 
     _unsubscribeGroup() {
         const groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
-        groupConfig && groupConfig.off("validated", this.groupSubscription);
+        groupConfig && groupConfig.off('validated', this.groupSubscription);
     },
 
     _getOrderedItems(validators, items) {
@@ -208,21 +208,21 @@ const ValidationSummary = CollectionWidget.inherit({
             if(validator._validationSummary !== this) {
                 let handler = this._itemValidationHandler.bind(this),
                     disposingHandler = function() {
-                        validator.off("validated", handler);
+                        validator.off('validated', handler);
                         validator._validationSummary = null;
                         handler = null;
                     };
-                validator.on("validated", handler);
-                validator.on("disposing", disposingHandler);
+                validator.on('validated', handler);
+                validator.on('disposing', disposingHandler);
                 validator._validationSummary = this;
             }
         });
 
-        this.option("items", items);
+        this.option('items', items);
     },
 
     _itemValidationHandler({ isValid, validator, brokenRules }) {
-        let items = this.option("items"),
+        let items = this.option('items'),
             itemsChanged = false;
 
         let itemIndex = 0;
@@ -260,7 +260,7 @@ const ValidationSummary = CollectionWidget.inherit({
 
         if(itemsChanged) {
             items = this._getOrderedItems(this.validators, items);
-            this.option("items", items);
+            this.option('items', items);
         }
     },
 
@@ -271,7 +271,7 @@ const ValidationSummary = CollectionWidget.inherit({
 
     _optionChanged(args) {
         switch(args.name) {
-            case "validationGroup":
+            case 'validationGroup':
                 this._initGroupRegistration();
                 break;
             default:
@@ -288,7 +288,7 @@ const ValidationSummary = CollectionWidget.inherit({
     },
 
     _postprocessRenderItem(params) {
-        eventsEngine.on(params.itemElement, "click", function() {
+        eventsEngine.on(params.itemElement, 'click', function() {
             params.itemData.validator && params.itemData.validator.focus && params.itemData.validator.focus();
         });
     },
@@ -318,6 +318,6 @@ const ValidationSummary = CollectionWidget.inherit({
 
 });
 
-registerComponent("dxValidationSummary", ValidationSummary);
+registerComponent('dxValidationSummary', ValidationSummary);
 
 module.exports = ValidationSummary;

@@ -1,6 +1,6 @@
-var getKeyHash = require("./common").getKeyHash,
-    equalByValue = require("./common").equalByValue,
-    typeUtils = require("./type");
+var getKeyHash = require('./common').getKeyHash,
+    equalByValue = require('./common').equalByValue,
+    typeUtils = require('./type');
 
 var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
@@ -22,7 +22,7 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
             var filterExprPart;
 
             if(index > 0) {
-                filterExpr.push(isSelectAll ? "and" : "or");
+                filterExpr.push(isSelectAll ? 'and' : 'or');
             }
 
             if(typeUtils.isString(keyExpr)) {
@@ -102,7 +102,7 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         if(keyValue === undefined) {
             return;
         }
-        return [keyExpr, isSelectAll ? "<>" : "=", keyValue];
+        return [keyExpr, isSelectAll ? '<>' : '=', keyValue];
     };
 
     var getFilterForCompositeKey = function(keyExpr, itemKeyValue) {
@@ -118,7 +118,7 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
             }
 
             if(i > 0) {
-                filterExpr.push(isSelectAll ? "or" : "and");
+                filterExpr.push(isSelectAll ? 'or' : 'and');
             }
 
             filterExpr.push(filterExprPart);

@@ -1,28 +1,28 @@
 var seriesNS = {},
-    typeUtils = require("../../core/utils/type"),
-    _extend = require("../../core/utils/extend").extend,
-    _each = require("../../core/utils/iterator").each,
-    pointModule = require("./points/base_point"),
+    typeUtils = require('../../core/utils/type'),
+    _extend = require('../../core/utils/extend').extend,
+    _each = require('../../core/utils/iterator').each,
+    pointModule = require('./points/base_point'),
     _isDefined = typeUtils.isDefined,
-    vizUtils = require("../core/utils"),
+    vizUtils = require('../core/utils'),
     _isEmptyObject = typeUtils.isEmptyObject,
     _normalizeEnum = vizUtils.normalizeEnum,
-    _noop = require("../../core/utils/common").noop,
-    states = require("../components/consts").states,
+    _noop = require('../../core/utils/common').noop,
+    states = require('../components/consts').states,
 
-    rangeCalculator = require("./helpers/range_data_calculator"),
+    rangeCalculator = require('./helpers/range_data_calculator'),
 
-    scatterSeries = require("./scatter_series"),
-    lineSeries = require("./line_series"),
-    areaSeries = require("./area_series"),
-    barSeries = require("./bar_series"),
-    rangeSeries = require("./range_series"),
-    bubbleSeries = require("./bubble_series"),
-    pieSeries = require("./pie_series"),
-    financialSeries = require("./financial_series"),
-    stackedSeries = require("./stacked_series"),
+    scatterSeries = require('./scatter_series'),
+    lineSeries = require('./line_series'),
+    areaSeries = require('./area_series'),
+    barSeries = require('./bar_series'),
+    rangeSeries = require('./range_series'),
+    bubbleSeries = require('./bubble_series'),
+    pieSeries = require('./pie_series'),
+    financialSeries = require('./financial_series'),
+    stackedSeries = require('./stacked_series'),
 
-    DISCRETE = "discrete",
+    DISCRETE = 'discrete',
     SELECTED_STATE = states.selectedMark,
     HOVER_STATE = states.hoverMark,
     HOVER = states.hover,
@@ -31,20 +31,20 @@ var seriesNS = {},
     APPLY_SELECTED = states.applySelected,
     APPLY_HOVER = states.applyHover,
     RESET_ITEM = states.resetItem,
-    NONE_MODE = "none",
-    INCLUDE_POINTS = "includepoints",
-    NEAREST_POINT = "nearestpoint",
-    SERIES_SELECTION_CHANGED = "seriesSelectionChanged",
-    POINT_SELECTION_CHANGED = "pointSelectionChanged",
-    SERIES_HOVER_CHANGED = "seriesHoverChanged",
-    POINT_HOVER_CHANGED = "pointHoverChanged",
-    ALL_SERIES_POINTS = "allseriespoints",
-    ALL_ARGUMENT_POINTS = "allargumentpoints",
-    POINT_HOVER = "pointHover",
-    CLEAR_POINT_HOVER = "clearPointHover",
-    SERIES_SELECT = "seriesSelect",
-    POINT_SELECT = "pointSelect",
-    POINT_DESELECT = "pointDeselect",
+    NONE_MODE = 'none',
+    INCLUDE_POINTS = 'includepoints',
+    NEAREST_POINT = 'nearestpoint',
+    SERIES_SELECTION_CHANGED = 'seriesSelectionChanged',
+    POINT_SELECTION_CHANGED = 'pointSelectionChanged',
+    SERIES_HOVER_CHANGED = 'seriesHoverChanged',
+    POINT_HOVER_CHANGED = 'pointHoverChanged',
+    ALL_SERIES_POINTS = 'allseriespoints',
+    ALL_ARGUMENT_POINTS = 'allargumentpoints',
+    POINT_HOVER = 'pointHover',
+    CLEAR_POINT_HOVER = 'clearPointHover',
+    SERIES_SELECT = 'seriesSelect',
+    POINT_SELECT = 'pointSelect',
+    POINT_DESELECT = 'pointDeselect',
     getEmptyBusinessRange = function() {
         return { arg: {}, val: {} };
     };
@@ -80,16 +80,16 @@ function getLabelOptions(labelOptions, defaultColor) {
         labelConnector = opt.connector || {},
         backgroundAttr = {
             fill: opt.backgroundColor || defaultColor,
-            "stroke-width": labelBorder.visible ? labelBorder.width || 0 : 0,
-            stroke: labelBorder.visible && labelBorder.width ? labelBorder.color : "none",
+            'stroke-width': labelBorder.visible ? labelBorder.width || 0 : 0,
+            stroke: labelBorder.visible && labelBorder.width ? labelBorder.color : 'none',
             dashStyle: labelBorder.dashStyle
         },
         connectorAttr = {
-            stroke: labelConnector.visible && labelConnector.width ? labelConnector.color || defaultColor : "none",
-            "stroke-width": labelConnector.visible ? labelConnector.width || 0 : 0
+            stroke: labelConnector.visible && labelConnector.width ? labelConnector.color || defaultColor : 'none',
+            'stroke-width': labelConnector.visible ? labelConnector.width || 0 : 0
         };
 
-    labelFont.color = (opt.backgroundColor === "none" && _normalizeEnum(labelFont.color) === "#ffffff" && opt.position !== "inside") ? defaultColor : labelFont.color;
+    labelFont.color = (opt.backgroundColor === 'none' && _normalizeEnum(labelFont.color) === '#ffffff' && opt.position !== 'inside') ? defaultColor : labelFont.color;
 
     return {
         alignment: opt.alignment,
@@ -152,7 +152,7 @@ function Series(settings, options) {
     that.fullState = 0;
     that._extGroups = settings;
     that._renderer = settings.renderer;
-    that._group = settings.renderer.g().attr({ "class": "dxc-series" });
+    that._group = settings.renderer.g().attr({ 'class': 'dxc-series' });
     that._eventTrigger = settings.eventTrigger;
     that._eventPipe = settings.eventPipe;
     that._incidentOccurred = settings.incidentOccurred;
@@ -170,7 +170,7 @@ exports.Series = Series;
 exports.mixins = seriesNS.mixins;
 
 function getValueChecker(axisType, axis) {
-    if(!axis || axisType !== "logarithmic" || axis.getOptions().allowNegatives !== false) {
+    if(!axis || axisType !== 'logarithmic' || axis.getOptions().allowNegatives !== false) {
         return () => true;
     } else {
         return value => value > 0;
@@ -209,14 +209,14 @@ Series.prototype = {
     },
 
     applyClip: function() {
-        this._group.attr({ "clip-path": this._paneClipRectID });
+        this._group.attr({ 'clip-path': this._paneClipRectID });
     },
 
     resetClip: function() {
-        this._group.attr({ "clip-path": null });
+        this._group.attr({ 'clip-path': null });
     },
 
-    getTagField: function() { return this._options.tagField || "tag"; },
+    getTagField: function() { return this._options.tagField || 'tag'; },
 
     getValueFields: _noop,
 
@@ -411,7 +411,7 @@ Series.prototype = {
         }, []);
 
         if(itemsWithoutArgument && itemsWithoutArgument === data.length) {
-            that._incidentOccurred("W2002", [that.name, that.getArgumentField()]);
+            that._incidentOccurred('W2002', [that.name, that.getArgumentField()]);
         }
         that._endUpdateData();
     },
@@ -469,7 +469,7 @@ Series.prototype = {
 
         for(let field in skippedFields) {
             if(skippedFields[field] === data.length) {
-                that._incidentOccurred("W2002", [that.name, field]);
+                that._incidentOccurred('W2002', [that.name, field]);
             }
         }
         Object.keys(oldPointsByArgument).forEach((key) => that._disposePoints(oldPointsByArgument[key]));
@@ -567,7 +567,7 @@ Series.prototype = {
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
-        var settings = { "class": "dxc-labels", "pointer-events": "none" };
+        var settings = { 'class': 'dxc-labels', 'pointer-events': 'none' };
         this._clipLabels && this._applyElementsClipRect(settings);
         this._applyClearingSettings(settings);
         animationEnabled && (settings.opacity = 0.001);
@@ -579,7 +579,7 @@ Series.prototype = {
     },
 
     _checkPolarBarType: function(widgetType, options) {
-        return (widgetType === "polar" && options.spiderWidget && this.type.indexOf("bar") !== -1);
+        return (widgetType === 'polar' && options.spiderWidget && this.type.indexOf('bar') !== -1);
     },
 
     _resetType: function(seriesType, widgetType) {
@@ -653,15 +653,15 @@ Series.prototype = {
     },
 
     isFullStackedSeries: function() {
-        return this.type.indexOf("fullstacked") === 0;
+        return this.type.indexOf('fullstacked') === 0;
     },
 
     isStackedSeries: function() {
-        return this.type.indexOf("stacked") === 0;
+        return this.type.indexOf('stacked') === 0;
     },
 
     isFinancialSeries: function() {
-        return this.type === "stock" || this.type === "candlestick";
+        return this.type === 'stock' || this.type === 'candlestick';
     },
 
     _canChangeView: function() {
@@ -673,11 +673,11 @@ Series.prototype = {
             state = that.fullState,
             styles = [NORMAL, HOVER, SELECTION, SELECTION];
 
-        if(that.lastHoverMode === "none") {
+        if(that.lastHoverMode === 'none') {
             state &= ~HOVER_STATE;
         }
 
-        if(that.lastSelectionMode === "none") {
+        if(that.lastSelectionMode === 'none') {
             state &= ~SELECTED_STATE;
         }
 
@@ -708,7 +708,7 @@ Series.prototype = {
     },
 
     _getMainAxisName: function() {
-        return this._options.rotated ? "X" : "Y";
+        return this._options.rotated ? 'X' : 'Y';
     },
 
     areLabelsVisible: function() {
@@ -818,7 +818,7 @@ Series.prototype = {
     _getAggregationMethod: function(isDiscrete, aggregateByCategory) {
         const options = this.getOptions().aggregation;
         const method = _normalizeEnum(options.method);
-        const customAggregator = method === "custom" && options.calculate;
+        const customAggregator = method === 'custom' && options.calculate;
 
         let aggregator;
 
@@ -1029,11 +1029,11 @@ Series.prototype = {
     },
 
     showPointTooltip: function(point) {
-        triggerEvent(this._extGroups.seriesGroup, "showpointtooltip", point);
+        triggerEvent(this._extGroups.seriesGroup, 'showpointtooltip', point);
     },
 
     hidePointTooltip: function(point) {
-        triggerEvent(this._extGroups.seriesGroup, "hidepointtooltip", point);
+        triggerEvent(this._extGroups.seriesGroup, 'hidepointtooltip', point);
     },
 
     select: function() {
@@ -1093,9 +1093,9 @@ Series.prototype = {
         } else if(action === CLEAR_POINT_HOVER) {
             that._clearPointHoverHandler(target, pointHoverMode, data.notifyLegend);
         } else if(action === SERIES_SELECT) {
-            (target !== that) && (seriesModes.seriesSelectionMode === "single") && that.clearSelection();
+            (target !== that) && (seriesModes.seriesSelectionMode === 'single') && that.clearSelection();
         } else if(action === POINT_SELECT) {
-            if(seriesModes.pointSelectionMode === "single") {
+            if(seriesModes.pointSelectionMode === 'single') {
                 that.getPoints().some(function(currentPoint) {
                     if(currentPoint !== target && currentPoint.isSelected()) {
                         that.deselectPoint(currentPoint);

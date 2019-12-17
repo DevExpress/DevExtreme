@@ -1,8 +1,8 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    Class = require("../../core/class"),
-    dateLocalization = require("../../localization/date");
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    noop = require('../../core/utils/common').noop,
+    Class = require('../../core/class'),
+    dateLocalization = require('../../localization/date');
 
 var abstract = Class.abstract;
 
@@ -16,7 +16,7 @@ var DateBoxStrategy = Class.inherit({
     },
 
     _renderWidget: function(element) {
-        element = element || $("<div>");
+        element = element || $('<div>');
         this._widget = this._createWidget(element);
         this._widget.$element().appendTo(this._getWidgetContainer());
     },
@@ -33,7 +33,7 @@ var DateBoxStrategy = Class.inherit({
     _getWidgetName: abstract,
 
     getDefaultOptions: function() {
-        return { mode: "text" };
+        return { mode: 'text' };
     },
 
     getDisplayFormat: abstract,
@@ -64,8 +64,8 @@ var DateBoxStrategy = Class.inherit({
         this._renderWidget();
 
         var $popupContent = popup.$content().parent();
-        eventsEngine.off($popupContent, "mousedown");
-        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
+        eventsEngine.off($popupContent, 'mousedown');
+        eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
     },
 
     getFirstPopupElement: noop,
@@ -89,11 +89,11 @@ var DateBoxStrategy = Class.inherit({
     popupHiddenHandler: noop,
 
     _updateValue: function() {
-        this._widget && this._widget.option("value", this.dateBoxValue());
+        this._widget && this._widget.option('value', this.dateBoxValue());
     },
 
     _valueChangedHandler: function(args) {
-        if(this.dateBox.option("opened") && this.dateBox.option("applyValueMode") === "instantly") {
+        if(this.dateBox.option('opened') && this.dateBox.option('applyValueMode') === 'instantly') {
             this.dateBoxValue(args.value);
         }
     },
@@ -107,13 +107,13 @@ var DateBoxStrategy = Class.inherit({
     textChangedHandler: noop,
 
     renderValue: function() {
-        if(this.dateBox.option("opened")) {
+        if(this.dateBox.option('opened')) {
             this._updateValue();
         }
     },
 
     getValue: function() {
-        return this._widget.option("value");
+        return this._widget.option('value');
     },
 
     isAdaptivityChanged: function() {
@@ -132,7 +132,7 @@ var DateBoxStrategy = Class.inherit({
         if(arguments.length) {
             return this.dateBox.dateValue.apply(this.dateBox, arguments);
         } else {
-            return this.dateBox.dateOption.apply(this.dateBox, ["value"]);
+            return this.dateBox.dateOption.apply(this.dateBox, ['value']);
         }
     }
 });

@@ -1,9 +1,9 @@
-var eventUtils = require("./utils"),
-    Emitter = require("./core/emitter"),
-    registerEmitter = require("./core/emitter_registrator"),
+var eventUtils = require('./utils'),
+    Emitter = require('./core/emitter'),
+    registerEmitter = require('./core/emitter_registrator'),
     abs = Math.abs;
 
-var HOLD_EVENT_NAME = "dxhold",
+var HOLD_EVENT_NAME = 'dxhold',
     HOLD_TIMEOUT = 750,
     TOUCH_BOUNDARY = 5;
 
@@ -17,7 +17,7 @@ var HoldEmitter = Emitter.inherit({
     },
 
     _startTimer: function(e) {
-        var holdTimeout = ("timeout" in this) ? this.timeout : HOLD_TIMEOUT;
+        var holdTimeout = ('timeout' in this) ? this.timeout : HOLD_TIMEOUT;
         this._holdTimer = setTimeout((function() {
             this._requestAccept(e);
             this._fireEvent(HOLD_EVENT_NAME, e, {

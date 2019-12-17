@@ -1,6 +1,6 @@
-import HorizontalAppointmentsStrategy from "./ui.scheduler.appointments.strategy.horizontal";
-import dateUtils from "../../../core/utils/date";
-import query from "../../../data/query";
+import HorizontalAppointmentsStrategy from './ui.scheduler.appointments.strategy.horizontal';
+import dateUtils from '../../../core/utils/date';
+import query from '../../../data/query';
 
 var HOURS_IN_DAY = 24,
     MINUTES_IN_HOUR = 60,
@@ -22,7 +22,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
 
     _getDurationInHour(startDate, endDate) {
         var adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
-        return adjustedDuration / dateUtils.dateToMilliseconds("hour");
+        return adjustedDuration / dateUtils.dateToMilliseconds('hour');
     }
 
     getDeltaTime(args, initialSize) {
@@ -45,7 +45,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
         var result = super._getSortedPositions(map);
 
         if(!skipSorting) {
-            result = query(result).sortBy("top").thenBy("left").thenBy("cellPosition").thenBy("i").toArray();
+            result = query(result).sortBy('top').thenBy('left').thenBy('cellPosition').thenBy('i').toArray();
         }
 
         return result;

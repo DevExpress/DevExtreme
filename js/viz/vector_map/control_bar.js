@@ -5,22 +5,22 @@ var _math = Math,
     _floor = _math.floor,
     _sqrt = _math.sqrt,
 
-    vizUtils = require("../core/utils"),
+    vizUtils = require('../core/utils'),
     _parseScalar = vizUtils.parseScalar,
-    parseHorizontalAlignment = vizUtils.enumParser(["left", "center", "right"]),
-    parseVerticalAlignment = vizUtils.enumParser(["top", "bottom"]),
+    parseHorizontalAlignment = vizUtils.enumParser(['left', 'center', 'right']),
+    parseVerticalAlignment = vizUtils.enumParser(['top', 'bottom']),
 
-    COMMAND_RESET = "command-reset",
-    COMMAND_MOVE_UP = "command-move-up",
-    COMMAND_MOVE_RIGHT = "command-move-right",
-    COMMAND_MOVE_DOWN = "command-move-down",
-    COMMAND_MOVE_LEFT = "command-move-left",
-    COMMAND_ZOOM_IN = "command-zoom-in",
-    COMMAND_ZOOM_OUT = "command-zoom-out",
-    COMMAND_ZOOM_DRAG_LINE = "command-zoom-drag-line",
-    COMMAND_ZOOM_DRAG = "command-zoom-drag",
+    COMMAND_RESET = 'command-reset',
+    COMMAND_MOVE_UP = 'command-move-up',
+    COMMAND_MOVE_RIGHT = 'command-move-right',
+    COMMAND_MOVE_DOWN = 'command-move-down',
+    COMMAND_MOVE_LEFT = 'command-move-left',
+    COMMAND_ZOOM_IN = 'command-zoom-in',
+    COMMAND_ZOOM_OUT = 'command-zoom-out',
+    COMMAND_ZOOM_DRAG_LINE = 'command-zoom-drag-line',
+    COMMAND_ZOOM_DRAG = 'command-zoom-drag',
 
-    EVENT_TARGET_TYPE = "control-bar",
+    EVENT_TARGET_TYPE = 'control-bar',
 
     FLAG_CENTERING = 1,
     FLAG_ZOOMING = 2,
@@ -79,11 +79,11 @@ ControlBar.prototype = {
     _subscribeToProjection: function(projection) {
         var that = this;
         that._offProjection = projection.on({
-            "engine": function() {
+            'engine': function() {
                 that._update();
             },
-            "zoom": updateZoom,
-            "max-zoom": function() {
+            'zoom': updateZoom,
+            'max-zoom': function() {
                 that._zoomPartition = projection.getZoomScalePartition();
                 that._sliderUnitLength = that._sliderLineLength / that._zoomPartition;
                 updateZoom();
@@ -98,18 +98,18 @@ ControlBar.prototype = {
         var that = this,
             isActive = false;
         that._offTracker = tracker.on({
-            "start": function(arg) {
+            'start': function(arg) {
                 isActive = arg.data.name === EVENT_TARGET_TYPE;
                 if(isActive) {
                     that._processStart(arg.data.index, arg);
                 }
             },
-            "move": function(arg) {
+            'move': function(arg) {
                 if(isActive) {
                     that._processMove(arg.data.index, arg);
                 }
             },
-            "end": function() {
+            'end': function() {
                 if(isActive) {
                     that._processEnd();
                     isActive = false;
@@ -149,9 +149,9 @@ ControlBar.prototype = {
             buttonsGroups,
             trackersGroup;
 
-        that._root = renderer.g().attr({ "class": "dxm-control-bar" }).linkOn(container, "control-bar");
-        buttonsGroups = that._buttonsGroup = renderer.g().attr({ "class": "dxm-control-buttons" }).append(that._root);
-        trackersGroup = renderer.g().attr({ stroke: "none", "stroke-width": 0, fill: "#000000", opacity: 0.0001 }).css({ cursor: "pointer" }).append(that._root);
+        that._root = renderer.g().attr({ 'class': 'dxm-control-bar' }).linkOn(container, 'control-bar');
+        buttonsGroups = that._buttonsGroup = renderer.g().attr({ 'class': 'dxm-control-buttons' }).append(that._root);
+        trackersGroup = renderer.g().attr({ stroke: 'none', 'stroke-width': 0, fill: '#000000', opacity: 0.0001 }).css({ cursor: 'pointer' }).append(that._root);
         that._createButtons(renderer, dataKey, buttonsGroups);
         that._createTrackers(renderer, dataKey, trackersGroup);
     },
@@ -163,11 +163,11 @@ ControlBar.prototype = {
             offset1 = options.arrowButtonOffset - size,
             offset2 = options.arrowButtonOffset,
             incDecButtonSize = options.incDecButtonSize / 2,
-            directionOptions = { "stroke-linecap": "square", fill: "none" },
-            line = "line";
+            directionOptions = { 'stroke-linecap': 'square', fill: 'none' },
+            line = 'line';
 
         renderer.circle(0, 0, options.bigCircleSize / 2).append(group);
-        renderer.circle(0, 0, size).attr({ fill: "none" }).append(group);
+        renderer.circle(0, 0, size).attr({ fill: 'none' }).append(group);
 
         renderer.path([-size, -offset1, 0, -offset2, size, -offset1], line).attr(directionOptions).append(group);
         renderer.path([offset1, -size, offset2, 0, offset1, size], line).attr(directionOptions).append(group);
@@ -175,11 +175,11 @@ ControlBar.prototype = {
         renderer.path([-offset1, size, -offset2, 0, -offset1, -size], line).attr(directionOptions).append(group);
 
         renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).append(group);
-        renderer.path([[-incDecButtonSize, options.incButtonOffset, incDecButtonSize, options.incButtonOffset], [0, options.incButtonOffset - incDecButtonSize, 0, options.incButtonOffset + incDecButtonSize]], "area").append(group);
+        renderer.path([[-incDecButtonSize, options.incButtonOffset, incDecButtonSize, options.incButtonOffset], [0, options.incButtonOffset - incDecButtonSize, 0, options.incButtonOffset + incDecButtonSize]], 'area').append(group);
         renderer.circle(0, options.decButtonOffset, options.smallCircleSize / 2).append(group);
-        renderer.path([-incDecButtonSize, options.decButtonOffset, incDecButtonSize, options.decButtonOffset], "area").append(group);
+        renderer.path([-incDecButtonSize, options.decButtonOffset, incDecButtonSize, options.decButtonOffset], 'area').append(group);
 
-        that._zoomLine = renderer.path([], "line").append(group);
+        that._zoomLine = renderer.path([], 'line').append(group);
         that._zoomDrag = renderer.rect(
             _floor(-options.sliderLength / 2),
             _floor(options.sliderLineEndOffset - options.sliderWidth / 2),
@@ -203,14 +203,14 @@ ControlBar.prototype = {
         renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).data(dataKey, { index: COMMAND_ZOOM_IN, name: EVENT_TARGET_TYPE }).append(group);
         renderer.circle(0, options.decButtonOffset, options.smallCircleSize / 2).data(dataKey, { index: COMMAND_ZOOM_OUT, name: EVENT_TARGET_TYPE }).append(group);
 
-        renderer.rect(-2, options.sliderLineStartOffset - 2, 4, options.sliderLineEndOffset - options.sliderLineStartOffset + 4).css({ cursor: "default" }).data(dataKey, { index: COMMAND_ZOOM_DRAG_LINE, name: EVENT_TARGET_TYPE }).append(group);
+        renderer.rect(-2, options.sliderLineStartOffset - 2, 4, options.sliderLineEndOffset - options.sliderLineStartOffset + 4).css({ cursor: 'default' }).data(dataKey, { index: COMMAND_ZOOM_DRAG_LINE, name: EVENT_TARGET_TYPE }).append(group);
         this._zoomDragTracker = renderer.rect(-options.sliderLength / 2, options.sliderLineEndOffset - options.sliderWidth / 2, options.sliderLength, options.sliderWidth).data(dataKey, { index: COMMAND_ZOOM_DRAG, name: EVENT_TARGET_TYPE }).append(group);
     },
 
     // BEGIN: Implementation of LayoutTarget interface
     resize: function(size) {
         if(this._isActive) {
-            this._root.attr({ visibility: size !== null ? null : "hidden" });
+            this._root.attr({ visibility: size !== null ? null : 'hidden' });
         }
     },
 
@@ -257,10 +257,10 @@ ControlBar.prototype = {
         that._layoutOptions = {
             width: 2 * that._margin + TOTAL_WIDTH,
             height: 2 * that._margin + TOTAL_HEIGHT,
-            horizontalAlignment: parseHorizontalAlignment(options.horizontalAlignment, "left"),
-            verticalAlignment: parseVerticalAlignment(options.verticalAlignment, "top")
+            horizontalAlignment: parseHorizontalAlignment(options.horizontalAlignment, 'left'),
+            verticalAlignment: parseVerticalAlignment(options.verticalAlignment, 'top')
         };
-        that._buttonsGroup.attr({ "stroke-width": options.borderWidth, stroke: options.borderColor, fill: options.color, "fill-opacity": options.opacity });
+        that._buttonsGroup.attr({ 'stroke-width': options.borderWidth, stroke: options.borderColor, fill: options.color, 'fill-opacity': options.opacity });
         that._update();
     },
 

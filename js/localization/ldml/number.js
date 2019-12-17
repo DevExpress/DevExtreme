@@ -1,59 +1,59 @@
-var fitIntoRange = require("../../core/utils/math").fitIntoRange;
-var toFixed = require("../utils").toFixed;
+var fitIntoRange = require('../../core/utils/math').fitIntoRange;
+var toFixed = require('../utils').toFixed;
 
-var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
-    ESCAPING_CHAR = "'",
+var DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' },
+    ESCAPING_CHAR = '\'',
     MAXIMUM_NUMBER_LENGTH = 15;
 
 function getGroupSizes(formatString) {
-    return formatString.split(",").slice(1).map(function(str) {
-        return str.split("").filter(function(char) {
-            return char === "#" || char === "0";
+    return formatString.split(',').slice(1).map(function(str) {
+        return str.split('').filter(function(char) {
+            return char === '#' || char === '0';
         }).length;
     });
 }
 
 function getSignParts(format) {
-    var signParts = format.split(";");
+    var signParts = format.split(';');
 
     if(signParts.length === 1) {
-        signParts.push("-" + signParts[0]);
+        signParts.push('-' + signParts[0]);
     }
 
     return signParts;
 }
 
 function reverseString(str) {
-    return str.toString().split("").reverse().join("");
+    return str.toString().split('').reverse().join('');
 }
 
 function isPercentFormat(format) {
-    return format.indexOf("%") !== -1 && !format.match(/'[^']*%[^']*'/g);
+    return format.indexOf('%') !== -1 && !format.match(/'[^']*%[^']*'/g);
 }
 
 function getNonRequiredDigitCount(floatFormat) {
     if(!floatFormat) return 0;
-    return floatFormat.length - floatFormat.replace(/[#]/g, "").length;
+    return floatFormat.length - floatFormat.replace(/[#]/g, '').length;
 }
 
 function getRequiredDigitCount(floatFormat) {
     if(!floatFormat) return 0;
-    return floatFormat.length - floatFormat.replace(/[0]/g, "").length;
+    return floatFormat.length - floatFormat.replace(/[0]/g, '').length;
 }
 
 function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
-    if(!valuePart) return "";
+    if(!valuePart) return '';
 
     if(valuePart.length > maxDigitCount) {
         valuePart = valuePart.substr(0, maxDigitCount);
     }
 
-    while(valuePart.length > minDigitCount && valuePart.slice(-1) === "0") {
+    while(valuePart.length > minDigitCount && valuePart.slice(-1) === '0') {
         valuePart = valuePart.substr(0, valuePart.length - 1);
     }
 
     while(valuePart.length < minDigitCount) {
-        valuePart += "0";
+        valuePart += '0';
     }
 
     return valuePart;
@@ -83,17 +83,17 @@ function formatNumberPart(format, valueString) {
             return ESCAPING_CHAR;
         }
         return isEscape ? formatPart : formatPart.replace(/[,#0]+/, valueString);
-    }).join("");
+    }).join('');
 }
 
 function getFloatPointIndex(format) {
     var isEscape = false;
 
     for(var index = 0; index < format.length; index++) {
-        if(format[index] === "'") {
+        if(format[index] === '\'') {
             isEscape = !isEscape;
         }
-        if(format[index] === "." && !isEscape) {
+        if(format[index] === '.' && !isEscape) {
             return index;
         }
     }
@@ -105,7 +105,7 @@ function getFormatter(format, config) {
     config = config || DEFAULT_CONFIG;
 
     return function(value) {
-        if(typeof value !== "number" || isNaN(value)) return "";
+        if(typeof value !== 'number' || isNaN(value)) return '';
 
         var signFormatParts = getSignParts(format),
             isPositiveZero = 1 / value === Infinity,
@@ -130,7 +130,7 @@ function getFormatter(format, config) {
             floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength),
             groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
 
-        var valueParts = toFixed(value, floatPrecision < 0 ? 0 : floatPrecision).split(".");
+        var valueParts = toFixed(value, floatPrecision < 0 ? 0 : floatPrecision).split('.');
 
         var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
@@ -138,9 +138,9 @@ function getFormatter(format, config) {
         valueIntegerPart = applyGroups(valueIntegerPart, groupSizes, config.thousandsSeparator);
 
         var integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), valueIntegerPart)),
-            floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : "";
+            floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : '';
 
-        var result = integerString + (floatString.match(/\d/) ? config.decimalSeparator : "") + floatString;
+        var result = integerString + (floatString.match(/\d/) ? config.decimalSeparator : '') + floatString;
 
         return result;
     };
@@ -160,18 +160,18 @@ function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
 
     do {
         if(nextText) {
-            char = text.length === nextText.length ? "0" : "1";
+            char = text.length === nextText.length ? '0' : '1';
             valueText = isIntegerPart ? char + valueText : valueText + char;
         }
         text = nextText || formatter(parseValue(nextValueText, isPercent));
-        nextValueText = isIntegerPart ? "1" + nextValueText : nextValueText + "1";
+        nextValueText = isIntegerPart ? '1' + nextValueText : nextValueText + '1';
         nextText = formatter(parseValue(nextValueText, isPercent));
     } while(text !== nextText && (isIntegerPart ? text.length === nextText.length : text.length <= nextText.length));
 
     if(isIntegerPart && nextText.length > text.length) {
-        var hasGroups = formatter(12345).indexOf("12345") === -1;
+        var hasGroups = formatter(12345).indexOf('12345') === -1;
         do {
-            valueText = "1" + valueText;
+            valueText = '1' + valueText;
         } while(hasGroups && parseValue(valueText, isPercent) < 100000);
     }
 
@@ -180,29 +180,29 @@ function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
 
 function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
     var format = formatter(parseValue(valueText, isPercent, isNegative)),
-        valueTextParts = valueText.split("."),
-        valueTextWithModifiedFloat = valueTextParts[0] + ".3" + valueTextParts[1].slice(1),
+        valueTextParts = valueText.split('.'),
+        valueTextWithModifiedFloat = valueTextParts[0] + '.3' + valueTextParts[1].slice(1),
         valueWithModifiedFloat = parseValue(valueTextWithModifiedFloat, isPercent, isNegative),
-        decimalSeparatorIndex = formatter(valueWithModifiedFloat).indexOf("3") - 1;
+        decimalSeparatorIndex = formatter(valueWithModifiedFloat).indexOf('3') - 1;
 
-    format = format.replace(/(\d)\D(\d)/g, "$1,$2");
+    format = format.replace(/(\d)\D(\d)/g, '$1,$2');
 
     if(decimalSeparatorIndex >= 0) {
-        format = format.slice(0, decimalSeparatorIndex) + "." + format.slice(decimalSeparatorIndex + 1);
+        format = format.slice(0, decimalSeparatorIndex) + '.' + format.slice(decimalSeparatorIndex + 1);
     }
 
-    format = format.replace(/1+/, "1").replace(/1/g, "#");
+    format = format.replace(/1+/, '1').replace(/1/g, '#');
 
     if(!isPercent) {
-        format = format.replace("%", "'%'");
+        format = format.replace('%', '\'%\'');
     }
 
     return format;
 }
 
 function getFormat(formatter) {
-    var valueText = ".",
-        isPercent = formatter(1).indexOf("100") >= 0;
+    var valueText = '.',
+        isPercent = formatter(1).indexOf('100') >= 0;
 
     valueText = prepareValueText(valueText, formatter, isPercent, true);
     valueText = prepareValueText(valueText, formatter, isPercent, false);
@@ -210,7 +210,7 @@ function getFormat(formatter) {
     var positiveFormat = getFormatByValueText(valueText, formatter, isPercent, false);
     var negativeFormat = getFormatByValueText(valueText, formatter, isPercent, true);
 
-    return negativeFormat === "-" + positiveFormat ? positiveFormat : positiveFormat + ";" + negativeFormat;
+    return negativeFormat === '-' + positiveFormat ? positiveFormat : positiveFormat + ';' + negativeFormat;
 }
 
 exports.getFormatter = getFormatter;

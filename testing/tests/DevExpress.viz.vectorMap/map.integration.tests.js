@@ -1,5 +1,5 @@
-var $ = require("jquery"),
-    simpleProjection = require("viz/vector_map/projection").projection({
+var $ = require('jquery'),
+    simpleProjection = require('viz/vector_map/projection').projection({
         aspectRatio: 4 / 3,
         to: function(coordinates) {
             return [
@@ -16,16 +16,16 @@ var $ = require("jquery"),
         }
     });
 
-require("viz/vector_map/vector_map");
+require('viz/vector_map/vector_map');
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html("<div id='container'></div>");
+    $('#qunit-fixture').html('<div id=\'container\'></div>');
 });
 
-QUnit.module("Tests without stub", {
+QUnit.module('Tests without stub', {
     beforeEach: function() {
         this.dataSource = {
-            type: "FeatureCollection",
+            type: 'FeatureCollection',
             features: [
                 [
                     [[100, 50], [200, 50], [200, 200], [100, 200]]
@@ -37,9 +37,9 @@ QUnit.module("Tests without stub", {
                 []
             ].map(function(item) {
                 return {
-                    type: "Feature",
+                    type: 'Feature',
                     geometry: {
-                        type: "Polygon",
+                        type: 'Polygon',
                         coordinates: item.coordinates ? item.coordinates : item
                     },
                     properties: item.properties || {}
@@ -49,11 +49,11 @@ QUnit.module("Tests without stub", {
     }
 });
 
-QUnit.test("VectorMap should not fire onCenterChanged and onZoomFactorChanged events on widget creation", function(assert) {
+QUnit.test('VectorMap should not fire onCenterChanged and onZoomFactorChanged events on widget creation', function(assert) {
     var onCenterChanged = sinon.spy(),
         onZoomFactorChanged = sinon.spy();
 
-    $("#container").dxVectorMap({
+    $('#container').dxVectorMap({
         projection: simpleProjection,
         layers: {
             dataSource: this.dataSource
@@ -68,11 +68,11 @@ QUnit.test("VectorMap should not fire onCenterChanged and onZoomFactorChanged ev
     assert.strictEqual(onZoomFactorChanged.callCount, 0);
 });
 
-QUnit.test("VectorMap should fire onCenterChanged and onZoomFactorChanged events on option changing", function(assert) {
+QUnit.test('VectorMap should fire onCenterChanged and onZoomFactorChanged events on option changing', function(assert) {
     var onCenterChanged = sinon.spy(),
         onZoomFactorChanged = sinon.spy();
 
-    var map = $("#container").dxVectorMap({
+    var map = $('#container').dxVectorMap({
         projection: simpleProjection,
         layers: {
             dataSource: this.dataSource
@@ -80,7 +80,7 @@ QUnit.test("VectorMap should fire onCenterChanged and onZoomFactorChanged events
         zoomFactor: 3.5,
         onCenterChanged: onCenterChanged,
         onZoomFactorChanged: onZoomFactorChanged
-    }).dxVectorMap("instance");
+    }).dxVectorMap('instance');
 
     map.option({
         center: [10, 10],
@@ -91,10 +91,10 @@ QUnit.test("VectorMap should fire onCenterChanged and onZoomFactorChanged events
     assert.strictEqual(onZoomFactorChanged.callCount, 1);
 });
 
-QUnit.module("VectorMap bounds", {
+QUnit.module('VectorMap bounds', {
     beforeEach: function() {
         this.dataSource = {
-            type: "FeatureCollection",
+            type: 'FeatureCollection',
             features: [
                 [
                     [[100, 50], [120, 50], [150, 20], [50, 40]]
@@ -106,9 +106,9 @@ QUnit.module("VectorMap bounds", {
                 []
             ].map(function(item) {
                 return {
-                    type: "Feature",
+                    type: 'Feature',
                     geometry: {
-                        type: "Polygon",
+                        type: 'Polygon',
                         coordinates: item.coordinates ? item.coordinates : item
                     },
                     properties: item.properties || {}
@@ -118,28 +118,28 @@ QUnit.module("VectorMap bounds", {
     }
 });
 
-QUnit.test("VectorMap should set prepared bounds from dataSource (root - FeatureCollection object)", function(assert) {
-    this.dataSource["bbox"] = [0, 50, 100, 0];
-    var map = $("#container").dxVectorMap({
+QUnit.test('VectorMap should set prepared bounds from dataSource (root - FeatureCollection object)', function(assert) {
+    this.dataSource['bbox'] = [0, 50, 100, 0];
+    var map = $('#container').dxVectorMap({
         getBoundsFromData: true,
         layers: {
             dataSource: this.dataSource
         }
-    }).dxVectorMap("instance");
+    }).dxVectorMap('instance');
 
     assert.deepEqual(map._projection._engine.min(), [0, 0]);
     assert.deepEqual(map._projection._engine.max(), [100, 50]);
 });
 
-QUnit.test("VectorMap should set prepared bounds from dataSource (collect from feature objects)", function(assert) {
-    this.dataSource.features[0]["bbox"] = [-10, 50, 120, 0];
-    this.dataSource.features[1]["bbox"] = [0, 60, 100, -10];
-    var map = $("#container").dxVectorMap({
+QUnit.test('VectorMap should set prepared bounds from dataSource (collect from feature objects)', function(assert) {
+    this.dataSource.features[0]['bbox'] = [-10, 50, 120, 0];
+    this.dataSource.features[1]['bbox'] = [0, 60, 100, -10];
+    var map = $('#container').dxVectorMap({
         getBoundsFromData: true,
         layers: {
             dataSource: this.dataSource
         }
-    }).dxVectorMap("instance");
+    }).dxVectorMap('instance');
 
     assert.deepEqual(map._projection._engine.min(), [-10, -10]);
     assert.deepEqual(map._projection._engine.max(), [120, 60]);

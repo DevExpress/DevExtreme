@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import Class from "../../core/class";
-import Callbacks from "../../core/utils/callbacks";
-import { grep } from "../../core/utils/common";
-import { isFunction } from "../../core/utils/type";
-import { inArray } from "../../core/utils/array";
-import { each } from "../../core/utils/iterator";
-import errors from "../widget/ui.errors";
-import messageLocalization from "../../localization/message";
-import { hasWindow } from "../../core/utils/window";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import Class from '../../core/class';
+import Callbacks from '../../core/utils/callbacks';
+import { grep } from '../../core/utils/common';
+import { isFunction } from '../../core/utils/type';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import errors from '../widget/ui.errors';
+import messageLocalization from '../../localization/message';
+import { hasWindow } from '../../core/utils/window';
 
-var WIDGET_WITH_LEGACY_CONTAINER_NAME = "dxDataGrid";
+var WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 
 var ModuleItem = Class.inherit({
@@ -102,7 +102,7 @@ var ModuleItem = Class.inherit({
 
     setAria: function(name, value, $target) {
         var target = $target.get(0),
-            prefix = (name !== "role" && name !== "id") ? "aria-" : "";
+            prefix = (name !== 'role' && name !== 'id') ? 'aria-' : '';
 
         if(target.setAttribute) {
             target.setAttribute(prefix + name, value);
@@ -149,11 +149,11 @@ var ModuleItem = Class.inherit({
     addWidgetPrefix: function(className) {
         var componentName = this.component.NAME;
 
-        return "dx-" + componentName.slice(2).toLowerCase() + (className ? "-" + className : "");
+        return 'dx-' + componentName.slice(2).toLowerCase() + (className ? '-' + className : '');
     },
 
     getWidgetContainerClass: function() {
-        var containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : "container";
+        var containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
         return this.addWidgetPrefix(containerName);
     }
@@ -220,8 +220,8 @@ var View = ModuleItem.inherit({
 
         if(!$element) return 0;
 
-        var marginTop = parseFloat($element.css("marginTop")) || 0,
-            marginBottom = parseFloat($element.css("marginBottom")) || 0,
+        var marginTop = parseFloat($element.css('marginTop')) || 0,
+            marginBottom = parseFloat($element.css('marginBottom')) || 0,
             offsetHeight = $element.get(0).offsetHeight;
 
         return offsetHeight + marginTop + marginBottom;
@@ -244,11 +244,11 @@ var View = ModuleItem.inherit({
         this._requireReady = false;
 
         if(!$element) {
-            $element = this._$element = $("<div>").appendTo($parent);
+            $element = this._$element = $('<div>').appendTo($parent);
             this._$parent = $parent;
         }
 
-        $element.toggleClass("dx-hidden", !isVisible);
+        $element.toggleClass('dx-hidden', !isVisible);
         if(isVisible) {
             this.component._optionCache = {};
             this._renderCore(options);
@@ -266,7 +266,7 @@ var View = ModuleItem.inherit({
     },
 
     focus: function() {
-        eventsEngine.trigger(this.element(), "focus");
+        eventsEngine.trigger(this.element(), 'focus');
     }
 });
 
@@ -303,18 +303,18 @@ var processModules = function(that, componentClass) {
 
             controllers && each(controllers, function(name, type) {
                 if(controllerTypes[name]) {
-                    throw errors.Error("E1001", moduleName, name);
+                    throw errors.Error('E1001', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(Controller))) {
                     type.subclassOf(Controller);
-                    throw errors.Error("E1002", moduleName, name);
+                    throw errors.Error('E1002', moduleName, name);
                 }
                 controllerTypes[name] = type;
             });
             views && each(views, function(name, type) {
                 if(viewTypes[name]) {
-                    throw errors.Error("E1003", moduleName, name);
+                    throw errors.Error('E1003', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(View))) {
-                    throw errors.Error("E1004", moduleName, name);
+                    throw errors.Error('E1004', moduleName, name);
                 }
                 viewTypes[name] = type;
             });
@@ -351,10 +351,10 @@ var processModules = function(that, componentClass) {
                             return moduleItem[methodName].apply(moduleItem, arguments);
                         };
                     } else {
-                        throw errors.Error("E1005", methodName);
+                        throw errors.Error('E1005', methodName);
                     }
                 } else {
-                    throw errors.Error("E1006", name, methodName);
+                    throw errors.Error('E1006', name, methodName);
                 }
             });
         }

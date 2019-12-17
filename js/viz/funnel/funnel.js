@@ -1,12 +1,12 @@
-var tiling = require("./tiling"),
-    dynamicSlope = require("./tiling.funnel"),
-    dynamicHeight = require("./tiling.pyramid"),
-    noop = require("../../core/utils/common").noop,
-    Item = require("./item"),
-    NODES_CREATE_CHANGE = "NODES_CREATE";
+var tiling = require('./tiling'),
+    dynamicSlope = require('./tiling.funnel'),
+    dynamicHeight = require('./tiling.pyramid'),
+    noop = require('../../core/utils/common').noop,
+    Item = require('./item'),
+    NODES_CREATE_CHANGE = 'NODES_CREATE';
 
-tiling.addAlgorithm("dynamicslope", dynamicSlope, true);
-tiling.addAlgorithm("dynamicheight", dynamicHeight);
+tiling.addAlgorithm('dynamicslope', dynamicSlope, true);
+tiling.addAlgorithm('dynamicheight', dynamicHeight);
 
 function invertFigure(figure) {
     return figure.map(function(coord, index) {
@@ -21,15 +21,15 @@ function getLegendItemState(itemState) {
     };
 }
 
-var dxFunnel = require("../core/base_widget").inherit({
-    _rootClass: "dxf-funnel",
+var dxFunnel = require('../core/base_widget').inherit({
+    _rootClass: 'dxf-funnel',
 
-    _rootClassPrefix: "dxf",
+    _rootClassPrefix: 'dxf',
 
     _proxyData: [],
 
     _optionChangesMap: {
-        dataSource: "DATA_SOURCE",
+        dataSource: 'DATA_SOURCE',
         neckWidth: NODES_CREATE_CHANGE,
         neckHeight: NODES_CREATE_CHANGE,
         inverted: NODES_CREATE_CHANGE,
@@ -49,13 +49,13 @@ var dxFunnel = require("../core/base_widget").inherit({
         return { width: 400, height: 400 };
     },
 
-    _themeSection: "funnel",
+    _themeSection: 'funnel',
 
-    _fontFields: ["legend.title.font", "legend.title.subtitle.font", "legend.font"],
+    _fontFields: ['legend.title.font', 'legend.title.subtitle.font', 'legend.font'],
 
-    _optionChangesOrder: ["DATA_SOURCE"],
+    _optionChangesOrder: ['DATA_SOURCE'],
 
-    _initialChanges: ["DATA_SOURCE"],
+    _initialChanges: ['DATA_SOURCE'],
 
     _initCore: function() {
         this._group = this._renderer.g().append(this._renderer.root);
@@ -63,15 +63,15 @@ var dxFunnel = require("../core/base_widget").inherit({
     },
 
     _eventsMap: {
-        onHoverChanged: { name: "hoverChanged" },
-        onSelectionChanged: { name: "selectionChanged" }
+        onHoverChanged: { name: 'hoverChanged' },
+        onSelectionChanged: { name: 'selectionChanged' }
     },
 
     _disposeCore: noop,
 
     _applySize: function(rect) {
         this._rect = rect.slice();
-        this._change(["TILING"]);
+        this._change(['TILING']);
         return this._rect;
     },
 
@@ -93,7 +93,7 @@ var dxFunnel = require("../core/base_widget").inherit({
 
         items.forEach(function(item, index) {
             var coords = item.figure.map(convertCoord),
-                element = that._renderer.path([], "area")
+                element = that._renderer.path([], 'area')
                     .attr({
                         points: coords
                     })
@@ -103,10 +103,10 @@ var dxFunnel = require("../core/base_widget").inherit({
             item.element = element;
         });
 
-        this._requestChange(["TILES"]);
+        this._requestChange(['TILES']);
     },
 
-    _customChangesOrder: [NODES_CREATE_CHANGE, "LAYOUT", "TILING", "TILES", "DRAWN"],
+    _customChangesOrder: [NODES_CREATE_CHANGE, 'LAYOUT', 'TILING', 'TILES', 'DRAWN'],
 
     _dataSourceChangedHandler: function() {
         this._requestChange([NODES_CREATE_CHANGE]);
@@ -117,7 +117,7 @@ var dxFunnel = require("../core/base_widget").inherit({
     },
 
     _change_DATA_SOURCE: function() {
-        this._change(["DRAWN"]);
+        this._change(['DRAWN']);
         this._updateDataSource();
     },
 
@@ -180,9 +180,9 @@ var dxFunnel = require("../core/base_widget").inherit({
     _getData: function() {
         var that = this,
             data = that._dataSourceItems() || [],
-            valueField = that._getOption("valueField", true),
-            argumentField = that._getOption("argumentField", true),
-            colorField = that._getOption("colorField", true),
+            valueField = that._getOption('valueField', true),
+            argumentField = that._getOption('argumentField', true),
+            colorField = that._getOption('colorField', true),
             processedData = data.reduce(function(d, item) {
                 var value = Number(item[valueField]);
                 if(value >= 0) {
@@ -206,10 +206,10 @@ var dxFunnel = require("../core/base_widget").inherit({
         }
 
         if(data.length > 0 && items.length === 0) {
-            that._incidentOccurred("E2005", valueField);
+            that._incidentOccurred('E2005', valueField);
         }
 
-        if(that._getOption("sortData", true)) {
+        if(that._getOption('sortData', true)) {
             items.sort(function(a, b) {
                 return b.value - a.value;
             });
@@ -221,13 +221,13 @@ var dxFunnel = require("../core/base_widget").inherit({
     _buildNodes: function() {
         var that = this,
             data = that._getData(),
-            algorithm = tiling.getAlgorithm(that._getOption("algorithm", true)),
+            algorithm = tiling.getAlgorithm(that._getOption('algorithm', true)),
             percents = algorithm.normalizeValues(data),
-            itemOptions = that._getOption("item"),
-            figures = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true)),
-            palette = that._themeManager.createPalette(that._getOption("palette", true), {
+            itemOptions = that._getOption('item'),
+            figures = algorithm.getFigures(percents, that._getOption('neckWidth', true), that._getOption('neckHeight', true)),
+            palette = that._themeManager.createPalette(that._getOption('palette', true), {
                 useHighlight: true,
-                extensionMode: that._getOption("paletteExtensionMode", true),
+                extensionMode: that._getOption('paletteExtensionMode', true),
                 count: figures.length
             });
 
@@ -245,14 +245,14 @@ var dxFunnel = require("../core/base_widget").inherit({
             return node;
         });
 
-        if(that._getOption("inverted", true)) {
+        if(that._getOption('inverted', true)) {
             that._items.forEach(function(item) {
                 item.figure = invertFigure(item.figure);
             });
         }
 
         that._renderer.initHatching();
-        that._change(["TILING", "DRAWN"]);
+        that._change(['TILING', 'DRAWN']);
     },
 
     _showTooltip: noop,
@@ -281,15 +281,15 @@ var dxFunnel = require("../core/base_widget").inherit({
     },
 
     _getMinSize: function() {
-        var adaptiveLayout = this._getOption("adaptiveLayout");
+        var adaptiveLayout = this._getOption('adaptiveLayout');
 
         return [adaptiveLayout.width, adaptiveLayout.height];
     }
 });
 
 
-require("../../core/component_registrator")("dxFunnel", dxFunnel);
+require('../../core/component_registrator')('dxFunnel', dxFunnel);
 module.exports = dxFunnel;
 
 // PLUGINS_SECTION
-dxFunnel.addPlugin(require("../core/data_source").plugin);
+dxFunnel.addPlugin(require('../core/data_source').plugin);

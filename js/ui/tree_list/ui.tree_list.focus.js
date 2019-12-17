@@ -15,21 +15,21 @@ function findIndex(items, callback) {
     return result;
 }
 
-core.registerModule("focus", extend(true, {}, focusModule, {
+core.registerModule('focus', extend(true, {}, focusModule, {
     extenders: {
         controllers: {
             data: {
                 changeRowExpand: function(key) {
-                    if(this.option("focusedRowEnabled") && this.isRowExpanded(key)) {
+                    if(this.option('focusedRowEnabled') && this.isRowExpanded(key)) {
                         if(this._isFocusedRowInside(key)) {
-                            this.option("focusedRowKey", key);
+                            this.option('focusedRowKey', key);
                         }
                     }
 
                     return this.callBase.apply(this, arguments);
                 },
                 _isFocusedRowInside: function(parentKey) {
-                    var focusedRowKey = this.option("focusedRowKey"),
+                    var focusedRowKey = this.option('focusedRowKey'),
                         rowIndex = this.getRowIndexByKey(focusedRowKey),
                         focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex],
                         parent = focusedRow && focusedRow.node.parent;
@@ -53,7 +53,7 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                         d.resolve(node.parent ? node.parent.key : undefined);
                     } else {
                         dataSource.load({
-                            filter: [dataSource.getKeyExpr(), "=", key]
+                            filter: [dataSource.getKeyExpr(), '=', key]
                         }).done(function(items) {
                             var parentData = items[0];
 
@@ -73,7 +73,7 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                         d = new Deferred();
 
                     that.getParentKey(key).done(function(parentKey) {
-                        if(dataSource && parentKey !== undefined && parentKey !== that.option("rootValue")) {
+                        if(dataSource && parentKey !== undefined && parentKey !== that.option('rootValue')) {
                             dataSource._isNodesInitializing = true;
                             that.expandRow(parentKey);
                             dataSource._isNodesInitializing = false;
@@ -93,7 +93,7 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                     that.expandAscendants(key).done(function() {
                         dataSource.load({
                             filter: that.getCombinedFilter(),
-                            sort: that.getController("columns").getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
+                            sort: that.getController('columns').getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
                             parentIds: []
                         }).done(function(nodes) {
                             var offset = findIndex(nodes, function(node) {

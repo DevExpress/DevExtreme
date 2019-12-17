@@ -1,14 +1,14 @@
-import { each, map } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import Class from "../../core/class";
-import EventsMixin from "../../core/events_mixin";
-import ValidationEngine from "../../ui/validation_engine";
-import { Deferred } from "../../core/utils/deferred";
-import Guid from "../../core/guid";
-import ko from "knockout";
+import { each, map } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import Class from '../../core/class';
+import EventsMixin from '../../core/events_mixin';
+import ValidationEngine from '../../ui/validation_engine';
+import { Deferred } from '../../core/utils/deferred';
+import Guid from '../../core/guid';
+import ko from 'knockout';
 
-const VALIDATION_STATUS_VALID = "valid",
-    VALIDATION_STATUS_PENDING = "pending";
+const VALIDATION_STATUS_VALID = 'valid',
+    VALIDATION_STATUS_PENDING = 'pending';
 
 const koDxValidator = Class.inherit({
     ctor(target, { name, validationRules }) {
@@ -37,7 +37,7 @@ const koDxValidator = Class.inherit({
             this._validationInfo.result = extend({}, result, { complete });
         } else {
             for(let prop in result) {
-                if(prop !== "id" && prop !== "complete") {
+                if(prop !== 'id' && prop !== 'complete') {
                     this._validationInfo.result[prop] = result[prop];
                 }
             }
@@ -88,11 +88,11 @@ const koDxValidator = Class.inherit({
                 this._validationInfo.deferred = new Deferred();
                 this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this.fireEvent("validating", [this._validationInfo.result]);
+            this.fireEvent('validating', [this._validationInfo.result]);
             return;
         }
         if(result.status !== VALIDATION_STATUS_PENDING) {
-            this.fireEvent("validated", [result]);
+            this.fireEvent('validated', [result]);
             if(this._validationInfo.deferred) {
                 this._validationInfo.deferred.resolve(result);
                 this._validationInfo.deferred = null;
