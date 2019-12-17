@@ -1,14 +1,14 @@
-import $ from "jquery";
-import dataCoreUtils from "core/utils/data";
-import typeUtils from "core/utils/type";
-import fx from "animation/fx";
-import "ui/scheduler/ui.scheduler";
+import $ from 'jquery';
+import dataCoreUtils from 'core/utils/data';
+import typeUtils from 'core/utils/type';
+import fx from 'animation/fx';
+import 'ui/scheduler/ui.scheduler';
 
 const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
+    $('#qunit-fixture').html('<div id="scheduler-appointments"></div>\
                                 <div id="allDayContainer"></div>\
                                 <div id="fixedContainer"></div>');
 });
@@ -27,38 +27,38 @@ var moduleOptions = {
         this.getCoordinates = function() {
             return this.coordinates;
         };
-        this.instance = $("#scheduler-appointments").dxSchedulerAppointments().dxSchedulerAppointments("instance");
+        this.instance = $('#scheduler-appointments').dxSchedulerAppointments().dxSchedulerAppointments('instance');
 
         this.instance.notifyObserver = $.proxy(function(command, options) {
-            if(command === "needCoordinates") {
+            if(command === 'needCoordinates') {
                 options.callback(this.getCoordinates.apply(this));
             }
 
-            if(command === "getCellDimensions") {
+            if(command === 'getCellDimensions') {
                 options.callback(this.width, this.height, this.allDayHeight);
             }
 
-            if(command === "getFullWeekAppointmentWidth") {
+            if(command === 'getFullWeekAppointmentWidth') {
                 options.callback(this.fullWeekAppointmentWidth);
             }
 
-            if(command === "getMaxAppointmentWidth") {
+            if(command === 'getMaxAppointmentWidth') {
                 options.callback(this.maxAppointmentWidth);
             }
 
-            if(command === "getAppointmentColor") {
-                options.callback($.Deferred().resolve("red").promise());
+            if(command === 'getAppointmentColor') {
+                options.callback($.Deferred().resolve('red').promise());
             }
 
-            if(command === "getResourceForPainting") {
-                options.callback({ field: "roomId" });
+            if(command === 'getResourceForPainting') {
+                options.callback({ field: 'roomId' });
             }
 
-            if(command === "updateAppointmentStartDate") {
+            if(command === 'updateAppointmentStartDate') {
                 this.viewStartDate && options.callback(this.viewStartDate);
             }
 
-            if(command === "getAppointmentDurationInMs") {
+            if(command === 'getAppointmentDurationInMs') {
                 options.callback(options.endDate.getTime() - options.startDate.getTime());
             }
 
@@ -67,55 +67,55 @@ var moduleOptions = {
         this.instance.invoke = $.proxy(function(command, field, obj, value) {
             var dataAccessors = {
                 getter: {
-                    startDate: compileGetter("startDate"),
-                    endDate: compileGetter("endDate"),
-                    allDay: compileGetter("allDay"),
-                    text: compileGetter("text"),
-                    recurrenceRule: compileGetter("recurrenceRule")
+                    startDate: compileGetter('startDate'),
+                    endDate: compileGetter('endDate'),
+                    allDay: compileGetter('allDay'),
+                    text: compileGetter('text'),
+                    recurrenceRule: compileGetter('recurrenceRule')
                 },
                 setter: {
-                    startDate: compileSetter("startDate"),
-                    endDate: compileSetter("endDate"),
-                    allDay: compileSetter("allDay"),
-                    text: compileSetter("text"),
-                    recurrenceRule: compileSetter("recurrenceRule")
+                    startDate: compileSetter('startDate'),
+                    endDate: compileSetter('endDate'),
+                    allDay: compileSetter('allDay'),
+                    text: compileSetter('text'),
+                    recurrenceRule: compileSetter('recurrenceRule')
                 }
             };
-            if(command === "getField") {
+            if(command === 'getField') {
                 if(!typeUtils.isDefined(dataAccessors.getter[field])) {
                     return;
                 }
 
                 return dataAccessors.getter[field](obj);
             }
-            if(command === "setField") {
+            if(command === 'setField') {
                 return dataAccessors.setter[field](obj, value);
             }
-            if(command === "prerenderFilter") {
-                return this.instance.option("items");
+            if(command === 'prerenderFilter') {
+                return this.instance.option('items');
             }
-            if(command === "convertDateByTimezone") {
+            if(command === 'convertDateByTimezone') {
                 return field;
             }
-            if(command === "getEndDayHour") {
-                if(this.instance.option("renderingStrategy") === "horizontalMonthLine") {
+            if(command === 'getEndDayHour') {
+                if(this.instance.option('renderingStrategy') === 'horizontalMonthLine') {
                     return 24;
                 } else {
                     return 20;
                 }
             }
-            if(command === "getStartDayHour") {
-                if(this.instance.option("renderingStrategy") === "horizontalMonthLine") {
+            if(command === 'getStartDayHour') {
+                if(this.instance.option('renderingStrategy') === 'horizontalMonthLine') {
                     return 0;
                 } else {
                     return 8;
                 }
             }
             // TODO: rename arguments
-            if(command === "processDateDependOnTimezone") {
+            if(command === 'processDateDependOnTimezone') {
                 return field;
             }
-            if(command === "getAppointmentGeometry") {
+            if(command === 'getAppointmentGeometry') {
                 return {
                     width: field.width || 0,
                     height: field.height || 0,
@@ -134,12 +134,12 @@ var moduleOptions = {
 
 (function() {
 
-    QUnit.module("Horizontal Month Strategy", moduleOptions);
+    QUnit.module('Horizontal Month Strategy', moduleOptions);
 
-    QUnit.test("AllDay appointment should be displayed right when endDate > startDate and duration < 24", function(assert) {
+    QUnit.test('AllDay appointment should be displayed right when endDate > startDate and duration < 24', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 2, 5, 10),
                 endDate: new Date(2015, 2, 6, 6),
                 allDay: true
@@ -148,17 +148,17 @@ var moduleOptions = {
         }];
 
         this.items = items;
-        this.instance.option("items", items);
+        this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment'),
             allDayAppointmentWidth = this.width * 2;
-        assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, "appointment has right width");
+        assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, 'appointment has right width');
     });
 
-    QUnit.test("Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)", function(assert) {
+    QUnit.test('Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 2, 1),
                 endDate: new Date(2015, 2, 8)
             },
@@ -170,18 +170,18 @@ var moduleOptions = {
 
         this.instance.option({
             items: items,
-            renderingStrategy: "horizontalMonth"
+            renderingStrategy: 'horizontalMonth'
         });
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.length, 1, "appointment is not multiline");
+        assert.equal($appointment.length, 1, 'appointment is not multiline');
     });
 
-    QUnit.test("Collapsing appointments should have specific class", function(assert) {
+    QUnit.test('Collapsing appointments should have specific class', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 11),
                 endDate: new Date(2015, 1, 9, 12)
             },
@@ -190,18 +190,18 @@ var moduleOptions = {
 
         this.width = 150;
         this.height = 200;
-        this.instance.option("renderingStrategy", "horizontalMonth");
+        this.instance.option('renderingStrategy', 'horizontalMonth');
         this.items = items;
-        this.instance.option("items", items);
+        this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
-        assert.ok($appointment.hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
+        assert.ok($appointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
-    QUnit.test("Small width appointments should have specific class", function(assert) {
+    QUnit.test('Small width appointments should have specific class', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
@@ -209,17 +209,17 @@ var moduleOptions = {
         }];
 
         this.items = items;
-        this.instance.option("renderingStrategy", "horizontalMonth");
-        this.instance.option("items", items);
+        this.instance.option('renderingStrategy', 'horizontalMonth');
+        this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
-        assert.ok($appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
-    QUnit.test("Small height appointments should have specific class", function(assert) {
+    QUnit.test('Small height appointments should have specific class', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
@@ -227,22 +227,22 @@ var moduleOptions = {
         }];
 
         this.items = items;
-        this.instance.option("renderingStrategy", "horizontalMonth");
-        this.instance.option("items", items);
+        this.instance.option('renderingStrategy', 'horizontalMonth');
+        this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
-        assert.ok($appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
-})("Horizontal Month Strategy");
+})('Horizontal Month Strategy');
 
 (function() {
-    QUnit.module("Horizontal Strategy", moduleOptions);
+    QUnit.module('Horizontal Strategy', moduleOptions);
 
-    QUnit.test("All-day appointment should have a correct css class", function(assert) {
+    QUnit.test('All-day appointment should have a correct css class', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 1),
                 endDate: new Date(2015, 1, 9, 2),
                 allDay: true
@@ -254,30 +254,30 @@ var moduleOptions = {
         this.width = 50;
         this.items = items;
 
-        this.instance.option("renderingStrategy", "horizontal");
-        this.instance.option("items", items);
+        this.instance.option('renderingStrategy', 'horizontal');
+        this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
-        assert.ok($appointment.eq(0).hasClass("dx-scheduler-all-day-appointment"), "Appointment has a right css class");
+        assert.ok($appointment.eq(0).hasClass('dx-scheduler-all-day-appointment'), 'Appointment has a right css class');
     });
 
-    QUnit.test("Appointment should have a correct min width", function(assert) {
+    QUnit.test('Appointment should have a correct min width', function(assert) {
         var items = [{
             itemData: {
-                text: "Appointment 1",
+                text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 1),
                 endDate: new Date(2015, 1, 9, 2),
                 allDay: true
             },
             settings: [{ width: 2 }]
         }];
-        this.instance.option("renderingStrategy", "horizontal");
-        this.instance.option("items", items);
+        this.instance.option('renderingStrategy', 'horizontal');
+        this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.outerWidth(), 2, "Min width is OK");
+        assert.equal($appointment.outerWidth(), 2, 'Min width is OK');
     });
 
-})("Horizontal Strategy");
+})('Horizontal Strategy');

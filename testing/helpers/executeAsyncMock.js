@@ -4,7 +4,7 @@
 
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.DevExpress.testing.executeAsyncMock = module.exports = factory(require("core/utils/common"));
+            root.DevExpress.testing.executeAsyncMock = module.exports = factory(require('core/utils/common'));
         });
     } else {
         root.DevExpress.testing.executeAsyncMock = factory(DevExpress.utils.common);

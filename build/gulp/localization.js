@@ -18,13 +18,13 @@ var getParentLocale = require('../../js/localization/parentLocale.js');
 
 var firstDayOfWeekData = function() {
     var DAY_INDEXES = {
-        "sun": 0,
-        "mon": 1,
-        "tue": 2,
-        "wed": 3,
-        "thu": 4,
-        "fri": 5,
-        "sat": 6
+        'sun': 0,
+        'mon': 1,
+        'tue': 2,
+        'wed': 3,
+        'thu': 4,
+        'fri': 5,
+        'sat': 6
     };
     var DEFAULT_DAY_OF_WEEK_INDEX = 0;
 

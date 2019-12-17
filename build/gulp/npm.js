@@ -30,7 +30,7 @@ var JSON_GLOBS = [
 
 var DIST_GLOBS = [
     'artifacts/**/*.*',
-    '!' + context.TRANSPILED_PATH + "/**/*.*",
+    '!' + context.TRANSPILED_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
     '!artifacts/js/angular**/*.*',
     '!artifacts/js/angular*',
@@ -66,9 +66,9 @@ var addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-var widgetNameByPath = require("./ts").widgetNameByPath;
-var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
-var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
+var widgetNameByPath = require('./ts').widgetNameByPath;
+var generateJQueryAugmentation = require('./ts').generateJQueryAugmentation;
+var getAugmentationOptionsPath = require('./ts').getAugmentationOptionsPath;
 
 gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
     var tsModules = MODULES.map(function(moduleMeta) {
@@ -83,7 +83,7 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
 
                 if(name !== 'default') {
                     switch(moduleMeta.exports[name].exportAs) {
-                        case "type":
+                        case 'type':
                             return `export type ${name} = DevExpress.${exportEntry.path};`;
                     }
                     return `export declare let ${name}: typeof DevExpress.${exportEntry.path};`;
@@ -103,7 +103,7 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
                 var widgetOptionsPath = getAugmentationOptionsPath(exportEntry.path);
                 if(widgetOptionsPath) {
                     result += `\nexport type Options = DevExpress.${widgetOptionsPath};`;
-                    result += `\n\n/** @deprecated use Options instead */`;
+                    result += '\n\n/** @deprecated use Options instead */';
                     result += `\nexport type IOptions = DevExpress.${widgetOptionsPath};`;
                 }
 

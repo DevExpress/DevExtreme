@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    devices = require("core/devices"),
-    fx = require("animation/fx"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    animationPresets = require("animation/presets/presets").presets,
-    TransitionExecutorModule = require("animation/transition_executor/transition_executor");
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    devices = require('core/devices'),
+    fx = require('animation/fx'),
+    executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
+    animationPresets = require('animation/presets/presets').presets,
+    TransitionExecutorModule = require('animation/transition_executor/transition_executor');
 
-QUnit.module("transition executor", {
+QUnit.module('transition executor', {
     beforeEach: function() {
         executeAsyncMock.setup();
         this._originalAnimate = fx.animate;
@@ -42,12 +42,12 @@ function MockAnimation(options) {
     this.deferred = options.deferred || $.Deferred();
 }
 
-QUnit.test("enter/leave/start", function(assert) {
+QUnit.test('enter/leave/start', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter = $("<div/>"),
-        $toLeave = $("<div/>"),
+        $toEnter = $('<div/>'),
+        $toLeave = $('<div/>'),
         fxAnimateDeferred = $.Deferred(),
         animationConfig = { duration: 555 };
 
@@ -70,7 +70,7 @@ QUnit.test("enter/leave/start", function(assert) {
     transitionExecutor.leave($toLeave, animationConfig);
 
     assert.equal(createAnimationLog.length, 2);
-    assert.equal(animationSetupLog.length, 2, "T266556");
+    assert.equal(animationSetupLog.length, 2, 'T266556');
     assert.equal(animationStartLog.length, 0);
 
     var resultDeferred = transitionExecutor.start();
@@ -80,28 +80,28 @@ QUnit.test("enter/leave/start", function(assert) {
     assert.equal(animationStartLog.length, 2);
 
     assert.equal(createAnimationLog[0].element[0], $toEnter[0]);
-    assert.equal(createAnimationLog[0].config.type, "css");
+    assert.equal(createAnimationLog[0].config.type, 'css');
     assert.equal(createAnimationLog[0].config.duration, 555);
-    assert.equal(createAnimationLog[0].config.from, "dx-enter dx-no-direction");
-    assert.equal(createAnimationLog[0].config.to, "dx-enter-active");
+    assert.equal(createAnimationLog[0].config.from, 'dx-enter dx-no-direction');
+    assert.equal(createAnimationLog[0].config.to, 'dx-enter-active');
 
     assert.equal(createAnimationLog[1].element[0], $toLeave[0]);
-    assert.equal(createAnimationLog[1].config.type, "css");
+    assert.equal(createAnimationLog[1].config.type, 'css');
     assert.equal(createAnimationLog[1].config.duration, 555);
-    assert.equal(createAnimationLog[1].config.from, "dx-leave dx-no-direction");
-    assert.equal(createAnimationLog[1].config.to, "dx-leave-active");
-    assert.equal(resultDeferred.state(), "pending");
+    assert.equal(createAnimationLog[1].config.from, 'dx-leave dx-no-direction');
+    assert.equal(createAnimationLog[1].config.to, 'dx-leave-active');
+    assert.equal(resultDeferred.state(), 'pending');
 
     fxAnimateDeferred.resolve();
 
     assert.equal(createAnimationLog.length, 2);
-    assert.equal(resultDeferred.state(), "resolved");
+    assert.equal(resultDeferred.state(), 'resolved');
 });
 
-QUnit.test("stop", function(assert) {
+QUnit.test('stop', function(assert) {
     var animationStopLog = [],
-        $toEnter = $("<div/>"),
-        $toLeave = $("<div/>"),
+        $toEnter = $('<div/>'),
+        $toLeave = $('<div/>'),
         animationConfig = { duration: 555 };
 
     fx.createAnimation = function(element, config) {
@@ -125,20 +125,20 @@ QUnit.test("stop", function(assert) {
     transitionExecutor.leave($toLeave, animationConfig);
     var resultDeferred = transitionExecutor.start();
     assert.equal(animationStopLog.length, 0);
-    assert.equal(resultDeferred.state(), "pending");
+    assert.equal(resultDeferred.state(), 'pending');
 
     transitionExecutor.stop();
 
     assert.equal(animationStopLog.length, 2);
-    assert.equal(resultDeferred.state(), "resolved");
+    assert.equal(resultDeferred.state(), 'resolved');
 });
 
-QUnit.test("enter/leave/start direction parameter", function(assert) {
+QUnit.test('enter/leave/start direction parameter', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter = $("<div/>"),
-        $toLeave = $("<div/>");
+        $toEnter = $('<div/>'),
+        $toLeave = $('<div/>');
 
     fx.createAnimation = function(element, config) {
         var result = new MockAnimation({
@@ -156,47 +156,47 @@ QUnit.test("enter/leave/start direction parameter", function(assert) {
     var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     createAnimationLog.length = 0;
-    transitionExecutor.enter($toEnter, { type: undefined, duration: 555, extraCssClasses: "a b" }, { direction: "forward" });
-    transitionExecutor.leave($toLeave, { type: "css", duration: 555, extraCssClasses: "a b" }, { direction: "forward" });
+    transitionExecutor.enter($toEnter, { type: undefined, duration: 555, extraCssClasses: 'a b' }, { direction: 'forward' });
+    transitionExecutor.leave($toLeave, { type: 'css', duration: 555, extraCssClasses: 'a b' }, { direction: 'forward' });
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
-    assert.equal(createAnimationLog[0].config.type, "css");
-    assert.equal(createAnimationLog[0].config.from, "dx-enter a b dx-forward");
-    assert.equal(createAnimationLog[0].config.to, "dx-enter-active");
-    assert.equal(createAnimationLog[1].config.type, "css");
-    assert.equal(createAnimationLog[1].config.from, "dx-leave a b dx-forward");
-    assert.equal(createAnimationLog[1].config.to, "dx-leave-active");
+    assert.equal(createAnimationLog[0].config.type, 'css');
+    assert.equal(createAnimationLog[0].config.from, 'dx-enter a b dx-forward');
+    assert.equal(createAnimationLog[0].config.to, 'dx-enter-active');
+    assert.equal(createAnimationLog[1].config.type, 'css');
+    assert.equal(createAnimationLog[1].config.from, 'dx-leave a b dx-forward');
+    assert.equal(createAnimationLog[1].config.to, 'dx-leave-active');
 
     createAnimationLog.length = 0;
-    transitionExecutor.enter($toEnter, { duration: 555 }, { direction: "backward" });
-    transitionExecutor.leave($toLeave, { duration: 555 }, { direction: "backward" });
+    transitionExecutor.enter($toEnter, { duration: 555 }, { direction: 'backward' });
+    transitionExecutor.leave($toLeave, { duration: 555 }, { direction: 'backward' });
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
-    assert.equal(createAnimationLog[0].config.from, "dx-enter dx-backward");
-    assert.equal(createAnimationLog[0].config.to, "dx-enter-active");
-    assert.equal(createAnimationLog[1].config.from, "dx-leave dx-backward");
-    assert.equal(createAnimationLog[1].config.to, "dx-leave-active");
+    assert.equal(createAnimationLog[0].config.from, 'dx-enter dx-backward');
+    assert.equal(createAnimationLog[0].config.to, 'dx-enter-active');
+    assert.equal(createAnimationLog[1].config.from, 'dx-leave dx-backward');
+    assert.equal(createAnimationLog[1].config.to, 'dx-leave-active');
 
     createAnimationLog.length = 0;
-    transitionExecutor.enter($toEnter, { duration: 555 }, { direction: "none" });
-    transitionExecutor.leave($toLeave, { duration: 555 }, { direction: "none" });
+    transitionExecutor.enter($toEnter, { duration: 555 }, { direction: 'none' });
+    transitionExecutor.leave($toLeave, { duration: 555 }, { direction: 'none' });
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
-    assert.equal(createAnimationLog[0].config.from, "dx-enter dx-no-direction");
-    assert.equal(createAnimationLog[0].config.to, "dx-enter-active");
-    assert.equal(createAnimationLog[1].config.from, "dx-leave dx-no-direction");
-    assert.equal(createAnimationLog[1].config.to, "dx-leave-active");
+    assert.equal(createAnimationLog[0].config.from, 'dx-enter dx-no-direction');
+    assert.equal(createAnimationLog[0].config.to, 'dx-enter-active');
+    assert.equal(createAnimationLog[1].config.from, 'dx-leave dx-no-direction');
+    assert.equal(createAnimationLog[1].config.to, 'dx-leave-active');
 });
 
-QUnit.test("enter/leave/start non css", function(assert) {
+QUnit.test('enter/leave/start non css', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter = $("<div/>"),
-        $toLeave = $("<div/>");
+        $toEnter = $('<div/>'),
+        $toLeave = $('<div/>');
 
     fx.createAnimation = function(element, config) {
         var result = new MockAnimation({
@@ -214,33 +214,33 @@ QUnit.test("enter/leave/start non css", function(assert) {
     var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     createAnimationLog.length = 0;
-    transitionExecutor.enter($toEnter, { type: "fade", from: 0.1, to: 0.9, duration: 555 });
-    transitionExecutor.leave($toLeave, { type: "fade", from: 0.9, to: 0.1, duration: 555 });
+    transitionExecutor.enter($toEnter, { type: 'fade', from: 0.1, to: 0.9, duration: 555 });
+    transitionExecutor.leave($toLeave, { type: 'fade', from: 0.9, to: 0.1, duration: 555 });
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
     assert.equal(createAnimationLog[0].element[0], $toEnter[0]);
-    assert.equal(createAnimationLog[0].config.type, "fade");
+    assert.equal(createAnimationLog[0].config.type, 'fade');
     assert.equal(createAnimationLog[0].config.from, 0.1);
     assert.equal(createAnimationLog[0].config.to, 0.9);
     assert.equal(createAnimationLog[0].config.duration, 555);
 
     assert.equal(createAnimationLog[1].element[0], $toLeave[0]);
-    assert.equal(createAnimationLog[1].config.type, "fade");
-    assert.equal(createAnimationLog[1].config.from, 0.9, "from and to are swapped");
+    assert.equal(createAnimationLog[1].config.type, 'fade');
+    assert.equal(createAnimationLog[1].config.from, 0.9, 'from and to are swapped');
     assert.equal(createAnimationLog[1].config.to, 0.1);
     assert.equal(createAnimationLog[1].config.duration, 555);
 });
 
-QUnit.test("enter/leave/start custom animations", function(assert) {
+QUnit.test('enter/leave/start custom animations', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter = $("<div/>"),
-        $toLeave = $("<div/>"),
+        $toEnter = $('<div/>'),
+        $toLeave = $('<div/>'),
         customAnimation,
         customAnimationNoResult = { enter: noop, leave: noop },
-        modifiers = { test: "test" },
+        modifiers = { test: 'test' },
         deferred = $.Deferred();
 
     customAnimation = {
@@ -279,28 +279,28 @@ QUnit.test("enter/leave/start custom animations", function(assert) {
 
     assert.equal(createAnimationLog.length, 2);
     assert.equal(createAnimationLog[0].element[0], $toEnter[0]);
-    assert.equal(createAnimationLog[0].config.test, "test");
+    assert.equal(createAnimationLog[0].config.test, 'test');
     assert.equal(createAnimationLog[1].element[0], $toLeave[0]);
-    assert.equal(createAnimationLog[1].config.test, "test");
-    assert.equal(transitionsPromise.state(), "pending");
+    assert.equal(createAnimationLog[1].config.test, 'test');
+    assert.equal(transitionsPromise.state(), 'pending');
 
     deferred.resolve();
-    assert.equal(transitionsPromise.state(), "resolved");
+    assert.equal(transitionsPromise.state(), 'resolved');
 
     transitionExecutor.enter($toEnter, customAnimationNoResult, modifiers);
     transitionExecutor.leave($toLeave, customAnimationNoResult, modifiers);
 
     transitionsPromise = transitionExecutor.start();
-    assert.equal(transitionsPromise.state(), "resolved");
+    assert.equal(transitionsPromise.state(), 'resolved');
 });
 
-QUnit.test("sync transitions", function(assert) {
+QUnit.test('sync transitions', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter1 = $("<div/>"),
-        $toEnter2 = $("<div/>"),
-        $toLeave = $("<div/>"),
+        $toEnter1 = $('<div/>'),
+        $toEnter2 = $('<div/>'),
+        $toLeave = $('<div/>'),
         fxAnimateDeferreds = [$.Deferred(), $.Deferred(), $.Deferred()];
 
     fx.createAnimation = function(element, config) {
@@ -327,26 +327,26 @@ QUnit.test("sync transitions", function(assert) {
 
     var resultDeferred = transitionExecutor.start();
     assert.equal(createAnimationLog.length, 3);
-    assert.equal(resultDeferred.state(), "pending");
+    assert.equal(resultDeferred.state(), 'pending');
 
     fxAnimateDeferreds[0].resolve();
-    assert.equal(resultDeferred.state(), "pending");
+    assert.equal(resultDeferred.state(), 'pending');
     fxAnimateDeferreds[1].reject();
-    assert.equal(resultDeferred.state(), "pending", "Addition to T300400");
+    assert.equal(resultDeferred.state(), 'pending', 'Addition to T300400');
     fxAnimateDeferreds[2].resolve();
-    assert.equal(resultDeferred.state(), "resolved");
+    assert.equal(resultDeferred.state(), 'resolved');
 });
 
-QUnit.test("staggering transitions", function(assert) {
+QUnit.test('staggering transitions', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter1 = $("<div/>"),
-        $toEnter2 = $("<div/>"),
-        $toEnter3 = $("<div/>"),
-        $toLeave1 = $("<div/>"),
-        $toLeave2 = $("<div/>"),
-        $toLeave3 = $("<div/>"),
+        $toEnter1 = $('<div/>'),
+        $toEnter2 = $('<div/>'),
+        $toEnter3 = $('<div/>'),
+        $toLeave1 = $('<div/>'),
+        $toLeave2 = $('<div/>'),
+        $toLeave3 = $('<div/>'),
         fxAnimateDeferred = $.Deferred().resolve(),
         animation = {
             duration: 555,
@@ -408,11 +408,11 @@ QUnit.test("staggering transitions", function(assert) {
 
 });
 
-QUnit.test("animation device-dependent presets", function(assert) {
+QUnit.test('animation device-dependent presets', function(assert) {
     var createAnimationLog = [],
         animationSetupLog = [],
         animationStartLog = [],
-        $toEnter = $("<div/>");
+        $toEnter = $('<div/>');
 
     fx.createAnimation = function(element, config) {
         var result = new MockAnimation({
@@ -429,40 +429,40 @@ QUnit.test("animation device-dependent presets", function(assert) {
 
     var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
-    animationPresets.registerPreset("test-animation", {
-        device: { platform: "ios" },
-        animation: { type: "fadeIn", from: 0.1, to: 0.9 }
+    animationPresets.registerPreset('test-animation', {
+        device: { platform: 'ios' },
+        animation: { type: 'fadeIn', from: 0.1, to: 0.9 }
     });
 
-    animationPresets.registerPreset("test-animation", {
-        device: function(currentDevice) { return currentDevice.platform === "android"; },
-        animation: { type: "css", from: "test", to: "test-active" }
+    animationPresets.registerPreset('test-animation', {
+        device: function(currentDevice) { return currentDevice.platform === 'android'; },
+        animation: { type: 'css', from: 'test', to: 'test-active' }
     });
 
-    devices.current({ platform: "ios" });
+    devices.current({ platform: 'ios' });
     animationPresets.applyChanges();
-    transitionExecutor.enter($toEnter, "test-animation");
+    transitionExecutor.enter($toEnter, 'test-animation');
     transitionExecutor.start();
 
-    devices.current({ platform: "android" });
+    devices.current({ platform: 'android' });
     animationPresets.applyChanges();
-    transitionExecutor.enter($toEnter, "test-animation");
+    transitionExecutor.enter($toEnter, 'test-animation');
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
 
-    assert.equal(createAnimationLog[0].config.type, "fadeIn");
+    assert.equal(createAnimationLog[0].config.type, 'fadeIn');
     assert.equal(createAnimationLog[0].config.from, 0.1);
     assert.equal(createAnimationLog[0].config.to, 0.9);
 
-    assert.equal(createAnimationLog[1].config.type, "css");
-    assert.equal(createAnimationLog[1].config.from, "test dx-no-direction");
-    assert.equal(createAnimationLog[1].config.to, "test-active");
+    assert.equal(createAnimationLog[1].config.type, 'css');
+    assert.equal(createAnimationLog[1].config.from, 'test dx-no-direction');
+    assert.equal(createAnimationLog[1].config.to, 'test-active');
 });
 
-QUnit.test("no animations with unknown preset", function(assert) {
+QUnit.test('no animations with unknown preset', function(assert) {
     var createAnimationLog = [],
-        $toEnter = $("<div/>");
+        $toEnter = $('<div/>');
 
     fx.createAnimationLog = function(element, config) {
         createAnimationLog.push({
@@ -474,48 +474,48 @@ QUnit.test("no animations with unknown preset", function(assert) {
 
     var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
-    transitionExecutor.enter($toEnter, "test-animation");
+    transitionExecutor.enter($toEnter, 'test-animation');
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 0);
 });
 
-QUnit.test("clear presets", function(assert) {
-    animationPresets.registerPreset("test-animation1", {
-        animation: { type: "test" }
+QUnit.test('clear presets', function(assert) {
+    animationPresets.registerPreset('test-animation1', {
+        animation: { type: 'test' }
     });
-    animationPresets.registerPreset("test-animation2", {
-        animation: { type: "test" }
+    animationPresets.registerPreset('test-animation2', {
+        animation: { type: 'test' }
     });
     animationPresets.applyChanges();
-    assert.ok(animationPresets.getPreset("test-animation1"));
-    assert.ok(animationPresets.getPreset("test-animation2"));
+    assert.ok(animationPresets.getPreset('test-animation1'));
+    assert.ok(animationPresets.getPreset('test-animation2'));
 
-    animationPresets.clear("test-animation1");
-    assert.ok(!animationPresets.getPreset("test-animation1"));
-    assert.ok(animationPresets.getPreset("test-animation2"));
+    animationPresets.clear('test-animation1');
+    assert.ok(!animationPresets.getPreset('test-animation1'));
+    assert.ok(animationPresets.getPreset('test-animation2'));
 
     animationPresets.clear();
-    assert.ok(!animationPresets.getPreset("test-animation1"));
-    assert.ok(!animationPresets.getPreset("test-animation2"));
+    assert.ok(!animationPresets.getPreset('test-animation1'));
+    assert.ok(!animationPresets.getPreset('test-animation2'));
 });
 
-QUnit.test("preset aliases", function(assert) {
-    animationPresets.registerPreset("test-animation", {
-        animation: { type: "fadeIn", from: 0.1, to: 0.9 }
+QUnit.test('preset aliases', function(assert) {
+    animationPresets.registerPreset('test-animation', {
+        animation: { type: 'fadeIn', from: 0.1, to: 0.9 }
     });
-    animationPresets.registerPreset("alias", {
-        animation: "test-animation"
+    animationPresets.registerPreset('alias', {
+        animation: 'test-animation'
     });
     animationPresets.applyChanges();
-    assert.equal(animationPresets.getPreset("alias"), animationPresets.getPreset("test-animation"));
+    assert.equal(animationPresets.getPreset('alias'), animationPresets.getPreset('test-animation'));
 });
 
-QUnit.test("Animation with direction=none on Android (T277115)", function(assert) {
+QUnit.test('Animation with direction=none on Android (T277115)', function(assert) {
     var createAnimationLog = [],
-        $toEnter = $("<div/>");
+        $toEnter = $('<div/>');
 
-    devices.current({ platform: "android" });
+    devices.current({ platform: 'android' });
     animationPresets.resetToDefaults();
 
     fx.createAnimation = function(element, config) {
@@ -532,17 +532,17 @@ QUnit.test("Animation with direction=none on Android (T277115)", function(assert
     };
 
     var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
-    transitionExecutor.enter($toEnter, "slide", { direction: "none" });
+    transitionExecutor.enter($toEnter, 'slide', { direction: 'none' });
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 1);
 });
 
-QUnit.test("The 'configModifier.delay' property is taken into account on Android (T339056)", function(assert) {
+QUnit.test('The \'configModifier.delay\' property is taken into account on Android (T339056)', function(assert) {
     var createAnimationLog = [],
-        $toEnter = $("<div/>");
+        $toEnter = $('<div/>');
 
-    devices.current({ platform: "android" });
+    devices.current({ platform: 'android' });
     animationPresets.resetToDefaults();
 
     fx.createAnimation = function(element, config) {
@@ -559,7 +559,7 @@ QUnit.test("The 'configModifier.delay' property is taken into account on Android
     };
 
     var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
-    transitionExecutor.enter($toEnter, "slide", { duration: 123, delay: 234 });
+    transitionExecutor.enter($toEnter, 'slide', { duration: 123, delay: 234 });
     transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 1);

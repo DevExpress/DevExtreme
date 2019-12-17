@@ -8,7 +8,6 @@
             {
                 "patterns": ["*.js"]
             }
-        ],
-        "quotes": ["error", "single"]
+        ]
     }
 }
