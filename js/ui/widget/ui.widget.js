@@ -50,8 +50,8 @@ const Widget = DOMComponent.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            _hoveredElement: null,
-            _isActive: false,
+            hoveredElement: null,
+            isActive: false,
 
             /**
              * @name WidgetOptions.disabled
@@ -472,9 +472,9 @@ const Widget = DOMComponent.inherit({
         if(hoverStateEnabled) {
             hover.on($el, new Action(({ event, element }) => {
                 this._hoverStartHandler(event);
-                this.option('_hoveredElement', $(element));
+                this.option('hoveredElement', $(element));
             }, { excludeValidators: ['readOnly'] }), event => {
-                this.option('_hoveredElement', null);
+                this.option('hoveredElement', null);
                 this._hoverEndHandler(event);
             }, { selector, namespace });
         }
@@ -525,24 +525,24 @@ const Widget = DOMComponent.inherit({
     _hoverEndHandler: noop,
 
     _toggleActiveState($element, value) {
-        this.option('_isActive', value);
+        this.option('isActive', value);
         $element.toggleClass('dx-state-active', value);
     },
 
     _updatedHover() {
-        const hoveredElement = this._options.silent('_hoveredElement');
+        const hoveredElement = this._options.silent('hoveredElement');
 
         this._hover(hoveredElement, hoveredElement);
     },
 
     _hover($el, $previous) {
-        const { hoverStateEnabled, disabled, _isActive } = this.option();
+        const { hoverStateEnabled, disabled, isActive } = this.option();
         const findHoverTarget = $el => $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
 
         $previous = findHoverTarget($previous);
         $previous && $previous.toggleClass('dx-state-hover', false);
 
-        if($el && hoverStateEnabled && !disabled && !_isActive) {
+        if($el && hoverStateEnabled && !disabled && !isActive) {
             const newHoveredElement = findHoverTarget($el);
 
             newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
@@ -606,10 +606,10 @@ const Widget = DOMComponent.inherit({
             case 'accessKey':
                 this._renderAccessKey();
                 break;
-            case '_hoveredElement':
+            case 'hoveredElement':
                 this._hover(value, previousValue);
                 break;
-            case '_isActive':
+            case 'isActive':
                 this._updatedHover();
                 break;
             case 'visible':
