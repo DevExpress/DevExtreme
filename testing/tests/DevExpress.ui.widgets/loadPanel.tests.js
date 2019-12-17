@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    keyboardMock = require('../../helpers/keyboardMock.js'),
-    fx = require('animation/fx');
+const $ = require('jquery');
+const keyboardMock = require('../../helpers/keyboardMock.js');
+const fx = require('animation/fx');
 
 require('common.css!');
 require('ui/load_panel');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
             <div id="target" style="position: absolute; top: 0; left: 0; width: 100px; height: 100px;">\
                 <div id="container">\
@@ -19,11 +19,11 @@ QUnit.testStart(function() {
     $('#qunit-fixture').replaceWith(markup);
 });
 
-var LOADPANEL_CLASS = 'dx-loadpanel',
-    LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message',
-    MESSAGE_SELECTOR = '.' + LOADPANEL_MESSAGE_CLASS,
-    LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content',
-    LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
+const LOADPANEL_CLASS = 'dx-loadpanel';
+const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
+const MESSAGE_SELECTOR = '.' + LOADPANEL_MESSAGE_CLASS;
+const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
+const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
 
 QUnit.module('init', {
     beforeEach: function() {
@@ -36,8 +36,8 @@ QUnit.module('init', {
 });
 
 QUnit.test('rendered markup', function(assert) {
-    var $element = $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true }),
-        $content = $element.dxLoadPanel('instance').$content();
+    const $element = $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true });
+    const $content = $element.dxLoadPanel('instance').$content();
 
     assert.ok($element.hasClass(LOADPANEL_CLASS));
     assert.ok($content.hasClass(LOADPANEL_CONTENT_CLASS), 'Load Indicator created');
@@ -46,9 +46,9 @@ QUnit.test('rendered markup', function(assert) {
 });
 
 QUnit.test('load panel created with templatesRenderAsynchronously option should be shown without delay', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     try {
-        var onShowingSpy = sinon.spy();
+        const onShowingSpy = sinon.spy();
 
         $('#loadPanel').dxLoadPanel({
             templatesRenderAsynchronously: true,
@@ -70,12 +70,12 @@ QUnit.test('shows on init if loading option is true', function(assert) {
 });
 
 QUnit.test('visible changes visibility', function(assert) {
-    var $loadPanel = $('#loadPanel').dxLoadPanel({
-            message: '',
-            visible: false
-        }),
-        loadPanel = $loadPanel.dxLoadPanel('instance'),
-        $content = loadPanel.$content();
+    const $loadPanel = $('#loadPanel').dxLoadPanel({
+        message: '',
+        visible: false
+    });
+    const loadPanel = $loadPanel.dxLoadPanel('instance');
+    const $content = loadPanel.$content();
 
     assert.ok(!$content.is(':visible'));
 
@@ -90,13 +90,13 @@ QUnit.test('visible changes visibility', function(assert) {
 });
 
 QUnit.test('visible changes visibility option', function(assert) {
-    var element = $('#loadPanel2').dxLoadPanel({
-            visible: false,
-            message: 'Text'
-        }),
-        $content = element.dxLoadPanel('instance').$content();
+    const element = $('#loadPanel2').dxLoadPanel({
+        visible: false,
+        message: 'Text'
+    });
+    const $content = element.dxLoadPanel('instance').$content();
 
-    var loadIndicator = element.dxLoadPanel('instance');
+    const loadIndicator = element.dxLoadPanel('instance');
 
     assert.ok(!$content.is(':visible'));
 
@@ -111,7 +111,7 @@ QUnit.test('visible changes visibility option', function(assert) {
 });
 
 QUnit.test('keep user defined position.of', function(assert) {
-    var instance = $('#loadPanel').dxLoadPanel({
+    const instance = $('#loadPanel').dxLoadPanel({
         targetContainer: '#container',
         position: { of: 'body' }
     }).dxLoadPanel('instance');
@@ -152,11 +152,11 @@ QUnit.test('width/height', function(assert) {
 });
 
 QUnit.test('showIndicator option', function(assert) {
-    var instance = this.element
+    const instance = this.element
         .dxLoadPanel({ showIndicator: false })
         .dxLoadPanel('instance');
 
-    var indicator = instance.$content().find('.dx-loadindicator');
+    let indicator = instance.$content().find('.dx-loadindicator');
     instance.show();
 
     assert.equal(indicator.length, 0, 'indicator is hidden');
@@ -171,7 +171,7 @@ QUnit.test('showIndicator option', function(assert) {
 });
 
 QUnit.test('showPane option', function(assert) {
-    var instance = this.element
+    const instance = this.element
         .dxLoadPanel({ showPane: true })
         .dxLoadPanel('instance');
 
@@ -187,16 +187,16 @@ QUnit.test('showPane option', function(assert) {
 });
 
 QUnit.test('LoadPanel with custom indicator', function(assert) {
-    var url = '../../testing/content/customLoadIndicator.png',
-        instance = this.element
-            .dxLoadPanel({
-                showIndicator: true,
-                indicatorSrc: url
-            })
-            .dxLoadPanel('instance');
+    const url = '../../testing/content/customLoadIndicator.png';
+    const instance = this.element
+        .dxLoadPanel({
+            showIndicator: true,
+            indicatorSrc: url
+        })
+        .dxLoadPanel('instance');
     instance.show();
 
-    var loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
+    const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
 
     assert.equal(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
     instance.option('indicatorSrc', '');
@@ -204,14 +204,14 @@ QUnit.test('LoadPanel with custom indicator', function(assert) {
 });
 
 QUnit.test('Load panel should not close on esc button when focusStateEnabled is true', function(assert) {
-    var instance = this.element
-            .dxLoadPanel({
-                focusStateEnabled: true,
-                width: 1,
-                height: 1,
-                visible: true
-            }).dxLoadPanel('instance'),
-        keyboard = keyboardMock(instance.$content());
+    const instance = this.element
+        .dxLoadPanel({
+            focusStateEnabled: true,
+            width: 1,
+            height: 1,
+            visible: true
+        }).dxLoadPanel('instance');
+    const keyboard = keyboardMock(instance.$content());
 
     keyboard.keyDown('esc');
 
@@ -219,10 +219,10 @@ QUnit.test('Load panel should not close on esc button when focusStateEnabled is 
 });
 
 QUnit.testInActiveWindow('Load panel with shading should grabbing focus from inputs under the shading when focusStateEnabled is true', function(assert) {
-    var $input = $('<input/>').val('');
+    const $input = $('<input/>').val('');
 
     try {
-        var instance = this.element
+        const instance = this.element
             .dxLoadPanel({
                 focusStateEnabled: true,
                 shading: true,
@@ -251,14 +251,14 @@ QUnit.module('delay', {
 });
 
 QUnit.test('option \'delay\' delays showing', function(assert) {
-    var delayTimeout = 500;
+    const delayTimeout = 500;
 
-    var $loadPanel = $('#loadPanel').dxLoadPanel({
+    const $loadPanel = $('#loadPanel').dxLoadPanel({
         delay: delayTimeout
     });
 
     $loadPanel.dxLoadPanel('show');
-    var $content = $loadPanel.dxLoadPanel('$content');
+    const $content = $loadPanel.dxLoadPanel('$content');
 
     assert.equal($content.is(':visible'), false, 'load panel showing delayed');
 
@@ -268,11 +268,11 @@ QUnit.test('option \'delay\' delays showing', function(assert) {
 });
 
 QUnit.test('onShowing and onShown action delayed', function(assert) {
-    var showingFired = 0;
-    var shownFired = 0;
-    var delayTimeout = 500;
+    let showingFired = 0;
+    let shownFired = 0;
+    const delayTimeout = 500;
 
-    var $loadPanel = $('#loadPanel').dxLoadPanel({
+    const $loadPanel = $('#loadPanel').dxLoadPanel({
         delay: delayTimeout,
         animation: null,
         onShowing: function() {
@@ -295,12 +295,12 @@ QUnit.test('onShowing and onShown action delayed', function(assert) {
 });
 
 QUnit.test('hiding rejects delayed showing', function(assert) {
-    var delayTimeout = 500;
+    const delayTimeout = 500;
 
-    var $loadPanel = $('#loadPanel').dxLoadPanel({
-            delay: delayTimeout
-        }),
-        $content = $loadPanel.dxLoadPanel('$content');
+    const $loadPanel = $('#loadPanel').dxLoadPanel({
+        delay: delayTimeout
+    });
+    const $content = $loadPanel.dxLoadPanel('$content');
 
     $loadPanel.dxLoadPanel('show');
     $loadPanel.dxLoadPanel('hide');

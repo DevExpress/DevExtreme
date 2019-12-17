@@ -29,12 +29,12 @@ class DiagramLeftPanel extends DiagramPanel {
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
-        var result = [];
-        var toolboxGroups = this.option('toolboxGroups');
-        for(var i = 0; i < toolboxGroups.length; i++) {
-            var category = toolboxGroups[i].category;
-            var title = toolboxGroups[i].title;
-            var groupObj = {
+        const result = [];
+        const toolboxGroups = this.option('toolboxGroups');
+        for(let i = 0; i < toolboxGroups.length; i++) {
+            const category = toolboxGroups[i].category;
+            const title = toolboxGroups[i].title;
+            const groupObj = {
                 category,
                 title: title || category,
                 expanded: toolboxGroups[i].expanded,
@@ -54,7 +54,7 @@ class DiagramLeftPanel extends DiagramPanel {
         return result;
     }
     _renderAccordion($container) {
-        var data = this._getAccordionDataSource();
+        const data = this._getAccordionDataSource();
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
@@ -67,7 +67,7 @@ class DiagramLeftPanel extends DiagramPanel {
             }
         });
 
-        for(var i = 0; i < data.length; i++) {
+        for(let i = 0; i < data.length; i++) {
             if(data[i].expanded === false) {
                 this._accordionInstance.collapseItem(i);
             } else if(data[i].expanded === true) {

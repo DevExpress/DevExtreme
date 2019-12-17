@@ -1,11 +1,11 @@
-var common = require('./commonParts/common.js'),
-    $ = require('jquery');
+const common = require('./commonParts/common.js');
+const $ = require('jquery');
 
 require('viz/tree_map/plain_data_source');
 
 QUnit.module('Basic', $.extend({
     checkLayout: function(assert, expected) {
-        var tiles = this.renderer.simpleRect.returnValues;
+        const tiles = this.renderer.simpleRect.returnValues;
         $.each(expected, function(i, data) {
             assert.checkTile(tiles[i].attr.lastCall.args[0], data, 'tile ' + i);
         });
@@ -25,7 +25,7 @@ QUnit.module('Basic', $.extend({
 }, common.environment));
 
 QUnit.test('creation without dataSource', function(assert) {
-    var widget = this.create();
+    const widget = this.create();
 
     assert.ok(widget);
 });
@@ -73,7 +73,7 @@ QUnit.test('two levels dataSource', function(assert) {
 });
 
 QUnit.test('idField & parentField changing', function(assert) {
-    var widget = this.create({
+    const widget = this.create({
         dataSource: [{
             value: 4,
             id: 'id_0'

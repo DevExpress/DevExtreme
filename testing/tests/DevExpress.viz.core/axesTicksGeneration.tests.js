@@ -12,8 +12,8 @@ const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
 });
 
 function getArray(len, content) {
-    var i,
-        array = new Array(len);
+    let i;
+    const array = new Array(len);
 
     for(i = 0; i < len; i++) {
         array[i] = content;
@@ -21,10 +21,10 @@ function getArray(len, content) {
     return array;
 }
 
-var environment = {
+const environment = {
     beforeEach: function() {
 
-        var that = this;
+        const that = this;
         sinon.stub(translator2DModule, 'Translator2D', function() {
             return that.translator;
         });
@@ -34,11 +34,11 @@ var environment = {
         this.translator.stub('getBusinessRange').returns(new Range());
     },
     createAxis: function(options) {
-        var stripsGroup = this.renderer.g(),
-            labelAxesGroup = this.renderer.g(),
-            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-            axesContainerGroup = this.renderer.g(),
-            gridGroup = this.renderer.g();
+        const stripsGroup = this.renderer.g();
+        const labelAxesGroup = this.renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = this.renderer.g();
+        const gridGroup = this.renderer.g();
 
         this.renderer.g.reset();
         this.incidentOccurred = sinon.spy();
@@ -108,7 +108,7 @@ function canvas(width) {
 
 function compareFloatNumbers(ticks, expectedNumbers, assert) {
     ticks.forEach(function(tick, index) {
-        var number = tick.value.valueOf();
+        const number = tick.value.valueOf();
 
         assert.strictEqual(parseFloat(number.toFixed(Math.floor(Math.abs(vizUtilsModule.getLog(number, 10))) + 1)), expectedNumbers[index], (index + 1) + 'tick');
     });
@@ -117,7 +117,7 @@ function compareFloatNumbers(ticks, expectedNumbers, assert) {
 QUnit.module('Range without data', environment);
 
 QUnit.test('No matter what type - return ticks in pixels', function(assert) {
-    var test = function(options) {
+    const test = function(options) {
         this.createAxis();
         this.updateOptions($.extend({ axisDivisionFactor: 50 }, options));
 
@@ -208,7 +208,7 @@ QUnit.test('Calculate tickInterval if ratio of (categories count) to (count by s
 });
 
 QUnit.test('Return categories between min and max', function(assert) {
-    var categories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
+    const categories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
 
     this.createAxis();
     this.updateOptions({
@@ -2451,8 +2451,8 @@ QUnit.test('Do not generate minor ticks more than minorTickCount', function(asse
     // act
     this.axis.createTicks(canvas(400));
 
-    var minorTicks = this.axis._minorTicks.filter(function(item) {
-        var value = item.value;
+    const minorTicks = this.axis._minorTicks.filter(function(item) {
+        const value = item.value;
         return value.getMonth() === 0;
     });
 
@@ -2478,8 +2478,8 @@ QUnit.test('Do not generate minor ticks more than minorTickCount before first ti
     // act
     this.axis.createTicks(canvas(400));
 
-    var minorTicks = this.axis._minorTicks.filter(function(item) {
-        var value = item.value;
+    const minorTicks = this.axis._minorTicks.filter(function(item) {
+        const value = item.value;
         return value.getMonth() === 0;
     });
 
@@ -2762,7 +2762,7 @@ QUnit.test('Tune scale break values. Logarithmic', function(assert) {
     // act
     this.axis.createTicks(canvas(150));
 
-    var scaleBreak = this.translator.updateBusinessRange.lastCall.args[0].breaks[0];
+    const scaleBreak = this.translator.updateBusinessRange.lastCall.args[0].breaks[0];
 
     assert.equal(this.axis._tickInterval, 2);
     assert.roughEqual(scaleBreak.from, 0.1, 0.001);
@@ -2811,7 +2811,7 @@ QUnit.test('Do not tune day off scale break', function(assert) {
     // act
     this.axis.createTicks(canvas(1000));
 
-    var dayOffBreak = this.translator.updateBusinessRange.lastCall.args[0].breaks[0];
+    const dayOffBreak = this.translator.updateBusinessRange.lastCall.args[0].breaks[0];
 
     assert.deepEqual(dayOffBreak.from, new Date(2017, 8, 16), 'from');
     assert.deepEqual(dayOffBreak.to, new Date(2017, 8, 18), 'to');
@@ -2833,7 +2833,7 @@ QUnit.test('Do not remove day off scale break if it less than tickInterval', fun
     // act
     this.axis.createTicks(canvas(1000));
 
-    var dayOffBreak = this.translator.updateBusinessRange.lastCall.args[0].breaks[0];
+    const dayOffBreak = this.translator.updateBusinessRange.lastCall.args[0].breaks[0];
 
     assert.deepEqual(dayOffBreak.from, new Date(2017, 8, 16), 'from');
     assert.deepEqual(dayOffBreak.to, new Date(2017, 8, 18), 'to');

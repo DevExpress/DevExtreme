@@ -157,10 +157,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
         assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector was rendered');
         assert.equal(this.scheduler.appointments.getAppointmentCount(), 6, 'Five appointments were rendered');
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
-        let collectorCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getCell(8).position();
+        const collectorCoordinates = translator.locate($collector);
+        const expectedCoordinates = this.scheduler.workSpace.getCell(8).position();
 
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
@@ -205,11 +205,11 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             ]
         });
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
-        let collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
-        let collectorCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getCell(2).position();
-        let cellWidth = this.scheduler.workSpace.getCell(2).outerWidth();
+        const $collector = this.scheduler.appointments.compact.getButton(0);
+        const collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
+        const collectorCoordinates = translator.locate($collector);
+        const expectedCoordinates = this.scheduler.workSpace.getCell(2).position();
+        const cellWidth = this.scheduler.workSpace.getCell(2).outerWidth();
 
         assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Collector was rendered');
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + cellWidth - collectorWidth - WEEK_VIEW_BUTTON_OFFSET, 1.001, 'Left coordinate is OK');
@@ -234,7 +234,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
         ]);
 
-        let cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
+        const cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
 
         assert.roughEqual(this.scheduler.appointments.compact.getButtonWidth(), cellWidth - 60, 1.5, 'Collector width is ok');
 
@@ -337,11 +337,11 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             firstDayOfWeek: 1,
             rtlEnabled: true
         });
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
-        let collectorCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getCell(7).position();
-        let rtlOffset = this.scheduler.workSpace.getCell(7).outerWidth() - 36;
+        const collectorCoordinates = translator.locate($collector);
+        const expectedCoordinates = this.scheduler.workSpace.getCell(7).position();
+        const rtlOffset = this.scheduler.workSpace.getCell(7).outerWidth() - 36;
 
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
@@ -374,7 +374,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
                 assert.equal($(args.appointmentElement).get(0), tooltipItemElement, 'Appointment element is OK');
                 assert.ok(args.event instanceof $.Event, 'Event is OK');
 
-                var haveArgsOwnProperty = Object.prototype.hasOwnProperty.bind(args);
+                const haveArgsOwnProperty = Object.prototype.hasOwnProperty.bind(args);
                 assert.notOk(haveArgsOwnProperty('itemData'));
                 assert.notOk(haveArgsOwnProperty('itemIndex'));
                 assert.notOk(haveArgsOwnProperty('itemElement'));
@@ -639,7 +639,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             }
         });
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
         assert.equal($collector.find('.button-title').text(), 'Appointment count is 2', 'Template is applied correctly');
     });
@@ -710,8 +710,8 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) }
         ]);
 
-        let collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
-        let cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
+        const collectorWidth = this.scheduler.appointments.compact.getButtonWidth(0);
+        const cellWidth = this.scheduler.workSpace.getCell(0).outerWidth();
 
         assert.roughEqual(collectorWidth, cellWidth - 4, 1.5, 'DropDown button has correct width');
     });
@@ -816,10 +816,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
     QUnit.test('Adaptive collector should have correct coordinates', function(assert) {
         this.createInstance();
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
-        let buttonCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getCell(8).position();
+        const buttonCoordinates = translator.locate($collector);
+        const expectedCoordinates = this.scheduler.workSpace.getCell(8).position();
 
         assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + this.scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
@@ -828,7 +828,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
     QUnit.test('Adaptive collector should have correct sizes', function(assert) {
         this.createInstance();
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
@@ -839,7 +839,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         themes.isMaterial = () => true;
 
         this.createInstance();
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
@@ -853,10 +853,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         this.instance.option('currentView', 'week');
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
-        let buttonCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getAllDayCell(1).position();
+        const buttonCoordinates = translator.locate($collector);
+        const expectedCoordinates = this.scheduler.workSpace.getAllDayCell(1).position();
 
         assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (this.scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, (this.scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
@@ -868,7 +868,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         this.instance.option('currentView', 'week');
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
@@ -900,15 +900,15 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');
 
-        let $appointment = this.scheduler.appointments.getAppointment(0);
+        const $appointment = this.scheduler.appointments.getAppointment(0);
 
         assert.roughEqual($appointment.outerWidth(), 70, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
 
         this.instance.option('width', 1000);
 
-        let $firstAppointment = this.scheduler.appointments.getAppointment(0);
-        let $secondAppointment = this.scheduler.appointments.getAppointment(1);
+        const $firstAppointment = this.scheduler.appointments.getAppointment(0);
+        const $secondAppointment = this.scheduler.appointments.getAppointment(1);
 
         assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, 'Height is OK');
@@ -923,10 +923,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
-        let collectorCoordinates = translator.locate($collector);
-        let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+        const collectorCoordinates = translator.locate($collector);
+        const expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
 
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
@@ -938,10 +938,10 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
             this.createInstance();
             this.instance.option('currentView', 'week');
 
-            let $collector = this.scheduler.appointments.compact.getButton(0);
+            const $collector = this.scheduler.appointments.compact.getButton(0);
 
-            let collectorCoordinates = translator.locate($collector);
-            let expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
+            const collectorCoordinates = translator.locate($collector);
+            const expectedCoordinates = this.scheduler.workSpace.getCell(1).position();
 
             assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + this.scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
             assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
@@ -956,7 +956,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
         this.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         this.instance.option('currentView', 'week');
 
-        let $collector = this.scheduler.appointments.compact.getButton(0);
+        const $collector = this.scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');

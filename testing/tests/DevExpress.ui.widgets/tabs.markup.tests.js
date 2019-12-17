@@ -11,8 +11,8 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const TABS_CLASS = 'dx-tabs',
-    TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
+const TABS_CLASS = 'dx-tabs';
+const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -42,8 +42,8 @@ QUnit.module('Tabs markup', () => {
             ]
         });
 
-        const tabsInstance = tabsElement.dxTabs('instance'),
-            tabElements = tabsInstance._itemElements();
+        const tabsInstance = tabsElement.dxTabs('instance');
+        const tabElements = tabsInstance._itemElements();
 
         assert.equal(tabsInstance.option('selectedIndex'), -1);
 
@@ -51,7 +51,7 @@ QUnit.module('Tabs markup', () => {
 
         assert.equal(tabElements.find('.dx-icon-custom').length, 1);
 
-        var icon = tabElements.find('img');
+        const icon = tabElements.find('img');
         assert.equal(icon.length, 1);
         assert.equal(icon.attr('src'), 'http://1.png');
     });
@@ -75,15 +75,15 @@ QUnit.module('Badges', () => {
 QUnit.module('Widget sizing render', () => {
     QUnit.test('constructor', function(assert) {
         const $element = $('#widget').dxTabs({
-                items: [
-                    { text: 'user' },
-                    { text: 'analytics' },
-                    { text: 'customers' },
-                    { text: 'search' },
-                    { text: 'favorites' }
-                ], width: 400
-            }),
-            instance = $element.dxTabs('instance');
+            items: [
+                { text: 'user' },
+                { text: 'analytics' },
+                { text: 'customers' },
+                { text: 'search' },
+                { text: 'favorites' }
+            ], width: 400
+        });
+        const instance = $element.dxTabs('instance');
 
         assert.strictEqual(instance.option('width'), 400);
         assert.strictEqual($element[0].style.width, 400 + 'px', 'outer width of the element must be equal to custom width');
@@ -91,22 +91,22 @@ QUnit.module('Widget sizing render', () => {
 
     QUnit.test('root with custom width', function(assert) {
         const $element = $('#widthRootStyle').dxTabs({
-                items: [
-                    { text: 'user' },
-                    { text: 'analytics' },
-                    { text: 'customers' },
-                    { text: 'search' },
-                    { text: 'favorites' }
-                ]
-            }),
-            instance = $element.dxTabs('instance');
+            items: [
+                { text: 'user' },
+                { text: 'analytics' },
+                { text: 'customers' },
+                { text: 'search' },
+                { text: 'favorites' }
+            ]
+        });
+        const instance = $element.dxTabs('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
         assert.strictEqual($element[0].style.width, 300 + 'px', 'outer width of the element must be equal to custom width');
     });
 });
 
-var helper;
+let helper;
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
         this.items = [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }];

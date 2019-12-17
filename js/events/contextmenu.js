@@ -1,24 +1,24 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    support = require('../core/utils/support'),
-    devices = require('../core/devices'),
-    Class = require('../core/class'),
-    registerEvent = require('./core/event_registrator'),
-    eventUtils = require('./utils'),
-    holdEvent = require('./hold');
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const support = require('../core/utils/support');
+const devices = require('../core/devices');
+const Class = require('../core/class');
+const registerEvent = require('./core/event_registrator');
+const eventUtils = require('./utils');
+const holdEvent = require('./hold');
 
-var CONTEXTMENU_NAMESPACE = 'dxContexMenu',
+const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 
-    CONTEXTMENU_NAMESPACED_EVENT_NAME = eventUtils.addNamespace('contextmenu', CONTEXTMENU_NAMESPACE),
-    HOLD_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(holdEvent.name, CONTEXTMENU_NAMESPACE),
+const CONTEXTMENU_NAMESPACED_EVENT_NAME = eventUtils.addNamespace('contextmenu', CONTEXTMENU_NAMESPACE);
+const HOLD_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(holdEvent.name, CONTEXTMENU_NAMESPACE);
 
-    CONTEXTMENU_EVENT_NAME = 'dxcontextmenu';
+const CONTEXTMENU_EVENT_NAME = 'dxcontextmenu';
 
 
-var ContextMenu = Class.inherit({
+const ContextMenu = Class.inherit({
 
     setup: function(element) {
-        var $element = $(element);
+        const $element = $(element);
 
         eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
 

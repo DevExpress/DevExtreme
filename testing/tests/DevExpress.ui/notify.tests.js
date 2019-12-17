@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    notify = require('ui/notify'),
-    viewPort = require('core/utils/view_port').value,
-    fx = require('animation/fx');
+const $ = require('jquery');
+const notify = require('ui/notify');
+const viewPort = require('core/utils/view_port').value;
+const fx = require('animation/fx');
 
 QUnit.module('notify tests', {
     beforeEach: function() {
@@ -33,7 +33,7 @@ QUnit.test('notify show/hide', function(assert) {
 });
 
 QUnit.test('notify content', function(assert) {
-    var expected = 'Hello word';
+    const expected = 'Hello word';
     assert.equal($('.dx-toast').length, 0);
     notify({
         message: expected,

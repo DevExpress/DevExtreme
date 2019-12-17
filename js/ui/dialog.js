@@ -142,9 +142,9 @@ exports.custom = function(options) {
         dragEnabled: ensureDefined(options.dragEnabled, true),
         height: 'auto',
         width: function() {
-            const isPortrait = $(window).height() > $(window).width(),
-                key = (isPortrait ? 'p' : 'l') + 'Width',
-                widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options['width'];
+            const isPortrait = $(window).height() > $(window).width();
+            const key = (isPortrait ? 'p' : 'l') + 'Width';
+            const widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options['width'];
 
             return isFunction(widthOption) ? widthOption() : widthOption;
         },

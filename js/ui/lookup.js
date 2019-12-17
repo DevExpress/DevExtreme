@@ -1,48 +1,48 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    window = require('../core/utils/window').getWindow(),
-    support = require('../core/utils/support'),
-    commonUtils = require('../core/utils/common'),
-    domUtils = require('../core/utils/dom'),
-    each = require('../core/utils/iterator').each,
-    extend = require('../core/utils/extend').extend,
-    inkRipple = require('./widget/utils.ink_ripple'),
-    messageLocalization = require('../localization/message'),
-    devices = require('../core/devices'),
-    registerComponent = require('../core/component_registrator'),
-    eventUtils = require('../events/utils'),
-    DropDownList = require('./drop_down_editor/ui.drop_down_list'),
-    themes = require('./themes'),
-    clickEvent = require('../events/click'),
-    Popover = require('./popover'),
-    TextBox = require('./text_box'),
-    ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate,
-    translator = require('../animation/translator');
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const window = require('../core/utils/window').getWindow();
+const support = require('../core/utils/support');
+const commonUtils = require('../core/utils/common');
+const domUtils = require('../core/utils/dom');
+const each = require('../core/utils/iterator').each;
+const extend = require('../core/utils/extend').extend;
+const inkRipple = require('./widget/utils.ink_ripple');
+const messageLocalization = require('../localization/message');
+const devices = require('../core/devices');
+const registerComponent = require('../core/component_registrator');
+const eventUtils = require('../events/utils');
+const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+const themes = require('./themes');
+const clickEvent = require('../events/click');
+const Popover = require('./popover');
+const TextBox = require('./text_box');
+const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+const translator = require('../animation/translator');
 
-var LOOKUP_CLASS = 'dx-lookup',
-    LOOKUP_SEARCH_CLASS = 'dx-lookup-search',
-    LOOKUP_SEARCH_WRAPPER_CLASS = 'dx-lookup-search-wrapper',
-    LOOKUP_FIELD_CLASS = 'dx-lookup-field',
-    LOOKUP_ARROW_CLASS = 'dx-lookup-arrow',
-    LOOKUP_FIELD_WRAPPER_CLASS = 'dx-lookup-field-wrapper',
-    LOOKUP_POPUP_CLASS = 'dx-lookup-popup',
-    LOOKUP_POPUP_WRAPPER_CLASS = 'dx-lookup-popup-wrapper',
-    LOOKUP_POPUP_SEARCH_CLASS = 'dx-lookup-popup-search',
-    LOOKUP_POPOVER_MODE = 'dx-lookup-popover-mode',
-    LOOKUP_EMPTY_CLASS = 'dx-lookup-empty',
-    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical',
-    TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const LOOKUP_CLASS = 'dx-lookup';
+const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
+const LOOKUP_SEARCH_WRAPPER_CLASS = 'dx-lookup-search-wrapper';
+const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
+const LOOKUP_ARROW_CLASS = 'dx-lookup-arrow';
+const LOOKUP_FIELD_WRAPPER_CLASS = 'dx-lookup-field-wrapper';
+const LOOKUP_POPUP_CLASS = 'dx-lookup-popup';
+const LOOKUP_POPUP_WRAPPER_CLASS = 'dx-lookup-popup-wrapper';
+const LOOKUP_POPUP_SEARCH_CLASS = 'dx-lookup-popup-search';
+const LOOKUP_POPOVER_MODE = 'dx-lookup-popover-mode';
+const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-var POPUP_OPTION_MAP = {
+const POPUP_OPTION_MAP = {
     'popupWidth': 'width',
     'popupHeight': 'height'
 };
 
 
-var LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
-var MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
-var MATERIAL_LOOKUP_LIST_PADDING = 8;
+const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
+const MATERIAL_LOOKUP_LIST_PADDING = 8;
 
 
 /**
@@ -52,7 +52,7 @@ var MATERIAL_LOOKUP_LIST_PADDING = 8;
 * @module ui/lookup
 * @export default
 */
-var Lookup = DropDownList.inherit({
+const Lookup = DropDownList.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
             space: function(e) {
@@ -467,7 +467,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _defaultOptionsRules: function() {
-        var themeName = themes.current();
+        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -638,7 +638,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderInput: function() {
-        var fieldClickAction = this._createAction((function() {
+        const fieldClickAction = this._createAction((function() {
             this._toggleOpenState();
         }).bind(this));
 
@@ -647,7 +647,7 @@ var Lookup = DropDownList.inherit({
             fieldClickAction({ event: e });
         });
 
-        var $arrow = $('<div>').addClass(LOOKUP_ARROW_CLASS);
+        const $arrow = $('<div>').addClass(LOOKUP_ARROW_CLASS);
 
         this._$fieldWrapper = $('<div>').addClass(LOOKUP_FIELD_WRAPPER_CLASS)
             .append(this._$field)
@@ -680,7 +680,7 @@ var Lookup = DropDownList.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: this._inputWrapper(),
             event: e
         };
@@ -693,7 +693,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderField: function() {
-        var fieldTemplate = this._getTemplateByOption('fieldTemplate');
+        const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
         if(fieldTemplate && this.option('fieldTemplate')) {
             this._renderFieldTemplate(fieldTemplate);
@@ -706,7 +706,7 @@ var Lookup = DropDownList.inherit({
 
     _renderFieldTemplate: function(template) {
         this._$field.empty();
-        var data = this._fieldRenderData();
+        const data = this._fieldRenderData();
         template.render({
             model: data,
             container: domUtils.getPublicElement(this._$field)
@@ -734,9 +734,9 @@ var Lookup = DropDownList.inherit({
     },
 
     _scrollToSelectedItem: function() {
-        var selectedIndex = this._list.option('selectedIndex'),
-            listItems = this._list.option('items'),
-            itemsCount = listItems.length;
+        const selectedIndex = this._list.option('selectedIndex');
+        const listItems = this._list.option('items');
+        const itemsCount = listItems.length;
 
         if(itemsCount !== 0) {
             if(this._list.option('grouped')) {
@@ -750,21 +750,21 @@ var Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        var selectedIndex = this._list.option('selectedIndex');
-        var flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
+        const selectedIndex = this._list.option('selectedIndex');
+        const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(selectedIndex === -1 || flipped) return;
 
-        var selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
+        const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
 
         if(selectedListItem.offset().top < 0) {
             this._scrollToSelectedItem();
         }
 
-        var differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
-            popupContentParent = $(this._popup.content()).parent(),
-            differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top,
-            lookupTop = $(this.element()).offset().top,
-            popupOffsetY = differenceOfHeights;
+        const differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2;
+        const popupContentParent = $(this._popup.content()).parent();
+        const differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top;
+        const lookupTop = $(this.element()).offset().top;
+        let popupOffsetY = differenceOfHeights;
 
         if(lookupTop > differenceOfOffsets) {
             popupOffsetY += differenceOfOffsets;
@@ -772,7 +772,7 @@ var Lookup = DropDownList.inherit({
             this._scrollToSelectedItem();
         }
 
-        var position = translator.locate(popupContentParent);
+        const position = translator.locate(popupContentParent);
 
         translator.move(popupContentParent, {
             top: position.top - popupOffsetY
@@ -838,7 +838,7 @@ var Lookup = DropDownList.inherit({
     _preventFocusOnPopup: commonUtils.noop,
 
     _popupConfig: function() {
-        var result = extend(this.callBase(), {
+        const result = extend(this.callBase(), {
             showTitle: this.option('showPopupTitle'),
             title: this.option('title'),
             titleTemplate: this._getTemplateByOption('titleTemplate'),
@@ -868,16 +868,16 @@ var Lookup = DropDownList.inherit({
     },
 
     _getPopupToolbarItems: function() {
-        var buttonsConfig = this.option('applyValueMode') === 'useButtons'
+        const buttonsConfig = this.option('applyValueMode') === 'useButtons'
             ? this._popupToolbarItemsConfig()
             : [];
 
-        var cancelButton = this._getCancelButtonConfig();
+        const cancelButton = this._getCancelButtonConfig();
         if(cancelButton) {
             buttonsConfig.push(cancelButton);
         }
 
-        var clearButton = this._getClearButtonConfig();
+        const clearButton = this._getClearButtonConfig();
         if(clearButton) {
             buttonsConfig.push(clearButton);
         }
@@ -956,18 +956,18 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderSearch: function() {
-        var isSearchEnabled = this.option('searchEnabled');
+        const isSearchEnabled = this.option('searchEnabled');
 
         this._toggleSearchClass(isSearchEnabled);
 
         if(isSearchEnabled) {
-            var $searchWrapper = this._$searchWrapper = $('<div>').addClass(LOOKUP_SEARCH_WRAPPER_CLASS);
+            const $searchWrapper = this._$searchWrapper = $('<div>').addClass(LOOKUP_SEARCH_WRAPPER_CLASS);
 
-            var $searchBox = this._$searchBox = $('<div>').addClass(LOOKUP_SEARCH_CLASS)
+            const $searchBox = this._$searchBox = $('<div>').addClass(LOOKUP_SEARCH_CLASS)
                 .appendTo($searchWrapper);
 
-            var currentDevice = devices.current(),
-                searchMode = currentDevice.android && currentDevice.version[0] >= 5 ? 'text' : 'search';
+            const currentDevice = devices.current();
+            const searchMode = currentDevice.android && currentDevice.version[0] >= 5 ? 'text' : 'search';
 
             let isKeyboardListeningEnabled = false;
 
@@ -1000,7 +1000,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _selectListItemHandler: function(e) {
-        var $itemElement = $(this._list.option('focusedElement'));
+        const $itemElement = $(this._list.option('focusedElement'));
 
         if(!$itemElement.length) {
             return;
@@ -1029,8 +1029,8 @@ var Lookup = DropDownList.inherit({
             return;
         }
 
-        var minSearchLength = this.option('minSearchLength');
-        var placeholder = this.option('searchPlaceholder');
+        const minSearchLength = this.option('minSearchLength');
+        let placeholder = this.option('searchPlaceholder');
 
         if(minSearchLength && placeholder === messageLocalization.format('Search')) {
             placeholder = messageLocalization.getFormatter('dxLookup-searchPlaceholder')(minSearchLength);
@@ -1150,8 +1150,8 @@ var Lookup = DropDownList.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
-        var value = args.value;
+        const name = args.name;
+        const value = args.value;
 
         switch(name) {
             case 'dataSource':

@@ -6,9 +6,9 @@ import iteratorUtils from '../core/utils/iterator';
 import ValidationEngine from './validation_engine';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
-const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary',
-    ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item',
-    ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
+const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
+const ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item';
+const ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
 
 /**
 * @name dxValidationSummary
@@ -206,12 +206,12 @@ const ValidationSummary = CollectionWidget.inherit({
 
         iteratorUtils.each(this.validators, (_, validator) => {
             if(validator._validationSummary !== this) {
-                let handler = this._itemValidationHandler.bind(this),
-                    disposingHandler = function() {
-                        validator.off('validated', handler);
-                        validator._validationSummary = null;
-                        handler = null;
-                    };
+                let handler = this._itemValidationHandler.bind(this);
+                const disposingHandler = function() {
+                    validator.off('validated', handler);
+                    validator._validationSummary = null;
+                    handler = null;
+                };
                 validator.on('validated', handler);
                 validator.on('disposing', disposingHandler);
                 validator._validationSummary = this;
@@ -222,8 +222,8 @@ const ValidationSummary = CollectionWidget.inherit({
     },
 
     _itemValidationHandler({ isValid, validator, brokenRules }) {
-        let items = this.option('items'),
-            itemsChanged = false;
+        let items = this.option('items');
+        let itemsChanged = false;
 
         let itemIndex = 0;
         while(itemIndex < items.length) {

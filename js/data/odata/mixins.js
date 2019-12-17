@@ -1,12 +1,12 @@
-var stringUtils = require('../../core/utils/string'),
-    iteratorUtils = require('../../core/utils/iterator'),
-    odataUtils = require('./utils');
+const stringUtils = require('../../core/utils/string');
+const iteratorUtils = require('../../core/utils/iterator');
+const odataUtils = require('./utils');
 
 require('./query_adapter');
 
-var DEFAULT_PROTOCOL_VERSION = 2;
+const DEFAULT_PROTOCOL_VERSION = 2;
 
-var formatFunctionInvocationUrl = function(baseUrl, args) {
+const formatFunctionInvocationUrl = function(baseUrl, args) {
     return stringUtils.format('{0}({1})',
         baseUrl,
         iteratorUtils.map(args || {}, function(value, key) {
@@ -15,7 +15,7 @@ var formatFunctionInvocationUrl = function(baseUrl, args) {
     );
 };
 
-var escapeServiceOperationParams = function(params, version) {
+const escapeServiceOperationParams = function(params, version) {
     if(!params) {
         return params;
     }
@@ -23,14 +23,14 @@ var escapeServiceOperationParams = function(params, version) {
     // From WCF Data Services docs:
     // The type of each parameter must be a primitive type.
     // Any data of a non-primitive type must be serialized and passed into a string parameter
-    var result = {};
+    const result = {};
     iteratorUtils.each(params, function(k, v) {
         result[k] = odataUtils.serializeValue(v, version);
     });
     return result;
 };
 
-var SharedMethods = {
+const SharedMethods = {
 
     _extractServiceOptions: function(options) {
         options = options || {};

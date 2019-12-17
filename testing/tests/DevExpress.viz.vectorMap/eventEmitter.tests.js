@@ -1,4 +1,4 @@
-var eventEmitterModule = require('viz/vector_map/event_emitter');
+const eventEmitterModule = require('viz/vector_map/event_emitter');
 
 QUnit.module('eventEmitterMethods', {
     beforeEach: function() {
@@ -21,7 +21,7 @@ QUnit.test('fire event with no callbacks', function(assert) {
 });
 
 QUnit.test('fire event with callback', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.emitter.on({ 'event-1': spy });
 
     this.emitter._fire('event-1', 'arg');
@@ -30,8 +30,8 @@ QUnit.test('fire event with callback', function(assert) {
 });
 
 QUnit.test('fire event with several callbacks', function(assert) {
-    var spy1 = sinon.spy(),
-        spy2 = sinon.spy();
+    const spy1 = sinon.spy();
+    const spy2 = sinon.spy();
     this.emitter.on({ 'event-2': spy1 });
     this.emitter.on({ 'event-2': spy2 });
 
@@ -42,8 +42,8 @@ QUnit.test('fire event with several callbacks', function(assert) {
 });
 
 QUnit.test('fire event with removed callback', function(assert) {
-    var spy = sinon.spy(),
-        remove = this.emitter.on({ 'event-1': spy });
+    const spy = sinon.spy();
+    const remove = this.emitter.on({ 'event-1': spy });
     remove();
 
     this.emitter._fire('event-1', 'arg');

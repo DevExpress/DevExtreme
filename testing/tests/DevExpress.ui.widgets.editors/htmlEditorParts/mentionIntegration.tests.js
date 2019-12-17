@@ -486,7 +486,7 @@ module('Mentions integration', {
 
                 this.addText(element, 'F', '@');
                 this.clock.tick();
-                let $items = this.getItems();
+                const $items = this.getItems();
                 assert.strictEqual($items.length, 4, 'dataSource isn\'t filtered');
                 this.addText(element, 'r', '@F');
             } else {

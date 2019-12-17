@@ -14,52 +14,52 @@ import dataQuery from '../../data/query';
 import { multiLevelGroup } from '../../data/store_helper';
 import { normalizeSortingInfo } from '../../data/utils';
 
-var DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer',
-    DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item',
-    DATAGRID_TEXT_CONTENT_CLASS = 'dx-datagrid-text-content',
-    DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer',
-    DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content',
-    DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap',
+const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
+const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
+const DATAGRID_TEXT_CONTENT_CLASS = 'dx-datagrid-text-content';
+const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
+const DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content';
+const DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap';
 
-    DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
+const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 
-var renderSummaryCell = function(cell, options) {
-        var i,
-            $cell = $(cell),
-            column = options.column,
-            summaryItems = options.summaryItems,
-            summaryItem,
-            $summaryItems = [];
+const renderSummaryCell = function(cell, options) {
+    let i;
+    const $cell = $(cell);
+    const column = options.column;
+    const summaryItems = options.summaryItems;
+    let summaryItem;
+    const $summaryItems = [];
 
-        if(!column.command && summaryItems) {
-            for(i = 0; i < summaryItems.length; i++) {
-                summaryItem = summaryItems[i];
-                $summaryItems.push($('<div>')
-                    .css('textAlign', summaryItem.alignment || column.alignment)
-                    .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
-                    .addClass(DATAGRID_TEXT_CONTENT_CLASS)
-                    .addClass(summaryItem.cssClass)
-                    .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
-                    .text(gridCore.getSummaryText(summaryItem, options.summaryTexts)));
-            }
-            $cell.append($summaryItems);
+    if(!column.command && summaryItems) {
+        for(i = 0; i < summaryItems.length; i++) {
+            summaryItem = summaryItems[i];
+            $summaryItems.push($('<div>')
+                .css('textAlign', summaryItem.alignment || column.alignment)
+                .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
+                .addClass(DATAGRID_TEXT_CONTENT_CLASS)
+                .addClass(summaryItem.cssClass)
+                .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
+                .text(gridCore.getSummaryText(summaryItem, options.summaryTexts)));
         }
-    },
-    getSummaryCellOptions = function(that, options) {
-        var summaryTexts = that.option('summary.texts') || {};
+        $cell.append($summaryItems);
+    }
+};
+const getSummaryCellOptions = function(that, options) {
+    const summaryTexts = that.option('summary.texts') || {};
 
-        return {
-            totalItem: options.row,
-            summaryItems: options.row.summaryCells[options.columnIndex],
-            summaryTexts: summaryTexts
-        };
+    return {
+        totalItem: options.row,
+        summaryItems: options.row.summaryCells[options.columnIndex],
+        summaryTexts: summaryTexts
     };
+};
 
-var getGroupAggregates = function(data) {
+const getGroupAggregates = function(data) {
     return data.summary || data.aggregates || [];
 };
 
-var recalculateWhileEditing = function(that) {
+const recalculateWhileEditing = function(that) {
     return that.option('summary.recalculateWhileEditing');
 };
 
@@ -79,7 +79,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _renderCore: function(change) {
-            var totalItem = this._dataController.footerItems()[0];
+            const totalItem = this._dataController.footerItems()[0];
 
             if(!change || !change.columnIndices) {
                 this.element()
@@ -95,8 +95,8 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
 
         _updateContent: function($newTable, change) {
             if(change && change.changeType === 'update' && change.columnIndices) {
-                var $row = this._getTableElement().find('.dx-row'),
-                    $newRow = $newTable.find('.dx-row');
+                const $row = this._getTableElement().find('.dx-row');
+                const $newRow = $newTable.find('.dx-row');
 
                 this._updateCells($row, $newRow, change.columnIndices[0]);
             } else {
@@ -105,12 +105,12 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _rowClick: function(e) {
-            var item = this._dataController.footerItems()[e.rowIndex] || {};
+            const item = this._dataController.footerItems()[e.rowIndex] || {};
             this.executeAction('onRowClick', extend({}, e, item));
         },
 
         _columnOptionChanged: function(e) {
-            var optionNames = e.optionNames;
+            const optionNames = e.optionNames;
 
             if(e.changeTypes.grouping) return;
 
@@ -120,7 +120,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _handleDataChanged: function(e) {
-            var changeType = e.changeType;
+            const changeType = e.changeType;
 
             if(e.changeType === 'update' && e.repaintChangesOnly) {
                 if(!e.totalColumnIndices) {
@@ -143,11 +143,11 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
     };
 })());
 
-var SummaryDataSourceAdapterExtender = (function() {
+const SummaryDataSourceAdapterExtender = (function() {
 
     function forEachGroup(groups, groupCount, callback, path) {
         path = path || [];
-        for(var i = 0; i < groups.length; i++) {
+        for(let i = 0; i < groups.length; i++) {
             path.push(groups[i].key);
             if(groupCount === 1) {
                 callback(path, groups[i].items);
@@ -184,14 +184,14 @@ var SummaryDataSourceAdapterExtender = (function() {
             return this._totalAggregates;
         },
         isLastLevelGroupItemsPagingLocal: function() {
-            var summary = this.summary(),
-                sortByGroupsInfo = summary && summary.sortByGroups();
+            const summary = this.summary();
+            const sortByGroupsInfo = summary && summary.sortByGroups();
 
             return sortByGroupsInfo && sortByGroupsInfo.length;
         },
         sortLastLevelGroupItems: function(items, groups, paths) {
-            var groupedItems = multiLevelGroup(dataQuery(items), groups).toArray(),
-                result = [];
+            const groupedItems = multiLevelGroup(dataQuery(items), groups).toArray();
+            let result = [];
 
             paths.forEach(function(path) {
                 forEachGroup(groupedItems, groups.length, function(itemsPath, items) {
@@ -206,7 +206,7 @@ var SummaryDataSourceAdapterExtender = (function() {
     };
 })();
 
-var SummaryDataSourceAdapterClientExtender = (function() {
+const SummaryDataSourceAdapterClientExtender = (function() {
     var applyAddedData = function(data, insertedData, groupLevel) {
         if(groupLevel) {
             return applyAddedData(data, insertedData.map(item => {
@@ -220,8 +220,8 @@ var SummaryDataSourceAdapterClientExtender = (function() {
     var applyRemovedData = function(data, removedData, groupLevel) {
         if(groupLevel) {
             return data.map(data => {
-                var updatedData = {},
-                    updatedItems = applyRemovedData(data.items || [], removedData, groupLevel - 1);
+                const updatedData = {};
+                const updatedItems = applyRemovedData(data.items || [], removedData, groupLevel - 1);
 
                 Object.defineProperty(updatedData, 'aggregates', {
                     get: () => data.aggregates,
@@ -237,18 +237,18 @@ var SummaryDataSourceAdapterClientExtender = (function() {
         return data.filter(data => removedData.indexOf(data) < 0);
     };
 
-    var calculateAggregates = function(that, summary, data, groupLevel) {
-        var calculator;
+    const calculateAggregates = function(that, summary, data, groupLevel) {
+        let calculator;
 
         if(recalculateWhileEditing(that)) {
-            var editingController = that.getController('editing');
+            const editingController = that.getController('editing');
             if(editingController) {
-                var insertedData = editingController.getInsertedData();
+                const insertedData = editingController.getInsertedData();
                 if(insertedData.length) {
                     data = applyAddedData(data, insertedData, groupLevel);
                 }
 
-                var removedData = editingController.getRemovedData();
+                const removedData = editingController.getRemovedData();
                 if(removedData.length) {
                     data = applyRemovedData(data, removedData, groupLevel);
                 }
@@ -271,9 +271,9 @@ var SummaryDataSourceAdapterClientExtender = (function() {
     var sortGroupsBySummaryCore = function(items, groups, sortByGroups) {
         if(!items || !groups.length) return items;
 
-        var group = groups[0],
-            sorts = sortByGroups[0],
-            query;
+        const group = groups[0];
+        const sorts = sortByGroups[0];
+        let query;
 
         if(group && sorts && sorts.length) {
             query = dataQuery(items);
@@ -300,8 +300,8 @@ var SummaryDataSourceAdapterClientExtender = (function() {
         return items;
     };
 
-    var sortGroupsBySummary = function(data, group, summary) {
-        var sortByGroups = summary && summary.sortByGroups && summary.sortByGroups();
+    const sortGroupsBySummary = function(data, group, summary) {
+        const sortByGroups = summary && summary.sortByGroups && summary.sortByGroups();
 
         if(sortByGroups && sortByGroups.length) {
             return sortGroupsBySummaryCore(data, group, sortByGroups);
@@ -311,7 +311,7 @@ var SummaryDataSourceAdapterClientExtender = (function() {
 
     return {
         _customizeRemoteOperations: function(options) {
-            var summary = this.summary();
+            const summary = this.summary();
 
             if(summary) {
                 if(options.remoteOperations.summary) {
@@ -331,18 +331,18 @@ var SummaryDataSourceAdapterClientExtender = (function() {
             }
             this.callBase.apply(this, arguments);
 
-            var cachedExtra = options.cachedPagesData.extra;
+            const cachedExtra = options.cachedPagesData.extra;
 
             if(cachedExtra && cachedExtra.summary && !options.isCustomLoading) {
                 options.storeLoadOptions.totalSummary = undefined;
             }
         },
         _handleDataLoadedCore: function(options) {
-            var that = this,
-                groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []),
-                remoteOperations = options.remoteOperations || {},
-                summary = that.summaryGetter()(remoteOperations),
-                totalAggregates;
+            const that = this;
+            const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
+            const remoteOperations = options.remoteOperations || {};
+            const summary = that.summaryGetter()(remoteOperations);
+            let totalAggregates;
 
             if(!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
                 if(remoteOperations.summary) {
@@ -620,10 +620,10 @@ gridCore.registerModule('summary', {
                     },
 
                     _isGroupFooterVisible: function() {
-                        var groupItems = this.option('summary.groupItems') || [],
-                            groupItem,
-                            column,
-                            i;
+                        const groupItems = this.option('summary.groupItems') || [];
+                        let groupItem;
+                        let column;
+                        let i;
 
                         for(i = 0; i < groupItems.length; i++) {
                             groupItem = groupItems[i];
@@ -637,8 +637,8 @@ gridCore.registerModule('summary', {
                     },
 
                     _processGroupItems: function(items, groupCount, options) {
-                        var data = options && options.data,
-                            result = this.callBase.apply(this, arguments);
+                        const data = options && options.data;
+                        const result = this.callBase.apply(this, arguments);
 
                         if(options) {
                             if(options.isGroupFooterVisible === undefined) {
@@ -659,17 +659,17 @@ gridCore.registerModule('summary', {
                     },
 
                     _processGroupItem: function(groupItem, options) {
-                        var that = this;
+                        const that = this;
 
                         if(!options.summaryGroupItems) {
                             options.summaryGroupItems = that.option('summary.groupItems') || [];
                         }
                         if(groupItem.rowType === 'group') {
-                            var groupColumnIndex = -1,
-                                afterGroupColumnIndex = -1;
+                            let groupColumnIndex = -1;
+                            let afterGroupColumnIndex = -1;
 
                             each(options.visibleColumns, function(visibleIndex) {
-                                var prevColumn = options.visibleColumns[visibleIndex - 1];
+                                const prevColumn = options.visibleColumns[visibleIndex - 1];
 
                                 if(groupItem.groupIndex === this.groupIndex) {
                                     groupColumnIndex = this.index;
@@ -702,15 +702,15 @@ gridCore.registerModule('summary', {
                     },
 
                     _calculateSummaryCells: function(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex) {
-                        var that = this,
-                            summaryCells = [],
-                            summaryCellsByColumns = {};
+                        const that = this;
+                        const summaryCells = [];
+                        const summaryCellsByColumns = {};
 
                         each(summaryItems, function(summaryIndex, summaryItem) {
-                            var column = that._columnsController.columnOption(summaryItem.column),
-                                showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column,
-                                columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn),
-                                aggregate;
+                            const column = that._columnsController.columnOption(summaryItem.column);
+                            const showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column;
+                            const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
+                            let aggregate;
 
                             if(columnIndex >= 0) {
                                 if(!summaryCellsByColumns[columnIndex]) {
@@ -719,7 +719,7 @@ gridCore.registerModule('summary', {
 
                                 aggregate = aggregates[summaryIndex];
                                 if(aggregate === aggregate) {
-                                    var valueFormat;
+                                    let valueFormat;
                                     if(isDefined(summaryItem.valueFormat)) {
                                         valueFormat = summaryItem.valueFormat;
                                     } else if(summaryItem.summaryType !== 'count') {
@@ -743,8 +743,8 @@ gridCore.registerModule('summary', {
                     },
 
                     _getSummaryCells: function(summaryTotalItems, totalAggregates) {
-                        var that = this,
-                            columnsController = that._columnsController;
+                        const that = this;
+                        const columnsController = that._columnsController;
 
                         return that._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(), function(summaryItem, column) {
                             return that._isDataColumn(column) ? column.index : -1;
@@ -752,13 +752,13 @@ gridCore.registerModule('summary', {
                     },
 
                     _updateItemsCore: function(change) {
-                        var that = this,
-                            summaryCells,
-                            totalAggregates,
-                            dataSource = that._dataSource,
-                            footerItems = that._footerItems,
-                            oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells,
-                            summaryTotalItems = that.option('summary.totalItems');
+                        const that = this;
+                        let summaryCells;
+                        let totalAggregates;
+                        const dataSource = that._dataSource;
+                        const footerItems = that._footerItems;
+                        const oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells;
+                        const summaryTotalItems = that.option('summary.totalItems');
 
                         that._footerItems = [];
                         if(dataSource && summaryTotalItems && summaryTotalItems.length) {
@@ -785,10 +785,10 @@ gridCore.registerModule('summary', {
                     },
 
                     _prepareUnsavedDataSelector: function(selector) {
-                        var that = this;
+                        const that = this;
 
                         if(recalculateWhileEditing(that)) {
-                            var editingController = that.getController('editing');
+                            const editingController = that.getController('editing');
                             if(editingController) {
                                 return function(data) {
                                     data = editingController.getUpdatedData(data);
@@ -805,7 +805,7 @@ gridCore.registerModule('summary', {
 
                         if(aggregator === 'avg' || aggregator === 'sum') {
                             return function(data) {
-                                var value = selector(data);
+                                const value = selector(data);
                                 return isDefined(value) ? Number(value) : value;
                             };
                         }
@@ -814,19 +814,19 @@ gridCore.registerModule('summary', {
                     },
 
                     _getAggregates: function(summaryItems, remoteOperations) {
-                        var that = this,
-                            columnsController = that.getController('columns'),
-                            calculateCustomSummary = that.option('summary.calculateCustomSummary'),
-                            commonSkipEmptyValues = that.option('summary.skipEmptyValues');
+                        const that = this;
+                        const columnsController = that.getController('columns');
+                        let calculateCustomSummary = that.option('summary.calculateCustomSummary');
+                        const commonSkipEmptyValues = that.option('summary.skipEmptyValues');
 
                         return map(summaryItems || [], function(summaryItem) {
 
-                            var column = columnsController.columnOption(summaryItem.column),
-                                calculateCellValue = (column && column.calculateCellValue) ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column),
-                                aggregator = summaryItem.summaryType || 'count',
-                                selector = summaryItem.column,
-                                skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues,
-                                options;
+                            const column = columnsController.columnOption(summaryItem.column);
+                            const calculateCellValue = (column && column.calculateCellValue) ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column);
+                            let aggregator = summaryItem.summaryType || 'count';
+                            let selector = summaryItem.column;
+                            const skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues;
+                            let options;
 
                             if(remoteOperations) {
                                 return {
@@ -882,7 +882,7 @@ gridCore.registerModule('summary', {
                     },
 
                     _addSortInfo: function(sortByGroups, groupColumn, selector, sortOrder) {
-                        var groupIndex;
+                        let groupIndex;
                         if(groupColumn) {
                             groupIndex = groupColumn.groupIndex;
                             sortOrder = sortOrder || groupColumn.sortOrder;
@@ -897,11 +897,11 @@ gridCore.registerModule('summary', {
                     },
 
                     _findSummaryItem: function(summaryItems, name) {
-                        var summaryItemIndex = -1;
+                        let summaryItemIndex = -1;
 
-                        var getFullName = function(summaryItem) {
-                            var summaryType = summaryItem.summaryType,
-                                column = summaryItem.column;
+                        const getFullName = function(summaryItem) {
+                            const summaryType = summaryItem.summaryType;
+                            const column = summaryItem.column;
 
                             return summaryType && column && summaryType + '_' + column;
                         };
@@ -918,21 +918,21 @@ gridCore.registerModule('summary', {
                     },
 
                     _getSummarySortByGroups: function(sortByGroupSummaryInfo, groupSummaryItems) {
-                        var that = this,
-                            columnsController = that._columnsController,
-                            groupColumns = columnsController.getGroupColumns(),
-                            sortByGroups = [];
+                        const that = this;
+                        const columnsController = that._columnsController;
+                        const groupColumns = columnsController.getGroupColumns();
+                        const sortByGroups = [];
 
                         if(!groupSummaryItems || !groupSummaryItems.length) return;
 
                         each(sortByGroupSummaryInfo || [], function() {
-                            var sortOrder = this.sortOrder,
-                                groupColumn = this.groupColumn,
-                                summaryItemIndex = that._findSummaryItem(groupSummaryItems, this.summaryItem);
+                            const sortOrder = this.sortOrder;
+                            let groupColumn = this.groupColumn;
+                            const summaryItemIndex = that._findSummaryItem(groupSummaryItems, this.summaryItem);
 
                             if(summaryItemIndex < 0) return;
 
-                            var selector = function(data) {
+                            const selector = function(data) {
                                 return getGroupAggregates(data)[summaryItemIndex];
                             };
 
@@ -949,8 +949,8 @@ gridCore.registerModule('summary', {
                     },
 
                     _createDataSourceAdapterCore: function(dataSource, remoteOperations) {
-                        var that = this,
-                            dataSourceAdapter = this.callBase(dataSource, remoteOperations);
+                        const that = this;
+                        const dataSourceAdapter = this.callBase(dataSource, remoteOperations);
 
                         dataSourceAdapter.summaryGetter(function(currentRemoteOperations) {
                             return that._getSummaryOptions(currentRemoteOperations || remoteOperations);
@@ -960,15 +960,15 @@ gridCore.registerModule('summary', {
                     },
 
                     _getSummaryOptions: function(remoteOperations) {
-                        var that = this,
-                            groupSummaryItems = that.option('summary.groupItems'),
-                            totalSummaryItems = that.option('summary.totalItems'),
-                            sortByGroupSummaryInfo = that.option('sortByGroupSummaryInfo'),
-                            groupAggregates = that._getAggregates(groupSummaryItems, remoteOperations && remoteOperations.grouping && remoteOperations.summary),
-                            totalAggregates = that._getAggregates(totalSummaryItems, remoteOperations && remoteOperations.summary),
-                            sortByGroups = function() {
-                                return that._getSummarySortByGroups(sortByGroupSummaryInfo, groupSummaryItems);
-                            };
+                        const that = this;
+                        const groupSummaryItems = that.option('summary.groupItems');
+                        const totalSummaryItems = that.option('summary.totalItems');
+                        const sortByGroupSummaryInfo = that.option('sortByGroupSummaryInfo');
+                        const groupAggregates = that._getAggregates(groupSummaryItems, remoteOperations && remoteOperations.grouping && remoteOperations.summary);
+                        const totalAggregates = that._getAggregates(totalSummaryItems, remoteOperations && remoteOperations.summary);
+                        const sortByGroups = function() {
+                            return that._getSummarySortByGroups(sortByGroupSummaryInfo, groupSummaryItems);
+                        };
 
                         if(groupAggregates.length || totalAggregates.length) {
                             return {
@@ -980,7 +980,7 @@ gridCore.registerModule('summary', {
                     },
 
                     publicMethods: function() {
-                        var methods = this.callBase();
+                        const methods = this.callBase();
                         methods.push('getTotalSummaryValue');
                         return methods;
                     },
@@ -992,8 +992,8 @@ gridCore.registerModule('summary', {
                      * @return any
                      */
                     getTotalSummaryValue: function(summaryItemName) {
-                        var summaryItemIndex = this._findSummaryItem(this.option('summary.totalItems'), summaryItemName),
-                            aggregates = this._dataSource.totalAggregates();
+                        const summaryItemIndex = this._findSummaryItem(this.option('summary.totalItems'), summaryItemName);
+                        const aggregates = this._dataSource.totalAggregates();
 
                         if(aggregates.length && summaryItemIndex > -1) {
                             return aggregates[summaryItemIndex];
@@ -1028,7 +1028,7 @@ gridCore.registerModule('summary', {
                         }
                     },
                     _addEditData: function(params) {
-                        var result = this.callBase.apply(this, arguments);
+                        const result = this.callBase.apply(this, arguments);
 
                         if(params.type) {
                             this._refreshSummary();
@@ -1037,14 +1037,14 @@ gridCore.registerModule('summary', {
                         return result;
                     },
                     _removeEditDataItem: function() {
-                        var result = this.callBase.apply(this, arguments);
+                        const result = this.callBase.apply(this, arguments);
 
                         this._refreshSummary();
 
                         return result;
                     },
                     cancelEditData: function() {
-                        var result = this.callBase.apply(this, arguments);
+                        const result = this.callBase.apply(this, arguments);
 
                         this._refreshSummary();
 
@@ -1057,7 +1057,7 @@ gridCore.registerModule('summary', {
             rowsView: (function() {
                 return {
                     _createRow: function(row) {
-                        var $row = this.callBase(row);
+                        const $row = this.callBase(row);
 
                         row && $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : '');
                         return $row;
@@ -1076,10 +1076,10 @@ gridCore.registerModule('summary', {
                     },
 
                     _getAlignByColumnCellCount: function(groupCellColSpan, options) {
-                        var alignByColumnCellCount = 0,
-                            columnIndex;
+                        let alignByColumnCellCount = 0;
+                        let columnIndex;
 
-                        for(var i = 1; i < groupCellColSpan; i++) {
+                        for(let i = 1; i < groupCellColSpan; i++) {
                             columnIndex = options.row.summaryCells.length - i;
                             alignByColumnCellCount = this._hasAlignByColumnSummaryItems(columnIndex, options) ? i : alignByColumnCellCount;
                         }
@@ -1088,9 +1088,9 @@ gridCore.registerModule('summary', {
                     },
 
                     _renderGroupSummaryCells: function($row, options) {
-                        var $groupCell = $row.children().last(),
-                            groupCellColSpan = Number($groupCell.attr('colSpan')) || 1,
-                            alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
+                        const $groupCell = $row.children().last();
+                        const groupCellColSpan = Number($groupCell.attr('colSpan')) || 1;
+                        const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
 
                         this._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
                     },
@@ -1099,8 +1099,8 @@ gridCore.registerModule('summary', {
                         if(alignByColumnCellCount > 0) {
                             $groupCell.attr('colSpan', groupCellColSpan - alignByColumnCellCount);
 
-                            for(var i = 0; i < alignByColumnCellCount; i++) {
-                                var columnIndex = options.columns.length - alignByColumnCellCount + i;
+                            for(let i = 0; i < alignByColumnCellCount; i++) {
+                                const columnIndex = options.columns.length - alignByColumnCellCount + i;
 
                                 this._renderCell($groupCell.parent(), extend({ column: options.columns[columnIndex], columnIndex: this._getSummaryCellIndex(columnIndex, options.columns) }, options));
                             }
@@ -1120,8 +1120,8 @@ gridCore.registerModule('summary', {
                     },
 
                     _getCellOptions: function(options) {
-                        var that = this,
-                            parameters = that.callBase(options);
+                        const that = this;
+                        const parameters = that.callBase(options);
 
                         if(options.row.summaryCells) {
                             return extend(parameters, getSummaryCellOptions(that, options));

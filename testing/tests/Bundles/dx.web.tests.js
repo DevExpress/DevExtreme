@@ -1,19 +1,19 @@
-var $ = require('jquery'),
-    angular = require('angular');
+const $ = require('jquery');
+const angular = require('angular');
 
 require('bundles/dx.web.js');
 
 QUnit.test('DevExpress namespaces', function(assert) {
-    var namespaces = [
-            'Color', // from core
+    const namespaces = [
+        'Color', // from core
 
-            'data',
-            'ui',
-            'events'
-        ],
-        uiNamespaces = [
-            'dxList', // from widgets-base
-        ];
+        'data',
+        'ui',
+        'events'
+    ];
+    const uiNamespaces = [
+        'dxList', // from widgets-base
+    ];
 
     $.each(namespaces, function(index, namespace) {
         assert.ok(DevExpress[namespace], namespace + ' namespace');

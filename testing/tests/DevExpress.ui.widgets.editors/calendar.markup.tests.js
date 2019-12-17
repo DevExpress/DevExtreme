@@ -1,23 +1,23 @@
-var $ = require('jquery'),
-    dateSerialization = require('core/utils/date_serialization'),
-    isDefined = require('core/utils/type').isDefined,
-    config = require('core/config'),
-    isRenderer = require('core/utils/type').isRenderer,
-    hasWindow = require('core/utils/window').hasWindow;
+const $ = require('jquery');
+const dateSerialization = require('core/utils/date_serialization');
+const isDefined = require('core/utils/type').isDefined;
+const config = require('core/config');
+const isRenderer = require('core/utils/type').isRenderer;
+const hasWindow = require('core/utils/window').hasWindow;
 
 require('common.css!');
 require('generic_light.css!');
 require('ui/calendar');
 
-var CALENDAR_CLASS = 'dx-calendar',
-    CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator',
-    CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view',
-    CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view',
-    CALENDAR_FOOTER_CLASS = 'dx-calendar-footer',
-    CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button',
-    CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
+const CALENDAR_CLASS = 'dx-calendar';
+const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
+const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
+const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
+const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
+const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
+const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 
-var toSelector = function(className) {
+const toSelector = function(className) {
     return '.' + className;
 };
 
@@ -52,7 +52,7 @@ QUnit.test('views are rendered', function(assert) {
 });
 
 QUnit.test('Calendar must render with dx-rtl class', function(assert) {
-    var $element = $('<div>').appendTo('body');
+    const $element = $('<div>').appendTo('body');
     $element.dxCalendar({
         value: new Date(2013, 9, 15),
         rtlEnabled: true
@@ -79,16 +79,16 @@ QUnit.module('Hidden input', {
 });
 
 QUnit.test('Calendar must create a hidden input', function(assert) {
-    var $input = this.$element.find('input');
+    const $input = this.$element.find('input');
 
     assert.equal($input.length, 1, 'input is rendered');
     assert.equal($input.attr('type'), 'hidden', 'input type is \'hidden\'');
 });
 
 QUnit.test('Calendar should pass value to the hidden input on init', function(assert) {
-    var $input = this.$element.find('input');
+    const $input = this.$element.find('input');
 
-    var expectedValue = this.stringValue(this.calendar.option('value'));
+    const expectedValue = this.stringValue(this.calendar.option('value'));
     assert.equal($input.val(), expectedValue, 'input value is correct after init');
 });
 
@@ -103,11 +103,11 @@ QUnit.module('The \'name\' option', {
 });
 
 QUnit.test('widget input should get the \'name\' attribute with a correct value', function(assert) {
-    var expectedName = 'some_name',
-        $element = this.$element.dxCalendar({
-            name: expectedName
-        }),
-        $input = $element.find('input');
+    const expectedName = 'some_name';
+    const $element = this.$element.dxCalendar({
+        name: expectedName
+    });
+    const $input = $element.find('input');
 
     assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
 });
@@ -134,7 +134,7 @@ QUnit.test('Calendar must display previous and next month links, and previous an
 });
 
 QUnit.test('Calendar must display the current month and year', function(assert) {
-    var navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+    const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
     assert.equal(navigatorCaption.text(), 'June 2015');
 });
 
@@ -148,7 +148,7 @@ QUnit.module('Calendar footer', {
 });
 
 QUnit.test('calendar must have _footer if showTodayButton = true', function(assert) {
-    var $element = this.$element;
+    const $element = this.$element;
     $element.dxCalendar({
         value: new Date(2015, 5, 13),
         showTodayButton: true
@@ -157,7 +157,7 @@ QUnit.test('calendar must have _footer if showTodayButton = true', function(asse
 });
 
 QUnit.test('calendar mustn\'t have _footer if showTodayButton  = false', function(assert) {
-    var $element = this.$element;
+    const $element = this.$element;
     $element.dxCalendar({
         value: new Date(2015, 5, 13),
         showTodayButton: false
@@ -181,7 +181,7 @@ QUnit.module('CellTemplate option', {
 });
 
 QUnit.test('custom markup should be applied', function(assert) {
-    var $cellTemplate = $('<span class=\'custom-cell-class\'>');
+    const $cellTemplate = $('<span class=\'custom-cell-class\'>');
 
     try {
         this.reinit({
@@ -198,7 +198,7 @@ QUnit.test('custom markup should be applied', function(assert) {
 });
 
 QUnit.test('correct data should be passed to cellTemplate', function(assert) {
-    var data;
+    let data;
 
     this.reinit({
         cellTemplate: function(itemData, itemIndex, itemElement) {
@@ -215,13 +215,13 @@ QUnit.test('correct data should be passed to cellTemplate', function(assert) {
 });
 
 QUnit.test('calendar must have view class name', function(assert) {
-    var className = 'dx-calendar-view-';
+    const className = 'dx-calendar-view-';
 
     $.each(['month', 'year', 'decade', 'century'], (function(_, type) {
         this.reinit({
             zoomLevel: type
         });
-        var $element = this.$element;
+        const $element = this.$element;
 
         assert.ok($element.hasClass(className + type));
 
@@ -241,7 +241,7 @@ QUnit.module('Aria accessibility', {
 });
 
 QUnit.test('role for calendar widget', function(assert) {
-    var $element = this.$element;
+    const $element = this.$element;
 
     $element.dxCalendar();
 

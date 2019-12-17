@@ -18,8 +18,8 @@ const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboa
 
 QUnit.module('Keyboard navigation', {
     beforeEach: function() {
-        const on = this.originalEventsEngineOn = eventsEngine.on,
-            off = this.originalEventsEngineOff = eventsEngine.off;
+        const on = this.originalEventsEngineOn = eventsEngine.on;
+        const off = this.originalEventsEngineOff = eventsEngine.off;
 
         eventsEngine.on = function(element, name) {
             element.fake && element.on(name) || on.apply(this, Array.prototype.slice.call(arguments, 0));
@@ -27,78 +27,78 @@ QUnit.module('Keyboard navigation', {
         eventsEngine.off = function(element, name) {
             element.fake && element.off(name) || off.apply(this, Array.prototype.slice.call(arguments, 0));
         };
-        var that = this,
-            View = function(name, isVisible) {
-                var element = {
-                    fake: true,
-                    eventsInfo: {},
-                    is: function() {
-                        return false;
-                    },
-                    find: function(selector) {
-                        if(selector === 'tr') {
-                            return [$('<tr><td></td></tr>')];
-                        }
-                    },
-                    on: function(name) {
-                        if(!this.eventsInfo[name]) {
-                            this.eventsInfo[name] = {};
-                        }
+        const that = this;
+        const View = function(name, isVisible) {
+            const element = {
+                fake: true,
+                eventsInfo: {},
+                is: function() {
+                    return false;
+                },
+                find: function(selector) {
+                    if(selector === 'tr') {
+                        return [$('<tr><td></td></tr>')];
+                    }
+                },
+                on: function(name) {
+                    if(!this.eventsInfo[name]) {
+                        this.eventsInfo[name] = {};
+                    }
 
-                        if(this.eventsInfo[name].subscribeToEventCounter === undefined) {
-                            this.eventsInfo[name].subscribeToEventCounter = 0;
-                        }
-                        this.eventsInfo[name].subscribeToEventCounter++;
-                    },
-                    off: function(name) {
-                        if(!this.eventsInfo[name]) {
-                            this.eventsInfo[name] = {};
-                        }
+                    if(this.eventsInfo[name].subscribeToEventCounter === undefined) {
+                        this.eventsInfo[name].subscribeToEventCounter = 0;
+                    }
+                    this.eventsInfo[name].subscribeToEventCounter++;
+                },
+                off: function(name) {
+                    if(!this.eventsInfo[name]) {
+                        this.eventsInfo[name] = {};
+                    }
 
-                        if(this.eventsInfo[name].unsubscribeFromEventCounter === undefined) {
-                            this.eventsInfo[name].unsubscribeFromEventCounter = 0;
-                        }
-                        this.eventsInfo[name].unsubscribeFromEventCounter++;
-                    },
-                    attr: function() { },
-                    length: 0
-                };
-
-                return {
-                    name: name,
-                    element: function() {
-                        return element;
-                    },
-                    isVisible: function() {
-                        return isVisible === undefined ? true : isVisible;
-                    },
-                    getRow: function(index) {
-                        return $(this.element().find('tr')[index]);
-                    },
-                    getCell: function(cellPosition) {
-                        var $row = this.getRow(cellPosition.rowIndex);
-                        return $($row.find('td')[cellPosition.columnIndex]);
-                    },
-                    focus: function() {
-                        this.$element().focus();
-                    },
-                    getRowIndex: function($row) {
-                        return $row.length && $row[0].rowIndex;
-                    },
-                    getRowsCount: function() {
-                        return this.$element().find('tr').length;
-                    },
-                    getCellIndex: function($cell) {
-                        var cellIndex = $cell.length ? $cell[0].cellIndex : -1;
-
-                        return cellIndex;
-                    },
-                    getView: function(name) {
-                        return this._views[name];
-                    },
-                    renderCompleted: $.Callbacks()
-                };
+                    if(this.eventsInfo[name].unsubscribeFromEventCounter === undefined) {
+                        this.eventsInfo[name].unsubscribeFromEventCounter = 0;
+                    }
+                    this.eventsInfo[name].unsubscribeFromEventCounter++;
+                },
+                attr: function() { },
+                length: 0
             };
+
+            return {
+                name: name,
+                element: function() {
+                    return element;
+                },
+                isVisible: function() {
+                    return isVisible === undefined ? true : isVisible;
+                },
+                getRow: function(index) {
+                    return $(this.element().find('tr')[index]);
+                },
+                getCell: function(cellPosition) {
+                    const $row = this.getRow(cellPosition.rowIndex);
+                    return $($row.find('td')[cellPosition.columnIndex]);
+                },
+                focus: function() {
+                    this.$element().focus();
+                },
+                getRowIndex: function($row) {
+                    return $row.length && $row[0].rowIndex;
+                },
+                getRowsCount: function() {
+                    return this.$element().find('tr').length;
+                },
+                getCellIndex: function($cell) {
+                    const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
+
+                    return cellIndex;
+                },
+                getView: function(name) {
+                    return this._views[name];
+                },
+                renderCompleted: $.Callbacks()
+            };
+        };
 
         that.options = {
             keyboardNavigation: {
@@ -138,8 +138,8 @@ QUnit.module('Keyboard navigation', {
                 columnHeadersView: new View('columnHeadersView')
             },
             option: function(name) {
-                const properties = name.split('.'),
-                    options = that.options;
+                const properties = name.split('.');
+                const options = that.options;
                 if(arguments.length === 1) {
                     return properties.reduce((prev, cur) => prev && prev[cur], options);
                 } else if(arguments.length === 2) {
@@ -158,7 +158,7 @@ QUnit.module('Keyboard navigation', {
             },
             _createComponent: function(element, name, config) {
                 name = typeof name === 'string' ? name : publicComponentUtils.name(name);
-                var $element = $(element)[name](config || {});
+                const $element = $(element)[name](config || {});
                 return $element[name]('instance');
             },
             _createActionByOption: function() {
@@ -188,7 +188,7 @@ QUnit.module('Keyboard navigation', {
 }, function() {
     QUnit.test('Is keyboard enabled', function(assert) {
         // arrange
-        var navigation = new KeyboardNavigationController(this.component);
+        const navigation = new KeyboardNavigationController(this.component);
 
         // assert
         assert.ok(navigation.isKeyboardEnabled());
@@ -210,7 +210,7 @@ QUnit.module('Keyboard navigation', {
             enabled: false
         };
 
-        var navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
 
         // act
         navigationController.init();
@@ -221,8 +221,8 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Init keyboardController when rowsView is hidden', function(assert) {
         // arrange
-        var navigationController = new KeyboardNavigationController(this.component),
-            element;
+        const navigationController = new KeyboardNavigationController(this.component);
+        let element;
 
         this.getView('rowsView').isVisible = () => false;
 
@@ -239,8 +239,8 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Element of view is subscribed to events', function(assert) {
         // arrange
-        var navigationController = new KeyboardNavigationController(this.component),
-            element;
+        const navigationController = new KeyboardNavigationController(this.component);
+        let element;
 
         // act
         navigationController.init();
@@ -255,8 +255,8 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Element of view is unsubscribed from events', function(assert) {
         // arrange
-        var navigationController = new KeyboardNavigationController(this.component),
-            element;
+        const navigationController = new KeyboardNavigationController(this.component);
+        let element;
 
         // act
         navigationController.init();
@@ -272,10 +272,10 @@ QUnit.module('Keyboard navigation', {
     // T579521
     QUnit.testInActiveWindow('Master detail cell is not focused when clicked on self', function(assert) {
         // arrange
-        var navigationController,
-            isFocused = false,
-            $masterDetailCell,
-            $rowsElement = $('<div />').append($('<tr class=\'dx-row\'><td class=\'dx-master-detail-cell\'><td/></tr>')).appendTo('#container');
+        let navigationController;
+        let isFocused = false;
+        let $masterDetailCell;
+        const $rowsElement = $('<div />').append($('<tr class=\'dx-row\'><td class=\'dx-master-detail-cell\'><td/></tr>')).appendTo('#container');
 
         this.getView('rowsView').element = function() {
             return $rowsElement;
@@ -302,10 +302,10 @@ QUnit.module('Keyboard navigation', {
     // T281701
     QUnit.testInActiveWindow('Cell is not focused when clicked it in another grid', function(assert) {
         // arrange
-        var navigationController,
-            isFocused = false,
-            $cell,
-            $rowsElement = $('<div />').addClass('.dx-datagrid').append($('<table><tr class=\'dx-row\'><td/></tr></table>')).appendTo('#container');
+        let navigationController;
+        let isFocused = false;
+        let $cell;
+        const $rowsElement = $('<div />').addClass('.dx-datagrid').append($('<table><tr class=\'dx-row\'><td/></tr></table>')).appendTo('#container');
 
         // act
         navigationController = new KeyboardNavigationController(this.component);
@@ -368,9 +368,9 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Interactive element is focused when edit mode is enabled (T403964)', function(assert) {
         // arrange
-        var navigationController,
-            view,
-            $rowsElement = $('<div />').appendTo('#container').append($(`
+        let navigationController;
+        let view;
+        const $rowsElement = $('<div />').appendTo('#container').append($(`
                 <tr class='dx-row'>"
                     <td class='cell-0'><input></td>
                     <td><input></td>
@@ -421,9 +421,9 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('View is not focused when row is inline edited', function(assert) {
         // arrange
-        var navigationController,
-            isFocused = false,
-            $rowsElement = $('<div />');
+        let navigationController;
+        let isFocused = false;
+        const $rowsElement = $('<div />');
 
         this.getView('columnHeadersView').element = function() {
             return $('<div />');
@@ -452,10 +452,10 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Focus by click is not applied when editing is enabled (T311207)', function(assert) {
         // arrange
-        var navigationController,
-            isViewFocused = false,
-            $rowsViewElement = $('<div />').append($('<table><tbody><tr class=\'dx-row\'><td><input class=\'dx-texteditor-input\'></td><td><input class=\'dx-texteditor-input\'></td></tr></tbody></table>')).appendTo('#container'),
-            rowsView = this.getView('rowsView');
+        let navigationController;
+        let isViewFocused = false;
+        const $rowsViewElement = $('<div />').append($('<table><tbody><tr class=\'dx-row\'><td><input class=\'dx-texteditor-input\'></td><td><input class=\'dx-texteditor-input\'></td></tr></tbody></table>')).appendTo('#container');
+        const rowsView = this.getView('rowsView');
 
         rowsView.element = function() {
             return $rowsViewElement;
@@ -487,7 +487,7 @@ QUnit.module('Keyboard navigation', {
             { title: 'Column 3', visible: true }
         ]);
 
-        var navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
 
         navigationController.init();
         navigationController._focusedView = this.getView('rowsView');
@@ -518,7 +518,7 @@ QUnit.module('Keyboard navigation', {
             { title: 'Column 3', visible: true }
         ]);
 
-        var navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
 
         navigationController.init();
         navigationController._focusedView = this.getView('rowsView');
@@ -548,8 +548,8 @@ QUnit.module('Keyboard navigation', {
             { title: 'Column 2', visible: true }
         ]);
 
-        var navigationController = new KeyboardNavigationController(this.component),
-            isFocused = false;
+        const navigationController = new KeyboardNavigationController(this.component);
+        let isFocused = false;
 
         navigationController.init();
         navigationController._focusedView = this.getView('rowsView');
@@ -583,8 +583,8 @@ QUnit.module('Keyboard navigation', {
             { title: 'Column 2', visible: true }
         ]);
 
-        var navigationController = new KeyboardNavigationController(this.component),
-            isFocused = false;
+        const navigationController = new KeyboardNavigationController(this.component);
+        let isFocused = false;
 
         navigationController.init();
         navigationController._focusedView = this.getView('rowsView');
@@ -613,7 +613,7 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Update focused cell for not cell element_T106691', function(assert) {
         // arrange
-        var navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
 
         // act
         navigationController.init();
@@ -625,8 +625,8 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Reset focused cell info on click ', function(assert) {
         // arrange
-        var navigationController = new KeyboardNavigationController(this.component),
-            $cell = $('<td tabindex=\'0\'>');
+        const navigationController = new KeyboardNavigationController(this.component);
+        const $cell = $('<td tabindex=\'0\'>');
 
         // act
         navigationController.init();
@@ -646,9 +646,9 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('focused cell info is not reset when element of rowvIew is clicked ', function(assert) {
         // arrange
-        var navigationController = new KeyboardNavigationController(this.component),
-            $rowsView = $('<div>').addClass('dx-datagrid-rowsview'),
-            $cell = $('<td tabindex=\'0\'>');
+        const navigationController = new KeyboardNavigationController(this.component);
+        const $rowsView = $('<div>').addClass('dx-datagrid-rowsview');
+        const $cell = $('<td tabindex=\'0\'>');
 
         // act
         $rowsView
@@ -672,11 +672,11 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.testInActiveWindow('Cell is not focused when view is renderCompleted without keydown event', function(assert) {
         // arrange
-        var navigationController,
-            isFocused = false,
-            $cell,
-            rowsView = this.getView('rowsView'),
-            $rowsElement = $('<div />').append($('<table><tr class=\'dx-row\'><td></td></tr></table>'));
+        let navigationController;
+        let isFocused = false;
+        let $cell;
+        const rowsView = this.getView('rowsView');
+        const $rowsElement = $('<div />').append($('<table><tr class=\'dx-row\'><td></td></tr></table>'));
 
         rowsView.element = function() {
             return $rowsElement;
@@ -704,10 +704,10 @@ QUnit.module('Keyboard navigation', {
 
     QUnit.test('Element is not focused when it is html tag is not cell', function(assert) {
         // arrange
-        var navigationController,
-            _$focusElement,
-            rowsView = this.getView('rowsView'),
-            $rowsElement = $('<div />').append($('<table><tr class=\'dx-row\'><td></td></tr></table>'));
+        let navigationController;
+        let _$focusElement;
+        const rowsView = this.getView('rowsView');
+        const $rowsElement = $('<div />').append($('<table><tr class=\'dx-row\'><td></td></tr></table>'));
 
         rowsView.element = function() {
             return $rowsElement;

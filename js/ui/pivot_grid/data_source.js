@@ -26,37 +26,37 @@ import {
     getFieldsDataType
 } from './ui.pivot_grid.utils';
 
-var DESCRIPTION_NAME_BY_AREA = {
-        row: 'rows',
-        column: 'columns',
-        data: 'values',
-        filter: 'filters'
-    },
-    STATE_PROPERTIES = [
-        'area',
-        'areaIndex',
-        'sortOrder',
-        'filterType',
-        'filterValues',
-        'sortBy',
-        'sortBySummaryField',
-        'sortBySummaryPath',
-        'expanded',
-        'summaryType',
-        'summaryDisplayMode'
-    ],
-    CALCULATED_PROPERTIES = [
-        'format',
-        'selector',
-        'customizeText',
-        'caption'
-    ],
-    ALL_CALCULATED_PROPERTIES = CALCULATED_PROPERTIES
-        .concat(['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll']);
+const DESCRIPTION_NAME_BY_AREA = {
+    row: 'rows',
+    column: 'columns',
+    data: 'values',
+    filter: 'filters'
+};
+const STATE_PROPERTIES = [
+    'area',
+    'areaIndex',
+    'sortOrder',
+    'filterType',
+    'filterValues',
+    'sortBy',
+    'sortBySummaryField',
+    'sortBySummaryPath',
+    'expanded',
+    'summaryType',
+    'summaryDisplayMode'
+];
+const CALCULATED_PROPERTIES = [
+    'format',
+    'selector',
+    'customizeText',
+    'caption'
+];
+const ALL_CALCULATED_PROPERTIES = CALCULATED_PROPERTIES
+    .concat(['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll']);
 
 function createCaption(field) {
-    var caption = field.dataField || field.groupName || '',
-        summaryType = (field.summaryType || '').toLowerCase();
+    let caption = field.dataField || field.groupName || '';
+    let summaryType = (field.summaryType || '').toLowerCase();
 
     if(isString(field.groupInterval)) {
         caption += '_' + field.groupInterval;
@@ -75,7 +75,7 @@ function createCaption(field) {
 }
 
 function resetFieldState(field, properties) {
-    var initialProperties = field._initProperties || {};
+    const initialProperties = field._initProperties || {};
 
     each(properties, function(_, prop) {
         if(Object.prototype.hasOwnProperty.call(initialProperties, prop)) {
@@ -109,16 +109,16 @@ function isDataExists(data) {
 
 module.exports = Class.inherit((function() {
 
-    var findHeaderItem = function(headerItems, path) {
+    const findHeaderItem = function(headerItems, path) {
         if(headerItems._cacheByPath) {
             return headerItems._cacheByPath[path.join('.')] || null;
         }
     };
 
     var getHeaderItemsLastIndex = function(headerItems, grandTotalIndex) {
-        var i,
-            lastIndex = -1,
-            headerItem;
+        let i;
+        let lastIndex = -1;
+        let headerItem;
 
         if(headerItems) {
             for(i = 0; i < headerItems.length; i++) {
@@ -140,17 +140,17 @@ module.exports = Class.inherit((function() {
         return lastIndex;
     };
 
-    var updateHeaderItemChildren = function(headerItems, headerItem, children, grandTotalIndex) {
-        var applyingHeaderItemsCount = getHeaderItemsLastIndex(children) + 1,
-            emptyIndex = getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1,
-            index,
-            applyingItemIndexesToCurrent = [],
-            needIndexUpdate = false,
-            d = new Deferred();
+    const updateHeaderItemChildren = function(headerItems, headerItem, children, grandTotalIndex) {
+        const applyingHeaderItemsCount = getHeaderItemsLastIndex(children) + 1;
+        let emptyIndex = getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1;
+        let index;
+        const applyingItemIndexesToCurrent = [];
+        let needIndexUpdate = false;
+        const d = new Deferred();
 
         if(headerItem.children && headerItem.children.length === children.length) {
-            for(var i = 0; i < children.length; i++) {
-                var child = children[i];
+            for(let i = 0; i < children.length; i++) {
+                const child = children[i];
                 if(child.index !== undefined) {
                     if(headerItem.children[i].index === undefined) {
                         child.index = applyingItemIndexesToCurrent[child.index] = emptyIndex++;
@@ -178,27 +178,27 @@ module.exports = Class.inherit((function() {
         return d;
     };
 
-    var updateHeaderItems = function(headerItems, newHeaderItems, grandTotalIndex) {
-        var d = new Deferred(),
-            emptyIndex = grandTotalIndex >= 0 && getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1;
+    const updateHeaderItems = function(headerItems, newHeaderItems, grandTotalIndex) {
+        const d = new Deferred();
+        let emptyIndex = grandTotalIndex >= 0 && getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1;
 
-        var applyingItemIndexesToCurrent = [];
+        const applyingItemIndexesToCurrent = [];
 
         // reset cache
         when(foreachTreeAsync(headerItems, function(items) {
             delete items[0].collapsedChildren;
         })).done(function() {
             when(foreachTreeAsync(newHeaderItems, function(newItems, index) {
-                var newItem = newItems[0];
+                const newItem = newItems[0];
                 if(newItem.index >= 0) {
-                    var headerItem = findHeaderItem(headerItems, createPath(newItems));
+                    let headerItem = findHeaderItem(headerItems, createPath(newItems));
                     if(headerItem && headerItem.index >= 0) {
                         applyingItemIndexesToCurrent[newItem.index] = headerItem.index;
                     } else if(emptyIndex) {
-                        var path = createPath(newItems.slice(1));
+                        const path = createPath(newItems.slice(1));
                         headerItem = findHeaderItem(headerItems, path);
 
-                        var parentItems = path.length ? headerItem && headerItem.children : headerItems;
+                        const parentItems = path.length ? headerItem && headerItem.children : headerItems;
                         if(parentItems) {
                             parentItems[index] = newItem;
                             newItem.index = applyingItemIndexesToCurrent[newItem.index] = emptyIndex++;
@@ -214,14 +214,14 @@ module.exports = Class.inherit((function() {
         return d;
     };
 
-    var updateDataSourceCells = function(dataSource, newDataSourceCells, newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
-        var newRowIndex,
-            newColumnIndex,
-            newRowCells,
-            newCell,
-            rowIndex,
-            columnIndex,
-            dataSourceCells = dataSource.values;
+    const updateDataSourceCells = function(dataSource, newDataSourceCells, newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
+        let newRowIndex;
+        let newColumnIndex;
+        let newRowCells;
+        let newCell;
+        let rowIndex;
+        let columnIndex;
+        const dataSourceCells = dataSource.values;
 
         if(newDataSourceCells) {
             for(newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
@@ -250,7 +250,7 @@ module.exports = Class.inherit((function() {
     };
 
     function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
-        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : LocalStore;
+        const StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : LocalStore;
 
         return new StoreConstructor(extend(normalizeDataSourceOptions(dataSourceOptions), {
             onChanged: null,
@@ -260,8 +260,8 @@ module.exports = Class.inherit((function() {
     }
 
     function createStore(dataSourceOptions, notifyProgress) {
-        var store,
-            storeOptions;
+        let store;
+        let storeOptions;
 
         if(isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
             store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
@@ -285,7 +285,7 @@ module.exports = Class.inherit((function() {
     }
 
     function equalFields(fields, prevFields, count) {
-        for(var i = 0; i < count; i++) {
+        for(let i = 0; i < count; i++) {
             if(!fields[i] || !prevFields[i] || fields[i].index !== prevFields[i].index) {
                 return false;
             }
@@ -295,13 +295,13 @@ module.exports = Class.inherit((function() {
     }
 
     function getExpandedPaths(dataSource, loadOptions, dimensionName, prevLoadOptions) {
-        var result = [],
-            fields = (loadOptions && loadOptions[dimensionName]) || [],
-            prevFields = (prevLoadOptions && prevLoadOptions[dimensionName]) || [];
+        const result = [];
+        const fields = (loadOptions && loadOptions[dimensionName]) || [];
+        const prevFields = (prevLoadOptions && prevLoadOptions[dimensionName]) || [];
 
         foreachTree(dataSource[dimensionName], function(items) {
-            var item = items[0],
-                path = createPath(items);
+            const item = items[0];
+            const path = createPath(items);
 
             if(item.children && fields[path.length - 1] && !fields[path.length - 1].expanded) {
                 if(path.length < fields.length && (!prevLoadOptions || equalFields(fields, prevFields, path.length))) {
@@ -335,7 +335,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldsState(fields, properties) {
-        var result = [];
+        const result = [];
 
         each(fields, function(_, field) {
             result.push(setFieldProperties({
@@ -356,7 +356,7 @@ module.exports = Class.inherit((function() {
 
     function getFieldsById(fields, id) {
 
-        var result = [];
+        const result = [];
 
         each(fields || [], function(_, field) {
             if(getFieldStateId(field) === id) {
@@ -379,8 +379,8 @@ module.exports = Class.inherit((function() {
 
     function setFieldsState(stateFields, fields) {
         stateFields = stateFields || [];
-        var fieldsById = {},
-            id;
+        const fieldsById = {};
+        let id;
 
         each(fields, function(_, field) {
             id = getFieldStateId(field);
@@ -424,12 +424,12 @@ module.exports = Class.inherit((function() {
     }
 
     function isAreaField(field, area) {
-        var canAddFieldInArea = area === 'data' || field.visible !== false;
+        const canAddFieldInArea = area === 'data' || field.visible !== false;
         return field.area === area && !isDefined(field.groupIndex) && canAddFieldInArea;
     }
 
     function getFieldId(field, retrieveFieldsOptionValue) {
-        var groupName = field.groupName || '';
+        const groupName = field.groupName || '';
 
         return (field.dataField || groupName)
             + (field.groupInterval ? groupName + field.groupInterval : 'NOGROUP')
@@ -437,11 +437,11 @@ module.exports = Class.inherit((function() {
     }
 
     function mergeFields(fields, storeFields, retrieveFieldsOptionValue) {
-        var result = [],
-            fieldsDictionary = {},
-            removedFields = {},
-            mergedGroups = [],
-            dataTypes = getFieldsDataType(fields);
+        let result = [];
+        const fieldsDictionary = {};
+        const removedFields = {};
+        const mergedGroups = [];
+        const dataTypes = getFieldsDataType(fields);
 
         if(storeFields) {
             each(storeFields, function(_, field) {
@@ -449,9 +449,9 @@ module.exports = Class.inherit((function() {
             });
 
             each(fields, function(_, field) {
-                var fieldKey = getFieldId(field, retrieveFieldsOptionValue),
-                    storeField = fieldsDictionary[fieldKey] || removedFields[fieldKey],
-                    mergedField;
+                const fieldKey = getFieldId(field, retrieveFieldsOptionValue);
+                const storeField = fieldsDictionary[fieldKey] || removedFields[fieldKey];
+                let mergedField;
 
                 if(storeField) {
                     if(storeField._initProperties) {
@@ -483,10 +483,10 @@ module.exports = Class.inherit((function() {
     }
 
     function getFields(that) {
-        var result = new Deferred(),
-            store = that._store,
-            storeFields = store && store.getFields(that._fields),
-            mergedFields;
+        const result = new Deferred();
+        const store = that._store;
+        const storeFields = store && store.getFields(that._fields);
+        let mergedFields;
 
         when(storeFields).done(function(storeFields) {
             that._storeFields = storeFields;
@@ -498,14 +498,14 @@ module.exports = Class.inherit((function() {
     }
 
     function getSliceIndex(items, path) {
-        var index = null,
-            pathValue = (path || []).join('.');
+        let index = null;
+        const pathValue = (path || []).join('.');
 
         if(pathValue.length) {
             foreachTree(items, function(items) {
-                var item = items[0],
-                    itemPath = createPath(items).join('.'),
-                    textPath = map(items, function(item) { return item.text; }).reverse().join('.');
+                const item = items[0];
+                const itemPath = createPath(items).join('.');
+                const textPath = map(items, function(item) { return item.text; }).reverse().join('.');
 
                 if(pathValue === itemPath || (item.key && textPath === pathValue)) {
                     index = items[0].index;
@@ -518,19 +518,19 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName) {
-        var values = dataSource.values,
-            sortBySummaryFieldIndex = findField(loadOptions.values, field.sortBySummaryField),
-            areRows = dimensionName === 'rows',
-            sortByDimension = areRows ? dataSource.columns : dataSource.rows,
-            grandTotalIndex = areRows ? dataSource.grandTotalRowIndex : dataSource.grandTotalColumnIndex,
-            sortBySummaryPath = field.sortBySummaryPath || [],
-            sliceIndex = sortBySummaryPath.length ? getSliceIndex(sortByDimension, sortBySummaryPath) : grandTotalIndex;
+        const values = dataSource.values;
+        const sortBySummaryFieldIndex = findField(loadOptions.values, field.sortBySummaryField);
+        const areRows = dimensionName === 'rows';
+        const sortByDimension = areRows ? dataSource.columns : dataSource.rows;
+        const grandTotalIndex = areRows ? dataSource.grandTotalRowIndex : dataSource.grandTotalColumnIndex;
+        const sortBySummaryPath = field.sortBySummaryPath || [];
+        const sliceIndex = sortBySummaryPath.length ? getSliceIndex(sortByDimension, sortBySummaryPath) : grandTotalIndex;
 
         if(values && values.length && sortBySummaryFieldIndex >= 0 && isDefined(sliceIndex)) {
             return function(field) {
-                var rowIndex = areRows ? field.index : sliceIndex,
-                    columnIndex = areRows ? sliceIndex : field.index,
-                    value = ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex];
+                const rowIndex = areRows ? field.index : sliceIndex;
+                const columnIndex = areRows ? sliceIndex : field.index;
+                const value = ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex];
 
                 return isDefined(value) ? value : null;
             };
@@ -538,7 +538,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getMemberForSortBy(sortBy, getAscOrder) {
-        var member = 'text';
+        let member = 'text';
         if(sortBy === 'none') {
             member = 'index';
         } else if(getAscOrder || sortBy !== 'displayText') {
@@ -548,29 +548,29 @@ module.exports = Class.inherit((function() {
     }
 
     function getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder) {
-        var sortOrder = getAscOrder ? 'asc' : field.sortOrder,
-            sortBy = getMemberForSortBy(field.sortBy, getAscOrder),
-            defaultCompare = field.sortingMethod ? function(a, b) {
-                return field.sortingMethod(a, b);
-            } : getCompareFunction(function(item) { return item[sortBy]; }),
-            summaryValueSelector = !getAscOrder && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName),
-            summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector),
-            sortingMethod = function(a, b) {
-                var result = summaryCompare && summaryCompare(a, b) || defaultCompare(a, b);
-                return sortOrder === 'desc' ? -result : result;
-            };
+        const sortOrder = getAscOrder ? 'asc' : field.sortOrder;
+        const sortBy = getMemberForSortBy(field.sortBy, getAscOrder);
+        const defaultCompare = field.sortingMethod ? function(a, b) {
+            return field.sortingMethod(a, b);
+        } : getCompareFunction(function(item) { return item[sortBy]; });
+        const summaryValueSelector = !getAscOrder && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName);
+        const summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector);
+        const sortingMethod = function(a, b) {
+            const result = summaryCompare && summaryCompare(a, b) || defaultCompare(a, b);
+            return sortOrder === 'desc' ? -result : result;
+        };
 
         return sortingMethod;
     }
 
     function sortDimension(dataSource, loadOptions, dimensionName, getAscOrder) {
-        var fields = loadOptions[dimensionName] || [],
-            baseIndex = loadOptions.headerName === dimensionName ? loadOptions.path.length : 0,
-            sortingMethodByLevel = [];
+        const fields = loadOptions[dimensionName] || [];
+        const baseIndex = loadOptions.headerName === dimensionName ? loadOptions.path.length : 0;
+        const sortingMethodByLevel = [];
 
         foreachDataLevel(dataSource[dimensionName], function(item, index) {
-            var field = fields[index] || {},
-                sortingMethod = sortingMethodByLevel[index] = sortingMethodByLevel[index] || getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder);
+            const field = fields[index] || {};
+            const sortingMethod = sortingMethodByLevel[index] = sortingMethodByLevel[index] || getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder);
 
             item.sort(sortingMethod);
         }, baseIndex);
@@ -583,7 +583,7 @@ module.exports = Class.inherit((function() {
 
     function formatHeaderItems(data, loadOptions, headerName) {
         return foreachTreeAsync(data[headerName], function(items) {
-            var item = items[0];
+            const item = items[0];
 
             item.text = item.text || formatValue(item.value, loadOptions[headerName][createPath(items).length - 1]);
         });
@@ -597,11 +597,11 @@ module.exports = Class.inherit((function() {
     }
 
     function updateCache(headerItems) {
-        var d = new Deferred();
-        var cacheByPath = {};
+        const d = new Deferred();
+        const cacheByPath = {};
 
         when(foreachTreeAsync(headerItems, function(items) {
-            var path = createPath(items).join('.');
+            const path = createPath(items).join('.');
             cacheByPath[path] = items[0];
         })).done(d.resolve);
 
@@ -611,7 +611,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getAreaFields(fields, area) {
-        var areaFields = [];
+        const areaFields = [];
         each(fields, function() {
             if(isAreaField(this, area)) {
                 areaFields.push(this);
@@ -637,10 +637,10 @@ module.exports = Class.inherit((function() {
             options = options || {};
             this._eventsStrategy = new EventsStrategy(this);
 
-            var that = this,
-                store = createStore(options, function(progress) {
-                    that._eventsStrategy.fireEvent('progressChanged', [progress]);
-                });
+            const that = this;
+            const store = createStore(options, function(progress) {
+                that._eventsStrategy.fireEvent('progressChanged', [progress]);
+            });
 
             /**
             * @name PivotGridDataSourceOptions.store
@@ -696,7 +696,7 @@ module.exports = Class.inherit((function() {
                     'expandValueChanging'
                 ],
                 (function(_, eventName) {
-                    var optionName = 'on' + eventName[0].toUpperCase() + eventName.slice(1);
+                    const optionName = 'on' + eventName[0].toUpperCase() + eventName.slice(1);
                     if(Object.prototype.hasOwnProperty.call(options, optionName)) {
                         this.on(eventName, options[optionName]);
                     }
@@ -984,8 +984,8 @@ module.exports = Class.inherit((function() {
         * @return Array<PivotGridDataSourceOptions.fields>
         */
         getAreaFields: function(area, collectGroups) {
-            var areaFields = [],
-                descriptions;
+            let areaFields = [];
+            let descriptions;
 
             if(collectGroups || area === 'data') {
                 areaFields = getAreaFields(this._fields, area);
@@ -1009,7 +1009,7 @@ module.exports = Class.inherit((function() {
         * @param1 fields:Array<PivotGridDataSourceOptions.fields>
         */
         fields: function(fields) {
-            var that = this;
+            const that = this;
             if(fields) {
                 that._fields = mergeFields(fields, that._storeFields, that._retrieveFields);
                 that._fieldsPrepared(that._fields);
@@ -1031,20 +1031,20 @@ module.exports = Class.inherit((function() {
          * @param2 options:object
          */
         field: function(id, options) {
-            var that = this,
-                fields = that._fields,
-                field = fields && fields[isNumeric(id) ? id : findField(fields, id)],
-                levels;
+            const that = this;
+            const fields = that._fields;
+            const field = fields && fields[isNumeric(id) ? id : findField(fields, id)];
+            let levels;
 
             if(field && options) {
                 each(options, function(optionName, optionValue) {
-                    var isInitialization = inArray(optionName, STATE_PROPERTIES) < 0;
+                    const isInitialization = inArray(optionName, STATE_PROPERTIES) < 0;
 
                     setFieldProperty(field, optionName, optionValue, isInitialization);
 
                     if(optionName === 'sortOrder') {
                         levels = field.levels || [];
-                        for(var i = 0; i < levels.length; i++) {
+                        for(let i = 0; i < levels.length; i++) {
                             levels[i][optionName] = optionValue;
                         }
                     }
@@ -1059,19 +1059,19 @@ module.exports = Class.inherit((function() {
         },
 
         getFieldValues: function(index, applyFilters, options) {
-            var that = this,
-                field = this._fields && this._fields[index],
-                store = this.store(),
-                loadFields = [],
-                loadOptions = {
-                    columns: loadFields,
-                    rows: [],
-                    values: this.getAreaFields('data'),
-                    filters: applyFilters ? this._fields.filter(f => f !== field && f.area && f.filterValues && f.filterValues.length) : [],
-                    skipValues: true
-                },
-                searchValue,
-                d = new Deferred();
+            const that = this;
+            const field = this._fields && this._fields[index];
+            const store = this.store();
+            const loadFields = [];
+            const loadOptions = {
+                columns: loadFields,
+                rows: [],
+                values: this.getAreaFields('data'),
+                filters: applyFilters ? this._fields.filter(f => f !== field && f.area && f.filterValues && f.filterValues.length) : [],
+                skipValues: true
+            };
+            let searchValue;
+            const d = new Deferred();
 
             if(options) {
                 searchValue = options.searchValue;
@@ -1123,7 +1123,7 @@ module.exports = Class.inherit((function() {
        * @param1 filterExpr:object
        */
         filter: function() {
-            var store = this._store;
+            const store = this._store;
 
             return store.filter.apply(store, arguments);
         },
@@ -1134,8 +1134,8 @@ module.exports = Class.inherit((function() {
         * @return Promise<any>
         */
         load: function(options) {
-            var that = this,
-                d = new Deferred();
+            const that = this;
+            const d = new Deferred();
             options = options || {};
 
             that.beginLoading();
@@ -1182,23 +1182,23 @@ module.exports = Class.inherit((function() {
         },
 
         _createDescriptions: function(currentField) {
-            var that = this,
-                fields = that.fields(),
-                descriptions = {
-                    rows: [],
-                    columns: [],
-                    values: [],
-                    filters: []
-                };
+            const that = this;
+            const fields = that.fields();
+            const descriptions = {
+                rows: [],
+                columns: [],
+                values: [],
+                filters: []
+            };
 
             each(['row', 'column', 'data', 'filter'], function(_, areaName) {
                 normalizeIndexes(getAreaFields(fields, areaName), 'areaIndex', currentField);
             });
 
             each(fields || [], function(_, field) {
-                var descriptionName = DESCRIPTION_NAME_BY_AREA[field.area],
-                    dimension = descriptions[descriptionName],
-                    groupName = field.groupName;
+                const descriptionName = DESCRIPTION_NAME_BY_AREA[field.area];
+                const dimension = descriptions[descriptionName];
+                const groupName = field.groupName;
 
                 if(groupName && !isNumeric(field.groupIndex)) {
                     field.levels = getFieldsByGroup(fields, field);
@@ -1222,11 +1222,11 @@ module.exports = Class.inherit((function() {
                 sortFieldsByAreaIndex(fields);
             });
 
-            var indices = {};
+            const indices = {};
             each(descriptions.values, function(_, field) {
-                var expression = field.calculateSummaryValue;
+                const expression = field.calculateSummaryValue;
                 if(isFunction(expression)) {
-                    var summaryCell = createMockSummaryCell(descriptions, fields, indices);
+                    const summaryCell = createMockSummaryCell(descriptions, fields, indices);
                     expression(summaryCell);
                 }
             });
@@ -1235,18 +1235,18 @@ module.exports = Class.inherit((function() {
         },
 
         _fieldsPrepared: function(fields) {
-            var that = this;
+            const that = this;
             that._fields = fields;
             each(fields, function(index, field) {
                 field.index = index;
                 updateCalculatedFieldProperties(field, ALL_CALCULATED_PROPERTIES);
             });
 
-            var currentFieldState = getFieldsState(fields, ['caption']);
+            const currentFieldState = getFieldsState(fields, ['caption']);
 
             that._eventsStrategy.fireEvent('fieldsPrepared', [fields]);
 
-            for(var i = 0; i < fields.length; i++) {
+            for(let i = 0; i < fields.length; i++) {
                 if(fields[i].caption !== currentFieldState[i].caption) {
                     setFieldProperty(fields[i], 'caption', fields[i].caption, true);
                 }
@@ -1276,7 +1276,7 @@ module.exports = Class.inherit((function() {
         */
 
         state: function(state, skipLoading) {
-            var that = this;
+            const that = this;
 
             if(arguments.length) {
                 state = extend({
@@ -1317,8 +1317,8 @@ module.exports = Class.inherit((function() {
         },
 
         _changeLoadingCount: function(increment) {
-            var oldLoading = this.isLoading(),
-                newLoading;
+            const oldLoading = this.isLoading();
+            let newLoading;
 
             this._loadingCount += increment;
             newLoading = this.isLoading();
@@ -1329,22 +1329,22 @@ module.exports = Class.inherit((function() {
         },
 
         _hasPagingValues: function(options, area, oppositeIndex) {
-            var takeField = area + 'Take',
-                skipField = area + 'Skip',
-                values = this._data.values,
-                items = this._data[area + 's'],
-                oppositeArea = area === 'row' ? 'column' : 'row',
-                indices = [];
+            const takeField = area + 'Take';
+            const skipField = area + 'Skip';
+            const values = this._data.values;
+            let items = this._data[area + 's'];
+            const oppositeArea = area === 'row' ? 'column' : 'row';
+            const indices = [];
 
             if(options.path && options.area === area) {
-                let headerItem = findHeaderItem(items, options.path);
+                const headerItem = findHeaderItem(items, options.path);
                 items = headerItem && headerItem.children;
                 if(!items) {
                     return false;
                 }
             }
             if(options.oppositePath && options.area === oppositeArea) {
-                let headerItem = findHeaderItem(items, options.oppositePath);
+                const headerItem = findHeaderItem(items, options.oppositePath);
                 items = headerItem && headerItem.children;
                 if(!items) {
                     return false;
@@ -1370,19 +1370,19 @@ module.exports = Class.inherit((function() {
         },
 
         _processPagingCacheByArea: function(options, pageSize, area) {
-            var takeField = area + 'Take',
-                skipField = area + 'Skip',
-                items = this._data[area + 's'],
-                oppositeArea = area === 'row' ? 'column' : 'row',
-                item;
+            const takeField = area + 'Take';
+            const skipField = area + 'Skip';
+            let items = this._data[area + 's'];
+            const oppositeArea = area === 'row' ? 'column' : 'row';
+            let item;
 
             if(options[takeField]) {
                 if(options.path && options.area === area) {
-                    let headerItem = findHeaderItem(items, options.path);
+                    const headerItem = findHeaderItem(items, options.path);
                     items = headerItem && headerItem.children || [];
                 }
                 if(options.oppositePath && options.area === oppositeArea) {
-                    let headerItem = findHeaderItem(items, options.oppositePath);
+                    const headerItem = findHeaderItem(items, options.oppositePath);
                     items = headerItem && headerItem.children || [];
                 }
 
@@ -1399,8 +1399,8 @@ module.exports = Class.inherit((function() {
                 } while(item && item.index !== undefined && options[takeField]);
 
                 if(options[takeField]) {
-                    var start = Math.floor(options[skipField] / pageSize) * pageSize;
-                    var end = Math.ceil((options[skipField] + options[takeField]) / pageSize) * pageSize;
+                    const start = Math.floor(options[skipField] / pageSize) * pageSize;
+                    const end = Math.ceil((options[skipField] + options[takeField]) / pageSize) * pageSize;
 
                     options[skipField] = start;
                     options[takeField] = end - start;
@@ -1409,7 +1409,7 @@ module.exports = Class.inherit((function() {
         },
 
         _processPagingCache: function(storeLoadOptions) {
-            var pageSize = this._pageSize;
+            const pageSize = this._pageSize;
 
             if(pageSize < 0) return;
 
@@ -1420,12 +1420,12 @@ module.exports = Class.inherit((function() {
         },
 
         _loadCore: function(options, deferred) {
-            var that = this,
-                store = this._store,
-                descriptions = this._descriptions,
-                reload = options.reload || (this.paginate() && that._isFieldsModified),
-                paginate = this.paginate(),
-                headerName = DESCRIPTION_NAME_BY_AREA[options.area];
+            const that = this;
+            const store = this._store;
+            const descriptions = this._descriptions;
+            const reload = options.reload || (this.paginate() && that._isFieldsModified);
+            const paginate = this.paginate();
+            const headerName = DESCRIPTION_NAME_BY_AREA[options.area];
 
             options = options || {};
 
@@ -1464,13 +1464,13 @@ module.exports = Class.inherit((function() {
                     return;
                 }
 
-                let results = storeLoadOptions.map(options => store.load(options));
+                const results = storeLoadOptions.map(options => store.load(options));
                 when.apply(null, results).done(function() {
-                    let results = arguments;
+                    const results = arguments;
                     for(let i = 0; i < results.length; i++) {
-                        var options = storeLoadOptions[i],
-                            data = results[i],
-                            isLast = i === results.length - 1;
+                        const options = storeLoadOptions[i];
+                        const data = results[i];
+                        const isLast = i === results.length - 1;
 
                         if(options.path) {
                             that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false, options.oppositePath);
@@ -1489,7 +1489,7 @@ module.exports = Class.inherit((function() {
         },
 
         _sort: function(descriptions, data, getAscOrder) {
-            var store = this._store;
+            const store = this._store;
 
             if(store && !this._paginate) {
                 sort(descriptions, data, getAscOrder);
@@ -1501,17 +1501,17 @@ module.exports = Class.inherit((function() {
         },
 
         isEmpty: function() {
-            var dataFields = this.getAreaFields('data'),
-                data = this.getData();
+            const dataFields = this.getAreaFields('data');
+            const data = this.getData();
             return !dataFields.length || !data.values.length;
         },
 
         _update: function(deferred) {
-            var that = this,
-                descriptions = that._descriptions,
-                loadedData = that._data,
-                dataFields = descriptions.values,
-                expressionsUsed = areExpressionsUsed(dataFields);
+            const that = this;
+            const descriptions = that._descriptions;
+            const loadedData = that._data;
+            const dataFields = descriptions.values;
+            const expressionsUsed = areExpressionsUsed(dataFields);
 
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
@@ -1550,10 +1550,10 @@ module.exports = Class.inherit((function() {
          * @param2 path:Array<string, number, Date>
          */
         collapseHeaderItem: function(area, path) {
-            var that = this,
-                headerItems = area === 'column' ? that._data.columns : that._data.rows,
-                headerItem = findHeaderItem(headerItems, path),
-                field = that.getAreaFields(area)[path.length - 1];
+            const that = this;
+            const headerItems = area === 'column' ? that._data.columns : that._data.rows;
+            const headerItem = findHeaderItem(headerItems, path);
+            const field = that.getAreaFields(area)[path.length - 1];
 
             if(headerItem && headerItem.children) {
                 that._eventsStrategy.fireEvent('expandValueChanging', [{
@@ -1581,9 +1581,9 @@ module.exports = Class.inherit((function() {
         * @param1 id:number|string
         */
         collapseAll: function(id) {
-            var dataChanged = false,
-                field = this.field(id) || {},
-                areaOffsets = [inArray(field, this.getAreaFields(field.area))];
+            let dataChanged = false;
+            const field = this.field(id) || {};
+            let areaOffsets = [inArray(field, this.getAreaFields(field.area))];
 
             field.expanded = false;
             if(field && field.levels) {
@@ -1595,8 +1595,8 @@ module.exports = Class.inherit((function() {
             }
 
             foreachTree(this._data[field.area + 's'], function(items) {
-                var item = items[0],
-                    path = createPath(items);
+                const item = items[0];
+                const path = createPath(items);
 
                 if(item && item.children && areaOffsets.indexOf(path.length - 1) !== -1) {
                     item.collapsedChildren = item.children;
@@ -1614,7 +1614,7 @@ module.exports = Class.inherit((function() {
         * @param1 id:number|string
         */
         expandAll: function(id) {
-            var field = this.field(id);
+            const field = this.field(id);
             if(field && field.area) {
                 field.expanded = true;
                 if(field && field.levels) {
@@ -1633,11 +1633,11 @@ module.exports = Class.inherit((function() {
          * @param2 path:Array<Object>
          */
         expandHeaderItem: function(area, path) {
-            var that = this,
-                hasCache,
-                headerItems = area === 'column' ? that._data.columns : that._data.rows,
-                headerItem = findHeaderItem(headerItems, path),
-                options;
+            const that = this;
+            let hasCache;
+            const headerItems = area === 'column' ? that._data.columns : that._data.rows;
+            const headerItem = findHeaderItem(headerItems, path);
+            let options;
 
             if(headerItem && !headerItem.children) {
                 hasCache = !!headerItem.collapsedChildren;
@@ -1661,10 +1661,10 @@ module.exports = Class.inherit((function() {
         },
 
         mergePartialDataSource: function(dataSource, deferred) {
-            var that = this,
-                loadedData = that._data,
-                newRowItemIndexesToCurrent,
-                newColumnItemIndexesToCurrent;
+            const that = this;
+            const loadedData = that._data;
+            let newRowItemIndexesToCurrent;
+            let newColumnItemIndexesToCurrent;
 
             if(dataSource && dataSource.values) {
                 dataSource.rows = dataSource.rows || [];
@@ -1683,14 +1683,14 @@ module.exports = Class.inherit((function() {
         },
 
         applyPartialDataSource: function(area, path, dataSource, deferred, oppositePath) {
-            var that = this,
-                loadedData = that._data,
-                headerItems = area === 'column' ? loadedData.columns : loadedData.rows,
-                headerItem,
-                oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns,
-                oppositeHeaderItem,
-                newRowItemIndexesToCurrent,
-                newColumnItemIndexesToCurrent;
+            const that = this;
+            const loadedData = that._data;
+            const headerItems = area === 'column' ? loadedData.columns : loadedData.rows;
+            let headerItem;
+            const oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns;
+            let oppositeHeaderItem;
+            let newRowItemIndexesToCurrent;
+            let newColumnItemIndexesToCurrent;
 
             if(dataSource && dataSource.values) {
                 dataSource.rows = dataSource.rows || [];
@@ -1764,8 +1764,8 @@ module.exports = Class.inherit((function() {
          * @publicName dispose()
          */
         dispose: function() {
-            var that = this,
-                delayedLoadTask = that._delayedLoadTask;
+            const that = this;
+            const delayedLoadTask = that._delayedLoadTask;
 
             this._eventsStrategy.dispose();
             if(delayedLoadTask) {

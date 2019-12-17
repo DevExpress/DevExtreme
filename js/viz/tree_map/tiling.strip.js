@@ -1,4 +1,4 @@
-var _squarify = require('./tiling.squarified.base');
+const _squarify = require('./tiling.squarified.base');
 
 function accumulate(total, current, count) {
     return ((count - 1) * total + current) / count;

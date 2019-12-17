@@ -529,7 +529,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 }
 
                 checkAsserts(assert, expectedOffset) {
-                    let $container = this.getScrollableContainer();
+                    const $container = this.getScrollableContainer();
 
                     if(this._isVerticalDirection) {
                         assert.strictEqual($container.scrollTop(), expectedOffset, 'scrollTop()');

@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
@@ -21,8 +21,8 @@ import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
 
-var setupModule = function() {
-    var that = this;
+const setupModule = function() {
+    const that = this;
 
     that.options = {
         dataSource: [
@@ -46,7 +46,7 @@ var setupModule = function() {
     };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
 };
 
@@ -54,14 +54,14 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
 
 QUnit.test('Select row', function(assert) {
     // arrange
-    var data = { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-        $testElement = $('#treeList');
+    const data = { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) };
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
     // act
-    var key = this.keyOf(data);
+    const key = this.keyOf(data);
     this.selectRows(key);
 
     // assert
@@ -72,8 +72,8 @@ QUnit.test('Select row', function(assert) {
 
 QUnit.test('Select row when store hasn\'t key', function(assert) {
 // arrange
-    var data = this.options.dataSource,
-        $testElement = $('#treeList');
+    const data = this.options.dataSource;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = {
         load: function() {
@@ -94,7 +94,7 @@ QUnit.test('Select row when store hasn\'t key', function(assert) {
 
 QUnit.test('Select all rows', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -116,7 +116,7 @@ QUnit.test('Select all rows', function(assert) {
 
 QUnit.test('Deselect all rows', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.selectedRowKeys = [1, 2];
 
@@ -134,7 +134,7 @@ QUnit.test('Deselect all rows', function(assert) {
 
 QUnit.test('Select all rows if autoExpandAll is true', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.autoExpandAll = true;
 
@@ -151,7 +151,7 @@ QUnit.test('Select all rows if autoExpandAll is true', function(assert) {
 
 QUnit.test('Select all rows if filter is applied', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource.push({ id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
 
@@ -172,7 +172,7 @@ QUnit.test('Select all rows if filter is applied', function(assert) {
 
 QUnit.test('getSelectedRowKeys with non-recursive selection', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -195,14 +195,14 @@ QUnit.test('getSelectedRowKeys with non-recursive selection', function(assert) {
 
 QUnit.test('Checkboxes should be rendered in right place', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always' };
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    var $gridCell = $testElement.find('.dx-treelist-cell-expandable').eq(0);
+    const $gridCell = $testElement.find('.dx-treelist-cell-expandable').eq(0);
 
     // assert
     assert.equal($gridCell.find('.dx-select-checkbox').length, 1, 'Select checkbox was rendered in right place');
@@ -211,14 +211,14 @@ QUnit.test('Checkboxes should be rendered in right place', function(assert) {
 
 QUnit.test('Checkboxes should not be rendered if selection is not multiple', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.selection = { mode: 'single', showCheckBoxesMode: 'always' };
 
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    var $gridCell = $testElement.find('.dx-treelist-cell-expandable').eq(0);
+    const $gridCell = $testElement.find('.dx-treelist-cell-expandable').eq(0);
 
     // assert
     assert.equal($gridCell.find('.dx-select-checkbox').length, 0, 'Select checkbox was not rendered');
@@ -226,7 +226,7 @@ QUnit.test('Checkboxes should not be rendered if selection is not multiple', fun
 
 QUnit.test('Click on select checkbox should works correctly', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always' };
 
@@ -234,7 +234,7 @@ QUnit.test('Click on select checkbox should works correctly', function(assert) {
     this.rowsView.render($testElement);
 
     // act
-    var $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
+    const $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
     $selectCheckbox.trigger('dxclick');
 
     // assert
@@ -245,7 +245,7 @@ QUnit.test('Click on select checkbox should works correctly', function(assert) {
 
 QUnit.test('Click on selectAll checkbox should works correctly', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.showColumnHeaders = true;
     this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
@@ -254,7 +254,7 @@ QUnit.test('Click on selectAll checkbox should works correctly', function(assert
     this.rowsView.render($testElement);
 
     // act
-    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    const $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger('dxclick');
 
     // assert
@@ -264,8 +264,8 @@ QUnit.test('Click on selectAll checkbox should works correctly', function(assert
 
 QUnit.test('Click on selectAll checkbox should works correctly when sorting is enabled', function(assert) {
     // arrange
-    var $testElement = $('#treeList'),
-        clock = sinon.useFakeTimers();
+    const $testElement = $('#treeList');
+    const clock = sinon.useFakeTimers();
 
     this.options.showColumnHeaders = true;
     this.options.sorting = {
@@ -278,7 +278,7 @@ QUnit.test('Click on selectAll checkbox should works correctly when sorting is e
     this.rowsView.render($testElement);
 
     // act
-    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    const $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger('dxclick');
     clock.tick();
 
@@ -290,7 +290,7 @@ QUnit.test('Click on selectAll checkbox should works correctly when sorting is e
 
 QUnit.test('Click on selectAll checkbox should check row checkboxes', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.showColumnHeaders = true;
     this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
@@ -299,17 +299,17 @@ QUnit.test('Click on selectAll checkbox should check row checkboxes', function(a
     this.rowsView.render($testElement);
 
     // act
-    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    const $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger('dxclick');
 
     // assert
-    var $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
+    const $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
     assert.equal($selectCheckbox.dxCheckBox('instance').option('value'), true, 'Select checkbox value is OK');
 });
 
 QUnit.test('Reordering column, selection', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
     this.options.allowColumnReordering = true;
     this.options.showColumnHeaders = true;
     this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
@@ -318,19 +318,19 @@ QUnit.test('Reordering column, selection', function(assert) {
     this.rowsView.render($testElement);
 
     // act
-    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    const $checkbox = $('.dx-header-row').find('.dx-checkbox');
     $checkbox.trigger('dxclick');
     this.columnsController.moveColumn(0, 3);
 
     // assert
-    var $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
+    const $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
     assert.equal($selectCheckbox.dxCheckBox('instance').option('value'), true, 'Select checkbox value is OK');
 });
 
 QUnit.test('Checking state selectAll checkbox - deselect row after select All', function(assert) {
     // arrange
-    var $selectAllCheckBox,
-        $testElement = $('#treeList');
+    let $selectAllCheckBox;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -365,8 +365,8 @@ QUnit.test('Checking state selectAll checkbox - deselect row after select All', 
 
 QUnit.test('Checking state selectAll checkbox - select all when there is filter', function(assert) {
     // arrange
-    var $selectAllCheckBox,
-        $testElement = $('#treeList');
+    let $selectAllCheckBox;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -396,7 +396,7 @@ QUnit.test('Checking state selectAll checkbox - select all when there is filter'
 
 QUnit.test('Not select row when click by expanding icon', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -411,8 +411,8 @@ QUnit.test('Not select row when click by expanding icon', function(assert) {
 
 QUnit.testInActiveWindow('Focused border is not displayed around expandable cell when row is selected', function(assert) {
     // arrange
-    var clock = sinon.useFakeTimers();
-    var $testElement = $('#treeList');
+    const clock = sinon.useFakeTimers();
+    const $testElement = $('#treeList');
 
     this.element = function() {
         return $testElement;
@@ -424,8 +424,8 @@ QUnit.testInActiveWindow('Focused border is not displayed around expandable cell
     this.rowsView.render($testElement);
 
     // act
-    var $expandableCell = $testElement.find('.dx-treelist-cell-expandable').first(),
-        $selectCheckbox = $expandableCell.find('.dx-select-checkbox').first();
+    const $expandableCell = $testElement.find('.dx-treelist-cell-expandable').first();
+    const $selectCheckbox = $expandableCell.find('.dx-select-checkbox').first();
 
     $selectCheckbox.focus();
     clock.tick();
@@ -438,14 +438,14 @@ QUnit.testInActiveWindow('Focused border is not displayed around expandable cell
 // T742205
 QUnit.test('The load method should not be called on an attempt to select loaded nodes when they are collapsed', function(assert) {
     // arrange
-    var $testElement = $('#treeList'),
-        store = new ArrayStore([
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) }
-        ]),
-        load = sinon.spy((loadOptions) => {
-            return store.load(loadOptions).promise();
-        });
+    const $testElement = $('#treeList');
+    const store = new ArrayStore([
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) }
+    ]);
+    const load = sinon.spy((loadOptions) => {
+        return store.load(loadOptions).promise();
+    });
 
     this.options.cacheEnabled = true;
     this.options.expandedRowKeys = [1];
@@ -476,7 +476,7 @@ QUnit.test('The load method should not be called on an attempt to select loaded 
 // T742205, T751539
 QUnit.test('selection for nested node should works', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.cacheEnabled = true;
     this.options.expandedRowKeys = [1];
@@ -510,8 +510,8 @@ QUnit.module('Recursive selection', {
 
 QUnit.test('Selecting row', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.expandedRowKeys = [1];
     this.setupTreeList();
@@ -529,8 +529,8 @@ QUnit.test('Selecting row', function(assert) {
 
 QUnit.test('Deselecting row', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -558,8 +558,8 @@ QUnit.test('Deselecting row', function(assert) {
 
 QUnit.test('Selecting a row when several of his children are selected', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -586,8 +586,8 @@ QUnit.test('Selecting a row when several of his children are selected', function
 
 QUnit.test('Deselecting the row when all children are selected', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -612,8 +612,8 @@ QUnit.test('Deselecting the row when all children are selected', function(assert
 
 QUnit.test('Select All', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -641,8 +641,8 @@ QUnit.test('Select All', function(assert) {
 
 QUnit.test('Select All when several rows are selected', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -671,8 +671,8 @@ QUnit.test('Select All when several rows are selected', function(assert) {
 
 QUnit.test('Deselect All', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -699,14 +699,14 @@ QUnit.test('Deselect All', function(assert) {
 
 QUnit.test('Checking arguments of the \'onSelectionChanged\' event when select row', function(assert) {
     // arrange
-    var selectionChangedArgs = [],
-        $testElement = $('#treeList'),
-        items = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
-        ];
+    const selectionChangedArgs = [];
+    const $testElement = $('#treeList');
+    const items = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+    ];
 
     this.options.dataSource = items;
     this.options.expandedRowKeys = [1];
@@ -732,14 +732,14 @@ QUnit.test('Checking arguments of the \'onSelectionChanged\' event when select r
 
 QUnit.test('Checking arguments of the \'onSelectionChanged\' event when deselect row', function(assert) {
     // arrange
-    var selectionChangedArgs = [],
-        $testElement = $('#treeList'),
-        items = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
-        ];
+    const selectionChangedArgs = [];
+    const $testElement = $('#treeList');
+    const items = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+    ];
 
     this.options.dataSource = items;
     this.options.expandedRowKeys = [1];
@@ -765,14 +765,14 @@ QUnit.test('Checking arguments of the \'onSelectionChanged\' event when deselect
 
 QUnit.test('Checking arguments of the \'onSelectionChanged\' event when select/deselect all rows', function(assert) {
     // arrange
-    var selectionChangedArgs = [],
-        $testElement = $('#treeList'),
-        items = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
-        ];
+    const selectionChangedArgs = [];
+    const $testElement = $('#treeList');
+    const items = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+    ];
 
     this.options.dataSource = items;
     this.options.expandedRowKeys = [1];
@@ -805,7 +805,7 @@ QUnit.test('Checking arguments of the \'onSelectionChanged\' event when select/d
 
 QUnit.test('getSelectedRowKeys with default parameter', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -826,7 +826,7 @@ QUnit.test('getSelectedRowKeys with default parameter', function(assert) {
 QUnit.test('getSelectedRowKeys with \'leavesOnly\' parameter', function(assert) {
     // arrange
     sinon.spy(errors, 'log');
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -852,7 +852,7 @@ QUnit.test('getSelectedRowKeys with \'leavesOnly\' parameter', function(assert) 
 
 QUnit.test('getSelectedRowKeys with \'all\' parameter', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -872,7 +872,7 @@ QUnit.test('getSelectedRowKeys with \'all\' parameter', function(assert) {
 
 QUnit.test('getSelectedRowKeys with \'excludeRecursive\' parameter', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -894,7 +894,7 @@ QUnit.test('getSelectedRowKeys with \'excludeRecursive\' parameter', function(as
 
 QUnit.test('getSelectedRowsData with mode parameter calls getSelectedRowKeys', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -918,17 +918,17 @@ QUnit.test('getSelectedRowsData with mode parameter calls getSelectedRowKeys', f
 
 QUnit.test('getSelectedRowsData with mode parameter when key has no data', function(assert) {
     // arrange, act
-    var clock = sinon.useFakeTimers(),
-        $testElement = $('#treeList'),
-        data = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
-        ];
+    const clock = sinon.useFakeTimers();
+    const $testElement = $('#treeList');
+    const data = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+    ];
 
     this.options.dataSource = {
         load: function() {
-            var d = $.Deferred();
+            const d = $.Deferred();
 
             setTimeout(function() {
                 d.resolve(data);
@@ -959,8 +959,8 @@ QUnit.test('getSelectedRowsData with mode parameter when key has no data', funct
 
 QUnit.test('Selection state of rows should be updated on loadDescendants', function(assert) {
     // arrange
-    var clock = sinon.useFakeTimers(),
-        $testElement = $('#treeList');
+    const clock = sinon.useFakeTimers();
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -990,8 +990,8 @@ QUnit.test('Selection state of rows should be updated on loadDescendants', funct
 
 QUnit.test('Checkbox of the parent node should be in an indeterminate state when deselecting child node', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -1016,8 +1016,8 @@ QUnit.test('Checkbox of the parent node should be in an indeterminate state when
 
 QUnit.test('Update selection after expanding node when \'remoteOperations\' is true', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.remoteOperations = true;
     this.options.selectedRowKeys = [1];
@@ -1042,7 +1042,7 @@ QUnit.test('Update selection after expanding node when \'remoteOperations\' is t
 
 QUnit.test('Changing recursive option at runtime - Deselecting row when all rows are selected', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.selection.recursive = false;
     this.options.dataSource = [
@@ -1068,8 +1068,8 @@ QUnit.test('Changing recursive option at runtime - Deselecting row when all rows
 
 QUnit.test('Deselecting child node when all nodes are selected', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -1102,7 +1102,7 @@ QUnit.test('Deselecting child node when all nodes are selected', function(assert
 // T550090
 QUnit.test('Select all when end nodes are selected', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
@@ -1126,7 +1126,7 @@ QUnit.test('Select all when end nodes are selected', function(assert) {
 // T550090
 QUnit.test('Deselect all after deselecting  -> selecting a nested node', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
@@ -1153,13 +1153,13 @@ QUnit.test('Deselect all after deselecting  -> selecting a nested node', functio
 // T557278
 QUnit.test('SelectRows - onSelectionChanged event should be fired before resolving the Deferred object', function(assert) {
     // arrange
-    var $testElement = $('#treeList'),
-        done = assert.async(),
-        onSelectionChangedFired;
+    const $testElement = $('#treeList');
+    const done = assert.async();
+    let onSelectionChangedFired;
 
     this.options.dataSource = {
         load: function() {
-            var d = $.Deferred();
+            const d = $.Deferred();
 
             setTimeout(function() {
                 d.resolve([
@@ -1190,8 +1190,8 @@ QUnit.test('SelectRows - onSelectionChanged event should be fired before resolvi
 
 QUnit.test('Selecting a node and its child node', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList');
+    let items;
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
@@ -1216,7 +1216,7 @@ QUnit.test('Selecting a node and its child node', function(assert) {
 // T560463
 QUnit.test('Select all after filtering data', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
@@ -1241,9 +1241,9 @@ QUnit.test('Select all after filtering data', function(assert) {
 // T558153
 QUnit.test('Selection state should be updated correctly after options are changed', function(assert) {
     // arrange
-    var items,
-        $testElement = $('#treeList'),
-        clock = sinon.useFakeTimers();
+    let items;
+    const $testElement = $('#treeList');
+    const clock = sinon.useFakeTimers();
 
     try {
         this.options.loadingTimeout = 30;
@@ -1275,7 +1275,7 @@ QUnit.test('Selection state should be updated correctly after options are change
 
 QUnit.test('Check selectedRowKeys after deselecting nested node', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.dataSource = [
         { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
@@ -1299,13 +1299,13 @@ QUnit.test('Check selectedRowKeys after deselecting nested node', function(asser
 
 QUnit.test('focusedItemIndex should be reset to -1 after change page index (T742193)', function(assert) {
     // arrange
-    var $testElement = $('#treeList'),
-        array = [
-            { id: 1, field1: 'test1', field2: 1 },
-            { id: 2, field1: 'test2', field2: 2 },
-            { id: 3, field1: 'test3', field2: 3 },
-            { id: 4, field1: 'test4', field2: 4 }
-        ];
+    const $testElement = $('#treeList');
+    const array = [
+        { id: 1, field1: 'test1', field2: 1 },
+        { id: 2, field1: 'test2', field2: 2 },
+        { id: 3, field1: 'test3', field2: 3 },
+        { id: 4, field1: 'test4', field2: 4 }
+    ];
 
     this.options.dataSource = {
         store: {

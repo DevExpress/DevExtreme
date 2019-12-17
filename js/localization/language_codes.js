@@ -1,5 +1,5 @@
-var locale = require('./core').locale;
-var LANGUAGE_CODES = {
+const locale = require('./core').locale;
+const LANGUAGE_CODES = {
     'ar': 1,
     'bg': 2,
     'ca': 3,

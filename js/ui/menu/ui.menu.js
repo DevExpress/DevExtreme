@@ -450,7 +450,7 @@ class Menu extends MenuBase {
     }
 
     _getTreeViewOptions() {
-        let menuOptions = {};
+        const menuOptions = {};
         const optionsToTransfer = [
             'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
             'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
@@ -554,14 +554,14 @@ class Menu extends MenuBase {
         const $submenuContainer = $('<div>').addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
-        const items = this._getChildNodes(node),
-            result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
-                _dataAdapter: this._dataAdapter,
-                _parentKey: node.internalFields.key,
-                items: items,
-                onHoverStart: this._clearTimeouts.bind(this),
-                position: this.getSubmenuPosition($rootItem)
-            }));
+        const items = this._getChildNodes(node);
+        const result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+            _dataAdapter: this._dataAdapter,
+            _parentKey: node.internalFields.key,
+            items: items,
+            onHoverStart: this._clearTimeouts.bind(this),
+            position: this.getSubmenuPosition($rootItem)
+        }));
 
         this._attachSubmenuHandlers($rootItem, result);
 
@@ -657,7 +657,7 @@ class Menu extends MenuBase {
 
             if((isOtherItem && $selectedItem.length) || cleanAllSubmenus) {
                 $selectedItem.removeClass(this._selectedItemClass());
-                let selectedItemData = this._getItemData($selectedItem);
+                const selectedItemData = this._getItemData($selectedItem);
 
                 if(selectedItemData) {
                     selectedItemData.selected = false;
@@ -724,7 +724,7 @@ class Menu extends MenuBase {
 
     _submenuOnHidingHandler($rootItem, submenu, eventArgs) {
         const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
-        let args = eventArgs;
+        const args = eventArgs;
 
         args.rootItem = getPublicElement($rootItem);
         args.submenu = submenu;
@@ -785,7 +785,7 @@ class Menu extends MenuBase {
         const isHorizontalMenu = this._isMenuHorizontal();
         const submenuDirection = this.option('submenuDirection').toLowerCase();
         const rtlEnabled = this.option('rtlEnabled');
-        let submenuPosition = {
+        const submenuPosition = {
             collision: 'flip',
             of: $rootItem
         };

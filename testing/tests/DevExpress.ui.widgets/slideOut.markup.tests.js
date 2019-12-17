@@ -1,19 +1,19 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('ui/slide_out');
 require('common.css!');
 
-var SLIDEOUT_CLASS = 'dx-slideout',
-    SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container',
+const SLIDEOUT_CLASS = 'dx-slideout';
+const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
 
-    SLIDEOUT_ITEM_CLASS = 'dx-slideout-item',
+const SLIDEOUT_ITEM_CLASS = 'dx-slideout-item';
 
-    LIST_CLASS = 'dx-list',
-    LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_CLASS = 'dx-list';
+const LIST_ITEM_CLASS = 'dx-list-item';
 
 
 QUnit.testStart(function() {
-    var markup = '\
+    const markup = '\
         <div id="slideOut"></div>\
         <div id="slideOutWithTemplate">\
             <div data-options="dxTemplate: { name: \'content\'}">\
@@ -31,7 +31,7 @@ QUnit.module('render widget', {
 });
 
 QUnit.test('render widget', function(assert) {
-    var slideOut = this.$element.dxSlideOut();
+    const slideOut = this.$element.dxSlideOut();
 
     assert.ok(slideOut.hasClass(SLIDEOUT_CLASS), 'widget class was added');
     assert.equal(slideOut.find('.' + LIST_CLASS).length, 1, 'menu was rendered');
@@ -39,7 +39,7 @@ QUnit.test('render widget', function(assert) {
 });
 
 QUnit.test('render item', function(assert) {
-    var slideOut = this.$element.dxSlideOut({
+    const slideOut = this.$element.dxSlideOut({
         dataSource: [{ text: 'testItem' }],
         selectedIndex: 0
     });
@@ -47,8 +47,8 @@ QUnit.test('render item', function(assert) {
 });
 
 QUnit.test('update items during beginUpdate/endUpdate should refresh list only once', function(assert) {
-    var $slideOut = this.$element.dxSlideOut({}),
-        instance = $slideOut.dxSlideOut('instance');
+    const $slideOut = this.$element.dxSlideOut({});
+    const instance = $slideOut.dxSlideOut('instance');
 
     instance.beginUpdate();
     instance.option('items', [1]);
@@ -61,7 +61,7 @@ QUnit.test('update items during beginUpdate/endUpdate should refresh list only o
 });
 
 QUnit.test('show only one item at same time', function(assert) {
-    var slideOut = this.$element.dxSlideOut({
+    const slideOut = this.$element.dxSlideOut({
         dataSource: [
             { text: 'testItem1' },
             { text: 'testItem2' }
@@ -73,7 +73,7 @@ QUnit.test('show only one item at same time', function(assert) {
 });
 
 QUnit.test('show only one item at same time if contentTemplate is used', function(assert) {
-    var slideOut = $('#slideOutWithTemplate').dxSlideOut({
+    const slideOut = $('#slideOutWithTemplate').dxSlideOut({
         dataSource: [
             { text: '1' },
             { text: '2' }
@@ -88,7 +88,7 @@ QUnit.test('show only one item at same time if contentTemplate is used', functio
 });
 
 QUnit.test('show only one item at same time if contentTemplate append markup in container', function(assert) {
-    var slideOut = $('#slideOutWithTemplate').dxSlideOut({
+    const slideOut = $('#slideOutWithTemplate').dxSlideOut({
         dataSource: [
             { text: '1' },
             { text: '2' }

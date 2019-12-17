@@ -1,21 +1,21 @@
-var $ = require('jquery'),
-    support = require('core/utils/support');
+const $ = require('jquery');
+const support = require('core/utils/support');
 
 require('common.css!');
 require('ui/load_indicator');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="loadIndicator"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var LOADINDICATOR_CLASS = 'dx-loadindicator',
-    LOADINDICATOR_ICON = LOADINDICATOR_CLASS + '-icon',
-    LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content',
-    LOADINDICATOR_SEGMENT = LOADINDICATOR_CLASS + '-segment',
-    LOADINDICATOR_IMAGE = 'dx-loadindicator-image';
+const LOADINDICATOR_CLASS = 'dx-loadindicator';
+const LOADINDICATOR_ICON = LOADINDICATOR_CLASS + '-icon';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_SEGMENT = LOADINDICATOR_CLASS + '-segment';
+const LOADINDICATOR_IMAGE = 'dx-loadindicator-image';
 
 QUnit.module('indicator with browser animation', {
     beforeEach: function() {
@@ -30,13 +30,13 @@ QUnit.module('indicator with browser animation', {
 });
 
 QUnit.test('visibility of the LoadIndicator with initial value of the \'visible\' option equal to \'true\'', function(assert) {
-    var $element = $('#loadIndicator').dxLoadIndicator({ visible: true, viaImage: false });
+    const $element = $('#loadIndicator').dxLoadIndicator({ visible: true, viaImage: false });
     assert.ok($element.is(':visible'));
 });
 
 QUnit.test('render animated indicator markup', function(assert) {
-    var $indicator = $('#loadIndicator'),
-        loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
+    const $indicator = $('#loadIndicator');
+    const loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
 
     assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
     assert.equal($indicator.find('.' + LOADINDICATOR_ICON).length, 1, 'Icon div created');
@@ -46,10 +46,10 @@ QUnit.test('render animated indicator markup', function(assert) {
 });
 
 QUnit.test('visible changes visibility option', function(assert) {
-    var $indicator = $('#loadIndicator').dxLoadIndicator({
-            visible: false
-        }),
-        loadIndicator = $indicator.dxLoadIndicator('instance');
+    const $indicator = $('#loadIndicator').dxLoadIndicator({
+        visible: false
+    });
+    const loadIndicator = $indicator.dxLoadIndicator('instance');
 
     assert.ok($indicator.is(':hidden'));
 
@@ -66,7 +66,7 @@ QUnit.test('visible changes visibility option', function(assert) {
 QUnit.module('Events');
 
 QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
-    var url = '../../testing/content/customLoadIndicator.png';
+    const url = '../../testing/content/customLoadIndicator.png';
 
     assert.expect(2);
 

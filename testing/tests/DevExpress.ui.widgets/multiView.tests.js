@@ -103,12 +103,12 @@ const animationCapturing = {
 QUnit.module('rendering');
 
 QUnit.test('height should be correctly updated on dxshown event', function(assert) {
-    var $container;
+    let $container;
 
     try {
         $container = $('<div>');
 
-        var $multiView = $('#customMultiView').appendTo($container).dxMultiView({
+        const $multiView = $('#customMultiView').appendTo($container).dxMultiView({
             items: [{ template: 'template1' }, { template: 'template2' }],
             selectedIndex: 0,
             height: 'auto'
@@ -117,7 +117,7 @@ QUnit.test('height should be correctly updated on dxshown event', function(asser
         $container.appendTo('#qunit-fixture');
         domUtils.triggerShownEvent($container);
 
-        var $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
         assert.equal($items.eq(0).outerHeight(), $multiView.outerHeight(), 'element has correct height');
     } finally {
         $container.remove();
@@ -125,7 +125,7 @@ QUnit.test('height should be correctly updated on dxshown event', function(asser
 });
 
 QUnit.test('multiView should trigger resize event for item content after item visibility changed', function(assert) {
-    var resizeHandler = sinon.spy();
+    const resizeHandler = sinon.spy();
 
     $('#customMultiView').dxMultiView({
         items: [{
@@ -141,30 +141,30 @@ QUnit.test('multiView should trigger resize event for item content after item vi
 });
 
 QUnit.test('item content should be rendered correctly when template was changed (T585645)', function(assert) {
-    var $multiView = $('#customMultiViewWithTemplate').dxMultiView({
-            items: [{ template: $('#template1') }, { template: $('#template1') }],
-            selectedIndex: 0
-        }),
-        multiView = $multiView.dxMultiView('instance');
+    const $multiView = $('#customMultiViewWithTemplate').dxMultiView({
+        items: [{ template: $('#template1') }, { template: $('#template1') }],
+        selectedIndex: 0
+    });
+    const multiView = $multiView.dxMultiView('instance');
 
     multiView.option('items[1].template', $('#template2'));
     multiView.option('selectedIndex', 1);
 
-    var $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
     assert.equal($items.eq(1).text(), 'Test2', 'element has correct content');
 });
 
 QUnit.test('item should stay hidden after changing template (T613732)', function(assert) {
-    var $multiView = $('#customMultiViewWithTemplate').dxMultiView({
-            items: [{ template: $('#template1') }, { template: $('#template1') }],
-            selectedIndex: 0
-        }),
-        multiView = $multiView.dxMultiView('instance');
+    const $multiView = $('#customMultiViewWithTemplate').dxMultiView({
+        items: [{ template: $('#template1') }, { template: $('#template1') }],
+        selectedIndex: 0
+    });
+    const multiView = $multiView.dxMultiView('instance');
 
     multiView.option('items[1].template', $('#template2'));
 
-    var $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
     assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
     assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'second item is still hidden');
@@ -173,19 +173,19 @@ QUnit.test('item should stay hidden after changing template (T613732)', function
 QUnit.module('nested multiview');
 
 QUnit.test('inner multiview items should not be overlapped by nested multiview items', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3, 4],
-            itemTemplate: function() {
-                return $('<div>').dxMultiView({
-                    items: [1, 2]
-                });
-            }
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3, 4],
+        itemTemplate: function() {
+            return $('<div>').dxMultiView({
+                items: [1, 2]
+            });
+        }
+    });
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
 
     $multiView.dxMultiView('option', 'selectedIndex', 3);
 
-    var $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
     assert.ok(!$items.eq(3).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'correct item selected');
 });
 
@@ -195,18 +195,18 @@ QUnit.test('pointerdown should not affect to parent multiview (T306118)', functi
         return;
     }
 
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2],
-            selectedIndex: 0,
-            itemTemplate: function() {
-                return $('<div>').dxMultiView({ items: [3, 4] });
-            }
-        }),
-        outerMultiView = $multiView.dxMultiView('instance'),
-        $outerItemElements = $multiView.dxMultiView('itemElements'),
-        $outerFirstItem = $outerItemElements.eq(0),
-        $innerMultiView = $outerFirstItem.find('.' + MULTIVIEW_CLASS),
-        $innerSecondItem = $innerMultiView.dxMultiView('itemElements').get(1);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2],
+        selectedIndex: 0,
+        itemTemplate: function() {
+            return $('<div>').dxMultiView({ items: [3, 4] });
+        }
+    });
+    const outerMultiView = $multiView.dxMultiView('instance');
+    const $outerItemElements = $multiView.dxMultiView('itemElements');
+    const $outerFirstItem = $outerItemElements.eq(0);
+    const $innerMultiView = $outerFirstItem.find('.' + MULTIVIEW_CLASS);
+    const $innerSecondItem = $innerMultiView.dxMultiView('itemElements').get(1);
 
     $($outerItemElements.eq(0)).trigger($.Event('dxpointerdown', { target: $innerSecondItem }));
 
@@ -224,11 +224,11 @@ QUnit.module('items positioning', {
 });
 
 QUnit.test('selected item should have correct position', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0
-        }),
-        $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0
+    });
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
     assert.equal(position($items.eq(0)), 0, 'first item has correct position');
 
@@ -237,11 +237,11 @@ QUnit.test('selected item should have correct position', function(assert) {
 });
 
 QUnit.test('only selected item should be visible', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0
-        }),
-        $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0
+    });
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
     assert.ok(!$items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
     assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
@@ -284,7 +284,7 @@ QUnit.test('moveTo', function(assert) {
 QUnit.test('complete', function(assert) {
     assert.expect(2);
 
-    var origFxStop = fx.stop;
+    const origFxStop = fx.stop;
 
     fx.stop = $.proxy(function(element, complete) {
         assert.equal(element[0], this.$animated[0], 'element correct');
@@ -316,12 +316,12 @@ QUnit.module('selected index change animation', {
 });
 
 QUnit.test('index increment should cause correct animation', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
 
     multiView.option('selectedIndex', 1);
 
@@ -333,12 +333,12 @@ QUnit.test('index increment should cause correct animation', function(assert) {
 });
 
 QUnit.test('index reduction should cause correct animation', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
 
     multiView.option('selectedIndex', 1);
 
@@ -350,12 +350,12 @@ QUnit.test('index reduction should cause correct animation', function(assert) {
 });
 
 QUnit.test('index change from first to last should prepare items', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
     this.animationStartAction = function() {
         assert.equal(position($items.eq(0)), 0, 'first item has correct position');
@@ -369,12 +369,12 @@ QUnit.test('index change from first to last should prepare items', function(asse
 });
 
 QUnit.test('index change from last to first should prepare items', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
     this.animationStartAction = function() {
         assert.equal(position($items.eq(0)), -800, 'first item has correct position');
@@ -393,7 +393,7 @@ QUnit.test('item container should be animated with zero duration if option anima
         animationEnabled: false
     });
 
-    var multiView = $('#multiView').dxMultiView('instance');
+    const multiView = $('#multiView').dxMultiView('instance');
 
     multiView.option('selectedIndex', 1);
 
@@ -417,7 +417,7 @@ QUnit.test('selected index should not be changed by click on item', function(ass
         selectedIndex: 0
     });
 
-    var multiView = $('#multiView').dxMultiView('instance');
+    const multiView = $('#multiView').dxMultiView('instance');
 
     $(multiView.itemElements()).eq(1).trigger('dxclick');
     assert.equal(multiView.option('selectedIndex'), 0, 'selected index not changed');
@@ -444,36 +444,36 @@ QUnit.module('interaction via swipe', {
 });
 
 QUnit.test('item container should not be moved by swipe if items count less then 2', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         items: [1]
     });
 
-    var startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+    const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
     assert.strictEqual(startEvent.maxRightOffset, undefined, 'container was not be moved');
 });
 
 QUnit.test('widget shouldn\'t handle dxswipe events if swipeEnabled is false', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0,
-            swipeEnabled: false
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        swipeEnabled: false
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd();
     assert.equal(multiView.option('selectedIndex'), 0, 'selected index is not changed by swipe');
 });
 
 QUnit.test('widget shouldn\'t handle dxswipe events if swipeEnabled set to false dynamically', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0,
-            swipeEnabled: true
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        swipeEnabled: true
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const pointer = pointerMock($multiView);
 
     multiView.option('swipeEnabled', false);
 
@@ -483,11 +483,11 @@ QUnit.test('widget shouldn\'t handle dxswipe events if swipeEnabled set to false
 });
 
 QUnit.test('item container should be moved by swipe', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3]
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3]
+    });
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.1);
     assert.equal(position($itemContainer), -$itemContainer.width() / 10, 'container moved');
@@ -495,24 +495,24 @@ QUnit.test('item container should be moved by swipe', function(assert) {
 });
 
 QUnit.test('selected index should be changed after swipe', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     assert.equal(multiView.option('selectedIndex'), 1, 'selected index was changed');
 });
 
 QUnit.test('item container should be animated back after canceled swipe', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(0.2).swipeEnd();
     assert.equal(multiView.option('selectedIndex'), 2, 'selected index was not changed');
@@ -520,58 +520,58 @@ QUnit.test('item container should be animated back after canceled swipe', functi
 });
 
 QUnit.test('item container should not be moved right if selected index is 0', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         items: [1, 2, 3],
         selectedIndex: 0
     });
 
-    var startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+    const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
     assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
 });
 
 QUnit.test('item container should not be moved left if selected index is 0 in RTL mode', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         rtlEnabled: true,
         items: [1, 2, 3],
         selectedIndex: 0
     });
 
-    var startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+    const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
     assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not be moved');
 });
 
 QUnit.test('item container should not be moved right if selected index is last in RTL mode', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         rtlEnabled: true,
         items: [1, 2, 3],
         selectedIndex: 2
     });
 
-    var startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+    const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
     assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
 });
 
 QUnit.test('item container should not be moved left if selected index is last', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         items: [1, 2, 3],
         selectedIndex: 2
     });
 
-    var startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+    const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
     assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not be moved');
 });
 
 QUnit.test('item container left animation should  be completed correctly if selected index is last', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2
+    });
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.2);
     assert.equal(this.completeCount, 1, 'previous animation completed');
@@ -580,12 +580,12 @@ QUnit.test('item container left animation should  be completed correctly if sele
 });
 
 QUnit.test('item container should not be moved if option swipeEnabled is false', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            swipeEnabled: false
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        swipeEnabled: false
+    });
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.1);
     assert.equal(position($itemContainer), 0, 'container was not moved');
@@ -593,12 +593,12 @@ QUnit.test('item container should not be moved if option swipeEnabled is false',
 });
 
 QUnit.test('swipe with focusStateEnabled false (T319963)', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            swipeEnabled: true,
-            focusStateEnabled: false
-        }),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        swipeEnabled: true,
+        focusStateEnabled: false
+    });
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
 
@@ -623,13 +623,13 @@ QUnit.module('loop', {
 });
 
 QUnit.test('item container should be moved right if selected index is 0', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0,
-            loop: true
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        loop: true
+    });
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(0.1);
     assert.equal(position($itemContainer), $itemContainer.width() / 10, 'container was moved');
@@ -637,13 +637,13 @@ QUnit.test('item container should be moved right if selected index is 0', functi
 });
 
 QUnit.test('item container should be moved left if selected index is last', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2,
-            loop: true
-        }),
-        $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2,
+        loop: true
+    });
+    const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.1);
     assert.equal(position($itemContainer), -$itemContainer.width() / 10, 'container was  moved');
@@ -651,38 +651,38 @@ QUnit.test('item container should be moved left if selected index is last', func
 });
 
 QUnit.test('selected index should be set to last item after right swipe from first one', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0,
-            loop: true
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        loop: true
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     assert.equal(multiView.option('selectedIndex'), 2, 'selected index changed correctly');
 });
 
 QUnit.test('selected index should be set to first item after left swipe from last one', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2,
-            loop: true
-        }),
-        multiView = $('#multiView').dxMultiView('instance'),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2,
+        loop: true
+    });
+    const multiView = $('#multiView').dxMultiView('instance');
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.equal(multiView.option('selectedIndex'), 0, 'selected index changed correctly');
 });
 
 QUnit.test('selected index change from first item to last via right swipe should cause correct animation', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0,
-            loop: true
-        }),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        loop: true
+    });
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
     assert.equal(this.capturedAnimations[0].end, 800, 'animated correctly');
@@ -690,25 +690,25 @@ QUnit.test('selected index change from first item to last via right swipe should
 });
 
 QUnit.test('selected index change from last item to first via left swipe should cause correct animation', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2,
-            loop: true
-        }),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2,
+        loop: true
+    });
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.equal(this.capturedAnimations[0].end, -800, 'animated correctly');
 });
 
 QUnit.test('index change from first item to last should prepare items', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 0,
-            loop: true
-        }),
-        $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 0,
+        loop: true
+    });
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const pointer = pointerMock($multiView);
 
     this.animationStartAction = function() {
         assert.equal(position($items.eq(0)), 0, 'first item has correct position');
@@ -719,13 +719,13 @@ QUnit.test('index change from first item to last should prepare items', function
 });
 
 QUnit.test('index change from last item to first should prepare items', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3],
-            selectedIndex: 2,
-            loop: true
-        }),
-        $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS)),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3],
+        selectedIndex: 2,
+        loop: true
+    });
+    const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    const pointer = pointerMock($multiView);
 
     this.animationStartAction = function() {
         assert.equal(position($items.eq(0)), 800, 'first item has correct position');
@@ -736,13 +736,13 @@ QUnit.test('index change from last item to first should prepare items', function
 });
 
 QUnit.test('second item should have correct position if swipe present at first one', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2],
-            selectedIndex: 0,
-            loop: true
-        }),
-        $item1 = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1),
-        pointer = pointerMock($multiView);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2],
+        selectedIndex: 0,
+        loop: true
+    });
+    const $item1 = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1);
+    const pointer = pointerMock($multiView);
 
     pointer.start().swipeStart().swipe(-0.01);
     assert.equal(position($item1), 800, 'item positioned correctly');
@@ -779,16 +779,16 @@ QUnit.module('defer rendering', {
 });
 
 QUnit.test('onItemRendered should be fired after item was rendered', function(assert) {
-    var renderedItems = [];
-    var $element = this.$element.dxMultiView({
-            items: this.items,
-            selectedIndex: 0,
-            deferRendering: true,
-            onItemRendered: function(args) {
-                renderedItems.push(args.itemData);
-            }
-        }),
-        instance = $element.dxMultiView('instance');
+    const renderedItems = [];
+    const $element = this.$element.dxMultiView({
+        items: this.items,
+        selectedIndex: 0,
+        deferRendering: true,
+        onItemRendered: function(args) {
+            renderedItems.push(args.itemData);
+        }
+    });
+    const instance = $element.dxMultiView('instance');
 
     assert.deepEqual(renderedItems, [this.items[0]], 'item was rendered');
 
@@ -797,12 +797,12 @@ QUnit.test('onItemRendered should be fired after item was rendered', function(as
 });
 
 QUnit.test('item content should be rendered for selected item if deferRendering is true', function(assert) {
-    var $element = this.$element.dxMultiView({
-            items: this.items,
-            selectedIndex: 0,
-            deferRendering: true
-        }),
-        instance = $element.dxMultiView('instance');
+    const $element = this.$element.dxMultiView({
+        items: this.items,
+        selectedIndex: 0,
+        deferRendering: true
+    });
+    const instance = $element.dxMultiView('instance');
 
     assert.equal($element.find('.' + MULTIVIEW_ITEM_CONTENT_CLASS).length, 1, 'only one item is rendered on init');
 
@@ -811,12 +811,12 @@ QUnit.test('item content should be rendered for selected item if deferRendering 
 });
 
 QUnit.test('item content should be rendered for animated item if deferRendering is true', function(assert) {
-    var $element = this.$element.dxMultiView({
-            items: this.items,
-            selectedIndex: 0,
-            deferRendering: true
-        }),
-        instance = $element.dxMultiView('instance');
+    const $element = this.$element.dxMultiView({
+        items: this.items,
+        selectedIndex: 0,
+        deferRendering: true
+    });
+    const instance = $element.dxMultiView('instance');
 
     this.animationStartAction = function() {
         assert.equal($element.find('.' + MULTIVIEW_ITEM_CLASS).eq(1).find('.' + MULTIVIEW_ITEM_CONTENT_CLASS).length, 1, 'animated item is rendered');
@@ -825,18 +825,18 @@ QUnit.test('item content should be rendered for animated item if deferRendering 
 });
 
 QUnit.test('widget should be rerendered on the deferRendering option change', function(assert) {
-    var renderCount = 0,
-        $element = this.$element.dxMultiView({
-            items: this.items,
-            selectedIndex: 0,
-            deferRendering: true,
-            onContentReady: function() {
-                renderCount++;
-            }
-        }),
-        instance = $element.dxMultiView('instance');
+    let renderCount = 0;
+    const $element = this.$element.dxMultiView({
+        items: this.items,
+        selectedIndex: 0,
+        deferRendering: true,
+        onContentReady: function() {
+            renderCount++;
+        }
+    });
+    const instance = $element.dxMultiView('instance');
 
-    var expectedRenderCount = 1;
+    let expectedRenderCount = 1;
 
     instance.option('deferRendering', false);
     expectedRenderCount++;
@@ -865,13 +865,13 @@ QUnit.module('keyboard navigation', {
 });
 
 QUnit.test('selected item should have focus after swipe', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2, 3, 4],
-            selectedIndex: 0,
-            focusStateEnabled: true
-        }),
-        multiView = $multiView.dxMultiView('instance'),
-        $item1 = $(multiView.itemElements()).eq(1);
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2, 3, 4],
+        selectedIndex: 0,
+        focusStateEnabled: true
+    });
+    const multiView = $multiView.dxMultiView('instance');
+    const $item1 = $(multiView.itemElements()).eq(1);
 
     pointerMock($multiView).start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.equal(isRenderer(multiView.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
@@ -880,7 +880,7 @@ QUnit.test('selected item should have focus after swipe', function(assert) {
 });
 
 QUnit.test('items should be animated in correct direction if looping through items from first to last', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         items: [1, 2],
         selectedIndex: 0,
         loop: true,
@@ -894,7 +894,7 @@ QUnit.test('items should be animated in correct direction if looping through ite
 });
 
 QUnit.test('items should be animated in correct direction if looping through items from last to first', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         items: [1, 2],
         selectedIndex: 1,
         loop: true,
@@ -908,7 +908,7 @@ QUnit.test('items should be animated in correct direction if looping through ite
 });
 
 QUnit.test('items should be animated in correct direction after looping through items', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
+    const $multiView = $('#multiView').dxMultiView({
         items: [1, 2],
         selectedIndex: 1,
         loop: true,
@@ -933,15 +933,15 @@ QUnit.module('aria accessibility', {
 });
 
 QUnit.test('selected item should have unique id', function(assert) {
-    var $multiView = $('#multiView').dxMultiView({
-            items: [1, 2],
-            focusStateEnabled: true,
-            selectedIndex: 0
-        }),
-        instance = $multiView.dxMultiView('instance'),
-        id = instance.getFocusedItemId().toString(),
-        $item0 = $multiView.find('.dx-multiview-item:eq(0)'),
-        $item1 = $multiView.find('.dx-multiview-item:eq(1)');
+    const $multiView = $('#multiView').dxMultiView({
+        items: [1, 2],
+        focusStateEnabled: true,
+        selectedIndex: 0
+    });
+    const instance = $multiView.dxMultiView('instance');
+    const id = instance.getFocusedItemId().toString();
+    const $item0 = $multiView.find('.dx-multiview-item:eq(0)');
+    const $item1 = $multiView.find('.dx-multiview-item:eq(1)');
 
     $multiView.focusin();
 
@@ -956,14 +956,14 @@ QUnit.test('selected item should have unique id', function(assert) {
 });
 
 QUnit.test('inactive item should have aria-hidden attribute', function(assert) {
-    var $element = $('#multiView').dxMultiView({
-            items: [1, 2],
-            selectedIndex: 0,
-            animationEnabled: false
-        }),
-        $item0 = $element.find('.dx-multiview-item:eq(0)'),
-        $item1 = $element.find('.dx-multiview-item:eq(1)'),
-        instance = $element.dxMultiView('instance');
+    const $element = $('#multiView').dxMultiView({
+        items: [1, 2],
+        selectedIndex: 0,
+        animationEnabled: false
+    });
+    const $item0 = $element.find('.dx-multiview-item:eq(0)');
+    const $item1 = $element.find('.dx-multiview-item:eq(1)');
+    const instance = $element.dxMultiView('instance');
 
     assert.equal($item0.attr('aria-hidden'), undefined, 'aria-hidden does not exist for 1st item');
     assert.equal($item1.attr('aria-hidden'), 'true', 'aria-hidden is true for 2nd item');

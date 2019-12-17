@@ -1,37 +1,37 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
-    commons = require('./chartParts/commons.js'),
-    seriesModule = require('viz/series/base_series'),
-    BaseChart = require('viz/chart_components/base_chart').BaseChart,
-    labelModule = require('viz/series/points/label'),
-    LabelCtor = new vizMocks.ObjectPool(labelModule.Label),
-    dataValidatorModule = require('viz/components/data_validator'),
-    translator1DModule = require('viz/translators/translator1d'),
-    CustomStore = require('data/custom_store'),
-    chartThemeManagerModule = require('viz/components/chart_theme_manager'),
-    layoutManagerModule = require('viz/chart_components/layout_manager'),
-    trackerModule = require('viz/chart_components/tracker'),
-    dxPieChart = require('viz/pie_chart'),
-    chartMocks = require('../../helpers/chartMocks.js'),
-    MockSeries = chartMocks.MockSeries,
-    MockPoint = chartMocks.MockPoint,
-    resetMockFactory = chartMocks.resetMockFactory,
-    insertMockFactory = chartMocks.insertMockFactory,
-    restoreMockFactory = chartMocks.restoreMockFactory;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const commons = require('./chartParts/commons.js');
+const seriesModule = require('viz/series/base_series');
+const BaseChart = require('viz/chart_components/base_chart').BaseChart;
+const labelModule = require('viz/series/points/label');
+const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);
+const dataValidatorModule = require('viz/components/data_validator');
+const translator1DModule = require('viz/translators/translator1d');
+const CustomStore = require('data/custom_store');
+const chartThemeManagerModule = require('viz/components/chart_theme_manager');
+const layoutManagerModule = require('viz/chart_components/layout_manager');
+const trackerModule = require('viz/chart_components/tracker');
+const dxPieChart = require('viz/pie_chart');
+const chartMocks = require('../../helpers/chartMocks.js');
+const MockSeries = chartMocks.MockSeries;
+const MockPoint = chartMocks.MockPoint;
+const resetMockFactory = chartMocks.resetMockFactory;
+const insertMockFactory = chartMocks.insertMockFactory;
+const restoreMockFactory = chartMocks.restoreMockFactory;
 
-var eventsEngine = require('events/core/events_engine'),
-    devices = require('core/devices');
+const eventsEngine = require('events/core/events_engine');
+const devices = require('core/devices');
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
-var dataSourceTemplate = [
+const dataSourceTemplate = [
     { cat: 'First', val: 100 },
     { cat: 'Second', val: 200 },
     { cat: 'Third', val: 300 }
 ];
-var Point = vizMocks.Point;
+const Point = vizMocks.Point;
 
 commons.rendererModule.Renderer = sinon.spy(function(parameters) {
     return new vizMocks.Renderer(parameters);
@@ -39,7 +39,7 @@ commons.rendererModule.Renderer = sinon.spy(function(parameters) {
 
 function createPieChart(options) {
     this.container = $('#chartContainer');
-    var chart = new dxPieChart(this.container, options);
+    const chart = new dxPieChart(this.container, options);
 
     /* global currentAssert */
     currentAssert().ok(chart, 'dxChart created');
@@ -62,7 +62,7 @@ function setupMocks() {
 }
 
 function createPoint(options) {
-    var point = new Point();
+    const point = new Point();
     point.argument = options.argument;
     point.value = options.value;
     point.visible = options.visible;
@@ -74,150 +74,150 @@ function createPoint(options) {
 }
 
 
-var environment = {
-        beforeEach: function() {
-            setupMocks.call(this);
-            var that = this;
-            that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
-            that.themeManager.theme.withArgs('legend').returns({ title: {} });
-            $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {
-                that.themeManager.getOptions.withArgs(name).returns({});
-            });
-            that.themeManager.getOptions.withArgs('rotated').returns(false);
-            that.themeManager.getOptions.withArgs('tooltip').returns({ enabled: true, font: {} });
-            that.themeManager.getOptions.withArgs('panes').returns({ name: 'default' });
-            that.themeManager.getOptions.withArgs('animation').returns(true);
-            that.themeManager.getOptions.withArgs('valueAxis').returnsArg(1);
-            that.themeManager.getOptions.withArgs('argumentAxis').returnsArg(1);
-            that.themeManager.getOptions.withArgs('pieSegment').returnsArg(1);
-            that.themeManager.getOptions.withArgs('series').returnsArg(1);
-            that.themeManager.getOptions.withArgs('export').returns({});
-            that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
-            that.themeManager.getOptions.withArgs('margin').returns({
-                marginsThemeApplied: true
-            });
-            that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
-                backgroundColor: 'none',
-                border: {
-                    visible: false,
-                    top: true,
-                    bottom: true,
-                    left: true,
-                    right: true,
-                    dashStyle: 'solid'
+const environment = {
+    beforeEach: function() {
+        setupMocks.call(this);
+        const that = this;
+        that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+        that.themeManager.theme.withArgs('legend').returns({ title: {} });
+        $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {
+            that.themeManager.getOptions.withArgs(name).returns({});
+        });
+        that.themeManager.getOptions.withArgs('rotated').returns(false);
+        that.themeManager.getOptions.withArgs('tooltip').returns({ enabled: true, font: {} });
+        that.themeManager.getOptions.withArgs('panes').returns({ name: 'default' });
+        that.themeManager.getOptions.withArgs('animation').returns(true);
+        that.themeManager.getOptions.withArgs('valueAxis').returnsArg(1);
+        that.themeManager.getOptions.withArgs('argumentAxis').returnsArg(1);
+        that.themeManager.getOptions.withArgs('pieSegment').returnsArg(1);
+        that.themeManager.getOptions.withArgs('series').returnsArg(1);
+        that.themeManager.getOptions.withArgs('export').returns({});
+        that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
+        that.themeManager.getOptions.withArgs('margin').returns({
+            marginsThemeApplied: true
+        });
+        that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
+            backgroundColor: 'none',
+            border: {
+                visible: false,
+                top: true,
+                bottom: true,
+                left: true,
+                right: true,
+                dashStyle: 'solid'
+            }
+        });
+
+        that.themeManager.getOptions.withArgs('dataPrepareSettings').returns({
+            checkTypeForAllData: true,
+            convertToAxisDataType: false,
+            sortingMethod: noop
+        });
+
+        that.createPieChart = function(options) {
+            let pieChart;
+            $.each(options || {}, function(k, v) {
+                if(k === 'commonPaneSettings') {
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
+                        backgroundColor: 'none',
+                        border: {
+                            visible: false,
+                            top: true,
+                            bottom: true,
+                            left: true,
+                            right: true,
+                            dashStyle: 'solid'
+                        }
+                    }, v));
+                } else if(k !== 'valueAxis' && k !== 'argumentAxis' && k !== 'series' && k !== 'pieSegment') {
+                    that.themeManager.getOptions.withArgs(k).returns(v);
                 }
             });
+            pieChart = createPieChart.call(this, options);
+            return pieChart;
+        };
+        that.layoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
+        that.layoutManager.needMoreSpaceForPanesCanvas.returns(true);
+        that.layoutManager.applyPieChartSeriesLayout.returns({ radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200 });
 
-            that.themeManager.getOptions.withArgs('dataPrepareSettings').returns({
-                checkTypeForAllData: true,
-                convertToAxisDataType: false,
-                sortingMethod: noop
-            });
+        that.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+            return that.layoutManager;
+        });
 
-            that.createPieChart = function(options) {
-                var pieChart;
-                $.each(options || {}, function(k, v) {
-                    if(k === 'commonPaneSettings') {
-                        that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
-                            backgroundColor: 'none',
-                            border: {
-                                visible: false,
-                                top: true,
-                                bottom: true,
-                                left: true,
-                                right: true,
-                                dashStyle: 'solid'
-                            }
-                        }, v));
-                    } else if(k !== 'valueAxis' && k !== 'argumentAxis' && k !== 'series' && k !== 'pieSegment') {
-                        that.themeManager.getOptions.withArgs(k).returns(v);
-                    }
-                });
-                pieChart = createPieChart.call(this, options);
-                return pieChart;
-            };
-            that.layoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
-            that.layoutManager.needMoreSpaceForPanesCanvas.returns(true);
-            that.layoutManager.applyPieChartSeriesLayout.returns({ radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200 });
-
-            that.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
-                return that.layoutManager;
-            });
-
-            this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
-                return that.themeManager;
-            });
-            this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
-                return { arg: data || [] };
-            });
-        },
-        afterEach: function() {
-            this.container.remove();
-
-            this.createThemeManager.restore();
-            this.LayoutManager.restore();
-            this.validateData.restore();
-
-            this.layoutManager.layoutElements.reset();
-            this.layoutManager = null;
-
-            this.themeManager.getOptions.reset();
-            this.themeManager = null;
-
-            commons.resetModules();
-            resetMockFactory();
-            restoreMockFactory();
-        }
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+            return that.themeManager;
+        });
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+            return { arg: data || [] };
+        });
     },
-    overlappingEnvironment = $.extend({}, environment, {
-        beforeEach: function() {
-            environment.beforeEach.apply(this, arguments);
-            LabelCtor.resetIndex();
-        },
-        afterEach: function() {
-            environment.afterEach.apply(this, arguments);
-        },
-        _createStubPoints: function(labels, series) {
-            return $.map(labels, function(label) {
-                var point = new Point();
+    afterEach: function() {
+        this.container.remove();
 
-                point.stub('getLabels');
-                point.getLabels.returns([label]);
-                point.middleAngle = label.getBoundingRect().pointPosition.angle;
-                point.series = series;
-                return point;
-            });
-        },
-        createFakeSeriesWithLabels: function(bBoxes, position) {
-            var series = new MockSeries(),
-                labels = this.createStubLabels(bBoxes);
+        this.createThemeManager.restore();
+        this.LayoutManager.restore();
+        this.validateData.restore();
 
-            series.getOptions = function() { return { label: { position: position || 'outside' } }; };
-            series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels, series));
-            chartMocks.seriesMockData.series.push(series);
-        },
-        createStubLabels: function(bBoxes) {
-            var labels = [];
-            $.each(bBoxes, function(_, BBox) {
-                var label = new LabelCtor();
-                label.getBoundingRect.returns(BBox);
-                label.isVisible = sinon.spy(function() {
-                    return !this.draw.calledWith(false);
-                });
-                labels.push(label);
+        this.layoutManager.layoutElements.reset();
+        this.layoutManager = null;
+
+        this.themeManager.getOptions.reset();
+        this.themeManager = null;
+
+        commons.resetModules();
+        resetMockFactory();
+        restoreMockFactory();
+    }
+};
+const overlappingEnvironment = $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.apply(this, arguments);
+        LabelCtor.resetIndex();
+    },
+    afterEach: function() {
+        environment.afterEach.apply(this, arguments);
+    },
+    _createStubPoints: function(labels, series) {
+        return $.map(labels, function(label) {
+            const point = new Point();
+
+            point.stub('getLabels');
+            point.getLabels.returns([label]);
+            point.middleAngle = label.getBoundingRect().pointPosition.angle;
+            point.series = series;
+            return point;
+        });
+    },
+    createFakeSeriesWithLabels: function(bBoxes, position) {
+        const series = new MockSeries();
+        const labels = this.createStubLabels(bBoxes);
+
+        series.getOptions = function() { return { label: { position: position || 'outside' } }; };
+        series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels, series));
+        chartMocks.seriesMockData.series.push(series);
+    },
+    createStubLabels: function(bBoxes) {
+        const labels = [];
+        $.each(bBoxes, function(_, BBox) {
+            const label = new LabelCtor();
+            label.getBoundingRect.returns(BBox);
+            label.isVisible = sinon.spy(function() {
+                return !this.draw.calledWith(false);
             });
-            return labels;
-        },
-        checkLabelPosition: function(assert, label, position) {
-            if(label.shift.called) {
-                assert.deepEqual(label.shift.lastCall.args, position, 'label was shifted');
-            } else {
-                assert.equal(label.getBoundingRect().x, position[0], 'boundingRect x');
-                assert.equal(label.getBoundingRect().y, position[1], 'boundingRect y');
-            }
-            assert.ok(!label.draw.calledWith(false), 'label should not be hidden');
+            labels.push(label);
+        });
+        return labels;
+    },
+    checkLabelPosition: function(assert, label, position) {
+        if(label.shift.called) {
+            assert.deepEqual(label.shift.lastCall.args, position, 'label was shifted');
+        } else {
+            assert.equal(label.getBoundingRect().x, position[0], 'boundingRect x');
+            assert.equal(label.getBoundingRect().y, position[1], 'boundingRect y');
         }
-    });
+        assert.ok(!label.draw.calledWith(false), 'label should not be hidden');
+    }
+});
 
 
 (function mainTest() {
@@ -225,7 +225,7 @@ var environment = {
     QUnit.module('Pie dxChart', environment);
 
     QUnit.test('dxChart creation', function(assert) {
-        var chart;
+        let chart;
 
         chart = createPieChart.call(this, {});
 
@@ -234,7 +234,7 @@ var environment = {
     });
 
     QUnit.test('Theme manager with no settings', function(assert) {
-        var chart = this.createPieChart({});
+        const chart = this.createPieChart({});
 
         assert.equal(this.createThemeManager.callCount, 1);
         assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart.option(), themeSection: 'pie', fontFields: [
@@ -311,7 +311,7 @@ var environment = {
         this.themeManager.getOptions.withArgs('pointSelectionMode').returns('pointSelectionModeWithTheme');
         this.themeManager.getOptions.withArgs('seriesSelectionMode').returns('serieSelectionModeWithTheme');
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             size: {
                 width: 800,
                 height: 800
@@ -338,10 +338,10 @@ var environment = {
             eventTrigger: chart._eventTrigger
         }, 'create tracker arguments');
 
-        var tracker = commons.getTrackerStub(true);
+        const tracker = commons.getTrackerStub(true);
         assert.ok(tracker.stub('update').calledOnce, 'tracker updating was called once');
 
-        var updateArg0 = tracker.stub('update').lastCall.args[0];
+        const updateArg0 = tracker.stub('update').lastCall.args[0];
         assert.equal(updateArg0.argumentAxis, undefined, 'argumentAxis');
         assert.equal(updateArg0.chart, chart, 'chart');
         assert.equal(updateArg0.rotated, undefined, 'rotated');
@@ -363,7 +363,7 @@ var environment = {
     });
 
     QUnit.test('Should not crash on parent scroll (test chain executor)', function(assert) {
-        var originalPlatform = devices.real().platform;
+        const originalPlatform = devices.real().platform;
 
         try {
             devices.real({ platform: 'generic' });
@@ -456,8 +456,8 @@ var environment = {
             this.points2 = [createPoint({ argument: 'First', value: 10, visible: true }),
                 createPoint({ argument: 'Second', value: 11, visible: true })];
 
-            var stubSeries1 = new MockSeries({ points: this.points1 }),
-                stubSeries2 = new MockSeries({ points: this.points2 });
+            const stubSeries1 = new MockSeries({ points: this.points1 });
+            const stubSeries2 = new MockSeries({ points: this.points2 });
 
             chartMocks.seriesMockData.series.push(stubSeries1);
             chartMocks.seriesMockData.series.push(stubSeries2);
@@ -476,12 +476,12 @@ var environment = {
 
     QUnit.test('T400246. After dataSource update tracker gets same series', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
 
-        var oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
+        const oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
         commons.getTrackerStub(true).stub('updateSeries').reset();
 
         // act
@@ -495,12 +495,12 @@ var environment = {
 
     QUnit.test('T400246. After series update tracker gets new series', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
 
-        var oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
+        const oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
         commons.getTrackerStub(true).stub('updateSeries').reset();
 
         chartMocks.seriesMockData.series.push(new MockSeries({ points: this.points1 }));
@@ -517,7 +517,7 @@ var environment = {
 
     QUnit.test('create tracker, with series', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
@@ -531,11 +531,11 @@ var environment = {
 
     QUnit.test('Pie dxChart with single series request default type, dataSource', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({});
+        const stubSeries = new MockSeries({});
         chartMocks.seriesMockData.series.push(stubSeries);
         sinon.spy(stubSeries, 'arrangePoints');
         // act
-        var chart = createPieChart.call(this, {
+        const chart = createPieChart.call(this, {
             dataSource: this.dataSource,
             type: 'pie',
             series: {}
@@ -556,10 +556,10 @@ var environment = {
 
     QUnit.test('Pie dxChart with single series request default type, data in series', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({});
+        const stubSeries = new MockSeries({});
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: dataSourceTemplate,
             type: 'pie',
             series: {}
@@ -580,14 +580,14 @@ var environment = {
 
     QUnit.test('visibility changed', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({}),
-            visiblePoints = [],
-            series,
-            populateBusinessRange,
-            renderMethod;
+        const stubSeries = new MockSeries({});
+        const visiblePoints = [];
+        let series;
+        let populateBusinessRange;
+        let renderMethod;
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: dataSourceTemplate,
             type: 'pie',
             series: {}
@@ -611,16 +611,16 @@ var environment = {
 
     QUnit.test('dxChart with single series, series type is unknown', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({});
+        const stubSeries = new MockSeries({});
         chartMocks.seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
 
         // act
-        var chart = this.createPieChart({
-                dataSource: dataSourceTemplate,
-                type: 'unknown',
-                series: {}
-            }), idError;
+        const chart = this.createPieChart({
+            dataSource: dataSourceTemplate,
+            type: 'unknown',
+            series: {}
+        }); let idError;
         // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 0);
@@ -647,7 +647,7 @@ var environment = {
 
 
         // act
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: {},
             type: 'pie'
@@ -663,11 +663,11 @@ var environment = {
 
     QUnit.test('Pie dxChart with single series request default type, customizeLabel and customizePoint is specify', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ points: this.stubPoints }),
-            points;
+        const stubSeries = new MockSeries({ points: this.stubPoints });
+        let points;
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             customizePoint: 'custompoint',
             customizeLabel: 'customlabel',
@@ -699,7 +699,7 @@ var environment = {
 
         chartMocks.seriesMockData.series.push(this.stubSeries);
         // act
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {}
         });
@@ -716,7 +716,7 @@ var environment = {
     QUnit.test('Series animation. maxPointCountSupported', function(assert) {
         chartMocks.seriesMockData.series.push(this.stubSeries);
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {},
             animation: {
@@ -733,17 +733,17 @@ var environment = {
     QUnit.module('Axes and Series', {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D', function() {
-                var translator = new translatorClass();
+                const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
                 return translator;
             });
 
-            var stubSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
-                stubSeries2 = new MockSeries({ range: { val: { min: 0, max: 110 } } });
+            const stubSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
+            const stubSeries2 = new MockSeries({ range: { val: { min: 0, max: 110 } } });
 
             chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
         },
@@ -760,8 +760,8 @@ var environment = {
             series: [{}, {}],
         });
 
-        var seriesOptions1 = chartMocks.seriesMockData.args[0][0],
-            seriesOptions2 = chartMocks.seriesMockData.args[1][0];
+        const seriesOptions1 = chartMocks.seriesMockData.args[0][0];
+        const seriesOptions2 = chartMocks.seriesMockData.args[1][0];
 
         assert.strictEqual(seriesOptions1.argumentAxis, null);
         assert.strictEqual(seriesOptions1.valueAxis.getTranslator(), translator1DModule.Translator1D.returnValues[0]);
@@ -776,8 +776,8 @@ var environment = {
             series: [{}, {}],
         });
 
-        var translator1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator(),
-            translator2 = chartMocks.seriesMockData.args[1][0].valueAxis.getTranslator();
+        const translator1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator();
+        const translator2 = chartMocks.seriesMockData.args[1][0].valueAxis.getTranslator();
 
         assert.deepEqual(translator1.stub('setDomain').lastCall.args, [0, 10]);
         assert.deepEqual(translator1.stub('setCodomain').firstCall.args, [360, 0]);
@@ -792,10 +792,10 @@ var environment = {
             this.mockSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
             this.mockSeries2 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
 
-            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D', function() {
-                var translator = new translatorClass();
+                const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
                 return translator;
@@ -819,11 +819,11 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.mockSeries1);
         chartMocks.seriesMockData.series.push(this.mockSeries2);
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}],
         });
-        var series = chart.series;
+        const series = chart.series;
 
         assert.ok(series);
         assert.equal(series.length, 2);
@@ -831,7 +831,7 @@ var environment = {
         assert.equal(series[1], chartMocks.seriesMockData.series[1]);
 
         $.each(series, function(i, singleSeries) {
-            var translator = translator1DModule.Translator1D.returnValues[i];
+            const translator = translator1DModule.Translator1D.returnValues[i];
             assert.equal(singleSeries.drawLabelsWOPoints.callCount, 1);
             assert.equal(singleSeries.correctPosition.callCount, 1);
             checkCorrectPosition(assert, singleSeries.correctPosition.getCall(0).args, 100, 200, 300, 0, chart.DEBUG_canvas);
@@ -875,15 +875,15 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.mockSeries1);
         chartMocks.seriesMockData.series.push(this.mockSeries2);
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}],
         });
         chart.series[0].setOptions({ range: { val: { min: 1, max: 5 } } });
         chart.option({ dataSource: [] });
 
-        var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
-        var businessRange2 = chartMocks.seriesMockData.args[1][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
+        const businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
+        const businessRange2 = chartMocks.seriesMockData.args[1][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
 
         assert.deepEqual(businessRange1, [1, 5]);
         assert.deepEqual(businessRange2, [0, 10]);
@@ -893,7 +893,7 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.mockSeries1);
         chartMocks.seriesMockData.series.push(this.mockSeries2);
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}],
         });
@@ -908,7 +908,7 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.mockSeries1);
         chartMocks.seriesMockData.series.push(this.mockSeries2);
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}],
         });
@@ -923,11 +923,11 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.mockSeries1);
         chartMocks.seriesMockData.series.push(this.mockSeries2);
 
-        var chart = this.createPieChart({
-                dataSource: this.dataSource,
-                series: [{}, {}]
-            }),
-            series = chart.series;
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}]
+        });
+        const series = chart.series;
 
         assert.ok(series);
         assert.equal(series.length, 2);
@@ -953,7 +953,7 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.mockSeries1);
         chartMocks.seriesMockData.series.push(this.mockSeries2);
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
@@ -974,10 +974,10 @@ var environment = {
             environment.beforeEach.apply(this, arguments);
             this.mockSeries1 = new MockSeries({ argumentField: 'arg' });
             this.mockSeries2 = new MockSeries({ argumentField: 'arg' });
-            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D', function() {
-                var translator = new translatorClass();
+                const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
                 return translator;
@@ -995,7 +995,7 @@ var environment = {
     });
 
     QUnit.test('Set max point count in each series', function(assert) {
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
@@ -1019,7 +1019,7 @@ var environment = {
     });
 
     QUnit.test('handle render complete without series', function(assert) {
-        var renderCompleteHandledCount = 0;
+        let renderCompleteHandledCount = 0;
         // act
         this.createPieChart({
             onDone: function() {
@@ -1032,11 +1032,11 @@ var environment = {
     });
 
     QUnit.test('handle render complete when series inited', function(assert) {
-        var stubSeries1 = new MockSeries({}),
-            stubSeries2 = new MockSeries({});
+        const stubSeries1 = new MockSeries({});
+        const stubSeries2 = new MockSeries({});
         chartMocks.seriesMockData.series.push(stubSeries1);
         chartMocks.seriesMockData.series.push(stubSeries2);
-        var renderCompleteHandledCount = 0;
+        let renderCompleteHandledCount = 0;
         // act
         this.createPieChart({
             onDone: function() {
@@ -1071,7 +1071,7 @@ var environment = {
             type: 'pie'
         });
 
-        var legend = commons.getLegendStub();
+        const legend = commons.getLegendStub();
 
         const getLegendData = function(passedData) {
             return {
@@ -1118,13 +1118,13 @@ var environment = {
         chartMocks.seriesMockData.series.push(this.stubSeries);
         this.themeManager.getOptions.withArgs('legend').returns({ legendThemeApplied: true });
         // act
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: {}
         });
         // assert
-        var legend = commons.getLegendStub(),
-            updateArgs = legend.update.lastCall.args;
+        const legend = commons.getLegendStub();
+        const updateArgs = legend.update.lastCall.args;
 
         assert.equal(updateArgs[1]._incidentOccurred, chart._incidentOccurred, 'incidentOccurred');
         assert.ok(updateArgs[1].legendThemeApplied, 'Theme was applied by theme manager');
@@ -1133,7 +1133,7 @@ var environment = {
 
         assert.equal(updateArgs[0].length, 3);
 
-        var stubPoints = this.stubPoints;
+        const stubPoints = this.stubPoints;
         updateArgs[0].forEach(function(args, i) {
             assert.strictEqual(args.text, stubPoints[i].argument, 'Legend item name for ' + i.toString());
             assert.deepEqual(args.states, { hover: {}, selection: {}, normal: {} }, 'Legend states for ' + i.toString());
@@ -1152,9 +1152,9 @@ var environment = {
             series: [{}, {}]
         });
 
-        var points = this.stubPoints;
+        const points = this.stubPoints;
 
-        var updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 3, 'update args');
         updateArgs[0].forEach(function(args, i) {
@@ -1167,13 +1167,13 @@ var environment = {
 
     QUnit.test('Create legend with two series, different arguments', function(assert) {
         chartMocks.seriesMockData.series.push(this.stubSeries);
-        var points = this.stubPoints,
-            i,
-            points2 = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
-                new MockPoint({ argument: 'Fifth', value: 12, visible: true })
-            ];
+        const points = this.stubPoints;
+        let i;
+        const points2 = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
+            new MockPoint({ argument: 'Fifth', value: 12, visible: true })
+        ];
 
         chartMocks.seriesMockData.series.push(new MockSeries({
             points: points2
@@ -1186,7 +1186,7 @@ var environment = {
             series: [{}, {}]
         });
 
-        var updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 5, 'update args');
         for(i = 0; i < updateArgs[0].length; i++) {
@@ -1198,24 +1198,24 @@ var environment = {
     });
 
     QUnit.test('Create legend with two series, the same arguments in each series', function(assert) {
-        var stubPoints = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Second', value: 11, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: true })
-            ],
-            stubSeries = new MockSeries({
-                points: stubPoints
-            });
+        const stubPoints = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Second', value: 11, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: true })
+        ];
+        const stubSeries = new MockSeries({
+            points: stubPoints
+        });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var points = stubPoints,
-            i,
-            points2 = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
-                new MockPoint({ argument: 'Fifth', value: 12, visible: true }),
-                new MockPoint({ argument: 'Fourth', value: 11, visible: true })
-            ];
+        const points = stubPoints;
+        let i;
+        const points2 = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
+            new MockPoint({ argument: 'Fifth', value: 12, visible: true }),
+            new MockPoint({ argument: 'Fourth', value: 11, visible: true })
+        ];
 
         chartMocks.seriesMockData.series.push(new MockSeries({
             points: points2
@@ -1229,7 +1229,7 @@ var environment = {
             series: [{}, {}]
         });
 
-        var updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 7, 'update args');
         for(i = 0; i < updateArgs[0].length; i++) {
@@ -1241,22 +1241,22 @@ var environment = {
     });
 
     QUnit.test('Create legend with two series, some of the points are invisible', function(assert) {
-        var stubPoints1 = [
-                new MockPoint({ argument: 'First', value: 10, visible: false }),
-                new MockPoint({ argument: 'Second', value: 11, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: false })
-            ],
-            stubPoints2 = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Second', value: 11, visible: false }),
-                new MockPoint({ argument: 'Third', value: 12, visible: false })
-            ],
-            stubSeries1 = new MockSeries({
-                points: stubPoints1
-            }),
-            stubSeries2 = new MockSeries({
-                points: stubPoints2
-            });
+        const stubPoints1 = [
+            new MockPoint({ argument: 'First', value: 10, visible: false }),
+            new MockPoint({ argument: 'Second', value: 11, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: false })
+        ];
+        const stubPoints2 = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Second', value: 11, visible: false }),
+            new MockPoint({ argument: 'Third', value: 12, visible: false })
+        ];
+        const stubSeries1 = new MockSeries({
+            points: stubPoints1
+        });
+        const stubSeries2 = new MockSeries({
+            points: stubPoints2
+        });
         chartMocks.seriesMockData.series.push(stubSeries1);
         chartMocks.seriesMockData.series.push(stubSeries2);
 
@@ -1265,7 +1265,7 @@ var environment = {
             series: [{}, {}]
         });
 
-        var updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
         assert.deepEqual(updateArgs[0][0].states, { hover: {}, selection: {}, normal: {} }, 'Legend states');
         assert.deepEqual(updateArgs[0][1].states, { hover: {}, selection: {}, normal: {} }, 'Legend states');
         assert.deepEqual(updateArgs[0][2].states, { hover: { opacity: 0.3 }, selection: { opacity: 0.3 }, normal: { opacity: 0.3 } }, 'Legend states');
@@ -1273,12 +1273,12 @@ var environment = {
 
     QUnit.test('index of points', function(assert) {
         chartMocks.seriesMockData.series.push(this.stubSeries);
-        var points = this.stubPoints,
-            points2 = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
-                new MockPoint({ argument: 'Fifth', value: 12, visible: true })
-            ];
+        const points = this.stubPoints;
+        const points2 = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
+            new MockPoint({ argument: 'Fifth', value: 12, visible: true })
+        ];
 
         chartMocks.seriesMockData.series.push(new MockSeries({
             points: points2
@@ -1286,12 +1286,12 @@ var environment = {
         points.push(points2[1]);
         points.push(points2[2]);
 
-        var chart = this.createPieChart({
-                dataSource: this.dataSource,
-                series: [{}, {}]
-            }),
-            series = chart.getAllSeries(),
-            seriesPoints = series[0].getPoints();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}]
+        });
+        const series = chart.getAllSeries();
+        let seriesPoints = series[0].getPoints();
 
         assert.equal(seriesPoints[0].index, 0);
         assert.equal(seriesPoints[1].index, 1);
@@ -1304,17 +1304,17 @@ var environment = {
     });
 
     QUnit.test('index of points with the same arguments', function(assert) {
-        var stubPoints = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Second', value: 11, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: true })
-            ],
-            stubSeries = new MockSeries({
-                points: stubPoints
-            });
+        const stubPoints = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Second', value: 11, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: true })
+        ];
+        const stubSeries = new MockSeries({
+            points: stubPoints
+        });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var points2 = [
+        const points2 = [
             new MockPoint({ argument: 'First', value: 10, visible: true }),
             new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
             new MockPoint({ argument: 'Fifth', value: 12, visible: true }),
@@ -1325,12 +1325,12 @@ var environment = {
             points: points2
         }));
 
-        var chart = this.createPieChart({
-                dataSource: this.dataSource,
-                series: [{}, {}]
-            }),
-            series = chart.getAllSeries(),
-            seriesPoints = series[0].getPoints();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}]
+        });
+        const series = chart.getAllSeries();
+        let seriesPoints = series[0].getPoints();
 
         assert.equal(seriesPoints[0].index, 0);
         assert.equal(seriesPoints[1].index, 1);
@@ -1345,19 +1345,19 @@ var environment = {
     });
 
     QUnit.test('argument indecies in the legend data of points with the same arguments', function(assert) {
-        var stubPoints = [
-                new MockPoint({ argument: 'First', value: 10, visible: true }),
-                new MockPoint({ argument: 'Second', value: 11, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: true }),
-                new MockPoint({ argument: 'Third', value: 12, visible: true })
-            ],
-            stubSeries = new MockSeries({
-                points: stubPoints
-            }),
-            legendData;
+        const stubPoints = [
+            new MockPoint({ argument: 'First', value: 10, visible: true }),
+            new MockPoint({ argument: 'Second', value: 11, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: true }),
+            new MockPoint({ argument: 'Third', value: 12, visible: true })
+        ];
+        const stubSeries = new MockSeries({
+            points: stubPoints
+        });
+        let legendData;
 
         chartMocks.seriesMockData.series.push(stubSeries);
-        var points2 = [
+        const points2 = [
             new MockPoint({ argument: 'First', value: 10, visible: true }),
             new MockPoint({ argument: 'Fourth', value: 11, visible: true }),
             new MockPoint({ argument: 'Fifth', value: 12, visible: true }),
@@ -1413,26 +1413,26 @@ var environment = {
     });
 
     QUnit.test('Legend callback', function(assert) {
-        var points = [
-                createPoint({ argument: 'First', value: 10, visible: true }),
-                createPoint({ argument: 'Second', value: 11, visible: true }),
-                createPoint({ argument: 'Third', value: 12, visible: true }),
-                createPoint({ argument: 'Fourth', value: 12, visible: true })
-            ],
-            points2 = [
-                createPoint({ argument: 'First', value: 10, visible: true }),
-                createPoint({ argument: 'Second', value: 11, visible: true }),
-                createPoint({ argument: 'Third', value: 12, visible: true }),
-                createPoint({ argument: 'Fourth', value: 11, visible: true })
-            ],
-            stubSeries = new MockSeries({
-                points: points
-            }),
+        const points = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true }),
+            createPoint({ argument: 'Third', value: 12, visible: true }),
+            createPoint({ argument: 'Fourth', value: 12, visible: true })
+        ];
+        const points2 = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true }),
+            createPoint({ argument: 'Third', value: 12, visible: true }),
+            createPoint({ argument: 'Fourth', value: 11, visible: true })
+        ];
+        const stubSeries = new MockSeries({
+            points: points
+        });
 
-            stubSeries2 = new MockSeries({
-                points: points2
-            }),
-            action = sinon.stub();
+        const stubSeries2 = new MockSeries({
+            points: points2
+        });
+        const action = sinon.stub();
 
         chartMocks.seriesMockData.series.push(stubSeries);
 
@@ -1464,8 +1464,8 @@ var environment = {
             series: [{}, {}]
         });
 
-        var legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action),
-            legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
+        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
         // act
         legendCallback();
 
@@ -1481,15 +1481,15 @@ var environment = {
     });
 
     QUnit.test('Legend callback with target', function(assert) {
-        var points = [
-                createPoint({ argument: 'First', value: 10, visible: true }),
-                createPoint({ argument: 'Second', value: 11, visible: true })
-            ],
+        const points = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true })
+        ];
 
-            stubSeries = new MockSeries({
-                points: points
-            }),
-            action = sinon.stub();
+        const stubSeries = new MockSeries({
+            points: points
+        });
+        const action = sinon.stub();
 
         chartMocks.seriesMockData.series.push(stubSeries);
 
@@ -1501,8 +1501,8 @@ var environment = {
             series: [{}]
         });
 
-        var legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action),
-            legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
+        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
         // act
         legendCallback({
             argument: 'Second',
@@ -1517,15 +1517,15 @@ var environment = {
     });
 
     QUnit.test('Legend callback with target. Selected point', function(assert) {
-        var points = [
-                createPoint({ argument: 'First', value: 10, visible: true }),
-                createPoint({ argument: 'Second', value: 11, visible: true })
-            ],
+        const points = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true })
+        ];
 
-            stubSeries = new MockSeries({
-                points: points
-            }),
-            action = sinon.stub();
+        const stubSeries = new MockSeries({
+            points: points
+        });
+        const action = sinon.stub();
 
         chartMocks.seriesMockData.series.push(stubSeries);
 
@@ -1539,8 +1539,8 @@ var environment = {
             series: [{}]
         });
 
-        var legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action),
-            legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
+        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
         // act
         legendCallback({
             argument: 'Second',
@@ -1566,7 +1566,7 @@ var environment = {
 
     QUnit.test('Force full redraw', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {},
             title: {
@@ -1595,7 +1595,7 @@ var environment = {
 
     QUnit.test('Refresh', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {},
             title: {
@@ -1625,7 +1625,7 @@ var environment = {
 
     QUnit.test('Hide labels if container too small', function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({}));
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{}],
             series: {}
         });
@@ -1638,7 +1638,7 @@ var environment = {
 
     QUnit.test('Show labels after hidden', function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({}));
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{}],
             series: {}
         });
@@ -1653,7 +1653,7 @@ var environment = {
 
     QUnit.test('Show labels if set keepLabels', function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({}));
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{}],
             series: {}
         });
@@ -1667,7 +1667,7 @@ var environment = {
 
     QUnit.test('Adaptive layout with small canvas does not cause exceptions', function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({}));
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             dataSource: [{}],
             series: {}
         });
@@ -1708,9 +1708,9 @@ var environment = {
 
     QUnit.test('update diameter', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
+        const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             type: 'pie',
             diameter: 0.9,
             series: [
@@ -1728,9 +1728,9 @@ var environment = {
 
     QUnit.test('update minDiameter', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
+        const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             type: 'pie',
             minDiameter: 0.9,
             series: [
@@ -1748,9 +1748,9 @@ var environment = {
 
     QUnit.test('update type', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
+        const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             type: 'pie',
             series: [
                 { name: 'First series' }
@@ -1773,9 +1773,9 @@ var environment = {
 
     QUnit.test('update innerRadius', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
+        const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             type: 'pie',
             innerRadius: 0.4,
             series: [
@@ -1799,9 +1799,9 @@ var environment = {
 
     QUnit.test('update startAngle', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
+        const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             type: 'pie',
             startAngle: 10,
             series: [
@@ -1825,9 +1825,9 @@ var environment = {
 
     QUnit.test('update segmentsDirection', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
+        const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         chartMocks.seriesMockData.series.push(stubSeries);
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             type: 'pie',
             segmentsDirection: 'clockwise',
             series: [
@@ -1855,10 +1855,10 @@ var environment = {
             chartMocks.seriesMockData.series.push(new MockSeries({ name: 'Pie series' }));
             executeAsyncMock.setup();
 
-            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D', function() {
-                var translator = new translatorClass();
+                const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
                 return translator;
@@ -1873,10 +1873,10 @@ var environment = {
 
     QUnit.test('dxChart with single series request default type', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             series: {}
         });
-        var updatedData = [1, 2, 3, 4, 5];
+        const updatedData = [1, 2, 3, 4, 5];
         chart.series[0].setOptions({ argumentField: 'arg', range: { val: { min: 1, max: 5 } } });
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
 
@@ -1889,7 +1889,7 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, 'Series data was reinitialized');
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, 'update data');
 
-        var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
+        const businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
         assert.deepEqual(businessRange1, [1, 5]);
 
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2);
@@ -1902,19 +1902,19 @@ var environment = {
 
     QUnit.test('Datasource with delayed loading from Store', function(assert) {
         // arrange
-        var loadingDeferred = $.Deferred();
-        var store = new CustomStore({
+        const loadingDeferred = $.Deferred();
+        const store = new CustomStore({
             load: function() {
                 return loadingDeferred.promise();
             }
         });
 
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             series: {},
             dataSource: store
         });
 
-        var updatedData = [1, 2, 3, 4, 5];
+        const updatedData = [1, 2, 3, 4, 5];
         chart.series[0].setOptions({ argumentField: 'arg', range: { val: { min: 1, max: 5 } } });
 
         // act
@@ -1926,7 +1926,7 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, 'Series data was reinitialized');
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, 'update data');
 
-        var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
+        const businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub('setDomain').lastCall.args;
         assert.deepEqual(businessRange1, [1, 5]);
 
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, 'apply layout count');
@@ -1937,12 +1937,12 @@ var environment = {
     });
 
     QUnit.test('Group series for pieChart', function(assert) {
-        var chart = this.createPieChart({
-                series: {
-                    argumentType: 'argumentType'
-                }
-            }),
-            expected = chart.series;
+        const chart = this.createPieChart({
+            series: {
+                argumentType: 'argumentType'
+            }
+        });
+        const expected = chart.series;
 
         expected.argumentOptions = chart.series[0].getOptions();
         assert.deepEqual(this.validateData.lastCall.args[1].groups[0].series, expected);
@@ -1965,7 +1965,7 @@ var environment = {
 
     QUnit.test('dxChart - clear selection', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             series: {
             }
         });
@@ -1977,12 +1977,12 @@ var environment = {
 
     QUnit.test('dxChart - get all series', function(assert) {
         // arrange
-        var chart = this.createPieChart({
+        const chart = this.createPieChart({
             // fake data comes from creation
             series: { name: 'Pie series' }
         });
         // act
-        var series = chart.getAllSeries()[0];
+        const series = chart.getAllSeries()[0];
         // assert
         assert.ok(series, 'Result is defined');
         assert.equal(series.name, 'Pie series');
@@ -2003,18 +2003,18 @@ var environment = {
     }));
 
     QUnit.test('hide label', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]);
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         assert.strictEqual(points[0].getLabels()[0].draw.callCount, 0);
         assert.deepEqual(points[1].getLabels()[0].draw.lastCall.args, [false]);
     });
 
     QUnit.test('Adjust labels only before overlapping resolve, without moving from center (T586419)', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            series = pie.getAllSeries()[0];
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]);
+        const series = pie.getAllSeries()[0];
 
         assert.equal(series.adjustLabels.callCount, 1);
         assert.deepEqual(series.adjustLabels.getCall(0).args, [false], 'Do not move from center (T586419)');
@@ -2034,20 +2034,20 @@ var environment = {
     }));
 
     QUnit.test('two overlapped labels', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]);
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         this.checkLabelPosition(assert, points[0].getLabels()[0], [5, 10]);
         this.checkLabelPosition(assert, points[1].getLabels()[0], [-15, 20]);
     });
 
     QUnit.test('two overlapped labels + single label', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { x: 5, y: 40, width: 10, height: 10, pointPosition: { y: 3, angle: 3 } }
-            ]),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { x: 5, y: 40, width: 10, height: 10, pointPosition: { y: 3, angle: 3 } }
+        ]);
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         this.checkLabelPosition(assert, points[0].getLabels()[0], [5, 10]);
         this.checkLabelPosition(assert, points[1].getLabels()[0], [-15, 20]);
@@ -2055,11 +2055,11 @@ var environment = {
     });
 
     QUnit.test('two different sides', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 2 } },
-                { x: 100, y: 10, width: 10, height: 10, pointPosition: { y: 3, angle: 181 } }
-            ]),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 2 } },
+            { x: 100, y: 10, width: 10, height: 10, pointPosition: { y: 3, angle: 181 } }
+        ]);
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         this.checkLabelPosition(assert, points[0].getLabels()[0], [5, 10]);
         this.checkLabelPosition(assert, points[1].getLabels()[0], [-15, 20]);
@@ -2067,13 +2067,13 @@ var environment = {
     });
 
     QUnit.test('overlapping labels, position inside', function(assert) {
-        var pie = this.createPieChartWithLabels([
-                { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], 'inside'),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], 'inside');
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         this.checkLabelPosition(assert, points[0].getLabels()[0], [150, 50]);
         this.checkLabelPosition(assert, points[1].getLabels()[0], [165, 65]);
@@ -2082,13 +2082,13 @@ var environment = {
     });
 
     QUnit.test('position inside, two labels on same row, but do not overlapp, one label horizontally overlap them - do not shift labels, there is no real overlapping', function(assert) {
-        var pie = this.createPieChartWithLabels([
-                { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 140, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { x: 160, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], 'inside'),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 140, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { x: 160, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], 'inside');
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         this.checkLabelPosition(assert, points[0].getLabels()[0], [150, 50]);
         this.checkLabelPosition(assert, points[1].getLabels()[0], [140, 65]);
@@ -2097,14 +2097,14 @@ var environment = {
     });
 
     QUnit.test('T578429. Save initial labels\' order after resolve overlapping, anticlockwise', function(assert) {
-        var pie = this.createPieChartWithLabels([
-                { y: 10, x: 294, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { y: 0, x: 285, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { y: 0, x: 287, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { y: 0, x: 288, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-                { y: 0, x: 289, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], 'columns', 'anticlockwise'),
-            points = pie.getAllSeries()[0].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([
+            { y: 10, x: 294, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 285, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 287, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 288, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 289, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], 'columns', 'anticlockwise');
+        const points = pie.getAllSeries()[0].getVisiblePoints();
 
         assert.equal(points[0].getLabels()[0].shift.lastCall.args[1], 40);
         assert.equal(points[1].getLabels()[0].shift.lastCall.args[1], 30);
@@ -2114,10 +2114,10 @@ var environment = {
     });
 
     QUnit.test('Adjust labels before and after resolve overlapping with moving from center (T586419)', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]);
+        const series = pie.getAllSeries()[0];
+        const points = series.getVisiblePoints();
 
         // assert
         assert.equal(series.adjustLabels.callCount, 5);
@@ -2127,17 +2127,17 @@ var environment = {
     });
 
     QUnit.test('Do not Adjust labels after resolve overlapping in columns position', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], 'columns'),
-            series = pie.getAllSeries()[0];
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], 'columns');
+        const series = pie.getAllSeries()[0];
 
         assert.equal(series.adjustLabels.callCount, 5);
     });
 
     QUnit.test('Do not Adjust labels after resolve overlapping in inside position', function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], 'inside'),
-            series = pie.getAllSeries()[0];
+        const pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], 'inside');
+        const series = pie.getAllSeries()[0];
 
         assert.equal(series.adjustLabels.callCount, 5);
     });
@@ -2156,15 +2156,15 @@ var environment = {
     }));
 
     QUnit.test('two series - all labels are resolved together (in two directions)', function(assert) {
-        var pie = this.createPieChartWithLabels([
-                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], [
-                { x: 150, y: 45, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 150, y: 55, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ]),
-            points1 = pie.getAllSeries()[0].getVisiblePoints(),
-            points2 = pie.getAllSeries()[1].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], [
+            { x: 150, y: 45, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 55, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ]);
+        const points1 = pie.getAllSeries()[0].getVisiblePoints();
+        const points2 = pie.getAllSeries()[1].getVisiblePoints();
 
         this.checkLabelPosition(assert, points1[0].getLabels()[0], [163, 55]);
         this.checkLabelPosition(assert, points1[1].getLabels()[0], [182, 65]);
@@ -2173,15 +2173,15 @@ var environment = {
     });
 
     QUnit.test('two series, columns - labels are resolved by series (vertically only)', function(assert) {
-        var pie = this.createPieChartWithLabels([
-                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], [
-                { x: 155, y: 49, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 155, y: 51, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], 'columns'),
-            points1 = pie.getAllSeries()[0].getVisiblePoints(),
-            points2 = pie.getAllSeries()[1].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], [
+            { x: 155, y: 49, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 155, y: 51, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], 'columns');
+        const points1 = pie.getAllSeries()[0].getVisiblePoints();
+        const points2 = pie.getAllSeries()[1].getVisiblePoints();
 
         this.checkLabelPosition(assert, points1[0].getLabels()[0], [150, 50]);
         this.checkLabelPosition(assert, points1[1].getLabels()[0], [150, 60]);
@@ -2190,15 +2190,15 @@ var environment = {
     });
 
     QUnit.test('two series, inside - all labels are resolved together', function(assert) {
-        var pie = this.createPieChartWithLabels([
-                { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], [
-                { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-                { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], 'inside'),
-            points1 = pie.getAllSeries()[0].getVisiblePoints(),
-            points2 = pie.getAllSeries()[1].getVisiblePoints();
+        const pie = this.createPieChartWithLabels([
+            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], [
+            { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+        ], 'inside');
+        const points1 = pie.getAllSeries()[0].getVisiblePoints();
+        const points2 = pie.getAllSeries()[1].getVisiblePoints();
 
         this.checkLabelPosition(assert, points1[0].getLabels()[0], [150, 50]);
         this.checkLabelPosition(assert, points1[1].getLabels()[0], [165, 65]);

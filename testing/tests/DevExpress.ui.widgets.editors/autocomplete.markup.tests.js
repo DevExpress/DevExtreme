@@ -29,18 +29,18 @@ QUnit.module('dxAutocomplete', {
 });
 
 QUnit.test('markup init', function(assert) {
-    var element = this.element;
+    const element = this.element;
 
     assert.ok(element.hasClass(WIDGET_CLASS), 'Element has ' + WIDGET_CLASS + ' class');
     assert.ok(element.hasClass(TEXTEDITOR_CLASS), 'Element has ' + TEXTEDITOR_CLASS + ' class');
 });
 
 QUnit.test('init with options', function(assert) {
-    var element = $('#widget').dxAutocomplete({
-            value: 'anotherText',
-            placeholder: 'type something'
-        }),
-        instance = element.dxAutocomplete('instance');
+    const element = $('#widget').dxAutocomplete({
+        value: 'anotherText',
+        placeholder: 'type something'
+    });
+    const instance = element.dxAutocomplete('instance');
 
     assert.equal(instance.option('value'), 'anotherText', 'autocomplete-s textbox value initialization');
     assert.equal(instance.option('placeholder'), instance.option('placeholder'), 'autocomplete-s successful placeholder initialization');
@@ -66,12 +66,12 @@ QUnit.test('maxLength', function(assert) {
 });
 
 QUnit.test('input should be empty when value is empty', function(assert) {
-    var $autocomplete = $('#widget').dxAutocomplete({
+    const $autocomplete = $('#widget').dxAutocomplete({
         placeholder: 'test',
         value: ''
     });
 
-    var $input = $autocomplete.find('.' + TEXTEDITOR_INPUT_CLASS);
+    const $input = $autocomplete.find('.' + TEXTEDITOR_INPUT_CLASS);
     assert.equal($input.val(), '', 'input is empty');
 });
 
@@ -89,25 +89,25 @@ QUnit.test('B251138 disabled', function(assert) {
 QUnit.module('widget sizing render');
 
 QUnit.test('constructor', function(assert) {
-    var $element = $('#widget').dxAutocomplete({ width: 400 }),
-        instance = $element.dxAutocomplete('instance'),
-        elementStyles = $element.get(0).style;
+    const $element = $('#widget').dxAutocomplete({ width: 400 });
+    const instance = $element.dxAutocomplete('instance');
+    const elementStyles = $element.get(0).style;
 
     assert.strictEqual(instance.option('width'), 400);
     assert.strictEqual(elementStyles.width, '400px', 'width of the element must be equal to custom width');
 });
 
 QUnit.test('root with custom width', function(assert) {
-    var $element = $('#widthRootStyle').dxAutocomplete(),
-        elementStyles = $element.get(0).style;
+    const $element = $('#widthRootStyle').dxAutocomplete();
+    const elementStyles = $element.get(0).style;
 
     assert.strictEqual(elementStyles.width, '300px', 'width of the element must be equal to custom width');
 });
 
 QUnit.test('change width', function(assert) {
-    var $element = $('#widget').dxAutocomplete(),
-        element = $element.get(0),
-        instance = $element.dxAutocomplete('instance');
+    const $element = $('#widget').dxAutocomplete();
+    const element = $element.get(0);
+    const instance = $element.dxAutocomplete('instance');
 
     instance.option('width', 400);
 
@@ -117,8 +117,8 @@ QUnit.test('change width', function(assert) {
 
 QUnit.module('aria accessibility', {}, () => {
     QUnit.test('aria-autocomplete property', function(assert) {
-        var $element = $('#widget').dxAutocomplete(),
-            $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS + ':first');
+        const $element = $('#widget').dxAutocomplete();
+        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS + ':first');
 
         assert.equal($input.attr('aria-autocomplete'), 'inline');
     });

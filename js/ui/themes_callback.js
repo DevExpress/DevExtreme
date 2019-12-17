@@ -1,3 +1,3 @@
-var Callbacks = require('../core/utils/callbacks');
+const Callbacks = require('../core/utils/callbacks');
 
 module.exports = new Callbacks();

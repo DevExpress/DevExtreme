@@ -1,16 +1,16 @@
-var Class = require('../core/class'),
-    abstract = Class.abstract,
-    EventsStrategy = require('../core/events_strategy').EventsStrategy,
-    each = require('../core/utils/iterator').each,
-    errorsModule = require('./errors'),
-    dataUtils = require('./utils'),
-    compileGetter = require('../core/utils/data').compileGetter,
-    storeHelper = require('./store_helper'),
-    queryByOptions = storeHelper.queryByOptions,
-    Deferred = require('../core/utils/deferred').Deferred,
-    noop = require('../core/utils/common').noop,
+const Class = require('../core/class');
+const abstract = Class.abstract;
+const EventsStrategy = require('../core/events_strategy').EventsStrategy;
+const each = require('../core/utils/iterator').each;
+const errorsModule = require('./errors');
+const dataUtils = require('./utils');
+const compileGetter = require('../core/utils/data').compileGetter;
+const storeHelper = require('./store_helper');
+const queryByOptions = storeHelper.queryByOptions;
+const Deferred = require('../core/utils/deferred').Deferred;
+const noop = require('../core/utils/common').noop;
 
-    storeImpl = {};
+const storeImpl = {};
 
 /**
 * @name Store
@@ -19,10 +19,10 @@ var Class = require('../core/class'),
 * @module data/abstract_store
 * @export default
 */
-var Store = Class.inherit({
+const Store = Class.inherit({
 
     ctor: function(options) {
-        var that = this;
+        const that = this;
         options = options || {};
         this._eventsStrategy = new EventsStrategy(this);
 
@@ -182,7 +182,7 @@ var Store = Class.inherit({
     * @return Promise<any>
     */
     load: function(options) {
-        var that = this;
+        const that = this;
 
         options = options || {};
 
@@ -198,11 +198,11 @@ var Store = Class.inherit({
     },
 
     _withLock: function(task) {
-        var result = new Deferred();
+        const result = new Deferred();
 
         task.done(function() {
-            var that = this,
-                args = arguments;
+            const that = this;
+            const args = arguments;
 
             dataUtils.processRequestResultLock
                 .promise()
@@ -254,7 +254,7 @@ var Store = Class.inherit({
     * @return Promise<any>
     */
     insert: function(values) {
-        var that = this;
+        const that = this;
 
         that._eventsStrategy.fireEvent('modifying');
         that._eventsStrategy.fireEvent('inserting', [values]);
@@ -275,7 +275,7 @@ var Store = Class.inherit({
     * @return Promise<any>
     */
     update: function(key, values) {
-        var that = this;
+        const that = this;
 
         that._eventsStrategy.fireEvent('modifying');
         that._eventsStrategy.fireEvent('updating', [key, values]);
@@ -307,7 +307,7 @@ var Store = Class.inherit({
     * @return Promise<void>
     */
     remove: function(key) {
-        var that = this;
+        const that = this;
 
         that._eventsStrategy.fireEvent('modifying');
         that._eventsStrategy.fireEvent('removing', [key]);
@@ -378,7 +378,7 @@ Store.registerClass = function(type, alias) {
 
 Store.inherit = function(inheritor) {
     return function(members, alias) {
-        var type = inheritor.apply(this, [members]);
+        const type = inheritor.apply(this, [members]);
         Store.registerClass(type, alias);
         return type;
     };

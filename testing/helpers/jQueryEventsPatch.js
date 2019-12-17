@@ -1,9 +1,9 @@
 /* global jQuery */
 
-var eventsEngine = require('events/core/events_engine');
+const eventsEngine = require('events/core/events_engine');
 
-var originalJQueryEvent;
-var originalJQueryMethods = {};
+let originalJQueryEvent;
+const originalJQueryMethods = {};
 
 QUnit.testStart(function() {
     if(!jQuery) {
@@ -20,8 +20,8 @@ QUnit.testStart(function() {
     ['on', 'one', 'off', 'trigger', 'triggerHandler'].forEach(function(methodName) {
         originalJQueryMethods[methodName] = jQuery[methodName];
 
-        var patchedMethod = function(events, selector, data) {
-            var args = [].slice.call(arguments);
+        const patchedMethod = function(events, selector, data) {
+            const args = [].slice.call(arguments);
             eventsEngine[methodName].apply(this, [this].concat(args));
 
             return this;
@@ -30,7 +30,7 @@ QUnit.testStart(function() {
         if(methodName === 'on') {
             jQuery.fn.on = function(events, selector, data) {
                 if(typeof events === 'object') {
-                    for(var eventName in events) {
+                    for(const eventName in events) {
                         patchedMethod.call(this, eventName, selector, data, events[eventName]);
                     }
                     return this;

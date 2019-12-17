@@ -103,7 +103,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _init: function() {
-        var layoutData = this.option('layoutData');
+        const layoutData = this.option('layoutData');
 
         this.callBase();
         this._itemWatchers = [];
@@ -148,8 +148,8 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateFieldValue: function(dataField, value) {
-        var layoutData = this.option('layoutData'),
-            newValue = value;
+        const layoutData = this.option('layoutData');
+        let newValue = value;
 
         if(!isWrapped(layoutData[dataField]) && isDefined(dataField)) {
             this.option('layoutData.' + dataField, newValue);
@@ -167,12 +167,12 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateItems: function(layoutData) {
-        var that = this,
-            userItems = this.option('items'),
-            isUserItemsExist = isDefined(userItems),
-            customizeItem = that.option('customizeItem'),
-            items,
-            processedItems;
+        const that = this;
+        const userItems = this.option('items');
+        const isUserItemsExist = isDefined(userItems);
+        const customizeItem = that.option('customizeItem');
+        let items;
+        let processedItems;
 
         items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
         if(isDefined(items)) {
@@ -208,8 +208,8 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateItemWatchers: function(items) {
-        var that = this,
-            watch = that._getWatch();
+        const that = this;
+        const watch = that._getWatch();
 
         items.forEach(function(item) {
             if(isObject(item) && isDefined(item.visible) && isFunction(watch)) {
@@ -230,7 +230,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _generateItemsByData: function(layoutData) {
-        var result = [];
+        const result = [];
 
         if(isDefined(layoutData)) {
             each(layoutData, function(dataField) {
@@ -244,8 +244,8 @@ const LayoutManager = Widget.inherit({
     },
 
     _isAcceptableItem: function(item) {
-        var itemField = item.dataField || item,
-            itemData = this._getDataByField(itemField);
+        const itemField = item.dataField || item;
+        const itemData = this._getDataByField(itemField);
 
         return !(isFunction(itemData) && !isWrapped(itemData));
     },
@@ -260,7 +260,7 @@ const LayoutManager = Widget.inherit({
         }
 
         if(!isDefined(item.editorType) && isDefined(item.dataField)) {
-            var value = this._getDataByField(item.dataField);
+            const value = this._getDataByField(item.dataField);
 
             item.editorType = isDefined(value) ? this._getEditorTypeByDataType(type(value)) : FORM_EDITOR_BY_DEFAULT;
         }
@@ -288,9 +288,9 @@ const LayoutManager = Widget.inherit({
 
     _sortIndexes: function() {
         this._items.sort(function(itemA, itemB) {
-            var indexA = itemA.visibleIndex,
-                indexB = itemB.visibleIndex,
-                result;
+            const indexA = itemA.visibleIndex;
+            const indexB = itemB.visibleIndex;
+            let result;
 
             if(indexA > indexB) {
                 result = 1;
@@ -317,13 +317,13 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderResponsiveBox: function() {
-        var that = this,
-            templatesInfo = [];
+        const that = this;
+        const templatesInfo = [];
 
         if(that._items && that._items.length) {
-            var colCount = that._getColCount(),
-                $container = $('<div>').appendTo(that.$element()),
-                layoutItems;
+            const colCount = that._getColCount();
+            const $container = $('<div>').appendTo(that.$element());
+            let layoutItems;
 
             that._prepareItemsWithMerging(colCount);
 
@@ -368,23 +368,23 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderTemplates: function(templatesInfo) {
-        var that = this;
+        const that = this;
         each(templatesInfo, function(index, info) {
             that._renderTemplate(info.container, info.formItem);
         });
     },
 
     _getResponsiveBoxConfig: function(layoutItems, colCount, templatesInfo) {
-        var that = this,
-            colCountByScreen = that.option('colCountByScreen'),
-            xsColCount = colCountByScreen && colCountByScreen.xs;
+        const that = this;
+        const colCountByScreen = that.option('colCountByScreen');
+        const xsColCount = colCountByScreen && colCountByScreen.xs;
 
         return {
             onItemStateChanged: this._itemStateChangedHandler.bind(this),
             _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
-                var onLayoutChanged = that.option('onLayoutChanged'),
-                    isSingleColumnMode = that.isSingleColumnMode();
+                const onLayoutChanged = that.option('onLayoutChanged');
+                const isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
@@ -403,12 +403,12 @@ const LayoutManager = Widget.inherit({
                 if(!e.location) {
                     return;
                 }
-                var $itemElement = $(itemElement),
-                    itemRenderedCountInPreviousRows = e.location.row * colCount,
-                    item = that._items[e.location.col + itemRenderedCountInPreviousRows],
-                    $fieldItem = $('<div>')
-                        .addClass(item.cssClass)
-                        .appendTo($itemElement);
+                const $itemElement = $(itemElement);
+                const itemRenderedCountInPreviousRows = e.location.row * colCount;
+                const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
+                const $fieldItem = $('<div>')
+                    .addClass(item.cssClass)
+                    .appendTo($itemElement);
 
                 templatesInfo.push({
                     container: $fieldItem,
@@ -436,11 +436,11 @@ const LayoutManager = Widget.inherit({
     },
 
     _getColCount: function() {
-        var colCount = this.option('colCount'),
-            colCountByScreen = this.option('colCountByScreen');
+        let colCount = this.option('colCount');
+        const colCountByScreen = this.option('colCountByScreen');
 
         if(colCountByScreen) {
-            var screenFactor = this.option('form').getTargetScreenFactor();
+            let screenFactor = this.option('form').getTargetScreenFactor();
             if(!screenFactor) {
                 screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
             }
@@ -463,10 +463,10 @@ const LayoutManager = Widget.inherit({
             return 1;
         }
 
-        var minColWidth = this.option('minColWidth'),
-            width = this.$element().width(),
-            itemsCount = this._items.length,
-            maxColCount = Math.floor(width / minColWidth) || 1;
+        const minColWidth = this.option('minColWidth');
+        const width = this.$element().width();
+        const itemsCount = this._items.length;
+        const maxColCount = Math.floor(width / minColWidth) || 1;
 
         return itemsCount < maxColCount ? itemsCount : maxColCount;
     },
@@ -476,12 +476,12 @@ const LayoutManager = Widget.inherit({
     },
 
     _prepareItemsWithMerging: function(colCount) {
-        var items = this._items.slice(0),
-            item,
-            itemsMergedByCol,
-            result = [],
-            j,
-            i;
+        const items = this._items.slice(0);
+        let item;
+        let itemsMergedByCol;
+        let result = [];
+        let j;
+        let i;
 
         for(i = 0; i < items.length; i++) {
             item = items[i];
@@ -508,17 +508,17 @@ const LayoutManager = Widget.inherit({
     },
 
     _generateLayoutItems: function() {
-        var items = this._items,
-            colCount = this._getColCount(),
-            result = [],
-            item,
-            i;
+        const items = this._items;
+        const colCount = this._getColCount();
+        const result = [];
+        let item;
+        let i;
 
         for(i = 0; i < items.length; i++) {
             item = items[i];
 
             if(!item.merged) {
-                var generatedItem = {
+                const generatedItem = {
                     location: {
                         row: parseInt(i / colCount),
                         col: this._getColByIndex(i, colCount)
@@ -568,10 +568,10 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderButtonItem: function(item, $container) {
-        var $button = $('<div>').appendTo($container),
-            defaultOptions = {
-                validationGroup: this.option('validationGroup')
-            };
+        const $button = $('<div>').appendTo($container);
+        const defaultOptions = {
+            validationGroup: this.option('validationGroup')
+        };
 
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
@@ -579,7 +579,7 @@ const LayoutManager = Widget.inherit({
 
         $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
 
-        var instance = this._createComponent($button, 'dxButton', extend(defaultOptions, item.buttonOptions));
+        const instance = this._createComponent($button, 'dxButton', extend(defaultOptions, item.buttonOptions));
 
         this._itemsRunTimeInfo.add({
             item,
@@ -600,14 +600,14 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderFieldItem: function(item, $container) {
-        var that = this,
-            name = that._getName(item),
-            id = that.getItemID(name),
-            isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
-            labelOptions = that._getLabelOptions(item, id, isRequired),
-            $editor = $('<div>'),
-            helpID = item.helpText ? ('dx-' + new Guid()) : null,
-            $label;
+        const that = this;
+        const name = that._getName(item);
+        const id = that.getItemID(name);
+        const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
+        const labelOptions = that._getLabelOptions(item, id, isRequired);
+        const $editor = $('<div>');
+        const helpID = item.helpText ? ('dx-' + new Guid()) : null;
+        let $label;
 
         this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
@@ -631,7 +631,7 @@ const LayoutManager = Widget.inherit({
             labelOptions: labelOptions
         });
 
-        var instance = that._renderEditor({
+        const instance = that._renderEditor({
             $container: $editor,
             dataField: item.dataField,
             name: item.name,
@@ -665,7 +665,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _hasRequiredRuleInSet: function(rules) {
-        var hasRequiredRule;
+        let hasRequiredRule;
 
         if(rules && rules.length) {
             each(rules, function(index, rule) {
@@ -694,7 +694,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _getLabelOptions: function(item, id, isRequired) {
-        var labelOptions = extend(
+        const labelOptions = extend(
             {
                 showColon: this.option('showColonAfterLabel'),
                 location: this.option('labelLocation'),
@@ -750,14 +750,14 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderLabelMark: function(isRequired) {
-        var $mark,
-            requiredMarksConfig = this._getRequiredMarksConfig(),
-            isRequiredMark = requiredMarksConfig.showRequiredMark && isRequired,
-            isOptionalMark = requiredMarksConfig.showOptionalMark && !isRequired;
+        let $mark;
+        const requiredMarksConfig = this._getRequiredMarksConfig();
+        const isRequiredMark = requiredMarksConfig.showRequiredMark && isRequired;
+        const isOptionalMark = requiredMarksConfig.showOptionalMark && !isRequired;
 
         if(isRequiredMark || isOptionalMark) {
-            var markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS,
-                markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
+            const markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
+            const markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
 
             $mark = $('<span>')
                 .addClass(markClass)
@@ -781,16 +781,16 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderEditor: function(options) {
-        var dataValue = this._getDataByField(options.dataField),
-            defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {},
-            isDeepExtend = true,
-            editorOptions;
+        const dataValue = this._getDataByField(options.dataField);
+        const defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {};
+        const isDeepExtend = true;
+        let editorOptions;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
         }
 
-        var formInstance = this.option('form');
+        const formInstance = this.option('form');
 
         editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
             inputAttr: {
@@ -802,7 +802,7 @@ const LayoutManager = Widget.inherit({
 
         this._replaceDataOptions(options.editorOptions, editorOptions);
 
-        let renderOptions = {
+        const renderOptions = {
             editorType: options.editorType,
             dataField: options.dataField,
             template: options.template,
@@ -826,8 +826,8 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderValidator: function($editor, item) {
-        var fieldName = this._getFieldLabelName(item),
-            validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
+        const fieldName = this._getFieldLabelName(item);
+        const validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
 
         if(Array.isArray(validationRules) && validationRules.length) {
             this._createComponent($editor, Validator, {
@@ -843,21 +843,21 @@ const LayoutManager = Widget.inherit({
     },
 
     _getFieldLabelName: function(item) {
-        var isItemHaveCustomLabel = item.label && item.label.text,
-            itemName = isItemHaveCustomLabel ? null : this._getName(item);
+        const isItemHaveCustomLabel = item.label && item.label.text;
+        const itemName = isItemHaveCustomLabel ? null : this._getName(item);
 
         return isItemHaveCustomLabel ? item.label.text : itemName && inflector.captionize(itemName);
     },
 
     _prepareValidationRules: function(userValidationRules, isItemRequired, itemType, itemName) {
-        var isSimpleItem = itemType === SIMPLE_ITEM_TYPE,
-            validationRules;
+        const isSimpleItem = itemType === SIMPLE_ITEM_TYPE;
+        let validationRules;
 
         if(isSimpleItem) {
             if(userValidationRules) {
                 validationRules = userValidationRules;
             } else {
-                var requiredMessage = stringUtils.format(this.option('requiredMessage'), itemName || '');
+                const requiredMessage = stringUtils.format(this.option('requiredMessage'), itemName || '');
 
                 validationRules = isItemRequired ? [{ type: 'required', message: requiredMessage }] : null;
             }
@@ -867,11 +867,11 @@ const LayoutManager = Widget.inherit({
     },
 
     _addWrapperInvalidClass: function(editorInstance) {
-        var wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-            toggleInvalidClass = function(e) {
-                $(e.element).parents(wrapperClass)
-                    .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
-            };
+        const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
+        const toggleInvalidClass = function(e) {
+            $(e.element).parents(wrapperClass)
+                .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
+        };
 
         editorInstance
             .on('focusIn', toggleInvalidClass)
@@ -880,9 +880,9 @@ const LayoutManager = Widget.inherit({
     },
 
     _createEditor: function($container, renderOptions, editorOptions) {
-        var that = this,
-            template = renderOptions.template,
-            editorInstance;
+        const that = this;
+        const template = renderOptions.template;
+        let editorInstance;
 
         if(renderOptions.dataField && !editorOptions.name) {
             editorOptions.name = renderOptions.dataField;
@@ -891,7 +891,7 @@ const LayoutManager = Widget.inherit({
         that._addItemContentClasses($container);
 
         if(template) {
-            var data = {
+            const data = {
                 dataField: renderOptions.dataField,
                 editorType: renderOptions.editorType,
                 editorOptions: editorOptions,
@@ -904,7 +904,7 @@ const LayoutManager = Widget.inherit({
                 container: domUtils.getPublicElement($container)
             });
         } else {
-            var $editor = $('<div>').appendTo($container);
+            const $editor = $('<div>').appendTo($container);
 
             try {
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
@@ -932,7 +932,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _bindDataField: function(editorInstance, renderOptions, $container) {
-        var componentOwner = this._getComponentOwner();
+        const componentOwner = this._getComponentOwner();
 
         editorInstance.on('enterKey', function(args) {
             componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: renderOptions.dataField }));
@@ -943,14 +943,14 @@ const LayoutManager = Widget.inherit({
     },
 
     _createWatcher: function(editorInstance, $container, renderOptions) {
-        var that = this,
-            watch = that._getWatch();
+        const that = this;
+        const watch = that._getWatch();
 
         if(!isFunction(watch)) {
             return;
         }
 
-        var dispose = watch(
+        const dispose = watch(
             function() {
                 return that._getDataByField(renderOptions.dataField);
             },
@@ -968,7 +968,7 @@ const LayoutManager = Widget.inherit({
 
     _getWatch: function() {
         if(!isDefined(this._watch)) {
-            var formInstance = this.option('form');
+            const formInstance = this.option('form');
 
             this._watch = formInstance && formInstance.option('integrationOptions.watchMethod');
         }
@@ -977,25 +977,25 @@ const LayoutManager = Widget.inherit({
     },
 
     _addItemContentClasses: function($itemContent) {
-        var locationSpecificClass = this._getItemContentLocationSpecificClass();
+        const locationSpecificClass = this._getItemContentLocationSpecificClass();
         $itemContent.addClass([FIELD_ITEM_CONTENT_CLASS, locationSpecificClass].join(' '));
     },
 
     _getItemContentLocationSpecificClass: function() {
-        var labelLocation = this.option('labelLocation'),
-            oppositeClasses = {
-                right: 'left',
-                left: 'right',
-                top: 'bottom'
-            };
+        const labelLocation = this.option('labelLocation');
+        const oppositeClasses = {
+            right: 'left',
+            left: 'right',
+            top: 'bottom'
+        };
 
         return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
     },
 
     _createComponent: function($editor, type, editorOptions) {
-        var that = this,
-            readOnlyState = this.option('readOnly'),
-            instance;
+        const that = this;
+        const readOnlyState = this.option('readOnly');
+        let instance;
 
         instance = that.callBase($editor, type, editorOptions);
 
@@ -1016,7 +1016,7 @@ const LayoutManager = Widget.inherit({
 
     _appendEditorToField: function(params) {
         if(params.$label) {
-            var location = params.labelOptions.location;
+            const location = params.labelOptions.location;
 
             if(location === 'top' || location === 'left') {
                 params.$fieldItem.append(params.$editor);
@@ -1041,11 +1041,11 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderHelpText: function(fieldItem, $editor, helpID) {
-        var helpText = fieldItem.helpText,
-            isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
+        const helpText = fieldItem.helpText;
+        const isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
 
         if(helpText && isSimpleItem) {
-            var $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
+            const $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
 
             $editor.wrap($editorWrapper);
 
@@ -1058,7 +1058,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _attachClickHandler: function($label, $editor, editorType) {
-        var isBooleanEditors = editorType === 'dxCheckBox' || editorType === 'dxSwitch';
+        const isBooleanEditors = editorType === 'dxCheckBox' || editorType === 'dxSwitch';
 
         if($label && isBooleanEditors) {
             eventsEngine.on($label, clickEvent.name, function() {
@@ -1068,9 +1068,9 @@ const LayoutManager = Widget.inherit({
     },
 
     _generateRatio: function(count, isAutoSize) {
-        var result = [],
-            ratio,
-            i;
+        const result = [];
+        let ratio;
+        let i;
 
         for(i = 0; i < count; i++) {
             ratio = { ratio: 1 };
@@ -1088,7 +1088,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateReferencedOptions: function(newLayoutData) {
-        var layoutData = this.option('layoutData');
+        const layoutData = this.option('layoutData');
 
         if(isObject(layoutData)) {
             Object.getOwnPropertyNames(layoutData)
@@ -1210,12 +1210,12 @@ const LayoutManager = Widget.inherit({
     },
 
     getItemID: function(name) {
-        var formInstance = this.option('form');
+        const formInstance = this.option('form');
         return formInstance && formInstance.getItemID(name);
     },
 
     updateData: function(data, value) {
-        var that = this;
+        const that = this;
 
         if(isObject(data)) {
             each(data, function(dataField, fieldValue) {
@@ -1231,7 +1231,7 @@ const LayoutManager = Widget.inherit({
     },
 
     isSingleColumnMode: function(component) {
-        var responsiveBox = this._responsiveBox || component;
+        const responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option('currentScreenFactor') === responsiveBox.option('singleColumnScreen');
         }

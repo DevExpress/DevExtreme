@@ -8,11 +8,11 @@ import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import 'common.css!';
 
-const BUTTON_CLASS = 'dx-button',
-    BUTTON_CONTENT_CLASS = 'dx-button-content',
-    BUTTON_GROUP_CLASS = 'dx-buttongroup',
-    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item',
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + '-item-has-width';
+const BUTTON_CLASS = 'dx-button';
+const BUTTON_CONTENT_CLASS = 'dx-button-content';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
+const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
+const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + '-item-has-width';
 
 QUnit.testStart(() => {
     const markup = `
@@ -74,7 +74,7 @@ QUnit.module('option changed', {
         this.buttonGroup.option('width', 500);
 
         const buttonsSelector = `.${BUTTON_CLASS}`;
-        let buttons = $(buttonsSelector);
+        const buttons = $(buttonsSelector);
 
         assert.equal(this.$buttonGroup.width(), 500, 'button group width');
         assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'first item when button group has width');
@@ -86,7 +86,7 @@ QUnit.module('option changed', {
             height: 500
         }).$element();
 
-        let buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        const buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.equal($buttonGroup.height(), 500, 'button group height is right');
         assert.equal(buttons.eq(0).height(), 500, 'button group item height is right');
@@ -107,7 +107,7 @@ QUnit.module('option changed', {
 
         buttonGroup.option('width', 500);
 
-        let $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
         assert.equal(buttonGroup.$element().width(), 500, 'button group width');
         assert.ok($items.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'first item when button group has width');
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'second item when button group has width');
@@ -183,7 +183,7 @@ QUnit.module('option changed', {
             items: [{ text: 'button 1', width: 24, elementAttr: { class: 'test' }, customOption: 'Test option' }]
         });
         const buttonsSelector = `.${BUTTON_CLASS}`;
-        let button = $element.find(buttonsSelector).eq(0).dxButton('instance');
+        const button = $element.find(buttonsSelector).eq(0).dxButton('instance');
 
         assert.strictEqual(button.option('width'), 24, 'width is correct');
         assert.ok(button.$element().hasClass('test'), 'elementAttr is correct');
@@ -290,10 +290,10 @@ QUnit.module('Events', () => {
         [true, false].forEach((isItemDisabled) => {
             [true, false].forEach((isItemClickInInitialOption) => {
                 ['click', 'touch', 'space', 'enter'].forEach((eventName) => {
-                    let config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ''}`;
+                    const config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ''}`;
 
                     QUnit.test('Check onItemClick for' + config, function(assert) {
-                        let helper = new ButtonGroupEventsTestHelper(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
+                        const helper = new ButtonGroupEventsTestHelper(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
                         helper.createButtonGroup();
                         helper.performAction();
                         helper.checkAsserts(assert);

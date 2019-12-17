@@ -1,72 +1,72 @@
-var commonUtils = require('../../core/utils/common'),
-    noop = commonUtils.noop,
-    eventsEngine = require('../../events/core/events_engine'),
-    typeUtils = require('../../core/utils/type'),
-    iteratorModule = require('../../core/utils/iterator'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    eventUtils = require('../../events/utils'),
-    BaseWidget = require('../core/base_widget'),
-    coreDataUtils = require('../../core/utils/data'),
-    legendModule = require('../components/legend'),
-    dataValidatorModule = require('../components/data_validator'),
-    seriesModule = require('../series/base_series'),
-    chartThemeManagerModule = require('../components/chart_theme_manager'),
-    LayoutManagerModule = require('./layout_manager'),
-    trackerModule = require('./tracker'),
+const commonUtils = require('../../core/utils/common');
+const noop = commonUtils.noop;
+const eventsEngine = require('../../events/core/events_engine');
+const typeUtils = require('../../core/utils/type');
+const iteratorModule = require('../../core/utils/iterator');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const eventUtils = require('../../events/utils');
+const BaseWidget = require('../core/base_widget');
+const coreDataUtils = require('../../core/utils/data');
+const legendModule = require('../components/legend');
+const dataValidatorModule = require('../components/data_validator');
+const seriesModule = require('../series/base_series');
+const chartThemeManagerModule = require('../components/chart_theme_manager');
+const LayoutManagerModule = require('./layout_manager');
+const trackerModule = require('./tracker');
 
-    REINIT_REFRESH_ACTION = '_reinit',
-    REINIT_DATA_SOURCE_REFRESH_ACTION = '_updateDataSource',
-    DATA_INIT_REFRESH_ACTION = '_dataInit',
-    FORCE_RENDER_REFRESH_ACTION = '_forceRender',
-    RESIZE_REFRESH_ACTION = '_resize',
-    ACTIONS_BY_PRIORITY = [REINIT_REFRESH_ACTION, REINIT_DATA_SOURCE_REFRESH_ACTION, DATA_INIT_REFRESH_ACTION, FORCE_RENDER_REFRESH_ACTION, RESIZE_REFRESH_ACTION],
+const REINIT_REFRESH_ACTION = '_reinit';
+const REINIT_DATA_SOURCE_REFRESH_ACTION = '_updateDataSource';
+const DATA_INIT_REFRESH_ACTION = '_dataInit';
+const FORCE_RENDER_REFRESH_ACTION = '_forceRender';
+const RESIZE_REFRESH_ACTION = '_resize';
+const ACTIONS_BY_PRIORITY = [REINIT_REFRESH_ACTION, REINIT_DATA_SOURCE_REFRESH_ACTION, DATA_INIT_REFRESH_ACTION, FORCE_RENDER_REFRESH_ACTION, RESIZE_REFRESH_ACTION];
 
-    vizUtils = require('../core/utils'),
-    _map = vizUtils.map,
-    _each = iteratorModule.each,
-    _reverseEach = iteratorModule.reverseEach,
-    _isArray = Array.isArray,
-    _isDefined = typeUtils.isDefined,
-    _setCanvasValues = vizUtils.setCanvasValues,
-    DEFAULT_OPACITY = 0.3,
+const vizUtils = require('../core/utils');
+const _map = vizUtils.map;
+const _each = iteratorModule.each;
+const _reverseEach = iteratorModule.reverseEach;
+const _isArray = Array.isArray;
+const _isDefined = typeUtils.isDefined;
+const _setCanvasValues = vizUtils.setCanvasValues;
+const DEFAULT_OPACITY = 0.3;
 
-    REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
-        'series',
-        'commonSeriesSettings',
-        'dataPrepareSettings',
-        'seriesSelectionMode',
-        'pointSelectionMode',
-        'synchronizeMultiAxes',
-        'resolveLabelsOverlapping'
-    ],
+const REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
+    'series',
+    'commonSeriesSettings',
+    'dataPrepareSettings',
+    'seriesSelectionMode',
+    'pointSelectionMode',
+    'synchronizeMultiAxes',
+    'resolveLabelsOverlapping'
+];
 
-    REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
-        'equalBarWidth',
-        'minBubbleSize',
-        'maxBubbleSize',
-        'barWidth',
-        'barGroupPadding',
-        'barGroupWidth',
-        'negativesAsZeroes',
-        'negativesAsZeros' // misspelling case
-    ],
+const REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
+    'equalBarWidth',
+    'minBubbleSize',
+    'maxBubbleSize',
+    'barWidth',
+    'barGroupPadding',
+    'barGroupWidth',
+    'negativesAsZeroes',
+    'negativesAsZeros' // misspelling case
+];
 
-    FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
-        'adaptiveLayout',
-        'crosshair',
-        'resolveLabelOverlapping',
-        'adjustOnZoom',
-        'zoomingMode',
-        'scrollingMode',
-        'stickyHovering'
-    ],
+const FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
+    'adaptiveLayout',
+    'crosshair',
+    'resolveLabelOverlapping',
+    'adjustOnZoom',
+    'zoomingMode',
+    'scrollingMode',
+    'stickyHovering'
+];
 
-    FONT = 'font';
+const FONT = 'font';
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {
-    var canvasSize = stubCanvas.end - stubCanvas.start,
-        size = 0;
+    const canvasSize = stubCanvas.end - stubCanvas.start;
+    let size = 0;
     rollingStocks.forEach(function(rollingStock) {
         size += rollingStock.getBoundingRect().width;
     });
@@ -77,12 +77,12 @@ function checkHeightRollingStock(rollingStocks, stubCanvas) {
 }
 
 function findAndKillSmallValue(rollingStocks) {
-    var smallestObject,
-        width;
+    let smallestObject;
+    let width;
 
     smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
         if(!rollingStock) return prev;
-        var value = rollingStock.value();
+        const value = rollingStock.value();
         return value < prev.value ? {
             value: value,
             rollingStock: rollingStock,
@@ -102,11 +102,11 @@ function findAndKillSmallValue(rollingStocks) {
 }
 
 function checkStackOverlap(rollingStocks) {
-    var i,
-        j,
-        iLength,
-        jLength,
-        overlap = false;
+    let i;
+    let j;
+    let iLength;
+    let jLength;
+    let overlap = false;
 
     for(i = 0, iLength = rollingStocks.length - 1; i < iLength; i++) {
         for(j = i + 1, jLength = rollingStocks.length; j < jLength; j++) {
@@ -121,12 +121,12 @@ function checkStackOverlap(rollingStocks) {
 }
 
 function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction, customSorting = () => 0) {
-    var rollingStocks = [],
-        stubCanvas = {
-            start: isRotated ? canvas.left : canvas.top,
-            end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
-        },
-        hasStackedSeries = false;
+    const rollingStocks = [];
+    const stubCanvas = {
+        start: isRotated ? canvas.left : canvas.top,
+        end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
+    };
+    let hasStackedSeries = false;
 
     points.forEach(function(p) {
         if(!p) return;
@@ -140,7 +140,7 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     if(hasStackedSeries) {
         !isRotated && rollingStocks.reverse();
     } else {
-        var rollingStocksTmp = rollingStocks.slice();
+        const rollingStocksTmp = rollingStocks.slice();
         rollingStocks.sort(function(a, b) {
             return customSorting(a, b) || (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
@@ -158,17 +158,17 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
 
 function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
     if(!firstRolling || !secondRolling) return;
-    var firstRect = firstRolling.getBoundingRect(),
-        secondRect = secondRolling.getBoundingRect(),
-        oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
+    const firstRect = firstRolling.getBoundingRect();
+    const secondRect = secondRolling.getBoundingRect();
+    const oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
             (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)) : true;
     return firstRect.end > secondRect.start && oppositeOverlapping;
 }
 
 function prepareOverlapStacks(rollingStocks) {
-    var i,
-        currentRollingStock,
-        root;
+    let i;
+    let currentRollingStock;
+    let root;
 
     for(i = 0; i < rollingStocks.length - 1; i++) {
         currentRollingStock = root || rollingStocks[i];
@@ -183,11 +183,11 @@ function prepareOverlapStacks(rollingStocks) {
 }
 
 function moveRollingStock(rollingStocks, canvas) {
-    var i, j,
-        currentRollingStock,
-        nextRollingStock,
-        currentBBox,
-        nextBBox;
+    let i; let j;
+    let currentRollingStock;
+    let nextRollingStock;
+    let currentBBox;
+    let nextBBox;
 
     for(i = 0; i < rollingStocks.length; i++) {
         currentRollingStock = rollingStocks[i];
@@ -220,11 +220,11 @@ function rollingStocksIsOut(rollingStock, canvas) {
 }
 
 function RollingStock(label, isRotated, shiftFunction) {
-    var bBox = label.getBoundingRect(),
-        x = bBox.x,
-        y = bBox.y,
-        endX = bBox.x + bBox.width,
-        endY = bBox.y + bBox.height;
+    const bBox = label.getBoundingRect();
+    const x = bBox.x;
+    const y = bBox.y;
+    const endX = bBox.x + bBox.width;
+    const endY = bBox.y + bBox.height;
 
     this.labels = [label];
     this.shiftFunction = shiftFunction;
@@ -243,7 +243,7 @@ function RollingStock(label, isRotated, shiftFunction) {
 
 RollingStock.prototype = {
     toChain: function(nextRollingStock) {
-        var nextRollingStockBBox = nextRollingStock.getBoundingRect();
+        const nextRollingStockBBox = nextRollingStock.getBoundingRect();
 
         nextRollingStock.shift(nextRollingStockBBox.start - this._bBox.end);
 
@@ -254,10 +254,10 @@ RollingStock.prototype = {
         return this._bBox;
     },
     shift: function(shiftLength) {
-        var shiftFunction = this.shiftFunction;
+        const shiftFunction = this.shiftFunction;
         _each(this.labels, function(index, label) {
-            var bBox = label.getBoundingRect(),
-                coords = shiftFunction(bBox, shiftLength);
+            const bBox = label.getBoundingRect();
+            const coords = shiftFunction(bBox, shiftLength);
             if(!label.hideInsideLabel(coords)) {
                 label.shift(coords.x, coords.y);
             }
@@ -294,10 +294,10 @@ function getLegendFields(name) {
 }
 
 function getLegendSettings(legendDataField) {
-    var formatObjectFields = getLegendFields(legendDataField);
+    const formatObjectFields = getLegendFields(legendDataField);
     return {
         getFormatObject: function(data) {
-            var res = {};
+            const res = {};
             res[formatObjectFields.indexField] = data.id;
             res[formatObjectFields.colorField] = data.states.normal.fill;
             res[formatObjectFields.nameField] = data.text;
@@ -314,11 +314,11 @@ function checkOverlapping(firstRect, secondRect) {
             (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
 }
 
-var overlapping = {
+const overlapping = {
     resolveLabelOverlappingInOneDirection: resolveLabelOverlappingInOneDirection
 };
 
-var BaseChart = BaseWidget.inherit({
+const BaseChart = BaseWidget.inherit({
     _eventsMap: {
         onSeriesClick: { name: 'seriesClick' },
         onPointClick: { name: 'pointClick' },
@@ -344,22 +344,22 @@ var BaseChart = BaseWidget.inherit({
     _themeDependentChanges: ['REFRESH_SERIES_REINIT'],
 
     _getThemeManagerOptions() {
-        var themeOptions = this.callBase.apply(this, arguments);
+        const themeOptions = this.callBase.apply(this, arguments);
 
         themeOptions.options = this.option();
         return themeOptions;
     },
 
     _createThemeManager: function() {
-        var chartOption = this.option(),
-            themeManager = new chartThemeManagerModule.ThemeManager(this._getThemeManagerOptions());
+        const chartOption = this.option();
+        const themeManager = new chartThemeManagerModule.ThemeManager(this._getThemeManagerOptions());
 
         themeManager.setTheme(chartOption.theme, chartOption.rtlEnabled);
         return themeManager;
     },
 
     _initCore: function() {
-        var that = this;
+        const that = this;
         that._canvasClipRect = that._renderer.clipRect();
 
         that._createHtmlStructure();
@@ -409,13 +409,13 @@ var BaseChart = BaseWidget.inherit({
     _correctAxes: noop,
 
     _createHtmlStructure: function() {
-        var that = this,
-            renderer = that._renderer,
-            root = renderer.root,
-            createConstantLinesGroup = function() {
-                // TODO: Must be created in the same place where used (advanced chart)
-                return renderer.g().attr({ 'class': 'dxc-constant-lines-group' }).linkOn(root, 'constant-lines');
-            };
+        const that = this;
+        const renderer = that._renderer;
+        const root = renderer.root;
+        const createConstantLinesGroup = function() {
+            // TODO: Must be created in the same place where used (advanced chart)
+            return renderer.g().attr({ 'class': 'dxc-constant-lines-group' }).linkOn(root, 'constant-lines');
+        };
 
         that._constantLinesGroup = {
             dispose: function() {
@@ -468,18 +468,18 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _disposeCore: function() {
-        var that = this,
-            disposeObject = function(propName) {
-                // TODO: What is the purpose of the `if` check in a private function?
-                if(that[propName]) {
-                    that[propName].dispose();
-                    that[propName] = null;
-                }
-            },
-            unlinkGroup = function(name) {
-                that[name].linkOff();
-            },
-            disposeObjectsInArray = this._disposeObjectsInArray;
+        const that = this;
+        const disposeObject = function(propName) {
+            // TODO: What is the purpose of the `if` check in a private function?
+            if(that[propName]) {
+                that[propName].dispose();
+                that[propName] = null;
+            }
+        };
+        const unlinkGroup = function(name) {
+            that[name].linkOff();
+        };
+        const disposeObjectsInArray = this._disposeObjectsInArray;
 
         that._renderer.stopAllAnimations();
 
@@ -564,7 +564,7 @@ var BaseChart = BaseWidget.inherit({
     _trackerType: 'ChartTracker',
 
     _createTracker: function() {
-        var that = this;
+        const that = this;
 
         that._tracker = new trackerModule[that._trackerType]({
             seriesGroup: that._seriesGroup,
@@ -580,7 +580,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _getSelectionModes: function() {
-        var themeManager = this._themeManager;
+        const themeManager = this._themeManager;
 
         return {
             seriesSelectionMode: themeManager.getOptions('seriesSelectionMode'),
@@ -589,7 +589,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _updateTracker: function(trackerCanvases) {
-        var that = this;
+        const that = this;
 
         that._tracker.update(that._getTrackerSettings());
         that._tracker.setCanvases({
@@ -613,9 +613,9 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _doRender: function(_options) {
-        var that = this,
-            drawOptions,
-            recreateCanvas;
+        const that = this;
+        let drawOptions;
+        let recreateCanvas;
 
         if(that._canvas.width === 0 && that._canvas.height === 0) return;
 
@@ -657,15 +657,15 @@ var BaseChart = BaseWidget.inherit({
     _layoutAxes: noop,
 
     _renderElements: function(drawOptions) {
-        var that = this,
-            preparedOptions = that._prepareToRender(drawOptions),
-            isRotated = that._isRotated(),
-            isLegendInside = that._isLegendInside(),
-            trackerCanvases = [],
-            dirtyCanvas = extend({}, that._canvas),
-            argBusinessRange,
-            zoomMinArg,
-            zoomMaxArg;
+        const that = this;
+        const preparedOptions = that._prepareToRender(drawOptions);
+        const isRotated = that._isRotated();
+        const isLegendInside = that._isLegendInside();
+        const trackerCanvases = [];
+        const dirtyCanvas = extend({}, that._canvas);
+        let argBusinessRange;
+        let zoomMinArg;
+        let zoomMaxArg;
 
         ///#DEBUG
         that.DEBUG_dirtyCanvas = dirtyCanvas;
@@ -743,12 +743,12 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {
-        var that = this,
-            i,
-            series = that.series,
-            singleSeries,
-            seriesLength = series.length,
-            resolveLabelOverlapping = that._themeManager.getOptions('resolveLabelOverlapping');
+        const that = this;
+        let i;
+        const series = that.series;
+        let singleSeries;
+        const seriesLength = series.length;
+        const resolveLabelOverlapping = that._themeManager.getOptions('resolveLabelOverlapping');
 
         for(i = 0; i < seriesLength; i++) {
             singleSeries = series[i];
@@ -789,7 +789,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _resolveLabelOverlapping: function(resolveLabelOverlapping) {
-        var func;
+        let func;
         switch(resolveLabelOverlapping) {
             case 'stack':
                 func = this._resolveLabelOverlappingStack;
@@ -809,15 +809,15 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _resolveLabelOverlappingHide: function() {
-        var labels = [],
-            currentLabel,
-            nextLabel,
-            currentLabelRect,
-            nextLabelRect,
-            i,
-            j,
-            points,
-            series = this._getVisibleSeries();
+        const labels = [];
+        let currentLabel;
+        let nextLabel;
+        let currentLabelRect;
+        let nextLabelRect;
+        let i;
+        let j;
+        let points;
+        const series = this._getVisibleSeries();
 
         for(i = 0; i < series.length; i++) {
             points = series[i].getVisiblePoints();
@@ -846,7 +846,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _cleanGroups: function() {
-        var that = this;
+        const that = this;
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
@@ -865,8 +865,8 @@ var BaseChart = BaseWidget.inherit({
     _updateLegendPosition: noop,
 
     _createLegend: function() {
-        var that = this,
-            legendSettings = getLegendSettings(that._legendDataField);
+        const that = this;
+        const legendSettings = getLegendSettings(that._legendDataField);
 
         that._legend = new legendModule.Legend({
             renderer: that._renderer,
@@ -886,10 +886,10 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _updateLegend: function() {
-        var that = this,
-            themeManager = that._themeManager,
-            legendOptions = themeManager.getOptions('legend'),
-            legendData = that._getLegendData();
+        const that = this;
+        const themeManager = that._themeManager;
+        const legendOptions = themeManager.getOptions('legend');
+        const legendData = that._getLegendData();
 
         legendOptions.containerBackgroundColor = themeManager.getOptions('containerBackgroundColor');
         legendOptions._incidentOccurred = that._incidentOccurred; // TODO: Why is `_` used?
@@ -898,8 +898,8 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _prepareDrawOptions: function(drawOptions) {
-        var animationOptions = this._getAnimationOptions(),
-            options;
+        const animationOptions = this._getAnimationOptions();
+        let options;
         options = extend({},
             {
                 force: false,
@@ -917,8 +917,8 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _processRefreshData: function(newRefreshAction) {
-        var currentRefreshActionPosition = inArray(this._currentRefreshData, ACTIONS_BY_PRIORITY),
-            newRefreshActionPosition = inArray(newRefreshAction, ACTIONS_BY_PRIORITY);
+        const currentRefreshActionPosition = inArray(this._currentRefreshData, ACTIONS_BY_PRIORITY);
+        const newRefreshActionPosition = inArray(newRefreshAction, ACTIONS_BY_PRIORITY);
         if(!this._currentRefreshData || (currentRefreshActionPosition >= 0 && newRefreshActionPosition < currentRefreshActionPosition)) {
             this._currentRefreshData = newRefreshAction;
             // this._invalidate();
@@ -929,9 +929,9 @@ var BaseChart = BaseWidget.inherit({
 
     _getLegendData: function() {
         return _map(this._getLegendTargets(), function(item) {
-            var legendData = item.legendData,
-                style = item.getLegendStyles,
-                opacity = style.normal.opacity;
+            const legendData = item.legendData;
+            const style = item.getLegendStyles;
+            let opacity = style.normal.opacity;
 
             if(!item.visible) {
                 if(!_isDefined(opacity) || opacity > DEFAULT_OPACITY) {
@@ -1124,7 +1124,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _doRefresh: function() {
-        var methodName = this._currentRefreshData;
+        const methodName = this._currentRefreshData;
         if(methodName) {
             this._currentRefreshData = null;
             this._renderer.stopAllAnimations(true);
@@ -1133,9 +1133,9 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _updateCanvasClipRect: function(canvas) {
-        var that = this,
-            width,
-            height;
+        const that = this;
+        let width;
+        let height;
 
         width = Math.max(canvas.width - canvas.left - canvas.right, 0);
         height = Math.max(canvas.height - canvas.top - canvas.bottom, 0);
@@ -1193,12 +1193,12 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _repopulateSeries: function() {
-        var that = this,
-            parsedData,
-            themeManager = that._themeManager,
-            data = that._dataSourceItems(),
-            dataValidatorOptions = themeManager.getOptions('dataPrepareSettings'),
-            seriesTemplate = themeManager.getOptions('seriesTemplate');
+        const that = this;
+        let parsedData;
+        const themeManager = that._themeManager;
+        const data = that._dataSourceItems();
+        const dataValidatorOptions = themeManager.getOptions('dataPrepareSettings');
+        const seriesTemplate = themeManager.getOptions('seriesTemplate');
 
         if(seriesTemplate) {
             that._populateSeries(data);
@@ -1216,8 +1216,8 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _renderCompleteHandler: function() {
-        var that = this,
-            allSeriesInited = true;
+        const that = this;
+        let allSeriesInited = true;
         if(that._needHandleRenderComplete) {
             _each(that.series, function(_, s) {
                 allSeriesInited = (allSeriesInited && s.canRenderCompleteHandle());
@@ -1244,7 +1244,7 @@ var BaseChart = BaseWidget.inherit({
         const extraOptions = that._getExtraOptions();
         let particularSeriesOptions;
         let seriesTheme;
-        let seriesThemes = [];
+        const seriesThemes = [];
         const seriesVisibilityChanged = (target) => {
             that._specialProcessSeries();
             that._populateBusinessRange(target && target.getValueAxis(), true);
@@ -1280,7 +1280,7 @@ var BaseChart = BaseWidget.inherit({
         const that = this;
         const seriesBasis = [];
         const incidentOccurred = that._incidentOccurred;
-        let seriesThemes = that._populateSeriesOptions(data);
+        const seriesThemes = that._populateSeriesOptions(data);
         let particularSeries;
         let disposeSeriesFamilies = false;
 
@@ -1319,8 +1319,8 @@ var BaseChart = BaseWidget.inherit({
         };
 
         _each(seriesBasis, (_, basis) => {
-            let seriesTheme = basis.options;
-            let renderSettings = {
+            const seriesTheme = basis.options;
+            const renderSettings = {
                 commonSeriesModes: that._getSelectionModes(),
                 argumentAxis: that.getArgumentAxis(),
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
@@ -1365,7 +1365,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     getSeriesByName: function getSeriesByName(name) {
-        var found = null;
+        let found = null;
         _each(this.series, function(i, singleSeries) {
             if(singleSeries.name === name) {
                 found = singleSeries;
@@ -1392,7 +1392,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     render: function(renderOptions) {
-        var that = this;
+        const that = this;
         that.__renderOptions = renderOptions;
         that.__forceRender = renderOptions && renderOptions.force;
         that.callBase.apply(that, arguments);
@@ -1456,7 +1456,7 @@ BaseChart.addPlugin(require('../core/loading_indicator').plugin);
 BaseChart.addPlugin(require('../core/data_source').plugin);
 
 // These are charts specifics on using title - they cannot be omitted because of charts custom layout.
-var _change_TITLE = BaseChart.prototype._change_TITLE;
+const _change_TITLE = BaseChart.prototype._change_TITLE;
 BaseChart.prototype._change_TITLE = function() {
     _change_TITLE.apply(this, arguments);
     this._change(['FORCE_RENDER']);

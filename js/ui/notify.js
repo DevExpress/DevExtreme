@@ -1,17 +1,17 @@
-var $ = require('../core/renderer'),
-    Action = require('../core/action'),
-    viewPortUtils = require('../core/utils/view_port'),
-    extend = require('../core/utils/extend').extend,
-    isPlainObject = require('../core/utils/type').isPlainObject,
-    Toast = require('./toast');
+const $ = require('../core/renderer');
+const Action = require('../core/action');
+const viewPortUtils = require('../core/utils/view_port');
+const extend = require('../core/utils/extend').extend;
+const isPlainObject = require('../core/utils/type').isPlainObject;
+const Toast = require('./toast');
 
 
-var $notify = null;
+let $notify = null;
 
-var notify = function(message, /* optional */ type, displayTime) {
-    var options = isPlainObject(message) ? message : { message: message };
+const notify = function(message, /* optional */ type, displayTime) {
+    const options = isPlainObject(message) ? message : { message: message };
 
-    var userHiddenAction = options.onHidden;
+    const userHiddenAction = options.onHidden;
 
     extend(options, {
         type: type,

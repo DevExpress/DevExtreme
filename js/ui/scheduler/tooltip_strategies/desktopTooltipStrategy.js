@@ -58,8 +58,8 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     onListRendered(e) {
-        let dragElement,
-            $element = $(e.element);
+        let dragElement;
+        const $element = $(e.element);
 
         if(this.scheduler._allowDragging()) {
             const dragBehavior = this._getWorkspaceInstance().dragBehavior;
@@ -79,8 +79,8 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                     return dragElement;
                 },
                 onDragStart: (e) => {
-                    const event = e.event,
-                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                    const event = e.event;
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
                     if(itemData) {
                         event.data = event.data || {};
@@ -211,8 +211,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     }
 
     _isAppointmentInAllDayPanel(appointmentData) {
-        const workSpace = this.scheduler._workSpace,
-            itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
+        const workSpace = this.scheduler._workSpace;
+        const itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
 
         return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
     }

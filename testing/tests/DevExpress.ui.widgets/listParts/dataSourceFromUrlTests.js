@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    List = require('ui/list'),
-    ajaxMock = require('../../../helpers/ajaxMock.js');
+const $ = require('jquery');
+const List = require('ui/list');
+const ajaxMock = require('../../../helpers/ajaxMock.js');
 
 QUnit.module(
     'data source from url',
@@ -10,7 +10,7 @@ QUnit.module(
         }
     },
     function() {
-        var TEST_URL = '/a3211c1d-c725-4185-acc0-0a59a4152aae';
+        const TEST_URL = '/a3211c1d-c725-4185-acc0-0a59a4152aae';
 
         function setupAjaxMock(responseFactory) {
             ajaxMock.setup({
@@ -26,9 +26,9 @@ QUnit.module(
         }
 
         QUnit.test('list refresh', function(assert) {
-            var done = assert.async(),
-                dataVersion = 1,
-                list;
+            const done = assert.async();
+            let dataVersion = 1;
+            let list;
 
             appendWidgetContainer();
             setupAjaxMock(function() {
@@ -61,10 +61,10 @@ QUnit.module(
         });
 
         QUnit.test('list search', function(assert) {
-            var done = assert.async(),
-                list,
-                itemRenderedCount = 0,
-                searching = false;
+            const done = assert.async();
+            let list;
+            let itemRenderedCount = 0;
+            let searching = false;
 
             appendWidgetContainer();
             setupAjaxMock(function() {
@@ -80,7 +80,7 @@ QUnit.module(
                 if(!searching) {
                     itemRenderedCount++;
                     if(itemRenderedCount === 2) {
-                        var source = list.getDataSource();
+                        const source = list.getDataSource();
                         source.searchExpr('this');
                         source.searchValue('z');
 

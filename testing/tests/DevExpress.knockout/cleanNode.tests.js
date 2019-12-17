@@ -1,25 +1,25 @@
 require('integration/knockout');
 
-var $ = require('jquery'),
-    ko = require('knockout'),
-    dataUtils = require('core/element_data');
+const $ = require('jquery');
+const ko = require('knockout');
+const dataUtils = require('core/element_data');
 
-var FIXTURE_ELEMENT = $('#qunit-fixture');
+const FIXTURE_ELEMENT = $('#qunit-fixture');
 
-var setTestData = function($element) {
+const setTestData = function($element) {
     dataUtils.data($element.get(0), '__test_key__', { key: 'value' });
     ko.utils.domData.set($element.get(0), '__test_key__', { key: 'value ' });
 };
 
-var hasKOTestData = function($element) {
+const hasKOTestData = function($element) {
     return ko.utils.domData.get($element.get(0), '__test_key__');
 };
 
-var hasJQueryTestData = function($element) {
+const hasJQueryTestData = function($element) {
     return dataUtils.data($element.get(0), '__test_key__');
 };
 
-var checkHasNoTestData = function($element, assert) {
+const checkHasNoTestData = function($element, assert) {
     assert.ok(!hasKOTestData($element), 'element has no KO data');
     assert.ok(!hasJQueryTestData($element), 'element has no $ data');
 };
@@ -40,7 +40,7 @@ QUnit.test('by $.remove', function(assert) {
 });
 
 QUnit.test('by $.empty', function(assert) {
-    var $childElement = $('<div>').appendTo(this.$element);
+    const $childElement = $('<div>').appendTo(this.$element);
 
     setTestData($childElement);
     this.$element.empty();
@@ -48,7 +48,7 @@ QUnit.test('by $.empty', function(assert) {
 });
 
 QUnit.test('by $.html', function(assert) {
-    var $childElement = $('<div>').appendTo(this.$element);
+    const $childElement = $('<div>').appendTo(this.$element);
 
     setTestData($childElement);
     this.$element.html('123');
@@ -57,7 +57,7 @@ QUnit.test('by $.html', function(assert) {
 
 // T266920
 QUnit.test('by $.replaceWith', function(assert) {
-    var $childElement = $('<div>').appendTo(this.$element);
+    const $childElement = $('<div>').appendTo(this.$element);
 
     setTestData($childElement);
     this.$element.replaceWith($('<div>'));
@@ -65,7 +65,7 @@ QUnit.test('by $.replaceWith', function(assert) {
 });
 
 QUnit.test('by ko.cleanNode', function(assert) {
-    var $childElement = $('<div>').appendTo(this.$element);
+    const $childElement = $('<div>').appendTo(this.$element);
 
     setTestData($childElement);
     ko.cleanNode(this.$element.get(0));
@@ -73,7 +73,7 @@ QUnit.test('by ko.cleanNode', function(assert) {
 });
 
 QUnit.test('by ko.removeNode', function(assert) {
-    var $childElement = $('<div>').appendTo(this.$element);
+    const $childElement = $('<div>').appendTo(this.$element);
 
     setTestData($childElement);
     ko.removeNode(this.$element.get(0));
@@ -82,7 +82,7 @@ QUnit.test('by ko.removeNode', function(assert) {
 
 if($.fn.jquery[0] !== '1') {
     QUnit.test('by ko.removeNode - cleanNode & cleanData should be called once per node', function(assert) {
-        var markup = $(
+        const markup = $(
             '<div id=\'i0\'>0' +
                 '<div id=\'i00\'>00</div>' +
                 '<div id=\'i01\'>01' +
@@ -96,17 +96,17 @@ if($.fn.jquery[0] !== '1') {
             ko.utils.domData.set(this, 'dxTestData', true);
         });
 
-        var cleanDataLog = [],
-            dataUtilsStrategy = dataUtils.getDataStrategy(),
-            originalCleanData = dataUtilsStrategy.cleanData;
+        const cleanDataLog = [];
+        const dataUtilsStrategy = dataUtils.getDataStrategy();
+        const originalCleanData = dataUtilsStrategy.cleanData;
 
         dataUtilsStrategy.cleanData = function(nodes) {
             cleanDataLog.push.apply(cleanDataLog, nodes);
             return originalCleanData.apply(this, arguments);
         };
 
-        var domDataClearLog = [],
-            originalDomDataClear = ko.utils.domData.clear;
+        const domDataClearLog = [];
+        const originalDomDataClear = ko.utils.domData.clear;
         ko.utils.domData.clear = function(node) {
             domDataClearLog.push(node);
             return originalDomDataClear.apply(this, arguments);
@@ -128,7 +128,7 @@ if($.fn.jquery[0] !== '1') {
     });
 
     QUnit.test('by $.remove - cleanNode & cleanData should be called once per node', function(assert) {
-        var markup = $(
+        const markup = $(
             '<div id=\'i0\'>0' +
                 '<div id=\'i00\'>00</div>' +
                 '<div id=\'i01\'>01' +
@@ -142,17 +142,17 @@ if($.fn.jquery[0] !== '1') {
             ko.utils.domData.set(this, 'dxTestData', true);
         });
 
-        var cleanDataLog = [],
-            dataUtilsStrategy = dataUtils.getDataStrategy(),
-            originalCleanData = dataUtilsStrategy.cleanData;
+        const cleanDataLog = [];
+        const dataUtilsStrategy = dataUtils.getDataStrategy();
+        const originalCleanData = dataUtilsStrategy.cleanData;
 
         dataUtilsStrategy.cleanData = function(nodes) {
             cleanDataLog.push.apply(cleanDataLog, nodes);
             return originalCleanData.apply(this, arguments);
         };
 
-        var domDataClearLog = [],
-            originalDomDataClear = ko.utils.domData.clear;
+        const domDataClearLog = [];
+        const originalDomDataClear = ko.utils.domData.clear;
         ko.utils.domData.clear = function(node) {
             domDataClearLog.push(node);
             return originalDomDataClear.apply(this, arguments);
@@ -176,7 +176,7 @@ if($.fn.jquery[0] !== '1') {
 }
 
 QUnit.test('by $.remove - second dom element removing should lead to data disposing', function(assert) {
-    var $element = this.$element
+    const $element = this.$element
         .data('test1', true)
         .remove()
         .appendTo(FIXTURE_ELEMENT);
@@ -191,7 +191,7 @@ QUnit.test('by $.remove - second dom element removing should lead to data dispos
 });
 
 QUnit.test('by ko.removeNode - second dom element removing should lead to data disposing', function(assert) {
-    var $element = this.$element.data('test1', true);
+    const $element = this.$element.data('test1', true);
 
     ko.utils.domData.set($element.get(0), 'test1', true);
     ko.removeNode($element.get(0));

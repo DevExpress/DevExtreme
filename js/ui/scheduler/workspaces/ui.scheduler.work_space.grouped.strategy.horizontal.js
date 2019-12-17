@@ -1,10 +1,10 @@
-var GroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy');
+const GroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy');
 
-var HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
+const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
 
-var HorizontalGroupedStrategy = GroupedStrategy.inherit({
+const HorizontalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDay) {
-        var groupByDay = this._workSpace.isGroupedByDate();
+        const groupByDay = this._workSpace.isGroupedByDate();
 
         if(!groupByDay) {
             return {
@@ -26,8 +26,8 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupIndex: function(rowIndex, cellIndex) {
-        var groupByDay = this._workSpace.isGroupedByDate(),
-            groupCount = this._workSpace._getGroupCount();
+        const groupByDay = this._workSpace.isGroupedByDate();
+        const groupCount = this._workSpace._getGroupCount();
 
         if(groupByDay) {
             return cellIndex % groupCount;
@@ -61,7 +61,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     _addLastGroupCellClass: function(cellClass, index) {
-        var groupByDay = this._workSpace.option('groupByDate');
+        const groupByDay = this._workSpace.option('groupByDate');
 
         if(groupByDay) {
             if(index % this._workSpace._getGroupCount() === 0) {
@@ -120,11 +120,11 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
-        var groupIndex,
-            cellIndex,
-            startCellIndex,
-            startOffset,
-            endOffset;
+        let groupIndex;
+        let cellIndex;
+        let startCellIndex;
+        let startOffset;
+        let endOffset;
 
         if(this._workSpace.isGroupedByDate()) {
             startCellIndex = 0;
@@ -149,15 +149,15 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     shiftIndicator: function($indicator, height, rtlOffset, i) {
-        var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i,
-            horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+        const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i;
+        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
 
         $indicator.css('left', horizontalOffset);
         $indicator.css('top', height);
     },
 
     getShaderOffset: function(i, width) {
-        var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
+        const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
         return this._workSpace.option('rtlEnabled') ? this._workSpace._dateTableScrollable.$content().get(0).getBoundingClientRect().width - offset - this._workSpace.getTimePanelWidth() - width : offset;
     },
 
@@ -166,7 +166,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getShaderHeight: function() {
-        var height = this._workSpace.getIndicationHeight();
+        const height = this._workSpace.getIndicationHeight();
 
         return height;
     },

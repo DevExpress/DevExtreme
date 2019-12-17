@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    angular = require('angular'),
-    registerComponent = require('core/component_registrator'),
-    DOMComponent = require('core/dom_component'),
-    Widget = require('ui/widget/ui.widget'),
-    config = require('core/config'),
-    inflector = require('core/utils/inflector'),
-    fx = require('animation/fx'),
-    positionUtils = require('animation/position'),
-    ValidationGroup = require('ui/validation_group');
+const $ = require('jquery');
+const angular = require('angular');
+const registerComponent = require('core/component_registrator');
+const DOMComponent = require('core/dom_component');
+const Widget = require('ui/widget/ui.widget');
+const config = require('core/config');
+const inflector = require('core/utils/inflector');
+const fx = require('animation/fx');
+const positionUtils = require('animation/position');
+const ValidationGroup = require('ui/validation_group');
 
 require('common.css!');
 require('generic_light.css!');
@@ -27,14 +27,14 @@ require('ui/tabs');
 require('ui/text_box');
 require('ui/toolbar');
 
-var FILTERING_TIMEOUT = 700;
+const FILTERING_TIMEOUT = 700;
 
 fx.off = true;
-var ignoreAngularBrowserDeferTimer = function(args) {
+const ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
 };
 
-var initMarkup = function($markup, controller, context) {
+const initMarkup = function($markup, controller, context) {
     context.testApp = angular.module('testApp', ['dx']);
     context.$fixtureElement = $('<div/>').attr('ng-app', 'testApp').appendTo('#qunit-fixture');
     context.$container = context.$fixtureElement;
@@ -69,9 +69,9 @@ QUnit.module('Widgets with async templates', {
 });
 
 QUnit.test('dxPopup', function(assert) {
-    var originalPositionSetup = positionUtils.setup;
+    const originalPositionSetup = positionUtils.setup;
 
-    var contentHeight;
+    let contentHeight;
 
     positionUtils.setup = function($content, position) {
         contentHeight = $content.find('.dx-popup-content').height();
@@ -79,7 +79,7 @@ QUnit.test('dxPopup', function(assert) {
         originalPositionSetup($content, position);
     };
 
-    var $markup = $('\
+    const $markup = $('\
         <div dx-popup=\'popupOptions\'>\
             <div data-options=\'dxTemplate: { name: "custom" }\' style=\'line-height: 18px\'>\
                 {{VeryVeryVeryLongField.value1}}\
@@ -88,7 +88,7 @@ QUnit.test('dxPopup', function(assert) {
         </div>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.VeryVeryVeryLongField = {
             'value1': 'short',
             'value2': 'field'
@@ -117,7 +117,7 @@ QUnit.test('dxPopup', function(assert) {
 });
 
 QUnit.test('dxPopover', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <a id="link1">testLink</a>\
         <div id="popover" dx-popover=\'popoverOptions\'>\
             <div data-options=\'dxTemplate: { name: "content" }\' style=\'line-height: 18px\'>\
@@ -126,7 +126,7 @@ QUnit.test('dxPopover', function(assert) {
         </div>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.popoverOptions = {
             target: '#link1',
             animation: null,
@@ -146,7 +146,7 @@ QUnit.test('dxPopover', function(assert) {
 });
 
 QUnit.test('dxDataGrid', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div dx-data-grid=\'dataGridOptions\' dx-item-alias=\'alias\'></div>\
         <script id=\'gridRow\' type=\'text/html\'>\
             <tbody>\
@@ -158,7 +158,7 @@ QUnit.test('dxDataGrid', function(assert) {
         </script>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.dataGridOptions = {
             dataSource: [{
                 'Column1': 'Value1',
@@ -175,13 +175,13 @@ QUnit.test('dxDataGrid', function(assert) {
 
     this.clock.tick(30);
 
-    var $cols = $('.dx-datagrid-rowsview col');
+    const $cols = $('.dx-datagrid-rowsview col');
     assert.roughEqual(parseInt($cols[0].style.width), 100, 1.01);
     assert.roughEqual(parseInt($cols[1].style.width), 100, 1.01);
 });
 
 QUnit.test('dxDataGrid - search with row template should highlight data without template (T539633)', function(assert) {
-    var $markup = $(
+    const $markup = $(
         '<div dx-data-grid="gridOptions" dx-item-alias="employee"></div>\
         <script id="gridRow" type="text/html">\
             <tbody>\
@@ -191,7 +191,7 @@ QUnit.test('dxDataGrid - search with row template should highlight data without 
             </tbody>\
         </script>'
     );
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [{
                 column1: 'text.1'
@@ -218,7 +218,7 @@ QUnit.test('dxDataGrid - highlight timer was cleared on disposing for dataGrid w
     assert.expect(0);
     this.clock.restore();
 
-    var $markup = $(
+    const $markup = $(
         '<div dx-data-grid="gridOptions" dx-item-alias="employee"></div>\
         <script id="gridRow" type="text/html">\
             <tbody>\
@@ -228,7 +228,7 @@ QUnit.test('dxDataGrid - highlight timer was cleared on disposing for dataGrid w
             </tbody>\
         </script>'
     );
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [{ column1: 'text.1' }],
             rowTemplate: $('#gridRow')
@@ -239,7 +239,7 @@ QUnit.test('dxDataGrid - highlight timer was cleared on disposing for dataGrid w
 });
 
 QUnit.test('dxDataGrid - search with cell template should highlight data without template (T554034)', function(assert) {
-    var $markup = $(
+    const $markup = $(
         '<div dx-data-grid="gridOptions" dx-item-alias="item">\
             <div data-options="dxTemplate:{ name: \'cellTemplate\' }">\
                 <span class="mycell">{{item.data.column1}}</span>\
@@ -247,7 +247,7 @@ QUnit.test('dxDataGrid - search with cell template should highlight data without
         </div>'
     );
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [{
                 column1: 'text1'
@@ -277,14 +277,14 @@ QUnit.test('dxDataGrid - highlight timer was cleared on disposing for dataGrid w
     assert.expect(0);
     this.clock.restore();
 
-    var $markup = $(
+    const $markup = $(
         '<div dx-data-grid="gridOptions" dx-item-alias="item">\
             <div data-options="dxTemplate:{ name: \'cellTemplate\' }">\
                 <span class="mycell">{{item.data.column1}}</span>\
             </div>\
         </div>'
     );
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [{ column1: 'text1' }],
             columns: [{
@@ -299,7 +299,7 @@ QUnit.test('dxDataGrid - highlight timer was cleared on disposing for dataGrid w
 
 // T576310
 QUnit.test('dxDataGrid - row template should rendered correctly with grouping', function(assert) {
-    var $markup = $(
+    const $markup = $(
         '<div dx-data-grid="gridOptions" dx-item-alias="employee"></div>\
         <script id="gridRow" type="text/html">\
             <tr class="myrow">\
@@ -307,7 +307,7 @@ QUnit.test('dxDataGrid - row template should rendered correctly with grouping', 
             </tr>\
         </script>'
     );
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [{
                 value: 'text1'
@@ -322,7 +322,7 @@ QUnit.test('dxDataGrid - row template should rendered correctly with grouping', 
     initMarkup($markup, controller, this);
     this.clock.tick(30);
 
-    var $rows = $('.dx-datagrid-rowsview tbody > tr');
+    const $rows = $('.dx-datagrid-rowsview tbody > tr');
 
     assert.equal($rows.length, 5);
     assert.ok($rows.eq(0).hasClass('dx-group-row'));
@@ -330,9 +330,9 @@ QUnit.test('dxDataGrid - row template should rendered correctly with grouping', 
 });
 
 QUnit.test('dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)', function(assert) {
-    var $markup = $('<div dx-tabs=\'tabSettings\'></div>');
+    const $markup = $('<div dx-tabs=\'tabSettings\'></div>');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.tabs = [
             { text: 'item1', visible: true },
             { text: 'item2', visible: true }
@@ -349,7 +349,7 @@ QUnit.test('dxTabs - navigation buttons should show/hide after showing/hiding it
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     this.clock.tick();
     assert.equal($markup.find('.dx-tabs-nav-button').length, 2);
@@ -382,13 +382,13 @@ QUnit.module('dxDataGrid', {
 });
 
 function calcWatchersCount(element) {
-    var root = angular.element(element || document.getElementsByTagName('body'));
+    const root = angular.element(element || document.getElementsByTagName('body'));
 
-    var watchers = [];
+    const watchers = [];
 
     var f = function(element) {
         angular.forEach(['$scope', '$isolateScope'], function(scopeProperty) {
-            var elementData = element.data();
+            const elementData = element.data();
             if(elementData && Object.prototype.hasOwnProperty.call(elementData, scopeProperty)) {
                 angular.forEach(element.data()[scopeProperty].$$watchers, function(watcher) {
                     watchers.push(watcher);
@@ -407,11 +407,11 @@ function calcWatchersCount(element) {
 }
 
 QUnit.test('Two-way binding', function(assert) {
-    var initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
+    const initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
 
-    var $markup = $('<div dx-data-grid="gridOptions"></div>');
+    const $markup = $('<div dx-data-grid="gridOptions"></div>');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [
                 { field1: 1, field2: 2 },
@@ -422,11 +422,11 @@ QUnit.test('Two-way binding', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     this.clock.tick(30);
 
-    var $rows = $markup.find('.dx-data-row');
+    let $rows = $markup.find('.dx-data-row');
     assert.equal($rows.length, 2, 'row count');
     assert.equal($rows.eq(0).children().eq(0).text(), '1');
     assert.equal($rows.eq(1).children().eq(0).text(), '3');
@@ -446,10 +446,10 @@ QUnit.test('Two-way binding', function(assert) {
 
 // T285727
 QUnit.test('Two-way binding when columnFixing', function(assert) {
-    var initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
+    const initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
 
-    var $markup = $('<div dx-data-grid="gridOptions"></div>');
-    var controller = function($scope) {
+    const $markup = $('<div dx-data-grid="gridOptions"></div>');
+    const controller = function($scope) {
         $scope.gridOptions = {
             columns: [{ dataField: 'field1', fixed: true }, 'field2'],
             dataSource: [
@@ -461,11 +461,11 @@ QUnit.test('Two-way binding when columnFixing', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     this.clock.tick(30);
 
-    var $rows = $markup.find('.dx-datagrid-content-fixed .dx-data-row');
+    let $rows = $markup.find('.dx-datagrid-content-fixed .dx-data-row');
     assert.equal($rows.length, 2, 'row count');
     assert.equal($rows.eq(0).children().eq(0).text(), '1');
     assert.equal($rows.eq(1).children().eq(0).text(), '3');
@@ -485,10 +485,10 @@ QUnit.test('Two-way binding when columnFixing', function(assert) {
 
 // T352960
 QUnit.test('Two-way binding does not work for inserted rows', function(assert) {
-    var initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
+    const initialWatchersCount = 1; // NOTE: One uncleared watcher created for dxDigestCallbacks service
 
-    var $markup = $('<div dx-data-grid="gridOptions"></div>');
-    var controller = function($scope) {
+    const $markup = $('<div dx-data-grid="gridOptions"></div>');
+    const controller = function($scope) {
         $scope.gridOptions = {
             onInitialized: function(e) {
                 $scope.grid = e.component;
@@ -503,7 +503,7 @@ QUnit.test('Two-way binding does not work for inserted rows', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     this.clock.tick(30);
 
@@ -513,16 +513,16 @@ QUnit.test('Two-way binding does not work for inserted rows', function(assert) {
     });
 
     // assert
-    var $rows = $markup.find('.dx-data-row');
+    const $rows = $markup.find('.dx-data-row');
     assert.equal($rows.length, 3, 'row count');
     assert.equal(calcWatchersCount(), initialWatchersCount + 2, 'watchers count. Inserted row is ignored');
 });
 
 // T429370
 QUnit.test('Assign selectedRowKeys option via binding', function(assert) {
-    var $markup = $('<div dx-data-grid="gridOptions"></div>');
+    const $markup = $('<div dx-data-grid="gridOptions"></div>');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.gridOptions = {
             bindingOptions: {
                 'selectedRowKeys': 'selectedRowKeys'
@@ -543,7 +543,7 @@ QUnit.test('Assign selectedRowKeys option via binding', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     this.clock.tick(30);
     // act
@@ -553,15 +553,15 @@ QUnit.test('Assign selectedRowKeys option via binding', function(assert) {
     });
 
     // assert
-    var $selectedRows = $markup.find('.dx-data-row.dx-selection');
+    const $selectedRows = $markup.find('.dx-data-row.dx-selection');
     assert.equal($selectedRows.length, 1, 'one row is selected');
     assert.notEqual(scope.selectedRowKeysInstance, scope.selectedRowKeys, 'selectedRowKeys instance is not changed');
 });
 
 // T427432
 QUnit.test('Change selection.mode option via binding and refresh', function(assert) {
-    var $markup = $('<div id="grid" dx-data-grid="gridOptions"></div>');
-    var controller = function($scope) {
+    const $markup = $('<div id="grid" dx-data-grid="gridOptions"></div>');
+    const controller = function($scope) {
         $scope.gridOptions = {
             onInitialized: function(e) {
                 $scope.grid = e.component;
@@ -583,7 +583,7 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     this.clock.tick(30);
 
@@ -610,10 +610,10 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
 
 
 QUnit.test('Scope refreshing count on init', function(assert) {
-    var $markup = $('<div dx-data-grid="gridOptions"></div> <div>{{ calculateValue() }}</div>');
+    const $markup = $('<div dx-data-grid="gridOptions"></div> <div>{{ calculateValue() }}</div>');
 
-    var refreshingCount = 0;
-    var controller = function($scope) {
+    let refreshingCount = 0;
+    const controller = function($scope) {
         $scope.gridOptions = {
             dataSource: [
                 { field1: 1 },
@@ -645,12 +645,12 @@ QUnit.module('Adaptive menu', {
 });
 
 QUnit.test('Adaptive menu should support angular integration', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div dx-menu="menuOptions"></div>\
         <div id="testDiv" ng-bind="test"></div>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.test = 'Test text 1';
 
         $scope.menuOptions = {
@@ -665,9 +665,9 @@ QUnit.test('Adaptive menu should support angular integration', function(assert) 
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
-    var $treeViewItem = $markup.find('.dx-treeview-item').eq(0);
+    const $treeViewItem = $markup.find('.dx-treeview-item').eq(0);
 
     $($treeViewItem).trigger('dxclick');
 
@@ -676,10 +676,10 @@ QUnit.test('Adaptive menu should support angular integration', function(assert) 
 });
 
 QUnit.test('Component can change itself options on init (T446364)', function(assert) {
-    var data = ['Peter', 'Mary', 'John', 'Sam', 'Betty', 'Joyce'];
+    const data = ['Peter', 'Mary', 'John', 'Sam', 'Betty', 'Joyce'];
 
-    var $markup = $('<div dx-list="listOptions"></div>');
-    var controller = function($scope) {
+    const $markup = $('<div dx-list="listOptions"></div>');
+    const controller = function($scope) {
         $scope.listOptions = {
             bindingOptions: {
                 dataSource: 'vm.myData',
@@ -688,7 +688,7 @@ QUnit.test('Component can change itself options on init (T446364)', function(ass
             selectionMode: 'single'
         };
 
-        var Test = (function() {
+        const Test = (function() {
             function Test() {
                 this.myRows = [];
                 this.myData = [];
@@ -712,7 +712,7 @@ QUnit.test('Component can change itself options on init (T446364)', function(ass
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     $markup.dxList('option', 'selectedItems', [ 'Betty' ]);
 
@@ -720,13 +720,13 @@ QUnit.test('Component can change itself options on init (T446364)', function(ass
 });
 
 QUnit.test('The hamburger button should be visible on small screen (T377800)', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div style=\'width: 100px\'>\
             <div dx-menu=\'menu\'></div>\
         </div>'
     );
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.menu = {
             adaptivityEnabled: true,
             items: [{ text: 'menuItem1' }, { text: 'menuItem2' }, { text: 'menuItem3' }]
@@ -750,12 +750,12 @@ QUnit.module('toolbar', {
 });
 
 QUnit.test('polymorph widget correctly renders nested widgets', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div dx-toolbar="{ items: items }"></div>\
         <div ng-bind="test"></div>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         scope = $scope;
 
         $scope.disabled = false;
@@ -781,12 +781,12 @@ QUnit.test('polymorph widget correctly renders nested widgets', function(assert)
 });
 
 QUnit.test('dxPopup - bindingOptions for a title property should be worked', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div dx-popup="popupOptions"></div>\
         <div ng-bind="test"></div>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         scope = $scope;
         $scope.titlePopup = 'title';
 
@@ -803,7 +803,7 @@ QUnit.test('dxPopup - bindingOptions for a title property should be worked', fun
 
     var scope = $markup.scope();
 
-    var done = assert.async();
+    const done = assert.async();
     setTimeout(function() {
         scope.$apply(function() {
             scope.titlePopup = 'new title';
@@ -819,12 +819,12 @@ QUnit.module('accordion');
 
 QUnit.test('item height is correct in animation config (T520346)', function(assert) {
     assert.expect(1);
-    var done = assert.async();
+    const done = assert.async();
     this.clock = sinon.useFakeTimers();
 
-    var originalAnimate = fx.animate;
+    const originalAnimate = fx.animate;
 
-    var $markup = $(
+    const $markup = $(
         '<div dx-accordion="accordionOptions" dx-item-alias="veryVeryVeryLongAlias">\
             <div data-options="dxTemplate : { name: \'item\' } " style=\'line-height: 18px\'>\
                 {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}\
@@ -832,7 +832,7 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
         </div>'
     );
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.accordionOptions = {
             dataSource: [{ 'Value': '1' }],
             width: 150,
@@ -851,7 +851,7 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
         return originalAnimate($element, config);
     };
 
-    var $titles = $markup.find('.dx-accordion-item-title');
+    const $titles = $markup.find('.dx-accordion-item-title');
     $($titles.eq(0)).trigger('dxclick');
 
     this.clock.tick();
@@ -864,7 +864,7 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
 QUnit.test('title height is correct if the title is customized using ng-class (T444379)', function(assert) {
     this.clock = sinon.useFakeTimers();
 
-    var $markup = $(
+    const $markup = $(
         '<style>.test-class { height: 100px; }</style>\
         <div dx-accordion="accordionOptions" dx-item-alias="item">\
             <div data-options="dxTemplate : { name: \'title\' } ">\
@@ -873,7 +873,7 @@ QUnit.test('title height is correct if the title is customized using ng-class (T
         </div>'
     );
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.accordionOptions = {
             dataSource: [{ 'Value': '1' }],
             collapsible: true,
@@ -888,7 +888,7 @@ QUnit.test('title height is correct if the title is customized using ng-class (T
 
     this.clock.tick();
 
-    var $titles = $markup.find('.dx-accordion-item');
+    const $titles = $markup.find('.dx-accordion-item');
     assert.equal($titles.children().height(), 100);
 
     this.clock.restore();
@@ -897,7 +897,7 @@ QUnit.test('title height is correct if the title is customized using ng-class (T
 QUnit.test('not cleared timers not detected', function(assert) {
     assert.expect(0);
 
-    var $markup = $('<div dx-accordion="{}"></div>');
+    const $markup = $('<div dx-accordion="{}"></div>');
     initMarkup($markup, function() {}, this);
 
     $markup.remove();
@@ -914,7 +914,7 @@ QUnit.module('box', {
 });
 
 QUnit.test('innerBox with nested box item', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div dx-box="{}">\
             <div data-options="dxItem: {baseSize: 272, ratio: 0, box: {direction: \'col\'}}">\
                 <div data-options="dxItem: {baseSize: \'auto\', ratio: 0}"><h2>Box1</h2></div>\
@@ -938,7 +938,7 @@ QUnit.module('date box', {
 
 // T533858
 QUnit.test('dxDateBox with list strategy automatically scrolls to selected item on opening', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div dx-date-box="{\
             type: \'time\',\
             value: \'2017/07/01 08:30\',\
@@ -952,8 +952,8 @@ QUnit.test('dxDateBox with list strategy automatically scrolls to selected item 
 
     this.clock.tick();
 
-    var $popupContent = $('.dx-popup-content');
-    var $selectedItem = $popupContent.find('.dx-list-item-selected');
+    const $popupContent = $('.dx-popup-content');
+    const $selectedItem = $popupContent.find('.dx-list-item-selected');
 
     assert.equal($selectedItem.length, 1, 'one item is selected');
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, 'selected item is visible');
@@ -971,13 +971,13 @@ QUnit.module('tree view', {
 QUnit.test('tree view should not crash with complex ids', function(assert) {
     assert.expect(0);
 
-    var $markup = $('\
+    const $markup = $('\
         <div dx-tree-view=\'options\' dx-item-alias=\'item\'>\
             <div data-options=\'dxTemplate: { name: "item" }\'>{{item.title}}</div>\
         </div>\
     ');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.data = [{
             uid: '33ad',
             title: 'title',
@@ -1010,13 +1010,13 @@ QUnit.module('dxScheduler', {
 });
 
 QUnit.test('Custom store with ISO8601 dates', function(assert) {
-    var $markup = $('<div dx-scheduler="schedulerOptions"></div>');
+    const $markup = $('<div dx-scheduler="schedulerOptions"></div>');
 
-    var controller = function($scope) {
+    const controller = function($scope) {
         $scope.schedulerOptions = {
             dataSource: {
                 load: function() {
-                    var d = $.Deferred();
+                    const d = $.Deferred();
 
                     setTimeout(function() {
                         d.resolve([{
@@ -1055,7 +1055,7 @@ QUnit.module('Widgets without model for template', {
     }
 });
 
-var noModelWidgets = [
+const noModelWidgets = [
     {
         name: 'dxDeferRendering',
         options: { renderWhen: $.Deferred().resolve().promise() }
@@ -1072,7 +1072,7 @@ var noModelWidgets = [
 
 noModelWidgets.forEach(function(widget) {
     QUnit.test(widget.name, function(assert) {
-        var TestComponent = DOMComponent.inherit({
+        const TestComponent = DOMComponent.inherit({
             _render: function() {
                 return this.callBase.apply(this, arguments);
             },
@@ -1089,7 +1089,7 @@ noModelWidgets.forEach(function(widget) {
 
         registerComponent('dxTest', TestComponent);
 
-        var $markup = $('<div/>')
+        const $markup = $('<div/>')
             .attr(inflector.dasherize(widget.name), 'widgetOptions');
 
         // TODO: ng-bind?
@@ -1098,7 +1098,7 @@ noModelWidgets.forEach(function(widget) {
             .addClass('inner-widget')
             .appendTo($markup);
 
-        var controller = function($scope) {
+        const controller = function($scope) {
             scope = $scope;
 
             $scope.modelIsReady = $.Deferred().resolve().promise();
@@ -1118,7 +1118,7 @@ noModelWidgets.forEach(function(widget) {
         var scope = $markup.scope();
         this.clock.tick(300);
 
-        var instance = $('.inner-widget').dxTest('instance');
+        const instance = $('.inner-widget').dxTest('instance');
 
         instance.option('text', 'Test text 2');
 
@@ -1127,9 +1127,9 @@ noModelWidgets.forEach(function(widget) {
 });
 
 QUnit.test('Scope for template with \'noModel\' option is not destroyed after clean (T427115)', function(assert) {
-    var TestContainer = Widget.inherit({
+    const TestContainer = Widget.inherit({
         _render: function() {
-            var content = $('<div />')
+            const content = $('<div />')
                 .addClass('dx-content')
                 .appendTo(this.$element());
 
@@ -1142,7 +1142,7 @@ QUnit.test('Scope for template with \'noModel\' option is not destroyed after cl
 
     registerComponent('dxTestContainerNoModel', TestContainer);
 
-    var $markup = $('\
+    const $markup = $('\
         <div dx-test-container-no-model>\
             <div data-options=\'dxTemplate: { name: "template" }\' class=\'outer-template\'>\
             </div>\
@@ -1151,8 +1151,8 @@ QUnit.test('Scope for template with \'noModel\' option is not destroyed after cl
 
     initMarkup($markup, function() {}, this);
 
-    var instance = $markup.dxTestContainerNoModel('instance'),
-        scope = $markup.scope();
+    const instance = $markup.dxTestContainerNoModel('instance');
+    const scope = $markup.scope();
 
     assert.ok(scope.$root);
 
@@ -1173,16 +1173,16 @@ QUnit.module('dxValidator', {
 });
 
 QUnit.test('T183342 dxValidator should be created after any editors', function(assert) {
-    var dxApp = angular.module('dx'),
-        validatorDirective = $.grep(dxApp._invokeQueue, function(configObj) {
-            return (configObj[1] === 'directive') && (configObj[2][0] === 'dxValidator');
-        })[0],
-        editorDirective = $.grep(dxApp._invokeQueue, function(configObj) {
-            return (configObj[1] === 'directive') && (configObj[2][0] === 'dxTextBox');
-        })[0],
-        getPriority = function(configObj) {
-            return configObj[2][1][3]().priority;
-        };
+    const dxApp = angular.module('dx');
+    const validatorDirective = $.grep(dxApp._invokeQueue, function(configObj) {
+        return (configObj[1] === 'directive') && (configObj[2][0] === 'dxValidator');
+    })[0];
+    const editorDirective = $.grep(dxApp._invokeQueue, function(configObj) {
+        return (configObj[1] === 'directive') && (configObj[2][0] === 'dxTextBox');
+    })[0];
+    const getPriority = function(configObj) {
+        return configObj[2][1][3]().priority;
+    };
 
     assert.ok(validatorDirective, 'Validator directive should be registered');
     assert.ok(editorDirective, 'Editor directive should be registered');
@@ -1190,7 +1190,7 @@ QUnit.test('T183342 dxValidator should be created after any editors', function(a
 });
 
 QUnit.test('T228219 dxValidationSummary should be disposed properly', function(assert) {
-    var $markup = $('\
+    const $markup = $('\
         <div id=\'testGroup\' dx-validation-group=\'{}\'>\
             <div class=\'dx-field\'>\
                 <div class=\'dx-field-value\'>\

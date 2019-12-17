@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    fx = require('animation/fx');
+const $ = require('jquery');
+const fx = require('animation/fx');
 
 require('ui/progress_bar');
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture">\
             <div class="dx-viewport">\
                 <div id="container">\
@@ -21,11 +21,11 @@ function toSelector(text) {
     return '.' + text;
 }
 
-var PROGRESSBAR_CLASS = 'dx-progressbar',
-    PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container',
-    PROGRESSBAR_STATUS_CLASS = 'dx-progressbar-status',
-    PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-container',
-    PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
+const PROGRESSBAR_CLASS = 'dx-progressbar';
+const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
+const PROGRESSBAR_STATUS_CLASS = 'dx-progressbar-status';
+const PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-container';
+const PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
 
 QUnit.module('default', {
     beforeEach: function() {
@@ -54,11 +54,11 @@ QUnit.module('options', {
 });
 
 QUnit.test('correct value display in status after option changed', function(assert) {
-    var $progressBar = this.$element.dxProgressBar({
-            value: 10
-        }),
-        progressBar = $progressBar.dxProgressBar('instance'),
-        $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+    const $progressBar = this.$element.dxProgressBar({
+        value: 10
+    });
+    const progressBar = $progressBar.dxProgressBar('instance');
+    const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
 
     progressBar.option('value', 30);
     assert.equal($status.text(), 'Progress: ' + progressBar.option('value') + '%', 'status text has been change right');
@@ -67,14 +67,14 @@ QUnit.test('correct value display in status after option changed', function(asse
 QUnit.test('custom status format', function(assert) {
     assert.expect(6);
 
-    var $progressBar = this.$element.dxProgressBar({
-            value: 10,
-            statusFormat: function(value) {
-                return 'Customised value: ' + value * 100;
-            }
-        }),
-        progressBar = $progressBar.dxProgressBar('instance'),
-        $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+    const $progressBar = this.$element.dxProgressBar({
+        value: 10,
+        statusFormat: function(value) {
+            return 'Customised value: ' + value * 100;
+        }
+    });
+    const progressBar = $progressBar.dxProgressBar('instance');
+    const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
     assert.equal($status.text(), 'Customised value: ' + progressBar.option('value'), 'status text is right');
 
     progressBar.option('value', 50);
@@ -105,10 +105,10 @@ QUnit.test('custom status format', function(assert) {
 QUnit.test('complete fired after max setting', function(assert) {
     assert.expect(4);
 
-    var completeActionFired = 0,
-        progressBar = this.$element.dxProgressBar({
-            onComplete: function() { completeActionFired++; }
-        }).dxProgressBar('instance');
+    let completeActionFired = 0;
+    const progressBar = this.$element.dxProgressBar({
+        onComplete: function() { completeActionFired++; }
+    }).dxProgressBar('instance');
 
     progressBar.option('value', 99);
     assert.equal(completeActionFired, 0, 'complete does not fired');
@@ -126,11 +126,11 @@ QUnit.test('complete fired after max setting', function(assert) {
 QUnit.test('complete option changed', function(assert) {
     assert.expect(6);
 
-    var firstCompleteActionFired = 0,
-        secondCompleteActionFired = 0,
-        progressBar = this.$element.dxProgressBar({
-            onComplete: function() { firstCompleteActionFired++; }
-        }).dxProgressBar('instance');
+    let firstCompleteActionFired = 0;
+    let secondCompleteActionFired = 0;
+    const progressBar = this.$element.dxProgressBar({
+        onComplete: function() { firstCompleteActionFired++; }
+    }).dxProgressBar('instance');
 
     progressBar.option('value', 100);
     assert.equal(firstCompleteActionFired, 1, 'first CompleteActionFired is fired');
@@ -159,14 +159,14 @@ QUnit.module('states', {
 QUnit.test('render indeterminate state', function(assert) {
     assert.expect(5);
 
-    var $progressBar = this.$element.dxProgressBar({
-            value: 10
-        }),
-        progressBar = $progressBar.dxProgressBar('instance');
+    const $progressBar = this.$element.dxProgressBar({
+        value: 10
+    });
+    const progressBar = $progressBar.dxProgressBar('instance');
 
-    var renderedIndeterminateSegmentContainersCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length,
-        renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length,
-        defaultSegmentCount = progressBar.option('_animatingSegmentCount');
+    const renderedIndeterminateSegmentContainersCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length;
+    let renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+    const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
     assert.equal(renderedIndeterminateSegmentContainersCount, 0, 'Segment wrapper has not been created');
     assert.equal(renderedIndeterminateSegmentsCount, 0, 'Segments have not been created');
@@ -184,12 +184,12 @@ QUnit.test('render indeterminate state', function(assert) {
 QUnit.module('aria accessibility');
 
 QUnit.test('aria properties after options changed', function(assert) {
-    var $element = $('#progressbar').dxProgressBar({
-            min: 32,
-            max: 137,
-            value: 58
-        }),
-        instance = $element.dxProgressBar('instance');
+    const $element = $('#progressbar').dxProgressBar({
+        min: 32,
+        max: 137,
+        value: 58
+    });
+    const instance = $element.dxProgressBar('instance');
 
     instance.option({
         min: 33,

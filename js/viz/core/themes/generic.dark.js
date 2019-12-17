@@ -1,16 +1,16 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    WHITE = '#ffffff',
-    BLACK = '#000000',
-    SOME_GREY = '#2b2b2b',
-    RANGE_COLOR = '#b5b5b5',
-    GREY_GREEN = '#303030',
-    AREA_LAYER_COLOR = '#686868',
-    LINE_COLOR = '#c7c7c7',
-    TARGET_COLOR = '#8e8e8e',
-    POSITIVE_COLOR = '#b8b8b8',
-    BORDER_COLOR = '#494949';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+const SOME_GREY = '#2b2b2b';
+const RANGE_COLOR = '#b5b5b5';
+const GREY_GREEN = '#303030';
+const AREA_LAYER_COLOR = '#686868';
+const LINE_COLOR = '#c7c7c7';
+const TARGET_COLOR = '#8e8e8e';
+const POSITIVE_COLOR = '#b8b8b8';
+const BORDER_COLOR = '#494949';
 
 registerTheme({
     name: 'generic.dark',

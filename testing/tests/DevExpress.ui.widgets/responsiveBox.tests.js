@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    devices = require('core/devices'),
-    registerComponent = require('core/component_registrator'),
-    Widget = require('ui/widget/ui.widget'),
-    ResponsiveBox = require('ui/responsive_box'),
-    responsiveBoxScreenMock = require('../../helpers/responsiveBoxScreenMock.js');
+const $ = require('jquery');
+const devices = require('core/devices');
+const registerComponent = require('core/component_registrator');
+const Widget = require('ui/widget/ui.widget');
+const ResponsiveBox = require('ui/responsive_box');
+const responsiveBoxScreenMock = require('../../helpers/responsiveBoxScreenMock.js');
 
 require('common.css!');
 require('ui/box');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="responsiveBox"></div>\
         \
         <div id="responsiveBoxWithTemplate">\
@@ -19,10 +19,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var BOX_CLASS = 'dx-box',
-    BOX_ITEM_CLASS = 'dx-box-item';
+const BOX_CLASS = 'dx-box';
+const BOX_ITEM_CLASS = 'dx-box-item';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         responsiveBoxScreenMock.setup.call(this);
     },
@@ -34,33 +34,33 @@ var moduleConfig = {
 QUnit.module('layouting', moduleConfig);
 
 QUnit.test('check size of grid without items', function(assert) {
-    var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
-    var cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
-    var height = 600;
-    var width = 600;
-    var heightWithoutBaseSize = height - rows[0].baseSize - rows[1].baseSize;
-    var widthWithoutBaseSize = width - cols[0].baseSize - cols[1].baseSize;
-    var heightRatioUnit = heightWithoutBaseSize / (rows[0].ratio + rows[1].ratio);
-    var widthRatioUnit = widthWithoutBaseSize / (cols[0].ratio + cols[1].ratio);
+    const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
+    const cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
+    const height = 600;
+    const width = 600;
+    const heightWithoutBaseSize = height - rows[0].baseSize - rows[1].baseSize;
+    const widthWithoutBaseSize = width - cols[0].baseSize - cols[1].baseSize;
+    const heightRatioUnit = heightWithoutBaseSize / (rows[0].ratio + rows[1].ratio);
+    const widthRatioUnit = widthWithoutBaseSize / (cols[0].ratio + cols[1].ratio);
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: rows,
         cols: cols,
         width: width,
         height: height
     });
 
-    var $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(0);
-    var $columnBoxes = $rowBox.find('.' + BOX_CLASS);
+    const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(0);
+    const $columnBoxes = $rowBox.find('.' + BOX_CLASS);
 
-    var $firstRow = $columnBoxes.eq(0).find('.' + BOX_ITEM_CLASS);
+    const $firstRow = $columnBoxes.eq(0).find('.' + BOX_ITEM_CLASS);
     assert.equal($firstRow.eq(0).width(), cols[0].baseSize + widthRatioUnit * cols[0].ratio, 'empty item 11 width');
     assert.equal($firstRow.eq(0).height(), rows[0].baseSize + heightRatioUnit * rows[0].ratio, 'empty item 11 height');
 
     assert.equal($firstRow.eq(1).width(), cols[1].baseSize + widthRatioUnit * cols[1].ratio, 'empty item 12 width');
     assert.equal($firstRow.eq(1).height(), rows[0].baseSize + heightRatioUnit * rows[0].ratio, 'empty item 12 height');
 
-    var $secondRow = $columnBoxes.eq(1).find('.' + BOX_ITEM_CLASS);
+    const $secondRow = $columnBoxes.eq(1).find('.' + BOX_ITEM_CLASS);
     assert.equal($secondRow.eq(0).width(), cols[0].baseSize + widthRatioUnit * cols[0].ratio, 'empty item 21 width');
     assert.equal($secondRow.eq(0).height(), rows[1].baseSize + heightRatioUnit * rows[1].ratio, 'empty item 21 height');
 
@@ -69,16 +69,16 @@ QUnit.test('check size of grid without items', function(assert) {
 });
 
 QUnit.test('check size of grid with items', function(assert) {
-    var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
-    var cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
-    var height = 600;
-    var width = 600;
-    var heightWithoutBaseSize = height - rows[0].baseSize - rows[1].baseSize;
-    var widthWithoutBaseSize = width - cols[0].baseSize - cols[1].baseSize;
-    var heightRatioUnit = heightWithoutBaseSize / (rows[0].ratio + rows[1].ratio);
-    var widthRatioUnit = widthWithoutBaseSize / (cols[0].ratio + cols[1].ratio);
+    const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
+    const cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
+    const height = 600;
+    const width = 600;
+    const heightWithoutBaseSize = height - rows[0].baseSize - rows[1].baseSize;
+    const widthWithoutBaseSize = width - cols[0].baseSize - cols[1].baseSize;
+    const heightRatioUnit = heightWithoutBaseSize / (rows[0].ratio + rows[1].ratio);
+    const widthRatioUnit = widthWithoutBaseSize / (cols[0].ratio + cols[1].ratio);
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: rows,
         cols: cols,
         items: [
@@ -91,16 +91,16 @@ QUnit.test('check size of grid with items', function(assert) {
         height: height
     });
 
-    var $boxes = $responsiveBox.find('.' + BOX_CLASS);
+    const $boxes = $responsiveBox.find('.' + BOX_CLASS);
 
-    var $firstRow = $boxes.eq(1).find('.' + BOX_ITEM_CLASS);
+    const $firstRow = $boxes.eq(1).find('.' + BOX_ITEM_CLASS);
     assert.equal($firstRow.eq(0).width(), cols[0].baseSize + widthRatioUnit * cols[0].ratio, 'item11 width');
     assert.equal($firstRow.eq(0).height(), rows[0].baseSize + heightRatioUnit * rows[0].ratio, 'item11 height');
 
     assert.equal($firstRow.eq(1).width(), cols[1].baseSize + widthRatioUnit * cols[1].ratio, 'item12 width');
     assert.equal($firstRow.eq(1).height(), rows[0].baseSize + heightRatioUnit * rows[0].ratio, 'item12 height');
 
-    var $secondRow = $boxes.eq(2).find('.' + BOX_ITEM_CLASS);
+    const $secondRow = $boxes.eq(2).find('.' + BOX_ITEM_CLASS);
     assert.equal($secondRow.eq(0).width(), cols[0].baseSize + widthRatioUnit * cols[0].ratio, 'item21 width');
     assert.equal($secondRow.eq(0).height(), rows[1].baseSize + heightRatioUnit * rows[1].ratio, 'item21 height');
 
@@ -109,10 +109,10 @@ QUnit.test('check size of grid with items', function(assert) {
 });
 
 QUnit.test('root box and it\'s items should have correct height (T566515)', function(assert) {
-    var rows = [{}, {}];
-    var cols = [{ ratio: 1 }, { ratio: 1 }];
+    const rows = [{}, {}];
+    const cols = [{ ratio: 1 }, { ratio: 1 }];
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: rows,
         cols: cols,
         items: [
@@ -124,61 +124,61 @@ QUnit.test('root box and it\'s items should have correct height (T566515)', func
         height: 'auto'
     });
 
-    var $boxes = $responsiveBox.find('.' + BOX_CLASS);
+    const $boxes = $responsiveBox.find('.' + BOX_CLASS);
 
-    var $rootBox = $boxes.eq(0);
+    const $rootBox = $boxes.eq(0);
     assert.notEqual($rootBox.height(), 0, 'Height of the rootBox is OK');
 
-    var $rootItems = $rootBox.find('.' + BOX_ITEM_CLASS);
+    const $rootItems = $rootBox.find('.' + BOX_ITEM_CLASS);
 
     assert.roughEqual($rootItems.eq(0).height(), 16, 2.1, 'Height of the root item is OK');
     assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, 'Height of the root item is OK');
 });
 
 QUnit.test('check width of colspan', function(assert) {
-    var cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-    var size = 900;
+    const cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+    const size = 900;
 
-    var sizeWithoutBaseSize = size - cols[0].baseSize - cols[1].baseSize - cols[2].baseSize;
-    var ratioUnit = sizeWithoutBaseSize / (cols[0].ratio + cols[1].ratio + cols[2].ratio);
+    const sizeWithoutBaseSize = size - cols[0].baseSize - cols[1].baseSize - cols[2].baseSize;
+    const ratioUnit = sizeWithoutBaseSize / (cols[0].ratio + cols[1].ratio + cols[2].ratio);
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: cols,
         width: size,
         items: [{ location: { row: 0, col: 0, colspan: 2 } }, { location: { row: 0, col: 2 } }]
     });
 
-    var $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
-    var $boxItems = $rowBox.find('.' + BOX_ITEM_CLASS);
+    const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
+    const $boxItems = $rowBox.find('.' + BOX_ITEM_CLASS);
 
-    var firstColumnSize = cols[0].baseSize + cols[0].ratio * ratioUnit;
-    var secondColumnSize = cols[1].baseSize + cols[1].ratio * ratioUnit;
-    var thirdColumnSize = cols[2].baseSize + cols[2].ratio * ratioUnit;
+    const firstColumnSize = cols[0].baseSize + cols[0].ratio * ratioUnit;
+    const secondColumnSize = cols[1].baseSize + cols[1].ratio * ratioUnit;
+    const thirdColumnSize = cols[2].baseSize + cols[2].ratio * ratioUnit;
 
     assert.equal($boxItems.eq(0).width(), firstColumnSize + secondColumnSize, 'first item size');
     assert.equal($boxItems.eq(1).width(), thirdColumnSize, 'second item size');
 });
 
 QUnit.test('check height of rowspan', function(assert) {
-    var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-    var size = 900;
+    const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+    const size = 900;
 
-    var sizeWithoutBaseSize = size - rows[0].baseSize - rows[1].baseSize - rows[2].baseSize;
-    var ratioUnit = sizeWithoutBaseSize / (rows[0].ratio + rows[1].ratio + rows[2].ratio);
+    const sizeWithoutBaseSize = size - rows[0].baseSize - rows[1].baseSize - rows[2].baseSize;
+    const ratioUnit = sizeWithoutBaseSize / (rows[0].ratio + rows[1].ratio + rows[2].ratio);
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: rows,
         cols: [{}],
         height: size,
         items: [{ location: { row: 0, col: 0, rowspan: 2 } }, { location: { row: 2, col: 0 } }]
     });
 
-    var $boxItems = $responsiveBox.find('.' + BOX_ITEM_CLASS);
+    const $boxItems = $responsiveBox.find('.' + BOX_ITEM_CLASS);
 
-    var firstRowSize = rows[0].baseSize + rows[0].ratio * ratioUnit;
-    var secondRowSize = rows[1].baseSize + rows[1].ratio * ratioUnit;
-    var thirdRowSize = rows[2].baseSize + rows[2].ratio * ratioUnit;
+    const firstRowSize = rows[0].baseSize + rows[0].ratio * ratioUnit;
+    const secondRowSize = rows[1].baseSize + rows[1].ratio * ratioUnit;
+    const thirdRowSize = rows[2].baseSize + rows[2].ratio * ratioUnit;
 
     assert.equal($boxItems.eq(0).height(), firstRowSize + secondRowSize, 'first item size');
     assert.equal($boxItems.eq(1).height(), thirdRowSize, 'second item size');
@@ -186,14 +186,14 @@ QUnit.test('check height of rowspan', function(assert) {
 
 
 QUnit.test('rowspan and colspan', function(assert) {
-    var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-    var cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-    var size = 900;
+    const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+    const cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+    const size = 900;
 
-    var sizeWithoutBaseSize = size - rows[0].baseSize - rows[1].baseSize - rows[2].baseSize;
-    var ratioUnit = sizeWithoutBaseSize / (rows[0].ratio + rows[1].ratio + rows[2].ratio);
+    const sizeWithoutBaseSize = size - rows[0].baseSize - rows[1].baseSize - rows[2].baseSize;
+    const ratioUnit = sizeWithoutBaseSize / (rows[0].ratio + rows[1].ratio + rows[2].ratio);
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: rows,
         cols: cols,
         items: [
@@ -204,11 +204,11 @@ QUnit.test('rowspan and colspan', function(assert) {
         height: size
     });
 
-    var $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
+    const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
 
     assert.equal($rowBox.height(), rows[0].baseSize + rows[1].baseSize + ratioUnit * rows[0].ratio + ratioUnit * rows[1].ratio, 'rowspan height');
 
-    var $colBox = $rowBox.find('.' + BOX_CLASS).eq(0);
+    const $colBox = $rowBox.find('.' + BOX_CLASS).eq(0);
 
     assert.equal($colBox.width(), cols[1].baseSize + cols[2].baseSize + ratioUnit * cols[1].ratio + ratioUnit * cols[2].ratio, 'colspan width');
 
@@ -216,14 +216,14 @@ QUnit.test('rowspan and colspan', function(assert) {
 });
 
 QUnit.test('rowspan and colspan simultaneously', function(assert) {
-    var rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-    var cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-    var size = 900;
+    const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+    const cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+    const size = 900;
 
-    var sizeWithoutBaseSize = size - rows[0].baseSize - rows[1].baseSize - rows[2].baseSize;
-    var ratioUnit = sizeWithoutBaseSize / (rows[0].ratio + rows[1].ratio + rows[2].ratio);
+    const sizeWithoutBaseSize = size - rows[0].baseSize - rows[1].baseSize - rows[2].baseSize;
+    const ratioUnit = sizeWithoutBaseSize / (rows[0].ratio + rows[1].ratio + rows[2].ratio);
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: rows,
         cols: cols,
         items: [{
@@ -233,19 +233,19 @@ QUnit.test('rowspan and colspan simultaneously', function(assert) {
         height: size
     });
 
-    var $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
-    var $firstItem = $rowBox.find('.' + BOX_ITEM_CLASS).eq(0);
+    const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
+    const $firstItem = $rowBox.find('.' + BOX_ITEM_CLASS).eq(0);
 
-    var firstItemWidth = rows[0].baseSize + rows[1].baseSize + ratioUnit * rows[0].ratio + ratioUnit * rows[1].ratio;
-    var firstItemHeight = cols[0].baseSize + cols[1].baseSize + ratioUnit * cols[0].ratio + ratioUnit * cols[1].ratio;
+    const firstItemWidth = rows[0].baseSize + rows[1].baseSize + ratioUnit * rows[0].ratio + ratioUnit * rows[1].ratio;
+    const firstItemHeight = cols[0].baseSize + cols[1].baseSize + ratioUnit * cols[0].ratio + ratioUnit * cols[1].ratio;
 
     assert.equal($firstItem.width(), firstItemWidth, 'item width');
     assert.equal($firstItem.height(), firstItemHeight, 'item height');
 });
 
 QUnit.test('overlapping rowspan and colspan', function(assert) {
-    var size = 100;
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const size = 100;
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}, {}, {}],
         cols: [{}, {}, {}, {}],
         items: [
@@ -258,30 +258,30 @@ QUnit.test('overlapping rowspan and colspan', function(assert) {
         height: 3 * size
     });
 
-    var $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
+    const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
 
     assert.roughEqual($rowBox.height(), 3 * size, 0.1, 'first row box height');
 
-    var $colBox = $rowBox.find('.' + BOX_CLASS).eq(1);
+    const $colBox = $rowBox.find('.' + BOX_CLASS).eq(1);
 
     assert.roughEqual($colBox.width(), 3 * size, 0.1, 'second col box width');
 });
 
 QUnit.test('minSize and maxSize', function(assert) {
-    var size = 100;
-    var minSize = 80;
-    var maxSize = 5;
+    const size = 100;
+    const minSize = 80;
+    const maxSize = 5;
 
-    var device = devices.real(),
-        version = device.version,
-        isAndroid = device.android;
+    const device = devices.real();
+    const version = device.version;
+    const isAndroid = device.android;
 
     if(isAndroid && (version[0] < 4 || (version[0] === 4 && version[1] === 0))) {
         assert.ok(true, 'old android min/max height problem');
         return;
     }
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{ baseSize: 0, minSize: minSize, ratio: 1 }, { maxSize: maxSize, ratio: 1 }, { ratio: 1 }],
         cols: [{ baseSize: 0, minSize: minSize, ratio: 1 }, { maxSize: maxSize, ratio: 1 }, { ratio: 1 }],
         items: [
@@ -292,8 +292,8 @@ QUnit.test('minSize and maxSize', function(assert) {
         height: size
     });
 
-    var $first = $responsiveBox.find('.first').parent();
-    var $second = $responsiveBox.find('.second').parent();
+    const $first = $responsiveBox.find('.first').parent();
+    const $second = $responsiveBox.find('.second').parent();
 
     assert.equal($first.width(), minSize, 'width is min-width');
     assert.equal($first.height(), minSize, 'height is min-height');
@@ -305,7 +305,7 @@ QUnit.test('minSize and maxSize', function(assert) {
 QUnit.test('singleColumnScreen render items with baseSize: auto', function(assert) {
     this.updateScreenSize(500);
 
-    var $responsiveBox = $('#responsiveBox').css('height', 'auto').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').css('height', 'auto').dxResponsiveBox({
         rows: [{}, {}],
         cols: [{}],
         singleColumnScreen: 'xs',
@@ -319,7 +319,7 @@ QUnit.test('singleColumnScreen render items with baseSize: auto', function(asser
 });
 
 QUnit.test('width and height rendered correctly when dxResponsiveBox has one row and column', function(assert) {
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         width: 'auto',
         height: 'auto',
         rows: [{ ratio: 1, baseSize: 'auto' }],
@@ -329,20 +329,20 @@ QUnit.test('width and height rendered correctly when dxResponsiveBox has one row
 
     assert.equal($responsiveBox.height(), 100, 'height calculated correctly');
 
-    var $item = $responsiveBox.find('.dx-box-item');
+    const $item = $responsiveBox.find('.dx-box-item');
 
     assert.equal($item.width(), $responsiveBox.width(), 'item width calculated correctly');
 });
 
 QUnit.test('dxUpdate should not be bubbling to parent container', function(assert) {
-    var clock = sinon.useFakeTimers();
-    var $parentContainer = $('<div>');
+    const clock = sinon.useFakeTimers();
+    const $parentContainer = $('<div>');
 
     $parentContainer.appendTo('#qunit-fixture');
 
     try {
-        var dxUpdateStub = sinon.stub();
-        var $responsiveBox = $('<div>').dxResponsiveBox({
+        const dxUpdateStub = sinon.stub();
+        const $responsiveBox = $('<div>').dxResponsiveBox({
             width: 'auto',
             height: 'auto',
             rows: [{ ratio: 1, baseSize: 'auto' }],
@@ -375,7 +375,7 @@ QUnit.test('widget inside item is not disposed', function(assert) {
 
     registerComponent('dxWidget', Widget.inherit({}));
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
@@ -387,8 +387,8 @@ QUnit.test('widget inside item is not disposed', function(assert) {
         ]
     });
 
-    var $widget = $responsiveBox.find('.dx-item .dx-widget');
-    var initialWidget = $widget.dxWidget('instance');
+    let $widget = $responsiveBox.find('.dx-item .dx-widget');
+    const initialWidget = $widget.dxWidget('instance');
 
     this.updateScreenSize(700);
     this.updateScreenSize(1000);
@@ -400,13 +400,13 @@ QUnit.test('widget inside item is not disposed', function(assert) {
 QUnit.test('items have no unsafe modifications after dispose', function(assert) {
     this.updateScreenSize(1000);
 
-    var items = [
+    const items = [
         {
             location: { row: 0, col: 0, screen: 'md' }, template: 'template'
         }
     ];
 
-    var result = [
+    const result = [
         {
             // only safe modifications
             baseSize: 'auto',
@@ -421,7 +421,7 @@ QUnit.test('items have no unsafe modifications after dispose', function(assert) 
         }
     ];
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: items
@@ -442,8 +442,8 @@ QUnit.test('onLayoutChanged', function(assert) {
     //  width: <768    768-<992    992-<1200    >1200
 
     this.updateScreenSize(500);
-    var onLayoutChangedSpy = sinon.stub();
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const onLayoutChangedSpy = sinon.stub();
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
@@ -473,7 +473,7 @@ QUnit.test('onLayoutChanged', function(assert) {
 });
 
 QUnit.test('onItemClick', function(assert) {
-    var responsiveBox = new ResponsiveBox($('#responsiveBox'), {
+    const responsiveBox = new ResponsiveBox($('#responsiveBox'), {
         items: [{ text: 1 }, { text: 2 }]
     });
     responsiveBox.on('itemClick', function() {
@@ -491,7 +491,7 @@ QUnit.test('currentScreenFactor', function(assert) {
     //  width: <768    768-<992    992-<1200    >1200
 
     this.updateScreenSize(500);
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
@@ -499,7 +499,7 @@ QUnit.test('currentScreenFactor', function(assert) {
         ]
     });
 
-    var responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+    const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
 
     assert.equal(responsiveBox.option('currentScreenFactor'), 'xs', 'currentScreenFactor update on start');
 
@@ -510,7 +510,7 @@ QUnit.test('currentScreenFactor', function(assert) {
 });
 
 QUnit.test('_layoutStrategy pass to internal box', function(assert) {
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
@@ -519,15 +519,15 @@ QUnit.test('_layoutStrategy pass to internal box', function(assert) {
         _layoutStrategy: 'test'
     });
 
-    var box = $responsiveBox.find('.dx-box').eq(0).dxBox('instance');
+    const box = $responsiveBox.find('.dx-box').eq(0).dxBox('instance');
 
     assert.equal(box.option('_layoutStrategy'), 'test', '_layoutStrategy was passed to internal box');
 });
 
 QUnit.test('Changing visibility should update simulated strategy', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     try {
-        var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             visible: false,
             _layoutStrategy: 'fallback',
             height: 400,
@@ -538,7 +538,7 @@ QUnit.test('Changing visibility should update simulated strategy', function(asse
             cols: [{}],
             items: [{ location: { row: 0, col: 0 }, template: function() { return $('<div>').prop('id', 'cellTest'); } }]
         });
-        var responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+        const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
 
         clock.tick();
 
@@ -546,7 +546,7 @@ QUnit.test('Changing visibility should update simulated strategy', function(asse
 
         clock.tick();
 
-        var $firstItem = $('#cellTest').closest('.dx-item');
+        const $firstItem = $('#cellTest').closest('.dx-item');
 
         assert.equal($firstItem.height(), 200, 'height calculate correctly');
     } finally {
@@ -555,9 +555,9 @@ QUnit.test('Changing visibility should update simulated strategy', function(asse
 });
 
 QUnit.test('onOptionChanged should not be fired after click on item', function(assert) {
-    var onOptionChangedStub = sinon.stub();
+    const onOptionChangedStub = sinon.stub();
 
-    var $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
@@ -565,7 +565,7 @@ QUnit.test('onOptionChanged should not be fired after click on item', function(a
         ],
         onOptionChanged: onOptionChangedStub
     });
-    var initCallCount = onOptionChangedStub.callCount;
+    const initCallCount = onOptionChangedStub.callCount;
 
     $($responsiveBox.find('.dx-item')).trigger('dxclick');
 
@@ -573,7 +573,7 @@ QUnit.test('onOptionChanged should not be fired after click on item', function(a
 });
 
 QUnit.test('responsive box should work correctly after item option changing', function(assert) {
-    var responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [{ location: { col: 0, row: 0 }, html: '<div class=\'test\'>' }]
@@ -584,7 +584,7 @@ QUnit.test('responsive box should work correctly after item option changing', fu
 });
 
 QUnit.test('responsive box should render layout correctly after item option changing', function(assert) {
-    var responsiveBox = $('#responsiveBox').dxResponsiveBox({
+    const responsiveBox = $('#responsiveBox').dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         _layoutStrategy: 'flex',

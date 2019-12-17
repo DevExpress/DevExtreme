@@ -1,20 +1,20 @@
-var extend = require('../core/utils/extend').extend,
-    each = require('../core/utils/iterator').each,
-    vizUtils = require('./core/utils'),
-    uiThemes = require('../ui/themes'),
-    themes = {},
-    themesMapping = {},
-    themesSchemeMapping = {},
-    _extend = extend,
-    _each = each,
-    _normalizeEnum = vizUtils.normalizeEnum,
-    currentThemeName = null,
-    defaultTheme,
-    nextCacheUid = 0,
-    widgetsCache = {};
+const extend = require('../core/utils/extend').extend;
+const each = require('../core/utils/iterator').each;
+const vizUtils = require('./core/utils');
+const uiThemes = require('../ui/themes');
+const themes = {};
+const themesMapping = {};
+const themesSchemeMapping = {};
+const _extend = extend;
+const _each = each;
+const _normalizeEnum = vizUtils.normalizeEnum;
+let currentThemeName = null;
+let defaultTheme;
+let nextCacheUid = 0;
+const widgetsCache = {};
 
 function getTheme(themeName) {
-    var name = _normalizeEnum(themeName);
+    const name = _normalizeEnum(themeName);
     return themes[name] || themes[themesMapping[name] || currentTheme()];
 }
 
@@ -31,21 +31,21 @@ function currentTheme(themeName, colorScheme) {
         return currentThemeName || findThemeNameByName(uiThemes.current()) || defaultTheme;
     }
 
-    var scheme = _normalizeEnum(colorScheme);
+    const scheme = _normalizeEnum(colorScheme);
     currentThemeName = (themeName && themeName.platform ? findThemeNameByPlatform(_normalizeEnum(themeName.platform), themeName.version, scheme) : findThemeNameByName(_normalizeEnum(themeName), scheme)) || currentThemeName;
     // For chaining only
     return this;
 }
 
 function getThemeInfo(themeName, splitter) {
-    var k = themeName.indexOf(splitter);
+    const k = themeName.indexOf(splitter);
     return k > 0 ? { name: themeName.substring(0, k), scheme: themeName.substring(k + 1) } : null;
 }
 
 function registerThemeName(themeName, targetThemeName) {
-    var themeInfo = getThemeInfo(themeName, '.') || { name: themeName },
-        name = themeInfo.name,
-        scheme = themeInfo.scheme;
+    const themeInfo = getThemeInfo(themeName, '.') || { name: themeName };
+    const name = themeInfo.name;
+    const scheme = themeInfo.scheme;
     if(scheme) {
         themesMapping[name] = themesMapping[name] || targetThemeName;
         themesMapping[name + '.' + scheme] = targetThemeName;
@@ -55,7 +55,7 @@ function registerThemeName(themeName, targetThemeName) {
 }
 
 function registerTheme(theme, baseThemeName) {
-    var themeName = _normalizeEnum(theme && theme.name);
+    const themeName = _normalizeEnum(theme && theme.name);
     if(themeName) {
         theme.isDefault && (defaultTheme = themeName);
         registerThemeName(themeName, themeName);
@@ -72,14 +72,14 @@ function registerThemeSchemeAlias(from, to) {
 }
 
 function mergeScalar(target, field, source, sourceValue) {
-    var _value = source ? source[field] : sourceValue;
+    const _value = source ? source[field] : sourceValue;
     if(_value !== undefined && target[field] === undefined) {
         target[field] = _value;
     }
 }
 
 function mergeObject(target, field, source, sourceValue) {
-    var _value = source ? source[field] : sourceValue;
+    const _value = source ? source[field] : sourceValue;
     if(_value !== undefined) {
         target[field] = _extend(true, {}, _value, target[field]);
     }
@@ -150,8 +150,8 @@ function patchTheme(theme) {
 }
 
 function patchAxes(theme) {
-    var commonAxisSettings = theme['chart:common:axis'],
-        colorFieldName = 'color';
+    const commonAxisSettings = theme['chart:common:axis'];
+    const colorFieldName = 'color';
     _each([commonAxisSettings.grid, commonAxisSettings.minorGrid], function(_, obj) {
         mergeScalar(obj, colorFieldName, null, theme.gridColor);
     });
@@ -166,7 +166,7 @@ function patchAxes(theme) {
 }
 
 function patchMapLayers(theme) {
-    var map = theme.map;
+    const map = theme.map;
     _each(['area', 'line', 'marker'], function(_, section) {
         mergeObject(map, 'layer:' + section, null, map.layer);
     });
@@ -176,7 +176,7 @@ function patchMapLayers(theme) {
 }
 
 function addCacheItem(target) {
-    var cacheUid = ++nextCacheUid;
+    const cacheUid = ++nextCacheUid;
     target._cache = cacheUid;
     widgetsCache[cacheUid] = target;
 }

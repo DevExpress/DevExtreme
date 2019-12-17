@@ -5,15 +5,15 @@ import $ from '../../../core/renderer';
 import List from '../../list/ui.list.edit';
 import { extendFromObject } from '../../../core/utils/extend';
 
-const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item',
-    TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + '-content',
-    TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = TOOLTIP_APPOINTMENT_ITEM + '-content-subject',
-    TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE = TOOLTIP_APPOINTMENT_ITEM + '-content-date',
-    TOOLTIP_APPOINTMENT_ITEM_MARKER = TOOLTIP_APPOINTMENT_ITEM + '-marker',
-    TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = TOOLTIP_APPOINTMENT_ITEM + '-marker-body',
+const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
+const TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + '-content';
+const TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = TOOLTIP_APPOINTMENT_ITEM + '-content-subject';
+const TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE = TOOLTIP_APPOINTMENT_ITEM + '-content-date';
+const TOOLTIP_APPOINTMENT_ITEM_MARKER = TOOLTIP_APPOINTMENT_ITEM + '-marker';
+const TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = TOOLTIP_APPOINTMENT_ITEM + '-marker-body';
 
-    TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + '-delete-button-container',
-    TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
+const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + '-delete-button-container';
+const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
 
 export const createDefaultTooltipTemplate = (template, data, targetData, index) => {
     return new FunctionTemplate(options => {
@@ -182,13 +182,13 @@ export class TooltipStrategyBase {
     }
 
     _createItemListContent(data, currentData, color) {
-        const editing = this.scheduler.option('editing'),
-            isAllDay = this.scheduler.fire('getField', 'allDay', data),
-            text = this.scheduler.fire('getField', 'text', data),
-            startDateTimeZone = this.scheduler.fire('getField', 'startDateTimeZone', data),
-            endDateTimeZone = this.scheduler.fire('getField', 'endDateTimeZone', data),
-            startDate = this.scheduler.fire('convertDateByTimezone', this.scheduler.fire('getField', 'startDate', currentData), startDateTimeZone),
-            endDate = this.scheduler.fire('convertDateByTimezone', this.scheduler.fire('getField', 'endDate', currentData), endDateTimeZone);
+        const editing = this.scheduler.option('editing');
+        const isAllDay = this.scheduler.fire('getField', 'allDay', data);
+        const text = this.scheduler.fire('getField', 'text', data);
+        const startDateTimeZone = this.scheduler.fire('getField', 'startDateTimeZone', data);
+        const endDateTimeZone = this.scheduler.fire('getField', 'endDateTimeZone', data);
+        const startDate = this.scheduler.fire('convertDateByTimezone', this.scheduler.fire('getField', 'startDate', currentData), startDateTimeZone);
+        const endDate = this.scheduler.fire('convertDateByTimezone', this.scheduler.fire('getField', 'endDate', currentData), endDateTimeZone);
 
         const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
         $itemElement.append(this._createItemListMarker(color));
@@ -220,8 +220,8 @@ export class TooltipStrategyBase {
     }
 
     _createDeleteButton(data, currentData) {
-        const $container = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER),
-            $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
+        const $container = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER);
+        const $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
         $container.append($deleteButton);
         this.scheduler._createComponent($deleteButton, Button, {

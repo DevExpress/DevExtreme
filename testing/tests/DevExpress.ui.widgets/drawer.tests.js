@@ -20,8 +20,8 @@ const position = $element => $element.position().left;
 
 const mockFxAnimate = (animations, type, output) => {
     animations[type] = (config) => {
-        let position = config.position || 0,
-            $element = config.$element;
+        const position = config.position || 0;
+        const $element = config.$element;
 
         output.push({
             $element,
@@ -106,8 +106,8 @@ QUnit.test('defaults', function(assert) {
 });
 
 QUnit.test('drawer should preserve content', function(assert) {
-    const $content = $('#drawer #content'),
-        $element = $('#drawer').dxDrawer();
+    const $content = $('#drawer #content');
+    const $element = $('#drawer').dxDrawer();
 
     assert.equal($content[0], $element.find('#content')[0]);
 });
@@ -160,7 +160,7 @@ QUnit.test('dxresize event should be fired for content at the end of animation',
     });
 
     const instance = $element.dxDrawer('instance');
-    var triggerFunction = domUtils.triggerResizeEvent;
+    const triggerFunction = domUtils.triggerResizeEvent;
     assert.expect(2);
 
     try {
@@ -185,7 +185,7 @@ QUnit.test('dxresize event should be fired if there is no any animation', functi
     });
 
     const instance = $element.dxDrawer('instance');
-    var triggerFunction = domUtils.triggerResizeEvent;
+    const triggerFunction = domUtils.triggerResizeEvent;
     assert.expect(2);
 
     try {
@@ -202,12 +202,12 @@ QUnit.test('dxresize event should be fired if there is no any animation', functi
 });
 
 QUnit.test('incomplete animation should be stopped after toggling visibility', function(assert) {
-    let origFxStop = fx.stop,
-        panelStopCalls = 0,
-        contentStopCalls = 0,
-        overlayContentStopCalls = 0,
-        shaderStopCalls = 0,
-        isJumpedToEnd = false;
+    const origFxStop = fx.stop;
+    let panelStopCalls = 0;
+    let contentStopCalls = 0;
+    let overlayContentStopCalls = 0;
+    let shaderStopCalls = 0;
+    let isJumpedToEnd = false;
 
     const $element = $('#drawer').dxDrawer({
         opened: false,
@@ -261,12 +261,12 @@ QUnit.test('incomplete animation should be stopped after closing on outside clic
         shading: true
     });
 
-    let origFxStop = fx.stop,
-        panelStopCalls = 0,
-        contentStopCalls = 0,
-        overlayContentStopCalls = 0,
-        shaderStopCalls = 0,
-        isJumpedToEnd = false;
+    const origFxStop = fx.stop;
+    let panelStopCalls = 0;
+    let contentStopCalls = 0;
+    let overlayContentStopCalls = 0;
+    let shaderStopCalls = 0;
+    let isJumpedToEnd = false;
 
     const instance = $element.dxDrawer('instance');
     fx.stop = function($element, jumpToEnd) {
@@ -313,11 +313,11 @@ QUnit.test('incomplete animation should be stopped after changing modes', functi
         shading: true
     });
 
-    let origFxStop = fx.stop,
-        panelStopCalls = 0,
-        contentStopCalls = 0,
-        shaderStopCalls = 0,
-        isJumpedToEnd = false;
+    const origFxStop = fx.stop;
+    let panelStopCalls = 0;
+    let contentStopCalls = 0;
+    let shaderStopCalls = 0;
+    let isJumpedToEnd = false;
 
     const instance = $element.dxDrawer('instance');
     fx.stop = function($element, jumpToEnd) {
@@ -420,7 +420,7 @@ QUnit.test('wrapper content should be reversed if position = \'bottom\' or \'rig
     const instance = $element.dxDrawer('instance');
 
     instance.option('position', 'right');
-    let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+    const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
     let $content = $wrapper.children();
 
     assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
@@ -442,7 +442,7 @@ QUnit.test('wrapper content should be reversed if position = \'right\' and opene
     const instance = $element.dxDrawer('instance');
 
     instance.option('openedStateMode', 'shrink');
-    let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+    const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
     let $content = $wrapper.children();
 
     assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
@@ -464,7 +464,7 @@ QUnit.skip('drawer panel should be repositioned correctly after dimension change
         revealMode: 'slide',
         openedStateMode: 'overlap',
         template: function($content) {
-            var $div = $('<div/>');
+            const $div = $('<div/>');
             $div.css('height', 600);
             $div.css('width', 200);
 
@@ -489,7 +489,7 @@ QUnit.skip('drawer panel should be repositioned correctly after dimension change
         revealMode: 'slide',
         openedStateMode: 'overlap',
         template: function($content) {
-            var $div = $('<div/>');
+            const $div = $('<div/>');
             $div.css('height', 600);
             $div.css('width', 200);
 
@@ -514,7 +514,7 @@ QUnit.test('drawer panel should have correct size after dimension changed,top po
         revealMode: 'expand',
         openedStateMode: 'overlap',
         template: function($content) {
-            var $div = $('<div/>');
+            const $div = $('<div/>');
             $div.css('height', 600);
             $div.css('width', 200);
 
@@ -541,7 +541,7 @@ QUnit.test('drawer panel should be repositioned correctly after dimension change
         revealMode: 'slide',
         openedStateMode: 'overlap',
         template: function($content) {
-            var $div = $('<div/>');
+            const $div = $('<div/>');
             $div.css('height', 600);
             $div.css('width', 200);
 
@@ -567,7 +567,7 @@ QUnit.skip('drawer panel should be repositioned after dimension changed, right p
         position: 'right',
         openedStateMode: 'overlap',
         template: function($content) {
-            var $div = $('<div/>');
+            const $div = $('<div/>');
             $div.css('height', 600);
             $div.css('width', 200);
 
@@ -646,7 +646,7 @@ QUnit.test('drawer panel should have correct width when panel content is wrapped
     const $element = $('#drawer').dxDrawer({
         opened: true,
         template: function($content) {
-            var $outerDiv = $('<div/>');
+            const $outerDiv = $('<div/>');
             $('<div/>').css('height', 600).css('width', 200).appendTo($outerDiv);
 
             return $outerDiv;
@@ -662,7 +662,7 @@ QUnit.test('drawer panel should have correct width when panel content is wrapped
 });
 
 QUnit.test('drawer panel should have correct width when async template is used', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
 
     $('#drawer').dxDrawer({
         openedStateMode: 'push',
@@ -671,7 +671,7 @@ QUnit.test('drawer panel should have correct width when async template is used',
             templates: {
                 'panel': {
                     render: function(args) {
-                        var $div = $('<div/>').appendTo(args.container);
+                        const $div = $('<div/>').appendTo(args.container);
                         setTimeout(() => {
                             $div.css('height', 600);
                             $div.css('width', 200);
@@ -691,7 +691,7 @@ QUnit.test('drawer panel should have correct width when async template is used',
 });
 
 QUnit.test('drawer panel should have correct width when async template is used, overlap mode', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
 
     $('#drawer').dxDrawer({
         openedStateMode: 'overlap',
@@ -700,7 +700,7 @@ QUnit.test('drawer panel should have correct width when async template is used, 
             templates: {
                 'panel': {
                     render: function(args) {
-                        var $div = $('<div/>').appendTo(args.container);
+                        const $div = $('<div/>').appendTo(args.container);
                         setTimeout(() => {
                             $div.css('height', 600);
                             $div.css('width', 200);
@@ -720,7 +720,7 @@ QUnit.test('drawer panel should have correct width when async template is used, 
 });
 
 QUnit.test('drawer panel should have correct z-index when async template is used, overlap mode', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
 
     $('#drawer').dxDrawer({
         openedStateMode: 'overlap',
@@ -729,7 +729,7 @@ QUnit.test('drawer panel should have correct z-index when async template is used
             templates: {
                 'panel': {
                     render: function(args) {
-                        var $div = $('<div/>').appendTo(args.container);
+                        const $div = $('<div/>').appendTo(args.container);
                         setTimeout(() => {
                             $div.css('height', 600);
                             $div.css('width', 200);
@@ -749,7 +749,7 @@ QUnit.test('drawer panel should have correct z-index when async template is used
 });
 
 QUnit.test('drawer panel should have correct margin when async template is used', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
 
     $('#drawer').dxDrawer({
         openedStateMode: 'shrink',
@@ -759,7 +759,7 @@ QUnit.test('drawer panel should have correct margin when async template is used'
             templates: {
                 'panel': {
                     render: function(args) {
-                        var $div = $('<div/>').appendTo(args.container);
+                        const $div = $('<div/>').appendTo(args.container);
                         setTimeout(() => {
                             $div.css('height', 600);
                             $div.css('width', 200);
@@ -1013,11 +1013,11 @@ QUnit.test('content should have correct position if panel is visible in rtl mode
 });
 
 QUnit.test('drawer panel overlay should have right position config', function(assert) {
-    let drawer = $('#drawer').dxDrawer({
-            openedStateMode: 'overlap',
-            rtlEnabled: true
-        }).dxDrawer('instance'),
-        overlay = drawer.getOverlay();
+    const drawer = $('#drawer').dxDrawer({
+        openedStateMode: 'overlap',
+        rtlEnabled: true
+    }).dxDrawer('instance');
+    let overlay = drawer.getOverlay();
 
     assert.equal(overlay.option('position').my, 'top left');
     assert.equal(overlay.option('position').at, 'top left');
@@ -1031,7 +1031,7 @@ QUnit.test('drawer panel overlay should have right position config', function(as
 
 QUnit.test('minSize and maxSize should be rendered correctly in overlap mode rtl, slide', function(assert) {
     fx.off = true;
-    let drawer = $('#drawer').dxDrawer({
+    const drawer = $('#drawer').dxDrawer({
         openedStateMode: 'overlap',
         minSize: 50,
         maxSize: 300,
@@ -1040,7 +1040,7 @@ QUnit.test('minSize and maxSize should be rendered correctly in overlap mode rtl
         revealMode: 'slide',
         rtlEnabled: true,
         template: function($content) {
-            var $div = $('<div/>');
+            const $div = $('<div/>');
             $div.css('height', 600);
             $div.css('width', 200);
 
@@ -1069,7 +1069,7 @@ QUnit.test('wrapper content should be reversed if position = \'right\' and opene
 
     instance.option('openedStateMode', 'shrink');
 
-    let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+    const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
     let $content = $wrapper.children();
 
     assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
@@ -1086,13 +1086,13 @@ QUnit.test('wrapper content should be reversed if position = \'right\' and opene
 QUnit.module('CloseOnOutsideClick');
 
 QUnit.test('drawer should be hidden after click on content', function(assert) {
-    var drawer = $('#drawer').dxDrawer({
-            closeOnOutsideClick: false,
-            opened: true,
-            shading: true
-        })
-            .dxDrawer('instance'),
-        $content = drawer.viewContent();
+    const drawer = $('#drawer').dxDrawer({
+        closeOnOutsideClick: false,
+        opened: true,
+        shading: true
+    })
+        .dxDrawer('instance');
+    const $content = drawer.viewContent();
 
     $($content).trigger('dxclick');
     assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
@@ -1106,14 +1106,14 @@ QUnit.test('drawer should be hidden after click on content', function(assert) {
 });
 
 QUnit.test('closeOnOutsideClick as function should be processed correctly', function(assert) {
-    var drawer = $('#drawer').dxDrawer({
-            closeOnOutsideClick: () => {
-                return false;
-            },
-            opened: true
-        })
-            .dxDrawer('instance'),
-        $content = drawer.viewContent();
+    const drawer = $('#drawer').dxDrawer({
+        closeOnOutsideClick: () => {
+            return false;
+        },
+        opened: true
+    })
+        .dxDrawer('instance');
+    const $content = drawer.viewContent();
 
     $($content).trigger('dxclick');
     assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
@@ -1132,7 +1132,7 @@ QUnit.module('Push mode', {
             this.instance = $('#drawer').dxDrawer($.extend(options, {
                 openedStateMode: 'push',
                 template: function($content) {
-                    var $div = $('<div/>');
+                    const $div = $('<div/>');
                     $div.css('height', 200);
                     $div.css('width', 300);
 
@@ -1246,7 +1246,7 @@ QUnit.module('Shrink mode', {
                 contentTemplate: 'contentTemplate',
                 width: 800,
                 template: function($content) {
-                    var $div = $('<div/>');
+                    const $div = $('<div/>');
                     $div.css('height', 200);
                     $div.css('width', 300);
 
@@ -1528,7 +1528,7 @@ QUnit.module('Overlap mode', {
                         opened: isOpened,
                         minSize: minSize,
                         template: ($content) => {
-                            let $div = $('<div/>').css({ height: 200, width: 300 });
+                            const $div = $('<div/>').css({ height: 200, width: 300 });
                             return $('<div/>').append($div);
                         }
                     });
@@ -1778,7 +1778,7 @@ QUnit.module('Modes changing', {
         this.createInstance = function(options) {
             this.instance = $('#drawer').dxDrawer($.extend(options, {
                 template: function($content) {
-                    var $div = $('<div/>');
+                    const $div = $('<div/>');
                     $div.css('height', 200);
                     $div.css('width', 300);
 

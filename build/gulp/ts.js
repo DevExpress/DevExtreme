@@ -1,17 +1,17 @@
-var gulp = require('gulp');
-var file = require('gulp-file');
-var concat = require('gulp-concat');
-var ts = require('gulp-typescript');
+const gulp = require('gulp');
+const file = require('gulp-file');
+const concat = require('gulp-concat');
+const ts = require('gulp-typescript');
 
-var headerPipes = require('./header-pipes.js');
+const headerPipes = require('./header-pipes.js');
 
-var OUTPUT_DIR = 'artifacts/ts';
-var MODULES = require('./modules_metadata.json');
-var TS_PATH = './ts/dx.all.d.ts';
+const OUTPUT_DIR = 'artifacts/ts';
+const MODULES = require('./modules_metadata.json');
+const TS_PATH = './ts/dx.all.d.ts';
 
-var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
+const widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
     if(widgetPath.startsWith('ui.dx') || widgetPath.startsWith('viz.dx')) {
-        var parts = widgetPath.split('.');
+        const parts = widgetPath.split('.');
         return parts.length === 2 ? parts[1] : '';
     }
 };
@@ -21,7 +21,7 @@ exports.getAugmentationOptionsPath = (widgetPath) => widgetNameByPath(widgetPath
 var getWidgetOptionsPath = (widgetPath) => `${widgetPath}Options`;
 
 exports.generateJQueryAugmentation = function(globalWidgetPath) {
-    var widgetName = widgetNameByPath(globalWidgetPath);
+    const widgetName = widgetNameByPath(globalWidgetPath);
     if(!widgetName) return '';
 
     return 'interface JQuery {\n' +
@@ -46,7 +46,7 @@ gulp.task('ts-sources', function() {
 });
 
 gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
-    var content = `/// <reference path="${TS_PATH}" />\n`;
+    let content = `/// <reference path="${TS_PATH}" />\n`;
 
     content += MODULES
         .map(function(moduleMeta) {
@@ -57,8 +57,8 @@ gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
                 const exportEntry = moduleMeta.exports[name];
                 if(!exportEntry.isWidget) { return ''; }
 
-                var globalPath = exportEntry.path;
-                var widgetName = widgetNameByPath(globalPath);
+                const globalPath = exportEntry.path;
+                const widgetName = widgetNameByPath(globalPath);
                 if(!widgetName) { return ''; }
 
                 return `$().${widgetName}();\n` +

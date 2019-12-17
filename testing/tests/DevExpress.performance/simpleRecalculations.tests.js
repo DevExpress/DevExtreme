@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('../../helpers/qunitPerformanceExtension.js');
 require('../../helpers/widgetsIterator.js');
@@ -10,7 +10,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.skip('Animation performance test', function(assert) {
-    var $div = $('<div>').appendTo($('body'));
+    const $div = $('<div>').appendTo($('body'));
     $div.css({
         'transitionProperty': 'none'
     });
@@ -20,7 +20,7 @@ QUnit.skip('Animation performance test', function(assert) {
     $div.css('opacity', 1);
     $div.css('transform', 'translate(1000px,0px)');
 
-    var $div2 = $('<div>').appendTo($('body'));
+    const $div2 = $('<div>').appendTo($('body'));
     $div2.css({
         'transitionProperty': 'none'
     });
@@ -38,8 +38,8 @@ QUnit.skip('Animation performance test', function(assert) {
     });
 
 
-    var measureFunction = function() {
-        var deferred = $.Deferred();
+    const measureFunction = function() {
+        const deferred = $.Deferred();
         $div.on('transitionend', function() {
             deferred.resolve();
         });

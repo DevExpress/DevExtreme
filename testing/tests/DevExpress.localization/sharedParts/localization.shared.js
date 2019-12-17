@@ -1,18 +1,18 @@
-var $ = require('jquery'),
-    numberLocalization = require('localization/number'),
-    dateLocalization = require('localization/date'),
-    messageLocalization = require('localization/message'),
-    errors = require('core/errors'),
-    localization = require('localization'),
-    config = require('core/config'),
-    logger = require('core/utils/console').logger;
+const $ = require('jquery');
+const numberLocalization = require('localization/number');
+const dateLocalization = require('localization/date');
+const messageLocalization = require('localization/message');
+const errors = require('core/errors');
+const localization = require('localization');
+const config = require('core/config');
+const logger = require('core/utils/console').logger;
 
-var generateExpectedDate = require('../../../helpers/dateHelper.js').generateDate;
+const generateExpectedDate = require('../../../helpers/dateHelper.js').generateDate;
 
 module.exports = function() {
     QUnit.module('Localization modules');
 
-    var checkModules = function(testName, namespace, methods) {
+    const checkModules = function(testName, namespace, methods) {
         QUnit.test(testName, function(assert) {
             $.each(methods, function(index, method) {
                 assert.ok($.isFunction(namespace[method]), method + ' method exists');
@@ -97,7 +97,7 @@ module.exports = function() {
     });
 
     QUnit.test('format', function(assert) {
-        var assertData = {
+        const assertData = {
             'day': {
                 date: new Date(2015, 2, 2, 3, 4, 5, 6),
                 expected: '2'
@@ -246,7 +246,7 @@ module.exports = function() {
             data = $.makeArray(data);
 
             $.each(data, function(_, data) {
-                var localizedDate = localization.formatDate(data.date, format);
+                const localizedDate = localization.formatDate(data.date, format);
                 assert.equal(typeof (localizedDate), 'string');
                 assert.equal(localizedDate, data.expected, data.date + ' in ' + format + ' format');
             });
@@ -282,14 +282,14 @@ module.exports = function() {
     });
 
     QUnit.test('parse', function(assert) {
-        var originalLoggerWarn = logger.warn;
-        var warnLog = [];
+        const originalLoggerWarn = logger.warn;
+        const warnLog = [];
 
         logger.warn = function(text) {
             warnLog.push(text);
         };
 
-        var assertData = {
+        const assertData = {
             'day': {
                 text: '2',
                 expectedConfig: { day: 2 }
@@ -430,7 +430,7 @@ module.exports = function() {
                 data = $.makeArray(data);
 
                 $.each(data, function(_, data) {
-                    var expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
+                    const expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
                     assert.equal(localization.parseDate(data.text, format), expected && String(expected), format + ' format');
                 });
             });
@@ -488,7 +488,7 @@ module.exports = function() {
     });
 
     QUnit.test('set custom localizablePrefix', function(assert) {
-        var localized = messageLocalization.localizeString('@addedKey #addedKey');
+        let localized = messageLocalization.localizeString('@addedKey #addedKey');
         assert.equal(localized, 'testValue #addedKey');
 
         try {
@@ -569,33 +569,33 @@ module.exports = function() {
     });
 
     QUnit.test('localizeString', function(assert) {
-        var localized = messageLocalization.localizeString('@addedKey @@addedKey @');
+        const localized = messageLocalization.localizeString('@addedKey @@addedKey @');
         assert.equal(localized, 'testValue @addedKey @');
     });
 
     QUnit.test('localizeString doesn\'t affect e-mails', function(assert) {
-        var toLocalize = 'E-mails such as email@addedKey.com are not localized',
-            localized = messageLocalization.localizeString(toLocalize);
+        const toLocalize = 'E-mails such as email@addedKey.com are not localized';
+        const localized = messageLocalization.localizeString(toLocalize);
 
         assert.equal(localized, toLocalize);
     });
 
     QUnit.test('localizeString doesn\'t affect unknown keys', function(assert) {
-        var toLocalize = '@unknownKey',
-            localized = messageLocalization.localizeString(toLocalize);
+        const toLocalize = '@unknownKey';
+        const localized = messageLocalization.localizeString(toLocalize);
 
         assert.equal(localized, toLocalize);
     });
 
     QUnit.test('localizeNode', function(assert) {
-        var $node = $(
-                '<div data=\'@Loading\'>' +
+        const $node = $(
+            '<div data=\'@Loading\'>' +
                 '   @Loading' +
                 '   <div data=\'@Loading\' class=\'inner\'>' +
                 '       @Loading' +
                 '   </div>' +
-                '</div>'),
-            $contents = $node.contents();
+                '</div>');
+        const $contents = $node.contents();
 
         messageLocalization.localizeNode($node);
 
@@ -624,7 +624,7 @@ module.exports = function() {
     });
 
     QUnit.test('T199912: Application crashes if it has iframe and jquery version is 1.11.x', function(assert) {
-        var $node = $('<iframe data=\'@Loading\'></iframe>');
+        const $node = $('<iframe data=\'@Loading\'></iframe>');
 
         messageLocalization.localizeNode($node);
         assert.equal($node.attr('data'), '@Loading', 'T199912: Don\'t touch iframes');
@@ -633,7 +633,7 @@ module.exports = function() {
     QUnit.test('B239384: Application crushes if opening in IE with flash-specific tags', function(assert) {
         assert.expect(0);
 
-        var html = '\
+        const html = '\
         <object name="_dp_swf_engine" width="1" height="1" align="middle" id="_dp_swf_engine" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" style="width: 1px; height: 1px;">\
             <param name="_cx" value="5080">\
             <param name="_cy" value="5080">\
@@ -671,7 +671,7 @@ module.exports = function() {
     });
 
     QUnit.test('input attr \'type\' was not localized (Q588810)', function(assert) {
-        var $node = $('<input type=\'text\'></input>');
+        const $node = $('<input type=\'text\'></input>');
 
         messageLocalization.localizeNode($node);
 
@@ -717,9 +717,9 @@ module.exports = function() {
     });
 
     QUnit.test('parse with custom separators', function(assert) {
-        var oldDecimalSeparator = config().decimalSeparator,
-            oldThousandsSeparator = config().thousandsSeparator,
-            oldLocale = localization.locale();
+        const oldDecimalSeparator = config().decimalSeparator;
+        const oldThousandsSeparator = config().thousandsSeparator;
+        const oldLocale = localization.locale();
 
         config({
             decimalSeparator: ',',
@@ -795,9 +795,9 @@ module.exports = function() {
     });
 
     QUnit.test('custom group and decimal separators', function(assert) {
-        var oldDecimalSeparator = config().decimalSeparator,
-            oldThousandsSeparator = config().thousandsSeparator,
-            oldLocale = localization.locale();
+        const oldDecimalSeparator = config().decimalSeparator;
+        const oldThousandsSeparator = config().thousandsSeparator;
+        const oldLocale = localization.locale();
 
         config({
             decimalSeparator: ',',
@@ -824,9 +824,9 @@ module.exports = function() {
     });
 
     QUnit.test('format as LDML pattern with custom separators', function(assert) {
-        var oldDecimalSeparator = config().decimalSeparator,
-            oldThousandsSeparator = config().thousandsSeparator,
-            oldLocale = localization.locale();
+        const oldDecimalSeparator = config().decimalSeparator;
+        const oldThousandsSeparator = config().thousandsSeparator;
+        const oldLocale = localization.locale();
 
         config({
             decimalSeparator: ',',
@@ -854,10 +854,10 @@ module.exports = function() {
         assert.equal(localization.formatNumber(12, { type: 'currency' }), '$12');
         assert.equal(localization.formatNumber(1, { type: 'currency', precision: 2 }), '$1.00');
         assert.equal(localization.formatNumber(1, { type: 'currency', precision: 2, currency: 'USD' }), '$1.00');
-        var negativeCurrency = localization.formatNumber(-1, { type: 'currency', precision: 2 }),
-            normalStyle = '-$1.00',
-            // NOTE: We use accounting style for currencies in Globalize by default
-            accountingStyle = '($1.00)';
+        const negativeCurrency = localization.formatNumber(-1, { type: 'currency', precision: 2 });
+        const normalStyle = '-$1.00';
+        // NOTE: We use accounting style for currencies in Globalize by default
+        const accountingStyle = '($1.00)';
 
         assert.ok(negativeCurrency === normalStyle || negativeCurrency === accountingStyle);
     });
@@ -871,7 +871,7 @@ module.exports = function() {
     QUnit.module('Localization custom functions');
 
     QUnit.test('number', function(assert) {
-        var format = {
+        const format = {
             formatter: function(value) {
                 return 'two';
             },
@@ -886,7 +886,7 @@ module.exports = function() {
     });
 
     QUnit.test('date', function(assert) {
-        var format = {
+        const format = {
             formatter: function(date) {
                 return 'Шел ' + date.getFullYear() + ' год.';
             },
@@ -894,7 +894,7 @@ module.exports = function() {
                 return new Date(Number(text.substr(4, 4)), 1, 1);
             }
         };
-        var someDate = new Date(1999, 1, 1);
+        const someDate = new Date(1999, 1, 1);
 
         assert.equal(localization.formatDate(someDate, format), 'Шел 1999 год.');
         assert.equal(localization.formatDate(someDate, format.formatter), 'Шел 1999 год.');
@@ -902,17 +902,17 @@ module.exports = function() {
     });
 
     QUnit.test('\'no parser\' errors', function(assert) {
-        var numberFormatter = function(value) {
-                return '1';
-            },
-            dateFormatter = function(value) {
-                return new Date(0, 0, 1);
-            },
-            warningIdPrefixLength = 8,
-            numberWarning = 'Number parsing is invoked while the parser is not defined',
-            dateWarning = 'Date parsing is invoked while the parser is not defined',
-            originalLoggerWarn = logger.warn,
-            warnLog = [];
+        const numberFormatter = function(value) {
+            return '1';
+        };
+        const dateFormatter = function(value) {
+            return new Date(0, 0, 1);
+        };
+        const warningIdPrefixLength = 8;
+        const numberWarning = 'Number parsing is invoked while the parser is not defined';
+        const dateWarning = 'Date parsing is invoked while the parser is not defined';
+        const originalLoggerWarn = logger.warn;
+        const warnLog = [];
 
         logger.warn = function(text) {
             warnLog.push(text);
@@ -937,19 +937,19 @@ module.exports = function() {
     });
 
     QUnit.test('formatter has higher priority than a type', function(assert) {
-        var format = {
+        const format = {
             formatter: function(date) {
                 return 'Y ' + date.getFullYear();
             },
             type: 'year'
         };
-        var someDate = new Date(1999, 1, 1);
+        const someDate = new Date(1999, 1, 1);
 
         assert.equal(localization.formatDate(someDate, format), 'Y 1999');
     });
 
     QUnit.test('string format without a parser should not rise a warning', function(assert) {
-        var errorHandler = sinon.spy(errors, 'log');
+        const errorHandler = sinon.spy(errors, 'log');
         localization.parseNumber('1', '#0');
 
         assert.equal(errorHandler.callCount, 0, 'warning was not rised');

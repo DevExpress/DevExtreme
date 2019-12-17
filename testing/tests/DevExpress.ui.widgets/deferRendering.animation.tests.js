@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    TransitionExecutorModule = require('animation/transition_executor/transition_executor');
+const $ = require('jquery');
+const TransitionExecutorModule = require('animation/transition_executor/transition_executor');
 
 require('common.css!');
 require('ui/defer_rendering');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="animation">\
             <div class="defer-rendering"></div>\
         </div>\
@@ -27,7 +27,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var savedTransitionExecutor;
+let savedTransitionExecutor;
 
 QUnit.module('dxDeferRendering', {
     beforeEach: function() {
@@ -41,28 +41,28 @@ QUnit.module('dxDeferRendering', {
 QUnit.test('animation option', function(assert) {
     assert.expect(5);
 
-    var done = assert.async(),
-        animation = {
-            type: 'test'
+    const done = assert.async();
+    const animation = {
+        type: 'test'
+    };
+    const options = {
+        animation: animation,
+        renderWhen: $.Deferred(),
+        onRendered: function() {
+            assert.equal(enterLog.length, 0);
+            assert.equal(startLog.length, 0);
         },
-        options = {
-            animation: animation,
-            renderWhen: $.Deferred(),
-            onRendered: function() {
-                assert.equal(enterLog.length, 0);
-                assert.equal(startLog.length, 0);
-            },
-            onShown: function() {
-                assert.equal(enterLog.length, 1);
-                assert.equal(enterLog[0].$element[0], $test.find('.dx-deferrendering')[0]);
-                assert.equal(enterLog[0].config.type, 'test');
+        onShown: function() {
+            assert.equal(enterLog.length, 1);
+            assert.equal(enterLog[0].$element[0], $test.find('.dx-deferrendering')[0]);
+            assert.equal(enterLog[0].config.type, 'test');
 
-                done();
-            }
-        },
-        enterLog = [],
-        startLog = [],
-        $test = $('#animation');
+            done();
+        }
+    };
+    var enterLog = [];
+    var startLog = [];
+    var $test = $('#animation');
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: function($el, config) {
@@ -89,32 +89,32 @@ QUnit.test('animation option', function(assert) {
 QUnit.test('staggering animation options', function(assert) {
     assert.expect(7);
 
-    var done = assert.async(),
-        animation = {
-            type: 'test'
-        },
-        options = {
-            animation: animation,
-            staggerItemSelector: '.test-staggering-item',
-            renderWhen: $.Deferred(),
-            onShown: function() {
-                assert.equal(enterLog.length, 2);
-                assert.ok(enterLog[0].$element.is('.item1'));
-                assert.ok(enterLog[0].config.type, 'test');
-                assert.ok(enterLog[1].$element.is('.item2'));
-                assert.ok(enterLog[1].config.type, 'test');
+    const done = assert.async();
+    const animation = {
+        type: 'test'
+    };
+    const options = {
+        animation: animation,
+        staggerItemSelector: '.test-staggering-item',
+        renderWhen: $.Deferred(),
+        onShown: function() {
+            assert.equal(enterLog.length, 2);
+            assert.ok(enterLog[0].$element.is('.item1'));
+            assert.ok(enterLog[0].config.type, 'test');
+            assert.ok(enterLog[1].$element.is('.item2'));
+            assert.ok(enterLog[1].config.type, 'test');
 
-                assert.equal(startLog.length, 1);
-                assert.equal(startLog[0], undefined);
+            assert.equal(startLog.length, 1);
+            assert.equal(startLog[0], undefined);
 
-                done();
-            }
-        },
-        enterLog = [],
-        startLog = [],
-        $test = $('#staggering-animation')
-            .clone()
-            .appendTo($('body'));
+            done();
+        }
+    };
+    var enterLog = [];
+    var startLog = [];
+    const $test = $('#staggering-animation')
+        .clone()
+        .appendTo($('body'));
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: function($el, config) {
@@ -140,31 +140,31 @@ QUnit.test('staggering animation options', function(assert) {
 QUnit.test('staggering animation with items that are outside the screen', function(assert) {
     assert.expect(5);
 
-    var done = assert.async(),
-        animation = {
-            type: 'test'
-        },
-        options = {
-            animation: animation,
-            staggerItemSelector: '.test-staggering-item',
-            renderWhen: $.Deferred(),
-            onShown: function() {
-                assert.equal(enterLog.length, 1, 'the top item is not visible');
-                assert.ok(enterLog[0].$element.is('.item2'));
-                assert.ok(enterLog[0].config.type, 'test');
+    const done = assert.async();
+    const animation = {
+        type: 'test'
+    };
+    const options = {
+        animation: animation,
+        staggerItemSelector: '.test-staggering-item',
+        renderWhen: $.Deferred(),
+        onShown: function() {
+            assert.equal(enterLog.length, 1, 'the top item is not visible');
+            assert.ok(enterLog[0].$element.is('.item2'));
+            assert.ok(enterLog[0].config.type, 'test');
 
-                assert.equal(startLog.length, 1);
-                assert.equal(startLog[0], undefined);
+            assert.equal(startLog.length, 1);
+            assert.equal(startLog[0], undefined);
 
-                done();
-            }
-        },
-        enterLog = [],
-        startLog = [],
-        $test = $('#staggering-animation')
-            .clone()
-            .appendTo($('body'))
-            .css('top', '-15px');// Hide the top item. It's of 10px height
+            done();
+        }
+    };
+    var enterLog = [];
+    var startLog = [];
+    const $test = $('#staggering-animation')
+        .clone()
+        .appendTo($('body'))
+        .css('top', '-15px');// Hide the top item. It's of 10px height
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: function($el, config) {
@@ -188,15 +188,15 @@ QUnit.test('staggering animation with items that are outside the screen', functi
 });
 
 QUnit.test('stops on dispose (T315643)', function(assert) {
-    var animation = {
-            type: 'test'
-        },
-        options = {
-            animation: animation,
-            renderWhen: $.Deferred()
-        },
-        stopLog = [],
-        $test = $('#animation');
+    const animation = {
+        type: 'test'
+    };
+    const options = {
+        animation: animation,
+        renderWhen: $.Deferred()
+    };
+    const stopLog = [];
+    const $test = $('#animation');
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: function($el, config) {
@@ -227,14 +227,14 @@ QUnit.test('stops on dispose (T315643)', function(assert) {
 });
 
 QUnit.test('stops animation on the \'renderWhen\' option toggling (T574848)', function(assert) {
-    var options = {
-            animation: {
-                type: 'test'
-            },
-            renderWhen: false
+    const options = {
+        animation: {
+            type: 'test'
         },
-        stopLog = [],
-        $test = $('#animation');
+        renderWhen: false
+    };
+    const stopLog = [];
+    const $test = $('#animation');
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: $.noop,
@@ -248,7 +248,7 @@ QUnit.test('stops animation on the \'renderWhen\' option toggling (T574848)', fu
         }
     });
 
-    var deferRendering = $test
+    const deferRendering = $test
         .find('.defer-rendering')
         .dxDeferRendering(options)
         .dxDeferRendering('instance');

@@ -250,7 +250,7 @@ const Editor = Widget.inherit({
             this._$validationMessage = null;
         }
 
-        let validationErrorMessage = getValidationErrorMessage(validationErrors);
+        const validationErrorMessage = getValidationErrorMessage(validationErrors);
 
         if(!isValid && validationErrorMessage) {
             this._$validationMessage = $('<div>').addClass(INVALID_MESSAGE)

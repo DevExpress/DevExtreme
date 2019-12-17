@@ -1,6 +1,6 @@
-var tableCreator = require('ui/scheduler/ui.scheduler.table_creator');
+const tableCreator = require('ui/scheduler/ui.scheduler.table_creator');
 
-var FIXTURE_DATA = [{
+const FIXTURE_DATA = [{
     title: 'o1',
     children: [{
         title: 'r1',
@@ -51,7 +51,7 @@ var FIXTURE_DATA = [{
 }];
 
 function checkCell(cell, expectedData, assert) {
-    var parentRow = cell.parentElement;
+    const parentRow = cell.parentElement;
 
     assert.equal(parentRow.getElementsByTagName('td').length, expectedData.totalCellCount, 'Cell Count is OK');
     assert.equal(cell.textContent, expectedData.textContent, 'Cell text is OK');
@@ -61,9 +61,9 @@ function checkCell(cell, expectedData, assert) {
 QUnit.module('Vertical table');
 
 QUnit.test('Default rendering', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA),
-        rows = table.getElementsByTagName('tr'),
-        cells = table.getElementsByTagName('td');
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA);
+    const rows = table.getElementsByTagName('tr');
+    const cells = table.getElementsByTagName('td');
 
     assert.equal(table.tagName.toLowerCase(), 'table', 'Table is created');
     assert.equal(rows.length, 12, 'Row count is OK');
@@ -102,17 +102,17 @@ QUnit.test('Default rendering', function(assert) {
 });
 
 QUnit.test('Cells rendering using the \'th\' tag', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         cellTag: 'th'
     });
 
-    var cells = table.getElementsByTagName('th');
+    const cells = table.getElementsByTagName('th');
 
     assert.equal(cells.length, 20, 'Cells are OK');
 });
 
 QUnit.test('Custom css class for the table', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupTableClass: 'group-table'
     });
 
@@ -120,11 +120,11 @@ QUnit.test('Custom css class for the table', function(assert) {
 });
 
 QUnit.test('Custom css class for rows', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupRowClass: 'group-row'
     });
 
-    var rows = table.getElementsByTagName('tr');
+    const rows = table.getElementsByTagName('tr');
 
     Array.prototype.forEach.call(rows, function(row) {
         assert.equal(row.className, 'group-row', 'The row css class is OK');
@@ -132,11 +132,11 @@ QUnit.test('Custom css class for rows', function(assert) {
 });
 
 QUnit.test('Custom css class for cells', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupCellClass: 'group-cell'
     });
 
-    var cells = table.getElementsByTagName('td');
+    const cells = table.getElementsByTagName('td');
 
     Array.prototype.forEach.call(cells, function(cell) {
         assert.equal(cell.className, 'group-cell', 'The cell css class is OK');
@@ -144,9 +144,9 @@ QUnit.test('Custom css class for cells', function(assert) {
 });
 
 QUnit.test('Custom content for cells', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupCellCustomContent: function(cell, cellText) {
-            var innerCellContent = document.createElement('div');
+            const innerCellContent = document.createElement('div');
             innerCellContent.className = 'cell-content';
             innerCellContent.appendChild(cellText);
 
@@ -154,7 +154,7 @@ QUnit.test('Custom content for cells', function(assert) {
         }
     });
 
-    var cells = table.getElementsByTagName('td');
+    const cells = table.getElementsByTagName('td');
 
     Array.prototype.forEach.call(cells, function(cell) {
         assert.equal(cell.getElementsByClassName('cell-content').length, 1, 'The cell content is OK');
@@ -162,7 +162,7 @@ QUnit.test('Custom content for cells', function(assert) {
 });
 
 QUnit.test('Custom \'children\' and \'title\' fields', function(assert) {
-    var table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, [{
+    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, [{
         name: 'One', items: [
             { name: 'Sub 1' },
             { name: 'Sub 2' }
@@ -172,7 +172,7 @@ QUnit.test('Custom \'children\' and \'title\' fields', function(assert) {
         titleField: 'name'
     });
 
-    var rows = table.getElementsByTagName('tr');
+    const rows = table.getElementsByTagName('tr');
 
     assert.equal(rows.length, 2, 'Rows are OK');
     assert.equal(rows[0].getElementsByTagName('td').length, 2, 'Cells are OK');

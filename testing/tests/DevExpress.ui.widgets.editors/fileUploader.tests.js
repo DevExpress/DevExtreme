@@ -18,27 +18,27 @@ QUnit.testStart(function() {
 
 const internals = FileUploader.__internals;
 
-const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty',
+const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';
 
-    FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content',
-    FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper',
-    FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button',
-    FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container',
-    FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input',
-    FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container',
-    FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container',
+const FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content';
+const FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper';
+const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
+const FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container';
+const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
+const FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container';
+const FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container';
 
-    FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file',
-    FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name',
-    FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size',
+const FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file';
+const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
+const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
 
-    FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button',
-    FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button',
-    FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message',
+const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
+const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message';
 
-    FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid',
+const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
-    FILEUPLOADER_AFTER_LOAD_DELAY = 500;
+const FILEUPLOADER_AFTER_LOAD_DELAY = 500;
 
 
 const simulateFileChoose = function($fileUploader, files) {
@@ -76,8 +76,8 @@ const fakeFile2 = {
 };
 
 const getNewFile = function() {
-    const randomSize = Math.round(Math.random() * 10000),
-        randomId = Math.round(Math.random() * 10000);
+    const randomSize = Math.round(Math.random() * 10000);
+    const randomId = Math.round(Math.random() * 10000);
 
     return {
         name: 'fakefile' + randomId,
@@ -146,14 +146,14 @@ const moduleConfig = {
 QUnit.module('custom uploading', moduleConfig, () => {
 
     test('chunked uploading goes well', function(assert) {
-        const chunkSize = 20000,
-            fileSize = 50100,
-            uploadChunkSpy = sinon.spy((file, chunksInfo) => {
-                lastArgsInfo = getUploadChunkArgumentsSummary(file, chunksInfo);
-                return executeAfterDelay();
-            }),
-            onProgressSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy();
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy((file, chunksInfo) => {
+            lastArgsInfo = getUploadChunkArgumentsSummary(file, chunksInfo);
+            return executeAfterDelay();
+        });
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
 
         let lastArgsInfo = null;
         const $fileUploader = $('#fileuploader').dxFileUploader({
@@ -201,16 +201,16 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('chunked uploading handle error', function(assert) {
-        const chunkSize = 20000,
-            fileSize = 50100,
-            uploadChunkSpy = sinon.spy((file, chunksInfo) => executeAfterDelay(() => {
-                if(chunksInfo.chunkIndex === 1) {
-                    throw 'Some error.';
-                }
-            })),
-            onProgressSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy(),
-            onUploadErrorSpy = sinon.spy();
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy((file, chunksInfo) => executeAfterDelay(() => {
+            if(chunksInfo.chunkIndex === 1) {
+                throw 'Some error.';
+            }
+        }));
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -253,14 +253,14 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
     test('custom state persisted during chunked uploading', function(assert) {
         let lastCustomData = null;
-        const chunkSize = 20000,
-            fileSize = 50100,
-            uploadChunkSpy = sinon.spy((file, chunksInfo) => {
-                lastCustomData = $.extend(true, { }, chunksInfo.customData);
-                chunksInfo.customData.testCounter = chunksInfo.customData.testCounter || 0;
-                chunksInfo.customData.testCounter++;
-                return executeAfterDelay();
-            });
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy((file, chunksInfo) => {
+            lastCustomData = $.extend(true, { }, chunksInfo.customData);
+            chunksInfo.customData.testCounter = chunksInfo.customData.testCounter || 0;
+            chunksInfo.customData.testCounter++;
+            return executeAfterDelay();
+        });
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -286,16 +286,16 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('cancel chunked uploading', function(assert) {
-        const chunkSize = 20000,
-            fileSize = 50100,
-            uploadChunkSpy = sinon.spy(() => executeAfterDelay()),
-            abortUploadSpy = sinon.spy((file, chunksInfo) => {
-                lastArgsInfo = getUploadChunkArgumentsSummary(file, chunksInfo);
-                return executeAfterDelay();
-            }),
-            onProgressSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy(),
-            onUploadAbortedSpy = sinon.spy();
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy((file, chunksInfo) => {
+            lastArgsInfo = getUploadChunkArgumentsSummary(file, chunksInfo);
+            return executeAfterDelay();
+        });
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
 
         let lastArgsInfo = null;
         const $fileUploader = $('#fileuploader').dxFileUploader({
@@ -342,17 +342,17 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
     test('custom state available during upload aborting', function(assert) {
         let lastCustomData = null;
-        const chunkSize = 20000,
-            fileSize = 50100,
-            uploadChunkSpy = sinon.spy((file, chunksInfo) => {
-                chunksInfo.customData.testCounter = chunksInfo.customData.testCounter || 0;
-                chunksInfo.customData.testCounter++;
-                return executeAfterDelay();
-            }),
-            abortUploadSpy = sinon.spy((file, chunksInfo) => {
-                lastCustomData = $.extend(true, { }, chunksInfo.customData);
-                return executeAfterDelay();
-            });
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy((file, chunksInfo) => {
+            chunksInfo.customData.testCounter = chunksInfo.customData.testCounter || 0;
+            chunksInfo.customData.testCounter++;
+            return executeAfterDelay();
+        });
+        const abortUploadSpy = sinon.spy((file, chunksInfo) => {
+            lastCustomData = $.extend(true, { }, chunksInfo.customData);
+            return executeAfterDelay();
+        });
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -373,10 +373,10 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('whole file upload goes well', function(assert) {
-        const fileSize = 50100,
-            uploadFileSpy = sinon.spy(() => executeAfterDelay()),
-            onProgressSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy();
+        const fileSize = 50100;
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay());
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -401,14 +401,14 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('whole file upload handles progress', function(assert) {
-        const fileSize = 50100,
-            uploadFileSpy = sinon.spy((file, progressCallback) => {
-                return executeAfterDelay(() => progressCallback(20000), 300)
-                    .then(() => executeAfterDelay(() => progressCallback(40000), 400))
-                    .then(() => executeAfterDelay(null, 300));
-            }),
-            onProgressSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy();
+        const fileSize = 50100;
+        const uploadFileSpy = sinon.spy((file, progressCallback) => {
+            return executeAfterDelay(() => progressCallback(20000), 300)
+                .then(() => executeAfterDelay(() => progressCallback(40000), 400))
+                .then(() => executeAfterDelay(null, 300));
+        });
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -451,13 +451,13 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('whole file upload handles error', function(assert) {
-        const fileSize = 50100,
-            uploadFileSpy = sinon.spy(() => executeAfterDelay(() => {
-                throw 'Some error.';
-            })),
-            onProgressSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy(),
-            onUploadErrorSpy = sinon.spy();
+        const fileSize = 50100;
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay(() => {
+            throw 'Some error.';
+        }));
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadErrorSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -486,10 +486,10 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('whole file upload allows canceling', function(assert) {
-        const fileSize = 50100,
-            uploadFileSpy = sinon.spy(() => executeAfterDelay()),
-            abortUploadSpy = sinon.spy(),
-            onUploadedSpy = sinon.spy();
+        const fileSize = 50100;
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -522,11 +522,11 @@ QUnit.module('custom uploading', moduleConfig, () => {
     });
 
     test('uploaded files are not aborted after resetting value', function(assert) {
-        const chunkSize = 20000,
-            fileSize = 50100,
-            uploadChunkSpy = sinon.spy(() => executeAfterDelay()),
-            onUploadedSpy = sinon.spy(),
-            onAbortedSpy = sinon.spy();
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
+        const onUploadedSpy = sinon.spy();
+        const onAbortedSpy = sinon.spy();
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
             multiple: false,
@@ -634,7 +634,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         let fileUploadedCount = 0;
         let totalBytes = 0;
         let totalLoadedBytes = 0;
-        let fileStates = { };
+        const fileStates = { };
 
         const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
         files.forEach(function(item) {
@@ -776,9 +776,9 @@ QUnit.module('rendering');
 
 QUnit.test('the \'Upload\' button should be hidden if no files are chosen', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        $uploadButton = $fileUploader.find('.' + FILEUPLOADER_CONTENT_CLASS + ' > .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        uploadMode: 'useButtons'
+    });
+    const $uploadButton = $fileUploader.find('.' + FILEUPLOADER_CONTENT_CLASS + ' > .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
     assert.ok($uploadButton.length && !$uploadButton.is(':visible'), 'the upload button is hidden');
 });
@@ -788,9 +788,9 @@ QUnit.module('files rendering', moduleConfig);
 
 QUnit.test('selected files should be rendered in container', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: true
-        }),
-        $filesContainer = $fileUploader.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS);
+        multiple: true
+    });
+    const $filesContainer = $fileUploader.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS);
 
     simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
     assert.equal($filesContainer.find('.' + FILEUPLOADER_FILE_CLASS).length, 2, 'number of files is correct');
@@ -798,10 +798,10 @@ QUnit.test('selected files should be rendered in container', function(assert) {
 
 QUnit.test('selected files should be rendered in container, uploadMethod = useForm', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            uploadMode: 'useForm'
-        }),
-        $filesContainer = $fileUploader.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS);
+        multiple: true,
+        uploadMode: 'useForm'
+    });
+    const $filesContainer = $fileUploader.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS);
 
     simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
     assert.equal($filesContainer.find('.' + FILEUPLOADER_FILE_CLASS).length, 2, 'number of files is correct');
@@ -820,20 +820,20 @@ QUnit.test('files should contain file name and file size', function(assert) {
 
 QUnit.test('files size should be correct', function(assert) {
     const files = [
-            { name: 'first.png', size: 1 },
-            { name: 'second.png', size: 1024 },
-            { name: 'third.png', size: 1048576 },
-            { name: 'fourth.png', size: 1073741824 }
-        ],
-        filesSize = [
-            '1 bytes',
-            '1 kb',
-            '1 Mb',
-            '1 Gb'
-        ],
-        $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: true
-        });
+        { name: 'first.png', size: 1 },
+        { name: 'second.png', size: 1024 },
+        { name: 'third.png', size: 1048576 },
+        { name: 'fourth.png', size: 1073741824 }
+    ];
+    const filesSize = [
+        '1 bytes',
+        '1 kb',
+        '1 Mb',
+        '1 Gb'
+    ];
+    const $fileUploader = $('#fileuploader').dxFileUploader({
+        multiple: true
+    });
 
     simulateFileChoose($fileUploader, files);
 
@@ -845,11 +845,11 @@ QUnit.test('files size should be correct', function(assert) {
 });
 
 QUnit.test('progressBar should be rendered for each file', function(assert) {
-    const files = [fakeFile, fakeFile1],
-        $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            uploadMode: 'instantly'
-        });
+    const files = [fakeFile, fakeFile1];
+    const $fileUploader = $('#fileuploader').dxFileUploader({
+        multiple: true,
+        uploadMode: 'instantly'
+    });
 
     simulateFileChoose($fileUploader, files);
 
@@ -859,11 +859,11 @@ QUnit.test('progressBar should be rendered for each file', function(assert) {
 });
 
 QUnit.test('cancel button should be rendered for each file', function(assert) {
-    const files = [fakeFile, fakeFile1],
-        $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            uploadMode: 'instantly'
-        });
+    const files = [fakeFile, fakeFile1];
+    const $fileUploader = $('#fileuploader').dxFileUploader({
+        multiple: true,
+        uploadMode: 'instantly'
+    });
 
     simulateFileChoose($fileUploader, files);
 
@@ -873,13 +873,13 @@ QUnit.test('cancel button should be rendered for each file', function(assert) {
 });
 
 QUnit.test('list of files should be rendered depending on the \'showFileList\' option', function(assert) {
-    const files = [fakeFile, fakeFile1],
-        $element = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            showFileList: false,
-            extendSelection: false
-        }),
-        instance = $element.dxFileUploader('instance');
+    const files = [fakeFile, fakeFile1];
+    const $element = $('#fileuploader').dxFileUploader({
+        multiple: true,
+        showFileList: false,
+        extendSelection: false
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, files);
 
@@ -894,22 +894,22 @@ QUnit.test('list of files should be rendered depending on the \'showFileList\' o
 
 QUnit.test('file info width should be correct if file has long name', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            allowCanceling: true,
-            uploadMode: 'useButtons',
-            width: 300
-        }),
-        file = {
-            name: 'very_very_very_very_very_very_very_very_very_long_name.png',
-            size: 100023,
-            type: 'image/png',
-            lastModifiedDate: $.now()
-        };
+        allowCanceling: true,
+        uploadMode: 'useButtons',
+        width: 300
+    });
+    const file = {
+        name: 'very_very_very_very_very_very_very_very_very_long_name.png',
+        size: 100023,
+        type: 'image/png',
+        lastModifiedDate: $.now()
+    };
 
     simulateFileChoose($fileUploader, file);
 
-    const $fileContainer = $fileUploader.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS),
-        fileContainerWidth = $fileContainer.width(),
-        $fileContainerChildren = $fileContainer.children();
+    const $fileContainer = $fileUploader.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS);
+    const fileContainerWidth = $fileContainer.width();
+    const $fileContainerChildren = $fileContainer.children();
     let fileContainerChildrenWidth = 0;
 
     for(let i = 0, n = $fileContainerChildren.length; i < n; i++) {
@@ -921,10 +921,10 @@ QUnit.test('file info width should be correct if file has long name', function(a
 
 QUnit.test('drag event should handle on inputWrapper element if \'useDragOver\' is true', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            uploadMode: 'instantly'
-        }),
-        $inputWrapper = $fileUploader.find('.dx-fileuploader-input-wrapper');
+        useDragOver: true,
+        uploadMode: 'instantly'
+    });
+    const $inputWrapper = $fileUploader.find('.dx-fileuploader-input-wrapper');
 
     $fileUploader.trigger('dragenter');
     assert.ok(!$fileUploader.hasClass('dx-fileuploader-dragover'), 'drag event was not handled for fileuploader element');
@@ -935,10 +935,10 @@ QUnit.test('drag event should handle on inputWrapper element if \'useDragOver\' 
 
 QUnit.test('\'dragover\' class should be removed on \'dragleave\' event after several \'dragenter\' events', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            uploadMode: 'instantly'
-        }),
-        $inputWrapper = $fileUploader.find('.dx-fileuploader-input-wrapper');
+        useDragOver: true,
+        uploadMode: 'instantly'
+    });
+    const $inputWrapper = $fileUploader.find('.dx-fileuploader-input-wrapper');
 
     $inputWrapper
         .trigger('dragenter')
@@ -949,9 +949,9 @@ QUnit.test('\'dragover\' class should be removed on \'dragleave\' event after se
 });
 
 QUnit.test('T286111 - input click should not be prevented if the \'useNativeInputClick\' option is set to true', function(assert) {
-    const $fileUploader = $('#fileuploader').dxFileUploader({ uploadMode: 'useButtons', useNativeInputClick: true }),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS),
-        clickSpy = sinon.spy();
+    const $fileUploader = $('#fileuploader').dxFileUploader({ uploadMode: 'useButtons', useNativeInputClick: true });
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+    const clickSpy = sinon.spy();
 
     $input
         .on('click', clickSpy)
@@ -963,10 +963,10 @@ QUnit.test('T286111 - input click should not be prevented if the \'useNativeInpu
 
 QUnit.test('T286111 - input should be rendered in select button if form is used and native click should be', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm',
-            useNativeInputClick: true
-        }),
-        $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS).children('.' + FILEUPLOADER_BUTTON_CLASS);
+        uploadMode: 'useForm',
+        useNativeInputClick: true
+    });
+    const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS).children('.' + FILEUPLOADER_BUTTON_CLASS);
 
     assert.equal($selectButton.find('.' + FILEUPLOADER_INPUT_CLASS).length, 1, 'input is rendered in select button');
 });
@@ -1015,10 +1015,10 @@ QUnit.module('allowCanceling', moduleConfig);
 
 QUnit.test('cancel buttons rendering should depend on the \'allowCanceling\' option', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            allowCanceling: false,
-            uploadMode: 'instantly'
-        }),
-        instance = $element.dxFileUploader('instance');
+        allowCanceling: false,
+        uploadMode: 'instantly'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, fakeFile);
     assert.ok(!$element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS).is(':visible'), 'cancel button is not visible when \'allowCanceling\' is false');
@@ -1031,13 +1031,13 @@ QUnit.test('cancel buttons rendering should depend on the \'allowCanceling\' opt
 });
 
 QUnit.test('the \'cancel\' button should be rendered for each file if the \'allowCanceling\' option is true', function(assert) {
-    const files = [fakeFile, fakeFile1],
-        $element = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            showFileList: true,
-            allowCanceling: true,
-            uploadMode: 'instantly'
-        });
+    const files = [fakeFile, fakeFile1];
+    const $element = $('#fileuploader').dxFileUploader({
+        multiple: true,
+        showFileList: true,
+        allowCanceling: true,
+        uploadMode: 'instantly'
+    });
 
     simulateFileChoose($element, files);
     assert.equal($element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS).length, 2, 'two cancel button are rendered');
@@ -1051,12 +1051,12 @@ QUnit.test('file should be removed after the \'cancel\' button is clicked', func
     const files = [fakeFile, fakeFile1];
     let valueChangedCount = 0;
     const $element = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            showFileList: true,
-            allowCanceling: true,
-            uploadMode: 'instantly'
-        }),
-        instance = $element.dxFileUploader('instance');
+        multiple: true,
+        showFileList: true,
+        allowCanceling: true,
+        uploadMode: 'instantly'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, files);
 
@@ -1071,13 +1071,13 @@ QUnit.test('file should be removed after the \'cancel\' button is clicked', func
 });
 
 QUnit.test('the \'allowCanceling\' option should be ignored if the \'uploadMode\' option is \'useForm\'', function(assert) {
-    const files = [fakeFile, fakeFile1],
-        $element = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            showFileList: true,
-            allowCanceling: true,
-            uploadMode: 'useForm'
-        });
+    const files = [fakeFile, fakeFile1];
+    const $element = $('#fileuploader').dxFileUploader({
+        multiple: true,
+        showFileList: true,
+        allowCanceling: true,
+        uploadMode: 'useForm'
+    });
 
     simulateFileChoose($element, files);
     assert.equal($element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS).length, 0, 'no cancel buttons are rendered');
@@ -1085,11 +1085,11 @@ QUnit.test('the \'allowCanceling\' option should be ignored if the \'uploadMode\
 
 QUnit.test('file list should be cleared when \'useForm\' option is used', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            multiple: true,
-            uploadMode: 'useForm'
-        }),
-        fileUploader = $element.dxFileUploader('instance'),
-        newFile = getNewFile();
+        multiple: true,
+        uploadMode: 'useForm'
+    });
+    const fileUploader = $element.dxFileUploader('instance');
+    const newFile = getNewFile();
 
     simulateFileChoose($element, [fakeFile, fakeFile1]);
     simulateFileChoose($element, [newFile]);
@@ -1102,9 +1102,9 @@ QUnit.module('autoUpload', moduleConfig);
 
 QUnit.test('\'upload\' button should be rendered depending on the \'uploadMode\' option', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        instance = $fileUploader.dxFileUploader('instance');
+        uploadMode: 'useButtons'
+    });
+    const instance = $fileUploader.dxFileUploader('instance');
 
     assert.equal($fileUploader.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).length, 1, '\'upload\' button is rendered');
 
@@ -1131,10 +1131,10 @@ QUnit.test('upload buttons should be rendered if the \'uploadMode\' option is \'
 
 QUnit.test('the \'value\' option should be cleared after the \'uploadMode\' option change', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons',
-            multiple: true
-        }),
-        instance = $fileUploader.dxFileUploader('instance');
+        uploadMode: 'useButtons',
+        multiple: true
+    });
+    const instance = $fileUploader.dxFileUploader('instance');
 
     const files = [fakeFile, fakeFile1];
     simulateFileChoose($fileUploader, files);
@@ -1147,9 +1147,9 @@ QUnit.test('the \'value\' option should be cleared after the \'uploadMode\' opti
 
 QUnit.test('the \'upload\' button should not be rendered if the \'uploadMode\' option is not \'useButtons\'', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm'
-        }),
-        instance = $fileUploader.dxFileUploader('instance');
+        uploadMode: 'useForm'
+    });
+    const instance = $fileUploader.dxFileUploader('instance');
 
     assert.equal($fileUploader.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).length, 0, 'there is no \'upload\' button');
 
@@ -1169,9 +1169,9 @@ QUnit.test('no upload buttons should be rendered if the \'uploadMode\' option is
 
 QUnit.test('file should be uploaded only one time', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        $uploadButton = $fileUploader.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        uploadMode: 'useButtons'
+    });
+    const $uploadButton = $fileUploader.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
     simulateFileChoose($fileUploader, fakeFile);
 
@@ -1196,8 +1196,8 @@ QUnit.test('file should be uploaded only one time', function(assert) {
 QUnit.module('value option', moduleConfig);
 
 QUnit.test('selected file should be present in value option', function(assert) {
-    const $fileUploader = $('#fileuploader').dxFileUploader(),
-        fileUploader = $fileUploader.dxFileUploader('instance');
+    const $fileUploader = $('#fileuploader').dxFileUploader();
+    const fileUploader = $fileUploader.dxFileUploader('instance');
 
     simulateFileChoose($fileUploader, fakeFile);
 
@@ -1242,12 +1242,12 @@ QUnit.test('value change should be fired when file selected', function(assert) {
 });
 
 QUnit.test('value change should be fired when file selected, uploadMode = useForm', function(assert) {
-    const valueChangeHandler = sinon.stub(),
-        $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm',
-            onValueChanged: valueChangeHandler
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance');
+    const valueChangeHandler = sinon.stub();
+    const $fileUploader = $('#fileuploader').dxFileUploader({
+        uploadMode: 'useForm',
+        onValueChanged: valueChangeHandler
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
 
     simulateFileChoose($fileUploader, fakeFile);
 
@@ -1258,10 +1258,10 @@ QUnit.test('value change should be fired when file selected, uploadMode = useFor
 
 QUnit.test('value should support files at initialization', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            value: [fakeFile]
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance'),
-        $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        value: [fakeFile]
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
+    const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
     assert.equal($fileInput.val(), '', 'input value was set to empty string');
     assert.deepEqual(fileUploader.option('value'), [fakeFile], 'file value is correct');
@@ -1341,9 +1341,9 @@ QUnit.module('multiple option', moduleConfig);
 
 QUnit.test('field multiple attr should be set correctly', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: true
-        }),
-        $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        multiple: true
+    });
+    const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
     assert.equal($fileInput.prop('multiple'), true, 'file input has correct name property');
 
@@ -1386,8 +1386,8 @@ QUnit.test('upload should be started after file is selected', function(assert) {
 
     simulateFileChoose($element, fakeFile);
 
-    const request = this.xhrMock.getInstanceAt(),
-        expectedCallsCount = this.xhrMock.LOAD_TIMEOUT / this.xhrMock.PROGRESS_INTERVAL;
+    const request = this.xhrMock.getInstanceAt();
+    const expectedCallsCount = this.xhrMock.LOAD_TIMEOUT / this.xhrMock.PROGRESS_INTERVAL;
 
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
 
@@ -1410,9 +1410,9 @@ QUnit.test('upload should not start automatically only if \'uploadMode\' option 
 
 QUnit.test('click on common \'upload\' button should start file uploading', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        $button = $element.find('.' + FILEUPLOADER_CONTENT_CLASS + ' > .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        uploadMode: 'useButtons'
+    });
+    const $button = $element.find('.' + FILEUPLOADER_CONTENT_CLASS + ' > .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
     simulateFileChoose($element, fakeFile);
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
@@ -1429,9 +1429,9 @@ QUnit.test('click on common \'upload\' button should start file uploading', func
 
 QUnit.test('upload of specific file should start after click on corresponding \'upload\' button', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        files = [fakeFile, fakeFile1];
+        uploadMode: 'useButtons'
+    });
+    const files = [fakeFile, fakeFile1];
 
     simulateFileChoose($element, files);
 
@@ -1448,9 +1448,9 @@ QUnit.test('upload of specific file should start after click on corresponding \'
 
 QUnit.test('file upload buttons should be removed after upload started', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        files = [fakeFile, fakeFile1];
+        uploadMode: 'useButtons'
+    });
+    const files = [fakeFile, fakeFile1];
 
     simulateFileChoose($element, files);
 
@@ -1470,8 +1470,8 @@ QUnit.test('progressBar should reflect file upload progress', function(assert) {
 
     simulateFileChoose($element, fakeFile);
 
-    const request = this.xhrMock.getInstanceAt(),
-        progressBar = $('.dx-progressbar').dxProgressBar('instance');
+    const request = this.xhrMock.getInstanceAt();
+    const progressBar = $('.dx-progressbar').dxProgressBar('instance');
 
     assert.equal(progressBar.option('value'), request.loadedSize, 'progressBar value is correct on init');
 
@@ -1484,11 +1484,11 @@ QUnit.test('progressBar should reflect file upload progress', function(assert) {
 });
 
 QUnit.test('request should use url from the \'uploadUrl\' option', function(assert) {
-    const uploadUrl = location.href,
-        $element = $('#fileuploader').dxFileUploader({
-            uploadUrl: uploadUrl,
-            uploadMode: 'instantly'
-        });
+    const uploadUrl = location.href;
+    const $element = $('#fileuploader').dxFileUploader({
+        uploadUrl: uploadUrl,
+        uploadMode: 'instantly'
+    });
 
     simulateFileChoose($element, fakeFile);
 
@@ -1516,8 +1516,8 @@ QUnit.test('upload process should be aborted by \'cancel\' button click', functi
 
     simulateFileChoose($element, fakeFile);
 
-    const request = this.xhrMock.getInstanceAt(),
-        $cancelButton = $element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS);
+    const request = this.xhrMock.getInstanceAt();
+    const $cancelButton = $element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS);
 
     $cancelButton.trigger('dxclick');
 
@@ -1525,16 +1525,16 @@ QUnit.test('upload process should be aborted by \'cancel\' button click', functi
 });
 
 QUnit.test('FormData field name should correspond the \'name\' option value', function(assert) {
-    const formFieldElement = 'custom',
-        $element = $('#fileuploader').dxFileUploader({
-            name: formFieldElement,
-            uploadMode: 'instantly'
-        });
+    const formFieldElement = 'custom';
+    const $element = $('#fileuploader').dxFileUploader({
+        name: formFieldElement,
+        uploadMode: 'instantly'
+    });
 
     simulateFileChoose($element, fakeFile);
 
-    const formData = this.formDataMock.getInstanceAt(),
-        fieldName = formData.getTopElement().fieldName;
+    const formData = this.formDataMock.getInstanceAt();
+    const fieldName = formData.getTopElement().fieldName;
 
     assert.equal(fieldName, formFieldElement, 'field name is correct');
 });
@@ -1635,10 +1635,10 @@ QUnit.test('uploaded files\' cancel buttons are hidden if the \'extendSelection\
 
 QUnit.test('files count should be correct after value reset', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            extendSelection: true,
-            multiple: true
-        }),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        extendSelection: true,
+        multiple: true
+    });
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
     simulateFileChoose($fileUploader, [fakeFile, fakeFile, fakeFile]);
     assert.equal($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 3, 'files count is correct on the first file choose');
@@ -1653,12 +1653,12 @@ QUnit.test('files count should be correct after value reset', function(assert) {
 
 QUnit.test('input should be cleared after value reset', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            extendSelection: true,
-            value: [fakeFile],
-            multiple: true
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance'),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        extendSelection: true,
+        value: [fakeFile],
+        multiple: true
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
     $input.val('fakefile');
     fileUploader.reset();
 
@@ -1667,10 +1667,10 @@ QUnit.test('input should be cleared after value reset', function(assert) {
 
 QUnit.test('input value should not be cleared after the file selection', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            extendSelection: true,
-            uploadMode: 'useForm'
-        }),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        extendSelection: true,
+        uploadMode: 'useForm'
+    });
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
     $input.val('fakeFile').trigger('change');
 
     assert.equal($input.val(), 'fakeFile', 'value was cleared in input');
@@ -1681,19 +1681,19 @@ QUnit.module('uploading progress', moduleConfig);
 
 QUnit.test('the \'progress\' option should reflect file upload progress', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            extendSelection: false,
-            uploadMode: 'instantly'
-        }),
-        instance = $element.dxFileUploader('instance');
+        extendSelection: false,
+        uploadMode: 'instantly'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     const files = [fakeFile, fakeFile1];
     simulateFileChoose($element, files);
 
     const stepsCount = this.xhrMock.LOAD_TIMEOUT / this.xhrMock.PROGRESS_INTERVAL;
 
-    let totalSize,
-        loadedSize,
-        currentProgress;
+    let totalSize;
+    let loadedSize;
+    let currentProgress;
 
     for(let i = 0; i < stepsCount; i++) {
         loadedSize = 0;
@@ -1720,10 +1720,10 @@ QUnit.test('the \'progress\' option should reflect file upload progress', functi
 
 QUnit.test('the \'progress\' option should be reset to 0 when new files are selected after old files has been uploaded', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons',
-            extendSelection: false
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadMode: 'useButtons',
+        extendSelection: false
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, fakeFile);
 
@@ -1738,16 +1738,16 @@ QUnit.test('the \'progress\' option should be reset to 0 when new files are sele
 
 QUnit.test('T246244 - the \'progress\' option should be recalculated when not uploaded file is removed', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadMode: 'useButtons'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, [fakeFile, fakeFile, fakeFile]);
 
-    const $files = $element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS),
-        $firstFile = $files.eq(0),
-        $secondFile = $files.eq(1),
-        $thirdFile = $files.eq(2);
+    const $files = $element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS);
+    const $firstFile = $files.eq(0);
+    const $secondFile = $files.eq(1);
+    const $thirdFile = $files.eq(2);
 
     $firstFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
@@ -1762,16 +1762,16 @@ QUnit.test('T246244 - the \'progress\' option should be recalculated when not up
 
 QUnit.test('T246244 - the \'progress\' option should be recalculated when uploaded file is removed', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadMode: 'useButtons'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, [fakeFile, fakeFile, fakeFile]);
 
-    const $files = $element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS),
-        $firstFile = $files.eq(0),
-        $secondFile = $files.eq(1),
-        $thirdFile = $files.eq(2);
+    const $files = $element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS);
+    const $firstFile = $files.eq(0);
+    const $secondFile = $files.eq(1);
+    const $thirdFile = $files.eq(2);
 
     $firstFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
     $secondFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
@@ -1787,16 +1787,16 @@ QUnit.test('T246244 - the \'progress\' option should be recalculated when upload
 
 QUnit.test('T246244 - the \'progress\' option should be recalculated when uploading file is removed', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons'
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadMode: 'useButtons'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, [fakeFile, fakeFile, fakeFile]);
 
-    const $files = $element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS),
-        $firstFile = $files.eq(0),
-        $secondFile = $files.eq(1),
-        $thirdFile = $files.eq(2);
+    const $files = $element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS);
+    const $firstFile = $files.eq(0);
+    const $secondFile = $files.eq(1);
+    const $thirdFile = $files.eq(2);
 
     $firstFile.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).trigger('dxclick');
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
@@ -1811,8 +1811,8 @@ QUnit.test('T246244 - the \'progress\' option should be recalculated when upload
 });
 
 QUnit.test('T246244 - the \'progress\' option should be reset to 0 when last file is removed', function(assert) {
-    const $element = $('#fileuploader').dxFileUploader({ uploadMode: 'instantly' }),
-        instance = $element.dxFileUploader('instance');
+    const $element = $('#fileuploader').dxFileUploader({ uploadMode: 'instantly' });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, fakeFile);
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
@@ -1827,15 +1827,15 @@ QUnit.module('file status message', moduleConfig);
 
 QUnit.test('correct status message on init', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons',
-            readyToUploadMessage: 'ready'
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadMode: 'useButtons',
+        readyToUploadMessage: 'ready'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, fakeFile);
 
-    const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS),
-        $progressBar = $element.find('.dx-progressbar');
+    const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+    const $progressBar = $element.find('.dx-progressbar');
 
     assert.equal($fileStatusMessage.text(), instance.option('readyToUploadMessage'), 'status message is correct');
     assert.ok($fileStatusMessage.is(':visible'), 'status message is visible');
@@ -1844,17 +1844,17 @@ QUnit.test('correct status message on init', function(assert) {
 
 QUnit.test('correct status message on uploaded', function(assert) {
     const $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            uploadedMessage: 'done'
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadMode: 'instantly',
+        uploadedMessage: 'done'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, fakeFile);
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
     this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
-    const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS),
-        $progressBar = $element.find('.dx-progressbar');
+    const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+    const $progressBar = $element.find('.dx-progressbar');
 
     assert.equal($fileStatusMessage.text(), instance.option('uploadedMessage'), 'status message is correct');
     assert.ok($fileStatusMessage.is(':visible'), 'status message is visible');
@@ -1870,8 +1870,8 @@ QUnit.test('status message is hidden and progressbar is visible on loading', fun
     simulateFileChoose($element, fakeFile);
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
 
-    const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS),
-        $progressBar = $element.find('.dx-progressbar');
+    const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+    const $progressBar = $element.find('.dx-progressbar');
 
     assert.ok(!$fileStatusMessage.is(':visible'), 'status message is not visible');
     assert.equal($progressBar.length, 1, 'progressbar is visible');
@@ -1881,10 +1881,10 @@ QUnit.test('status message should be correct if upload failed', function(assert)
     this.xhrMock.setStatus(405);
 
     const $element = $('#fileuploader').dxFileUploader({
-            uploadFailedMessage: 'failed',
-            uploadMode: 'instantly'
-        }),
-        instance = $element.dxFileUploader('instance');
+        uploadFailedMessage: 'failed',
+        uploadMode: 'instantly'
+    });
+    const instance = $element.dxFileUploader('instance');
 
     simulateFileChoose($element, fakeFile);
     this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -1913,13 +1913,13 @@ QUnit.test('the \'onUploaded\' option', function(assert) {
 
 QUnit.test('the \'onUploaded\' option with multiple files', function(assert) {
     let onUploadedCount = 0;
-    const files = [fakeFile, fakeFile1],
-        $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            onUploaded: function() {
-                onUploadedCount++;
-            }
-        });
+    const files = [fakeFile, fakeFile1];
+    const $element = $('#fileuploader').dxFileUploader({
+        uploadMode: 'instantly',
+        onUploaded: function() {
+            onUploadedCount++;
+        }
+    });
 
     simulateFileChoose($element, files);
     this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -1948,14 +1948,14 @@ QUnit.test('the \'onProgress\' option', function(assert) {
 
 QUnit.test('the \'onProgress\' option with multiple files', function(assert) {
     let onProgressCount = 0;
-    const files = [fakeFile, fakeFile1],
-        filesCount = files.length,
-        $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            onProgress: function() {
-                onProgressCount++;
-            }
-        });
+    const files = [fakeFile, fakeFile1];
+    const filesCount = files.length;
+    const $element = $('#fileuploader').dxFileUploader({
+        uploadMode: 'instantly',
+        onProgress: function() {
+            onProgressCount++;
+        }
+    });
 
     simulateFileChoose($element, files);
     assert.equal(onProgressCount, filesCount, 'the \'onProgress\' callback is called for each file');
@@ -1965,12 +1965,12 @@ QUnit.test('the \'onProgress\' option with multiple files', function(assert) {
 });
 
 QUnit.test('the \'onProgress\' option event fields', function(assert) {
-    const stepSize = fakeFile.size * this.xhrMock.PROGRESS_INTERVAL / this.xhrMock.LOAD_TIMEOUT,
-        onProgressHandler = sinon.spy(),
-        $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            onProgress: onProgressHandler
-        });
+    const stepSize = fakeFile.size * this.xhrMock.PROGRESS_INTERVAL / this.xhrMock.LOAD_TIMEOUT;
+    const onProgressHandler = sinon.spy();
+    const $element = $('#fileuploader').dxFileUploader({
+        uploadMode: 'instantly',
+        onProgress: onProgressHandler
+    });
 
     simulateFileChoose($element, fakeFile);
     let args = onProgressHandler.getCall(0).args[0];
@@ -2009,13 +2009,13 @@ QUnit.test('the \'onUploadError\' option with multiple files', function(assert) 
     this.xhrMock.setStatus(405);
 
     let onUploadErrorCount = 0;
-    const files = [fakeFile, fakeFile1],
-        $element = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            onUploadError: function() {
-                onUploadErrorCount++;
-            }
-        });
+    const files = [fakeFile, fakeFile1];
+    const $element = $('#fileuploader').dxFileUploader({
+        uploadMode: 'instantly',
+        onUploadError: function() {
+            onUploadErrorCount++;
+        }
+    });
 
     simulateFileChoose($element, files);
     this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
@@ -2239,14 +2239,14 @@ QUnit.test('upload button should be focus target of fileUploader', function(asse
     });
     assert.equal($fileUploader.attr('tabindex'), undefined, 'element has not tabindex');
 
-    const $uploadButton = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS),
-        uploadButton = $uploadButton.dxButton('instance');
+    const $uploadButton = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+    const uploadButton = $uploadButton.dxButton('instance');
 
     assert.equal(uploadButton.option('focusStateEnabled'), false, 'button has not self keyboard handlers');
     assert.equal($uploadButton.attr('tabindex'), 0, 'button has tabindex');
 
-    const stub = sinon.stub(),
-        keyboard = keyboardMock($uploadButton);
+    const stub = sinon.stub();
+    const keyboard = keyboardMock($uploadButton);
     uploadButton.option('onClick', stub);
     keyboard.keyDown('enter');
 
@@ -2260,14 +2260,14 @@ QUnit.test('T328503 - \'enter\' press on select button should lead to input clic
     }
 
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            focusStateEnabled: true,
-            useNativeInputClick: false
-        }),
-        $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + ' .' + FILEUPLOADER_BUTTON_CLASS),
-        keyboard = keyboardMock($selectButton),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS),
-        stub = sinon.stub();
+        uploadMode: 'instantly',
+        focusStateEnabled: true,
+        useNativeInputClick: false
+    });
+    const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + ' .' + FILEUPLOADER_BUTTON_CLASS);
+    const keyboard = keyboardMock($selectButton);
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+    const stub = sinon.stub();
 
     $input.on('click', stub);
     $selectButton.trigger('focusin');
@@ -2282,11 +2282,11 @@ QUnit.test('Propagation of the native input click should be stopped (T404422)', 
     assert.expect(1);
 
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            useNativeInputClick: false
-        }),
-        $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + ' .' + FILEUPLOADER_BUTTON_CLASS),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        uploadMode: 'instantly',
+        useNativeInputClick: false
+    });
+    const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + ' .' + FILEUPLOADER_BUTTON_CLASS);
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
     $input.on('click', function(e) {
         assert.ok(e.isPropagationStopped(), 'propagation was stopped');
@@ -2300,17 +2300,17 @@ QUnit.module('Drag and drop', moduleConfig);
 
 QUnit.test('T328503 - drag and drop events should be prevented if native drop is not supported', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            nativeDropSupported: false,
-            uploadMode: 'useButtons'
-        }),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        dragAndDropSpy = sinon.spy(),
-        events = ['dragenter', 'dragover', 'dragleave', 'drop'],
-        dropEvent = $.Event($.Event('drop', {
-            dataTransfer: { files: [fakeFile] }
-        })),
-        eventsCount = events.length;
+        useDragOver: true,
+        nativeDropSupported: false,
+        uploadMode: 'useButtons'
+    });
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+    const dragAndDropSpy = sinon.spy();
+    const events = ['dragenter', 'dragover', 'dragleave', 'drop'];
+    const dropEvent = $.Event($.Event('drop', {
+        dataTransfer: { files: [fakeFile] }
+    }));
+    const eventsCount = events.length;
 
     assert.expect(eventsCount);
 
@@ -2330,14 +2330,14 @@ QUnit.test('T328503 - drag and drop events should be prevented if native drop is
 
 QUnit.test('T328503 - drag and drop events should not be prevented if native drop is supported', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            nativeDropSupported: true,
-            uploadMode: 'useForm'
-        }),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        dragAndDropSpy = sinon.spy(),
-        events = ['dragenter', 'dragover', 'dragleave', 'drop'],
-        eventsCount = events.length;
+        useDragOver: true,
+        nativeDropSupported: true,
+        uploadMode: 'useForm'
+    });
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+    const dragAndDropSpy = sinon.spy();
+    const events = ['dragenter', 'dragover', 'dragleave', 'drop'];
+    const eventsCount = events.length;
 
     assert.expect(eventsCount);
 
@@ -2351,12 +2351,12 @@ QUnit.test('T328503 - drag and drop events should not be prevented if native dro
 
 QUnit.test('T328503 - files drag and drop should lead to value change if form is not used', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            multiple: true
-        }),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        files = [fakeFile, fakeFile1],
-        event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+        uploadMode: 'instantly',
+        multiple: true
+    });
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+    const files = [fakeFile, fakeFile1];
+    const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
     $inputWrapper.trigger(event);
     assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), files, 'files are correct');
@@ -2364,22 +2364,22 @@ QUnit.test('T328503 - files drag and drop should lead to value change if form is
 
 QUnit.test('T328503 - drop field should be hidden if upload mode is useForm and native drop is not supported', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm',
-            nativeDropSupported: false
-        }),
-        $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        uploadMode: 'useForm',
+        nativeDropSupported: false
+    });
+    const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
 
     assert.ok(!$inputContainer.is(':visible'), 'input container is hidden');
 });
 
 QUnit.test('T370412 - it is impossible to drop some files if the \'multiple\' option is false', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            multiple: false,
-            useDragOver: true
-        }),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        files = [fakeFile, fakeFile1],
-        event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+        multiple: false,
+        useDragOver: true
+    });
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+    const files = [fakeFile, fakeFile1];
+    const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
     $inputWrapper.trigger(event);
     assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), [], 'dragged files count is correct');
@@ -2387,13 +2387,13 @@ QUnit.test('T370412 - it is impossible to drop some files if the \'multiple\' op
 
 QUnit.test('the \'accept\' option should not be ignored on drag&drop (T384800)', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            accept: 'text/*'
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance'),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        files = [fakeFile],
-        event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+        useDragOver: true,
+        accept: 'text/*'
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+    const files = [fakeFile];
+    const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
     $inputWrapper.trigger(event);
     assert.deepEqual(fileUploader.option('value'), [], 'value is empty');
@@ -2401,16 +2401,16 @@ QUnit.test('the \'accept\' option should not be ignored on drag&drop (T384800)',
 
 QUnit.test('the \'accept\' option is case insensitive (T570224)', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            useDragOver: true,
-            accept: '.jpg'
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance'),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        uploadMode: 'instantly',
+        useDragOver: true,
+        accept: '.jpg'
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
     let files = [{
-            name: 'fakefile.JPG',
-        }],
-        event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+        name: 'fakefile.JPG',
+    }];
+    let event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
     $inputWrapper.trigger(event);
     assert.deepEqual(fileUploader.option('value'), files, 'file is chosen');
@@ -2427,17 +2427,17 @@ QUnit.test('the \'accept\' option is case insensitive (T570224)', function(asser
 
 QUnit.test('the \'accept\' option check an extension only at the end of the file (T570224)', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            useDragOver: true,
-            accept: '.jpg'
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance'),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
-        files = [{
-            name: 'fakefile.jpg.bak',
-            type: 'image/text',
-        }],
-        event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+        uploadMode: 'instantly',
+        useDragOver: true,
+        accept: '.jpg'
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+    const files = [{
+        name: 'fakefile.jpg.bak',
+        type: 'image/text',
+    }];
+    const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
     $inputWrapper.trigger(event);
     assert.deepEqual(fileUploader.option('value'), [], 'value is empty');
@@ -2452,12 +2452,12 @@ QUnit.test('the \'accept\' option with multiple types should work correctly on d
     };
 
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            useDragOver: true,
-            accept: 'text/*,image/png'
-        }),
-        fileUploader = $fileUploader.dxFileUploader('instance'),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        uploadMode: 'instantly',
+        useDragOver: true,
+        accept: 'text/*,image/png'
+    });
+    const fileUploader = $fileUploader.dxFileUploader('instance');
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
     const triggerDrop = function(targetFiles) {
         const event = $.Event($.Event('drop', { dataTransfer: { files: targetFiles } }));
@@ -2481,10 +2481,10 @@ QUnit.test('error should not be thrown for the \'*\' accept (T386887)', function
     assert.expect(0);
 
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            accept: '*'
-        }),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        useDragOver: true,
+        accept: '*'
+    });
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
     $inputWrapper.trigger($.Event($.Event('drop', {
         dataTransfer: { files: [fakeFile] }
@@ -2493,21 +2493,21 @@ QUnit.test('error should not be thrown for the \'*\' accept (T386887)', function
 
 QUnit.test('file should be added for the \'.jpg\' accept (T386887)', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            useDragOver: true,
-            uploadMode: 'instantly',
-            accept: '.txt',
-            multiple: true
-        }),
-        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        useDragOver: true,
+        uploadMode: 'instantly',
+        accept: '.txt',
+        multiple: true
+    });
+    const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
     const firstFile = $.extend({}, fakeFile, {
-            name: 'firstFile.txt',
-            type: 'text/plain'
-        }),
-        secondFile = $.extend({}, fakeFile, {
-            name: 'secondFile',
-            type: 'text/plain'
-        });
+        name: 'firstFile.txt',
+        type: 'text/plain'
+    });
+    const secondFile = $.extend({}, fakeFile, {
+        name: 'secondFile',
+        type: 'text/plain'
+    });
 
     $inputWrapper.trigger($.Event($.Event('drop', {
         dataTransfer: { files: [firstFile, secondFile] }
@@ -2522,32 +2522,32 @@ QUnit.module('files selection', moduleConfig);
 
 QUnit.test('T328503 - input is in input container if you should not use native input click', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons',
-            nativeDropSupported: true,
-            useNativeInputClick: false
-        }),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS + ' .' + FILEUPLOADER_INPUT_CLASS);
+        uploadMode: 'useButtons',
+        nativeDropSupported: true,
+        useNativeInputClick: false
+    });
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS + ' .' + FILEUPLOADER_INPUT_CLASS);
 
     assert.equal($input.length, 1, 'input is in input container');
 });
 
 QUnit.test('T328503 - input is in select button if you should use native input click', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm',
-            nativeDropSupported: true,
-            useNativeInputClick: false
-        }),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + '.' + FILEUPLOADER_BUTTON_CLASS + ' .' + FILEUPLOADER_INPUT_CLASS);
+        uploadMode: 'useForm',
+        nativeDropSupported: true,
+        useNativeInputClick: false
+    });
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + '.' + FILEUPLOADER_BUTTON_CLASS + ' .' + FILEUPLOADER_INPUT_CLASS);
 
     assert.equal($input.length, 0, 'input is in select button');
 });
 
 QUnit.test('T323019 - click on the \'Drop\' field should not lead to file choosing', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons',
-            useNativeInputClick: false
-        }),
-        $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        uploadMode: 'useButtons',
+        useNativeInputClick: false
+    });
+    const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
     let event;
 
     $input.on('click', function(e) {
@@ -2560,13 +2560,13 @@ QUnit.test('T323019 - click on the \'Drop\' field should not lead to file choosi
 
 QUnit.test('T346021 - upload is not started after file drop if the \'uploadMode\' is \'instantly\'', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            useDragOver: true,
-            useNativeInputClick: false
-        }),
-        event = $.Event('drop', {
-            originalEvent: $.Event('drop', { dataTransfer: { files: [fakeFile] } })
-        });
+        uploadMode: 'instantly',
+        useDragOver: true,
+        useNativeInputClick: false
+    });
+    const event = $.Event('drop', {
+        originalEvent: $.Event('drop', { dataTransfer: { files: [fakeFile] } })
+    });
 
     $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS).trigger(event);
     const request = this.xhrMock.getInstanceAt();
@@ -2591,12 +2591,12 @@ QUnit.module('disabled option');
 
 QUnit.test('file input should be hidden when widget is disabled', function(assert) {
     const $fileUploader = $('#fileuploader').dxFileUploader({
-            disabled: false,
-            useNativeInputClick: false,
-            useDragOver: true,
-            uploadMode: 'useButtons'
-        }),
-        $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+        disabled: false,
+        useNativeInputClick: false,
+        useDragOver: true,
+        uploadMode: 'useButtons'
+    });
+    const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
     assert.equal($fileInput.css('display'), 'inline-block', 'input is visible');
 

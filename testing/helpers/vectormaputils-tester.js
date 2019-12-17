@@ -7,17 +7,17 @@ process.on('uncaughtException', function(e) {
     console.log(e.stack);
 });
 
-var fs = require('fs'),
-    path = require('path'),
-    utils = require('../../artifacts/js/vectormap-utils/dx.vectormaputils.node.js'),
-    PORTS = require('../../ports.json');
+const fs = require('fs');
+const path = require('path');
+const utils = require('../../artifacts/js/vectormap-utils/dx.vectormaputils.node.js');
+const PORTS = require('../../ports.json');
 
-var dataDirectory = path.join(path.dirname(process.argv[1]), '../content/VectorMapData');
+const dataDirectory = path.join(path.dirname(process.argv[1]), '../content/VectorMapData');
 
-var actions = {
+const actions = {
     'parse-buffer': function(arg, callback) {
-        var count = 2,
-            obj = {};
+        let count = 2;
+        const obj = {};
         fs.readFile(path.join(dataDirectory, arg + '.shp'), function(e, buffer) {
             obj['shp'] = buffer;
             done();
@@ -27,9 +27,9 @@ var actions = {
             done();
         });
         function done() {
-            var func,
-                data,
-                errors;
+            let func;
+            let data;
+            let errors;
             if(--count === 0) {
                 func = utils.parse(obj, function(data_, errors_) {
                     data = data_;
@@ -45,7 +45,7 @@ var actions = {
     },
 
     'read-and-parse': function(arg, callback) {
-        var func;
+        let func;
         func = utils.parse(path.join(dataDirectory, arg), function(data, errors) {
             callback({
                 func: func === undefined,
@@ -57,7 +57,7 @@ var actions = {
 };
 
 function getRequestInfo(url) {
-    var parts = url.split('/');
+    const parts = url.split('/');
     return {
         action: parts[1],
         arg: parts[2]
@@ -65,8 +65,8 @@ function getRequestInfo(url) {
 }
 
 require('http').createServer(function(request, response) {
-    var info = getRequestInfo(request.url),
-        action = actions[info.action];
+    const info = getRequestInfo(request.url);
+    const action = actions[info.action];
     response.writeHead(200, { 'Content-Type': 'text/plain' });
     if(action) {
         action(info.arg, callback);

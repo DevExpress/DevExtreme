@@ -1,15 +1,15 @@
 /* global $ */
 
-var RealXMLHttpRequest = window.XMLHttpRequest;
+const RealXMLHttpRequest = window.XMLHttpRequest;
 
 window.XMLHttpRequestMock = function() {
-    var LOAD_TIMEOUT_DEFAULT = 500;
-    var PROGRESS_INTERVAL_DEFAULT = 100;
+    const LOAD_TIMEOUT_DEFAULT = 500;
+    const PROGRESS_INTERVAL_DEFAULT = 100;
 
-    var xhrList = [];
-    var LOAD_TIMEOUT = this.LOAD_TIMEOUT = LOAD_TIMEOUT_DEFAULT;
-    var PROGRESS_INTERVAL = this.PROGRESS_INTERVAL = PROGRESS_INTERVAL_DEFAULT;
-    var STATUS = this.STATUS = 200;
+    const xhrList = [];
+    let LOAD_TIMEOUT = this.LOAD_TIMEOUT = LOAD_TIMEOUT_DEFAULT;
+    let PROGRESS_INTERVAL = this.PROGRESS_INTERVAL = PROGRESS_INTERVAL_DEFAULT;
+    let STATUS = this.STATUS = 200;
 
     this.startSeries = function() {
         this.changeTimeouts(100, 100);
@@ -77,7 +77,7 @@ window.XMLHttpRequestMock = function() {
                 return;
             }
 
-            var progressEvent = {
+            const progressEvent = {
                 loaded: this._getLoadedSize(),
                 total: this._fileSize
             };
@@ -89,7 +89,7 @@ window.XMLHttpRequestMock = function() {
             }
 
             if(progressEvent.loaded >= progressEvent.total) {
-                var readyStateEvent = {
+                const readyStateEvent = {
                     currentTarget: {
                         status: STATUS,
                         readyState: 4
@@ -107,12 +107,12 @@ window.XMLHttpRequestMock = function() {
         };
 
         this._errorHandler = function() {
-            var errorEvent = {
+            const errorEvent = {
                 loaded: 0,
                 total: 0
             };
 
-            var readyStateEvent = {
+            const readyStateEvent = {
                 currentTarget: {
                     status: STATUS,
                     readyState: 4
@@ -152,7 +152,7 @@ window.XMLHttpRequestMock = function() {
             this.uploaded = false;
             this.onProgressCallCount = 0;
 
-            var file = data.getTopElement && data.getTopElement().fieldValue;
+            const file = data.getTopElement && data.getTopElement().fieldValue;
             this._fileSize = file && file.size;
 
             this._stepSize = this._fileSize * PROGRESS_INTERVAL / LOAD_TIMEOUT;
@@ -180,7 +180,7 @@ window.XMLHttpRequestMock = function() {
 };
 
 window.FormDataMock = function() {
-    var formDataArray = this.formDataArray = [];
+    const formDataArray = this.formDataArray = [];
 
     this.getInstanceAt = function(index) {
         index = index || 0;

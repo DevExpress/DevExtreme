@@ -35,23 +35,23 @@ QUnit.module('Events', {
 });
 
 QUnit.test('onItemSelectionChanged event with unselected item', function(assert) {
-    var handler = sinon.spy(function() { return; });
-    var data = $.extend(true, [], DATA[5]);
+    const handler = sinon.spy(function() { return; });
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal',
         onItemSelectionChanged: handler
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[4]).trigger('dxclick');
 
     assert.ok(handler.calledOnce);
 
-    var args = stripFunctions(handler.getCall(0).args[0].itemData);
+    const args = stripFunctions(handler.getCall(0).args[0].itemData);
 
     assert.equal(handler.getCall(0).args[0].node.text, 'Third level item 2');
 
@@ -64,23 +64,23 @@ QUnit.test('onItemSelectionChanged event with unselected item', function(assert)
 });
 
 QUnit.test('onItemSelectionChanged event with selected item', function(assert) {
-    var data = $.extend(true, [], DATA[5]),
-        handler = sinon.spy(function() { return; });
+    const data = $.extend(true, [], DATA[5]);
+    const handler = sinon.spy(function() { return; });
 
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
     data[0].items[1].items[1].selected = true;
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal',
         onItemSelectionChanged: handler
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[4]).trigger('dxclick');
 
-    var args = stripFunctions(handler.getCall(0).args[0].itemData);
+    const args = stripFunctions(handler.getCall(0).args[0].itemData);
 
     assert.ok(handler.calledOnce);
     assert.deepEqual(args, {
@@ -92,19 +92,19 @@ QUnit.test('onItemSelectionChanged event with selected item', function(assert) {
 });
 
 QUnit.test('onItemSelectionChanged should use correct set of arguments when item selected via api', function(assert) {
-    var handler = sinon.spy(),
-        items = [{ text: 'Item 1' }],
-        $treeView = initTree({
-            items: items,
-            showCheckBoxesMode: 'normal',
-            onItemSelectionChanged: handler
-        }),
-        instance = $treeView.dxTreeView('instance'),
-        nodes = instance.getNodes();
+    const handler = sinon.spy();
+    const items = [{ text: 'Item 1' }];
+    const $treeView = initTree({
+        items: items,
+        showCheckBoxesMode: 'normal',
+        onItemSelectionChanged: handler
+    });
+    const instance = $treeView.dxTreeView('instance');
+    const nodes = instance.getNodes();
 
     instance.selectItem(1);
 
-    var args = handler.getCall(0).args[0];
+    const args = handler.getCall(0).args[0];
 
     assert.deepEqual(args.itemData, items[0], 'itemData is correct');
     assert.strictEqual(args.component, instance, 'component is correct');
@@ -115,21 +115,21 @@ QUnit.test('onItemSelectionChanged should use correct set of arguments when item
 });
 
 QUnit.test('onItemSelectionChanged should use correct set of arguments without checkboxes', function(assert) {
-    var handler = sinon.spy(),
-        items = [{ text: 'Item 1' }],
-        $treeView = initTree({
-            items: items,
-            showCheckBoxesMode: 'none',
-            selectByClick: true,
-            onItemSelectionChanged: handler
-        }),
-        instance = $treeView.dxTreeView('instance'),
-        nodes = instance.getNodes(),
-        $item = $treeView.find('.dx-treeview-item').eq(0);
+    const handler = sinon.spy();
+    const items = [{ text: 'Item 1' }];
+    const $treeView = initTree({
+        items: items,
+        showCheckBoxesMode: 'none',
+        selectByClick: true,
+        onItemSelectionChanged: handler
+    });
+    const instance = $treeView.dxTreeView('instance');
+    const nodes = instance.getNodes();
+    const $item = $treeView.find('.dx-treeview-item').eq(0);
 
     $item.trigger('dxclick');
 
-    var args = handler.getCall(0).args[0];
+    const args = handler.getCall(0).args[0];
 
     assert.deepEqual(args.itemData, items[0], 'itemData is correct');
     assert.strictEqual(args.component, instance, 'component is correct');
@@ -140,13 +140,13 @@ QUnit.test('onItemSelectionChanged should use correct set of arguments without c
 });
 
 QUnit.test('onSelectAllValueChanged event should be rised after select by the selectAll method', function(assert) {
-    var handler = sinon.spy(),
-        treeView = initTree({
-            items: [{ text: 'item 1' }],
-            showCheckBoxesMode: 'selectAll',
-            selectionMode: 'multiple',
-            onSelectAllValueChanged: handler
-        }).dxTreeView('instance');
+    const handler = sinon.spy();
+    const treeView = initTree({
+        items: [{ text: 'item 1' }],
+        showCheckBoxesMode: 'selectAll',
+        selectionMode: 'multiple',
+        onSelectAllValueChanged: handler
+    }).dxTreeView('instance');
 
     treeView.selectAll();
 
@@ -159,13 +159,13 @@ QUnit.test('onSelectAllValueChanged event should be rised after select by the se
 });
 
 QUnit.test('onSelectAllValueChanged event should be rised after all item selected', function(assert) {
-    var handler = sinon.spy(),
-        treeView = initTree({
-            items: [{ text: 'item 1' }],
-            showCheckBoxesMode: 'selectAll',
-            selectionMode: 'multiple',
-            onSelectAllValueChanged: handler
-        }).dxTreeView('instance');
+    const handler = sinon.spy();
+    const treeView = initTree({
+        items: [{ text: 'item 1' }],
+        showCheckBoxesMode: 'selectAll',
+        selectionMode: 'multiple',
+        onSelectAllValueChanged: handler
+    }).dxTreeView('instance');
 
     treeView.selectItem(1);
 
@@ -178,13 +178,13 @@ QUnit.test('onSelectAllValueChanged event should be rised after all item selecte
 });
 
 QUnit.test('onSelectAllValueChanged event should not be rised after all item selected without selectAll checkbox', function(assert) {
-    var handler = sinon.spy(),
-        treeView = initTree({
-            items: [{ text: 'item 1' }],
-            showCheckBoxesMode: 'normal',
-            selectionMode: 'multiple',
-            onSelectAllValueChanged: handler
-        }).dxTreeView('instance');
+    const handler = sinon.spy();
+    const treeView = initTree({
+        items: [{ text: 'item 1' }],
+        showCheckBoxesMode: 'normal',
+        selectionMode: 'multiple',
+        onSelectAllValueChanged: handler
+    }).dxTreeView('instance');
 
     treeView.selectAll();
     treeView.unselectAll();
@@ -195,14 +195,14 @@ QUnit.test('onSelectAllValueChanged event should not be rised after all item sel
 });
 
 QUnit.test('onSelectAllValueChanged event should be rised after selectAll checked', function(assert) {
-    var handler = sinon.spy(),
-        $treeView = initTree({
-            items: [{ text: 'item 1' }],
-            showCheckBoxesMode: 'selectAll',
-            selectionMode: 'multiple',
-            onSelectAllValueChanged: handler
-        }),
-        $selectAll = $treeView.find('.dx-treeview-select-all-item');
+    const handler = sinon.spy();
+    const $treeView = initTree({
+        items: [{ text: 'item 1' }],
+        showCheckBoxesMode: 'selectAll',
+        selectionMode: 'multiple',
+        onSelectAllValueChanged: handler
+    });
+    const $selectAll = $treeView.find('.dx-treeview-select-all-item');
 
     $selectAll.trigger('dxclick');
 
@@ -215,59 +215,59 @@ QUnit.test('onSelectAllValueChanged event should be rised after selectAll checke
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired when item is selected', function(assert) {
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: onSelectionChangedHandler
-        }),
-        $item = $treeView.find('.dx-checkbox').eq(0);
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: onSelectionChangedHandler
+    });
+    const $item = $treeView.find('.dx-checkbox').eq(0);
 
     $item.trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(nodes[0].selected);
     assert.ok(!nodes[1].selected);
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired when item is unselected', function(assert) {
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', selected: true }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: onSelectionChangedHandler
-        }),
-        $item = $treeView.find('.dx-checkbox').eq(0);
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', selected: true }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: onSelectionChangedHandler
+    });
+    const $item = $treeView.find('.dx-checkbox').eq(0);
 
     $item.trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(!nodes[0].selected);
     assert.ok(!nodes[1].selected);
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired when item selection is toggled via API', function(assert) {
-    var i = 0,
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', selected: true }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: function() { i++; }
-        }),
-        treeView = $treeView.dxTreeView('instance'),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0).get(0);
+    let i = 0;
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', selected: true }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: function() { i++; }
+    });
+    const treeView = $treeView.dxTreeView('instance');
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0).get(0);
 
     treeView.unselectItem($item);
     assert.equal(i, 1, 'event was fired');
 
-    var nodes = treeView.getNodes();
+    let nodes = treeView.getNodes();
     assert.ok(!nodes[0].selected);
 
     treeView.selectItem($item);
@@ -278,58 +278,58 @@ QUnit.test('\'onSelectionChanged\' should be fired when item selection is toggle
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired when \'selectAll\' item is selected', function(assert) {
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        treeView = initTree({
-            items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'selectAll',
-            onSelectionChanged: onSelectionChangedHandler
-        }).dxTreeView('instance');
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'selectAll',
+        onSelectionChanged: onSelectionChangedHandler
+    }).dxTreeView('instance');
 
     $(treeView._$selectAllItem).trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(nodes[0].selected);
     assert.ok(nodes[1].selected);
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired when \'selectAll\' item is unselected', function(assert) {
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', selected: true }, { id: 2, text: 'Item 2', selected: true }],
-            showCheckBoxesMode: 'selectAll',
-            onSelectionChanged: onSelectionChangedHandler
-        }).dxTreeView('instance');
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', selected: true }, { id: 2, text: 'Item 2', selected: true }],
+        showCheckBoxesMode: 'selectAll',
+        onSelectionChanged: onSelectionChangedHandler
+    }).dxTreeView('instance');
 
     $(treeView._$selectAllItem).trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(!nodes[0].selected);
     assert.ok(!nodes[1].selected);
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired once for children selection', function(assert) {
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 3, text: 'Nested item' }] }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: onSelectionChangedHandler
-        }),
-        $item = $treeView.find('.dx-checkbox').eq(0);
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 3, text: 'Nested item' }] }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: onSelectionChangedHandler
+    });
+    const $item = $treeView.find('.dx-checkbox').eq(0);
 
     $item.trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(nodes[0].selected);
     assert.ok(nodes[0].items[0].selected);
@@ -338,19 +338,19 @@ QUnit.test('\'onSelectionChanged\' should be fired once for children selection',
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired once for children unselection', function(assert) {
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', selected: true, expanded: true, items: [{ id: 3, text: 'Nested item', selected: true }] }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: onSelectionChangedHandler
-        }),
-        $item = $treeView.find('.dx-checkbox').eq(0);
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', selected: true, expanded: true, items: [{ id: 3, text: 'Nested item', selected: true }] }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: onSelectionChangedHandler
+    });
+    const $item = $treeView.find('.dx-checkbox').eq(0);
 
     $item.trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(!nodes[0].selected);
     assert.ok(!nodes[0].items[0].selected);
@@ -359,7 +359,7 @@ QUnit.test('\'onSelectionChanged\' should be fired once for children unselection
 });
 
 QUnit.test('\'onSelectionChanged\' should have right arguments for nested items (unselect)', function(assert) {
-    var items = [{
+    const items = [{
         'id': 1,
         'text': 'Autos',
         'items': [{
@@ -393,19 +393,19 @@ QUnit.test('\'onSelectionChanged\' should have right arguments for nested items 
         ]
     }
     ];
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        $treeView = initTree({
-            items: items,
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: onSelectionChangedHandler
-        }),
-        $item = $treeView.find('.dx-checkbox').eq(2);
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const $treeView = initTree({
+        items: items,
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: onSelectionChangedHandler
+    });
+    const $item = $treeView.find('.dx-checkbox').eq(2);
 
     $item.trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(!nodes[0].selected);
 
@@ -429,7 +429,7 @@ QUnit.test('\'onSelectionChanged\' should have right arguments for nested items 
 });
 
 QUnit.test('\'onSelectionChanged\' should have right arguments for nested items (select)', function(assert) {
-    var items = [{
+    const items = [{
         'id': 1,
         'text': 'Autos',
         'items': [{
@@ -460,19 +460,19 @@ QUnit.test('\'onSelectionChanged\' should have right arguments for nested items 
         ]
     }
     ];
-    var onSelectionChangedHandler = sinon.spy(function() { return; }),
-        $treeView = initTree({
-            items: items,
-            showCheckBoxesMode: 'normal',
-            onSelectionChanged: onSelectionChangedHandler
-        }),
-        $item = $treeView.find('.dx-checkbox').eq(2);
+    const onSelectionChangedHandler = sinon.spy(function() { return; });
+    const $treeView = initTree({
+        items: items,
+        showCheckBoxesMode: 'normal',
+        onSelectionChanged: onSelectionChangedHandler
+    });
+    const $item = $treeView.find('.dx-checkbox').eq(2);
 
     $item.trigger('dxclick');
-    var args = onSelectionChangedHandler.getCall(0).args[0];
+    const args = onSelectionChangedHandler.getCall(0).args[0];
     assert.ok(onSelectionChangedHandler.calledOnce);
 
-    var nodes = args.component.getNodes();
+    const nodes = args.component.getNodes();
 
     assert.ok(Object.prototype.hasOwnProperty.call(nodes[0], 'selected'));
     assert.strictEqual(nodes[0].selected, undefined);
@@ -497,14 +497,14 @@ QUnit.test('\'onSelectionChanged\' should have right arguments for nested items 
 });
 
 QUnit.test('\'onSelectionChanged\' should be fired if selectNodesRecursive = false', function(assert) {
-    var handler = sinon.spy(commonUtils.noop),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
-            onSelectionChanged: handler,
-            selectNodesRecursive: false,
-            showCheckBoxesMode: 'normal'
-        }),
-        $checkBox = $treeView.find('.dx-checkbox').eq(0);
+    const handler = sinon.spy(commonUtils.noop);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
+        onSelectionChanged: handler,
+        selectNodesRecursive: false,
+        showCheckBoxesMode: 'normal'
+    });
+    const $checkBox = $treeView.find('.dx-checkbox').eq(0);
 
     $checkBox.trigger('dxclick');
 
@@ -512,16 +512,16 @@ QUnit.test('\'onSelectionChanged\' should be fired if selectNodesRecursive = fal
 });
 
 QUnit.test('onItemClick', function(assert) {
-    var clickHandler = sinon.spy(),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
-            showCheckBoxesMode: 'normal',
-            onItemClick: clickHandler
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const clickHandler = sinon.spy();
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
+        showCheckBoxesMode: 'normal',
+        onItemClick: clickHandler
+    });
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     $item.trigger('dxclick');
-    var args = clickHandler.getCall(0).args[0];
+    const args = clickHandler.getCall(0).args[0];
 
     assert.ok(clickHandler.calledOnce);
     assert.equal(args.node.key, 1);
@@ -530,13 +530,13 @@ QUnit.test('onItemClick', function(assert) {
 });
 
 QUnit.test('onItemClick should not be fired when clicking on expander icon', function(assert) {
-    var clickHandler = sinon.spy(),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 11, text: 'Item 11' }] }],
-            showCheckBoxesMode: 'normal',
-            onItemClick: clickHandler
-        }),
-        $expander = $treeView.find('.dx-treeview-toggle-item-visibility').eq(0);
+    const clickHandler = sinon.spy();
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 11, text: 'Item 11' }] }],
+        showCheckBoxesMode: 'normal',
+        onItemClick: clickHandler
+    });
+    const $expander = $treeView.find('.dx-treeview-toggle-item-visibility').eq(0);
 
     $expander.trigger('dxclick');
 
@@ -544,12 +544,12 @@ QUnit.test('onItemClick should not be fired when clicking on expander icon', fun
 });
 
 QUnit.test('onItemClick should work correct with string keys including several underscore symbols', function(assert) {
-    var clickHandler = sinon.spy(),
-        $treeView = initTree({
-            items: [{ id: '1', expanded: true, text: 'Item 1', items: [{ id: '1_1_1_2', text: 'Item 11' }] }],
-            onItemClick: clickHandler
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(1);
+    const clickHandler = sinon.spy();
+    const $treeView = initTree({
+        items: [{ id: '1', expanded: true, text: 'Item 1', items: [{ id: '1_1_1_2', text: 'Item 11' }] }],
+        onItemClick: clickHandler
+    });
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(1);
 
     $item.trigger('dxclick');
 
@@ -557,13 +557,13 @@ QUnit.test('onItemClick should work correct with string keys including several u
 });
 
 QUnit.test('onItemClick should not be fired when clicking on the checkbox', function(assert) {
-    var clickHandler = sinon.spy(commonUtils.noop),
-        $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 11, text: 'Item 11' }] }],
-            showCheckBoxesMode: 'normal',
-            onItemClick: clickHandler
-        }),
-        $checkBox = $treeView.find('.dx-checkbox').eq(0);
+    const clickHandler = sinon.spy(commonUtils.noop);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 11, text: 'Item 11' }] }],
+        showCheckBoxesMode: 'normal',
+        onItemClick: clickHandler
+    });
+    const $checkBox = $treeView.find('.dx-checkbox').eq(0);
 
     $checkBox.trigger('dxclick');
 
@@ -572,8 +572,8 @@ QUnit.test('onItemClick should not be fired when clicking on the checkbox', func
 
 
 QUnit.test('T177595', function(assert) {
-    var handle = sinon.spy(commonUtils.noop);
-    var $treeView = initTree({
+    const handle = sinon.spy(commonUtils.noop);
+    const $treeView = initTree({
         items: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
         showCheckBoxesMode: 'normal',
         selectNodesRecursive: false,
@@ -582,29 +582,29 @@ QUnit.test('T177595', function(assert) {
 
     $treeView.find('.dx-checkbox').eq(0).trigger('dxclick');
 
-    var args = handle.getCall(0).args[0];
+    const args = handle.getCall(0).args[0];
 
     assert.ok(args.itemData.selected);
     assert.ok(args.node.selected);
 });
 
 QUnit.test('T184799: expand item', function(assert) {
-    var currentDevice = devices.current();
+    const currentDevice = devices.current();
     if(currentDevice.phone || currentDevice.tablet) {
         assert.ok(true);
     } else {
-        var handler = sinon.spy(commonUtils.noop);
-        var treeView = initTree({
+        const handler = sinon.spy(commonUtils.noop);
+        const treeView = initTree({
             items: [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
             onItemExpanded: handler
         }).dxTreeView('instance');
 
-        var $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
+        const $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
         this.clock.tick(0);
 
-        var args = handler.getCall(0).args[0];
+        const args = handler.getCall(0).args[0];
 
         assert.ok(treeView.option('items')[0].expanded);
         assert.ok(treeView.getNodes()[0].expanded);
@@ -619,12 +619,12 @@ QUnit.test('T184799: expand item', function(assert) {
 });
 
 QUnit.test('double click should be detached if expand by click is enabled', function(assert) {
-    var items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
-        $treeView = initTree({
-            items: items,
-            expandEvent: 'click'
-        }),
-        $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }];
+    const $treeView = initTree({
+        items: items,
+        expandEvent: 'click'
+    });
+    const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     $rootItem.trigger(dblclickEvent.name);
 
@@ -632,13 +632,13 @@ QUnit.test('double click should be detached if expand by click is enabled', func
 });
 
 QUnit.test('double click should be attached again if expand by click is disabled', function(assert) {
-    var items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
-        $treeView = initTree({
-            items: items,
-            expandEvent: 'click'
-        }),
-        instance = $treeView.dxTreeView('instance'),
-        $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }];
+    const $treeView = initTree({
+        items: items,
+        expandEvent: 'click'
+    });
+    const instance = $treeView.dxTreeView('instance');
+    const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     instance.option('expandEvent', 'dblclick');
 
@@ -648,13 +648,13 @@ QUnit.test('double click should be attached again if expand by click is disabled
 });
 
 QUnit.test('double click should be detached if expand by click is enabling dynamically', function(assert) {
-    var items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
-        $treeView = initTree({
-            items: items,
-            expandEvent: 'dblclick'
-        }),
-        instance = $treeView.dxTreeView('instance'),
-        $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }];
+    const $treeView = initTree({
+        items: items,
+        expandEvent: 'dblclick'
+    });
+    const instance = $treeView.dxTreeView('instance');
+    const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     instance.option('expandEvent', 'click');
 
@@ -664,13 +664,13 @@ QUnit.test('double click should be detached if expand by click is enabling dynam
 });
 
 QUnit.test('dblclick should be used as expand event if unclear value is specified', function(assert) {
-    var items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
-        $treeView = initTree({
-            items: items,
-            expandEvent: 'dblclick'
-        }),
-        instance = $treeView.dxTreeView('instance'),
-        $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }];
+    const $treeView = initTree({
+        items: items,
+        expandEvent: 'dblclick'
+    });
+    const instance = $treeView.dxTreeView('instance');
+    const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     instance.option('expandEvent', 'undefinedEvent');
 
@@ -680,37 +680,37 @@ QUnit.test('dblclick should be used as expand event if unclear value is specifie
 });
 
 QUnit.test('double click should expand an item after widget repainted', function(assert) {
-    var items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }],
-        $treeView = initTree({
-            items: items,
-            expandEvent: 'dblclick'
-        }),
-        instance = $treeView.dxTreeView('instance');
+    const items = [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }];
+    const $treeView = initTree({
+        items: items,
+        expandEvent: 'dblclick'
+    });
+    const instance = $treeView.dxTreeView('instance');
 
     instance.repaint();
 
-    var $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $rootItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
     $rootItem.trigger(dblclickEvent.name);
 
     assert.ok(items[0].expanded, 'item is expanded');
 });
 
 QUnit.test('T184799: collapse item', function(assert) {
-    var currentDevice = devices.current();
+    const currentDevice = devices.current();
     if(currentDevice.phone || currentDevice.tablet) {
         assert.ok(true);
     } else {
-        var handler = sinon.spy(commonUtils.noop);
-        var treeView = initTree({
+        const handler = sinon.spy(commonUtils.noop);
+        const treeView = initTree({
             items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
             onItemCollapsed: handler
         }).dxTreeView('instance');
 
-        var $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
+        const $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
 
-        var args = handler.getCall(0).args[0];
+        const args = handler.getCall(0).args[0];
 
         assert.ok(!treeView.option('items')[0].expanded);
         assert.ok(!treeView.getNodes()[0].expanded);
@@ -725,40 +725,40 @@ QUnit.test('T184799: collapse item', function(assert) {
 });
 
 QUnit.test('Select event handler has correct arguments', function(assert) {
-    var treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
-            showCheckBoxesMode: 'normal',
-            onItemSelectionChanged: function(e) {
-                checkEventArgs(assert, e);
-            }
-        }),
-        $item = treeView.find('.dx-checkbox').eq(0);
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
+        showCheckBoxesMode: 'normal',
+        onItemSelectionChanged: function(e) {
+            checkEventArgs(assert, e);
+        }
+    });
+    const $item = treeView.find('.dx-checkbox').eq(0);
 
     assert.ok(treeView);
     $item.trigger('dxclick');
 });
 
 QUnit.test('Click event handler has correct arguments', function(assert) {
-    var treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
-            onItemClick: function(e) {
-                checkEventArgs(assert, e);
-            }
-        }),
-        $item = treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
+        onItemClick: function(e) {
+            checkEventArgs(assert, e);
+        }
+    });
+    const $item = treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     assert.ok(treeView);
     $item.trigger('dxclick');
 });
 
 QUnit.test('Collapse event handler has correct arguments', function(assert) {
-    var treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 2, text: 'Nested items' }] }],
-            onItemCollapsed: function(e) {
-                checkEventArgs(assert, e);
-            }
-        }),
-        $icon = treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 2, text: 'Nested items' }] }],
+        onItemCollapsed: function(e) {
+            checkEventArgs(assert, e);
+        }
+    });
+    const $icon = treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
     assert.ok(treeView);
     $icon.trigger('dxclick');
@@ -767,11 +767,11 @@ QUnit.test('Collapse event handler has correct arguments', function(assert) {
 QUnit.test('onItemExpanded should be called after animation completed', function(assert) {
     try {
         fx.off = false;
-        var onItemExpanded = sinon.stub(),
-            treeView = initTree({
-                items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
-                onItemExpanded: onItemExpanded
-            }).dxTreeView('instance');
+        const onItemExpanded = sinon.stub();
+        const treeView = initTree({
+            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
+            onItemExpanded: onItemExpanded
+        }).dxTreeView('instance');
 
         treeView.expandItem(1);
         this.clock.tick(50);
@@ -804,37 +804,37 @@ QUnit.test('onItemExpanded event should not be called when the expandAll is call
 });
 
 QUnit.test('Expand event handler has correct arguments', function(assert) {
-    var treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
-            onItemExpanded: function(e) {
-                checkEventArgs(assert, e);
-            }
-        }),
-        $icon = treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
+        onItemExpanded: function(e) {
+            checkEventArgs(assert, e);
+        }
+    });
+    const $icon = treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
     assert.ok(treeView);
     $icon.trigger('dxclick');
 });
 
 QUnit.test('ContextMenu event handler has correct arguments', function(assert) {
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
-            onItemContextMenu: function(e) {
-                checkEventArgs(assert, e);
-            }
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
+        onItemContextMenu: function(e) {
+            checkEventArgs(assert, e);
+        }
+    });
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     assert.ok($treeView);
     $item.trigger(contextMenuEvent.name);
 });
 
 QUnit.test('itemContextMenu should be fired when showing contextMenu', function(assert) {
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }]
-        }),
-        treeView = $treeView.dxTreeView('instance'),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }]
+    });
+    const treeView = $treeView.dxTreeView('instance');
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     treeView.on('itemContextMenu', function() {
         assert.ok(true, 'onItemContextMenu was fired');
@@ -844,24 +844,24 @@ QUnit.test('itemContextMenu should be fired when showing contextMenu', function(
 });
 
 QUnit.test('Hold event handler has correct arguments', function(assert) {
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
-            onItemHold: function(e) {
-                checkEventArgs(assert, e);
-            }
-        }),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }],
+        onItemHold: function(e) {
+            checkEventArgs(assert, e);
+        }
+    });
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     assert.ok($treeView);
     $item.trigger(holdEvent.name);
 });
 
 QUnit.test('itemHold should be fired when holding item', function(assert) {
-    var $treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }]
-        }),
-        treeView = $treeView.dxTreeView('instance'),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Nested items' }] }]
+    });
+    const treeView = $treeView.dxTreeView('instance');
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
     treeView.on('itemHold', function() {
         assert.ok(true, 'onItemHold was fired');
@@ -871,7 +871,7 @@ QUnit.test('itemHold should be fired when holding item', function(assert) {
 });
 
 QUnit.test('Rendered event handler has correct arguments', function(assert) {
-    var treeView = initTree({
+    const treeView = initTree({
         items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 3, text: 'Nested item' }] }, { id: 2, text: 'Item 2' }],
         onItemRendered: function(e) {
             assert.ok(e.component);
@@ -970,7 +970,7 @@ QUnit.test('onItemRendered event arguments', function(assert) {
 });
 
 QUnit.test('Fire contentReady event if new dataSource is empty', function(assert) {
-    var contentReadyHandler = sinon.stub();
+    const contentReadyHandler = sinon.stub();
 
     initTree({
         dataSource: [],
@@ -981,11 +981,11 @@ QUnit.test('Fire contentReady event if new dataSource is empty', function(assert
 });
 
 QUnit.test('Fire contentReady event when search', function(assert) {
-    var contentReadyHandler = sinon.spy(),
-        instance = initTree({
-            items: $.extend(true, [], DATA[0]),
-            onContentReady: contentReadyHandler
-        }).dxTreeView('instance');
+    const contentReadyHandler = sinon.spy();
+    const instance = initTree({
+        items: $.extend(true, [], DATA[0]),
+        onContentReady: contentReadyHandler
+    }).dxTreeView('instance');
 
     assert.strictEqual(contentReadyHandler.callCount, 1, 'onContentReady was first time');
 
@@ -995,7 +995,7 @@ QUnit.test('Fire contentReady event when search', function(assert) {
 });
 
 QUnit.test('ContentReady event rise once when the data source is remote by first rendering', function(assert) {
-    var contentReadyHandler = sinon.spy();
+    const contentReadyHandler = sinon.spy();
 
     initTree({
         dataSource: makeSlowDataSource([{

@@ -9,7 +9,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="menuContainer1" style="width: 100%; height: 100%"></div>\
         <div id="menuContainer3" style="width: 100%; height: 100%"></div>\
         <div id="menuContainer2" style="width: 100%; height: 100%"></div>\
@@ -19,29 +19,29 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var DX_MENU_CLASS = 'dx-menu',
-    DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item',
-    DX_MENU_ITEM_CONTENT_CLASS = DX_MENU_ITEM_CLASS + '-content',
-    DX_MENU_ITEM_TEXT_CLASS = DX_MENU_ITEM_CLASS + '-text',
-    DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + '-popout',
-    DX_MENU_ITEM_POPOUT_CONTAINER_CLASS = DX_MENU_ITEM_POPOUT_CLASS + '-container',
-    DX_MENU_ITEM_WRAPPER_CLASS = DX_MENU_ITEM_CLASS + '-wrapper',
-    DX_ICON_CLASS = 'dx-icon',
-    DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + '-no-icons',
-    DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + '-items-container',
-    DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + '-expanded',
-    DX_MENU_SEPARATOR_CLASS = DX_MENU_CLASS + '-separator',
-    DX_MENU_ITEM_LAST_GROUP_ITEM = DX_MENU_CLASS + '-last-group-item',
+const DX_MENU_CLASS = 'dx-menu';
+const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
+const DX_MENU_ITEM_CONTENT_CLASS = DX_MENU_ITEM_CLASS + '-content';
+const DX_MENU_ITEM_TEXT_CLASS = DX_MENU_ITEM_CLASS + '-text';
+const DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + '-popout';
+const DX_MENU_ITEM_POPOUT_CONTAINER_CLASS = DX_MENU_ITEM_POPOUT_CLASS + '-container';
+const DX_MENU_ITEM_WRAPPER_CLASS = DX_MENU_ITEM_CLASS + '-wrapper';
+const DX_ICON_CLASS = 'dx-icon';
+const DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + '-no-icons';
+const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + '-items-container';
+const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + '-expanded';
+const DX_MENU_SEPARATOR_CLASS = DX_MENU_CLASS + '-separator';
+const DX_MENU_ITEM_LAST_GROUP_ITEM = DX_MENU_CLASS + '-last-group-item';
 
-    DX_ITEM_SELECTED_CLASS = 'dx-menu-item-selected',
-    DX_STATE_DISABLED_CLASS = 'dx-state-disabled',
+const DX_ITEM_SELECTED_CLASS = 'dx-menu-item-selected';
+const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 
-    DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text',
-    DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon',
-    DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
+const DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text';
+const DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon';
+const DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
 
 
-var TestComponent = MenuBase.inherit({
+const TestComponent = MenuBase.inherit({
     NAME: 'TestComponent',
     _itemDataKey: function() {
         return '123';
@@ -52,13 +52,13 @@ var TestComponent = MenuBase.inherit({
 });
 
 function createMenu(options) {
-    var element = $('#menu'),
-        instance = new TestComponent(element, options);
+    const element = $('#menu');
+    const instance = new TestComponent(element, options);
 
     return { instance: instance, element: element };
 }
 
-var isDeviceDesktop = function(assert) {
+const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'if device is not desktop we do not QUnit.test the case');
         return false;
@@ -70,10 +70,10 @@ var isDeviceDesktop = function(assert) {
 QUnit.module('Menu rendering');
 
 QUnit.test('Render root submenu group', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'a' }, { text: 'b' }] }),
-        $itemsContainer = menuBase.element.find('.' + DX_MENU_ITEMS_CONTAINER_CLASS),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $firstItem = $itemWrappers.first().children();
+    const menuBase = createMenu({ items: [{ text: 'a' }, { text: 'b' }] });
+    const $itemsContainer = menuBase.element.find('.' + DX_MENU_ITEMS_CONTAINER_CLASS);
+    const $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS);
+    const $firstItem = $itemWrappers.first().children();
 
     assert.equal($itemsContainer.length, 1);
     assert.ok($itemsContainer.hasClass(DX_MENU_ITEMS_CONTAINER_CLASS));
@@ -85,11 +85,11 @@ QUnit.test('Render root submenu group', function(assert) {
 });
 
 QUnit.test('Render empty item', function(assert) {
-    var menuBase = createMenu({ items: [{}] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS),
-        $menuItemCaption = $menuItemContent.children();
+    const menuBase = createMenu({ items: [{}] });
+    const $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS);
+    const $item = $itemWrappers.children();
+    const $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
+    const $menuItemCaption = $menuItemContent.children();
 
     assert.equal($itemWrappers.length, 1);
     assert.equal($item.length, 1);
@@ -100,10 +100,10 @@ QUnit.test('Render empty item', function(assert) {
 });
 
 QUnit.test('Render string as item', function(assert) {
-    var menuBase = createMenu({ items: ['a'] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children();
+    const menuBase = createMenu({ items: ['a'] });
+    const $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS);
+    const $item = $itemWrappers.children();
+    const $menuItemContent = $item.children();
 
     assert.equal($itemWrappers.length, 1, 'there is 1 item wrapper in menu');
     assert.equal($item.length, 1, 'there is 1 item in menu');
@@ -113,10 +113,10 @@ QUnit.test('Render string as item', function(assert) {
 });
 
 QUnit.test('Render popout at item', function(assert) {
-    var menuBase = createMenu({ items: [{ text: '', items: [{ text: '' }] }] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
+    const menuBase = createMenu({ items: [{ text: '', items: [{ text: '' }] }] });
+    const $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS);
+    const $item = $itemWrappers.children();
+    const $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
 
     assert.equal($itemWrappers.length, 1, 'there is 1 item wrapper in menu');
     assert.equal($item.length, 1, 'there is 1 item in menu');
@@ -131,10 +131,10 @@ QUnit.test('Render popout at item', function(assert) {
 });
 
 QUnit.test('Render item with imageCSS', function(assert) {
-    var menuBase = createMenu({ items: [{ icon: 'imageCssClass' }] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
+    const menuBase = createMenu({ items: [{ icon: 'imageCssClass' }] });
+    const $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS);
+    const $item = $itemWrappers.children();
+    const $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
 
     assert.equal($itemWrappers.length, 1, 'there is 1 item wrapper in menu');
     assert.equal($item.length, 1, 'there is 1 item in menu');
@@ -149,10 +149,10 @@ QUnit.test('Render item with imageCSS', function(assert) {
 });
 
 QUnit.test('Render item with icon path', function(assert) {
-    var menuBase = createMenu({ items: [{ icon: '1.png' }] }),
-        $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS),
-        $item = $itemWrappers.children(),
-        $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
+    const menuBase = createMenu({ items: [{ icon: '1.png' }] });
+    const $itemWrappers = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS);
+    const $item = $itemWrappers.children();
+    const $menuItemContent = $item.children('.' + DX_MENU_ITEM_CONTENT_CLASS);
 
     assert.equal($itemWrappers.length, 1, 'there is 1 item wrapper in menu');
     assert.equal($item.length, 1, 'there is 1 item in menu');
@@ -167,15 +167,15 @@ QUnit.test('Render item with icon path', function(assert) {
 });
 
 QUnit.test('Render item with expressions', function(assert) {
-    var menuBase = createMenu({
-            displayExpr: 'name',
-            selectionMode: 'single',
-            selectedExpr: 'isSelected',
-            itemsExpr: 'children',
-            disabledExpr: 'active',
-            items: [{ name: 'a', active: true, children: [{ name: 'a1' }] }, { name: 'a', isSelected: true }]
-        }),
-        $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const menuBase = createMenu({
+        displayExpr: 'name',
+        selectionMode: 'single',
+        selectedExpr: 'isSelected',
+        itemsExpr: 'children',
+        disabledExpr: 'active',
+        items: [{ name: 'a', active: true, children: [{ name: 'a1' }] }, { name: 'a', isSelected: true }]
+    });
+    const $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
 
     assert.equal($items.length, 2, 'there are 2 items in menu');
     assert.equal($items.eq(0).text(), 'a', 'text is right');
@@ -187,22 +187,22 @@ QUnit.test('Render item with expressions', function(assert) {
 });
 
 QUnit.test('Render separator', function(assert) {
-    var menuBase = createMenu({ items: [{ text: '1' }, { text: '2', beginGroup: true }] }),
-        $item1 = $(menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS)[0]),
-        $separators = menuBase.element.find('.' + DX_MENU_SEPARATOR_CLASS);
+    const menuBase = createMenu({ items: [{ text: '1' }, { text: '2', beginGroup: true }] });
+    const $item1 = $(menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS)[0]);
+    const $separators = menuBase.element.find('.' + DX_MENU_SEPARATOR_CLASS);
 
     assert.equal($separators.length, 1, 'separator rendered');
     assert.ok($item1.hasClass(DX_MENU_ITEM_LAST_GROUP_ITEM));
 });
 
 QUnit.test('Add rtl class if necessary', function(assert) {
-    var menuBase = createMenu({ rtlEnabled: true, items: [{ text: 'testItem', imageCSS: 'imageCssClass' }] });
+    const menuBase = createMenu({ rtlEnabled: true, items: [{ text: 'testItem', imageCSS: 'imageCssClass' }] });
 
     assert.ok(menuBase.element.hasClass('dx-rtl'));
 });
 
 QUnit.test('Separator should not be shown if there is no visible items after it (T289333)', function(assert) {
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         items: [{ text: 'itemA' }, { text: 'itemB', beginGroup: true, visible: false }, { text: 'itemC', beginGroup: true, visible: false }]
     });
 
@@ -210,7 +210,7 @@ QUnit.test('Separator should not be shown if there is no visible items after it 
 });
 
 QUnit.test('Separator should be shown if there are visible items after it (T289333)', function(assert) {
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         items: [{ text: 'itemA' }, { text: 'itemB', beginGroup: true, visible: false }, { text: 'itemC', beginGroup: true, visible: false }, { text: 'itemD' }]
     });
 
@@ -218,7 +218,7 @@ QUnit.test('Separator should be shown if there are visible items after it (T2893
 });
 
 QUnit.test('Separator should not be shown if there are no visible items before if', function(assert) {
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         items: [
             { text: '000000', visible: false },
             { text: '1111111', beginGroup: true },
@@ -230,7 +230,7 @@ QUnit.test('Separator should not be shown if there are no visible items before i
 });
 
 QUnit.test('Separator should not be shown if there is an invisible item between two groups', function(assert) {
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         items: [
             { text: 'item 1', beginGroup: true, visible: false },
             { text: 'item 2', visible: false },
@@ -250,23 +250,23 @@ QUnit.test('Render menu with hidden items (T310028)', function(assert) {
 });
 
 QUnit.test('item container should have dx-menu-no-icons class when menu level have no icons', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item 1' }, { text: 'item 3' }] }),
-        $itemsContainer = $(menuBase.element.find('.' + DX_MENU_ITEMS_CONTAINER_CLASS));
+    const menuBase = createMenu({ items: [{ text: 'item 1' }, { text: 'item 3' }] });
+    const $itemsContainer = $(menuBase.element.find('.' + DX_MENU_ITEMS_CONTAINER_CLASS));
 
     assert.ok($itemsContainer.hasClass(DX_MENU_NO_ICONS_CLASS), 'item container has icon class');
 });
 
 QUnit.test('item container should not have dx-menu-no-icons class when at least one item have icon', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item 1', icon: 'add' }, { text: 'item 3' }] }),
-        $itemsContainer = $(menuBase.element.find('.' + DX_MENU_ITEMS_CONTAINER_CLASS));
+    const menuBase = createMenu({ items: [{ text: 'item 1', icon: 'add' }, { text: 'item 3' }] });
+    const $itemsContainer = $(menuBase.element.find('.' + DX_MENU_ITEMS_CONTAINER_CLASS));
 
     assert.notOk($itemsContainer.hasClass(DX_MENU_NO_ICONS_CLASS), 'item container has not icon class');
 });
 
 QUnit.test('Change item content in runtime', function(assert) {
     // arrange
-    var menuBase = createMenu({ items: [{ text: 'item' }] }),
-        $item;
+    const menuBase = createMenu({ items: [{ text: 'item' }] });
+    let $item;
 
     // act
     menuBase.instance.option('items[0].icon', 'add');
@@ -278,8 +278,8 @@ QUnit.test('Change item content in runtime', function(assert) {
 
 QUnit.test('Remove extra classes from item frame if content is changed', function(assert) {
     // arrange
-    var menuBase = createMenu({ items: [{ text: 'item' }] }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
+    const menuBase = createMenu({ items: [{ text: 'item' }] });
+    let $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
     assert.ok($item.hasClass(DX_ITEM_HAS_TEXT), 'item has dx-menu-item-has-text class');
 
@@ -292,19 +292,19 @@ QUnit.test('Remove extra classes from item frame if content is changed', functio
 });
 
 QUnit.test('Encode text for default item template', function(assert) {
-    var menuBase = createMenu({
-            items: [{ text: '<b>Test item</b>' }]
-        }),
-        $element = menuBase.element;
+    const menuBase = createMenu({
+        items: [{ text: '<b>Test item</b>' }]
+    });
+    const $element = menuBase.element;
 
     assert.equal($element.find('.dx-menu-item-text').first().text(), '<b>Test item</b>');
 });
 
 QUnit.test('Encoding is not used for html parameter in default item template', function(assert) {
-    var menuBase = createMenu({
-            items: [{ html: '<b>Test item</b>' }]
-        }),
-        $element = menuBase.element;
+    const menuBase = createMenu({
+        items: [{ html: '<b>Test item</b>' }]
+    });
+    const $element = menuBase.element;
 
     assert.equal($element.find('.dx-menu-item-content').first().text(), 'Test item');
 });
@@ -335,8 +335,8 @@ QUnit.module('ShowSubmenuMode', {
 });
 
 QUnit.test('Show onClick', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { name: 'onClick' } }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { name: 'onClick' } });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     $item.trigger('dxclick');
     this.clock.setTimeout(50);
@@ -344,8 +344,8 @@ QUnit.test('Show onClick', function(assert) {
 });
 
 QUnit.test('Show onClick mode set as string', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onClick' }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onClick' });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     $item.trigger('dxclick');
     this.clock.setTimeout(50);
@@ -353,8 +353,8 @@ QUnit.test('Show onClick mode set as string', function(assert) {
 });
 
 QUnit.test('showSubmenuMode - by default', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     if(isDeviceDesktop(assert)) {
         menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
@@ -367,8 +367,8 @@ QUnit.test('showSubmenuMode - by default', function(assert) {
 });
 
 QUnit.test('showSubmenuMode - onHover - set as object and delay set as number', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     if(isDeviceDesktop(assert)) {
         menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
@@ -381,8 +381,8 @@ QUnit.test('showSubmenuMode - onHover - set as object and delay set as number', 
 });
 
 QUnit.test('showSubmenuMode - onHover - function has item element as parameter', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     menuBase.instance._showSubmenu = function($item) {
         assert.ok(!!$item);
@@ -395,8 +395,8 @@ QUnit.test('showSubmenuMode - onHover - function has item element as parameter',
 });
 
 QUnit.test('showSubmenuMode - onHover - set as object and delay set as object too', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: { show: 100, hide: 500 } } }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: { show: 100, hide: 500 } } });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     if(isDeviceDesktop(assert)) {
         menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
@@ -409,8 +409,8 @@ QUnit.test('showSubmenuMode - onHover - set as object and delay set as object to
 });
 
 QUnit.test('showSubmenuMode - onHover - set as string without delay', function(assert) {
-    var menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onHover' }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onHover' });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     if(isDeviceDesktop(assert)) {
         menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
@@ -423,14 +423,14 @@ QUnit.test('showSubmenuMode - onHover - set as string without delay', function(a
 });
 
 QUnit.test('previous submenu should not appear if other submenu shown timeout is started', function(assert) {
-    var menuBase = createMenu({
-            items: [
-                { text: 'item1', items: [{ text: 'item1-1' }] },
-                { text: 'item2', items: [{ text: 'item2-1' }] }
-            ],
-            showSubmenuMode: { name: 'onHover', delay: 300 }
-        }),
-        $rootItems = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const menuBase = createMenu({
+        items: [
+            { text: 'item1', items: [{ text: 'item1-1' }] },
+            { text: 'item2', items: [{ text: 'item2-1' }] }
+        ],
+        showSubmenuMode: { name: 'onHover', delay: 300 }
+    });
+    const $rootItems = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
 
     if(isDeviceDesktop(assert)) {
         menuBase.element.trigger({ target: $rootItems.eq(0).get(0), type: 'dxpointerenter', pointerType: 'mouse' });
@@ -448,7 +448,7 @@ QUnit.test('previous submenu should not appear if other submenu shown timeout is
 QUnit.module('Selection');
 
 QUnit.test('Default value of selectedItem option', function(assert) {
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         items: [{ text: 'item1' }],
         selectionMode: 'single'
     });
@@ -457,16 +457,16 @@ QUnit.test('Default value of selectedItem option', function(assert) {
 });
 
 QUnit.test('Check that selected item updates by reference', function(assert) {
-    var dataSource = [
-            { text: 'item1', selected: true },
-            { text: 'item2' },
-            { text: 'item3' }
-        ],
-        menuBase = createMenu({
-            items: dataSource,
-            selectionMode: 'single'
-        }),
-        selectedItem;
+    const dataSource = [
+        { text: 'item1', selected: true },
+        { text: 'item2' },
+        { text: 'item3' }
+    ];
+    const menuBase = createMenu({
+        items: dataSource,
+        selectionMode: 'single'
+    });
+    let selectedItem;
 
     assert.ok(menuBase.instance);
     menuBase.instance.option('selectedItem', dataSource[1]);
@@ -475,17 +475,17 @@ QUnit.test('Check that selected item updates by reference', function(assert) {
 });
 
 QUnit.test('By default, rendered menu item has no selected class', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' },
-            { text: 'item3' },
-            { text: 'item4' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' },
+        { text: 'item3' },
+        { text: 'item4' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
 
     assert.equal($items.length, 4);
     assert.ok(!$items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
@@ -495,80 +495,80 @@ QUnit.test('By default, rendered menu item has no selected class', function(asse
 });
 
 QUnit.test('Set selected item via item.selected option', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2', selected: true },
-            { text: 'item3' },
-            { text: 'item4' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2', selected: true },
+        { text: 'item3' },
+        { text: 'item4' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
 
     assert.equal($items.length, 1);
     assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).text(), 'item2');
 });
 
 QUnit.test('Priority of selection', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2', selected: true },
-            { text: 'item3' }],
-        menuBase = createMenu({
-            items: items,
-            selectedItem: items[2],
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2', selected: true },
+        { text: 'item3' }];
+    const menuBase = createMenu({
+        items: items,
+        selectedItem: items[2],
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
 
     assert.equal($items.length, 1);
     assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).text(), 'item3');
 });
 
 QUnit.test('Try to set selected state of several items via item.selected option', function(assert) {
-    var items = [
-            { text: 'item1', selected: true },
-            { text: 'item2', selected: true }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
+    const items = [
+        { text: 'item1', selected: true },
+        { text: 'item2', selected: true }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
 
     assert.equal($items.length, 1);
     assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).text(), 'item2');
 });
 
 QUnit.test('Set selected item via selectedItem option', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' },
-            { text: 'item3' }],
-        menuBase = createMenu({
-            items: items,
-            selectedItem: items[1],
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' },
+        { text: 'item3' }];
+    const menuBase = createMenu({
+        items: items,
+        selectedItem: items[1],
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
 
     assert.equal($items.length, 1);
     assert.equal($items.find('.' + DX_MENU_ITEM_TEXT_CLASS).eq(0).text(), 'item2');
 });
 
 QUnit.test('Do not select item on click by default', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
-        $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
 
     assert.ok(!$item1.hasClass(DX_ITEM_SELECTED_CLASS), 'At start item1 has no selected item class');
     assert.ok(!$item2.hasClass(DX_ITEM_SELECTED_CLASS), 'At start item2 has no selected item class');
@@ -586,17 +586,17 @@ QUnit.test('Do not select item on click by default', function(assert) {
 });
 
 QUnit.test('Select item on click', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single',
-            selectByClick: true
-        }),
-        $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
-        $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single',
+        selectByClick: true
+    });
+    const $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
 
     assert.ok(!$item1.hasClass(DX_ITEM_SELECTED_CLASS), 'At start item1 has no selected item class');
     assert.ok(!$item2.hasClass(DX_ITEM_SELECTED_CLASS), 'At start item2 has no selected item class');
@@ -615,16 +615,16 @@ QUnit.test('Select item on click', function(assert) {
 });
 
 QUnit.test('Select item after third click', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single',
-            selectByClick: true
-        }),
-        $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single',
+        selectByClick: true
+    });
+    const $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
     assert.ok(!menuBase.instance.option('selectedItem'), 'No selected item in menu options');
 
@@ -646,17 +646,17 @@ QUnit.test('Select item after third click', function(assert) {
 });
 
 QUnit.test('Select item via selectItem method', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS),
-        $item1 = $items.eq(0),
-        $item2 = $items.eq(1);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const $item1 = $items.eq(0);
+    const $item2 = $items.eq(1);
 
     menuBase.instance.selectItem($item1[0]);
     assert.ok($item1.hasClass(DX_ITEM_SELECTED_CLASS), 'Added selected item class to item1');
@@ -671,16 +671,16 @@ QUnit.test('Select item via selectItem method', function(assert) {
 });
 
 QUnit.test('Unselect item via unselectItem method', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS),
-        $item1 = $items.eq(0);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const $item1 = $items.eq(0);
 
     menuBase.instance.selectItem($item1[0]);
     assert.ok($item1.hasClass(DX_ITEM_SELECTED_CLASS), 'Added selected item class to item1');
@@ -693,19 +693,19 @@ QUnit.test('Unselect item via unselectItem method', function(assert) {
 });
 
 QUnit.test('fire \'onSelectionChanged\' action', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        actionCount = 0,
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single',
-            selectByClick: true,
-            onSelectionChanged: function() { actionCount++; }
-        }),
-        $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0),
-        $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    let actionCount = 0;
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single',
+        selectByClick: true,
+        onSelectionChanged: function() { actionCount++; }
+    });
+    const $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+    const $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
 
     $item1.trigger('dxclick');
     assert.ok($item1.hasClass(DX_ITEM_SELECTED_CLASS));
@@ -719,46 +719,46 @@ QUnit.test('fire \'onSelectionChanged\' action', function(assert) {
 QUnit.test('onSelectionChanged should have correct API (T311914)', function(assert) {
     assert.expect(4);
 
-    var items = [
-            { text: 'item1' },
-            { text: 'item2' }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single',
-            selectByClick: true,
-            onSelectionChanged: function(e) {
-                assert.equal(e.component, this, 'e.component should be an instance of menu');
-                assert.ok($(e.element).get(0).nodeType, 'e.element should be dom node or jquery object');
-                assert.ok($.isArray(e.addedItems), 'e.addedItems should be array');
-                assert.ok($.isArray(e.removedItems), 'e.removedItems should be array');
-            }
-        }),
-        $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2' }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single',
+        selectByClick: true,
+        onSelectionChanged: function(e) {
+            assert.equal(e.component, this, 'e.component should be an instance of menu');
+            assert.ok($(e.element).get(0).nodeType, 'e.element should be dom node or jquery object');
+            assert.ok($.isArray(e.addedItems), 'e.addedItems should be array');
+            assert.ok($.isArray(e.removedItems), 'e.removedItems should be array');
+        }
+    });
+    const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
 
     $item.trigger('dxclick');
 });
 
 QUnit.test('Prevent selection item on click', function(assert) {
-    var items = [
-            { text: 'item1' },
-            {
-                text: 'item2',
-                selected: true,
-                items: [
-                    { text: 'item2-1' },
-                    { text: 'item2-2' }
-                ]
-            }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single',
-            selectByClick: true
-        }),
-        $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS),
-        $item1 = $items.eq(1),
-        $item2 = $items.eq(2);
+    const items = [
+        { text: 'item1' },
+        {
+            text: 'item2',
+            selected: true,
+            items: [
+                { text: 'item2-1' },
+                { text: 'item2-2' }
+            ]
+        }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single',
+        selectByClick: true
+    });
+    const $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const $item1 = $items.eq(1);
+    const $item2 = $items.eq(2);
 
     assert.ok($item1.hasClass(DX_ITEM_SELECTED_CLASS));
     assert.ok(!$item2.hasClass(DX_ITEM_SELECTED_CLASS));
@@ -769,15 +769,15 @@ QUnit.test('Prevent selection item on click', function(assert) {
 });
 
 QUnit.test('Prevent selection', function(assert) {
-    var items = [
-            { text: 'item1' },
-            { text: 'item2', selected: true, selectable: false }
-        ],
-        menuBase = createMenu({
-            items: items,
-            selectionMode: 'single'
-        }),
-        $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
+    const items = [
+        { text: 'item1' },
+        { text: 'item2', selected: true, selectable: false }
+    ];
+    const menuBase = createMenu({
+        items: items,
+        selectionMode: 'single'
+    });
+    const $items = menuBase.element.find('.' + DX_ITEM_SELECTED_CLASS);
 
     assert.equal($items.length, 0);
 });
@@ -787,7 +787,7 @@ QUnit.module('Keyboard navigation');
 QUnit.test('select item when space pressed', function(assert) {
     assert.expect(3);
 
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         selectionMode: 'single',
         items: [
             { text: 'item1' },
@@ -809,7 +809,7 @@ QUnit.test('select item when space pressed', function(assert) {
 QUnit.test('if selection mode is none  not select item when space pressed', function(assert) {
     assert.expect(2);
 
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         selectionMode: 'none',
         items: [
             { text: 'item1' },
@@ -831,7 +831,7 @@ QUnit.test('if selection mode is none  not select item when space pressed', func
 QUnit.test('if item.selectable is false not select item when space pressed', function(assert) {
     assert.expect(2);
 
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         selectionMode: 'none',
         items: [
             { text: 'item1' },
@@ -853,7 +853,7 @@ QUnit.test('if item.selectable is false not select item when space pressed', fun
 QUnit.test('if selection mode is unknown  not select item when space pressed', function(assert) {
     assert.expect(2);
 
-    var menuBase = createMenu({
+    const menuBase = createMenu({
         selectionMode: 'myNewAwesomeSelection',
         items: [
             { text: 'item1' },
@@ -873,12 +873,12 @@ QUnit.test('if selection mode is unknown  not select item when space pressed', f
 });
 
 QUnit.test('Raise onItemClick on root item click', function(assert) {
-    var itemClickArgs = [],
-        menuBase = createMenu({
-            onItemClick: function(arg) { itemClickArgs.push(arg.itemData); },
-            items: [{ text: 'a', customField: 'cf' }]
-        }),
-        $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
+    const itemClickArgs = [];
+    const menuBase = createMenu({
+        onItemClick: function(arg) { itemClickArgs.push(arg.itemData); },
+        items: [{ text: 'a', customField: 'cf' }]
+    });
+    const $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
     this.clock = sinon.useFakeTimers();
 
     $($items[0]).trigger('dxclick');
@@ -889,7 +889,7 @@ QUnit.test('Raise onItemClick on root item click', function(assert) {
     this.clock.restore();
 });
 
-var helper;
+let helper;
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({

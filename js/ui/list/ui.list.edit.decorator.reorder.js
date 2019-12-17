@@ -1,15 +1,15 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    extend = require('../../core/utils/extend').extend,
-    eventUtils = require('../../events/utils'),
-    registerDecorator = require('./ui.list.edit.decorator_registry').register,
-    EditDecorator = require('./ui.list.edit.decorator'),
-    Sortable = require('../sortable');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const extend = require('../../core/utils/extend').extend;
+const eventUtils = require('../../events/utils');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const EditDecorator = require('./ui.list.edit.decorator');
+const Sortable = require('../sortable');
 
-var REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container',
-    REORDER_HANDLE_CLASS = 'dx-list-reorder-handle',
-    REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering',
-    STATE_HOVER_CLASS = 'dx-state-hover';
+const REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container';
+const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
+const REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
+const STATE_HOVER_CLASS = 'dx-state-hover';
 
 registerDecorator(
     'reorder',
@@ -17,7 +17,7 @@ registerDecorator(
     EditDecorator.inherit({
 
         _init: function() {
-            let list = this._list;
+            const list = this._list;
 
             this._groupedEnabled = this._list.option('grouped');
 
@@ -61,21 +61,21 @@ registerDecorator(
         },
 
         _sameParent: function(fromIndex, toIndex) {
-            var $dragging = this._list.getItemElementByFlatIndex(fromIndex),
-                $over = this._list.getItemElementByFlatIndex(toIndex);
+            const $dragging = this._list.getItemElementByFlatIndex(fromIndex);
+            const $over = this._list.getItemElementByFlatIndex(toIndex);
 
             return $over.parent().get(0) === $dragging.parent().get(0);
         },
 
         _reorderHandler: function(e) {
-            var $targetElement = this._list.getItemElementByFlatIndex(e.toIndex);
+            const $targetElement = this._list.getItemElementByFlatIndex(e.toIndex);
             this._list.reorderItem($(e.itemElement), $targetElement);
         },
 
         afterBag: function(config) {
-            var $container = config.$container;
+            const $container = config.$container;
 
-            var $handle = $('<div>').addClass(REORDER_HANDLE_CLASS);
+            const $handle = $('<div>').addClass(REORDER_HANDLE_CLASS);
 
             eventsEngine.on($handle, 'dxpointerdown', (e) => {
                 this._lockedDrag = !eventUtils.isMouseEvent(e);

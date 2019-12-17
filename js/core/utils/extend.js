@@ -1,10 +1,10 @@
-var isPlainObject = require('./type').isPlainObject;
+const isPlainObject = require('./type').isPlainObject;
 
-var extendFromObject = function(target, source, overrideExistingValues) {
+const extendFromObject = function(target, source, overrideExistingValues) {
     target = target || {};
-    for(var prop in source) {
+    for(const prop in source) {
         if(Object.prototype.hasOwnProperty.call(source, prop)) {
-            var value = source[prop];
+            const value = source[prop];
             if(!(prop in target) || overrideExistingValues) {
                 target[prop] = value;
             }
@@ -16,8 +16,8 @@ var extendFromObject = function(target, source, overrideExistingValues) {
 var extend = function(target) {
     target = target || {};
 
-    var i = 1,
-        deep = false;
+    let i = 1;
+    let deep = false;
 
     if(typeof target === 'boolean') {
         deep = target;
@@ -26,16 +26,16 @@ var extend = function(target) {
     }
 
     for(; i < arguments.length; i++) {
-        var source = arguments[i];
+        const source = arguments[i];
         if(source == null) {
             continue;
         }
 
-        for(var key in source) {
-            var targetValue = target[key],
-                sourceValue = source[key],
-                sourceValueIsArray = false,
-                clone;
+        for(const key in source) {
+            const targetValue = target[key];
+            const sourceValue = source[key];
+            let sourceValueIsArray = false;
+            var clone;
 
             if(key === '__proto__' || target === sourceValue) {
                 continue;

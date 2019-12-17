@@ -46,7 +46,7 @@ class GanttContextMenuBar { // IBar
     getCommandKeys() {
         const itemsCache = this._getItemsCache();
         const result = [];
-        for(let itemKey in itemsCache) {
+        for(const itemKey in itemsCache) {
             result.push(parseInt(itemKey));
         }
         return result;

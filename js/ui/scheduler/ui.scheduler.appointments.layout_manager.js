@@ -85,8 +85,8 @@ class AppointmentLayoutManager {
         }
 
         for(let i = 0; i < settingList.length; i++) {
-            const newSettings = settingList[i],
-                oldSettings = oldSettingList[i];
+            const newSettings = settingList[i];
+            const oldSettings = oldSettingList[i];
 
             if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;

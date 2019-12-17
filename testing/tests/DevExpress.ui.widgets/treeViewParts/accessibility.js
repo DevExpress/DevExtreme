@@ -5,7 +5,7 @@ import eventsEngine from 'events/core/events_engine';
 
 const { module, test } = QUnit;
 
-var helper;
+let helper;
 [true, false].forEach((searchEnabled) => {
     module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
         beforeEach: function() {

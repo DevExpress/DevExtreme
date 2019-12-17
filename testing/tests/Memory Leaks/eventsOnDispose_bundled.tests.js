@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    GoogleProvider = require('ui/map/provider.dynamic.google'),
-    memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
+const $ = require('jquery');
+const GoogleProvider = require('ui/map/provider.dynamic.google');
+const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
 
 require('bundles/modules/parts/widgets-all');
 
@@ -16,15 +16,15 @@ $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
         QUnit.test(componentName + ' should not leak memory by not removing redundant event subscriptions after disposing', function(assert) {
             // NOTE: $.getScript() subscribes load and error event handlers on <script> element
-            var originalGetScript = $.fn.getScript;
+            const originalGetScript = $.fn.getScript;
             $.getScript = function() {
                 return $.Deferred().promise();
             };
 
             try {
-                var testNode = memoryLeaksHelper.createTestNode(),
-                    originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions(),
-                    newEventSubscriptions;
+                const testNode = memoryLeaksHelper.createTestNode();
+                const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+                let newEventSubscriptions;
 
                 $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance'),
 

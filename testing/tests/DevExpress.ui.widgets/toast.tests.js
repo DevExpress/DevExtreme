@@ -1,19 +1,19 @@
-var $ = require('jquery'),
-    pointerMock = require('../../helpers/pointerMock.js'),
-    fx = require('animation/fx'),
-    setViewPort = require('core/utils/view_port').value,
-    Toast = require('ui/toast');
+const $ = require('jquery');
+const pointerMock = require('../../helpers/pointerMock.js');
+const fx = require('animation/fx');
+const setViewPort = require('core/utils/view_port').value;
+const Toast = require('ui/toast');
 
 require('common.css!');
 
-var TOAST_CLASS = 'dx-toast',
-    TOAST_CLASS_PREFIX = TOAST_CLASS + '-',
-    TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper',
-    TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + 'content',
-    TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + 'message',
-    TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + 'icon';
+const TOAST_CLASS = 'dx-toast';
+const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
+const TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper';
+const TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + 'content';
+const TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + 'message';
+const TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + 'icon';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#toast');
         this.instance = new Toast(this.$element);
@@ -26,12 +26,12 @@ var moduleConfig = {
     }
 };
 
-var viewPort = $('#qunit-fixture').addClass('dx-viewport');
+const viewPort = $('#qunit-fixture').addClass('dx-viewport');
 setViewPort(viewPort);
 
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="toast"></div>\
         <div id="firstToast"></div>\
         <div id="secondToast"></div>';
@@ -44,7 +44,7 @@ QUnit.module('general', moduleConfig);
 QUnit.test('render', function(assert) {
     this.instance.show();
 
-    var $content = this.instance.$content();
+    const $content = this.instance.$content();
 
     assert.ok(this.$element.hasClass(TOAST_CLASS));
     assert.ok($content.parent().hasClass(TOAST_WRAPPER_CLASS));
@@ -55,7 +55,7 @@ QUnit.test('render', function(assert) {
 });
 
 QUnit.test('default template', function(assert) {
-    var $content = this.instance.$content();
+    const $content = this.instance.$content();
 
     this.instance.option({
         message: 'test42',
@@ -79,13 +79,13 @@ QUnit.test('position', function(assert) {
     fx.off = true;
     this.instance.show();
 
-    var $content = this.instance.$content();
+    const $content = this.instance.$content();
     assert.roughEqual($content.offset().top + $content.outerHeight(), $(window).height(), 1.01);
 });
 
 QUnit.test('displayTime', function(assert) {
-    var shown = 0,
-        hidden = 0;
+    let shown = 0;
+    let hidden = 0;
 
     this.instance.option({
         'displayTime': 100,
@@ -113,10 +113,10 @@ QUnit.test('displayTime', function(assert) {
 });
 
 QUnit.test('T179647 - only one toast is visible at the same time', function(assert) {
-    var $first = $('#firstToast'),
-        $second = $('#secondToast'),
-        first = $first.dxToast().dxToast('instance'),
-        second = $second.dxToast().dxToast('instance');
+    const $first = $('#firstToast');
+    const $second = $('#secondToast');
+    const first = $first.dxToast().dxToast('instance');
+    const second = $second.dxToast().dxToast('instance');
 
     first.show();
 
@@ -133,7 +133,7 @@ QUnit.module('API', moduleConfig);
 QUnit.test('show/hide', function(assert) {
     fx.off = true;
 
-    var instance = this.instance;
+    const instance = this.instance;
 
     instance.option({
         // hidden: function() {
@@ -168,7 +168,7 @@ QUnit.test('change message in runtime', function(assert) {
 QUnit.test('B238416', function(assert) {
     assert.expect(2);
 
-    var instance = this.instance;
+    const instance = this.instance;
 
     instance.option({
         animation: {
@@ -184,7 +184,7 @@ QUnit.test('B238416', function(assert) {
     });
 
     instance.show().done(function() {
-        var $content = instance.$content();
+        const $content = instance.$content();
 
         assert.equal($content.css('opacity'), '1');
 
@@ -195,11 +195,11 @@ QUnit.test('B238416', function(assert) {
 });
 
 QUnit.test('animation option should not contain window object if it was not set (T228805)', function(assert) {
-    var instance = this.instance,
-        animationConfig = {
-            show: { type: 'pop', from: { opacity: 1, scale: 0 }, to: { scale: 1 } },
-            hide: { type: 'pop', from: { scale: 1 }, to: { scale: 0 } }
-        };
+    const instance = this.instance;
+    const animationConfig = {
+        show: { type: 'pop', from: { opacity: 1, scale: 0 }, to: { scale: 1 } },
+        hide: { type: 'pop', from: { scale: 1 }, to: { scale: 0 } }
+    };
 
     instance.option('animation', animationConfig);
 
@@ -223,9 +223,9 @@ QUnit.test('toast should be closed on outside click if closeOnOutsideClick is tr
 });
 
 QUnit.test('toast does not prevent closeOnOutsideClick handler of other overlays', function(assert) {
-    var $overlay = $('<div>').appendTo(viewPort);
+    const $overlay = $('<div>').appendTo(viewPort);
 
-    var overlay = $overlay.dxOverlay({
+    const overlay = $overlay.dxOverlay({
         closeOnOutsideClick: true
     }).dxOverlay('instance');
 
@@ -240,17 +240,17 @@ QUnit.test('toast does not prevent closeOnOutsideClick handler of other overlays
 
 QUnit.test('it should be possible to select a message in the toast by the mouse', function(assert) {
     assert.expect(1);
-    var $toast = $('#toast').dxToast({
-            shading: true,
-            visible: true
-        }),
-        $shader = $toast.dxToast('$content').closest('.dx-overlay-shader');
+    const $toast = $('#toast').dxToast({
+        shading: true,
+        visible: true
+    });
+    const $shader = $toast.dxToast('$content').closest('.dx-overlay-shader');
 
     $($shader).on('dxdrag', function(e) {
         assert.equal(e.isDefaultPrevented(), false, 'touchmove is not prevented');
     });
 
-    var event = $.Event('dxdrag', {
+    const event = $.Event('dxdrag', {
         originalEvent: $.Event('dxpointermove', {
             originalEvent: $.Event('touchmove')
         })
@@ -260,10 +260,10 @@ QUnit.test('it should be possible to select a message in the toast by the mouse'
 });
 
 QUnit.test('toast should stay opened after change content template', function(assert) {
-    var toast = $('#toast').dxToast({
-            visible: true
-        }).dxToast('instance'),
-        hideSpy = sinon.spy(toast, 'hide');
+    const toast = $('#toast').dxToast({
+        visible: true
+    }).dxToast('instance');
+    const hideSpy = sinon.spy(toast, 'hide');
 
     toast.option('contentTemplate', function() {
         return $('<div>');
@@ -278,8 +278,8 @@ QUnit.module('base z-index');
 QUnit.test('toast should have base z-index greater than overlay', function(assert) {
     Toast.baseZIndex(10000);
 
-    var $toast = $('#toast').dxToast({ visible: true }),
-        $content = $toast.dxToast('instance').$content();
+    const $toast = $('#toast').dxToast({ visible: true });
+    const $content = $toast.dxToast('instance').$content();
 
     assert.equal($content.css('zIndex'), 18001, 'toast\'s z-index is correct');
 });
@@ -288,9 +288,9 @@ QUnit.test('toast should have base z-index greater than overlay', function(asser
 QUnit.module('close events handling');
 
 QUnit.test('closeOnSwipe option', function(assert) {
-    var $element = $('#toast').dxToast({ visible: true }),
-        instance = $element.dxToast('instance'),
-        pointer = pointerMock($element.find('.dx-toast-content'));
+    const $element = $('#toast').dxToast({ visible: true });
+    const instance = $element.dxToast('instance');
+    const pointer = pointerMock($element.find('.dx-toast-content'));
 
     pointer.start().swipe(-0.5);
     assert.ok(!instance.option('visible'), 'toast should hide on swipe');
@@ -303,9 +303,9 @@ QUnit.test('closeOnSwipe option', function(assert) {
 });
 
 QUnit.test('closeOnClick option', function(assert) {
-    var $element = $('#toast').dxToast({ visible: true }),
-        instance = $element.dxToast('instance'),
-        $content = $element.find('.dx-toast-content');
+    const $element = $('#toast').dxToast({ visible: true });
+    const instance = $element.dxToast('instance');
+    const $content = $element.find('.dx-toast-content');
 
     $($content).trigger('dxclick');
     assert.ok(instance.option('visible'), 'toast should not hide on click if option is false');
@@ -320,15 +320,15 @@ QUnit.test('closeOnClick option', function(assert) {
 QUnit.module('aria accessibility');
 
 QUnit.test('aria role', function(assert) {
-    var $element = $('#toast').dxToast({
-            message: 'test',
-            animation: {}
-        }),
-        instance = $element.dxToast('instance');
+    const $element = $('#toast').dxToast({
+        message: 'test',
+        animation: {}
+    });
+    const instance = $element.dxToast('instance');
 
     instance.show();
 
-    var $message = instance.$content().find('.' + TOAST_MESSAGE_CLASS);
+    const $message = instance.$content().find('.' + TOAST_MESSAGE_CLASS);
 
     assert.equal($message.attr('role'), 'alert', 'role for toast message is correct');
 });

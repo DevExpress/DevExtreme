@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    angular = require('angular'),
-    registerEvent = require('events/core/event_registrator'),
-    dragEvents = require('events/drag'),
-    swipeEvents = require('events/swipe');
+const $ = require('jquery');
+const angular = require('angular');
+const registerEvent = require('events/core/event_registrator');
+const dragEvents = require('events/drag');
+const swipeEvents = require('events/swipe');
 
 require('integration/angular');
 
@@ -35,10 +35,10 @@ $.each([
     dragEvents.leave,
     dragEvents.drop
 ], function(_, eventName) {
-    var ngEventName = eventName.slice(0, 2) + '-' + eventName.slice(2);
+    const ngEventName = eventName.slice(0, 2) + '-' + eventName.slice(2);
     QUnit.test('\'' + eventName + '\' event triggers on \'' + ngEventName + '\' attribute', function(assert) {
-        var triggered = 0,
-            $markup = $('<div ' + ngEventName + '="handler($event)"></div>').appendTo(this.$controller);
+        let triggered = 0;
+        const $markup = $('<div ' + ngEventName + '="handler($event)"></div>').appendTo(this.$controller);
 
         this.testApp.controller('my-controller', function($scope) {
             $scope.handler = function($event) {
@@ -57,7 +57,7 @@ $.each([
 QUnit.test('event with option binding', function(assert) {
     assert.expect(3);
 
-    var $markup = $('<div dx-testevent="{ execute: \'handler($event)\', option1: option1Value }"></div>').appendTo(this.$controller);
+    const $markup = $('<div dx-testevent="{ execute: \'handler($event)\', option1: option1Value }"></div>').appendTo(this.$controller);
 
     registerEvent('dxtestevent', {
         setup: function(element, data) {

@@ -28,18 +28,18 @@
         );
     }
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
-    var templateCompiler = createTemplateCompiler();
-    var pendingCreateComponentRoutines = [ ];
-    var enableAlternateTemplateTags = true;
+    const templateCompiler = createTemplateCompiler();
+    let pendingCreateComponentRoutines = [ ];
+    let enableAlternateTemplateTags = true;
 
     function createTemplateCompiler() {
-        var OPEN_TAG = '<%',
-            CLOSE_TAG = '%>',
-            ENCODE_QUALIFIER = '-',
-            INTERPOLATE_QUALIFIER = '=';
+        const OPEN_TAG = '<%';
+        const CLOSE_TAG = '%>';
+        const ENCODE_QUALIFIER = '-';
+        const INTERPOLATE_QUALIFIER = '=';
 
-        var EXTENDED_OPEN_TAG = /[<[]%/g,
-            EXTENDED_CLOSE_TAG = /%[>\]]/g;
+        const EXTENDED_OPEN_TAG = /[<[]%/g;
+        const EXTENDED_CLOSE_TAG = /%[>\]]/g;
 
         function acceptText(bag, text) {
             if(text) {
@@ -48,9 +48,9 @@
         }
 
         function acceptCode(bag, code) {
-            var encode = code.charAt(0) === ENCODE_QUALIFIER,
-                value = code.substr(1),
-                interpolate = code.charAt(0) === INTERPOLATE_QUALIFIER;
+            const encode = code.charAt(0) === ENCODE_QUALIFIER;
+            const value = code.substr(1);
+            const interpolate = code.charAt(0) === INTERPOLATE_QUALIFIER;
 
             if(encode || interpolate) {
                 bag.push('_.push(');
@@ -62,13 +62,13 @@
         }
 
         return function(text) {
-            var bag = ['var _ = [];', 'with(obj||{}) {'],
-                chunks = text.split(enableAlternateTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
+            const bag = ['var _ = [];', 'with(obj||{}) {'];
+            const chunks = text.split(enableAlternateTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
 
             acceptText(bag, chunks.shift());
 
-            for(var i = 0; i < chunks.length; i++) {
-                var tmp = chunks[i].split(enableAlternateTemplateTags ? EXTENDED_CLOSE_TAG : CLOSE_TAG);
+            for(let i = 0; i < chunks.length; i++) {
+                const tmp = chunks[i].split(enableAlternateTemplateTags ? EXTENDED_CLOSE_TAG : CLOSE_TAG);
                 if(tmp.length !== 2) {
                     throw 'Template syntax error';
                 }
@@ -89,9 +89,9 @@
                 return templateCompiler(extractTemplateMarkup(element));
             },
             render: function(template, data) {
-                var html = template(data, encodeHtml);
+                let html = template(data, encodeHtml);
 
-                var dxMvcExtensionsObj = window['MVCx'];
+                const dxMvcExtensionsObj = window['MVCx'];
                 if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
                     html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, '$1');
                 }
@@ -102,9 +102,9 @@
     }
 
     function getValidationSummary(validationGroup) {
-        var result;
+        let result;
         $('.dx-validationsummary').each(function(_, element) {
-            var summary = $(element).data('dxValidationSummary');
+            const summary = $(element).data('dxValidationSummary');
             if(summary && summary.option('validationGroup') === validationGroup) {
                 result = summary;
                 return false;
@@ -114,10 +114,10 @@
     }
 
     function createValidationSummaryItemsFromValidators(validators, editorNames) {
-        var items = [];
+        const items = [];
 
         iteratorUtils.each(validators, function(_, validator) {
-            var widget = validator.$element().data('dx-validation-target');
+            const widget = validator.$element().data('dx-validation-target');
             if(widget && $.inArray(widget.option('name'), editorNames) > -1) {
                 items.push({
                     text: widget.option('validationError.message'),
@@ -130,9 +130,9 @@
     }
 
     function createComponent(name, options, id, validatorOptions) {
-        var selector = '#' + String(id).replace(/[^\w-]/g, '\\$&');
+        const selector = '#' + String(id).replace(/[^\w-]/g, '\\$&');
         pendingCreateComponentRoutines.push(function() {
-            var $component = $(selector)[name](options);
+            const $component = $(selector)[name](options);
             if($.isPlainObject(validatorOptions)) {
                 $component.dxValidator(validatorOptions);
             }
@@ -140,7 +140,7 @@
     }
 
     templateRendered.add(function() {
-        var snapshot = pendingCreateComponentRoutines.slice();
+        const snapshot = pendingCreateComponentRoutines.slice();
         pendingCreateComponentRoutines = [ ];
         snapshot.forEach(function(func) { func(); });
     });
@@ -155,10 +155,10 @@
         },
 
         getEditorValue: function(inputName) {
-            var $widget = $('input[name=\'' + inputName + '\']').closest('.dx-widget');
+            const $widget = $('input[name=\'' + inputName + '\']').closest('.dx-widget');
             if($widget.length) {
-                var dxComponents = $widget.data('dxComponents'),
-                    widget = $widget.data(dxComponents[0]);
+                const dxComponents = $widget.data('dxComponents');
+                const widget = $widget.data(dxComponents[0]);
 
                 if(widget) {
                     return widget.option('value');
@@ -177,9 +177,9 @@
         },
 
         createValidationSummaryItems: function(validationGroup, editorNames) {
-            var summary = getValidationSummary(validationGroup),
-                groupConfig,
-                items;
+            const summary = getValidationSummary(validationGroup);
+            let groupConfig;
+            let items;
 
             if(summary) {
                 groupConfig = validationEngine.getGroupConfig(validationGroup);
@@ -191,8 +191,8 @@
         },
 
         sendValidationRequest: function(propertyName, propertyValue, url, method) {
-            var d = $.Deferred();
-            var data = { };
+            const d = $.Deferred();
+            const data = { };
             data[propertyName] = propertyValue;
 
             ajax.sendRequest({

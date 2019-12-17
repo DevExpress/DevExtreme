@@ -1,9 +1,9 @@
-var registerComponent = require('../../../core/component_registrator'),
-    SchedulerTimeline = require('./ui.scheduler.timeline');
+const registerComponent = require('../../../core/component_registrator');
+const SchedulerTimeline = require('./ui.scheduler.timeline');
 
-var TIMELINE_CLASS = 'dx-scheduler-timeline-day';
+const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 
-var SchedulerTimelineDay = SchedulerTimeline.inherit({
+const SchedulerTimelineDay = SchedulerTimeline.inherit({
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },

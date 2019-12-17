@@ -4,8 +4,8 @@ require('../../helpers/widgetsIterator.js');
 require('common.css!');
 require('generic_light.css!');
 
-var $ = require('jquery'),
-    componentName = 'dxSwitch';
+const $ = require('jquery');
+const componentName = 'dxSwitch';
 
 require('ui/switch');
 
@@ -14,7 +14,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -22,7 +22,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -30,7 +30,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -38,7 +38,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -46,7 +46,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -54,7 +54,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -62,7 +62,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -70,7 +70,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -78,7 +78,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -86,7 +86,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -94,7 +94,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -102,7 +102,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -110,7 +110,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -118,7 +118,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -126,7 +126,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -134,7 +134,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -142,7 +142,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -150,7 +150,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -158,7 +158,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 
@@ -166,7 +166,7 @@ QUnit.performanceTest(componentName + ' performance test', function(assert) {
 });
 
 QUnit.performanceTest(componentName + ' performance test', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('<div>').appendTo('#qunit-fixture')[componentName]({});
     };
 

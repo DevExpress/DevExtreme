@@ -98,7 +98,7 @@
 
         customBoundary: {
             create: function() {
-                var b = $('<div id=boundary>').css({
+                const b = $('<div id=boundary>').css({
                     position: 'absolute',
                     background: 'green',
                     width: 300,
@@ -164,8 +164,8 @@
         collisionTopRight: {
             create: function() {
                 fixtures.simple.create();
-                var win = $(window);
-                var where = $('#where');
+                const win = $(window);
+                const where = $('#where');
                 where.css({
                     top: 0,
                     left: win.scrollLeft() + win.width() - where.outerWidth()
@@ -180,8 +180,8 @@
         collisionBottomLeft: {
             create: function() {
                 fixtures.simple.create();
-                var win = $(window);
-                var where = $('#where');
+                const win = $(window);
+                const where = $('#where');
                 where.css({
                     top: win.scrollTop() + win.height() - where.outerHeight(),
                     left: 0
@@ -196,8 +196,8 @@
         collisionBottomRight: {
             create: function() {
                 fixtures.simple.create();
-                var win = $(window);
-                var where = $('#where');
+                const win = $(window);
+                const where = $('#where');
                 where.css({
                     top: win.scrollTop() + win.height() - where.outerHeight(),
                     left: win.scrollLeft() + win.width() - where.outerWidth()

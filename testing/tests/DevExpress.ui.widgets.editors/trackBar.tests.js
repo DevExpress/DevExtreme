@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    fx = require('animation/fx');
+const $ = require('jquery');
+const fx = require('animation/fx');
 
 require('ui/track_bar');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div class="dx-viewport">\
             <div id="container">\
                 <div id="trackbar"></div>\
@@ -18,7 +18,7 @@ function toSelector(text) {
     return '.' + text;
 }
 
-var TRACKBAR_RANGE_CLASS = 'dx-trackbar-range';
+const TRACKBAR_RANGE_CLASS = 'dx-trackbar-range';
 
 QUnit.module('options', {
     beforeEach: function() {
@@ -33,10 +33,10 @@ QUnit.module('options', {
 QUnit.test('value test', function(assert) {
     assert.expect(2);
 
-    var $trackBar = this.$element.dxTrackBar({
-            value: 10
-        }),
-        trackBar = $trackBar.dxTrackBar('instance');
+    const $trackBar = this.$element.dxTrackBar({
+        value: 10
+    });
+    const trackBar = $trackBar.dxTrackBar('instance');
 
     assert.equal(trackBar.option('value'), 10, 'value option is right');
 
@@ -47,11 +47,11 @@ QUnit.test('value test', function(assert) {
 QUnit.test('min/max test', function(assert) {
     assert.expect(4);
 
-    var $trackBar = this.$element.dxTrackBar({
-            min: 20,
-            max: 150
-        }),
-        trackBar = $trackBar.dxTrackBar('instance');
+    const $trackBar = this.$element.dxTrackBar({
+        min: 20,
+        max: 150
+    });
+    const trackBar = $trackBar.dxTrackBar('instance');
 
     assert.equal(trackBar.option('min'), 20, 'min option is right');
 
@@ -67,11 +67,11 @@ QUnit.test('min/max test', function(assert) {
 QUnit.test('min/max overflow test', function(assert) {
     assert.expect(4);
 
-    var $trackBar = this.$element.dxTrackBar({
-            min: 20,
-            max: 150
-        }),
-        trackBar = $trackBar.dxTrackBar('instance');
+    const $trackBar = this.$element.dxTrackBar({
+        min: 20,
+        max: 150
+    });
+    const trackBar = $trackBar.dxTrackBar('instance');
 
     assert.equal(trackBar.option('value'), 20, 'value option change to min value after set min > value');
 
@@ -88,13 +88,13 @@ QUnit.test('min/max overflow test', function(assert) {
 QUnit.test('range width depends on value', function(assert) {
     assert.expect(2);
 
-    var $trackBar = this.$element.dxTrackBar({
-            value: 10,
-            min: 0,
-            max: 100
-        }).css('width', 100),
-        trackBar = $trackBar.dxTrackBar('instance'),
-        $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
+    const $trackBar = this.$element.dxTrackBar({
+        value: 10,
+        min: 0,
+        max: 100
+    }).css('width', 100);
+    const trackBar = $trackBar.dxTrackBar('instance');
+    const $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
 
     assert.equal($range.width(), trackBar.option('value'), 'range width is right');
 
@@ -105,13 +105,13 @@ QUnit.test('range width depends on value', function(assert) {
 QUnit.test('range width depends on max/min options', function(assert) {
     assert.expect(3);
 
-    var $trackBar = this.$element.dxTrackBar({
-            value: 40,
-            min: 20,
-            max: 100
-        }).css('width', 100),
-        trackBar = $trackBar.dxTrackBar('instance'),
-        $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
+    const $trackBar = this.$element.dxTrackBar({
+        value: 40,
+        min: 20,
+        max: 100
+    }).css('width', 100);
+    const trackBar = $trackBar.dxTrackBar('instance');
+    const $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
 
     assert.equal($range.width(), 25, 'range width is right');
 
@@ -126,7 +126,7 @@ QUnit.test('range width depends on max/min options', function(assert) {
 QUnit.test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
     assert.expect(1);
 
-    var trackBar = this.$element.dxTrackBar({
+    const trackBar = this.$element.dxTrackBar({
         onValueChanged: function() { assert.ok(true, 'action fired'); }
     }).dxTrackBar('instance');
     trackBar.option('value', 10);

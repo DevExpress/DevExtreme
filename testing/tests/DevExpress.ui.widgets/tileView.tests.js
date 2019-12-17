@@ -9,23 +9,23 @@ import 'ui/tile_view';
 import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="widget"></div>\
         <div id="widthRootStyle" style="width: 300px;"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper',
-    TILEVIEW_ITEM_CLASS = 'dx-tile',
-    TILEVIEW_ITEM_SELECTOR = '.' + TILEVIEW_ITEM_CLASS,
+const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
+const TILEVIEW_ITEM_CLASS = 'dx-tile';
+const TILEVIEW_ITEM_SELECTOR = '.' + TILEVIEW_ITEM_CLASS;
 
-    DEFAULT_ITEMSIZE = 100,
-    DEFAULT_ITEMMARGIN = 20,
-    DEFAULT_ITEMOFFSET = DEFAULT_ITEMSIZE + DEFAULT_ITEMMARGIN;
+const DEFAULT_ITEMSIZE = 100;
+const DEFAULT_ITEMMARGIN = 20;
+const DEFAULT_ITEMOFFSET = DEFAULT_ITEMSIZE + DEFAULT_ITEMMARGIN;
 
 
-var items = [{
+const items = [{
     text: 'item1'
 }, {
     text: 'item2',
@@ -62,7 +62,7 @@ var items = [{
     crossRatio: 2.1
 }];
 
-var configs = {
+const configs = {
     'horizontal': {
         main: {
             position: 'left',
@@ -87,9 +87,9 @@ var configs = {
     }
 };
 
-var prepareItems = function(items, config) {
+const prepareItems = function(items, config) {
     return $.map(items, function(item) {
-        var ratios = {};
+        const ratios = {};
         ratios[config.main.ratio] = item.mainRatio;
         ratios[config.cross.ratio] = item.crossRatio;
 
@@ -97,7 +97,7 @@ var prepareItems = function(items, config) {
     });
 };
 
-var getPositionCreator = function(config) {
+const getPositionCreator = function(config) {
     return function($el, axis) {
         return Math.round($el.position()[config[axis].position]);
     };
@@ -115,14 +115,14 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('non standard item ratios should be handled correctly', function(assert) {
-        var element = this.element.dxTileView({
-                height: 20,
-                items: prepareItems(items, config),
-                itemRender: function(item) {
-                    return 'Text is: ' + item.text;
-                }
-            }),
-            $items = element.find(TILEVIEW_ITEM_SELECTOR);
+        const element = this.element.dxTileView({
+            height: 20,
+            items: prepareItems(items, config),
+            itemRender: function(item) {
+                return 'Text is: ' + item.text;
+            }
+        });
+        const $items = element.find(TILEVIEW_ITEM_SELECTOR);
 
         assert.ok($items.eq(7).width() === 0 && $items.eq(7).height() === 0, 'item 8 not displayed');
 
@@ -156,13 +156,13 @@ QUnit.test('Item collection changing should repaint widget (T686243)', function(
 });
 
 QUnit.test('template should be rendered correctly', function(assert) {
-    var element = this.element.dxTileView({
+    const element = this.element.dxTileView({
         items: prepareItems(items, configs.horizontal),
         itemTemplate: function(item) {
             return 'Text is: ' + item.text;
         }
     });
-    var $items = element.find(TILEVIEW_ITEM_SELECTOR);
+    const $items = element.find(TILEVIEW_ITEM_SELECTOR);
 
     assert.equal($items.eq(0).text(), 'Text is: item1');
 });
@@ -173,12 +173,12 @@ QUnit.test('tiles should not be collapsed if widget rendered in disabled state (
         disabled: true
     });
 
-    var $tiles = this.element.find('.dx-tile'),
-        firstTileOffset = $tiles.eq(0).offset(),
-        tilesImposed = false;
+    const $tiles = this.element.find('.dx-tile');
+    const firstTileOffset = $tiles.eq(0).offset();
+    let tilesImposed = false;
 
-    for(var i = 1, n = $tiles.length; i < n; i++) {
-        var offset = $tiles.eq(i).offset();
+    for(let i = 1, n = $tiles.length; i < n; i++) {
+        const offset = $tiles.eq(i).offset();
 
         if(offset.left === firstTileOffset.left && offset.top === firstTileOffset.top) {
             tilesImposed = true;
@@ -190,17 +190,17 @@ QUnit.test('tiles should not be collapsed if widget rendered in disabled state (
 });
 
 QUnit.test('rendering horizontal in RTL mode', function(assert) {
-    var config = configs.horizontal,
-        getPosition = getPositionCreator(config);
+    const config = configs.horizontal;
+    const getPosition = getPositionCreator(config);
 
-    var element = this.element.dxTileView({
+    const element = this.element.dxTileView({
         height: 200,
         direction: 'horizontal',
         items: prepareItems(items, config),
         rtlEnabled: true
     });
-    var $items = element.find(TILEVIEW_ITEM_SELECTOR);
-    var width = element.find('.' + TILEVIEW_CONTAINER_CLASS).width();
+    const $items = element.find(TILEVIEW_ITEM_SELECTOR);
+    const width = element.find('.' + TILEVIEW_CONTAINER_CLASS).width();
 
     assert.equal(getPosition($items.eq(0), 'main'), width - DEFAULT_ITEMOFFSET, 'item 1');
     assert.equal(getPosition($items.eq(0), 'cross'), DEFAULT_ITEMMARGIN, 'item 1');
@@ -225,17 +225,17 @@ QUnit.test('rendering horizontal in RTL mode', function(assert) {
 });
 
 QUnit.test('rendering vertical in RTL mode', function(assert) {
-    var config = configs.vertical,
-        getPosition = getPositionCreator(config);
+    const config = configs.vertical;
+    const getPosition = getPositionCreator(config);
 
-    var element = this.element.dxTileView({
+    const element = this.element.dxTileView({
         width: 200,
         direction: 'vertical',
         items: prepareItems(items, config),
         rtlEnabled: true
     });
-    var $items = element.find(TILEVIEW_ITEM_SELECTOR);
-    var width = element.find('.' + TILEVIEW_CONTAINER_CLASS).width();
+    const $items = element.find(TILEVIEW_ITEM_SELECTOR);
+    const width = element.find('.' + TILEVIEW_CONTAINER_CLASS).width();
 
     assert.equal(getPosition($items.eq(0), 'main'), DEFAULT_ITEMMARGIN, 'item 1');
     assert.equal(getPosition($items.eq(0), 'cross'), width - DEFAULT_ITEMOFFSET, 'item 1');
@@ -287,15 +287,15 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('getting scroll position', function(assert) {
-        var $element = this.element.dxTileView({
-                items: prepareItems(items, config),
-                direction: direction,
-                height: 100,
-                width: 100
-            }),
-            instance = $element.dxTileView('instance'),
-            scrollView = $element.dxScrollView('instance'),
-            scrollPosition = {};
+        const $element = this.element.dxTileView({
+            items: prepareItems(items, config),
+            direction: direction,
+            height: 100,
+            width: 100
+        });
+        const instance = $element.dxTileView('instance');
+        const scrollView = $element.dxScrollView('instance');
+        const scrollPosition = {};
 
         assert.equal(instance.scrollPosition(), 0, 'default scroll position');
 
@@ -313,31 +313,31 @@ $.each(configs, function(direction, config) {
 QUnit.module('widget sizing render');
 
 QUnit.test('default', function(assert) {
-    var $element = $('#widget').dxTileView({ items: prepareItems(items, configs.horizontal) });
+    const $element = $('#widget').dxTileView({ items: prepareItems(items, configs.horizontal) });
 
     assert.ok($element.outerWidth() > 0, 'outer width of the element must be more than zero');
 });
 
 QUnit.test('constructor', function(assert) {
-    var $element = $('#widget').dxTileView({ items: prepareItems(items, configs.horizontal), width: 400 }),
-        instance = $element.dxTileView('instance');
+    const $element = $('#widget').dxTileView({ items: prepareItems(items, configs.horizontal), width: 400 });
+    const instance = $element.dxTileView('instance');
 
     assert.strictEqual(instance.option('width'), 400);
     assert.strictEqual($element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
 });
 
 QUnit.test('root with custom width', function(assert) {
-    var $element = $('#widthRootStyle').dxTileView({ items: prepareItems(items, configs.horizontal) }),
-        instance = $element.dxTileView('instance');
+    const $element = $('#widthRootStyle').dxTileView({ items: prepareItems(items, configs.horizontal) });
+    const instance = $element.dxTileView('instance');
 
     assert.strictEqual(instance.option('width'), undefined);
     assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
 });
 
 QUnit.test('change width', function(assert) {
-    var $element = $('#widget').dxTileView({ items: prepareItems(items, configs.horizontal) }),
-        instance = $element.dxTileView('instance'),
-        customWidth = 400;
+    const $element = $('#widget').dxTileView({ items: prepareItems(items, configs.horizontal) });
+    const instance = $element.dxTileView('instance');
+    const customWidth = 400;
 
     instance.option('width', customWidth);
 
@@ -355,11 +355,11 @@ QUnit.module('integration with dataSource', {
 });
 
 QUnit.test('process indication during dataSource loading', function(assert) {
-    var dataSourceLoadTime = 100;
+    const dataSourceLoadTime = 100;
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         load: function() {
-            var deferred = $.Deferred();
+            const deferred = $.Deferred();
 
             setTimeout(function() {
                 deferred.resolve([]);
@@ -369,11 +369,11 @@ QUnit.test('process indication during dataSource loading', function(assert) {
         }
     });
 
-    var element = $('<div>').appendTo('#qunit-fixture').dxTileView({
+    const element = $('<div>').appendTo('#qunit-fixture').dxTileView({
         dataSource: dataSource
     });
 
-    var loadPanel = element.find('.dx-scrollview-loadpanel').eq(0).dxLoadPanel('instance');
+    const loadPanel = element.find('.dx-scrollview-loadpanel').eq(0).dxLoadPanel('instance');
     this.clock.tick(dataSourceLoadTime);
     assert.equal(loadPanel.option('visible'), false, 'load panel hidden');
 
@@ -385,11 +385,11 @@ QUnit.test('process indication during dataSource loading', function(assert) {
 });
 
 QUnit.test('timeview doesn\'t show load panel during dataSource loading when indicateLoading = false', function(assert) {
-    var dataSourceLoadTime = 100;
+    const dataSourceLoadTime = 100;
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         load: function() {
-            var deferred = $.Deferred();
+            const deferred = $.Deferred();
 
             setTimeout(function() {
                 deferred.resolve([]);
@@ -399,22 +399,22 @@ QUnit.test('timeview doesn\'t show load panel during dataSource loading when ind
         }
     });
 
-    var element = $('<div>').appendTo('#qunit-fixture').dxTileView({
+    const element = $('<div>').appendTo('#qunit-fixture').dxTileView({
         dataSource: dataSource,
         indicateLoading: false
     });
 
-    var loadPanel = element.find('.dx-scrollview-loadpanel').eq(0).dxLoadPanel('instance');
+    const loadPanel = element.find('.dx-scrollview-loadpanel').eq(0).dxLoadPanel('instance');
     dataSource.load();
     assert.equal(loadPanel.option('visible'), false, 'load panel hidden');
 });
 
 QUnit.test('setting indicateLoading to false hides load panel at once', function(assert) {
-    var dataSourceLoadTime = 100;
+    const dataSourceLoadTime = 100;
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         load: function() {
-            var deferred = $.Deferred();
+            const deferred = $.Deferred();
 
             setTimeout(function() {
                 deferred.resolve([]);
@@ -424,12 +424,12 @@ QUnit.test('setting indicateLoading to false hides load panel at once', function
         }
     });
 
-    var element = $('<div>').appendTo('#qunit-fixture').dxTileView({
+    const element = $('<div>').appendTo('#qunit-fixture').dxTileView({
         dataSource: dataSource,
         indicateLoading: false
     });
 
-    var loadPanel = element.find('.dx-scrollview-loadpanel').eq(0).dxLoadPanel('instance');
+    const loadPanel = element.find('.dx-scrollview-loadpanel').eq(0).dxLoadPanel('instance');
     dataSource.load();
 
     setTimeout(function() {
@@ -458,16 +458,16 @@ QUnit.module('keyboard navigation', {
 });
 
 QUnit.test('useKeyboard is must be false by default', function(assert) {
-    var instance = this.$element.dxTileView().dxTileView('instance'),
-        scrollView = this.$element.dxScrollView('instance');
+    const instance = this.$element.dxTileView().dxTileView('instance');
+    const scrollView = this.$element.dxScrollView('instance');
 
     instance.option('useKeyboard', false);
     assert.ok(!scrollView.option('useKeyboard'), 'useKeyboard is false in scrollview');
 });
 
 QUnit.test('home move focus to first element', function(assert) {
-    var $element = this.$element,
-        keyboard = this.keyboard;
+    const $element = this.$element;
+    const keyboard = this.keyboard;
 
     $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerdown');
     this.clock.tick();
@@ -477,8 +477,8 @@ QUnit.test('home move focus to first element', function(assert) {
 }),
 
 QUnit.test('end move focus to last element', function(assert) {
-    var $element = this.$element,
-        keyboard = this.keyboard;
+    const $element = this.$element;
+    const keyboard = this.keyboard;
 
     $element.find(TILEVIEW_ITEM_SELECTOR).eq(5).trigger('dxpointerdown');
     this.clock.tick();
@@ -508,14 +508,14 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('right arrow move focus to right element', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { start: 1, end: 4 },
             'vertical': { start: 1, end: 2 }
         })[direction];
 
-        var $element = this.$element;
-        var keyboard = this.keyboard;
-        var instance = $('#widget').dxTileView('instance');
+        const $element = this.$element;
+        const keyboard = this.keyboard;
+        const instance = $('#widget').dxTileView('instance');
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
         this.clock.tick();
@@ -526,13 +526,13 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('left arrow move focus to left element', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { start: 4, end: 6 },
             'vertical': { start: 3, end: 1 }
         })[direction];
 
-        var $element = this.$element;
-        var keyboard = this.keyboard;
+        const $element = this.$element;
+        const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
         this.clock.tick();
@@ -542,13 +542,13 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('down arrow move focus to down element', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { start: 4, end: 3 },
             'vertical': { start: 3, end: 5 }
         })[direction];
 
-        var $element = this.$element;
-        var keyboard = this.keyboard;
+        const $element = this.$element;
+        const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
         this.clock.tick();
@@ -558,13 +558,13 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('pageDown move focus to down element', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { start: 4, end: 3 },
             'vertical': { start: 3, end: 5 }
         })[direction];
 
-        var $element = this.$element;
-        var keyboard = this.keyboard;
+        const $element = this.$element;
+        const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
         this.clock.tick();
@@ -574,13 +574,13 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('up arrow move focus to up element', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { start: 5, end: 4 },
             'vertical': { start: 3, end: 2 }
         })[direction];
 
-        var $element = this.$element,
-            keyboard = this.keyboard;
+        const $element = this.$element;
+        const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
         this.clock.tick();
@@ -590,13 +590,13 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('pageUp move focus to up element', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { start: 5, end: 4 },
             'vertical': { start: 3, end: 2 }
         })[direction];
 
-        var $element = this.$element,
-            keyboard = this.keyboard;
+        const $element = this.$element;
+        const keyboard = this.keyboard;
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger('dxpointerdown');
         this.clock.tick();
@@ -606,19 +606,19 @@ $.each(configs, function(direction, config) {
     });
 
     QUnit.test('scroll to item on arrows', function(assert) {
-        var testConfig = ({
+        const testConfig = ({
             'horizontal': { forward: 'right', backward: 'left' },
             'vertical': { forward: 'down', backward: 'up' }
         })[direction];
 
-        var $element = $('#widget').dxTileView({
-                height: 300,
-                width: 300,
-                items: prepareItems(items, config),
-                focusStateEnabled: true
-            }),
-            instance = $element.dxTileView('instance'),
-            keyboard = keyboardMock($element);
+        const $element = $('#widget').dxTileView({
+            height: 300,
+            width: 300,
+            items: prepareItems(items, config),
+            focusStateEnabled: true
+        });
+        const instance = $element.dxTileView('instance');
+        const keyboard = keyboardMock($element);
 
         assert.equal(instance.scrollPosition(), 0, 'scrollPosition equal zero on init');
 

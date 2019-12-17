@@ -1,22 +1,22 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    commonUtils = require('../core/utils/common'),
-    typeUtils = require('../core/utils/type'),
-    errors = require('./widget/ui.errors'),
-    windowUtils = require('../core/utils/window'),
-    window = windowUtils.getWindow(),
-    iteratorUtils = require('../core/utils/iterator'),
-    extend = require('../core/utils/extend').extend,
-    registerComponent = require('../core/component_registrator'),
-    Box = require('./box'),
-    CollectionWidget = require('./collection/ui.collection_widget.edit');
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const commonUtils = require('../core/utils/common');
+const typeUtils = require('../core/utils/type');
+const errors = require('./widget/ui.errors');
+const windowUtils = require('../core/utils/window');
+const window = windowUtils.getWindow();
+const iteratorUtils = require('../core/utils/iterator');
+const extend = require('../core/utils/extend').extend;
+const registerComponent = require('../core/component_registrator');
+const Box = require('./box');
+const CollectionWidget = require('./collection/ui.collection_widget.edit');
 
-var RESPONSIVE_BOX_CLASS = 'dx-responsivebox',
-    SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-',
-    BOX_ITEM_CLASS = 'dx-box-item',
-    BOX_ITEM_DATA_KEY = 'dxBoxItemData',
+const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
+const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
+const BOX_ITEM_CLASS = 'dx-box-item';
+const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
-    HD_SCREEN_WIDTH = 1920;
+const HD_SCREEN_WIDTH = 1920;
 
 /**
 * @name dxResponsiveBox
@@ -25,7 +25,7 @@ var RESPONSIVE_BOX_CLASS = 'dx-responsivebox',
 * @module ui/responsive_box
 * @export default
 */
-var ResponsiveBox = CollectionWidget.inherit({
+const ResponsiveBox = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -233,7 +233,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemOptionChanged: function(item) {
-        var $item = this._findItemElementByItem(item);
+        const $item = this._findItemElementByItem(item);
         if(!$item.length) {
             return;
         }
@@ -244,7 +244,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _setScreenSize: function() {
-        var currentScreen = this._getCurrentScreen();
+        const currentScreen = this._getCurrentScreen();
 
         this._removeScreenSizeClass();
 
@@ -253,18 +253,18 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _removeScreenSizeClass: function() {
-        var currentScreenFactor = this.option('currentScreenFactor');
+        const currentScreenFactor = this.option('currentScreenFactor');
 
         currentScreenFactor && this.$element().removeClass(SCREEN_SIZE_CLASS_PREFIX + currentScreenFactor);
     },
 
     _prepareGrid: function() {
-        var grid = this._grid = [];
+        const grid = this._grid = [];
 
         this._prepareRowsAndCols();
 
         iteratorUtils.each(this._rows, (function() {
-            var row = [];
+            const row = [];
             grid.push(row);
 
             iteratorUtils.each(this._cols, (function() {
@@ -274,15 +274,15 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     getSingleColumnRows: function() {
-        var rows = this.option('rows'),
-            screenItemsLength = this._screenItems.length;
+        const rows = this.option('rows');
+        const screenItemsLength = this._screenItems.length;
 
         if(rows.length) {
-            var filteredRows = this._filterByScreen(rows),
-                result = [];
+            const filteredRows = this._filterByScreen(rows);
+            const result = [];
 
-            for(var i = 0; i < screenItemsLength; i++) {
-                var sizeConfig = this._defaultSizeConfig();
+            for(let i = 0; i < screenItemsLength; i++) {
+                const sizeConfig = this._defaultSizeConfig();
                 if(i < filteredRows.length && typeUtils.isDefined(filteredRows[i].shrink)) {
                     sizeConfig.shrink = filteredRows[i].shrink;
                 }
@@ -331,20 +331,20 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _defaultSizeConfig: function(size) {
-        var defaultSizeConfig = this._createDefaultSizeConfig();
+        const defaultSizeConfig = this._createDefaultSizeConfig();
         if(!arguments.length) {
             return defaultSizeConfig;
         }
 
-        var result = [];
-        for(var i = 0; i < size; i++) {
+        const result = [];
+        for(let i = 0; i < size; i++) {
             result.push(defaultSizeConfig);
         }
         return result;
     },
 
     _filterByScreen: function(items) {
-        var screenRegExp = this._screenRegExp();
+        const screenRegExp = this._screenRegExp();
 
         return commonUtils.grep(items, function(item) {
             return !item.screen || screenRegExp.test(item.screen);
@@ -352,12 +352,12 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenRegExp: function() {
-        var screen = this._getCurrentScreen();
+        const screen = this._getCurrentScreen();
         return new RegExp('(^|\\s)' + screen + '($|\\s)', 'i');
     },
 
     _getCurrentScreen: function() {
-        var width = this._screenWidth();
+        const width = this._screenWidth();
         return this.option('screenByWidth')(width);
     },
 
@@ -374,11 +374,11 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _spreadItems: function() {
         iteratorUtils.each(this._screenItems, (function(_, itemInfo) {
-            var location = itemInfo.location || {};
-            var itemCol = location.col;
-            var itemRow = location.row;
-            var row = this._grid[itemRow];
-            var itemCell = row && row[itemCol];
+            const location = itemInfo.location || {};
+            const itemCol = location.col;
+            const itemRow = location.row;
+            const row = this._grid[itemRow];
+            const itemCell = row && row[itemCol];
 
             this._occupyCells(itemCell, itemInfo);
         }).bind(this));
@@ -414,7 +414,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             return true;
         }
 
-        var result = false;
+        let result = false;
         this._loopOverSpanning(itemInfo.location, function(cell) {
             result = result || !typeUtils.isEmptyObject(cell.item);
         });
@@ -422,15 +422,15 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _loopOverSpanning: function(location, callback) {
-        var rowEnd = location.row + location.rowspan - 1;
-        var colEnd = location.col + location.colspan - 1;
-        var boundRowEnd = Math.min(rowEnd, this._rows.length - 1);
-        var boundColEnd = Math.min(colEnd, this._cols.length - 1);
+        const rowEnd = location.row + location.rowspan - 1;
+        const colEnd = location.col + location.colspan - 1;
+        const boundRowEnd = Math.min(rowEnd, this._rows.length - 1);
+        const boundColEnd = Math.min(colEnd, this._cols.length - 1);
         location.rowspan -= rowEnd - boundRowEnd;
         location.colspan -= colEnd - boundColEnd;
 
-        for(var rowIndex = location.row; rowIndex <= boundRowEnd; rowIndex++) {
-            for(var colIndex = location.col; colIndex <= boundColEnd; colIndex++) {
+        for(let rowIndex = location.row; rowIndex <= boundRowEnd; rowIndex++) {
+            for(let colIndex = location.col; colIndex <= boundColEnd; colIndex++) {
                 if((rowIndex !== location.row) || (colIndex !== location.col)) {
                     callback(this._grid[rowIndex][colIndex]);
                 }
@@ -449,8 +449,8 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _linkNodeToItem: function() {
         iteratorUtils.each(this._itemElements(), function(_, itemNode) {
-            var $item = $(itemNode),
-                item = $item.data(BOX_ITEM_DATA_KEY);
+            const $item = $(itemNode);
+            const item = $item.data(BOX_ITEM_DATA_KEY);
             if(!item.box) {
                 item.node = $item.children();
             }
@@ -458,20 +458,20 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _layoutItems: function() {
-        var rowsCount = this._grid.length;
-        var colsCount = rowsCount && this._grid[0].length;
+        const rowsCount = this._grid.length;
+        const colsCount = rowsCount && this._grid[0].length;
 
         if(!rowsCount && !colsCount) {
             return;
         }
 
-        var result = this._layoutBlock({
+        const result = this._layoutBlock({
             direction: 'col',
             row: { start: 0, end: rowsCount - 1 },
             col: { start: 0, end: colsCount - 1 }
         });
 
-        var rootBox = this._prepareBoxConfig(result.box || { direction: 'row', items: [extend(result, { ratio: 1 })] });
+        const rootBox = this._prepareBoxConfig(result.box || { direction: 'row', items: [extend(result, { ratio: 1 })] });
         extend(rootBox, this._rootBoxConfig(rootBox.items));
 
         this._$root = $('<div>').appendTo(this._itemContainer());
@@ -479,7 +479,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _rootBoxConfig: function(items) {
-        var rootItems = iteratorUtils.each(items, (function(index, item) {
+        const rootItems = iteratorUtils.each(items, (function(index, item) {
             this._needApplyAutoBaseSize(item) && extend(item, { baseSize: 'auto' });
         }).bind(this));
 
@@ -516,31 +516,31 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _isSingleItem: function(options) {
-        var firstCellLocation = this._grid[options.row.start][options.col.start].location;
-        var isItemRowSpanned = (options.row.end - options.row.start) === (firstCellLocation.rowspan - 1);
-        var isItemColSpanned = (options.col.end - options.col.start) === (firstCellLocation.colspan - 1);
+        const firstCellLocation = this._grid[options.row.start][options.col.start].location;
+        const isItemRowSpanned = (options.row.end - options.row.start) === (firstCellLocation.rowspan - 1);
+        const isItemColSpanned = (options.col.end - options.col.start) === (firstCellLocation.colspan - 1);
 
         return isItemRowSpanned && isItemColSpanned;
     },
 
     _itemByCell: function(rowIndex, colIndex) {
-        var itemCell = this._grid[rowIndex][colIndex];
+        const itemCell = this._grid[rowIndex][colIndex];
         return itemCell.spanningCell ? null : itemCell.item;
     },
 
     _layoutDirection: function(options) {
-        var items = [];
-        var direction = options.direction;
-        var crossDirection = this._crossDirection(direction);
+        const items = [];
+        const direction = options.direction;
+        const crossDirection = this._crossDirection(direction);
 
-        var block;
+        let block;
         while((block = this._nextBlock(options))) {
 
             if(this._isBlockIndivisible(options.prevBlockOptions, block)) {
                 throw errors.Error('E1025');
             }
 
-            var item = this._layoutBlock({
+            const item = this._layoutBlock({
                 direction: crossDirection,
                 row: block.row,
                 col: block.col,
@@ -573,33 +573,33 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _nextBlock: function(options) {
-        var direction = options.direction;
-        var crossDirection = this._crossDirection(direction);
-        var startIndex = options[direction].start;
-        var endIndex = options[direction].end;
-        var crossStartIndex = options[crossDirection].start;
+        const direction = options.direction;
+        const crossDirection = this._crossDirection(direction);
+        const startIndex = options[direction].start;
+        const endIndex = options[direction].end;
+        const crossStartIndex = options[crossDirection].start;
 
         if(crossStartIndex > options[crossDirection].end) {
             return null;
         }
 
-        var crossSpan = 1;
-        for(var crossIndex = crossStartIndex; crossIndex < crossStartIndex + crossSpan; crossIndex++) {
+        let crossSpan = 1;
+        for(let crossIndex = crossStartIndex; crossIndex < crossStartIndex + crossSpan; crossIndex++) {
 
-            var lineCrossSpan = 1;
-            for(var index = startIndex; index <= endIndex; index++) {
-                var cell = this._cellByDirection(direction, index, crossIndex);
+            let lineCrossSpan = 1;
+            for(let index = startIndex; index <= endIndex; index++) {
+                const cell = this._cellByDirection(direction, index, crossIndex);
                 lineCrossSpan = Math.max(lineCrossSpan, cell.location[crossDirection + 'span']);
             }
 
-            var lineCrossEndIndex = crossIndex + lineCrossSpan;
-            var crossEndIndex = crossStartIndex + crossSpan;
+            const lineCrossEndIndex = crossIndex + lineCrossSpan;
+            const crossEndIndex = crossStartIndex + crossSpan;
             if(lineCrossEndIndex > crossEndIndex) {
                 crossSpan += lineCrossEndIndex - crossEndIndex;
             }
         }
 
-        var result = {};
+        const result = {};
         result[direction] = { start: startIndex, end: endIndex };
         result[crossDirection] = { start: crossStartIndex, end: (crossStartIndex + crossSpan - 1) };
         return result;
@@ -612,11 +612,11 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _blockSize: function(block, direction) {
-        var sizeConfigs = (direction === 'row') ? this._rows : this._cols,
-            result = extend(this._createDefaultSizeConfig(), { ratio: 0 });
+        const sizeConfigs = (direction === 'row') ? this._rows : this._cols;
+        const result = extend(this._createDefaultSizeConfig(), { ratio: 0 });
 
-        for(var index = block[direction].start; index <= block[direction].end; index++) {
-            var sizeConfig = sizeConfigs[index];
+        for(let index = block[direction].start; index <= block[direction].end; index++) {
+            const sizeConfig = sizeConfigs[index];
             result.ratio += sizeConfig.ratio;
             result.baseSize += sizeConfig.baseSize;
             result.minSize += sizeConfig.minSize;
@@ -636,7 +636,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _update: function() {
-        var $existingRoot = this._$root;
+        const $existingRoot = this._$root;
         this._renderItems();
         $existingRoot && $existingRoot.detach();
         this._saveAssistantRoot($existingRoot);

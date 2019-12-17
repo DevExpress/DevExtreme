@@ -1,12 +1,12 @@
-var errorUtils = require('../core/utils/error'),
-    coreErrors = require('../core/errors'),
-    handlers = {};
+const errorUtils = require('../core/utils/error');
+const coreErrors = require('../core/errors');
+let handlers = {};
 
 /**
 * @docid
 * @name ErrorsData
 */
-var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
+const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
     /**
     * @name ErrorsData.E4000
@@ -146,7 +146,7 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
 // todo: add some logic
 function handleError(error) {
-    var id = 'E4000';
+    let id = 'E4000';
     if(error && '__id' in error) {
         id = error.__id;
     }
@@ -162,8 +162,8 @@ function handleError(error) {
 * @export errorHandler
 * @namespace DevExpress.data
 */
-var errorHandler = null;
-var _errorHandler = function(error) {
+const errorHandler = null;
+const _errorHandler = function(error) {
     ///#DEBUG
     handleError(error);
     ///#ENDDEBUG

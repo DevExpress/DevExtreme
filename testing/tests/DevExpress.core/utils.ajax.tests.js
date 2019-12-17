@@ -1,11 +1,11 @@
-var $ = require('jquery');
-var ajax = require('core/utils/ajax');
-var compareVersion = require('core/utils/version').compare;
+const $ = require('jquery');
+const ajax = require('core/utils/ajax');
+const compareVersion = require('core/utils/version').compare;
 
 QUnit.module('sendRequest', {
     beforeEach: function() {
         this.xhr = sinon.useFakeXMLHttpRequest();
-        var requests = this.requests = [];
+        const requests = this.requests = [];
 
         this.xhr.onCreate = function(xhr) {
             requests.push(xhr);
@@ -19,8 +19,8 @@ QUnit.module('sendRequest', {
 });
 
 QUnit.test('cache=false for dataType=json (cross domain)', function(assert) {
-    var json = { foo: 'bar' };
-    var crossDomainResult;
+    const json = { foo: 'bar' };
+    let crossDomainResult;
 
     ajax.sendRequest({
         url: 'http://example.com/json-url',
@@ -30,15 +30,15 @@ QUnit.test('cache=false for dataType=json (cross domain)', function(assert) {
         crossDomainResult = data;
     });
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
     xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(json));
 
     assert.deepEqual(crossDomainResult, json);
 });
 
 QUnit.test('Get JSON', function(assert) {
-    var json = { foo: 'bar' };
-    var result;
+    const json = { foo: 'bar' };
+    let result;
 
     ajax.sendRequest({
         url: '/json-url',
@@ -49,7 +49,7 @@ QUnit.test('Get JSON', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
     xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(json));
 
 
@@ -59,8 +59,8 @@ QUnit.test('Get JSON', function(assert) {
 });
 
 QUnit.test('responseType arraybuffer', function(assert) {
-    var buffer = new ArrayBuffer(8);
-    var result;
+    const buffer = new ArrayBuffer(8);
+    let result;
 
     ajax.sendRequest({
         url: '/binary-url',
@@ -71,7 +71,7 @@ QUnit.test('responseType arraybuffer', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
 
     assert.equal(xhr.method, 'GET');
     assert.equal(xhr.url, '/binary-url');
@@ -84,10 +84,10 @@ QUnit.test('responseType arraybuffer', function(assert) {
 });
 
 QUnit.test('upload events', function(assert) {
-    var progressCallback = sinon.spy();
-    var loadStartCallback = sinon.spy();
-    var abortCallback = sinon.spy();
-    var doneCallback = sinon.spy();
+    const progressCallback = sinon.spy();
+    const loadStartCallback = sinon.spy();
+    const abortCallback = sinon.spy();
+    const doneCallback = sinon.spy();
 
     ajax.sendRequest({
         url: '/file-url',
@@ -101,12 +101,12 @@ QUnit.test('upload events', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
 
     assert.equal(xhr.method, 'POST');
     assert.equal(xhr.url, '/file-url');
 
-    var e = {};
+    const e = {};
 
     xhr.upload['onprogress'](e);
     assert.equal(progressCallback.callCount, 1);
@@ -126,8 +126,8 @@ QUnit.test('upload events', function(assert) {
 });
 
 QUnit.test('upload fail', function(assert) {
-    var failCallback = sinon.spy();
-    var doneCallback = sinon.spy();
+    const failCallback = sinon.spy();
+    const doneCallback = sinon.spy();
 
     ajax.sendRequest({
         url: '/fail-url',
@@ -135,7 +135,7 @@ QUnit.test('upload fail', function(assert) {
         upload: { }
     }).fail(failCallback).done(doneCallback);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
     xhr.respond(404);
 
     assert.equal(failCallback.callCount, 1);
@@ -152,7 +152,7 @@ QUnit.test('Set request header', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
 
     assert.equal(xhr.method, 'GET');
     assert.equal(xhr.url, '/some-url');
@@ -171,7 +171,7 @@ QUnit.test('Set request header and content-type', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
 
     assert.equal(xhr.method, 'GET');
     assert.equal(xhr.url, '/some-url');
@@ -189,7 +189,7 @@ QUnit.test('Set request header for upload', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
 
     assert.equal(xhr.method, 'POST');
     assert.equal(xhr.url, '/some-url');
@@ -213,9 +213,9 @@ QUnit.test('Default Content-Type', function(assert) {
 
     assert.equal(this.requests.length, 3);
 
-    var xhr1 = this.requests[0],
-        xhr2 = this.requests[1],
-        xhr3 = this.requests[2];
+    const xhr1 = this.requests[0];
+    const xhr2 = this.requests[1];
+    const xhr3 = this.requests[2];
 
     assert.equal(xhr1.method, 'GET');
     assert.equal(xhr1.url, '/some-url');
@@ -229,9 +229,9 @@ QUnit.test('Default Content-Type', function(assert) {
 });
 
 QUnit.test('abort request', function(assert) {
-    var failCallback = sinon.spy();
+    const failCallback = sinon.spy();
 
-    var request = ajax.sendRequest({
+    const request = ajax.sendRequest({
         url: '/heavy-url',
         method: 'GET'
     });
@@ -244,9 +244,9 @@ QUnit.test('abort request', function(assert) {
 });
 
 QUnit.test('beforeSend called properly with an xhr object as an argument', function(assert) {
-    var beforeSendCallback = sinon.spy(),
-        xhr;
-    var request = ajax.sendRequest({
+    const beforeSendCallback = sinon.spy();
+    let xhr;
+    const request = ajax.sendRequest({
         url: '/some-url',
         method: 'GET',
         beforeSend: beforeSendCallback
@@ -267,8 +267,8 @@ QUnit.test('beforeSend called properly with an xhr object as an argument', funct
 
 QUnit.test('Jsonp request (same domain)', function(assert) {
 
-    var result,
-        expectedUrlStart = '/json-url?callback1=callbackName&_=';
+    let result;
+    const expectedUrlStart = '/json-url?callback1=callbackName&_=';
 
     ajax.sendRequest({
         url: '/json-url',
@@ -281,11 +281,11 @@ QUnit.test('Jsonp request (same domain)', function(assert) {
 
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
     xhr.respond(200, { 'Content-Type': 'application/json' }, 'callbackName(1)');
     assert.ok(xhr.url.indexOf(expectedUrlStart) === 0, 'url: ' + xhr.url);
 
-    var noCache = xhr.url.substring(expectedUrlStart.length);
+    const noCache = xhr.url.substring(expectedUrlStart.length);
     assert.ok(noCache.length > 0);
 
     assert.equal(result, 1);
@@ -294,16 +294,16 @@ QUnit.test('Jsonp request (same domain)', function(assert) {
 
 QUnit.test('Send data with request (jsonp)', function(assert) {
 
-    var random = sinon.stub(Math, 'random', function() {
+    const random = sinon.stub(Math, 'random', function() {
         return 0.5555555555;
     });
 
     function parseUrl(url) {
-        var params = {},
-            urlParts = url.split('?')[1].split('&');
+        const params = {};
+        const urlParts = url.split('?')[1].split('&');
 
-        for(var i = 0; i < urlParts.length; i++) {
-            var paramParts = urlParts[i].split('=');
+        for(let i = 0; i < urlParts.length; i++) {
+            const paramParts = urlParts[i].split('=');
             params[paramParts[0]] = paramParts[1];
         }
 
@@ -331,7 +331,7 @@ QUnit.test('Send data with request (jsonp)', function(assert) {
         dataType: 'jsonp'
     });
 
-    var callbackName = getCallbackName(this.requests[0].url);
+    let callbackName = getCallbackName(this.requests[0].url);
     assert.ok(callbackName === 'callback', 'callback name: ' + callbackName);
     assert.ok(getHash(this.requests[0].url).length > 0);
 
@@ -344,7 +344,7 @@ QUnit.test('Send data with request (jsonp)', function(assert) {
 
 QUnit.test('Send data with request (cached resources)', function(assert) {
 
-    var testData = [
+    const testData = [
         {
             // sendRequest options
 
@@ -389,7 +389,7 @@ QUnit.test('Send data with request (cached resources)', function(assert) {
         }
     ];
 
-    for(var i = 0; i < testData.length; i++) {
+    for(let i = 0; i < testData.length; i++) {
         ajax.sendRequest({
             url: testData[i].optionUrl || '/some-url',
             data: { top: 20, skip: 5, filter: '%any value%' },
@@ -415,7 +415,7 @@ QUnit.test('Send data with request (cached resources)', function(assert) {
 });
 
 QUnit.test('Accept headers for different dataTypes', function(assert) {
-    var dataTypes = [
+    const dataTypes = [
         { type: '', header: '*/*' },
         { type: 'someType', header: '*/*' },
         { type: undefined, header: '*/*' },
@@ -428,7 +428,7 @@ QUnit.test('Accept headers for different dataTypes', function(assert) {
         { type: 'script', header: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01' },
         { type: 'jsonp', header: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01' }];
 
-    for(var i = 0; i < dataTypes.length; i++) {
+    for(let i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: '/some-url',
             dataType: dataTypes[i].type
@@ -437,7 +437,7 @@ QUnit.test('Accept headers for different dataTypes', function(assert) {
 
     assert.equal(this.requests.length, dataTypes.length);
 
-    for(var index = 0; index < dataTypes.length; index++) {
+    for(let index = 0; index < dataTypes.length; index++) {
         assert.equal(this.requests[index].requestHeaders['Accept'], dataTypes[index].header);
     }
 
@@ -469,20 +469,20 @@ QUnit.test('empty url', function(assert) {
 });
 
 QUnit.test('Post process of data with different dataType (same domain)', function(assert) {
-    var result = [],
-        dataTypes = [
-            { type: 'json', response: '{ \'value\': 1234 }', result: undefined },
-            { type: 'json', response: '{ "value": 1234 }', result: { 'value': 1234 } },
-            { type: 'script', response: 'var variable = 10;', result: 'var variable = 10;' },
-            { type: 'text', response: 'text text', result: 'text text' }
-        ],
-        error,
-        status;
-    var setResult = function(data) {
+    const result = [];
+    const dataTypes = [
+        { type: 'json', response: '{ \'value\': 1234 }', result: undefined },
+        { type: 'json', response: '{ "value": 1234 }', result: { 'value': 1234 } },
+        { type: 'script', response: 'var variable = 10;', result: 'var variable = 10;' },
+        { type: 'text', response: 'text text', result: 'text text' }
+    ];
+    let error;
+    let status;
+    const setResult = function(data) {
         result[i] = data;
     };
 
-    var setError = function(xhr, statusText, e) {
+    const setError = function(xhr, statusText, e) {
         error = e;
         status = statusText;
     };
@@ -528,13 +528,13 @@ QUnit.test('xhrFields', function(assert) {
 
 QUnit.test('X-Requested-With headers (no cors)', function(assert) {
 
-    var testData = [
+    const testData = [
         { url: './', crossDomain: false },
         { url: '/some-url', crossDomain: false },
         { url: location.origin + '/some-url', crossDomain: false }
     ];
 
-    for(var i = 0; i < testData.length; i++) {
+    for(let i = 0; i < testData.length; i++) {
         ajax.sendRequest({
             url: testData[i].url
         });
@@ -545,12 +545,12 @@ QUnit.test('X-Requested-With headers (no cors)', function(assert) {
 
 QUnit.test('X-Requested-With headers (cors)', function(assert) {
 
-    var testData = [
+    const testData = [
         { url: 'http://example.com:80', crossDomain: true },
         { url: 'http://example.com:80x', crossDomain: true }
     ];
 
-    for(var i = 0; i < testData.length; i++) {
+    for(let i = 0; i < testData.length; i++) {
         ajax.sendRequest({
             url: testData[i].url
         });
@@ -561,7 +561,7 @@ QUnit.test('X-Requested-With headers (cors)', function(assert) {
 
 QUnit.test('nocontent status check', function(assert) {
 
-    var status;
+    let status;
 
     ajax.sendRequest({
         url: '/json-url'
@@ -575,7 +575,7 @@ QUnit.test('nocontent status check', function(assert) {
 
 QUnit.test('Handle timeout', function(assert) {
 
-    var status;
+    let status;
 
     ajax.sendRequest({
         url: '',
@@ -601,7 +601,7 @@ QUnit.test('cache=false for dataType=json', function(assert) {
 });
 
 QUnit.test('cache=false, POST string', function(assert) {
-    var options = {
+    const options = {
         url: '/',
         dataType: 'json',
         cache: false
@@ -613,14 +613,14 @@ QUnit.test('cache=false, POST string', function(assert) {
 
     ajax.sendRequest(options);
 
-    var xhr = this.requests[0];
+    const xhr = this.requests[0];
     assert.equal(xhr.url, '/');
     assert.equal(xhr.requestBody, 'payload');
 });
 
 QUnit.test('xhr is available in done', function(assert) {
-    var xhrCount = 0;
-    var requests = this.requests;
+    let xhrCount = 0;
+    const requests = this.requests;
 
     function check(dataType, statusCode, responseText, options) {
         options = options || { };
@@ -654,7 +654,7 @@ QUnit.test('special values in data', function(assert) {
         }
     });
 
-    var url = this.requests[0].url;
+    const url = this.requests[0].url;
 
     // undefined values are excluded
     assert.ok(url.indexOf('a=') < 0);
@@ -680,7 +680,7 @@ QUnit.module('sendRequest async tests');
 
 QUnit.test('Handle error', function(assert) {
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajax.sendRequest({
         url: 'http://devexpress.noresolve/'
@@ -697,12 +697,12 @@ QUnit.test('Script request (cross domain)', function(assert) {
         return;
     }
 
-    var wrongRemoteUrl = 'http://somefakedomain1221.com/json-url',
-        fail = assert.async(),
+    const wrongRemoteUrl = 'http://somefakedomain1221.com/json-url';
+    const fail = assert.async();
 
-        appendChild = sinon.spy(document.head, 'appendChild'),
-        removeChild = sinon.spy(document.head, 'removeChild'),
-        createElement = sinon.spy(document, 'createElement');
+    const appendChild = sinon.spy(document.head, 'appendChild');
+    const removeChild = sinon.spy(document.head, 'removeChild');
+    const createElement = sinon.spy(document, 'createElement');
 
     ajax.sendRequest({
         url: wrongRemoteUrl,
@@ -714,7 +714,7 @@ QUnit.test('Script request (cross domain)', function(assert) {
         assert.equal(appendChild.callCount, 1);
         assert.equal(removeChild.callCount, 1);
 
-        var addedScript = appendChild.firstCall.args[0];
+        const addedScript = appendChild.firstCall.args[0];
 
         assert.ok(addedScript.src.indexOf('http://somefakedomain1221.com/json-url?_=') === 0, 'url: ' + addedScript.src);
 

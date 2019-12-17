@@ -169,18 +169,18 @@ var google = window.google = {
                 google.directionDrawnByDirectionService = true;
                 google.directionTravelMode = request.travelMode;
 
-                var result = new google.maps.DirectionsResult(),
-                    route = {
-                        bounds: {
-                            getNorthEast: function() {
-                                return request.origin;
-                            },
-                            getSouthWest: function() {
-                                return request.destination;
-                            }
+                const result = new google.maps.DirectionsResult();
+                const route = {
+                    bounds: {
+                        getNorthEast: function() {
+                            return request.origin;
                         },
-                        legs: []
-                    };
+                        getSouthWest: function() {
+                            return request.destination;
+                        }
+                    },
+                    legs: []
+                };
 
                 route.legs.push([request.origin]);
                 jQuery.each(request.waypoints, function() {
@@ -189,7 +189,7 @@ var google = window.google = {
                 route.legs.push([request.destination]);
 
                 result.routes.push(route);
-                var status = google.statusCallback ? google.statusCallback() : google.maps.DirectionsStatus.OK;
+                const status = google.statusCallback ? google.statusCallback() : google.maps.DirectionsStatus.OK;
                 callback(result, status);
             };
         },

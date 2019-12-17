@@ -6,8 +6,8 @@ import { extend } from '../utils/extend';
 import { isDefined, isPlainObject } from '../utils/type';
 import { normalizeOptions } from './utils';
 
-let cachedGetters = {};
-let cachedSetters = {};
+const cachedGetters = {};
+const cachedSetters = {};
 
 export class OptionManager {
     constructor(options, optionsByReference) {

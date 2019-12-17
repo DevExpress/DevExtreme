@@ -8,22 +8,22 @@ import {
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 
-const _math = Math,
-    _round = _math.round,
-    _floor = _math.floor,
-    _abs = _math.abs,
+const _math = Math;
+const _round = _math.round;
+const _floor = _math.floor;
+const _abs = _math.abs;
 
-    CONNECTOR_LENGTH = 12,
-    LABEL_BACKGROUND_PADDING_X = 8,
-    LABEL_BACKGROUND_PADDING_Y = 4;
+const CONNECTOR_LENGTH = 12;
+const LABEL_BACKGROUND_PADDING_X = 8;
+const LABEL_BACKGROUND_PADDING_Y = 4;
 
 function getClosestCoord(point, coords) {
-    var closestDistance = Infinity,
-        closestCoord;
+    let closestDistance = Infinity;
+    let closestCoord;
     each(coords, function(_, coord) {
-        var x = point[0] - coord[0],
-            y = point[1] - coord[1],
-            distance = x * x + y * y;
+        const x = point[0] - coord[0];
+        const y = point[1] - coord[1];
+        const distance = x * x + y * y;
         if(distance < closestDistance) {
             closestDistance = distance;
             closestCoord = coord;
@@ -43,20 +43,20 @@ function getCrossCoord(rect, coord, indexOffset) {
 
 var barPointStrategy = {
     isLabelInside: function(labelPoint, figure) {
-        var xc = labelPoint.x + labelPoint.width / 2,
-            yc = labelPoint.y + labelPoint.height / 2;
+        const xc = labelPoint.x + labelPoint.width / 2;
+        const yc = labelPoint.y + labelPoint.height / 2;
         return figure.x <= xc && xc <= figure.x + figure.width && figure.y <= yc && yc <= figure.y + figure.height;
     },
 
     prepareLabelPoints: function(bBox, rotatedBBox, isHorizontal, angle, figureCenter) {
-        var x1 = rotatedBBox.x,
-            xc = x1 + rotatedBBox.width / 2,
-            x2 = x1 + rotatedBBox.width - 1,
-            y1 = rotatedBBox.y,
-            yc = y1 + rotatedBBox.height / 2,
-            y2 = y1 + rotatedBBox.height - 1,
-            labelPoints,
-            isRectangular = (_abs(angle) % 90) === 0;
+        const x1 = rotatedBBox.x;
+        const xc = x1 + rotatedBBox.width / 2;
+        const x2 = x1 + rotatedBBox.width - 1;
+        const y1 = rotatedBBox.y;
+        const yc = y1 + rotatedBBox.height / 2;
+        const y2 = y1 + rotatedBBox.height - 1;
+        let labelPoints;
+        const isRectangular = (_abs(angle) % 90) === 0;
 
         if(figureCenter[0] > x1 && figureCenter[0] < x2) {
             if(isRectangular) {
@@ -98,19 +98,19 @@ var barPointStrategy = {
     },
 
     findFigurePoint: function(figure, labelPoint) {
-        var figureCenter = barPointStrategy.getFigureCenter(figure),
-            point = getClosestCoord(labelPoint, [
-                [figure.x, figureCenter[1]],
-                [figureCenter[0], figure.y + figure.height],
-                [figure.x + figure.width, figureCenter[1]],
-                [figureCenter[0], figure.y]
-            ]);
+        const figureCenter = barPointStrategy.getFigureCenter(figure);
+        const point = getClosestCoord(labelPoint, [
+            [figure.x, figureCenter[1]],
+            [figureCenter[0], figure.y + figure.height],
+            [figure.x + figure.width, figureCenter[1]],
+            [figureCenter[0], figure.y]
+        ]);
         return point;
     },
 
     adjustPoints: function(points) {
-        var lineIsVertical = _abs(points[1] - points[3]) <= 1,
-            lineIsHorizontal = _abs(points[0] - points[2]) <= 1;
+        const lineIsVertical = _abs(points[1] - points[3]) <= 1;
+        const lineIsHorizontal = _abs(points[0] - points[2]) <= 1;
 
         if(lineIsHorizontal) {
             points[0] = points[2];
@@ -122,7 +122,7 @@ var barPointStrategy = {
     }
 };
 
-var symbolPointStrategy = {
+const symbolPointStrategy = {
     isLabelInside: function() {
         return false;
     },
@@ -138,32 +138,32 @@ var symbolPointStrategy = {
     },
 
     findFigurePoint: function(figure, labelPoint) {
-        var angle = Math.atan2(figure.y - labelPoint[1], labelPoint[0] - figure.x);
+        const angle = Math.atan2(figure.y - labelPoint[1], labelPoint[0] - figure.x);
         return [_round(figure.x + figure.r * Math.cos(angle)), _round(figure.y - figure.r * Math.sin(angle))];
     },
 
     adjustPoints: barPointStrategy.adjustPoints
 };
 
-var piePointStrategy = {
+const piePointStrategy = {
     isLabelInside: function(_0, _1, isOutside) {
         return !isOutside;
     },
 
     prepareLabelPoints: function(bBox, rotatedBBox, isHorizontal, angle) {
-        var xl = bBox.x,
-            xr = xl + bBox.width,
-            xc = xl + _round(bBox.width / 2),
-            yt = bBox.y,
-            yb = yt + bBox.height,
-            yc = yt + _round(bBox.height / 2),
-            points = [
-                [[xl, yt], [xr, yt]],
-                [[xr, yt], [xr, yb]],
-                [[xr, yb], [xl, yb]],
-                [[xl, yb], [xl, yt]]
-            ],
-            cosSin = _getCosAndSin(angle);
+        const xl = bBox.x;
+        const xr = xl + bBox.width;
+        const xc = xl + _round(bBox.width / 2);
+        const yt = bBox.y;
+        const yb = yt + bBox.height;
+        const yc = yt + _round(bBox.height / 2);
+        let points = [
+            [[xl, yt], [xr, yt]],
+            [[xr, yt], [xr, yb]],
+            [[xr, yb], [xl, yb]],
+            [[xl, yb], [xl, yt]]
+        ];
+        const cosSin = _getCosAndSin(angle);
 
         if(angle === 0) {
             points = isHorizontal ? [
@@ -182,10 +182,10 @@ var piePointStrategy = {
                     ];
                 });
             }).reduce(function(r, pair) {
-                var point1x = pair[0][0],
-                    point1y = pair[0][1],
-                    point2x = pair[1][0],
-                    point2y = pair[1][1];
+                const point1x = pair[0][0];
+                const point1y = pair[0][1];
+                const point2x = pair[1][0];
+                const point2y = pair[1][1];
 
                 if(isHorizontal) {
                     if((point1y >= yc && yc >= point2y) || (point1y <= yc && yc <= point2y)) {
@@ -212,9 +212,9 @@ var piePointStrategy = {
         if(!isHorizontal) {
             return [figure.x, figure.y];
         }
-        var labelX = labelPoint[0],
-            x = _round(figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle))),
-            points = [figure.x, figure.y, x, labelPoint[1]];
+        const labelX = labelPoint[0];
+        const x = _round(figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle)));
+        let points = [figure.x, figure.y, x, labelPoint[1]];
 
         if(!(figure.x <= x && x <= labelX) && !(labelX <= x && x <= figure.x)) {
             if(_abs(figure.x - labelX) < CONNECTOR_LENGTH) {
@@ -318,7 +318,7 @@ Label.prototype = {
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         disposeItem(that, '_group');
         that._data = that._options = that._textContent = that._visible = that._insideGroup = that._text = that._background = that._connector = that._figure = null;
     },
@@ -345,7 +345,7 @@ Label.prototype = {
     },
 
     show: function(holdVisible) {
-        var correctPosition = !this._drawn;
+        const correctPosition = !this._drawn;
         if(this._point.hasValue()) {
             this._holdVisibility = !!holdVisible;
             this._show();
@@ -354,11 +354,11 @@ Label.prototype = {
     },
 
     _show: function() {
-        var that = this,
-            renderer = that._renderer,
-            container = that._container,
-            options = that._options || {},
-            text = that._textContent = formatText(that._data, that._options) || null;
+        const that = this;
+        const renderer = that._renderer;
+        const container = that._container;
+        const options = that._options || {};
+        const text = that._textContent = formatText(that._data, that._options) || null;
 
         if(text) {
             if(!that._group) {
@@ -411,7 +411,7 @@ Label.prototype = {
     },
 
     _updateBackground: function(bBox) {
-        var that = this;
+        const that = this;
 
         if(that._background) {
             bBox.x -= LABEL_BACKGROUND_PADDING_X;
@@ -438,19 +438,19 @@ Label.prototype = {
     },
 
     _getConnectorPoints: function() {
-        var that = this,
-            figure = that._figure,
-            options = that._options,
-            strategy = that._strategy || selectStrategy(figure),
-            bBox = that._shiftBBox(that._bBoxWithoutRotation),
-            rotatedBBox = that.getBoundingRect(),
-            labelPoint,
-            points = [],
-            isHorizontal;
+        const that = this;
+        const figure = that._figure;
+        const options = that._options;
+        const strategy = that._strategy || selectStrategy(figure);
+        const bBox = that._shiftBBox(that._bBoxWithoutRotation);
+        const rotatedBBox = that.getBoundingRect();
+        let labelPoint;
+        let points = [];
+        let isHorizontal;
 
         if(!strategy.isLabelInside(bBox, figure, options.position !== 'inside')) {
             isHorizontal = strategy.isHorizontal(bBox, figure);
-            var figureCenter = that.getFigureCenter();
+            const figureCenter = that.getFigureCenter();
             points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
             labelPoint = getClosestCoord(figureCenter, points);
             points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
@@ -498,7 +498,7 @@ Label.prototype = {
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     shift: function(x, y) {
-        var that = this;
+        const that = this;
         if(that._textContent) {
             that._insideGroup.attr({
                 translateX: (that._x = _round(x - that._bBox.x)),
@@ -526,7 +526,7 @@ Label.prototype = {
     },
 
     getLayoutOptions: function() {
-        var options = this._options;
+        const options = this._options;
         return {
             alignment: options.alignment,
             background: checkBackground(options.background),

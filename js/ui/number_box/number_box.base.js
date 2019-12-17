@@ -1,27 +1,27 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    eventsEngine = require('../../events/core/events_engine'),
-    commonUtils = require('../../core/utils/common'),
-    typeUtils = require('../../core/utils/type'),
-    mathUtils = require('../../core/utils/math'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    devices = require('../../core/devices'),
-    browser = require('../../core/utils/browser'),
-    TextEditor = require('../text_box/ui.text_editor'),
-    eventUtils = require('../../events/utils'),
-    SpinButtons = require('./number_box.spins').default,
-    messageLocalization = require('../../localization/message'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const eventsEngine = require('../../events/core/events_engine');
+const commonUtils = require('../../core/utils/common');
+const typeUtils = require('../../core/utils/type');
+const mathUtils = require('../../core/utils/math');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const devices = require('../../core/devices');
+const browser = require('../../core/utils/browser');
+const TextEditor = require('../text_box/ui.text_editor');
+const eventUtils = require('../../events/utils');
+const SpinButtons = require('./number_box.spins').default;
+const messageLocalization = require('../../localization/message');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var math = Math;
+const math = Math;
 
-var WIDGET_CLASS = 'dx-numberbox';
-var FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
+const WIDGET_CLASS = 'dx-numberbox';
+const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
-var FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
+const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
 
-var NumberBoxBase = TextEditor.inherit({
+const NumberBoxBase = TextEditor.inherit({
 
     _supportedKeys: function() {
         return extend(this.callBase(), {
@@ -148,7 +148,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _isSupportInputMode: function() {
-        var version = parseFloat(browser.version);
+        const version = parseFloat(browser.version);
 
         return (
             browser.chrome && version >= 66
@@ -217,12 +217,12 @@ var NumberBoxBase = TextEditor.inherit({
     _keyPressHandler: function(e) {
         this.callBase(e);
 
-        var char = eventUtils.getChar(e),
-            validCharRegExp = /[\d.,eE\-+]|Subtract/, // Workaround for IE (T592690)
-            isInputCharValid = validCharRegExp.test(char);
+        const char = eventUtils.getChar(e);
+        const validCharRegExp = /[\d.,eE\-+]|Subtract/; // Workaround for IE (T592690)
+        const isInputCharValid = validCharRegExp.test(char);
 
         if(!isInputCharValid) {
-            var keyName = eventUtils.normalizeKeyName(e);
+            const keyName = eventUtils.normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
             if(e.metaKey || e.ctrlKey || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
                 return;
@@ -240,15 +240,15 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _renderValue: function() {
-        var inputValue = this._input().val();
-        var value = this.option('value');
+        const inputValue = this._input().val();
+        const value = this.option('value');
 
         if(!inputValue.length || Number(inputValue) !== value) {
             this._forceValueRender();
             this._toggleEmptinessEventHandler();
         }
 
-        var valueText = typeUtils.isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
+        const valueText = typeUtils.isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
         this.setAria({
             'valuenow': commonUtils.ensureDefined(value, ''),
@@ -262,9 +262,9 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _forceValueRender: function() {
-        var value = this.option('value'),
-            number = Number(value),
-            formattedValue = isNaN(number) ? '' : this._applyDisplayValueFormatter(value);
+        const value = this.option('value');
+        const number = Number(value);
+        const formattedValue = isNaN(number) ? '' : this._applyDisplayValueFormatter(value);
 
         this._renderDisplayText(formattedValue);
     },
@@ -289,7 +289,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _spinButtonsPointerDownHandler: function() {
-        var $input = this._input();
+        const $input = this._input();
         if(!this.option('useLargeSpinButtons') && domAdapter.getActiveElement() !== $input[0]) {
             eventsEngine.trigger($input, 'focus');
         }
@@ -308,17 +308,17 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _spinValueChange: function(sign, dxEvent) {
-        var step = parseFloat(this.option('step'));
+        const step = parseFloat(this.option('step'));
         if(step === 0) {
             return;
         }
 
-        var value = parseFloat(this._normalizeInputValue()) || 0;
+        let value = parseFloat(this._normalizeInputValue()) || 0;
 
         value = this._correctRounding(value, step * sign);
 
-        var min = this.option('min'),
-            max = this.option('max');
+        const min = this.option('min');
+        const max = this.option('max');
 
         if(min !== undefined) {
             value = Math.max(min, value);
@@ -333,14 +333,14 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _correctRounding: function(value, step) {
-        var regex = /[,.](.*)/;
-        var isFloatValue = regex.test(value),
-            isFloatStep = regex.test(step);
+        const regex = /[,.](.*)/;
+        const isFloatValue = regex.test(value);
+        const isFloatStep = regex.test(step);
 
         if(isFloatValue || isFloatStep) {
-            var valueAccuracy = (isFloatValue) ? regex.exec(value)[0].length : 0,
-                stepAccuracy = (isFloatStep) ? regex.exec(step)[0].length : 0,
-                accuracy = math.max(valueAccuracy, stepAccuracy);
+            const valueAccuracy = (isFloatValue) ? regex.exec(value)[0].length : 0;
+            const stepAccuracy = (isFloatStep) ? regex.exec(step)[0].length : 0;
+            const accuracy = math.max(valueAccuracy, stepAccuracy);
 
             value = this._round(value + step, accuracy);
 
@@ -353,7 +353,7 @@ var NumberBoxBase = TextEditor.inherit({
     _round: function(value, precision) {
         precision = precision || 0;
 
-        var multiplier = Math.pow(10, precision);
+        const multiplier = Math.pow(10, precision);
 
         value *= multiplier;
         value = Math.round(value) / multiplier;
@@ -364,7 +364,7 @@ var NumberBoxBase = TextEditor.inherit({
     _renderValueChangeEvent: function() {
         this.callBase();
 
-        var forceValueChangeEvent = eventUtils.addNamespace('focusout', FORCE_VALUECHANGE_EVENT_NAMESPACE);
+        const forceValueChangeEvent = eventUtils.addNamespace('focusout', FORCE_VALUECHANGE_EVENT_NAMESPACE);
         eventsEngine.off(this.element(), forceValueChangeEvent);
         eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
     },
@@ -374,18 +374,18 @@ var NumberBoxBase = TextEditor.inherit({
             return;
         }
 
-        var $input = this._input(),
-            formattedValue = this._applyDisplayValueFormatter(this.option('value'));
+        const $input = this._input();
+        const formattedValue = this._applyDisplayValueFormatter(this.option('value'));
 
         $input.val(null);
         $input.val(formattedValue);
     },
 
     _valueChangeEventHandler: function(e) {
-        var $input = this._input(),
-            inputValue = this._normalizeText(),
-            value = this._parseValue(inputValue),
-            valueHasDigits = inputValue !== '.' && inputValue !== '-';
+        const $input = this._input();
+        const inputValue = this._normalizeText();
+        const value = this._parseValue(inputValue);
+        const valueHasDigits = inputValue !== '.' && inputValue !== '-';
 
         if(this._isValueValid() && !this._validateValue(value)) {
             $input.val(this._applyDisplayValueFormatter(value));
@@ -405,8 +405,8 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _applyValueBoundaries: function(inputValue, parsedValue) {
-        var isValueIncomplete = this._isValueIncomplete(inputValue),
-            isValueCorrect = this._isValueInRange(inputValue);
+        const isValueIncomplete = this._isValueIncomplete(inputValue);
+        const isValueCorrect = this._isValueInRange(inputValue);
 
         if(!isValueIncomplete && !isValueCorrect && parsedValue !== null) {
             if(Number(inputValue) !== parsedValue) {
@@ -420,8 +420,8 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _inputIsInvalid: function() {
-        var isNumberMode = this.option('mode') === 'number';
-        var validityState = this._input().get(0).validity;
+        const isNumberMode = this.option('mode') === 'number';
+        const validityState = this._input().get(0).validity;
 
         return isNumberMode && validityState && validityState.badInput;
     },
@@ -435,7 +435,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _isValueIncomplete: function(value) {
-        var incompleteRegex = /(^-$)|(^-?\d*\.$)|(\d+e-?$)/i;
+        const incompleteRegex = /(^-$)|(^-?\d*\.$)|(\d+e-?$)/i;
         return incompleteRegex.test(value);
     },
 
@@ -448,10 +448,10 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _validateValue: function(value) {
-        var inputValue = this._normalizeText(),
-            isValueValid = this._isValueValid(),
-            isValid = true,
-            isNumber = this._isNumber(inputValue);
+        const inputValue = this._normalizeText();
+        const isValueValid = this._isValueValid();
+        let isValid = true;
+        const isNumber = this._isNumber(inputValue);
 
         if(isNaN(Number(value))) {
             isValid = false;
@@ -479,13 +479,13 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _normalizeText: function() {
-        var value = this._input().val().trim();
+        const value = this._input().val().trim();
 
         return this._replaceCommaWithPoint(value);
     },
 
     _parseValue: function(value) {
-        var number = parseFloat(value);
+        const number = parseFloat(value);
 
         if(isNaN(number)) {
             return null;

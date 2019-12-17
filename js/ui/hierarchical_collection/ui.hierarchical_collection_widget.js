@@ -20,7 +20,7 @@ const DISABLED_STATE_CLASS = 'dx-state-disabled';
 * @export default
 * @hidden
 */
-var HierarchicalCollectionWidget = CollectionWidget.inherit({
+const HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -107,7 +107,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _initDataAdapter: function() {
-        var accessors = this._createDataAdapterAccessors();
+        const accessors = this._createDataAdapterAccessors();
 
         this._dataAdapter = new HierarchicalDataAdapter(
             extend({
@@ -122,7 +122,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getDataAdapterOptions: noop,
 
     _initDynamicTemplates: function() {
-        var that = this;
+        const that = this;
 
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, itemData) {
@@ -152,7 +152,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _addContentClasses: noop,
 
     _initAccessors: function() {
-        var that = this;
+        const that = this;
         each(this._getAccessors(), function(_, accessor) {
             that._compileAccessor(accessor);
         });
@@ -165,10 +165,10 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _getChildNodes: function(node) {
-        var that = this,
-            arr = [];
+        const that = this;
+        const arr = [];
         each(node.internalFields.childrenKeys, function(_, key) {
-            var childNode = that._dataAdapter.getNodeByKey(key);
+            const childNode = that._dataAdapter.getNodeByKey(key);
             arr.push(childNode);
         });
         return arr;
@@ -179,9 +179,9 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _compileAccessor: function(optionName) {
-        var getter = '_' + optionName + 'Getter',
-            setter = '_' + optionName + 'Setter',
-            optionExpr = this.option(optionName + 'Expr');
+        const getter = '_' + optionName + 'Getter';
+        const setter = '_' + optionName + 'Setter';
+        const optionExpr = this.option(optionName + 'Expr');
 
         if(!optionExpr) {
             this[getter] = noop;
@@ -198,16 +198,16 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _createDataAdapterAccessors: function() {
-        var that = this,
-            accessors = {
-                getters: {},
-                setters: {}
-            };
+        const that = this;
+        const accessors = {
+            getters: {},
+            setters: {}
+        };
 
         each(this._getAccessors(), function(_, accessor) {
-            var getterName = '_' + accessor + 'Getter',
-                setterName = '_' + accessor + 'Setter',
-                newAccessor = accessor === 'parentId' ? 'parentKey' : accessor;
+            const getterName = '_' + accessor + 'Getter';
+            const setterName = '_' + accessor + 'Setter';
+            const newAccessor = accessor === 'parentId' ? 'parentKey' : accessor;
 
             accessors.getters[newAccessor] = that[getterName];
             accessors.setters[newAccessor] = that[setterName];
@@ -230,7 +230,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _widgetClass: noop,
 
     _renderItemFrame: function(index, itemData) {
-        var $itemFrame = this.callBase.apply(this, arguments);
+        const $itemFrame = this.callBase.apply(this, arguments);
 
         $itemFrame.toggleClass(DISABLED_STATE_CLASS, !!this._disabledGetter(itemData));
         return $itemFrame;

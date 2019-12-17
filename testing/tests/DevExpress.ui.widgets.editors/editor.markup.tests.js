@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    Editor = require('ui/editor/editor'),
-    Class = require('core/class');
+const $ = require('jquery');
+const Editor = require('ui/editor/editor');
+const Class = require('core/class');
 
 require('common.css!');
 
-var READONLY_STATE_CLASS = 'dx-state-readonly';
+const READONLY_STATE_CLASS = 'dx-state-readonly';
 
-var Fixture = Class.inherit({
+const Fixture = Class.inherit({
     createEditor: function(options) {
         this.$element = $('<div/>').appendTo('body');
-        var editor = new Editor(this.$element, options);
+        const editor = new Editor(this.$element, options);
 
         return editor;
     },
@@ -33,7 +33,7 @@ QUnit.module('Editor markup', {
 });
 
 QUnit.test('editor should have \'dx-state-readonly\' class depending on the \'readOnly\' option on init', function(assert) {
-    var editor = this.fixture.createEditor({
+    const editor = this.fixture.createEditor({
         readOnly: true
     });
 
@@ -41,7 +41,7 @@ QUnit.test('editor should have \'dx-state-readonly\' class depending on the \'re
 });
 
 QUnit.test('\'readOnly\' option with \'true\'/\'false\' value attaches/detaches \'dx-state-readonly\' class', function(assert) {
-    var editor = this.fixture.createEditor();
+    const editor = this.fixture.createEditor();
 
     editor.option('readOnly', true);
 
@@ -53,7 +53,7 @@ QUnit.test('\'readOnly\' option with \'true\'/\'false\' value attaches/detaches 
 });
 
 QUnit.test('\'readOnly\' option with 0 value should remove readonly class and should not add it', function(assert) {
-    var editor = this.fixture.createEditor();
+    const editor = this.fixture.createEditor();
 
     editor.option('readOnly', 0);
     editor.option('readOnly', 0);
@@ -62,7 +62,7 @@ QUnit.test('\'readOnly\' option with 0 value should remove readonly class and sh
 });
 
 QUnit.test('\'readOnly\' option with undefined value should remove readonly class and should not add it', function(assert) {
-    var editor = this.fixture.createEditor();
+    const editor = this.fixture.createEditor();
 
     editor.option('readOnly', undefined);
     editor.option('readOnly', undefined);
@@ -71,7 +71,7 @@ QUnit.test('\'readOnly\' option with undefined value should remove readonly clas
 });
 
 QUnit.test('\'readOnly\' option with null value should remove readonly class and should not add it', function(assert) {
-    var editor = this.fixture.createEditor();
+    const editor = this.fixture.createEditor();
 
     editor.option('readOnly', null);
     editor.option('readOnly', null);

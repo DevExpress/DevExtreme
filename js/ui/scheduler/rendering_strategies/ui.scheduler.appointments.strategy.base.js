@@ -9,13 +9,13 @@ import themes from '../../themes';
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const APPOINTMENT_MIN_SIZE = 2,
-    COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15,
-    APPOINTMENT_DEFAULT_HEIGHT = 20,
+const APPOINTMENT_MIN_SIZE = 2;
+const COMPACT_APPOINTMENT_DEFAULT_WIDTH = 15;
+const APPOINTMENT_DEFAULT_HEIGHT = 20;
 
-    COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
+const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 
-    DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
+const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
 class BaseRenderingStrategy {
     constructor(instance) {
@@ -66,16 +66,16 @@ class BaseRenderingStrategy {
     createTaskPositionMap(items) {
         delete this._maxAppointmentCountPerCell;
 
-        var length = items && items.length;
+        const length = items && items.length;
         if(!length) return;
 
         this._defaultWidth = this.instance._cellWidth;
         this._defaultHeight = this.instance._cellHeight;
         this._allDayHeight = this.instance._allDayCellHeight;
 
-        var map = [];
-        for(var i = 0; i < length; i++) {
-            var coordinates = this._getItemPosition(items[i]);
+        const map = [];
+        for(let i = 0; i < length; i++) {
+            let coordinates = this._getItemPosition(items[i]);
 
             if(this._isRtl()) {
                 coordinates = this._correctRtlCoordinates(coordinates);
@@ -84,14 +84,14 @@ class BaseRenderingStrategy {
             map.push(coordinates);
         }
 
-        var positionArray = this._getSortedPositions(map),
-            resultPositions = this._getResultPositions(positionArray);
+        const positionArray = this._getSortedPositions(map);
+        const resultPositions = this._getResultPositions(positionArray);
         return this._getExtendedPositionMap(map, resultPositions);
     }
 
     _getDeltaWidth(args, initialSize) {
-        var intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize(),
-            initialWidth = initialSize.width;
+        const intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize();
+        const initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);
     }
@@ -113,23 +113,23 @@ class BaseRenderingStrategy {
     }
 
     _getItemPosition(item) {
-        var position = this._getAppointmentCoordinates(item),
-            allDay = this.isAllDay(item),
-            result = [],
-            startDate = new Date(this.instance.fire('getField', 'startDate', item)),
-            isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
+        const position = this._getAppointmentCoordinates(item);
+        const allDay = this.isAllDay(item);
+        let result = [];
+        const startDate = new Date(this.instance.fire('getField', 'startDate', item));
+        const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
 
-        for(var j = 0; j < position.length; j++) {
-            var height = this.calculateAppointmentHeight(item, position[j], isRecurring),
-                width = this.calculateAppointmentWidth(item, position[j], isRecurring),
-                resultWidth = width,
-                appointmentReduced = null,
-                multiWeekAppointmentParts = [],
-                initialRowIndex = position[j].rowIndex,
-                initialCellIndex = position[j].cellIndex;
+        for(let j = 0; j < position.length; j++) {
+            const height = this.calculateAppointmentHeight(item, position[j], isRecurring);
+            const width = this.calculateAppointmentWidth(item, position[j], isRecurring);
+            let resultWidth = width;
+            let appointmentReduced = null;
+            let multiWeekAppointmentParts = [];
+            let initialRowIndex = position[j].rowIndex;
+            let initialCellIndex = position[j].cellIndex;
 
             if((this._needVerifyItemSize() || allDay)) {
-                var currentMaxAllowedPosition = position[j].hMax;
+                const currentMaxAllowedPosition = position[j].hMax;
 
                 if(this.isAppointmentGreaterThan(currentMaxAllowedPosition, {
                     left: position[j].left,
@@ -186,7 +186,7 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentCoordinates(itemData) {
-        var coordinates = [{
+        let coordinates = [{
             top: 0,
             left: 0
         }];
@@ -211,7 +211,7 @@ class BaseRenderingStrategy {
     }
 
     _getCompactAppointmentParts(appointmentWidth) {
-        var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         return Math.round(appointmentWidth / cellWidth);
     }
@@ -234,7 +234,7 @@ class BaseRenderingStrategy {
     }
 
     isAppointmentGreaterThan(etalon, comparisonParameters) {
-        var result = comparisonParameters.left + comparisonParameters.width - etalon;
+        let result = comparisonParameters.left + comparisonParameters.width - etalon;
 
         if(this._isRtl()) {
             result = etalon + comparisonParameters.width - comparisonParameters.left;
@@ -303,18 +303,18 @@ class BaseRenderingStrategy {
     }
 
     _rowCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
+        const isSomeEdge = this._isSomeEdge(a, b);
 
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
+        const columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge);
+        const rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
     }
 
     _columnCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
+        const isSomeEdge = this._isSomeEdge(a, b);
 
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
+        const columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge);
+        const rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
     }
 
@@ -324,23 +324,23 @@ class BaseRenderingStrategy {
 
     _normalizeCondition(first, second, isSomeEdge) {
         // NOTE: ie & ff pixels
-        var result = first - second;
+        const result = first - second;
 
         return isSomeEdge || Math.abs(result) > 1 ? result : 0;
     }
 
     _getResultPositions(sortedArray) {
-        var stack = [],
-            indexes = [],
-            result = [],
-            intersectPositions = [],
-            intersectPositionCount = 0,
-            sortedIndex = 0,
-            position;
+        const stack = [];
+        let indexes = [];
+        const result = [];
+        let intersectPositions = [];
+        let intersectPositionCount = 0;
+        let sortedIndex = 0;
+        let position;
 
-        for(var i = 0; i < sortedArray.length; i++) {
-            var current = sortedArray[i],
-                j;
+        for(let i = 0; i < sortedArray.length; i++) {
+            const current = sortedArray[i];
+            var j;
 
             if(current.isStart) {
                 position = undefined;
@@ -376,8 +376,8 @@ class BaseRenderingStrategy {
                     intersectPositionCount = indexes.length;
                 }
             } else {
-                var removeIndex = this._findIndexByKey(stack, 'i', 'j', current.i, current.j),
-                    resultItem = stack[removeIndex];
+                const removeIndex = this._findIndexByKey(stack, 'i', 'j', current.i, current.j);
+                const resultItem = stack[removeIndex];
 
                 stack.splice(removeIndex, 1);
 
@@ -386,7 +386,7 @@ class BaseRenderingStrategy {
 
                 if(!stack.length) {
                     indexes = [];
-                    for(var k = 0; k < intersectPositions.length; k++) {
+                    for(let k = 0; k < intersectPositions.length; k++) {
                         intersectPositions[k].count = intersectPositionCount;
                     }
                     intersectPositions = [];
@@ -399,8 +399,8 @@ class BaseRenderingStrategy {
         }
 
         return result.sort(function(a, b) {
-            var columnCondition = a.j - b.j,
-                rowCondition = a.i - b.i;
+            const columnCondition = a.j - b.j;
+            const rowCondition = a.i - b.i;
             return rowCondition ? rowCondition : columnCondition;
         });
     }
@@ -410,8 +410,8 @@ class BaseRenderingStrategy {
     }
 
     _findIndexByKey(arr, iKey, jKey, iValue, jValue) {
-        var result = 0;
-        for(var i = 0, len = arr.length; i < len; i++) {
+        let result = 0;
+        for(let i = 0, len = arr.length; i < len; i++) {
             if(arr[i][iKey] === iValue && arr[i][jKey] === jValue) {
                 result = i;
                 break;
@@ -421,11 +421,11 @@ class BaseRenderingStrategy {
     }
 
     _getExtendedPositionMap(map, positions) {
-        var positionCounter = 0,
-            result = [];
-        for(var i = 0, mapLength = map.length; i < mapLength; i++) {
-            var resultString = [];
-            for(var j = 0, itemLength = map[i].length; j < itemLength; j++) {
+        let positionCounter = 0;
+        const result = [];
+        for(let i = 0, mapLength = map.length; i < mapLength; i++) {
+            const resultString = [];
+            for(let j = 0, itemLength = map[i].length; j < itemLength; j++) {
                 map[i][j].index = positions[positionCounter].index;
                 map[i][j].sortedIndex = positions[positionCounter].sortedIndex;
                 map[i][j].count = positions[positionCounter++].count;
@@ -441,14 +441,14 @@ class BaseRenderingStrategy {
     }
 
     _splitLongCompactAppointment(item, result) {
-        var appointmentCountPerCell = this._getMaxAppointmentCountPerCellByType(item.allDay);
-        var compactCount = 0;
+        const appointmentCountPerCell = this._getMaxAppointmentCountPerCellByType(item.allDay);
+        let compactCount = 0;
 
         if(appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
             item.isCompact = true;
             compactCount = this._getCompactAppointmentParts(item.width);
-            for(var k = 1; k < compactCount; k++) {
-                var compactPart = extend(true, {}, item);
+            for(let k = 1; k < compactCount; k++) {
+                const compactPart = extend(true, {}, item);
                 compactPart.left = this._getCompactLeftCoordinate(item.left, k);
                 compactPart.cellIndex = compactPart.cellIndex + k;
                 compactPart.sortedIndex = null;
@@ -459,9 +459,9 @@ class BaseRenderingStrategy {
     }
 
     startDate(appointment, skipNormalize, position) {
-        var startDate = position && position.startDate,
-            rangeStartDate = this.instance._getStartDate(appointment, skipNormalize),
-            text = this.instance.fire('getField', 'text', appointment);
+        let startDate = position && position.startDate;
+        const rangeStartDate = this.instance._getStartDate(appointment, skipNormalize);
+        const text = this.instance.fire('getField', 'text', appointment);
 
         if((startDate && rangeStartDate > startDate) || !startDate) {
             startDate = rangeStartDate;
@@ -475,16 +475,16 @@ class BaseRenderingStrategy {
     }
 
     endDate(appointment, position, isRecurring) {
-        var endDate = this.instance._getEndDate(appointment),
-            realStartDate = this.startDate(appointment, true),
-            viewStartDate = this.startDate(appointment, false, position);
+        let endDate = this.instance._getEndDate(appointment);
+        const realStartDate = this.startDate(appointment, true);
+        const viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            var recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
-                recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate,
-                fullDuration = viewStartDate.getTime() > endDate.getTime() ?
-                    this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
-                    endDate.getTime() - realStartDate.getTime();
+            const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate;
+            const recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate;
+            let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
+                this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
+                endDate.getTime() - realStartDate.getTime();
 
             fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
 
@@ -495,8 +495,8 @@ class BaseRenderingStrategy {
             }
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartCroppedByViewStartDate.getTime() < viewStartDate.getTime()) {
-                var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime(),
-                    tailDuration = fullDuration - headDuration || fullDuration;
+                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime();
+                const tailDuration = fullDuration - headDuration || fullDuration;
 
                 endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
             }
@@ -504,7 +504,7 @@ class BaseRenderingStrategy {
         }
 
         if(!this.isAllDay(appointment)) {
-            var viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
+            const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
@@ -515,7 +515,7 @@ class BaseRenderingStrategy {
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-        var daylightDiff = this.instance.fire('getDaylightOffset', startDate, endDate);
+        const daylightDiff = this.instance.fire('getDaylightOffset', startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
     }
 
@@ -528,7 +528,7 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentDurationInMs(startDate, endDate, allDay) {
-        var result;
+        let result;
         this.instance.fire('getAppointmentDurationInMs', {
             startDate: startDate,
             endDate: endDate,
@@ -542,9 +542,9 @@ class BaseRenderingStrategy {
     }
 
     _getMaxNeighborAppointmentCount() {
-        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
         if(!overlappingMode) {
-            var outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
+            const outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
             return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
         } else {
             return 0;
@@ -552,7 +552,7 @@ class BaseRenderingStrategy {
     }
 
     _markAppointmentAsVirtual(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
+        const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
@@ -566,7 +566,7 @@ class BaseRenderingStrategy {
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {
-        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+        const appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
 
         if(typeUtils.isObject(appointmentCountPerCell)) {
             return isAllDay ? this._getMaxAppointmentCountPerCell().allDay : this._getMaxAppointmentCountPerCell().simple;
@@ -615,15 +615,15 @@ class BaseRenderingStrategy {
     }
 
     _customizeCoordinates(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
-        var index = coordinates.index,
-            appointmentHeight = height / appointmentCountPerCell,
-            appointmentTop = coordinates.top + (index * appointmentHeight),
-            top = appointmentTop + topOffset,
-            width = coordinates.width,
-            left = coordinates.left,
-            compactAppointmentDefaultSize,
-            compactAppointmentLeftOffset,
-            compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
+        const index = coordinates.index;
+        let appointmentHeight = height / appointmentCountPerCell;
+        const appointmentTop = coordinates.top + (index * appointmentHeight);
+        let top = appointmentTop + topOffset;
+        let width = coordinates.width;
+        let left = coordinates.left;
+        let compactAppointmentDefaultSize;
+        let compactAppointmentLeftOffset;
+        const compactAppointmentTopOffset = this.getCompactAppointmentTopOffset(isAllDay);
 
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultWidth();
@@ -653,20 +653,20 @@ class BaseRenderingStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell'),
-            offsets = this._getOffsets(),
-            appointmentDefaultOffset = this._getAppointmentDefaultOffset();
+        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const offsets = this._getOffsets();
+        const appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
-        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
-        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
-        var maxHeight = this._getMaxHeight();
+        let appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
+        let ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
+        let maxHeight = this._getMaxHeight();
 
         if(!isNumeric(appointmentCountPerCell)) {
             appointmentCountPerCell = coordinates.count;
             ratio = (maxHeight - offsets.unlimited) / maxHeight;
         }
 
-        var topOffset = (1 - ratio) * maxHeight;
+        let topOffset = (1 - ratio) * maxHeight;
         if(overlappingMode === 'auto' || isNumeric(overlappingMode)) {
             ratio = 1;
             maxHeight = maxHeight - appointmentDefaultOffset;
@@ -702,8 +702,8 @@ class BaseRenderingStrategy {
 
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
-            var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell'),
-                appointmentCountPerCell;
+            const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+            let appointmentCountPerCell;
 
             if(!overlappingMode) {
                 appointmentCountPerCell = 2;

@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
     <div id="container" class="dx-datagrid"></div>\
 </div>';
@@ -22,13 +22,13 @@ import clickEvent from 'events/click';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 
-var createDataSource = function(data, storeOptions, dataSourceOptions) {
-    var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
-    var dataSource = new DataSource($.extend(true, { store: arrayStore, requireTotalCount: true, _preferSync: true }, dataSourceOptions));
+const createDataSource = function(data, storeOptions, dataSourceOptions) {
+    const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
+    const dataSource = new DataSource($.extend(true, { store: arrayStore, requireTotalCount: true, _preferSync: true }, dataSourceOptions));
     return dataSource;
 };
 
-var setupModule = function() {
+const setupModule = function() {
     setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'search']);
 
     this.applyOptions = function(options) {
@@ -40,12 +40,12 @@ var setupModule = function() {
     this.clock = sinon.useFakeTimers();
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
     this.clock.restore();
 };
 
-var setupSelectionModule = function() {
+const setupSelectionModule = function() {
     setupModule.apply(this);
 
     this.applyOptions({ columns: ['name', 'age'] });
@@ -65,7 +65,7 @@ var setupSelectionModule = function() {
     this.dataSource.load();
 };
 
-var teardownSelectionModule = function() {
+const teardownSelectionModule = function() {
     teardownModule.apply(this);
 };
 
@@ -110,7 +110,7 @@ QUnit.test('set selectedRows for single selection. Array parameter with one obje
 });
 
 QUnit.test('check selection options for selection controller', function(assert) {
-    var selectionOptions;
+    let selectionOptions;
 
     this.applyOptions({
         selection: {
@@ -153,7 +153,7 @@ QUnit.test('set selectedRows. Array parameter with one object and parameter pres
 });
 
 QUnit.test('set selectedRows. Done callback', function(assert) {
-    var finalized;
+    let finalized;
 
     this.applyOptions({
         selection: { mode: 'single' }
@@ -189,8 +189,8 @@ QUnit.test('set selectedRows for single selection. Several objects in array. sel
 
 // T453514
 QUnit.test('set selectedRows after modify keys returned by getSelectedRowKeys', function(assert) {
-    var onSelectionCounter = 0;
-    var selectionChangedArgs;
+    let onSelectionCounter = 0;
+    let selectionChangedArgs;
     this.applyOptions({
         selection: { mode: 'single' },
         onSelectionChanged: function(e) {
@@ -202,7 +202,7 @@ QUnit.test('set selectedRows after modify keys returned by getSelectedRowKeys', 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Vadim', age: 17 }]);
 
     // act
-    var keys = this.selectionController.getSelectedRowKeys();
+    const keys = this.selectionController.getSelectedRowKeys();
     keys.shift();
     onSelectionCounter = 0;
     this.selectionController.selectRows(keys);
@@ -218,7 +218,7 @@ QUnit.test('set selectedRows after modify keys returned by getSelectedRowKeys', 
 
 // T443719
 QUnit.test('getSelectedRowKeys and getSelectedRowsData should returns array copy', function(assert) {
-    var keys = this.selectionController.getSelectedRowKeys();
+    const keys = this.selectionController.getSelectedRowKeys();
 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }], true);
 
@@ -266,7 +266,7 @@ QUnit.test('set selectedRows. Object parameter and parameter preserve is true', 
 
 // B251864
 QUnit.test('set selectedRows for single selection. Object parameter with array field', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', comments: [] },
         { name: 'Alex', comments: ['Comment 1'] },
         { name: 'Dan', comments: ['Comment 1', 'Comment 2'] },
@@ -291,7 +291,7 @@ QUnit.test('set selectedRows for single selection. Object parameter with array f
 });
 
 QUnit.test('set selectedRows for single selection. Object parameter with object field', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', address: { country: 'USA', city: 'New York' } },
         { name: 'Alex', address: { country: 'USA', city: 'Chicago' } },
         { name: 'Dan', address: { country: 'Russia', city: 'Moscow' } },
@@ -318,7 +318,7 @@ QUnit.test('set selectedRows for single selection. Object parameter with object 
 // T122304
 QUnit.test('set selectedRows for single selection. Object with the level of embedding > 2', function(assert) {
     // arrange
-    var array = [
+    const array = [
         { name: 'Alex', address: { country: { name: 'USA', city: { name: 'New York' } } } },
         { name: 'Alex', address: { country: { name: 'USA', city: { name: 'Chicago' } } } }
     ];
@@ -342,9 +342,9 @@ QUnit.test('set selectedRows for single selection. Object with the level of embe
 // T122304
 QUnit.test('set selectedRows for single selection. Recursive object', function(assert) {
     // arrange
-    var item1 = { name: 'Alex', address: { country: 'USA', city: 'New York' } },
-        item2 = { name: 'Dan', address: { country: 'USA', city: 'Chicago' } },
-        array;
+    const item1 = { name: 'Alex', address: { country: 'USA', city: 'New York' } };
+    const item2 = { name: 'Dan', address: { country: 'USA', city: 'Chicago' } };
+    let array;
 
     item1.item = item1;
     item2.item = item2;
@@ -370,7 +370,7 @@ QUnit.test('set selectedRows for single selection. Recursive object', function(a
 // T119761
 QUnit.test('set selectedRows for single selection. Object with the property dataType is date', function(assert) {
     // arrange
-    var array = [
+    const array = [
         { name: 'Alex', date: new Date(2011, 2, 3) },
         { name: 'Alex', date: new Date(2012, 3, 4) }
     ];
@@ -394,7 +394,7 @@ QUnit.test('set selectedRows for single selection. Object with the property data
 // T112473
 QUnit.test('set selectedRows for single selection. Empty objects', function(assert) {
     // arrange
-    var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
+    const array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
 
     this.dataSource = createDataSource(array);
     this.dataController.setDataSource(this.dataSource);
@@ -416,7 +416,7 @@ QUnit.test('set selectedRows for single selection. Empty objects', function(asse
 // T112473
 QUnit.test('set selectedRows for single selection. Selecting empty object', function(assert) {
     // arrange
-    var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
+    const array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
 
     this.dataSource = createDataSource(array);
     this.dataController.setDataSource(this.dataSource);
@@ -438,7 +438,7 @@ QUnit.test('set selectedRows for single selection. Selecting empty object', func
 // T112473
 QUnit.test('set selectedRows for single selection. Selecting object with a different number of properties', function(assert) {
     // arrange
-    var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } },
+    const array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } },
         { name: 'Dan', address: { country: 'USA', city: 'Chicago' } }];
 
     this.dataSource = createDataSource(array);
@@ -488,7 +488,7 @@ QUnit.test('set selectedRows for multiple selection. Several objects in array', 
 
 // T135244
 QUnit.test('set selectedRows. Not Loading data then no selected rows', function(assert) {
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataController.store().on('loading', function() {
         loadingCount++;
     });
@@ -596,7 +596,7 @@ QUnit.test('get selectedRows for multiple selection. Several objects in array', 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
 
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
 
     assert.deepEqual(this.selectionController.option('selectedRowKeys'), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
     assert.deepEqual(selectedRows, [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
@@ -614,12 +614,12 @@ QUnit.test('get selectedRows for multiple selection when dataSource has filter. 
 
     this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
 
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     assert.deepEqual(selectedRows, [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }], 'selectRows ignore filter');
 });
 
 QUnit.test('get selectedRows for multiple selection. Array key', function(assert) {
-    var array = [
+    const array = [
         { prop1: 'a', prop2: 1, prop3: 1 },
         { prop1: 'a', prop2: 2, prop3: 2 },
         { prop1: 'a', prop2: 3, prop3: 3 },
@@ -641,7 +641,7 @@ QUnit.test('get selectedRows for multiple selection. Array key', function(assert
 
     this.selectionController.selectRows([{ prop1: 'a', prop2: 2 }, { prop1: 'b', prop2: 2 }, { prop1: 'c' }]);
 
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
 
     assert.deepEqual(selectedRows, [{ prop1: 'a', prop2: 2, prop3: 2 }, { prop1: 'b', prop2: 2, prop3: 4 }]);
 });
@@ -679,7 +679,7 @@ QUnit.test('selectedRowKeys should not be changed after assign', function(assert
         }
     });
 
-    var keys = [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }];
+    const keys = [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }];
 
     this.options.selectedRowKeys = keys;
 
@@ -765,7 +765,7 @@ QUnit.test('Deselect selectedRows. Object parameter', function(assert) {
 
 QUnit.test('OnSelectionChange action when row deselected via API (T220378)', function(assert) {
     // arrange
-    var onSelectionCounter = 0;
+    let onSelectionCounter = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -786,9 +786,9 @@ QUnit.test('OnSelectionChange action when row deselected via API (T220378)', fun
 
 QUnit.test('On selection changed argument contents actual parameters (T239237, selection case)', function(assert) {
     // arrange
-    var onSelectionChangedArgs,
-        onSelectionChangedCounter = 0,
-        that = this;
+    let onSelectionChangedArgs;
+    let onSelectionChangedCounter = 0;
+    const that = this;
 
     this.applyOptions({
         selection: { mode: 'single' },
@@ -831,9 +831,9 @@ QUnit.test('On selection changed argument contents actual parameters (T239237, s
 
 QUnit.test('On selection changed argument contents actual parameters (T239237, deselection case)', function(assert) {
     // arrange
-    var onSelectionChangedArgs,
-        onSelectionChangedCounter = 0,
-        that = this;
+    let onSelectionChangedArgs;
+    let onSelectionChangedCounter = 0;
+    const that = this;
 
     this.applyOptions({
         selection: { mode: 'single' },
@@ -879,7 +879,7 @@ QUnit.test('On selection changed argument contents actual parameters (T239237, d
 
 QUnit.test('onSelectionChanged should not be called when loading data and given the selectedRowKeys', function(assert) {
     // arrange
-    var onSelectionChangedCounter = 0;
+    let onSelectionChangedCounter = 0;
 
     this.applyOptions({
         onSelectionChanged: function() {
@@ -916,8 +916,8 @@ QUnit.test('clearSelection', function(assert) {
 });
 
 QUnit.test('Rise selectionChanged event on set selectedRows. Several objects', function(assert) {
-    var selectionChangedCount = 0,
-        selectionChangedArgs;
+    let selectionChangedCount = 0;
+    let selectionChangedArgs;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -939,8 +939,8 @@ QUnit.test('Rise selectionChanged event on set selectedRows. Several objects', f
 
 // B255057
 QUnit.test('Rise selectionChanged event on set selectedRows. Several objects. Store with key', function(assert) {
-    var selectionChangedCount = 0,
-        selectionChangedArgs;
+    let selectionChangedCount = 0;
+    let selectionChangedArgs;
 
     this.applyOptions({
         selection: { mode: 'multiple', storeSelectedItems: true },
@@ -965,8 +965,8 @@ QUnit.test('Rise selectionChanged event on set selectedRows. Several objects. St
 });
 
 QUnit.test('Rise selectionChanged event on change selectedRows. Several objects', function(assert) {
-    var selectionChangedCount = 0,
-        selectionChangedArgs;
+    let selectionChangedCount = 0;
+    let selectionChangedArgs;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -989,8 +989,8 @@ QUnit.test('Rise selectionChanged event on change selectedRows. Several objects'
 
 // B255057
 QUnit.test('Rise selectionChanged event on change selectedRows. Several objects. Store with key', function(assert) {
-    var selectionChangedCount = 0,
-        selectionChangedArgs;
+    let selectionChangedCount = 0;
+    let selectionChangedArgs;
 
     this.applyOptions({
         selection: { mode: 'multiple', storeSelectedItems: true },
@@ -1018,7 +1018,7 @@ QUnit.test('Rise selectionChanged event on change selectedRows. Several objects.
 
 QUnit.test('proxy select and expand load parameters during selectAll operation', function(assert) {
     // arrange
-    var loadOptions;
+    let loadOptions;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -1042,7 +1042,7 @@ QUnit.test('proxy select and expand load parameters during selectAll operation',
 });
 
 QUnit.test('Not rise selectionChanged event on apply filter after SelectAll', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple', allowSelectAll: true },
@@ -1063,7 +1063,7 @@ QUnit.test('Not rise selectionChanged event on apply filter after SelectAll', fu
 });
 
 QUnit.test('Not rise selectionChanged event on apply filter after set selectedRowKeys', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -1084,7 +1084,7 @@ QUnit.test('Not rise selectionChanged event on apply filter after set selectedRo
 });
 
 QUnit.test('Rise selectionChanged event on change dataSource', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -1106,7 +1106,7 @@ QUnit.test('Rise selectionChanged event on change dataSource', function(assert) 
 });
 
 QUnit.test('Rise selectionChanged event on refresh', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -1128,7 +1128,7 @@ QUnit.test('Rise selectionChanged event on refresh', function(assert) {
 });
 
 QUnit.test('Not rise selectionChanged event on refresh with changesOnly', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -1150,7 +1150,7 @@ QUnit.test('Not rise selectionChanged event on refresh with changesOnly', functi
 });
 
 QUnit.test('Not rise selectionChanged event on apply filter when selectedRows count not changed', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -1188,8 +1188,8 @@ QUnit.test('Not rise selectionChanged event on apply filter when selectedRows co
 }); */
 
 QUnit.test('changed on set selectedRows', function(assert) {
-    var changedCount = 0,
-        lastArgs;
+    let changedCount = 0;
+    let lastArgs;
 
     this.applyOptions({
         selection: { mode: 'multiple' }
@@ -1259,7 +1259,7 @@ QUnit.test('select column row values than column position at the end', function(
 });
 
 QUnit.test('update selectedRows after update item in store and refresh where Paging', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', pay: 215 },
         { name: 'Dan1', pay: 151 },
         { name: 'Dan2', pay: 152 },
@@ -1293,7 +1293,7 @@ QUnit.test('update selectedRows after update item in store and refresh where Pag
 
 // T203742
 QUnit.test('redundant load after refresh when the grid restores its selection', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', pay: 215 },
         { name: 'Dan1', pay: 151 },
         { name: 'Dan2', pay: 152 },
@@ -1319,7 +1319,7 @@ QUnit.test('redundant load after refresh when the grid restores its selection', 
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
 
-    var loadingCount = 0;
+    let loadingCount = 0;
 
     this.dataSource.store().on('loading', function() {
         loadingCount++;
@@ -1329,12 +1329,12 @@ QUnit.test('redundant load after refresh when the grid restores its selection', 
     this.dataSource.store().update('Dan1', { pay: 999 });
 
     assert.equal(loadingCount, 0, 'no loading on selectRows when all items in the page');
-    var oldSelectedRowsData = this.selectionController.getSelectedRowsData();
+    const oldSelectedRowsData = this.selectionController.getSelectedRowsData();
 
     // act
     this.dataController.refresh();
 
-    var selectedRowsData = this.selectionController.getSelectedRowsData();
+    const selectedRowsData = this.selectionController.getSelectedRowsData();
     assert.ok(oldSelectedRowsData !== selectedRowsData, 'selectedRowsData instance is changed');
     assert.deepEqual(selectedRowsData, [{ name: 'Dan1', pay: 999 }, { name: 'Dan3', pay: 153 }]);
     assert.equal(loadingCount, 1, 'one loading after refresh with selection');
@@ -1342,10 +1342,10 @@ QUnit.test('redundant load after refresh when the grid restores its selection', 
 
 // T460451
 QUnit.test('selection should not perform redundant load when loaded items contains all selected items', function(assert) {
-    var that = this,
-        isSelectAllStates = [];
+    const that = this;
+    const isSelectAllStates = [];
 
-    var array = [
+    const array = [
         { name: 'Alex', pay: 215 },
         { name: 'Dan1', pay: 151 },
         { name: 'Dan2', pay: 152 },
@@ -1370,7 +1370,7 @@ QUnit.test('selection should not perform redundant load when loaded items contai
     // act
     this.dataController._refreshDataSource();
 
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataController.store().on('loading', function() {
         loadingCount++;
     });
@@ -1389,7 +1389,7 @@ QUnit.test('selection should not perform redundant load when loaded items contai
 
 // T450615
 QUnit.test('selection should be cleared when call clearSelection after call selectRows', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', pay: 215 },
         { name: 'Dan1', pay: 151 },
         { name: 'Dan2', pay: 152 },
@@ -1430,7 +1430,7 @@ QUnit.test('no selection column when not has columns', function(assert) {
     });
 
     // act
-    var visibleColumns = this.columnsController.getVisibleColumns();
+    const visibleColumns = this.columnsController.getVisibleColumns();
 
     // assert
     assert.ok(!visibleColumns.length, 'not has columns');
@@ -1438,7 +1438,7 @@ QUnit.test('no selection column when not has columns', function(assert) {
 
 QUnit.test('selectRows with big array', function(assert) {
     // arrange
-    var that = this;
+    const that = this;
 
     that.applyOptions({
         selection: {
@@ -1447,7 +1447,7 @@ QUnit.test('selectRows with big array', function(assert) {
     });
 
     that.array = [];
-    for(var i = 1; i <= 10000; i++) {
+    for(let i = 1; i <= 10000; i++) {
         that.array.push({ id: i, text: 'text ' + i });
     }
 
@@ -1456,7 +1456,7 @@ QUnit.test('selectRows with big array', function(assert) {
     that.dataSource.load();
 
     // act
-    var keys = that.array.filter(function(data) { return data.id <= 9000; }).map(function(data) { return data.id; });
+    const keys = that.array.filter(function(data) { return data.id <= 9000; }).map(function(data) { return data.id; });
     that.selectRows(keys);
     assert.equal(that.selectionController.getSelectedRowKeys().length, 9000, 'selected row keys');
 });
@@ -1464,7 +1464,7 @@ QUnit.test('selectRows with big array', function(assert) {
 // T441847
 QUnit.test('selectRows with key as array of undefined', function(assert) {
     // arrange
-    var that = this;
+    const that = this;
 
     that.dataSource = createDataSource(that.array, { key: ['name', 'age'] });
     that.dataController.setDataSource(that.dataSource);
@@ -1523,8 +1523,8 @@ QUnit.test('changeRowSelection', function(assert) {
 });
 
 QUnit.test('selectAll', function(assert) {
-    var selectionController = this.selectionController,
-        changeCallCount = 0;
+    const selectionController = this.selectionController;
+    let changeCallCount = 0;
 
     this.applyOptions({
         selection: {
@@ -1547,8 +1547,8 @@ QUnit.test('selectAll', function(assert) {
 
 // T130427
 QUnit.test('loadingChanged when selectAll', function(assert) {
-    var selectionController = this.selectionController,
-        loadingStates = [];
+    const selectionController = this.selectionController;
+    const loadingStates = [];
 
     this.applyOptions({
         selection: {
@@ -1703,7 +1703,7 @@ QUnit.test('changeRowSelection. Several calls on different rows with control key
 });
 
 QUnit.test('Rise events on changeRowSelection', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'single' },
@@ -1783,7 +1783,7 @@ QUnit.test('changeRowSelection. Several calls on different rows with control key
 });
 
 
-var setupSelectionWithKeysModule = function() {
+const setupSelectionWithKeysModule = function() {
     setupModule.apply(this);
 
     this.applyOptions({ columns: ['name', 'age'] });
@@ -1799,12 +1799,12 @@ var setupSelectionWithKeysModule = function() {
         { id: 7, name: 'Dan', age: 21 }
     ];
 
-    var dataSource = createDataSource(this.array, { key: 'id' });
+    const dataSource = createDataSource(this.array, { key: 'id' });
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 };
 
-var teardownSelectionWithKeysModule = function() {
+const teardownSelectionWithKeysModule = function() {
     teardownModule.apply(this);
 };
 
@@ -1974,7 +1974,7 @@ QUnit.test('changeRowSelection with shift key after filtering', function(assert)
 
 QUnit.test('changeRowSelection with shift key after partial refresh', function(assert) {
     // arrange
-    var that = this;
+    const that = this;
     this.applyOptions({
         selection: {
             mode: 'multiple',
@@ -2017,7 +2017,7 @@ QUnit.test('focusedItemIndex should be reset to -1 after change page index', fun
 });
 
 QUnit.test('Rise events on changeRowSelection', function(assert) {
-    var selectionChangedCount = 0;
+    let selectionChangedCount = 0;
 
     this.applyOptions({
         selection: { mode: 'multiple' },
@@ -2082,9 +2082,9 @@ QUnit.test('selectRows when filter row defined', function(assert) {
 
 // T150738
 QUnit.test('set selectedRows when CustomStore used without filter implementation', function(assert) {
-    var array = this.array;
+    const array = this.array;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         key: 'id',
         load: function() {
             return array;
@@ -2093,7 +2093,7 @@ QUnit.test('set selectedRows when CustomStore used without filter implementation
             return array.length;
         }
     });
-    var dataSource = new DataSource({ store: store, requireTotalCount: true });
+    const dataSource = new DataSource({ store: store, requireTotalCount: true });
     dataSource.load();
 
 
@@ -2232,8 +2232,8 @@ QUnit.test('stop selection after QUnit.start remove select column to columns and
 });
 
 QUnit.test('QUnit.start selection rise columnsChanged/changed events', function(assert) {
-    var columnsChangedCount = 0,
-        changedCount = 0;
+    let columnsChangedCount = 0;
+    let changedCount = 0;
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
@@ -2254,8 +2254,8 @@ QUnit.test('QUnit.start selection rise columnsChanged/changed events', function(
 });
 
 QUnit.test('stop selection after QUnit.start rise columnsChanged/changed events', function(assert) {
-    var columnsChangedCount = 0,
-        changedCount = 0;
+    let columnsChangedCount = 0;
+    let changedCount = 0;
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
@@ -2278,8 +2278,8 @@ QUnit.test('stop selection after QUnit.start rise columnsChanged/changed events'
 });
 
 QUnit.test('stop selection without QUnit.start not rise columnsChanged/changed events', function(assert) {
-    var columnsChangedCount = 0,
-        changedCount = 0;
+    let columnsChangedCount = 0;
+    let changedCount = 0;
     this.applyOptions({
         selection: { mode: 'multiple' }
     });
@@ -2444,7 +2444,7 @@ QUnit.test('Deselect All for multiple selection when selectAllMode is page', fun
 
 // T350806
 QUnit.test('remove all items and refresh after selectAll', function(assert) {
-    var that = this;
+    const that = this;
 
     this.applyOptions({
         selection: {
@@ -2680,7 +2680,7 @@ QUnit.test('changeRowSelection when multipleWithCheckBoxes after Select All', fu
     assert.ok(!this.dataController.items()[1].isSelected);
     assert.ok(this.dataController.items()[2].isSelected);
     assert.ok(this.dataController.items()[3].isSelected);
-    var selectColumn = this.columnsController.getVisibleColumns()[0];
+    const selectColumn = this.columnsController.getVisibleColumns()[0];
     assert.ok(!selectColumn.isSelectAll);
     assert.equal(selectColumn.command, 'select');
 });
@@ -2723,7 +2723,7 @@ QUnit.test('get isSelected rows after Select All', function(assert) {
     this.selectionController.changeItemSelection(2, { control: true });
 
     // act
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
@@ -2750,7 +2750,7 @@ QUnit.test('get isSelected rows after Select All when dataSource has filter', fu
     this.selectionController.changeItemSelection(2, { control: true });
 
     // act
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
@@ -2777,7 +2777,7 @@ QUnit.test('selected rows after Select All when filter row defined', function(as
     this.selectionController.selectAll();
 
     // assert
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     assert.equal(selectedRows.length, 4, 'selected rows count');
     assert.ok(this.selectionController.isSelectAll(), 'isSelectAll');
     assert.deepEqual(selectedRows, [
@@ -2830,7 +2830,7 @@ QUnit.test('selected rows after Deselect All when filter row defined', function(
     this.deselectAll();
 
     // assert
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     assert.equal(selectedRows.length, 1, 'selected rows count');
     assert.deepEqual(selectedRows, [{ id: 4, value: 'value4' }]);
 });
@@ -2852,7 +2852,7 @@ QUnit.test('get isSelected rows after Select All when dataSource has complex key
     this.selectionController.changeItemSelection(2, { control: true });
 
     // act
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
@@ -2880,7 +2880,7 @@ QUnit.test('get isSelected rows after Select All when dataSource has no key', fu
     this.selectionController.changeItemSelection(2, { control: true });
 
     // act
-    var selectedRows = this.selectionController.getSelectedRowsData();
+    const selectedRows = this.selectionController.getSelectedRowsData();
     // assert
     assert.deepEqual(selectedRows, [
         { id: 1, value: 'value1' },
@@ -2894,17 +2894,17 @@ QUnit.test('get isSelected rows after Select All when dataSource has no key', fu
 // T843852
 QUnit.test('SelectAll should not select all rows if filter by search is applied and grid has many columns', function(assert) {
     // arrange
-    var data = [],
-        onSelectionChangedSpy = sinon.spy(),
-        columns = ['id'];
+    const data = [];
+    const onSelectionChangedSpy = sinon.spy();
+    const columns = ['id'];
 
     for(let i = 0; i <= 10; i++) {
-        let item = { id: `${i}` };
+        const item = { id: `${i}` };
 
         columns.push(`field${i}`);
 
         for(let j = 1; j <= 10; j++) {
-            let field = `field${j}`;
+            const field = `field${j}`;
 
             item[field] = '';
         }
@@ -2930,7 +2930,7 @@ QUnit.test('SelectAll should not select all rows if filter by search is applied 
     // act
     this.selectionController.selectAll();
 
-    var onSelectionChangedArgs = onSelectionChangedSpy.args[0][0];
+    let onSelectionChangedArgs = onSelectionChangedSpy.args[0][0];
 
     // assert
     assert.equal(onSelectionChangedSpy.callCount, 1, 'onSelectionChanged call count');
@@ -3238,7 +3238,7 @@ QUnit.test('changeRowSelection for select items with shift key when isSelectionW
 
 // T117203
 QUnit.test('selectRows with several values', function(assert) {
-    var selectionChangedCallCount = 0;
+    let selectionChangedCallCount = 0;
     // arrange
     this.applyOptions({
         selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' },
@@ -3293,8 +3293,8 @@ QUnit.module('Selection with views', {
 // B254109
 QUnit.test('unselect row after selectAll work incorrectly', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container').width(800);
+    const that = this;
+    const testElement = $('#container').width(800);
 
     that.setup();
 
@@ -3303,7 +3303,7 @@ QUnit.test('unselect row after selectAll work incorrectly', function(assert) {
 
     that.selectionController.selectAll();
 
-    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    const $checkbox = $('.dx-header-row').find('.dx-checkbox');
 
     // assert
     assert.ok($checkbox.length);
@@ -3326,7 +3326,7 @@ QUnit.test('unselect row after selectAll work incorrectly', function(assert) {
 });
 
 QUnit.test('changeRowSelection onClick Multiple mode', function(assert) {
-    var testElement = $('#container').width(800);
+    const testElement = $('#container').width(800);
 
     this.options.selection.showCheckBoxesMode = 'onClick';
     this.setup();
@@ -3403,10 +3403,10 @@ QUnit.test('changeRowSelection for edited data if cell edit mode (T357814)', fun
 
 QUnit.test('changeRowSelection for editing data (T654321)', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container').width(800),
-        clock = sinon.useFakeTimers(),
-        rowsViewWrapper = dataGridWrapper.rowsView;
+    const that = this;
+    const $testElement = $('#container').width(800);
+    const clock = sinon.useFakeTimers();
+    const rowsViewWrapper = dataGridWrapper.rowsView;
 
     that.options.selection.showCheckBoxesMode = 'onClick';
     that.options.editing = {
@@ -3432,10 +3432,10 @@ QUnit.test('changeRowSelection for editing data (T654321)', function(assert) {
 
 QUnit.test('changeRowSelection for editing data if cell edit mode (T826197)', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container').width(800),
-        clock = sinon.useFakeTimers(),
-        rowsViewWrapper = dataGridWrapper.rowsView;
+    const that = this;
+    const $testElement = $('#container').width(800);
+    const clock = sinon.useFakeTimers();
+    const rowsViewWrapper = dataGridWrapper.rowsView;
 
     that.options.selection.showCheckBoxesMode = 'onClick';
     that.options.editing = {
@@ -3459,8 +3459,8 @@ QUnit.test('changeRowSelection for editing data if cell edit mode (T826197)', fu
 });
 
 QUnit.test('Indeterminate state of selectAll', function(assert) {
-    var $checkbox,
-        testElement = $('#container');
+    let $checkbox;
+    const testElement = $('#container');
 
     this.setup();
     this.columnHeadersView.render(testElement);
@@ -3475,8 +3475,8 @@ QUnit.test('Indeterminate state of selectAll', function(assert) {
 
 
 QUnit.test('selectAll checkbox state after change filter', function(assert) {
-    var $checkbox,
-        testElement = $('#container');
+    let $checkbox;
+    const testElement = $('#container');
 
     this.setup();
     this.columnHeadersView.render(testElement);
@@ -3507,8 +3507,8 @@ QUnit.test('selectAll checkbox state after change filter', function(assert) {
 
 
 QUnit.test('Uncheck selectAll button call deselectAll', function(assert) {
-    var $checkbox,
-        testElement = $('#container');
+    let $checkbox;
+    const testElement = $('#container');
 
     this.setup();
     this.columnHeadersView.render(testElement);
@@ -3532,8 +3532,8 @@ QUnit.test('Uncheck selectAll button call deselectAll', function(assert) {
 
 // T102394
 QUnit.test('Indeterminate state of selectAll when selectedRowKeys defined', function(assert) {
-    var $checkbox,
-        testElement = $('#container');
+    let $checkbox;
+    const testElement = $('#container');
 
     this.options.selectedRowKeys = [this.array[1]];
     this.setup();
@@ -3548,8 +3548,8 @@ QUnit.test('Indeterminate state of selectAll when selectedRowKeys defined', func
 
 
 QUnit.test('Unchecked of selectAll when rows are not isSelected', function(assert) {
-    var $checkbox,
-        testElement = $('#container');
+    let $checkbox;
+    const testElement = $('#container');
 
     this.setup();
     this.columnHeadersView.render(testElement);
@@ -3567,8 +3567,8 @@ QUnit.test('Unchecked of selectAll when rows are not isSelected', function(asser
 
 // B255078
 QUnit.test('Checked of selectAll when all rows are isSelected', function(assert) {
-    var $checkbox,
-        testElement = $('#container');
+    let $checkbox;
+    const testElement = $('#container');
 
     this.setup();
     this.columnHeadersView.render(testElement);
@@ -3586,7 +3586,7 @@ QUnit.test('Checked of selectAll when all rows are isSelected', function(assert)
 
 // T108078
 QUnit.test('updateSelection with invalid itemIndexes', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.setup();
     this.rowsView.render(testElement);
@@ -3605,12 +3605,12 @@ QUnit.test('updateSelection with invalid itemIndexes', function(assert) {
 
 // T642034
 QUnit.test('selecting of row when rowTemplate contains several tr tags', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.setup();
     this.options.selection = { mode: 'single' };
     this.options.rowTemplate = function(container, options) {
-        var data = options.data;
+        const data = options.data;
         $(container).append('<tbody class=\'dx-row\'><tr><td id=\'' + data.name + '\'>' + data.name + '</td></tr><tr><td>' + data.age + '</td></tr></tbody>');
     };
     this.rowsView.render(testElement);
@@ -3621,11 +3621,11 @@ QUnit.test('selecting of row when rowTemplate contains several tr tags', functio
         itemIndexes: [1]
     });
 
-    var ACTIVE_ID = '#Dan';
+    const ACTIVE_ID = '#Dan';
     testElement.find(ACTIVE_ID).trigger(clickEvent.name);
 
     // assert
-    var selectedRows = testElement.find('.dx-selection');
+    const selectedRows = testElement.find('.dx-selection');
     assert.equal(selectedRows.length, 1);
     assert.equal(selectedRows[0].tagName.toLowerCase(), 'tbody');
     assert.ok(selectedRows.has(ACTIVE_ID));
@@ -3634,11 +3634,11 @@ QUnit.test('selecting of row when rowTemplate contains several tr tags', functio
 // T152315
 QUnit.test('Selection state refreshing on dataController change', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container').width(800),
-        $headerCheckBox,
-        isHeaderCheckBoxInIntermediateState,
-        isHeaderCheckBoxChecked;
+    const that = this;
+    const testElement = $('#container').width(800);
+    let $headerCheckBox;
+    let isHeaderCheckBoxInIntermediateState;
+    let isHeaderCheckBoxChecked;
 
     this.options.selection.showCheckBoxesMode = 'onClick';
     that.setup();
@@ -3664,7 +3664,7 @@ QUnit.test('Selection state refreshing on dataController change', function(asser
 });
 
 QUnit.test('Add checkboxes hidden class to table', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.options.selection.mode = 'multiple';
     this.options.selection.showCheckBoxesMode = 'onClick';
@@ -3696,7 +3696,7 @@ QUnit.test('Show checkboxes when selectedRowKeys are defined from options_T10239
 
 
 QUnit.test('change selectAllMode to \'page\' at runtime', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     $.extend(this.option, {
         loadingTimeout: null,
@@ -3723,7 +3723,7 @@ QUnit.test('change selectAllMode to \'page\' at runtime', function(assert) {
         value: 'page'
     });
 
-    var $checkbox = testElement.find('.dx-checkbox');
+    const $checkbox = testElement.find('.dx-checkbox');
 
     assert.strictEqual($checkbox.length, 8);
     $.each($checkbox, function(i) {
@@ -3732,7 +3732,7 @@ QUnit.test('change selectAllMode to \'page\' at runtime', function(assert) {
 });
 
 QUnit.test('change selectAllMode to \'allPages\' at runtime', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     $.extend(this.options, {
         loadingTimeout: null,
@@ -3763,7 +3763,7 @@ QUnit.test('change selectAllMode to \'allPages\' at runtime', function(assert) {
         value: 'allPages'
     });
 
-    var $checkbox = testElement.find('.dx-checkbox');
+    const $checkbox = testElement.find('.dx-checkbox');
 
     assert.strictEqual($checkbox.length, 4);
     $.each($checkbox, function(i) {
@@ -3777,7 +3777,7 @@ QUnit.test('change selectAllMode to \'allPages\' at runtime', function(assert) {
 
 // T550013
 QUnit.test('Click on selected selection checkbox with shift key', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.options.selection.showCheckBoxesMode = 'onClick';
     this.setup();
@@ -3785,7 +3785,7 @@ QUnit.test('Click on selected selection checkbox with shift key', function(asser
     this.rowsView.render(testElement);
 
     // act
-    var $checkbox = testElement.find('.dx-data-row .dx-select-checkbox').eq(0);
+    const $checkbox = testElement.find('.dx-data-row .dx-select-checkbox').eq(0);
     $checkbox.trigger(clickEvent.name);
     $checkbox.trigger($.Event(clickEvent.name, { shiftKey: true }));
 
@@ -3796,7 +3796,7 @@ QUnit.test('Click on selected selection checkbox with shift key', function(asser
 
 // T550013
 QUnit.test('Click on selected selection checkbox with shift key to select range', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.options.selection.showCheckBoxesMode = 'onClick';
     this.setup();
@@ -3804,7 +3804,7 @@ QUnit.test('Click on selected selection checkbox with shift key to select range'
     this.rowsView.render(testElement);
 
     // act
-    var $checkboxes = testElement.find('.dx-data-row .dx-select-checkbox');
+    const $checkboxes = testElement.find('.dx-data-row .dx-select-checkbox');
     $checkboxes.eq(1).trigger(clickEvent.name);
     $checkboxes.eq(0).trigger(clickEvent.name);
     $checkboxes.eq(1).trigger($.Event(clickEvent.name, { shiftKey: true }));
@@ -3817,7 +3817,7 @@ QUnit.test('Click on selected selection checkbox with shift key to select range'
 
 // T550013
 QUnit.test('Click on unselected selection checkbox with shift key', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.options.selection.showCheckBoxesMode = 'onClick';
     this.setup();
@@ -3825,7 +3825,7 @@ QUnit.test('Click on unselected selection checkbox with shift key', function(ass
     this.rowsView.render(testElement);
 
     // act
-    var $checkbox = testElement.find('.dx-data-row .dx-select-checkbox').eq(0);
+    const $checkbox = testElement.find('.dx-data-row .dx-select-checkbox').eq(0);
     $checkbox.trigger(clickEvent.name);
     $checkbox.trigger(clickEvent.name);
     $checkbox.trigger($.Event(clickEvent.name, { shiftKey: true }));
@@ -3908,7 +3908,7 @@ QUnit.test('Checkboxes should not be visible when selected one row', function(as
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.ok(items[1].isSelected, 'second item is selected');
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'checkboxes isn\'t visible');
 });
@@ -3928,7 +3928,7 @@ QUnit.test('Checkboxes should not be visible when selected one row (key as array
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.ok(items[1].isSelected, 'second item is selected');
     assert.ok(!this.selectionController.isSelectionWithCheckboxes(), 'checkboxes isn\'t visible');
 });
@@ -3948,7 +3948,7 @@ QUnit.test('Checkboxes should be visible when selected several rows', function(a
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.ok(items[1].isSelected, 'second item is selected');
     assert.ok(items[3].isSelected, 'fourth item is selected');
     assert.ok(items[4].isSelected, 'fifth item is selected');
@@ -3970,15 +3970,15 @@ QUnit.test('Checkboxes should be visible when selected several rows (key as arra
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.ok(items[1].isSelected, 'second item is selected');
     assert.ok(items[6].isSelected, 'seventh item is selected');
     assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'checkboxes is visible');
 });
 
 QUnit.test('selectRows', function(assert) {
-    var data = this.data,
-        onSelectionCalls = [];
+    const data = this.data;
+    const onSelectionCalls = [];
 
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: 'id' }),
@@ -4013,8 +4013,8 @@ QUnit.test('selectRows', function(assert) {
 });
 
 QUnit.test('change row selection', function(assert) {
-    var changedItemIndexes = [],
-        selectionChanged = sinon.stub();
+    let changedItemIndexes = [];
+    const selectionChanged = sinon.stub();
 
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: 'id' }),
@@ -4043,7 +4043,7 @@ QUnit.test('change row selection', function(assert) {
 });
 
 QUnit.test('change selectionFilter', function(assert) {
-    var selectionChangedStub = sinon.stub();
+    const selectionChangedStub = sinon.stub();
 
     this.setupDataGrid({
         dataSource: createDataSource(this.data, { key: 'id' }),
@@ -4064,7 +4064,7 @@ QUnit.test('change selectionFilter', function(assert) {
         value: ['id', '>', 5]
     });
     // assert
-    var selectedKeys = [];
+    let selectedKeys = [];
 
     this.selectionController.getSelectedRowKeys().done(function(keys) {
         selectedKeys = keys;
@@ -4077,7 +4077,7 @@ QUnit.test('change selectionFilter', function(assert) {
 });
 
 QUnit.test('getSelectedRowData should not load data when selectionFilter is empty', function(assert) {
-    var dataSource = createDataSource(this.data, { key: 'id' });
+    const dataSource = createDataSource(this.data, { key: 'id' });
     // act
     this.setupDataGrid({
         dataSource: dataSource,
@@ -4087,8 +4087,8 @@ QUnit.test('getSelectedRowData should not load data when selectionFilter is empt
         }
     });
 
-    var loadingCount = 0;
-    var rowsData;
+    let loadingCount = 0;
+    let rowsData;
 
     dataSource.store().on('loading', function() {
         loadingCount++;
@@ -4125,7 +4125,7 @@ QUnit.test('SelectAll items with remote filtering and deferred selection', funct
 
     this.clock.tick();
 
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.equal(items.length, 2, 'filtered items');
 
     this.selectionController.selectAll();
@@ -4139,7 +4139,7 @@ QUnit.test('SelectAll items with remote filtering and deferred selection', funct
 // T754974
 QUnit.test('The getSelectedRowsData method should return correct selected rows data after filtering and selecting/deselecting rows', function(assert) {
     // arrange
-    var selectedRowsData = [];
+    let selectedRowsData = [];
 
     this.setupDataGrid({
         loadingTimeout: undefined,

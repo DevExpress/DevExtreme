@@ -2,29 +2,29 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Sortable from '../sortable';
 
-let COMMAND_HANDLE_CLASS = 'dx-command-drag',
-    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
-    HANDLE_ICON_CLASS = 'drag-icon',
-    ROWS_VIEW = 'rowsview',
-    SORTABLE_WITHOUT_HANDLE_CLASS = 'dx-sortable-without-handle';
+const COMMAND_HANDLE_CLASS = 'dx-command-drag';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const HANDLE_ICON_CLASS = 'drag-icon';
+const ROWS_VIEW = 'rowsview';
+const SORTABLE_WITHOUT_HANDLE_CLASS = 'dx-sortable-without-handle';
 
-var RowDraggingExtender = {
+const RowDraggingExtender = {
     init: function() {
         this.callBase.apply(this, arguments);
         this._updateHandleColumn();
     },
 
     _allowReordering: function() {
-        let rowDragging = this.option('rowDragging');
+        const rowDragging = this.option('rowDragging');
 
         return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
     },
 
     _updateHandleColumn: function() {
-        let rowDragging = this.option('rowDragging'),
-            allowReordering = this._allowReordering(),
-            columnsController = this._columnsController,
-            isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
+        const rowDragging = this.option('rowDragging');
+        const allowReordering = this._allowReordering();
+        const columnsController = this._columnsController;
+        const isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
 
         columnsController && columnsController.addCommandColumn({
             type: 'drag',
@@ -41,10 +41,10 @@ var RowDraggingExtender = {
     },
 
     _renderContent: function() {
-        let that = this,
-            rowDragging = this.option('rowDragging'),
-            allowReordering = this._allowReordering(),
-            $content = that.callBase.apply(that, arguments);
+        const that = this;
+        const rowDragging = this.option('rowDragging');
+        const allowReordering = this._allowReordering();
+        const $content = that.callBase.apply(that, arguments);
 
         if(allowReordering && $content.length) {
             that._sortable = that._createComponent($content, Sortable, extend({
@@ -74,9 +74,9 @@ var RowDraggingExtender = {
     },
 
     _getDraggableGridOptions: function(options) {
-        let gridOptions = this.option(),
-            columns = this.getColumns(),
-            $rowElement = $(this.getRowElement(options.rowIndex));
+        const gridOptions = this.option();
+        const columns = this.getColumns();
+        const $rowElement = $(this.getRowElement(options.rowIndex));
 
         return {
             dataSource: [{ id: 1, parentId: 0 }],
@@ -109,11 +109,11 @@ var RowDraggingExtender = {
 
     _getDraggableRowTemplate: function() {
         return (options) => {
-            let $rootElement = this.component.$element(),
-                $dataGridContainer = $('<div>').width($rootElement.width()),
-                items = this._dataController.items(),
-                row = items && items[options.fromIndex],
-                gridOptions = this._getDraggableGridOptions(row);
+            const $rootElement = this.component.$element();
+            const $dataGridContainer = $('<div>').width($rootElement.width());
+            const items = this._dataController.items();
+            const row = items && items[options.fromIndex];
+            const gridOptions = this._getDraggableGridOptions(row);
 
             this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
             $dataGridContainer.find('.dx-gridbase-container').children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();

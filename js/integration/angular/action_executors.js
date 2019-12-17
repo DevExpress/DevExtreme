@@ -1,4 +1,4 @@
-var Action = require('../../core/action');
+const Action = require('../../core/action');
 
 Action.registerExecutor({
     'ngExpression': {

@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    GoogleProvider = require('ui/map/provider.dynamic.google'),
-    memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
+const $ = require('jquery');
+const GoogleProvider = require('ui/map/provider.dynamic.google');
+const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
 
 require('bundles/modules/parts/widgets-all');
 require('common.css!');
@@ -16,10 +16,10 @@ QUnit.module('eventsOnRefresh', {
 $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
         QUnit.test(componentName + ' should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
-            var testNode = memoryLeaksHelper.createTestNode(),
-                component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance'),
-                originalEventSubscriptions,
-                newEventSubscriptions;
+            const testNode = memoryLeaksHelper.createTestNode();
+            const component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
+            let originalEventSubscriptions;
+            let newEventSubscriptions;
 
             this.clock.tick(0);
             originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();

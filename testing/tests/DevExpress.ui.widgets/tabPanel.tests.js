@@ -112,7 +112,7 @@ QUnit.test('container should consider tabs height when it rendered in hiding are
 
 // T803640
 QUnit.test('content should be rendered if create widget inside deferUpdate (React)', function(assert) {
-    var $tabPanel;
+    let $tabPanel;
 
     deferUpdate(function() {
         $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({
@@ -534,7 +534,7 @@ QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', functio
 
 if(devices.current().deviceType === 'desktop') {
     const createWidget = ($element) => {
-        let widget = $element.dxTabPanel({
+        const widget = $element.dxTabPanel({
             focusStateEnabled: true,
             items: [{ text: 'text' }]
         }).dxTabPanel('instance');
