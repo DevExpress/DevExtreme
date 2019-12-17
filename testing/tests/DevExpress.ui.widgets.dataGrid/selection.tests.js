@@ -2892,36 +2892,27 @@ QUnit.test('get isSelected rows after Select All when dataSource has no key', fu
 });
 
 // T843852
-QUnit.test('SelectAll should not select all rows if filter by search is applied and grid has many columns', function(assert) {
+QUnit.test('SelectAll should not select all rows if filter by search is applied and filter length is larger than maxFilterLengthInRequest', function(assert) {
     // arrange
-    var data = [],
-        onSelectionChangedSpy = sinon.spy(),
-        columns = ['id'];
-
-    for(let i = 0; i <= 10; i++) {
-        let item = { id: `${i}` };
-
-        columns.push(`field${i}`);
-
-        for(let j = 1; j <= 10; j++) {
-            let field = `field${j}`;
-
-            item[field] = '';
-        }
-
-        data.push(item);
-    }
+    var data = [{
+            'id': '0', 'field1': '0', 'field2': '0'
+        }, {
+            'id': '1', 'field1': '1', 'field2': '1'
+        }, {
+            'id': '2', 'field1': '2', 'field2': '2'
+        }],
+        onSelectionChangedSpy = sinon.spy();
 
     this.dataSource = createDataSource(data, { key: 'id' });
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
 
     this.applyOptions({
-        columns,
+        columns: ['id', 'field1', 'field3'],
         loadingTimeout: undefined,
         selection: {
             mode: 'multiple',
-            maxFilterLengthInRequest: 10
+            maxFilterLengthInRequest: 1
         },
         searchPanel: { visible: true, text: '0' },
         onSelectionChanged: onSelectionChangedSpy
@@ -2935,11 +2926,11 @@ QUnit.test('SelectAll should not select all rows if filter by search is applied 
     // assert
     assert.equal(onSelectionChangedSpy.callCount, 1, 'onSelectionChanged call count');
 
-    assert.deepEqual(onSelectionChangedArgs.currentSelectedRowKeys, ['0', '10'], 'current selected row keys');
-    assert.deepEqual(onSelectionChangedArgs.selectedRowKeys, ['0', '10'], 'selected row keys');
-    assert.equal(onSelectionChangedArgs.selectedRowsData.length, 2, 'selected rows data length');
+    assert.deepEqual(onSelectionChangedArgs.currentSelectedRowKeys, ['0'], 'current selected row keys');
+    assert.deepEqual(onSelectionChangedArgs.selectedRowKeys, ['0'], 'selected row keys');
+    assert.equal(onSelectionChangedArgs.selectedRowsData.length, 1, 'selected rows data length');
 
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), ['0', '10'], 'selected row keys');
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), ['0'], 'selected row keys');
 
     // act
     this.selectionController.deselectAll();
