@@ -1113,9 +1113,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             paddingLeft: rtlEnabled ? width : "",
             paddingRight: rtlEnabled ? "" : width
         });
+
+        this._toggleScrollerBorder(width);
     },
 
-    toggleScrollerBorder: function(width) {
+    _toggleScrollerBorder: function(width) {
         let $tables = this.getTableElements(),
             $table = this.option("rtlEnabled") ? $tables.last() : $tables.first(),
             $element = this.option("rtlEnabled") && this._fixedTableElement ? $table : $table.parent();
