@@ -335,7 +335,10 @@ const Validator = DOMComponent.inherit({
     focus() {
         const adapter = this.option('adapter');
         adapter && adapter.focus && adapter.focus();
-    }
+    },
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 registerComponent('dxValidator', Validator);

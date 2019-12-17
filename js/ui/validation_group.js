@@ -81,6 +81,10 @@ class ValidationGroup extends DOMComponent {
         this.$element().removeClass(VALIDATION_ENGINE_CLASS);
         super._dispose();
     }
+
+    _useTemplates() {
+        return false;
+    }
 }
 
 registerComponent('dxValidationGroup', ValidationGroup);

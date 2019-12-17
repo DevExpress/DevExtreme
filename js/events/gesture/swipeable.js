@@ -94,8 +94,11 @@ var Swipeable = DOMComponent.inherit({
                 this.callBase(args);
         }
 
-    }
+    },
 
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 publicComponentUtils.name(Swipeable, DX_SWIPEABLE);

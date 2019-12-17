@@ -1081,6 +1081,9 @@ noModelWidgets.forEach(function(widget) {
             },
             _getDefaultOptions: function() {
                 return { text: '', array: [], obj: null };
+            },
+            _useTemplates() {
+                return false;
             }
         });
 

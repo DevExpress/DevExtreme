@@ -7,7 +7,6 @@ import angular from 'angular';
 import registerComponent from 'core/component_registrator';
 import DOMComponent from 'core/dom_component';
 import Widget from 'ui/widget/ui.widget';
-import ComponentWithTemplate from 'core/dom_component_with_template';
 import { NgTemplate } from 'integration/angular/template';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
 
@@ -33,6 +32,9 @@ QUnit.module('simple component tests', {
             },
             _getDefaultOptions() {
                 return { text: '', array: [], obj: null };
+            },
+            _useTemplates() {
+                return false;
             }
         });
 
@@ -292,6 +294,9 @@ QUnit.test('component with bindingOptions from scope when invalid value for widg
             if(args.name === 'width' && args.value < 0) {
                 this.option('width', 0);
             }
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -743,6 +748,9 @@ QUnit.test('Lockers works correctly when widget options changed using action (T3
         },
         emulateAction() {
             this._createActionByOption('onClick')();
+        },
+        _useTemplates() {
+            return false;
         }
     });
     registerComponent('dxMyComponent', MyComponent);
@@ -797,6 +805,9 @@ QUnit.test('The component should not be rendered more times than it needed', fun
         },
         emulateAction() {
             this._createActionByOption('onClick')();
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -832,6 +843,9 @@ QUnit.test('WrappedAction should return function result (T388034)', function(ass
         emulateAction() {
             const testAction = this._createActionByOption('onTestAction');
             return testAction({ text: 'testText' });
+        },
+        _useTemplates() {
+            return false;
         }
     });
     registerComponent('dxMyComponent', MyComponent);
@@ -854,7 +868,7 @@ QUnit.test('Empty action doesn\'t call scope.$apply if config.wrapActionsBeforeE
     const originFlag = config().wrapActionsBeforeExecute;
     config({ wrapActionsBeforeExecute: true });
 
-    const TestDOMComponent = DOMComponent.inherit();
+    const TestDOMComponent = DOMComponent.inherit({ _useTemplates() { return false; } });
     registerComponent('dxMyComponent', TestDOMComponent);
 
     const $markup = $('<div></div>')
@@ -943,6 +957,9 @@ QUnit.test('The \'release\' method shouldn\'t be called for an unlocked Lock obj
         emulateAction() {
             const testAction = this._createActionByOption('onTestAction');
             testAction({ instance: this });
+        },
+        _useTemplates() {
+            return false;
         }
     });
     registerComponent('dxMyComponentWithWrappedAction', MyComponent);
@@ -1130,6 +1147,9 @@ QUnit.test('beginUpdate and endUpdate must be called in pairs (T373299)', functi
                 beginWithoutEnd--;
             }
             this.callBase();
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -1169,6 +1189,9 @@ QUnit.test('beginUpdate and endUpdate shouldn\'t fire only once for each apply',
         endUpdate() {
             endUpdate++;
             this.callBase();
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -1259,6 +1282,9 @@ QUnit.test('Binding with several nested options with same parent should work cor
             this.callBase();
 
             this._deprecatedOptions['root.deprecated'] = { alias: 'root.child1' };
+        },
+        _useTemplates() {
+            return false;
         }
     });
     registerComponent('dxTestWithDeprecated', TestComponentWithDeprecated);
@@ -1293,6 +1319,9 @@ QUnit.test('Components should not affect on eachother lock engines', function(as
                 this._createActionByOption('onUpdate')();
             }
             this.callBase(...args);
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -1507,7 +1536,11 @@ QUnit.test('widget inside two nested containers', function(assert) {
 });
 
 QUnit.test('angular integration don\'t breaks defaultOptions', function(assert) {
-    const TestDOMComponent = DOMComponent.inherit();
+    const TestDOMComponent = DOMComponent.inherit({
+        _useTemplates() {
+            return false;
+        }
+    });
 
     registerComponent('dxTestDOMComponent', TestDOMComponent);
 
@@ -1686,7 +1719,7 @@ QUnit.test('retrieving default NG template for collection widgets created with a
 });
 
 QUnit.test('creates anonymous template from its contents', function(assert) {
-    const TestContainer = ComponentWithTemplate.inherit({
+    const TestContainer = DOMComponent.inherit({
         _getDefaultOptions() {
             return $.extend(this.callBase(), {
                 items: null
@@ -1810,6 +1843,9 @@ QUnit.test('two-way binding works correct for inner component (T577900)', functi
     const MyComponent = DOMComponent.inherit({
         emulateAction() {
             this._createActionByOption('onClick')();
+        },
+        _useTemplates() {
+            return false;
         }
     });
     registerComponent('dxComponentWithInnerComponent', MyComponent);
@@ -2551,6 +2587,9 @@ QUnit.test('binding inside ng-repeat (T137200)', function(assert) {
     const TestComponent = DOMComponent.inherit({
         _getDefaultOptions() {
             return { text: '', array: [], obj: null };
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -2596,6 +2635,9 @@ QUnit.test('component should notify view model if option changed on ctor after i
         _render() {
             this.callBase();
             this.option('a', 2);
+        },
+        _useTemplates() {
+            return false;
         }
     });
 
@@ -2628,7 +2670,11 @@ QUnit.test('Watchers executed after component initialization (T334273)', functio
         exceptionFired = true;
     });
 
-    const TestComponent = DOMComponent.inherit({});
+    const TestComponent = DOMComponent.inherit({
+        _useTemplates() {
+            return false;
+        }
+    });
 
     registerComponent('dxTest', TestComponent);
 
@@ -2679,6 +2725,9 @@ QUnit.module('component action context', {
             },
             triggerByOptionCategoryRendering(e) {
                 this._createActionByOption('onHandler', { category: 'rendering' })(e);
+            },
+            _useTemplates() {
+                return false;
             }
         });
 
@@ -2933,6 +2982,9 @@ QUnit.test('Component shouldn\'t watch digest callback after dispose', function(
         endUpdate(...args) {
             endCounter++;
             this.callBase(...args);
+        },
+        _useTemplates() {
+            return false;
         }
     });
 

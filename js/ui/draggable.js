@@ -8,7 +8,7 @@ var $ = require('../core/renderer'),
     browser = require('../core/utils/browser'),
     dasherize = require('../core/utils/inflector').dasherize,
     extend = require('../core/utils/extend').extend,
-    DOMComponentWithTemplate = require('../core/dom_component_with_template'),
+    DOMComponent = require('../core/dom_component'),
     getPublicElement = require('../core/utils/dom').getPublicElement,
     eventUtils = require('../events/utils'),
     pointerEvents = require('../events/pointer'),
@@ -221,7 +221,7 @@ var ScrollAnimator = Animator.inherit({
  * @export default
  */
 
-var Draggable = DOMComponentWithTemplate.inherit({
+var Draggable = DOMComponent.inherit({
     reset: noop,
 
     dragMove: noop,
