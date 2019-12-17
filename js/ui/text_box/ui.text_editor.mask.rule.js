@@ -1,11 +1,11 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    typeUtils = require("../../core/utils/type"),
-    noop = require("../../core/utils/common").noop,
+var Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    inArray = require('../../core/utils/array').inArray,
+    typeUtils = require('../../core/utils/type'),
+    noop = require('../../core/utils/common').noop,
     isFunction = typeUtils.isFunction;
 
-var EMPTY_CHAR = " ";
+var EMPTY_CHAR = ' ';
 
 var BaseMaskRule = Class.inherit({
 
@@ -30,7 +30,7 @@ var BaseMaskRule = Class.inherit({
 
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
-        var handlingProperty = Object.prototype.hasOwnProperty.call(args, "value") ? "value" : "text";
+        var handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
         args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
         args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
         args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
@@ -70,11 +70,11 @@ var EmptyMaskRule = BaseMaskRule.inherit({
     },
 
     text: function() {
-        return "";
+        return '';
     },
 
     value: function() {
-        return "";
+        return '';
     },
 
     first: function() {
@@ -82,7 +82,7 @@ var EmptyMaskRule = BaseMaskRule.inherit({
     },
 
     rawValue: function() {
-        return "";
+        return '';
     },
 
     adjustedCaret: function() {
@@ -110,7 +110,7 @@ var MaskRule = BaseMaskRule.inherit({
     },
 
     handle: function(args) {
-        var str = Object.prototype.hasOwnProperty.call(args, "value") ? args.value : args.text;
+        var str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
         if(!str || !str.length || !args.length) {
             return 0;
         }
@@ -225,7 +225,7 @@ var StubMaskRule = MaskRule.inherit({
     },
 
     handle: function(args) {
-        var hasValueProperty = Object.prototype.hasOwnProperty.call(args, "value");
+        var hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
         var str = hasValueProperty ? args.value : args.text;
         if(!str.length || !args.length) {
             return 0;

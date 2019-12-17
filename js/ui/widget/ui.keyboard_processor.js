@@ -1,14 +1,14 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import Class from "../../core/class";
-import { inArray } from "../../core/utils/array";
-import { each } from "../../core/utils/iterator";
-import { addNamespace, normalizeKeyName } from "../../events/utils";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import Class from '../../core/class';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
 
-const COMPOSITION_START_EVENT = "compositionstart";
-const COMPOSITION_END_EVENT = "compositionend";
-const KEYDOWN_EVENT = "keydown";
-const NAMESPACE = "KeyboardProcessor";
+const COMPOSITION_START_EVENT = 'compositionstart';
+const COMPOSITION_END_EVENT = 'compositionend';
+const KEYDOWN_EVENT = 'keydown';
+const NAMESPACE = 'KeyboardProcessor';
 
 const KeyboardProcessor = Class.inherit({
     _keydown: addNamespace(KEYDOWN_EVENT, NAMESPACE),

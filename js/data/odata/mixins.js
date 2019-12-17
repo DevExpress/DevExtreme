@@ -1,17 +1,17 @@
-var stringUtils = require("../../core/utils/string"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    odataUtils = require("./utils");
+var stringUtils = require('../../core/utils/string'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    odataUtils = require('./utils');
 
-require("./query_adapter");
+require('./query_adapter');
 
 var DEFAULT_PROTOCOL_VERSION = 2;
 
 var formatFunctionInvocationUrl = function(baseUrl, args) {
-    return stringUtils.format("{0}({1})",
+    return stringUtils.format('{0}({1})',
         baseUrl,
         iteratorUtils.map(args || {}, function(value, key) {
-            return stringUtils.format("{0}={1}", key, value);
-        }).join(",")
+            return stringUtils.format('{0}={1}', key, value);
+        }).join(',')
     );
 };
 
@@ -35,7 +35,7 @@ var SharedMethods = {
     _extractServiceOptions: function(options) {
         options = options || {};
 
-        this._url = String(options.url).replace(/\/+$/, "");
+        this._url = String(options.url).replace(/\/+$/, '');
         this._beforeSend = options.beforeSend;
         this._jsonp = options.jsonp;
         this._version = options.version || DEFAULT_PROTOCOL_VERSION;

@@ -1,5 +1,5 @@
-var logger = require("./console").logger,
-    dependencyInjector = require("./dependency_injector");
+var logger = require('./console').logger,
+    dependencyInjector = require('./dependency_injector');
 
 module.exports = dependencyInjector({
     isWrapped: function() {
@@ -15,6 +15,6 @@ module.exports = dependencyInjector({
         return value;
     },
     assign: function() {
-        logger.error("Method 'assign' should not be used for not wrapped variables. Use 'isWrapped' method for ensuring.");
+        logger.error('Method \'assign\' should not be used for not wrapped variables. Use \'isWrapped\' method for ensuring.');
     }
 });

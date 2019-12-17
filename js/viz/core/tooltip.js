@@ -1,15 +1,15 @@
-import domAdapter from "../../core/dom_adapter";
-import windowUtils from "../../core/utils/window";
-import inflector from "../../core/utils/inflector";
+import domAdapter from '../../core/dom_adapter';
+import windowUtils from '../../core/utils/window';
+import inflector from '../../core/utils/inflector';
 
-import $ from "../../core/renderer";
-import rendererModule from "./renderers/renderer";
-import typeUtils from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import vizUtils from "./utils";
-import { format } from "../../format_helper";
+import $ from '../../core/renderer';
+import rendererModule from './renderers/renderer';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import vizUtils from './utils';
+import { format } from '../../format_helper';
 
-import { Plaque } from "./plaque";
+import { Plaque } from './plaque';
 
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
@@ -18,17 +18,17 @@ const window = windowUtils.getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 function hideElement($element) {
-    $element.css({ left: "-9999px" }).detach();
+    $element.css({ left: '-9999px' }).detach();
 }
 
 function getSpecialFormatOptions(options, specialFormat) {
     var result = options;
     switch(specialFormat) {
-        case "argument":
+        case 'argument':
             result = { format: options.argumentFormat };
             break;
-        case "percent":
-            result = { format: { type: "percent", precision: options.format && options.format.percentPrecision } };
+        case 'percent':
+            result = { format: { type: 'percent', precision: options.format && options.format.percentPrecision } };
             break;
     }
     return result;
@@ -43,20 +43,20 @@ function Tooltip(params) {
     that._widgetRoot = params.widgetRoot;
     that._widget = params.widget;
 
-    that._wrapper = $("<div>")
-        .css({ position: "absolute", overflow: "hidden", "pointerEvents": "none" }) // T265557, T447623
+    that._wrapper = $('<div>')
+        .css({ position: 'absolute', overflow: 'hidden', 'pointerEvents': 'none' }) // T265557, T447623
         .addClass(params.cssClass);
 
     that._renderer = renderer = new rendererModule.Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
     root = renderer.root;
-    root.attr({ "pointer-events": "none" });
+    root.attr({ 'pointer-events': 'none' });
 
     // svg text
     that._text = renderer.text(undefined, 0, 0);
 
     // html text
-    that._textGroupHtml = $("<div>").css({ position: "absolute", padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._wrapper);
-    that._textHtml = $("<div>").css({ position: "relative", display: "inline-block", padding: 0, margin: 0, border: "0px solid transparent" }).appendTo(that._textGroupHtml);
+    that._textGroupHtml = $('<div>').css({ position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._wrapper);
+    that._textHtml = $('<div>').css({ position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._textGroupHtml);
 }
 
 Tooltip.prototype = {
@@ -74,7 +74,7 @@ Tooltip.prototype = {
         if(container.length === 0) {
             container = $(options.container);
         }
-        return (container.length ? container : $("body")).get(0);
+        return (container.length ? container : $('body')).get(0);
     },
 
     setTemplate(contentTemplate) {
@@ -90,7 +90,7 @@ Tooltip.prototype = {
         that._options = options;
         that._textFontStyles = vizUtils.patchFontOptions(options.font);
         that._textFontStyles.color = options.font.color;
-        that._wrapper.css({ "zIndex": options.zIndex });
+        that._wrapper.css({ 'zIndex': options.zIndex });
 
         that._customizeTooltip = options.customizeTooltip;
 
@@ -117,7 +117,7 @@ Tooltip.prototype = {
                             return;
                         }
                     } else {
-                        that._text.attr({ text: "" });
+                        that._text.attr({ text: '' });
                         textHtml.html(state.html);
                     }
                     textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH });
@@ -168,7 +168,7 @@ Tooltip.prototype = {
 
     setRendererOptions: function(options) {
         this._renderer.setOptions(options);
-        this._textGroupHtml.css({ direction: options.rtl ? "rtl" : "ltr" });
+        this._textGroupHtml.css({ direction: options.rtl ? 'rtl' : 'ltr' });
         return this;
     },
 
@@ -202,15 +202,15 @@ Tooltip.prototype = {
         if(typeUtils.isFunction(customizeTooltip)) {
             customize = customizeTooltip.call(formatObject, formatObject);
             customize = typeUtils.isPlainObject(customize) ? customize : {};
-            if("text" in customize) {
-                state.text = typeUtils.isDefined(customize.text) ? String(customize.text) : "";
+            if('text' in customize) {
+                state.text = typeUtils.isDefined(customize.text) ? String(customize.text) : '';
             }
-            if("html" in customize) {
-                state.html = typeUtils.isDefined(customize.html) ? String(customize.html) : "";
+            if('html' in customize) {
+                state.html = typeUtils.isDefined(customize.html) ? String(customize.html) : '';
             }
         }
-        if(!("text" in state) && !("html" in state)) {
-            state.text = formatObject.valueText || formatObject.description || "";
+        if(!('text' in state) && !('html' in state)) {
+            state.text = formatObject.valueText || formatObject.description || '';
         }
         state.color = customize.color || options.color;
         state.borderColor = customize.borderColor || (options.border || {}).color;
@@ -250,9 +250,9 @@ Tooltip.prototype = {
         // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
         // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
         // This functionality can be simplified when we get rid of timeouts for tooltip
-        that._eventData && that._eventTrigger("tooltipHidden", that._eventData);
+        that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
         that._eventData = eventData;
-        that._eventTrigger("tooltipShown", that._eventData);
+        that._eventTrigger('tooltipShown', that._eventData);
         return true;
     },
 
@@ -261,7 +261,7 @@ Tooltip.prototype = {
         hideElement(that._wrapper);
         // trigger event
         if(that._eventData) {
-            that._eventTrigger("tooltipHidden", that._eventData);
+            that._eventTrigger('tooltipHidden', that._eventData);
             that._clear();
             that._eventData = null;
         }
@@ -358,7 +358,7 @@ Tooltip.prototype = {
 exports.Tooltip = Tooltip;
 
 exports.plugin = {
-    name: "tooltip",
+    name: 'tooltip',
     init: function() {
         this._initTooltip();
     },
@@ -370,9 +370,9 @@ exports.plugin = {
         _initTooltip: function() {
             // "exports" is used for testing purposes.
             this._tooltip = new exports.Tooltip({
-                cssClass: this._rootClassPrefix + "-tooltip",
+                cssClass: this._rootClassPrefix + '-tooltip',
                 eventTrigger: this._eventTrigger,
-                pathModified: this.option("pathModified"),
+                pathModified: this.option('pathModified'),
                 widgetRoot: this.element(),
                 widget: this
             });
@@ -388,7 +388,7 @@ exports.plugin = {
         },
         // The method exists only to be overridden in sparklines and gauges.
         _setTooltipOptions: function() {
-            this._tooltip.update(this._getOption("tooltip"));
+            this._tooltip.update(this._getOption('tooltip'));
         }
     },
     extenders: {
@@ -399,10 +399,10 @@ exports.plugin = {
     customize: function(constructor) {
         var proto = constructor.prototype;
 
-        proto._eventsMap.onTooltipShown = { name: "tooltipShown" };
-        proto._eventsMap.onTooltipHidden = { name: "tooltipHidden" };
+        proto._eventsMap.onTooltipShown = { name: 'tooltipShown' };
+        proto._eventsMap.onTooltipHidden = { name: 'tooltipHidden' };
         constructor.addChange({
-            code: "TOOLTIP_RENDERER",
+            code: 'TOOLTIP_RENDERER',
             handler: function() {
                 this._setTooltipRendererOptions();
             },
@@ -410,14 +410,14 @@ exports.plugin = {
             isOptionChange: true
         });
         constructor.addChange({
-            code: "TOOLTIP",
+            code: 'TOOLTIP',
             handler: function() {
                 this._setTooltipOptions();
             },
             isThemeDependent: true,
             isOptionChange: true,
-            option: "tooltip"
+            option: 'tooltip'
         });
     },
-    fontFields: ["tooltip.font"]
+    fontFields: ['tooltip.font']
 };

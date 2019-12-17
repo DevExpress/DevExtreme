@@ -6,10 +6,10 @@ SystemJS.config({
 });
 
 define(function(require) {
-    const getDiagram = require("ui/diagram/diagram_importer").getDiagram;
+    const getDiagram = require('ui/diagram/diagram_importer').getDiagram;
 
-    QUnit.module("Import devexpress-diagram", function() {
-        QUnit.test("throw an error if the devexpress-diagram script isn't referenced", function(assert) {
+    QUnit.module('Import devexpress-diagram', function() {
+        QUnit.test('throw an error if the devexpress-diagram script isn\'t referenced', function(assert) {
             assert.throws(
                 function() { getDiagram(); },
                 function(e) {

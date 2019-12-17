@@ -1,14 +1,14 @@
-import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provider/file_provider";
-import ArrayFileProvider from "./file_provider/array";
-import AjaxFileProvider from "./file_provider/ajax";
-import RemoteFileProvider from "./file_provider/remote";
-import CustomFileProvider from "./file_provider/custom";
-import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from "./ui.file_manager.utils";
-import whenSome, { ErrorCode } from "./ui.file_manager.common";
+import { FileProvider, FileManagerItem, FileManagerRootItem } from './file_provider/file_provider';
+import ArrayFileProvider from './file_provider/array';
+import AjaxFileProvider from './file_provider/ajax';
+import RemoteFileProvider from './file_provider/remote';
+import CustomFileProvider from './file_provider/custom';
+import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from './ui.file_manager.utils';
+import whenSome, { ErrorCode } from './ui.file_manager.common';
 
-import { Deferred, when } from "../../core/utils/deferred";
-import { find } from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
+import { Deferred, when } from '../../core/utils/deferred';
+import { find } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
 
 export default class FileItemsController {
 
@@ -50,7 +50,7 @@ export default class FileItemsController {
             return new ArrayFileProvider({ data: fileProvider });
         }
 
-        if(typeof fileProvider === "string") {
+        if(typeof fileProvider === 'string') {
             return new AjaxFileProvider({ url: fileProvider });
         }
 
@@ -59,9 +59,9 @@ export default class FileItemsController {
         }
 
         switch(fileProvider.type) {
-            case "remote":
+            case 'remote':
                 return new RemoteFileProvider(fileProvider);
-            case "custom":
+            case 'custom':
                 return new CustomFileProvider(fileProvider);
         }
 
@@ -85,7 +85,7 @@ export default class FileItemsController {
     }
 
     getCurrentPath() {
-        let currentPath = "";
+        let currentPath = '';
         let directory = this.getCurrentDirectory();
         while(directory && !directory.fileItem.isRoot) {
             const escapedName = getEscapedFileName(directory.fileItem.name);
@@ -166,14 +166,14 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const actionInfo = this._createEditActionInfo("create", parentDirectoryInfo, parentDirectoryInfo);
+        const actionInfo = this._createEditActionInfo('create', parentDirectoryInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        const actionInfo = this._createEditActionInfo("rename", fileItemInfo, fileItemInfo.parentDirectory);
+        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory);
         return this._processEditAction(actionInfo,
             () => {
                 if(!fileItemInfo.fileItem.isDirectory) {
@@ -189,7 +189,7 @@ export default class FileItemsController {
 
     moveItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        const actionInfo = this._createEditActionInfo("move", itemInfos, destinationDirectory);
+        const actionInfo = this._createEditActionInfo('move', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
             () => {
@@ -201,7 +201,7 @@ export default class FileItemsController {
 
     copyItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        const actionInfo = this._createEditActionInfo("copy", itemInfos, destinationDirectory);
+        const actionInfo = this._createEditActionInfo('copy', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
             () => {
@@ -214,7 +214,7 @@ export default class FileItemsController {
     deleteItems(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
         const directory = itemInfos.length > 0 ? itemInfos[0].parentDirectory : null;
-        const actionInfo = this._createEditActionInfo("delete", itemInfos, directory);
+        const actionInfo = this._createEditActionInfo('delete', itemInfos, directory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.deleteItems(items),
             () => {
@@ -228,7 +228,7 @@ export default class FileItemsController {
 
     processUploadSession(sessionInfo, uploadDirectoryInfo) {
         const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
-        const actionInfo = this._createEditActionInfo("upload", itemInfos, uploadDirectoryInfo, { sessionInfo });
+        const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
             () => this._resetDirectoryState(uploadDirectoryInfo));
@@ -397,7 +397,7 @@ export default class FileItemsController {
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
         return extend(this._createFileInfo(fileItem, parentDirectoryInfo), {
-            icon: "folder",
+            icon: 'folder',
             expanded: fileItem.isRoot,
             items: [ ]
         });
@@ -418,29 +418,29 @@ export default class FileItemsController {
 
     _getFileItemDefaultIcon(fileItem) {
         if(fileItem.isDirectory) {
-            return "folder";
+            return 'folder';
         }
 
         const extension = fileItem.getExtension();
         const icon = this._defaultIconMap[extension];
-        return icon || "doc";
+        return icon || 'doc';
     }
 
     _createDefaultIconMap() {
         const result = {
-            ".txt": "txtfile",
-            ".rtf": "rtffile",
-            ".doc": "docfile",
-            ".docx": "docxfile",
-            ".xls": "xlsfile",
-            ".xlsx": "xlsxfile",
-            ".ppt": "pptfile",
-            ".pptx": "pptxfile",
-            ".pdf": "pdffile"
+            '.txt': 'txtfile',
+            '.rtf': 'rtffile',
+            '.doc': 'docfile',
+            '.docx': 'docxfile',
+            '.xls': 'xlsfile',
+            '.xlsx': 'xlsxfile',
+            '.ppt': 'pptfile',
+            '.pptx': 'pptxfile',
+            '.pdf': 'pdffile'
         };
 
-        [".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp"].forEach(extension => {
-            result[extension] = "image";
+        ['.png', '.gif', '.jpg', '.jpeg', '.ico', '.bmp'].forEach(extension => {
+            result[extension] = 'image';
         });
 
         return result;
@@ -448,7 +448,7 @@ export default class FileItemsController {
 
     _createRootDirectory(text) {
         let root = new FileManagerRootItem();
-        root.name = text || "";
+        root.name = text || '';
         return root;
     }
 

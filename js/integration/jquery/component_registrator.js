@@ -1,11 +1,11 @@
-var jQuery = require("jquery");
-var componentRegistratorCallbacks = require("../../core/component_registrator_callbacks");
-var errors = require("../../core/errors");
+var jQuery = require('jquery');
+var componentRegistratorCallbacks = require('../../core/component_registrator_callbacks');
+var errors = require('../../core/errors');
 
 if(jQuery) {
     var registerJQueryComponent = function(name, componentClass) {
         jQuery.fn[name] = function(options) {
-            var isMemberInvoke = typeof options === "string",
+            var isMemberInvoke = typeof options === 'string',
                 result;
 
             if(isMemberInvoke) {
@@ -16,7 +16,7 @@ if(jQuery) {
                     var instance = componentClass.getInstance(this);
 
                     if(!instance) {
-                        throw errors.Error("E0009", name);
+                        throw errors.Error('E0009', name);
                     }
 
                     var member = instance[memberName],

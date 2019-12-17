@@ -1,20 +1,20 @@
-import $ from "jquery";
-import { value as viewPort } from "core/utils/view_port";
-import fx from "animation/fx";
-import Tooltip from "ui/tooltip";
-import renderer from "core/renderer";
+import $ from 'jquery';
+import { value as viewPort } from 'core/utils/view_port';
+import fx from 'animation/fx';
+import Tooltip from 'ui/tooltip';
+import renderer from 'core/renderer';
 
-import "common.css!";
+import 'common.css!';
 
-var TOOLTIP_CLASS = "dx-tooltip",
-    TOOLTIP_WRAPPER_CLASS = "dx-tooltip-wrapper",
-    DX_INVISIBILITY_CLASS = "dx-state-invisible";
+var TOOLTIP_CLASS = 'dx-tooltip',
+    TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper',
+    DX_INVISIBILITY_CLASS = 'dx-state-invisible';
 
 var wrapper = function() {
-    return $("body").find("." + TOOLTIP_WRAPPER_CLASS);
+    return $('body').find('.' + TOOLTIP_WRAPPER_CLASS);
 };
 
-viewPort($("#qunit-fixture").addClass("dx-viewport"));
+viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
 
 QUnit.testStart(function() {
@@ -28,61 +28,61 @@ QUnit.testStart(function() {
         </div>\
     //</div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("render");
+QUnit.module('render');
 
-QUnit.test("render as tooltip", function(assert) {
-    var $tooltip = $("#tooltip");
+QUnit.test('render as tooltip', function(assert) {
+    var $tooltip = $('#tooltip');
     new Tooltip($tooltip, { visible: true });
 
     assert.ok($tooltip.hasClass(TOOLTIP_CLASS));
     assert.ok(wrapper().length);
 });
 
-QUnit.test("tooltip should render when target is core renderer object", function(assert) {
+QUnit.test('tooltip should render when target is core renderer object', function(assert) {
     const target = renderer('#target');
     const target2 = renderer('#target2');
 
-    const $tooltip = $("#tooltip");
-    const $tooltip2 = $("#tooltip2");
+    const $tooltip = $('#tooltip');
+    const $tooltip2 = $('#tooltip2');
 
     new Tooltip($tooltip, {
         target: target,
-        showEvent: "mouseenter",
-        hideEvent: "mouseleave"
+        showEvent: 'mouseenter',
+        hideEvent: 'mouseleave'
     });
 
     new Tooltip($tooltip2, {
         target: target2,
-        showEvent: "mouseenter",
-        hideEvent: "mouseleave"
+        showEvent: 'mouseenter',
+        hideEvent: 'mouseleave'
     });
 
-    $('#target').trigger("mouseenter");
+    $('#target').trigger('mouseenter');
 
-    assert.notOk($tooltip.hasClass(DX_INVISIBILITY_CLASS), "first tooltip is visible");
-    assert.ok($tooltip2.hasClass(DX_INVISIBILITY_CLASS), "second tooltip is hidden");
+    assert.notOk($tooltip.hasClass(DX_INVISIBILITY_CLASS), 'first tooltip is visible');
+    assert.ok($tooltip2.hasClass(DX_INVISIBILITY_CLASS), 'second tooltip is hidden');
 });
 
-QUnit.test("tooltip should render when target is selector", function(assert) {
-    const $tooltip = $("#tooltip");
+QUnit.test('tooltip should render when target is selector', function(assert) {
+    const $tooltip = $('#tooltip');
 
     new Tooltip($tooltip, {
         target: '#defferedTarget',
-        showEvent: "mouseenter",
-        hideEvent: "mouseleave"
+        showEvent: 'mouseenter',
+        hideEvent: 'mouseleave'
     });
 
-    $("<div>").attr("id", "defferedTarget").appendTo("body");
-    $('#defferedTarget').trigger("mouseenter");
+    $('<div>').attr('id', 'defferedTarget').appendTo('body');
+    $('#defferedTarget').trigger('mouseenter');
 
-    assert.notOk($tooltip.hasClass(DX_INVISIBILITY_CLASS), "first tooltip is visible");
+    assert.notOk($tooltip.hasClass(DX_INVISIBILITY_CLASS), 'first tooltip is visible');
 });
 
 
-QUnit.module("overlay integration", {
+QUnit.module('overlay integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
@@ -93,63 +93,63 @@ QUnit.module("overlay integration", {
     }
 });
 
-QUnit.test("tooltip should be closed on outside click if closeOnOutsideClick is true", function(assert) {
-    var $tooltip = $("#tooltip").dxTooltip({
+QUnit.test('tooltip should be closed on outside click if closeOnOutsideClick is true', function(assert) {
+    var $tooltip = $('#tooltip').dxTooltip({
             closeOnOutsideClick: true
         }),
-        instance = $tooltip.dxTooltip("instance");
+        instance = $tooltip.dxTooltip('instance');
 
     instance.show();
-    $("#qunit-fixture").trigger("dxpointerdown");
+    $('#qunit-fixture').trigger('dxpointerdown');
 
-    assert.equal(instance.option("visible"), false, "toast was hidden should be hiding");
+    assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
 });
 
-QUnit.test("tooltip should not prevent closeOnOutsideClick handler of other overlays", function(assert) {
-    var tooltip = new Tooltip($("#tooltip"));
-    var $overlay = $("<div>").appendTo(".dx-viewport");
+QUnit.test('tooltip should not prevent closeOnOutsideClick handler of other overlays', function(assert) {
+    var tooltip = new Tooltip($('#tooltip'));
+    var $overlay = $('<div>').appendTo('.dx-viewport');
 
     var overlay = $overlay.dxOverlay({
         closeOnOutsideClick: true
-    }).dxOverlay("instance");
+    }).dxOverlay('instance');
 
     overlay.show();
     tooltip.show();
 
-    $("#qunit-fixture").trigger("dxpointerdown");
+    $('#qunit-fixture').trigger('dxpointerdown');
 
-    assert.equal(overlay.option("visible"), false, "dxOverlay should be hiding");
+    assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
 });
 
-QUnit.module("base z-index");
+QUnit.module('base z-index');
 
-QUnit.test("tooltip should have correct z-index", function(assert) {
+QUnit.test('tooltip should have correct z-index', function(assert) {
     Tooltip.baseZIndex(10000);
 
-    var tooltip = new Tooltip($("#tooltip"), { visible: true }),
+    var tooltip = new Tooltip($('#tooltip'), { visible: true }),
         $tooltipContent = tooltip.overlayContent();
 
-    assert.equal($tooltipContent.css("zIndex"), 10001, "tooltip's z-index is correct");
+    assert.equal($tooltipContent.css('zIndex'), 10001, 'tooltip\'s z-index is correct');
 });
 
 
-QUnit.module("aria accessibility");
+QUnit.module('aria accessibility');
 
-QUnit.test("aria role", function(assert) {
-    var $tooltip = $("#tooltip");
+QUnit.test('aria role', function(assert) {
+    var $tooltip = $('#tooltip');
     new Tooltip($tooltip);
-    var $overlayContent = $tooltip.find(".dx-overlay-content");
+    var $overlayContent = $tooltip.find('.dx-overlay-content');
 
-    assert.equal($overlayContent.attr("role"), "tooltip");
+    assert.equal($overlayContent.attr('role'), 'tooltip');
 });
 
-QUnit.test("aria-describedby property should be set on target when tooltip is visible", function(assert) {
-    var $target = $("#target"),
-        $element = $("#tooltip");
+QUnit.test('aria-describedby property should be set on target when tooltip is visible', function(assert) {
+    var $target = $('#target'),
+        $element = $('#tooltip');
     new Tooltip($element, { target: '#target', visible: false });
-    var $overlay = $element.find(".dx-overlay-content");
+    var $overlay = $element.find('.dx-overlay-content');
 
-    assert.notEqual($target.attr("aria-describedby"), undefined, "aria-describedby exists on target");
-    assert.equal($target.attr("aria-describedby"), $overlay.attr("id"), "aria-describedby and overlay's id are equal");
+    assert.notEqual($target.attr('aria-describedby'), undefined, 'aria-describedby exists on target');
+    assert.equal($target.attr('aria-describedby'), $overlay.attr('id'), 'aria-describedby and overlay\'s id are equal');
 
 });

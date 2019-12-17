@@ -1,8 +1,8 @@
-var Promise = require("../../core/polyfills/promise"),
-    Class = require("../../core/class"),
-    map = require("../../core/utils/iterator").map,
-    typeUtils = require("../../core/utils/type"),
-    eventUtils = require("../../events/utils"),
+var Promise = require('../../core/polyfills/promise'),
+    Class = require('../../core/class'),
+    map = require('../../core/utils/iterator').map,
+    typeUtils = require('../../core/utils/type'),
+    eventUtils = require('../../events/utils'),
     isPlainObject = typeUtils.isPlainObject,
     isNumeric = typeUtils.isNumeric;
 
@@ -19,7 +19,7 @@ var Provider = Class.inherit({
     },
 
     _defaultRouteColor: function() {
-        return "#0000FF";
+        return '#0000FF';
     },
 
     ctor: function(map, $container) {
@@ -30,8 +30,8 @@ var Provider = Class.inherit({
     render: function(markerOptions, routeOptions) {
         return this._renderImpl().then(function() {
             return Promise.all([
-                this._applyFunctionIfNeeded("addMarkers", markerOptions),
-                this._applyFunctionIfNeeded("addRoutes", routeOptions)
+                this._applyFunctionIfNeeded('addMarkers', markerOptions),
+                this._applyFunctionIfNeeded('addRoutes', routeOptions)
             ]).then(function() {
                 return true;
             });
@@ -54,8 +54,8 @@ var Provider = Class.inherit({
 
     updateMarkers: function(markerOptionsToRemove, markerOptionsToAdd) {
         return new Promise(function(resolve) {
-            return this._applyFunctionIfNeeded("removeMarkers", markerOptionsToRemove).then(function(removeValue) {
-                this._applyFunctionIfNeeded("addMarkers", markerOptionsToAdd).then(function(addValue) {
+            return this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove).then(function(removeValue) {
+                this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd).then(function(addValue) {
                     resolve(addValue ? addValue : removeValue);
                 });
             }.bind(this));
@@ -70,8 +70,8 @@ var Provider = Class.inherit({
 
     updateRoutes: function(routeOptionsToRemove, routeOptionsToAdd) {
         return new Promise(function(resolve) {
-            return this._applyFunctionIfNeeded("removeRoutes", routeOptionsToRemove).then(function(removeValue) {
-                this._applyFunctionIfNeeded("addRoutes", routeOptionsToAdd).then(function(addValue) {
+            return this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove).then(function(removeValue) {
+                this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd).then(function(addValue) {
                     resolve(addValue ? addValue : removeValue);
                 });
             }.bind(this));
@@ -101,7 +101,7 @@ var Provider = Class.inherit({
     },
 
     _keyOption: function(providerName) {
-        var key = this._option("key");
+        var key = this._option('key');
 
         return key[providerName] === undefined ? key : key[providerName];
     },
@@ -114,8 +114,8 @@ var Provider = Class.inherit({
     },
 
     _getLatLng: function(location) {
-        if(typeof location === "string") {
-            var coords = map(location.split(","), function(item) {
+        if(typeof location === 'string') {
+            var coords = map(location.split(','), function(item) {
                     return item.trim();
                 }),
                 numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
@@ -133,7 +133,7 @@ var Provider = Class.inherit({
     },
 
     _areBoundsSet: function() {
-        return this._option("bounds.northEast") && this._option("bounds.southWest");
+        return this._option('bounds.northEast') && this._option('bounds.southWest');
     },
 
     _addEventNamespace: function(name) {
@@ -153,23 +153,23 @@ var Provider = Class.inherit({
     },
 
     _fireClickAction: function(actionArguments) {
-        this._fireAction("onClick", actionArguments);
+        this._fireAction('onClick', actionArguments);
     },
 
     _fireMarkerAddedAction: function(actionArguments) {
-        this._fireAction("onMarkerAdded", actionArguments);
+        this._fireAction('onMarkerAdded', actionArguments);
     },
 
     _fireMarkerRemovedAction: function(actionArguments) {
-        this._fireAction("onMarkerRemoved", actionArguments);
+        this._fireAction('onMarkerRemoved', actionArguments);
     },
 
     _fireRouteAddedAction: function(actionArguments) {
-        this._fireAction("onRouteAdded", actionArguments);
+        this._fireAction('onRouteAdded', actionArguments);
     },
 
     _fireRouteRemovedAction: function(actionArguments) {
-        this._fireAction("onRouteRemoved", actionArguments);
+        this._fireAction('onRouteRemoved', actionArguments);
     }
 
 });

@@ -1,7 +1,7 @@
-var Callbacks = require("./utils/callbacks"),
-    isFunction = require("./utils/type").isFunction,
-    each = require("./utils/iterator").each,
-    Class = require("./class");
+var Callbacks = require('./utils/callbacks'),
+    isFunction = require('./utils/type').isFunction,
+    each = require('./utils/iterator').each,
+    Class = require('./class');
 
 module.exports = Class.inherit({
     ctor: function(owner) {

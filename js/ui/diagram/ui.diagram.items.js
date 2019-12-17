@@ -1,5 +1,5 @@
-import Component from "../../core/component";
-import DataHelperMixin from "../../data_helper";
+import Component from '../../core/component';
+import DataHelperMixin from '../../data_helper';
 
 class ItemsOption extends Component {
     constructor(diagramWidget) {
@@ -93,7 +93,7 @@ class ItemsOption extends Component {
             cache.keys = keys;
         }
 
-        if(typeof key === "object") {
+        if(typeof key === 'object') {
             for(var i = 0, length = keys.length; i < length; i++) {
                 if(keys[i] === key) return i;
             }
@@ -119,7 +119,7 @@ class ItemsOption extends Component {
     }
 
     _getKeyExpr() {
-        throw "Not Implemented";
+        throw 'Not Implemented';
     }
 
     _dataSourceOptions() {

@@ -1,6 +1,6 @@
-var noop = require("../../core/utils/common").noop,
-    dateSerialization = require("../../core/utils/date_serialization"),
-    isDefined = require("../../core/utils/type").isDefined,
+var noop = require('../../core/utils/common').noop,
+    dateSerialization = require('../../core/utils/date_serialization'),
+    isDefined = require('../../core/utils/type').isDefined,
     parsers = {
         string: function(val) {
             return isDefined(val) ? ('' + val) : val;

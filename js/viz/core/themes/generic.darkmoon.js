@@ -1,47 +1,47 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = "#3debd3",
-    BACKGROUND_COLOR = "#465672",
-    TITLE_COLOR = "#fff",
-    SUBTITLE_COLOR = "#919bac",
-    TEXT_COLOR = "#c7ccd4",
-    BORDER_COLOR = "#596980";
+    ACCENT_COLOR = '#3debd3',
+    BACKGROUND_COLOR = '#465672',
+    TITLE_COLOR = '#fff',
+    SUBTITLE_COLOR = '#919bac',
+    TEXT_COLOR = '#c7ccd4',
+    BORDER_COLOR = '#596980';
 
 registerTheme({
-    name: "generic.darkmoon",
-    defaultPalette: "Dark Moon",
+    name: 'generic.darkmoon',
+    defaultPalette: 'Dark Moon',
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
     secondaryTitleColor: SUBTITLE_COLOR,
     gridColor: BORDER_COLOR,
     axisColor: TEXT_COLOR,
-    "export": {
+    'export': {
         backgroundColor: BACKGROUND_COLOR,
         font: {
             color: TITLE_COLOR
         },
         button: {
-            "default": {
+            'default': {
                 color: TITLE_COLOR,
-                borderColor: "#7a889e",
+                borderColor: '#7a889e',
                 backgroundColor: BACKGROUND_COLOR
             },
             hover: {
                 color: TITLE_COLOR,
-                borderColor: "#9da8b8",
-                backgroundColor: "#596e92"
+                borderColor: '#9da8b8',
+                backgroundColor: '#596e92'
             },
             focus: {
                 color: TITLE_COLOR,
-                borderColor: "#c4cad4",
-                backgroundColor: "#596e92"
+                borderColor: '#c4cad4',
+                backgroundColor: '#596e92'
             },
             active: {
                 color: TITLE_COLOR,
-                borderColor: "#c4cad4",
-                backgroundColor: "#6b80a4"
+                borderColor: '#c4cad4',
+                backgroundColor: '#6b80a4'
             }
         }
     },
@@ -51,7 +51,7 @@ registerTheme({
         }
     },
     tooltip: {
-        color: "#62789e",
+        color: '#62789e',
         border: {
             color: BORDER_COLOR
         },
@@ -59,7 +59,7 @@ registerTheme({
             color: TITLE_COLOR
         }
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -75,7 +75,7 @@ registerTheme({
             }
         },
         commonAxisSettings: {
-            breakStyle: { color: "#73869e" }
+            breakStyle: { color: '#73869e' }
         },
         commonAnnotationSettings: {
             font: {
@@ -84,15 +84,15 @@ registerTheme({
             border: {
                 color: BORDER_COLOR
             },
-            color: "#62789e"
+            color: '#62789e'
         }
     },
     gauge: {
         valueIndicators: {
-            "rangebar": {
+            'rangebar': {
                 color: ACCENT_COLOR
             },
-            "textcloud": {
+            'textcloud': {
                 color: ACCENT_COLOR,
                 text: {
                     font: {
@@ -103,7 +103,7 @@ registerTheme({
         }
     },
     barGauge: {
-        backgroundColor: "#526280"
+        backgroundColor: '#526280'
     },
     funnel: {
         item: {
@@ -114,8 +114,8 @@ registerTheme({
     },
     sparkline: {
         pointColor: BACKGROUND_COLOR,
-        minColor: "#f0ad4e",
-        maxColor: "#f9517e"
+        minColor: '#f0ad4e',
+        maxColor: '#f9517e'
     },
     treeMap: {
         group: {
@@ -131,8 +131,8 @@ registerTheme({
         background: {
             borderColor: BORDER_COLOR
         },
-        "layer:area": {
-            color: "#97a3b6",
+        'layer:area': {
+            color: '#97a3b6',
             borderColor: BACKGROUND_COLOR
         }
     },
@@ -141,7 +141,7 @@ registerTheme({
             color: BACKGROUND_COLOR
         },
         scale: {
-            breakStyle: { color: "#73869e" },
+            breakStyle: { color: '#73869e' },
             tick: {
                 opacity: 0.2
             }
@@ -150,7 +150,7 @@ registerTheme({
         sliderMarker: {
             color: ACCENT_COLOR,
             font: {
-                color: "#000"
+                color: '#000'
             }
         },
         sliderHandle: {
@@ -173,6 +173,6 @@ registerTheme({
             }
         }
     }
-}, "generic.dark");
+}, 'generic.dark');
 
-registerThemeAlias("generic.darkmoon.compact", "generic.darkmoon");
+registerThemeAlias('generic.darkmoon.compact', 'generic.darkmoon');

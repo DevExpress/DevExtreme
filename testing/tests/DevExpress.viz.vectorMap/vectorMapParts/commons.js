@@ -1,18 +1,18 @@
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    vizMocks = require("../../../helpers/vizMocks.js"),
-    dxVectorMapModule = require("viz/vector_map/vector_map"),
+var $ = require('jquery'),
+    renderer = require('core/renderer'),
+    vizMocks = require('../../../helpers/vizMocks.js'),
+    dxVectorMapModule = require('viz/vector_map/vector_map'),
 
-    projectionModule = require("viz/vector_map/projection.main"),
-    controlBarModule = require("viz/vector_map/control_bar"),
-    gestureHandlerModule = require("viz/vector_map/gesture_handler"),
-    trackerModule = require("viz/vector_map/tracker"),
-    themeManagerModule = require("viz/core/base_theme_manager"),
-    dataExchangerModule = require("viz/vector_map/data_exchanger"),
-    legendModule = require("viz/vector_map/legend"),
-    layoutModule = require("viz/vector_map/layout"),
-    mapLayerModule = require("viz/vector_map/map_layer"),
-    tooltipViewerModule = require("viz/vector_map/tooltip_viewer"),
+    projectionModule = require('viz/vector_map/projection.main'),
+    controlBarModule = require('viz/vector_map/control_bar'),
+    gestureHandlerModule = require('viz/vector_map/gesture_handler'),
+    trackerModule = require('viz/vector_map/tracker'),
+    themeManagerModule = require('viz/core/base_theme_manager'),
+    dataExchangerModule = require('viz/vector_map/data_exchanger'),
+    legendModule = require('viz/vector_map/legend'),
+    layoutModule = require('viz/vector_map/layout'),
+    mapLayerModule = require('viz/vector_map/map_layer'),
+    tooltipViewerModule = require('viz/vector_map/tooltip_viewer'),
 
     StubProjection = vizMocks.stubClass(projectionModule.Projection),
     StubControlBar = vizMocks.stubClass(controlBarModule.ControlBar),
@@ -25,10 +25,10 @@ var $ = require("jquery"),
     StubMapLayerCollection = vizMocks.stubClass(mapLayerModule.MapLayerCollection),
     StubTooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer),
 
-    rendererModule = require("viz/core/renderers/renderer"),
-    titleModule = require("viz/core/title"),
-    exportModule = require("viz/core/export"),
-    tooltipModule = require("viz/core/tooltip"),
+    rendererModule = require('viz/core/renderers/renderer'),
+    titleModule = require('viz/core/title'),
+    exportModule = require('viz/core/export'),
+    tooltipModule = require('viz/core/tooltip'),
 
     StubExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 
@@ -69,7 +69,7 @@ exports.environment = {
         this.$container = $('<div id="test-container"></div>');
         this.renderer = new vizMocks.Renderer();
         this.themeManager = new StubThemeManager();
-        this.themeManager.stub("theme").returns({});
+        this.themeManager.stub('theme').returns({});
         this.dataExchanger = new StubDataExchanger();
         this.gestureHandler = new StubGestureHandler();
         this.projection = new StubProjection();
@@ -97,7 +97,7 @@ exports.environment = {
     },
 
     createMap: function(options) {
-        this.map = this.$container.dxVectorMap(options).dxVectorMap("instance");
+        this.map = this.$container.dxVectorMap(options).dxVectorMap('instance');
         return this.map;
     }
 };

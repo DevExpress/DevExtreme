@@ -1,10 +1,10 @@
-var baseIndicatorsModule = require("./base_indicators"),
+var baseIndicatorsModule = require('./base_indicators'),
     BaseIndicator = baseIndicatorsModule.BaseIndicator,
     BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker,
     BaseRangeBar = baseIndicatorsModule.BaseRangeBar,
 
     _Number = Number,
-    _normalizeEnum = require("../core/utils").normalizeEnum;
+    _normalizeEnum = require('../core/utils').normalizeEnum;
 
 var SimpleIndicator = BaseIndicator.inherit({
     _move: function() {
@@ -99,7 +99,7 @@ var rectangle = SimpleIndicator.inherit({
             y1 = options.y + options.length / 2;
             y2 = options.y - options.length / 2;
         }
-        that._element = that._element || that._renderer.path([], "area").append(that._rootElement);
+        that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
         that._element.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
     }
 });
@@ -125,7 +125,7 @@ var rhombus = SimpleIndicator.inherit({
             dx = options.width / 2 || 0;
             dy = options.length / 2 || 0;
         }
-        that._element = that._element || that._renderer.path([], "area").append(that._rootElement);
+        that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
         that._element.attr({ points: [x - dx, y, x, y - dy, x + dx, y, x, y + dy] });
     }
 });
@@ -173,7 +173,7 @@ var triangleMarker = SimpleIndicator.inherit({
             x2,
             y1,
             y2,
-            settings = { stroke: 'none', "stroke-width": 0, "stroke-linecap": "square" };
+            settings = { stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square' };
 
         that.callBase();
         if(that.vertical) {
@@ -189,10 +189,10 @@ var triangleMarker = SimpleIndicator.inherit({
         }
 
         if(options.space > 0) {
-            settings["stroke-width"] = Math.min(options.space, options.width / 4) || 0;
-            settings.stroke = settings["stroke-width"] > 0 ? options.containerBackgroundColor || 'none' : 'none';
+            settings['stroke-width'] = Math.min(options.space, options.width / 4) || 0;
+            settings.stroke = settings['stroke-width'] > 0 ? options.containerBackgroundColor || 'none' : 'none';
         }
-        that._element = that._element || that._renderer.path([], "area").append(that._rootElement);
+        that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
         that._element.attr(settings).sharp();
     },
 
@@ -333,11 +333,11 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _createBarItem: function() {
-        return this._renderer.path([], "area").append(this._rootElement);
+        return this._renderer.path([], 'area').append(this._rootElement);
     },
 
     _createTracker: function() {
-        return this._renderer.path([], "area");
+        return this._renderer.path([], 'area');
     },
 
     _setBarSides: function() {
@@ -545,9 +545,9 @@ var rangeBar = BaseRangeBar.inherit({
 });
 
 exports._default = rangeBar;
-exports["rectangle"] = rectangle;
-exports["rhombus"] = rhombus;
-exports["circle"] = circle;
-exports["trianglemarker"] = triangleMarker;
-exports["textcloud"] = textCloud;
-exports["rangebar"] = rangeBar;
+exports['rectangle'] = rectangle;
+exports['rhombus'] = rhombus;
+exports['circle'] = circle;
+exports['trianglemarker'] = triangleMarker;
+exports['textcloud'] = textCloud;
+exports['rangebar'] = rangeBar;

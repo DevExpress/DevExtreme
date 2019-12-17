@@ -1,16 +1,16 @@
-var iterateUtils = require("../../core/utils/iterator"),
-    BaseElement = require("./base_indicators").BaseElement,
+var iterateUtils = require('../../core/utils/iterator'),
+    BaseElement = require('./base_indicators').BaseElement,
 
     _Number = Number,
     _abs = Math.abs,
-    _isString = require("../../core/utils/type").isString,
+    _isString = require('../../core/utils/type').isString,
     _isArray = Array.isArray,
     _isFinite = isFinite,
     _each = iterateUtils.each;
 
 var BaseRangeContainer = BaseElement.inherit({
     _init: function() {
-        this._root = this._renderer.g().attr({ 'class': 'dxg-range-container' }).linkOn(this._container, "range-container");
+        this._root = this._renderer.g().attr({ 'class': 'dxg-range-container' }).linkOn(this._container, 'range-container');
     },
 
     _dispose: function() {

@@ -1,18 +1,18 @@
-var extend = require("../../core/utils/extend").extend,
-    BaseStrategy = require("./base"),
-    MouseStrategy = require("./mouse"),
-    TouchStrategy = require("./touch"),
-    eventUtils = require("../utils");
+var extend = require('../../core/utils/extend').extend,
+    BaseStrategy = require('./base'),
+    MouseStrategy = require('./mouse'),
+    TouchStrategy = require('./touch'),
+    eventUtils = require('../utils');
 
 var eventMap = {
-    "dxpointerdown": "touchstart mousedown",
-    "dxpointermove": "touchmove mousemove",
-    "dxpointerup": "touchend mouseup",
-    "dxpointercancel": "touchcancel",
-    "dxpointerover": "mouseover",
-    "dxpointerout": "mouseout",
-    "dxpointerenter": "mouseenter",
-    "dxpointerleave": "mouseleave"
+    'dxpointerdown': 'touchstart mousedown',
+    'dxpointermove': 'touchmove mousemove',
+    'dxpointerup': 'touchend mouseup',
+    'dxpointercancel': 'touchcancel',
+    'dxpointerover': 'mouseover',
+    'dxpointerout': 'mouseout',
+    'dxpointerenter': 'mouseenter',
+    'dxpointerleave': 'mouseleave'
 };
 
 

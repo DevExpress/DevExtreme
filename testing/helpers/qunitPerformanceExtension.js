@@ -3,7 +3,7 @@
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            factory(require("jquery"));
+            factory(require('jquery'));
         });
     } else {
         factory(root.jQuery);
@@ -14,22 +14,22 @@
         that.callbacks = {};
         that.nextCommandId = 1;
 
-        loadJSON("http://localhost:9223/json", function(data) {
+        loadJSON('http://localhost:9223/json', function(data) {
             $.each(data, function(_, item) {
-                var title = $("<div>").html(item.title).text();
+                var title = $('<div>').html(item.title).text();
                 // TODO: Try to find another way (item.title.indexOf(document.title) !== -1))
                 if(item.webSocketDebuggerUrl && (title.indexOf(document.title) !== -1 || title.indexOf(window.location.href) !== -1)) {
                     that.connect(item.webSocketDebuggerUrl);
                 }
             });
         }, function() {
-            that.connect("ws://localhost:8222/devtools/page/2155");
+            that.connect('ws://localhost:8222/devtools/page/2155');
         });
     }
 
     var loadJSON = function(path, onSuccess, onError) {
         $.ajax({
-            type: "GET",
+            type: 'GET',
             url: path,
             success: function(result) {
                 onSuccess(result);
@@ -46,11 +46,11 @@
         var that = this;
         this.ws = new WebSocket(url);
 
-        this.ws["onopen"] = function() {
+        this.ws['onopen'] = function() {
             that.onConnect();
         };
 
-        this.ws["onmessage"] = function(e) {
+        this.ws['onmessage'] = function(e) {
             var data = e.data;
             var message = JSON.parse(data);
 
@@ -70,7 +70,7 @@
         };
 
         this.ws.onerror = function(err) {
-            $(that).trigger("error");
+            $(that).trigger('error');
         };
     };
 
@@ -88,7 +88,7 @@
 
     var chrome = new ChromeRemote();
     var chromeRemoteIsReady = false;
-    var documentIsLoaded = document.readyState === "complete";
+    var documentIsLoaded = document.readyState === 'complete';
 
     chrome.onConnect = function() {
         chromeRemoteIsReady = true;
@@ -119,10 +119,10 @@
                 for(var i = 0; i < len; i++) {
                     var task = val[i];
 
-                    if(task.name === "ScheduleStyleRecalculation") {
+                    if(task.name === 'ScheduleStyleRecalculation') {
                         var stackTrace = task.args.data.stackTrace || [];
                         var excludedRestyles = $.grep(stackTrace, function(trace) {
-                            return trace.url.indexOf("chrome-devtools") === 0 || trace.functionName === "readThemeMarker";
+                            return trace.url.indexOf('chrome-devtools') === 0 || trace.functionName === 'readThemeMarker';
                         });
 
                         if(!excludedRestyles.length && stackTrace.length) {
@@ -135,11 +135,11 @@
                         }
                     }
 
-                    if(updateLayout && task.name === "UpdateLayoutTree") {
-                        if(task.ph === "B") {
+                    if(updateLayout && task.name === 'UpdateLayoutTree') {
+                        if(task.ph === 'B') {
                             updateLayout.time = task.ts;
                             updateLayout.layoutStack = task.args.beginData.stackTrace || [];
-                        } else if(task.ph === "E") {
+                        } else if(task.ph === 'E') {
                             updateLayout.elementCount = task.args.elementCount;
                             updateLayout.time = task.ts - updateLayout.time;
                         }
@@ -148,8 +148,8 @@
             };
 
             var collectEndData = function() {
-                $(chrome).off("Tracing.dataCollected", collectData);
-                $(chrome).off("Tracing.tracingComplete", collectEndData);
+                $(chrome).off('Tracing.dataCollected', collectData);
+                $(chrome).off('Tracing.tracingComplete', collectEndData);
 
                 var assertResult = (typeof standardMeasure === 'function') ? standardMeasure(that.styleRecalculations.length) : standardMeasure === that.styleRecalculations.length;
                 var resultMessage = 'Took ' + that.styleRecalculations.length + ' style recalculations';
@@ -162,7 +162,7 @@
                         console.log(that.styleRecalculations[i]);
                     }
 
-                    console.log("TIME: " + time);
+                    console.log('TIME: ' + time);
                 }
 
                 that.pushResult({
@@ -174,22 +174,22 @@
                 done();
             };
 
-            $("body").outerWidth(true);
+            $('body').outerWidth(true);
 
-            $(chrome).on("Tracing.dataCollected", collectData);
-            $(chrome).on("Tracing.tracingComplete", collectEndData);
+            $(chrome).on('Tracing.dataCollected', collectData);
+            $(chrome).on('Tracing.tracingComplete', collectEndData);
 
             var categories = [
-                "disabled-by-default-devtools.timeline",
-                "disabled-by-default-devtools.timeline.invalidationTracking",
-                "disabled-by-default-devtools.timeline.stack"
+                'disabled-by-default-devtools.timeline',
+                'disabled-by-default-devtools.timeline.invalidationTracking',
+                'disabled-by-default-devtools.timeline.stack'
             ];
-            chrome.send("Tracing.start", { categories: categories.join(",") }, function(isError) {
+            chrome.send('Tracing.start', { categories: categories.join(',') }, function(isError) {
                 (function() {
                     var result = measureFunction();
                     return result || $.Deferred().resolve();
                 })().done(function() {
-                    isError ? collectEndData() : chrome.send("Tracing.end", {});
+                    isError ? collectEndData() : chrome.send('Tracing.end', {});
                 });
             });
         });

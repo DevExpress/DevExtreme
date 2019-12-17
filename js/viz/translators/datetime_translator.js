@@ -7,5 +7,5 @@ module.exports = {
 
     _toValue: parse,
 
-    _add: require("../../core/utils/date").addDateInterval
+    _add: require('../../core/utils/date').addDateInterval
 };

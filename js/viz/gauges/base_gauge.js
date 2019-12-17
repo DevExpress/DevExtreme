@@ -1,14 +1,14 @@
 var _Number = Number,
-    _getAppropriateFormat = require("../core/utils").getAppropriateFormat,
-    extend = require("../../core/utils/extend").extend,
-    translator1DModule = require("../translators/translator1d"),
+    _getAppropriateFormat = require('../core/utils').getAppropriateFormat,
+    extend = require('../../core/utils/extend').extend,
+    translator1DModule = require('../translators/translator1d'),
     _extend = extend,
-    BaseWidget = require("../core/base_widget"),
-    themeManagerModule = require("./theme_manager"),
-    Tracker = require("./tracker");
+    BaseWidget = require('../core/base_widget'),
+    themeManagerModule = require('./theme_manager'),
+    Tracker = require('./tracker');
 
 var dxBaseGauge = BaseWidget.inherit({
-    _rootClassPrefix: "dxg",
+    _rootClassPrefix: 'dxg',
 
     _themeSection: 'gauge',
 
@@ -129,20 +129,20 @@ var dxBaseGauge = BaseWidget.inherit({
         return [rect[0], that._innerRect.top, rect[2], that._innerRect.bottom];
     },
 
-    _initialChanges: ["DOMAIN"],
+    _initialChanges: ['DOMAIN'],
 
-    _themeDependentChanges: ["DOMAIN"],
+    _themeDependentChanges: ['DOMAIN'],
 
     _optionChangesMap: {
-        subtitle: "MOSTLY_TOTAL",
-        indicator: "MOSTLY_TOTAL",
-        geometry: "MOSTLY_TOTAL",
-        animation: "MOSTLY_TOTAL",
-        startValue: "DOMAIN",
-        endValue: "DOMAIN"
+        subtitle: 'MOSTLY_TOTAL',
+        indicator: 'MOSTLY_TOTAL',
+        geometry: 'MOSTLY_TOTAL',
+        animation: 'MOSTLY_TOTAL',
+        startValue: 'DOMAIN',
+        endValue: 'DOMAIN'
     },
 
-    _optionChangesOrder: ["DOMAIN", "MOSTLY_TOTAL"],
+    _optionChangesOrder: ['DOMAIN', 'MOSTLY_TOTAL'],
 
     _change_DOMAIN: function() {
         this._setupDomain();
@@ -158,9 +158,9 @@ var dxBaseGauge = BaseWidget.inherit({
         // T130599
         that._isValidDomain = isFinite(1 / (that._translator.getDomain()[1] - that._translator.getDomain()[0]));
         if(!that._isValidDomain) {
-            that._incidentOccurred("W2301");
+            that._incidentOccurred('W2301');
         }
-        that._change(["MOSTLY_TOTAL"]);
+        that._change(['MOSTLY_TOTAL']);
     },
 
     _applyMostlyTotalChange: function() {
@@ -168,25 +168,25 @@ var dxBaseGauge = BaseWidget.inherit({
         that._setupCodomain();
         that._setupAnimationSettings();
         that._setupDefaultFormat();
-        that._change(["LAYOUT"]);
+        that._change(['LAYOUT']);
     },
 
     _setupAnimationSettings: function() {
         var that = this,
-            option = that.option("animation");
+            option = that.option('animation');
         that._animationSettings = null;
         if(option === undefined || option) {
             option = _extend({
                 enabled: true,
                 duration: 1000,
-                easing: "easeOutCubic"
+                easing: 'easeOutCubic'
             }, option);
             if(option.enabled && option.duration > 0) {
                 that._animationSettings = { duration: _Number(option.duration), easing: option.easing };
             }
         }
         //  It is better to place it here than to create separate function for one line of code
-        that._containerBackgroundColor = that.option("containerBackgroundColor") || that._themeManager.theme().containerBackgroundColor;
+        that._containerBackgroundColor = that.option('containerBackgroundColor') || that._themeManager.theme().containerBackgroundColor;
     },
 
     _setupDefaultFormat: function() {
@@ -219,14 +219,14 @@ var dxBaseGauge = BaseWidget.inherit({
 
 exports.dxBaseGauge = dxBaseGauge;
 
-var _format = require("../../format_helper").format;
+var _format = require('../../format_helper').format;
 
 //  TODO: find a better place for it
 var formatValue = function(value, options, extra) {
     options = options || {};
     var text = _format(value, options.format),
         formatObject;
-    if(typeof options.customizeText === "function") {
+    if(typeof options.customizeText === 'function') {
         formatObject = _extend({ value: value, valueText: text }, extra);
         return String(options.customizeText.call(formatObject, formatObject));
     }
@@ -267,10 +267,10 @@ function compareArraysElements(array1, array2) {
 }
 
 // PLUGINS_SECTION
-dxBaseGauge.addPlugin(require("../core/export").plugin);
-dxBaseGauge.addPlugin(require("../core/title").plugin);
-dxBaseGauge.addPlugin(require("../core/tooltip").plugin);
-dxBaseGauge.addPlugin(require("../core/loading_indicator").plugin);
+dxBaseGauge.addPlugin(require('../core/export').plugin);
+dxBaseGauge.addPlugin(require('../core/title').plugin);
+dxBaseGauge.addPlugin(require('../core/tooltip').plugin);
+dxBaseGauge.addPlugin(require('../core/loading_indicator').plugin);
 
 // These are gauges specifics on using tooltip - they require refactoring.
 var _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;

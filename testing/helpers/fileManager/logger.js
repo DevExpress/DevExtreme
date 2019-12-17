@@ -1,5 +1,5 @@
-import { extend } from "core/utils/extend";
-import { isNumeric } from "core/utils/type";
+import { extend } from 'core/utils/extend';
+import { isNumeric } from 'core/utils/type';
 
 export default class FileManagerLogger {
 

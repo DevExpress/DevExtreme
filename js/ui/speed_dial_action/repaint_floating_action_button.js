@@ -1,4 +1,4 @@
-import { repaint } from "./speed_dial_main_item";
+import { repaint } from './speed_dial_main_item';
 
 /**
  * @name ui.repaintFloatingActionButton

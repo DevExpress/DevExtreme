@@ -1,6 +1,6 @@
-import { when, Deferred } from "../../core/utils/deferred";
-import { noop } from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
+import { when, Deferred } from '../../core/utils/deferred';
+import { noop } from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
 
 const ErrorCode = {
     NoAccess: 0,

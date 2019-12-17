@@ -1,11 +1,11 @@
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
-    each = require("../../core/utils/iterator").each,
-    publicComponentUtils = require("../../core/utils/public_component");
+var $ = require('../../core/renderer'),
+    Class = require('../../core/class'),
+    each = require('../../core/utils/iterator').each,
+    publicComponentUtils = require('../../core/utils/public_component');
 
-var INVISIBLE_STATE_CLASS = "dx-state-invisible",
-    DISABLED_STATE_CLASS = "dx-state-disabled",
-    ITEM_CONTENT_PLACEHOLDER_CLASS = "dx-item-content-placeholder";
+var INVISIBLE_STATE_CLASS = 'dx-state-invisible',
+    DISABLED_STATE_CLASS = 'dx-state-disabled',
+    ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
 
 var forcibleWatcher = function(watchMethod, fn, callback) {
     var filteredCallback = (function() {
@@ -39,7 +39,7 @@ var CollectionItem = Class.inherit({
     },
 
     _render: function() {
-        var $placeholder = $("<div>").addClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
+        var $placeholder = $('<div>').addClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
         this._$element.append($placeholder);
 
         this._watchers = [];
@@ -47,8 +47,8 @@ var CollectionItem = Class.inherit({
     },
 
     _renderWatchers: function() {
-        this._startWatcher("disabled", this._renderDisabled.bind(this));
-        this._startWatcher("visible", this._renderVisible.bind(this));
+        this._startWatcher('disabled', this._renderDisabled.bind(this));
+        this._startWatcher('visible', this._renderVisible.bind(this));
     },
 
     _startWatcher: function(field, render) {

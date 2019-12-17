@@ -1,28 +1,28 @@
-import Callbacks from "../../core/utils/callbacks";
-import { when, Deferred } from "../../core/utils/deferred";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import iteratorUtils from "../../core/utils/iterator";
-import Class from "../../core/class";
-import stringUtils from "../../core/utils/string";
-import commonUtils from "../../core/utils/common";
-import { isDefined, isString } from "../../core/utils/type";
-import virtualScrolling from "../grid_core/ui.grid_core.virtual_scrolling_core";
-import virtualColumnsCore from "../grid_core/ui.grid_core.virtual_columns_core";
-import stateStoring from "../grid_core/ui.grid_core.state_storing_core";
-import PivotGridDataSource from "./data_source";
+import Callbacks from '../../core/utils/callbacks';
+import { when, Deferred } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import iteratorUtils from '../../core/utils/iterator';
+import Class from '../../core/class';
+import stringUtils from '../../core/utils/string';
+import commonUtils from '../../core/utils/common';
+import { isDefined, isString } from '../../core/utils/type';
+import virtualScrolling from '../grid_core/ui.grid_core.virtual_scrolling_core';
+import virtualColumnsCore from '../grid_core/ui.grid_core.virtual_columns_core';
+import stateStoring from '../grid_core/ui.grid_core.state_storing_core';
+import PivotGridDataSource from './data_source';
 import pivotGridUtils, {
     foreachTree,
     foreachTreeAsync,
     createPath,
     formatValue
-} from "./ui.pivot_grid.utils";
+} from './ui.pivot_grid.utils';
 
 var math = Math,
-    GRAND_TOTAL_TYPE = "GT",
-    TOTAL_TYPE = "T",
-    DATA_TYPE = "D",
-    NOT_AVAILABLE = "#N/A",
+    GRAND_TOTAL_TYPE = 'GT',
+    TOTAL_TYPE = 'T',
+    DATA_TYPE = 'D',
+    NOT_AVAILABLE = '#N/A',
     CHANGING_DURATION_IF_PAGINATE = 300;
 
 var proxyMethod = function(instance, methodName, defaultResult) {
@@ -162,7 +162,7 @@ exports.DataController = Class.inherit((function() {
                 stringValuesUsed = isString(sortBySummaryPath[0]),
                 headerItem = item.dataIndex >= 0 ? items[1] : item;
 
-            if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {
+            if((stringValuesUsed && sortBySummaryPath[0].indexOf('&[') !== -1 && headerItem.key) || !headerItem.key) {
                 path = createPath(items);
             } else {
                 path = iteratorUtils.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
@@ -172,7 +172,7 @@ exports.DataController = Class.inherit((function() {
                 path = path.slice(1);
             }
 
-            return path.join("/") === sortBySummaryPath.join("/");
+            return path.join('/') === sortBySummaryPath.join('/');
         };
 
         var getViewHeaderItems = function(headerItems, headerDescriptions, cellDescriptions, depthSize, options) {
@@ -185,7 +185,7 @@ exports.DataController = Class.inherit((function() {
                 options.notifyProgress(0.5);
 
                 if(options.showGrandTotals) {
-                    viewHeaderItems[!options.showTotalsPrior ? "push" : "unshift"]({
+                    viewHeaderItems[!options.showTotalsPrior ? 'push' : 'unshift']({
                         type: GRAND_TOTAL_TYPE,
                         isEmpty: options.isEmptyGrandTotal
                     });
@@ -198,8 +198,8 @@ exports.DataController = Class.inherit((function() {
                     depthSize = 1;
                 }
 
-                if(!hideTotals || options.layout === "tree") {
-                    addAdditionalTotalHeaderItems(viewHeaderItems, headerDescriptions, options.showTotalsPrior, options.layout === "tree");
+                if(!hideTotals || options.layout === 'tree') {
+                    addAdditionalTotalHeaderItems(viewHeaderItems, headerDescriptions, options.showTotalsPrior, options.layout === 'tree');
                 }
 
                 when(foreachTreeAsync(viewHeaderItems, function(items) {
@@ -433,7 +433,7 @@ exports.DataController = Class.inherit((function() {
                 d = new Deferred();
 
             getViewHeaderItems(headerItems, headerDescriptions, cellDescriptions, depthSize, options).done(function(viewHeaderItems) {
-                fillHeaderInfo(info, viewHeaderItems, depthSize, isHorizontal, options.layout === "tree");
+                fillHeaderInfo(info, viewHeaderItems, depthSize, isHorizontal, options.layout === 'tree');
                 options.notifyProgress(1);
                 d.resolve(info);
             });
@@ -480,7 +480,7 @@ exports.DataController = Class.inherit((function() {
 
     function createCellsInfo(rowsInfo, columnsInfo, data, dataFields, dataFieldArea, errorText) {
         var info = [],
-            dataFieldAreaInRows = dataFieldArea === "row",
+            dataFieldAreaInRows = dataFieldArea === 'row',
             dataSourceCells = data.values;
 
         dataSourceCells.length && foreachRowInfo(rowsInfo, function(rowInfo, rowIndex) {
@@ -579,7 +579,7 @@ exports.DataController = Class.inherit((function() {
     }
 
     function createScrollController(dataController, component, dataAdapter) {
-        if(component && component.option("scrolling.mode") === "virtual") {
+        if(component && component.option('scrolling.mode') === 'virtual') {
             return new virtualScrolling.VirtualScrollController(component, extend({
                 hasKnownLastPage: function() {
                     return true;
@@ -773,7 +773,7 @@ exports.DataController = Class.inherit((function() {
                 for(j = 0; j < rows[i].length; j++) {
                     var cell = rows[i][j];
 
-                    if(cell.type === "D") {
+                    if(cell.type === 'D') {
                         this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
 
                         path = cell.path || path;
@@ -798,7 +798,7 @@ exports.DataController = Class.inherit((function() {
                 takeByPath = {};
 
             virtualColumnsCore.foreachColumnInfo(this._columnsInfo, function(columnInfo, columnIndex) {
-                if(columnInfo.type === "D" && columnInfo.path && columnInfo.dataIndex === undefined) {
+                if(columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
                     var colspan = columnInfo.colspan || 1,
                         path = columnInfo.path.slice(0, -1).toString();
 
@@ -830,14 +830,14 @@ exports.DataController = Class.inherit((function() {
         },
 
         _processPagingForExpandedPaths: function(options, area, storeLoadOptions, reload) {
-            var expandedPaths = options[area + "ExpandedPaths"],
+            var expandedPaths = options[area + 'ExpandedPaths'],
                 expandedSkips = expandedPaths.map(() => 0),
                 expandedTakes = expandedPaths.map(() => reload ? options.pageSize : 0),
                 skips = [],
                 takes = [];
 
             if(!reload) {
-                if(area === "row") {
+                if(area === 'row') {
                     this._calculatePagingForRowExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
                 } else {
                     this._calculatePagingForColumnExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
@@ -847,11 +847,11 @@ exports.DataController = Class.inherit((function() {
         },
 
         _savePagingForExpandedPaths: function(options, area, storeLoadOptions, skip, take, expandedSkips, expandedTakes) {
-            var expandedPaths = options[area + "ExpandedPaths"];
+            var expandedPaths = options[area + 'ExpandedPaths'];
 
-            options[area + "ExpandedPaths"] = [];
-            options[area + "Skip"] = skip !== undefined ? skip : options[area + "Skip"];
-            options[area + "Take"] = take !== undefined ? take : options[area + "Take"];
+            options[area + 'ExpandedPaths'] = [];
+            options[area + 'Skip'] = skip !== undefined ? skip : options[area + 'Skip'];
+            options[area + 'Take'] = take !== undefined ? take : options[area + 'Take'];
 
             for(var i = 0; i < expandedPaths.length; i++) {
                 if(expandedTakes[i]) {
@@ -859,11 +859,11 @@ exports.DataController = Class.inherit((function() {
 
                     storeLoadOptions.push(extend({
                         area: area,
-                        headerName: area + "s"
+                        headerName: area + 's'
                     }, options, {
-                        [area + "Skip"]: expandedSkips[i],
-                        [area + "Take"]: expandedTakes[i],
-                        [isOppositeArea ? "oppositePath" : "path"]: expandedPaths[i]
+                        [area + 'Skip']: expandedSkips[i],
+                        [area + 'Take']: expandedTakes[i],
+                        [isOppositeArea ? 'oppositePath' : 'path']: expandedPaths[i]
                     }));
                 }
             }
@@ -876,14 +876,14 @@ exports.DataController = Class.inherit((function() {
             if(this._dataSource.paginate() && rowsScrollController) {
                 var rowPageSize = rowsScrollController._dataSource.pageSize();
 
-                if(options.headerName === "rows") {
+                if(options.headerName === 'rows') {
                     options.rowSkip = 0;
                     options.rowTake = rowPageSize;
                     options.rowExpandedPaths = [];
                 } else {
                     options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
                     options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
-                    this._processPagingForExpandedPaths(options, "row", storeLoadOptions, reload);
+                    this._processPagingForExpandedPaths(options, 'row', storeLoadOptions, reload);
                 }
             }
 
@@ -892,14 +892,14 @@ exports.DataController = Class.inherit((function() {
             if(this._dataSource.paginate() && columnsScrollController) {
                 var columnPageSize = columnsScrollController._dataSource.pageSize();
                 storeLoadOptions.forEach((options, index) => {
-                    if(options.headerName === "columns") {
+                    if(options.headerName === 'columns') {
                         options.columnSkip = 0;
                         options.columnTake = columnPageSize;
                         options.columnExpandedPaths = [];
                     } else {
                         options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
                         options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
-                        this._processPagingForExpandedPaths(options, "column", storeLoadOptions, reload);
+                        this._processPagingForExpandedPaths(options, 'column', storeLoadOptions, reload);
                     }
                 });
             }
@@ -1010,12 +1010,12 @@ exports.DataController = Class.inherit((function() {
                 that._handleProgressChanged(progress * 0.8);
             };
 
-            dataSource.on("changed", that._changedHandler);
-            dataSource.on("expandValueChanging", that._expandValueChangingHandler);
-            dataSource.on("loadingChanged", that._loadingChangedHandler);
-            dataSource.on("progressChanged", that._progressChangedHandler);
-            dataSource.on("fieldsPrepared", that._fieldsPreparedHandler);
-            dataSource.on("customizeStoreLoadOptions", that._customizeStoreLoadOptionsHandler);
+            dataSource.on('changed', that._changedHandler);
+            dataSource.on('expandValueChanging', that._expandValueChangingHandler);
+            dataSource.on('loadingChanged', that._loadingChangedHandler);
+            dataSource.on('progressChanged', that._progressChangedHandler);
+            dataSource.on('fieldsPrepared', that._fieldsPreparedHandler);
+            dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
 
             return dataSource;
         },
@@ -1036,11 +1036,11 @@ exports.DataController = Class.inherit((function() {
             var that = this,
                 dataSource = that._dataSource,
                 options = that._options,
-                columnFields = dataSource.getAreaFields("column"),
-                rowFields = dataSource.getAreaFields("row"),
-                dataFields = dataSource.getAreaFields("data"),
-                dataFieldsForRows = options.dataFieldArea === "row" ? dataFields : [],
-                dataFieldsForColumns = options.dataFieldArea !== "row" ? dataFields : [],
+                columnFields = dataSource.getAreaFields('column'),
+                rowFields = dataSource.getAreaFields('row'),
+                dataFields = dataSource.getAreaFields('data'),
+                dataFieldsForRows = options.dataFieldArea === 'row' ? dataFields : [],
+                dataFieldsForColumns = options.dataFieldArea !== 'row' ? dataFields : [],
                 data = dataSource.getData(),
                 hiddenTotals = getHiddenTotals(dataFields),
                 hiddenValues = getHiddenValues(dataFields),
@@ -1059,7 +1059,7 @@ exports.DataController = Class.inherit((function() {
                     showTotals: options.showRowTotals,
                     showGrandTotals: options.showRowGrandTotals !== false && grandTotalsAreHiddenForNotAllDataFields,
                     sortBySummaryPaths: createSortPaths(columnFields, dataFields),
-                    showTotalsPrior: options.showTotalsPrior === "rows" || options.showTotalsPrior === "both",
+                    showTotalsPrior: options.showTotalsPrior === 'rows' || options.showTotalsPrior === 'both',
                     showEmpty: !options.hideEmptySummaryCells,
                     layout: options.rowHeaderLayout,
                     fields: rowFields,
@@ -1074,7 +1074,7 @@ exports.DataController = Class.inherit((function() {
                     hiddenValues: hiddenValues,
                     hiddenGrandTotals: hiddenGrandTotals,
                     showTotals: options.showColumnTotals,
-                    showTotalsPrior: options.showTotalsPrior === "columns" || options.showTotalsPrior === "both",
+                    showTotalsPrior: options.showTotalsPrior === 'columns' || options.showTotalsPrior === 'both',
                     showGrandTotals: options.showColumnGrandTotals !== false && grandTotalsAreHiddenForNotAllDataFields,
                     sortBySummaryPaths: createSortPaths(rowFields, dataFields),
                     showEmpty: !options.hideEmptySummaryCells,
@@ -1240,18 +1240,18 @@ exports.DataController = Class.inherit((function() {
                 data = this._dataSource.getData(),
                 texts = this._options.texts || {};
 
-            return createCellsInfo(rowsInfo, columnsInfo, data, this._dataSource.getAreaFields("data"), this._options.dataFieldArea, texts.dataNotAvailable);
+            return createCellsInfo(rowsInfo, columnsInfo, data, this._dataSource.getAreaFields('data'), this._options.dataFieldArea, texts.dataNotAvailable);
         },
 
         dispose: function() {
             var that = this;
             if(that._isSharedDataSource) {
-                that._dataSource.off("changed", that._changedHandler);
-                that._dataSource.off("expandValueChanging", that._expandValueChangingHandler);
-                that._dataSource.off("loadingChanged", that._loadingChangedHandler);
-                that._dataSource.off("progressChanged", that._progressChangedHandler);
-                that._dataSource.off("fieldsPrepared", that._fieldsPreparedHandler);
-                that._dataSource.off("customizeStoreLoadOptions", that._customizeStoreLoadOptionsHandler);
+                that._dataSource.off('changed', that._changedHandler);
+                that._dataSource.off('expandValueChanging', that._expandValueChangingHandler);
+                that._dataSource.off('loadingChanged', that._loadingChangedHandler);
+                that._dataSource.off('progressChanged', that._progressChangedHandler);
+                that._dataSource.off('fieldsPrepared', that._fieldsPreparedHandler);
+                that._dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
             } else {
                 that._dataSource.dispose();
             }
@@ -1270,11 +1270,11 @@ exports.DataController = Class.inherit((function() {
         }
     };
 
-    proxyMethod(members, "applyPartialDataSource");
-    proxyMethod(members, "collapseHeaderItem");
-    proxyMethod(members, "expandHeaderItem");
-    proxyMethod(members, "getData");
-    proxyMethod(members, "isEmpty");
+    proxyMethod(members, 'applyPartialDataSource');
+    proxyMethod(members, 'collapseHeaderItem');
+    proxyMethod(members, 'expandHeaderItem');
+    proxyMethod(members, 'getData');
+    proxyMethod(members, 'isEmpty');
 
     return members;
 })());

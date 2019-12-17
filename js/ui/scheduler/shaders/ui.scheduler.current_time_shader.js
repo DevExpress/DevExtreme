@@ -1,7 +1,7 @@
-var $ = require("../../../core/renderer"),
-    Class = require("../../../core/class");
+var $ = require('../../../core/renderer'),
+    Class = require('../../../core/class');
 
-var DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader";
+var DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 var currentTimeShader = Class.inherit({
     render: function(workspace) {
@@ -14,9 +14,9 @@ var currentTimeShader = Class.inherit({
 
         this._renderShader();
 
-        if(this._$shader && this._workspace.option("crossScrollingEnabled")) {
-            this._$shader.css("marginTop", -this._$container.get(0).getBoundingClientRect().height);
-            this._$shader.css("height", this._$container.get(0).getBoundingClientRect().height);
+        if(this._$shader && this._workspace.option('crossScrollingEnabled')) {
+            this._$shader.css('marginTop', -this._$container.get(0).getBoundingClientRect().height);
+            this._$shader.css('height', this._$container.get(0).getBoundingClientRect().height);
         }
 
         this._shader.forEach((shader, index) => {
@@ -25,11 +25,11 @@ var currentTimeShader = Class.inherit({
     },
 
     _createShader: function() {
-        return $("<div>").addClass(DATE_TIME_SHADER_CLASS);
+        return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
     },
 
     clean: function() {
-        this._$container && this._$container.find("." + DATE_TIME_SHADER_CLASS).remove();
+        this._$container && this._$container.find('.' + DATE_TIME_SHADER_CLASS).remove();
     }
 });
 

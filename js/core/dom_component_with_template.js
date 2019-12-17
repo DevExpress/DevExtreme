@@ -1,34 +1,34 @@
-import $ from "./renderer";
-import { isDefined, isFunction, isRenderer } from "./utils/type";
-import { findBestMatches, noop } from "./utils/common";
-import { extend } from "./utils/extend";
-import { Error, log } from "./errors";
-import { getElementOptions, normalizeTemplateElement } from "./utils/dom";
-import devices from "./devices";
-import DomComponent from "./dom_component";
-import { Template } from "./templates/template";
-import { TemplateBase } from "./templates/template_base";
-import { FunctionTemplate } from "./templates/function_template";
-import { EmptyTemplate } from "./templates/empty_template";
-import { ChildDefaultTemplate } from "./templates/child_default_template";
-import { camelize } from "./utils/inflector";
+import $ from './renderer';
+import { isDefined, isFunction, isRenderer } from './utils/type';
+import { findBestMatches, noop } from './utils/common';
+import { extend } from './utils/extend';
+import { Error, log } from './errors';
+import { getElementOptions, normalizeTemplateElement } from './utils/dom';
+import devices from './devices';
+import DomComponent from './dom_component';
+import { Template } from './templates/template';
+import { TemplateBase } from './templates/template_base';
+import { FunctionTemplate } from './templates/function_template';
+import { EmptyTemplate } from './templates/empty_template';
+import { ChildDefaultTemplate } from './templates/child_default_template';
+import { camelize } from './utils/inflector';
 
 const TEXT_NODE = 3;
-const ANONYMOUS_TEMPLATE_NAME = "template";
-const TEMPLATE_SELECTOR = "[data-options*='dxTemplate']";
-const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
+const ANONYMOUS_TEMPLATE_NAME = 'template';
+const TEMPLATE_SELECTOR = '[data-options*=\'dxTemplate\']';
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 
 var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
     var widgetName = options.model.widget;
     if(widgetName) {
-        var widgetElement = $("<div>"),
+        var widgetElement = $('<div>'),
             widgetOptions = options.model.options || {};
 
-        if(widgetName === "button" || widgetName === "tabs" || widgetName === "dropDownMenu") {
+        if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
             var deprecatedName = widgetName;
-            widgetName = camelize("dx-" + widgetName);
-            log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
+            widgetName = camelize('dx-' + widgetName);
+            log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
         }
 
         if(options.parent) {
@@ -54,7 +54,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
                     }
                     return noop;
                 },
-                templates: { "dx-polymorph-widget": DX_POLYMORPH_WIDGET_TEMPLATE },
+                templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
                 createTemplate: function(element) {
                     return new Template(element);
                 }
@@ -99,7 +99,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
             }
 
             if(!templateOptions.name) {
-                throw Error("E0023");
+                throw Error('E0023');
             }
 
             $(template).addClass(TEMPLATE_WRAPPER_CLASS).detach();
@@ -116,7 +116,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        var templates = this.option("integrationOptions.templates");
+        var templates = this.option('integrationOptions.templates');
         templates[name] = this._createTemplate(template);
     },
 
@@ -135,7 +135,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _extractAnonymousTemplate: function() {
-        var templates = this.option("integrationOptions.templates"),
+        var templates = this.option('integrationOptions.templates'),
             anonymousTemplateName = this._getAnonymousTemplateName(),
             $anonymousTemplate = this.$element().contents().detach();
 
@@ -173,8 +173,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _createTemplate: function(templateSource) {
-        templateSource = typeof templateSource === "string" ? normalizeTemplateElement(templateSource) : templateSource;
-        return this.option("integrationOptions.createTemplate")(templateSource);
+        templateSource = typeof templateSource === 'string' ? normalizeTemplateElement(templateSource) : templateSource;
+        return this.option('integrationOptions.createTemplate')(templateSource);
     },
 
     _getTemplateByOption: function(optionName) {
@@ -192,7 +192,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
 
                 var dispose = false;
                 var template = this._acquireTemplate(templateSourceResult, function(templateSource) {
-                    if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is("script")) {
+                    if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
                         return new FunctionTemplate(function() {
                             return templateSource;
                         });
@@ -232,8 +232,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
             return createTemplate($(templateSource));
         }
 
-        if(typeof templateSource === "string") {
-            var nonIntegrationTemplates = this.option("integrationOptions.skipTemplates") || [];
+        if(typeof templateSource === 'string') {
+            var nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
             var integrationTemplate = null;
 
             if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
@@ -251,10 +251,10 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _getNormalizedTemplateArgs: function(options) {
         var args = [];
 
-        if("model" in options) {
+        if('model' in options) {
             args.push(options.model);
         }
-        if("index" in options) {
+        if('index' in options) {
             args.push(options.index);
         }
         args.push(options.container);
@@ -274,10 +274,10 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _renderIntegrationTemplate: function(templateSource) {
-        let integrationTemplate = this.option("integrationOptions.templates")[templateSource];
+        let integrationTemplate = this.option('integrationOptions.templates')[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            const isAsyncTemplate = this.option("templatesRenderAsynchronously");
+            const isAsyncTemplate = this.option('templatesRenderAsynchronously');
             if(!isAsyncTemplate) {
                 return this._addOneRenderedCall(integrationTemplate);
             }

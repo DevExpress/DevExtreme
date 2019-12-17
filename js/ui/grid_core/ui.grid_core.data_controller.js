@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import modules from "./ui.grid_core.modules";
-import gridCoreUtils from "./ui.grid_core.utils";
-import ArrayStore from "../../data/array_store";
-import CustomStore from "../../data/custom_store";
-import errors from "../widget/ui.errors";
-import { noop, deferRender, equalByValue } from "../../core/utils/common";
-import { each } from "../../core/utils/iterator";
-import typeUtils from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import DataHelperMixin from "../../data_helper";
-import { when, Deferred } from "../../core/utils/deferred";
-import { findChanges } from "../../core/utils/array_compare";
+import $ from '../../core/renderer';
+import modules from './ui.grid_core.modules';
+import gridCoreUtils from './ui.grid_core.utils';
+import ArrayStore from '../../data/array_store';
+import CustomStore from '../../data/custom_store';
+import errors from '../widget/ui.errors';
+import { noop, deferRender, equalByValue } from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import DataHelperMixin from '../../data_helper';
+import { when, Deferred } from '../../core/utils/deferred';
+import { findChanges } from '../../core/utils/array_compare';
 
 module.exports = {
     defaultOptions: function() {
@@ -57,7 +57,7 @@ module.exports = {
              * @name dxTreeListOptions.remoteOperations
              * @type object
              */
-            remoteOperations: "auto",
+            remoteOperations: 'auto',
             /**
              * @name dxDataGridOptions.remoteOperations.sorting
              * @type boolean
@@ -173,16 +173,16 @@ module.exports = {
                 if(dataSource) {
                     if(value !== undefined) {
                         if(dataSource[optionName]() !== value) {
-                            if(optionName === "pageSize") {
+                            if(optionName === 'pageSize') {
                                 dataSource.pageIndex(0);
                             }
                             dataSource[optionName](value);
 
                             that._skipProcessingPagingChange = true;
-                            that.option("paging." + optionName, value);
+                            that.option('paging.' + optionName, value);
                             that._skipProcessingPagingChange = false;
 
-                            return dataSource[optionName === "pageIndex" ? "load" : "reload"]()
+                            return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
                                 .done(that.pageChanged.fire.bind(that.pageChanged));
                         }
                         return Deferred().resolve().promise();
@@ -197,7 +197,7 @@ module.exports = {
                 init: function() {
                     var that = this;
                     that._items = [];
-                    that._columnsController = that.getController("columns");
+                    that._columnsController = that.getController('columns');
 
                     that._columnsChangedHandler = that._handleColumnsChanged.bind(that);
                     that._dataChangedHandler = that._handleDataChanged.bind(that);
@@ -213,43 +213,43 @@ module.exports = {
                     that._repaintChangesOnly = undefined;
                     that._changes = [];
 
-                    that.createAction("onDataErrorOccurred");
+                    that.createAction('onDataErrorOccurred');
 
                     that.dataErrorOccurred.add(function(error) {
-                        return that.executeAction("onDataErrorOccurred", { error: error });
+                        return that.executeAction('onDataErrorOccurred', { error: error });
                     });
 
                     that._refreshDataSource();
                 },
                 callbackNames: function() {
-                    return ["changed", "loadingChanged", "dataErrorOccurred", "pageChanged", "dataSourceChanged"];
+                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged'];
                 },
                 callbackFlags: function(name) {
-                    if(name === "dataErrorOccurred") {
+                    if(name === 'dataErrorOccurred') {
                         return { stopOnFalse: true };
                     }
                 },
                 publicMethods: function() {
                     return [
-                        "beginCustomLoading",
-                        "endCustomLoading",
-                        "refresh",
-                        "filter",
-                        "clearFilter",
-                        "getCombinedFilter",
-                        "keyOf",
-                        "byKey",
-                        "getDataByKeys",
-                        "pageIndex",
-                        "pageSize",
-                        "pageCount",
-                        "totalCount",
-                        "_disposeDataSource",
-                        "getKeyByRowIndex",
-                        "getRowIndexByKey",
-                        "getDataSource",
-                        "getVisibleRows",
-                        "repaintRows"
+                        'beginCustomLoading',
+                        'endCustomLoading',
+                        'refresh',
+                        'filter',
+                        'clearFilter',
+                        'getCombinedFilter',
+                        'keyOf',
+                        'byKey',
+                        'getDataByKeys',
+                        'pageIndex',
+                        'pageSize',
+                        'pageCount',
+                        'totalCount',
+                        '_disposeDataSource',
+                        'getKeyByRowIndex',
+                        'getRowIndexByKey',
+                        'getDataSource',
+                        'getVisibleRows',
+                        'repaintRows'
                     ];
                 },
                 reset: function() {
@@ -265,7 +265,7 @@ module.exports = {
                         args.handled = true;
                     }
 
-                    if(args.name === "dataSource" && args.name === args.fullName && (args.value === args.previousValue || (that.option("columns") && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
+                    if(args.name === 'dataSource' && args.name === args.fullName && (args.value === args.previousValue || (that.option('columns') && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
                         if(args.value !== args.previousValue) {
                             var store = that.store();
                             if(store) {
@@ -273,35 +273,35 @@ module.exports = {
                             }
                         }
                         handled();
-                        that.refresh(that.option("repaintChangesOnly"));
+                        that.refresh(that.option('repaintChangesOnly'));
                         return;
                     }
 
                     switch(args.name) {
-                        case "cacheEnabled":
-                        case "repaintChangesOnly":
-                        case "highlightChanges":
-                        case "loadingTimeout":
+                        case 'cacheEnabled':
+                        case 'repaintChangesOnly':
+                        case 'highlightChanges':
+                        case 'loadingTimeout':
                             handled();
                             break;
-                        case "remoteOperations":
-                        case "keyExpr":
-                        case "dataSource":
-                        case "scrolling":
+                        case 'remoteOperations':
+                        case 'keyExpr':
+                        case 'dataSource':
+                        case 'scrolling':
                             handled();
                             that.reset();
                             break;
-                        case "paging":
+                        case 'paging':
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
                                 dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
                             }
                             handled();
                             break;
-                        case "rtlEnabled":
+                        case 'rtlEnabled':
                             that.reset();
                             break;
-                        case "columns":
+                        case 'columns':
                             dataSource = that.dataSource();
                             if(dataSource && dataSource.isLoading() && args.name === args.fullName) {
                                 dataSource.load();
@@ -425,8 +425,8 @@ module.exports = {
                         }
                     } else if(changeTypes.columns) {
                         if(optionNames.filterValues || optionNames.filterValue || optionNames.selectedFilterOperation) {
-                            filterValue = that._columnsController.columnOption(e.columnIndex, "filterValue");
-                            filterValues = that._columnsController.columnOption(e.columnIndex, "filterValues");
+                            filterValue = that._columnsController.columnOption(e.columnIndex, 'filterValue');
+                            filterValues = that._columnsController.columnOption(e.columnIndex, 'filterValues');
 
                             if(Array.isArray(filterValues) || e.columnIndex === undefined || typeUtils.isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
                                 that._applyFilter();
@@ -434,7 +434,7 @@ module.exports = {
                             }
                         }
 
-                        if(!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth", "filterValue", "bufferedFilterValue", "selectedFilterOperation", "filterValues", "filterType"])) {
+                        if(!that._needApplyFilter && !gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'filterValues', 'filterType'])) {
                             // TODO remove resubscribing
                             that._columnsController.columnsChanged.add(updateItemsHandler);
                         }
@@ -482,7 +482,7 @@ module.exports = {
                             that._needApplyFilter = false;
 
                             if(needApplyFilter && !that._isAllDataTypesDefined && hasAdditionalFilter()) {
-                                errors.log("W1005", that.component.NAME);
+                                errors.log('W1005', that.component.NAME);
                                 that._applyFilter();
                             } else {
                                 that.updateItems(e, true);
@@ -510,12 +510,12 @@ module.exports = {
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
                 },
                 _setPagingOptions: function(dataSource) {
-                    var pageIndex = this.option("paging.pageIndex"),
-                        pageSize = this.option("paging.pageSize"),
-                        pagingEnabled = this.option("paging.enabled"),
-                        scrollingMode = this.option("scrolling.mode"),
-                        appendMode = scrollingMode === "infinite",
-                        virtualMode = scrollingMode === "virtual",
+                    var pageIndex = this.option('paging.pageIndex'),
+                        pageSize = this.option('paging.pageSize'),
+                        pagingEnabled = this.option('paging.enabled'),
+                        scrollingMode = this.option('scrolling.mode'),
+                        appendMode = scrollingMode === 'infinite',
+                        virtualMode = scrollingMode === 'virtual',
                         paginate = pagingEnabled || virtualMode || appendMode,
                         isChanged = false;
 
@@ -536,14 +536,14 @@ module.exports = {
                     return isChanged;
                 },
                 _getSpecificDataSourceOption: function() {
-                    var dataSource = this.option("dataSource");
+                    var dataSource = this.option('dataSource');
 
                     if(Array.isArray(dataSource)) {
                         return {
                             store: {
-                                type: "array",
+                                type: 'array',
                                 data: dataSource,
-                                key: this.option("keyExpr")
+                                key: this.option('keyExpr')
                             }
                         };
                     }
@@ -552,7 +552,7 @@ module.exports = {
                 },
                 _initDataSource: function() {
                     var that = this,
-                        dataSource = this.option("dataSource"),
+                        dataSource = this.option('dataSource'),
                         oldDataSource = this._dataSource;
 
                     that.callBase();
@@ -590,9 +590,9 @@ module.exports = {
                     var that = this,
                         rowIndexDelta = that.getRowIndexDelta(),
                         changeType = change.changeType,
-                        visibleColumns = that._columnsController.getVisibleColumns(null, changeType === "loadingAll"),
+                        visibleColumns = that._columnsController.getVisibleColumns(null, changeType === 'loadingAll'),
                         visibleItems = that._items,
-                        dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
+                        dataIndex = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
                         options = {
                             visibleColumns: visibleColumns,
                             dataIndex: dataIndex
@@ -616,7 +616,7 @@ module.exports = {
                 },
                 _generateDataItem: function(data) {
                     return {
-                        rowType: "data",
+                        rowType: 'data',
                         data: data,
                         key: this.keyOf(data)
                     };
@@ -648,11 +648,11 @@ module.exports = {
                 _applyChange: function(change) {
                     var that = this;
 
-                    if(change.changeType === "update") {
+                    if(change.changeType === 'update') {
                         that._applyChangeUpdate(change);
-                    } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
+                    } else if(that.items().length && change.repaintChangesOnly && change.changeType === 'refresh') {
                         that._applyChangesOnly(change);
-                    } else if(change.changeType === "refresh") {
+                    } else if(change.changeType === 'refresh') {
                         that._applyChangeFull(change);
                     }
                 },
@@ -685,7 +685,7 @@ module.exports = {
                         items = change.items,
                         rowIndices = that._getRowIndices(change),
                         rowIndexDelta = that.getRowIndexDelta(),
-                        repaintChangesOnly = that.option("repaintChangesOnly"),
+                        repaintChangesOnly = that.option('repaintChangesOnly'),
                         prevIndex = -1,
                         rowIndexCorrection = 0,
                         changeType;
@@ -698,7 +698,7 @@ module.exports = {
                     var equalItems = function(item1, item2, strict) {
                         var result = item1 && item2 && equalByValue(item1.key, item2.key);
                         if(result && strict) {
-                            result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
+                            result = item1.rowType === item2.rowType && (item2.rowType !== 'detail' || item1.isEditing === item2.isEditing);
                         }
                         return result;
                     };
@@ -729,7 +729,7 @@ module.exports = {
                         }
 
                         if(oldItem && newItem && equalItems(oldItem, newItem, strict)) {
-                            changeType = "update";
+                            changeType = 'update';
                             that._items[rowIndex] = newItem;
                             if(oldItem.visible !== newItem.visible) {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
@@ -738,16 +738,16 @@ module.exports = {
                                 columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex - rowIndexDelta);
                             }
                         } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
-                            changeType = "insert";
+                            changeType = 'insert';
                             that._items.splice(rowIndex, 0, newItem);
                             rowIndexCorrection++;
                         } else if(oldItem && !newItem || (oldNextItem && equalItems(newItem, oldNextItem, strict))) {
-                            changeType = "remove";
+                            changeType = 'remove';
                             that._items.splice(rowIndex, 1);
                             rowIndexCorrection--;
                             prevIndex = -1;
                         } else if(newItem) {
-                            changeType = "update";
+                            changeType = 'update';
                             that._items[rowIndex] = newItem;
                         } else {
                             return;
@@ -774,10 +774,10 @@ module.exports = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
                         var columnIndices = [];
 
-                        if(newItem.rowType !== "detail") {
+                        if(newItem.rowType !== 'detail') {
                             for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
                                 if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
                                     columnIndices.push(columnIndex);
@@ -804,7 +804,7 @@ module.exports = {
 
                     function getRowKey(row) {
                         if(row) {
-                            return row.rowType + "," + JSON.stringify(row.key);
+                            return row.rowType + ',' + JSON.stringify(row.key);
                         }
                     }
 
@@ -813,12 +813,12 @@ module.exports = {
                             return false;
                         }
 
-                        const compareFields = ["modified", "isNewRow", "removed", "isEditing"];
+                        const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
                         if(compareFields.some(field => item1[field] !== item2[field])) {
                             return false;
                         }
 
-                        if(item1.rowType === "group" || item1.rowType === "groupFooter") {
+                        if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
                             if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
                                 return false;
                             }
@@ -852,14 +852,14 @@ module.exports = {
 
                     result.forEach((change) => {
                         switch(change.type) {
-                            case "update": {
+                            case 'update': {
                                 let index = change.index,
                                     newItem = change.data,
                                     oldItem = change.oldItem,
                                     currentColumnIndices = this._getChangedColumnIndices(oldItem, newItem, index, true);
 
                                 rowIndices.push(index);
-                                changeTypes.push("update");
+                                changeTypes.push('update');
                                 items.push(newItem);
                                 this._items[index] = newItem;
                                 newItem.cells = oldItem.cells;
@@ -867,16 +867,16 @@ module.exports = {
                                 columnIndices.push(currentColumnIndices);
                                 break;
                             }
-                            case "insert":
+                            case 'insert':
                                 rowIndices.push(change.index);
-                                changeTypes.push("insert");
+                                changeTypes.push('insert');
                                 items.push(change.data);
                                 columnIndices.push(undefined);
                                 this._items.splice(change.index, 0, change.data);
                                 break;
-                            case "remove":
+                            case 'remove':
                                 rowIndices.push(change.index);
-                                changeTypes.push("remove");
+                                changeTypes.push('remove');
                                 this._items.splice(change.index, 1);
                                 items.push(change.oldItem);
                                 columnIndices.push(undefined);
@@ -885,7 +885,7 @@ module.exports = {
                     });
 
                     change.repaintChangesOnly = true;
-                    change.changeType = "update";
+                    change.changeType = 'update';
                     change.rowIndices = rowIndices;
                     change.columnIndices = columnIndices;
                     change.changeTypes = changeTypes;
@@ -908,7 +908,7 @@ module.exports = {
                         items,
                         oldItems,
                         dataSource = that._dataSource,
-                        changeType = change.changeType || "refresh";
+                        changeType = change.changeType || 'refresh';
 
                     change.changeType = changeType;
 
@@ -939,13 +939,13 @@ module.exports = {
 
                     if(dataSource) {
                         e.changes.forEach(function(change) {
-                            if(change.type === "insert" && change.index >= 0) {
+                            if(change.type === 'insert' && change.index >= 0) {
                                 var dataIndex = 0,
                                     row;
 
                                 for(var i = 0; i < change.index; i++) {
                                     row = rows[i];
-                                    if(row && (row.rowType === "data" || row.rowType === "group")) {
+                                    if(row && (row.rowType === 'data' || row.rowType === 'group')) {
                                         dataIndex++;
                                     }
                                 }
@@ -962,11 +962,11 @@ module.exports = {
                     if(that._repaintChangesOnly !== undefined) {
                         change.repaintChangesOnly = that._repaintChangesOnly;
                     } else if(change.changes) {
-                        change.repaintChangesOnly = that.option("repaintChangesOnly");
+                        change.repaintChangesOnly = that.option('repaintChangesOnly');
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
 
-                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option("repaintChangesOnly");
+                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option('repaintChangesOnly');
                         change.isDataChanged = true;
                         if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
                             change.needUpdateDimensions = true;
@@ -1067,25 +1067,25 @@ module.exports = {
 
                     if(arguments.length > 0) {
                         switch(filterName) {
-                            case "dataSource":
+                            case 'dataSource':
                                 that.filter(null);
                                 break;
-                            case "search":
-                                that.searchByText("");
+                            case 'search':
+                                that.searchByText('');
                                 break;
-                            case "header":
-                                clearColumnOption("filterValues");
+                            case 'header':
+                                clearColumnOption('filterValues');
                                 break;
-                            case "row":
-                                clearColumnOption("filterValue");
+                            case 'row':
+                                clearColumnOption('filterValue');
                                 break;
                         }
                     } else {
                         that.filter(null);
-                        that.searchByText("");
-                        clearColumnOption("filterValue");
-                        clearColumnOption("bufferedFilterValue");
-                        clearColumnOption("filterValues");
+                        that.searchByText('');
+                        clearColumnOption('filterValue');
+                        clearColumnOption('bufferedFilterValue');
+                        clearColumnOption('filterValues');
                     }
 
                     that.component.endUpdate();
@@ -1117,7 +1117,7 @@ module.exports = {
                     return store instanceof CustomStore;
                 },
                 _createDataSourceAdapter: function(dataSource) {
-                    var remoteOperations = this.option("remoteOperations"),
+                    var remoteOperations = this.option('remoteOperations'),
                         store = dataSource.store(),
                         enabledRemoteOperations = { filtering: true, sorting: true, paging: true, grouping: true, summary: true };
 
@@ -1125,7 +1125,7 @@ module.exports = {
                         remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
                     }
 
-                    if(remoteOperations === "auto") {
+                    if(remoteOperations === 'auto') {
                         remoteOperations = this.isLocalStore(store) || this.isCustomStore(store) ? {} : { filtering: true, sorting: true, paging: true };
                     }
                     if(remoteOperations === true) {
@@ -1207,14 +1207,14 @@ module.exports = {
                             dataSource._handleDataLoaded(options);
                             when(options.data).done(function(data) {
                                 data = that._beforeProcessItems(data);
-                                d.resolve(that._processItems(data, { changeType: "loadingAll" }), options.extra && options.extra.summary);
+                                d.resolve(that._processItems(data, { changeType: 'loadingAll' }), options.extra && options.extra.summary);
                             }).fail(d.reject);
                         } else {
                             if(!dataSource.isLoading()) {
                                 var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
                                     items = that._beforeProcessItems(items);
-                                    items = that._processItems(items, { changeType: "loadingAll" });
+                                    items = that._processItems(items, { changeType: 'loadingAll' });
                                     d.resolve(items, extra && extra.summary);
                                 }).fail(d.reject);
                             } else {
@@ -1318,7 +1318,7 @@ module.exports = {
                 * @return Promise<void>
                 */
                 pageIndex: function(value) {
-                    return changePaging(this, "pageIndex", value);
+                    return changePaging(this, 'pageIndex', value);
                 },
                 /**
                 * @name GridBaseMethods.pageSize
@@ -1331,7 +1331,7 @@ module.exports = {
                 * @param1 value:numeric
                 */
                 pageSize: function(value) {
-                    return changePaging(this, "pageSize", value);
+                    return changePaging(this, 'pageSize', value);
                 },
                 /**
                  * @name GridBaseMethods.beginCustomLoading
@@ -1382,10 +1382,10 @@ module.exports = {
 
                     when(!options.lookup || that._columnsController.refresh()).always(function() {
                         if(options.load || options.reload) {
-                            dataSource && dataSource.on("customizeLoadResult", customizeLoadResult);
+                            dataSource && dataSource.on('customizeLoadResult', customizeLoadResult);
 
                             when(that.reload(options.reload, changesOnly)).always(function() {
-                                dataSource && dataSource.off("customizeLoadResult", customizeLoadResult);
+                                dataSource && dataSource.off('customizeLoadResult', customizeLoadResult);
                                 that._repaintChangesOnly = undefined;
                             }).done(d.resolve).fail(d.reject);
                         } else {
@@ -1426,17 +1426,17 @@ module.exports = {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
-                        this.updateItems({ changeType: "update", rowIndices: rowIndexes, isFullUpdate: !changesOnly });
+                        this.updateItems({ changeType: 'update', rowIndices: rowIndexes, isFullUpdate: !changesOnly });
                     }
                 },
 
                 skipProcessingPagingChange: function(fullName) {
-                    return this._skipProcessingPagingChange && (fullName === "paging.pageIndex" || fullName === "paging.pageSize");
+                    return this._skipProcessingPagingChange && (fullName === 'paging.pageIndex' || fullName === 'paging.pageSize');
                 },
 
                 getUserState: function() {
                     return {
-                        searchText: this.option("searchPanel.text"),
+                        searchText: this.option('searchPanel.text'),
                         pageIndex: this.pageIndex(),
                         pageSize: this.pageSize()
                     };
@@ -1447,19 +1447,19 @@ module.exports = {
                 }
             };
 
-            gridCoreUtils.proxyMethod(members, "load");
-            gridCoreUtils.proxyMethod(members, "reload");
-            gridCoreUtils.proxyMethod(members, "push");
-            gridCoreUtils.proxyMethod(members, "itemsCount", 0);
-            gridCoreUtils.proxyMethod(members, "totalItemsCount", 0);
-            gridCoreUtils.proxyMethod(members, "hasKnownLastPage", true);
-            gridCoreUtils.proxyMethod(members, "isLoaded", true);
+            gridCoreUtils.proxyMethod(members, 'load');
+            gridCoreUtils.proxyMethod(members, 'reload');
+            gridCoreUtils.proxyMethod(members, 'push');
+            gridCoreUtils.proxyMethod(members, 'itemsCount', 0);
+            gridCoreUtils.proxyMethod(members, 'totalItemsCount', 0);
+            gridCoreUtils.proxyMethod(members, 'hasKnownLastPage', true);
+            gridCoreUtils.proxyMethod(members, 'isLoaded', true);
             /**
             * @name dxDataGridMethods.totalCount
             * @publicName totalCount()
             * @return numeric
             */
-            gridCoreUtils.proxyMethod(members, "totalCount", 0);
+            gridCoreUtils.proxyMethod(members, 'totalCount', 0);
 
             return members;
         })())

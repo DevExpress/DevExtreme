@@ -1,15 +1,15 @@
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    translator = require("../../animation/translator"),
-    eventUtils = require("../../events/utils"),
-    NativeStrategy = require("./ui.scrollable.native"),
-    LoadIndicator = require("../load_indicator"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var $ = require('../../core/renderer'),
+    Callbacks = require('../../core/utils/callbacks'),
+    translator = require('../../animation/translator'),
+    eventUtils = require('../../events/utils'),
+    NativeStrategy = require('./ui.scrollable.native'),
+    LoadIndicator = require('../load_indicator'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
-var SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = "dx-scrollview-pull-down-loading",
-    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = "dx-scrollview-pull-down-indicator",
-    SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = "dx-scrollview-pull-down-refreshing",
-    PULLDOWN_ICON_CLASS = "dx-icon-pulldown",
+var SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading',
+    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator',
+    SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-refreshing',
+    PULLDOWN_ICON_CLASS = 'dx-icon-pulldown',
 
     STATE_RELEASED = 0,
     STATE_READY = 1,
@@ -43,10 +43,10 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _renderPullDown: function() {
-        var $loadContainer = $("<div>").addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($("<div>")).$element();
+        var $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
+            $loadIndicator = new LoadIndicator($('<div>')).$element();
 
-        this._$icon = $("<div>")
+        this._$icon = $('<div>')
             .addClass(PULLDOWN_ICON_CLASS);
 
         this._$pullDown
@@ -121,7 +121,7 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         translator.move(this._$pullDown, { top: top });
 
         this._$icon.css({
-            transform: "rotate(" + angle + "deg)"
+            transform: 'rotate(' + angle + 'deg)'
         });
     },
 
