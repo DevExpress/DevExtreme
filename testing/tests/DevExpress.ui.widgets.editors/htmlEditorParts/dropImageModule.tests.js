@@ -1,10 +1,10 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-import DropImage from "ui/html_editor/modules/dropImage";
-import { createBlobFile } from "../../../helpers/fileHelper.js";
-import browser from "core/utils/browser";
+import DropImage from 'ui/html_editor/modules/dropImage';
+import { createBlobFile } from '../../../helpers/fileHelper.js';
+import browser from 'core/utils/browser';
 
-const IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==";
+const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==';
 
 class DropImageMock extends DropImage {
     _getImage(files, callback) {
@@ -13,8 +13,8 @@ class DropImageMock extends DropImage {
 }
 
 const moduleConfig = {
-    beforeEach: () => {
-        this.$element = $("#htmlEditor");
+    beforeEach: function() {
+        this.$element = $('#htmlEditor');
 
         this.insertEmbedStub = sinon.stub();
 
@@ -26,11 +26,11 @@ const moduleConfig = {
             insertEmbed: this.insertEmbedStub
         };
 
-        this.file = createBlobFile("test", 80);
+        this.file = createBlobFile('test', 80);
 
         this.options = {
             editorInstance: {
-                NAME: "dxHtmlEditor"
+                NAME: 'dxHtmlEditor'
             }
         };
     }
@@ -38,74 +38,74 @@ const moduleConfig = {
 
 const { test } = QUnit;
 
-QUnit.module("DropImage module", moduleConfig, () => {
-    test("insert image on drop", (assert) => {
+QUnit.module('DropImage module', moduleConfig, () => {
+    test('insert image on drop', function(assert) {
         new DropImageMock(this.quillMock, this.options);
 
-        const event = $.Event($.Event("drop", { dataTransfer: { files: [this.file] } }));
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [this.file] } }));
         this.$element.trigger(event);
 
-        assert.ok(event.isDefaultPrevented(), "Prevent default behavior");
-        assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
-        assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "extendedImage", IMAGE, "user"], "insert base64 image by user");
+        assert.ok(event.isDefaultPrevented(), 'Prevent default behavior');
+        assert.equal(this.insertEmbedStub.callCount, 1, 'File inserted');
+        assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, 'extendedImage', IMAGE, 'user'], 'insert base64 image by user');
     });
 
-    test("check file type", (assert) => {
+    test('check file type', function(assert) {
         const dropImage = new DropImage(this.quillMock, this.options);
 
-        const textFile = createBlobFile("test", 80, "text/html");
-        const unsupportedImage = createBlobFile("test", 80, "image/psd");
+        const textFile = createBlobFile('test', 80, 'text/html');
+        const unsupportedImage = createBlobFile('test', 80, 'image/psd');
 
-        assert.ok(dropImage._isImage(this.file), "PNG");
-        assert.notOk(dropImage._isImage(textFile), "Text");
-        assert.notOk(dropImage._isImage(unsupportedImage), "PSD is unsupported");
+        assert.ok(dropImage._isImage(this.file), 'PNG');
+        assert.notOk(dropImage._isImage(textFile), 'Text');
+        assert.notOk(dropImage._isImage(unsupportedImage), 'PSD is unsupported');
     });
 
-    test("insert image on paste", (assert) => {
+    test('insert image on paste', function(assert) {
         const clock = sinon.useFakeTimers();
         new DropImageMock(this.quillMock, this.options);
 
-        const event = $.Event($.Event("paste", {
+        const event = $.Event($.Event('paste', {
             clipboardData: {
                 items: [this.file],
-                getData: (type) => type === "text/html" ? false : true
+                getData: (type) => type === 'text/html' ? false : true
             }
         }));
         this.$element.trigger(event);
         clock.tick();
 
         if(browser.mozilla) {
-            assert.ok(true, "FF handle this out-the-box");
+            assert.ok(true, 'FF handle this out-the-box');
         } else {
-            assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
-            assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "extendedImage", IMAGE, "user"], "insert base64 image by user");
+            assert.equal(this.insertEmbedStub.callCount, 1, 'File inserted');
+            assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, 'extendedImage', IMAGE, 'user'], 'insert base64 image by user');
         }
 
         clock.restore();
     });
 
-    test("Do not encode pasted image with URL", (assert) => {
+    test('Do not encode pasted image with URL', function(assert) {
         new DropImageMock(this.quillMock, this.options);
 
-        const textFile = createBlobFile("test", 80, "text/html");
-        const event = $.Event($.Event("paste", {
+        const textFile = createBlobFile('test', 80, 'text/html');
+        const event = $.Event($.Event('paste', {
             clipboardData: {
                 items: [this.file, textFile],
-                getData: (type) => type === "text/html" ? true : false
+                getData: (type) => type === 'text/html' ? true : false
             }
         }));
         this.$element.trigger(event);
 
-        assert.notOk(event.isDefaultPrevented(), "Doesn't prevent default behavior");
-        assert.equal(this.insertEmbedStub.callCount, 0, "File isn't inserted");
+        assert.notOk(event.isDefaultPrevented(), 'Doesn\'t prevent default behavior');
+        assert.equal(this.insertEmbedStub.callCount, 0, 'File isn\'t inserted');
     });
 
-    test("dragover event", (assert) => {
+    test('dragover event', function(assert) {
         new DropImage(this.quillMock, this.options);
 
-        const event = $.Event("dragover");
+        const event = $.Event('dragover');
         this.$element.trigger(event);
 
-        assert.equal(event.isDefaultPrevented(), !!browser.msie, "It should be prevented for MS browsers");
+        assert.equal(event.isDefaultPrevented(), !!browser.msie, 'It should be prevented for MS browsers');
     });
 });

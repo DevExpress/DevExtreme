@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    animationFrame = require("animation/frame");
+var $ = require('jquery'),
+    animationFrame = require('animation/frame');
 
-QUnit.module("animation frame");
+QUnit.module('animation frame');
 
-QUnit.testInActiveWindow("request", function(assert) {
+QUnit.testInActiveWindow('request', function(assert) {
     var done = assert.async();
     var animationFrameID = animationFrame.requestAnimationFrame(function() {
         done();
@@ -11,7 +11,7 @@ QUnit.testInActiveWindow("request", function(assert) {
     assert.ok($.isNumeric(animationFrameID));
 });
 
-QUnit.testInActiveWindow("cancel", function(assert) {
+QUnit.testInActiveWindow('cancel', function(assert) {
     assert.expect(1);
 
     var done = assert.async(),
@@ -22,7 +22,7 @@ QUnit.testInActiveWindow("cancel", function(assert) {
     });
 
     if(callbackCalled) {
-        assert.ok(true, "animation frame callback can be triggered before animation frame canceled");
+        assert.ok(true, 'animation frame callback can be triggered before animation frame canceled');
         done();
         return;
     }
@@ -30,7 +30,7 @@ QUnit.testInActiveWindow("cancel", function(assert) {
     animationFrame.cancelAnimationFrame(animationFrameID);
 
     setTimeout(function() {
-        assert.ok(!callbackCalled, "animation frame callback is not triggered after animation frame canceled");
+        assert.ok(!callbackCalled, 'animation frame callback is not triggered after animation frame canceled');
         done();
     });
 });

@@ -7,7 +7,7 @@ QUnit.testStart(function() {
     </div>\
 ';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 import 'common.css!';
@@ -17,16 +17,16 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import pointerEvents from "events/pointer";
-import { DataSource } from "data/data_source/data_source";
-import { TreeListWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import pointerEvents from 'events/pointer';
+import { DataSource } from 'data/data_source/data_source';
+import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import ArrayStore from 'data/array_store';
-import TreeList from "ui/tree_list/ui.tree_list";
-import pointerMock from "../../helpers/pointerMock.js";
+import TreeList from 'ui/tree_list/ui.tree_list';
+import pointerMock from '../../helpers/pointerMock.js';
 
 fx.off = true;
 
-QUnit.module("Initialization", {
+QUnit.module('Initialization', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -35,14 +35,14 @@ QUnit.module("Initialization", {
     }
 });
 
-const treeListWrapper = new TreeListWrapper("#container");
+const treeListWrapper = new TreeListWrapper('#container');
 
 var createTreeList = function(options) {
     var treeList,
-        treeListElement = $("#treeList").dxTreeList(options);
+        treeListElement = $('#treeList').dxTreeList(options);
 
     QUnit.assert.ok(treeListElement);
-    treeList = treeListElement.dxTreeList("instance");
+    treeList = treeListElement.dxTreeList('instance');
     return treeList;
 };
 
@@ -58,51 +58,51 @@ var generateData = function(count) {
     return result;
 };
 
-QUnit.test("Empty options", function(assert) {
+QUnit.test('Empty options', function(assert) {
     var treeList = createTreeList({}),
         $treeListElement = $(treeList.$element()),
-        $noDataElement = $treeListElement.find(".dx-treelist-nodata");
+        $noDataElement = $treeListElement.find('.dx-treelist-nodata');
 
     assert.ok(treeList);
-    assert.ok($treeListElement.hasClass("dx-treelist"), "widget class on the root element");
-    assert.ok($noDataElement.length, "widget have a 'no data' element");
-    assert.ok($noDataElement.is(":visible"), "'No data' element is visible");
-    assert.ok($treeListElement.children().hasClass("dx-treelist-container"), "container class on the child");
+    assert.ok($treeListElement.hasClass('dx-treelist'), 'widget class on the root element');
+    assert.ok($noDataElement.length, 'widget have a \'no data\' element');
+    assert.ok($noDataElement.is(':visible'), '\'No data\' element is visible');
+    assert.ok($treeListElement.children().hasClass('dx-treelist-container'), 'container class on the child');
 });
 
-QUnit.test("Sorting should be applied on header cell click", function(assert) {
+QUnit.test('Sorting should be applied on header cell click', function(assert) {
     var treeList = createTreeList({
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 0, name: "Name 1", age: 19 },
-            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+            { id: 2, parentId: 0, name: 'Name 1', age: 19 },
+            { id: 3, parentId: 0, name: 'Name 2', age: 18 }
         ]
     });
 
     this.clock.tick();
 
     // act
-    var $headerCell = $(treeList.$element().find(".dx-header-row td").first());
+    var $headerCell = $(treeList.$element().find('.dx-header-row td').first());
 
-    $($headerCell).trigger("dxclick");
+    $($headerCell).trigger('dxclick');
     this.clock.tick();
 
     // assert
-    var $dataRows = $(treeList.$element().find(".dx-data-row"));
-    assert.equal($dataRows.eq(0).children().eq(0).text(), "Name 1", "row 0 is sorted");
-    assert.equal($dataRows.eq(1).children().eq(0).text(), "Name 2", "row 1 is sorted");
-    assert.equal($dataRows.eq(2).children().eq(0).text(), "Name 3", "row 2 is sorted");
-    assert.equal(treeList.$element().find(".dx-sort-up").length, 1, "one sort up indicator");
-    assert.equal(treeList.$element().find(".dx-header-row td").first().find(".dx-sort-up").length, 1, "sort indicator is rendered in first cell");
+    var $dataRows = $(treeList.$element().find('.dx-data-row'));
+    assert.equal($dataRows.eq(0).children().eq(0).text(), 'Name 1', 'row 0 is sorted');
+    assert.equal($dataRows.eq(1).children().eq(0).text(), 'Name 2', 'row 1 is sorted');
+    assert.equal($dataRows.eq(2).children().eq(0).text(), 'Name 3', 'row 2 is sorted');
+    assert.equal(treeList.$element().find('.dx-sort-up').length, 1, 'one sort up indicator');
+    assert.equal(treeList.$element().find('.dx-header-row td').first().find('.dx-sort-up').length, 1, 'sort indicator is rendered in first cell');
 });
 
-QUnit.test("Fixed column should be rendered in separate table", function(assert) {
+QUnit.test('Fixed column should be rendered in separate table', function(assert) {
     // act
     var treeList = createTreeList({
-        columns: [{ dataField: "name", fixed: true }, "age"],
+        columns: [{ dataField: 'name', fixed: true }, 'age'],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 1", age: 19 }
+            { id: 1, parentId: 0, name: 'Name 1', age: 19 }
         ]
     });
 
@@ -110,105 +110,105 @@ QUnit.test("Fixed column should be rendered in separate table", function(assert)
 
     // assert
     var $rowElement = $(treeList.getRowElement(0));
-    assert.equal($rowElement.length, 2, "two row elements for one row");
-    assert.notEqual($rowElement.eq(0).closest("table").get(0), $rowElement.eq(1).closest("table").get(0), "row elements are in different tables");
+    assert.equal($rowElement.length, 2, 'two row elements for one row');
+    assert.notEqual($rowElement.eq(0).closest('table').get(0), $rowElement.eq(1).closest('table').get(0), 'row elements are in different tables');
 });
 
-QUnit.test("Resize columns", function(assert) {
+QUnit.test('Resize columns', function(assert) {
     // arrange
     var treeList = createTreeList({
             width: 400,
             allowColumnResizing: true,
             loadingTimeout: undefined,
-            dataSource: [{ id: 1, firstName: "Dmitriy", lastName: "Semenov", room: 101, birthDay: "1992/08/06" }],
-            columns: [{ dataField: "firstName", width: 100 }, { dataField: "lastName", width: 100 }, { dataField: "room", width: 100 }, { dataField: "birthDay", width: 100 }]
+            dataSource: [{ id: 1, firstName: 'Dmitriy', lastName: 'Semenov', room: 101, birthDay: '1992/08/06' }],
+            columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
         }),
         headersCols,
         rowsCols,
         resizeController;
 
     // act
-    resizeController = treeList.getController("columnsResizer");
+    resizeController = treeList.getController('columnsResizer');
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 1 };
     resizeController._setupResizingInfo(-9800);
     resizeController._moveSeparator({
         event: {
             data: resizeController,
-            type: "mousemove",
+            type: 'mousemove',
             pageX: -9750,
             preventDefault: noop
         }
     });
 
     // assert
-    headersCols = $(".dx-treelist-headers col");
-    rowsCols = $(".dx-treelist-rowsview col");
-    assert.equal($(headersCols[1]).css("width"), "150px", "width of two column - headers view");
-    assert.equal($(headersCols[2]).css("width"), "50px", "width of three column - headers view");
-    assert.equal($(rowsCols[1]).css("width"), "150px", "width of two column - rows view");
-    assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
+    headersCols = $('.dx-treelist-headers col');
+    rowsCols = $('.dx-treelist-rowsview col');
+    assert.equal($(headersCols[1]).css('width'), '150px', 'width of two column - headers view');
+    assert.equal($(headersCols[2]).css('width'), '50px', 'width of three column - headers view');
+    assert.equal($(rowsCols[1]).css('width'), '150px', 'width of two column - rows view');
+    assert.equal($(rowsCols[2]).css('width'), '50px', 'width of three column - rows view');
 });
 
-QUnit.test("Reordering column", function(assert) {
+QUnit.test('Reordering column', function(assert) {
     // arrange
     var $cellElement,
         $iconContainer,
         treeList = createTreeList({
             allowColumnReordering: true,
             loadingTimeout: undefined,
-            dataSource: [{ id: 1, firstName: "1", lastName: "2", room: "3", birthDay: "4" }],
-            columns: ["firstName", "lastName", "room", "birthDay"]
+            dataSource: [{ id: 1, firstName: '1', lastName: '2', room: '3', birthDay: '4' }],
+            columns: ['firstName', 'lastName', 'room', 'birthDay']
         }),
         columnController;
 
     // act
-    columnController = treeList.getController("columns");
+    columnController = treeList.getController('columns');
     columnController.moveColumn(0, 3);
 
     // assert
-    $cellElement = $("#treeList").find(".dx-treelist-rowsview").find(".dx-data-row > td").first();
-    $iconContainer = $("#treeList").find(".dx-treelist-rowsview").find(".dx-treelist-icon-container");
-    assert.equal($iconContainer.length, 1, "count expand icon");
-    assert.equal($cellElement.children(".dx-treelist-icon-container").length, 1, "first cell have expand icon");
-    assert.equal($cellElement.text(), "2", "first cell value");
+    $cellElement = $('#treeList').find('.dx-treelist-rowsview').find('.dx-data-row > td').first();
+    $iconContainer = $('#treeList').find('.dx-treelist-rowsview').find('.dx-treelist-icon-container');
+    assert.equal($iconContainer.length, 1, 'count expand icon');
+    assert.equal($cellElement.children('.dx-treelist-icon-container').length, 1, 'first cell have expand icon');
+    assert.equal($cellElement.text(), '2', 'first cell value');
 });
 
-QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
+QUnit.test('Columns hiding - columnHidingEnabled is true', function(assert) {
     // arrange, act
     var $cellElement,
         treeList = createTreeList({
             width: 200,
             loadingTimeout: undefined,
             columnHidingEnabled: true,
-            dataSource: [{ id: 1, firstName: "Blablablablablablablablablabla", lastName: "Psy" }],
-            columns: ["firstName", "lastName"]
+            dataSource: [{ id: 1, firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
+            columns: ['firstName', 'lastName']
         });
 
     // assert
-    $cellElement = $(treeList.$element().find(".dx-header-row > td"));
-    assert.equal($cellElement.length, 3, "count cell");
-    assert.equal($cellElement.eq(0).text(), "First Name", "caption of the first cell");
-    assert.notOk($cellElement.eq(0).hasClass("dx-treelist-hidden-column"), "first cell is visible");
-    assert.ok($cellElement.eq(1).hasClass("dx-treelist-hidden-column"), "second cell is hidden");
-    assert.notOk($cellElement.eq(2).hasClass("dx-command-adaptive-hidden"), "adaptive cell is visible");
+    $cellElement = $(treeList.$element().find('.dx-header-row > td'));
+    assert.equal($cellElement.length, 3, 'count cell');
+    assert.equal($cellElement.eq(0).text(), 'First Name', 'caption of the first cell');
+    assert.notOk($cellElement.eq(0).hasClass('dx-treelist-hidden-column'), 'first cell is visible');
+    assert.ok($cellElement.eq(1).hasClass('dx-treelist-hidden-column'), 'second cell is hidden');
+    assert.notOk($cellElement.eq(2).hasClass('dx-command-adaptive-hidden'), 'adaptive cell is visible');
 
     this.clock.tick(300);
 
     // act
-    treeList.option("width", 800);
+    treeList.option('width', 800);
 
     // assert
-    $cellElement = $(treeList.$element().find(".dx-header-row > td"));
-    assert.equal($cellElement.length, 3, "count cell");
-    assert.equal($cellElement.eq(0).text(), "First Name", "caption of the first cell");
-    assert.notOk($cellElement.eq(0).hasClass("dx-treelist-hidden-column"), "first cell is visible");
-    assert.equal($cellElement.eq(1).text(), "Last Name", "caption of the second cell");
-    assert.notOk($cellElement.eq(1).hasClass("dx-treelist-hidden-column"), "second cell is visible");
-    assert.ok($cellElement.eq(2).hasClass("dx-command-adaptive-hidden"), "adaptive cell is hidden");
+    $cellElement = $(treeList.$element().find('.dx-header-row > td'));
+    assert.equal($cellElement.length, 3, 'count cell');
+    assert.equal($cellElement.eq(0).text(), 'First Name', 'caption of the first cell');
+    assert.notOk($cellElement.eq(0).hasClass('dx-treelist-hidden-column'), 'first cell is visible');
+    assert.equal($cellElement.eq(1).text(), 'Last Name', 'caption of the second cell');
+    assert.notOk($cellElement.eq(1).hasClass('dx-treelist-hidden-column'), 'second cell is visible');
+    assert.ok($cellElement.eq(2).hasClass('dx-command-adaptive-hidden'), 'adaptive cell is hidden');
 });
 
-QUnit.test("Height rows view", function(assert) {
+QUnit.test('Height rows view', function(assert) {
     // arrange, act
     var treeList = createTreeList({
         height: 200,
@@ -216,34 +216,34 @@ QUnit.test("Height rows view", function(assert) {
         loadingTimeout: undefined,
         columnHidingEnabled: true,
         dataSource: [
-            { id: 1, name: "Name 1", age: 10 },
-            { id: 2, name: "Name 2", age: 11 },
-            { id: 3, name: "Name 3", age: 12 },
-            { id: 4, name: "Name 4", age: 13 },
-            { id: 5, name: "Name 5", age: 14 },
-            { id: 6, name: "Name 6", age: 15 },
-            { id: 7, name: "Name 7", age: 16 }
+            { id: 1, name: 'Name 1', age: 10 },
+            { id: 2, name: 'Name 2', age: 11 },
+            { id: 3, name: 'Name 3', age: 12 },
+            { id: 4, name: 'Name 4', age: 13 },
+            { id: 5, name: 'Name 5', age: 14 },
+            { id: 6, name: 'Name 6', age: 15 },
+            { id: 7, name: 'Name 7', age: 16 }
         ]
     });
 
     // assert
-    assert.equal(treeList.$element().find(".dx-treelist-rowsview").outerHeight(), 200, "height rows view");
+    assert.equal(treeList.$element().find('.dx-treelist-rowsview').outerHeight(), 200, 'height rows view');
 });
 
-QUnit.test("Virtual scrolling enabled by default and should render two virtual rows", function(assert) {
+QUnit.test('Virtual scrolling enabled by default and should render two virtual rows', function(assert) {
     var treeList = createTreeList({
         height: 50,
         paging: { pageSize: 2, pageIndex: 1 },
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 1", age: 19 },
-            { id: 2, parentId: 0, name: "Name 2", age: 19 },
-            { id: 3, parentId: 0, name: "Name 3", age: 18 },
-            { id: 4, parentId: 0, name: "Name 4", age: 18 },
-            { id: 5, parentId: 0, name: "Name 5", age: 18 },
-            { id: 6, parentId: 0, name: "Name 6", age: 18 },
-            { id: 7, parentId: 0, name: "Name 7", age: 18 },
-            { id: 8, parentId: 0, name: "Name 8", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 1', age: 19 },
+            { id: 2, parentId: 0, name: 'Name 2', age: 19 },
+            { id: 3, parentId: 0, name: 'Name 3', age: 18 },
+            { id: 4, parentId: 0, name: 'Name 4', age: 18 },
+            { id: 5, parentId: 0, name: 'Name 5', age: 18 },
+            { id: 6, parentId: 0, name: 'Name 6', age: 18 },
+            { id: 7, parentId: 0, name: 'Name 7', age: 18 },
+            { id: 8, parentId: 0, name: 'Name 8', age: 18 }
         ]
     });
 
@@ -251,29 +251,29 @@ QUnit.test("Virtual scrolling enabled by default and should render two virtual r
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.option("scrolling.mode"), "virtual", "scrolling mode is virtual");
-    var $rowsViewTables = $(treeList.$element().find(".dx-treelist-rowsview table"));
-    assert.equal($rowsViewTables.length, 1, "one table are rendered");
-    assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 4, "data rows in table");
-    assert.equal($rowsViewTables.eq(0).find(".dx-virtual-row").length, 2, "two virtual rows in table");
-    assert.equal($rowsViewTables.eq(0).find(".dx-freespace-row").length, 1, "one freespace row in table");
+    assert.equal(treeList.option('scrolling.mode'), 'virtual', 'scrolling mode is virtual');
+    var $rowsViewTables = $(treeList.$element().find('.dx-treelist-rowsview table'));
+    assert.equal($rowsViewTables.length, 1, 'one table are rendered');
+    assert.equal($rowsViewTables.eq(0).find('.dx-data-row').length, 4, 'data rows in table');
+    assert.equal($rowsViewTables.eq(0).find('.dx-virtual-row').length, 2, 'two virtual rows in table');
+    assert.equal($rowsViewTables.eq(0).find('.dx-freespace-row').length, 1, 'one freespace row in table');
 });
 
 
-QUnit.testInActiveWindow("Ctrl + left/right keys should collapse/expand row", function(assert) {
-    if(devices.real().deviceType !== "desktop") {
-        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+QUnit.testInActiveWindow('Ctrl + left/right keys should collapse/expand row', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
         return;
     }
     var treeList = createTreeList({
-            columns: ["name", "age"],
+            columns: ['name', 'age'],
             dataSource: [
-                { id: 1, parentId: 0, name: "Name 1", age: 19 },
-                { id: 2, parentId: 0, name: "Name 2", age: 19 },
-                { id: 3, parentId: 2, name: "Name 3", age: 18 }
+                { id: 1, parentId: 0, name: 'Name 1', age: 19 },
+                { id: 2, parentId: 0, name: 'Name 2', age: 19 },
+                { id: 3, parentId: 2, name: 'Name 3', age: 18 }
             ]
         }),
-        navigationController = treeList.getController("keyboardNavigation");
+        navigationController = treeList.getController('keyboardNavigation');
 
     this.clock.tick();
 
@@ -281,30 +281,30 @@ QUnit.testInActiveWindow("Ctrl + left/right keys should collapse/expand row", fu
     this.clock.tick();
 
     // act
-    navigationController._keyDownHandler({ keyName: "rightArrow", key: "ArrowRight", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+    navigationController._keyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
     this.clock.tick();
 
     // assert
-    assert.ok(treeList.isRowExpanded(2), "second row is expanded");
+    assert.ok(treeList.isRowExpanded(2), 'second row is expanded');
 
     // act
-    navigationController._keyDownHandler({ keyName: "leftArrow", key: "ArrowLeft", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+    navigationController._keyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
     this.clock.tick();
 
     // assert
-    assert.notOk(treeList.isRowExpanded(2), "second row is collapsed");
+    assert.notOk(treeList.isRowExpanded(2), 'second row is collapsed');
 });
 
-QUnit.test("Filter Row", function(assert) {
+QUnit.test('Filter Row', function(assert) {
     var treeList = createTreeList({
         filterRow: {
             visible: true
         },
-        columns: ["name", { dataField: "age", filterValue: 19 }],
+        columns: ['name', { dataField: 'age', filterValue: 19 }],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 0, name: "Name 1", age: 19 },
-            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+            { id: 2, parentId: 0, name: 'Name 1', age: 19 },
+            { id: 3, parentId: 0, name: 'Name 2', age: 18 }
         ]
     });
 
@@ -312,12 +312,12 @@ QUnit.test("Filter Row", function(assert) {
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.$element().find(".dx-data-row").length, 2, "two filtered rows are rendered");
-    assert.equal(treeList.$element().find(".dx-treelist-filter-row").length, 1, "filter row is rendered");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 2, 'two filtered rows are rendered');
+    assert.equal(treeList.$element().find('.dx-treelist-filter-row').length, 1, 'filter row is rendered');
 });
 
 // T516918
-QUnit.test("Filter menu items should have icons", function(assert) {
+QUnit.test('Filter menu items should have icons', function(assert) {
     // arrange
     var $filterMenuElement,
         $menuItemElements,
@@ -325,36 +325,36 @@ QUnit.test("Filter menu items should have icons", function(assert) {
             filterRow: {
                 visible: true
             },
-            columns: ["name", { dataField: "age", filterValue: 19 }],
+            columns: ['name', { dataField: 'age', filterValue: 19 }],
             dataSource: [
-                { id: 1, parentId: 0, name: "Name 3", age: 19 },
-                { id: 2, parentId: 0, name: "Name 1", age: 19 },
-                { id: 3, parentId: 0, name: "Name 2", age: 18 }
+                { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+                { id: 2, parentId: 0, name: 'Name 1', age: 19 },
+                { id: 3, parentId: 0, name: 'Name 2', age: 18 }
             ]
         });
 
     this.clock.tick();
 
     // act
-    $filterMenuElement = $(treeList.$element().find(".dx-treelist-filter-row").find(".dx-menu").first().find(".dx-menu-item"));
-    $($filterMenuElement).trigger("dxclick"); // show menu
+    $filterMenuElement = $(treeList.$element().find('.dx-treelist-filter-row').find('.dx-menu').first().find('.dx-menu-item'));
+    $($filterMenuElement).trigger('dxclick'); // show menu
 
     // assert
-    $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
-    assert.ok($menuItemElements.length > 0, "has filter menu items");
-    assert.equal($menuItemElements.first().find(".dx-icon").css("fontFamily"), "DXIcons", "first item has icon");
+    $menuItemElements = $('.dx-overlay-wrapper').find('.dx-menu-item');
+    assert.ok($menuItemElements.length > 0, 'has filter menu items');
+    assert.equal($menuItemElements.first().find('.dx-icon').css('fontFamily'), 'DXIcons', 'first item has icon');
 });
 
-QUnit.test("Header Filter", function(assert) {
+QUnit.test('Header Filter', function(assert) {
     var treeList = createTreeList({
         headerFilter: {
             visible: true
         },
-        columns: ["name", { dataField: "age", filterValues: [19] }],
+        columns: ['name', { dataField: 'age', filterValues: [19] }],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 0, name: "Name 1", age: 19 },
-            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+            { id: 2, parentId: 0, name: 'Name 1', age: 19 },
+            { id: 3, parentId: 0, name: 'Name 2', age: 18 }
         ]
     });
 
@@ -362,80 +362,80 @@ QUnit.test("Header Filter", function(assert) {
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.$element().find(".dx-data-row").length, 2, "two filtered rows are rendered");
-    assert.equal(treeList.$element().find(".dx-header-filter").length, 2, "two header filter icons area rendered");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 2, 'two filtered rows are rendered');
+    assert.equal(treeList.$element().find('.dx-header-filter').length, 2, 'two header filter icons area rendered');
 });
 
-QUnit.test("Expanding of all items should work correctly after clearing filter", function(assert) {
+QUnit.test('Expanding of all items should work correctly after clearing filter', function(assert) {
     var treeList = createTreeList({
         headerFilter: {
             visible: true
         },
         autoExpandAll: true,
-        columns: ["name", { dataField: "age", filterValues: [19], allowFiltering: true }, "gender"],
+        columns: ['name', { dataField: 'age', filterValues: [19], allowFiltering: true }, 'gender'],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19, gender: "male" },
-            { id: 2, parentId: 1, name: "Name 1", age: 19, gender: "female" },
-            { id: 3, parentId: 1, name: "Name 2", age: 18, gender: "male" },
-            { id: 4, parentId: 2, name: "Name 4", age: 19, gender: "male" },
-            { id: 5, parentId: 2, name: "Name 5", age: 20, gender: "female" },
-            { id: 6, parentId: 3, name: "Name 6", age: 18, gender: "male" }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19, gender: 'male' },
+            { id: 2, parentId: 1, name: 'Name 1', age: 19, gender: 'female' },
+            { id: 3, parentId: 1, name: 'Name 2', age: 18, gender: 'male' },
+            { id: 4, parentId: 2, name: 'Name 4', age: 19, gender: 'male' },
+            { id: 5, parentId: 2, name: 'Name 5', age: 20, gender: 'female' },
+            { id: 6, parentId: 3, name: 'Name 6', age: 18, gender: 'male' }
         ]
     });
 
     this.clock.tick();
-    assert.equal(treeList.$element().find(".dx-data-row").length, 3, "filtered rows are rendered");
-    treeList.filter("gender", "=", "male");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 3, 'filtered rows are rendered');
+    treeList.filter('gender', '=', 'male');
     this.clock.tick();
-    assert.equal(treeList.$element().find(".dx-data-row").length, 3, "filtered rows are rendered");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 3, 'filtered rows are rendered');
 
     // act
     treeList.clearFilter();
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.$element().find(".dx-data-row").length, 6, "six filtered rows are rendered");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 6, 'six filtered rows are rendered');
 });
 
-QUnit.test("Items should be collapsed after clearing filter, autoExpandAll = false", function(assert) {
+QUnit.test('Items should be collapsed after clearing filter, autoExpandAll = false', function(assert) {
     var treeList = createTreeList({
         headerFilter: {
             visible: true
         },
         autoExpandAll: false,
-        columns: ["name", { dataField: "age", filterValues: [19], allowFiltering: true }],
+        columns: ['name', { dataField: 'age', filterValues: [19], allowFiltering: true }],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 1, name: "Name 1", age: 19 },
-            { id: 3, parentId: 2, name: "Name 2", age: 18 },
-            { id: 4, parentId: 0, name: "Name 4", age: 19 },
-            { id: 5, parentId: 4, name: "Name 5", age: 20 },
-            { id: 6, parentId: 5, name: "Name 6", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+            { id: 2, parentId: 1, name: 'Name 1', age: 19 },
+            { id: 3, parentId: 2, name: 'Name 2', age: 18 },
+            { id: 4, parentId: 0, name: 'Name 4', age: 19 },
+            { id: 5, parentId: 4, name: 'Name 5', age: 20 },
+            { id: 6, parentId: 5, name: 'Name 6', age: 18 }
         ]
     });
 
     this.clock.tick();
-    assert.equal(treeList.$element().find(".dx-data-row").length, 3, "filtered rows are rendered");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 3, 'filtered rows are rendered');
 
     // act
     treeList.clearFilter();
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.$element().find(".dx-data-row").length, 2, "two rows are rendered");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 2, 'two rows are rendered');
 });
 
-QUnit.test("Search Panel", function(assert) {
+QUnit.test('Search Panel', function(assert) {
     var treeList = createTreeList({
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         searchPanel: {
             visible: true,
-            text: "Name 1"
+            text: 'Name 1'
         },
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 0, name: "Name 1", age: 19 },
-            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+            { id: 2, parentId: 0, name: 'Name 1', age: 19 },
+            { id: 3, parentId: 0, name: 'Name 2', age: 18 }
         ]
     });
 
@@ -444,19 +444,19 @@ QUnit.test("Search Panel", function(assert) {
 
 
     // assert
-    assert.equal(treeList.$element().find(".dx-data-row").length, 1, "one filtered row is rendered");
-    assert.equal(treeList.$element().find(".dx-toolbar .dx-searchbox").length, 1, "searchPanel is rendered");
-    assert.equal(treeList.$element().find(".dx-toolbar .dx-searchbox").dxTextBox("instance").option("value"), "Name 1", "searchPanel text is applied");
+    assert.equal(treeList.$element().find('.dx-data-row').length, 1, 'one filtered row is rendered');
+    assert.equal(treeList.$element().find('.dx-toolbar .dx-searchbox').length, 1, 'searchPanel is rendered');
+    assert.equal(treeList.$element().find('.dx-toolbar .dx-searchbox').dxTextBox('instance').option('value'), 'Name 1', 'searchPanel text is applied');
 });
 
-QUnit.test("Selectable treeList should have right default options", function(assert) {
+QUnit.test('Selectable treeList should have right default options', function(assert) {
     var treeList = createTreeList({
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         selection: { mode: 'multiple' },
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 },
-            { id: 2, parentId: 0, name: "Name 1", age: 19 },
-            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 },
+            { id: 2, parentId: 0, name: 'Name 1', age: 19 },
+            { id: 3, parentId: 0, name: 'Name 2', age: 18 }
         ]
     });
 
@@ -464,43 +464,43 @@ QUnit.test("Selectable treeList should have right default options", function(ass
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.option("selection.showCheckBoxesMode"), "always", "showCheckBoxesMode is always");
+    assert.equal(treeList.option('selection.showCheckBoxesMode'), 'always', 'showCheckBoxesMode is always');
 });
 
-QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection", function(assert) {
+QUnit.test('Click on selectCheckBox shouldn\'t render editor, editing & selection', function(assert) {
     createTreeList({
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         selection: { mode: 'multiple' },
         editing: {
-            mode: "batch",
+            mode: 'batch',
             allowUpdating: true
         },
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 }
         ]
     });
 
     // act
     this.clock.tick();
-    var $selectCheckbox = $("#treeList").find(".dx-treelist-cell-expandable").eq(0).find(".dx-select-checkbox").eq(0);
-    $($selectCheckbox).trigger("dxclick");
+    var $selectCheckbox = $('#treeList').find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
+    $($selectCheckbox).trigger('dxclick');
     this.clock.tick();
 
     // assert
-    assert.notOk($("#treeList").find(".dx-texteditor").length, "Editing textEditor wasn't rendered");
+    assert.notOk($('#treeList').find('.dx-texteditor').length, 'Editing textEditor wasn\'t rendered');
 });
 
 // T742147
-QUnit.test("Selection checkbox should be rendered if first column is lookup", function(assert) {
+QUnit.test('Selection checkbox should be rendered if first column is lookup', function(assert) {
     var treeList = createTreeList({
         columns: [{
-            dataField: "nameId",
+            dataField: 'nameId',
             lookup: {
-                dataSource: [{ id: 1, name: "Name 1" }],
-                valueExpr: "id",
-                displayExpr: "name"
+                dataSource: [{ id: 1, name: 'Name 1' }],
+                valueExpr: 'id',
+                displayExpr: 'name'
             }
-        }, "age"],
+        }, 'age'],
         selection: {
             mode: 'multiple'
         },
@@ -514,19 +514,19 @@ QUnit.test("Selection checkbox should be rendered if first column is lookup", fu
 
     // assert
     var $firstDataCell = $(treeList.getCellElement(0, 0));
-    assert.equal($firstDataCell.find(".dx-select-checkbox.dx-checkbox").length, 1, "first cell contains select checkbox");
-    assert.equal($firstDataCell.find(".dx-treelist-text-content").text(), "Name 1", "first cell text");
+    assert.equal($firstDataCell.find('.dx-select-checkbox.dx-checkbox').length, 1, 'first cell contains select checkbox');
+    assert.equal($firstDataCell.find('.dx-treelist-text-content').text(), 'Name 1', 'first cell text');
 });
 
-QUnit.test("Filter row should not contains selection checkboxes", function(assert) {
+QUnit.test('Filter row should not contains selection checkboxes', function(assert) {
     createTreeList({
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         selection: { mode: 'multiple' },
         filterRow: {
             visible: true
         },
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 3", age: 19 }
+            { id: 1, parentId: 0, name: 'Name 3', age: 19 }
         ]
     });
 
@@ -534,12 +534,12 @@ QUnit.test("Filter row should not contains selection checkboxes", function(asser
     this.clock.tick();
 
     // assert
-    assert.equal($("#treeList").find(".dx-treelist-filter-row").length, 1, "filter row is rendered");
-    assert.equal($("#treeList").find(".dx-checkbox").length, 2, "selection chebkboxes are rendered");
-    assert.equal($("#treeList").find(".dx-treelist-filter-row .dx-checkbox").length, 0, "no selection chebkboxes in filter row");
+    assert.equal($('#treeList').find('.dx-treelist-filter-row').length, 1, 'filter row is rendered');
+    assert.equal($('#treeList').find('.dx-checkbox').length, 2, 'selection chebkboxes are rendered');
+    assert.equal($('#treeList').find('.dx-treelist-filter-row .dx-checkbox').length, 0, 'no selection chebkboxes in filter row');
 });
 
-QUnit.test("Aria accessibility", function(assert) {
+QUnit.test('Aria accessibility', function(assert) {
     // arrange, act
     var $dataRows,
         $headerTable,
@@ -547,10 +547,10 @@ QUnit.test("Aria accessibility", function(assert) {
         $treeList,
         treeList = createTreeList({
             dataSource: [
-                { id: 1, parentId: 0, name: "Name 1", age: 19 },
-                { id: 2, parentId: 1, name: "Name 2", age: 19 },
-                { id: 3, parentId: 2, name: "Name 3", age: 18 },
-                { id: 4, parentId: 0, name: "Name 4", age: 18 }
+                { id: 1, parentId: 0, name: 'Name 1', age: 19 },
+                { id: 2, parentId: 1, name: 'Name 2', age: 19 },
+                { id: 3, parentId: 2, name: 'Name 3', age: 18 },
+                { id: 4, parentId: 0, name: 'Name 4', age: 18 }
             ],
             expandedRowKeys: [1]
         });
@@ -560,38 +560,38 @@ QUnit.test("Aria accessibility", function(assert) {
     // assert
     $treeList = $(treeList.$element());
 
-    assert.equal($treeList.find(".dx-gridbase-container").attr("role"), "treegrid", "treeList base container - value of 'role' attribute");
+    assert.equal($treeList.find('.dx-gridbase-container').attr('role'), 'treegrid', 'treeList base container - value of \'role\' attribute');
 
-    $headerTable = $treeList.find(".dx-treelist-headers table").first();
-    assert.equal($headerTable.attr("role"), "presentation", "header table - value of 'role' attribute");
+    $headerTable = $treeList.find('.dx-treelist-headers table').first();
+    assert.equal($headerTable.attr('role'), 'presentation', 'header table - value of \'role\' attribute');
 
-    $dataTable = $treeList.find(".dx-treelist-rowsview table").first();
-    assert.equal($dataTable.attr("role"), "presentation", "data table - value of 'role' attribute");
+    $dataTable = $treeList.find('.dx-treelist-rowsview table').first();
+    assert.equal($dataTable.attr('role'), 'presentation', 'data table - value of \'role\' attribute');
 
-    $dataRows = $dataTable.find(".dx-data-row");
-    assert.equal($dataRows.eq(0).attr("aria-expanded"), "true", "first data row - value of 'aria-expanded' attribute");
-    assert.equal($dataRows.eq(0).attr("aria-level"), "0", "first data row - value of 'aria-level' attribute");
-    assert.equal($dataRows.eq(1).attr("aria-expanded"), "false", "second data row - value of 'aria-expanded' attribute");
-    assert.equal($dataRows.eq(1).attr("aria-level"), "1", "second data row - value of 'aria-level' attribute");
-    assert.equal($dataRows.eq(2).attr("aria-expanded"), undefined, "third data row hasn't the 'aria-expanded' attribute");
-    assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
+    $dataRows = $dataTable.find('.dx-data-row');
+    assert.equal($dataRows.eq(0).attr('aria-expanded'), 'true', 'first data row - value of \'aria-expanded\' attribute');
+    assert.equal($dataRows.eq(0).attr('aria-level'), '0', 'first data row - value of \'aria-level\' attribute');
+    assert.equal($dataRows.eq(1).attr('aria-expanded'), 'false', 'second data row - value of \'aria-expanded\' attribute');
+    assert.equal($dataRows.eq(1).attr('aria-level'), '1', 'second data row - value of \'aria-level\' attribute');
+    assert.equal($dataRows.eq(2).attr('aria-expanded'), undefined, 'third data row hasn\'t the \'aria-expanded\' attribute');
+    assert.equal($dataRows.eq(2).attr('aria-level'), '0', 'third data row - value of \'aria-level\' attribute');
 });
 
-QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
+QUnit.test('Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)', function(assert) {
     // arrange
     var columnsWrapper = treeListWrapper.columns,
         clock = sinon.useFakeTimers(),
         treeList = createTreeList({
             dataSource: [
-                { id: 0, parentId: -1, c0: "c0" },
-                { id: 1, parentId: 0, c0: "c1" }
+                { id: 0, parentId: -1, c0: 'c0' },
+                { id: 1, parentId: 0, c0: 'c1' }
             ],
             columns: [
                 {
-                    type: "buttons",
-                    buttons: ["add", "edit", "delete", "save", "cancel"]
+                    type: 'buttons',
+                    buttons: ['add', 'edit', 'delete', 'save', 'cancel']
                 },
-                "id"
+                'id'
             ],
             editing: {
                 allowUpdating: true,
@@ -604,7 +604,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
 
     // assert
     columnsWrapper.getCommandButtons().each((_, button) => {
-        var ariaLabel = $(button).attr("aria-label");
+        var ariaLabel = $(button).attr('aria-label');
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
 
@@ -612,7 +612,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     treeList.editRow(0);
     // assert
     columnsWrapper.getCommandButtons().each((_, button) => {
-        var ariaLabel = $(button).attr("aria-label");
+        var ariaLabel = $(button).attr('aria-label');
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
 
@@ -620,9 +620,9 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
 });
 
 // T632028
-QUnit.test("Display context menu", function(assert) {
+QUnit.test('Display context menu', function(assert) {
     // arrange, act
-    var contextMenuItems = [{ text: "test" }],
+    var contextMenuItems = [{ text: 'test' }],
         treeList = createTreeList({
             dataSource: [
                 { id: 1 }
@@ -635,29 +635,29 @@ QUnit.test("Display context menu", function(assert) {
     this.clock.tick();
 
     var $cellElement = $(treeList.getCellElement(0, 0));
-    $cellElement.trigger("contextmenu");
-    var contextMenuInstance = treeList.getView("contextMenuView").element().dxContextMenu("instance");
+    $cellElement.trigger('contextmenu');
+    var contextMenuInstance = treeList.getView('contextMenuView').element().dxContextMenu('instance');
 
     // assert
     assert.ok(contextMenuInstance);
-    assert.deepEqual(contextMenuInstance.option("items"), contextMenuItems);
+    assert.deepEqual(contextMenuInstance.option('items'), contextMenuItems);
 });
 
-QUnit.test("filterSyncEnabled is working in TreeList", function(assert) {
+QUnit.test('filterSyncEnabled is working in TreeList', function(assert) {
     // act
     var treeList = createTreeList({
         filterSyncEnabled: true,
-        columns: [{ dataField: "field", allowHeaderFiltering: true, filterValues: [2] }]
+        columns: [{ dataField: 'field', allowHeaderFiltering: true, filterValues: [2] }]
     });
 
     // act
-    treeList.columnOption("field", { filterValues: [2, 1] });
+    treeList.columnOption('field', { filterValues: [2, 1] });
 
     // assert
-    assert.deepEqual(treeList.option("filterValue"), ["field", "anyof", [2, 1]]);
+    assert.deepEqual(treeList.option('filterValue'), ['field', 'anyof', [2, 1]]);
 });
 
-QUnit.test("filterBulider is working in TreeList", function(assert) {
+QUnit.test('filterBulider is working in TreeList', function(assert) {
     // arrange
     var handlerInit = sinon.spy();
 
@@ -666,21 +666,21 @@ QUnit.test("filterBulider is working in TreeList", function(assert) {
         filterBuilder: {
             onInitialized: handlerInit
         },
-        columns: [{ dataField: "field" }]
+        columns: [{ dataField: 'field' }]
     });
 
     // assert
     assert.equal(handlerInit.called, 0);
 
     // act
-    treeList.option("filterBuilderPopup.visible", true);
+    treeList.option('filterBuilderPopup.visible', true);
 
     // assert
     assert.equal(handlerInit.called, 1);
 });
 
 // T812031
-QUnit.test("Change filterPanel.visible to false", function(assert) {
+QUnit.test('Change filterPanel.visible to false', function(assert) {
     // arrange
     // act
     var treeList = createTreeList({
@@ -688,22 +688,22 @@ QUnit.test("Change filterPanel.visible to false", function(assert) {
         filterPanel: {
             visible: true
         },
-        columns: [{ dataField: "field" }]
+        columns: [{ dataField: 'field' }]
     });
 
     this.clock.tick();
 
     // assert
-    assert.ok(treeList.$element().find(".dx-treelist-filter-panel").is(":visible"), "filter panel is visible");
+    assert.ok(treeList.$element().find('.dx-treelist-filter-panel').is(':visible'), 'filter panel is visible');
 
     // act
-    treeList.option("filterPanel.visible", false);
+    treeList.option('filterPanel.visible', false);
 
     // assert
-    assert.notOk(treeList.$element().find(".dx-treelist-filter-panel").is(":visible"), "filter panel is hidden");
+    assert.notOk(treeList.$element().find('.dx-treelist-filter-panel').is(':visible'), 'filter panel is hidden');
 });
 
-QUnit.test("TreeList with paging", function(assert) {
+QUnit.test('TreeList with paging', function(assert) {
     // arrange, act
     var $treeListElement,
         treeList = createTreeList({
@@ -723,13 +723,13 @@ QUnit.test("TreeList with paging", function(assert) {
 
     // assert
     $treeListElement = $(treeList.$element());
-    assert.strictEqual($treeListElement.find(".dx-treelist-pager").length, 1, "has pager");
-    assert.strictEqual($treeListElement.find(".dx-page").length, 2, "number of containers for page");
-    assert.ok($treeListElement.find(".dx-page").first().hasClass("dx-selection"), "current page - first");
-    assert.strictEqual($treeListElement.find(".dx-page-size").length, 3, "number of containers for page sizes");
+    assert.strictEqual($treeListElement.find('.dx-treelist-pager').length, 1, 'has pager');
+    assert.strictEqual($treeListElement.find('.dx-page').length, 2, 'number of containers for page');
+    assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
+    assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
 });
 
-QUnit.module("Option Changed", {
+QUnit.module('Option Changed', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -738,7 +738,7 @@ QUnit.module("Option Changed", {
     }
 });
 
-QUnit.test("Change dataSource, selectedRowKeys and scrolling options together", function(assert) {
+QUnit.test('Change dataSource, selectedRowKeys and scrolling options together', function(assert) {
     // arrange
     var treeList = createTreeList({});
     this.clock.tick(30);
@@ -747,37 +747,37 @@ QUnit.test("Change dataSource, selectedRowKeys and scrolling options together", 
     treeList.option({
         dataSource: [{ id: 1 }],
         selectedRowKeys: [1],
-        scrolling: { mode: "virtual" }
+        scrolling: { mode: 'virtual' }
     });
     this.clock.tick(30);
 
     // assert
-    assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
+    assert.strictEqual(treeList.getVisibleRows().length, 1, 'row count');
 });
 
 // T575440
-QUnit.test("Change options and call selectRows", function(assert) {
+QUnit.test('Change options and call selectRows', function(assert) {
     // arrange
 
     var createOptions = function() {
         return {
             dataSource: [{
                 id: 1,
-                text: "Brazil"
+                text: 'Brazil'
             }, {
                 id: 2,
-                text: "Spain"
+                text: 'Spain'
             }, {
                 id: 3,
-                text: "USA"
+                text: 'USA'
             }],
             selectedRowKeys: [1, 2, 3],
             selection: {
-                mode: "multiple",
+                mode: 'multiple',
                 recursive: true
             },
             scrolling: {
-                mode: "virtual"
+                mode: 'virtual'
             }
         };
     };
@@ -791,11 +791,11 @@ QUnit.test("Change options and call selectRows", function(assert) {
     this.clock.tick(30);
 
     // assert
-    assert.strictEqual(treeList.getSelectedRowsData().length, 3, "selected rows");
+    assert.strictEqual(treeList.getSelectedRowsData().length, 3, 'selected rows');
 });
 
 // T576806
-QUnit.test("Pages should be correctly loaded after change dataSource and selectedRowKeys options", function(assert) {
+QUnit.test('Pages should be correctly loaded after change dataSource and selectedRowKeys options', function(assert) {
     var treeList = createTreeList({
         height: 1500,
         autoExpandAll: true
@@ -811,55 +811,55 @@ QUnit.test("Pages should be correctly loaded after change dataSource and selecte
     this.clock.tick(0);
 
     // assert
-    assert.strictEqual(treeList.getVisibleRows().length, 40, "row count");
+    assert.strictEqual(treeList.getVisibleRows().length, 40, 'row count');
 });
 
 // T591390
-QUnit.test("Change expandedRowKeys", function(assert) {
+QUnit.test('Change expandedRowKeys', function(assert) {
     // arrange
     var treeList = createTreeList({
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 1", age: 16 },
-            { id: 2, parentId: 1, name: "Name 2", age: 17 },
-            { id: 3, parentId: 2, name: "Name 3", age: 18 }
+            { id: 1, parentId: 0, name: 'Name 1', age: 16 },
+            { id: 2, parentId: 1, name: 'Name 2', age: 17 },
+            { id: 3, parentId: 2, name: 'Name 3', age: 18 }
         ]
     });
     this.clock.tick(30);
 
     // assert
-    assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
+    assert.strictEqual(treeList.getVisibleRows().length, 1, 'row count');
 
     // act
-    treeList.option("expandedRowKeys", [1, 2]);
+    treeList.option('expandedRowKeys', [1, 2]);
     this.clock.tick(30);
 
     // assert
-    assert.strictEqual(treeList.getVisibleRows().length, 3, "row count");
+    assert.strictEqual(treeList.getVisibleRows().length, 3, 'row count');
 });
 
-QUnit.test("TreeList with columnAutoWidth should be rendered", function(assert) {
+QUnit.test('TreeList with columnAutoWidth should be rendered', function(assert) {
     // act
     var treeList = createTreeList({
         columnAutoWidth: true,
-        columns: ["name", "age"],
+        columns: ['name', 'age'],
         dataSource: [
-            { id: 1, parentId: 0, name: "Name 1", age: 19 }
+            { id: 1, parentId: 0, name: 'Name 1', age: 19 }
         ]
     });
 
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.$element().find(".dx-treelist-headers .dx-header-row").length, 1, "header row is rendered");
-    assert.equal(treeList.$element().find(".dx-treelist-rowsview .dx-data-row").length, 1, "data row is rendered");
+    assert.equal(treeList.$element().find('.dx-treelist-headers .dx-header-row').length, 1, 'header row is rendered');
+    assert.equal(treeList.$element().find('.dx-treelist-rowsview .dx-data-row').length, 1, 'data row is rendered');
 });
 
-QUnit.test("Virtual columns", function(assert) {
+QUnit.test('Virtual columns', function(assert) {
     // arrange, act
     var columns = [];
 
     for(var i = 1; i <= 20; i++) {
-        columns.push("field" + i);
+        columns.push('field' + i);
     }
 
     var treeList = createTreeList({
@@ -868,17 +868,17 @@ QUnit.test("Virtual columns", function(assert) {
         dataSource: [{}],
         columns: columns,
         scrolling: {
-            columnRenderingMode: "virtual"
+            columnRenderingMode: 'virtual'
         }
     });
 
     this.clock.tick(0);
 
     // assert
-    assert.equal(treeList.getVisibleColumns().length, 6, "visible column count");
+    assert.equal(treeList.getVisibleColumns().length, 6, 'visible column count');
 });
 
-QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong selectedKeys after dataSource change", function(assert) {
+QUnit.test('Call getSelectedRowKeys with \'leavesOnly\' parameter and wrong selectedKeys after dataSource change', function(assert) {
     var treeList = createTreeList({
         dataSource: [
             { id: 1, field1: 'test1' },
@@ -886,7 +886,7 @@ QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong select
             { id: 3, field1: 'test3' }
         ],
         selection: {
-            mode: "multiple",
+            mode: 'multiple',
             recursive: true
         },
         selectedRowKeys: [1, 3],
@@ -902,35 +902,67 @@ QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong select
     });
 
     // assert
-    assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [], "dataSource is not loaded yet");
+    assert.deepEqual(treeList.getSelectedRowKeys('leavesOnly'), [], 'dataSource is not loaded yet');
 
     this.clock.tick(30);
-    assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [2], "dataSource is reloaded");
+    assert.deepEqual(treeList.getSelectedRowKeys('leavesOnly'), [2], 'dataSource is reloaded');
 });
 
 // T664886
-QUnit.test("Highlight searchText in expandable column", function(assert) {
+QUnit.test('Highlight searchText in expandable column', function(assert) {
     var treeList = createTreeList({
             dataSource: [
-                { id: 1, parentId: 0, name: "Name 1", age: 16 },
-                { id: 2, parentId: 1, name: "Name 2", age: 17 },
-                { id: 3, parentId: 2, name: "Name", age: 18 }
+                { id: 1, parentId: 0, name: 'Name 1', age: 16 },
+                { id: 2, parentId: 1, name: 'Name 2', age: 17 },
+                { id: 3, parentId: 2, name: 'Name', age: 18 }
             ],
             searchPanel: {
-                text: "3"
+                text: '3'
             }
         }),
-        searchTextSelector = ".dx-treelist-search-text";
+        searchTextSelector = '.dx-treelist-search-text';
 
     this.clock.tick(30);
 
     assert.equal(treeList.$element().find(searchTextSelector).length, 1);
 });
 
-QUnit.module("Expand/Collapse rows");
+// T835655
+QUnit.test('Change searchPanel.text', function(assert) {
+    var treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0, name: 'Name 1', age: 16 },
+                { id: 2, parentId: 1, name: 'Name 2', age: 17 },
+                { id: 3, parentId: 2, name: 'Name', age: 18 }
+            ],
+            searchPanel: {
+                visible: true,
+                text: '3'
+            }
+        }),
+        searchPanelSelector = '.dx-treelist-search-panel',
+        $searchInput;
+
+    this.clock.tick(30);
+
+    // act, assert
+    $searchInput = treeList.$element().find(searchPanelSelector).find('input');
+
+    assert.equal($searchInput.val(), '3', 'search text');
+
+    // act
+    treeList.option('searchPanel.text', 'new text');
+
+    $searchInput = treeList.$element().find(searchPanelSelector).find('input');
+
+    // assert
+    assert.equal($searchInput.val(), 'new text', 'search text');
+});
+
+QUnit.module('Expand/Collapse rows');
 
 // T627926
-QUnit.test("Nodes should not be shifted after expanding node on last page", function(assert) {
+QUnit.test('Nodes should not be shifted after expanding node on last page', function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
         topVisibleRowData,
@@ -942,7 +974,7 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
                 pageSize: 2
             },
             scrolling: {
-                mode: "virtual"
+                mode: 'virtual'
             },
             expandedRowKeys: [1],
             dataSource: [
@@ -964,38 +996,38 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
 
     try {
         scrollable.scrollTo({ y: 300 }); // scroll to the last page
-        devices.real().deviceType !== "desktop" && $(scrollable._container()).trigger("scroll");
+        devices.real().deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
         clock.tick();
 
         topVisibleRowData = treeList.getTopVisibleRowData();
 
         // assert
-        assert.strictEqual(treeList.pageIndex(), 4, "page index");
-        assert.strictEqual(treeList.pageCount(), 5, "page count");
+        assert.strictEqual(treeList.pageIndex(), 4, 'page index');
+        assert.strictEqual(treeList.pageCount(), 5, 'page count');
 
         // act
         treeList.expandRow(8);
         treeList.expandRow(9);
 
         // assert
-        assert.strictEqual(treeList.pageIndex(), 3, "page index");
-        assert.strictEqual(treeList.pageCount(), 6, "page count");
-        assert.deepEqual(treeList.getTopVisibleRowData(), topVisibleRowData, "top visible row data has not changed");
+        assert.strictEqual(treeList.pageIndex(), 3, 'page index');
+        assert.strictEqual(treeList.pageCount(), 6, 'page count');
+        assert.deepEqual(treeList.getTopVisibleRowData(), topVisibleRowData, 'top visible row data has not changed');
     } finally {
         clock.restore();
     }
 });
 
 // T648005
-QUnit.test("Scrollbar position must be kept after expanding node when the treelist container has max-height", function(assert) {
+QUnit.test('Scrollbar position must be kept after expanding node when the treelist container has max-height', function(assert) {
     // arrange
-    $("#treeList").css("max-height", 400);
+    $('#treeList').css('max-height', 400);
 
     var done = assert.async(),
         treeList = createTreeList({
             loadingTimeout: undefined,
             scrolling: {
-                mode: "virtual",
+                mode: 'virtual',
                 useNative: false
             },
             dataSource: generateData(100)
@@ -1009,14 +1041,14 @@ QUnit.test("Scrollbar position must be kept after expanding node when the treeli
 
         setTimeout(function() {
             // assert
-            assert.ok($(treeList.element()).find(".dx-treelist-rowsview .dx-scrollbar-vertical > .dx-scrollable-scroll").position().top > 0, "scrollbar position top");
+            assert.ok($(treeList.element()).find('.dx-treelist-rowsview .dx-scrollbar-vertical > .dx-scrollable-scroll').position().top > 0, 'scrollbar position top');
             done();
         }, 310);
     });
 });
 
 // T692068
-QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
+QUnit.test('Expand row if repaintChangesOnly is true', function(assert) {
     // arrange
     var treeList = createTreeList({
         height: 120,
@@ -1033,12 +1065,12 @@ QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
     treeList.expandRow(1);
 
     // assert
-    assert.strictEqual(treeList.getVisibleRows()[0].isExpanded, true, "first row has corrent isExpanded state");
-    assert.strictEqual($(treeList.getRowElement(0)).find(".dx-treelist-expanded").length, 1, "first row has expanded icon");
+    assert.strictEqual(treeList.getVisibleRows()[0].isExpanded, true, 'first row has corrent isExpanded state');
+    assert.strictEqual($(treeList.getRowElement(0)).find('.dx-treelist-expanded').length, 1, 'first row has expanded icon');
 });
 
 // T742885
-QUnit.test("Expand node after filtering when it has many children and they are selected", function(assert) {
+QUnit.test('Expand node after filtering when it has many children and they are selected', function(assert) {
     // arrange
     var clock = sinon.useFakeTimers();
 
@@ -1048,39 +1080,39 @@ QUnit.test("Expand node after filtering when it has many children and they are s
             height: 200,
             dataSource: {
                 store: {
-                    type: "array",
+                    type: 'array',
                     data: [{
-                        field1: "test1",
+                        field1: 'test1',
                         items: [{
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }, {
-                            field1: "test2"
+                            field1: 'test2'
                         }]
                     }]
                 },
                 pageSize: 2
             },
             scrolling: {
-                mode: "virtual"
+                mode: 'virtual'
             },
             selection: {
-                mode: "multiple"
+                mode: 'multiple'
             },
-            itemsExpr: "items",
-            dataStructure: "tree",
-            columns: [{ dataField: "field1", dataType: "string", filterValues: ["test2"] }],
+            itemsExpr: 'items',
+            dataStructure: 'tree',
+            columns: [{ dataField: 'field1', dataType: 'string', filterValues: ['test2'] }],
             onContentReady: function(e) {
                 e.component.selectRows([2, 3, 4, 5, 6, 7, 8, 9]);
             }
@@ -1094,14 +1126,14 @@ QUnit.test("Expand node after filtering when it has many children and they are s
 
         // assert
         var items = treeList.getVisibleRows();
-        assert.strictEqual(items.length, 1, "row count");
-        assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+        assert.strictEqual(items.length, 1, 'row count');
+        assert.notOk(treeList.isRowExpanded(1), 'first node is collapsed');
     } finally {
         clock.restore();
     }
 });
 
-QUnit.module("Focused Row", {
+QUnit.module('Focused Row', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -1110,7 +1142,7 @@ QUnit.module("Focused Row", {
     }
 });
 
-QUnit.test("TreeList with focusedRowEnabled and focusedRowIndex 0", function(assert) {
+QUnit.test('TreeList with focusedRowEnabled and focusedRowIndex 0', function(assert) {
     // arrange, act
     var treeList = createTreeList({
         dataSource: generateData(5),
@@ -1121,14 +1153,14 @@ QUnit.test("TreeList with focusedRowEnabled and focusedRowIndex 0", function(ass
     this.clock.tick();
 
     // assert
-    assert.ok($(treeList.getRowElement(0)).hasClass("dx-row-focused"), "first row is focused");
+    assert.ok($(treeList.getRowElement(0)).hasClass('dx-row-focused'), 'first row is focused');
 });
 
-QUnit.test("TreeList with focusedRowKey", function(assert) {
+QUnit.test('TreeList with focusedRowKey', function(assert) {
     // arrange, act
     var treeList = createTreeList({
         height: 100,
-        keyExpr: "id",
+        keyExpr: 'id',
         dataSource: generateData(10),
         paging: {
             pageSize: 4
@@ -1140,16 +1172,16 @@ QUnit.test("TreeList with focusedRowKey", function(assert) {
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.pageIndex(), 1, "page is changed");
-    assert.deepEqual(treeList.option("expandedRowKeys"), [11], "focus parent is expanded");
-    assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
+    assert.equal(treeList.pageIndex(), 1, 'page is changed');
+    assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'focus parent is expanded');
+    assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass('dx-row-focused'), 'focused row is visible');
 });
 
-QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) {
+QUnit.test('TreeList with remoteOperations and focusedRowKey', function(assert) {
     // arrange, act
     var treeList = createTreeList({
         height: 100,
-        keyExpr: "id",
+        keyExpr: 'id',
         dataSource: generateData(10),
         remoteOperations: true,
         paging: {
@@ -1162,23 +1194,23 @@ QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) 
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.pageIndex(), 1, "page is changed");
-    assert.deepEqual(treeList.option("expandedRowKeys"), [11], "focus parent is expanded");
-    assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
+    assert.equal(treeList.pageIndex(), 1, 'page is changed');
+    assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'focus parent is expanded');
+    assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass('dx-row-focused'), 'focused row is visible');
 });
 
-QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and focusedRowKey should not generate repeated node", function(assert) {
+QUnit.test('TreeList with remoteOperations(filtering, sorting, grouping) and focusedRowKey should not generate repeated node', function(assert) {
     // arrange, act
     var childrenNodes,
         treeList = createTreeList({
             dataSource: [
-                { "Task_ID": 1, "Task_Parent_ID": 0 },
-                { "Task_ID": 3, "Task_Parent_ID": 1 },
-                { "Task_ID": 4, "Task_Parent_ID": 2 },
-                { "Task_ID": 5, "Task_Parent_ID": 3 }
+                { 'Task_ID': 1, 'Task_Parent_ID': 0 },
+                { 'Task_ID': 3, 'Task_Parent_ID': 1 },
+                { 'Task_ID': 4, 'Task_Parent_ID': 2 },
+                { 'Task_ID': 5, 'Task_Parent_ID': 3 }
             ],
-            keyExpr: "Task_ID",
-            parentIdExpr: "Task_Parent_ID",
+            keyExpr: 'Task_ID',
+            parentIdExpr: 'Task_Parent_ID',
             remoteOperations: {
                 filtering: true,
                 sorting: true,
@@ -1194,14 +1226,14 @@ QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and foc
     childrenNodes = treeList.getNodeByKey(1).children;
 
     // assert
-    assert.equal(childrenNodes.length, 1, "children nodes count");
-    assert.equal(childrenNodes[0].key, 3, "children node key");
+    assert.equal(childrenNodes.length, 1, 'children nodes count');
+    assert.equal(childrenNodes[0].key, 3, 'children node key');
 });
 
-QUnit.testInActiveWindow("TreeList should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
+QUnit.testInActiveWindow('TreeList should focus the corresponding group row if group collapsed and inner data row was focused', function(assert) {
     // arrange
     var treeList = createTreeList({
-        keyExpr: "id",
+        keyExpr: 'id',
         dataSource: generateData(10),
         focusedRowEnabled: true,
         expandedRowKeys: [3],
@@ -1216,15 +1248,15 @@ QUnit.testInActiveWindow("TreeList should focus the corresponding group row if g
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.isRowExpanded(3), false, "parent node collapsed");
-    assert.equal(treeList.option("focusedRowKey"), 3, "parent node focused");
+    assert.equal(treeList.isRowExpanded(3), false, 'parent node collapsed');
+    assert.equal(treeList.option('focusedRowKey'), 3, 'parent node focused');
 });
 
-QUnit.test("TreeList should focus only one focused row (T827201)", function(assert) {
+QUnit.test('TreeList should focus only one focused row (T827201)', function(assert) {
     // arrange
     const rowsViewWrapper = treeListWrapper.rowsView;
     const treeList = createTreeList({
-        keyExpr: "id",
+        keyExpr: 'id',
         dataSource: generateData(10),
         focusedRowEnabled: true,
         focusedRowKey: 3
@@ -1237,11 +1269,11 @@ QUnit.test("TreeList should focus only one focused row (T827201)", function(asse
     this.clock.tick();
 
     // assert
-    assert.equal(rowsViewWrapper.getFocusedRow().length, 1, "Only one row is focused");
-    assert.ok(rowsViewWrapper.isFocusedRow(treeList.getRowIndexByKey(9)), "Row with key 9 is focused");
+    assert.equal(rowsViewWrapper.getFocusedRow().length, 1, 'Only one row is focused');
+    assert.ok(rowsViewWrapper.isFocusedRow(treeList.getRowIndexByKey(9)), 'Row with key 9 is focused');
 });
 
-QUnit.test("TreeList navigateTo", function(assert) {
+QUnit.test('TreeList navigateTo', function(assert) {
     // arrange, act
     var treeList = createTreeList({
         dataSource: generateData(10),
@@ -1256,12 +1288,12 @@ QUnit.test("TreeList navigateTo", function(assert) {
     this.clock.tick();
 
     // assert
-    assert.equal(treeList.pageIndex(), 1, "page is changed");
-    assert.ok(treeList.getRowIndexByKey(12) >= 0, "key is visible");
+    assert.equal(treeList.pageIndex(), 1, 'page is changed');
+    assert.ok(treeList.getRowIndexByKey(12) >= 0, 'key is visible');
 });
 
 // T697860
-QUnit.test("dataSource change with columns should force one loading only", function(assert) {
+QUnit.test('dataSource change with columns should force one loading only', function(assert) {
     var loadingSpy = sinon.spy();
 
     var options = {
@@ -1279,33 +1311,33 @@ QUnit.test("dataSource change with columns should force one loading only", funct
         paging: {
             pageSize: 2
         },
-        columns: ["id"]
+        columns: ['id']
     };
 
     var treeList = createTreeList(options);
 
     this.clock.tick(0);
 
-    options.dataSource.store().on("loading", loadingSpy);
+    options.dataSource.store().on('loading', loadingSpy);
 
     // act
     treeList.option(options);
     this.clock.tick(0);
 
     // assert
-    assert.equal(loadingSpy.callCount, 1, "loading called once");
-    assert.equal(treeList.getVisibleRows().length, 3, "visible row count");
+    assert.equal(loadingSpy.callCount, 1, 'loading called once');
+    assert.equal(treeList.getVisibleRows().length, 3, 'visible row count');
 });
 
-QUnit.test("Should not generate exception when selection mode is multiple and focusedRowKey is set for the nested node (T735585)", function(assert) {
+QUnit.test('Should not generate exception when selection mode is multiple and focusedRowKey is set for the nested node (T735585)', function(assert) {
     var options = {
         dataSource: [
-            { id: 0, parentId: -1, c0: "C0_0", c1: "c1_0" },
-            { id: 1, parentId: 0, c0: "C0_0", c1: "c1_0" }
+            { id: 0, parentId: -1, c0: 'C0_0', c1: 'c1_0' },
+            { id: 1, parentId: 0, c0: 'C0_0', c1: 'c1_0' }
         ],
-        keyExpr: "id",
-        parentIdExpr: "parentId",
-        selection: { mode: "single" },
+        keyExpr: 'id',
+        parentIdExpr: 'parentId',
+        selection: { mode: 'single' },
         focusedRowEnabled: true,
         focusedRowKey: 1,
         expandedRowKeys: [1],
@@ -1322,7 +1354,7 @@ QUnit.test("Should not generate exception when selection mode is multiple and fo
         this.clock.tick();
 
         // arrange
-        options.selection.mode = "multiple";
+        options.selection.mode = 'multiple';
 
         // act
         createTreeList(options);
@@ -1333,10 +1365,10 @@ QUnit.test("Should not generate exception when selection mode is multiple and fo
     }
 
     // assert
-    assert.ok(true, "No exceptions");
+    assert.ok(true, 'No exceptions');
 });
 
-QUnit.module("Scroll", {
+QUnit.module('Scroll', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -1346,7 +1378,7 @@ QUnit.module("Scroll", {
 });
 
 // T757537
-QUnit.test("TreeList should not hang when scrolling", function(assert) {
+QUnit.test('TreeList should not hang when scrolling', function(assert) {
     // arrange
     var scrollable,
         contentReadySpy = sinon.spy(),
@@ -1391,22 +1423,22 @@ QUnit.test("TreeList should not hang when scrolling", function(assert) {
 
     setTimeout(function() {
         // assert
-        assert.strictEqual(treeList.pageIndex(), 2, "page index");
-        assert.strictEqual(contentReadySpy.callCount, 3, "onContentReady");
+        assert.strictEqual(treeList.pageIndex(), 2, 'page index');
+        assert.strictEqual(contentReadySpy.callCount, 3, 'onContentReady');
         done();
     }, 1000);
 });
 
 // T806141
-QUnit.test("TreeList should correctly load data when filtering is remote and sorting is applied", function(assert) {
+QUnit.test('TreeList should correctly load data when filtering is remote and sorting is applied', function(assert) {
     // arrange
     var loadSpy = sinon.spy(),
-        data = [{ id: 0, parentId: "", hasItems: true }, { id: 1, parentId: 0, hasItems: false }],
+        data = [{ id: 0, parentId: '', hasItems: true }, { id: 1, parentId: 0, hasItems: false }],
         treeList = createTreeList({
             dataSource: {
                 load: function(options) {
                     loadSpy(options);
-                    if(options.filter && options.filter[2] !== "") {
+                    if(options.filter && options.filter[2] !== '') {
                         return $.Deferred().resolve([data[1]]);
                     }
                     return $.Deferred().resolve([data[0]]);
@@ -1415,37 +1447,37 @@ QUnit.test("TreeList should correctly load data when filtering is remote and sor
             remoteOperations: {
                 filtering: true
             },
-            keyExpr: "id",
-            parentIdExpr: "parentId",
-            hasItemsExpr: "hasItems",
-            rootValue: "",
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            hasItemsExpr: 'hasItems',
+            rootValue: '',
             showBorders: true,
             columns: [
-                { dataField: "id", sortOrder: "asc" }
+                { dataField: 'id', sortOrder: 'asc' }
             ]
         });
 
     this.clock.tick(100);
 
     // act
-    $("#treeList").find(".dx-treelist-collapsed").trigger("dxclick");
+    $('#treeList').find('.dx-treelist-collapsed').trigger('dxclick');
     this.clock.tick(100);
     this.clock.restore();
 
     // assert
-    assert.equal(loadSpy.callCount, 2, "load call count");
+    assert.equal(loadSpy.callCount, 2, 'load call count');
 
-    assert.deepEqual(loadSpy.args[0][0].filter, ["parentId", "=", ""], "first load arguments");
-    assert.deepEqual(loadSpy.args[1][0].filter, ["parentId", "=", 0], "second load arguments");
+    assert.deepEqual(loadSpy.args[0][0].filter, ['parentId', '=', ''], 'first load arguments');
+    assert.deepEqual(loadSpy.args[1][0].filter, ['parentId', '=', 0], 'second load arguments');
 
-    assert.equal($(treeList.getCellElement(0, 0)).text(), "0", "first row first cell");
-    assert.equal($(treeList.getCellElement(1, 0)).text(), "1", "second row first cell");
+    assert.equal($(treeList.getCellElement(0, 0)).text(), '0', 'first row first cell');
+    assert.equal($(treeList.getCellElement(1, 0)).text(), '1', 'second row first cell');
 
     loadSpy.reset();
 });
 
 // T806547
-QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true", function(assert) {
+QUnit.test('TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true', function(assert) {
     // arrange
     var $row,
         treeList = createTreeList({
@@ -1453,21 +1485,21 @@ QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column a
             autoExpandAll: false,
             repaintChangesOnly: true,
             columns: [{
-                dataField: "id",
+                dataField: 'id',
                 fixed: true
-            }, "field"],
+            }, 'field'],
             dataSource: [{
                 id: 1,
                 parentId: 0,
-                field: "data"
+                field: 'data'
             }, {
                 id: 2,
                 parentId: 1,
-                field: "data"
+                field: 'data'
             }, {
                 id: 3,
                 parentId: 0,
-                field: "data"
+                field: 'data'
             }]
         });
 
@@ -1479,11 +1511,11 @@ QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column a
     $row = $(treeList.getRowElement(2));
 
     // assert
-    assert.notOk($row.eq(0).hasClass("dx-row-alt"), "unfixed table row element");
-    assert.notOk($row.eq(1).hasClass("dx-row-alt"), "fixed table row element");
+    assert.notOk($row.eq(0).hasClass('dx-row-alt'), 'unfixed table row element');
+    assert.notOk($row.eq(1).hasClass('dx-row-alt'), 'fixed table row element');
 });
 
-QUnit.test("TreeList should reshape data after update dataSource if reshapeOnPush set true (T815367)", function(assert) {
+QUnit.test('TreeList should reshape data after update dataSource if reshapeOnPush set true (T815367)', function(assert) {
     // arrange
     var $row,
         treeList = createTreeList({
@@ -1491,13 +1523,13 @@ QUnit.test("TreeList should reshape data after update dataSource if reshapeOnPus
                 store: [{
                     ID: 1,
                     Head_ID: 0,
-                    Name: "John"
+                    Name: 'John'
                 }],
                 reshapeOnPush: true
             },
-            keyExpr: "ID",
-            parentIdExpr: "Head_ID",
-            columns: ["Name"],
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
+            columns: ['Name'],
             expandedRowKeys: [1]
         });
     this.clock.tick();
@@ -1505,7 +1537,7 @@ QUnit.test("TreeList should reshape data after update dataSource if reshapeOnPus
     // act
     treeList.getDataSource().store().push([{
         type: 'insert',
-        data: { ID: 2, Head_ID: 1, Name: "Alex" }
+        data: { ID: 2, Head_ID: 1, Name: 'Alex' }
     }]);
     this.clock.tick();
 
@@ -1513,23 +1545,23 @@ QUnit.test("TreeList should reshape data after update dataSource if reshapeOnPus
     $row = $(treeList.getRowElement(1));
 
     // assert
-    assert.ok($row && $row.text() === "Alex", "pushed item displays");
+    assert.ok($row && $row.text() === 'Alex', 'pushed item displays');
 });
 
-QUnit.test("TreeList should not reshape data after expand row (T815367)", function(assert) {
+QUnit.test('TreeList should not reshape data after expand row (T815367)', function(assert) {
     // arrange
     var onNodesInitializedSpy = sinon.spy(),
         treeList = createTreeList({
             dataSource: {
                 store: [
-                    { ID: 1, Head_ID: 0, Name: "John" },
-                    { ID: 2, Head_ID: 1, Name: "Alex" }
+                    { ID: 1, Head_ID: 0, Name: 'John' },
+                    { ID: 2, Head_ID: 1, Name: 'Alex' }
                 ],
                 reshapeOnPush: true
             },
-            keyExpr: "ID",
-            parentIdExpr: "Head_ID",
-            columns: ["Name"],
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
+            columns: ['Name'],
             expandedRowKeys: [],
             onNodesInitialized: onNodesInitializedSpy
         });
@@ -1540,17 +1572,17 @@ QUnit.test("TreeList should not reshape data after expand row (T815367)", functi
     this.clock.tick();
 
     // assert
-    assert.equal(onNodesInitializedSpy.callCount, 1, "data did not reshape");
+    assert.equal(onNodesInitializedSpy.callCount, 1, 'data did not reshape');
 });
 
-QUnit.test("TreeList should not occur an exception on an attempt to remove the non-existing key from the store (T827142)", function(assert) {
+QUnit.test('TreeList should not occur an exception on an attempt to remove the non-existing key from the store (T827142)', function(assert) {
     // arrange
     var store = new ArrayStore({
         data: [
             { id: 1, parentId: 0, age: 19 },
             { id: 2, parentId: 1, age: 16 }
         ],
-        key: "id",
+        key: 'id',
         reshapeOnPush: true
     });
 
@@ -1558,8 +1590,8 @@ QUnit.test("TreeList should not occur an exception on an attempt to remove the n
         dataSource: {
             store: store
         },
-        keyExpr: "id",
-        parentIdExpr: "parentId",
+        keyExpr: 'id',
+        parentIdExpr: 'parentId',
     });
     this.clock.tick();
 
@@ -1568,34 +1600,34 @@ QUnit.test("TreeList should not occur an exception on an attempt to remove the n
     this.clock.tick();
 
     // assert
-    assert.ok(true, "exception does not occur");
+    assert.ok(true, 'exception does not occur');
 });
 
-QUnit.test("TreeList should filter data with unreachable items (T816921)", function(assert) {
+QUnit.test('TreeList should filter data with unreachable items (T816921)', function(assert) {
     // arrange
     var treeList = createTreeList({
         dataSource: [
-            { ID: 1, Head_ID: 0, Name: "John" },
-            { ID: 2, Head_ID: 1, Name: "Alex" },
-            { ID: 3, Head_ID: 100, Name: "Alex" }
+            { ID: 1, Head_ID: 0, Name: 'John' },
+            { ID: 2, Head_ID: 1, Name: 'Alex' },
+            { ID: 3, Head_ID: 100, Name: 'Alex' }
         ],
-        keyExpr: "ID",
-        parentIdExpr: "Head_ID",
+        keyExpr: 'ID',
+        parentIdExpr: 'Head_ID',
         loadingTimeout: undefined,
         searchPanel: {
             visible: true,
 
             // act
-            text: "Alex"
+            text: 'Alex'
         }
     });
 
     // assert
-    assert.equal(treeList.getVisibleRows().length, 2, "filtered row count");
+    assert.equal(treeList.getVisibleRows().length, 2, 'filtered row count');
 });
 
 
-QUnit.module("Row dragging", {
+QUnit.module('Row dragging', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -1605,7 +1637,7 @@ QUnit.module("Row dragging", {
 });
 
 // T831020
-QUnit.test("The draggable row should have correct markup when defaultOptions is specified", function(assert) {
+QUnit.test('The draggable row should have correct markup when defaultOptions is specified', function(assert) {
     // arrange
     TreeList.defaultOptions({
         options: {
@@ -1624,11 +1656,11 @@ QUnit.test("The draggable row should have correct markup when defaultOptions is 
     try {
         const treeList = createTreeList({
             dataSource: [
-                { ID: 1, Head_ID: 0, Name: "John" },
-                { ID: 2, Head_ID: 0, Name: "Alex" }
+                { ID: 1, Head_ID: 0, Name: 'John' },
+                { ID: 2, Head_ID: 0, Name: 'Alex' }
             ],
-            keyExpr: "ID",
-            parentIdExpr: "Head_ID",
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
             rowDragging: {
                 allowReordering: true
             }
@@ -1640,12 +1672,12 @@ QUnit.test("The draggable row should have correct markup when defaultOptions is 
         pointerMock(treeList.getCellElement(0, 0)).start().down().move(100, 100);
 
         // assert
-        const $draggableRow = $("body").children(".dx-sortable-dragging");
-        assert.strictEqual($draggableRow.length, 1, "has draggable row");
+        const $draggableRow = $('body').children('.dx-sortable-dragging');
+        assert.strictEqual($draggableRow.length, 1, 'has draggable row');
 
-        const $visibleView = $draggableRow.find(".dx-gridbase-container").children(":visible");
-        assert.strictEqual($visibleView.length, 1, "markup of the draggable row is correct");
-        assert.ok($visibleView.hasClass("dx-treelist-rowsview"), "rowsview is visible");
+        const $visibleView = $draggableRow.find('.dx-gridbase-container').children(':visible');
+        assert.strictEqual($visibleView.length, 1, 'markup of the draggable row is correct');
+        assert.ok($visibleView.hasClass('dx-treelist-rowsview'), 'rowsview is visible');
     } finally {
         TreeList.defaultOptions({
             options: {

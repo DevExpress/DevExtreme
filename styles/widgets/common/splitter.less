@@ -6,22 +6,25 @@
     top: 0;
 
     &.dx-splitter-initial {
-        right: 0;
+        right: 3.5px; // Half of dx-splitter-border width
     }
 
     .dx-splitter-border {
         z-index: 997;
         height: 100%;
         display: table;
+        width: 7px;
+        cursor: col-resize;
 
         .dx-splitter {
             height: 100%;
-            width: 3px;
+            width: 1px;
             display: block;
             cursor: col-resize;
             z-index: 999; // Below @OVERLAY_ZINDEX: 1000
+            margin: auto;
 
-            &.dx-splitter-transparent {
+            &.dx-splitter-inactive {
                 z-index: 998;
             }
 

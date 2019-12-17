@@ -1,14 +1,15 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import { isDefined } from "../../core/utils/type";
-import { compileGetter } from "../../core/utils/data";
-import { each } from "../../core/utils/iterator";
-import { combineFilters, getFormatOptionsByColumn, formatValue } from "./ui.grid_core.utils";
-import messageLocalization from "../../localization/message";
-import dataQuery from "../../data/query";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import { isDefined } from '../../core/utils/type';
+import { compileGetter } from '../../core/utils/data';
+import { each } from '../../core/utils/iterator';
+import { combineFilters, getFormatOptionsByColumn, formatValue } from './ui.grid_core.utils';
+import messageLocalization from '../../localization/message';
+import dataQuery from '../../data/query';
 
-var SEARCH_PANEL_CLASS = "search-panel",
-    SEARCH_TEXT_CLASS = "search-text",
+var SEARCH_PANEL_CLASS = 'search-panel',
+    SEARCH_TEXT_CLASS = 'search-text',
+    HEADER_PANEL_CLASS = 'header-panel',
     FILTERING_TIMEOUT = 700;
 
 
@@ -56,7 +57,7 @@ module.exports = {
                  * @type string
                  * @default "Search..."
                  */
-                placeholder: messageLocalization.format("dxDataGrid-searchPanelPlaceholder"),
+                placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
                 /**
                  * @name GridBaseOptions.searchPanel.highlightSearchText
                  * @type boolean
@@ -75,7 +76,7 @@ module.exports = {
                  * @default ""
                  * @fires GridBaseOptions.onOptionChanged
                  */
-                text: "",
+                text: '',
                 /**
                  * @name GridBaseOptions.searchPanel.searchVisibleColumnsOnly
                  * @type boolean
@@ -92,7 +93,7 @@ module.exports = {
                     var i,
                         column,
                         columns = that._columnsController.getColumns(),
-                        searchVisibleColumnsOnly = that.option("searchPanel.searchVisibleColumnsOnly"),
+                        searchVisibleColumnsOnly = that.option('searchPanel.searchVisibleColumnsOnly'),
                         filterValue,
                         lookup,
                         filters = [];
@@ -106,7 +107,7 @@ module.exports = {
 
                         for(i = 0; i < items.length; i++) {
                             value = valueGetter(items[i]);
-                            filters.push(column.createFilterExpression(value, null, "search"));
+                            filters.push(column.createFilterExpression(value, null, 'search'));
                         }
                     }
 
@@ -119,26 +120,26 @@ module.exports = {
                             lookup = column.lookup;
                             filterValue = parseValue(column, text);
                             if(lookup && lookup.items) {
-                                dataQuery(lookup.items).filter(column.createFilterExpression.call({ dataField: lookup.displayExpr, dataType: lookup.dataType, calculateFilterExpression: column.calculateFilterExpression }, filterValue, null, "search")).enumerate().done(onQueryDone);
+                                dataQuery(lookup.items).filter(column.createFilterExpression.call({ dataField: lookup.displayExpr, dataType: lookup.dataType, calculateFilterExpression: column.calculateFilterExpression }, filterValue, null, 'search')).enumerate().done(onQueryDone);
                             } else {
                                 if(filterValue !== undefined) {
-                                    filters.push(column.createFilterExpression(filterValue, null, "search"));
+                                    filters.push(column.createFilterExpression(filterValue, null, 'search'));
                                 }
                             }
                         }
                     }
 
-                    return combineFilters(filters, "or");
+                    return combineFilters(filters, 'or');
                 };
 
                 return {
                     publicMethods: function() {
-                        return this.callBase().concat(["searchByText"]);
+                        return this.callBase().concat(['searchByText']);
                     },
                     _calculateAdditionalFilter: function() {
                         var that = this,
                             filter = that.callBase(),
-                            searchFilter = calculateSearchFilter(that, that.option("searchPanel.text"));
+                            searchFilter = calculateSearchFilter(that, that.option('searchPanel.text'));
 
                         return combineFilters([filter, searchFilter]);
                     },
@@ -149,15 +150,15 @@ module.exports = {
                      * @param1 text:string
                      */
                     searchByText: function(text) {
-                        this.option("searchPanel.text", text);
+                        this.option('searchPanel.text', text);
                     },
 
                     optionChanged: function(args) {
                         var that = this;
 
                         switch(args.fullName) {
-                            case "searchPanel.text":
-                            case "searchPanel":
+                            case 'searchPanel.text':
+                            case 'searchPanel':
                                 that._applyFilter();
                                 args.handled = true;
                                 break;
@@ -171,7 +172,7 @@ module.exports = {
         views: {
             headerPanel: (function() {
                 var getSearchPanelOptions = function(that) {
-                    return that.option("searchPanel");
+                    return that.option('searchPanel');
                 };
 
                 return {
@@ -183,37 +184,37 @@ module.exports = {
 
                     _prepareSearchItem: function(items) {
                         var that = this,
-                            dataController = that.getController("data"),
+                            dataController = that.getController('data'),
                             searchPanelOptions = getSearchPanelOptions(that);
 
                         if(searchPanelOptions && searchPanelOptions.visible) {
                             var toolbarItem = {
                                 template: function(data, index, container) {
-                                    var $search = $("<div>")
+                                    var $search = $('<div>')
                                         .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
                                         .appendTo(container);
 
-                                    that.getController("editorFactory").createEditor($search, {
+                                    that.getController('editorFactory').createEditor($search, {
                                         width: searchPanelOptions.width,
                                         placeholder: searchPanelOptions.placeholder,
-                                        parentType: "searchPanel",
-                                        value: that.option("searchPanel.text"),
+                                        parentType: 'searchPanel',
+                                        value: that.option('searchPanel.text'),
                                         updateValueTimeout: FILTERING_TIMEOUT,
                                         setValue: function(value) {
                                             dataController.searchByText(value);
                                         },
                                         editorOptions: {
                                             inputAttr: {
-                                                "aria-label": messageLocalization.format("dxDataGrid-ariaSearchInGrid")
+                                                'aria-label': messageLocalization.format('dxDataGrid-ariaSearchInGrid')
                                             }
                                         }
                                     });
 
                                     that.resize();
                                 },
-                                name: "searchPanel",
-                                location: "after",
-                                locateInMenu: "never",
+                                name: 'searchPanel',
+                                location: 'after',
+                                locateInMenu: 'never',
                                 sortIndex: 40
                             };
 
@@ -224,13 +225,14 @@ module.exports = {
                     },
 
                     getSearchTextEditor: function() {
-                        var $element = this.element(),
-                            $searchPanel = $element.find("." + this.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
-                                return $(this).closest(".dx-datagrid-header-panel").is($element);
+                        var that = this,
+                            $element = that.element(),
+                            $searchPanel = $element.find('.' + that.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
+                                return $(this).closest('.' + that.addWidgetPrefix(HEADER_PANEL_CLASS)).is($element);
                             });
 
                         if($searchPanel.length) {
-                            return $searchPanel.dxTextBox("instance");
+                            return $searchPanel.dxTextBox('instance');
                         }
                         return null;
                     },
@@ -242,12 +244,12 @@ module.exports = {
                     },
 
                     optionChanged: function(args) {
-                        if(args.name === "searchPanel") {
+                        if(args.name === 'searchPanel') {
 
-                            if(args.fullName === "searchPanel.text") {
+                            if(args.fullName === 'searchPanel.text') {
                                 var editor = this.getSearchTextEditor();
                                 if(editor) {
-                                    editor.option("value", args.value);
+                                    editor.option('value', args.value);
                                 }
                             } else {
                                 this._invalidate();
@@ -268,12 +270,12 @@ module.exports = {
 
                 _getFormattedSearchText: function(column, searchText) {
                     var value = parseValue(column, searchText),
-                        formatOptions = getFormatOptionsByColumn(column, "search");
+                        formatOptions = getFormatOptionsByColumn(column, 'search');
                     return formatValue(value, formatOptions);
                 },
 
                 _getStringNormalizer: function() {
-                    var isCaseSensitive = this.option("searchPanel.highlightCaseSensitive");
+                    var isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
                     return function(str) {
                         return isCaseSensitive ? str : str.toLowerCase();
                     };
@@ -288,16 +290,16 @@ module.exports = {
                         normalizedSearchText = stringNormalizer(searchText);
 
                     if(!$parent.length) {
-                        $parent = $("<div>").append(cellElement);
+                        $parent = $('<div>').append(cellElement);
                     } else if(column) {
                         if(column.groupIndex >= 0 && !column.showWhenGrouped) {
                             $items = cellElement;
                         } else {
                             columnIndex = that._columnsController.getVisibleIndex(column.index);
-                            $items = $parent.children("td").eq(columnIndex).find("*");
+                            $items = $parent.children('td').eq(columnIndex).find('*');
                         }
                     }
-                    $items = $items && $items.length ? $items : $parent.find("*");
+                    $items = $items && $items.length ? $items : $parent.find('*');
 
                     $items = $items.filter(function(_, element) {
                         var $contents = $(element).contents();
@@ -315,7 +317,7 @@ module.exports = {
 
                 _highlightSearchTextCore: function($textNode, searchText) {
                     var that = this,
-                        $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
+                        $searchTextSpan = $('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
                         text = $textNode.text(),
                         firstContentElement = $textNode[0],
                         stringNormalizer = this._getStringNormalizer(),
@@ -338,19 +340,19 @@ module.exports = {
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
                         stringNormalizer = this._getStringNormalizer(),
-                        searchText = that.option("searchPanel.text");
+                        searchText = that.option('searchPanel.text');
 
                     if(isEquals && column) {
                         searchText = searchText && that._getFormattedSearchText(column, searchText);
                     }
 
-                    if(searchText && that.option("searchPanel.highlightSearchText")) {
+                    if(searchText && that.option('searchPanel.highlightSearchText')) {
                         var textNodes = that._findHighlightingTextNodes(column, cellElement, searchText);
                         each(textNodes, function(_, element) {
                             each($(element).contents(), function(_, textNode) {
                                 if(isEquals) {
                                     if(stringNormalizer($(textNode).text()) === stringNormalizer(searchText)) {
-                                        $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(textNode).text()));
+                                        $(this).replaceWith($('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(textNode).text()));
                                     }
                                 } else {
                                     that._highlightSearchTextCore($(textNode), searchText);
@@ -364,8 +366,8 @@ module.exports = {
                     this.callBase.apply(this, arguments);
 
                     // T103538
-                    if(this.option("rowTemplate")) {
-                        if(this.option("templatesRenderAsynchronously")) {
+                    if(this.option('rowTemplate')) {
+                        if(this.option('templatesRenderAsynchronously')) {
                             clearTimeout(this._highlightTimer);
 
                             this._highlightTimer = setTimeout(function() {
@@ -380,10 +382,10 @@ module.exports = {
                 _updateCell: function($cell, parameters) {
                     var column = parameters.column,
                         dataType = column.lookup && column.lookup.dataType || column.dataType,
-                        isEquals = dataType !== "string";
+                        isEquals = dataType !== 'string';
 
                     if(allowSearch(column)) {
-                        if(this.option("templatesRenderAsynchronously")) {
+                        if(this.option('templatesRenderAsynchronously')) {
                             if(!this._searchParams.length) {
                                 clearTimeout(this._highlightTimer);
 

@@ -1,11 +1,11 @@
-import $ from "jquery";
-import ArrayStore from "data/array_store";
-import config from "core/config";
-import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
+import $ from 'jquery';
+import ArrayStore from 'data/array_store';
+import config from 'core/config';
+import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 
-QUnit.module("Loading data");
+QUnit.module('Loading data');
 
-QUnit.test("trivial load", assert => {
+QUnit.test('trivial load', function(assert) {
     const done = assert.async();
 
     new ArrayStore([1]).load().done((data, extra) => {
@@ -14,7 +14,7 @@ QUnit.test("trivial load", assert => {
     });
 });
 
-QUnit.test("totalCount", assert => {
+QUnit.test('totalCount', function(assert) {
     const done = assert.async();
 
     const data = [
@@ -28,8 +28,8 @@ QUnit.test("totalCount", assert => {
 
     new ArrayStore(data)
         .totalCount({
-            filter: ["a", "<>", 1],
-            group: "a",
+            filter: ['a', '<>', 1],
+            group: 'a',
             pageSize: 2
 
         })
@@ -39,7 +39,7 @@ QUnit.test("totalCount", assert => {
         });
 });
 
-QUnit.test("load callbacks", assert => {
+QUnit.test('load callbacks', function(assert) {
     const done = assert.async();
 
     const checklist = {};
@@ -56,18 +56,18 @@ QUnit.test("load callbacks", assert => {
         }
     });
 
-    store.on("loading", options => {
+    store.on('loading', options => {
         checklist.on_loading_callback = options;
     });
 
-    store.on("loaded", data => {
+    store.on('loaded', data => {
         checklist.on_loaded_callback = data;
     });
 
-    store.load({ sort: "a", extra: 1 }).done(data => {
+    store.load({ sort: 'a', extra: 1 }).done(data => {
         assert.deepEqual(checklist, {
-            onLoading_option: { sort: "a", extra: 1 },
-            on_loading_callback: { sort: "a", extra: 1 },
+            onLoading_option: { sort: 'a', extra: 1 },
+            on_loading_callback: { sort: 'a', extra: 1 },
             onLoaded_option: [{ a: 1, b: 2 }],
             on_loaded_callback: [{ a: 1, b: 2 }]
         });
@@ -77,7 +77,7 @@ QUnit.test("load callbacks", assert => {
     });
 });
 
-QUnit.test("paging", assert => {
+QUnit.test('paging', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
@@ -94,31 +94,31 @@ QUnit.test("paging", assert => {
 });
 
 
-QUnit.test("sorting, short syntax", assert => {
+QUnit.test('sorting, short syntax', function(assert) {
     const done = assert.async();
 
     new ArrayStore([
-        { name: "Z" },
-        { name: "A" }
+        { name: 'Z' },
+        { name: 'A' }
     ])
-        .load({ sort: "name" })
+        .load({ sort: 'name' })
         .done(data => {
-            assert.equal(data[0].name, "A");
+            assert.equal(data[0].name, 'A');
             done();
         });
 });
 
-QUnit.test("sorting, using sortingMethod", assert => {
+QUnit.test('sorting, using sortingMethod', function(assert) {
     const done = assert.async();
-    const namesByOrder = ["C", "A", "B"];
+    const namesByOrder = ['C', 'A', 'B'];
 
     new ArrayStore([
-        { name: "A" },
-        { name: "B" },
-        { name: "C" },
+        { name: 'A' },
+        { name: 'B' },
+        { name: 'C' },
     ])
         .load({ sort: {
-            getter: "name",
+            getter: 'name',
             compare(value1, value2) {
                 return namesByOrder.indexOf(value1) - namesByOrder.indexOf(value2);
             }
@@ -129,7 +129,7 @@ QUnit.test("sorting, using sortingMethod", assert => {
         });
 });
 
-QUnit.test("sorting, multi-level, mixed syntax", assert => {
+QUnit.test('sorting, multi-level, mixed syntax', function(assert) {
     const done = assert.async();
 
     new ArrayStore({
@@ -141,9 +141,9 @@ QUnit.test("sorting, multi-level, mixed syntax", assert => {
     })
         .load({
             sort: [
-                "a",
-                { field: "b", dir: "DESC" },
-                { selector: "c", desc: false }
+                'a',
+                { field: 'b', dir: 'DESC' },
+                { selector: 'c', desc: false }
             ]
         })
         .done(data => {
@@ -153,62 +153,62 @@ QUnit.test("sorting, multi-level, mixed syntax", assert => {
         });
 });
 
-QUnit.test("filtering", assert => {
+QUnit.test('filtering', function(assert) {
     const done = assert.async();
 
     new ArrayStore({
         data: [{ a: 1 }, { a: 2 }]
     })
-        .load({ filter: ["a", ">", 1] })
+        .load({ filter: ['a', '>', 1] })
         .done(data => {
             assert.deepEqual(data, [{ a: 2 }]);
             done();
         });
 });
 
-QUnit.test("multi-level grouping", assert => {
+QUnit.test('multi-level grouping', function(assert) {
     const done = assert.async();
 
     new ArrayStore([
-        { name: "Bob", year: 2008 },
-        { name: "Alex", year: 2006 },
-        { name: "Alice", year: 2011 },
-        { name: "Ann", year: 2011 }
+        { name: 'Bob', year: 2008 },
+        { name: 'Alex', year: 2006 },
+        { name: 'Alice', year: 2011 },
+        { name: 'Ann', year: 2011 }
     ])
         .load({
-            sort: { field: "name", dir: "desc" },
+            sort: { field: 'name', dir: 'desc' },
             group: [
                 { selector(i) { return i.name.charAt(0); } },
-                { field: "year", desc: true }
+                { field: 'year', desc: true }
             ]
         })
         .done(data => {
             assert.deepEqual(data, [
                 {
-                    key: "A",
+                    key: 'A',
                     items: [
                         {
                             key: 2011,
                             items: [
-                                { name: "Ann", year: 2011 },
-                                { name: "Alice", year: 2011 }
+                                { name: 'Ann', year: 2011 },
+                                { name: 'Alice', year: 2011 }
                             ]
                         },
                         {
                             key: 2006,
                             items: [
-                                { name: "Alex", year: 2006 }
+                                { name: 'Alex', year: 2006 }
                             ]
                         }
                     ]
                 },
                 {
-                    key: "B",
+                    key: 'B',
                     items: [
                         {
                             key: 2008,
                             items: [
-                                { name: "Bob", year: 2008 }
+                                { name: 'Bob', year: 2008 }
                             ]
                         }
                     ]
@@ -220,48 +220,48 @@ QUnit.test("multi-level grouping", assert => {
 
 });
 
-QUnit.test("grouping and no sorting", assert => {
+QUnit.test('grouping and no sorting', function(assert) {
     const done = assert.async();
 
     new ArrayStore([
-        { name: "Bob", year: 2008 },
-        { name: "Alex", year: 2006 },
-        { name: "Alice", year: 2011 },
-        { name: "Ann", year: 2011 }
+        { name: 'Bob', year: 2008 },
+        { name: 'Alex', year: 2006 },
+        { name: 'Alice', year: 2011 },
+        { name: 'Ann', year: 2011 }
     ])
         .load({
             group: [
                 { selector(i) { return i.name.charAt(0); } },
-                { field: "year", desc: true }
+                { field: 'year', desc: true }
             ]
         })
         .done(data => {
             assert.deepEqual(data, [
                 {
-                    key: "A",
+                    key: 'A',
                     items: [
                         {
                             key: 2011,
                             items: [
-                                { name: "Alice", year: 2011 },
-                                { name: "Ann", year: 2011 }
+                                { name: 'Alice', year: 2011 },
+                                { name: 'Ann', year: 2011 }
                             ]
                         },
                         {
                             key: 2006,
                             items: [
-                                { name: "Alex", year: 2006 }
+                                { name: 'Alex', year: 2006 }
                             ]
                         }
                     ]
                 },
                 {
-                    key: "B",
+                    key: 'B',
                     items: [
                         {
                             key: 2008,
                             items: [
-                                { name: "Bob", year: 2008 }
+                                { name: 'Bob', year: 2008 }
                             ]
                         }
                     ]
@@ -273,13 +273,13 @@ QUnit.test("grouping and no sorting", assert => {
 
 });
 
-QUnit.test("selector", assert => {
+QUnit.test('selector', function(assert) {
     const done = assert.async();
 
     new ArrayStore([
         { a: 1, b: 2, c: 3 }
     ])
-        .load({ select: ["a", "b"] })
+        .load({ select: ['a', 'b'] })
         .done(data => {
             assert.deepEqual(data, [
                 { a: 1, b: 2 }
@@ -289,33 +289,33 @@ QUnit.test("selector", assert => {
 
 });
 
-QUnit.test("grouping with select (Q531205)", assert => {
+QUnit.test('grouping with select (Q531205)', function(assert) {
     const done = assert.async();
 
     const items = [
-        { groupKey: 1, f1: 1, f2: "a" },
-        { groupKey: 1, f1: 2, f2: "b" },
-        { groupKey: 2, f1: 3, f2: "c" }
+        { groupKey: 1, f1: 1, f2: 'a' },
+        { groupKey: 1, f1: 2, f2: 'b' },
+        { groupKey: 2, f1: 3, f2: 'c' }
     ];
 
     new ArrayStore(items)
         .load({
-            select: ["groupKey", "f2"],
-            group: "groupKey"
+            select: ['groupKey', 'f2'],
+            group: 'groupKey'
         })
         .done(data => {
             assert.deepEqual(data, [
                 {
                     key: 1,
                     items: [
-                        { groupKey: 1, f2: "a" },
-                        { groupKey: 1, f2: "b" }
+                        { groupKey: 1, f2: 'a' },
+                        { groupKey: 1, f2: 'b' }
                     ]
                 },
                 {
                     key: 2,
                     items: [
-                        { groupKey: 2, f2: "c" }
+                        { groupKey: 2, f2: 'c' }
                     ]
                 }
             ]);
@@ -323,12 +323,12 @@ QUnit.test("grouping with select (Q531205)", assert => {
         });
 });
 
-QUnit.test("sort/group by function (regression)", assert => {
+QUnit.test('sort/group by function (regression)', function(assert) {
     const done = assert.async();
 
     new ArrayStore([
-        { value: "z" },
-        { value: "a" }
+        { value: 'z' },
+        { value: 'a' }
     ])
         .load({
             sort(i) { return i.value; },
@@ -337,12 +337,12 @@ QUnit.test("sort/group by function (regression)", assert => {
         .done(data => {
             assert.deepEqual(data, [
                 {
-                    key: "a",
-                    items: [{ value: "a" }]
+                    key: 'a',
+                    items: [{ value: 'a' }]
                 },
                 {
-                    key: "z",
-                    items: [{ value: "z" }]
+                    key: 'z',
+                    items: [{ value: 'z' }]
                 }
             ]);
 
@@ -351,25 +351,25 @@ QUnit.test("sort/group by function (regression)", assert => {
 
 });
 
-QUnit.test("turn off sort in grouping", assert => {
+QUnit.test('turn off sort in grouping', function(assert) {
     const done = assert.async();
 
     new ArrayStore([
-        { key: "c", text: "c1" },
-        { key: "a", text: "a1" }
+        { key: 'c', text: 'c1' },
+        { key: 'a', text: 'a1' }
     ])
         .load({
-            group: { selector: "key", keepInitialKeyOrder: true }
+            group: { selector: 'key', keepInitialKeyOrder: true }
         })
         .done(data => {
             assert.deepEqual(data, [
                 {
-                    key: "c",
-                    items: [{ key: "c", text: "c1" }]
+                    key: 'c',
+                    items: [{ key: 'c', text: 'c1' }]
                 },
                 {
-                    key: "a",
-                    items: [ { key: "a", text: "a1" }]
+                    key: 'a',
+                    items: [ { key: 'a', text: 'a1' }]
                 }
             ]);
 
@@ -377,30 +377,30 @@ QUnit.test("turn off sort in grouping", assert => {
         });
 });
 
-QUnit.test("byKey", assert => {
+QUnit.test('byKey', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore({
-        key: "k",
+        key: 'k',
         data: [
-            { k: 1, v: "a" },
-            { k: 2, v: "b" }
+            { k: 1, v: 'a' },
+            { k: 2, v: 'b' }
         ]
     });
 
     store.byKey(2).done(r => {
-        assert.equal(r.v, "b");
+        assert.equal(r.v, 'b');
         done();
     });
 });
 
-QUnit.test("byKey called with unknown id", assert => {
+QUnit.test('byKey called with unknown id', function(assert) {
     assert.expect(2);
 
     const done = assert.async();
 
     const store = new ArrayStore({
-        key: "k"
+        key: 'k'
     });
 
     store.byKey(1)
@@ -414,7 +414,7 @@ QUnit.test("byKey called with unknown id", assert => {
         .always(done);
 });
 
-QUnit.test("Big data grouping", (assert) => {
+QUnit.test('Big data grouping', function(assert) {
     const arrayLength = 25;
     const done = assert.async();
 
@@ -427,21 +427,21 @@ QUnit.test("Big data grouping", (assert) => {
     // eslint-disable-next-line no-extend-native
     Array.prototype.concat = function(a1, a2) {
         if(arguments.length > 20) {
-            throw new Error("Maximum call stack size exceeded");
+            throw new Error('Maximum call stack size exceeded');
         }
         return originalConcat.apply(this, arguments);
     };
 
     const arrayStore = new ArrayStore({
-        type: "array",
-        key: "Id",
+        type: 'array',
+        key: 'Id',
         data
     });
 
     arrayStore.load({
-        group: [{ selector: "Description" }]
+        group: [{ selector: 'Description' }]
     }).done(() => {
-        assert.ok(true, "Loading passed");
+        assert.ok(true, 'Loading passed');
     }).fail(error => {
         assert.ok(false, `Loading failed wint error "${error}"`);
     }).always(() => {
@@ -452,9 +452,9 @@ QUnit.test("Big data grouping", (assert) => {
 });
 
 
-QUnit.module("Modifying data");
+QUnit.module('Modifying data');
 
-QUnit.test("insert with autogenerated key and with useLegacyStoreResult", function(assert) {
+QUnit.test('insert with autogenerated key and with useLegacyStoreResult', function(assert) {
     const done = assert.async();
 
     const checklist = {};
@@ -462,7 +462,7 @@ QUnit.test("insert with autogenerated key and with useLegacyStoreResult", functi
     config({ useLegacyStoreResult: true });
 
     const store = new ArrayStore({
-        key: "id",
+        key: 'id',
 
         onModifying() {
             checklist.onModifying_option = true;
@@ -481,25 +481,25 @@ QUnit.test("insert with autogenerated key and with useLegacyStoreResult", functi
         }
     });
 
-    store.on("modifying", () => {
+    store.on('modifying', () => {
         checklist.on_modifying_callback = true;
     });
 
-    store.on("modified", () => {
+    store.on('modified', () => {
         checklist.on_modified_callback = true;
     });
 
-    store.on("inserting", values => {
+    store.on('inserting', values => {
         checklist.on_inserting_callback = values;
         values.b = 2;
     });
 
-    store.on("inserted", (values, key) => {
+    store.on('inserted', (values, key) => {
         checklist.on_inserted_callback = [values, key];
     });
 
     store.insert({ a: 1 }).done((values, key) => {
-        assert.equal(typeof key, "string");
+        assert.equal(typeof key, 'string');
         assert.ok(/[0-9a-f-]{36}/.test(key));
 
         const expectedValues = { a: 1, b: 2 };
@@ -526,13 +526,13 @@ QUnit.test("insert with autogenerated key and with useLegacyStoreResult", functi
     });
 });
 
-QUnit.test("insert with autogenerated key", function(assert) {
+QUnit.test('insert with autogenerated key', function(assert) {
     var done = assert.async();
 
     var checklist = {};
 
     var store = new ArrayStore({
-        key: "id",
+        key: 'id',
 
         onModifying: function() {
             checklist.onModifying_option = true;
@@ -551,25 +551,25 @@ QUnit.test("insert with autogenerated key", function(assert) {
         }
     });
 
-    store.on("modifying", function() {
+    store.on('modifying', function() {
         checklist.on_modifying_callback = true;
     });
 
-    store.on("modified", function() {
+    store.on('modified', function() {
         checklist.on_modified_callback = true;
     });
 
-    store.on("inserting", function(values) {
+    store.on('inserting', function(values) {
         checklist.on_inserting_callback = values;
         values.b = 2;
     });
 
-    store.on("inserted", function(values, key) {
+    store.on('inserted', function(values, key) {
         checklist.on_inserted_callback = [values, key];
     });
 
     store.insert({ a: 1 }).done(function(data, key) {
-        assert.equal(typeof key, "string");
+        assert.equal(typeof key, 'string');
         assert.ok(/[0-9a-f-]{36}/.test(key));
 
         var expectedValues = { a: 1, b: 2 };
@@ -596,9 +596,9 @@ QUnit.test("insert with autogenerated key", function(assert) {
     });
 });
 
-QUnit.test("insert with autogenerated compound key throws", assert => {
+QUnit.test('insert with autogenerated compound key throws', function(assert) {
     const store = new ArrayStore({
-        key: ["key1", "key2"]
+        key: ['key1', 'key2']
     });
 
     assert.throws(() => {
@@ -606,10 +606,10 @@ QUnit.test("insert with autogenerated compound key throws", assert => {
     });
 });
 
-QUnit.test("insert with user-generated key", assert => {
+QUnit.test('insert with user-generated key', function(assert) {
     const done = assert.async();
 
-    const store = new ArrayStore({ key: "id" });
+    const store = new ArrayStore({ key: 'id' });
 
     store.insert({ id: 42 }).done((values, key) => {
         assert.equal(key, 42);
@@ -618,7 +618,7 @@ QUnit.test("insert with user-generated key", assert => {
 
 });
 
-QUnit.test("update with key and with useLegacyStoreResult", function(assert) {
+QUnit.test('update with key and with useLegacyStoreResult', function(assert) {
     const done = assert.async();
 
     const checklist = {};
@@ -626,8 +626,8 @@ QUnit.test("update with key and with useLegacyStoreResult", function(assert) {
     config({ useLegacyStoreResult: true });
 
     const store = new ArrayStore({
-        key: "id",
-        data: [{ id: 123, name: "Alice" }],
+        key: 'id',
+        data: [{ id: 123, name: 'Alice' }],
 
         onModifying() {
             checklist.onModifying_option = true;
@@ -646,28 +646,28 @@ QUnit.test("update with key and with useLegacyStoreResult", function(assert) {
         }
     });
 
-    store.on("modifying", () => {
+    store.on('modifying', () => {
         checklist.on_modifying_callback = true;
     });
 
-    store.on("modified", () => {
+    store.on('modified', () => {
         checklist.on_modified_callback = true;
     });
 
-    store.on("updating", (key, values) => {
+    store.on('updating', (key, values) => {
         values.something = 1;
         checklist.on_updating_callback = [key, values];
     });
 
-    store.on("updated", (key, values) => {
+    store.on('updated', (key, values) => {
         checklist.on_updated_callback = [key, values];
     });
 
-    store.update(123, { name: "Bob" }).done((key, values) => {
+    store.update(123, { name: 'Bob' }).done((key, values) => {
         assert.equal(key, 123);
 
         const expectedValues = {
-            name: "Bob",
+            name: 'Bob',
             something: 1
         };
 
@@ -692,7 +692,7 @@ QUnit.test("update with key and with useLegacyStoreResult", function(assert) {
         });
 
         store.load().done(data => {
-            assert.equal(data[0].name, "Bob");
+            assert.equal(data[0].name, 'Bob');
             config({ useLegacyStoreResult: false });
             done();
         });
@@ -701,14 +701,14 @@ QUnit.test("update with key and with useLegacyStoreResult", function(assert) {
 
 });
 
-QUnit.test("update with key", function(assert) {
+QUnit.test('update with key', function(assert) {
     var done = assert.async();
 
     var checklist = {};
 
     var store = new ArrayStore({
-        key: "id",
-        data: [{ id: 123, name: "Alice" }],
+        key: 'id',
+        data: [{ id: 123, name: 'Alice' }],
 
         onModifying: function() {
             checklist.onModifying_option = true;
@@ -727,33 +727,33 @@ QUnit.test("update with key", function(assert) {
         }
     });
 
-    store.on("modifying", function() {
+    store.on('modifying', function() {
         checklist.on_modifying_callback = true;
     });
 
-    store.on("modified", function() {
+    store.on('modified', function() {
         checklist.on_modified_callback = true;
     });
 
-    store.on("updating", function(key, values) {
+    store.on('updating', function(key, values) {
         values.something = 1;
         checklist.on_updating_callback = [key, values];
     });
 
-    store.on("updated", function(key, values) {
+    store.on('updated', function(key, values) {
         checklist.on_updated_callback = [key, values];
     });
 
-    store.update(123, { name: "Bob" }).done(function(data, key) {
+    store.update(123, { name: 'Bob' }).done(function(data, key) {
         assert.equal(key, 123);
 
         var expectedValues = {
-            name: "Bob",
+            name: 'Bob',
             something: 1
         };
 
         var expectedData = {
-            name: "Bob",
+            name: 'Bob',
             something: 1,
             id: key
         };
@@ -779,7 +779,7 @@ QUnit.test("update with key", function(assert) {
         });
 
         store.load().done(data => {
-            assert.equal(data[0].name, "Bob");
+            assert.equal(data[0].name, 'Bob');
             done();
         });
 
@@ -787,11 +787,11 @@ QUnit.test("update with key", function(assert) {
 
 });
 
-QUnit.test("insert duplicate key (simple)", assert => {
+QUnit.test('insert duplicate key (simple)', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore({
-        key: "id",
+        key: 'id',
         data: [{ id: 1 }]
     });
 
@@ -801,11 +801,11 @@ QUnit.test("insert duplicate key (simple)", assert => {
     });
 });
 
-QUnit.test("insert duplicate key (compound)", assert => {
+QUnit.test('insert duplicate key (compound)', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore({
-        key: ["key1", "key2"],
+        key: ['key1', 'key2'],
         data: [{ key1: 1, key2: 2 }]
     });
     store.insert({ key1: 1, key2: 2 }).fail(error => {
@@ -814,13 +814,13 @@ QUnit.test("insert duplicate key (compound)", assert => {
     });
 });
 
-QUnit.test("remove with key", assert => {
+QUnit.test('remove with key', function(assert) {
     const done = assert.async();
 
     const checklist = {};
 
     const store = new ArrayStore({
-        key: "id",
+        key: 'id',
         data: [
             { id: 123 }
         ],
@@ -842,19 +842,19 @@ QUnit.test("remove with key", assert => {
         }
     });
 
-    store.on("modifying", () => {
+    store.on('modifying', () => {
         checklist.on_modifying_callback = true;
     });
 
-    store.on("modified", () => {
+    store.on('modified', () => {
         checklist.on_modified_callback = true;
     });
 
-    store.on("removing", key => {
+    store.on('removing', key => {
         checklist.on_removing_callback = key;
     });
 
-    store.on("removed", key => {
+    store.on('removed', key => {
         checklist.on_removed_callback = key;
     });
 
@@ -887,11 +887,11 @@ QUnit.test("remove with key", assert => {
 
 });
 
-QUnit.test("modification operations without key use instance as key", assert => {
+QUnit.test('modification operations without key use instance as key', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore();
-    assert.equal(typeof store.key(), "undefined");
+    assert.equal(typeof store.key(), 'undefined');
 
     const insertValues = { a: 1 };
     let insertedObj;
@@ -899,7 +899,7 @@ QUnit.test("modification operations without key use instance as key", assert => 
     store.insert(insertValues).done((data, key) => {
         insertedObj = store._array[0];
 
-        assert.ok(typeof insertedObj === "object");
+        assert.ok(typeof insertedObj === 'object');
         assert.ok(data === insertedObj);
         assert.ok(data === key);
         assert.ok(key === insertedObj);
@@ -922,11 +922,11 @@ QUnit.test("modification operations without key use instance as key", assert => 
     });
 });
 
-QUnit.test("update with array sub-member (B251202)", assert => {
+QUnit.test('update with array sub-member (B251202)', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore({
-        key: "id",
+        key: 'id',
         data: [
             {
                 id: 1,
@@ -941,11 +941,11 @@ QUnit.test("update with array sub-member (B251202)", assert => {
     });
 });
 
-QUnit.test("updating key value throws an error (simple key)", assert => {
+QUnit.test('updating key value throws an error (simple key)', function(assert) {
     assert.expect(3);
 
     const store = new ArrayStore({
-        key: "id",
+        key: 'id',
         data: [{ id: 1 }]
     });
 
@@ -963,11 +963,11 @@ QUnit.test("updating key value throws an error (simple key)", assert => {
         .done(() => { assert.ok(false); });
 });
 
-QUnit.test("updating key value throws an error (compound key)", assert => {
+QUnit.test('updating key value throws an error (compound key)', function(assert) {
     assert.expect(5);
 
     const store = new ArrayStore({
-        key: ["idFirst", "idSecond"],
+        key: ['idFirst', 'idSecond'],
         data: [{ idFirst: 0, idSecond: 1 }]
     });
 
@@ -996,7 +996,7 @@ QUnit.test("updating key value throws an error (compound key)", assert => {
         .done(() => { assert.ok(false); });
 });
 
-QUnit.test("clear", assert => {
+QUnit.test('clear', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore([1, 2, 3]);
@@ -1008,7 +1008,7 @@ QUnit.test("clear", assert => {
     });
 });
 
-QUnit.test("clear fires modifying and modified events (T366717)", assert => {
+QUnit.test('clear fires modifying and modified events (T366717)', function(assert) {
     const done = assert.async();
     const bag = {};
 
@@ -1019,14 +1019,14 @@ QUnit.test("clear fires modifying and modified events (T366717)", assert => {
         data: [1, 2, 3]
     });
 
-    store.on("modifying", () => { bag.modifying = true; });
-    store.on("modified", () => { bag.modified = true; });
+    store.on('modifying', () => { bag.modifying = true; });
+    store.on('modified', () => { bag.modified = true; });
 
     store.clear();
 
     store.load()
         .fail(() => {
-            assert.ok(false, "Shouldn't reach this point");
+            assert.ok(false, 'Shouldn\'t reach this point');
         })
         .done(r => {
             assert.ok(!r.length);
@@ -1041,61 +1041,61 @@ QUnit.test("clear fires modifying and modified events (T366717)", assert => {
         .always(done);
 });
 
-QUnit.module("Misc");
+QUnit.module('Misc');
 
-QUnit.test("T281004: LocalStore/ArrayStore - The update method works properly only if key values are passed as parameters", assert => {
+QUnit.test('T281004: LocalStore/ArrayStore - The update method works properly only if key values are passed as parameters', function(assert) {
     const store = new ArrayStore({
         key: [
-            "keyPart1",
-            "keyPart2"
+            'keyPart1',
+            'keyPart2'
         ],
         data: [
-            { keyPart1: "0", keyPart2: "0", prop: 5 }
+            { keyPart1: '0', keyPart2: '0', prop: 5 }
         ]
     });
 
-    store.update({ keyPart1: "0", keyPart2: "0" }, { prop: 5 })
+    store.update({ keyPart1: '0', keyPart2: '0' }, { prop: 5 })
         .fail(() => {
-            assert.ok(false, "Shouldn't reach this point");
+            assert.ok(false, 'Shouldn\'t reach this point');
         })
         .done(function(values, key) {
-            assert.deepEqual(key, { keyPart1: "0", keyPart2: "0" });
-            assert.deepEqual(values, { prop: 5, keyPart1: "0", keyPart2: "0" });
+            assert.deepEqual(key, { keyPart1: '0', keyPart2: '0' });
+            assert.deepEqual(values, { prop: 5, keyPart1: '0', keyPart2: '0' });
         });
 });
 
-QUnit.test("T155114: ArrayStore converts a string to a char array when you add a string value to the store using the insert() method", assert => {
+QUnit.test('T155114: ArrayStore converts a string to a char array when you add a string value to the store using the insert() method', function(assert) {
     const done = assert.async();
 
     const store = new ArrayStore();
-    store.insert("a").done(() => {
+    store.insert('a').done(() => {
         store.load().done(r => {
-            assert.deepEqual(r, ["a"]);
+            assert.deepEqual(r, ['a']);
             done();
         });
     });
 });
 
-QUnit.test("key() method", assert => {
-    assert.equal(new ArrayStore({ key: "abc" }).key(), "abc");
+QUnit.test('key() method', function(assert) {
+    assert.equal(new ArrayStore({ key: 'abc' }).key(), 'abc');
 });
 
-QUnit.test("store has a public query method", assert => {
-    assert.ok("select" in new ArrayStore().createQuery());
+QUnit.test('store has a public query method', function(assert) {
+    assert.ok('select' in new ArrayStore().createQuery());
 
 });
 
-QUnit.test("prevent passing data as non-array", assert => {
+QUnit.test('prevent passing data as non-array', function(assert) {
     assert.throws(() => {
         new ArrayStore({
-            data: "string"
+            data: 'string'
         });
     });
 });
 
-QUnit.module("Error handling");
+QUnit.module('Error handling');
 
-QUnit.test("error in during query evaluation", assert => {
+QUnit.test('error in during query evaluation', function(assert) {
     const done = assert.async();
 
     const helper = new ErrorHandlingHelper();
@@ -1106,12 +1106,12 @@ QUnit.test("error in during query evaluation", assert => {
     });
 
     helper.run(() => store.load({
-        select() { throw Error("test"); }
+        select() { throw Error('test'); }
     }), done, assert);
 });
 
 
-QUnit.test("error during update (missing item)", assert => {
+QUnit.test('error during update (missing item)', function(assert) {
     const done = assert.async();
 
     const helper = new ErrorHandlingHelper();
@@ -1120,27 +1120,27 @@ QUnit.test("error during update (missing item)", assert => {
     };
 
     const store = new ArrayStore({
-        key: "id",
+        key: 'id',
         errorHandler: helper.optionalHandler
     });
 
     helper.run(() => store.update(123, {}), done, assert);
 });
 
-QUnit.test("forced error for insert", assert => {
+QUnit.test('forced error for insert', function(assert) {
     const done = assert.async();
 
     const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = error => {
-        assert.equal(error.message, "FORCED");
+        assert.equal(error.message, 'FORCED');
     };
 
     const store = $.extend(
         new ArrayStore({ errorHandler: helper.optionalHandler }),
         {
             _insertImpl() {
-                return $.Deferred().reject(Error("FORCED"));
+                return $.Deferred().reject(Error('FORCED'));
             }
         }
     );
@@ -1148,20 +1148,20 @@ QUnit.test("forced error for insert", assert => {
     helper.run(() => store.insert({}), done, assert);
 });
 
-QUnit.test("forced error for update", assert => {
+QUnit.test('forced error for update', function(assert) {
     const done = assert.async();
 
     const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = error => {
-        assert.equal(error.message, "FORCED");
+        assert.equal(error.message, 'FORCED');
     };
 
     const store = $.extend(
         new ArrayStore({ errorHandler: helper.optionalHandler }),
         {
             _updateImpl() {
-                return $.Deferred().reject(Error("FORCED"));
+                return $.Deferred().reject(Error('FORCED'));
             }
         }
     );
@@ -1169,20 +1169,20 @@ QUnit.test("forced error for update", assert => {
     helper.run(() => store.update(1, {}), done, assert);
 });
 
-QUnit.test("forced error for remove", assert => {
+QUnit.test('forced error for remove', function(assert) {
     const done = assert.async();
 
     const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = error => {
-        assert.equal(error.message, "FORCED");
+        assert.equal(error.message, 'FORCED');
     };
 
     const store = $.extend(
         new ArrayStore({ errorHandler: helper.optionalHandler }),
         {
             _removeImpl() {
-                return $.Deferred().reject(Error("FORCED"));
+                return $.Deferred().reject(Error('FORCED'));
             }
         }
     );

@@ -1,50 +1,50 @@
-var hideTopOverlay = require("mobile/hide_top_overlay"),
+var hideTopOverlay = require('mobile/hide_top_overlay'),
     hideTopOverlayCallback = hideTopOverlay.hideCallback;
 
-QUnit.module("top overlay util");
+QUnit.module('top overlay util');
 
-QUnit.test("hideTopOverlayCallback", function(assert) {
+QUnit.test('hideTopOverlayCallback', function(assert) {
     var navCallback = hideTopOverlayCallback;
-    var res = "";
+    var res = '';
     navCallback.add(function() {
-        res += "0";
+        res += '0';
     });
     assert.ok(navCallback.hasCallback());
     assert.ok(navCallback.fire());
     assert.ok(!navCallback.hasCallback());
-    assert.equal("0", res);
+    assert.equal(res, '0');
 
     navCallback.add(function() {
-        res += "1";
+        res += '1';
     });
     navCallback.add(function() {
-        res += "2";
+        res += '2';
     });
     navCallback.fire();
     navCallback.fire();
-    assert.equal("021", res);
+    assert.equal(res, '021');
     var callback = function() {
-        res += "3";
+        res += '3';
     };
     navCallback.add(callback);
     navCallback.add(function() {
-        res += "4";
+        res += '4';
     });
     navCallback.remove(callback);
     assert.ok(navCallback.fire());
     assert.ok(!navCallback.fire());
-    assert.equal("0214", res);
+    assert.equal(res, '0214');
 });
 
-QUnit.test("hideTopOverlay", function(assert) {
+QUnit.test('hideTopOverlay', function(assert) {
     var callback = hideTopOverlayCallback,
         eventFiredCount = 0;
 
     callback.add(function() {
         eventFiredCount++;
     });
-    assert.equal(0, eventFiredCount);
+    assert.equal(eventFiredCount, 0);
 
     hideTopOverlay();
-    assert.equal(1, eventFiredCount);
+    assert.equal(eventFiredCount, 1);
 });

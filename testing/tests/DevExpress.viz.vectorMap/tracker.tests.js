@@ -4,16 +4,16 @@
 // Every time "mousewheel" event is triggered within a test animation frame is requested
 // It is done by widgets event system ("dxwheel")
 // It is not used in map and requesting frame is just suppressed
-import $ from "jquery";
-import { noop } from "core/utils/common";
-import vizMocks from "../../helpers/vizMocks.js";
-import trackerModule from "viz/vector_map/tracker";
-import eventEmitterModule from "viz/vector_map/event_emitter";
-import animationFrame from "animation/frame";
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import trackerModule from 'viz/vector_map/tracker';
+import eventEmitterModule from 'viz/vector_map/event_emitter';
+import animationFrame from 'animation/frame';
 
 const FOCUS_OFF_DELAY = 100;
 
-$("#qunit-fixture").append('<div id="test-root"></div>');
+$('#qunit-fixture').append('<div id="test-root"></div>');
 
 animationFrame.requestAnimationFrame = animationFrame.cancelAnimationFrame = noop;
 
@@ -128,14 +128,14 @@ var environment = {
 
 QUnit.module('General', environment);
 
-QUnit.test("Subscription to projection", function(assert) {
+QUnit.test('Subscription to projection', function(assert) {
     var arg = this.projection.on.lastCall.args[0];
-    assert.strictEqual(typeof arg.center, "function", "center handler");
-    assert.strictEqual(typeof arg.zoom, "function", "zoom handler");
-    assert.ok(arg.center === arg.zoom, "same handler for both events");
+    assert.strictEqual(typeof arg.center, 'function', 'center handler');
+    assert.strictEqual(typeof arg.zoom, 'function', 'zoom handler');
+    assert.ok(arg.center === arg.zoom, 'same handler for both events');
 });
 
-QUnit.test("Event emitter methods are injected", function(assert) {
+QUnit.test('Event emitter methods are injected', function(assert) {
     var tracker = this.tracker;
     $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(tracker[name], method, name);
@@ -162,12 +162,12 @@ var EVENTS = {
         'pointer': 'pointerup'
     },
     'wheel': {
-        'mouse': document["onwheel"] !== undefined ? "wheel" : "mousewheel"
+        'mouse': document['onwheel'] !== undefined ? 'wheel' : 'mousewheel'
     }
 };
 
 // T249548, T322560
-QUnit.module("Default prevention", $.extend({}, environment, {
+QUnit.module('Default prevention', $.extend({}, environment, {
     check: function(assert, eventMode, eventName, withData, preventDefaultCount, stopPropagationCount) {
         trackerModule._DEBUG_forceEventMode(eventMode);
         this.eventMode = eventMode;
@@ -176,48 +176,48 @@ QUnit.module("Default prevention", $.extend({}, environment, {
 
         var preventDefault = sinon.spy(),
             stopPropagation = sinon.spy();
-        this[withData ? "trigger" : "triggerNoData"](eventName, { x: 10, y: 20 }, {
+        this[withData ? 'trigger' : 'triggerNoData'](eventName, { x: 10, y: 20 }, {
             preventDefault: preventDefault,
             stopPropagation: stopPropagation
         });
 
-        assert.strictEqual(preventDefault.callCount, preventDefaultCount, "prevent default");
-        assert.strictEqual(stopPropagation.callCount, stopPropagationCount, "stop propagation");
+        assert.strictEqual(preventDefault.callCount, preventDefaultCount, 'prevent default');
+        assert.strictEqual(stopPropagation.callCount, stopPropagationCount, 'stop propagation');
     }
 }));
 
-$.each(["mouse", "touch", "MSPointer", "pointer"], function(_, mode) {
-    QUnit.test(mode + " - start", function(assert) {
-        this.check(assert, mode, "start", true, 1, 1);
+$.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, mode) {
+    QUnit.test(mode + ' - start', function(assert) {
+        this.check(assert, mode, 'start', true, 1, 1);
     });
 
-    QUnit.test(mode + " - start / no data", function(assert) {
-        this.check(assert, mode, "start", false, 0, 0);
+    QUnit.test(mode + ' - start / no data', function(assert) {
+        this.check(assert, mode, 'start', false, 0, 0);
     });
 
-    QUnit.test(mode + " - move", function(assert) {
-        this.check(assert, mode, "move", true, 0, 0);
+    QUnit.test(mode + ' - move', function(assert) {
+        this.check(assert, mode, 'move', true, 0, 0);
     });
 
-    QUnit.test(mode + " - move / no data", function(assert) {
-        this.check(assert, mode, "move", false, 0, 0);
+    QUnit.test(mode + ' - move / no data', function(assert) {
+        this.check(assert, mode, 'move', false, 0, 0);
     });
 
-    QUnit.test(mode + " - end", function(assert) {
-        this.check(assert, mode, "end", true, 0, 0);
+    QUnit.test(mode + ' - end', function(assert) {
+        this.check(assert, mode, 'end', true, 0, 0);
     });
 
-    QUnit.test(mode + " - end / no data", function(assert) {
-        this.check(assert, mode, "move", false, 0, 0);
+    QUnit.test(mode + ' - end / no data', function(assert) {
+        this.check(assert, mode, 'move', false, 0, 0);
     });
 });
 
-QUnit.test("mouse - wheel", function(assert) {
-    this.check(assert, "mouse", "wheel", true, 1, 2); // second "stopPropagation" is called by the dxmousewheel system
+QUnit.test('mouse - wheel', function(assert) {
+    this.check(assert, 'mouse', 'wheel', true, 1, 2); // second "stopPropagation" is called by the dxmousewheel system
 });
 
-QUnit.test("mouse - wheel / no data", function(assert) {
-    this.check(assert, "mouse", "wheel", false, 0, 1); // one 'stopPropagation' call because our events system always stops propagation
+QUnit.test('mouse - wheel / no data', function(assert) {
+    this.check(assert, 'mouse', 'wheel', false, 0, 1); // one 'stopPropagation' call because our events system always stops propagation
 });
 
 $.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, type) {
@@ -477,7 +477,7 @@ var StubFocus = vizMocks.stubClass(new trackerModule.Focus(), null, {
     }
 });
 
-QUnit.module("focus / projection", $.extend({}, environment, {
+QUnit.module('focus / projection', $.extend({}, environment, {
     beforeEach: function() {
         trackerModule._DEBUG_stubFocusType(StubFocus);
         environment.beforeEach.apply(this, arguments);
@@ -489,7 +489,7 @@ QUnit.module("focus / projection", $.extend({}, environment, {
 }));
 
 // 'zoom' is not tested because there is another test which checks that there is one handler for both events
-QUnit.test("focus is canceled on projection 'center' event", function(assert) {
+QUnit.test('focus is canceled on projection \'center\' event', function(assert) {
     this.projection.on.lastCall.args[0].center();
     assert.deepEqual(this.focus.cancel.lastCall.args, []);
 });

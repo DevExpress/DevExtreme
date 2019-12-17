@@ -1,12 +1,12 @@
-var extend = require("../../../core/utils/extend").extend,
-    each = require("../../../core/utils/iterator").each,
-    noop = require("../../../core/utils/common").noop,
-    windowUtils = require("../../../core/utils/window"),
+var extend = require('../../../core/utils/extend').extend,
+    each = require('../../../core/utils/iterator').each,
+    noop = require('../../../core/utils/common').noop,
+    windowUtils = require('../../../core/utils/window'),
     window = windowUtils.getWindow(),
-    labelModule = require("./label"),
+    labelModule = require('./label'),
     _extend = extend,
-    _isDefined = require("../../../core/utils/type").isDefined,
-    _normalizeEnum = require("../../core/utils").normalizeEnum,
+    _isDefined = require('../../../core/utils/type').isDefined,
+    _normalizeEnum = require('../../core/utils').normalizeEnum,
 
     _math = Math,
     _round = _math.round,
@@ -16,7 +16,7 @@ var extend = require("../../../core/utils/extend").extend,
     DEFAULT_IMAGE_WIDTH = 20,
     DEFAULT_IMAGE_HEIGHT = 20,
     LABEL_OFFSET = 10,
-    CANVAS_POSITION_DEFAULT = "canvas_position_default";
+    CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 
 function getSquareMarkerCoords(radius) {
     return [
@@ -91,7 +91,7 @@ module.exports = {
     clearVisibility: function() {
         var that = this,
             graphic = that.graphic;
-        if(graphic && graphic.attr("visibility")) {
+        if(graphic && graphic.attr('visibility')) {
             graphic.attr({ visibility: null });
         }
     },
@@ -103,10 +103,10 @@ module.exports = {
     setInvisibility: function() {
         var that = this,
             graphic = that.graphic;
-        if(graphic && graphic.attr("visibility") !== "hidden") {
-            graphic.attr({ visibility: "hidden" });
+        if(graphic && graphic.attr('visibility') !== 'hidden') {
+            graphic.attr({ visibility: 'hidden' });
         }
-        that._errorBar && that._errorBar.attr({ visibility: "hidden" });
+        that._errorBar && that._errorBar.attr({ visibility: 'hidden' });
         that._label.draw(false);
     },
 
@@ -133,7 +133,7 @@ module.exports = {
     },
 
     _checkImage: function(image) {
-        return _isDefined(image) && (typeof image === "string" || _isDefined(image.url));
+        return _isDefined(image) && (typeof image === 'string' || _isDefined(image.url));
     },
 
     _fillStyle: function() {
@@ -143,7 +143,7 @@ module.exports = {
     _checkSymbol: function(oldOptions, newOptions) {
         var oldSymbol = oldOptions.symbol,
             newSymbol = newOptions.symbol,
-            symbolChanged = (oldSymbol === "circle" && newSymbol !== "circle") || (oldSymbol !== "circle" && newSymbol === "circle"),
+            symbolChanged = (oldSymbol === 'circle' && newSymbol !== 'circle') || (oldSymbol !== 'circle' && newSymbol === 'circle'),
             imageChanged = this._checkImage(oldOptions.image) !== this._checkImage(newOptions.image);
 
         return !!(symbolChanged || imageChanged);
@@ -151,16 +151,16 @@ module.exports = {
 
     _populatePointShape: function(symbol, radius) {
         switch(symbol) {
-            case "square":
+            case 'square':
                 return getSquareMarkerCoords(radius);
-            case "polygon":
+            case 'polygon':
                 return getPolygonMarkerCoords(radius);
-            case "triangle":
-            case "triangleDown":
+            case 'triangle':
+            case 'triangleDown':
                 return getTriangleDownMarkerCoords(radius);
-            case "triangleUp":
+            case 'triangleUp':
                 return getTriangleUpMarkerCoords(radius);
-            case "cross":
+            case 'cross':
                 return getCrossMarkerCoords(radius);
         }
     },
@@ -189,7 +189,7 @@ module.exports = {
             that.value = that.properValue = that.initialValue = 0;
             that.minValue = 0;
 
-            that._label.setDataField("value", that.value);
+            that._label.setDataField('value', that.value);
         }
     },
 
@@ -211,7 +211,7 @@ module.exports = {
         var width = options.width || DEFAULT_IMAGE_WIDTH,
             height = options.height || DEFAULT_IMAGE_HEIGHT;
 
-        return renderer.image(-_round(width * 0.5), -_round(height * 0.5), width, height, options.url ? options.url.toString() : options.toString(), "center")
+        return renderer.image(-_round(width * 0.5), -_round(height * 0.5), width, height, options.url ? options.url.toString() : options.toString(), 'center')
             .attr({ translateX: settings.translateX, translateY: settings.translateY, visibility: settings.visibility });
     },
 
@@ -219,11 +219,11 @@ module.exports = {
         var marker,
             symbol = this._options.symbol;
 
-        if(symbol === "circle") {
+        if(symbol === 'circle') {
             delete pointSettings.points;
             marker = renderer.circle().attr(pointSettings);
-        } else if(symbol === "square" || symbol === "polygon" || symbol === "triangle" || symbol === "triangleDown" || symbol === "triangleUp" || symbol === "cross") {
-            marker = renderer.path([], "area").attr(pointSettings).sharp();
+        } else if(symbol === 'square' || symbol === 'polygon' || symbol === 'triangle' || symbol === 'triangleDown' || symbol === 'triangleUp' || symbol === 'cross') {
+            marker = renderer.path([], 'area').attr(pointSettings).sharp();
         }
 
         return marker;
@@ -233,7 +233,7 @@ module.exports = {
         var that = this,
             marker = that._checkImage(image) ? that._createImageMarker(renderer, settings, image) : that._createSymbolMarker(renderer, settings);
         if(marker) {
-            marker.data({ "chart-data-point": that }).append(group);
+            marker.data({ 'chart-data-point': that }).append(group);
         }
         return marker;
     },
@@ -369,9 +369,9 @@ module.exports = {
             labelOptions = label.getLayoutOptions();
 
         if(!this._options.rotated) {
-            if(labelOptions.alignment === "left") {
+            if(labelOptions.alignment === 'left') {
                 coord.x += labelBBox.width / 2;
-            } else if(labelOptions.alignment === "right") {
+            } else if(labelOptions.alignment === 'right') {
                 coord.x -= labelBBox.width / 2;
             }
         }
@@ -396,23 +396,23 @@ module.exports = {
             y = graphicBBox.y;
 
         switch(position) {
-            case "left":
+            case 'left':
                 x -= labelBBox.width + offset;
                 y += centerY;
                 break;
-            case "right":
+            case 'right':
                 x += graphicBBox.width + offset;
                 y += centerY;
                 break;
-            case "top":
+            case 'top':
                 x += centerX;
                 y -= labelBBox.height + offset;
                 break;
-            case "bottom":
+            case 'bottom':
                 x += centerX;
                 y += graphicBBox.height + offset;
                 break;
-            case "inside":
+            case 'inside':
                 x += centerX;
                 y += centerY;
                 break;
@@ -431,7 +431,7 @@ module.exports = {
     },
 
     _getErrorBarSettings: function() {
-        return { visibility: "visible" };
+        return { visibility: 'visible' };
     },
 
     _getErrorBarBaseEdgeLength() {
@@ -451,8 +451,8 @@ module.exports = {
             high = that._highErrorCoord,
             low = that._lowErrorCoord,
             displayMode = _normalizeEnum(errorBarOptions.displayMode),
-            isHighDisplayMode = displayMode === "high",
-            isLowDisplayMode = displayMode === "low",
+            isHighDisplayMode = displayMode === 'high',
+            isLowDisplayMode = displayMode === 'low',
             highErrorOnly = (isHighDisplayMode || !_isDefined(low)) && (_isDefined(high) && !isLowDisplayMode),
             lowErrorOnly = (isLowDisplayMode || !_isDefined(high)) && (_isDefined(low) && !isHighDisplayMode);
 
@@ -467,7 +467,7 @@ module.exports = {
         highErrorOnly && (low = that._baseErrorBarPos);
         lowErrorOnly && (high = that._baseErrorBarPos);
 
-        if(displayMode !== "none" && _isDefined(high) && _isDefined(low) && _isDefined(pos)) {
+        if(displayMode !== 'none' && _isDefined(high) && _isDefined(low) && _isDefined(pos)) {
             !lowErrorOnly && points.push([pos - edgeLength, high, pos + edgeLength, high]);
             points.push([pos, high, pos, low]);
             !highErrorOnly && points.push([pos + edgeLength, low, pos - edgeLength, low]);
@@ -478,13 +478,13 @@ module.exports = {
 
             settings = that._getErrorBarSettings(errorBarOptions);
             if(!that._errorBar) {
-                that._errorBar = renderer.path(points, "line").attr(settings).append(group);
+                that._errorBar = renderer.path(points, 'line').attr(settings).append(group);
             } else {
                 settings.points = points;
                 that._errorBar.attr(settings);
             }
         } else {
-            that._errorBar && that._errorBar.attr({ visibility: "hidden" });
+            that._errorBar && that._errorBar.attr({ visibility: 'hidden' });
         }
     },
 
@@ -504,8 +504,8 @@ module.exports = {
             minValuePercent = (that.minValue / absTotal) || 0,
             percent = valuePercent - minValuePercent;
 
-        that._label.setDataField("percent", percent);
-        that._label.setDataField("total", total);
+        that._label.setDataField('percent', percent);
+        that._label.setDataField('total', total);
 
         if(that.series.isFullStackedSeries() && that.hasValue()) {
             if(that.leftHole) {
@@ -530,7 +530,7 @@ module.exports = {
         navigator = that.__debug_navigator || navigator;
         that.__debug_browserNavigator = navigator;
         ///#ENDDEBUG
-        minTrackerSize = windowUtils.hasProperty("ontouchstart") || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+        minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
         that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
         return that._options.trackerR;
     },
@@ -549,7 +549,7 @@ module.exports = {
         _isDefined(that.lowError) && (that._lowErrorCoord = translator.translate(that.lowError));
         _isDefined(that.highError) && (that._highErrorCoord = translator.translate(that.highError));
         that._errorBarPos = _floor(rotated ? that.vy : that.vx);
-        that._baseErrorBarPos = errorBars.type === "stdDeviation" ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : rotated ? that.vx : that.vy;
+        that._baseErrorBarPos = errorBars.type === 'stdDeviation' ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : rotated ? that.vx : that.vy;
     },
 
     _translate: function() {
@@ -606,10 +606,10 @@ module.exports = {
             r = style.r,
             extraSpace,
             symbol = options.symbol,
-            isSquare = symbol === "square",
-            isTriangle = symbol === "triangle" || symbol === "triangleDown" || symbol === "triangleUp";
+            isSquare = symbol === 'square',
+            isTriangle = symbol === 'triangle' || symbol === 'triangleDown' || symbol === 'triangleUp';
         if(options.visible && !options.image && r) {
-            extraSpace = style["stroke-width"] / 2;
+            extraSpace = style['stroke-width'] / 2;
             return (isSquare || isTriangle ? 1.4 * r : r) + extraSpace;
         }
         return 0;
@@ -620,7 +620,7 @@ module.exports = {
             options = that._options,
             settings,
             image = options.image,
-            visibility = !that.isVisible() ? { visibility: "hidden" } : {};
+            visibility = !that.isVisible() ? { visibility: 'hidden' } : {};
 
         if(that._checkImage(image)) {
             settings = _extend({}, { visibility: style.visibility }, visibility, that._getImageSettings(image));
@@ -653,9 +653,9 @@ module.exports = {
     _getLabelPosition: function() {
         var rotated = this._options.rotated;
         if(this.initialValue > 0) {
-            return rotated ? "right" : "top";
+            return rotated ? 'right' : 'top';
         } else {
-            return rotated ? "left" : "bottom";
+            return rotated ? 'left' : 'bottom';
         }
     },
 
@@ -667,10 +667,10 @@ module.exports = {
             {},
             labelFormatObject,
             {
-                argumentText: tooltip.formatValue(that.initialArgument, "argument"),
+                argumentText: tooltip.formatValue(that.initialArgument, 'argument'),
                 valueText: tooltip.formatValue(that.initialValue)
             },
-            _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, "percent") } : {},
+            _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, 'percent') } : {},
             _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {}
         );
     },
@@ -688,8 +688,8 @@ module.exports = {
         const errorBarOptions = this._options.errorBars;
         if(errorBarOptions && !noErrorBar) {
             const displayMode = errorBarOptions.displayMode;
-            const lowValue = displayMode !== "high" && _isDefined(this.lowError) ? this.lowError : this.value;
-            const highValue = displayMode !== "low" && _isDefined(this.highError) ? this.highError : this.value;
+            const lowValue = displayMode !== 'high' && _isDefined(this.lowError) ? this.lowError : this.value;
+            const highValue = displayMode !== 'low' && _isDefined(this.highError) ? this.highError : this.value;
 
             return lowValue < highValue ? lowValue : highValue;
         } else {
@@ -701,8 +701,8 @@ module.exports = {
         const errorBarOptions = this._options.errorBars;
         if(errorBarOptions && !noErrorBar) {
             const displayMode = errorBarOptions.displayMode;
-            const lowValue = displayMode !== "high" && _isDefined(this.lowError) ? this.lowError : this.value;
-            const highValue = displayMode !== "low" && _isDefined(this.highError) ? this.highError : this.value;
+            const lowValue = displayMode !== 'high' && _isDefined(this.lowError) ? this.lowError : this.value;
+            const highValue = displayMode !== 'low' && _isDefined(this.highError) ? this.highError : this.value;
 
             return lowValue > highValue ? lowValue : highValue;
         } else {

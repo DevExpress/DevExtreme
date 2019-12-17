@@ -1,19 +1,19 @@
-var Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    errors = require("../../ui/widget/ui.errors"),
-    getOperationBySearchMode = require("../../ui/widget/ui.search_box_mixin").getOperationBySearchMode,
-    inArray = require("../../core/utils/array").inArray,
-    query = require("../../data/query"),
-    storeHelper = require("../../data/store_helper"),
-    HierarchicalDataConverter = require("./ui.data_converter");
+var Class = require('../../core/class'),
+    commonUtils = require('../../core/utils/common'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    each = require('../../core/utils/iterator').each,
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    errors = require('../../ui/widget/ui.errors'),
+    getOperationBySearchMode = require('../../ui/widget/ui.search_box_mixin').getOperationBySearchMode,
+    inArray = require('../../core/utils/array').inArray,
+    query = require('../../data/query'),
+    storeHelper = require('../../data/store_helper'),
+    HierarchicalDataConverter = require('./ui.data_converter');
 
-var EXPANDED = "expanded",
-    SELECTED = "selected",
-    DISABLED = "disabled";
+var EXPANDED = 'expanded',
+    SELECTED = 'selected',
+    DISABLED = 'disabled';
 
 var DataAdapter = Class.inherit({
 
@@ -33,7 +33,7 @@ var DataAdapter = Class.inherit({
     setOption: function(name, value) {
         this.options[name] = value;
 
-        if(name === "recursiveSelection") {
+        if(name === 'recursiveSelection') {
             this._updateSelection();
         }
     },
@@ -46,9 +46,9 @@ var DataAdapter = Class.inherit({
             recursiveSelection: false,
             recursiveExpansion: false,
             rootValue: 0,
-            searchValue: "",
-            dataType: "tree",
-            searchMode: "contains",
+            searchValue: '',
+            dataType: 'tree',
+            searchMode: 'contains',
             dataConverter: new HierarchicalDataConverter(),
             onNodeChanged: commonUtils.noop,
             sort: null
@@ -166,28 +166,41 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _iterateChildren: function(node, recursive, callback) {
-        var that = this;
-
-        each(node.internalFields.childrenKeys, function(_, key) {
-            var child = that.getNodeByKey(key);
-            typeUtils.isFunction(callback) && callback(child);
-            if(child.internalFields.childrenKeys.length && recursive) {
-                that._iterateChildren(child, recursive, callback);
-            }
-        });
-    },
-
-    _iterateParents: function(node, callback) {
-        if(node.internalFields.parentKey === this.options.rootValue) {
+    _iterateChildren: function(node, recursive, callback, processedKeys) {
+        if(!typeUtils.isFunction(callback)) {
             return;
         }
 
-        var parent = this.options.dataConverter.getParentNode(node);
-        if(parent) {
-            typeUtils.isFunction(callback) && callback(parent);
-            if(parent.internalFields.parentKey !== this.options.rootValue) {
-                this._iterateParents(parent, callback);
+        const that = this;
+        const nodeKey = node.internalFields.key;
+        processedKeys = processedKeys || [];
+        if(processedKeys.indexOf(nodeKey) === -1) {
+            processedKeys.push(nodeKey);
+            each(node.internalFields.childrenKeys, function(_, key) {
+                let child = that.getNodeByKey(key);
+                callback(child);
+                if(child.internalFields.childrenKeys.length && recursive) {
+                    that._iterateChildren(child, recursive, callback, processedKeys);
+                }
+            });
+        }
+    },
+
+    _iterateParents: function(node, callback, processedKeys) {
+        if(node.internalFields.parentKey === this.options.rootValue || !typeUtils.isFunction(callback)) {
+            return;
+        }
+        processedKeys = processedKeys || [];
+        const key = node.internalFields.key;
+
+        if(processedKeys.indexOf(key) === -1) {
+            processedKeys.push(key);
+            let parent = this.options.dataConverter.getParentNode(node);
+            if(parent) {
+                callback(parent);
+                if(parent.internalFields.parentKey !== this.options.rootValue) {
+                    this._iterateParents(parent, callback, processedKeys);
+                }
             }
         }
     },
@@ -355,7 +368,7 @@ var DataAdapter = Class.inherit({
     },
 
     getChildrenNodes: function(parentKey) {
-        return query(this._dataStructure).filter(["internalFields.parentKey", parentKey]).toArray();
+        return query(this._dataStructure).filter(['internalFields.parentKey', parentKey]).toArray();
     },
 
     getIndexByKey: function(key) {
@@ -445,7 +458,7 @@ var DataAdapter = Class.inherit({
             return [selector, operation, value];
         }
         iteratorUtils.each(selector, function(i, item) {
-            searchFilter.push([item, operation, value], "or");
+            searchFilter.push([item, operation, value], 'or');
         });
 
         searchFilter.pop();
@@ -482,7 +495,7 @@ var DataAdapter = Class.inherit({
                 var parent = dataConverter.getParentNode(node);
 
                 if(!parent) {
-                    errors.log("W1007", node.internalFields.parentKey, node.internalFields.key);
+                    errors.log('W1007', node.internalFields.parentKey, node.internalFields.key);
                     index++;
                     continue;
                 }

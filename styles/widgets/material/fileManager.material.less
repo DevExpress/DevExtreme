@@ -77,6 +77,11 @@
                 }
             }
         }
+
+        .dx-toolbar .dx-filemanager-toolbar-viewmode-item .dx-button-content {
+            padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+            padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+        }
     }
 
     .dx-filemanager-container {
@@ -95,6 +100,11 @@
                 background: @filemanager-breadcrumbs-item-focus-bg;
                 color: @filemanager-breadcrumbs-item-focus-color;
             }
+        }
+
+        .dx-menu-item-content {
+            padding-top: @FILEMANAGER_BREADCRUMBS_ITEM_PADDING_TOP;
+            padding-bottom: @FILEMANAGER_BREADCRUMBS_ITEM_PADDING_BOTTOM;
         }
 
         .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
@@ -138,6 +148,20 @@
             .dx-filemanager-details-item-thumbnail {
                 font-size: @MATERIAL_BASE_ICON_SIZE;
             }
+
+            .dx-datagrid .dx-datagrid-content .dx-datagrid-table {
+                .dx-command-select {
+                    padding: 0;
+                    width: @FILEMANAGER_DETAILS_VIEW_CHECKBOX_COLUMN_WIDTH;
+                    min-width: @FILEMANAGER_DETAILS_VIEW_CHECKBOX_COLUMN_WIDTH;
+                    max-width: @FILEMANAGER_DETAILS_VIEW_CHECKBOX_COLUMN_WIDTH;
+                }
+
+                .dx-filemanager-details-item-is-directory {
+                    padding-right: 0;
+                    padding-left: 0;
+                }
+            }
         }
     }
 
@@ -170,12 +194,13 @@
     }
 }
 
-.dx-filemanager { // stylelint-disable-line no-duplicate-selectors
-    .dx-filemanager-container { // stylelint-disable-line no-duplicate-selectors
-        .dx-filemanager-dirs-panel {
-            min-width: 300px;
-            max-width: 350px;
-        }
+.dx-filemanager-view-switcher-popup {
+    width: 2 * @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING + @MATERIAL_BASE_ICON_SIZE;
+
+    .dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+        padding-left: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING - 1px;
+        padding-right: @FILEMANAGER_TOOLBAR_VIEWMODE_PADDING;
+        text-overflow: clip;
     }
 }
 

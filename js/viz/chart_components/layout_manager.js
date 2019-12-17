@@ -1,11 +1,11 @@
-var extend = require("../../core/utils/extend").extend,
-    layoutElementModule = require("../core/layout_element"),
-    _isNumber = require("../../core/utils/type").isNumeric,
+var extend = require('../../core/utils/extend').extend,
+    layoutElementModule = require('../core/layout_element'),
+    _isNumber = require('../../core/utils/type').isNumeric,
     _min = Math.min,
     _max = Math.max,
     _floor = Math.floor,
     _sqrt = Math.sqrt,
-    consts = require("../components/consts"),
+    consts = require('../components/consts'),
     RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
@@ -21,7 +21,7 @@ function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
 }
 
 function getLabelLayout(point) {
-    if(point._label.isVisible() && point._label.getLayoutOptions().position !== "inside") {
+    if(point._label.isVisible() && point._label.getLayoutOptions().position !== 'inside') {
         return point._label.getBoundingRect();
     }
 }
@@ -102,7 +102,7 @@ function getLengthFromCenter(x, y, paneCenterX, paneCenterY) {
 
 function getInnerRadius(series) {
     var innerRadius;
-    if(series.type === "pie") {
+    if(series.type === 'pie') {
         innerRadius = 0;
     } else {
         innerRadius = _isNumber(series.innerRadius) ? Number(series.innerRadius) : 0.5;
@@ -113,15 +113,15 @@ function getInnerRadius(series) {
 }
 
 var inverseAlign = {
-    left: "right",
-    right: "left",
-    top: "bottom",
-    bottom: "top",
-    center: "center"
+    left: 'right',
+    right: 'left',
+    top: 'bottom',
+    bottom: 'top',
+    center: 'center'
 };
 
 function downSize(canvas, layoutOptions) {
-    canvas[layoutOptions.cutLayoutSide] += layoutOptions.cutSide === "horizontal" ? layoutOptions.width : layoutOptions.height;
+    canvas[layoutOptions.cutLayoutSide] += layoutOptions.cutSide === 'horizontal' ? layoutOptions.width : layoutOptions.height;
 }
 
 function getOffset(layoutOptions, offsets) {
@@ -132,12 +132,12 @@ function getOffset(layoutOptions, offsets) {
         };
 
     switch(side) {
-        case "top":
-        case "left":
+        case 'top':
+        case 'left':
             offset[layoutOptions.cutSide] = -offsets[side];
             break;
-        case "bottom":
-        case "right":
+        case 'bottom':
+        case 'right':
             offset[layoutOptions.cutSide] = offsets[side];
             break;
     }
@@ -304,21 +304,21 @@ LayoutManager.prototype = {
             sizeObject = extend({}, layoutOptions);
 
             needRedraw =
-                layoutOptions.cutSide === "vertical" && size.width < 0 ||
-                layoutOptions.cutSide === "horizontal" && size.height < 0 ||
-                layoutOptions.cutSide === "vertical" && size.height > 0 ||
-                layoutOptions.cutSide === "horizontal" && size.width > 0;
+                layoutOptions.cutSide === 'vertical' && size.width < 0 ||
+                layoutOptions.cutSide === 'horizontal' && size.height < 0 ||
+                layoutOptions.cutSide === 'vertical' && size.height > 0 ||
+                layoutOptions.cutSide === 'horizontal' && size.width > 0;
 
-            cutSide = layoutOptions.cutSide === "horizontal" ? "width" : "height";
+            cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
 
             if(needRedraw) {
                 var width = sizeObject.width - size.width;
                 var height = sizeObject.height - size.height;
 
-                if(cutSide === "height" && size.width < 0) {
+                if(cutSide === 'height' && size.width < 0) {
                     width = canvas.width - canvas.left - canvas.right;
                 }
-                if(cutSide === "width" && size.height < 0) {
+                if(cutSide === 'width' && size.height < 0) {
                     height = canvas.height - canvas.top - canvas.bottom;
                 }
                 item.draw(width, height);
@@ -342,7 +342,7 @@ LayoutManager.prototype = {
             }
 
             sizeObject = { width: canvas.width - canvas.left - canvas.right, height: canvas.height - canvas.top - canvas.bottom };
-            if(layoutOptions.cutSide === "vertical") {
+            if(layoutOptions.cutSide === 'vertical') {
                 sizeObject.height -= that._options.height;
             } else {
                 sizeObject.width -= that._options.width;
@@ -369,7 +369,7 @@ LayoutManager.prototype = {
                 height: canvas.height - canvas.top - canvas.bottom
             };
             cutSide = layoutOptions.cutSide;
-            length = cutSide === "horizontal" ? "width" : "height";
+            length = cutSide === 'horizontal' ? 'width' : 'height';
 
             sizeObject[length] = layoutOptions[length];
             item.draw(sizeObject.width, sizeObject.height);
@@ -408,7 +408,7 @@ LayoutManager.prototype = {
                 at: position, offset: getOffset(layoutOptions, offsets)
             });
 
-            offsets[layoutOptions.cutLayoutSide] += layoutOptions[layoutOptions.cutSide === "horizontal" ? "width" : "height"];
+            offsets[layoutOptions.cutLayoutSide] += layoutOptions[layoutOptions.cutSide === 'horizontal' ? 'width' : 'height'];
         });
     }
 };

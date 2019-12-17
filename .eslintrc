@@ -85,6 +85,7 @@
                 }
             }
         ],
+        "quotes": ["error", "single"],
         "spellcheck/spell-checker": [
             "error",
             {
@@ -145,6 +146,7 @@
                     "mozilla",
                     "mvc",
                     "firefox",
+                    "fmt",
                     "msie",
                     "odata",      // OData
                     "readonly",

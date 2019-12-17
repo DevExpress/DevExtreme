@@ -1,14 +1,14 @@
-import "../../../testing/content/orders.js";
-import "data/odata/store";
+import '../../../testing/content/orders.js';
+import 'data/odata/store';
 
-import $ from "jquery";
-import { noop } from "core/utils/common";
-import { LocalStore } from "ui/pivot_grid/local_store";
-import pivotGridDataSource from "ui/pivot_grid/data_source";
-import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
-import config from "core/config";
-import formatHelper from "format_helper";
-import ajaxMock from "../../helpers/ajaxMock.js";
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import { LocalStore } from 'ui/pivot_grid/local_store';
+import pivotGridDataSource from 'ui/pivot_grid/data_source';
+import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
+import config from 'core/config';
+import formatHelper from 'format_helper';
+import ajaxMock from '../../helpers/ajaxMock.js';
 
 var moduleConfig = {
     beforeEach: function() {
@@ -25,20 +25,20 @@ QUnit.testDone(function() {
     ajaxMock.clear();
 });
 
-QUnit.module("Local Store Initialization");
+QUnit.module('Local Store Initialization');
 
-QUnit.test("Array", function(assert) {
+QUnit.test('Array', function(assert) {
     this.store = new LocalStore(window.orders);
 
     this.store.load({
-        columns: [{ dataField: "ShipCountry" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'ShipCountry' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 21);
     });
 });
 
-QUnit.test("Custom Store", function(assert) {
+QUnit.test('Custom Store', function(assert) {
     var done = assert.async(),
         d = $.Deferred(),
 
@@ -50,8 +50,8 @@ QUnit.test("Custom Store", function(assert) {
         });
 
     store.load({
-        columns: [{ dataField: "ShipCountry" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'ShipCountry' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 21);
         assert.strictEqual(store.key(), 10);
@@ -61,25 +61,25 @@ QUnit.test("Custom Store", function(assert) {
 
 });
 
-QUnit.test("OData Store", function(assert) {
+QUnit.test('OData Store', function(assert) {
     var done = assert.async(),
         d = $.Deferred();
 
     ajaxMock.setup({
-        url: "/mock-odata",
-        responseText: { "d": [{ "group": "a" }, { "group": "a" }, { "group": "b" }, { "group": "c" }, { "group": "c" }] }
+        url: '/mock-odata',
+        responseText: { 'd': [{ 'group': 'a' }, { 'group': 'a' }, { 'group': 'b' }, { 'group': 'c' }, { 'group': 'c' }] }
     });
 
     this.store = new LocalStore({
         store: {
             type: 'odata',
-            url: "/mock-odata"
+            url: '/mock-odata'
         }
     });
 
     this.store.load({
-        columns: [{ dataField: "group" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'group' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 3);
         assert.equal(result.columns[0].value, 'a');
@@ -90,7 +90,7 @@ QUnit.test("OData Store", function(assert) {
     d.resolve(window.orders);
 });
 
-QUnit.test("Filter", function(assert) {
+QUnit.test('Filter', function(assert) {
     this.store = new LocalStore({
         store: {
             type: 'array',
@@ -100,65 +100,65 @@ QUnit.test("Filter", function(assert) {
     });
 
     this.store.load({
-        columns: [{ dataField: "ShipCountry" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'ShipCountry' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 1);
     });
 });
 
-QUnit.test("Filter by date", function(assert) {
+QUnit.test('Filter by date', function(assert) {
     this.store = new LocalStore({
         store: {
             type: 'array',
             data: window.orders,
         },
-        filter: ['OrderDate', '=', new Date("1996/07/09")]
+        filter: ['OrderDate', '=', new Date('1996/07/09')]
     });
 
     this.store.load({
-        columns: [{ dataField: "OrderDate", dataType: "date" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'OrderDate', dataType: 'date' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 1);
     });
 });
 
-QUnit.test("Filter by date set as second parameter", function(assert) {
+QUnit.test('Filter by date set as second parameter', function(assert) {
     this.store = new LocalStore({
         store: {
             type: 'array',
             data: window.orders,
         },
-        filter: ['OrderDate', new Date("1996/07/09")]
+        filter: ['OrderDate', new Date('1996/07/09')]
     });
 
     this.store.load({
-        columns: [{ dataField: "OrderDate", dataType: "date" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'OrderDate', dataType: 'date' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 1);
     });
 });
 
-QUnit.test("Filter by date set as string", function(assert) {
+QUnit.test('Filter by date set as string', function(assert) {
     this.store = new LocalStore({
         store: {
             type: 'array',
             data: window.orders,
         },
-        filter: ['OrderDate', '=', "1996/07/09"]
+        filter: ['OrderDate', '=', '1996/07/09']
     });
 
     this.store.load({
-        columns: [{ dataField: "OrderDate", dataType: "date" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'OrderDate', dataType: 'date' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 1);
     });
 });
 
-QUnit.test("Fail on load", function(assert) {
+QUnit.test('Fail on load', function(assert) {
     assert.expect(1);
 
     var store = new LocalStore({
@@ -177,14 +177,14 @@ QUnit.test("Fail on load", function(assert) {
     });
 });
 
-QUnit.module("Array Local Store", moduleConfig);
+QUnit.module('Array Local Store', moduleConfig);
 
-QUnit.test("Async loading when more 10000 items", function(assert) {
+QUnit.test('Async loading when more 10000 items', function(assert) {
     var items = [];
 
 
     for(var i = 0; i < 20000; i++) {
-        items.push({ name: "test" + i });
+        items.push({ name: 'test' + i });
     }
 
     this.store = new LocalStore({
@@ -201,13 +201,13 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
     this.store.load({
         rows: [{
             selector: function(data) {
-                if(data.name === "test5000") {
+                if(data.name === 'test5000') {
                     clock.tick(500);
                 }
                 return data.name;
             }
         }],
-        values: [{ summaryType: "count" }]
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         doneCalled = true;
         // assert
@@ -217,28 +217,28 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
     });
 
     // assert
-    assert.notOk(doneCalled, "load is not completed");
+    assert.notOk(doneCalled, 'load is not completed');
 
     // act
     clock.tick();
 
     // assert
-    assert.ok(doneCalled, "load is completed");
-    assert.deepEqual(progresses, [50, 100], "progress values");
+    assert.ok(doneCalled, 'load is completed');
+    assert.deepEqual(progresses, [50, 100], 'progress values');
 
     clock.restore();
 });
 
-QUnit.test("Columns and rows with string dataField", function(assert) {
+QUnit.test('Columns and rows with string dataField', function(assert) {
     this.load({
-        columns: [{ dataField: "ShipCountry" }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 21, 'columns count');
-        assert.equal(data.columns[0].value, "Argentina");
+        assert.equal(data.columns[0].value, 'Argentina');
         assert.equal(data.columns[0].index, 21, 'Argentina index');
-        assert.equal(data.columns[20].value, "Venezuela");
+        assert.equal(data.columns[20].value, 'Venezuela');
 
         assert.equal(data.rows.length, 3, 'rows count');
         assert.equal(data.rows[0].value, 1);
@@ -259,10 +259,10 @@ QUnit.test("Columns and rows with string dataField", function(assert) {
     });
 });
 
-QUnit.test("Group interval year & month", function(assert) {
+QUnit.test('Group interval year & month', function(assert) {
     this.load({
-        columns: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'year' }],
-        rows: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'month' }],
+        columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
+        rows: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 3, 'columns count');
@@ -289,18 +289,18 @@ QUnit.test("Group interval year & month", function(assert) {
     });
 });
 
-QUnit.test("Group interval year & month with filter", function(assert) {
+QUnit.test('Group interval year & month with filter', function(assert) {
     this.store = new LocalStore({
         store: {
             type: 'array',
             data: window.orders,
         },
-        filter: ['OrderDate', '=', new Date("1996/07/09")]
+        filter: ['OrderDate', '=', new Date('1996/07/09')]
     });
 
     this.load({
-        columns: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'year', expanded: true },
-            { dataField: "OrderDate", dataType: 'date', groupInterval: 'month' }],
+        columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year', expanded: true },
+            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 1, 'columns count');
@@ -308,10 +308,10 @@ QUnit.test("Group interval year & month with filter", function(assert) {
     });
 });
 
-QUnit.test("Group interval quarter & dayOfWeek", function(assert) {
+QUnit.test('Group interval quarter & dayOfWeek', function(assert) {
     this.load({
-        columns: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'quarter' }],
-        rows: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'dayOfWeek' }],
+        columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter' }],
+        rows: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'dayOfWeek' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 4, 'columns count');
@@ -339,9 +339,9 @@ QUnit.test("Group interval quarter & dayOfWeek", function(assert) {
     });
 });
 
-QUnit.test("Group interval day", function(assert) {
+QUnit.test('Group interval day', function(assert) {
     this.load({
-        columns: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'day' }],
+        columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'day' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 31, 'columns count');
@@ -362,9 +362,9 @@ QUnit.test("Group interval day", function(assert) {
     });
 });
 
-QUnit.test("Wrong groupInterval", function(assert) {
+QUnit.test('Wrong groupInterval', function(assert) {
     this.load({
-        columns: [{ dataField: "OrderDate", dataType: 'date', groupInterval: 'wrong' }],
+        columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'wrong' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 480, 'columns count');
@@ -383,9 +383,9 @@ QUnit.test("Wrong groupInterval", function(assert) {
     });
 });
 
-QUnit.test("Numeric intervals. Wrong groupInterval", function(assert) {
+QUnit.test('Numeric intervals. Wrong groupInterval', function(assert) {
     this.load({
-        columns: [{ dataField: "Freight", dataType: "number", groupInterval: 'wrong' }],
+        columns: [{ dataField: 'Freight', dataType: 'number', groupInterval: 'wrong' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 799, 'columns count');
@@ -404,9 +404,9 @@ QUnit.test("Numeric intervals. Wrong groupInterval", function(assert) {
     });
 });
 
-QUnit.test("Numeric intervals. interval is 0", function(assert) {
+QUnit.test('Numeric intervals. interval is 0', function(assert) {
     this.load({
-        columns: [{ dataField: "Freight", dataType: "number", groupInterval: 0 }],
+        columns: [{ dataField: 'Freight', dataType: 'number', groupInterval: 0 }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 799, 'columns count');
@@ -425,9 +425,9 @@ QUnit.test("Numeric intervals. interval is 0", function(assert) {
     });
 });
 
-QUnit.test("Numeric intervals. interval is < 1", function(assert) {
+QUnit.test('Numeric intervals. interval is < 1', function(assert) {
     this.load({
-        columns: [{ dataField: "Freight", dataType: "number", groupInterval: 0.01 }],
+        columns: [{ dataField: 'Freight', dataType: 'number', groupInterval: 0.01 }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 794, 'columns count');
@@ -447,14 +447,14 @@ QUnit.test("Numeric intervals. interval is < 1", function(assert) {
     });
 });
 
-QUnit.test("Numeric intervals. Numeric interval", function(assert) {
+QUnit.test('Numeric intervals. Numeric interval', function(assert) {
     this.load({
-        columns: [{ dataField: "Freight", dataType: "number", groupInterval: 100 }],
+        columns: [{ dataField: 'Freight', dataType: 'number', groupInterval: 100 }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 10, 'columns count');
-        assert.strictEqual(data.columns[0].value, 0, "[0-100)");
-        assert.strictEqual(data.columns[1].value, 100, "[100-1000)");
+        assert.strictEqual(data.columns[0].value, 0, '[0-100)');
+        assert.strictEqual(data.columns[1].value, 100, '[100-1000)');
 
         assert.equal(data.rows.length, 0, 'rows count');
 
@@ -469,9 +469,9 @@ QUnit.test("Numeric intervals. Numeric interval", function(assert) {
     });
 });
 
-QUnit.test("Numeric intervals. Custom customizeText callback", function(assert) {
+QUnit.test('Numeric intervals. Custom customizeText callback', function(assert) {
     var customizeFunc = function() { },
-        field = { dataField: "Freight", dataType: "number", groupInterval: 100, customizeText: customizeFunc };
+        field = { dataField: 'Freight', dataType: 'number', groupInterval: 100, customizeText: customizeFunc };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
@@ -480,73 +480,73 @@ QUnit.test("Numeric intervals. Custom customizeText callback", function(assert) 
     });
 });
 
-QUnit.test("Numeric intervals. Without custom customizeText callback", function(assert) {
-    var field = { dataField: "Freight", dataType: "number", groupInterval: 100 };
+QUnit.test('Numeric intervals. Without custom customizeText callback', function(assert) {
+    var field = { dataField: 'Freight', dataType: 'number', groupInterval: 100 };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.strictEqual(field.customizeText({
             value: 0,
-            valueText: "0"
-        }), "0 - 100");
+            valueText: '0'
+        }), '0 - 100');
     });
 });
 
-QUnit.test("Numeric intervals. With format and without custom customizeText callback", function(assert) {
-    var field = { dataField: "Freight", dataType: "number", groupInterval: 100, format: { type: "currency", precision: 2 } };
+QUnit.test('Numeric intervals. With format and without custom customizeText callback', function(assert) {
+    var field = { dataField: 'Freight', dataType: 'number', groupInterval: 100, format: { type: 'currency', precision: 2 } };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
-        sinon.stub(formatHelper, "format");
-        formatHelper.format.returns("$100");
+        sinon.stub(formatHelper, 'format');
+        formatHelper.format.returns('$100');
 
 
         assert.strictEqual(field.customizeText({
             value: 0,
-            valueText: "$0"
-        }), "$0 - $100");
+            valueText: '$0'
+        }), '$0 - $100');
 
-        assert.deepEqual(formatHelper.format.lastCall.args, [100, { type: "currency", precision: 2 }]);
-
-        assert.strictEqual(field.customizeText({
-            value: 0,
-            valueText: ""
-        }), "", "first value not formatting");
-        assert.deepEqual(formatHelper.format.lastCall.args, [100, { type: "currency", precision: 2 }]);
-
-        formatHelper.format.returns("");
+        assert.deepEqual(formatHelper.format.lastCall.args, [100, { type: 'currency', precision: 2 }]);
 
         assert.strictEqual(field.customizeText({
             value: 0,
-            valueText: "$0"
-        }), "", "second value not formatting");
+            valueText: ''
+        }), '', 'first value not formatting');
+        assert.deepEqual(formatHelper.format.lastCall.args, [100, { type: 'currency', precision: 2 }]);
+
+        formatHelper.format.returns('');
+
+        assert.strictEqual(field.customizeText({
+            value: 0,
+            valueText: '$0'
+        }), '', 'second value not formatting');
 
         formatHelper.format.restore();
     });
 });
 
-QUnit.test("Date intervals formatting", function(assert) {
+QUnit.test('Date intervals formatting', function(assert) {
     var fields = [
-        { dataField: "OrderDate", dataType: "date", groupInterval: "quarter" },
-        { dataField: "OrderDate", dataType: "date", groupInterval: "month" },
-        { dataField: "OrderDate", dataType: "date", groupInterval: "dayOfWeek" },
-        { dataField: "OrderDate", dataType: "date", groupInterval: "day" },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter' },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'dayOfWeek' },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'day' },
     ];
     this.load({
         columns: fields,
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
-        assert.strictEqual(pivotGridUtils.formatValue(1, fields[0]), "Q1", "quarter 1");
-        assert.strictEqual(pivotGridUtils.formatValue(1, fields[1]), "January", "month 1");
-        assert.strictEqual(pivotGridUtils.formatValue(1, fields[2]), "Monday", "dayOfWeek 1");
-        assert.strictEqual(pivotGridUtils.formatValue(1, fields[3]), "1", "day 1");
+        assert.strictEqual(pivotGridUtils.formatValue(1, fields[0]), 'Q1', 'quarter 1');
+        assert.strictEqual(pivotGridUtils.formatValue(1, fields[1]), 'January', 'month 1');
+        assert.strictEqual(pivotGridUtils.formatValue(1, fields[2]), 'Monday', 'dayOfWeek 1');
+        assert.strictEqual(pivotGridUtils.formatValue(1, fields[3]), '1', 'day 1');
     });
 });
 
 
-QUnit.test("Summary types", function(assert) {
+QUnit.test('Summary types', function(assert) {
     this.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
         values: [{ summaryType: 'count' }, { dataField: 'Freight', dataType: 'number', summaryType: 'sum' }, { dataField: 'Freight', dataType: 'number', summaryType: 'avg' }, { dataField: 'Freight', dataType: 'number', summaryType: 'min' }, { dataField: 'Freight', dataType: 'number', summaryType: 'max' }, { dataField: 'Freight', dataType: 'number', summaryType: 'wrong' }]
@@ -578,11 +578,11 @@ QUnit.test("Summary types", function(assert) {
     });
 });
 
-QUnit.test("groupField in the values", function(assert) {
+QUnit.test('groupField in the values', function(assert) {
     this.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
         values: [{
-            dataField: 'Freight', dataType: 'number', summaryType: 'sum', groupName: "MyGroup", levels: [
+            dataField: 'Freight', dataType: 'number', summaryType: 'sum', groupName: 'MyGroup', levels: [
                 { dataField: 'Freight', groupInterval: 100, groupIndex: 0 },
                 { dataField: 'Freight', groupInterval: 10, groupIndex: 1 }
             ]
@@ -615,7 +615,7 @@ QUnit.test("groupField in the values", function(assert) {
     });
 });
 
-QUnit.test("Custom summary aggregation", function(assert) {
+QUnit.test('Custom summary aggregation', function(assert) {
     var calculateCustomSummaryProcess = {
             start: [],
             calculate: [],
@@ -627,8 +627,8 @@ QUnit.test("Custom summary aggregation", function(assert) {
             options.totalValue++;
         },
         field = {
-            dataField: "Freight",
-            summaryType: "custom",
+            dataField: 'Freight',
+            summaryType: 'custom',
             calculateCustomSummary: calculateCustomSummary
         };
 
@@ -642,15 +642,15 @@ QUnit.test("Custom summary aggregation", function(assert) {
         },
         field,
         {
-            dataField: "Freight",
-            dataType: "number",
-            summaryType: "custom",
+            dataField: 'Freight',
+            dataType: 'number',
+            summaryType: 'custom',
             calculateCustomSummary: noop
         },
         {
-            dataField: "Freight",
-            dataType: "number",
-            summaryType: "custom"
+            dataField: 'Freight',
+            dataType: 'number',
+            summaryType: 'custom'
         }
         ]
     }).done(function(data) {
@@ -677,13 +677,13 @@ QUnit.test("Custom summary aggregation", function(assert) {
     });
 });
 
-QUnit.test("Custom summary aggregation calculation", function(assert) {
+QUnit.test('Custom summary aggregation calculation', function(assert) {
     this.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
         values: [
-            { dataField: "Freight", dataType: 'number', summaryType: "avg", format: 'fixedPoint', precision: 2, area: "data", name: "etalon" },
+            { dataField: 'Freight', dataType: 'number', summaryType: 'avg', format: 'fixedPoint', precision: 2, area: 'data', name: 'etalon' },
             {
-                dataField: "Freight", dataType: 'number', summaryType: 'custom',
+                dataField: 'Freight', dataType: 'number', summaryType: 'custom',
                 calculateCustomSummary: function(options) {
                     if(options.summaryProcess === 'start') {
                         // Initializing "totalValue" here
@@ -698,10 +698,10 @@ QUnit.test("Custom summary aggregation calculation", function(assert) {
                         // Assigning the final value to "totalValue" here
                         options.totalValue = options.totalValue[0] / options.totalValue[1];
                     }
-                }, format: 'fixedPoint', precision: 2, area: "data", name: "Custom Field 1"
+                }, format: 'fixedPoint', precision: 2, area: 'data', name: 'Custom Field 1'
             },
             {
-                dataField: "Freight", dataType: 'number', summaryType: 'custom',
+                dataField: 'Freight', dataType: 'number', summaryType: 'custom',
                 calculateCustomSummary: function(options) {
                     if(options.summaryProcess === 'start') {
                         // Initializing "totalValue" here
@@ -717,10 +717,10 @@ QUnit.test("Custom summary aggregation calculation", function(assert) {
                         // Assigning the final value to "totalValue" here
                         options.totalValue /= options.count;
                     }
-                }, caption: 'Custom Avg Freight', format: 'fixedPoint', precision: 2, area: "data", name: "Custom Field 2"
+                }, caption: 'Custom Avg Freight', format: 'fixedPoint', precision: 2, area: 'data', name: 'Custom Field 2'
             },
             {
-                dataField: "Freight", dataType: 'number', summaryType: 'custom',
+                dataField: 'Freight', dataType: 'number', summaryType: 'custom',
                 calculateCustomSummary: function(options) {
                     if(options.summaryProcess === 'start') {
                         // Initializing "totalValue" here
@@ -735,26 +735,26 @@ QUnit.test("Custom summary aggregation calculation", function(assert) {
                         // Assigning the final value to "totalValue" here
                         options.totalValue = options.totalValue[0] / options.totalValue[1];
                     }
-                }, caption: 'Custom Avg Freight', format: 'fixedPoint', precision: 2, area: "data", name: "Custom Field 3"
+                }, caption: 'Custom Avg Freight', format: 'fixedPoint', precision: 2, area: 'data', name: 'Custom Field 3'
             }
         ]
     }).done(function(data) {
         $.each(data.values[0], function(_, valueCells) {
             assert.strictEqual(valueCells.length, 4);
-            assert.strictEqual(valueCells[1], valueCells[0], "custom Field 1");
-            assert.strictEqual(valueCells[2], valueCells[0], "custom Field 2");
-            assert.strictEqual(valueCells[3], valueCells[0], "custom Field 3");
+            assert.strictEqual(valueCells[1], valueCells[0], 'custom Field 1');
+            assert.strictEqual(valueCells[2], valueCells[0], 'custom Field 2');
+            assert.strictEqual(valueCells[3], valueCells[0], 'custom Field 3');
         });
 
     });
 });
 
-QUnit.test("Local store with empty array", function(assert) {
+QUnit.test('Local store with empty array', function(assert) {
     var store = new LocalStore([]);
 
     store.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
-        rows: [{ dataField: "ShipVia" }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [
             { summaryType: 'count' },
             { dataField: 'Freight', dataType: 'number', summaryType: 'sum' },
@@ -763,7 +763,7 @@ QUnit.test("Local store with empty array", function(assert) {
             { dataField: 'Freight', dataType: 'number', summaryType: 'max' },
             { dataField: 'Freight', dataType: 'number', summaryType: 'wrong' },
             {
-                dataField: "Freight", dataType: 'number', summaryType: 'custom',
+                dataField: 'Freight', dataType: 'number', summaryType: 'custom',
                 calculateCustomSummary: function(options) {
                     if(options.summaryProcess === 'start') {
                         // Initializing "totalValue" here
@@ -778,7 +778,7 @@ QUnit.test("Local store with empty array", function(assert) {
                         // Assigning the final value to "totalValue" here
                         options.totalValue = options.totalValue[0] / options.totalValue[1];
                     }
-                }, format: 'fixedPoint', precision: 2, area: "data", name: "Custom Field 1"
+                }, format: 'fixedPoint', precision: 2, area: 'data', name: 'Custom Field 1'
             }
         ]
     }).done(function(data) {
@@ -788,14 +788,14 @@ QUnit.test("Local store with empty array", function(assert) {
     });
 });
 
-QUnit.test("Calculate count with expanded header when header values are undefined", function(assert) {
+QUnit.test('Calculate count with expanded header when header values are undefined', function(assert) {
     var store = new LocalStore([{}]);
 
     store.load({
         columns: [],
         rows: [
-            { dataField: "ShipCity", expanded: true },
-            { dataField: "ShipName" }
+            { dataField: 'ShipCity', expanded: true },
+            { dataField: 'ShipName' }
         ],
         values: [
             { summaryType: 'count' }
@@ -807,19 +807,19 @@ QUnit.test("Calculate count with expanded header when header values are undefine
     });
 });
 
-QUnit.test("Expand column", function(assert) {
+QUnit.test('Expand column', function(assert) {
     this.load({
-        columns: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'ShipCountry' }, { dataField: 'ShipCity' }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }],
         headerName: 'columns',
         path: ['Spain']
     }).done(function(data) {
         assert.equal(data.columns.length, 3, 'columns count');
-        assert.equal(data.columns[0].value, "Barcelona");
+        assert.equal(data.columns[0].value, 'Barcelona');
         assert.equal(data.columns[0].index, 3, 'Barcelona index');
-        assert.equal(data.columns[1].value, "Madrid");
-        assert.equal(data.columns[2].value, "Sevilla");
+        assert.equal(data.columns[1].value, 'Madrid');
+        assert.equal(data.columns[2].value, 'Sevilla');
 
         assert.equal(data.rows.length, 3, 'rows count');
         assert.equal(data.rows[0].value, 1);
@@ -840,52 +840,52 @@ QUnit.test("Expand column", function(assert) {
     });
 });
 
-QUnit.test("Expand  date field", function(assert) {
+QUnit.test('Expand  date field', function(assert) {
     this.load({
-        path: [new Date("1996/07/04")],
+        path: [new Date('1996/07/04')],
         rows: [
             {
-                dataType: "date",
+                dataType: 'date',
                 selector: function(data) {
                     var d = new Date(data.OrderDate);
                     return d;
                 }
             },
-            { dataField: "ShipCountry" }
+            { dataField: 'ShipCountry' }
         ],
         columns: [],
         values: [{ summaryType: 'count' }],
-        headerName: "rows"
+        headerName: 'rows'
     }).done(function(data) {
         assert.equal(data.columns.length, 0, 'columns count');
         assert.equal(data.rows.length, 1);
 
-        assert.equal(data.rows[0].value, "France");
+        assert.equal(data.rows[0].value, 'France');
     });
 });
 
-QUnit.test("Expand undefined value", function(assert) {
+QUnit.test('Expand undefined value', function(assert) {
     this.load({
         path: [undefined],
         rows: [
             {
-                dataField: "missedField"
+                dataField: 'missedField'
             },
-            { dataField: "ShipCountry" }
+            { dataField: 'ShipCountry' }
         ],
         columns: [],
         values: [{ summaryType: 'count' }],
-        headerName: "rows"
+        headerName: 'rows'
     }).done(function(data) {
         assert.equal(data.columns.length, 0, 'columns count');
         assert.equal(data.rows.length, 21);
     });
 });
 
-QUnit.test("Expanded column", function(assert) {
+QUnit.test('Expanded column', function(assert) {
     this.load({
-        columns: [{ dataField: "OrderDate", dataType: "date", groupInterval: "year", expanded: true }, { dataField: "OrderDate", dataType: "date", groupInterval: "month", expanded: true }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year', expanded: true }, { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month', expanded: true }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 3, 'columns count');
@@ -921,16 +921,16 @@ QUnit.test("Expanded column", function(assert) {
     });
 });
 
-QUnit.test("Expanded column after expanding", function(assert) {
+QUnit.test('Expanded column after expanding', function(assert) {
     this.load({
         columns: [
-            { dataField: "OrderDate", dataType: "date", groupInterval: "year" },
-            { dataField: "OrderDate", dataType: "date", groupInterval: "quarter", expanded: true },
-            { dataField: "OrderDate", dataType: "date", groupInterval: "month" }
+            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' },
+            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter', expanded: true },
+            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' }
         ],
         headerName: 'columns',
         path: [1997],
-        rows: [{ dataField: "ShipVia" }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.columns.length, 4, 'columns count');
@@ -964,19 +964,19 @@ QUnit.test("Expanded column after expanding", function(assert) {
     });
 });
 
-QUnit.test("Expand row", function(assert) {
+QUnit.test('Expand row', function(assert) {
     this.load({
-        rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }],
-        columns: [{ dataField: "ShipVia" }],
+        rows: [{ dataField: 'ShipCountry' }, { dataField: 'ShipCity' }],
+        columns: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }],
         headerName: 'rows',
         path: ['Spain']
     }).done(function(data) {
         assert.equal(data.rows.length, 3, 'rows count');
-        assert.equal(data.rows[0].value, "Barcelona");
+        assert.equal(data.rows[0].value, 'Barcelona');
         assert.equal(data.rows[0].index, 3, 'Barcelona index');
-        assert.equal(data.rows[1].value, "Madrid");
-        assert.equal(data.rows[2].value, "Sevilla");
+        assert.equal(data.rows[1].value, 'Madrid');
+        assert.equal(data.rows[2].value, 'Sevilla');
 
         assert.equal(data.columns.length, 3, 'columns count');
         assert.equal(data.columns[0].value, 1);
@@ -997,10 +997,10 @@ QUnit.test("Expand row", function(assert) {
     });
 });
 
-QUnit.test("Expanded row", function(assert) {
+QUnit.test('Expanded row', function(assert) {
     this.load({
-        rows: [{ dataField: "OrderDate", dataType: "date", groupInterval: "year", expanded: true }, { dataField: "OrderDate", dataType: "date", groupInterval: "month", expanded: true }],
-        columns: [{ dataField: "ShipVia" }],
+        rows: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year', expanded: true }, { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month', expanded: true }],
+        columns: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
         assert.equal(data.rows.length, 3, 'rows count');
@@ -1036,17 +1036,17 @@ QUnit.test("Expanded row", function(assert) {
     });
 });
 
-QUnit.test("Expand row on several levels", function(assert) {
+QUnit.test('Expand row on several levels', function(assert) {
     this.load({
-        rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }, { dataField: "ShipName" }],
+        rows: [{ dataField: 'ShipCountry' }, { dataField: 'ShipCity' }, { dataField: 'ShipName' }],
         values: [{ summaryType: 'count' }],
         headerName: 'rows',
         path: ['Spain', 'Madrid']
     }).done(function(data) {
         assert.equal(data.rows.length, 2, 'rows count');
-        assert.equal(data.rows[0].value, "Bolido Comidas preparadas");
-        assert.equal(data.rows[0].index, 2, "Bolido Comidas preparadas index");
-        assert.equal(data.rows[1].value, "Romero y tomillo");
+        assert.equal(data.rows[0].value, 'Bolido Comidas preparadas');
+        assert.equal(data.rows[0].index, 2, 'Bolido Comidas preparadas index');
+        assert.equal(data.rows[1].value, 'Romero y tomillo');
 
         assert.equal(data.columns.length, 0, 'columns count');
 
@@ -1063,30 +1063,30 @@ QUnit.test("Expand row on several levels", function(assert) {
 });
 
 
-QUnit.test("Expand column & row", function(assert) {
+QUnit.test('Expand column & row', function(assert) {
     this.load({
-        rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }],
-        columns: [{ dataField: "ShipVia" }, { dataField: "CustomerID" }],
+        rows: [{ dataField: 'ShipCountry' }, { dataField: 'ShipCity' }],
+        columns: [{ dataField: 'ShipVia' }, { dataField: 'CustomerID' }],
         values: [{ summaryType: 'count' }],
         headerName: 'rows',
         columnExpandedPaths: [[1]],
         path: ['Spain']
     }).done(function(data) {
         assert.equal(data.rows.length, 3, 'rows count');
-        assert.equal(data.rows[0].value, "Barcelona");
+        assert.equal(data.rows[0].value, 'Barcelona');
         assert.equal(data.rows[0].index, 3, 'Barcelona index');
-        assert.equal(data.rows[1].value, "Madrid");
-        assert.equal(data.rows[2].value, "Sevilla");
+        assert.equal(data.rows[1].value, 'Madrid');
+        assert.equal(data.rows[2].value, 'Sevilla');
 
         assert.equal(data.columns.length, 3, 'columns count');
         assert.equal(data.columns[0].value, 1);
         assert.equal(data.columns[0].index, 1, 'ShipVia 1 index');
         assert.ok(data.columns[0].children, 'ShipVia 1 has children');
         assert.equal(data.columns[0].children.length, 4, 'ShipVia 1 children count');
-        assert.equal(data.columns[0].children[0].value, "BOLID", 'ShipVia 1 first children value');
+        assert.equal(data.columns[0].children[0].value, 'BOLID', 'ShipVia 1 first children value');
 
-        assert.ok(!data.columns[1].children, "second column should be not expanded");
-        assert.ok(!data.columns[2].children, "third column should be not expanded");
+        assert.ok(!data.columns[1].children, 'second column should be not expanded');
+        assert.ok(!data.columns[2].children, 'third column should be not expanded');
 
         assert.strictEqual(data.grandTotalColumnIndex, 0, 'grandTotalColumnIndex');
         assert.strictEqual(data.grandTotalRowIndex, 0, 'grandTotalRowIndex');
@@ -1101,28 +1101,28 @@ QUnit.test("Expand column & row", function(assert) {
     });
 });
 
-QUnit.test("Expand row on several levels & column", function(assert) {
+QUnit.test('Expand row on several levels & column', function(assert) {
     this.load({
-        rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }, { dataField: "ShipName" }],
-        columns: [{ dataField: "OrderDate", groupInterval: "year", dataType: 'date' }, { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date' }],
+        rows: [{ dataField: 'ShipCountry' }, { dataField: 'ShipCity' }, { dataField: 'ShipName' }],
+        columns: [{ dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' }, { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date' }],
         values: [{ summaryType: 'count' }],
         headerName: 'columns',
         rowExpandedPaths: [['Spain'], ['Spain', 'Madrid']],
         path: [1996]
     }).done(function(data) {
         assert.equal(data.rows.length, 20, 'rows count');
-        assert.equal(data.rows[0].value, "Austria");
-        assert.equal(data.rows[14].value, "Spain");
+        assert.equal(data.rows[0].value, 'Austria');
+        assert.equal(data.rows[14].value, 'Spain');
         assert.equal(data.rows[14].index, 13, 'Spain index');
         assert.ok(data.rows[14].children, 'Spain has children');
         assert.equal(data.rows[14].children.length, 3, 'Spain children count');
-        assert.equal(data.rows[14].children[1].value, "Madrid", 'Spain Madrid value');
+        assert.equal(data.rows[14].children[1].value, 'Madrid', 'Spain Madrid value');
         assert.equal(data.rows[14].children[1].index, 14, 'Spain Madrid index');
-        assert.ok(data.rows[14].children[1].children, "Madrid", 'Spain - Madrid has children');
+        assert.ok(data.rows[14].children[1].children, 'Spain - Madrid has children');
         assert.equal(data.rows[14].children[1].children.length, 2, 'Spain - Madrid children count');
-        assert.equal(data.rows[14].children[1].children[0].value, "Bolido Comidas preparadas", 'Spain - Madrid first children value');
+        assert.equal(data.rows[14].children[1].children[0].value, 'Bolido Comidas preparadas', 'Spain - Madrid first children value');
         assert.equal(data.rows[14].children[1].children[0].index, 19, 'Spain - Madrid first children index');
-        assert.equal(data.rows[19].value, "Venezuela");
+        assert.equal(data.rows[19].value, 'Venezuela');
 
         assert.equal(data.columns.length, 2, 'columns count');
         assert.equal(data.columns[0].value, 3, 'Q3');
@@ -1146,15 +1146,15 @@ QUnit.test("Expand row on several levels & column", function(assert) {
     });
 });
 
-QUnit.test("Load with undefined value in the expanded path", function(assert) {
+QUnit.test('Load with undefined value in the expanded path', function(assert) {
     new LocalStore([
         { a: undefined, b: 1 },
         { a: undefined, b: 2 },
-        { a: "1", b: 2 }
+        { a: '1', b: 2 }
     ]).load({
         rows: [
-            { dataField: "a" },
-            { dataField: "b" }
+            { dataField: 'a' },
+            { dataField: 'b' }
         ],
         columns: [],
         values: [],
@@ -1165,96 +1165,96 @@ QUnit.test("Load with undefined value in the expanded path", function(assert) {
     });
 });
 
-QUnit.test("getFields", function(assert) {
+QUnit.test('getFields', function(assert) {
     var dataSource = [
-        { "OrderID": 10248, Customer: { name: null }, "EmployeeID": undefined, "OrderDate": null, "Freight": "32.3800", "ShipName": "Vins et alcools Chevalier", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10249, Customer: {}, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10249, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10250, Customer: { name: "Name" }, "EmployeeID": 4, "OrderDate": new Date("1996/07/08"), "Freight": "65.8300", "ShipName": "Hanari Carnes", "ShipRegion": "RJ", "ShipPostalCode": null }];
+        { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10249, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10250, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }];
 
     new LocalStore(dataSource).getFields().done(function(data) {
         assert.ok(data);
 
         assert.deepEqual(data, [
             {
-                "dataField": "OrderID",
-                "dataType": "number",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'OrderID',
+                'dataType': 'number',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             },
             {
-                "dataField": "Customer.name",
-                "dataType": "string",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": "Customer"
+                'dataField': 'Customer.name',
+                'dataType': 'string',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': 'Customer'
             },
             {
-                "dataField": "EmployeeID",
-                "dataType": "number",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'EmployeeID',
+                'dataType': 'number',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupInterval": undefined,
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupInterval': undefined,
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupIndex": 0,
-                "groupInterval": "year",
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupIndex': 0,
+                'groupInterval': 'year',
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupIndex": 1,
-                "groupInterval": "quarter",
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupIndex': 1,
+                'groupInterval': 'quarter',
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupIndex": 2,
-                "groupInterval": "month",
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupIndex': 2,
+                'groupInterval': 'month',
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "Freight",
-                "dataType": "string",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'Freight',
+                'dataType': 'string',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             },
             {
-                "dataField": "ShipName",
-                "dataType": "string",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'ShipName',
+                'dataType': 'string',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             },
             {
-                "dataField": "ShipRegion",
-                "dataType": "string",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'ShipRegion',
+                'dataType': 'string',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             },
             {
-                "dataField": "ShipPostalCode",
-                "dataType": undefined,
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'ShipPostalCode',
+                'dataType': undefined,
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             }
 
         ]);
@@ -1262,111 +1262,111 @@ QUnit.test("getFields", function(assert) {
 });
 
 // T666145
-QUnit.test("getFields should skip fields with '__' prefix", function(assert) {
+QUnit.test('getFields should skip fields with \'__\' prefix', function(assert) {
     var dataSource = [{
-        "__metadata": {
-            "id": 1,
-            "uri": "uri",
-            "type": "Product"
+        '__metadata': {
+            'id': 1,
+            'uri': 'uri',
+            'type': 'Product'
         },
-        "OrderID": 1
+        'OrderID': 1
     }];
 
     new LocalStore(dataSource).getFields().done(function(fields) {
         assert.deepEqual(fields, [
             {
-                "dataField": "OrderID",
-                "dataType": "number",
-                "groupInterval": undefined,
-                "groupName": undefined,
-                "displayFolder": ""
+                'dataField': 'OrderID',
+                'dataType': 'number',
+                'groupInterval': undefined,
+                'groupName': undefined,
+                'displayFolder': ''
             }
         ]);
     });
 });
 
-QUnit.test("getFields doesn't modify fields", function(assert) {
-    var dataSource = [{ OrderDate: "1996/12/12" }],
+QUnit.test('getFields doesn\'t modify fields', function(assert) {
+    var dataSource = [{ OrderDate: '1996/12/12' }],
         field = {
-            dataField: "OrderDate",
-            dataType: "date"
+            dataField: 'OrderDate',
+            dataType: 'date'
         };
 
     new LocalStore(dataSource).getFields(field).done(function() {
         assert.deepEqual(field, {
-            dataField: "OrderDate",
-            dataType: "date"
+            dataField: 'OrderDate',
+            dataType: 'date'
         });
     });
 });
 
-QUnit.test("getFields. Generate levels for user dataType", function(assert) {
+QUnit.test('getFields. Generate levels for user dataType', function(assert) {
     var dataSource = [
-        { OrderDate: "1996/07/05" },
-        { OrderDate: "1999/07/05" }
+        { OrderDate: '1996/07/05' },
+        { OrderDate: '1999/07/05' }
     ];
 
     new LocalStore(dataSource).getFields([{
-        dataField: "OrderDate",
-        dataType: "date"
+        dataField: 'OrderDate',
+        dataType: 'date'
     }]).done(function(data) {
         assert.ok(data);
 
         assert.deepEqual(data, [
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupInterval": undefined,
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupInterval': undefined,
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupIndex": 0,
-                "groupInterval": "year",
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupIndex': 0,
+                'groupInterval': 'year',
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupIndex": 1,
-                "groupInterval": "quarter",
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupIndex': 1,
+                'groupInterval': 'quarter',
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             },
             {
-                "dataField": "OrderDate",
-                "dataType": "date",
-                "groupIndex": 2,
-                "groupInterval": "month",
-                "groupName": "OrderDate",
-                "displayFolder": ""
+                'dataField': 'OrderDate',
+                'dataType': 'date',
+                'groupIndex': 2,
+                'groupInterval': 'month',
+                'groupName': 'OrderDate',
+                'displayFolder': ''
             }
         ]);
     });
 });
 
-QUnit.test("Filter in rows and columns", function(assert) {
+QUnit.test('Filter in rows and columns', function(assert) {
     this.load({
         rows: [
-            { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "incorrectType" },
-            { dataField: "ShipCity", filterValues: ["Boise", "Lander", "Montreal"], filterType: "exclude" }
+            { dataField: 'ShipCountry', filterValues: ['USA', 'Canada'], filterType: 'incorrectType' },
+            { dataField: 'ShipCity', filterValues: ['Boise', 'Lander', 'Montreal'], filterType: 'exclude' }
         ],
         columns: [
-            { dataField: "OrderDate", groupInterval: "year", dataType: 'date', filterValues: [1996, 1998], filterType: "exclude" },
-            { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date', filterValues: [1], filterType: "include" }
+            { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date', filterValues: [1996, 1998], filterType: 'exclude' },
+            { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', filterValues: [1], filterType: 'include' }
         ],
         values: [{ summaryType: 'count' }]
 
     }).done(function(data) {
         assert.deepEqual(data.rows, [{
             index: 2,
-            value: "Canada"
+            value: 'Canada'
         }, {
             index: 1,
-            value: "USA"
+            value: 'USA'
 
         }]);
 
@@ -1384,27 +1384,27 @@ QUnit.test("Filter in rows and columns", function(assert) {
     });
 });
 
-QUnit.test("Filter fields", function(assert) {
+QUnit.test('Filter fields', function(assert) {
     this.load({
         rows: [
-            { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "include" }
+            { dataField: 'ShipCountry', filterValues: ['USA', 'Canada'], filterType: 'include' }
         ],
         columns: [
-            { dataField: "OrderDate", groupInterval: "year", dataType: 'date', filterValues: [1996, 1998], filterType: "exclude" }
+            { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date', filterValues: [1996, 1998], filterType: 'exclude' }
         ],
         values: [{ summaryType: 'count' }],
         filters: [
-            { dataField: "ShipCity", filterValues: ["Boise", "Lander", "Montreal"], filterType: "exclude" },
-            { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date', filterValues: [1], filterType: "include" },
-            { dataField: "ShipAddress", filterType: "include" }
+            { dataField: 'ShipCity', filterValues: ['Boise', 'Lander', 'Montreal'], filterType: 'exclude' },
+            { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', filterValues: [1], filterType: 'include' },
+            { dataField: 'ShipAddress', filterType: 'include' }
         ]
     }).done(function(data) {
         assert.deepEqual(data.rows, [{
             index: 2,
-            value: "Canada"
+            value: 'Canada'
         }, {
             index: 1,
-            value: "USA"
+            value: 'USA'
 
         }]);
 
@@ -1422,34 +1422,34 @@ QUnit.test("Filter fields", function(assert) {
     });
 });
 
-QUnit.test("Filter group field. Include Type", function(assert) {
+QUnit.test('Filter group field. Include Type', function(assert) {
     this.load({
         rows: [
-            { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "include" }
+            { dataField: 'ShipCountry', filterValues: ['USA', 'Canada'], filterType: 'include' }
         ],
         columns: [
-            { dataField: "OrderDate", groupInterval: "year", dataType: 'date', groupName: "OrderDate", groupIndex: 0 },
-            { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date', groupName: "OrderDate", groupIndex: 1 },
-            { dataField: "OrderDate", groupInterval: "month", dataType: 'date', groupName: "OrderDate", groupIndex: 2 }
+            { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date', groupName: 'OrderDate', groupIndex: 0 },
+            { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', groupName: 'OrderDate', groupIndex: 1 },
+            { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', groupName: 'OrderDate', groupIndex: 2 }
         ],
         values: [{ summaryType: 'count' }],
         filters: [
             {
-                dataField: "OrderDate", groupName: "OrderDate", filterValues: [[1996], [1997, 1]], filterType: "include",
+                dataField: 'OrderDate', groupName: 'OrderDate', filterValues: [[1996], [1997, 1]], filterType: 'include',
                 levels: [
-                    { dataField: "OrderDate", groupInterval: "year", dataType: 'date', groupName: "OrderDate", groupIndex: 0 },
-                    { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date', groupName: "OrderDate", groupIndex: 1 },
-                    { dataField: "OrderDate", groupInterval: "month", dataType: 'date', groupName: "OrderDate", groupIndex: 2 }
+                    { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date', groupName: 'OrderDate', groupIndex: 0 },
+                    { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', groupName: 'OrderDate', groupIndex: 1 },
+                    { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', groupName: 'OrderDate', groupIndex: 2 }
                 ]
             }
         ]
     }).done(function(data) {
         assert.deepEqual(data.rows, [{
             index: 2,
-            value: "Canada"
+            value: 'Canada'
         }, {
             index: 1,
-            value: "USA"
+            value: 'USA'
         }]);
 
         assert.deepEqual(data.columns, [{
@@ -1469,34 +1469,34 @@ QUnit.test("Filter group field. Include Type", function(assert) {
     });
 });
 
-QUnit.test("Filter group field. Exclude Type", function(assert) {
+QUnit.test('Filter group field. Exclude Type', function(assert) {
     this.load({
         rows: [
-            { dataField: "ShipCountry", filterValues: ["USA", "Canada"], filterType: "include" }
+            { dataField: 'ShipCountry', filterValues: ['USA', 'Canada'], filterType: 'include' }
         ],
         columns: [
-            { dataField: "OrderDate", groupInterval: "year", dataType: 'date', groupName: "OrderDate", groupIndex: 0 },
-            { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date', groupName: "OrderDate", groupIndex: 1 },
-            { dataField: "OrderDate", groupInterval: "month", dataType: 'date', groupName: "OrderDate", groupIndex: 2 }
+            { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date', groupName: 'OrderDate', groupIndex: 0 },
+            { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', groupName: 'OrderDate', groupIndex: 1 },
+            { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', groupName: 'OrderDate', groupIndex: 2 }
         ],
         values: [{ summaryType: 'count' }],
         filters: [
             {
-                dataField: "OrderDate", groupName: "OrderDate", filterValues: [[1996], [1997, 1], [1997, 3, 8], [1998, undefined, 2]], filterType: "exclude",
+                dataField: 'OrderDate', groupName: 'OrderDate', filterValues: [[1996], [1997, 1], [1997, 3, 8], [1998, undefined, 2]], filterType: 'exclude',
                 levels: [
-                    { dataField: "OrderDate", groupInterval: "year", dataType: 'date', groupName: "OrderDate", groupIndex: 0 },
-                    { dataField: "OrderDate", groupInterval: "quarter", dataType: 'date', groupName: "OrderDate", groupIndex: 1 },
-                    { dataField: "OrderDate", groupInterval: "month", dataType: 'date', groupName: "OrderDate", groupIndex: 2 }
+                    { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date', groupName: 'OrderDate', groupIndex: 0 },
+                    { dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', groupName: 'OrderDate', groupIndex: 1 },
+                    { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', groupName: 'OrderDate', groupIndex: 2 }
                 ]
             }
         ]
     }).done(function(data) {
         assert.deepEqual(data.rows, [{
             index: 1,
-            value: "Canada"
+            value: 'Canada'
         }, {
             index: 2,
-            value: "USA"
+            value: 'USA'
         }]);
 
         assert.deepEqual(data.columns, [{
@@ -1515,7 +1515,7 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
     });
 });
 
-QUnit.test("Filter dates without group interval", function(assert) {
+QUnit.test('Filter dates without group interval', function(assert) {
     var dataSource = window.orders.slice();
     dataSource[10] = { OrderDate: null };
 
@@ -1523,10 +1523,10 @@ QUnit.test("Filter dates without group interval", function(assert) {
         rows: [],
         columns: [
             {
-                dataField: "OrderDate", dataType: 'date', filterValues: [
+                dataField: 'OrderDate', dataType: 'date', filterValues: [
                     new Date(window.orders[0].OrderDate),
                     null
-                ], filterType: "include" }
+                ], filterType: 'include' }
         ],
         values: [{ summaryType: 'count' }]
     }).done(function(data) {
@@ -1536,20 +1536,20 @@ QUnit.test("Filter dates without group interval", function(assert) {
     });
 });
 
-QUnit.test("complex dataField", function(assert) {
+QUnit.test('complex dataField', function(assert) {
     var dataSource = [
-        { Customer: { name: null }, "Freight": "32.3800" },
-        { Customer: {}, "Freight": "11.6100" },
-        { Customer: { name: "Name1", Surname: "Surname2" }, "Freight": "11.6100" },
-        { Customer: { name: "Name1" }, "Freight": "65.8300" },
-        { Customer: { name: "Name2" }, "Freight": "65.8300" }
+        { Customer: { name: null }, 'Freight': '32.3800' },
+        { Customer: {}, 'Freight': '11.6100' },
+        { Customer: { name: 'Name1', Surname: 'Surname2' }, 'Freight': '11.6100' },
+        { Customer: { name: 'Name1' }, 'Freight': '65.8300' },
+        { Customer: { name: 'Name2' }, 'Freight': '65.8300' }
     ];
 
     new LocalStore(dataSource).load({
         columns: [
-            { dataField: "Customer.name" }
+            { dataField: 'Customer.name' }
         ],
-        values: [{ dataField: "Freight", summaryType: "sum", dataType: "number" }]
+        values: [{ dataField: 'Freight', summaryType: 'sum', dataType: 'number' }]
 
     }).done(function(data) {
         assert.ok(data);
@@ -1562,10 +1562,10 @@ QUnit.test("complex dataField", function(assert) {
                 value: undefined
             }, {
                 index: 3,
-                value: "Name1"
+                value: 'Name1'
             }, {
                 index: 4,
-                value: "Name2"
+                value: 'Name2'
             }
         ]);
         assert.deepEqual(data.values, [[[187.26], [32.38], [11.61], [77.44], [65.83]]]);
@@ -1573,18 +1573,18 @@ QUnit.test("complex dataField", function(assert) {
 
 });
 
-QUnit.test("Date dataField with ISO8601 format without forceIsoDateParsing", function(assert) {
+QUnit.test('Date dataField with ISO8601 format without forceIsoDateParsing', function(assert) {
     var defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = false;
 
     try {
         var dataSource = [
-            { "Date": "2015-08-05T13:30:15" }
+            { 'Date': '2015-08-05T13:30:15' }
         ];
 
         new LocalStore(dataSource).load({
             columns: [
-                { dataField: "Date", dataType: "date" }
+                { dataField: 'Date', dataType: 'date' }
             ],
             values: [{}]
         }).done(function(data) {
@@ -1592,7 +1592,7 @@ QUnit.test("Date dataField with ISO8601 format without forceIsoDateParsing", fun
             assert.deepEqual(data.columns, [
                 {
                     index: 1,
-                    value: new Date("2015-08-05T13:30:15")
+                    value: new Date('2015-08-05T13:30:15')
                 }
             ]);
         });
@@ -1601,18 +1601,18 @@ QUnit.test("Date dataField with ISO8601 format without forceIsoDateParsing", fun
     }
 });
 
-QUnit.test("Date dataField with ISO8601 format with forceIsoDateParsing", function(assert) {
+QUnit.test('Date dataField with ISO8601 format with forceIsoDateParsing', function(assert) {
     var defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;
 
     try {
         var dataSource = [
-            { "Date": "2015-08-05T13:30:15" }
+            { 'Date': '2015-08-05T13:30:15' }
         ];
 
         new LocalStore(dataSource).load({
             columns: [
-                { dataField: "Date", dataType: "date" }
+                { dataField: 'Date', dataType: 'date' }
             ],
             values: [{}]
         }).done(function(data) {
@@ -1629,18 +1629,18 @@ QUnit.test("Date dataField with ISO8601 format with forceIsoDateParsing", functi
     }
 });
 
-QUnit.test("reload data", function(assert) {
+QUnit.test('reload data', function(assert) {
     var dataSource = [
-        { "OrderID": 10248, Customer: { name: null }, "EmployeeID": undefined, "OrderDate": null, "Freight": "32.3800", "ShipName": "Vins et alcools Chevalier", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10249, Customer: {}, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10249, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10250, Customer: { name: "Name" }, "EmployeeID": 4, "OrderDate": new Date("1996/07/08"), "Freight": "65.8300", "ShipName": "Hanari Carnes", "ShipRegion": "RJ", "ShipPostalCode": null }
+        { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10249, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10250, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
     var localStore = new LocalStore(dataSource);
 
     localStore.load({
-        values: [{ dataField: "OrderID" }]
+        values: [{ dataField: 'OrderID' }]
     }).done(function(data) {
         assert.strictEqual(data.values[0][0][0], 4);
     });
@@ -1649,7 +1649,7 @@ QUnit.test("reload data", function(assert) {
     dataSource.splice(0, 2);
 
     localStore = localStore.load({
-        values: [{ dataField: "OrderID" }],
+        values: [{ dataField: 'OrderID' }],
         reload: true
     }).done(function(data) {
         // assert
@@ -1657,33 +1657,33 @@ QUnit.test("reload data", function(assert) {
     });
 });
 
-QUnit.test("filter data", function(assert) {
+QUnit.test('filter data', function(assert) {
     var dataSource = [
-        { "OrderID": 10248, Customer: { name: null }, "EmployeeID": undefined, "OrderDate": null, "Freight": "32.3800", "ShipName": "Vins et alcools Chevalier", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10249, Customer: {}, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10250, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-        { "OrderID": 10251, Customer: { name: "Name" }, "EmployeeID": 4, "OrderDate": new Date("1996/07/08"), "Freight": "65.8300", "ShipName": "Hanari Carnes", "ShipRegion": "RJ", "ShipPostalCode": null }
+        { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10250, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
+        { 'OrderID': 10251, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
     var localStore = new LocalStore(dataSource);
 
     localStore.load({
-        values: [{ dataField: "OrderID" }]
+        values: [{ dataField: 'OrderID' }]
     });
 
     // act
-    localStore.filter("OrderID", ">", 10249);
+    localStore.filter('OrderID', '>', 10249);
     var filterExpr = localStore.filter();
 
     localStore.load({
-        values: [{ dataField: "OrderID" }],
+        values: [{ dataField: 'OrderID' }],
     }).done(function(data) {
         // assert
-        assert.strictEqual(data.values[0][0][0], 4, "data should be filtered on reload only if not CustomStore is used");
+        assert.strictEqual(data.values[0][0][0], 4, 'data should be filtered on reload only if not CustomStore is used');
     });
 
     localStore.load({
-        values: [{ dataField: "OrderID" }],
+        values: [{ dataField: 'OrderID' }],
         reload: true
     }).done(function(data) {
         // assert
@@ -1692,28 +1692,28 @@ QUnit.test("filter data", function(assert) {
         assert.ok(false);
     });
 
-    assert.deepEqual(filterExpr, ["OrderID", ">", 10249]);
+    assert.deepEqual(filterExpr, ['OrderID', '>', 10249]);
 });
 
 
-QUnit.test("T717466. Header item contains . symbol in value", function(assert) {
+QUnit.test('T717466. Header item contains . symbol in value', function(assert) {
     this.store = new LocalStore({
         store: {
             type: 'array',
             data: [
-                { "a1": 0, "a2": 333, "v": 0 },
-                { "a1": 0.333, "a2": 1765, "v": 0 },
+                { 'a1': 0, 'a2': 333, 'v': 0 },
+                { 'a1': 0.333, 'a2': 1765, 'v': 0 },
             ]
         }
     });
 
     this.store.load({
         rows: [
-            { "dataField": "a1", "expanded": true },
-            { "dataField": "a2" }
+            { 'dataField': 'a1', 'expanded': true },
+            { 'dataField': 'a2' }
         ],
         values: [{
-            "dataField": "v", "summaryType": "sum"
+            'dataField': 'v', 'summaryType': 'sum'
         }]
     }).done(function(result) {
         assert.equal(result.rows.length, 2);
@@ -1722,14 +1722,14 @@ QUnit.test("T717466. Header item contains . symbol in value", function(assert) {
     });
 });
 
-QUnit.module("DrillDown", {
+QUnit.module('DrillDown', {
     beforeEach: function() {
         moduleConfig.beforeEach.apply(this, arguments);
         var store = this.store;
 
         store.load({
-            columns: [{ dataField: "ShipCountry" }],
-            rows: [{ dataField: "ShipVia" }],
+            columns: [{ dataField: 'ShipCountry' }],
+            rows: [{ dataField: 'ShipVia' }],
             values: [{ summaryType: 'count' }]
         });
 
@@ -1742,158 +1742,158 @@ QUnit.module("DrillDown", {
     }
 });
 
-QUnit.test("with empty loadOptions and empty params", function(assert) {
+QUnit.test('with empty loadOptions and empty params', function(assert) {
     this.getDrillDownData({}, {}).done(function(data) {
-        assert.strictEqual(data.length, 830, "should return all items");
+        assert.strictEqual(data.length, 830, 'should return all items');
     });
 });
 
-QUnit.test("DrillDown with empty paths", function(assert) {
+QUnit.test('DrillDown with empty paths', function(assert) {
     this.getDrillDownData({
-        columns: [{ dataField: "ShipCountry" }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
     }, { columnPath: [], rowPath: [] }).done(function(data) {
-        assert.strictEqual(data.length, 830, "should return all items");
+        assert.strictEqual(data.length, 830, 'should return all items');
     });
 });
 
-QUnit.test("drill down by column path", function(assert) {
+QUnit.test('drill down by column path', function(assert) {
     this.getDrillDownData({
-        columns: [{ dataField: "ShipCountry" }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
-    }, { columnPath: ["Argentina"], rowPath: [] }).done(function(data) {
-        assert.strictEqual(data.length, 16, "should return 16 items");
+    }, { columnPath: ['Argentina'], rowPath: [] }).done(function(data) {
+        assert.strictEqual(data.length, 16, 'should return 16 items');
     });
 });
 
-QUnit.test("drill down by row path", function(assert) {
+QUnit.test('drill down by row path', function(assert) {
     this.getDrillDownData({
-        columns: [{ dataField: "ShipCountry" }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
     }, { columnPath: [], rowPath: [1] }).done(function(data) {
-        assert.strictEqual(data.length, 249, "should return 249 items");
+        assert.strictEqual(data.length, 249, 'should return 249 items');
     });
 });
 
 
-QUnit.test("drill down by row and column path", function(assert) {
+QUnit.test('drill down by row and column path', function(assert) {
     this.getDrillDownData({
-        columns: [{ dataField: "ShipCountry" }],
-        rows: [{ dataField: "ShipVia" }],
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
         values: [{ summaryType: 'count' }]
-    }, { columnPath: ["Argentina"], rowPath: [1] }).done(function(data) {
-        assert.strictEqual(data.length, 5, "should return 5 items");
+    }, { columnPath: ['Argentina'], rowPath: [1] }).done(function(data) {
+        assert.strictEqual(data.length, 5, 'should return 5 items');
     });
 });
 
-QUnit.test("set custom columns", function(assert) {
-    this.getDrillDownData({}, { customColumns: ["CustomerID", "ShipAddress"] }).done(function(data) {
-        assert.strictEqual(data.length, 830, "should return all items");
+QUnit.test('set custom columns', function(assert) {
+    this.getDrillDownData({}, { customColumns: ['CustomerID', 'ShipAddress'] }).done(function(data) {
+        assert.strictEqual(data.length, 830, 'should return all items');
         assert.deepEqual(data[0], {
-            "CustomerID": "VINET",
-            "ShipAddress": "59 rue de l'Abbaye"
-        }, "first item");
+            'CustomerID': 'VINET',
+            'ShipAddress': '59 rue de l\'Abbaye'
+        }, 'first item');
     });
 });
 
-QUnit.test("DrillDown by path with maxRowCount", function(assert) {
+QUnit.test('DrillDown by path with maxRowCount', function(assert) {
     var store = this.store,
         loadOptions = {
-            columns: [{ dataField: "ShipCountry" }],
-            rows: [{ dataField: "ShipVia" }],
+            columns: [{ dataField: 'ShipCountry' }],
+            rows: [{ dataField: 'ShipVia' }],
             values: [{ summaryType: 'count' }]
         };
     this.load(loadOptions);
 
-    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], maxRowCount: 0 }).length, 830, "GrandTotal with maxRowCount is 0");
-    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], maxRowCount: 100 }).length, 100, "GrandTotal");
-    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: ["Argentina"], rowPath: [1], maxRowCount: 100 }).length, 5, "ShipVia 1 - Argentina");
+    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], maxRowCount: 0 }).length, 830, 'GrandTotal with maxRowCount is 0');
+    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], maxRowCount: 100 }).length, 100, 'GrandTotal');
+    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: ['Argentina'], rowPath: [1], maxRowCount: 100 }).length, 5, 'ShipVia 1 - Argentina');
 });
 
-QUnit.test("DrillDown by path with customColumns", function(assert) {
+QUnit.test('DrillDown by path with customColumns', function(assert) {
     var store = this.store,
         loadOptions = {
-            columns: [{ dataField: "ShipCountry" }],
-            rows: [{ dataField: "ShipVia" }],
+            columns: [{ dataField: 'ShipCountry' }],
+            rows: [{ dataField: 'ShipVia' }],
             values: [{ summaryType: 'count' }]
         };
 
     this.load(loadOptions);
 
-    var drillDownItems = store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], customColumns: ["CustomerID", "ShipAddress"] });
+    var drillDownItems = store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], customColumns: ['CustomerID', 'ShipAddress'] });
 
-    assert.strictEqual(drillDownItems.length, 830, "GrandTotal with maxRowCount is 0");
+    assert.strictEqual(drillDownItems.length, 830, 'GrandTotal with maxRowCount is 0');
     assert.deepEqual(drillDownItems[0], {
-        "CustomerID": "VINET",
-        "ShipAddress": "59 rue de l'Abbaye"
+        'CustomerID': 'VINET',
+        'ShipAddress': '59 rue de l\'Abbaye'
     });
 });
 
-QUnit.test("DrillDown with filters", function(assert) {
+QUnit.test('DrillDown with filters', function(assert) {
     var store = this.store,
         loadOptions = {
-            columns: [{ dataField: "ShipCountry", filterValues: ["Argentina", "Brazil", "Canada", "USA"] }],
-            rows: [{ dataField: "ShipVia", filterValues: [1, 3] }],
-            filters: [{ dataField: "OrderDate", dataType: "date", groupInterval: "year", filterValues: [1996, 1997] }],
+            columns: [{ dataField: 'ShipCountry', filterValues: ['Argentina', 'Brazil', 'Canada', 'USA'] }],
+            rows: [{ dataField: 'ShipVia', filterValues: [1, 3] }],
+            filters: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year', filterValues: [1996, 1997] }],
             values: [{ summaryType: 'count' }]
         };
 
     this.load(loadOptions).done(function(data) {
-        assert.strictEqual(data.values[0][0][0], 91, "GT");
+        assert.strictEqual(data.values[0][0][0], 91, 'GT');
     });
 
-    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [] }).length, 91, "GT");
-    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: ["Argentina"], rowPath: [1] }).length, 2, "ShipVia 1 - Argentina");
+    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [] }).length, 91, 'GT');
+    assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: ['Argentina'], rowPath: [1] }).length, 2, 'ShipVia 1 - Argentina');
 });
 
-QUnit.test("DrillDown by path when groups", function(assert) {
+QUnit.test('DrillDown by path when groups', function(assert) {
     var store = this.store,
         loadOptions = {
             columns: [
-                { groupName: "Date", groupIndex: 0, dataField: "OrderDate", expanded: true, groupInterval: "year", dataType: "date", area: "column" },
-                { groupName: "Date", groupIndex: 1, dataField: "OrderDate", groupInterval: "quarter", dataType: "date", area: "column" },
-                { groupName: "Date", groupIndex: 2, dataField: "OrderDate", groupInterval: "month", dataType: "date", area: "column" }
+                { groupName: 'Date', groupIndex: 0, dataField: 'OrderDate', expanded: true, groupInterval: 'year', dataType: 'date', area: 'column' },
+                { groupName: 'Date', groupIndex: 1, dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', area: 'column' },
+                { groupName: 'Date', groupIndex: 2, dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', area: 'column' }
             ],
-            rows: [{ dataField: "ShipCountry" }],
+            rows: [{ dataField: 'ShipCountry' }],
             values: [{ summaryType: 'count' }]
         };
 
     this.load(loadOptions);
 
 
-    var drillItems = store.getDrillDownItems(loadOptions, { columnPath: [1997, 2, 6], rowPath: ["Brazil"], customColumns: ["OrderID"] });
+    var drillItems = store.getDrillDownItems(loadOptions, { columnPath: [1997, 2, 6], rowPath: ['Brazil'], customColumns: ['OrderID'] });
 
     assert.strictEqual(drillItems.length, 2);
     assert.deepEqual(drillItems, [{ OrderID: 10563 }, { OrderID: 10581 }]);
 });
 
 
-QUnit.module("Custom Store local filtering");
+QUnit.module('Custom Store local filtering');
 
-QUnit.test("Data should be filtered locally if custom store is used", function(assert) {
-    var filterOptions = ["OrderID", ">", 11000],
+QUnit.test('Data should be filtered locally if custom store is used', function(assert) {
+    var filterOptions = ['OrderID', '>', 11000],
         store = new LocalStore({
             load: function(loadOptions) {
-                assert.deepEqual(loadOptions.filter, filterOptions, "filter options should are passed if custom store is used");
+                assert.deepEqual(loadOptions.filter, filterOptions, 'filter options should are passed if custom store is used');
                 return $.Deferred().resolve(window.orders);
             },
 
             filter: filterOptions
         });
 
-    store.load({ rows: [], columns: [], values: [{ summaryType: "column" }] }).done(function(data) {
-        assert.strictEqual(data.values[0][0][0], 77, "Store loaded data without filtering");
+    store.load({ rows: [], columns: [], values: [{ summaryType: 'column' }] }).done(function(data) {
+        assert.strictEqual(data.values[0][0][0], 77, 'Store loaded data without filtering');
     });
 });
 
-QUnit.test("Data should be filtered by date locally if custom store is used", function(assert) {
-    var filterOptions = ['OrderDate', '=', new Date("1996/07/09")],
+QUnit.test('Data should be filtered by date locally if custom store is used', function(assert) {
+    var filterOptions = ['OrderDate', '=', new Date('1996/07/09')],
         store = new LocalStore({
             load: function(loadOptions) {
-                assert.deepEqual(loadOptions.filter, filterOptions, "filter options should are passed if custom store is used");
+                assert.deepEqual(loadOptions.filter, filterOptions, 'filter options should are passed if custom store is used');
                 return $.Deferred().resolve(window.orders);
             },
 
@@ -1901,39 +1901,39 @@ QUnit.test("Data should be filtered by date locally if custom store is used", fu
         });
 
     store.load({
-        columns: [{ dataField: "OrderDate", dataType: "date" }],
-        values: [{ summaryType: "count" }]
+        columns: [{ dataField: 'OrderDate', dataType: 'date' }],
+        values: [{ summaryType: 'count' }]
     }).done(function(result) {
         assert.equal(result.columns.length, 1);
     });
 });
 
-QUnit.test("Data should be filtered locally if store was loaded twice", function(assert) {
-    var loadOptions = { rows: [], columns: [], values: [{ summaryType: "column" }] },
+QUnit.test('Data should be filtered locally if store was loaded twice', function(assert) {
+    var loadOptions = { rows: [], columns: [], values: [{ summaryType: 'column' }] },
         store = new LocalStore({
             load: function() {
                 return $.Deferred().resolve(window.orders);
             },
 
-            filter: ["OrderID", ">", 11000]
+            filter: ['OrderID', '>', 11000]
         });
 
     store.load(loadOptions);
 
     store.load(loadOptions).done(function(data) {
-        assert.strictEqual(data.values[0][0][0], 77, "Store loaded data without filtering");
+        assert.strictEqual(data.values[0][0][0], 77, 'Store loaded data without filtering');
     });
 });
 
-QUnit.test("Data should return all items if filter is not defined", function(assert) {
+QUnit.test('Data should return all items if filter is not defined', function(assert) {
     var store = new LocalStore({
         load: function() {
             return $.Deferred().resolve(window.orders);
         }
     });
 
-    store.load({ rows: [], columns: [], values: [{ summaryType: "column" }] }).done(function(data) {
-        assert.strictEqual(data.values[0][0][0], 830, "Store loaded data without filtering");
+    store.load({ rows: [], columns: [], values: [{ summaryType: 'column' }] }).done(function(data) {
+        assert.strictEqual(data.values[0][0][0], 830, 'Store loaded data without filtering');
     });
 });
 

@@ -1,39 +1,32 @@
-var typeUtils = require("../core/utils/type"),
-    stringUtils = require("../core/utils/string"),
-    numberFormatter = require("../localization/number"),
-    dateLocalization = require("../localization/date"),
-    getDateLDMLFormat = require("../localization/ldml/date.format").getFormat,
-    getLanguageID = require("../localization/language_codes").getLanguageId,
-    UNSUPPORTED_FORMAT_MAPPING = {
-        quarter: "shortDate",
-        quarterAndYear: "shortDate",
-        minute: "longTime",
-        millisecond: "longTime"
-    },
-    ARABIC_ZERO_CODE = 1632,
-    DEFINED_NUMBER_FORMTATS = {
-        thousands: "#,##0{0},&quot;K&quot;",
-        millions: "#,##0{0},,&quot;M&quot;",
-        billions: "#,##0{0},,,&quot;B&quot;",
-        trillions: "#,##0{0},,,,&quot;T&quot;",
-        percent: "0{0}%",
-        decimal: "#{0}",
-        "fixedpoint": "#,##0{0}",
-        exponential: "0{0}E+00",
-        currency: " "
-    };
+import stringUtils from '../core/utils/string';
+import numberFormatter from '../localization/number';
+import dateLocalization from '../localization/date';
+import { isDefined, isString } from '../core/utils/type';
+import { getFormat } from '../localization/ldml/date.format';
+import { getLanguageId } from '../localization/language_codes';
+import '../localization/currency';
 
-var PERIOD_REGEXP = /a+/g,
-    DAY_REGEXP = /E/g,
-    DO_REGEXP = /dE+/g,
-    STANDALONE_MONTH_REGEXP = /L/g,
-    HOUR_REGEXP = /h/g,
-    SLASH_REGEXP = /\//g,
-    SQUARE_OPEN_BRACKET_REGEXP = /\[/g,
-    SQUARE_CLOSE_BRACKET_REGEXP = /]/g,
-    ANY_REGEXP = /./g;
-
-require("../localization/currency");
+const ARABIC_ZERO_CODE = 1632;
+const DEFINED_NUMBER_FORMTATS = {
+    thousands: '#,##0{0},&quot;K&quot;',
+    millions: '#,##0{0},,&quot;M&quot;',
+    billions: '#,##0{0},,,&quot;B&quot;',
+    trillions: '#,##0{0},,,,&quot;T&quot;',
+    percent: '0{0}%',
+    decimal: '#{0}',
+    'fixedpoint': '#,##0{0}',
+    exponential: '0{0}E+00',
+    currency: ' '
+};
+const PERIOD_REGEXP = /a+/g;
+const DAY_REGEXP = /E/g;
+const DO_REGEXP = /dE+/g;
+const STANDALONE_MONTH_REGEXP = /L/g;
+const HOUR_REGEXP = /h/g;
+const SLASH_REGEXP = /\//g;
+const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
+const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
+const ANY_REGEXP = /./g;
 
 var excelFormatConverter = module.exports = {
     _applyPrecision: function(format, precision) {
@@ -41,18 +34,14 @@ var excelFormatConverter = module.exports = {
             i;
 
         if(precision > 0) {
-            result = format !== "decimal" ? "." : "";
+            result = format !== 'decimal' ? '.' : '';
             for(i = 0; i < precision; i++) {
-                result = result + "0";
+                result = result + '0';
             }
 
             return result;
         }
-        return "";
-    },
-
-    _getCurrencyFormat: function(currency) {
-        return numberFormatter.getOpenXmlCurrencyFormat(currency);
+        return '';
     },
 
     _hasArabicDigits: function(text) {
@@ -68,60 +57,61 @@ var excelFormatConverter = module.exports = {
     },
 
     _convertDateFormatToOpenXml: function(format) {
-        return format.replace(SLASH_REGEXP, "\\/").split("'").map(function(datePart, index) {
+        return format.replace(SLASH_REGEXP, '\\/').split('\'').map(function(datePart, index) {
             if(index % 2 === 0) {
                 return datePart
-                    .replace(PERIOD_REGEXP, "AM/PM")
-                    .replace(DO_REGEXP, "d")
-                    .replace(DAY_REGEXP, "d")
-                    .replace(STANDALONE_MONTH_REGEXP, "M")
-                    .replace(HOUR_REGEXP, "H")
-                    .replace(SQUARE_OPEN_BRACKET_REGEXP, "\\[")
-                    .replace(SQUARE_CLOSE_BRACKET_REGEXP, "\\]");
+                    .replace(PERIOD_REGEXP, 'AM/PM')
+                    .replace(DO_REGEXP, 'd')
+                    .replace(DAY_REGEXP, 'd')
+                    .replace(STANDALONE_MONTH_REGEXP, 'M')
+                    .replace(HOUR_REGEXP, 'H')
+                    .replace(SQUARE_OPEN_BRACKET_REGEXP, '\\[')
+                    .replace(SQUARE_CLOSE_BRACKET_REGEXP, '\\]');
             } if(datePart) {
-                return datePart.replace(ANY_REGEXP, "\\$&");
+                return datePart.replace(ANY_REGEXP, '\\$&');
             }
-            return "'";
-        }).join("");
+            return '\'';
+        }).join('');
     },
 
     _convertDateFormat: function(format) {
-        format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
-
-        var that = this,
-            formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
-            result = getDateLDMLFormat(function(value) {
-                return dateLocalization.format(value, format);
-            });
+        const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || '').toString();
+        let result = getFormat(value => dateLocalization.format(value, format));
 
         if(result) {
-            result = that._convertDateFormatToOpenXml(result);
-            result = that._getLanguageInfo(formattedValue) + result;
+            result = this._convertDateFormatToOpenXml(result);
+            result = this._getLanguageInfo(formattedValue) + result;
         }
 
         return result;
     },
 
     _getLanguageInfo: function(defaultPattern) {
-        var languageID = getLanguageID(),
-            languageIDStr = languageID ? languageID.toString(16) : "",
-            languageInfo = "";
+        var languageID = getLanguageId(),
+            languageIDStr = languageID ? languageID.toString(16) : '',
+            languageInfo = '';
 
         if(this._hasArabicDigits(defaultPattern)) {
             while(languageIDStr.length < 3) {
-                languageIDStr = "0" + languageIDStr;
+                languageIDStr = '0' + languageIDStr;
             }
-            languageInfo = "[$-2010" + languageIDStr + "]";
+            languageInfo = '[$-2010' + languageIDStr + ']';
         } else if(languageIDStr) {
-            languageInfo = "[$-" + languageIDStr + "]";
+            languageInfo = '[$-' + languageIDStr + ']';
         }
 
         return languageInfo;
     },
 
     _convertNumberFormat: function(format, precision, currency) {
-        var result,
-            excelFormat = format === "currency" ? this._getCurrencyFormat(currency) : DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
+        let result,
+            excelFormat;
+
+        if(format === 'currency') {
+            excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency);
+        } else {
+            excelFormat = DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
+        }
 
         if(excelFormat) {
             result = stringUtils.format(excelFormat, this._applyPrecision(format, precision));
@@ -131,11 +121,11 @@ var excelFormatConverter = module.exports = {
     },
 
     convertFormat: function(format, precision, type, currency) {
-        if(typeUtils.isDefined(format)) {
-            if(type === "date") {
+        if(isDefined(format)) {
+            if(type === 'date') {
                 return excelFormatConverter._convertDateFormat(format);
             } else {
-                if(typeUtils.isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
+                if(isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
                     return excelFormatConverter._convertNumberFormat(format, precision, currency);
                 }
             }

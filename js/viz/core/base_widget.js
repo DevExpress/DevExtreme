@@ -1,34 +1,34 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    windowUtils = require("../../core/utils/window"),
-    domAdapter = require("../../core/dom_adapter"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    version = require("../../core/version"),
-    _windowResizeCallbacks = require("../../core/utils/resize_callbacks"),
-    _stringFormat = require("../../core/utils/string").format,
-    _isObject = require("../../core/utils/type").isObject,
-    extend = require("../../core/utils/extend").extend,
-    themeManagerModule = require("../core/base_theme_manager"),
+var $ = require('../../core/renderer'),
+    noop = require('../../core/utils/common').noop,
+    windowUtils = require('../../core/utils/window'),
+    domAdapter = require('../../core/dom_adapter'),
+    typeUtils = require('../../core/utils/type'),
+    each = require('../../core/utils/iterator').each,
+    version = require('../../core/version'),
+    _windowResizeCallbacks = require('../../core/utils/resize_callbacks'),
+    _stringFormat = require('../../core/utils/string').format,
+    _isObject = require('../../core/utils/type').isObject,
+    extend = require('../../core/utils/extend').extend,
+    themeManagerModule = require('../core/base_theme_manager'),
 
     _floor = Math.floor,
-    DOMComponentWithTemplate = require("../../core/dom_component_with_template"),
-    helpers = require("./helpers"),
-    _parseScalar = require("./utils").parseScalar,
-    errors = require("./errors_warnings"),
+    DOMComponent = require('../../core/dom_component'),
+    helpers = require('./helpers'),
+    _parseScalar = require('./utils').parseScalar,
+    errors = require('./errors_warnings'),
     _log = errors.log,
-    rendererModule = require("./renderers/renderer"),
+    rendererModule = require('./renderers/renderer'),
 
-    _Layout = require("./layout"),
+    _Layout = require('./layout'),
 
-    devices = require("../../core/devices"),
-    eventsEngine = require("../../events/core/events_engine"),
+    devices = require('../../core/devices'),
+    eventsEngine = require('../../events/core/events_engine'),
 
-    OPTION_RTL_ENABLED = "rtlEnabled",
+    OPTION_RTL_ENABLED = 'rtlEnabled',
 
-    SIZED_ELEMENT_CLASS = "dx-sized-element",
+    SIZED_ELEMENT_CLASS = 'dx-sized-element',
 
-    _option = DOMComponentWithTemplate.prototype.option;
+    _option = DOMComponent.prototype.option;
 
 function getTrue() {
     return true;
@@ -59,17 +59,17 @@ function createResizeHandler(callback) {
 }
 
 function defaultOnIncidentOccurred(e) {
-    if(!e.component.hasEvent("incidentOccurred")) {
+    if(!e.component._eventsStrategy.hasEvent('incidentOccurred')) {
         _log.apply(null, [e.target.id].concat(e.target.args || []));
     }
 }
 
 var createIncidentOccurred = function(widgetName, eventTrigger) {
     return function incidentOccurred(id, args) {
-        eventTrigger("incidentOccurred", {
+        eventTrigger('incidentOccurred', {
             target: {
                 id: id,
-                type: id[0] === "E" ? "error" : "warning",
+                type: id[0] === 'E' ? 'error' : 'warning',
                 args: args,
                 text: _stringFormat.apply(null, [errors.ERROR_MESSAGES[id]].concat(args || [])),
                 widget: widgetName,
@@ -109,25 +109,25 @@ var getEmptyComponent = function() {
         _initTemplates() {},
         ctor(element, options) {
             this.callBase(element, options);
-            var sizedElement = domAdapter.createElement("div");
+            var sizedElement = domAdapter.createElement('div');
 
-            var width = options && typeUtils.isNumeric(options.width) ? options.width + "px" : "100%";
-            var height = options && typeUtils.isNumeric(options.height) ? options.height + "px" : this._getDefaultSize().height + "px";
+            var width = options && typeUtils.isNumeric(options.width) ? options.width + 'px' : '100%';
+            var height = options && typeUtils.isNumeric(options.height) ? options.height + 'px' : this._getDefaultSize().height + 'px';
 
-            domAdapter.setStyle(sizedElement, "width", width);
-            domAdapter.setStyle(sizedElement, "height", height);
+            domAdapter.setStyle(sizedElement, 'width', width);
+            domAdapter.setStyle(sizedElement, 'height', height);
 
             domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS);
             domAdapter.insertElement(element, sizedElement);
         }
     };
 
-    var EmptyComponent = DOMComponentWithTemplate.inherit(emptyComponentConfig);
+    var EmptyComponent = DOMComponent.inherit(emptyComponentConfig);
     var originalInherit = EmptyComponent.inherit;
 
     EmptyComponent.inherit = function(config) {
         for(var field in config) {
-            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== "_" || field === "_dispose" || field === "_optionChanged") {
+            if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== '_' && field !== 'option' || field === '_dispose' || field === '_optionChanged') {
                 config[field] = noop;
             }
         }
@@ -144,10 +144,10 @@ function sizeIsValid(value) {
     return typeUtils.isDefined(value) && value > 0;
 }
 
-module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.inherit({
+module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
-        "onIncidentOccurred": { name: "incidentOccurred" },
-        "onDrawn": { name: "drawn" }
+        'onIncidentOccurred': { name: 'incidentOccurred' },
+        'onDrawn': { name: 'drawn' }
     },
 
     _getDefaultOptions: function() {
@@ -156,15 +156,13 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         });
     },
 
-    _extractAnonymousTemplate() {},
-
     _useLinks: true,
 
     _init: function() {
         var that = this,
             linkTarget;
 
-        that._$element.children("." + SIZED_ELEMENT_CLASS).remove();
+        that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
 
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
@@ -181,7 +179,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         linkTarget = that._useLinks && that._renderer.root;
         // There is an implicit relation between `_useLinks` and `loading indicator` - it uses links
         // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
-        linkTarget && linkTarget.enableLinks().virtualLink("core").virtualLink("peripheral");
+        linkTarget && linkTarget.enableLinks().virtualLink('core').virtualLink('peripheral');
         that._renderVisibilityChange();
         that._attachVisibilityChangeHandlers();
         that._toggleParentsScrollSubscription(this._isVisible());
@@ -190,7 +188,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         that._layout = new _Layout();
         // Such solution is used only to avoid writing lots of "after" for all core elements in all widgets
         // May be later a proper solution would be found
-        linkTarget && linkTarget.linkAfter("core");
+        linkTarget && linkTarget.linkAfter('core');
         that._initPlugins();
         that._initCore();
         linkTarget && linkTarget.linkAfter();
@@ -208,7 +206,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         };
     },
 
-    _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME", "DISABLED"],
+    _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED'],
 
     _initPlugins: function() {
         var that = this;
@@ -278,16 +276,16 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
         for(i = 0; i < ii; ++i) {
             if(changes.has(order[i])) {
-                that["_change_" + order[i]]();
+                that['_change_' + order[i]]();
             }
         }
     },
 
-    _optionChangesOrder: ["EVENTS", "THEME", "RENDERER", "RESIZE_HANDLER"],
+    _optionChangesOrder: ['EVENTS', 'THEME', 'RENDERER', 'RESIZE_HANDLER'],
 
-    _layoutChangesOrder: ["ELEMENT_ATTR", "CONTAINER_SIZE", "LAYOUT"],
+    _layoutChangesOrder: ['ELEMENT_ATTR', 'CONTAINER_SIZE', 'LAYOUT'],
 
-    _customChangesOrder: ["DISABLED"],
+    _customChangesOrder: ['DISABLED'],
 
     _change_EVENTS: function() {
         this._eventTrigger.applyChanges();
@@ -307,7 +305,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
     _change_ELEMENT_ATTR: function() {
         this._renderElementAttributes();
-        this._change(["CONTAINER_SIZE"]);
+        this._change(['CONTAINER_SIZE']);
     },
 
     _change_CONTAINER_SIZE: function() {
@@ -322,29 +320,29 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         var renderer = this._renderer,
             root = renderer.root;
 
-        if(this.option("disabled")) {
-            this._initDisabledState = root.attr("pointer-events");
+        if(this.option('disabled')) {
+            this._initDisabledState = root.attr('pointer-events');
             root.attr({
-                "pointer-events": "none",
+                'pointer-events': 'none',
                 filter: renderer.getGrayScaleFilter().id
             });
         } else {
-            if(root.attr("pointer-events") === "none") {
+            if(root.attr('pointer-events') === 'none') {
                 root.attr({
-                    "pointer-events": typeUtils.isDefined(this._initDisabledState) ? this._initDisabledState : null,
-                    "filter": null
+                    'pointer-events': typeUtils.isDefined(this._initDisabledState) ? this._initDisabledState : null,
+                    'filter': null
                 });
             }
         }
     },
 
-    _themeDependentChanges: ["RENDERER"],
+    _themeDependentChanges: ['RENDERER'],
 
     _initRenderer: function() {
         var that = this;
         // Canvas is calculated before the renderer is created in order to capture actual size of the container
         that._canvas = that._calculateCanvas();
-        that._renderer = new rendererModule.Renderer({ cssClass: that._rootClassPrefix + " " + that._rootClass, pathModified: that.option("pathModified"), container: that._$element[0] });
+        that._renderer = new rendererModule.Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
         that._renderer.resize(that._canvas.width, that._canvas.height);
     },
 
@@ -359,7 +357,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _getAnimationOptions: noop,
 
     render: function() {
-        this._requestChange(["CONTAINER_SIZE"]);
+        this._requestChange(['CONTAINER_SIZE']);
 
         const visible = this._isVisible();
         this._toggleParentsScrollSubscription(visible);
@@ -368,9 +366,9 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
     _toggleParentsScrollSubscription: function(subscribe) {
         var $parents = $(this._renderer.root.element).parents(),
-            scrollEvents = "scroll.viz_widgets";
+            scrollEvents = 'scroll.viz_widgets';
 
-        if(devices.real().platform === "generic") {
+        if(devices.real().platform === 'generic') {
             $parents = $parents.add(windowUtils.getWindow());
         }
 
@@ -408,8 +406,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
     _calculateCanvas: function() {
         var that = this,
-            size = that.option("size") || {},
-            margin = that.option("margin") || {},
+            size = that.option('size') || {},
+            margin = that.option('margin') || {},
             defaultCanvas = that._getDefaultSize() || {},
             elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0,
             elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0,
@@ -438,7 +436,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
             that._canvas = canvas;
             that._recreateSizeDependentObjects(true);
             that._renderer.resize(canvas.width, canvas.height);
-            that._change(["LAYOUT"]);
+            that._change(['LAYOUT']);
         }
     },
 
@@ -479,7 +477,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
     _setupResizeHandler: function() {
         var that = this,
-            redrawOnResize = _parseScalar(this._getOption("redrawOnResize", true), true);
+            redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
 
         if(that._resizeHandler) {
             that._removeResizeHandler();
@@ -487,7 +485,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 
         that._resizeHandler = createResizeHandler(function() {
             if(redrawOnResize) {
-                that._requestChange(["CONTAINER_SIZE"]);
+                that._requestChange(['CONTAINER_SIZE']);
             } else {
                 that._renderer.fixPlacement();
             }
@@ -509,7 +507,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     beginUpdate: function() {
         var that = this;
         // The "_initialized" flag is checked because first time "beginUpdate" is called in the constructor.
-        if(that._initialized && that._updateLockCount === 0) {
+        if(that._initialized && that._isUpdateAllowed()) {
             that._onBeginUpdate();
             that._suspendChanges();
         }
@@ -518,12 +516,10 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     endUpdate: function() {
-        var that = this;
-        that.callBase.apply(that, arguments);
-        if(that._updateLockCount === 0) {
-            that._resumeChanges();
-        }
-        return that;
+        this.callBase();
+        this._isUpdateAllowed() && this._resumeChanges();
+
+        return this;
     },
 
     option: function(name) {
@@ -569,7 +565,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         changes = changes.filter(c => !!c);
 
         if(that._eventTrigger.change(arg.name)) {
-            that._change(["EVENTS"]);
+            that._change(['EVENTS']);
         } else if(changes.length > 0) {
             that._change(changes);
         } else {
@@ -580,14 +576,14 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _notify: noop,
 
     _optionChangesMap: {
-        size: "CONTAINER_SIZE",
-        margin: "CONTAINER_SIZE",
-        redrawOnResize: "RESIZE_HANDLER",
-        theme: "THEME",
-        rtlEnabled: "THEME",
-        encodeHtml: "THEME",
-        elementAttr: "ELEMENT_ATTR",
-        disabled: "DISABLED"
+        size: 'CONTAINER_SIZE',
+        margin: 'CONTAINER_SIZE',
+        redrawOnResize: 'RESIZE_HANDLER',
+        theme: 'THEME',
+        rtlEnabled: 'THEME',
+        encodeHtml: 'THEME',
+        elementAttr: 'ELEMENT_ATTR',
+        disabled: 'DISABLED'
     },
 
     _partialOptionChangesMap: { },
@@ -611,9 +607,9 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
                     fullName.indexOf(op) >= 0 && partialChangeOptionsName.push(op);
                 });
                 if(sections.length === 1) {
-                    if(typeUtils.type(value) === "object") {
+                    if(typeUtils.type(value) === 'object') {
                         that._addOptionsNameForPartialUpdate(value, options, partialChangeOptionsName);
-                    } else if(typeUtils.type(value) === "array") {
+                    } else if(typeUtils.type(value) === 'array') {
                         if(value.length > 0 && value.every(item => that._checkOptionsForPartialUpdate(item, options))) {
                             value.forEach(item => that._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName));
                         }
@@ -642,13 +638,13 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _setThemeAndRtl: function() {
-        this._themeManager.setTheme(this.option("theme"), this.option(OPTION_RTL_ENABLED));
+        this._themeManager.setTheme(this.option('theme'), this.option(OPTION_RTL_ENABLED));
     },
 
     _getRendererOptions: function() {
         return {
             rtl: this.option(OPTION_RTL_ENABLED),
-            encodeHtml: this.option("encodeHtml"),
+            encodeHtml: this.option('encodeHtml'),
             animation: this._getAnimationOptions()
         };
     },
@@ -682,7 +678,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
                 that.isReady = getTrue;
             });
         }
-        that._eventTrigger("drawn", {});
+        that._eventTrigger('drawn', {});
     }
 });
 

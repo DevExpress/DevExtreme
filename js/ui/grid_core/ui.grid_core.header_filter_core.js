@@ -1,17 +1,17 @@
-import $ from "../../core/renderer";
-import modules from "./ui.grid_core.modules";
-import gridCoreUtils from "./ui.grid_core.utils";
-import { isDefined, isFunction } from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import Popup from "../popup";
-import TreeView from "../tree_view";
-import List from "../list";
+import $ from '../../core/renderer';
+import modules from './ui.grid_core.modules';
+import gridCoreUtils from './ui.grid_core.utils';
+import { isDefined, isFunction } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import Popup from '../popup';
+import TreeView from '../tree_view';
+import List from '../list';
 
-var HEADER_FILTER_CLASS = "dx-header-filter",
-    HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";
+var HEADER_FILTER_CLASS = 'dx-header-filter',
+    HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
 
-var DEFAULT_SEARCH_EXPRESSION = "text";
+var DEFAULT_SEARCH_EXPRESSION = 'text';
 
 function resetChildrenItemSelection(items) {
     items = items || [];
@@ -22,13 +22,13 @@ function resetChildrenItemSelection(items) {
 }
 
 function updateSelectAllState(e, filterValues) {
-    if(e.component.option("searchValue")) {
+    if(e.component.option('searchValue')) {
         return;
     }
-    var selectAllCheckBox = $(e.element).find(".dx-list-select-all-checkbox").data("dxCheckBox");
+    var selectAllCheckBox = $(e.element).find('.dx-list-select-all-checkbox').data('dxCheckBox');
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
-        selectAllCheckBox.option("value", undefined);
+        selectAllCheckBox.option('value', undefined);
     }
 }
 
@@ -39,7 +39,7 @@ function isSearchEnabled(that, options) {
         return headerFilter.allowSearch;
     }
 
-    return that.option("headerFilter.allowSearch");
+    return that.option('headerFilter.allowSearch');
 }
 
 exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
@@ -72,7 +72,7 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         var that = this,
             list = that.getListContainer(),
-            isSelectAll = !list.option("searchValue") && !options.isFilterBuilder && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
+            isSelectAll = !list.option('searchValue') && !options.isFilterBuilder && list.$element().find('.dx-checkbox').eq(0).hasClass('dx-checkbox-checked'),
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
@@ -80,7 +80,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
                     var hasChildrenWithSelection = item.items && item.items.some((item) => item.selected !== undefined);
 
-                    if(!list.option("searchValue") || !hasChildrenWithSelection) {
+                    if(!list.option('searchValue') || !hasChildrenWithSelection) {
                         filterValues.push(item.value);
                         return;
                     }
@@ -93,8 +93,8 @@ exports.HeaderFilterView = modules.View.inherit({
         };
 
         if(!isSelectAll) {
-            if(options.type === "tree") {
-                fillSelectedItemKeys(filterValues, list.option("items"), options.filterType === "exclude");
+            if(options.type === 'tree') {
+                fillSelectedItemKeys(filterValues, list.option('items'), options.filterType === 'exclude');
                 options.filterValues = filterValues;
             }
         } else if(Array.isArray(options.filterValues)) {
@@ -134,15 +134,15 @@ exports.HeaderFilterView = modules.View.inherit({
 
     updatePopup: function($element, options) {
         var that = this,
-            alignment = options.alignment === "right" ? "left" : "right";
+            alignment = options.alignment === 'right' ? 'left' : 'right';
 
         if(that._popupContainer) {
             that._cleanPopupContent();
-            that._popupContainer.option("position", {
-                my: alignment + " top",
-                at: alignment + " bottom",
+            that._popupContainer.option('position', {
+                my: alignment + ' top',
+                at: alignment + ' bottom',
                 of: $element,
-                collision: "flip fit" // T291384
+                collision: 'flip fit' // T291384
             });
         }
     },
@@ -157,7 +157,7 @@ exports.HeaderFilterView = modules.View.inherit({
         }
 
         if(lookup) {
-            return lookup.displayExpr || "this";
+            return lookup.displayExpr || 'this';
         }
 
         if(options.dataSource) {
@@ -179,7 +179,7 @@ exports.HeaderFilterView = modules.View.inherit({
     _initializePopupContainer: function(options) {
         var that = this,
             $element = that.element(),
-            headerFilterOptions = that.option("headerFilter"),
+            headerFilterOptions = that.option('headerFilter'),
             width = options.headerFilter && options.headerFilter.width || headerFilterOptions && headerFilterOptions.width,
             height = options.headerFilter && options.headerFilter.height || headerFilterOptions && headerFilterOptions.height,
             dxPopupOptions = {
@@ -195,14 +195,14 @@ exports.HeaderFilterView = modules.View.inherit({
                 focusStateEnabled: false,
                 toolbarItems: [
                     {
-                        toolbar: "bottom", location: "after", widget: "dxButton", options: {
+                        toolbar: 'bottom', location: 'after', widget: 'dxButton', options: {
                             text: headerFilterOptions.texts.ok, onClick: function() {
                                 that.applyHeaderFilter(options);
                             }
                         }
                     },
                     {
-                        toolbar: "bottom", location: "after", widget: "dxButton", options: {
+                        toolbar: 'bottom', location: 'after', widget: 'dxButton', options: {
                             text: headerFilterOptions.texts.cancel, onClick: function() {
                                 that.hideHeaderFilterMenu();
                             }
@@ -211,7 +211,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 ],
                 resizeEnabled: true,
                 onShowing: function(e) {
-                    e.component.$content().parent().addClass("dx-dropdowneditor-overlay");
+                    e.component.$content().parent().addClass('dx-dropdowneditor-overlay');
                     that._initializeListContainer(options);
                     options.onShowing && options.onShowing(e);
                 },
@@ -222,7 +222,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 onInitialized: function(e) {
                     var component = e.component;
                     // T321243
-                    component.option("animation", component._getDefaultOptions().animation);
+                    component.option('animation', component._getDefaultOptions().animation);
                 }
             };
 
@@ -238,8 +238,8 @@ exports.HeaderFilterView = modules.View.inherit({
             $content = that._popupContainer.$content(),
             widgetOptions = {
                 searchEnabled: isSearchEnabled(that, options),
-                searchTimeout: that.option("headerFilter.searchTimeout"),
-                searchMode: options.headerFilter && options.headerFilter.searchMode || "",
+                searchTimeout: that.option('headerFilter.searchTimeout'),
+                searchMode: options.headerFilter && options.headerFilter.searchMode || '',
                 dataSource: options.dataSource,
                 onContentReady: function() {
                     that.renderCompleted.fire();
@@ -254,29 +254,41 @@ exports.HeaderFilterView = modules.View.inherit({
                 }
             };
 
-        if(options.type === "tree") {
-            that._listContainer = that._createComponent($("<div>").appendTo($content),
+        if(options.type === 'tree') {
+            that._listContainer = that._createComponent($('<div>').appendTo($content),
                 TreeView, extend(widgetOptions, {
-                    showCheckBoxesMode: options.isFilterBuilder ? "normal" : "selectAll",
-                    keyExpr: "id"
+                    showCheckBoxesMode: options.isFilterBuilder ? 'normal' : 'selectAll',
+                    onOptionChanged: function(e) {
+                        // T835492, T833015
+                        if(e.fullName === 'searchValue' && !options.isFilterBuilder) {
+                            e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
+                        }
+                    },
+                    keyExpr: 'id'
                 }));
         } else {
-            that._listContainer = that._createComponent($("<div>").appendTo($content),
+            that._listContainer = that._createComponent($('<div>').appendTo($content),
                 List, extend(widgetOptions, {
                     searchExpr: that._getSearchExpr(options),
-                    pageLoadMode: "scrollBottom",
+                    pageLoadMode: 'scrollBottom',
                     showSelectionControls: true,
-                    selectionMode: options.isFilterBuilder ? "multiple" : "all",
+                    selectionMode: options.isFilterBuilder ? 'multiple' : 'all',
+                    onOptionChanged: function(e) {
+                        // T835492, T833015
+                        if(e.fullName === 'searchValue' && !options.isFilterBuilder) {
+                            e.component.option('selectionMode', e.value ? 'multiple' : 'all');
+                        }
+                    },
                     onSelectionChanged: function(e) {
-                        var items = e.component.option("items"),
-                            selectedItems = e.component.option("selectedItems");
+                        var items = e.component.option('items'),
+                            selectedItems = e.component.option('selectedItems');
 
-                        if(!e.component._selectedItemsUpdating && !e.component.option("searchValue") && !options.isFilterBuilder) {
+                        if(!e.component._selectedItemsUpdating && !e.component.option('searchValue') && !options.isFilterBuilder) {
                             if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1)) {
-                                options.filterType = "include";
+                                options.filterType = 'include';
                                 options.filterValues = [];
                             } else if(selectedItems.length === items.length) {
-                                options.filterType = "exclude";
+                                options.filterType = 'exclude';
                                 options.filterValues = [];
                             }
                         }
@@ -295,7 +307,7 @@ exports.HeaderFilterView = modules.View.inherit({
                                     options.filterValues.splice(filterValueIndex, 1);
                                 }
 
-                                if(selected ^ options.filterType === "exclude") {
+                                if(selected ^ options.filterType === 'exclude') {
                                     options.filterValues.push(item.value);
                                 }
                             }
@@ -305,7 +317,7 @@ exports.HeaderFilterView = modules.View.inherit({
                     },
                     onContentReady: function(e) {
                         var component = e.component,
-                            items = component.option("items"),
+                            items = component.option('items'),
                             selectedItems = [];
 
                         each(items, function() {
@@ -314,7 +326,7 @@ exports.HeaderFilterView = modules.View.inherit({
                             }
                         });
                         component._selectedItemsUpdating = true;
-                        component.option("selectedItems", selectedItems);
+                        component.option('selectedItems', selectedItems);
                         component._selectedItemsUpdating = false;
 
                         updateSelectAllState(e, options.filterValues);
@@ -339,13 +351,13 @@ exports.headerFilterMixin = {
             rootElement = options.rootElement,
             column = options.column;
 
-        if(options.name === "headerFilter") {
-            rootElement.find("." + HEADER_FILTER_CLASS).remove();
+        if(options.name === 'headerFilter') {
+            rootElement.find('.' + HEADER_FILTER_CLASS).remove();
 
             if(allowHeaderFiltering(column)) {
-                $headerFilterIndicator = this.callBase(options).toggleClass("dx-header-filter-empty", this._isHeaderFilterEmpty(column));
-                if(!this.option("useLegacyKeyboardNavigation")) {
-                    $headerFilterIndicator.attr("tabindex", this.option("tabindex") || 0);
+                $headerFilterIndicator = this.callBase(options).toggleClass('dx-header-filter-empty', this._isHeaderFilterEmpty(column));
+                if(!this.option('useLegacyKeyboardNavigation')) {
+                    $headerFilterIndicator.attr('tabindex', this.option('tabindex') || 0);
                 }
             }
 
@@ -360,7 +372,7 @@ exports.headerFilterMixin = {
     },
 
     _getIndicatorClassName: function(name) {
-        if(name === "headerFilter") {
+        if(name === 'headerFilter') {
             return HEADER_FILTER_CLASS;
         }
         return this.callBase(name);
@@ -371,9 +383,9 @@ exports.headerFilterMixin = {
             $container = options.container,
             $indicator = options.indicator;
 
-        if(options.name === "headerFilter") {
-            rtlEnabled = this.option("rtlEnabled");
-            if($container.children().length && (!rtlEnabled && options.columnAlignment === "right" || rtlEnabled && options.columnAlignment === "left")) {
+        if(options.name === 'headerFilter') {
+            rtlEnabled = this.option('rtlEnabled');
+            if($container.children().length && (!rtlEnabled && options.columnAlignment === 'right' || rtlEnabled && options.columnAlignment === 'left')) {
                 $container.prepend($indicator);
                 return;
             }
@@ -383,8 +395,8 @@ exports.headerFilterMixin = {
     },
 
     optionChanged: function(args) {
-        if(args.name === "headerFilter") {
-            var requireReady = this.name === "columnHeadersView";
+        if(args.name === 'headerFilter') {
+            var requireReady = this.name === 'columnHeadersView';
             this._invalidate(requireReady, requireReady);
             args.handled = true;
         } else {

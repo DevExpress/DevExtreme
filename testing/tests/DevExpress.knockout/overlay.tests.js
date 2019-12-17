@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    fx = require('animation/fx'),
+    ko = require('knockout');
 
-require("ui/overlay");
-require("ui/slider");
-require("integration/knockout");
+require('ui/overlay');
+require('ui/slider');
+require('integration/knockout');
 
-require("common.css!");
+require('common.css!');
 
 QUnit.testStart(function() {
     var markup =
@@ -16,7 +16,7 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 var moduleConfig = {
@@ -28,10 +28,10 @@ var moduleConfig = {
     }
 };
 
-QUnit.module("integration tests", moduleConfig);
+QUnit.module('integration tests', moduleConfig);
 
-QUnit.test("slider within overlay does not properly display its current position properly (Q509956)", function(assert) {
-    var $container = $("#Q509956");
+QUnit.test('slider within overlay does not properly display its current position properly (Q509956)', function(assert) {
+    var $container = $('#Q509956');
     var vm = {
         visible: ko.observable(false),
         value: ko.observable(5)
@@ -40,6 +40,6 @@ QUnit.test("slider within overlay does not properly display its current position
     ko.applyBindings(vm, $container.get(0));
     vm.visible(true);
 
-    var $handle = $container.find(".dx-slider .dx-slider-handle");
+    var $handle = $container.find('.dx-slider .dx-slider-handle');
     assert.equal($handle.position().left, 5);
 });

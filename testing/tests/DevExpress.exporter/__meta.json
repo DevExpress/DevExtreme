@@ -1,5 +1,5 @@
-{ 
-    "constellation": "misc",
+{
+    "constellation": "export",
     "explicit": false,
     "runOnDevices": true
 }

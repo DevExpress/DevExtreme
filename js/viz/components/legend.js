@@ -1,11 +1,11 @@
-import { enumParser, normalizeEnum, patchFontOptions } from "../core/utils";
-import { extend } from "../../core/utils/extend";
-import { LayoutElement, WrapperLayoutElement } from "../core/layout_element";
-import { isDefined, isFunction } from "../../core/utils/type";
-import title from "../core/title";
-import { clone } from "../../core/utils/object";
-import { noop } from "../../core/utils/common";
-import { processHatchingAttrs, getFuncIri } from "../core/renderers/renderer";
+import { enumParser, normalizeEnum, patchFontOptions } from '../core/utils';
+import { extend } from '../../core/utils/extend';
+import { LayoutElement, WrapperLayoutElement } from '../core/layout_element';
+import { isDefined, isFunction } from '../../core/utils/type';
+import title from '../core/title';
+import { clone } from '../../core/utils/object';
+import { noop } from '../../core/utils/common';
+import { processHatchingAttrs, getFuncIri } from '../core/renderers/renderer';
 
 var _Number = Number,
 
@@ -25,18 +25,18 @@ var _Number = Number,
     DEFAULT_MARGIN = 10,
     DEFAULT_MARKER_HATCHING_WIDTH = 2,
     DEFAULT_MARKER_HATCHING_STEP = 5,
-    CENTER = "center",
-    RIGHT = "right",
-    LEFT = "left",
-    TOP = "top",
-    BOTTOM = "bottom",
-    HORIZONTAL = "horizontal",
-    VERTICAL = "vertical",
-    INSIDE = "inside",
-    OUTSIDE = "outside",
-    NONE = "none",
-    HEIGHT = "height",
-    WIDTH = "width",
+    CENTER = 'center',
+    RIGHT = 'right',
+    LEFT = 'left',
+    TOP = 'top',
+    BOTTOM = 'bottom',
+    HORIZONTAL = 'horizontal',
+    VERTICAL = 'vertical',
+    INSIDE = 'inside',
+    OUTSIDE = 'outside',
+    NONE = 'none',
+    HEIGHT = 'height',
+    WIDTH = 'width',
 
     parseHorizontalAlignment = _enumParser([LEFT, CENTER, RIGHT]),
     parseVerticalAlignment = _enumParser([TOP, BOTTOM]),
@@ -65,7 +65,7 @@ function getState(state, color, stateName) {
 function getAttributes(item, state, size) {
     const attrs = processHatchingAttrs(item, state);
 
-    if(attrs.fill && attrs.fill.indexOf("DevExpress") === 0) {
+    if(attrs.fill && attrs.fill.indexOf('DevExpress') === 0) {
         attrs.fill = getFuncIri(attrs.fill);
     }
 
@@ -134,16 +134,16 @@ function parseOptions(options, textField, allowInsidePosition) {
     if(!options) return null;
 
     ///#DEBUG
-    var debug = require("../../core/utils/console").debug;
-    debug.assertParam(options.visible, "Visibility was not passed");
-    debug.assertParam(options.markerSize, "markerSize was not passed");
-    debug.assertParam(options.font.color, "fontColor was not passed");
-    debug.assertParam(options.font.family, "fontFamily was not passed");
-    debug.assertParam(options.font.size, "fontSize was not passed");
-    debug.assertParam(options.paddingLeftRight, "paddingLeftRight was not passed");
-    debug.assertParam(options.paddingTopBottom, "paddingTopBottom was not passed");
-    debug.assertParam(options.columnItemSpacing, "columnItemSpacing was not passed");
-    debug.assertParam(options.rowItemSpacing, "rowItemSpacing was not passed");
+    var debug = require('../../core/utils/console').debug;
+    debug.assertParam(options.visible, 'Visibility was not passed');
+    debug.assertParam(options.markerSize, 'markerSize was not passed');
+    debug.assertParam(options.font.color, 'fontColor was not passed');
+    debug.assertParam(options.font.family, 'fontFamily was not passed');
+    debug.assertParam(options.font.size, 'fontSize was not passed');
+    debug.assertParam(options.paddingLeftRight, 'paddingLeftRight was not passed');
+    debug.assertParam(options.paddingTopBottom, 'paddingTopBottom was not passed');
+    debug.assertParam(options.columnItemSpacing, 'columnItemSpacing was not passed');
+    debug.assertParam(options.rowItemSpacing, 'rowItemSpacing was not passed');
     ///#ENDDEBUG
 
     parseMargins(options);
@@ -169,7 +169,7 @@ function createCircleMarker(renderer, size) {
 }
 
 function isCircle(type) {
-    return _normalizeEnum(type) === "circle";
+    return _normalizeEnum(type) === 'circle';
 }
 
 function inRect(rect, x, y) {
@@ -182,7 +182,7 @@ function checkLinesSize(lines, layoutOptions, countItems, margins) {
         maxAltMeasureLength = 0,
         margin = 0;
 
-    if(layoutOptions.direction === "y") {
+    if(layoutOptions.direction === 'y') {
         margin = margins.top + margins.bottom;
     } else {
         margin = margins.left + margins.right;
@@ -381,12 +381,22 @@ extend(legendPrototype, {
         this._data = data.map((dataItem) => {
             dataItem.size = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
             dataItem.marker = getAttributes(dataItem, dataItem.states.normal);
-            Object.defineProperty(dataItem.marker, "size", {
+            Object.defineProperty(dataItem.marker, 'size', {
                 get() {
                     return dataItem.size;
                 },
                 set(value) {
                     dataItem.size = value;
+                }
+            });
+            Object.defineProperty(dataItem.marker, 'opacity', {
+                get() {
+                    return dataItem.states.normal.opacity;
+                },
+                set(value) {
+                    dataItem.states.normal.opacity =
+                    dataItem.states.hover.opacity =
+                    dataItem.states.selection.opacity = value;
                 }
             });
 
@@ -498,15 +508,15 @@ extend(legendPrototype, {
             dataItem.size = dataItem.marker.size;
 
             const states = {
-                normal: extend(normalState, { fill: normalStateFill || options.markerColor || options.defaultColor, state: "normal" }),
-                hover: getState(stateOfDataItem.hover, normalStateFill, "hovered"),
-                selection: getState(stateOfDataItem.selection, normalStateFill, "selected")
+                normal: extend(normalState, { fill: normalStateFill || options.markerColor || options.defaultColor, state: 'normal' }),
+                hover: getState(stateOfDataItem.hover, normalStateFill, 'hovered'),
+                selection: getState(stateOfDataItem.selection, normalStateFill, 'selected')
             };
             dataItem.states = states;
 
             const itemGroup = renderer.g().append(markersGroup);
 
-            const markerGroup = renderer.g().attr({ class: "dxl-marker" }).append(itemGroup);
+            const markerGroup = renderer.g().attr({ class: 'dxl-marker' }).append(itemGroup);
 
             const item = {
                 label: that._createLabel(dataItem, itemGroup),
@@ -526,7 +536,7 @@ extend(legendPrototype, {
                         model: dataItem, container: markerGroup.element, onRendered: () => {
                             isRendered = true;
                             if(isAsyncRendering) {
-                                that._widget._requestChange(["LAYOUT"]);
+                                that._widget._requestChange(['LAYOUT']);
                             }
                         }
                     });
@@ -600,17 +610,17 @@ extend(legendPrototype, {
     },
 
     applySelected: function(id) {
-        applyMarkerState(id, this._markersId, this._items, "selection");
+        applyMarkerState(id, this._markersId, this._items, 'selection');
         return this;
     },
 
     applyHover: function(id) {
-        applyMarkerState(id, this._markersId, this._items, "hover");
+        applyMarkerState(id, this._markersId, this._items, 'hover');
         return this;
     },
 
     resetItem: function(id) {
-        applyMarkerState(id, this._markersId, this._items, "normal");
+        applyMarkerState(id, this._markersId, this._items, 'normal');
         return this;
     },
 
@@ -619,7 +629,7 @@ extend(legendPrototype, {
         const options = this._options;
         const align = getAlign(options.itemTextPosition);
         const text = options.customizeText.call(labelFormatObject, labelFormatObject);
-        const fontStyle = _isDefined(data.textOpacity) ? _extend({}, options.font, { opacity: data.textOpacity }) : options.font;
+        const fontStyle = _isDefined(data.textOpacity) ? { color: options.font.color, opacity: data.textOpacity } : {};
 
         return this._renderer.text(text, 0, 0)
             .css(patchFontOptions(fontStyle))
@@ -630,7 +640,7 @@ extend(legendPrototype, {
     _createHint: function(data, group) {
         var labelFormatObject = this._getCustomizeObject(data),
             text = this._options.customizeHint.call(labelFormatObject, labelFormatObject);
-        if(_isDefined(text) && text !== "") {
+        if(_isDefined(text) && text !== '') {
             group.setTitle(text);
         }
     },
@@ -690,7 +700,7 @@ extend(legendPrototype, {
                 },
                 firstItem,
                 secondItem,
-                offsetDirection = layoutOptions.markerOffset ? "altOffset" : "offset";
+                offsetDirection = layoutOptions.markerOffset ? 'altOffset' : 'offset';
 
             if(layoutOptions.inverseLabelPosition) {
                 firstItem = labelBox;
@@ -786,10 +796,10 @@ extend(legendPrototype, {
         if(orientation === HORIZONTAL) {
             layoutOptions.length = width;
             layoutOptions.spacing = options.columnItemSpacing;
-            layoutOptions.direction = "x";
+            layoutOptions.direction = 'x';
             layoutOptions.measure = WIDTH;
             layoutOptions.altMeasure = HEIGHT;
-            layoutOptions.altDirection = "y";
+            layoutOptions.altDirection = 'y';
             layoutOptions.altSpacing = options.rowItemSpacing;
             layoutOptions.countItem = options.columnCount;
             layoutOptions.altCountItem = options.rowCount;
@@ -803,10 +813,10 @@ extend(legendPrototype, {
         } else {
             layoutOptions.length = height;
             layoutOptions.spacing = options.rowItemSpacing;
-            layoutOptions.direction = "y";
+            layoutOptions.direction = 'y';
             layoutOptions.measure = HEIGHT;
             layoutOptions.altMeasure = WIDTH;
-            layoutOptions.altDirection = "x";
+            layoutOptions.altDirection = 'x';
             layoutOptions.altSpacing = options.columnItemSpacing;
             layoutOptions.countItem = options.rowCount;
             layoutOptions.altCountItem = options.columnCount;
@@ -849,9 +859,9 @@ extend(legendPrototype, {
             };
 
         if(border.visible && border.width && border.color && border.color !== NONE) {
-            backgroundSettings["stroke-width"] = border.width;
+            backgroundSettings['stroke-width'] = border.width;
             backgroundSettings.stroke = border.color;
-            backgroundSettings["stroke-opacity"] = border.opacity;
+            backgroundSettings['stroke-opacity'] = border.opacity;
             backgroundSettings.dashStyle = border.dashStyle;
             backgroundSettings.rx = border.cornerRadius || 0;
             backgroundSettings.ry = border.cornerRadius || 0;
@@ -914,15 +924,15 @@ extend(legendPrototype, {
             boundingRect.horizontalAlignment = options.horizontalAlignment;
             if(options.orientation === HORIZONTAL) {
                 boundingRect.cutLayoutSide = options.verticalAlignment;
-                boundingRect.cutSide = "vertical";
+                boundingRect.cutSide = 'vertical';
             } else {
                 if(options.horizontalAlignment === CENTER) {
                     boundingRect.cutLayoutSide = options.verticalAlignment;
-                    boundingRect.cutSide = "vertical";
+                    boundingRect.cutSide = 'vertical';
 
                 } else {
                     boundingRect.cutLayoutSide = options.horizontalAlignment;
-                    boundingRect.cutSide = "horizontal";
+                    boundingRect.cutSide = 'horizontal';
                 }
             }
             boundingRect.position = {
@@ -1017,8 +1027,8 @@ extend(legendPrototype, {
     getItemByCoord: function(x, y) {
         var items = this._items,
             legendGroup = this._insideLegendGroup;
-        x = x - legendGroup.attr("translateX");
-        y = y - legendGroup.attr("translateY");
+        x = x - legendGroup.attr('translateX');
+        y = y - legendGroup.attr('translateY');
 
         for(var i = 0; i < items.length; i++) {
             if(inRect(items[i].tracker, x, y)) {
@@ -1062,7 +1072,7 @@ extend(legendPrototype, {
     },
 
     freeSpace: function() {
-        this._options._incidentOccurred("W2104");
+        this._options._incidentOccurred('W2104');
         this.erase();
     }
     // BaseWidget_layout_implementation
@@ -1070,12 +1080,12 @@ extend(legendPrototype, {
 
 
 exports.plugin = {
-    name: "legend",
+    name: 'legend',
     init: function() {
         var that = this,
             group = this._renderer.g()
                 .attr({
-                    class: this._rootClassPrefix + "-legend"
+                    class: this._rootClassPrefix + '-legend'
                 })
                 .enableLinks()
                 .append(that._renderer.root);
@@ -1084,9 +1094,9 @@ exports.plugin = {
             renderer: that._renderer,
             group: group,
             widget: this,
-            itemGroupClass: this._rootClassPrefix + "-item",
-            titleGroupClass: this._rootClassPrefix + "-title",
-            textField: "text",
+            itemGroupClass: this._rootClassPrefix + '-item',
+            titleGroupClass: this._rootClassPrefix + '-title',
+            textField: 'text',
             getFormatObject: function(data) {
                 return {
                     item: data.item,
@@ -1112,10 +1122,10 @@ exports.plugin = {
         _applyLegendItemStyle: function(id, state) {
             var legend = this._legend;
             switch(state) {
-                case "hover":
+                case 'hover':
                     legend.applyHover(id);
                     break;
-                case "selection":
+                case 'selection':
                     legend.applySelected(id);
                     break;
                 default:
@@ -1125,8 +1135,8 @@ exports.plugin = {
         },
 
         _createLegendItems: function() {
-            if(this._legend.update(this._getLegendData(), this._getOption("legend"), this._themeManager.theme("legend").title)) {
-                this._requestChange(["LAYOUT"]);
+            if(this._legend.update(this._getLegendData(), this._getOption('legend'), this._themeManager.theme('legend').title)) {
+                this._requestChange(['LAYOUT']);
             }
         }
     },
@@ -1140,19 +1150,19 @@ exports.plugin = {
                 if(item) {
                     return {
                         id: item.id,
-                        type: "legend"
+                        type: 'legend'
                     };
                 }
             }
         });
 
         constructor.addChange({
-            code: "LEGEND",
+            code: 'LEGEND',
             handler: function() {
                 this._createLegendItems();
             },
             isThemeDependent: true,
-            option: "legend",
+            option: 'legend',
             isOptionChange: true
         });
     }

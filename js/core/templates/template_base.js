@@ -1,8 +1,8 @@
-import $ from "../renderer";
-import { getBody } from "../dom_adapter";
-import Callbacks from "../utils/callbacks";
-import { contains, triggerShownEvent } from "../utils/dom";
-import errors from "../errors";
+import $ from '../renderer';
+import { getBody } from '../dom_adapter';
+import Callbacks from '../utils/callbacks';
+import { contains, triggerShownEvent } from '../utils/dom';
+import errors from '../errors';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
 
@@ -60,6 +60,6 @@ export class TemplateBase {
     }
 
     _renderCore() {
-        throw errors.Error("E0001");
+        throw errors.Error('E0001');
     }
 }

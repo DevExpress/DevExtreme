@@ -1,5 +1,5 @@
-var states = ["normal", "hover", "selection", "selection"],
-    isDefined = require("../../core/utils/type").isDefined;
+var states = ['normal', 'hover', 'selection', 'selection'],
+    isDefined = require('../../core/utils/type').isDefined;
 
 function parseStyles(color, style, baseStyle) {
     var border = style.border,
@@ -11,7 +11,7 @@ function parseStyles(color, style, baseStyle) {
         fill: color,
         hatching: style.hatching,
         stroke: border.color || baseBorder.color,
-        "stroke-width": borderVisible ? borderWidth : 0
+        'stroke-width': borderVisible ? borderWidth : 0
     };
 }
 
@@ -52,14 +52,14 @@ Item.prototype = {
     },
 
     hover: function(state) {
-        if(!this.widget._getOption("hoverEnabled", true) || state === this.isHovered()) {
+        if(!this.widget._getOption('hoverEnabled', true) || state === this.isHovered()) {
             return;
         }
 
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(1, state);
-        this.widget._eventTrigger("hoverChanged", { item: this });
+        this.widget._eventTrigger('hoverChanged', { item: this });
         this.widget._resume();
     },
 
@@ -73,16 +73,16 @@ Item.prototype = {
     },
 
     select: function(state) {
-        var mode = this.widget._getOption("selectionMode", true);
-        if(mode === "none" || state === this.isSelected()) {
+        var mode = this.widget._getOption('selectionMode', true);
+        if(mode === 'none' || state === this.isSelected()) {
             return;
         }
         this.widget._suspend();
-        if(state && mode !== "multiple") {
+        if(state && mode !== 'multiple') {
             this.widget.clearSelection();
         }
         this.setState(2, state);
-        this.widget._eventTrigger("selectionChanged", { item: this });
+        this.widget._eventTrigger('selectionChanged', { item: this });
         this.widget._resume();
     },
 

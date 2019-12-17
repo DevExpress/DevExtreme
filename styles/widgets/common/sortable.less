@@ -1,12 +1,8 @@
+@MAX_INTEGER: 2147483647;
+
 .dx-sortable {
     overflow: hidden;
-    cursor: pointer;
     .user-select(none);
-
-    &.dx-state-disabled,
-    .dx-state-disabled & {
-        cursor: default;
-    }
 }
 
 .dx-sortable-dragging.dx-sortable-clone {
@@ -15,7 +11,12 @@
     left: 0;
     box-sizing: border-box;
     opacity: 0.9;
-    z-index: 10000;
+    z-index: @MAX_INTEGER;
+}
+
+.dx-sortable-dragging.dx-sortable-clone * {
+    cursor: pointer;
+    cursor: grabbing;
 }
 
 .dx-sortable-source {
@@ -32,7 +33,7 @@
     left: 0;
     border: 1px solid transparent;
     box-sizing: border-box;
-    z-index: 10000;
+    z-index: @MAX_INTEGER;
 }
 
 .dx-sortable-placeholder-inside {

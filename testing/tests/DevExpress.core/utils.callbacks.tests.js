@@ -1,6 +1,6 @@
-var Callbacks = require("core/utils/callbacks");
+var Callbacks = require('core/utils/callbacks');
 
-QUnit.module("Methods", {
+QUnit.module('Methods', {
     beforeEach: function() {
         this.Callbacks = Callbacks();
     },
@@ -9,7 +9,7 @@ QUnit.module("Methods", {
     }
 });
 
-QUnit.test("Call all of the Callbacks with the argument", function(assert) {
+QUnit.test('Call all of the Callbacks with the argument', function(assert) {
     // arrange
     var callBack1,
         callBack2;
@@ -18,39 +18,39 @@ QUnit.test("Call all of the Callbacks with the argument", function(assert) {
         callBack1 = true;
 
         // assert
-        assert.deepEqual(param, { param: "test" }, "parameter of the first callback");
+        assert.deepEqual(param, { param: 'test' }, 'parameter of the first callback');
     });
     this.Callbacks.add(function(param) {
         callBack2 = true;
 
         // assert
-        assert.ok(callBack1, "callBack1");
-        assert.deepEqual(param, { param: "test" }, "parameter of the second callback");
+        assert.ok(callBack1, 'callBack1');
+        assert.deepEqual(param, { param: 'test' }, 'parameter of the second callback');
     });
 
     // act
-    this.Callbacks.fire({ param: "test" });
+    this.Callbacks.fire({ param: 'test' });
 
     // assert
-    assert.ok(callBack2, "callBack1");
+    assert.ok(callBack2, 'callBack1');
 });
 
-QUnit.test("Fired method", function(assert) {
+QUnit.test('Fired method', function(assert) {
     // arrange
     this.Callbacks.add(function(param) {});
 
     // assert
-    assert.ok(!this.Callbacks.fired(), "Callback not fired at start");
+    assert.ok(!this.Callbacks.fired(), 'Callback not fired at start');
 
     // act
     this.Callbacks.fire();
 
     // assert
-    assert.ok(this.Callbacks.fired(), "Callback fired");
+    assert.ok(this.Callbacks.fired(), 'Callback fired');
 });
 
 
-QUnit.test("Call all Callbacks in a list with the given context", function(assert) {
+QUnit.test('Call all Callbacks in a list with the given context', function(assert) {
     // arrange
     var context = {},
         callBack1,
@@ -60,26 +60,26 @@ QUnit.test("Call all Callbacks in a list with the given context", function(asser
         callBack1 = true;
 
         // assert
-        assert.deepEqual(param, { param: "test" }, "parameter of the first callback");
-        assert.deepEqual(this, context, "context");
+        assert.deepEqual(param, { param: 'test' }, 'parameter of the first callback');
+        assert.deepEqual(this, context, 'context');
     });
     this.Callbacks.add(function(param) {
         callBack2 = true;
 
         // assert
-        assert.ok(callBack1, "callBack1");
-        assert.deepEqual(param, { param: "test" }, "parameter of the second callback");
-        assert.deepEqual(this, context, "context");
+        assert.ok(callBack1, 'callBack1');
+        assert.deepEqual(param, { param: 'test' }, 'parameter of the second callback');
+        assert.deepEqual(this, context, 'context');
     });
 
     // act
-    this.Callbacks.fireWith(context, [{ param: "test" }]);
+    this.Callbacks.fireWith(context, [{ param: 'test' }]);
 
     // assert
-    assert.ok(callBack2, "callBack1");
+    assert.ok(callBack2, 'callBack1');
 });
 
-QUnit.test("Determine whether callback is in a list", function(assert) {
+QUnit.test('Determine whether callback is in a list', function(assert) {
     // arrange
     var callBack1 = function() {},
         callBack2 = function() {};
@@ -87,11 +87,11 @@ QUnit.test("Determine whether callback is in a list", function(assert) {
     this.Callbacks.add(callBack1);
 
     // act, assert
-    assert.ok(this.Callbacks.has(callBack1), "has callBack1");
-    assert.ok(!this.Callbacks.has(callBack2), "not has callBack2");
+    assert.ok(this.Callbacks.has(callBack1), 'has callBack1');
+    assert.ok(!this.Callbacks.has(callBack2), 'not has callBack2');
 });
 
-QUnit.test("Remove a callback from a callback list", function(assert) {
+QUnit.test('Remove a callback from a callback list', function(assert) {
     // arrange
     var callBack1 = function() { },
         callBack2 = function() { };
@@ -100,18 +100,18 @@ QUnit.test("Remove a callback from a callback list", function(assert) {
     this.Callbacks.add(callBack2);
 
     // assert
-    assert.ok(this.Callbacks.has(callBack1), "has callBack1");
-    assert.ok(this.Callbacks.has(callBack2), "has callBack2");
+    assert.ok(this.Callbacks.has(callBack1), 'has callBack1');
+    assert.ok(this.Callbacks.has(callBack2), 'has callBack2');
 
     // act
     this.Callbacks.remove(callBack1);
 
     // assert
-    assert.ok(!this.Callbacks.has(callBack1), "not has callBack1");
-    assert.ok(this.Callbacks.has(callBack2), "has callBack2");
+    assert.ok(!this.Callbacks.has(callBack1), 'not has callBack1');
+    assert.ok(this.Callbacks.has(callBack2), 'has callBack2');
 });
 
-QUnit.test("Remove a callback from a callback list when firing", function(assert) {
+QUnit.test('Remove a callback from a callback list when firing', function(assert) {
     // arrange
     var that = this;
     var callOrder = [];
@@ -162,7 +162,7 @@ QUnit.test("Remove a callback from a callback list when firing", function(assert
     assert.deepEqual(callOrder, [ 2, 4, 6 ]);
 });
 
-QUnit.test("Remove all of the Callbacks from a list", function(assert) {
+QUnit.test('Remove all of the Callbacks from a list', function(assert) {
     // arrange
     var callBack1 = function() { },
         callBack2 = function() { };
@@ -171,18 +171,18 @@ QUnit.test("Remove all of the Callbacks from a list", function(assert) {
     this.Callbacks.add(callBack2);
 
     // assert
-    assert.ok(this.Callbacks.has(callBack1), "has callBack1");
-    assert.ok(this.Callbacks.has(callBack2), "has callBack2");
+    assert.ok(this.Callbacks.has(callBack1), 'has callBack1');
+    assert.ok(this.Callbacks.has(callBack2), 'has callBack2');
 
     // act
     this.Callbacks.empty();
 
     // assert
-    assert.ok(!this.Callbacks.has(callBack1), "not has callBack1");
-    assert.ok(!this.Callbacks.has(callBack2), "not has callBack2");
+    assert.ok(!this.Callbacks.has(callBack1), 'not has callBack1');
+    assert.ok(!this.Callbacks.has(callBack2), 'not has callBack2');
 });
 
-QUnit.test("Base strategy", function(assert) {
+QUnit.test('Base strategy', function(assert) {
     // arrange
     var that = this,
         firstFire = true,
@@ -219,28 +219,28 @@ QUnit.test("Base strategy", function(assert) {
     ]);
 });
 
-QUnit.test("Fired method", function(assert) {
+QUnit.test('Fired method', function(assert) {
     // arrange
 
     this.Callbacks.add(function() {});
 
     // assert
-    assert.notOk(this.Callbacks.fired(), "Callback not fired yet");
+    assert.notOk(this.Callbacks.fired(), 'Callback not fired yet');
 
     // act
     this.Callbacks.fire();
 
     // assert
-    assert.ok(this.Callbacks.fired(), "Callback fired");
+    assert.ok(this.Callbacks.fired(), 'Callback fired');
 });
 
-QUnit.module("Flags", {
+QUnit.module('Flags', {
     afterEach: function() {
         this.Callbacks.empty();
     }
 });
 
-QUnit.test("Sync strategy with one inner fire", function(assert) {
+QUnit.test('Sync strategy with one inner fire', function(assert) {
     // arrange
     var that = this,
         firstFire = true,
@@ -280,7 +280,7 @@ QUnit.test("Sync strategy with one inner fire", function(assert) {
 });
 
 // T544647
-QUnit.test("Sync strategy with one inner fire in first callback", function(assert) {
+QUnit.test('Sync strategy with one inner fire in first callback', function(assert) {
     // arrange
     var that = this,
         callOrder = [];
@@ -316,7 +316,7 @@ QUnit.test("Sync strategy with one inner fire in first callback", function(asser
     ]);
 });
 
-QUnit.test("Sync strategy with two inner fires", function(assert) {
+QUnit.test('Sync strategy with two inner fires', function(assert) {
     // arrange
     var that = this,
         fireCount = 1,
@@ -358,7 +358,7 @@ QUnit.test("Sync strategy with two inner fires", function(assert) {
     ]);
 });
 
-QUnit.test("Remove a callback from a callback list when firing for sync strategy", function(assert) {
+QUnit.test('Remove a callback from a callback list when firing for sync strategy', function(assert) {
     // arrange
     var that = this;
     var callOrder = [];
@@ -411,7 +411,7 @@ QUnit.test("Remove a callback from a callback list when firing for sync strategy
     assert.deepEqual(callOrder, [ 2, 4, 6 ]);
 });
 
-QUnit.test("StopOnFalse", function(assert) {
+QUnit.test('StopOnFalse', function(assert) {
     // arrange
     var fireCount = 0;
 
@@ -434,7 +434,7 @@ QUnit.test("StopOnFalse", function(assert) {
     assert.equal(fireCount, 1);
 });
 
-QUnit.test("Unique", function(assert) {
+QUnit.test('Unique', function(assert) {
     // arrange
     var fireCount = 0;
 

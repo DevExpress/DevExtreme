@@ -194,11 +194,20 @@
             }
         }
 
-        .dx-@{widgetName}-rowsview .dx-row .dx-command-drag {
+        .dx-@{widgetName}-rowsview .dx-data-row .dx-command-drag {
             cursor: move;
             vertical-align: middle;
             padding: 0;
         }
+    }
+
+    .dx-sortable-dragging .dx-@{widgetName}-rowsview .dx-data-row .dx-command-drag {
+        cursor: pointer;
+        cursor: grabbing;
+    }
+
+    .dx-sortable-without-handle .dx-data-row {
+        cursor: pointer;
     }
 
     .dx-@{widgetName}-column-chooser {

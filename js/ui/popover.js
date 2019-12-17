@@ -1,54 +1,54 @@
-var $ = require("../core/renderer"),
-    windowUtils = require("../core/utils/window"),
+var $ = require('../core/renderer'),
+    windowUtils = require('../core/utils/window'),
     window = windowUtils.getWindow(),
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    domAdapter = require("../core/dom_adapter"),
-    eventsEngine = require("../events/core/events_engine"),
-    registerComponent = require("../core/component_registrator"),
-    commonUtils = require("../core/utils/common"),
-    extend = require("../core/utils/extend").extend,
-    browser = require("../core/utils/browser"),
-    translator = require("../animation/translator"),
-    positionUtils = require("../animation/position"),
-    typeUtils = require("../core/utils/type"),
-    mathUtils = require("../core/utils/math"),
-    eventUtils = require("../events/utils"),
-    Popup = require("./popup");
+    getPublicElement = require('../core/utils/dom').getPublicElement,
+    domAdapter = require('../core/dom_adapter'),
+    eventsEngine = require('../events/core/events_engine'),
+    registerComponent = require('../core/component_registrator'),
+    commonUtils = require('../core/utils/common'),
+    extend = require('../core/utils/extend').extend,
+    browser = require('../core/utils/browser'),
+    translator = require('../animation/translator'),
+    positionUtils = require('../animation/position'),
+    typeUtils = require('../core/utils/type'),
+    mathUtils = require('../core/utils/math'),
+    eventUtils = require('../events/utils'),
+    Popup = require('./popup');
 
-var POPOVER_CLASS = "dx-popover",
-    POPOVER_WRAPPER_CLASS = "dx-popover-wrapper",
-    POPOVER_ARROW_CLASS = "dx-popover-arrow",
-    POPOVER_WITHOUT_TITLE_CLASS = "dx-popover-without-title",
+var POPOVER_CLASS = 'dx-popover',
+    POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper',
+    POPOVER_ARROW_CLASS = 'dx-popover-arrow',
+    POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title',
 
     POSITION_FLIP_MAP = {
-        "left": "right",
-        "top": "bottom",
-        "right": "left",
-        "bottom": "top",
-        "center": "center"
+        'left': 'right',
+        'top': 'bottom',
+        'right': 'left',
+        'bottom': 'top',
+        'center': 'center'
     },
 
     WEIGHT_OF_SIDES = {
-        "left": -1,
-        "top": -1,
-        "center": 0,
-        "right": 1,
-        "bottom": 1
+        'left': -1,
+        'top': -1,
+        'center': 0,
+        'right': 1,
+        'bottom': 1
     },
 
     POSITION_ALIASES = {
         // NOTE: public API
-        "top": { my: "bottom center", at: "top center", collision: "fit flip" },
-        "bottom": { my: "top center", at: "bottom center", collision: "fit flip" },
-        "right": { my: "left center", at: "right center", collision: "flip fit" },
-        "left": { my: "right center", at: "left center", collision: "flip fit" }
+        'top': { my: 'bottom center', at: 'top center', collision: 'fit flip' },
+        'bottom': { my: 'top center', at: 'bottom center', collision: 'fit flip' },
+        'right': { my: 'left center', at: 'right center', collision: 'flip fit' },
+        'left': { my: 'right center', at: 'left center', collision: 'flip fit' }
     },
 
     SIDE_BORDER_WIDTH_STYLES = {
-        "left": "borderLeftWidth",
-        "top": "borderTopWidth",
-        "right": "borderRightWidth",
-        "bottom": "borderBottomWidth"
+        'left': 'borderLeftWidth',
+        'top': 'borderTopWidth',
+        'right': 'borderRightWidth',
+        'bottom': 'borderBottomWidth'
     },
 
     isFirefox = browser.mozilla,
@@ -71,18 +71,19 @@ var POPOVER_CLASS = "dx-popover",
             action,
             handler,
             eventName,
-            target = that.option("target"),
+            target = that.option('target'),
             isSelector = typeUtils.isString(target),
-            event = getEventName(that, name + "Event");
+            event = getEventName(that, name + 'Event');
 
-        if(!event || that.option("disabled")) {
+        if(!event || that.option('disabled')) {
             return;
         }
 
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
-            delay = getEventDelay(that, name + "Event");
-            this._clearEventTimeout(name === "hide");
+            delay = getEventDelay(that, name + 'Event');
+            this._clearEventsTimeouts();
+
             if(delay) {
                 this._timeouts[name] = setTimeout(function() {
                     that[name]();
@@ -90,13 +91,13 @@ var POPOVER_CLASS = "dx-popover",
             } else {
                 that[name]();
             }
-        }).bind(that), { validatingTargetName: "target" });
+        }).bind(that), { validatingTargetName: 'target' });
 
         handler = function(e) {
             action({ event: e, target: $(e.currentTarget) });
         };
 
-        var EVENT_HANDLER_NAME = "_" + name + "EventHandler";
+        var EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
         if(isSelector) {
             that[EVENT_HANDLER_NAME] = handler;
             eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
@@ -107,7 +108,7 @@ var POPOVER_CLASS = "dx-popover",
         }
     },
     detachEvent = function(that, target, name, event) {
-        var eventName = event || getEventName(that, name + "Event");
+        var eventName = event || getEventName(that, name + 'Event');
 
         if(!eventName) {
             return;
@@ -115,7 +116,7 @@ var POPOVER_CLASS = "dx-popover",
 
         eventName = eventUtils.addNamespace(eventName, that.NAME);
 
-        var EVENT_HANDLER_NAME = "_" + name + "EventHandler";
+        var EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
         if(that[EVENT_HANDLER_NAME]) {
             eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
         } else {
@@ -172,7 +173,7 @@ var Popover = Popup.inherit({
                 * @default { type: "fade", from: 0, to: 1 }
                 */
                 show: {
-                    type: "fade",
+                    type: 'fade',
                     from: 0,
                     to: 1
                 },
@@ -182,7 +183,7 @@ var Popover = Popup.inherit({
                 * @default { type: "fade", to: 0 }
                 */
                 hide: {
-                    type: "fade",
+                    type: 'fade',
                     to: 0
                 }
             },
@@ -200,7 +201,7 @@ var Popover = Popup.inherit({
              * @default "auto"
              * @type_function_return number|string
              */
-            width: "auto",
+            width: 'auto',
 
             /**
              * @name dxPopoverOptions.height
@@ -208,7 +209,7 @@ var Popover = Popup.inherit({
              * @default "auto"
              * @type_function_return number|string
              */
-            height: "auto",
+            height: 'auto',
 
             /**
              * @name dxPopoverOptions.dragEnabled
@@ -282,7 +283,7 @@ var Popover = Popup.inherit({
 
             fullScreen: false,
             closeOnTargetScroll: true,
-            arrowPosition: "",
+            arrowPosition: '',
             arrowOffset: 0,
             boundaryOffset: { h: 10, v: 10 }
 
@@ -306,11 +307,11 @@ var Popover = Popup.inherit({
     _defaultOptionsRules: function() {
         return [
             {
-                device: { platform: "ios" },
+                device: { platform: 'ios' },
                 options: {
                     arrowPosition: {
                         boundaryOffset: { h: 20, v: -10 },
-                        collision: "fit"
+                        collision: 'fit'
                     }
                 }
             }, {
@@ -336,22 +337,22 @@ var Popover = Popup.inherit({
 
     _render: function() {
         this.callBase.apply(this, arguments);
-        this._detachEvents(this.option("target"));
+        this._detachEvents(this.option('target'));
         this._attachEvents();
     },
 
     _detachEvents: function(target) {
-        detachEvent(this, target, "show");
-        detachEvent(this, target, "hide");
+        detachEvent(this, target, 'show');
+        detachEvent(this, target, 'hide');
     },
 
     _attachEvents: function() {
-        attachEvent(this, "show");
-        attachEvent(this, "hide");
+        attachEvent(this, 'show');
+        attachEvent(this, 'hide');
     },
 
     _renderArrow: function() {
-        this._$arrow = $("<div>")
+        this._$arrow = $('<div>')
             .addClass(POPOVER_ARROW_CLASS)
             .prependTo(this.overlayContent());
     },
@@ -364,11 +365,11 @@ var Popover = Popup.inherit({
     },
 
     _isOutsideClick: function(e) {
-        return !$(e.target).closest(this.option("target")).length;
+        return !$(e.target).closest(this.option('target')).length;
     },
 
     _animate: function(animation) {
-        if(animation && animation.to && typeof animation.to === "object") {
+        if(animation && animation.to && typeof animation.to === 'object') {
             extend(animation.to, {
                 position: this._getContainerPosition()
             });
@@ -382,7 +383,7 @@ var Popover = Popup.inherit({
     },
 
     _renderTitle: function() {
-        this._wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option("showTitle"));
+        this._wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
         this.callBase();
     },
 
@@ -402,7 +403,7 @@ var Popover = Popup.inherit({
 
         var positionSide = this._getSideByLocation(resultLocation);
 
-        this._togglePositionClass("dx-position-" + positionSide);
+        this._togglePositionClass('dx-position-' + positionSide);
         this._toggleFlippedClass(resultLocation.h.flip, resultLocation.v.flip);
 
         var isArrowVisible = this._isHorizontalSide() || this._isVerticalSide();
@@ -414,7 +415,7 @@ var Popover = Popup.inherit({
 
     _resetOverlayPosition: function() {
         this._setContentHeight(true);
-        this._togglePositionClass("dx-position-" + this._positionSide);
+        this._togglePositionClass('dx-position-' + this._positionSide);
 
         translator.move(this._$content, { left: 0, top: 0 });
 
@@ -446,7 +447,7 @@ var Popover = Popup.inherit({
     },
 
     _getContainerPosition: function() {
-        var offset = commonUtils.pairToObject(this._position.offset || "");
+        var offset = commonUtils.pairToObject(this._position.offset || '');
         var hOffset = offset.h;
         var vOffset = offset.v;
         var isVerticalSide = this._isVerticalSide();
@@ -462,7 +463,7 @@ var Popover = Popup.inherit({
             isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
         }
 
-        return extend({}, this._position, { offset: hOffset + " " + vOffset });
+        return extend({}, this._position, { offset: hOffset + ' ' + vOffset });
     },
 
     _getContentBorderWidth: function(side) {
@@ -481,21 +482,21 @@ var Popover = Popup.inherit({
 
     _togglePositionClass: function(positionClass) {
         this._$wrapper
-            .removeClass("dx-position-left dx-position-right dx-position-top dx-position-bottom")
+            .removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
             .addClass(positionClass);
     },
 
     _toggleFlippedClass: function(isFlippedHorizontal, isFlippedVertical) {
         this._$wrapper
-            .toggleClass("dx-popover-flipped-horizontal", isFlippedHorizontal)
-            .toggleClass("dx-popover-flipped-vertical", isFlippedVertical);
+            .toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
+            .toggleClass('dx-popover-flipped-vertical', isFlippedVertical);
     },
 
     _renderArrowPosition: function(side) {
         this._$arrow.css(POSITION_FLIP_MAP[side], -(this._isVerticalSide(side) ? this._$arrow.height() : this._$arrow.width()));
 
-        var axis = this._isVerticalSide(side) ? "left" : "top";
-        var sizeProperty = this._isVerticalSide(side) ? "outerWidth" : "outerHeight";
+        var axis = this._isVerticalSide(side) ? 'left' : 'top';
+        var sizeProperty = this._isVerticalSide(side) ? 'outerWidth' : 'outerHeight';
         var $target = $(this._position.of);
 
         var targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
@@ -510,21 +511,21 @@ var Popover = Popup.inherit({
         var min = Math.max(contentLocation, targetLocation);
         var max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
         var arrowLocation;
-        if(this.option("arrowPosition") === "start") {
+        if(this.option('arrowPosition') === 'start') {
             arrowLocation = min - contentLocation;
-        } else if(this.option("arrowPosition") === "end") {
+        } else if(this.option('arrowPosition') === 'end') {
             arrowLocation = max - contentLocation - arrowSize;
         } else {
             arrowLocation = (min + max) / 2 - contentLocation - arrowSize / 2;
         }
 
         var borderWidth = this._getContentBorderWidth(side);
-        var finalArrowLocation = mathUtils.fitIntoRange(arrowLocation - borderWidth + this.option("arrowOffset"), borderWidth, contentSize - arrowSize - borderWidth * 2);
+        var finalArrowLocation = mathUtils.fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
         this._$arrow.css(axis, finalArrowLocation);
     },
 
     _isPopoverInside: function() {
-        var position = this._transformStringPosition(this.option("position"), POSITION_ALIASES);
+        var position = this._transformStringPosition(this.option('position'), POSITION_ALIASES);
 
         var my = positionUtils.setup.normalizeAlign(position.my);
         var at = positionUtils.setup.normalizeAlign(position.at);
@@ -538,25 +539,34 @@ var Popover = Popup.inherit({
         }
     },
 
-    _renderShadingPosition: function() {
-        if(this.option("shading")) {
+    _renderWrapperPosition: function() {
+        if(this.option('shading')) {
             this._$wrapper.css({ top: 0, left: 0 });
         }
     },
 
+    _renderWrapperDimensions: function() {
+        if(this.option('shading')) {
+            this._$wrapper.css({
+                width: '100%',
+                height: '100%'
+            });
+        }
+    },
+
     _normalizePosition: function() {
-        var position = extend({}, this._transformStringPosition(this.option("position"), POSITION_ALIASES));
+        var position = extend({}, this._transformStringPosition(this.option('position'), POSITION_ALIASES));
 
         if(!position.of) {
-            position.of = this.option("target");
+            position.of = this.option('target');
         }
 
         if(!position.collision) {
-            position.collision = "flip";
+            position.collision = 'flip';
         }
 
         if(!position.boundaryOffset) {
-            position.boundaryOffset = this.option("boundaryOffset");
+            position.boundaryOffset = this.option('boundaryOffset');
         }
 
         this._positionSide = this._getDisplaySide(position);
@@ -578,58 +588,63 @@ var Popover = Popup.inherit({
     _resetContentHeight: function() {
         this.callBase();
         if(isFirefox) { // T655040
-            var originalOverflow = this._$popupContent.css("overflow");
-            this._$popupContent.css("overflow", "visible");
-            this._$popupContent.css("overflow", originalOverflow);
+            var originalOverflow = this._$popupContent.css('overflow');
+            this._$popupContent.css('overflow', 'visible');
+            this._$popupContent.css('overflow', originalOverflow);
         }
     },
 
     _isVerticalSide: function(side) {
         side = side || this._positionSide;
-        return side === "top" || side === "bottom";
+        return side === 'top' || side === 'bottom';
     },
 
     _isHorizontalSide: function(side) {
         side = side || this._positionSide;
-        return side === "left" || side === "right";
+        return side === 'left' || side === 'right';
     },
 
-    _clearEventTimeout: function(visibility) {
-        clearTimeout(this._timeouts[visibility ? "show" : "hide"]);
+    _clearEventTimeout: function(name) {
+        clearTimeout(this._timeouts[name]);
+    },
+
+    _clearEventsTimeouts: function() {
+        this._clearEventTimeout('show');
+        this._clearEventTimeout('hide');
     },
 
     _clean: function() {
-        this._detachEvents(this.option("target"));
+        this._detachEvents(this.option('target'));
         this.callBase.apply(this, arguments);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "boundaryOffset":
-            case "arrowPosition":
-            case "arrowOffset":
+            case 'boundaryOffset':
+            case 'arrowPosition':
+            case 'arrowOffset':
                 this._renderGeometry();
                 break;
-            case "fullScreen":
+            case 'fullScreen':
                 if(args.value) {
-                    this.option("fullScreen", false);
+                    this.option('fullScreen', false);
                 }
                 break;
-            case "target":
+            case 'target':
                 args.previousValue && this._detachEvents(args.previousValue);
                 this.callBase(args);
                 break;
-            case "showEvent":
-            case "hideEvent":
+            case 'showEvent':
+            case 'hideEvent':
                 var name = args.name.substring(0, 4),
                     event = getEventNameByOption(args.previousValue);
 
                 this.hide();
-                detachEvent(this, this.option("target"), name, event);
+                detachEvent(this, this.option('target'), name, event);
                 attachEvent(this, name);
                 break;
-            case "visible":
-                this._clearEventTimeout(args.value);
+            case 'visible':
+                this._clearEventTimeout(args.value ? 'show' : 'hide');
                 this.callBase(args);
                 break;
             default:
@@ -645,7 +660,7 @@ var Popover = Popup.inherit({
     */
     show: function(target) {
         if(target) {
-            this.option("target", target);
+            this.option('target', target);
         }
 
         return this.callBase();
@@ -665,6 +680,6 @@ var Popover = Popup.inherit({
 
 });
 
-registerComponent("dxPopover", Popover);
+registerComponent('dxPopover', Popover);
 
 module.exports = Popover;

@@ -1,18 +1,18 @@
 /* global __dirname */
-const path = require("path");
-const fs = require("fs");
+const path = require('path');
+const fs = require('fs');
 
-const themes = require("./themes");
-const getBundleName = require("./bundle-resolver");
-const ModulesHandler = require("../modules/modules-handler");
+const themes = require('./themes');
+const getBundleName = require('./bundle-resolver');
+const ModulesHandler = require('../modules/modules-handler');
 
-const stylesDirectory = path.join(__dirname, "..", "..", "styles");
-const themesFileContent = fs.readFileSync(path.join(stylesDirectory, "theme.less"), "utf8");
+const stylesDirectory = path.join(__dirname, '..', '..', 'styles');
+const themesFileContent = fs.readFileSync(path.join(stylesDirectory, 'theme.less'), 'utf8');
 const publicWidgets = new ModulesHandler().availableWidgets(themesFileContent).map(w => w.name);
 
 
 const capitalize = (key) => key.charAt(0).toUpperCase() + key.slice(1);
-const getWidgetFromFileName = (fileName) => capitalize(fileName.split("/").pop().split(".")[0]);
+const getWidgetFromFileName = (fileName) => capitalize(fileName.split('/').pop().split('.')[0]);
 
 const executor = (str, regex, handler) => {
     let matches;
@@ -37,7 +37,7 @@ const getMetaItems = (less) => {
 
     executor(less, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-@a-z_0-9]+):/gim, (matches) => {
         const metaItem = {
-            "Key": matches[2]
+            'Key': matches[2]
         };
         metaItems.push(Object.assign(metaItem, parseComments(matches[1])));
     });
@@ -105,7 +105,7 @@ const dependenciesPlugin = (dependencies) => {
                 process: (less, context) => {
                     const fullPath = context && context.fileInfo && context.fileInfo.filename;
 
-                    if(typeof fullPath === "string") {
+                    if(typeof fullPath === 'string') {
                         const widget = getWidgetFromFileName(path.basename(fullPath));
                         if(!dependencies[widget]) {
                             dependencies[widget] = [];
@@ -124,11 +124,11 @@ const generate = (version, lessCompiler) => {
     const promises = [];
     const metadata = {};
     const dependencies = {};
-    const resultPath = path.join(__dirname, "..", "data", "metadata", "dx-theme-builder-metadata.js");
+    const resultPath = path.join(__dirname, '..', 'data', 'metadata', 'dx-theme-builder-metadata.js');
 
     themes.forEach((theme) => {
         const bundlePath = path.join(stylesDirectory, getBundleName(theme.name, theme.colorScheme));
-        const propertyName = [theme.name, theme.colorScheme.replace(/-/g, "_"), "metadata"].join("_");
+        const propertyName = [theme.name, theme.colorScheme.replace(/-/g, '_'), 'metadata'].join('_');
 
         metadata[propertyName] = [];
 
@@ -154,9 +154,9 @@ const generate = (version, lessCompiler) => {
     });
 
     return Promise.all(promises).then(() => {
-        metadata["_metadata_version"] = version;
-        metadata["dependencies"] = removeInternalDependencies(resolveDependencies(dependencies));
-        const meta = "module.exports = " + JSON.stringify(metadata) + ";";
+        metadata['_metadata_version'] = version;
+        metadata['dependencies'] = removeInternalDependencies(resolveDependencies(dependencies));
+        const meta = 'module.exports = ' + JSON.stringify(metadata) + ';';
         fs.mkdirSync(path.dirname(resultPath), { recursive: true });
         fs.writeFileSync(resultPath, meta);
     });

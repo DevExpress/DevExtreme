@@ -1,21 +1,20 @@
-var Class = require("../core/class"),
+var Class = require('../core/class'),
     abstract = Class.abstract,
-    EventsMixin = require("../core/events_mixin"),
-    each = require("../core/utils/iterator").each,
-    errorsModule = require("./errors"),
-    dataUtils = require("./utils"),
-    compileGetter = require("../core/utils/data").compileGetter,
-    storeHelper = require("./store_helper"),
+    EventsStrategy = require('../core/events_strategy').EventsStrategy,
+    each = require('../core/utils/iterator').each,
+    errorsModule = require('./errors'),
+    dataUtils = require('./utils'),
+    compileGetter = require('../core/utils/data').compileGetter,
+    storeHelper = require('./store_helper'),
     queryByOptions = storeHelper.queryByOptions,
-    Deferred = require("../core/utils/deferred").Deferred,
-    noop = require("../core/utils/common").noop,
+    Deferred = require('../core/utils/deferred').Deferred,
+    noop = require('../core/utils/common').noop,
 
     storeImpl = {};
 
 /**
 * @name Store
 * @type object
-* @inherits EventsMixin
 * @hidden
 * @module data/abstract_store
 * @export default
@@ -25,6 +24,7 @@ var Store = Class.inherit({
     ctor: function(options) {
         var that = this;
         options = options || {};
+        this._eventsStrategy = new EventsStrategy(this);
 
         each(
             [
@@ -34,7 +34,7 @@ var Store = Class.inherit({
                  * @type_function_param1 result:Array<any>
                  * @action
                  */
-                "onLoaded",
+                'onLoaded',
 
                 /**
                  * @name StoreOptions.onLoading
@@ -42,7 +42,7 @@ var Store = Class.inherit({
                  * @type_function_param1 loadOptions:LoadOptions
                  * @action
                  */
-                "onLoading",
+                'onLoading',
 
                 /**
                  * @name StoreOptions.onInserted
@@ -51,7 +51,7 @@ var Store = Class.inherit({
                  * @type_function_param2 key:object|string|number
                  * @action
                  */
-                "onInserted",
+                'onInserted',
 
                 /**
                  * @name StoreOptions.onInserting
@@ -59,7 +59,7 @@ var Store = Class.inherit({
                  * @type_function_param1 values:object
                  * @action
                  */
-                "onInserting",
+                'onInserting',
 
                 /**
                  * @name StoreOptions.onUpdated
@@ -68,7 +68,7 @@ var Store = Class.inherit({
                  * @type_function_param2 values:object
                  * @action
                  */
-                "onUpdated",
+                'onUpdated',
 
                 /**
                  * @name StoreOptions.onUpdating
@@ -77,7 +77,7 @@ var Store = Class.inherit({
                  * @type_function_param2 values:object
                  * @action
                  */
-                "onUpdating",
+                'onUpdating',
 
                 /**
                  * @name StoreOptions.onPush
@@ -85,7 +85,7 @@ var Store = Class.inherit({
                  * @type_function_param1 changes:Array<any>
                  * @action
                  */
-                "onPush",
+                'onPush',
 
                 /**
                  * @name StoreOptions.onRemoved
@@ -93,7 +93,7 @@ var Store = Class.inherit({
                  * @type_function_param1 key:object|string|number
                  * @action
                  */
-                "onRemoved",
+                'onRemoved',
 
                 /**
                  * @name StoreOptions.onRemoving
@@ -101,21 +101,21 @@ var Store = Class.inherit({
                  * @type_function_param1 key:object|string|number
                  * @action
                  */
-                "onRemoving",
+                'onRemoving',
 
                 /**
                  * @name StoreOptions.onModified
                  * @type function
                  * @action
                  */
-                "onModified",
+                'onModified',
 
                 /**
                  * @name StoreOptions.onModifying
                  * @type function
                  * @action
                  */
-                "onModifying"
+                'onModifying'
             ],
             function(_, optionName) {
                 if(optionName in options) {
@@ -167,7 +167,7 @@ var Store = Class.inherit({
 
     _requireKey: function() {
         if(!this.key()) {
-            throw errorsModule.errors.Error("E4005");
+            throw errorsModule.errors.Error('E4005');
         }
     },
     /**
@@ -186,10 +186,10 @@ var Store = Class.inherit({
 
         options = options || {};
 
-        this.fireEvent("loading", [options]);
+        this._eventsStrategy.fireEvent('loading', [options]);
 
         return this._withLock(this._loadImpl(options)).done(function(result) {
-            that.fireEvent("loaded", [result, options]);
+            that._eventsStrategy.fireEvent('loaded', [result, options]);
         });
     },
 
@@ -256,12 +256,12 @@ var Store = Class.inherit({
     insert: function(values) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("inserting", [values]);
+        that._eventsStrategy.fireEvent('modifying');
+        that._eventsStrategy.fireEvent('inserting', [values]);
 
         return that._addFailHandlers(that._insertImpl(values).done(function(callbackValues, callbackKey) {
-            that.fireEvent("inserted", [callbackValues, callbackKey]);
-            that.fireEvent("modified");
+            that._eventsStrategy.fireEvent('inserted', [callbackValues, callbackKey]);
+            that._eventsStrategy.fireEvent('modified');
         }));
     },
 
@@ -277,12 +277,12 @@ var Store = Class.inherit({
     update: function(key, values) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("updating", [key, values]);
+        that._eventsStrategy.fireEvent('modifying');
+        that._eventsStrategy.fireEvent('updating', [key, values]);
 
         return that._addFailHandlers(that._updateImpl(key, values).done(function() {
-            that.fireEvent("updated", [key, values]);
-            that.fireEvent("modified");
+            that._eventsStrategy.fireEvent('updated', [key, values]);
+            that._eventsStrategy.fireEvent('modified');
         }));
     },
 
@@ -295,7 +295,7 @@ var Store = Class.inherit({
     */
     push: function(changes) {
         this._pushImpl(changes);
-        this.fireEvent("push", [changes]);
+        this._eventsStrategy.fireEvent('push', [changes]);
     },
 
     _pushImpl: noop,
@@ -309,12 +309,12 @@ var Store = Class.inherit({
     remove: function(key) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("removing", [key]);
+        that._eventsStrategy.fireEvent('modifying');
+        that._eventsStrategy.fireEvent('removing', [key]);
 
         return that._addFailHandlers(that._removeImpl(key).done(function(callbackKey) {
-            that.fireEvent("removed", [callbackKey]);
-            that.fireEvent("modified");
+            that._eventsStrategy.fireEvent('removed', [callbackKey]);
+            that._eventsStrategy.fireEvent('modified');
         }));
     },
 
@@ -322,12 +322,48 @@ var Store = Class.inherit({
 
     _addFailHandlers: function(deferred) {
         return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
+    },
+
+    /**
+     * @name StoreMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name StoreMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
+        return this;
+    },
+
+    /**
+     * @name StoreMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name StoreMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    off(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     }
-}).include(EventsMixin);
+});
 
 Store.create = function(alias, options) {
     if(!(alias in storeImpl)) {
-        throw errorsModule.errors.Error("E4020", alias);
+        throw errorsModule.errors.Error('E4020', alias);
     }
 
     return new storeImpl[alias](options);

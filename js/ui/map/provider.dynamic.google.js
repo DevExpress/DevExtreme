@@ -1,21 +1,21 @@
 /* global google */
 
-var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
-    noop = require("../../core/utils/common").noop,
-    devices = require("../../core/devices"),
-    Promise = require("../../core/polyfills/promise"),
-    extend = require("../../core/utils/extend").extend,
-    map = require("../../core/utils/iterator").map,
-    DynamicProvider = require("./provider.dynamic"),
-    errors = require("../widget/ui.errors"),
-    Color = require("../../color"),
-    ajax = require("../../core/utils/ajax"),
-    isDefined = require("../../core/utils/type").isDefined;
+var $ = require('../../core/renderer'),
+    window = require('../../core/utils/window').getWindow(),
+    noop = require('../../core/utils/common').noop,
+    devices = require('../../core/devices'),
+    Promise = require('../../core/polyfills/promise'),
+    extend = require('../../core/utils/extend').extend,
+    map = require('../../core/utils/iterator').map,
+    DynamicProvider = require('./provider.dynamic'),
+    errors = require('../widget/ui.errors'),
+    Color = require('../../color'),
+    ajax = require('../../core/utils/ajax'),
+    isDefined = require('../../core/utils/type').isDefined;
 
-var GOOGLE_MAP_READY = "_googleScriptReady";
-var GOOGLE_URL = "https://maps.googleapis.com/maps/api/js?callback=" + GOOGLE_MAP_READY;
-var INFO_WINDOW_CLASS = "gm-style-iw";
+var GOOGLE_MAP_READY = '_googleScriptReady';
+var GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?callback=' + GOOGLE_MAP_READY;
+var INFO_WINDOW_CLASS = 'gm-style-iw';
 
 var CustomMarker;
 
@@ -24,11 +24,11 @@ var initCustomMarkerClass = function() {
         this._position = options.position;
         this._offset = options.offset;
 
-        this._$overlayContainer = $("<div>")
+        this._$overlayContainer = $('<div>')
             .css({
-                position: "absolute",
-                display: "none",
-                cursor: "pointer"
+                position: 'absolute',
+                display: 'none',
+                cursor: 'pointer'
             })
             .append(options.html);
 
@@ -119,7 +119,7 @@ var GoogleProvider = DynamicProvider.inherit({
                 if(status === google.maps.GeocoderStatus.OK) {
                     resolve(results[0].geometry.location);
                 } else {
-                    errors.log("W1006", status);
+                    errors.log('W1006', status);
                     resolve(new google.maps.LatLng(0, 0));
                 }
             });
@@ -165,12 +165,12 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _loadMapScript: function() {
         return new Promise(function(resolve) {
-            var key = this._keyOption("google");
+            var key = this._keyOption('google');
 
             window[GOOGLE_MAP_READY] = resolve;
             ajax.sendRequest({
-                url: GOOGLE_URL + (key ? ("&key=" + key) : ""),
-                dataType: "script"
+                url: GOOGLE_URL + (key ? ('&key=' + key) : ''),
+                dataType: 'script'
             });
         }.bind(this)).then(function() {
             try {
@@ -183,11 +183,11 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _init: function() {
         return new Promise(function(resolve) {
-            this._resolveLocation(this._option("center")).then(function(center) {
-                var showDefaultUI = this._option("controls");
+            this._resolveLocation(this._option('center')).then(function(center) {
+                var showDefaultUI = this._option('controls');
 
                 this._map = new google.maps.Map(this._$container[0], {
-                    zoom: this._option("zoom"),
+                    zoom: this._option('zoom'),
                     center: center,
                     disableDefaultUI: !showDefaultUI
                 });
@@ -208,13 +208,13 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _boundsChangeHandler: function() {
         var bounds = this._map.getBounds();
-        this._option("bounds", this._normalizeLocationRect(bounds));
+        this._option('bounds', this._normalizeLocationRect(bounds));
 
         var center = this._map.getCenter();
-        this._option("center", this._normalizeLocation(center));
+        this._option('center', this._normalizeLocation(center));
 
         if(!this._preventZoomChangeEvent) {
-            this._option("zoom", this._map.getZoom());
+            this._option('zoom', this._map.getZoom());
         }
     },
 
@@ -223,23 +223,23 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     updateDimensions: function() {
-        var center = this._option("center");
+        var center = this._option('center');
         google.maps.event.trigger(this._map, 'resize');
-        this._option("center", center);
+        this._option('center', center);
 
         return this.updateCenter();
     },
 
     updateMapType: function() {
-        this._map.setMapTypeId(this._mapType(this._option("type")));
+        this._map.setMapTypeId(this._mapType(this._option('type')));
 
         return Promise.resolve();
     },
 
     updateBounds: function() {
         return Promise.all([
-            this._resolveLocation(this._option("bounds.northEast")),
-            this._resolveLocation(this._option("bounds.southWest"))
+            this._resolveLocation(this._option('bounds.northEast')),
+            this._resolveLocation(this._option('bounds.southWest'))
         ]).then(function(result) {
             var bounds = new google.maps.LatLngBounds();
             bounds.extend(result[0]);
@@ -250,20 +250,20 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     updateCenter: function() {
-        return this._resolveLocation(this._option("center")).then(function(center) {
+        return this._resolveLocation(this._option('center')).then(function(center) {
             this._map.setCenter(center);
-            this._option("center", this._normalizeLocation(center));
+            this._option('center', this._normalizeLocation(center));
         }.bind(this));
     },
 
     updateZoom: function() {
-        this._map.setZoom(this._option("zoom"));
+        this._map.setZoom(this._option('zoom'));
 
         return Promise.resolve();
     },
 
     updateControls: function() {
-        var showDefaultUI = this._option("controls");
+        var showDefaultUI = this._option('controls');
 
         this._map.setOptions({
             disableDefaultUI: !showDefaultUI
@@ -273,9 +273,9 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     isEventsCanceled: function(e) {
-        var gestureHandling = this._map && this._map.get("gestureHandling");
+        var gestureHandling = this._map && this._map.get('gestureHandling');
         var isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
-        if(isInfoWindowContent || devices.real().deviceType !== "desktop" && gestureHandling === "cooperative") {
+        if(isInfoWindowContent || devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative') {
             return false;
         }
         return this.callBase();
@@ -298,7 +298,7 @@ var GoogleProvider = DynamicProvider.inherit({
                 marker = new google.maps.Marker({
                     position: location,
                     map: this._map,
-                    icon: options.iconSrc || this._option("markerIconSrc")
+                    icon: options.iconSrc || this._option('markerIconSrc')
                 });
             }
 
@@ -308,7 +308,7 @@ var GoogleProvider = DynamicProvider.inherit({
                 var markerClickAction = this._mapWidget._createAction(options.onClick || noop),
                     markerNormalizedLocation = this._normalizeLocation(location);
 
-                listener = google.maps.event.addListener(marker, "click", function() {
+                listener = google.maps.event.addListener(marker, 'click', function() {
                     markerClickAction({
                         location: markerNormalizedLocation
                     });
@@ -394,7 +394,7 @@ var GoogleProvider = DynamicProvider.inherit({
                             southWest: bounds.getSouthWest()
                         });
                     } else {
-                        errors.log("W1006", status);
+                        errors.log('W1006', status);
                         resolve({
                             instance: new google.maps.DirectionsRenderer({})
                         });
@@ -411,7 +411,7 @@ var GoogleProvider = DynamicProvider.inherit({
     _fitBounds: function() {
         this._updateBounds();
 
-        if(this._bounds && this._option("autoAdjust")) {
+        if(this._bounds && this._option('autoAdjust')) {
             var zoomBeforeFitting = this._map.getZoom();
             this._preventZoomChangeEvent = true;
 
@@ -422,7 +422,7 @@ var GoogleProvider = DynamicProvider.inherit({
             if(zoomBeforeFitting < zoomAfterFitting) {
                 this._map.setZoom(zoomBeforeFitting);
             } else {
-                this._option("zoom", zoomAfterFitting);
+                this._option('zoom', zoomAfterFitting);
             }
             delete this._preventZoomChangeEvent;
         }

@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    ko = require('knockout');
 
-require("ui/load_panel");
-require("integration/knockout");
+require('ui/load_panel');
+require('integration/knockout');
 
 QUnit.testStart(function() {
     var markup =
@@ -13,18 +13,18 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("regressions");
+QUnit.module('regressions');
 
-QUnit.test("B234630 - targetContainer with ko", function(assert) {
+QUnit.test('B234630 - targetContainer with ko', function(assert) {
     var vm = {
         visible: ko.observable(false)
     };
 
-    ko.applyBindings(vm, $("#B234630").get(0));
+    ko.applyBindings(vm, $('#B234630').get(0));
     vm.visible(true);
-    assert.equal($("#B234630_target").find(".dx-overlay-content").length, 1);
+    assert.equal($('#B234630_target').find('.dx-overlay-content').length, 1);
     vm.visible(false);
 });

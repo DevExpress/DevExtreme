@@ -1,12 +1,12 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { isDefined, isString } from "../../core/utils/type";
-import { ensureDefined } from "../../core/utils/common";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { isDefined, isString } from '../../core/utils/type';
+import { ensureDefined } from '../../core/utils/common';
 
-import Widget from "../widget/ui.widget";
-import ContextMenu from "../context_menu/ui.context_menu";
+import Widget from '../widget/ui.widget';
+import ContextMenu from '../context_menu/ui.context_menu';
 
-const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
+const FILEMANAGER_CONTEXT_MEMU_CLASS = 'dx-filemanager-context-menu';
 
 const DEFAULT_CONTEXT_MENU_ITEMS = {
     create: {},
@@ -28,10 +28,10 @@ class FileManagerContextMenu extends Widget {
 
         this._isVisible = false;
 
-        const $menu = $("<div>").appendTo(this.$element());
+        const $menu = $('<div>').appendTo(this.$element());
         this._contextMenu = this._createComponent($menu, ContextMenu, {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
-            showEvent: "",
+            showEvent: '',
             onItemClick: ({ itemData: { name } }) => this._onContextMenuItemClick(name),
             onHidden: () => this._onContextMenuHidden()
         });
@@ -49,16 +49,17 @@ class FileManagerContextMenu extends Widget {
 
         const position = {
             of: element,
-            at: "top left",
-            my: "top left",
-            offset: ""
+            at: 'top left',
+            my: 'top left',
+            offset: ''
         };
 
         if(offset) {
-            position.offset = offset.offsetX + " " + offset.offsetY;
+            position.offset = offset.offsetX + ' ' + offset.offsetY;
         } else {
-            position.my = "left top";
-            position.at = "left bottom";
+            position.my = 'left top';
+            position.at = 'left bottom';
+            position.boundaryOffset = '1';
         }
 
         this._contextMenu.option({
@@ -75,7 +76,7 @@ class FileManagerContextMenu extends Widget {
 
         const result = [];
 
-        const itemArray = contextMenuItems || this.option("items");
+        const itemArray = contextMenuItems || this.option('items');
         itemArray.forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.name;
             const item = this._configureItemByCommandName(commandName, srcItem, fileItems);
@@ -91,7 +92,16 @@ class FileManagerContextMenu extends Widget {
         if(!this._isDefaultItem(menuItem.name) || !menuItem._autoHide) {
             return ensureDefined(menuItem.visible, true);
         }
+
+        if(this._isIsolatedCreationItemCommand(menuItem.name) && fileItems && fileItems.length) {
+            return false;
+        }
+
         return this._commandManager.isCommandAvailable(menuItem.name, fileItems);
+    }
+
+    _isIsolatedCreationItemCommand(commandName) {
+        return (commandName === 'create' || commandName === 'upload') && this.option('isolateCreationItemCommands');
     }
 
     _isDefaultItem(commandName) {
@@ -118,12 +128,12 @@ class FileManagerContextMenu extends Widget {
         let result = this._createMenuItemByCommandName(commandName);
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
-        this._extendAttributes(result, item, ["visible", "beginGroup", "text", "icon"]);
+        this._extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
 
         if(!isDefined(result.visible)) {
             result._autoHide = true;
         } else {
-            this._extendAttributes(result, item, ["visible", "disabled"]);
+            this._extendAttributes(result, item, ['visible', 'disabled']);
         }
 
         if(commandName && !result.name) {
@@ -144,11 +154,12 @@ class FileManagerContextMenu extends Widget {
     }
 
     _onContextMenuItemClick(commandName) {
-        this._commandManager.executeCommand(commandName, this._targetFileItems);
+        let targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
+        this._commandManager.executeCommand(commandName, targetFileItems);
     }
 
     _createContextMenuHiddenAction() {
-        this._contextMenuHiddenAction = this._createActionByOption("onContextMenuHidden");
+        this._contextMenuHiddenAction = this._createActionByOption('onContextMenuHidden');
     }
 
     _onContextMenuHidden() {
@@ -171,10 +182,10 @@ class FileManagerContextMenu extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "commandManager":
+            case 'commandManager':
                 this.repaint();
                 break;
-            case "onContextMenuHidden":
+            case 'onContextMenuHidden':
                 this._createContextMenuHiddenAction();
                 break;
             default:
@@ -183,7 +194,7 @@ class FileManagerContextMenu extends Widget {
     }
 
     get _commandManager() {
-        return this.option("commandManager");
+        return this.option('commandManager');
     }
 
 }

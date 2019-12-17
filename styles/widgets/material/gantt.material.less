@@ -28,19 +28,9 @@
         }
     }
 
-    .dx-gantt-tac {
-        height: calc(100% - @GANTT_HEADER_ITEM_HEIGHT);
-    }
-
     .dx-gantt-si {
         padding-left: 16px;
         padding-right: 16px;
-    }
-
-    .dx-gantt-si,
-    .dx-gantt-tsa .dx-gantt-vb {
-        height: @GANTT_SCALE_ITEM_HEIGHT;
-        line-height: @GANTT_SCALE_ITEM_HEIGHT;
     }
 
     .dx-gantt-tsac,
@@ -82,12 +72,6 @@
                     padding: 0 2px;
                 }
             }
-
-            &.dx-gantt-milestone {
-                background-image: linear-gradient(135deg, @base-border-color, @base-text-color);
-                width: @GANTT_MILESTONE_SIZE;
-                height: @GANTT_MILESTONE_SIZE;
-            }
         }
 
         .dx-gantt-taskRes {
@@ -107,6 +91,12 @@
         .dx-gantt-titleOut {
             padding-right: 20px;
         }
+    }
+
+    .dx-gantt-milestone {
+        background-image: linear-gradient(135deg, @base-border-color, @base-text-color);
+        width: @GANTT_MILESTONE_SIZE;
+        height: @GANTT_MILESTONE_SIZE;
     }
 
     .dx-gantt-task-edit-wrapper {
@@ -175,6 +165,10 @@
 
     .dx-gantt-arrow {
         border: 5px solid @base-text-color;
+    }
+
+    .dx-gantt-tm {
+        border-left: 1px dashed @base-accent;
     }
 
     .dx-gantt-altRow,

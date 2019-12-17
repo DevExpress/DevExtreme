@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/gallery.markup.tests.js");
+require('../DevExpress.ui.widgets/gallery.markup.tests.js');

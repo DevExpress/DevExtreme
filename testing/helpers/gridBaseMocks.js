@@ -152,7 +152,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getVirtualContentSize: function() { return 0; },
 
-            getContentOffset: function(type) { return options.virtualItemsCount ? options.virtualItemsCount[type || "begin"] * 20 : 0; },
+            getContentOffset: function(type) { return options.virtualItemsCount ? options.virtualItemsCount[type || 'begin'] * 20 : 0; },
 
             itemsCount: function() {
                 return options.itemsCount;
@@ -179,7 +179,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             searchByText: function(text) {
-                options.component.option("searchPanel.text", text);
+                options.component.option('searchPanel.text', text);
             },
 
             changeRowExpand: function(path) {
@@ -375,7 +375,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         }
                     });
 
-                    result.splice(indexTransparentColumn, 0, { command: "transparent", colspan: colspan, rowspan: rowCount });
+                    result.splice(indexTransparentColumn, 0, { command: 'transparent', colspan: colspan, rowspan: rowCount });
                 }
 
                 return result;
@@ -471,8 +471,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         return columns[columnIndex];
                     }
                     if(typeUtils.isString(columnIndex)) {
-                        if(columnIndex.indexOf("command:") === 0) {
-                            var commandName = columnIndex.substr("command:".length);
+                        if(columnIndex.indexOf('command:') === 0) {
+                            var commandName = columnIndex.substr('command:'.length);
                             for(i = 0; i < columns.length; i++) {
                                 if(columns[i].command === commandName) {
                                     columns[i][optionName] = optionValue;
@@ -599,7 +599,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getColumnId: function(column) {
-                return column.command ? "command:" + column.command : column.index;
+                return column.command ? 'command:' + column.command : column.index;
             }
         };
     };
@@ -720,10 +720,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             customizeLoadResult: $.Callbacks(),
             changing: $.Callbacks(),
 
-            on: function(eventName, eventHandler) {
+            cancelAll: commonUtils.noop,
+
+            on(eventName, eventHandler) {
                 this[eventName].add(eventHandler);
             },
-            off: function(eventName, eventHandler) {
+            off(eventName, eventHandler) {
                 this[eventName].remove(eventHandler);
             }
         };
@@ -864,7 +866,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents: function(rootElement) { }
     });
 
-    exports["setup" + nameWidget + "Modules"] = function(that, moduleNames, options) {
+    exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         var modules = [];
 
         $.each(gridCore.modules, function() {
@@ -873,13 +875,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
         });
 
-        that.NAME = "dx" + nameWidget;
+        that.NAME = 'dx' + nameWidget;
 
         that.focus = commonUtils.noop;
 
         that.setAria = function(name, value, $target) {
             var setAttribute = function(option) {
-                var attrName = ($.inArray(option.name, ["role", "id"]) + 1) ? option.name : "aria-" + option.name,
+                var attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name,
                     attrValue = option.value;
 
                 if(attrValue === null || attrValue === undefined) {
@@ -967,7 +969,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that._createComponent = function(element, component, config) {
             config = config || {};
 
-            $.each(["disabled", "rtlEnabled"], function(_, optionName) {
+            $.each(['disabled', 'rtlEnabled'], function(_, optionName) {
                 if(!(optionName in config)) {
                     config[optionName] = that.option(optionName);
                 }
@@ -976,7 +978,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             var instance;
             if(typeUtils.isString(component)) {
                 var $element = $(element)[component](config);
-                instance = $element[component]("instance");
+                instance = $element[component]('instance');
             } else if(element.length) {
                 instance = component.getInstance(element);
                 if(!instance) {
@@ -1060,7 +1062,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         var items = [];
 
         for(var i = 1; i <= itemCount; i++) {
-            items.push({ id: i, field1: "test1" + i, field2: "test2" + i, field3: "test3" + i, field4: "test4" + i });
+            items.push({ id: i, field1: 'test1' + i, field2: 'test2' + i, field3: 'test3' + i, field4: 'test4' + i });
         }
 
         return items;

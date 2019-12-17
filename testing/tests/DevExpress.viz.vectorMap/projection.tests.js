@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    eventEmitterModule = require("viz/vector_map/event_emitter"),
-    projectionModule = require("viz/vector_map/projection.main"),
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    eventEmitterModule = require('viz/vector_map/event_emitter'),
+    projectionModule = require('viz/vector_map/projection.main'),
     Projection = projectionModule.Projection,
-    projectionEnginesModule = require("viz/vector_map/projection"),
+    projectionEnginesModule = require('viz/vector_map/projection'),
     projection = projectionEnginesModule.projection;
 
 function returnValue(value) {
@@ -33,9 +33,9 @@ var environment = {
     }
 };
 
-QUnit.module("General", environment);
+QUnit.module('General', environment);
 
-QUnit.test("setEngine / center is changed", function(assert) {
+QUnit.test('setEngine / center is changed', function(assert) {
     var onEngine = sinon.spy(),
         onScreen = sinon.spy(),
         onCenter = sinon.spy(),
@@ -59,18 +59,18 @@ QUnit.test("setEngine / center is changed", function(assert) {
 
     this.projection.setEngine(engine);
 
-    assert.strictEqual(onEngine.callCount, 1, "engine event is triggered");
-    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
-    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[-60, 40]], "centerChanged is called");
-    assert.deepEqual(this.zoomChanged.lastCall.args, [1], "zoomChanged is called");
-    assert.deepEqual(this.projection.getCenter(), [-60, 40], "center");
-    assert.strictEqual(this.projection.getZoom(), 1, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
+    assert.strictEqual(onEngine.callCount, 1, 'engine event is triggered');
+    assert.strictEqual(onScreen.callCount, 1, 'screen event is triggered');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered');
+    assert.strictEqual(onZoom.callCount, 1, 'zoom event is triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[-60, 40]], 'centerChanged is called');
+    assert.deepEqual(this.zoomChanged.lastCall.args, [1], 'zoomChanged is called');
+    assert.deepEqual(this.projection.getCenter(), [-60, 40], 'center');
+    assert.strictEqual(this.projection.getZoom(), 1, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, 'transform');
 });
 
-QUnit.test("setEngine (config) / center is changed", function(assert) {
+QUnit.test('setEngine (config) / center is changed', function(assert) {
     var onEngine = sinon.spy(),
         onScreen = sinon.spy(),
         onCenter = sinon.spy(),
@@ -94,18 +94,18 @@ QUnit.test("setEngine (config) / center is changed", function(assert) {
 
     this.projection.setEngine(engine);
 
-    assert.strictEqual(onEngine.callCount, 1, "engine event is triggered");
-    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
-    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[-60, 40]], "centerChanged is called");
-    assert.deepEqual(this.zoomChanged.lastCall.args, [1], "zoomChanged is called");
-    assert.deepEqual(this.projection.getCenter(), [-60, 40], "center");
-    assert.strictEqual(this.projection.getZoom(), 1, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
+    assert.strictEqual(onEngine.callCount, 1, 'engine event is triggered');
+    assert.strictEqual(onScreen.callCount, 1, 'screen event is triggered');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered');
+    assert.strictEqual(onZoom.callCount, 1, 'zoom event is triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[-60, 40]], 'centerChanged is called');
+    assert.deepEqual(this.zoomChanged.lastCall.args, [1], 'zoomChanged is called');
+    assert.deepEqual(this.projection.getCenter(), [-60, 40], 'center');
+    assert.strictEqual(this.projection.getZoom(), 1, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, 'transform');
 });
 
-QUnit.test("setEngine / center is not changed", function(assert) {
+QUnit.test('setEngine / center is not changed', function(assert) {
     var onEngine = sinon.spy(),
         onScreen = sinon.spy(),
         onCenter = sinon.spy(),
@@ -133,18 +133,18 @@ QUnit.test("setEngine / center is not changed", function(assert) {
 
     this.projection.setEngine(engine);
 
-    assert.strictEqual(onEngine.callCount, 1, "engine event is triggered");
-    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(onZoom.callCount, 0, "zoom event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
-    assert.strictEqual(this.zoomChanged.lastCall, null, "zoomChanged is not called");
-    assert.deepEqual(this.projection.getCenter(), [40, -20], "center");
-    assert.strictEqual(this.projection.getZoom(), 1, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
+    assert.strictEqual(onEngine.callCount, 1, 'engine event is triggered');
+    assert.strictEqual(onScreen.callCount, 1, 'screen event is triggered');
+    assert.strictEqual(onCenter.callCount, 0, 'center event is not triggered');
+    assert.strictEqual(onZoom.callCount, 0, 'zoom event is not triggered');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called');
+    assert.strictEqual(this.zoomChanged.lastCall, null, 'zoomChanged is not called');
+    assert.deepEqual(this.projection.getCenter(), [40, -20], 'center');
+    assert.strictEqual(this.projection.getZoom(), 1, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, 'transform');
 });
 
-QUnit.test("setEngine / not changed", function(assert) {
+QUnit.test('setEngine / not changed', function(assert) {
     var onEngine = sinon.spy(),
         onScreen = sinon.spy(),
         onCenter = sinon.spy(),
@@ -154,17 +154,17 @@ QUnit.test("setEngine / not changed", function(assert) {
 
     this.projection.setEngine(this.engine);
 
-    assert.strictEqual(onEngine.callCount, 0, "engine event is not triggered");
-    assert.strictEqual(onScreen.callCount, 0, "screen event is not triggered");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(onZoom.callCount, 0, "zoom event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
-    assert.strictEqual(this.zoomChanged.lastCall, null, "zoomChanged is not called");
-    assert.deepEqual(this.projection.getCenter(), [20, -10], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
+    assert.strictEqual(onEngine.callCount, 0, 'engine event is not triggered');
+    assert.strictEqual(onScreen.callCount, 0, 'screen event is not triggered');
+    assert.strictEqual(onCenter.callCount, 0, 'center event is not triggered');
+    assert.strictEqual(onZoom.callCount, 0, 'zoom event is not triggered');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called');
+    assert.strictEqual(this.zoomChanged.lastCall, null, 'zoomChanged is not called');
+    assert.deepEqual(this.projection.getCenter(), [20, -10], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
 });
 
-QUnit.test("setEngine / non invertible", function(assert) {
+QUnit.test('setEngine / non invertible', function(assert) {
     var onEngine = sinon.spy(),
         onScreen = sinon.spy(),
         onCenter = sinon.spy(),
@@ -176,162 +176,162 @@ QUnit.test("setEngine / non invertible", function(assert) {
         to: returnValue([])
     }));
 
-    assert.strictEqual(onEngine.callCount, 1, "engine event is triggered");
-    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
-    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[NaN, NaN]], "centerChanged is called");
-    assert.deepEqual(this.zoomChanged.lastCall.args, [1], "zoomChanged is called");
-    assert.deepEqual(this.projection.getCenter(), [NaN, NaN], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
+    assert.strictEqual(onEngine.callCount, 1, 'engine event is triggered');
+    assert.strictEqual(onScreen.callCount, 1, 'screen event is triggered');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered');
+    assert.strictEqual(onZoom.callCount, 1, 'zoom event is triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[NaN, NaN]], 'centerChanged is called');
+    assert.deepEqual(this.zoomChanged.lastCall.args, [1], 'zoomChanged is called');
+    assert.deepEqual(this.projection.getCenter(), [NaN, NaN], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, 'transform');
 });
 
-QUnit.test("Event emitter methods are injected", function(assert) {
+QUnit.test('Event emitter methods are injected', function(assert) {
     var projection = this.projection;
     $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(projection[name], method, name);
     });
 });
 
-QUnit.test("setSize", function(assert) {
+QUnit.test('setSize', function(assert) {
     var onScreen = sinon.spy();
     this.projection.on({ screen: onScreen });
 
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
-    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
+    assert.strictEqual(onScreen.callCount, 1, 'screen event is triggered');
 
     this.projection.setSize({ left: 100, top: 200, width: 600, height: 800 });
 
-    assert.deepEqual(this.projection.getTransform(), { translateX: 600, translateY: 750 }, "transform");
-    assert.strictEqual(onScreen.callCount, 2, "screen event is triggered");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 600, translateY: 750 }, 'transform');
+    assert.strictEqual(onScreen.callCount, 2, 'screen event is triggered');
 });
 
-QUnit.test("isInvertible", function(assert) {
-    this.engine.isInvertible = returnValue("test");
+QUnit.test('isInvertible', function(assert) {
+    this.engine.isInvertible = returnValue('test');
 
-    assert.strictEqual(this.projection.isInvertible(), "test");
+    assert.strictEqual(this.projection.isInvertible(), 'test');
 });
 
-QUnit.test("setBounds", function(assert) {
-    var engine1 = { tag: "engine-1" },
-        engine2 = { tag: "engine-2" };
+QUnit.test('setBounds', function(assert) {
+    var engine1 = { tag: 'engine-1' },
+        engine2 = { tag: 'engine-2' };
     this.projection.setEngine = sinon.spy();
     this.engine.original = sinon.stub().returns(engine1);
     engine1.bounds = sinon.stub().returns(engine2);
 
-    this.projection.setBounds("bounds");
+    this.projection.setBounds('bounds');
 
-    assert.deepEqual(this.engine.original.lastCall.args, [], "original");
-    assert.deepEqual(engine1.bounds.lastCall.args, ["bounds"], "bounds");
-    assert.deepEqual(this.projection.setEngine.lastCall.args, [engine2], "engine");
+    assert.deepEqual(this.engine.original.lastCall.args, [], 'original');
+    assert.deepEqual(engine1.bounds.lastCall.args, ['bounds'], 'bounds');
+    assert.deepEqual(this.projection.setEngine.lastCall.args, [engine2], 'engine');
 });
 
-QUnit.test("setBounds / no argument", function(assert) {
+QUnit.test('setBounds / no argument', function(assert) {
     this.projection.setEngine = sinon.spy();
     this.engine.original = sinon.spy();
 
     this.projection.setBounds();
 
-    assert.strictEqual(this.projection.setEngine.lastCall, null, "engine");
-    assert.strictEqual(this.engine.original.lastCall, null, "original");
+    assert.strictEqual(this.projection.setEngine.lastCall, null, 'engine');
+    assert.strictEqual(this.engine.original.lastCall, null, 'original');
 });
 
-QUnit.test("getTransform / zooming", function(assert) {
+QUnit.test('getTransform / zooming', function(assert) {
     this.projection.setZoom(3);
 
     this.engine.ar = returnValue(0.5);
     this.projection.setSize({ left: 200, top: 100, width: 600, height: 400 });
-    assert.deepEqual(this.projection.getTransform(), { translateX: 300, translateY: 600 }, "aspect ratio is 0.5");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 300, translateY: 600 }, 'aspect ratio is 0.5');
 
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 200, top: 100, width: 600, height: 400 });
-    assert.deepEqual(this.projection.getTransform(), { translateX: 900, translateY: 450 }, "aspect ratio is 2");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 900, translateY: 450 }, 'aspect ratio is 2');
 });
 
-QUnit.test("getTransform / centering", function(assert) {
+QUnit.test('getTransform / centering', function(assert) {
     this.projection.setCenter([30, -15]);
 
     this.engine.ar = returnValue(0.5);
     this.projection.setSize({ left: 200, top: 100, width: 600, height: 400 });
-    assert.deepEqual(this.projection.getTransform(), { translateX: 100, translateY: 200 }, "aspect ratio is 0.5");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 100, translateY: 200 }, 'aspect ratio is 0.5');
 
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 200, top: 100, width: 600, height: 400 });
-    assert.deepEqual(this.projection.getTransform(), { translateX: 300, translateY: 150 }, "aspect ratio is 2");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 300, translateY: 150 }, 'aspect ratio is 2');
 });
 
-QUnit.test("getTransform / zooming and centering", function(assert) {
+QUnit.test('getTransform / zooming and centering', function(assert) {
     this.projection.setZoom(3);
     this.projection.setCenter([30, -15]);
 
     this.engine.ar = returnValue(0.5);
     this.projection.setSize({ left: 200, top: 100, width: 600, height: 400 });
-    assert.deepEqual(this.projection.getTransform(), { translateX: 150, translateY: 300 }, "aspect ratio is 0.5");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 150, translateY: 300 }, 'aspect ratio is 0.5');
 
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 200, top: 100, width: 600, height: 400 });
-    assert.deepEqual(this.projection.getTransform(), { translateX: 450, translateY: 225 }, "aspect ratio is 2");
+    assert.deepEqual(this.projection.getTransform(), { translateX: 450, translateY: 225 }, 'aspect ratio is 2');
 });
 
-QUnit.test("getCenter", function(assert) {
+QUnit.test('getCenter', function(assert) {
     assert.deepEqual(this.projection.getCenter(), [20, -10]);
 });
 
-QUnit.test("setCenter", function(assert) {
+QUnit.test('setCenter', function(assert) {
     var onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
     this.projection.setCenter([30, -15]);
 
-    assert.deepEqual(this.projection.getCenter(), [30, -15], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 280, translateY: 350 }, "transform");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[30, -15]], "centerChanged is called");
+    assert.deepEqual(this.projection.getCenter(), [30, -15], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 280, translateY: 350 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[30, -15]], 'centerChanged is called');
 });
 
-QUnit.test("setCenter / not changed", function(assert) {
+QUnit.test('setCenter / not changed', function(assert) {
     var onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
     this.projection.setCenter([20, -10]);
 
-    assert.deepEqual(this.projection.getCenter(), [20, -10], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
+    assert.deepEqual(this.projection.getCenter(), [20, -10], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 0, 'center event is not triggered');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called');
 });
 
-QUnit.test("setCenter / out of bounds", function(assert) {
+QUnit.test('setCenter / out of bounds', function(assert) {
     var onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
     this.projection.setCenter([80, -40]);
 
-    assert.deepEqual(this.projection.getCenter(), [60, -30], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: -560, translateY: -700 }, "transform");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[60, -30]], "centerChanged is called");
+    assert.deepEqual(this.projection.getCenter(), [60, -30], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: -560, translateY: -700 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[60, -30]], 'centerChanged is called');
 });
 
-QUnit.test("setCenter / not valid", function(assert) {
+QUnit.test('setCenter / not valid', function(assert) {
     var onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
-    this.projection.setCenter("test");
+    this.projection.setCenter('test');
 
-    assert.deepEqual(this.projection.getCenter(), [40, -20], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[40, -20]], "centerChanged is called");
+    assert.deepEqual(this.projection.getCenter(), [40, -20], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[40, -20]], 'centerChanged is called');
 });
 
-QUnit.test("setCenter / engine is not invertible", function(assert) {
+QUnit.test('setCenter / engine is not invertible', function(assert) {
     var onCenter = sinon.spy();
     this.engine.isInvertible = returnValue(false);
     this.projection.on({ center: onCenter });
@@ -339,22 +339,22 @@ QUnit.test("setCenter / engine is not invertible", function(assert) {
 
     this.projection.setCenter([10, 20]);
 
-    assert.deepEqual(this.projection.getCenter(), [20, -10], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
+    assert.deepEqual(this.projection.getCenter(), [20, -10], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 0, 'center event is not triggered');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called');
 });
 
-QUnit.test("setCenterByPoint", function(assert) {
+QUnit.test('setCenterByPoint', function(assert) {
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
     this.projection.setCenterByPoint([30, -15], [740, 100]);
 
-    assert.deepEqual(this.projection.getCenter(), [25, -20], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 420, translateY: 0 }, "transform");
+    assert.deepEqual(this.projection.getCenter(), [25, -20], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 420, translateY: 0 }, 'transform');
 });
 
-QUnit.test("moveCenter", function(assert) {
+QUnit.test('moveCenter', function(assert) {
     var onCenter = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ center: onCenter });
@@ -362,43 +362,43 @@ QUnit.test("moveCenter", function(assert) {
     this.projection.beginMoveCenter();
 
     this.projection.moveCenter([140, 0]);
-    assert.deepEqual(this.projection.getCenter(), [25, -10], "center 1");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 420, translateY: 700 }, "transform 1");
-    assert.strictEqual(onCenter.callCount, 1, "center event is triggered 1");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called 1");
+    assert.deepEqual(this.projection.getCenter(), [25, -10], 'center 1');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 420, translateY: 700 }, 'transform 1');
+    assert.strictEqual(onCenter.callCount, 1, 'center event is triggered 1');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called 1');
 
     this.projection.moveCenter([0, 140]);
-    assert.deepEqual(this.projection.getCenter(), [25, -12], "center 2");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 420, translateY: 560 }, "transform 2");
-    assert.strictEqual(onCenter.callCount, 2, "center event is triggered 2");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called 2");
+    assert.deepEqual(this.projection.getCenter(), [25, -12], 'center 2');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 420, translateY: 560 }, 'transform 2');
+    assert.strictEqual(onCenter.callCount, 2, 'center event is triggered 2');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called 2');
 
     this.projection.moveCenter([280, 210]);
-    assert.deepEqual(this.projection.getCenter(), [35, -15], "center 3");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 140, translateY: 350 }, "transform 3");
-    assert.strictEqual(onCenter.callCount, 3, "center event is triggered 3");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called 3");
+    assert.deepEqual(this.projection.getCenter(), [35, -15], 'center 3');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 140, translateY: 350 }, 'transform 3');
+    assert.strictEqual(onCenter.callCount, 3, 'center event is triggered 3');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called 3');
 
     this.projection.endMoveCenter();
 
-    assert.strictEqual(onCenter.callCount, 3, "center event is not triggered");
-    assert.deepEqual(this.centerChanged.lastCall.args, [[35, -15]], "centerChanged is called");
+    assert.strictEqual(onCenter.callCount, 3, 'center event is not triggered');
+    assert.deepEqual(this.centerChanged.lastCall.args, [[35, -15]], 'centerChanged is called');
 });
 
-QUnit.test("moveCenter / without begin and end", function(assert) {
+QUnit.test('moveCenter / without begin and end', function(assert) {
     var onCenter = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ center: onCenter });
 
     this.projection.moveCenter([100, 200]);
 
-    assert.deepEqual(this.projection.getCenter(), [20, -10], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
+    assert.deepEqual(this.projection.getCenter(), [20, -10], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 0, 'center event is not triggered');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called');
 });
 
-QUnit.test("moveCenter / non invertible", function(assert) {
+QUnit.test('moveCenter / non invertible', function(assert) {
     var onCenter = sinon.spy();
     this.engine.isInvertible = returnValue(false);
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
@@ -408,30 +408,30 @@ QUnit.test("moveCenter / non invertible", function(assert) {
     this.projection.moveCenter([100, 200]);
     this.projection.endMoveCenter();
 
-    assert.deepEqual(this.projection.getCenter(), [20, -10], "center");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
+    assert.deepEqual(this.projection.getCenter(), [20, -10], 'center');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
+    assert.strictEqual(onCenter.callCount, 0, 'center event is not triggered');
+    assert.strictEqual(this.centerChanged.lastCall, null, 'centerChanged is not called');
 });
 
-QUnit.test("getZoom", function(assert) {
+QUnit.test('getZoom', function(assert) {
     assert.strictEqual(this.projection.getZoom(), 2);
 });
 
-QUnit.test("setZoom", function(assert) {
+QUnit.test('setZoom', function(assert) {
     var onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom(3);
 
-    assert.strictEqual(this.projection.getZoom(), 3, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 840, translateY: 1050 }, "transform");
-    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
-    assert.deepEqual(this.zoomChanged.lastCall.args, [3], "zoomChanged is called");
+    assert.strictEqual(this.projection.getZoom(), 3, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 840, translateY: 1050 }, 'transform');
+    assert.strictEqual(onZoom.callCount, 1, 'zoom event is triggered');
+    assert.deepEqual(this.zoomChanged.lastCall.args, [3], 'zoomChanged is called');
 });
 
-QUnit.test("setZoom / not changed", function(assert) {
+QUnit.test('setZoom / not changed', function(assert) {
     var onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
@@ -440,13 +440,13 @@ QUnit.test("setZoom / not changed", function(assert) {
 
     this.projection.setZoom(3);
 
-    assert.strictEqual(this.projection.getZoom(), 3, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 840, translateY: 1050 }, "transform");
-    assert.strictEqual(onZoom.callCount, 0, "zoom event is not triggered");
-    assert.strictEqual(this.zoomChanged.lastCall, null, "zoomChanged is not called");
+    assert.strictEqual(this.projection.getZoom(), 3, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 840, translateY: 1050 }, 'transform');
+    assert.strictEqual(onZoom.callCount, 0, 'zoom event is not triggered');
+    assert.strictEqual(this.zoomChanged.lastCall, null, 'zoomChanged is not called');
 });
 
-QUnit.test("setZoom / out of bounds", function(assert) {
+QUnit.test('setZoom / out of bounds', function(assert) {
     var onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setMaxZoom(5);
@@ -455,28 +455,28 @@ QUnit.test("setZoom / out of bounds", function(assert) {
 
     this.projection.setZoom(10);
 
-    assert.strictEqual(this.projection.getZoom(), 5, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 1400, translateY: 1750 }, "transform");
-    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
-    assert.deepEqual(this.zoomChanged.lastCall.args, [5], "zoomChanged is called");
+    assert.strictEqual(this.projection.getZoom(), 5, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 1400, translateY: 1750 }, 'transform');
+    assert.strictEqual(onZoom.callCount, 1, 'zoom event is triggered');
+    assert.deepEqual(this.zoomChanged.lastCall.args, [5], 'zoomChanged is called');
 });
 
-QUnit.test("setZoom / not valid", function(assert) {
+QUnit.test('setZoom / not valid', function(assert) {
     var onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
     this.zoomChanged.reset();
     this.projection.on({ zoom: onZoom });
 
-    this.projection.setZoom("test");
+    this.projection.setZoom('test');
 
-    assert.strictEqual(this.projection.getZoom(), 1, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 280, translateY: 350 }, "transform");
-    assert.strictEqual(onZoom.callCount, 1, "zoom event is triggered");
-    assert.deepEqual(this.zoomChanged.lastCall.args, [1], "zoomChanged is called");
+    assert.strictEqual(this.projection.getZoom(), 1, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 280, translateY: 350 }, 'transform');
+    assert.strictEqual(onZoom.callCount, 1, 'zoom event is triggered');
+    assert.deepEqual(this.zoomChanged.lastCall.args, [1], 'zoomChanged is called');
 });
 
-QUnit.test("setZoom / engine is not invertible", function(assert) {
+QUnit.test('setZoom / engine is not invertible', function(assert) {
     var onZoom = sinon.spy();
     this.engine.isInvertible = returnValue(false);
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
@@ -484,157 +484,157 @@ QUnit.test("setZoom / engine is not invertible", function(assert) {
 
     this.projection.setZoom(3);
 
-    assert.strictEqual(this.projection.getZoom(), 2, "zoom");
-    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, "transform");
-    assert.strictEqual(onZoom.callCount, 0, "zoom event is not triggered");
-    assert.strictEqual(this.zoomChanged.lastCall, null, "zoomChanged is not called");
+    assert.strictEqual(this.projection.getZoom(), 2, 'zoom');
+    assert.deepEqual(this.projection.getTransform(), { translateX: 560, translateY: 700 }, 'transform');
+    assert.strictEqual(onZoom.callCount, 0, 'zoom event is not triggered');
+    assert.strictEqual(this.zoomChanged.lastCall, null, 'zoomChanged is not called');
 });
 
-QUnit.test("getScaledZoom", function(assert) {
+QUnit.test('getScaledZoom', function(assert) {
     this.projection.setMaxZoom(10);
     this.projection.setZoom(1);
-    assert.strictEqual(this.projection.getScaledZoom(), 0, "max zoom is 10, zoom is 1");
+    assert.strictEqual(this.projection.getScaledZoom(), 0, 'max zoom is 10, zoom is 1');
     this.projection.setZoom(4);
-    assert.strictEqual(this.projection.getScaledZoom(), 4, "max zoom is 10, zoom is 4");
+    assert.strictEqual(this.projection.getScaledZoom(), 4, 'max zoom is 10, zoom is 4');
     this.projection.setZoom(10);
-    assert.strictEqual(this.projection.getScaledZoom(), 7, "max zoom is 10, zoom is 10");
+    assert.strictEqual(this.projection.getScaledZoom(), 7, 'max zoom is 10, zoom is 10');
 
     this.projection.setMaxZoom(30);
     this.projection.setZoom(1);
-    assert.strictEqual(this.projection.getScaledZoom(), 0, "max zoom is 30, zoom is 1");
+    assert.strictEqual(this.projection.getScaledZoom(), 0, 'max zoom is 30, zoom is 1');
     this.projection.setZoom(18);
-    assert.strictEqual(this.projection.getScaledZoom(), 8, "max zoom is 30, zoom is 18");
+    assert.strictEqual(this.projection.getScaledZoom(), 8, 'max zoom is 30, zoom is 18');
     this.projection.setZoom(30);
-    assert.strictEqual(this.projection.getScaledZoom(), 10, "max zoom is 30, zoom is 30");
+    assert.strictEqual(this.projection.getScaledZoom(), 10, 'max zoom is 30, zoom is 30');
 });
 
-QUnit.test("setScaledZoom", function(assert) {
-    var setZoom = sinon.spy(this.projection, "setZoom");
+QUnit.test('setScaledZoom', function(assert) {
+    var setZoom = sinon.spy(this.projection, 'setZoom');
 
     this.projection.setMaxZoom(10);
     this.projection.setScaledZoom(0);
-    checkZoom(1, "max zoom is 10, scaled zoom is 0 - zoom");
+    checkZoom(1, 'max zoom is 10, scaled zoom is 0 - zoom');
     this.projection.setScaledZoom(4);
-    checkZoom(3.7276, "max zoom is 10, scaled zoom is 4 - zoom");
+    checkZoom(3.7276, 'max zoom is 10, scaled zoom is 4 - zoom');
     this.projection.setScaledZoom(7);
-    checkZoom(10, "max zoom is 10, scaled zoom is 7 - zoom");
+    checkZoom(10, 'max zoom is 10, scaled zoom is 7 - zoom');
 
     this.projection.setMaxZoom(30);
     this.projection.setScaledZoom(0);
-    checkZoom(1, "max zoom is 30, scaled zoom is 0 - zoom");
+    checkZoom(1, 'max zoom is 30, scaled zoom is 0 - zoom');
     this.projection.setScaledZoom(8);
-    checkZoom(15.1949, "max zoom is 30, scaled zoom is 8 - zoom");
+    checkZoom(15.1949, 'max zoom is 30, scaled zoom is 8 - zoom');
     this.projection.setScaledZoom(10);
-    checkZoom(30, "max zoom is 30, scaled zoom is 30 - zoom");
+    checkZoom(30, 'max zoom is 30, scaled zoom is 30 - zoom');
 
     function checkZoom(expected, message) {
         assert.roughEqual(setZoom.lastCall.args[0], expected, 1E-4, message);
     }
 });
 
-QUnit.test("changeScaledZoom", function(assert) {
-    var setZoom = sinon.spy(this.projection, "setZoom");
+QUnit.test('changeScaledZoom', function(assert) {
+    var setZoom = sinon.spy(this.projection, 'setZoom');
     this.projection.setMaxZoom(10);
 
     this.projection.changeScaledZoom(-1);
-    checkZoom(1.3895, "-1");
+    checkZoom(1.3895, '-1');
     this.projection.changeScaledZoom(3);
-    checkZoom(3.7276, "3");
+    checkZoom(3.7276, '3');
     this.projection.changeScaledZoom(100);
-    checkZoom(10, "100");
+    checkZoom(10, '100');
     this.projection.changeScaledZoom(-50);
-    checkZoom(1, "-50");
+    checkZoom(1, '-50');
 
     function checkZoom(expected, message) {
         assert.roughEqual(setZoom.lastCall.args[0], expected, 1E-4, message);
     }
 });
 
-QUnit.test("getZoomScalePartition", function(assert) {
+QUnit.test('getZoomScalePartition', function(assert) {
     this.projection.setMaxZoom(32);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 10, "32 (default)");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 10, '32 (default)');
     this.projection.setMaxZoom(200);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 15, "200");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 15, '200');
     this.projection.setMaxZoom(1 << 20);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 40, "2^20");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 40, '2^20');
     this.projection.setMaxZoom(90000);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 33, "90000");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 33, '90000');
     this.projection.setMaxZoom(9);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 6, "9");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 6, '9');
     this.projection.setMaxZoom(4);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 4, "4");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 4, '4');
     this.projection.setMaxZoom(2);
-    assert.strictEqual(this.projection.getZoomScalePartition(), 4, "2");
+    assert.strictEqual(this.projection.getZoomScalePartition(), 4, '2');
 });
 
-QUnit.test("setMaxZoom", function(assert) {
+QUnit.test('setMaxZoom', function(assert) {
     var onMaxZoom = sinon.spy();
 
-    sinon.spy(this.projection, "setZoom");
-    this.projection.on({ "max-zoom": onMaxZoom });
+    sinon.spy(this.projection, 'setZoom');
+    this.projection.on({ 'max-zoom': onMaxZoom });
 
     this.projection.setMaxZoom(20);
 
-    assert.strictEqual(onMaxZoom.callCount, 1, "max-zoom event is triggered");
-    assert.strictEqual(this.projection.setZoom.lastCall, null, "zoom is not changed");
+    assert.strictEqual(onMaxZoom.callCount, 1, 'max-zoom event is triggered');
+    assert.strictEqual(this.projection.setZoom.lastCall, null, 'zoom is not changed');
 });
 
-QUnit.test("setMaxZoom / less than current zoom", function(assert) {
+QUnit.test('setMaxZoom / less than current zoom', function(assert) {
     this.projection.setZoom(10);
     var onMaxZoom = sinon.spy();
 
-    sinon.spy(this.projection, "setZoom");
-    this.projection.on({ "max-zoom": onMaxZoom });
+    sinon.spy(this.projection, 'setZoom');
+    this.projection.on({ 'max-zoom': onMaxZoom });
 
     this.projection.setMaxZoom(5);
 
-    assert.strictEqual(onMaxZoom.callCount, 1, "max-zoom event is triggered");
-    assert.deepEqual(this.projection.setZoom.lastCall.args, [5], "zoom is changed");
+    assert.strictEqual(onMaxZoom.callCount, 1, 'max-zoom event is triggered');
+    assert.deepEqual(this.projection.setZoom.lastCall.args, [5], 'zoom is changed');
 });
 
-QUnit.test("setMaxZoom / not valid", function(assert) {
+QUnit.test('setMaxZoom / not valid', function(assert) {
     var onMaxZoom = sinon.spy();
 
-    sinon.spy(this.projection, "setZoom");
-    this.projection.on({ "max-zoom": onMaxZoom });
+    sinon.spy(this.projection, 'setZoom');
+    this.projection.on({ 'max-zoom': onMaxZoom });
 
-    this.projection.setMaxZoom("test");
+    this.projection.setMaxZoom('test');
 
-    assert.strictEqual(onMaxZoom.callCount, 1, "max-zoom event is triggered");
-    assert.strictEqual(this.projection.setZoom.lastCall, null, "zoom is not changed");
+    assert.strictEqual(onMaxZoom.callCount, 1, 'max-zoom event is triggered');
+    assert.strictEqual(this.projection.setZoom.lastCall, null, 'zoom is not changed');
 });
 
-QUnit.test("getViewport", function(assert) {
-    assert.deepEqual(this.projection.getViewport(), [10, -15, 30, -5], "viewport");
+QUnit.test('getViewport', function(assert) {
+    assert.deepEqual(this.projection.getViewport(), [10, -15, 30, -5], 'viewport');
 });
 
-QUnit.test("setViewport", function(assert) {
-    var setCenter = sinon.spy(this.projection, "setCenter"),
-        setZoom = sinon.spy(this.projection, "setZoom");
+QUnit.test('setViewport', function(assert) {
+    var setCenter = sinon.spy(this.projection, 'setCenter'),
+        setZoom = sinon.spy(this.projection, 'setZoom');
 
     this.projection.setViewport([-10, 20, 20, -5]);
 
-    assert.deepEqual(setCenter.lastCall.args, [[5, 7.5]], "setCenter");
-    assert.deepEqual(setZoom.lastCall.args, [0.8], "setZoom");
+    assert.deepEqual(setCenter.lastCall.args, [[5, 7.5]], 'setCenter');
+    assert.deepEqual(setZoom.lastCall.args, [0.8], 'setZoom');
 });
 
-QUnit.test("setViewport / not valid", function(assert) {
-    var setCenter = sinon.spy(this.projection, "setCenter"),
-        setZoom = sinon.spy(this.projection, "setZoom");
+QUnit.test('setViewport / not valid', function(assert) {
+    var setCenter = sinon.spy(this.projection, 'setCenter'),
+        setZoom = sinon.spy(this.projection, 'setZoom');
 
     this.projection.setViewport(null);
 
-    assert.deepEqual(setCenter.lastCall.args, [[40, -20]], "setCenter");
-    assert.deepEqual(setZoom.lastCall.args, [1], "setZoom");
+    assert.deepEqual(setCenter.lastCall.args, [[40, -20]], 'setCenter');
+    assert.deepEqual(setZoom.lastCall.args, [1], 'setZoom');
 });
 
-QUnit.test("fromScreenPoint", function(assert) {
+QUnit.test('fromScreenPoint', function(assert) {
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
     assert.deepEqual(this.projection.fromScreenPoint([670, 275]), [22.5, -7.5]);
 });
 
-QUnit.test("toScreenPoint", function(assert) {
+QUnit.test('toScreenPoint', function(assert) {
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
     assert.deepEqual(this.projection.toScreenPoint([22.5, -7.5]), [670, 275]);
@@ -818,20 +818,20 @@ QUnit.test('Longitude range is greater than latitude range - not at center', fun
     assert.arraysEqual(this.projection1.getViewport(), [-134.7677, 10, -5.2323, 80]);
 });
 
-QUnit.module("Project", $.extend({}, environment, {
+QUnit.module('Project', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.engine.project = function(arg) {
-            return "#" + arg;
+            return '#' + arg;
         };
     }
 }));
 
-QUnit.test("Project", function(assert) {
-    assert.deepEqual(this.projection.project("a"), "#a");
+QUnit.test('Project', function(assert) {
+    assert.deepEqual(this.projection.project('a'), '#a');
 });
 
-QUnit.module("Coordinates", $.extend({}, environment, {
+QUnit.module('Coordinates', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
@@ -839,29 +839,29 @@ QUnit.module("Coordinates", $.extend({}, environment, {
     }
 }));
 
-QUnit.test("Transform", function(assert) {
+QUnit.test('Transform', function(assert) {
     assert.deepEqual(this.projection.transform([10, 20]), [11800, 28450]);
 });
 
-QUnit.test("Transform. Wide canvas, bounds wider than canvas", function(assert) {
+QUnit.test('Transform. Wide canvas, bounds wider than canvas', function(assert) {
     this.projection.setBounds([20, -20, 60, -10]);
     assert.deepEqual(this.projection.transform([-1, -1]), [400, 200]);
     assert.deepEqual(this.projection.transform([1, 1]), [800, 700]);
 });
 
-QUnit.test("Transform. Wide canvas, canvas wider than bounds", function(assert) {
+QUnit.test('Transform. Wide canvas, canvas wider than bounds', function(assert) {
     this.projection.setBounds([30, -20, 40, -10]);
     assert.deepEqual(this.projection.transform([-1, -1]), [460, 275]);
     assert.deepEqual(this.projection.transform([1, 1]), [740, 625]);
 });
 
-QUnit.test("Transform. (Canvas AR < bounds AR < projection AR) or (Canvas AR > bounds AR > projection AR)", function(assert) {
+QUnit.test('Transform. (Canvas AR < bounds AR < projection AR) or (Canvas AR > bounds AR > projection AR)', function(assert) {
     this.projection.setBounds([30, -20, 50, -10]);
     assert.deepEqual(this.projection.transform([-1, -1]), [320, 100]);
     assert.deepEqual(this.projection.transform([1, 1]), [880, 800]);
 });
 
-QUnit.test("Transform. Engine is pseudocylindrical - bounds should be correct", function(assert) {
+QUnit.test('Transform. Engine is pseudocylindrical - bounds should be correct', function(assert) {
     const RADIANS = Math.PI / 180;
     const WAGNER_6_P_LAT = Math.PI / Math.sqrt(3);
     const WAGNER_6_U_LAT = 2 / Math.sqrt(3) - 0.1;
@@ -900,12 +900,12 @@ QUnit.test("Transform. Engine is pseudocylindrical - bounds should be correct", 
 // TODO: Remove cases with bounds when "projection" module is considered stable
 QUnit.module('Mercator - project', {
     beforeEach: function() {
-        this.engine = projection.get("mercator");
+        this.engine = projection.get('mercator');
     },
 
     doTest: function(assert, arg, expected) {
         var actual = this.engine.project(arg);
-        assert.arraysEqual(actual, expected, arg.join(" "));
+        assert.arraysEqual(actual, expected, arg.join(' '));
 
     },
 
@@ -957,12 +957,12 @@ QUnit.test('With bounds / height is zero', function(assert) {
 // Remove cases with bounds when "projection" module is considered stable
 QUnit.module('Mercator - unproject', {
     beforeEach: function() {
-        this.engine = projection.get("mercator");
+        this.engine = projection.get('mercator');
     },
 
     doTest: function(assert, arg, expected) {
         var actual = this.engine.unproject(arg);
-        assert.arraysEqual(actual, expected, arg.join(" "));
+        assert.arraysEqual(actual, expected, arg.join(' '));
     },
 
     bounds: function(bounds) {
@@ -1016,30 +1016,30 @@ QUnit.module('Internal - to transformed', $.extend({}, environment, {
         this.projection.setZoom(null);
     },
 
-    doTest: createInternalMethodTester("_toTransformed")
+    doTest: createInternalMethodTester('_toTransformed')
 }));
 
-QUnit.test("Default", function(assert) {
+QUnit.test('Default', function(assert) {
     this.doTest(assert, [-1, 1], [0, 2]);
     this.doTest(assert, [0, 0], [1, 1]);
     this.doTest(assert, [0.5, -0.8], [1.5, 0.2]);
 });
 
-QUnit.test("Zoom", function(assert) {
+QUnit.test('Zoom', function(assert) {
     this.projection.setZoom(2);
     this.doTest(assert, [-1, 1], [0, 4]);
     this.doTest(assert, [0, 0], [2, 2]);
     this.doTest(assert, [0.5, -0.8], [3, 0.4]);
 });
 
-QUnit.test("Center", function(assert) {
+QUnit.test('Center', function(assert) {
     this.projection.setCenter([10, 5]);
     this.doTest(assert, [1, -1], [2, 0]);
     this.doTest(assert, [0, 0], [1, 1]);
     this.doTest(assert, [-0.5, 0.4], [0.5, 1.4]);
 });
 
-QUnit.test("Center and zoom", function(assert) {
+QUnit.test('Center and zoom', function(assert) {
     this.projection.setCenter([10, 5]);
     this.projection.setZoom(2);
     this.doTest(assert, [1, 1], [4, 4]);
@@ -1047,36 +1047,36 @@ QUnit.test("Center and zoom", function(assert) {
     this.doTest(assert, [0, 0], [2, 2]);
 });
 
-QUnit.module("Internal - from transformed", $.extend({}, environment, {
+QUnit.module('Internal - from transformed', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.projection.setZoom(null);
     },
 
-    doTest: createInternalMethodTester("_fromTransformed")
+    doTest: createInternalMethodTester('_fromTransformed')
 }));
 
-QUnit.test("Default", function(assert) {
+QUnit.test('Default', function(assert) {
     this.doTest(assert, [-2, 2], [-3, 1]);
     this.doTest(assert, [0, 0], [-1, -1]);
     this.doTest(assert, [1, -1.6], [0, -2.6]);
 });
 
-QUnit.test("Zoom", function(assert) {
+QUnit.test('Zoom', function(assert) {
     this.projection.setZoom(2);
     this.doTest(assert, [-2, 2], [-2, 0]);
     this.doTest(assert, [0, 0], [-1, -1]);
     this.doTest(assert, [1, -1.6], [-0.5, -1.8]);
 });
 
-QUnit.test("Center", function(assert) {
+QUnit.test('Center', function(assert) {
     this.projection.setCenter([10, 5]);
     this.doTest(assert, [0.5, -0.5], [-0.5, -1.5]);
     this.doTest(assert, [-0.5, 0.5], [-1.5, -0.5]);
     this.doTest(assert, [-1, 0.9], [-2, -0.1]);
 });
 
-QUnit.test("Center and zoom", function(assert) {
+QUnit.test('Center and zoom', function(assert) {
     this.projection.setCenter([10, 5]);
     this.projection.setZoom(3);
     this.doTest(assert, [4.5, 1.5], [0.5, -0.5]);
@@ -1084,31 +1084,31 @@ QUnit.test("Center and zoom", function(assert) {
     this.doTest(assert, [1.5, -1.5], [-0.5, -1.5]);
 });
 
-QUnit.module("Internal - to screen", $.extend({}, environment, {
+QUnit.module('Internal - to screen', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.projection.setZoom(null);
         this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     },
 
-    doTest: createInternalMethodTester("_toScreen")
+    doTest: createInternalMethodTester('_toScreen')
 }));
 
-QUnit.test("Size is (400 300)", function(assert) {
+QUnit.test('Size is (400 300)', function(assert) {
     this.projection.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 400, height: 300 });
     this.doTest(assert, [-1, -1], [90, 30]);
     this.doTest(assert, [0, 0], [210, 180]);
     this.doTest(assert, [0.5, 0.75], [270, 292.5]);
 });
 
-QUnit.test("Size is (500 800)", function(assert) {
+QUnit.test('Size is (500 800)', function(assert) {
     this.projection.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 500, height: 800 });
     this.doTest(assert, [-1, -1], [10, 117.5]);
     this.doTest(assert, [0, 0], [260, 430]);
     this.doTest(assert, [0.5, 0.75], [385, 664.375]);
 });
 
-QUnit.test("Size is (200 200)", function(assert) {
+QUnit.test('Size is (200 200)', function(assert) {
     this.projection.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 200, height: 200 });
     this.doTest(assert, [-1, -1], [30, 30]);
     this.doTest(assert, [0, 0], [110, 130]);
@@ -1116,7 +1116,7 @@ QUnit.test("Size is (200 200)", function(assert) {
 });
 
 // T127942
-QUnit.test("Size is (400 300) / aspect ratio - 2", function(assert) {
+QUnit.test('Size is (400 300) / aspect ratio - 2', function(assert) {
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 300 });
     this.doTest(assert, [-1, -1], [0, 50]);
@@ -1124,7 +1124,7 @@ QUnit.test("Size is (400 300) / aspect ratio - 2", function(assert) {
 });
 
 // T127942
-QUnit.test("Size is (600 800) / aspect ratio - 2", function(assert) {
+QUnit.test('Size is (600 800) / aspect ratio - 2', function(assert) {
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: 600, height: 800 });
     this.doTest(assert, [-1, -1], [0, 250]);
@@ -1132,37 +1132,37 @@ QUnit.test("Size is (600 800) / aspect ratio - 2", function(assert) {
 });
 
 // T127942
-QUnit.test("Size is (200 200) / aspect ratio - 2", function(assert) {
+QUnit.test('Size is (200 200) / aspect ratio - 2', function(assert) {
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: 200, height: 200 });
     this.doTest(assert, [-1, -1], [0, 50]);
     this.doTest(assert, [1, 1], [200, 150]);
 });
 
-QUnit.module("Internal - from screen", $.extend({}, environment, {
+QUnit.module('Internal - from screen', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.projection.setZoom(null);
     },
 
-    doTest: createInternalMethodTester("_fromScreen")
+    doTest: createInternalMethodTester('_fromScreen')
 }));
 
-QUnit.test("Size is (400 300)", function(assert) {
+QUnit.test('Size is (400 300)', function(assert) {
     this.projection.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 400, height: 300 });
     this.doTest(assert, [60, 30], [-1.25, -1]);
     this.doTest(assert, [210, 180], [0, 0]);
     this.doTest(assert, [285, 292.5], [0.625, 0.75]);
 });
 
-QUnit.test("Size is (500 800)", function(assert) {
+QUnit.test('Size is (500 800)', function(assert) {
     this.projection.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 500, height: 800 });
     this.doTest(assert, [10, 180], [-1, -0.8]);
     this.doTest(assert, [260, 430], [0, 0]);
     this.doTest(assert, [385, 617.5], [0.5, 0.6]);
 });
 
-QUnit.test("Size is (200 200)", function(assert) {
+QUnit.test('Size is (200 200)', function(assert) {
     this.projection.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 200, height: 200 });
     this.doTest(assert, [10, 30], [-1.25, -1]);
     this.doTest(assert, [110, 130], [0, 0]);
@@ -1170,7 +1170,7 @@ QUnit.test("Size is (200 200)", function(assert) {
 });
 
 // T127942
-QUnit.test("Size is (400 300) / aspect ratio - 2", function(assert) {
+QUnit.test('Size is (400 300) / aspect ratio - 2', function(assert) {
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 300 });
     this.doTest(assert, [0, 50], [-1, -1]);
@@ -1178,7 +1178,7 @@ QUnit.test("Size is (400 300) / aspect ratio - 2", function(assert) {
 });
 
 // T127942
-QUnit.test("Size is (600 800) / aspect ratio - 2", function(assert) {
+QUnit.test('Size is (600 800) / aspect ratio - 2', function(assert) {
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: 600, height: 800 });
     this.doTest(assert, [0, 250], [-1, -1]);
@@ -1186,21 +1186,21 @@ QUnit.test("Size is (600 800) / aspect ratio - 2", function(assert) {
 });
 
 // T127942
-QUnit.test("Size is (200 200) / aspect ratio - 2", function(assert) {
+QUnit.test('Size is (200 200) / aspect ratio - 2', function(assert) {
     this.engine.ar = returnValue(2);
     this.projection.setSize({ left: 0, right: 0, top: 0, bottom: 0, width: 200, height: 200 });
     this.doTest(assert, [0, 50], [-1, -1]);
     this.doTest(assert, [200, 150], [1, 1]);
 });
 
-QUnit.module("projection");
+QUnit.module('projection');
 
-QUnit.test("creation / validation", function(assert) {
-    assert.strictEqual(projection(), null, "no arguments");
-    assert.strictEqual(projection({}), null, "empty object");
+QUnit.test('creation / validation', function(assert) {
+    assert.strictEqual(projection(), null, 'no arguments');
+    assert.strictEqual(projection({}), null, 'empty object');
 });
 
-QUnit.test("creation", function(assert) {
+QUnit.test('creation', function(assert) {
     var to = sinon.stub().returns([1000, 2000]),
         from = sinon.stub().returns([3000, 4000]);
     from.withArgs([0, 0]).returns([300, 400]);
@@ -1215,51 +1215,51 @@ QUnit.test("creation", function(assert) {
         from: from
     });
 
-    assert.ok(proj instanceof projectionModule._TESTS_Engine, "instance type");
+    assert.ok(proj instanceof projectionModule._TESTS_Engine, 'instance type');
 
-    assert.deepEqual(proj.project([1, 2]), [1000, -2000], "project");
-    assert.deepEqual(to.lastCall.args, [[1, 2]], "source project");
+    assert.deepEqual(proj.project([1, 2]), [1000, -2000], 'project');
+    assert.deepEqual(to.lastCall.args, [[1, 2]], 'source project');
 
-    assert.deepEqual(proj.unproject([3, 4]), [3000, 4000], "unproject");
-    assert.deepEqual(from.lastCall.args, [[3, -4]], "source unproject");
+    assert.deepEqual(proj.unproject([3, 4]), [3000, 4000], 'unproject');
+    assert.deepEqual(from.lastCall.args, [[3, -4]], 'source unproject');
 
     assert.deepEqual(proj.source(), {
         aspectRatio: 3,
         to: to,
         from: from
-    }, "source");
-    assert.strictEqual(proj.original(), proj, "original");
-    assert.strictEqual(proj.isInvertible(), true, "isinv");
-    assert.strictEqual(proj.ar(), 3, "ar");
-    assert.deepEqual(proj.center(), [300, 400], "center");
-    assert.deepEqual(proj.min(), [10, 40], "min");
-    assert.deepEqual(proj.max(), [50, 80], "max");
+    }, 'source');
+    assert.strictEqual(proj.original(), proj, 'original');
+    assert.strictEqual(proj.isInvertible(), true, 'isinv');
+    assert.strictEqual(proj.ar(), 3, 'ar');
+    assert.deepEqual(proj.center(), [300, 400], 'center');
+    assert.deepEqual(proj.min(), [10, 40], 'min');
+    assert.deepEqual(proj.max(), [50, 80], 'max');
 });
 
-QUnit.test("creation / non invertible", function(assert) {
+QUnit.test('creation / non invertible', function(assert) {
     var to = sinon.stub().returns([1000, 2000]);
 
     var proj = projection({ to: to });
 
-    assert.ok(proj instanceof projectionModule._TESTS_Engine, "instance type");
+    assert.ok(proj instanceof projectionModule._TESTS_Engine, 'instance type');
 
-    assert.deepEqual(proj.project([1, 2]), [1000, -2000], "project");
-    assert.deepEqual(to.lastCall.args, [[1, 2]], "source project");
+    assert.deepEqual(proj.project([1, 2]), [1000, -2000], 'project');
+    assert.deepEqual(to.lastCall.args, [[1, 2]], 'source project');
 
-    assert.deepEqual(proj.unproject([3, 4]), [NaN, NaN], "unproject");
+    assert.deepEqual(proj.unproject([3, 4]), [NaN, NaN], 'unproject');
 
     assert.deepEqual(proj.source(), {
         to: to
-    }, "source");
-    assert.strictEqual(proj.original(), proj, "original");
-    assert.strictEqual(proj.isInvertible(), false, "isinv");
-    assert.strictEqual(proj.ar(), 1, "ar");
-    assert.deepEqual(proj.center(), [NaN, NaN], "center");
-    assert.deepEqual(proj.min(), [NaN, NaN], "min");
-    assert.deepEqual(proj.max(), [NaN, NaN], "max");
+    }, 'source');
+    assert.strictEqual(proj.original(), proj, 'original');
+    assert.strictEqual(proj.isInvertible(), false, 'isinv');
+    assert.strictEqual(proj.ar(), 1, 'ar');
+    assert.deepEqual(proj.center(), [NaN, NaN], 'center');
+    assert.deepEqual(proj.min(), [NaN, NaN], 'min');
+    assert.deepEqual(proj.max(), [NaN, NaN], 'max');
 });
 
-QUnit.test("bounds", function(assert) {
+QUnit.test('bounds', function(assert) {
     var proj = projection({
         aspectRatio: 3,
         to: function(arg) {
@@ -1272,13 +1272,13 @@ QUnit.test("bounds", function(assert) {
 
     var newProj = proj.bounds([10, 20, 30, 40]);
 
-    assert.ok(newProj instanceof projectionModule._TESTS_Engine, "instance type");
-    assert.ok(newProj !== proj, "not same instance");
-    assert.strictEqual(newProj.original(), proj, "original");
-    assert.strictEqual(newProj.ar(), 3, "ar");
+    assert.ok(newProj instanceof projectionModule._TESTS_Engine, 'instance type');
+    assert.ok(newProj !== proj, 'not same instance');
+    assert.strictEqual(newProj.original(), proj, 'original');
+    assert.strictEqual(newProj.ar(), 3, 'ar');
 });
 
-QUnit.test("aspectRatio", function(assert) {
+QUnit.test('aspectRatio', function(assert) {
     var proj = projection({
         aspectRatio: 3,
         to: function(arg) {
@@ -1291,22 +1291,22 @@ QUnit.test("aspectRatio", function(assert) {
 
     var newProj = proj.aspectRatio(4);
 
-    assert.ok(newProj instanceof projectionModule._TESTS_Engine, "instance type");
-    assert.ok(newProj !== proj, "not same instance");
-    assert.strictEqual(newProj.original(), proj, "original");
-    assert.strictEqual(newProj.ar(), 4, "ar");
-    assert.deepEqual(newProj.project([10, 20]), proj.project([10, 20]), "project");
-    assert.deepEqual(newProj.unproject([30, 40]), proj.unproject([30, 40]), "unproject");
+    assert.ok(newProj instanceof projectionModule._TESTS_Engine, 'instance type');
+    assert.ok(newProj !== proj, 'not same instance');
+    assert.strictEqual(newProj.original(), proj, 'original');
+    assert.strictEqual(newProj.ar(), 4, 'ar');
+    assert.deepEqual(newProj.project([10, 20]), proj.project([10, 20]), 'project');
+    assert.deepEqual(newProj.unproject([30, 40]), proj.unproject([30, 40]), 'unproject');
 });
 
 $.each([
-    { bounds: [-1.5, -3, 0.5, 1], center: [-0.5, -1], min: [-1.5, -3], max: [0.5, 1], project: [-1, 2], unproject: [-0.5, -1.5], message: "x equals y" },
-    { bounds: [-1.5, -0.5, 0.5, 1.5], center: [-0.5, 0.5], min: [-1.5, -0.5], max: [0.5, 1.5], project: [-0.25, 0.75], unproject: [0.5, -0.25], message: "x is wider than y" },
-    { bounds: [0.5, -3, 1.5, 1], center: [1, -1], min: [0.5, -3], max: [1.5, 1], project: [1.25, -0.5], unproject: [0.5, -0.5], message: "y is wider than x" },
-    { bounds: [0.5, -3, 0.5, 1], center: [0.5, -1], min: [0.5, -3], max: [0.5, 1], project: [1, -2], unproject: [0.5, 0.5], message: "x is zero" },
-    { bounds: [-1.5, -0.5, 0.5, -0.5], center: [-0.5, -0.5], min: [-1.5, -0.5], max: [0.5, -0.5], project: [-1, 1], unproject: [-0.5, -0.75], message: "y is zero" }
+    { bounds: [-1.5, -3, 0.5, 1], center: [-0.5, -1], min: [-1.5, -3], max: [0.5, 1], project: [-1, 2], unproject: [-0.5, -1.5], message: 'x equals y' },
+    { bounds: [-1.5, -0.5, 0.5, 1.5], center: [-0.5, 0.5], min: [-1.5, -0.5], max: [0.5, 1.5], project: [-0.25, 0.75], unproject: [0.5, -0.25], message: 'x is wider than y' },
+    { bounds: [0.5, -3, 1.5, 1], center: [1, -1], min: [0.5, -3], max: [1.5, 1], project: [1.25, -0.5], unproject: [0.5, -0.5], message: 'y is wider than x' },
+    { bounds: [0.5, -3, 0.5, 1], center: [0.5, -1], min: [0.5, -3], max: [0.5, 1], project: [1, -2], unproject: [0.5, 0.5], message: 'x is zero' },
+    { bounds: [-1.5, -0.5, 0.5, -0.5], center: [-0.5, -0.5], min: [-1.5, -0.5], max: [0.5, -0.5], project: [-1, 1], unproject: [-0.5, -0.75], message: 'y is zero' }
 ], function(_, data) {
-    QUnit.test("bounds / " + data.message, function(assert) {
+    QUnit.test('bounds / ' + data.message, function(assert) {
         var proj = projection({
             to: function(arg) {
                 return [arg[0] / 2, arg[1] / 4];
@@ -1316,58 +1316,58 @@ $.each([
             }
         }).bounds(data.bounds);
 
-        assert.deepEqual(proj.project(data.project), data.unproject, "project");
-        assert.deepEqual(proj.unproject(data.unproject), data.project, "unproject");
-        assert.deepEqual(proj.center(), data.center, "center");
-        assert.deepEqual(proj.min(), data.min, "min");
-        assert.deepEqual(proj.max(), data.max, "max");
+        assert.deepEqual(proj.project(data.project), data.unproject, 'project');
+        assert.deepEqual(proj.unproject(data.unproject), data.project, 'unproject');
+        assert.deepEqual(proj.center(), data.center, 'center');
+        assert.deepEqual(proj.min(), data.min, 'min');
+        assert.deepEqual(proj.max(), data.max, 'max');
     });
 });
 
-QUnit.test("add/get methods, engine config", function(assert) {
+QUnit.test('add/get methods, engine config', function(assert) {
     var config = getTestEngineConfig();
 
-    projection.add("tester-0", config);
+    projection.add('tester-0', config);
 
-    const proj = projection.get("tester-0");
+    const proj = projection.get('tester-0');
 
     assert.deepEqual(proj.source(), config);
 });
 
-QUnit.test("add/get methods, engine", function(assert) {
+QUnit.test('add/get methods, engine', function(assert) {
     var proj = projection(getTestEngineConfig());
 
-    projection.add("tester-1", proj);
+    projection.add('tester-1', proj);
 
-    assert.strictEqual(projection.get("tester-1"), proj);
+    assert.strictEqual(projection.get('tester-1'), proj);
 });
 
-QUnit.test("add/get methods / not valid", function(assert) {
-    projection.add("tester-2", {});
+QUnit.test('add/get methods / not valid', function(assert) {
+    projection.add('tester-2', {});
 
-    assert.strictEqual(projection.get("tester-2"), null);
+    assert.strictEqual(projection.get('tester-2'), null);
 });
 
-QUnit.test("add/get methods / duplication", function(assert) {
+QUnit.test('add/get methods / duplication', function(assert) {
     var proj = createTestEngine();
 
-    projection.add("tester-3", proj).add("tester-3", getTestEngineConfig());
+    projection.add('tester-3', proj).add('tester-3', getTestEngineConfig());
 
-    assert.strictEqual(projection.get("tester-3"), proj);
+    assert.strictEqual(projection.get('tester-3'), proj);
 });
 
-QUnit.module("Engines", {
+QUnit.module('Engines', {
     check: function(assert, data) {
         var project = projection.get(QUnit.config.current.testName).project,
             unproject = projection.get(QUnit.config.current.testName).unproject;
         $.each(data, function(_, item) {
-            assert.arraysEqual(project(item.project), item.unproject, "project: " + item.project.join(" "));
-            assert.arraysEqual(unproject(item.unproject), item.project, "unproject: " + item.unproject.join(" "), 1E-2);
+            assert.arraysEqual(project(item.project), item.unproject, 'project: ' + item.project.join(' '));
+            assert.arraysEqual(unproject(item.unproject), item.project, 'unproject: ' + item.unproject.join(' '), 1E-2);
         });
     }
 });
 
-QUnit.test("mercator", function(assert) {
+QUnit.test('mercator', function(assert) {
     var X = 85.0511;
     this.check(assert, [
         { project: [-180, -X], unproject: [-1, +1] },
@@ -1379,7 +1379,7 @@ QUnit.test("mercator", function(assert) {
     ]);
 });
 
-QUnit.test("equirectangular", function(assert) {
+QUnit.test('equirectangular', function(assert) {
     this.check(assert, [
         { project: [-180, -90], unproject: [-1, +1] },
         { project: [-180, +90], unproject: [-1, -1] },
@@ -1391,7 +1391,7 @@ QUnit.test("equirectangular", function(assert) {
     ]);
 });
 
-QUnit.test("lambert", function(assert) {
+QUnit.test('lambert', function(assert) {
     this.check(assert, [
         { project: [-180, -90], unproject: [-1, +1] },
         { project: [-180, +90], unproject: [-1, -1] },
@@ -1403,7 +1403,7 @@ QUnit.test("lambert", function(assert) {
     ]);
 });
 
-QUnit.test("miller", function(assert) {
+QUnit.test('miller', function(assert) {
     this.check(assert, [
         { project: [-180, -90], unproject: [-1, +0.7332] },
         { project: [-180, +90], unproject: [-1, -0.7332] },
@@ -1434,7 +1434,7 @@ function createTestEngine() {
 function createInternalMethodTester(methodName) {
     return function(assert, arg, expected) {
         var actual = this.projection[methodName](arg);
-        assert.arraysEqual(actual, expected, arg.join(" "));
+        assert.arraysEqual(actual, expected, arg.join(' '));
     };
 }
 

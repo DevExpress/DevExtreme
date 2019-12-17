@@ -1,11 +1,11 @@
-import { renderValueText } from "../filter_builder/filter_builder";
+import { renderValueText } from '../filter_builder/filter_builder';
 
-var $ = require("../../core/renderer"),
-    messageLocalization = require("../../localization/message"),
-    extend = require("../../core/utils/extend").extend,
-    DataSourceModule = require("../../data/data_source/data_source"),
-    deferredUtils = require("../../core/utils/deferred"),
-    utils = require("../filter_builder/utils");
+var $ = require('../../core/renderer'),
+    messageLocalization = require('../../localization/message'),
+    extend = require('../../core/utils/extend').extend,
+    DataSourceModule = require('../../data/data_source/data_source'),
+    deferredUtils = require('../../core/utils/deferred'),
+    utils = require('../filter_builder/utils');
 
 function baseOperation(grid) {
     var calculateFilterExpression = function(filterValue, field) {
@@ -13,12 +13,12 @@ function baseOperation(grid) {
             lastIndex = filterValue.length - 1;
         filterValue && filterValue.forEach(function(value, index) {
             if(utils.isCondition(value) || utils.isGroup(value)) {
-                var filterExpression = utils.getFilterExpression(value, [field], [], "headerFilter");
+                var filterExpression = utils.getFilterExpression(value, [field], [], 'headerFilter');
                 result.push(filterExpression);
             } else {
-                result.push(utils.getFilterExpression([field.dataField, "=", value], [field], [], "headerFilter"));
+                result.push(utils.getFilterExpression([field.dataField, '=', value], [field], [], 'headerFilter'));
             }
-            index !== lastIndex && result.push("or");
+            index !== lastIndex && result.push('or');
         });
         if(result.length === 1) {
             result = result[0];
@@ -27,7 +27,7 @@ function baseOperation(grid) {
     };
 
     var getFullText = function(itemText, parentText) {
-        return parentText ? parentText + "/" + itemText : itemText;
+        return parentText ? parentText + '/' + itemText : itemText;
     };
 
     var getSelectedItemsTexts = function(items, parentText) {
@@ -42,7 +42,7 @@ function baseOperation(grid) {
         return result;
     };
 
-    var headerFilterController = grid && grid.getController("headerFilter"),
+    var headerFilterController = grid && grid.getController('headerFilter'),
         customizeText = function(fieldInfo) {
             var value = fieldInfo.value,
                 column = grid.columnOption(fieldInfo.field.dataField),
@@ -50,7 +50,7 @@ function baseOperation(grid) {
                 lookup = column && column.lookup;
 
             if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
-                column = extend({}, column, { filterType: "include", filterValues: [value] });
+                column = extend({}, column, { filterType: 'include', filterValues: [value] });
                 var dataSourceOptions = headerFilterController.getDataSource(column);
                 dataSourceOptions.paginate = false;
                 let headerFilterDataSource = headerFilter && headerFilter.dataSource;
@@ -65,26 +65,26 @@ function baseOperation(grid) {
                 });
                 return result;
             } else {
-                var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option("headerFilter"));
+                var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option('headerFilter'));
                 return text;
             }
         };
     return {
-        dataTypes: ["string", "date", "datetime", "number", "boolean", "object"],
+        dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'],
         calculateFilterExpression: calculateFilterExpression,
         editorTemplate: function(conditionInfo, container) {
-            var div = $("<div>")
-                    .addClass("dx-filterbuilder-item-value-text")
+            var div = $('<div>')
+                    .addClass('dx-filterbuilder-item-value-text')
                     .appendTo(container),
                 column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
 
-            renderValueText(div, conditionInfo.text && conditionInfo.text.split("|"));
+            renderValueText(div, conditionInfo.text && conditionInfo.text.split('|'));
 
             var setValue = function(value) {
                 conditionInfo.setValue(value);
             };
 
-            column.filterType = "include";
+            column.filterType = 'include';
             column.filterValues = conditionInfo.value ? conditionInfo.value.slice() : [];
 
             headerFilterController.showHeaderFilterMenuBase({
@@ -108,9 +108,9 @@ function baseOperation(grid) {
 
 function anyOf(grid) {
     return extend(baseOperation(grid), {
-        name: "anyof",
-        icon: "selectall",
-        caption: messageLocalization.format("dxFilterBuilder-filterOperationAnyOf")
+        name: 'anyof',
+        icon: 'selectall',
+        caption: messageLocalization.format('dxFilterBuilder-filterOperationAnyOf')
     });
 }
 
@@ -121,11 +121,11 @@ function noneOf(grid) {
             var baseFilter = baseOp.calculateFilterExpression(filterValue, field);
             if(!baseFilter || baseFilter.length === 0) return null;
 
-            return baseFilter[0] === "!" ? baseFilter : ["!", baseFilter];
+            return baseFilter[0] === '!' ? baseFilter : ['!', baseFilter];
         },
-        name: "noneof",
-        icon: "unselectall",
-        caption: messageLocalization.format("dxFilterBuilder-filterOperationNoneOf")
+        name: 'noneof',
+        icon: 'unselectall',
+        caption: messageLocalization.format('dxFilterBuilder-filterOperationNoneOf')
     });
 }
 

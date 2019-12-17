@@ -9,5 +9,18 @@
         "SystemJS": true,
         "DevExpress": true,
         "sinon": true
+    },
+    "plugins": [
+        "qunit"
+    ],
+    "rules": {
+        "qunit/assert-args": "error",
+        "qunit/literal-compare-order": "error",
+        "qunit/no-arrow-tests": "error",
+        "qunit/no-async-in-loops": "error",
+        "qunit/no-commented-tests": "warn",
+        "qunit/no-identical-names": "warn",
+        "qunit/no-ok-equality": "warn",
+        "qunit/no-only": "error"
     }
 }

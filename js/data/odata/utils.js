@@ -1,17 +1,17 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    each = require("../../core/utils/iterator").each,
-    ajax = require("../../core/utils/ajax"),
-    Guid = require("../../core/guid"),
+var Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    typeUtils = require('../../core/utils/type'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    each = require('../../core/utils/iterator').each,
+    ajax = require('../../core/utils/ajax'),
+    Guid = require('../../core/guid'),
     isDefined = typeUtils.isDefined,
     isPlainObject = typeUtils.isPlainObject,
-    grep = require("../../core/utils/common").grep,
-    Deferred = require("../../core/utils/deferred").Deferred,
+    grep = require('../../core/utils/common').grep,
+    Deferred = require('../../core/utils/deferred').Deferred,
 
-    errors = require("../errors").errors,
-    dataUtils = require("../utils");
+    errors = require('../errors').errors,
+    dataUtils = require('../utils');
 
 var GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
 
@@ -19,10 +19,10 @@ var VERBOSE_DATE_REGEX = /^\/Date\((-?\d+)((\+|-)?(\d+)?)\)\/$/;
 var ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?$/;
 
 // Request processing
-var JSON_VERBOSE_MIME_TYPE = "application/json;odata=verbose";
+var JSON_VERBOSE_MIME_TYPE = 'application/json;odata=verbose';
 
 var makeArray = function(value) {
-    return typeUtils.type(value) === "string" ? value.split() : value;
+    return typeUtils.type(value) === 'string' ? value.split() : value;
 };
 
 var hasDot = function(x) {
@@ -32,7 +32,7 @@ var hasDot = function(x) {
 var pad = function(text, length, right) {
     text = String(text);
     while(text.length < length) {
-        text = right ? (text + "0") : ("0" + text);
+        text = right ? (text + '0') : ('0' + text);
     }
     return text;
 };
@@ -47,35 +47,35 @@ function formatISO8601(date, skipZeroTime, skipTimezone) {
     var padLeft2 = function(text) { return pad(text, 2); };
 
     bag.push(date.getFullYear());
-    bag.push("-");
+    bag.push('-');
     bag.push(padLeft2(date.getMonth() + 1));
-    bag.push("-");
+    bag.push('-');
     bag.push(padLeft2(date.getDate()));
 
     if(!(skipZeroTime && isZeroTime())) {
-        bag.push("T");
+        bag.push('T');
         bag.push(padLeft2(date.getHours()));
-        bag.push(":");
+        bag.push(':');
         bag.push(padLeft2(date.getMinutes()));
-        bag.push(":");
+        bag.push(':');
         bag.push(padLeft2(date.getSeconds()));
 
         if(date.getMilliseconds()) {
-            bag.push(".");
+            bag.push('.');
             bag.push(pad(date.getMilliseconds(), 3));
         }
 
         if(!skipTimezone) {
-            bag.push("Z");
+            bag.push('Z');
         }
     }
 
-    return bag.join("");
+    return bag.join('');
 }
 
 function parseISO8601(isoString) {
     var result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000),
-        chunks = isoString.replace("Z", "").split("T"),
+        chunks = isoString.replace('Z', '').split('T'),
         date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]),
         time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
 
@@ -88,7 +88,7 @@ function parseISO8601(isoString) {
         result.setMinutes(Number(time[2]));
         result.setSeconds(Number(time[3]));
 
-        var fractional = (time[4] || "").slice(0, 3);
+        var fractional = (time[4] || '').slice(0, 3);
         fractional = pad(fractional, 3, true);
         result.setMilliseconds(Number(fractional));
     }
@@ -102,11 +102,11 @@ function isAbsoluteUrl(url) {
 
 function toAbsoluteUrl(basePath, relativePath) {
     var part;
-    var baseParts = stripParams(basePath).split("/");
-    var relativeParts = relativePath.split("/");
+    var baseParts = stripParams(basePath).split('/');
+    var relativeParts = relativePath.split('/');
 
     function stripParams(url) {
-        var index = url.indexOf("?");
+        var index = url.indexOf('?');
         if(index > -1) {
             return url.substr(0, index);
         }
@@ -117,32 +117,32 @@ function toAbsoluteUrl(basePath, relativePath) {
     while(relativeParts.length) {
         part = relativeParts.shift();
 
-        if(part === "..") {
+        if(part === '..') {
             baseParts.pop();
         } else {
             baseParts.push(part);
         }
     }
 
-    return baseParts.join("/");
+    return baseParts.join('/');
 }
 
 var param = function(params) {
     var result = [];
 
     for(var name in params) {
-        result.push(name + "=" + params[name]);
+        result.push(name + '=' + params[name]);
     }
 
-    return result.join("&");
+    return result.join('&');
 };
 
 var ajaxOptionsForRequest = function(protocolVersion, request, options) {
     request = extend(
         {
             async: true,
-            method: "get",
-            url: "",
+            method: 'get',
+            url: '',
             params: {},
             payload: null,
             headers: {
@@ -159,8 +159,8 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
         beforeSend(request);
     }
 
-    var method = (request.method || "get").toLowerCase(),
-        isGet = method === "get",
+    var method = (request.method || 'get').toLowerCase(),
+        isGet = method === 'get',
         useJsonp = isGet && options.jsonp,
         params = extend({}, request.params),
         ajaxData = isGet ? params : formatPayload(request.payload),
@@ -169,25 +169,25 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
         contentType = !isGet && JSON_VERBOSE_MIME_TYPE;
 
     if(qs) {
-        url += (url.indexOf("?") > -1 ? "&" : "?") + qs;
+        url += (url.indexOf('?') > -1 ? '&' : '?') + qs;
     }
 
     if(useJsonp) {
-        ajaxData["$format"] = "json";
+        ajaxData['$format'] = 'json';
     }
 
     return {
         url: url,
         data: ajaxData,
-        dataType: useJsonp ? "jsonp" : "json",
-        jsonp: useJsonp && "$callback",
+        dataType: useJsonp ? 'jsonp' : 'json',
+        jsonp: useJsonp && '$callback',
         method: method,
         async: request.async,
         timeout: request.timeout,
         headers: request.headers,
         contentType: contentType,
         accepts: {
-            json: [JSON_VERBOSE_MIME_TYPE, "text/plain"].join()
+            json: [JSON_VERBOSE_MIME_TYPE, 'text/plain'].join()
         },
         xhrFields: {
             withCredentials: options.withCredentials
@@ -210,7 +210,7 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
                 case 4:
                     return value;
 
-                default: throw errors.Error("E4002");
+                default: throw errors.Error('E4002');
             }
         });
     }
@@ -240,7 +240,7 @@ var sendRequest = function(protocolVersion, request, options) {
             if(isFinite(tuple.count)) {
                 d.resolve(tuple.count);
             } else {
-                d.reject(new errors.Error("E4018"));
+                d.reject(new errors.Error('E4018'));
             }
 
         } else if(nextUrl && !options.isPaged) {
@@ -269,16 +269,16 @@ var formatDotNetError = function(errorObj) {
     var message,
         currentError = errorObj;
 
-    if("message" in errorObj) {
+    if('message' in errorObj) {
         if(errorObj.message.value) {
             message = errorObj.message.value;
         } else {
             message = errorObj.message;
         }
     }
-    while((currentError = (currentError["innererror"] || currentError["internalexception"]))) {
+    while((currentError = (currentError['innererror'] || currentError['internalexception']))) {
         message = currentError.message;
-        if(currentError["internalexception"] && (message.indexOf("inner exception") === -1)) {
+        if(currentError['internalexception'] && (message.indexOf('inner exception') === -1)) {
             break;
         }
     }
@@ -287,18 +287,18 @@ var formatDotNetError = function(errorObj) {
 
 // TODO split: decouple HTTP errors from OData errors
 var errorFromResponse = function(obj, textStatus, ajaxOptions) {
-    if(textStatus === "nocontent") {
+    if(textStatus === 'nocontent') {
         return null; // workaround for http://bugs.jquery.com/ticket/13292
     }
 
-    var message = "Unknown error",
+    var message = 'Unknown error',
         response = obj,
         httpStatus = 200,
         errorData = {
             requestOptions: ajaxOptions
         };
 
-    if(textStatus !== "success") {
+    if(textStatus !== 'success') {
         httpStatus = obj.status;
         message = dataUtils.errorMessageFromXhr(obj, textStatus);
         try {
@@ -310,7 +310,7 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         // NOTE: $.Deferred rejected and response contain error message
         (response.then && response
         // NOTE: $.Deferred resolved with odata error
-        || response.error || response["odata.error"] || response["@odata.error"]);
+        || response.error || response['odata.error'] || response['@odata.error']);
 
     if(errorObj) {
         message = formatDotNetError(errorObj) || message;
@@ -346,7 +346,7 @@ var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOption
         return { data: obj };
     }
 
-    if("d" in obj && (Array.isArray(obj.d) || typeUtils.isObject(obj.d))) {
+    if('d' in obj && (Array.isArray(obj.d) || typeUtils.isObject(obj.d))) {
         value = interpretVerboseJsonFormat(obj, textStatus);
     } else {
         value = interpretLightJsonFormat(obj, textStatus);
@@ -360,7 +360,7 @@ var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOption
 var interpretVerboseJsonFormat = function(obj) {
     var data = obj.d;
     if(!isDefined(data)) {
-        return { error: Error("Malformed or unsupported JSON response received") };
+        return { error: Error('Malformed or unsupported JSON response received') };
     }
 
     if(isDefined(data.results)) {
@@ -383,8 +383,8 @@ var interpretLightJsonFormat = function(obj) {
 
     return {
         data: data,
-        nextUrl: obj["@odata.nextLink"],
-        count: parseInt(obj["@odata.count"], 10)
+        nextUrl: obj['@odata.nextLink'],
+        count: parseInt(obj['@odata.count'], 10)
     };
 };
 
@@ -421,16 +421,16 @@ var transformTypes = function(obj, options) {
     options = options || {};
 
     each(obj, function(key, value) {
-        if(value !== null && typeof value === "object") {
+        if(value !== null && typeof value === 'object') {
 
-            if("results" in value) {
+            if('results' in value) {
                 obj[key] = value.results;
             }
 
             transformTypes(obj[key], options);
-        } else if(typeof value === "string") {
+        } else if(typeof value === 'string') {
             var fieldTypes = options.fieldTypes,
-                canBeGuid = !fieldTypes || fieldTypes[key] !== "String";
+                canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
 
             if(canBeGuid && GUID_REGEX.test(value)) {
                 obj[key] = new Guid(value);
@@ -449,11 +449,11 @@ var transformTypes = function(obj, options) {
 };
 
 var serializeDate = function(date) {
-    return "datetime'" + formatISO8601(date, true, true) + "'";
+    return 'datetime\'' + formatISO8601(date, true, true) + '\'';
 };
 
 var serializeString = function(value) {
-    return "'" + value.replace(/'/g, "''") + "'";
+    return '\'' + value.replace(/'/g, '\'\'') + '\'';
 };
 
 var serializePropName = function(propName) {
@@ -461,7 +461,7 @@ var serializePropName = function(propName) {
         return propName.valueOf();
     }
 
-    return propName.replace(/\./g, "/");
+    return propName.replace(/\./g, '/');
 };
 
 var serializeValueV4 = function(value) {
@@ -472,9 +472,9 @@ var serializeValueV4 = function(value) {
         return value.valueOf();
     }
     if(Array.isArray(value)) {
-        return "[" + value.map(function(item) {
+        return '[' + value.map(function(item) {
             return serializeValueV4(item);
-        }).join(",") + "]";
+        }).join(',') + ']';
     }
     return serializeValueV2(value);
 };
@@ -484,12 +484,12 @@ var serializeValueV2 = function(value) {
         return serializeDate(value);
     }
     if(value instanceof Guid) {
-        return "guid'" + value + "'";
+        return 'guid\'' + value + '\'';
     }
     if(value instanceof EdmLiteral) {
         return value.valueOf();
     }
-    if(typeof value === "string") {
+    if(typeof value === 'string') {
         return serializeString(value);
     }
     return String(value);
@@ -502,7 +502,7 @@ var serializeValue = function(value, protocolVersion) {
             return serializeValueV2(value);
         case 4:
             return serializeValueV4(value);
-        default: throw errors.Error("E4002");
+        default: throw errors.Error('E4002');
     }
 };
 
@@ -510,7 +510,7 @@ var serializeKey = function(key, protocolVersion) {
     if(isPlainObject(key)) {
         var parts = [];
         each(key, function(k, v) {
-            parts.push(serializePropName(k) + "=" + serializeValue(v, protocolVersion));
+            parts.push(serializePropName(k) + '=' + serializeValue(v, protocolVersion));
         });
         return parts.join();
     }
@@ -528,7 +528,7 @@ var serializeKey = function(key, protocolVersion) {
 var keyConverters = {
 
     String: function(value) {
-        return value + "";
+        return value + '';
     },
 
     Int32: function(value) {
@@ -539,7 +539,7 @@ var keyConverters = {
         if(value instanceof EdmLiteral) {
             return value;
         }
-        return new EdmLiteral(value + "L");
+        return new EdmLiteral(value + 'L');
     },
 
     Guid: function(value) {
@@ -557,14 +557,14 @@ var keyConverters = {
         if(value instanceof EdmLiteral) {
             return value;
         }
-        return new EdmLiteral(value + "f");
+        return new EdmLiteral(value + 'f');
     },
 
     Decimal: function(value) {
         if(value instanceof EdmLiteral) {
             return value;
         }
-        return new EdmLiteral(value + "m");
+        return new EdmLiteral(value + 'm');
     }
 };
 
@@ -572,7 +572,7 @@ var convertPrimitiveValue = function(type, value) {
     if(value === null) return null;
     var converter = keyConverters[type];
     if(!converter) {
-        throw errors.Error("E4014", type);
+        throw errors.Error('E4014', type);
     }
     return converter(value);
 };
@@ -601,13 +601,13 @@ var generateExpand = function(oDataVersion, expand, select) {
 
         if(select) {
             iteratorUtils.each(makeArray(select), function() {
-                var path = this.split(".");
+                var path = this.split('.');
                 if(path.length < 2) {
                     return;
                 }
 
                 path.pop();
-                hash[serializePropName(path.join("."))] = 1;
+                hash[serializePropName(path.join('.'))] = 1;
             });
         }
 
@@ -617,7 +617,7 @@ var generateExpand = function(oDataVersion, expand, select) {
     var generatorV4 = function() {
         var format = function(hash) {
             var formatCore = function(hash) {
-                var result = "",
+                var result = '',
                     selectValue = [],
                     expandValue = [];
 
@@ -632,20 +632,20 @@ var generateExpand = function(oDataVersion, expand, select) {
                 });
 
                 if(selectValue.length || expandValue.length) {
-                    result += "(";
+                    result += '(';
 
                     if(selectValue.length) {
-                        result += "$select=" + iteratorUtils.map(selectValue, serializePropName).join();
+                        result += '$select=' + iteratorUtils.map(selectValue, serializePropName).join();
                     }
 
                     if(expandValue.length) {
                         if(selectValue.length) {
-                            result += ";";
+                            result += ';';
                         }
 
-                        result += "$expand=" + iteratorUtils.map(expandValue, serializePropName).join();
+                        result += '$expand=' + iteratorUtils.map(expandValue, serializePropName).join();
                     }
-                    result += ")";
+                    result += ')';
                 }
 
                 return result;
@@ -671,7 +671,7 @@ var generateExpand = function(oDataVersion, expand, select) {
             };
 
             iteratorUtils.each(exprs, function(_, x) {
-                parseCore(x.split("."), root, stepper);
+                parseCore(x.split('.'), root, stepper);
             });
         };
 

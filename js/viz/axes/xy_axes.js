@@ -1,12 +1,12 @@
-import rangeModule from "../translators/range";
-import { getDateFormatByDifferences } from "../../format_helper";
-import dateUtils from "../../core/utils/date";
-import { extend } from "../../core/utils/extend";
-import { generateDateBreaks } from "./datetime_breaks";
-import { noop } from "../../core/utils/common";
-import vizUtils from "../core/utils";
-import { isDefined } from "../../core/utils/type";
-import constants from "./axes_constants";
+import rangeModule from '../translators/range';
+import { getDateFormatByDifferences } from '../../format_helper';
+import dateUtils from '../../core/utils/date';
+import { extend } from '../../core/utils/extend';
+import { generateDateBreaks } from './datetime_breaks';
+import { noop } from '../../core/utils/common';
+import vizUtils from '../core/utils';
+import { isDefined } from '../../core/utils/type';
+import constants from './axes_constants';
 
 const getNextDateUnit = dateUtils.getNextDateUnit;
 const correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning;
@@ -36,11 +36,11 @@ function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
         i;
 
-    if(tickInterval === "week") {
-        tickInterval = "day";
+    if(tickInterval === 'week') {
+        tickInterval = 'day';
     }
-    if(tickInterval === "quarter") {
-        tickInterval = "month";
+    if(tickInterval === 'quarter') {
+        tickInterval = 'month';
     }
     if(datesDifferences[tickInterval]) {
         for(i = 0; i < dateUtils.dateUnitIntervals.length; i++) {
@@ -120,30 +120,30 @@ function getMarkerDates(min, max, markerInterval) {
 }
 
 function getStripHorizontalAlignmentPosition(alignment) {
-    var position = "start";
-    if(alignment === "center") {
-        position = "center";
+    var position = 'start';
+    if(alignment === 'center') {
+        position = 'center';
     }
-    if(alignment === "right") {
-        position = "end";
+    if(alignment === 'right') {
+        position = 'end';
     }
     return position;
 }
 
 function getStripVerticalAlignmentPosition(alignment) {
-    var position = "start";
-    if(alignment === "center") {
-        position = "center";
+    var position = 'start';
+    if(alignment === 'center') {
+        position = 'center';
     }
-    if(alignment === "bottom") {
-        position = "end";
+    if(alignment === 'bottom') {
+        position = 'end';
     }
     return position;
 }
 
 function getMarkerInterval(tickInterval) {
     var markerInterval = getNextDateUnit(tickInterval);
-    if(markerInterval === "quarter") {
+    if(markerInterval === 'quarter') {
         markerInterval = getNextDateUnit(markerInterval);
     }
     return markerInterval;
@@ -152,7 +152,7 @@ function getMarkerInterval(tickInterval) {
 function getMarkerFormat(curDate, prevDate, tickInterval, markerInterval) {
     var format = markerInterval,
         datesDifferences = prevDate && dateUtils.getDatesDifferences(prevDate, curDate);
-    if(prevDate && tickInterval !== "year") {
+    if(prevDate && tickInterval !== 'year') {
         prepareDatesDifferences(datesDifferences, tickInterval);
         format = getDateFormatByDifferences(datesDifferences);
     }
@@ -230,36 +230,30 @@ function generateRangesOnPoints(points, edgePoints, getRange) {
     return ranges;
 }
 
-function generateAutoBreaks(options, series, viewport) {
-    var ranges,
-        breaks = [],
-        i,
-        getRange = options.type === "logarithmic" ?
-            function(min, max) { return vizUtils.getLog(max / min, options.logarithmBase); } :
-            function(min, max) { return max - min; },
-        visibleRange = getRange(viewport.minVisible, viewport.maxVisible),
-        maxAutoBreakCount,
-        points = series.reduce(function(result, s) {
-            var points = s.getPointsInViewPort();
-            result[0] = result[0].concat(points[0]);
-            result[1] = result[1].concat(points[1]);
-            return result;
-        }, [[], []]),
-        sortedAllPoints = points[0].concat(points[1]).sort(function(a, b) {
-            return b - a;
-        }),
-        edgePoints = points[1].filter(function(p) {
-            return points[0].indexOf(p) < 0;
-        }),
-        epsilon = visibleRange / 1E10,
-        minDiff = RANGE_RATIO * visibleRange;
+function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, { minVisible, maxVisible }) {
+    const breaks = [];
+    const getRange = type === 'logarithmic' ?
+        (min, max) => { return vizUtils.getLog(max / min, logarithmBase); } :
+        (min, max) => { return max - min; };
 
-    ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort(function(a, b) {
-        return b.length - a.length;
-    });
+    let visibleRange = getRange(minVisible, maxVisible);
+    const points = series.reduce((result, s) => {
+        var points = s.getPointsInViewPort();
+        result[0] = result[0].concat(points[0]);
+        result[1] = result[1].concat(points[1]);
+        return result;
+    }, [[], []]);
 
-    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? Math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
-    for(i = 0; i < maxAutoBreakCount; i++) {
+    const sortedAllPoints = points[0].concat(points[1]).sort((a, b) => b - a);
+    const edgePoints = points[1].filter(p => points[0].indexOf(p) < 0);
+
+    let minDiff = RANGE_RATIO * visibleRange;
+
+    const ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort((a, b) => b.length - a.length);
+    const epsilon = _math.min.apply(null, ranges.map(r => r.length)) / 1000;
+    const _maxAutoBreakCount = isDefined(maxAutoBreakCount) ? _math.min(maxAutoBreakCount, ranges.length) : ranges.length;
+
+    for(let i = 0; i < _maxAutoBreakCount; i++) {
         if(ranges[i].length >= minDiff) {
             if(visibleRange <= ranges[i].length) {
                 break;
@@ -292,7 +286,7 @@ module.exports = {
                 maxLabelLength = getDistanceByAngle({ width: maxLabelLength, height: this._getMaxLabelHeight(boxes, 0) }, rotationAngle);
             }
 
-            return constants.getTicksCountInRange(this._majorTicks, this._isHorizontal ? "x" : "y", maxLabelLength);
+            return constants.getTicksCountInRange(this._majorTicks, this._isHorizontal ? 'x' : 'y', maxLabelLength);
         },
 
         _getMaxLabelHeight: function(boxes, spacing) {
@@ -300,14 +294,14 @@ module.exports = {
         },
 
         _validateOverlappingMode: function(mode, displayMode) {
-            if(this._isHorizontal && (displayMode === "rotate" || displayMode === "stagger") || !this._isHorizontal) {
+            if(this._isHorizontal && (displayMode === 'rotate' || displayMode === 'stagger') || !this._isHorizontal) {
                 return constants.validateOverlappingMode(mode);
             }
             return mode;
         },
 
         _validateDisplayMode: function(mode) {
-            return this._isHorizontal ? mode : "standard";
+            return this._isHorizontal ? mode : 'standard';
         },
 
         getMarkerTrackers: function() {
@@ -315,11 +309,11 @@ module.exports = {
         },
 
         _getSharpParam: function(opposite) {
-            return this._isHorizontal ^ opposite ? "h" : "v";
+            return this._isHorizontal ^ opposite ? 'h' : 'v';
         },
 
         _createAxisElement: function() {
-            return this._renderer.path([], "line");
+            return this._renderer.path([], 'line');
         },
 
         _updateAxisElementPosition: function() {
@@ -339,7 +333,7 @@ module.exports = {
             var that = this,
                 position = that._options.position;
 
-            that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
+            that._axisPosition = that._orthogonalPositions[position === 'top' || position === 'left' ? 'start' : 'end'];
         },
 
         _getTickMarkPoints(coords, length, tickOptions) {
@@ -351,7 +345,7 @@ module.exports = {
                 tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
             } else {
                 let shift = tickOptions.shift || 0;
-                if(options.position === "left" || options.position === "top") {
+                if(options.position === 'left' || options.position === 'top') {
                     shift = -shift;
                 }
                 tickStartCoord = shift + this.getTickStartPositionShift(length);
@@ -367,9 +361,9 @@ module.exports = {
         getTickStartPositionShift(length) {
             const options = this._options;
             return (length % 2 === 1 ?
-                (options.width % 2 === 0 && (options.position === "left" || options.position === "top") ||
-                options.width % 2 === 1 && (options.position === "right" || options.position === "bottom") ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
-                (-length / 2 + (options.width % 2 === 0 ? 0 : (options.position === "bottom" || options.position === "right" ? -1 : 1))));
+                (options.width % 2 === 0 && (options.position === 'left' || options.position === 'top') ||
+                options.width % 2 === 1 && (options.position === 'right' || options.position === 'bottom') ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                (-length / 2 + (options.width % 2 === 0 ? 0 : (options.position === 'bottom' || options.position === 'right' ? -1 : 1))));
         },
 
         _getTitleCoords: function() {
@@ -395,7 +389,7 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, "class": titleOptions.cssClass };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, 'class': titleOptions.cssClass };
 
             if(!titleOptions.text || !group) {
                 return;
@@ -449,8 +443,8 @@ module.exports = {
             if(options.x === null) return;
 
             if(!options.withoutStick) {
-                pathElement = that._renderer.path([options.x, options.y, options.x, options.y + markerOptions.separatorHeight], "line")
-                    .attr({ "stroke-width": markerOptions.width, stroke: markerOptions.color, "stroke-opacity": markerOptions.opacity, sharp: "h" })
+                pathElement = that._renderer.path([options.x, options.y, options.x, options.y + markerOptions.separatorHeight], 'line')
+                    .attr({ 'stroke-width': markerOptions.width, stroke: markerOptions.color, 'stroke-opacity': markerOptions.opacity, sharp: 'h' })
                     .append(that._axisElementsGroup);
             }
 
@@ -510,7 +504,7 @@ module.exports = {
                 }, viewport);
             }
 
-            if(viewport.isEmpty() || !options.marker.visible || options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
+            if(viewport.isEmpty() || !options.marker.visible || options.argumentType !== 'datetime' || options.type === 'discrete' || that._majorTicks.length <= 1) {
                 return [];
             }
 
@@ -625,14 +619,14 @@ module.exports = {
                             nextMarker.x, y + separatorHeight,
                             nextMarker.x, y,
                             x, y
-                        ], "area").attr({
-                            "stroke-width": 1,
-                            stroke: "grey",
-                            fill: "grey",
+                        ], 'area').attr({
+                            'stroke-width': 1,
+                            stroke: 'grey',
+                            fill: 'grey',
                             opacity: 0.0001
                         }).append(group);
 
-                    markerTracker.data("range", { startValue: marker.date, endValue: nextMarker.date });
+                    markerTracker.data('range', { startValue: marker.date, endValue: nextMarker.date });
                     if(marker.title) {
                         markerTracker.setTitle(marker.title);
                     }
@@ -676,7 +670,7 @@ module.exports = {
                     labelOptions = linesOptions.label,
                     labelVerticalAlignment = labelOptions.verticalAlignment,
                     labelHorizontalAlignment = labelOptions.horizontalAlignment,
-                    labelIsInside = labelOptions.position === "inside",
+                    labelIsInside = labelOptions.position === 'inside',
                     label = item.label,
                     box = item.labelBBox,
                     translateX,
@@ -762,7 +756,7 @@ module.exports = {
                 group = renderer.g();
 
             constantLines.forEach(function(options) {
-                that._drawConstantLineLabelText(options.label.text, 0, 0, options.label, group).attr({ align: "center" });
+                that._drawConstantLineLabelText(options.label.text, 0, 0, options.label, group).attr({ align: 'center' });
             });
 
             return group.append(renderer.root);
@@ -772,11 +766,11 @@ module.exports = {
             var height = bBox.height,
                 drawingType = labelOptions.drawingType;
 
-            if(this._validateDisplayMode(drawingType) === "stagger" || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === "stagger") {
+            if(this._validateDisplayMode(drawingType) === 'stagger' || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === 'stagger') {
                 height = height * 2 + labelOptions.staggeringSpacing;
             }
 
-            if(this._validateDisplayMode(drawingType) === "rotate" || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === "rotate") {
+            if(this._validateDisplayMode(drawingType) === 'rotate' || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === 'rotate') {
                 var sinCos = vizUtils.getCosAndSin(labelOptions.rotationAngle);
                 height = height * sinCos.cos + bBox.width * sinCos.sin;
             }
@@ -812,8 +806,8 @@ module.exports = {
                 margins = {
                     left: _max(getLeftMargin(labelBox), getLeftMargin(constantLinesBox)),
                     right: _max(getRightMargin(labelBox), getRightMargin(constantLinesBox)),
-                    top: (options.position === "top" ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, "top", constantLinesHeight),
-                    bottom: (options.position !== "top" ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, "bottom", constantLinesHeight)
+                    top: (options.position === 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'top', constantLinesHeight),
+                    bottom: (options.position !== 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'bottom', constantLinesHeight)
                 };
 
             labelElement && labelElement.remove();
@@ -825,11 +819,11 @@ module.exports = {
 
         _checkAlignmentConstantLineLabels: function(labelOptions) {
             var position = labelOptions.position,
-                verticalAlignment = (labelOptions.verticalAlignment || "").toLowerCase(),
-                horizontalAlignment = (labelOptions.horizontalAlignment || "").toLowerCase();
+                verticalAlignment = (labelOptions.verticalAlignment || '').toLowerCase(),
+                horizontalAlignment = (labelOptions.horizontalAlignment || '').toLowerCase();
 
             if(this._isHorizontal) {
-                if(position === "outside") {
+                if(position === 'outside') {
                     verticalAlignment = verticalAlignment === BOTTOM ? BOTTOM : TOP;
                     horizontalAlignment = CENTER;
                 } else {
@@ -837,7 +831,7 @@ module.exports = {
                     horizontalAlignment = horizontalAlignment === LEFT ? LEFT : RIGHT;
                 }
             } else {
-                if(position === "outside") {
+                if(position === 'outside') {
                     verticalAlignment = CENTER;
                     horizontalAlignment = horizontalAlignment === LEFT ? LEFT : RIGHT;
                 } else {
@@ -856,9 +850,9 @@ module.exports = {
                 y = value;
 
             if(that._isHorizontal) {
-                y = that._orthogonalPositions[lineLabelOptions.verticalAlignment === "top" ? "start" : "end"];
+                y = that._orthogonalPositions[lineLabelOptions.verticalAlignment === 'top' ? 'start' : 'end'];
             } else {
-                x = that._orthogonalPositions[lineLabelOptions.horizontalAlignment === "right" ? "end" : "start"];
+                x = that._orthogonalPositions[lineLabelOptions.horizontalAlignment === 'right' ? 'end' : 'start'];
             }
             return { x: x, y: y };
         },
@@ -944,10 +938,10 @@ module.exports = {
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
                 title.element.setMaxSize(canvasLength, undefined, {
-                    wordWrap: titleOptions.wordWrap || "none",
-                    textOverflow: titleOptions.textOverflow || "ellipsis"
+                    wordWrap: titleOptions.wordWrap || 'none',
+                    textOverflow: titleOptions.textOverflow || 'ellipsis'
                 });
-                this._wrapped = (titleOptions.wordWrap && titleOptions.wordWrap !== "none");
+                this._wrapped = (titleOptions.wordWrap && titleOptions.wordWrap !== 'none');
             } else {
                 const moreThanOriginalSize = title.originalSize && canvasLength > (this._isHorizontal ? title.originalSize.width : title.originalSize.height);
                 !this._wrapped && moreThanOriginalSize && title.element.restoreText();
@@ -967,7 +961,7 @@ module.exports = {
             if(isHorizontal && position === constants.top || !isHorizontal && position === constants.left) {
                 return coord < canvas[position];
             }
-            return coord > canvas[isHorizontal ? "height" : "width"] - canvas[position];
+            return coord > canvas[isHorizontal ? 'height' : 'width'] - canvas[position];
         },
 
         _boundaryTicksVisibility: {
@@ -1050,7 +1044,7 @@ module.exports = {
         },
 
         _getTranslatedValue: function(value, offset) {
-            var pos1 = this._translator.translate(value, offset, this._options.type === "semidiscrete" && this._options.tickInterval),
+            var pos1 = this._translator.translate(value, offset, this._options.type === 'semidiscrete' && this._options.tickInterval),
                 pos2 = this._axisPosition,
                 isHorizontal = this._isHorizontal;
             return {
@@ -1087,14 +1081,14 @@ module.exports = {
                         to: that.parser(b.endValue)
                     };
                 });
-            if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {
+            if(axisOptions.type !== 'discrete' && axisOptions.dataType === 'datetime' && axisOptions.workdaysOnly) {
                 breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
                     viewport.maxVisible,
                     axisOptions.workWeek,
                     axisOptions.singleWorkdays,
                     axisOptions.holidays));
             }
-            if(!isArgumentAxis && axisOptions.type !== "discrete" && axisOptions.dataType !== "datetime"
+            if(!isArgumentAxis && axisOptions.type !== 'discrete' && axisOptions.dataType !== 'datetime'
                 && axisOptions.autoBreaksEnabled && axisOptions.maxAutoBreakCount !== 0) {
                 breaks = breaks.concat(generateAutoBreaks(axisOptions, series, viewport));
             }
@@ -1105,16 +1099,16 @@ module.exports = {
             var that = this,
                 breakStart = translatedEnd - (!that._translator.isInverted() ? width + 1 : 0),
                 attr = {
-                    "stroke-width": 1,
+                    'stroke-width': 1,
                     stroke: options.borderColor,
-                    sharp: !options.isWaved ? options.isHorizontal ? "h" : "v" : undefined
+                    sharp: !options.isWaved ? options.isHorizontal ? 'h' : 'v' : undefined
                 },
                 spaceAttr = {
                     stroke: options.color,
-                    "stroke-width": width
+                    'stroke-width': width
                 },
                 getPoints = that._isHorizontal ? rotateLine : function(p) { return p; },
-                drawer = getLineDrawer(that._renderer, spaceAttr, attr, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
+                drawer = getLineDrawer(that._renderer, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
 
             drawer(width / 2, spaceAttr);
             drawer(0, attr);
@@ -1142,8 +1136,8 @@ module.exports = {
         _createBreaksGroup: function(clipFrom, clipTo) {
             var that = this,
                 group = that._renderer.g().attr({
-                    "class": that._axisCssPrefix + "breaks",
-                    "clip-path": that._createBreakClipRect(clipFrom, clipTo)
+                    'class': that._axisCssPrefix + 'breaks',
+                    'clip-path': that._createBreakClipRect(clipFrom, clipTo)
                 }).append(that._scaleBreaksGroup);
 
             that._breaksElements = that._breaksElements || [];
@@ -1183,15 +1177,15 @@ module.exports = {
                 color: that._options.containerColor,
                 borderColor: breakStyle.color,
                 isHorizontal: that._isHorizontal,
-                isWaved: breakStyle.line.toLowerCase() !== "straight"
+                isWaved: breakStyle.line.toLowerCase() !== 'straight'
             };
 
             if(customCanvas) {
                 positionFrom = customCanvas.start;
                 positionTo = customCanvas.end;
             } else {
-                positionFrom = that._orthogonalPositions.start - (options.visible && !that._axisShift && (position === "left" || position === "top") ? SCALE_BREAK_OFFSET : 0);
-                positionTo = that._orthogonalPositions.end + (options.visible && (position === "right" || position === "bottom") ? SCALE_BREAK_OFFSET : 0);
+                positionFrom = that._orthogonalPositions.start - (options.visible && !that._axisShift && (position === 'left' || position === 'top') ? SCALE_BREAK_OFFSET : 0);
+                positionTo = that._orthogonalPositions.end + (options.visible && (position === 'right' || position === 'bottom') ? SCALE_BREAK_OFFSET : 0);
             }
 
             mainGroup = that._createBreaksGroup(positionFrom, positionTo);
@@ -1229,7 +1223,7 @@ module.exports = {
                     },
                     shift = margins[side] ? margins[side] + axesSpacing : 0;
 
-                attr[isHorizontal ? "translateY" : "translateX"] = (side === "left" || side === "top" ? -1 : 1) * shift;
+                attr[isHorizontal ? 'translateY' : 'translateX'] = (side === 'left' || side === 'top' ? -1 : 1) * shift;
 
                 (group[side] || group).attr(attr);
                 return shift;
@@ -1237,7 +1231,7 @@ module.exports = {
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
 
-            (isHorizontal ? ["top", "bottom"] : ["left", "right"]).forEach(side => {
+            (isHorizontal ? ['top', 'bottom'] : ['left', 'right']).forEach(side => {
                 shiftGroup(side, constantLinesGroups.above);
                 shiftGroup(side, constantLinesGroups.under);
             });
@@ -1245,8 +1239,8 @@ module.exports = {
     }
 };
 
-function getLineDrawer(renderer, spaceAttr, elementAttr, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
-    var elementType = isWaved ? "bezier" : "line",
+function getLineDrawer(renderer, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
+    var elementType = isWaved ? 'bezier' : 'line',
         group = renderer.g().append(root);
 
     return function(offset, attr) {

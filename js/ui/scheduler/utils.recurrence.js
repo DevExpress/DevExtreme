@@ -1,38 +1,38 @@
-var errors = require("../../core/errors"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    inArray = require("../../core/utils/array").inArray,
-    isDefined = require("../../core/utils/type").isDefined,
-    dateUtils = require("../../core/utils/date");
+var errors = require('../../core/errors'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    inArray = require('../../core/utils/array').inArray,
+    isDefined = require('../../core/utils/type').isDefined,
+    dateUtils = require('../../core/utils/date');
 
 var toMs = dateUtils.dateToMilliseconds;
 
 var leastDaysInWeek = 4;
 
 var intervalMap = {
-    secondly: "seconds",
-    minutely: "minutes",
-    hourly: "hours",
-    daily: "days",
-    weekly: "weeks",
-    monthly: "months",
-    yearly: "years"
+    secondly: 'seconds',
+    minutely: 'minutes',
+    hourly: 'hours',
+    daily: 'days',
+    weekly: 'weeks',
+    monthly: 'months',
+    yearly: 'years'
 };
 
 var dateSetterMap = {
-    "bysecond": function(date, value) {
+    'bysecond': function(date, value) {
         date.setSeconds(value);
     },
-    "byminute": function(date, value) {
+    'byminute': function(date, value) {
         date.setMinutes(value);
     },
-    "byhour": function(date, value) {
+    'byhour': function(date, value) {
         date.setHours(value);
     },
-    "bymonth": function(date, value) {
+    'bymonth': function(date, value) {
         date.setMonth(value);
     },
-    "bymonthday": function(date, value) {
+    'bymonthday': function(date, value) {
         if(value < 0) {
             var initialDate = new Date(date);
 
@@ -51,7 +51,7 @@ var dateSetterMap = {
             correctDate(date, value);
         }
     },
-    "byday": function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
+    'byday': function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
         var appointmentDayOfWeek = date.getDay(),
             weekStart = days[appointmentWeekStart];
 
@@ -59,23 +59,23 @@ var dateSetterMap = {
 
         date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
     },
-    "byweekno": function(date, weekNumber, weekStart) {
+    'byweekno': function(date, weekNumber, weekStart) {
         var initialDate = new Date(date),
             firstYearDate = new Date(initialDate.setMonth(0, 1)),
             dayShift = firstYearDate.getDay() - days[weekStart],
-            firstDayOfYear = firstYearDate.getTime() - dayShift * toMs("day"),
+            firstDayOfYear = firstYearDate.getTime() - dayShift * toMs('day'),
             newFirstYearDate = dayShift + 1;
 
         if(newFirstYearDate > leastDaysInWeek) {
-            date.setTime(firstDayOfYear + weekNumber * 7 * toMs("day"));
+            date.setTime(firstDayOfYear + weekNumber * 7 * toMs('day'));
         } else {
-            date.setTime(firstDayOfYear + (weekNumber - 1) * 7 * toMs("day"));
+            date.setTime(firstDayOfYear + (weekNumber - 1) * 7 * toMs('day'));
         }
 
-        var timezoneDiff = (date.getTimezoneOffset() - firstYearDate.getTimezoneOffset()) * toMs("minute");
+        var timezoneDiff = (date.getTimezoneOffset() - firstYearDate.getTimezoneOffset()) * toMs('minute');
         timezoneDiff && date.setTime(date.getTime() + timezoneDiff);
     },
-    "byyearday": function(date, dayOfYear) {
+    'byyearday': function(date, dayOfYear) {
         date.setMonth(0, 1);
         date.setDate(dayOfYear);
     }
@@ -94,29 +94,29 @@ var setDateByNegativeValue = function(date, month, value) {
 };
 
 var dateGetterMap = {
-    "bysecond": function(date) {
+    'bysecond': function(date) {
         return date.getSeconds();
     },
-    "byminute": function(date) {
+    'byminute': function(date) {
         return date.getMinutes();
     },
-    "byhour": function(date) {
+    'byhour': function(date) {
         return date.getHours();
     },
-    "bymonth": function(date) {
+    'bymonth': function(date) {
         return date.getMonth();
     },
-    "bymonthday": function(date) {
+    'bymonthday': function(date) {
         return date.getDate();
     },
-    "byday": function(date) {
+    'byday': function(date) {
         return date.getDay();
     },
-    "byweekno": function(date, weekStart) {
+    'byweekno': function(date, weekStart) {
         var daysFromYearStart,
             current = new Date(date),
             diff = leastDaysInWeek - current.getDay() + days[weekStart] - 1,
-            dayInMilliseconds = toMs("day");
+            dayInMilliseconds = toMs('day');
 
         if(date.getDay() < days[weekStart]) {
             diff -= 7;
@@ -126,26 +126,26 @@ var dateGetterMap = {
         current.setDate(current.getDate() + diff);
 
         var yearStart = new Date(current.getFullYear(), 0, 1),
-            timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs("minute");
+            timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs('minute');
 
         daysFromYearStart = 1 + (current - yearStart + timezoneDiff) / dayInMilliseconds;
 
         return Math.ceil(daysFromYearStart / 7);
     },
-    "byyearday": function(date) {
+    'byyearday': function(date) {
         var yearStart = new Date(date.getFullYear(), 0, 0),
             timezoneDiff = date.getTimezoneOffset() - yearStart.getTimezoneOffset(),
-            diff = date - yearStart - timezoneDiff * toMs("minute"),
-            dayLength = toMs("day");
+            diff = date - yearStart - timezoneDiff * toMs('minute'),
+            dayLength = toMs('day');
 
         return Math.floor(diff / dayLength);
     }
 };
 
-var ruleNames = ["freq", "interval", "byday", "byweekno", "byyearday", "bymonth", "bymonthday", "count", "until", "byhour", "byminute", "bysecond", "bysetpos", "wkst"],
-    freqNames = ["DAILY", "WEEKLY", "MONTHLY", "YEARLY", "SECONDLY", "MINUTELY", "HOURLY"],
+var ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'],
+    freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'],
     days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 },
-    daysNames = { 0: "SU", 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA" };
+    daysNames = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WE', 4: 'TH', 5: 'FR', 6: 'SA' };
 
 var getTimeZoneOffset = function() {
     return new Date().getTimezoneOffset();
@@ -167,8 +167,8 @@ var normalizeInterval = function(rule) {
         intervalObject = {},
         intervalField = intervalMap[freq.toLowerCase()];
 
-    if(freq === "MONTHLY" && rule["byday"]) {
-        intervalField = intervalMap["daily"];
+    if(freq === 'MONTHLY' && rule['byday']) {
+        intervalField = intervalMap['daily'];
     }
     intervalObject[intervalField] = interval;
 
@@ -192,7 +192,7 @@ var dateIsRecurrenceException = function(date, recurrenceException) {
         return result;
     }
 
-    var splitDates = recurrenceException.split(","),
+    var splitDates = recurrenceException.split(','),
         exceptDates = getDatesByRecurrenceException(splitDates, date),
         shortFormat = /\d{8}$/;
 
@@ -251,7 +251,7 @@ var getDatesByRecurrence = function(options) {
     rule.interval = normalizeInterval(rule);
     dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
-    var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs("day");
+    var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs('day');
 
     var config = {
         exception: options.exception,
@@ -287,9 +287,9 @@ var getDatesByRecurrence = function(options) {
             });
     }
 
-    if(rule["bysetpos"]) {
+    if(rule['bysetpos']) {
         each(iterationResult, function(iterationIndex, iterationDates) {
-            iterationResult[iterationIndex] = filterDatesBySetPos(iterationDates, rule["bysetpos"]);
+            iterationResult[iterationIndex] = filterDatesBySetPos(iterationDates, rule['bysetpos']);
         });
     }
 
@@ -322,7 +322,7 @@ var checkDate = function(currentDate, i, config, verifiedField) {
         var duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
 
         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > config.min.getTime()) {
-            return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"]);
+            return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule['wkst']);
         }
     }
 
@@ -332,7 +332,7 @@ var checkDate = function(currentDate, i, config, verifiedField) {
 var filterDatesBySetPos = function(dates, bySetPos) {
     var resultArray = [];
 
-    bySetPos.split(",").forEach(function(index) {
+    bySetPos.split(',').forEach(function(index) {
         index = Number(index);
 
         var dateIndex = (index > 0) ? index - 1 : dates.length + index;
@@ -357,15 +357,19 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
 
     date = dateUtils.addInterval(date, rule.interval);
 
-    if(rule.freq === "MONTHLY" && !rule["byday"]) {
+    if(rule.freq === 'DAILY' && !isDefined(rule['byhour']) && originalStartDate.getHours() !== date.getHours()) {
+        date = new Date(date.getTime() - (initialDate.getHours() - originalStartDate.getHours()) * toMs('hour'));
+    }
+
+    if(rule.freq === 'MONTHLY' && !rule['byday']) {
         var expectedDate = originalStartDate.getDate();
 
-        if(rule["bymonthday"]) {
-            expectedDate = Number(rule["bymonthday"].split(",")[iterationStep]);
+        if(rule['bymonthday']) {
+            expectedDate = Number(rule['bymonthday'].split(',')[iterationStep]);
 
             if(expectedDate < 0) {
                 initialDate.setMonth(initialDate.getMonth() + 1, 1);
-                dateSetterMap["bymonthday"](initialDate, expectedDate);
+                dateSetterMap['bymonthday'](initialDate, expectedDate);
                 date = initialDate;
                 needCorrect = false;
             }
@@ -373,16 +377,16 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
         needCorrect && correctDate(date, expectedDate);
     }
 
-    if(rule.freq === "YEARLY") {
-        if(rule["byyearday"]) {
-            var dayNumber = Number(rule["byyearday"].split(",")[iterationStep]);
-            dateSetterMap["byyearday"](date, dayNumber);
+    if(rule.freq === 'YEARLY') {
+        if(rule['byyearday']) {
+            var dayNumber = Number(rule['byyearday'].split(',')[iterationStep]);
+            dateSetterMap['byyearday'](date, dayNumber);
         }
 
         var dateRules = splitDateRules(rule);
 
         for(var field in dateRules[iterationStep]) {
-            dateSetterMap[field] && dateSetterMap[field](date, dateRules[iterationStep][field], rule["wkst"]);
+            dateSetterMap[field] && dateSetterMap[field](date, dateRules[iterationStep][field], rule['wkst']);
         }
     }
 
@@ -446,7 +450,7 @@ var wrongCountRule = function(rule) {
     var wrongCount = false,
         count = rule.count;
 
-    if(count && typeof count === "string") {
+    if(count && typeof count === 'string') {
         wrongCount = true;
     }
 
@@ -455,7 +459,7 @@ var wrongCountRule = function(rule) {
 
 var wrongByMonthDayRule = function(rule) {
     var wrongByMonthDay = false,
-        byMonthDay = rule["bymonthday"];
+        byMonthDay = rule['bymonthday'];
 
     if(byMonthDay && isNaN(parseInt(byMonthDay))) {
         wrongByMonthDay = true;
@@ -466,7 +470,7 @@ var wrongByMonthDayRule = function(rule) {
 
 var wrongByMonth = function(rule) {
     var wrongByMonth = false,
-        byMonth = rule["bymonth"];
+        byMonth = rule['bymonth'];
 
     if(byMonth && isNaN(parseInt(byMonth))) {
         wrongByMonth = true;
@@ -479,7 +483,7 @@ var wrongIntervalRule = function(rule) {
     var wrongInterval = false,
         interval = rule.interval;
 
-    if(interval && typeof interval === "string") {
+    if(interval && typeof interval === 'string') {
         wrongInterval = true;
     }
 
@@ -515,18 +519,18 @@ var brokenRuleNameExists = function(rule) {
 
 var logBrokenRule = function(recurrence) {
     if(inArray(recurrence, loggedWarnings) === -1) {
-        errors.log("W0006", recurrence);
+        errors.log('W0006', recurrence);
         loggedWarnings.push(recurrence);
     }
 };
 
 var parseRecurrenceRule = function(recurrence) {
     var ruleObject = {},
-        ruleParts = recurrence.split(";");
+        ruleParts = recurrence.split(';');
 
     for(var i = 0, len = ruleParts.length; i < len; i++) {
 
-        var rule = ruleParts[i].split("="),
+        var rule = ruleParts[i].split('='),
             ruleName = rule[0].toLowerCase(),
             ruleValue = rule[1];
 
@@ -556,7 +560,7 @@ var parseRecurrenceRule = function(recurrence) {
 };
 
 var getDateByAsciiString = function(string, initialDate) {
-    if(typeof string !== "string") {
+    if(typeof string !== 'string') {
         return string;
     }
 
@@ -599,11 +603,11 @@ var prepareDateArrayToParse = function(arrayDate) {
 var daysFromByDayRule = function(rule) {
     var result = [];
 
-    if(rule["byday"]) {
-        if(Array.isArray(rule["byday"])) {
-            result = rule["byday"];
+    if(rule['byday']) {
+        if(Array.isArray(rule['byday'])) {
+            result = rule['byday'];
         } else {
-            result = rule["byday"].split(",");
+            result = rule['byday'].split(',');
         }
     }
 
@@ -622,21 +626,21 @@ var splitDateRules = function(rule, firstDayOfWeek = null) {
     var result = [];
 
     if(isDefined(firstDayOfWeek)) {
-        rule["fdow"] = firstDayOfWeek;
+        rule['fdow'] = firstDayOfWeek;
     }
 
-    if(!rule["wkst"]) {
-        rule["wkst"] = isDefined(firstDayOfWeek) ? daysNames[firstDayOfWeek] : "MO";
+    if(!rule['wkst']) {
+        rule['wkst'] = isDefined(firstDayOfWeek) ? daysNames[firstDayOfWeek] : 'MO';
     }
 
-    if(rule["byweekno"] && !rule["byday"]) {
+    if(rule['byweekno'] && !rule['byday']) {
         var dayNames = Object.keys(days);
 
-        for(var i = 0; i < days[rule["wkst"]]; i++) {
+        for(var i = 0; i < days[rule['wkst']]; i++) {
             dayNames.push(dayNames.shift());
         }
 
-        rule["byday"] = dayNames.join(",");
+        rule['byday'] = dayNames.join(',');
     }
 
     for(var field in dateSetterMap) {
@@ -644,7 +648,7 @@ var splitDateRules = function(rule, firstDayOfWeek = null) {
             continue;
         }
 
-        var ruleFieldValues = rule[field].split(","),
+        var ruleFieldValues = rule[field].split(','),
             ruleArray = getDateRuleArray(field, ruleFieldValues);
 
         result = result.length ? extendObjectArray(ruleArray, result) : ruleArray;
@@ -666,11 +670,11 @@ var getDateRuleArray = function(field, values) {
 var handleRuleFieldValue = function(field, value) {
     var result = parseInt(value);
 
-    if(field === "bymonth") {
+    if(field === 'bymonth') {
         result -= 1;
     }
 
-    if(field === "byday") {
+    if(field === 'byday') {
         result = days[value];
     }
 
@@ -693,10 +697,10 @@ var getDatesByRules = function(dateRules, startDate, rule) {
 
     for(var i = 0, len = dateRules.length; i < len; i++) {
         var current = dateRules[i],
-            updatedDate = prepareDate(startDate, dateRules, rule["wkst"]);
+            updatedDate = prepareDate(startDate, dateRules, rule['wkst']);
 
         for(var field in current) {
-            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"], rule.freq, rule["fdow"]);
+            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule['wkst'], rule.freq, rule['fdow']);
         }
 
         if(Array.isArray(updatedDate)) {
@@ -717,7 +721,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
     var result = [],
         count = rule.count,
         counter = 0,
-        date = prepareDate(startDate, dateRules, rule["wkst"]);
+        date = prepareDate(startDate, dateRules, rule['wkst']);
 
     while(counter < count) {
         var dates = getDatesByRules(dateRules, date, rule);
@@ -743,7 +747,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 
         var interval = rule.interval;
 
-        if(Object.keys(interval)[0] === "days") {
+        if(Object.keys(interval)[0] === 'days') {
             interval = { weeks: 1 };
         }
 
@@ -757,7 +761,7 @@ var prepareDate = function(startDate, dateRules, weekStartRule) {
     var date = new Date(startDate),
         day = date.getDay();
 
-    if(dateRules.length && isDefined(dateRules[0]["byday"])) {
+    if(dateRules.length && isDefined(dateRules[0]['byday'])) {
         date.setDate(date.getDate() - day + days[weekStartRule] - (day < days[weekStartRule] ? 7 : 0));
     } else {
         date.setDate(1);
@@ -774,7 +778,7 @@ var checkDateByRule = function(date, rules, weekStart) {
             currentRuleResult = true;
 
         for(var field in current) {
-            var processNegative = field === "bymonthday" && current[field] < 0;
+            var processNegative = field === 'bymonthday' && current[field] < 0;
 
             if(dateGetterMap[field] && (!processNegative && current[field] !== dateGetterMap[field](date, weekStart))) {
                 currentRuleResult = false;
@@ -790,19 +794,19 @@ var getRecurrenceString = function(object) {
         return;
     }
 
-    var result = "";
+    var result = '';
     for(var field in object) {
         var value = object[field];
 
-        if(field === "interval" && value < 2) {
+        if(field === 'interval' && value < 2) {
             continue;
         }
 
-        if(field === "until") {
+        if(field === 'until') {
             value = getAsciiStringByDate(value);
         }
 
-        result += field + "=" + value + ";";
+        result += field + '=' + value + ';';
     }
 
     result = result.substring(0, result.length - 1);

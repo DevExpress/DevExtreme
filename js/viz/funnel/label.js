@@ -1,10 +1,10 @@
-import labelModule from "../series/points/label";
-import { normalizeEnum } from "../core/utils";
-import { extend } from "../../core/utils/extend";
-import { noop } from "../../core/utils/common";
+import labelModule from '../series/points/label';
+import { normalizeEnum } from '../core/utils';
+import { extend } from '../../core/utils/extend';
+import { noop } from '../../core/utils/common';
 
-const OUTSIDE_POSITION = "outside";
-const INSIDE_POSITION = "inside";
+const OUTSIDE_POSITION = 'outside';
+const INSIDE_POSITION = 'inside';
 const OUTSIDE_LABEL_INDENT = 5;
 const COLUMNS_LABEL_INDENT = 20;
 const CONNECTOR_INDENT = 4;
@@ -56,7 +56,7 @@ function getInsideLabelPosition(coords, bBox, options) {
 function getColumnLabelRightPosition(labelRect, rect, textAlignment) {
     return function(coords, bBox, options, inverted) {
         return {
-            x: textAlignment === "left" ? rect[2] + options.horizontalOffset + COLUMNS_LABEL_INDENT : labelRect[2] - bBox.width,
+            x: textAlignment === 'left' ? rect[2] + options.horizontalOffset + COLUMNS_LABEL_INDENT : labelRect[2] - bBox.width,
             y: correctYForInverted(coords[3] + options.verticalOffset, bBox, inverted)
         };
     };
@@ -65,14 +65,14 @@ function getColumnLabelRightPosition(labelRect, rect, textAlignment) {
 function getColumnLabelLeftPosition(labelRect, rect, textAlignment) {
     return function(coords, bBox, options, inverted) {
         return {
-            x: textAlignment === "left" ? labelRect[0] : rect[0] - bBox.width - options.horizontalOffset - COLUMNS_LABEL_INDENT,
+            x: textAlignment === 'left' ? labelRect[0] : rect[0] - bBox.width - options.horizontalOffset - COLUMNS_LABEL_INDENT,
             y: correctYForInverted(coords[3] + options.verticalOffset, bBox, inverted)
         };
     };
 }
 
 function getConnectorStrategy(options, inverted) {
-    var isLeftPos = options.horizontalAlignment === "left",
+    var isLeftPos = options.horizontalAlignment === 'left',
         connectorIndent = isLeftPos ? CONNECTOR_INDENT : -CONNECTOR_INDENT,
         verticalCorrection = inverted ? -PREVENT_EMPTY_PIXEL_OFFSET : 0;
 
@@ -112,21 +112,21 @@ function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
         labelConnector = opt.connector || {},
         backgroundAttr = {
             fill: opt.backgroundColor || defaultColor,
-            "stroke-width": labelBorder.visible ? labelBorder.width || 0 : 0,
-            stroke: labelBorder.visible && labelBorder.width ? labelBorder.color : "none",
+            'stroke-width': labelBorder.visible ? labelBorder.width || 0 : 0,
+            stroke: labelBorder.visible && labelBorder.width ? labelBorder.color : 'none',
             dashStyle: labelBorder.dashStyle
         },
         connectorAttr = {
-            stroke: labelConnector.visible && labelConnector.width ? labelConnector.color || defaultColor : "none",
-            "stroke-width": labelConnector.visible ? labelConnector.width || 0 : 0,
+            stroke: labelConnector.visible && labelConnector.width ? labelConnector.color || defaultColor : 'none',
+            'stroke-width': labelConnector.visible ? labelConnector.width || 0 : 0,
             opacity: labelConnector.opacity
         };
 
-    labelFont.color = (opt.backgroundColor === "none" && normalizeEnum(labelFont.color) === "#ffffff" && opt.position !== "inside") ? defaultColor : labelFont.color;
+    labelFont.color = (opt.backgroundColor === 'none' && normalizeEnum(labelFont.color) === '#ffffff' && opt.position !== 'inside') ? defaultColor : labelFont.color;
 
     return {
         format: opt.format,
-        textAlignment: opt.textAlignment || (isOutsidePosition(opt.position) ? defaultTextAlignment : "center"),
+        textAlignment: opt.textAlignment || (isOutsidePosition(opt.position) ? defaultTextAlignment : 'center'),
         customizeText: opt.customizeText,
         attributes: { font: labelFont },
         visible: labelFont.size !== 0 ? opt.visible : false,
@@ -176,20 +176,20 @@ function removeEmptySpace(labels, requiredSpace, startPoint) {
 }
 
 exports.plugin = {
-    name: "lables",
+    name: 'lables',
     init: noop,
     dispose: noop,
     extenders: {
         _initCore: function() {
             this._labelsGroup = this._renderer.g().attr({
-                class: this._rootClassPrefix + "-labels"
+                class: this._rootClassPrefix + '-labels'
             }).append(this._renderer.root);
             this._labels = [];
         },
 
         _applySize: function() {
-            var options = this._getOption("label"),
-                adaptiveLayout = this._getOption("adaptiveLayout"),
+            var options = this._getOption('label'),
+                adaptiveLayout = this._getOption('adaptiveLayout'),
                 rect = this._rect,
                 labelWidth = 0,
                 groupWidth,
@@ -198,7 +198,7 @@ exports.plugin = {
             this._labelRect = rect.slice();
 
             if(!this._labels.length || !isOutsidePosition(options.position)) {
-                if(normalizeEnum(this._getOption("resolveLabelOverlapping", true) !== "none")) {
+                if(normalizeEnum(this._getOption('resolveLabelOverlapping', true) !== 'none')) {
                     this._labels.forEach(l => !l.isVisible() && l.draw(true));
                 }
                 return;
@@ -228,7 +228,7 @@ exports.plugin = {
                 });
             }
 
-            if(options.horizontalAlignment === "left") {
+            if(options.horizontalAlignment === 'left') {
                 rect[0] += labelWidth;
             } else {
                 rect[2] -= labelWidth;
@@ -242,17 +242,17 @@ exports.plugin = {
 
         _change_TILING: function() {
             var that = this,
-                options = that._getOption("label"),
+                options = that._getOption('label'),
                 getCoords = getInsideLabelPosition,
-                inverted = that._getOption("inverted", true),
+                inverted = that._getOption('inverted', true),
                 textAlignment;
 
             if(isOutsidePosition(options.position)) {
                 if(normalizeEnum(options.position) === OUTSIDE_POSITION) {
-                    getCoords = options.horizontalAlignment === "left" ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
+                    getCoords = options.horizontalAlignment === 'left' ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
                 } else {
                     textAlignment = this._defaultLabelTextAlignment();
-                    getCoords = options.horizontalAlignment === "left" ? getColumnLabelLeftPosition(this._labelRect, this._rect, textAlignment) : getColumnLabelRightPosition(this._labelRect, this._rect, textAlignment);
+                    getCoords = options.horizontalAlignment === 'left' ? getColumnLabelLeftPosition(this._labelRect, this._rect, textAlignment) : getColumnLabelRightPosition(this._labelRect, this._rect, textAlignment);
                 }
             }
 
@@ -260,7 +260,7 @@ exports.plugin = {
                 var item = that._items[index],
                     bBox,
                     pos,
-                    borderWidth = item.getNormalStyle()["stroke-width"],
+                    borderWidth = item.getNormalStyle()['stroke-width'],
                     halfBorderWidth = inverted ? borderWidth / 2 : -borderWidth / 2,
                     coords = halfBorderWidth ? item.coords.map(function(coord, index) {
                         if(index === 1 || index === 3) {
@@ -294,10 +294,10 @@ exports.plugin = {
     members: {
         _resolveLabelOverlapping() {
             const that = this;
-            const resolveLabelOverlapping = normalizeEnum(that._getOption("resolveLabelOverlapping", true));
-            const labels = this._getOption("inverted", true) ? that._labels.slice().reverse() : that._labels;
+            const resolveLabelOverlapping = normalizeEnum(that._getOption('resolveLabelOverlapping', true));
+            const labels = this._getOption('inverted', true) ? that._labels.slice().reverse() : that._labels;
 
-            if(resolveLabelOverlapping === "hide") {
+            if(resolveLabelOverlapping === 'hide') {
                 labels.reduce((height, label) => {
                     if(label.getBoundingRect().y < height) {
                         label.hide();
@@ -306,7 +306,7 @@ exports.plugin = {
                     }
                     return height;
                 }, 0);
-            } else if(resolveLabelOverlapping === "shift") {
+            } else if(resolveLabelOverlapping === 'shift') {
                 const maxHeight = this._labelRect[3];
 
                 labels.reduce(([height, emptySpace], label, index, labels) => {
@@ -341,11 +341,11 @@ exports.plugin = {
         },
 
         _defaultLabelTextAlignment: function() {
-            return this._getOption("rtlEnabled", true) ? "right" : "left";
+            return this._getOption('rtlEnabled', true) ? 'right' : 'left';
         },
 
         _correctLabelWidth: function(label, item, options) {
-            var isLeftPos = options.horizontalAlignment === "left",
+            var isLeftPos = options.horizontalAlignment === 'left',
                 minX = isLeftPos ? this._labelRect[0] : item[2],
                 maxX = isLeftPos ? item[0] : this._labelRect[2],
                 maxWidth = maxX - minX;
@@ -357,8 +357,8 @@ exports.plugin = {
 
         _createLabels: function() {
             var that = this,
-                labelOptions = that._getOption("label"),
-                connectorStrategy = getConnectorStrategy(labelOptions, that._getOption("inverted", true));
+                labelOptions = that._getOption('label'),
+                connectorStrategy = getConnectorStrategy(labelOptions, that._getOption('inverted', true));
 
             this._labelsGroup.clear();
 
@@ -387,7 +387,7 @@ exports.plugin = {
             });
 
             if(this._labels.length && isOutsidePosition(labelOptions.position)) {
-                this._requestChange(["LAYOUT"]);
+                this._requestChange(['LAYOUT']);
             }
         }
     },
@@ -398,10 +398,10 @@ exports.plugin = {
             that._labels.forEach(function(label, index) {
                 var rect = label.getBoundingRect();
                 if(x >= rect.x && x <= (rect.x + rect.width) && y >= rect.y && y <= (rect.y + rect.height)) {
-                    var pos = isOutsidePosition(that._getOption("label").position) ? "outside" : "inside";
+                    var pos = isOutsidePosition(that._getOption('label').position) ? 'outside' : 'inside';
                     data = {
                         id: index,
-                        type: pos + "-label"
+                        type: pos + '-label'
                     };
                     return true;
                 }
@@ -409,12 +409,12 @@ exports.plugin = {
             return data;
         });
 
-        ["label", "resolveLabelOverlapping"].forEach(optionName => {
+        ['label', 'resolveLabelOverlapping'].forEach(optionName => {
             constructor.addChange({
                 code: optionName.toUpperCase(),
                 handler: function() {
                     this._createLabels();
-                    this._requestChange(["LAYOUT"]);
+                    this._requestChange(['LAYOUT']);
                 },
                 isThemeDependent: true,
                 isOptionChange: true,
@@ -422,5 +422,5 @@ exports.plugin = {
             });
         });
     },
-    fontFields: ["label.font"]
+    fontFields: ['label.font']
 };

@@ -1,17 +1,17 @@
-var Component = require("../../core/component"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    devices = require("../../core/devices"),
-    fx = require("../fx");
+var Component = require('../../core/component'),
+    each = require('../../core/utils/iterator').each,
+    extend = require('../../core/utils/extend').extend,
+    devices = require('../../core/devices'),
+    fx = require('../fx');
 
 var directionPostfixes = {
-    forward: " dx-forward",
-    backward: " dx-backward",
-    none: " dx-no-direction",
-    undefined: " dx-no-direction"
+    forward: ' dx-forward',
+    backward: ' dx-backward',
+    none: ' dx-no-direction',
+    undefined: ' dx-no-direction'
 };
 
-var optionPrefix = "preset_";
+var optionPrefix = 'preset_';
 
 var AnimationPresetCollection = Component.inherit({
     ctor: function() {
@@ -63,9 +63,9 @@ var AnimationPresetCollection = Component.inherit({
 
         var createBaseConfig = function(configModifier) {
             return {
-                type: "slide",
-                delay: configModifier.delay === undefined ? that.option("defaultAnimationDelay") : configModifier.delay,
-                duration: configModifier.duration === undefined ? that.option("defaultAnimationDuration") : configModifier.duration
+                type: 'slide',
+                delay: configModifier.delay === undefined ? that.option('defaultAnimationDelay') : configModifier.delay,
+                duration: configModifier.duration === undefined ? that.option('defaultAnimationDuration') : configModifier.duration
             };
         };
 
@@ -80,12 +80,12 @@ var AnimationPresetCollection = Component.inherit({
                     opacity: 1
                 };
 
-                if(direction === "forward") {
+                if(direction === 'forward') {
                     config.from = {
                         left: width,
                         opacity: throughOpacity
                     };
-                } else if(direction === "backward") {
+                } else if(direction === 'backward') {
                     config.from = {
                         left: -width,
                         opacity: throughOpacity
@@ -109,12 +109,12 @@ var AnimationPresetCollection = Component.inherit({
                     opacity: 1
                 };
 
-                if(direction === "forward") {
+                if(direction === 'forward') {
                     config.to = {
                         left: -width,
                         opacity: throughOpacity
                     };
-                } else if(direction === "backward") {
+                } else if(direction === 'backward') {
                     config.to = {
                         left: width,
                         opacity: throughOpacity
@@ -136,10 +136,10 @@ var AnimationPresetCollection = Component.inherit({
 
         var createBaseConfig = function(configModifier) {
             return {
-                type: "css",
-                extraCssClasses: "dx-opendoor-animation",
-                delay: configModifier.delay === undefined ? that.option("defaultAnimationDelay") : configModifier.delay,
-                duration: configModifier.duration === undefined ? that.option("defaultAnimationDuration") : configModifier.duration
+                type: 'css',
+                extraCssClasses: 'dx-opendoor-animation',
+                delay: configModifier.delay === undefined ? that.option('defaultAnimationDelay') : configModifier.delay,
+                duration: configModifier.duration === undefined ? that.option('defaultAnimationDuration') : configModifier.duration
             };
         };
 
@@ -148,9 +148,9 @@ var AnimationPresetCollection = Component.inherit({
                 var direction = configModifier.direction,
                     config = createBaseConfig(configModifier);
 
-                config.delay = direction === "none" ? config.delay : config.duration;
-                config.from = "dx-enter dx-opendoor-animation" + directionPostfixes[direction];
-                config.to = "dx-enter-active";
+                config.delay = direction === 'none' ? config.delay : config.duration;
+                config.from = 'dx-enter dx-opendoor-animation' + directionPostfixes[direction];
+                config.to = 'dx-enter-active';
 
                 return fx.createAnimation($element, config);
             },
@@ -158,8 +158,8 @@ var AnimationPresetCollection = Component.inherit({
                 var direction = configModifier.direction,
                     config = createBaseConfig(configModifier);
 
-                config.from = "dx-leave dx-opendoor-animation" + directionPostfixes[direction];
-                config.to = "dx-leave-active";
+                config.from = 'dx-leave dx-opendoor-animation' + directionPostfixes[direction];
+                config.to = 'dx-leave-active';
 
                 return fx.createAnimation($element, config);
             }
@@ -169,9 +169,9 @@ var AnimationPresetCollection = Component.inherit({
     _createWinPopConfig: function() {
         var that = this,
             baseConfig = {
-                type: "css",
-                extraCssClasses: "dx-win-pop-animation",
-                duration: that.option("defaultAnimationDuration")
+                type: 'css',
+                extraCssClasses: 'dx-win-pop-animation',
+                duration: that.option('defaultAnimationDuration')
             };
 
         return {
@@ -179,9 +179,9 @@ var AnimationPresetCollection = Component.inherit({
                 var config = baseConfig,
                     direction = configModifier.direction;
 
-                config.delay = direction === "none" ? that.option("defaultAnimationDelay") : that.option("defaultAnimationDuration") / 2;
-                config.from = "dx-enter dx-win-pop-animation" + directionPostfixes[direction];
-                config.to = "dx-enter-active";
+                config.delay = direction === 'none' ? that.option('defaultAnimationDelay') : that.option('defaultAnimationDuration') / 2;
+                config.from = 'dx-enter dx-win-pop-animation' + directionPostfixes[direction];
+                config.to = 'dx-enter-active';
 
                 return fx.createAnimation($element, config);
             },
@@ -189,9 +189,9 @@ var AnimationPresetCollection = Component.inherit({
                 var config = baseConfig,
                     direction = configModifier.direction;
 
-                config.delay = that.option("defaultAnimationDelay");
-                config.from = "dx-leave dx-win-pop-animation" + directionPostfixes[direction];
-                config.to = "dx-leave-active";
+                config.delay = that.option('defaultAnimationDelay');
+                config.from = 'dx-leave dx-win-pop-animation' + directionPostfixes[direction];
+                config.to = 'dx-leave-active';
 
                 return fx.createAnimation($element, config);
             }
@@ -246,7 +246,7 @@ var AnimationPresetCollection = Component.inherit({
     getPreset: function(name) {
         var result = name;
 
-        while(typeof result === "string") {
+        while(typeof result === 'string') {
             result = this.option(this._getPresetOptionName(result));
         }
 
@@ -254,134 +254,134 @@ var AnimationPresetCollection = Component.inherit({
     },
 
     registerDefaultPresets: function() {
-        this.registerPreset("pop", {
+        this.registerPreset('pop', {
             animation: {
-                extraCssClasses: "dx-android-pop-animation",
-                delay: this.option("defaultAnimationDelay"),
-                duration: this.option("defaultAnimationDuration")
+                extraCssClasses: 'dx-android-pop-animation',
+                delay: this.option('defaultAnimationDelay'),
+                duration: this.option('defaultAnimationDuration')
             }
         });
-        this.registerPreset("openDoor", {
+        this.registerPreset('openDoor', {
             animation: this._createOpenDoorConfig()
         });
-        this.registerPreset("win-pop", {
+        this.registerPreset('win-pop', {
             animation: this._createWinPopConfig()
         });
-        this.registerPreset("fade", {
+        this.registerPreset('fade', {
             animation: {
-                extraCssClasses: "dx-fade-animation",
-                delay: this.option("defaultAnimationDelay"),
-                duration: this.option("defaultAnimationDuration")
+                extraCssClasses: 'dx-fade-animation',
+                delay: this.option('defaultAnimationDelay'),
+                duration: this.option('defaultAnimationDuration')
             }
         });
-        this.registerPreset("slide", {
+        this.registerPreset('slide', {
             device: function() {
                 return devices.current().android || devices.real.android;
             },
             animation: this._createAndroidSlideAnimationConfig(1, 1)
         });
-        this.registerPreset("slide", {
+        this.registerPreset('slide', {
             device: function() {
                 return !devices.current().android && !devices.real.android;
             },
             animation: {
-                extraCssClasses: "dx-slide-animation",
-                delay: this.option("defaultAnimationDelay"),
-                duration: this.option("defaultAnimationDuration")
+                extraCssClasses: 'dx-slide-animation',
+                delay: this.option('defaultAnimationDelay'),
+                duration: this.option('defaultAnimationDuration')
             }
         });
-        this.registerPreset("ios7-slide", {
+        this.registerPreset('ios7-slide', {
             animation: {
-                extraCssClasses: "dx-ios7-slide-animation",
-                delay: this.option("defaultAnimationDelay"),
-                duration: this.option("defaultAnimationDuration")
+                extraCssClasses: 'dx-ios7-slide-animation',
+                delay: this.option('defaultAnimationDelay'),
+                duration: this.option('defaultAnimationDuration')
             }
         });
-        this.registerPreset("overflow", {
+        this.registerPreset('overflow', {
             animation: {
-                extraCssClasses: "dx-overflow-animation",
-                delay: this.option("defaultAnimationDelay"),
-                duration: this.option("defaultAnimationDuration")
+                extraCssClasses: 'dx-overflow-animation',
+                delay: this.option('defaultAnimationDelay'),
+                duration: this.option('defaultAnimationDuration')
             }
         });
-        this.registerPreset("ios7-toolbar", {
+        this.registerPreset('ios7-toolbar', {
             device: function() {
                 return !devices.current().android && !devices.real.android;
             },
             animation: {
-                extraCssClasses: "dx-ios7-toolbar-animation",
-                delay: this.option("defaultAnimationDelay"),
-                duration: this.option("defaultAnimationDuration")
+                extraCssClasses: 'dx-ios7-toolbar-animation',
+                delay: this.option('defaultAnimationDelay'),
+                duration: this.option('defaultAnimationDuration')
             }
         });
-        this.registerPreset("ios7-toolbar", {
+        this.registerPreset('ios7-toolbar', {
             device: function() {
                 return devices.current().android || devices.real.android;
             },
             animation: this._createAndroidSlideAnimationConfig(0, 0.4)
         });
-        this.registerPreset("stagger-fade", {
+        this.registerPreset('stagger-fade', {
             animation: {
-                extraCssClasses: "dx-fade-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-fade-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-slide", {
+        this.registerPreset('stagger-slide', {
             animation: {
-                extraCssClasses: "dx-slide-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-slide-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-fade-slide", {
+        this.registerPreset('stagger-fade-slide', {
             animation: {
-                extraCssClasses: "dx-fade-slide-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-fade-slide-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-drop", {
+        this.registerPreset('stagger-drop', {
             animation: {
-                extraCssClasses: "dx-drop-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-drop-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-fade-drop", {
+        this.registerPreset('stagger-fade-drop', {
             animation: {
-                extraCssClasses: "dx-fade-drop-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-fade-drop-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-fade-rise", {
+        this.registerPreset('stagger-fade-rise', {
             animation: {
-                extraCssClasses: "dx-fade-rise-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-fade-rise-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-3d-drop", {
+        this.registerPreset('stagger-3d-drop', {
             animation: {
-                extraCssClasses: "dx-3d-drop-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-3d-drop-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
-        this.registerPreset("stagger-fade-zoom", {
+        this.registerPreset('stagger-fade-zoom', {
             animation: {
-                extraCssClasses: "dx-fade-zoom-animation",
-                staggerDelay: this.option("defaultStaggerAnimationDelay"),
-                duration: this.option("defaultStaggerAnimationDuration"),
-                delay: this.option("defaultStaggerAnimationStartDelay")
+                extraCssClasses: 'dx-fade-zoom-animation',
+                staggerDelay: this.option('defaultStaggerAnimationDelay'),
+                duration: this.option('defaultStaggerAnimationDuration'),
+                delay: this.option('defaultStaggerAnimationStartDelay')
             }
         });
     }

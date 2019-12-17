@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/dropDownBox.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/dropDownBox.markup.tests.js');

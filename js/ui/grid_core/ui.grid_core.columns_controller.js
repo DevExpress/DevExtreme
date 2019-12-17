@@ -1,35 +1,35 @@
-import $ from "../../core/renderer";
-import Callbacks from "../../core/utils/callbacks";
-import { isWrapped } from "../../core/utils/variable_wrapper";
-import dataCoreUtils from "../../core/utils/data";
-import { grep } from "../../core/utils/common";
-import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from "../../core/utils/type";
-import iteratorUtils from "../../core/utils/iterator";
-import { getDefaultAlignment } from "../../core/utils/position";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import config from "../../core/config";
-import { orderEach, deepExtendArraySafe } from "../../core/utils/object";
-import errors from "../widget/ui.errors";
-import modules from "./ui.grid_core.modules";
-import { isDateType, getFormatByDataType, getDisplayValue, normalizeSortingInfo, equalSortParameters } from "./ui.grid_core.utils";
-import { normalizeIndexes } from "../../core/utils/array";
-import inflector from "../../core/utils/inflector";
-import dateSerialization from "../../core/utils/date_serialization";
-import numberLocalization from "../../localization/number";
-import dateLocalization from "../../localization/date";
-import messageLocalization from "../../localization/message";
-import { when, Deferred } from "../../core/utils/deferred";
-import Store from "../../data/abstract_store";
-import { DataSource, normalizeDataSourceOptions } from "../../data/data_source/data_source";
-import filterUtils from "../shared/filtering";
+import $ from '../../core/renderer';
+import Callbacks from '../../core/utils/callbacks';
+import { isWrapped } from '../../core/utils/variable_wrapper';
+import dataCoreUtils from '../../core/utils/data';
+import { grep } from '../../core/utils/common';
+import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
+import iteratorUtils from '../../core/utils/iterator';
+import { getDefaultAlignment } from '../../core/utils/position';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import config from '../../core/config';
+import { orderEach, deepExtendArraySafe } from '../../core/utils/object';
+import errors from '../widget/ui.errors';
+import modules from './ui.grid_core.modules';
+import { isDateType, getFormatByDataType, getDisplayValue, normalizeSortingInfo, equalSortParameters } from './ui.grid_core.utils';
+import { normalizeIndexes } from '../../core/utils/array';
+import inflector from '../../core/utils/inflector';
+import dateSerialization from '../../core/utils/date_serialization';
+import numberLocalization from '../../localization/number';
+import dateLocalization from '../../localization/date';
+import messageLocalization from '../../localization/message';
+import { when, Deferred } from '../../core/utils/deferred';
+import Store from '../../data/abstract_store';
+import { DataSource, normalizeDataSourceOptions } from '../../data/data_source/data_source';
+import filterUtils from '../shared/filtering';
 
-var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
-    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+var USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'],
+    USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'selectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1),
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
-    COMMAND_EXPAND_CLASS = "dx-command-expand",
+    COMMAND_EXPAND_CLASS = 'dx-command-expand',
     MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */,
-    GROUP_COMMAND_COLUMN_NAME = "groupExpand";
+    GROUP_COMMAND_COLUMN_NAME = 'groupExpand';
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
@@ -49,13 +49,13 @@ module.exports = {
                  * @type string
                  * @default "true"
                  */
-                trueText: messageLocalization.format("dxDataGrid-trueText"),
+                trueText: messageLocalization.format('dxDataGrid-trueText'),
                 /**
                  * @name GridBaseColumn.falseText
                  * @type string
                  * @default "false"
                  */
-                falseText: messageLocalization.format("dxDataGrid-falseText")
+                falseText: messageLocalization.format('dxDataGrid-falseText')
             },
             /**
              * @name GridBaseOptions.allowColumnReordering
@@ -74,7 +74,7 @@ module.exports = {
              * @type Enums.ColumnResizingMode
              * @default "nextColumn"
              */
-            columnResizingMode: "nextColumn",
+            columnResizingMode: 'nextColumn',
             /**
              * @name GridBaseOptions.columnMinWidth
              * @type number
@@ -767,10 +767,10 @@ module.exports = {
                     showInColumnChooser: true
                 },
                 DATATYPE_OPERATIONS = {
-                    "number": ["=", "<>", "<", ">", "<=", ">=", "between"],
-                    "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-                    "date": ["=", "<>", "<", ">", "<=", ">=", "between"],
-                    "datetime": ["=", "<>", "<", ">", "<=", ">=", "between"]
+                    'number': ['=', '<>', '<', '>', '<=', '>=', 'between'],
+                    'string': ['contains', 'notcontains', 'startswith', 'endswith', '=', '<>'],
+                    'date': ['=', '<>', '<', '>', '<=', '>=', 'between'],
+                    'datetime': ['=', '<>', '<', '>', '<=', '>=', 'between']
                 },
                 COLUMN_INDEX_OPTIONS = {
                     visibleIndex: true,
@@ -779,8 +779,8 @@ module.exports = {
                     sortIndex: true,
                     sortOrder: true
                 },
-                GROUP_LOCATION = "group",
-                COLUMN_CHOOSER_LOCATION = "columnChooser";
+                GROUP_LOCATION = 'group',
+                COLUMN_CHOOSER_LOCATION = 'columnChooser';
 
             var setFilterOperationsAsDefaultValues = function(column) {
                 column.filterOperations = column.defaultFilterOperations;
@@ -932,7 +932,7 @@ module.exports = {
                     }
                 }
 
-                return result.join(".");
+                return result.join('.');
             };
 
             var calculateColspan = function(that, columnID) {
@@ -976,7 +976,7 @@ module.exports = {
 
             var getValueDataType = function(value) {
                 var dataType = type(value);
-                if(dataType !== "string" && dataType !== "boolean" && dataType !== "number" && dataType !== "date" && dataType !== "object") {
+                if(dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
                     dataType = undefined;
                 }
                 return dataType;
@@ -984,12 +984,12 @@ module.exports = {
 
             var getSerializationFormat = function(dataType, value) {
                 switch(dataType) {
-                    case "date":
-                    case "datetime":
+                    case 'date':
+                    case 'datetime':
                         return dateSerialization.getDateSerializationFormat(value);
-                    case "number":
+                    case 'number':
                         if(isString(value)) {
-                            return "string";
+                            return 'string';
                         }
 
                         if(isNumeric(value)) {
@@ -1008,14 +1008,14 @@ module.exports = {
                             return isString(value) ? value : dateSerialization.serializeDate(value, this.serializationFormat);
                         };
                     }
-                    if(dataType === "number") {
+                    if(dataType === 'number') {
                         options.deserializeValue = function(value) {
                             var parsedValue = parseFloat(value);
                             return isNaN(parsedValue) ? value : parsedValue;
                         };
                         options.serializeValue = function(value, target) {
-                            if(target === "filter") return value;
-                            return isDefined(value) && this.serializationFormat === "string" ? value.toString() : value;
+                            if(target === 'filter') return value;
+                            return isDefined(value) && this.serializationFormat === 'string' ? value.toString() : value;
                         };
                     }
                 }
@@ -1023,24 +1023,24 @@ module.exports = {
 
             var getAlignmentByDataType = function(dataType, isRTL) {
                 switch(dataType) {
-                    case "number":
-                        return "right";
-                    case "boolean":
-                        return "center";
+                    case 'number':
+                        return 'right';
+                    case 'boolean':
+                        return 'center';
                     default:
                         return getDefaultAlignment(isRTL);
                 }
             };
 
             var getCustomizeTextByDataType = function(dataType) {
-                if(dataType === "boolean") {
+                if(dataType === 'boolean') {
                     return function(e) {
                         if(e.value === true) {
-                            return this.trueText || "true";
+                            return this.trueText || 'true';
                         } else if(e.value === false) {
-                            return this.falseText || "false";
+                            return this.falseText || 'false';
                         } else {
-                            return e.valueText || "";
+                            return e.valueText || '';
                         }
                     };
                 }
@@ -1064,7 +1064,7 @@ module.exports = {
                 }
 
                 for(fieldName in processedFields) {
-                    if(fieldName.indexOf("__") !== 0) {
+                    if(fieldName.indexOf('__') !== 0) {
                         var column = createColumn(that, fieldName);
                         result.push(column);
                     }
@@ -1089,7 +1089,7 @@ module.exports = {
             };
 
             var updateColumnGroupIndexes = function(that, currentColumn) {
-                normalizeIndexes(that._columns, "groupIndex", currentColumn, function(column) {
+                normalizeIndexes(that._columns, 'groupIndex', currentColumn, function(column) {
                     var grouped = column.grouped;
                     delete column.grouped;
                     return grouped;
@@ -1103,7 +1103,7 @@ module.exports = {
                     }
                 });
 
-                normalizeIndexes(that._columns, "sortIndex", currentColumn, function(column) {
+                normalizeIndexes(that._columns, 'sortIndex', currentColumn, function(column) {
                     return !isDefined(column.groupIndex) && isSortOrderValid(column.sortOrder);
                 });
             };
@@ -1133,10 +1133,10 @@ module.exports = {
                 }
 
                 for(key in bandColumns) {
-                    normalizeIndexes(bandColumns[key], "visibleIndex", currentColumn);
+                    normalizeIndexes(bandColumns[key], 'visibleIndex', currentColumn);
                 }
 
-                normalizeIndexes(result, "visibleIndex", currentColumn);
+                normalizeIndexes(result, 'visibleIndex', currentColumn);
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
@@ -1201,14 +1201,14 @@ module.exports = {
 
                         if(inArray(fieldName, ignoreColumnOptionNames) >= 0) continue;
 
-                        if(fieldName === "dataType") {
+                        if(fieldName === 'dataType') {
                             column[fieldName] = column[fieldName] || userStateColumn[fieldName];
                         } else if(inArray(fieldName, USER_STATE_FIELD_NAMES_15_1) >= 0) {
                             if(fieldName in userStateColumn) {
                                 column[fieldName] = userStateColumn[fieldName];
                             }
                         } else {
-                            if(fieldName === "selectedFilterOperation" && userStateColumn[fieldName]) {
+                            if(fieldName === 'selectedFilterOperation' && userStateColumn[fieldName]) {
                                 column.defaultSelectedFilterOperation = column[fieldName] || null;
                             }
                             column[fieldName] = userStateColumn[fieldName];
@@ -1302,9 +1302,9 @@ module.exports = {
                     columnIndex: columnIndex
                 };
 
-                optionName = optionName || "all";
+                optionName = optionName || 'all';
 
-                optionName = optionName.split(".")[0];
+                optionName = optionName.split('.')[0];
 
                 var changeTypes = columnChanges.changeTypes;
 
@@ -1327,9 +1327,9 @@ module.exports = {
             };
 
             var fireColumnsChanged = function(that) {
-                var onColumnsChanging = that.option("onColumnsChanging"),
+                var onColumnsChanging = that.option('onColumnsChanging'),
                     columnChanges = that._columnChanges,
-                    reinitOptionNames = ["dataField", "lookup", "dataType", "columns"],
+                    reinitOptionNames = ['dataField', 'lookup', 'dataType', 'columns'],
                     needReinit = (options) => options && reinitOptionNames.some(name => options[name]);
 
                 if(that.isInitialized() && !that._updateLockCount && columnChanges) {
@@ -1367,7 +1367,7 @@ module.exports = {
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName] && !that._skipProcessingColumnsChange) {
                     that._skipProcessingColumnsChange = true;
-                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
+                    that.component._notifyOptionChanged(fullOptionName + '.' + optionName, value, prevValue);
                     that._skipProcessingColumnsChange = false;
                 }
             };
@@ -1387,18 +1387,24 @@ module.exports = {
                 }
                 prevValue = optionGetter(column, { functionsAsIs: true });
                 if(prevValue !== value) {
-                    if(optionName === "groupIndex" || optionName === "calculateGroupValue") {
-                        changeType = "grouping";
+                    if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
+                        changeType = 'grouping';
                         updateSortOrderWhenGrouping(column, value, prevValue);
-                    } else if(optionName === "sortIndex" || optionName === "sortOrder" || optionName === "calculateSortValue") {
-                        changeType = "sorting";
+                    } else if(optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
+                        changeType = 'sorting';
                     } else {
-                        changeType = "columns";
+                        changeType = 'columns';
                     }
 
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     fullOptionName = getColumnFullPath(that, column);
+
+                    if(COLUMN_INDEX_OPTIONS[optionName]) {
+                        updateIndexes(that, column);
+                        value = optionGetter(column);
+                    }
+
                     fullOptionName && fireOptionChanged(that, {
                         fullOptionName: fullOptionName,
                         optionName: optionName,
@@ -1406,14 +1412,14 @@ module.exports = {
                         prevValue: prevValue
                     });
 
-                    if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf("buffer") !== 0) {
+                    if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0) {
                         notFireEvent = true;
                     }
 
                     if(!notFireEvent) {
                         // T346972
-                        if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
-                            columns = that.option("columns");
+                        if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== 'visibleWidth') {
+                            columns = that.option('columns');
                             initialColumn = that.getColumnByPath(fullOptionName, columns);
                             if(isString(initialColumn)) {
                                 initialColumn = columns[columnIndex] = { dataField: initialColumn };
@@ -1430,7 +1436,7 @@ module.exports = {
             };
 
             var isSortOrderValid = function(sortOrder) {
-                return sortOrder === "asc" || sortOrder === "desc";
+                return sortOrder === 'asc' || sortOrder === 'desc';
             };
 
             var addExpandColumn = function(that) {
@@ -1440,7 +1446,7 @@ module.exports = {
             };
 
             var defaultSetCellValue = function(data, value) {
-                var path = this.dataField.split("."),
+                var path = this.dataField.split('.'),
                     dotCount = path.length - 1,
                     name,
                     i;
@@ -1475,7 +1481,7 @@ module.exports = {
                 return result;
             };
 
-            var getRowCount = function(that, level, bandColumnIndex) {
+            var getRowCount = function(that) {
                 var rowCount = 1,
                     bandColumnsCache = that.getBandColumnsCache(),
                     columnParentByIndex = bandColumnsCache.columnParentByIndex;
@@ -1493,10 +1499,10 @@ module.exports = {
             };
 
             var getFixedPosition = function(that, column) {
-                var rtlEnabled = that.option("rtlEnabled");
+                var rtlEnabled = that.option('rtlEnabled');
 
                 if(column.command && !isCustomCommandColumn(that, column) || !column.fixedPosition) {
-                    return rtlEnabled ? "right" : "left";
+                    return rtlEnabled ? 'right' : 'left';
                 }
 
                 return column.fixedPosition;
@@ -1535,10 +1541,10 @@ module.exports = {
             };
 
             var numberToString = function(number, digitsCount) {
-                var str = number ? number.toString() : "0";
+                var str = number ? number.toString() : '0';
 
                 while(str.length < digitsCount) {
-                    str = "0" + str;
+                    str = '0' + str;
                 }
 
                 return str;
@@ -1553,7 +1559,7 @@ module.exports = {
                     isColumnFixing = that._isColumnFixing(),
                     defaultCommandColumns = commandColumns.slice().map(column => extend({ fixed: isColumnFixing }, column)),
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
-                        var columnType = needToExtend && column.type === GROUP_COMMAND_COLUMN_NAME ? "expand" : column.type;
+                        var columnType = needToExtend && column.type === GROUP_COMMAND_COLUMN_NAME ? 'expand' : column.type;
                         return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
                     }, -1),
                     callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
@@ -1606,9 +1612,9 @@ module.exports = {
             return {
                 _getExpandColumnOptions: function() {
                     return {
-                        type: "expand",
-                        command: "expand",
-                        width: "auto",
+                        type: 'expand',
+                        command: 'expand',
+                        width: 'auto',
                         cssClass: COMMAND_EXPAND_CLASS,
                         allowEditing: false, // T165142
                         allowGrouping: false,
@@ -1649,7 +1655,7 @@ module.exports = {
                 },
                 init: function() {
                     var that = this,
-                        columns = that.option("columns");
+                        columns = that.option('columns');
 
                     that._commandColumns = that._commandColumns || [];
 
@@ -1673,7 +1679,7 @@ module.exports = {
                     }
                 },
                 callbackNames: function() {
-                    return ["columnsChanged"];
+                    return ['columnsChanged'];
                 },
 
                 getColumnByPath: function(path, columns) {
@@ -1683,7 +1689,7 @@ module.exports = {
 
                     path.replace(regExp, function(_, columnIndex) {
                         columnIndexes.push(parseInt(columnIndex));
-                        return "";
+                        return '';
                     });
 
                     if(columnIndexes.length) {
@@ -1703,15 +1709,15 @@ module.exports = {
                     let needUpdateRequireResize;
 
                     switch(args.name) {
-                        case "adaptColumnWidthByRatio":
+                        case 'adaptColumnWidthByRatio':
                             args.handled = true;
                             break;
-                        case "dataSource":
-                            if(args.value !== args.previousValue && !this.option("columns") && (!Array.isArray(args.value) || !Array.isArray(args.previousValue))) {
+                        case 'dataSource':
+                            if(args.value !== args.previousValue && !this.option('columns') && (!Array.isArray(args.value) || !Array.isArray(args.previousValue))) {
                                 this._columns = [];
                             }
                             break;
-                        case "columns":
+                        case 'columns':
                             needUpdateRequireResize = this._skipProcessingColumnsChange;
                             args.handled = true;
 
@@ -1730,32 +1736,32 @@ module.exports = {
                                 this._updateRequireResize(args);
                             }
                             break;
-                        case "commonColumnSettings":
-                        case "columnAutoWidth":
-                        case "allowColumnResizing":
-                        case "allowColumnReordering":
-                        case "columnFixing":
-                        case "grouping":
-                        case "groupPanel":
-                        case "regenerateColumnsByVisibleItems":
-                        case "customizeColumns":
-                        case "editing":
-                        case "columnHidingEnabled":
-                        case "dateSerializationFormat":
-                        case "columnResizingMode":
-                        case "columnMinWidth":
-                        case "columnWidth": {
+                        case 'commonColumnSettings':
+                        case 'columnAutoWidth':
+                        case 'allowColumnResizing':
+                        case 'allowColumnReordering':
+                        case 'columnFixing':
+                        case 'grouping':
+                        case 'groupPanel':
+                        case 'regenerateColumnsByVisibleItems':
+                        case 'customizeColumns':
+                        case 'editing':
+                        case 'columnHidingEnabled':
+                        case 'dateSerializationFormat':
+                        case 'columnResizingMode':
+                        case 'columnMinWidth':
+                        case 'columnWidth': {
                             args.handled = true;
-                            let ignoreColumnOptionNames = args.fullName === "columnWidth" && ["width"],
-                                isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
-                                isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
+                            let ignoreColumnOptionNames = args.fullName === 'columnWidth' && ['width'],
+                                isEditingPopup = args.fullName && args.fullName.indexOf('editing.popup') === 0,
+                                isEditingForm = args.fullName && args.fullName.indexOf('editing.form') === 0;
 
                             if(!isEditingPopup && !isEditingForm) {
                                 this.reinit(ignoreColumnOptionNames);
                             }
                             break;
                         }
-                        case "rtlEnabled":
+                        case 'rtlEnabled':
                             this.reinit();
                             break;
                         default:
@@ -1766,7 +1772,7 @@ module.exports = {
                 _columnOptionChanged: function(args) {
                     var columnOptionValue = {},
                         column = this.getColumnByPath(args.fullName),
-                        columnOptionName = args.fullName.replace(regExp, "");
+                        columnOptionName = args.fullName.replace(regExp, '');
 
                     if(column) {
                         if(columnOptionName) {
@@ -1783,13 +1789,13 @@ module.exports = {
                 _updateRequireResize: function(args) {
                     var component = this.component;
 
-                    if(args.fullName.replace(regExp, "") === "width" && component._updateLockCount) {
+                    if(args.fullName.replace(regExp, '') === 'width' && component._updateLockCount) {
                         component._requireResize = true;
                     }
                 },
 
                 publicMethods: function() {
-                    return ["addColumn", "deleteColumn", "columnOption", "columnCount", "clearSorting", "clearGrouping", "getVisibleColumns"];
+                    return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex'];
                 },
                 applyDataSource: function(dataSource, forceApplying) {
                     var that = this,
@@ -1797,7 +1803,7 @@ module.exports = {
 
                     that._dataSource = dataSource;
 
-                    if(!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option("regenerateColumnsByVisibleItems")) {
+                    if(!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option('regenerateColumnsByVisibleItems')) {
                         if(isDataSourceLoaded) {
                             if(!that._isColumnsFromOptions) {
                                 var columnsFromDataSource = createColumnsFromDataSource(that, dataSource);
@@ -1812,7 +1818,7 @@ module.exports = {
                             that._dataSourceApplied = false;
                         }
                     } else if(isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
-                        updateColumnChanges(that, "columns");
+                        updateColumnChanges(that, 'columns');
                         fireColumnsChanged(that);
                         return new Deferred().reject().promise();
                     }
@@ -1839,22 +1845,22 @@ module.exports = {
                     }
                 },
                 isInitialized: function() {
-                    return !!this._columns.length || !!this.option("columns");
+                    return !!this._columns.length || !!this.option('columns');
                 },
                 isDataSourceApplied: function() {
                     return this._dataSourceApplied;
                 },
                 getCommonSettings: function(column) {
-                    var commonColumnSettings = (!column || !column.type) && this.option("commonColumnSettings") || {},
-                        groupingOptions = this.option("grouping") || {},
-                        groupPanelOptions = this.option("groupPanel") || {};
+                    var commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {},
+                        groupingOptions = this.option('grouping') || {},
+                        groupPanelOptions = this.option('groupPanel') || {};
 
                     return extend({
-                        allowFixing: this.option("columnFixing.enabled"),
-                        allowResizing: this.option("allowColumnResizing") || undefined,
-                        allowReordering: this.option("allowColumnReordering"),
-                        minWidth: this.option("columnMinWidth"),
-                        width: this.option("columnWidth"),
+                        allowFixing: this.option('columnFixing.enabled'),
+                        allowResizing: this.option('allowColumnResizing') || undefined,
+                        allowReordering: this.option('allowColumnReordering'),
+                        minWidth: this.option('columnMinWidth'),
+                        width: this.option('columnWidth'),
                         autoExpandGroup: groupingOptions.autoExpandAll,
                         allowCollapsing: groupingOptions.allowCollapsing,
                         allowGrouping: groupPanelOptions.allowColumnDragging && groupPanelOptions.visible || groupingOptions.contextMenuEnabled
@@ -1960,7 +1966,7 @@ module.exports = {
                         result = [],
                         rowCount = that.getRowCount(),
                         isColumnFixing = that._isColumnFixing(),
-                        transparentColumn = { command: "transparent" },
+                        transparentColumn = { command: 'transparent' },
                         transparentColspan = 0,
                         notFixedColumnCount,
                         transparentColumnIndex,
@@ -2005,7 +2011,7 @@ module.exports = {
                             }
 
                             if(!isDefined(transparentColumnIndex)) {
-                                transparentColumnIndex = lastFixedPosition === "right" ? 0 : visibleColumns.length;
+                                transparentColumnIndex = lastFixedPosition === 'right' ? 0 : visibleColumns.length;
                             }
 
                             result[i] = visibleColumns.slice(0);
@@ -2019,7 +2025,7 @@ module.exports = {
                     return result;
                 },
                 _isColumnFixing: function() {
-                    var isColumnFixing = this.option("columnFixing.enabled");
+                    var isColumnFixing = this.option('columnFixing.enabled');
 
                     !isColumnFixing && iteratorUtils.each(this._columns, function(_, column) {
                         if(column.fixed) {
@@ -2041,7 +2047,7 @@ module.exports = {
                         isColumnFixing = this._isColumnFixing();
 
                     if(expandColumns.length) {
-                        expandColumn = this.columnOption("command:expand");
+                        expandColumn = this.columnOption('command:expand');
                     }
 
                     expandColumns = iteratorUtils.map(expandColumns, (column) => {
@@ -2116,7 +2122,7 @@ module.exports = {
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
                         isFixedToEnd,
-                        rtlEnabled = that.option("rtlEnabled"),
+                        rtlEnabled = that.option('rtlEnabled'),
                         bandColumnsCache = that.getBandColumnsCache(),
                         expandColumns = mergeColumns(that, that.getExpandColumns(), that._columns),
                         columns = mergeColumns(that, that._columns, that._commandColumns, true),
@@ -2149,7 +2155,7 @@ module.exports = {
                                 column.fixedPosition = parentBandColumns.length ? parentBandColumns[0].fixedPosition : column.fixedPosition;
 
                                 if(column.fixed) {
-                                    isFixedToEnd = column.fixedPosition === "right";
+                                    isFixedToEnd = column.fixedPosition === 'right';
 
                                     if(rtlEnabled && (!column.command || isCustomCommandColumn(that, column))) {
                                         isFixedToEnd = !isFixedToEnd;
@@ -2192,7 +2198,7 @@ module.exports = {
 
                         // The order of processing is important
                         if(rowspanExpandColumns < (rowIndex + 1)) {
-                            rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "detailExpand", firstPositiveIndexColumn);
+                            rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, 'detailExpand', firstPositiveIndexColumn);
                         }
 
                         if(rowspanGroupColumns < (rowIndex + 1)) {
@@ -2203,7 +2209,7 @@ module.exports = {
                     result.push(getDataColumns(result));
 
                     if(!notGroupedColumnsCount && that._columns.length) {
-                        result[rowCount].push({ command: "empty" });
+                        result[rowCount].push({ command: 'empty' });
                     }
 
                     return result;
@@ -2324,23 +2330,23 @@ module.exports = {
                 changeSortOrder: function(columnIndex, sortOrder) {
                     var that = this,
                         options = {},
-                        sortingOptions = that.option("sorting"),
+                        sortingOptions = that.option('sorting'),
                         sortingMode = sortingOptions && sortingOptions.mode,
-                        needResetSorting = sortingMode === "single" || !sortOrder,
-                        allowSorting = sortingMode === "single" || sortingMode === "multiple",
+                        needResetSorting = sortingMode === 'single' || !sortOrder,
+                        allowSorting = sortingMode === 'single' || sortingMode === 'multiple',
                         column = that._columns[columnIndex],
                         nextSortOrder = function(column) {
-                            if(sortOrder === "ctrl") {
-                                if(!(("sortOrder" in column) && ("sortIndex" in column))) {
+                            if(sortOrder === 'ctrl') {
+                                if(!(('sortOrder' in column) && ('sortIndex' in column))) {
                                     return false;
                                 }
 
                                 options.sortOrder = undefined;
                                 options.sortIndex = undefined;
                             } else if(isDefined(column.groupIndex) || isDefined(column.sortIndex)) {
-                                options.sortOrder = column.sortOrder === "desc" ? "asc" : "desc";
+                                options.sortOrder = column.sortOrder === 'desc' ? 'asc' : 'desc';
                             } else {
-                                options.sortOrder = "asc";
+                                options.sortOrder = 'asc';
                             }
 
                             return true;
@@ -2359,7 +2365,7 @@ module.exports = {
                             if(column.sortOrder !== sortOrder) {
                                 options.sortOrder = sortOrder;
                             }
-                        } else if(sortOrder === "none") {
+                        } else if(sortOrder === 'none') {
                             if(column.sortOrder) {
                                 options.sortIndex = undefined;
                                 options.sortOrder = undefined;
@@ -2386,7 +2392,7 @@ module.exports = {
                         if(isSortOrderValid(sortOrder)) {
                             var sortItem = {
                                 selector: this.calculateSortValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue,
-                                desc: (this.sortOrder === "desc")
+                                desc: (this.sortOrder === 'desc')
                             };
 
                             if(this.sortingMethod) {
@@ -2406,7 +2412,7 @@ module.exports = {
                         if(selector) {
                             var groupItem = {
                                 selector: selector,
-                                desc: (this.sortOrder === "desc"),
+                                desc: (this.sortOrder === 'desc'),
                                 isExpanded: !!this.autoExpandGroup
                             };
 
@@ -2440,7 +2446,7 @@ module.exports = {
                 _updateColumnOptions: function(column) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
 
-                    iteratorUtils.each(["calculateSortValue", "calculateGroupValue", "calculateDisplayValue"], function(_, calculateCallbackName) {
+                    iteratorUtils.each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         var calculateCallback = column[calculateCallbackName];
                         if(isFunction(calculateCallback) && !calculateCallback.originalCallback) {
                             column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
@@ -2465,20 +2471,20 @@ module.exports = {
 
                     var dataType = lookup ? lookup.dataType : column.dataType;
                     if(dataType) {
-                        column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option("rtlEnabled"));
+                        column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
                         column.format = column.format || getFormatByDataType(dataType);
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
                         column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
                             setFilterOperationsAsDefaultValues(column);
                         }
-                        column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || "=";
-                        column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === "boolean" && !column.cellTemplate);
+                        column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || '=';
+                        column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === 'boolean' && !column.cellTemplate);
                     }
                 },
                 updateColumnDataTypes: function(dataSource) {
                     var that = this,
-                        dateSerializationFormat = that.option("dateSerializationFormat"),
+                        dateSerializationFormat = that.option('dateSerializationFormat'),
                         firstItems = that._getFirstItems(dataSource),
                         isColumnDataTypesUpdated = false;
 
@@ -2506,7 +2512,7 @@ module.exports = {
                                         valueDataType = getValueDataType(value);
                                         dataType = dataType || valueDataType;
                                         if(dataType && valueDataType && dataType !== valueDataType) {
-                                            dataType = "string";
+                                            dataType = 'string';
                                         }
                                     }
 
@@ -2514,7 +2520,7 @@ module.exports = {
                                         valueDataType = getValueDataType(getDisplayValue(column, value, firstItems[i]));
                                         lookupDataType = lookupDataType || valueDataType;
                                         if(lookupDataType && valueDataType && lookupDataType !== valueDataType) {
-                                            lookupDataType = "string";
+                                            lookupDataType = 'string';
                                         }
                                     }
                                 }
@@ -2552,7 +2558,7 @@ module.exports = {
                 _customizeColumns: function(columns) {
                     var that = this,
                         hasOwnerBand,
-                        customizeColumns = that.option("customizeColumns");
+                        customizeColumns = that.option('customizeColumns');
 
                     if(customizeColumns) {
                         hasOwnerBand = columns.some(function(column) {
@@ -2568,13 +2574,13 @@ module.exports = {
                     }
                 },
                 _checkAsyncValidationRules: function() {
-                    const currentEditMode = this.option("editing.mode");
-                    if(currentEditMode !== "form" && currentEditMode !== "popup") {
+                    const currentEditMode = this.option('editing.mode');
+                    if(currentEditMode !== 'form' && currentEditMode !== 'popup') {
                         const hasAsyncRules = this._columns.some(function(col) {
-                            return (col.validationRules || []).some(rule => rule.type === "async");
+                            return (col.validationRules || []).some(rule => rule.type === 'async');
                         });
                         if(hasAsyncRules) {
-                            errors.log("E1057", this.component.NAME, currentEditMode);
+                            errors.log('E1057', this.component.NAME, currentEditMode);
                         }
                     }
                 },
@@ -2616,12 +2622,12 @@ module.exports = {
                     }
 
                     if(!equalSortParameters(parameters.sorting, that.getSortDataSourceParameters())) {
-                        updateColumnChanges(that, "sorting");
+                        updateColumnChanges(that, 'sorting');
                     }
                     if(!equalSortParameters(parameters.grouping, that.getGroupDataSourceParameters())) {
-                        updateColumnChanges(that, "grouping");
+                        updateColumnChanges(that, 'grouping');
                     }
-                    updateColumnChanges(that, "columns");
+                    updateColumnChanges(that, 'columns');
                 },
                 updateSortingGrouping: function(dataSource, fromDataSource) {
                     var that = this,
@@ -2643,7 +2649,7 @@ module.exports = {
                                         isExpanded = sortParameters[i].isExpanded;
 
                                         if(selector === column.dataField || selector === column.name || selector === column.selector || selector === column.calculateCellValue || selector === column.calculateGroupValue) {
-                                            column.sortOrder = column.sortOrder || (sortParameters[i].desc ? "desc" : "asc");
+                                            column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
 
                                             if(isExpanded !== undefined) {
                                                 column.autoExpandGroup = isExpanded;
@@ -2675,9 +2681,9 @@ module.exports = {
                             ///#DEBUG
                             that.__groupingUpdated = true;
                             ///#ENDDEBUG
-                            updateSortGroupParameterIndexes(that._columns, groupParameters, "groupIndex");
+                            updateSortGroupParameterIndexes(that._columns, groupParameters, 'groupIndex');
                             if(fromDataSource) {
-                                updateColumnChanges(that, "grouping");
+                                updateColumnChanges(that, 'grouping');
                                 isColumnsChanged = true;
                             }
                         }
@@ -2685,9 +2691,9 @@ module.exports = {
                             ///#DEBUG
                             that.__sortingUpdated = true;
                             ///#ENDDEBUG
-                            updateSortGroupParameterIndexes(that._columns, sortParameters, "sortIndex");
+                            updateSortGroupParameterIndexes(that._columns, sortParameters, 'sortIndex');
                             if(fromDataSource) {
-                                updateColumnChanges(that, "sorting");
+                                updateColumnChanges(that, 'sorting');
                                 isColumnsChanged = true;
                             }
                         }
@@ -2715,7 +2721,7 @@ module.exports = {
 
                         if(remoteFiltering) {
                             if(config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], "filter");
+                                filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], 'filter');
                             }
                         } else {
                             if(column && column.selector) {
@@ -2771,9 +2777,8 @@ module.exports = {
                 columnOption: function(identifier, option, value, notFireEvent) {
                     var that = this,
                         i,
-                        identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
+                        identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':')),
                         columns = that._columns.concat(that._commandColumns),
-                        needUpdateIndexes,
                         column;
 
                     if(identifier === undefined) return;
@@ -2784,7 +2789,7 @@ module.exports = {
 
                     for(i = 0; i < columns.length; i++) {
                         if(identifierOptionName) {
-                            if(("" + columns[i][identifierOptionName]) === identifier) {
+                            if(('' + columns[i][identifierOptionName]) === identifier) {
                                 column = columns[i];
                                 break;
                             }
@@ -2804,17 +2809,12 @@ module.exports = {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(isObject(option)) {
                             iteratorUtils.each(option, function(optionName, value) {
-                                needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
-                        }
-                        if(needUpdateIndexes) {
-                            updateIndexes(that, column);
                         }
 
                         fireColumnsChanged(that);
@@ -2832,7 +2832,7 @@ module.exports = {
                     that.beginUpdate();
 
                     for(i = 0; i < columnCount; i++) {
-                        that.columnOption(i, "sortOrder", undefined);
+                        that.columnOption(i, 'sortOrder', undefined);
                     }
                     that.endUpdate();
                 },
@@ -2848,7 +2848,7 @@ module.exports = {
                     that.beginUpdate();
 
                     for(i = 0; i < columnCount; i++) {
-                        that.columnOption(i, "groupIndex", undefined);
+                        that.columnOption(i, 'groupIndex', undefined);
                     }
                     that.endUpdate();
                 },
@@ -2864,6 +2864,19 @@ module.exports = {
                     }
                     return -1;
                 },
+
+                /**
+                 * @name GridBaseMethods.getVisibleColumnIndex
+                 * @publicName getVisibleColumnIndex(id)
+                 * @param1 id:number|string
+                 * @return number
+                 */
+                getVisibleColumnIndex: function(id, rowIndex) {
+                    const index = this.columnOption(id, 'index');
+
+                    return this.getVisibleIndex(index, rowIndex);
+                },
+
                 /**
                  * @name dxDataGridMethods.addColumn
                  * @publicName addColumn(columnOptions)
@@ -2942,35 +2955,34 @@ module.exports = {
                     var that = this,
                         commonColumnSettings,
                         dataSource = that._dataSource,
-                        ignoreColumnOptionNames = that.option("stateStoring.ignoreColumnOptionNames");
+                        ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
 
                     if(!ignoreColumnOptionNames) {
                         ignoreColumnOptionNames = [];
                         commonColumnSettings = that.getCommonSettings();
 
-                        if(!that.option("columnChooser.enabled")) ignoreColumnOptionNames.push("visible");
-                        if(that.option("sorting.mode") === "none") ignoreColumnOptionNames.push("sortIndex", "sortOrder");
-                        if(!commonColumnSettings.allowGrouping) ignoreColumnOptionNames.push("groupIndex");
-                        if(!commonColumnSettings.allowFixing) ignoreColumnOptionNames.push("fixed", "fixedPosition");
-                        if(!commonColumnSettings.allowResizing) ignoreColumnOptionNames.push("width", "visibleWidth");
+                        if(!that.option('columnChooser.enabled')) ignoreColumnOptionNames.push('visible');
+                        if(that.option('sorting.mode') === 'none') ignoreColumnOptionNames.push('sortIndex', 'sortOrder');
+                        if(!commonColumnSettings.allowGrouping) ignoreColumnOptionNames.push('groupIndex');
+                        if(!commonColumnSettings.allowFixing) ignoreColumnOptionNames.push('fixed', 'fixedPosition');
+                        if(!commonColumnSettings.allowResizing) ignoreColumnOptionNames.push('width', 'visibleWidth');
 
-                        const isFilterPanelHidden = !that.option("filterPanel.visible");
-                        if(!that.option("filterRow.visible") && isFilterPanelHidden) ignoreColumnOptionNames.push("filterValue", "selectedFilterOperation");
-                        if(!that.option("headerFilter.visible") && isFilterPanelHidden) ignoreColumnOptionNames.push("filterValues", "filterType");
+                        const isFilterPanelHidden = !that.option('filterPanel.visible');
+                        if(!that.option('filterRow.visible') && isFilterPanelHidden) ignoreColumnOptionNames.push('filterValue', 'selectedFilterOperation');
+                        if(!that.option('headerFilter.visible') && isFilterPanelHidden) ignoreColumnOptionNames.push('filterValues', 'filterType');
                     }
 
                     that._columnsUserState = state;
                     that._ignoreColumnOptionNames = ignoreColumnOptionNames;
                     that._hasUserState = !!state;
 
-                    updateColumnChanges(that, "filtering");
-                    updateColumnChanges(that, "grouping");
+                    updateColumnChanges(that, 'filtering');
 
                     that.init();
 
                     if(dataSource) {
-                        dataSource.sort(null);
-                        dataSource.group(null);
+                        dataSource.sort(that.getSortDataSourceParameters());
+                        dataSource.group(that.getGroupDataSourceParameters());
                     }
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {
@@ -2998,7 +3010,7 @@ module.exports = {
                                         result,
                                         parsedValue;
 
-                                    if(column.dataType === "number") {
+                                    if(column.dataType === 'number') {
                                         if(isString(text) && column.format) {
                                             parsedValue = numberLocalization.parse(text);
 
@@ -3008,7 +3020,7 @@ module.exports = {
                                         } else if(isDefined(text) && isNumeric(text)) {
                                             result = Number(text);
                                         }
-                                    } else if(column.dataType === "boolean") {
+                                    } else if(column.dataType === 'boolean') {
                                         if(text === column.trueText) {
                                             result = true;
                                         } else if(text === column.falseText) {
@@ -3041,7 +3053,7 @@ module.exports = {
                             result = this.calculateFilterExpression.apply(this, arguments);
                         }
                         if(isFunction(result)) {
-                            result = [result, "=", true];
+                            result = [result, '=', true];
                         }
                         if(result) {
                             result.columnIndex = this.index;
@@ -3066,7 +3078,7 @@ module.exports = {
                     if(columnOptions.dataType) {
                         calculatedColumnOptions.userDataType = columnOptions.dataType;
                     }
-                    if(columnOptions.selectedFilterOperation && !("defaultSelectedFilterOperation" in calculatedColumnOptions)) {
+                    if(columnOptions.selectedFilterOperation && !('defaultSelectedFilterOperation' in calculatedColumnOptions)) {
                         calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
                     }
                     if(columnOptions.lookup) {
@@ -3115,7 +3127,7 @@ module.exports = {
                                             });
                                         }
                                     } else {
-                                        errors.log("E1016");
+                                        errors.log('E1016');
                                     }
                                 } else {
                                     that.updateValueMap && that.updateValueMap();
@@ -3131,8 +3143,8 @@ module.exports = {
 
                     iteratorUtils.each(calculatedColumnOptions, function(optionName) {
                         var defaultOptionName;
-                        if(isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf("default") !== 0) {
-                            defaultOptionName = "default" + optionName.charAt(0).toUpperCase() + optionName.substr(1);
+                        if(isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf('default') !== 0) {
+                            defaultOptionName = 'default' + optionName.charAt(0).toUpperCase() + optionName.substr(1);
                             calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
                         }
                     });
@@ -3197,10 +3209,10 @@ module.exports = {
                 getColumnId: function(column) {
                     if(column.command && column.type === GROUP_COMMAND_COLUMN_NAME) {
                         if(isCustomCommandColumn(this, column)) {
-                            return "type:" + column.type;
+                            return 'type:' + column.type;
                         }
 
-                        return "command:" + column.command;
+                        return 'command:' + column.command;
                     }
 
                     return column.index;

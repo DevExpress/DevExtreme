@@ -1,11 +1,11 @@
-var $ = require("../../../core/renderer"),
-    registerComponent = require("../../../core/component_registrator"),
-    dateUtils = require("../../../core/utils/date"),
-    dateLocalization = require("../../../localization/date"),
-    each = require("../../../core/utils/iterator").each,
-    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator");
+var $ = require('../../../core/renderer'),
+    registerComponent = require('../../../core/component_registrator'),
+    dateUtils = require('../../../core/utils/date'),
+    dateLocalization = require('../../../localization/date'),
+    each = require('../../../core/utils/iterator').each,
+    SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
 
-var WEEK_CLASS = "dx-scheduler-work-space-week";
+var WEEK_CLASS = 'dx-scheduler-work-space-week';
 
 var toMs = dateUtils.dateToMilliseconds;
 var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
@@ -18,7 +18,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return 7 * this.option("intervalCount");
+        return 7 * this.option('intervalCount');
     },
 
     _getDateByIndex: function(headerIndex) {
@@ -32,11 +32,11 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getStartViewDate: function() {
-        return dateUtils.getFirstWeekDate(this.option("startDate"), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
+        return dateUtils.getFirstWeekDate(this.option('startDate'), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
     },
 
     _getIntervalDuration: function() {
-        return toMs("day") * 7 * this.option("intervalCount");
+        return toMs('day') * 7 * this.option('intervalCount');
     },
 
     _getCellsBetween: function($first, $last) {
@@ -62,7 +62,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         }
 
         var lastCellGroup = this.getCellData($last).groups,
-            indexesDifference = this.option("showAllDayPanel") && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
+            indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
 
         var newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference,
             newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
@@ -98,7 +98,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             groupCount = this._getGroupCount(),
             rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount),
             edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1,
-            direction = this._isRTL() ? "prev" : "next";
+            direction = this._isRTL() ? 'prev' : 'next';
 
         if($focusedCell.index() === edgeCellIndex || this._isGroupEndCell($focusedCell)) {
             $rightCell = $focusedCell;
@@ -118,7 +118,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             groupCount = this._getGroupCount(),
             rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount),
             edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0,
-            direction = this._isRTL() ? "next" : "prev";
+            direction = this._isRTL() ? 'next' : 'prev';
 
         if($focusedCell.index() === edgeCellIndex || this._isGroupStartCell($focusedCell)) {
             $leftCell = $focusedCell;
@@ -128,9 +128,27 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         }
 
         return $leftCell;
-    }
+    },
+
+    getPositionShift: function(timeShift, isAllDay) {
+        if(!isAllDay && this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
+            return {
+                top: 0,
+                left: 0,
+                cellPosition: 0
+            };
+        }
+        return this.callBase(timeShift, isAllDay);
+    },
+
+    _isApplyCompactAppointmentOffset: function() {
+        if(this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
+            return false;
+        }
+        return this.callBase();
+    },
 });
 
-registerComponent("dxSchedulerWorkSpaceWeek", SchedulerWorkSpaceWeek);
+registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);
 
 module.exports = SchedulerWorkSpaceWeek;

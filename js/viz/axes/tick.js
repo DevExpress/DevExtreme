@@ -1,8 +1,8 @@
-var isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend;
+var isDefined = require('../../core/utils/type').isDefined,
+    extend = require('../../core/utils/extend').extend;
 
 function getPathStyle(options) {
-    return { stroke: options.color, "stroke-width": options.width, "stroke-opacity": options.opacity, opacity: 1 };
+    return { stroke: options.color, 'stroke-width': options.width, 'stroke-opacity': options.opacity, opacity: 1 };
 }
 
 function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, skipLabels, offset) {
@@ -30,7 +30,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
     function createLabelHint(tick, range) {
         const labelHint = axis.formatHint(tick.value, labelOptions, range);
-        if(isDefined(labelHint) && labelHint !== "") {
+        if(isDefined(labelHint) && labelHint !== '') {
             tick.label.setTitle(labelHint);
         }
     }
@@ -131,13 +131,13 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                if(isDefined(text) && text !== "" && !emptyStrRegExp.test(text)) {
+                if(isDefined(text) && text !== '' && !emptyStrRegExp.test(text)) {
                     this.label = renderer
                         .text(text)
                         .css(getLabelFontStyle(this))
                         .attr(labelStyle)
 
-                        .data("chart-data-argument", this.value)
+                        .data('chart-data-argument', this.value)
                         .append(elementsGroup);
 
                     this.updateLabelPosition();
@@ -211,6 +211,13 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                         this._fadeInLabel();
                     }
                 }
+            },
+
+            updateMultilineTextAlignment() {
+                if(!this.label) {
+                    return;
+                }
+                this.label.attr({ textsAlignment: this.labelAlignment || axis.getOptions().label.alignment });
             },
 
             drawGrid: function(drawLine) {

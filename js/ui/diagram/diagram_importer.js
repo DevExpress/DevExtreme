@@ -1,5 +1,5 @@
-import Errors from "../widget/ui.errors";
-import { getWindow } from "../../core/utils/window";
+import Errors from '../widget/ui.errors';
+import { getWindow } from '../../core/utils/window';
 
 let diagram;
 
@@ -13,10 +13,10 @@ function getDiagram() {
 
 function requestDiagram() {
     const window = getWindow();
-    const diagram = window && window.DevExpress && window.DevExpress.diagram || require("devexpress-diagram");
+    const diagram = window && window.DevExpress && window.DevExpress.diagram || require('devexpress-diagram');
 
     if(!diagram) {
-        throw Errors.Error("E1041", "devexpress-diagram");
+        throw Errors.Error('E1041', 'devexpress-diagram');
     }
 
     return diagram;

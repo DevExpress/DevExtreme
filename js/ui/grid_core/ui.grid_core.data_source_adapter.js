@@ -1,12 +1,12 @@
-import Callbacks from "../../core/utils/callbacks";
-import gridCore from "../data_grid/ui.data_grid.core";
-import { executeAsync, getKeyHash } from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import ArrayStore from "../../data/array_store";
-import arrayUtils from "../../data/array_utils";
-import { when, Deferred } from "../../core/utils/deferred";
+import Callbacks from '../../core/utils/callbacks';
+import gridCore from '../data_grid/ui.data_grid.core';
+import { executeAsync, getKeyHash } from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import ArrayStore from '../../data/array_store';
+import arrayUtils from '../../data/array_utils';
+import { when, Deferred } from '../../core/utils/deferred';
 
 module.exports = gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
@@ -77,6 +77,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that._currentTotalCount = 0;
             that._cachedPagesData = createEmptyPagesData();
             that._lastOperationTypes = {};
+            that._eventsStrategy = dataSource._eventsStrategy;
 
 
             that.changed = Callbacks();
@@ -93,13 +94,13 @@ module.exports = gridCore.Controller.inherit((function() {
             that._pushHandler = that._handlePush.bind(that);
             that._changingHandler = that._handleChanging.bind(that);
 
-            dataSource.on("changed", that._dataChangedHandler);
-            dataSource.on("customizeStoreLoadOptions", that._dataLoadingHandler);
-            dataSource.on("customizeLoadResult", that._dataLoadedHandler);
-            dataSource.on("loadingChanged", that._loadingChangedHandler);
-            dataSource.on("loadError", that._loadErrorHandler);
-            dataSource.on("changing", that._changingHandler);
-            dataSource.store().on("push", that._pushHandler);
+            dataSource.on('changed', that._dataChangedHandler);
+            dataSource.on('customizeStoreLoadOptions', that._dataLoadingHandler);
+            dataSource.on('customizeLoadResult', that._dataLoadedHandler);
+            dataSource.on('loadingChanged', that._loadingChangedHandler);
+            dataSource.on('loadError', that._loadErrorHandler);
+            dataSource.on('changing', that._changingHandler);
+            dataSource.store().on('push', that._pushHandler);
 
             each(dataSource, function(memberName, member) {
                 if(!that[memberName] && typeUtils.isFunction(member)) {
@@ -117,13 +118,13 @@ module.exports = gridCore.Controller.inherit((function() {
                 dataSource = that._dataSource,
                 store = dataSource.store();
 
-            dataSource.off("changed", that._dataChangedHandler);
-            dataSource.off("customizeStoreLoadOptions", that._dataLoadingHandler);
-            dataSource.off("customizeLoadResult", that._dataLoadedHandler);
-            dataSource.off("loadingChanged", that._loadingChangedHandler);
-            dataSource.off("loadError", that._loadErrorHandler);
-            dataSource.off("changing", that._changingHandler);
-            store && store.off("push", that._pushHandler);
+            dataSource.off('changed', that._dataChangedHandler);
+            dataSource.off('customizeStoreLoadOptions', that._dataLoadingHandler);
+            dataSource.off('customizeLoadResult', that._dataLoadedHandler);
+            dataSource.off('loadingChanged', that._loadingChangedHandler);
+            dataSource.off('loadError', that._loadErrorHandler);
+            dataSource.off('changing', that._changingHandler);
+            store && store.off('push', that._pushHandler);
 
             if(!isSharedDataSource) {
                 dataSource.dispose();
@@ -202,7 +203,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 groupCount = gridCore.normalizeSortingInfo(this.group()).length;
 
             changes = changes.filter(function(change) {
-                return !dataSource.paginate() || change.type !== "insert" || change.index !== undefined;
+                return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
             });
 
             arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
@@ -217,7 +218,7 @@ module.exports = gridCore.Controller.inherit((function() {
             this._applyBatch(e.changes);
         },
         _needCleanCacheByOperation: function(operationType, remoteOperations) {
-            var operationTypesByOrder = ["filtering", "sorting", "paging"],
+            var operationTypesByOrder = ['filtering', 'sorting', 'paging'],
                 operationTypeIndex = operationTypesByOrder.indexOf(operationType),
                 currentOperationTypes = operationTypeIndex >= 0 ? operationTypesByOrder.slice(operationTypeIndex) : [operationType];
 
@@ -278,13 +279,13 @@ module.exports = gridCore.Controller.inherit((function() {
 
             that.customizeStoreLoadOptions.fire(options);
 
-            options.delay = this.option("loadingTimeout");
+            options.delay = this.option('loadingTimeout');
             options.originalStoreLoadOptions = options.storeLoadOptions;
             options.remoteOperations = extend({}, this.remoteOperations());
 
             var isReload = !that.isLoaded() && !that._isRefreshing;
 
-            if(that.option("integrationOptions.renderedOnServer") && !that.isLoaded()) {
+            if(that.option('integrationOptions.renderedOnServer') && !that.isLoaded()) {
                 options.delay = undefined;
             }
 
@@ -339,7 +340,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 summary: !remoteOperations.summary,
                 skip: !remoteOperations.paging,
                 take: !remoteOperations.paging,
-                requireTotalCount: cachedExtra && "totalCount" in cachedExtra || !remoteOperations.paging
+                requireTotalCount: cachedExtra && 'totalCount' in cachedExtra || !remoteOperations.paging
             };
 
             each(options.storeLoadOptions, function(optionName, optionValue) {
@@ -359,8 +360,8 @@ module.exports = gridCore.Controller.inherit((function() {
                 localPaging = options.remoteOperations && !options.remoteOperations.paging,
                 cachedPagesData = options.cachedPagesData,
                 storeLoadOptions = options.storeLoadOptions,
-                needCache = this.option("cacheEnabled") !== false && storeLoadOptions,
-                needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group) && !this.option("legacyRendering"),
+                needCache = this.option('cacheEnabled') !== false && storeLoadOptions,
+                needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group) && !this.option('legacyRendering'),
                 needPagingCache = needCache && localPaging,
                 needStoreCache = needPagingCache && !options.isCustomLoading;
 
@@ -448,7 +449,7 @@ module.exports = gridCore.Controller.inherit((function() {
         _handleLoadError: function(error) {
             this.loadError.fire(error);
             this.changed.fire({
-                changeType: "loadError",
+                changeType: 'loadError',
                 error: error
             });
         },
@@ -478,7 +479,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._currentTotalCount = Math.max(that._currentTotalCount, currentTotalCount);
                 if(itemsCount === 0 && dataSource.pageIndex() >= that.pageCount()) {
                     dataSource.pageIndex(that.pageCount() - 1);
-                    if(that.option("scrolling.mode") !== "infinite") {
+                    if(that.option('scrolling.mode') !== 'infinite') {
                         dataSource.load();
                         isLoading = true;
                     }
@@ -588,7 +589,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._handleDataLoading(loadResult);
                 executeTask(function() {
                     if(!dataSource.store()) {
-                        return d.reject("canceled");
+                        return d.reject('canceled');
                     }
 
                     when(loadResult.data || that.loadFromStore(loadResult.storeLoadOptions)).done(function(data, extra) {
@@ -605,10 +606,10 @@ module.exports = gridCore.Controller.inherit((function() {
                             d.resolve(data, loadResult.extra);
                         }).fail(d.reject);
                     }).fail(d.reject);
-                }, that.option("loadingTimeout"));
+                }, that.option('loadingTimeout'));
 
                 return d.fail(function() {
-                    that.fireEvent("loadError", arguments);
+                    that._eventsStrategy.fireEvent('loadError', arguments);
                 }).promise();
             } else {
                 return dataSource.load();

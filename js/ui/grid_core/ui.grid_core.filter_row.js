@@ -1,74 +1,76 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import { isDefined } from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { normalizeKeyName } from "../../events/utils";
-import iteratorUtils from "../../core/utils/iterator";
-import modules from "./ui.grid_core.modules";
-import gridCoreUtils from "./ui.grid_core.utils";
-import messageLocalization from "../../localization/message";
-import Editor from "../editor/editor";
-import Overlay from "../overlay";
-import Menu from "../menu";
-import { selectView } from "../shared/accessibility";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { normalizeKeyName } from '../../events/utils';
+import iteratorUtils from '../../core/utils/iterator';
+import modules from './ui.grid_core.modules';
+import gridCoreUtils from './ui.grid_core.utils';
+import messageLocalization from '../../localization/message';
+import Editor from '../editor/editor';
+import Overlay from '../overlay';
+import Menu from '../menu';
+import { selectView } from '../shared/accessibility';
 
 var OPERATION_ICONS = {
-    "=": "filter-operation-equals",
-    "<>": "filter-operation-not-equals",
-    "<": "filter-operation-less",
-    "<=": "filter-operation-less-equal",
-    ">": "filter-operation-greater",
-    ">=": "filter-operation-greater-equal",
-    "default": "filter-operation-default",
-    "notcontains": "filter-operation-not-contains",
-    "contains": "filter-operation-contains",
-    "startswith": "filter-operation-starts-with",
-    "endswith": "filter-operation-ends-with",
-    "between": "filter-operation-between"
+    '=': 'filter-operation-equals',
+    '<>': 'filter-operation-not-equals',
+    '<': 'filter-operation-less',
+    '<=': 'filter-operation-less-equal',
+    '>': 'filter-operation-greater',
+    '>=': 'filter-operation-greater-equal',
+    'default': 'filter-operation-default',
+    'notcontains': 'filter-operation-not-contains',
+    'contains': 'filter-operation-contains',
+    'startswith': 'filter-operation-starts-with',
+    'endswith': 'filter-operation-ends-with',
+    'between': 'filter-operation-between'
 };
 
 var OPERATION_DESCRIPTORS = {
-    "=": "equal",
-    "<>": "notEqual",
-    "<": "lessThan",
-    "<=": "lessThanOrEqual",
-    ">": "greaterThan",
-    ">=": "greaterThanOrEqual",
-    "startswith": "startsWith",
-    "contains": "contains",
-    "notcontains": "notContains",
-    "endswith": "endsWith",
-    "between": "between"
+    '=': 'equal',
+    '<>': 'notEqual',
+    '<': 'lessThan',
+    '<=': 'lessThanOrEqual',
+    '>': 'greaterThan',
+    '>=': 'greaterThanOrEqual',
+    'startswith': 'startsWith',
+    'contains': 'contains',
+    'notcontains': 'notContains',
+    'endswith': 'endsWith',
+    'between': 'between'
 };
 
 var FILTERING_TIMEOUT = 700,
     CORRECT_FILTER_RANGE_OVERLAY_WIDTH = 1,
-    FILTER_ROW_CLASS = "filter-row",
-    FILTER_RANGE_OVERLAY_CLASS = "filter-range-overlay",
-    FILTER_RANGE_START_CLASS = "filter-range-start",
-    FILTER_RANGE_END_CLASS = "filter-range-end",
-    MENU_CLASS = "dx-menu",
-    EDITOR_WITH_MENU_CLASS = "dx-editor-with-menu",
-    EDITOR_CONTAINER_CLASS = "dx-editor-container",
-    EDITOR_CELL_CLASS = "dx-editor-cell",
-    FILTER_MENU = "dx-filter-menu",
-    APPLY_BUTTON_CLASS = "dx-apply-button",
-    HIGHLIGHT_OUTLINE_CLASS = "dx-highlight-outline",
-    FOCUSED_CLASS = "dx-focused",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    FILTER_RANGE_CONTENT_CLASS = "dx-filter-range-content",
-    FILTER_MODIFIED_CLASS = "dx-filter-modified",
+    FILTER_ROW_CLASS = 'filter-row',
+    FILTER_RANGE_OVERLAY_CLASS = 'filter-range-overlay',
+    FILTER_RANGE_START_CLASS = 'filter-range-start',
+    FILTER_RANGE_END_CLASS = 'filter-range-end',
+    MENU_CLASS = 'dx-menu',
+    EDITOR_WITH_MENU_CLASS = 'dx-editor-with-menu',
+    EDITOR_CONTAINER_CLASS = 'dx-editor-container',
+    EDITOR_CELL_CLASS = 'dx-editor-cell',
+    FILTER_MENU = 'dx-filter-menu',
+    APPLY_BUTTON_CLASS = 'dx-apply-button',
+    HIGHLIGHT_OUTLINE_CLASS = 'dx-highlight-outline',
+    FOCUSED_CLASS = 'dx-focused',
+    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
+    FILTER_RANGE_CONTENT_CLASS = 'dx-filter-range-content',
+    FILTER_MODIFIED_CLASS = 'dx-filter-modified',
 
-    EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])";
+    EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])',
+
+    BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
 
 function isOnClickApplyFilterMode(that) {
-    return that.option("filterRow.applyFilter") === "onClick";
+    return that.option('filterRow.applyFilter') === 'onClick';
 }
 
 var ColumnHeadersViewFilterRowExtender = (function() {
     var getEditorInstance = function($editorContainer) {
         var $editor = $editorContainer && $editorContainer.children(),
-            componentNames = $editor && $editor.data("dxComponents"),
+            componentNames = $editor && $editor.data('dxComponents'),
             editor = componentNames && componentNames.length && $editor.data(componentNames[0]);
 
         if(editor instanceof Editor) {
@@ -77,17 +79,17 @@ var ColumnHeadersViewFilterRowExtender = (function() {
     };
 
     var getRangeTextByFilterValue = function(that, column) {
-        var result = "",
-            rangeEnd = "",
+        var result = '',
+            rangeEnd = '',
             filterValue = getColumnFilterValue(that, column),
-            formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, "filterRow");
+            formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'filterRow');
 
         if(Array.isArray(filterValue)) {
             result = gridCoreUtils.formatValue(filterValue[0], formatOptions);
             rangeEnd = gridCoreUtils.formatValue(filterValue[1], formatOptions);
 
-            if(rangeEnd !== "") {
-                result += " - " + rangeEnd;
+            if(rangeEnd !== '') {
+                result += ' - ' + rangeEnd;
             }
         } else if(isDefined(filterValue)) {
             result = gridCoreUtils.formatValue(filterValue, formatOptions);
@@ -108,14 +110,21 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         }
     };
 
+    var isValidFilterValue = function(filterValue, column) {
+        if(column && BETWEEN_OPERATION_DATA_TYPES.indexOf(column.dataType) >= 0 && Array.isArray(filterValue)) {
+            return false;
+        }
+
+        return filterValue !== undefined;
+    };
 
     var getFilterValue = function(that, columnIndex, $editorContainer) {
         var column = that._columnsController.columnOption(columnIndex),
             filterValue = getColumnFilterValue(that, column),
-            isFilterRange = $editorContainer.closest("." + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).length,
+            isFilterRange = $editorContainer.closest('.' + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).length,
             isRangeStart = $editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS));
 
-        if(filterValue && Array.isArray(filterValue) && getColumnSelectedFilterOperation(that, column) === "between") {
+        if(filterValue && Array.isArray(filterValue) && getColumnSelectedFilterOperation(that, column) === 'between') {
             if(isRangeStart) {
                 return filterValue[0];
             } else {
@@ -123,11 +132,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             }
         }
 
-        return !isFilterRange && filterValue !== undefined ? filterValue : null;
+        return !isFilterRange && isValidFilterValue(filterValue, column) ? filterValue : null;
     };
 
     var normalizeFilterValue = function(that, filterValue, column, $editorContainer) {
-        if(getColumnSelectedFilterOperation(that, column) === "between") {
+        if(getColumnSelectedFilterOperation(that, column) === 'between') {
             var columnFilterValue = getColumnFilterValue(that, column);
             if($editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
                 return [filterValue, Array.isArray(columnFilterValue) ? columnFilterValue[1] : undefined];
@@ -140,7 +149,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
     };
 
     var updateFilterValue = function(that, options) {
-        var value = options.value === "" ? null : options.value,
+        var value = options.value === '' ? null : options.value,
             $editorContainer = options.container,
             column = that._columnsController.columnOption(options.column.index),
             filterValue = getFilterValue(that, column.index, $editorContainer);
@@ -148,7 +157,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-        that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? "bufferedFilterValue" : "filterValue", normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
+        that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? 'bufferedFilterValue' : 'filterValue', normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
     };
 
     return {
@@ -156,7 +165,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             var that = this,
                 editor = getEditorInstance($editorContainer);
 
-            editor && editor.option("value", getFilterValue(that, column.index, $editorContainer));
+            editor && editor.option('value', getFilterValue(that, column.index, $editorContainer));
         },
 
         _columnOptionChanged: function(e) {
@@ -170,36 +179,36 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $editorRangeElements,
                 $menu;
 
-            if(gridCoreUtils.checkChanges(optionNames, ["filterValue", "bufferedFilterValue", "selectedFilterOperation", "bufferedSelectedFilterOperation"]) && e.columnIndex !== undefined) {
+            if(gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation']) && e.columnIndex !== undefined) {
                 visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
                 column = that._columnsController.columnOption(e.columnIndex);
-                $cell = that._getCellElement(that.element().find("." + that.addWidgetPrefix(FILTER_ROW_CLASS)).index(), visibleIndex) || $();
-                $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
+                $cell = that._getCellElement(that.element().find('.' + that.addWidgetPrefix(FILTER_ROW_CLASS)).index(), visibleIndex) || $();
+                $editorContainer = $cell.find('.' + EDITOR_CONTAINER_CLASS).first();
 
                 if(optionNames.filterValue || optionNames.bufferedFilterValue) {
                     that._updateEditorValue(column, $editorContainer);
 
-                    overlayInstance = $cell.find("." + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).data("dxOverlay");
+                    overlayInstance = $cell.find('.' + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).data('dxOverlay');
                     if(overlayInstance) {
-                        $editorRangeElements = overlayInstance.$content().find("." + EDITOR_CONTAINER_CLASS);
+                        $editorRangeElements = overlayInstance.$content().find('.' + EDITOR_CONTAINER_CLASS);
 
                         that._updateEditorValue(column, $editorRangeElements.first());
                         that._updateEditorValue(column, $editorRangeElements.last());
                     }
-                    if(!overlayInstance || !overlayInstance.option("visible")) {
+                    if(!overlayInstance || !overlayInstance.option('visible')) {
                         that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
                     }
                 }
                 if(optionNames.selectedFilterOperation || optionNames.bufferedSelectedFilterOperation) {
                     if(visibleIndex >= 0 && column) {
-                        $menu = $cell.find("." + MENU_CLASS);
+                        $menu = $cell.find('.' + MENU_CLASS);
 
                         if($menu.length) {
                             that._updateFilterOperationChooser($menu, column, $editorContainer);
 
-                            if(getColumnSelectedFilterOperation(that, column) === "between") {
+                            if(getColumnSelectedFilterOperation(that, column) === 'between') {
                                 that._renderFilterRangeContent($cell, column);
-                            } else if($editorContainer.find("." + FILTER_RANGE_CONTENT_CLASS).length) {
+                            } else if($editorContainer.find('.' + FILTER_RANGE_CONTENT_CLASS).length) {
                                 that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
                                 that._hideFilterRange();
                             }
@@ -223,7 +232,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         },
 
         isFilterRowVisible: function() {
-            return this._isElementVisible(this.option("filterRow"));
+            return this._isElementVisible(this.option('filterRow'));
         },
 
         isVisible: function() {
@@ -232,17 +241,17 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         init: function() {
             this.callBase();
-            this._applyFilterViewController = this.getController("applyFilter");
+            this._applyFilterViewController = this.getController('applyFilter');
         },
 
         _initFilterRangeOverlay: function($cell, column) {
             var that = this,
                 sharedData = {},
-                $editorContainer = $cell.find(".dx-editor-container"),
-                $overlay = $("<div>").addClass(that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).appendTo($cell);
+                $editorContainer = $cell.find('.dx-editor-container'),
+                $overlay = $('<div>').addClass(that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).appendTo($cell);
 
             return that._createComponent($overlay, Overlay, {
-                height: "auto",
+                height: 'auto',
                 shading: false,
                 showTitle: false,
                 focusStateEnabled: false,
@@ -250,58 +259,58 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 closeOnOutsideClick: true,
                 animation: false,
                 position: {
-                    my: "top",
-                    at: "top",
+                    my: 'top',
+                    at: 'top',
                     of: $editorContainer.length && $editorContainer || $cell,
-                    offset: "0 -1"
+                    offset: '0 -1'
                 },
                 contentTemplate: function(contentElement) {
                     var editorOptions,
-                        $editor = $("<div>").addClass(EDITOR_CONTAINER_CLASS + " " + that.addWidgetPrefix(FILTER_RANGE_START_CLASS)).appendTo(contentElement);
+                        $editor = $('<div>').addClass(EDITOR_CONTAINER_CLASS + ' ' + that.addWidgetPrefix(FILTER_RANGE_START_CLASS)).appendTo(contentElement);
 
                     column = that._columnsController.columnOption(column.index);
                     editorOptions = that._getEditorOptions($editor, column);
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
-                        var $prevElement = $cell.find("[tabindex]").not(e.target).first();
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', function(e) {
+                        var $prevElement = $cell.find('[tabindex]').not(e.target).first();
 
-                        if(normalizeKeyName(e) === "tab" && e.shiftKey) {
+                        if(normalizeKeyName(e) === 'tab' && e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
 
                             if(!$prevElement.length) {
-                                $prevElement = $cell.prev().find("[tabindex]").last();
+                                $prevElement = $cell.prev().find('[tabindex]').last();
                             }
-                            eventsEngine.trigger($prevElement, "focus");
+                            eventsEngine.trigger($prevElement, 'focus');
                         }
                     });
 
-                    $editor = $("<div>").addClass(EDITOR_CONTAINER_CLASS + " " + that.addWidgetPrefix(FILTER_RANGE_END_CLASS)).appendTo(contentElement);
+                    $editor = $('<div>').addClass(EDITOR_CONTAINER_CLASS + ' ' + that.addWidgetPrefix(FILTER_RANGE_END_CLASS)).appendTo(contentElement);
                     editorOptions = that._getEditorOptions($editor, column);
 
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
-                        if(normalizeKeyName(e) === "tab" && !e.shiftKey) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', function(e) {
+                        if(normalizeKeyName(e) === 'tab' && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
-                            eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");
+                            eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
                         }
                     });
 
                     return $(contentElement).addClass(that.getWidgetContainerClass());
                 },
                 onShown: function(e) {
-                    var $editor = e.component.$content().find("." + EDITOR_CONTAINER_CLASS).first();
+                    var $editor = e.component.$content().find('.' + EDITOR_CONTAINER_CLASS).first();
 
-                    eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), "focus");
+                    eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
                 },
                 onHidden: function() {
                     column = that._columnsController.columnOption(column.index);
 
-                    $cell.find("." + MENU_CLASS).parent().addClass(EDITOR_WITH_MENU_CLASS);
-                    if(getColumnSelectedFilterOperation(that, column) === "between") {
+                    $cell.find('.' + MENU_CLASS).parent().addClass(EDITOR_WITH_MENU_CLASS);
+                    if(getColumnSelectedFilterOperation(that, column) === 'between') {
                         that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
                         that.component.updateDimensions();
                     }
@@ -317,14 +326,14 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _showFilterRange: function($cell, column) {
             var that = this,
-                $overlay = $cell.children("." + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)),
-                overlayInstance = $overlay.length && $overlay.data("dxOverlay");
+                $overlay = $cell.children('.' + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)),
+                overlayInstance = $overlay.length && $overlay.data('dxOverlay');
 
             if(!overlayInstance && column) {
                 overlayInstance = that._initFilterRangeOverlay($cell, column);
             }
 
-            if(!overlayInstance.option("visible")) {
+            if(!overlayInstance.option('visible')) {
                 that._filterRangeOverlayInstance && that._filterRangeOverlayInstance.hide();
                 that._filterRangeOverlayInstance = overlayInstance;
 
@@ -346,11 +355,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         _createRow: function(row) {
             var $row = this.callBase(row);
 
-            if(row.rowType === "filter") {
+            if(row.rowType === 'filter') {
                 $row.addClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
 
-                if(!this.option("useLegacyKeyboardNavigation")) {
-                    eventsEngine.on($row, "keydown", event => selectView("filterRow", this, event));
+                if(!this.option('useLegacyKeyboardNavigation')) {
+                    eventsEngine.on($row, 'keydown', event => selectView('filterRow', this, event));
                 }
             }
 
@@ -361,7 +370,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             var result = this.callBase();
 
             if(this.isFilterRowVisible()) {
-                result.push({ rowType: "filter" });
+                result.push({ rowType: 'filter' });
             }
 
             return result;
@@ -374,21 +383,24 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $container,
                 $editorContainer;
 
-            that.setAria("label",
-                messageLocalization.format("dxDataGrid-ariaColumn") + " " + column.caption + ", " + messageLocalization.format("dxDataGrid-ariaFilterCell"),
-                $cell);
-            $cell.addClass(EDITOR_CELL_CLASS);
-            $container = $("<div>").appendTo($cell);
-            $editorContainer = $("<div>").addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
+            if(that.component.option('showColumnHeaders')) {
+                that.setAria('describedby', column.headerId, $cell);
+            }
+            that.setAria('label', messageLocalization.format('dxDataGrid-ariaFilterCell'), $cell);
 
-            if(getColumnSelectedFilterOperation(that, column) === "between") {
+            $cell.addClass(EDITOR_CELL_CLASS);
+            $container = $('<div>').appendTo($cell);
+            $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
+
+            if(getColumnSelectedFilterOperation(that, column) === 'between') {
                 that._renderFilterRangeContent($cell, column);
             } else {
-                that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
+                const editorOptions = that._getEditorOptions($editorContainer, column);
+                that._renderEditor($editorContainer, editorOptions);
             }
 
             if(column.alignment) {
-                $cell.find(EDITORS_INPUT_SELECTOR).first().css("textAlign", column.alignment);
+                $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', column.alignment);
             }
 
             if(column.filterOperations && column.filterOperations.length) {
@@ -400,9 +412,9 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             var that = this,
                 column = options.column;
 
-            if(options.rowType === "filter") {
+            if(options.rowType === 'filter') {
                 if(column.command) {
-                    $cell.html("&nbsp;");
+                    $cell.html('&nbsp;');
                 } else if(column.allowFiltering) {
                     that.renderTemplate($cell, that._renderFilterCell.bind(that), options);
                     return;
@@ -414,11 +426,16 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _getEditorOptions: function($editorContainer, column) {
             var that = this,
-                result = extend({}, column, {
+                accessibilityOptions = {
+                    editorOptions: {
+                        inputAttr: that._getFilterInputAccessibilityAttributes(column)
+                    }
+                },
+                result = extend(accessibilityOptions, column, {
                     value: getFilterValue(that, column.index, $editorContainer),
-                    parentType: "filterRow",
-                    showAllText: that.option("filterRow.showAllText"),
-                    updateValueTimeout: that.option("filterRow.applyFilter") === "onClick" ? 0 : FILTERING_TIMEOUT,
+                    parentType: 'filterRow',
+                    showAllText: that.option('filterRow.showAllText'),
+                    updateValueTimeout: that.option('filterRow.applyFilter') === 'onClick' ? 0 : FILTERING_TIMEOUT,
                     width: null,
                     setValue: function(value, notFireEvent) {
                         updateFilterValue(that, {
@@ -430,32 +447,43 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     }
                 });
 
-            if(getColumnSelectedFilterOperation(that, column) === "between") {
+            if(getColumnSelectedFilterOperation(that, column) === 'between') {
                 if($editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
-                    result.placeholder = that.option("filterRow.betweenStartText");
+                    result.placeholder = that.option('filterRow.betweenStartText');
                 } else {
-                    result.placeholder = that.option("filterRow.betweenEndText");
+                    result.placeholder = that.option('filterRow.betweenEndText');
                 }
             }
 
             return result;
         },
+        _getFilterInputAccessibilityAttributes: function(column) {
+            const columnAriaLabel = messageLocalization.format('dxDataGrid-ariaFilterCell');
+            if(this.component.option('showColumnHeaders')) {
+                return {
+                    'aria-label': columnAriaLabel,
+                    'aria-describedby': column.headerId
+                };
+            }
+            return { 'aria-label': columnAriaLabel };
+        },
+
 
         _renderEditor: function($editorContainer, options) {
             $editorContainer.empty();
-            return this.getController("editorFactory").createEditor($("<div>").appendTo($editorContainer), options);
+            return this.getController('editorFactory').createEditor($('<div>').appendTo($editorContainer), options);
         },
 
         _renderFilterRangeContent: function($cell, column) {
             var that = this,
-                $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
+                $editorContainer = $cell.find('.' + EDITOR_CONTAINER_CLASS).first();
 
             $editorContainer.empty();
-            var $filterRangeContent = $("<div>")
+            var $filterRangeContent = $('<div>')
                 .addClass(FILTER_RANGE_CONTENT_CLASS)
-                .attr("tabindex", this.option("tabIndex"));
+                .attr('tabindex', this.option('tabIndex'));
 
-            eventsEngine.on($filterRangeContent, "focusin", function() {
+            eventsEngine.on($filterRangeContent, 'focusin', function() {
                 that._showFilterRange($cell, column);
             });
 
@@ -465,11 +493,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         },
 
         _updateFilterRangeContent: function($cell, value) {
-            var $filterRangeContent = $cell.find("." + FILTER_RANGE_CONTENT_CLASS);
+            var $filterRangeContent = $cell.find('.' + FILTER_RANGE_CONTENT_CLASS);
 
             if($filterRangeContent.length) {
-                if(value === "") {
-                    $filterRangeContent.html("&nbsp;");
+                if(value === '') {
+                    $filterRangeContent.html('&nbsp;');
                 } else {
                     $filterRangeContent.text(value);
                 }
@@ -481,20 +509,20 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 isCellWasFocused,
                 restoreFocus = function() {
                     var menu = Menu.getInstance($menu);
-                    menu && menu.option("focusedElement", null);
+                    menu && menu.option('focusedElement', null);
                     isCellWasFocused && that._focusEditor($editorContainer);
                 };
 
             that._createComponent($menu, Menu, {
                 integrationOptions: {},
                 activeStateEnabled: false,
-                selectionMode: "single",
-                cssClass: that.getWidgetContainerClass() + " " + CELL_FOCUS_DISABLED_CLASS + " " + FILTER_MENU,
-                showFirstSubmenuMode: "onHover",
+                selectionMode: 'single',
+                cssClass: that.getWidgetContainerClass() + ' ' + CELL_FOCUS_DISABLED_CLASS + ' ' + FILTER_MENU,
+                showFirstSubmenuMode: 'onHover',
                 hideSubmenuOnMouseLeave: true,
                 items: [{
                     disabled: column.filterOperations && column.filterOperations.length ? false : true,
-                    icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || "default"],
+                    icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
                     selectable: false,
                     items: that._getFilterOperationMenuItems(column)
                 }],
@@ -510,15 +538,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     }
 
                     if(selectedFilterOperation) {
-                        options[isOnClickMode ? "bufferedSelectedFilterOperation" : "selectedFilterOperation"] = selectedFilterOperation;
+                        options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
 
-                        if(selectedFilterOperation === "between" || columnSelectedFilterOperation === "between") {
-                            notFocusEditor = selectedFilterOperation === "between";
-                            options[isOnClickMode ? "bufferedFilterValue" : "filterValue"] = null;
+                        if(selectedFilterOperation === 'between' || columnSelectedFilterOperation === 'between') {
+                            notFocusEditor = selectedFilterOperation === 'between';
+                            options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
                         }
                     } else {
-                        options[isOnClickMode ? "bufferedFilterValue" : "filterValue"] = null;
-                        options[isOnClickMode ? "bufferedSelectedFilterOperation" : "selectedFilterOperation"] = column.defaultSelectedFilterOperation || null;
+                        options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
+                        options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
                     }
 
                     that._columnsController.columnOption(column.index, options);
@@ -526,53 +554,53 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
                     if(!selectedFilterOperation) {
                         var editor = getEditorInstance($editorContainer);
-                        if(editor && editor.NAME === "dxDateBox" && !editor.option("isValid")) {
+                        if(editor && editor.NAME === 'dxDateBox' && !editor.option('isValid')) {
                             editor.reset();
-                            editor.option("isValid", true);
+                            editor.option('isValid', true);
                         }
                     }
 
                     if(!notFocusEditor) {
                         that._focusEditor($editorContainer);
                     } else {
-                        that._showFilterRange($editorContainer.closest("." + EDITOR_CELL_CLASS), column);
+                        that._showFilterRange($editorContainer.closest('.' + EDITOR_CELL_CLASS), column);
                     }
                 },
                 onSubmenuShown: function() {
                     isCellWasFocused = that._isEditorFocused($editorContainer);
-                    that.getController("editorFactory").loseFocus();
+                    that.getController('editorFactory').loseFocus();
                 },
                 onSubmenuHiding: function() {
-                    eventsEngine.trigger($menu, "blur");
+                    eventsEngine.trigger($menu, 'blur');
                     restoreFocus();
                 },
                 onContentReady: function(e) {
-                    eventsEngine.on($menu, "blur", () => {
+                    eventsEngine.on($menu, 'blur', () => {
                         var menu = e.component;
                         menu._hideSubmenu(menu._visibleSubmenu);
                         restoreFocus();
                     });
                 },
-                rtlEnabled: that.option("rtlEnabled")
+                rtlEnabled: that.option('rtlEnabled')
             });
         },
 
         _isEditorFocused: function($container) {
-            return $container.hasClass(FOCUSED_CLASS) || $container.parents("." + FOCUSED_CLASS).length;
+            return $container.hasClass(FOCUSED_CLASS) || $container.parents('.' + FOCUSED_CLASS).length;
         },
 
         _focusEditor: function($container) {
-            this.getController("editorFactory").focus($container);
-            eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), "focus");
+            this.getController('editorFactory').focus($container);
+            eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), 'focus');
         },
 
         _renderFilterOperationChooser: function($container, column, $editorContainer) {
             var that = this,
                 $menu;
 
-            if(that.option("filterRow.showOperationChooser")) {
+            if(that.option('filterRow.showOperationChooser')) {
                 $container.addClass(EDITOR_WITH_MENU_CLASS);
-                $menu = $("<div>").prependTo($container);
+                $menu = $('<div>').prependTo($container);
                 that._updateFilterOperationChooser($menu, column, $editorContainer);
             }
         },
@@ -580,7 +608,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
         _getFilterOperationMenuItems: function(column) {
             var that = this,
                 result = [{}],
-                filterRowOptions = that.option("filterRow"),
+                filterRowOptions = that.option('filterRow'),
                 operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
 
             if(column.filterOperations && column.filterOperations.length) {
@@ -601,7 +629,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 result.push({
                     name: null,
                     text: filterRowOptions && filterRowOptions.resetOperationText,
-                    icon: OPERATION_ICONS["default"]
+                    icon: OPERATION_ICONS['default']
                 });
             }
 
@@ -612,8 +640,8 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             var that = this;
 
             switch(args.name) {
-                case "filterRow":
-                case "showColumnLines":
+                case 'filterRow':
+                case 'showColumnLines':
                     this._invalidate(true, true);
                     args.handled = true;
                     break;
@@ -636,13 +664,13 @@ var DataControllerFilterRowExtender = {
         }
 
         var filters = [this.callBase()],
-            columns = this._columnsController.getVisibleColumns();
+            columns = this._columnsController.getVisibleColumns(null, true);
 
         iteratorUtils.each(columns, function() {
             var filter;
 
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {
-                filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, "filterRow");
+                filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
                 filters.push(filter);
             }
         });
@@ -654,7 +682,7 @@ var DataControllerFilterRowExtender = {
 exports.ApplyFilterViewController = modules.ViewController.inherit({
     _getHeaderPanel: function() {
         if(!this._headerPanel) {
-            this._headerPanel = this.getView("headerPanel");
+            this._headerPanel = this.getView('headerPanel');
         }
         return this._headerPanel;
     },
@@ -663,24 +691,24 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
         if(isOnClickApplyFilterMode(this)) {
             $element &&
             $element.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value) &&
-            $element.closest("." + EDITOR_CELL_CLASS).toggleClass(FILTER_MODIFIED_CLASS, value);
+            $element.closest('.' + EDITOR_CELL_CLASS).toggleClass(FILTER_MODIFIED_CLASS, value);
             this._getHeaderPanel().enableApplyButton(value);
         }
     },
 
     applyFilter: function() {
-        var columnsController = this.getController("columns"),
+        var columnsController = this.getController('columns'),
             columns = columnsController.getColumns();
 
         columnsController.beginUpdate();
         for(var i = 0; i < columns.length; i++) {
             var column = columns[i];
             if(column.bufferedFilterValue !== undefined) {
-                columnsController.columnOption(i, "filterValue", column.bufferedFilterValue);
+                columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
                 column.bufferedFilterValue = undefined;
             }
             if(column.bufferedSelectedFilterOperation !== undefined) {
-                columnsController.columnOption(i, "selectedFilterOperation", column.bufferedSelectedFilterOperation);
+                columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
                 column.bufferedSelectedFilterOperation = undefined;
             }
         }
@@ -690,9 +718,9 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
 
     removeHighLights: function() {
         if(isOnClickApplyFilterMode(this)) {
-            var columnHeadersViewElement = this.getView("columnHeadersView").element();
-            columnHeadersViewElement.find("." + this.addWidgetPrefix(FILTER_ROW_CLASS) + " ." + HIGHLIGHT_OUTLINE_CLASS).removeClass(HIGHLIGHT_OUTLINE_CLASS);
-            columnHeadersViewElement.find("." + this.addWidgetPrefix(FILTER_ROW_CLASS) + " ." + FILTER_MODIFIED_CLASS).removeClass(FILTER_MODIFIED_CLASS);
+            var columnHeadersViewElement = this.getView('columnHeadersView').element();
+            columnHeadersViewElement.find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS) + ' .' + HIGHLIGHT_OUTLINE_CLASS).removeClass(HIGHLIGHT_OUTLINE_CLASS);
+            columnHeadersViewElement.find('.' + this.addWidgetPrefix(FILTER_ROW_CLASS) + ' .' + FILTER_MODIFIED_CLASS).removeClass(FILTER_MODIFIED_CLASS);
             this._getHeaderPanel().enableApplyButton(false);
         }
     }
@@ -723,25 +751,25 @@ module.exports = {
                 * @type string
                 * @default "(All)"
                 */
-                showAllText: messageLocalization.format("dxDataGrid-filterRowShowAllText"),
+                showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
                 /**
                 * @name GridBaseOptions.filterRow.resetOperationText
                 * @type string
                 * @default "Reset"
                 */
-                resetOperationText: messageLocalization.format("dxDataGrid-filterRowResetOperationText"),
+                resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
                 /**
                  * @name GridBaseOptions.filterRow.applyFilter
                  * @type Enums.GridApplyFilterMode
                  * @default "auto"
                  */
-                applyFilter: "auto",
+                applyFilter: 'auto',
                 /**
                  * @name GridBaseOptions.filterRow.applyFilterText
                  * @type string
                  * @default "Apply filter"
                  */
-                applyFilterText: messageLocalization.format("dxDataGrid-applyFilterText"),
+                applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),
                 /**
                  * @name GridBaseOptions.filterRow.operationDescriptions
                  * @type object
@@ -752,83 +780,83 @@ module.exports = {
                      * @type string
                      * @default "Equals"
                      */
-                    equal: messageLocalization.format("dxDataGrid-filterRowOperationEquals"),
+                    equal: messageLocalization.format('dxDataGrid-filterRowOperationEquals'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.notEqual
                      * @type string
                      * @default "Does not equal"
                      */
-                    notEqual: messageLocalization.format("dxDataGrid-filterRowOperationNotEquals"),
+                    notEqual: messageLocalization.format('dxDataGrid-filterRowOperationNotEquals'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.lessThan
                      * @type string
                      * @default "Less than"
                      */
-                    lessThan: messageLocalization.format("dxDataGrid-filterRowOperationLess"),
+                    lessThan: messageLocalization.format('dxDataGrid-filterRowOperationLess'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual
                      * @type string
                      * @default "Less than or equal to"
                      */
-                    lessThanOrEqual: messageLocalization.format("dxDataGrid-filterRowOperationLessOrEquals"),
+                    lessThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationLessOrEquals'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.greaterThan
                      * @type string
                      * @default "Greater than"
                      */
-                    greaterThan: messageLocalization.format("dxDataGrid-filterRowOperationGreater"),
+                    greaterThan: messageLocalization.format('dxDataGrid-filterRowOperationGreater'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual
                      * @type string
                      * @default "Greater than or equal to"
                      */
-                    greaterThanOrEqual: messageLocalization.format("dxDataGrid-filterRowOperationGreaterOrEquals"),
+                    greaterThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationGreaterOrEquals'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.startsWith
                      * @type string
                      * @default "Starts with"
                      */
-                    startsWith: messageLocalization.format("dxDataGrid-filterRowOperationStartsWith"),
+                    startsWith: messageLocalization.format('dxDataGrid-filterRowOperationStartsWith'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.contains
                      * @type string
                      * @default "Contains"
                      */
-                    contains: messageLocalization.format("dxDataGrid-filterRowOperationContains"),
+                    contains: messageLocalization.format('dxDataGrid-filterRowOperationContains'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.notContains
                      * @type string
                      * @default "Does not contain"
                      */
-                    notContains: messageLocalization.format("dxDataGrid-filterRowOperationNotContains"),
+                    notContains: messageLocalization.format('dxDataGrid-filterRowOperationNotContains'),
 
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.endsWith
                      * @type string
                      * @default "Ends with"
                      */
-                    endsWith: messageLocalization.format("dxDataGrid-filterRowOperationEndsWith"),
+                    endsWith: messageLocalization.format('dxDataGrid-filterRowOperationEndsWith'),
                     /**
                      * @name GridBaseOptions.filterRow.operationDescriptions.between
                      * @type string
                      * @default "Between"
                      */
-                    between: messageLocalization.format("dxDataGrid-filterRowOperationBetween"),
-                    isBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsBlank"),
-                    isNotBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsNotBlank")
+                    between: messageLocalization.format('dxDataGrid-filterRowOperationBetween'),
+                    isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+                    isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank')
                 },
                 /**
                  * @name GridBaseOptions.filterRow.betweenStartText
                  * @type string
                  * @default "Start"
                  */
-                betweenStartText: messageLocalization.format("dxDataGrid-filterRowOperationBetweenStartText"),
+                betweenStartText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenStartText'),
                 /**
                  * @name GridBaseOptions.filterRow.betweenEndText
                  * @type string
                  * @default "End"
                  */
-                betweenEndText: messageLocalization.format("dxDataGrid-filterRowOperationBetweenEndText")
+                betweenEndText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenEndText')
             }
         };
     },
@@ -850,7 +878,7 @@ module.exports = {
                         overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
                         if(overlayInstance) {
-                            cellIndex = overlayInstance.$element().closest("td").index();
+                            cellIndex = overlayInstance.$element().closest('td').index();
 
                             if(cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
                                 overlayInstance.$content().hide();
@@ -868,7 +896,7 @@ module.exports = {
                         overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
                         if(overlayInstance) {
-                            $cell = overlayInstance.$element().closest("td");
+                            $cell = overlayInstance.$element().closest('td');
                             that._columnHeadersView._updateFilterRangeOverlay({ width: $cell.outerWidth(true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
                             overlayInstance.$content().show();
                         }
@@ -893,7 +921,7 @@ module.exports = {
                         filterItem = [];
 
                     if(that._isShowApplyFilterButton()) {
-                        var hintText = that.option("filterRow.applyFilterText"),
+                        var hintText = that.option('filterRow.applyFilterText'),
                             columns = that._columnsController.getColumns(),
                             disabled = !columns.filter(function(column) {
                                 return column.bufferedFilterValue !== undefined;
@@ -905,19 +933,19 @@ module.exports = {
                                 that._applyFilterViewController.applyFilter();
                             },
                             toolbarItem = {
-                                widget: "dxButton",
+                                widget: 'dxButton',
                                 options: {
-                                    icon: "apply-filter",
+                                    icon: 'apply-filter',
                                     disabled: disabled,
                                     onClick: onClickHandler,
                                     hint: hintText,
                                     text: hintText,
                                     onInitialized: onInitialized
                                 },
-                                showText: "inMenu",
-                                name: "applyFilterButton",
-                                location: "after",
-                                locateInMenu: "auto",
+                                showText: 'inMenu',
+                                name: 'applyFilterButton',
+                                location: 'after',
+                                locateInMenu: 'auto',
                                 sortIndex: 10
                             };
 
@@ -928,18 +956,18 @@ module.exports = {
                 },
 
                 _isShowApplyFilterButton: function() {
-                    var filterRowOptions = this.option("filterRow");
-                    return filterRowOptions && filterRowOptions.visible && filterRowOptions.applyFilter === "onClick";
+                    var filterRowOptions = this.option('filterRow');
+                    return filterRowOptions && filterRowOptions.visible && filterRowOptions.applyFilter === 'onClick';
                 },
 
                 init: function() {
                     this.callBase();
-                    this._dataController = this.getController("data");
-                    this._applyFilterViewController = this.getController("applyFilter");
+                    this._dataController = this.getController('data');
+                    this._applyFilterViewController = this.getController('applyFilter');
                 },
 
                 enableApplyButton: function(value) {
-                    this.setToolbarItemDisabled("applyFilterButton", !value);
+                    this.setToolbarItemDisabled('applyFilterButton', !value);
                 },
 
                 isVisible: function() {
@@ -947,7 +975,7 @@ module.exports = {
                 },
 
                 optionChanged: function(args) {
-                    if(args.name === "filterRow") {
+                    if(args.name === 'filterRow') {
                         this._invalidate();
                         args.handled = true;
                     } else {

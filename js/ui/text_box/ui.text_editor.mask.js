@@ -1,48 +1,48 @@
-var $ = require("../../core/renderer"),
-    caret = require("./utils.caret"),
-    devices = require("../../core/devices"),
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../../events/utils"),
-    eventsEngine = require("../../events/core/events_engine"),
-    extend = require("../../core/utils/extend").extend,
-    focused = require("../widget/selectors").focused,
-    isDefined = require("../../core/utils/type").isDefined,
-    messageLocalization = require("../../localization/message"),
-    noop = require("../../core/utils/common").noop,
-    stringUtils = require("../../core/utils/string"),
-    wheelEvent = require("../../events/core/wheel"),
-    MaskRules = require("./ui.text_editor.mask.rule"),
-    TextEditorBase = require("./ui.text_editor.base"),
-    DefaultMaskStrategy = require("./ui.text_editor.mask.strategy.default").default,
-    AndroidMaskStrategy = require("./ui.text_editor.mask.strategy.android").default;
+var $ = require('../../core/renderer'),
+    caret = require('./utils.caret'),
+    devices = require('../../core/devices'),
+    each = require('../../core/utils/iterator').each,
+    eventUtils = require('../../events/utils'),
+    eventsEngine = require('../../events/core/events_engine'),
+    extend = require('../../core/utils/extend').extend,
+    focused = require('../widget/selectors').focused,
+    isDefined = require('../../core/utils/type').isDefined,
+    messageLocalization = require('../../localization/message'),
+    noop = require('../../core/utils/common').noop,
+    stringUtils = require('../../core/utils/string'),
+    wheelEvent = require('../../events/core/wheel'),
+    MaskRules = require('./ui.text_editor.mask.rule'),
+    TextEditorBase = require('./ui.text_editor.base'),
+    DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default,
+    AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
 
 var stubCaret = function() {
     return {};
 };
 
-var EMPTY_CHAR = " ";
-var ESCAPED_CHAR = "\\";
+var EMPTY_CHAR = ' ';
+var ESCAPED_CHAR = '\\';
 
-var TEXTEDITOR_MASKED_CLASS = "dx-texteditor-masked";
-var FORWARD_DIRECTION = "forward";
-var BACKWARD_DIRECTION = "backward";
+var TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
+var FORWARD_DIRECTION = 'forward';
+var BACKWARD_DIRECTION = 'backward';
 
 var buildInMaskRules = {
-    "0": /[0-9]/,
-    "9": /[0-9\s]/,
-    "#": /[-+0-9\s]/,
-    "L": function(char) {
+    '0': /[0-9]/,
+    '9': /[0-9\s]/,
+    '#': /[-+0-9\s]/,
+    'L': function(char) {
         return isLiteralChar(char);
     },
-    "l": function(char) {
+    'l': function(char) {
         return isLiteralChar(char) || isSpaceChar(char);
     },
-    "C": /\S/,
-    "c": /./,
-    "A": function(char) {
+    'C': /\S/,
+    'c': /./,
+    'A': function(char) {
         return isLiteralChar(char) || isNumericChar(char);
     },
-    "a": function(char) {
+    'a': function(char) {
         return isLiteralChar(char) || isNumericChar(char) || isSpaceChar(char);
     }
 };
@@ -57,7 +57,7 @@ var isLiteralChar = function(char) {
 };
 
 var isSpaceChar = function(char) {
-    return char === " ";
+    return char === ' ';
 };
 
 var TextEditorMask = TextEditorBase.inherit({
@@ -69,14 +69,14 @@ var TextEditorMask = TextEditorBase.inherit({
                 * @type string
                 * @default ""
                 */
-            mask: "",
+            mask: '',
 
             /**
                 * @name dxTextEditorOptions.maskChar
                 * @type string
                 * @default "_"
                 */
-            maskChar: "_",
+            maskChar: '_',
 
             /**
                 * @name dxTextEditorOptions.maskRules
@@ -90,7 +90,7 @@ var TextEditorMask = TextEditorBase.inherit({
                 * @type string
                 * @default "Value is invalid"
                 */
-            maskInvalidMessage: messageLocalization.format("validation-mask"),
+            maskInvalidMessage: messageLocalization.format('validation-mask'),
 
             /**
                 * @name dxTextEditorOptions.useMaskedValue
@@ -104,7 +104,7 @@ var TextEditorMask = TextEditorBase.inherit({
              * @type Enums.ShowMaskMode
              * @default "always"
              */
-            showMaskMode: "always"
+            showMaskMode: 'always'
         });
     },
 
@@ -112,8 +112,8 @@ var TextEditorMask = TextEditorBase.inherit({
         var that = this;
 
         var keyHandlerMap = {
-            backspace: that._maskStrategy.getHandler("backspace"),
-            del: that._maskStrategy.getHandler("del"),
+            backspace: that._maskStrategy.getHandler('backspace'),
+            del: that._maskStrategy.getHandler('del'),
             enter: that._changeHandler
         };
 
@@ -121,7 +121,7 @@ var TextEditorMask = TextEditorBase.inherit({
         each(keyHandlerMap, function(key, callback) {
             var parentHandler = result[key];
             result[key] = function(e) {
-                that.option("mask") && callback.call(that, e);
+                that.option('mask') && callback.call(that, e);
                 parentHandler && parentHandler(e);
             };
         });
@@ -130,7 +130,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _getSubmitElement: function() {
-        return !this.option("mask") ? this.callBase() : this._$hiddenElement;
+        return !this.option('mask') ? this.callBase() : this._$hiddenElement;
     },
 
     _init: function() {
@@ -185,9 +185,9 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _renderHiddenElement: function() {
-        if(this.option("mask")) {
-            this._$hiddenElement = $("<input>")
-                .attr("type", "hidden")
+        if(this.option('mask')) {
+            this._$hiddenElement = $('<input>')
+                .attr('type', 'hidden')
                 .appendTo(this._inputWrapper());
         }
     },
@@ -202,7 +202,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._maskStrategy.detachEvents();
 
-        if(!this.option("mask")) {
+        if(!this.option('mask')) {
             return;
         }
 
@@ -232,17 +232,17 @@ var TextEditorMask = TextEditorBase.inherit({
         }
 
         this._changedValue = inputValue;
-        var changeEvent = eventUtils.createEvent(e, { type: "change" });
+        var changeEvent = eventUtils.createEvent(e, { type: 'change' });
         eventsEngine.trigger($input, changeEvent);
     },
 
     _parseMask: function() {
-        this._maskRules = extend({}, buildInMaskRules, this.option("maskRules"));
+        this._maskRules = extend({}, buildInMaskRules, this.option('maskRules'));
         this._maskRulesChain = this._parseMaskRule(0);
     },
 
     _parseMaskRule: function(index) {
-        var mask = this.option("mask");
+        var mask = this.option('mask');
         if(index >= mask.length) {
             return new MaskRules.EmptyMaskRule();
         }
@@ -271,7 +271,7 @@ var TextEditorMask = TextEditorBase.inherit({
         });
 
         return isDefined(ruleConfig)
-            ? new MaskRules.MaskRule(extend({ maskChar: this.option("maskChar") }, ruleConfig))
+            ? new MaskRules.MaskRule(extend({ maskChar: this.option('maskChar') }, ruleConfig))
             : new MaskRules.StubMaskRule({ maskChar: pattern });
     },
 
@@ -280,11 +280,11 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        var value = this.option("value") || "";
+        var value = this.option('value') || '';
         this._maskRulesChain.clear(this._normalizeChainArguments());
 
         var chainArgs = { length: value.length };
-        chainArgs[this._isMaskedValueMode() ? "text" : "value"] = value;
+        chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
 
         this._handleChain(chainArgs);
         this._displayMask();
@@ -303,7 +303,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _isMaskedValueMode: function() {
-        return this.option("useMaskedValue");
+        return this.option('useMaskedValue');
     },
 
     _displayMask: function(caret) {
@@ -317,9 +317,9 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _shouldShowMask: function() {
-        var showMaskMode = this.option("showMaskMode");
+        var showMaskMode = this.option('showMaskMode');
 
-        if(showMaskMode === "onFocus") {
+        if(showMaskMode === 'onFocus') {
             return focused(this._input()) || !this._isValueEmpty();
         }
 
@@ -329,8 +329,8 @@ var TextEditorMask = TextEditorBase.inherit({
     _showMaskPlaceholder: function() {
         if(this._shouldShowMask()) {
             var text = this._maskRulesChain.text();
-            this.option("text", text);
-            if(this.option("showMaskMode") === "onFocus") {
+            this.option('text', text);
+            if(this.option('showMaskMode') === 'onFocus') {
                 this._renderDisplayText(text);
             }
         }
@@ -346,7 +346,7 @@ var TextEditorMask = TextEditorBase.inherit({
                 var value = this._maskRulesChain.value(),
                     hiddenElementValue = this._isMaskedValueMode() ? text : value;
 
-                this._$hiddenElement.val(!stringUtils.isEmpty(value) ? hiddenElementValue : "");
+                this._$hiddenElement.val(!stringUtils.isEmpty(value) ? hiddenElementValue : '');
             }
         }
         return this.callBase();
@@ -360,7 +360,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._saveValueChangeEvent(e);
 
-        this.option("value", this._convertToValue().replace(/\s+$/, ""));
+        this.option('value', this._convertToValue().replace(/\s+$/, ''));
     },
 
     _isControlKeyFired: function(e) {
@@ -384,20 +384,20 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _convertToValue: function(text) {
         if(this._isMaskedValueMode()) {
-            text = this._replaceMaskCharWithEmpty(text || this._textValue || "");
+            text = this._replaceMaskCharWithEmpty(text || this._textValue || '');
         } else {
-            text = text || this._value || "";
+            text = text || this._value || '';
         }
 
         return text;
     },
 
     _replaceMaskCharWithEmpty: function(text) {
-        return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+        return text.replace(new RegExp(this.option('maskChar'), 'g'), EMPTY_CHAR);
     },
 
     _maskKeyHandler: function(e, keyHandler) {
-        if(this.option("readOnly")) {
+        if(this.option('readOnly')) {
             return;
         }
 
@@ -410,7 +410,7 @@ var TextEditorMask = TextEditorBase.inherit({
         const raiseInputEvent = () => {
             if(previousText !== this._input().val()) {
                 this._maskStrategy.runWithoutEventProcessing(
-                    () => eventsEngine.trigger(this._input(), "input")
+                    () => eventsEngine.trigger(this._input(), 'input')
                 );
             }
         };
@@ -524,23 +524,23 @@ var TextEditorMask = TextEditorBase.inherit({
         if(!this._maskRulesChain) {
             return;
         }
-        var isValid = stringUtils.isEmpty(this.option("value")) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+        var isValid = stringUtils.isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
 
         this.option({
             isValid: isValid,
-            validationError: isValid ? null : { editorSpecific: true, message: this.option("maskInvalidMessage") }
+            validationError: isValid ? null : { editorSpecific: true, message: this.option('maskInvalidMessage') }
         });
     },
 
     _updateHiddenElement: function() {
         this._removeHiddenElement();
 
-        if(this.option("mask")) {
-            this._input().removeAttr("name");
+        if(this.option('mask')) {
+            this._input().removeAttr('name');
             this._renderHiddenElement();
         }
 
-        this._setSubmitElementName(this.option("name"));
+        this._setSubmitElementName(this.option('name'));
     },
 
     _updateMaskOption: function() {
@@ -552,7 +552,7 @@ var TextEditorMask = TextEditorBase.inherit({
     _processEmptyMask: function(mask) {
         if(mask) return;
 
-        var value = this.option("value");
+        var value = this.option('value');
         this.option({
             text: value,
             isValid: true
@@ -566,24 +566,26 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "mask":
+            case 'mask':
                 this._updateMaskOption();
                 this._processEmptyMask(args.value);
                 break;
-            case "maskChar":
-            case "maskRules":
-            case "useMaskedValue":
+            case 'maskChar':
+            case 'maskRules':
+            case 'useMaskedValue':
                 this._updateMaskOption();
                 break;
-            case "value":
+            case 'value':
                 this._renderMaskedValue();
                 this._validateMask();
                 this.callBase(args);
+
+                this._changedValue = this._input().val();
                 break;
-            case "maskInvalidMessage":
+            case 'maskInvalidMessage':
                 break;
-            case "showMaskMode":
-                this.option("text", "");
+            case 'showMaskMode':
+                this.option('text', '');
                 this._renderValue();
                 break;
             default:

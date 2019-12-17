@@ -1,27 +1,27 @@
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    chartThemeManagerModule = require("viz/components/chart_theme_manager"),
-    legendModule = require("viz/components/legend"),
-    seriesModule = require("viz/series/base_series"),
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    chartThemeManagerModule = require('viz/components/chart_theme_manager'),
+    legendModule = require('viz/components/legend'),
+    seriesModule = require('viz/series/base_series'),
     Series = seriesModule.Series,
-    seriesFamilyModule = require("viz/core/series_family"),
-    axisModule = require("viz/axes/base_axis"),
-    trackerModule = require("viz/chart_components/tracker"),
+    seriesFamilyModule = require('viz/core/series_family'),
+    axisModule = require('viz/axes/base_axis'),
+    trackerModule = require('viz/chart_components/tracker'),
     ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker),
-    dxPolarChart = require("viz/polar_chart"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    dataValidatorModule = require("viz/components/data_validator"),
-    rangeModule = require("viz/translators/range"),
-    tooltipModule = require("viz/core/tooltip"),
-    layoutManagerModule = require("viz/chart_components/layout_manager"),
+    dxPolarChart = require('viz/polar_chart'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    dataValidatorModule = require('viz/components/data_validator'),
+    rangeModule = require('viz/translators/range'),
+    tooltipModule = require('viz/core/tooltip'),
+    layoutManagerModule = require('viz/chart_components/layout_manager'),
     stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip),
     stubRange = sinon.createStubInstance(rangeModule.Range),
     stubSeriesFamily = createStubSeriesFamily(),
     stubThemeManager = createStubThemeManager(),
-    exportModule = require("viz/core/export"),
+    exportModule = require('viz/core/export'),
     stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 
-$('<div id="chartContainer">').appendTo("#qunit-fixture");
+$('<div id="chartContainer">').appendTo('#qunit-fixture');
 
 legendModule.Legend = sinon.spy(function(parameters) {
     var legend = new vizMocks.Legend(parameters);
@@ -38,8 +38,8 @@ trackerModule.ChartTracker = sinon.spy(function(parameters) {
 function stubExport() {
     var that = this;
     that.export = new vizMocks.ExportMenu();
-    that.export.stub("measure").returns([0, 0]);
-    sinon.stub(exportModule, "ExportMenu", function() {
+    that.export.stub('measure').returns([0, 0]);
+    sinon.stub(exportModule, 'ExportMenu', function() {
         return that.export;
     });
 }
@@ -54,21 +54,21 @@ function resetStub(stub) {
 function createStubThemeManager() {
     var themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
-    themeManager.theme.withArgs("legend").returns({ title: {} });
-    $.each(["loadingIndicator", "legend", "size", "title", "adaptiveLayout"], function(_, name) {
+    themeManager.theme.withArgs('legend').returns({ title: {} });
+    $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {
         themeManager.getOptions.withArgs(name).returns({});
     });
-    themeManager.getOptions.withArgs("seriesTemplate").returns(false);
-    themeManager.getOptions.withArgs("series").returnsArg(1);
-    themeManager.getOptions.withArgs("valueAxis").returnsArg(1);
-    themeManager.getOptions.withArgs("argumentAxis").returnsArg(1);
-    themeManager.getOptions.withArgs("size").returns({ width: 600, height: 400 });
-    themeManager.getOptions.withArgs("margin").returns({ top: 5, bottom: 10, left: 5, right: 10 });
-    themeManager.getOptions.withArgs("polarTranslatorOptions").returns({});
-    themeManager.getOptions.withArgs("animation").returns({ enabled: true, maxPointCountSupported: 100 });
-    themeManager.getOptions.withArgs("equalBarWidth").returns(true);
-    themeManager.getOptions.withArgs("tooltip").returns({ enabled: true, font: {} });
-    themeManager.getOptions.withArgs("rotated").returns(true);
+    themeManager.getOptions.withArgs('seriesTemplate').returns(false);
+    themeManager.getOptions.withArgs('series').returnsArg(1);
+    themeManager.getOptions.withArgs('valueAxis').returnsArg(1);
+    themeManager.getOptions.withArgs('argumentAxis').returnsArg(1);
+    themeManager.getOptions.withArgs('size').returns({ width: 600, height: 400 });
+    themeManager.getOptions.withArgs('margin').returns({ top: 5, bottom: 10, left: 5, right: 10 });
+    themeManager.getOptions.withArgs('polarTranslatorOptions').returns({});
+    themeManager.getOptions.withArgs('animation').returns({ enabled: true, maxPointCountSupported: 100 });
+    themeManager.getOptions.withArgs('equalBarWidth').returns(true);
+    themeManager.getOptions.withArgs('tooltip').returns({ enabled: true, font: {} });
+    themeManager.getOptions.withArgs('rotated').returns(true);
     themeManager.getOptions.returns({});
     return themeManager;
 }
@@ -82,7 +82,7 @@ function createSeries() {
     series.getRangeData.returns({});
     series.getStackName.returns(null);
     series.getMarginOptions.returns({});
-    series.type = "line";
+    series.type = 'line';
     return series;
 }
 function createStubSeriesFamily() {
@@ -94,7 +94,7 @@ function createStubSeriesFamily() {
 }
 function createStubAxis() {
     var stubAxis = sinon.createStubInstance(axisModule.Axis);
-    stubAxis._options = { valueType: "" };
+    stubAxis._options = { valueType: '' };
     stubAxis.getOptions = function() {
         return this._options;
     };
@@ -133,9 +133,9 @@ var stubSeries = [createSeries(), createSeries()],
 
             axesIndex = 0;
 
-            that.$container = $("#chartContainer");
+            that.$container = $('#chartContainer');
 
-            this.createThemeManager = sinon.stub(chartThemeManagerModule, "ThemeManager", function() {
+            this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
                 resetStub(stubThemeManager);
                 that.themeManager = stubThemeManager;
                 return stubThemeManager;
@@ -146,31 +146,31 @@ var stubSeries = [createSeries(), createSeries()],
             };
             that.clipFunc = function() {
                 return {
-                    id: "DevExpress_" + that.getDefsSvgId(),
+                    id: 'DevExpress_' + that.getDefsSvgId(),
                     attr: sinon.spy(),
                     dispose: function() {}
                 };
             };
 
-            that.createRenderer = sinon.stub(rendererModule, "Renderer", function() {
+            that.createRenderer = sinon.stub(rendererModule, 'Renderer', function() {
                 var stubRenderer = new vizMocks.Renderer();
                 stubRenderer.clipCircle = that.clipFunc;
                 stubRenderer.clipRect = that.clipFunc;
                 return stubRenderer;
             });
 
-            that.createTooltip = sinon.stub(tooltipModule, "Tooltip", function() {
+            that.createTooltip = sinon.stub(tooltipModule, 'Tooltip', function() {
                 resetStub(stubTooltip);
                 return stubTooltip;
             });
 
-            that.range = sinon.stub(rangeModule, "Range", function() {
+            that.range = sinon.stub(rangeModule, 'Range', function() {
                 resetStub(stubRange);
                 stubRange.addRange = function() { this.min = 2; };
                 return stubRange;
             });
 
-            that.createSeries = sinon.stub(seriesModule, "Series", function(settings, seriesTheme) {
+            that.createSeries = sinon.stub(seriesModule, 'Series', function(settings, seriesTheme) {
                 resetStub(stubSeries[seriesIndex]);
                 stubSeries[seriesIndex].getValueAxis.returns(settings.valueAxis);
                 if(seriesTheme.valueErrorBar) {
@@ -179,7 +179,7 @@ var stubSeries = [createSeries(), createSeries()],
                 return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
             });
 
-            that.createAxis = sinon.stub(axisModule, "Axis", function() {
+            that.createAxis = sinon.stub(axisModule, 'Axis', function() {
                 resetStub(stubAxes[axesIndex]);
 
                 stubAxes[axesIndex].getMargins.returns({
@@ -192,12 +192,12 @@ var stubSeries = [createSeries(), createSeries()],
                 return stubAxes[axesIndex++];
             });
 
-            that.createSeriesFamily = sinon.stub(seriesFamilyModule, "SeriesFamily", function() {
+            that.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
                 resetStub(stubSeriesFamily);
                 return stubSeriesFamily;
             });
 
-            that.createLayoutManager = sinon.stub(layoutManagerModule, "LayoutManager", function() {
+            that.createLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
                 resetStub(stubLayoutManager);
                 return stubLayoutManager;
             });
@@ -250,28 +250,28 @@ var stubSeries = [createSeries(), createSeries()],
         }
     };
 
-QUnit.module("create Polar chart", environment);
+QUnit.module('create Polar chart', environment);
 
-QUnit.test("create empty polar chart", function(assert) {
+QUnit.test('create empty polar chart', function(assert) {
     var chart = this.createPolarChart();
 
     assert.ok(chart);
-    assert.strictEqual(rendererModule.Renderer.firstCall.args[0]["cssClass"], "dxc dxc-chart", "root class");
+    assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
 });
 
-QUnit.test("create series", function(assert) {
+QUnit.test('create series', function(assert) {
     var chart = this.createSimplePolarChart();
     assert.equal(chart.getAllSeries().length, 1);
 });
 
-QUnit.test("create series with panes", function(assert) {
-    var chart = this.createSimplePolarChart({ series: { pane: "123" } });
+QUnit.test('create series with panes', function(assert) {
+    var chart = this.createSimplePolarChart({ series: { pane: '123' } });
 
     assert.equal(chart.getAllSeries().length, 1);
 });
 
-QUnit.test("give series in groups to data validator", function(assert) {
-    var validateData = sinon.stub(dataValidatorModule, "validateData", function(data) {
+QUnit.test('give series in groups to data validator', function(assert) {
+    var validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
         return data || [];
     });
     try {
@@ -287,7 +287,7 @@ QUnit.test("give series in groups to data validator", function(assert) {
     }
 });
 
-QUnit.test("create series with correct theme and renderer", function(assert) {
+QUnit.test('create series with correct theme and renderer', function(assert) {
     this.createSimplePolarChart({
         rotated: true
     });
@@ -295,10 +295,10 @@ QUnit.test("create series with correct theme and renderer", function(assert) {
     assert.ok(this.createSeries.args[0][0].renderer instanceof vizMocks.Renderer);
 
     assert.strictEqual(this.createSeries.args[0][1].rotated, undefined);
-    assert.deepEqual(this.createSeries.args[0][1], this.themeManager.getOptions.withArgs("series").returnValues[0]);
+    assert.deepEqual(this.createSeries.args[0][1], this.themeManager.getOptions.withArgs('series').returnValues[0]);
 });
 
-QUnit.test("create spider series", function(assert) {
+QUnit.test('create spider series', function(assert) {
     this.createSimplePolarChart({
         useSpiderWeb: true
     });
@@ -306,20 +306,20 @@ QUnit.test("create spider series", function(assert) {
     assert.ok(this.createSeries.args[0][1].spiderWidget);
 });
 
-QUnit.test("give groups to theme", function(assert) {
+QUnit.test('give groups to theme', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.equal(this.createSeries.args[0][0].seriesGroup, chart._seriesGroup);
     assert.equal(this.createSeries.args[0][0].labelsGroup, chart._labelsGroup);
 });
 
-QUnit.test("render", function(assert) {
+QUnit.test('render', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.ok(chart.getSeriesByPos(0).draw.called);
 });
 
-QUnit.test("Actions sequence with series on render chart", function(assert) {
+QUnit.test('Actions sequence with series on render chart', function(assert) {
     // arrange
     var chart = this.createSimplePolarChart(),
         argumentAxis = chart._argumentAxes[0],
@@ -329,40 +329,40 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
     assert.ok(argumentAxis.setBusinessRange.firstCall.calledAfter(series.createPoints.lastCall));
 });
 
-QUnit.test("draw series with correct translators and animation options", function(assert) {
+QUnit.test('draw series with correct translators and animation options', function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10, height: 10 });
-    stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ keepLabels: false });
+    stubThemeManager.getOptions.withArgs('adaptiveLayout').returns({ keepLabels: false });
     var chart = this.createSimplePolarChart();
 
     assert.equal(chart.getSeriesByPos(0).draw.args[0][0], chart._renderer.animationEnabled());
     assert.equal(chart.getSeriesByPos(0).draw.args[0][1], true);
 });
 
-QUnit.test("draw series with correct translators and without animation", function(assert) {
-    stubThemeManager.getOptions.withArgs("animation").returns({ enabled: false });
+QUnit.test('draw series with correct translators and without animation', function(assert) {
+    stubThemeManager.getOptions.withArgs('animation').returns({ enabled: false });
     var chart = this.createSimplePolarChart();
 
     assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][0], false);
 });
 
-QUnit.test("draw series without animation because exceed point limit ", function(assert) {
-    stubThemeManager.getOptions.withArgs("animation").returns({ enabled: true, maxPointCountSupported: 1 });
+QUnit.test('draw series without animation because exceed point limit ', function(assert) {
+    stubThemeManager.getOptions.withArgs('animation').returns({ enabled: true, maxPointCountSupported: 1 });
     var chart = this.createSimplePolarChart();
 
     assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][0], false);
 });
 
-QUnit.test("pass legendcallback to series draw", function(assert) {
+QUnit.test('pass legendcallback to series draw', function(assert) {
     var chart = this.createSimplePolarChart();
 
-    assert.deepEqual(chart.getAllSeries()[0].draw.args[0][2], chart.getAllSeries()[0], "legend callback");
+    assert.deepEqual(chart.getAllSeries()[0].draw.args[0][2], chart.getAllSeries()[0], 'legend callback');
 });
 
-QUnit.test("create series with visibility changed", function(assert) {
+QUnit.test('create series with visibility changed', function(assert) {
     var chart = this.createSimplePolarChart(),
-        processSeriesFamilySpy = sinon.spy(chart, "_processSeriesFamilies"),
-        populateBusinessRangeSpy = sinon.spy(chart, "_populateBusinessRange"),
-        renderSpy = sinon.spy(chart, "_doRender");
+        processSeriesFamilySpy = sinon.spy(chart, '_processSeriesFamilies'),
+        populateBusinessRangeSpy = sinon.spy(chart, '_populateBusinessRange'),
+        renderSpy = sinon.spy(chart, '_doRender');
     chart._renderer.stopAllAnimations = sinon.stub();
 
     assert.ok(chart.getSeriesByPos(0).visibilityChanged);
@@ -377,7 +377,7 @@ QUnit.test("create series with visibility changed", function(assert) {
     assert.ok(chart._renderer.stopAllAnimations.withArgs(true).calledTwice);
 });
 
-QUnit.test("Pass angles to axes. Process unnormalized angle", function(assert) {
+QUnit.test('Pass angles to axes. Process unnormalized angle', function(assert) {
     this.createSimplePolarChart({
         argumentAxis: {
             startAngle: -526
@@ -386,65 +386,65 @@ QUnit.test("Pass angles to axes. Process unnormalized angle", function(assert) {
     var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
         valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
-    assert.equal(argumentAxisOptions.startAngle, 194, "startAngle", "argumentAxis startAngle");
-    assert.equal(argumentAxisOptions.endAngle, 554, "endAngle", "argumentAxis endAngle");
+    assert.equal(argumentAxisOptions.startAngle, 194, 'argumentAxis startAngle');
+    assert.equal(argumentAxisOptions.endAngle, 554, 'argumentAxis endAngle');
 
-    assert.equal(valueAxisOptions.startAngle, 194, "startAngle", "valueAxis startAngle");
-    assert.equal(valueAxisOptions.endAngle, 554, "endAngle", "valueAxis end");
+    assert.equal(valueAxisOptions.startAngle, 194, 'valueAxis startAngle');
+    assert.equal(valueAxisOptions.endAngle, 554, 'valueAxis end');
 });
 
-QUnit.test("Pass angles to axes. Process incorrect angle", function(assert) {
+QUnit.test('Pass angles to axes. Process incorrect angle', function(assert) {
     this.createSimplePolarChart({
         argumentAxis: {
-            startAngle: "string"
+            startAngle: 'string'
         }
     });
 
     var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
         valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
-    assert.equal(argumentAxisOptions.startAngle, 0, "startAngle", "argumentAxis startAngle");
-    assert.equal(argumentAxisOptions.endAngle, 360, "endAngle", "argumentAxis endAngle");
+    assert.equal(argumentAxisOptions.startAngle, 0, 'argumentAxis startAngle');
+    assert.equal(argumentAxisOptions.endAngle, 360, 'argumentAxis endAngle');
 
-    assert.equal(valueAxisOptions.startAngle, 0, "startAngle", "valueAxis startAngle");
-    assert.equal(valueAxisOptions.endAngle, 360, "endAngle", "valueAxis end");
+    assert.equal(valueAxisOptions.startAngle, 0, 'valueAxis startAngle');
+    assert.equal(valueAxisOptions.endAngle, 360, 'valueAxis end');
 });
 
-QUnit.test("create axes", function(assert) {
+QUnit.test('create axes', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.equal(chart._valueAxes.length, 1);
     assert.equal(chart._argumentAxes.length, 1);
 });
 
-QUnit.test("Pass axes to series", function(assert) {
+QUnit.test('Pass axes to series', function(assert) {
     var chart = this.createSimplePolarChart({ series: [{}, {}] });
 
-    assert.strictEqual(this.createSeries.getCall(0).args[0].valueAxis, chart._valueAxes[0], "value axis for first series");
-    assert.strictEqual(this.createSeries.getCall(1).args[0].valueAxis, chart._valueAxes[0], "value axis for second series");
+    assert.strictEqual(this.createSeries.getCall(0).args[0].valueAxis, chart._valueAxes[0], 'value axis for first series');
+    assert.strictEqual(this.createSeries.getCall(1).args[0].valueAxis, chart._valueAxes[0], 'value axis for second series');
 
-    assert.strictEqual(this.createSeries.getCall(0).args[0].argumentAxis, chart._argumentAxes[0], "argument axis for first series");
-    assert.strictEqual(this.createSeries.getCall(1).args[0].argumentAxis, chart._argumentAxes[0], "argument axis for second series");
+    assert.strictEqual(this.createSeries.getCall(0).args[0].argumentAxis, chart._argumentAxes[0], 'argument axis for first series');
+    assert.strictEqual(this.createSeries.getCall(1).args[0].argumentAxis, chart._argumentAxes[0], 'argument axis for second series');
 });
 
-QUnit.test("create argument and value axes with correct parameters", function(assert) {
+QUnit.test('create argument and value axes with correct parameters', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.equal(this.createAxis.firstCall.args[0].renderer, chart._renderer);
-    assert.equal(this.createAxis.args[0][0].drawingType, "circular", "create argument axis like circular axis");
+    assert.equal(this.createAxis.args[0][0].drawingType, 'circular', 'create argument axis like circular axis');
 
     assert.equal(this.createAxis.secondCall.args[0].renderer, chart._renderer);
-    assert.equal(this.createAxis.args[1][0].drawingType, "linear", "create value axis like circular axis");
+    assert.equal(this.createAxis.args[1][0].drawingType, 'linear', 'create value axis like circular axis');
 });
 
-QUnit.test("create axes with correct groups", function(assert) {
+QUnit.test('create axes with correct groups', function(assert) {
     var chart = this.createSimplePolarChart();
 
     checkAxisGroup(assert, this.createAxis.firstCall.args, chart);
     checkAxisGroup(assert, this.createAxis.secondCall.args, chart);
 });
 
-QUnit.test("draw Axes", function(assert) {
+QUnit.test('draw Axes', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 1);
@@ -490,9 +490,9 @@ QUnit.test("draw Axes", function(assert) {
     }]);
 });
 
-QUnit.test("Adaptive layout", function(assert) {
+QUnit.test('Adaptive layout', function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10 });
-    stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ width: 1000, keepLabels: false });
+    stubThemeManager.getOptions.withArgs('adaptiveLayout').returns({ width: 1000, keepLabels: false });
 
 
     stubAxes[0].getMargins.onCall(1).returns({ left: 2, right: 2, top: 2, bottom: 2 });
@@ -543,18 +543,18 @@ QUnit.test("Adaptive layout", function(assert) {
     }]);
 });
 
-QUnit.test("create correct seriesFamily", function(assert) {
+QUnit.test('create correct seriesFamily', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
-    assert.equal(this.createSeriesFamily.args[0][0].type, "line");
+    assert.equal(this.createSeriesFamily.args[0][0].type, 'line');
     assert.equal(this.createSeriesFamily.args[0][0].equalBarWidth, true);
     assert.deepEqual(chart.seriesFamilies[0].add.args[0][0], chart.series);
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce);
 });
 
-QUnit.test("adjust series dimension in seriesFamily", function(assert) {
+QUnit.test('adjust series dimension in seriesFamily', function(assert) {
     var chart = this.createSimplePolarChart(); // ,
     // translators = {
     //     arg: chart.translator,
@@ -570,14 +570,14 @@ QUnit.test("adjust series dimension in seriesFamily", function(assert) {
     // assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
 });
 
-QUnit.test("require not need more space in canvas", function(assert) {
+QUnit.test('require not need more space in canvas', function(assert) {
     var chart = this.createSimplePolarChart();
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 1);
     assert.equal(chart._valueAxes[0].draw.callCount, 1);
 });
 
-QUnit.test("set value axes spider ticks from argument axis", function(assert) {
+QUnit.test('set value axes spider ticks from argument axis', function(assert) {
     this.createSimplePolarChart();
     var argumentAxis = this.createAxis.returnValues[0],
         valueAxis = this.createAxis.returnValues[1];
@@ -587,45 +587,45 @@ QUnit.test("set value axes spider ticks from argument axis", function(assert) {
 });
 
 
-QUnit.test("create axis with correct options", function(assert) {
+QUnit.test('create axis with correct options', function(assert) {
     this.createSimplePolarChart({});
     var argumentAxis = this.createAxis.returnValues[0],
         valueAxis = this.createAxis.returnValues[1];
 
-    assert.strictEqual(argumentAxis.updateOptions.lastCall.args[0].showCustomBoundaryTicks, true, "boundary ticks for argument axis");
-    assert.strictEqual(valueAxis.updateOptions.lastCall.args[0].showCustomBoundaryTicks, false, "boundary ticks for value axis");
-    assert.strictEqual(argumentAxis.updateOptions.lastCall.args[0].isHorizontal, true, "isHorizontal for argument axis");
-    assert.strictEqual(valueAxis.updateOptions.lastCall.args[0].isHorizontal, true, "isHorizontal for value axis");
+    assert.strictEqual(argumentAxis.updateOptions.lastCall.args[0].showCustomBoundaryTicks, true, 'boundary ticks for argument axis');
+    assert.strictEqual(valueAxis.updateOptions.lastCall.args[0].showCustomBoundaryTicks, false, 'boundary ticks for value axis');
+    assert.strictEqual(argumentAxis.updateOptions.lastCall.args[0].isHorizontal, true, 'isHorizontal for argument axis');
+    assert.strictEqual(valueAxis.updateOptions.lastCall.args[0].isHorizontal, true, 'isHorizontal for value axis');
 });
 
-QUnit.test("create axis with correct types. Spider axis", function(assert) {
+QUnit.test('create axis with correct types. Spider axis', function(assert) {
     this.createSimplePolarChart({ useSpiderWeb: true });
     var argumentAxis = this.createAxis.returnValues[0],
         valueAxis = this.createAxis.returnValues[1];
 
-    assert.equal(this.createAxis.getCall(0).args[0].drawingType, "circularSpider", "create argument axis like circular axis");
-    assert.equal(this.createAxis.getCall(1).args[0].drawingType, "linearSpider", "create value axis like circular axis");
-    assert.equal(argumentAxis.updateOptions.lastCall.args[0].type, "discrete", "create argument axis discrete type");
+    assert.equal(this.createAxis.getCall(0).args[0].drawingType, 'circularSpider', 'create argument axis like circular axis');
+    assert.equal(this.createAxis.getCall(1).args[0].drawingType, 'linearSpider', 'create value axis like circular axis');
+    assert.equal(argumentAxis.updateOptions.lastCall.args[0].type, 'discrete', 'create argument axis discrete type');
     assert.equal(valueAxis.updateOptions.lastCall.args[0].type, undefined);
 });
 
-QUnit.test("create constant lines and strips", function(assert) {
+QUnit.test('create constant lines and strips', function(assert) {
     this.createSimplePolarChart({
         argumentAxis: {
             strips: [{ value: 1 }, { value: 2 }], constantLines: [{ value: 3 }, { value: 4 }],
-            stripStyle: { color: "orange" }, constantLineStyle: { width: 5, color: "green" }
+            stripStyle: { color: 'orange' }, constantLineStyle: { width: 5, color: 'green' }
         }
     });
     var argumentAxis = this.createAxis.returnValues[0];
 
-    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].constantLines[0], { color: "green", value: 3, width: 5 });
-    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].constantLines[1], { color: "green", value: 4, width: 5 });
+    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].constantLines[0], { color: 'green', value: 3, width: 5 });
+    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].constantLines[1], { color: 'green', value: 4, width: 5 });
 
-    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].strips[0], { color: "orange", value: 1 });
-    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].strips[1], { color: "orange", value: 2 });
+    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].strips[0], { color: 'orange', value: 1 });
+    assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].strips[1], { color: 'orange', value: 2 });
 });
 
-QUnit.test("Create Tracker.", function(assert) {
+QUnit.test('Create Tracker.', function(assert) {
     var chart = this.createSimplePolarChart({
         margin: {
             width: 800,
@@ -638,25 +638,25 @@ QUnit.test("Create Tracker.", function(assert) {
         commonPaneSettings: {
             border: { visible: true }
         },
-        zoomingMode: "zoomingModeValue",
-        scrollingMode: "scrollingModeValue",
-        pointSelectionMode: "pointSelectionMode",
-        seriesSelectionMode: "serieSelectionModeWithTheme",
-        rotated: "rotated"
+        zoomingMode: 'zoomingModeValue',
+        scrollingMode: 'scrollingModeValue',
+        pointSelectionMode: 'pointSelectionMode',
+        seriesSelectionMode: 'serieSelectionModeWithTheme',
+        rotated: 'rotated'
     });
 
     var tracker = trackerModule.ChartTracker.lastCall.returnValue;
-    assert.ok(tracker.stub("update").calledOnce, "tracker update is called once");
+    assert.ok(tracker.stub('update').calledOnce, 'tracker update is called once');
 
-    var updateArg0 = tracker.stub("update").lastCall.args[0];
-    assert.equal(updateArg0.argumentAxis, chart._argumentAxes[0], "argument axis");
-    assert.equal(updateArg0.chart, chart, "chart instances should be not passed");
-    assert.equal(updateArg0.rotated, undefined, "rotated");
-    assert.equal(updateArg0.zoomingMode, undefined, "zoomingMode");
-    assert.equal(updateArg0.scrollingMode, undefined, "scrollingMode");
+    var updateArg0 = tracker.stub('update').lastCall.args[0];
+    assert.equal(updateArg0.argumentAxis, chart._argumentAxes[0], 'argument axis');
+    assert.equal(updateArg0.chart, chart, 'chart instances should be not passed');
+    assert.equal(updateArg0.rotated, undefined, 'rotated');
+    assert.equal(updateArg0.zoomingMode, undefined, 'zoomingMode');
+    assert.equal(updateArg0.scrollingMode, undefined, 'scrollingMode');
 
-    assert.ok(tracker.stub("setCanvases").calledOnce, "setCanvases is called once");
-    assert.deepEqual(tracker.stub("setCanvases").lastCall.args, [{
+    assert.ok(tracker.stub('setCanvases').calledOnce, 'setCanvases is called once');
+    assert.deepEqual(tracker.stub('setCanvases').lastCall.args, [{
         bottom: 400,
         left: 0,
         right: 1000,
@@ -669,44 +669,44 @@ QUnit.test("Create Tracker.", function(assert) {
             right: 910,
             top: 10
         }
-    ]], "setCanvases args");
+    ]], 'setCanvases args');
 
-    assert.ok(tracker.stub("updateSeries").calledOnce, "updateSeries");
-    assert.deepEqual(tracker.stub("updateSeries").lastCall.args[0], chart.series, "updateSeries args");
+    assert.ok(tracker.stub('updateSeries').calledOnce, 'updateSeries');
+    assert.deepEqual(tracker.stub('updateSeries').lastCall.args[0], chart.series, 'updateSeries args');
 });
 
-QUnit.test("crosshair should not be enabled", function(assert) {
-    stubThemeManager.getOptions.withArgs("crosshair").returns({ enabled: true });
-    assert.ok(this.createSimplePolarChart(), "chart was successful created");
+QUnit.test('crosshair should not be enabled', function(assert) {
+    stubThemeManager.getOptions.withArgs('crosshair').returns({ enabled: true });
+    assert.ok(this.createSimplePolarChart(), 'chart was successful created');
 });
 
-QUnit.test("ClipPaths. Hide series by pane clip path (out visual range)", function(assert) {
+QUnit.test('ClipPaths. Hide series by pane clip path (out visual range)', function(assert) {
     var chart = this.createSimplePolarChart({});
 
-    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", null, false, false]);
+    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ['DevExpress_3', null, false, false]);
 });
 
-QUnit.test("ClipPaths. Hide constant lines and strips (out visual range)", function(assert) {
+QUnit.test('ClipPaths. Hide constant lines and strips (out visual range)', function(assert) {
     this.createSimplePolarChart({});
     var argAxis = this.createAxis.returnValues[0],
         valueAxis = this.createAxis.returnValues[1];
 
-    assert.equal(argAxis.applyClipRects.lastCall.args[0], "DevExpress_2");
-    assert.equal(argAxis.applyClipRects.lastCall.args[1], "DevExpress_1", "canvas clip path");
-    assert.equal(valueAxis.applyClipRects.lastCall.args[0], "DevExpress_2");
-    assert.equal(valueAxis.applyClipRects.lastCall.args[1], "DevExpress_1", "canvas clip path");
+    assert.equal(argAxis.applyClipRects.lastCall.args[0], 'DevExpress_2');
+    assert.equal(argAxis.applyClipRects.lastCall.args[1], 'DevExpress_1', 'canvas clip path');
+    assert.equal(valueAxis.applyClipRects.lastCall.args[0], 'DevExpress_2');
+    assert.equal(valueAxis.applyClipRects.lastCall.args[1], 'DevExpress_1', 'canvas clip path');
 });
 
-QUnit.test("ClipPaths. Hide error bars (out visual range)", function(assert) {
+QUnit.test('ClipPaths. Hide error bars (out visual range)', function(assert) {
     var chart = this.createSimplePolarChart({
         series: [{
             valueErrorBar: {}
         }] });
 
-    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", "DevExpress_4", false, false]);
+    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ['DevExpress_3', 'DevExpress_4', false, false]);
 });
 
-QUnit.test("ClipPaths. Refresh clip path", function(assert) {
+QUnit.test('ClipPaths. Refresh clip path', function(assert) {
     var chart = this.createSimplePolarChart({});
 
     chart.render({ force: true });

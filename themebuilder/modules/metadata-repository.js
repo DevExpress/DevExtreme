@@ -6,7 +6,7 @@ class MetadataRepository {
 
     getDataItemByKey(key, theme) {
         let result = null;
-        const themeData = this.repositoryData[theme.name + "-" + theme.colorScheme];
+        const themeData = this.repositoryData[theme.name + '-' + theme.colorScheme];
 
         for(let i = 0; i < themeData.length; i++) {
             if(themeData[i].Key === key) {
@@ -26,7 +26,7 @@ class MetadataRepository {
                 this.metadataLoader
                     .load(theme.name, theme.colorScheme)
                     .then(metadata => {
-                        this.repositoryData[theme.name + "-" + theme.colorScheme] = metadata;
+                        this.repositoryData[theme.name + '-' + theme.colorScheme] = metadata;
                         resolve();
                     });
             }));
@@ -37,7 +37,7 @@ class MetadataRepository {
 
     getData(theme) {
         if(!theme) return this.repositoryData;
-        return this.repositoryData[theme.name + "-" + theme.colorScheme];
+        return this.repositoryData[theme.name + '-' + theme.colorScheme];
     }
 
     updateData(data, theme) {
