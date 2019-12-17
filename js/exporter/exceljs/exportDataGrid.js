@@ -1,6 +1,6 @@
-import { isDefined, isString, isObject } from "../../core/utils/type";
-import excelFormatConverter from "../excel_format_converter";
-import { extend } from "../../core/utils/extend";
+import { isDefined, isString, isObject } from '../../core/utils/type';
+import excelFormatConverter from '../excel_format_converter';
+import { extend } from '../../core/utils/extend';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -66,12 +66,12 @@ function exportDataGrid(options) {
 
             let worksheetViewSettings = worksheet.views[0] || {};
 
-            if(component.option("rtlEnabled")) {
+            if(component.option('rtlEnabled')) {
                 worksheetViewSettings.rightToLeft = true;
             }
 
             if(headerRowCount > 0) {
-                if(Object.keys(worksheetViewSettings).indexOf("state") === -1) {
+                if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                     extend(worksheetViewSettings, { state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 });
                 }
                 _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled);
@@ -103,7 +103,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             if(isDefined(numberFormat)) {
                 numberFormat = numberFormat.replace(/&quot;/g, '');
             } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
-                numberFormat = "@";
+                numberFormat = '@';
             }
 
             _setNumberFormat(excelCell, numberFormat);
@@ -130,7 +130,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
 function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
     if(!isDefined(autoFilterEnabled)) {
-        autoFilterEnabled = !!component.option("export.excelFilterEnabled");
+        autoFilterEnabled = !!component.option('export.excelFilterEnabled');
     }
 
     if(autoFilterEnabled) {
@@ -194,7 +194,7 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
     }
     for(let i = 0; i < columns.length; i++) {
         const columnWidth = columns[i].width;
-        if((typeof columnWidth === "number") && isFinite(columnWidth)) {
+        if((typeof columnWidth === 'number') && isFinite(columnWidth)) {
             worksheet.getColumn(startColumnIndex + i).width =
                 Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
         }

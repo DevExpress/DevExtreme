@@ -1,12 +1,12 @@
-var common = require("./commonParts/common.js");
+var common = require('./commonParts/common.js');
 
-require("viz/tree_map/selection");
+require('viz/tree_map/selection');
 
-QUnit.module("Basics", common.environment);
+QUnit.module('Basics', common.environment);
 
-QUnit.test("Select tile", function(assert) {
+QUnit.test('Select tile', function(assert) {
     function onSelectionChanged(e) {
-        assert.strictEqual(e.node.isSelected(), true, "state inside callback");
+        assert.strictEqual(e.node.isSelected(), true, 'state inside callback');
     }
     var spy = sinon.spy(onSelectionChanged),
         root = common.createWidget({
@@ -14,8 +14,8 @@ QUnit.test("Select tile", function(assert) {
             onSelectionChanged: spy,
             tile: {
                 selectionStyle: {
-                    color: "green",
-                    border: { color: "black", width: 3 }
+                    color: 'green',
+                    border: { color: 'black', width: 3 }
                 }
             }
         }).getRootNode(),
@@ -25,44 +25,44 @@ QUnit.test("Select tile", function(assert) {
     root.getChild(0).select(true);
 
     assert.deepEqual(tile.smartAttr.lastCall.args, [{
-        fill: "green", stroke: "black", "stroke-width": 3, "stroke-opacity": 1,
-        hatching: { step: 6, width: 2, opacity: 0.5, direction: "right" }
-    }], "settings");
-    assert.strictEqual(spy.callCount, 1, "events count");
-    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), "event arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), true, "node state");
+        fill: 'green', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 1,
+        hatching: { step: 6, width: 2, opacity: 0.5, direction: 'right' }
+    }], 'settings');
+    assert.strictEqual(spy.callCount, 1, 'events count');
+    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), 'event arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), true, 'node state');
 });
 
-QUnit.test("Unselect tile", function(assert) {
+QUnit.test('Unselect tile', function(assert) {
     function onSelectionChanged(e) {
-        assert.strictEqual(e.node.isSelected(), false, "state inside callback");
+        assert.strictEqual(e.node.isSelected(), false, 'state inside callback');
     }
     var spy = sinon.spy(onSelectionChanged),
         widget = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             tile: {
-                color: "red",
-                border: { color: "blue", width: 2 }
+                color: 'red',
+                border: { color: 'blue', width: 2 }
             },
             colorizer: {
-                type: "none"
+                type: 'none'
             }
         }),
         root = widget.getRootNode(),
         tile = this.tile(0);
     root.getChild(0).select(true);
     tile.smartAttr.reset();
-    widget.on("selectionChanged", spy);
+    widget.on('selectionChanged', spy);
 
     root.getChild(0).select(false);
 
-    assert.deepEqual(tile.smartAttr.lastCall.args, [{ fill: "red", stroke: "blue", "stroke-width": 2, "stroke-opacity": 0.2 }], "settings");
-    assert.strictEqual(spy.callCount, 1, "events count");
-    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), "event arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), false, "node state");
+    assert.deepEqual(tile.smartAttr.lastCall.args, [{ fill: 'red', stroke: 'blue', 'stroke-width': 2, 'stroke-opacity': 0.2 }], 'settings');
+    assert.strictEqual(spy.callCount, 1, 'events count');
+    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), 'event arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), false, 'node state');
 });
 
-QUnit.test("Select group", function(assert) {
+QUnit.test('Select group', function(assert) {
     var spy = sinon.spy(),
         root = common.createWidget({
             dataSource: [{
@@ -73,8 +73,8 @@ QUnit.test("Select group", function(assert) {
             onSelectionChanged: spy,
             group: {
                 selectionStyle: {
-                    color: "red",
-                    border: { color: "blue", width: 2 }
+                    color: 'red',
+                    border: { color: 'blue', width: 2 }
                 }
             }
         }).getRootNode(),
@@ -85,17 +85,17 @@ QUnit.test("Select group", function(assert) {
 
     root.getChild(0).select(true);
 
-    assert.deepEqual(outer.attr.lastCall.args, [{ stroke: "blue", "stroke-width": 2, "stroke-opacity": undefined }], "outer settings");
+    assert.deepEqual(outer.attr.lastCall.args, [{ stroke: 'blue', 'stroke-width': 2, 'stroke-opacity': undefined }], 'outer settings');
     assert.deepEqual(inner.smartAttr.lastCall.args, [{
-        fill: "red", opacity: undefined,
-        hatching: { step: 6, width: 2, opacity: 0, direction: "right" }
-    }], "inner settings");
-    assert.strictEqual(spy.callCount, 1, "events count");
-    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), "event arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), true, "node state");
+        fill: 'red', opacity: undefined,
+        hatching: { step: 6, width: 2, opacity: 0, direction: 'right' }
+    }], 'inner settings');
+    assert.strictEqual(spy.callCount, 1, 'events count');
+    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), 'event arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), true, 'node state');
 });
 
-QUnit.test("Unselect group", function(assert) {
+QUnit.test('Unselect group', function(assert) {
     var spy = sinon.spy(),
         root = common.createWidget({
             dataSource: [{
@@ -105,8 +105,8 @@ QUnit.test("Unselect group", function(assert) {
             }],
             onSelectionChanged: spy,
             group: {
-                color: "green",
-                border: { color: "black", width: 3 }
+                color: 'green',
+                border: { color: 'black', width: 3 }
             }
         }).getRootNode(),
         outer = this.tile(0),
@@ -118,14 +118,14 @@ QUnit.test("Unselect group", function(assert) {
 
     root.getChild(0).select(false);
 
-    assert.deepEqual(outer.attr.lastCall.args, [{ stroke: "black", "stroke-width": 3, "stroke-opacity": undefined }], "outer settings");
-    assert.deepEqual(inner.smartAttr.lastCall.args, [{ fill: "green", opacity: undefined, hatching: undefined }], "inner settings");
-    assert.strictEqual(spy.callCount, 1, "events count");
-    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), "event arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), false, "node state");
+    assert.deepEqual(outer.attr.lastCall.args, [{ stroke: 'black', 'stroke-width': 3, 'stroke-opacity': undefined }], 'outer settings');
+    assert.deepEqual(inner.smartAttr.lastCall.args, [{ fill: 'green', opacity: undefined, hatching: undefined }], 'inner settings');
+    assert.strictEqual(spy.callCount, 1, 'events count');
+    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(0), 'event arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), false, 'node state');
 });
 
-QUnit.test("Select tile when another one is selected", function(assert) {
+QUnit.test('Select tile when another one is selected', function(assert) {
     var spy = sinon.spy(),
         root = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
@@ -136,49 +136,49 @@ QUnit.test("Select tile when another one is selected", function(assert) {
 
     root.getChild(1).select(true);
 
-    assert.strictEqual(spy.callCount, 2, "events count");
-    assert.strictEqual(spy.getCall(0).args[0].node, root.getChild(0), "event 1 arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), false, "state 1");
-    assert.strictEqual(spy.getCall(1).args[0].node, root.getChild(1), "event 2 arg - node");
-    assert.strictEqual(root.getChild(1).isSelected(), true, "state 2");
+    assert.strictEqual(spy.callCount, 2, 'events count');
+    assert.strictEqual(spy.getCall(0).args[0].node, root.getChild(0), 'event 1 arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), false, 'state 1');
+    assert.strictEqual(spy.getCall(1).args[0].node, root.getChild(1), 'event 2 arg - node');
+    assert.strictEqual(root.getChild(1).isSelected(), true, 'state 2');
 });
 
-QUnit.test("Select tile when another one is selected - multiple selection", function(assert) {
+QUnit.test('Select tile when another one is selected - multiple selection', function(assert) {
     var spy = sinon.spy(),
         root = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             onSelectionChanged: spy,
-            selectionMode: "MULTIPLE"
+            selectionMode: 'MULTIPLE'
         }).getRootNode();
     root.getChild(0).select(true);
     spy.reset();
 
     root.getChild(1).select(true);
 
-    assert.strictEqual(spy.callCount, 1, "events count");
-    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(1), "event arg - node");
-    assert.strictEqual(root.getChild(1).isSelected(), true, "state");
+    assert.strictEqual(spy.callCount, 1, 'events count');
+    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(1), 'event arg - node');
+    assert.strictEqual(root.getChild(1).isSelected(), true, 'state');
 });
 
-QUnit.test("Disabled selection", function(assert) {
+QUnit.test('Disabled selection', function(assert) {
     var spy = sinon.spy(),
         root = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             onSelectionChanged: spy,
-            selectionMode: "NONE"
+            selectionMode: 'NONE'
         }).getRootNode();
 
     root.getChild(0).select(true);
 
-    assert.strictEqual(spy.callCount, 0, "events count");
+    assert.strictEqual(spy.callCount, 0, 'events count');
 });
 
-QUnit.test("Clear selection", function(assert) {
+QUnit.test('Clear selection', function(assert) {
     var spy = sinon.spy(),
         widget = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             onSelectionChanged: spy,
-            selectionMode: "multiple"
+            selectionMode: 'multiple'
         }),
         root = widget.getRootNode();
     root.getChild(0).select(true);
@@ -187,60 +187,60 @@ QUnit.test("Clear selection", function(assert) {
 
     widget.clearSelection();
 
-    assert.strictEqual(spy.callCount, 2, "events count");
-    assert.strictEqual(spy.getCall(0).args[0].node, root.getChild(0), "event 1 arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), false, "state 1");
-    assert.strictEqual(spy.getCall(1).args[0].node, root.getChild(1), "event 2 arg - node");
-    assert.strictEqual(root.getChild(1).isSelected(), false, "state 2");
+    assert.strictEqual(spy.callCount, 2, 'events count');
+    assert.strictEqual(spy.getCall(0).args[0].node, root.getChild(0), 'event 1 arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), false, 'state 1');
+    assert.strictEqual(spy.getCall(1).args[0].node, root.getChild(1), 'event 2 arg - node');
+    assert.strictEqual(root.getChild(1).isSelected(), false, 'state 2');
 });
 
-QUnit.test("Change from multiple to single", function(assert) {
+QUnit.test('Change from multiple to single', function(assert) {
     var spy = sinon.spy(),
         widget = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             onSelectionChanged: spy,
-            selectionMode: "multiple"
+            selectionMode: 'multiple'
         }),
         root = widget.getRootNode();
     root.getChild(1).select(true);
     root.getChild(0).select(true);
     spy.reset();
 
-    widget.option("selectionMode", "SINGLE");
+    widget.option('selectionMode', 'SINGLE');
 
-    assert.strictEqual(spy.callCount, 1, "events count");
-    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(1), "event arg - node");
-    assert.strictEqual(root.getChild(1).isSelected(), false, "state");
+    assert.strictEqual(spy.callCount, 1, 'events count');
+    assert.strictEqual(spy.lastCall.args[0].node, root.getChild(1), 'event arg - node');
+    assert.strictEqual(root.getChild(1).isSelected(), false, 'state');
 });
 
-QUnit.test("Change from multiple to none", function(assert) {
+QUnit.test('Change from multiple to none', function(assert) {
     var spy = sinon.spy(),
         widget = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             onSelectionChanged: spy,
-            selectionMode: "multiple"
+            selectionMode: 'multiple'
         }),
         root = widget.getRootNode();
     root.getChild(0).select(true);
     root.getChild(1).select(true);
     spy.reset();
 
-    widget.option("selectionMode", "NONE");
+    widget.option('selectionMode', 'NONE');
 
-    assert.strictEqual(spy.callCount, 2, "events count");
-    assert.strictEqual(spy.getCall(0).args[0].node, root.getChild(0), "event 1 arg - node");
-    assert.strictEqual(root.getChild(0).isSelected(), false, "state 1");
-    assert.strictEqual(spy.getCall(1).args[0].node, root.getChild(1), "event 2 arg - node");
-    assert.strictEqual(root.getChild(1).isSelected(), false, "state 2");
+    assert.strictEqual(spy.callCount, 2, 'events count');
+    assert.strictEqual(spy.getCall(0).args[0].node, root.getChild(0), 'event 1 arg - node');
+    assert.strictEqual(root.getChild(0).isSelected(), false, 'state 1');
+    assert.strictEqual(spy.getCall(1).args[0].node, root.getChild(1), 'event 2 arg - node');
+    assert.strictEqual(root.getChild(1).isSelected(), false, 'state 2');
 });
 
-QUnit.test("Selection state is not applied until endUpdate", function(assert) {
+QUnit.test('Selection state is not applied until endUpdate', function(assert) {
     var spy = sinon.spy(),
         widget = common.createWidget({
             dataSource: [{ value: 1 }, { value: 2 }],
             tile: {
                 hoverStyle: {
-                    color: "red"
+                    color: 'red'
                 }
             },
             onSelectionChanged: spy
@@ -250,6 +250,6 @@ QUnit.test("Selection state is not applied until endUpdate", function(assert) {
     widget.beginUpdate();
     widget.getRootNode().getChild(1).select(true);
 
-    assert.strictEqual(spy.callCount, 1, "event");
-    assert.strictEqual(this.tile(1).attr.callCount, 0, "settings call count");
+    assert.strictEqual(spy.callCount, 1, 'event');
+    assert.strictEqual(this.tile(1).attr.callCount, 0, 'settings call count');
 });

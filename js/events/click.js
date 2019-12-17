@@ -1,21 +1,21 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    devices = require("../core/devices"),
-    domAdapter = require("../core/dom_adapter"),
-    domUtils = require("../core/utils/dom"),
-    animationFrame = require("../animation/frame"),
-    eventUtils = require("./utils"),
-    pointerEvents = require("./pointer"),
-    Emitter = require("./core/emitter"),
-    registerEmitter = require("./core/emitter_registrator"),
-    compareVersions = require("../core/utils/version").compare;
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    devices = require('../core/devices'),
+    domAdapter = require('../core/dom_adapter'),
+    domUtils = require('../core/utils/dom'),
+    animationFrame = require('../animation/frame'),
+    eventUtils = require('./utils'),
+    pointerEvents = require('./pointer'),
+    Emitter = require('./core/emitter'),
+    registerEmitter = require('./core/emitter_registrator'),
+    compareVersions = require('../core/utils/version').compare;
 
-var CLICK_EVENT_NAME = "dxclick",
+var CLICK_EVENT_NAME = 'dxclick',
     TOUCH_BOUNDARY = 10,
     abs = Math.abs;
 
 var isInput = function(element) {
-    return $(element).is("input, textarea, select, button ,:focus, :focus *");
+    return $(element).is('input, textarea, select, button ,:focus, :focus *');
 };
 
 var misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
@@ -29,8 +29,8 @@ var ClickEmitter = Emitter.inherit({
     },
 
     _makeElementClickable: function($element) {
-        if(!$element.attr("onclick")) {
-            $element.attr("onclick", "void(0)");
+        if(!$element.attr('onclick')) {
+            $element.attr('onclick', 'void(0)');
         }
     },
 
@@ -81,7 +81,7 @@ var ClickEmitter = Emitter.inherit({
 
 // NOTE: native strategy for desktop, iOS 9.3+, Android 5+
 (function() {
-    var NATIVE_CLICK_CLASS = "dx-native-click";
+    var NATIVE_CLICK_CLASS = 'dx-native-click';
     var realDevice = devices.real(),
         useNativeClick =
             realDevice.generic ||
@@ -89,7 +89,7 @@ var ClickEmitter = Emitter.inherit({
             realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
 
     var isNativeClickEvent = function(target) {
-        return useNativeClick || $(target).closest("." + NATIVE_CLICK_CLASS).length;
+        return useNativeClick || $(target).closest('.' + NATIVE_CLICK_CLASS).length;
     };
 
 
@@ -120,7 +120,7 @@ var ClickEmitter = Emitter.inherit({
                 this.callBase($element);
             }
 
-            eventsEngine.on($element, "click", clickHandler);
+            eventsEngine.on($element, 'click', clickHandler);
         },
 
         configure: function(data) {
@@ -151,7 +151,7 @@ var ClickEmitter = Emitter.inherit({
         dispose: function() {
             this.callBase();
 
-            eventsEngine.off(this.getElement(), "click", clickHandler);
+            eventsEngine.off(this.getElement(), 'click', clickHandler);
         }
     });
 
@@ -176,7 +176,7 @@ var ClickEmitter = Emitter.inherit({
 
         var clickHandler = function(e) {
             var $target = $(e.target);
-            if(!blurPrevented && startTarget && !$target.is(startTarget) && !$(startTarget).is("label") && isInput($target)) {
+            if(!blurPrevented && startTarget && !$target.is(startTarget) && !$(startTarget).is('label') && isInput($target)) {
                 domUtils.resetActiveElement();
             }
 
@@ -184,10 +184,10 @@ var ClickEmitter = Emitter.inherit({
             blurPrevented = false;
         };
 
-        var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER",
+        var NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER',
             document = domAdapter.getDocument();
         eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

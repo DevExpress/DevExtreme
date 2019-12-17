@@ -1,10 +1,10 @@
-var typeUtils = require("./core/utils/type"),
-    dateUtils = require("./core/utils/date"),
-    numberLocalization = require("./localization/number"),
-    dateLocalization = require("./localization/date"),
-    dependencyInjector = require("./core/utils/dependency_injector");
+var typeUtils = require('./core/utils/type'),
+    dateUtils = require('./core/utils/date'),
+    numberLocalization = require('./localization/number'),
+    dateLocalization = require('./localization/date'),
+    dependencyInjector = require('./core/utils/dependency_injector');
 
-require("./localization/currency");
+require('./localization/currency');
 
 module.exports = dependencyInjector({
     format: function(value, format) {
@@ -33,7 +33,7 @@ module.exports = dependencyInjector({
         }
     },
     getTimeFormat: function(showSecond) {
-        return showSecond ? "longtime" : "shorttime";
+        return showSecond ? 'longtime' : 'shorttime';
     },
 
     _normalizeFormat: function(format) {
@@ -48,7 +48,7 @@ module.exports = dependencyInjector({
         return function(date) {
             return format.map(function(formatPart) {
                 return dateLocalization.format(date, formatPart);
-            }).join(" ");
+            }).join(' ');
         };
     },
 
@@ -58,7 +58,7 @@ module.exports = dependencyInjector({
 
         if(needSpecialSecondFormatter) {
             var secondFormatter = function(date) {
-                return (date.getSeconds() + date.getMilliseconds() / 1000) + "s";
+                return (date.getSeconds() + date.getMilliseconds() / 1000) + 's';
             };
             resultFormat.push(secondFormatter);
         } else if(dateDifferences.millisecond) {
@@ -94,7 +94,7 @@ module.exports = dependencyInjector({
         if(dateDifferences.month && dateDifferences.day) {
             if(intervalFormat) {
                 var monthDayFormatter = function(date) {
-                    return dateLocalization.getMonthNames("abbreviated")[date.getMonth()] + " " + dateLocalization.format(date, "day");
+                    return dateLocalization.getMonthNames('abbreviated')[date.getMonth()] + ' ' + dateLocalization.format(date, 'day');
                 };
                 resultFormat.unshift(monthDayFormatter);
             } else {
@@ -110,7 +110,7 @@ module.exports = dependencyInjector({
                 resultFormat.unshift('day');
             } else {
                 var dayFormatter = function(date) {
-                    return dateLocalization.format(date, "dayofweek") + ", " + dateLocalization.format(date, "day");
+                    return dateLocalization.format(date, 'dayofweek') + ', ' + dateLocalization.format(date, 'day');
                 };
                 resultFormat.unshift(dayFormatter);
             }

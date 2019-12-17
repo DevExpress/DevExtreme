@@ -5,4 +5,4 @@
 * @module ui/text_box
 * @export default
 */
-module.exports = require("./text_box/text_box");
+module.exports = require('./text_box/text_box');

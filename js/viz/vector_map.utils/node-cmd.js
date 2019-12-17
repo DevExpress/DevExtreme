@@ -1,6 +1,6 @@
 /* eslint-disable no-console, no-undef*/
 
-var path = require("path");
+var path = require('path');
 
 function normalizeJsName(value) {
     return value.trim().replace('-', '_').replace(' ', '_');
@@ -8,12 +8,12 @@ function normalizeJsName(value) {
 
 function processFile(file, options, callback) {
     var name = path.basename(file, path.extname(file));
-    options.info("%s: started", name);
+    options.info('%s: started', name);
     parse(file, { precision: options.precision }, function(shapeData, errors) {
         var content;
-        options.info("%s: finished", name);
+        options.info('%s: finished', name);
         errors && errors.forEach(function(e) {
-            options.error("  " + e);
+            options.error('  ' + e);
         });
         if(shapeData) {
             content = JSON.stringify(options.processData(shapeData), null, options.isDebug && 4);
@@ -21,9 +21,9 @@ function processFile(file, options, callback) {
                 content = options.processFileContent(content, normalizeJsName(name));
             }
             fs.writeFile(
-                path.resolve(options.output || path.dirname(file), options.processFileName(name + (options.isJSON ? ".json" : ".js"))),
+                path.resolve(options.output || path.dirname(file), options.processFileName(name + (options.isJSON ? '.json' : '.js'))),
                 content, function(e) {
-                    e && options.error("  " + e.message);
+                    e && options.error('  ' + e.message);
                     callback();
                 });
         } else {
@@ -33,7 +33,7 @@ function processFile(file, options, callback) {
 }
 
 function collectFiles(dir, done) {
-    var input = path.resolve(dir || "");
+    var input = path.resolve(dir || '');
     fs.stat(input, function(e, stat) {
         if(e) {
             done(e, []);
@@ -55,11 +55,11 @@ function collectFiles(dir, done) {
     });
 
     function checkFile(name) {
-        return path.extname(name).toLowerCase() === ".shp";
+        return path.extname(name).toLowerCase() === '.shp';
     }
 
     function normalizeFile(name) {
-        return path.basename(name, ".shp");
+        return path.basename(name, '.shp');
     }
 }
 
@@ -76,7 +76,7 @@ function pickFunctionOption(value) {
 }
 
 function processFileContentByDefault(content, name) {
-    return name + " = " + content + ";";
+    return name + ' = ' + content + ';';
 }
 
 function prepareSettings(source, options) {
@@ -98,18 +98,18 @@ function prepareSettings(source, options) {
 
 function processFiles(source, options, callback) {
     var settings = prepareSettings(source, options && options.trim ? importFile(options) : options);
-    settings.info("Started");
+    settings.info('Started');
     collectFiles(settings.input, function(e, files) {
         e && settings.error(e.message);
         settings.info(files.map(function(file) {
-            return "  " + path.basename(file);
-        }).join("\n"));
+            return '  ' + path.basename(file);
+        }).join('\n'));
         when(files.map(function(file) {
             return function(done) {
                 processFile(file, settings, done);
             };
         }), function() {
-            settings.info("Finished");
+            settings.info('Finished');
             (isFunction(callback) ? callback : noop)();
         });
     });
@@ -118,16 +118,16 @@ function processFiles(source, options, callback) {
 exports.processFiles = processFiles;
 
 var COMMAND_LINE_ARG_KEYS = [
-    { key: "--output", name: "output", arg: true, desc: "Destination directory" },
-    { key: "--process-data", name: "processData", arg: true, desc: "Process parsed data" },
-    { key: "--process-file-name", name: "processFileName", arg: true, desc: "Process output file name" },
-    { key: "--process-file-content", name: "processFileContent", arg: true, desc: "Process output file content" },
-    { key: "--precision", name: "precision", arg: true, desc: "Precision of shape coordinates" },
-    { key: "--json", name: "isJSON", desc: "Generate as a .json file" },
-    { key: "--debug", name: "isDebug", desc: "Generate non minified file" },
-    { key: "--quiet", name: "isQuiet", desc: "Suppress console output" },
-    { key: "--settings", name: "settings", arg: true, desc: "Path to settings file" },
-    { key: "--help", name: "isHelp", desc: "Print help" }
+    { key: '--output', name: 'output', arg: true, desc: 'Destination directory' },
+    { key: '--process-data', name: 'processData', arg: true, desc: 'Process parsed data' },
+    { key: '--process-file-name', name: 'processFileName', arg: true, desc: 'Process output file name' },
+    { key: '--process-file-content', name: 'processFileContent', arg: true, desc: 'Process output file content' },
+    { key: '--precision', name: 'precision', arg: true, desc: 'Precision of shape coordinates' },
+    { key: '--json', name: 'isJSON', desc: 'Generate as a .json file' },
+    { key: '--debug', name: 'isDebug', desc: 'Generate non minified file' },
+    { key: '--quiet', name: 'isQuiet', desc: 'Suppress console output' },
+    { key: '--settings', name: 'settings', arg: true, desc: 'Path to settings file' },
+    { key: '--help', name: 'isHelp', desc: 'Print help' }
 ];
 
 function parseCommandLineArgs() {
@@ -151,7 +151,7 @@ function parseCommandLineArgs() {
 }
 
 function printCommandLineHelp() {
-    var parts = ["node ", path.basename(process.argv[1]), " Source "],
+    var parts = ['node ', path.basename(process.argv[1]), ' Source '],
         lines = [],
         maxLength = Math.max.apply(null, COMMAND_LINE_ARG_KEYS.map(function(info) {
             return info.key.length;
@@ -159,20 +159,20 @@ function printCommandLineHelp() {
         message;
     COMMAND_LINE_ARG_KEYS.forEach(function(info) {
         var key = info.key;
-        parts.push(key, " ");
+        parts.push(key, ' ');
         if(info.arg) {
-            parts.push("<", key.slice(2), ">", " ");
+            parts.push('<', key.slice(2), '>', ' ');
         }
-        lines.push(["  ", key, Array(maxLength - key.length).join(" "), info.desc].join(""));
+        lines.push(['  ', key, Array(maxLength - key.length).join(' '), info.desc].join(''));
     });
-    message = ["Generates dxVectorMap-compatible files from shapefiles.", "\n", parts.join("")].concat(lines).join("\n");
+    message = ['Generates dxVectorMap-compatible files from shapefiles.', '\n', parts.join('')].concat(lines).join('\n');
     console.log(message);
 }
 
 function runFromConsole() {
     var args = parseCommandLineArgs();
     if(args) {
-        processFiles(process.argv[2] || "", args);
+        processFiles(process.argv[2] || '', args);
     }
 }
 

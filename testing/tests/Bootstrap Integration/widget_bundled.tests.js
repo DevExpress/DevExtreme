@@ -1,29 +1,29 @@
-var $ = require("jquery"),
-    GoogleStaticProvider = require("ui/map/provider.google_static"),
-    fx = require("animation/fx"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+var $ = require('jquery'),
+    GoogleStaticProvider = require('ui/map/provider.google_static'),
+    fx = require('animation/fx'),
+    executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
-require("common.css!");
-require("generic_light.css!");
+require('common.css!');
+require('generic_light.css!');
 
-require("bundles/modules/parts/widgets-all");
+require('bundles/modules/parts/widgets-all');
 
-GoogleStaticProvider.remapConstant("/mapURL?");
+GoogleStaticProvider.remapConstant('/mapURL?');
 
 QUnit.testStart(function() {
     var markup = '<div id="element"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 executeAsyncMock.setup();
 
-var BOOTSTRAP_CSS_URL = window.ROOT_URL + "node_modules/bootstrap/dist/css/bootstrap.css";
+var BOOTSTRAP_CSS_URL = window.ROOT_URL + 'node_modules/bootstrap/dist/css/bootstrap.css';
 
 var applyBootstrap = (function() {
     var styles = null,
         renderStyle = function(data) {
-            $("<style id=bootstrap>").html(styles).appendTo("head");
+            $('<style id=bootstrap>').html(styles).appendTo('head');
         };
 
     return function() {
@@ -40,13 +40,13 @@ var applyBootstrap = (function() {
 })();
 
 var dropBootstrap = function() {
-    $("#bootstrap").remove();
+    $('#bootstrap').remove();
 };
 
-QUnit.module("widgets sizing", {
+QUnit.module('widgets sizing', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $("#element");
+        this.$element = $('#element');
         executeAsyncMock.setup();
     },
     afterEach: function() {
@@ -61,7 +61,7 @@ $.each(ui, function(componentName, componentConstructor) {
     if($.fn[componentName] &&
         ui[componentName] &&
         ui[componentName].subclassOf &&
-        componentName !== "dxDateViewRoller"
+        componentName !== 'dxDateViewRoller'
     ) {
         QUnit.test(componentName, function(assert) {
             var done = assert.async(),

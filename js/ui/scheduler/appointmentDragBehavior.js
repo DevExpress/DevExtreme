@@ -1,12 +1,12 @@
-import $ from "../../core/renderer";
-import Draggable from "../draggable";
-import translator from "../../animation/translator";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import Draggable from '../draggable';
+import translator from '../../animation/translator';
+import { extend } from '../../core/utils/extend';
 
-const FIXED_CONTAINER_PROP_NAME = "fixedContainer";
+const FIXED_CONTAINER_PROP_NAME = 'fixedContainer';
 
-const APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment";
-const LIST_ITEM_DATA_KEY = "dxListItemData";
+const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
+const LIST_ITEM_DATA_KEY = 'dxListItemData';
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
@@ -22,12 +22,12 @@ export default class AppointmentDragBehavior {
     }
 
     isAllDay(appointment) {
-        return appointment.data("dxAppointmentSettings").allDay;
+        return appointment.data('dxAppointmentSettings').allDay;
     }
 
     getDraggableArea() {
         let result = null;
-        this.appointments.notifyObserver("getDraggableAppointmentArea", { callback: appointmentArea => result = appointmentArea });
+        this.appointments.notifyObserver('getDraggableAppointmentArea', { callback: appointmentArea => result = appointmentArea });
         return result;
     }
 
@@ -46,7 +46,7 @@ export default class AppointmentDragBehavior {
 
     onDragStart(e) {
         this.initialPosition = translator.locate($(e.itemElement));
-        this.appointments.notifyObserver("hideAppointmentTooltip");
+        this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
     getAppointmentElement(e) {
@@ -62,7 +62,7 @@ export default class AppointmentDragBehavior {
 
         this.currentAppointment = $appointment;
 
-        this.appointments.notifyObserver("updateAppointmentAfterDrag", {
+        this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
             data: this.appointments._getItemData($appointment),
             $appointment: $appointment,
@@ -102,7 +102,7 @@ export default class AppointmentDragBehavior {
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            e.itemData = extend({}, e.itemData, this.appointments.invoke("getUpdatedData", {
+            e.itemData = extend({}, e.itemData, this.appointments.invoke('getUpdatedData', {
                 data: e.itemData
             }));
 
@@ -113,7 +113,7 @@ export default class AppointmentDragBehavior {
     }
 
     addTo(container, config) {
-        let appointmentDragging = this.scheduler.option("appointmentDragging") || {},
+        let appointmentDragging = this.scheduler.option('appointmentDragging') || {},
             options = extend({
                 component: this.scheduler,
                 contentTemplate: null,

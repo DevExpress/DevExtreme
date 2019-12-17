@@ -1,10 +1,10 @@
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
-var noop = require("../../core/utils/common").noop,
-    Node = require("./node_item"),
-    Link = require("./link_item"),
-    defaultLayoutBuilder = require("./layout"),
-    typeUtils = require("../../core/utils/type"),
+var noop = require('../../core/utils/common').noop,
+    Node = require('./node_item'),
+    Link = require('./link_item'),
+    defaultLayoutBuilder = require('./layout'),
+    typeUtils = require('../../core/utils/type'),
     _isString = typeUtils.isString,
     _isNumber = typeUtils.isNumeric;
 
@@ -48,21 +48,21 @@ function getConnectedLinks(layout, nodeName, linkType) {
     return result;
 }
 
-var dxSankey = require("../core/base_widget").inherit({
-    _rootClass: "dxs-sankey",
+var dxSankey = require('../core/base_widget').inherit({
+    _rootClass: 'dxs-sankey',
 
-    _rootClassPrefix: "dxs",
+    _rootClassPrefix: 'dxs',
 
     _proxyData: [],
 
     _optionChangesMap: {
-        dataSource: "DATA_SOURCE",
-        sortData: "DATA_SOURCE",
-        alignment: "DATA_SOURCE",
-        node: "BUILD_LAYOUT",
-        link: "BUILD_LAYOUT",
-        palette: "BUILD_LAYOUT",
-        paletteExtensionMode: "BUILD_LAYOUT"
+        dataSource: 'DATA_SOURCE',
+        sortData: 'DATA_SOURCE',
+        alignment: 'DATA_SOURCE',
+        node: 'BUILD_LAYOUT',
+        link: 'BUILD_LAYOUT',
+        palette: 'BUILD_LAYOUT',
+        paletteExtensionMode: 'BUILD_LAYOUT'
     },
 
     _themeDependentChanges: ['BUILD_LAYOUT'],
@@ -71,19 +71,19 @@ var dxSankey = require("../core/base_widget").inherit({
         return { width: 400, height: 400 };
     },
 
-    _themeSection: "sankey",
+    _themeSection: 'sankey',
 
-    _fontFields: ["label.font"],
+    _fontFields: ['label.font'],
 
-    _optionChangesOrder: ["DATA_SOURCE"],
+    _optionChangesOrder: ['DATA_SOURCE'],
 
-    _initialChanges: ["DATA_SOURCE"],
+    _initialChanges: ['DATA_SOURCE'],
 
     _initCore: function() {
         this._groupLinks = this._renderer.g().append(this._renderer.root);
         this._groupNodes = this._renderer.g().append(this._renderer.root);
         this._groupLabels = this._renderer.g().attr({
-            class: this._rootClassPrefix + "-labels"
+            class: this._rootClassPrefix + '-labels'
         }).append(this._renderer.root);
 
         this._drawLabels = true;
@@ -98,23 +98,23 @@ var dxSankey = require("../core/base_widget").inherit({
     _applySize: function(rect) {
         this._rect = rect.slice();
 
-        var adaptiveLayout = this._getOption("adaptiveLayout");
+        var adaptiveLayout = this._getOption('adaptiveLayout');
         if(adaptiveLayout.keepLabels || this._rect[2] - this._rect[0] > adaptiveLayout.width) {
             this._drawLabels = true;
         } else {
             this._drawLabels = false;
         }
 
-        this._change(["BUILD_LAYOUT"]);
+        this._change(['BUILD_LAYOUT']);
         return this._rect;
     },
 
     _eventsMap: {
-        onNodeHoverChanged: { name: "nodeHoverChanged" },
-        onLinkHoverChanged: { name: "linkHoverChanged" }
+        onNodeHoverChanged: { name: 'nodeHoverChanged' },
+        onLinkHoverChanged: { name: 'linkHoverChanged' }
     },
 
-    _customChangesOrder: ["BUILD_LAYOUT", "NODES_DRAW", "LINKS_DRAW", "LABELS", "DRAWN"],
+    _customChangesOrder: ['BUILD_LAYOUT', 'NODES_DRAW', 'LINKS_DRAW', 'LABELS', 'DRAWN'],
 
     _dataSourceChangedHandler: function() {
         this._requestChange(['BUILD_LAYOUT']);
@@ -125,7 +125,7 @@ var dxSankey = require("../core/base_widget").inherit({
     },
 
     _change_DATA_SOURCE: function() {
-        this._change(["DRAWN"]);
+        this._change(['DRAWN']);
         this._updateDataSource();
     },
 
@@ -158,8 +158,8 @@ var dxSankey = require("../core/base_widget").inherit({
 
         links.forEach(function(link, index) {
             var group = that._renderer.g().attr({ class: 'link', 'data-link-idx': index }).append(that._groupLinks);
-            link.overlayElement = that._renderer.path([], "area").attr({ d: link.d }).append(group);
-            link.element = that._renderer.path([], "area").attr({ d: link.d }).append(group);
+            link.overlayElement = that._renderer.path([], 'area').attr({ d: link.d }).append(group);
+            link.element = that._renderer.path([], 'area').attr({ d: link.d }).append(group);
         });
         this._applyLinksAppearance();
     },
@@ -225,27 +225,27 @@ var dxSankey = require("../core/base_widget").inherit({
     _getData: function() {
         var that = this,
             data = that._dataSourceItems() || [],
-            sourceField = that._getOption("sourceField", true),
-            targetField = that._getOption("targetField", true),
-            weightField = that._getOption("weightField", true),
+            sourceField = that._getOption('sourceField', true),
+            targetField = that._getOption('targetField', true),
+            weightField = that._getOption('weightField', true),
             processedData = [];
 
         data.forEach(function(item) {
             var hasItemOwnProperty = Object.prototype.hasOwnProperty.bind(item);
             if(!hasItemOwnProperty(sourceField)) {
-                that._incidentOccurred("E2007", sourceField);
+                that._incidentOccurred('E2007', sourceField);
             } else if(!hasItemOwnProperty(targetField)) {
-                that._incidentOccurred("E2007", targetField);
+                that._incidentOccurred('E2007', targetField);
             } else if(!hasItemOwnProperty(weightField)) {
-                that._incidentOccurred("E2007", weightField);
+                that._incidentOccurred('E2007', weightField);
             } else {
 
                 if(!_isString(item[sourceField])) {
-                    that._incidentOccurred("E2008", sourceField);
+                    that._incidentOccurred('E2008', sourceField);
                 } else if(!_isString(item[targetField])) {
-                    that._incidentOccurred("E2008", targetField);
+                    that._incidentOccurred('E2008', targetField);
                 } else if(!_isNumber(item[weightField]) || item[weightField] <= 0) {
-                    that._incidentOccurred("E2009", weightField);
+                    that._incidentOccurred('E2009', weightField);
                 } else {
                     processedData.push([item[sourceField], item[targetField], item[weightField]]);
                 }
@@ -282,13 +282,13 @@ var dxSankey = require("../core/base_widget").inherit({
         if(!Object.prototype.hasOwnProperty.call(layout, 'error')) {
             let nodeColors = {},
                 nodeIdx = 0,
-                linkOptions = that._getOption("link"),
+                linkOptions = that._getOption('link'),
                 totalNodesNum = layout.nodes
                     .map((item) => { return item.length; })
                     .reduce((previousValue, currentValue) => { return previousValue + currentValue; }, 0),
-                palette = that._themeManager.createPalette(that._getOption("palette", true), {
+                palette = that._themeManager.createPalette(that._getOption('palette', true), {
                     useHighlight: true,
-                    extensionMode: that._getOption("paletteExtensionMode", true),
+                    extensionMode: that._getOption('paletteExtensionMode', true),
                     count: totalNodesNum
                 });
 
@@ -351,19 +351,19 @@ var dxSankey = require("../core/base_widget").inherit({
             });
 
             that._renderer.initHatching();
-            that._change(["NODES_DRAW", "LINKS_DRAW", "LABELS"]);
+            that._change(['NODES_DRAW', 'LINKS_DRAW', 'LABELS']);
         }
 
-        that._change(["DRAWN"]);
+        that._change(['DRAWN']);
     },
 
     _applyLabelsAppearance: function() {
         var that = this,
-            labelOptions = that._getOption("label"),
+            labelOptions = that._getOption('label'),
             availableWidth = that._rect[2] - that._rect[0],
-            nodeOptions = that._getOption("node");
+            nodeOptions = that._getOption('node');
 
-        that._shadowFilter = that._renderer.shadowFilter("-50%", "-50%", "200%", "200%").attr(labelOptions.shadow);
+        that._shadowFilter = that._renderer.shadowFilter('-50%', '-50%', '200%', '200%').attr(labelOptions.shadow);
         that._groupLabels.clear();
 
         if(that._drawLabels && labelOptions.visible) {
@@ -407,7 +407,7 @@ var dxSankey = require("../core/base_widget").inherit({
     },
 
     _getMinSize: function() {
-        var adaptiveLayout = this._getOption("adaptiveLayout");
+        var adaptiveLayout = this._getOption('adaptiveLayout');
         return [adaptiveLayout.width, adaptiveLayout.height];
     },
 
@@ -420,8 +420,8 @@ var dxSankey = require("../core/base_widget").inherit({
     }
 });
 
-require("../../core/component_registrator")("dxSankey", dxSankey);
+require('../../core/component_registrator')('dxSankey', dxSankey);
 module.exports = dxSankey;
 
 // PLUGINS_SECTION
-dxSankey.addPlugin(require("../core/data_source").plugin);
+dxSankey.addPlugin(require('../core/data_source').plugin);

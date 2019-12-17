@@ -1,15 +1,15 @@
 // there are line, stepline, stackedline, fullstackedline, spline
-var series = require("./scatter_series"),
+var series = require('./scatter_series'),
     chartScatterSeries = series.chart,
     polarScatterSeries = series.polar,
-    objectUtils = require("../../core/utils/object"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    vizUtils = require("../core/utils"),
-    mathUtils = require("../../core/utils/math"),
+    objectUtils = require('../../core/utils/object'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    vizUtils = require('../core/utils'),
+    mathUtils = require('../../core/utils/math'),
     normalizeAngle = vizUtils.normalizeAngle,
 
-    DISCRETE = "discrete",
+    DISCRETE = 'discrete',
 
     _map = vizUtils.map,
 
@@ -61,8 +61,8 @@ var lineMethods = {
         var that = this,
             style = that._styles.normal;
 
-        that._applyGroupSettings(style.elements, { "class": "dxc-elements" }, that._elementsGroup);
-        that._bordersGroup && that._applyGroupSettings(style.border, { "class": "dxc-borders" }, that._bordersGroup);
+        that._applyGroupSettings(style.elements, { 'class': 'dxc-elements' }, that._elementsGroup);
+        that._bordersGroup && that._applyGroupSettings(style.border, { 'class': 'dxc-borders' }, that._bordersGroup);
 
         chartScatterSeries._setGroupsSettings.call(that, animationEnabled);
         animationEnabled && that._markersGroup && that._markersGroup.attr({ opacity: 0.001 });
@@ -70,8 +70,8 @@ var lineMethods = {
 
     _createGroups: function() {
         var that = this;
-        that._createGroup("_elementsGroup", that, that._group);
-        that._areBordersVisible() && that._createGroup("_bordersGroup", that, that._group);
+        that._createGroup('_elementsGroup', that, that._group);
+        that._areBordersVisible() && that._createGroup('_bordersGroup', that, that._group);
         chartScatterSeries._createGroups.call(that);
     },
 
@@ -94,7 +94,7 @@ var lineMethods = {
     _parseLineOptions: function(options, defaultColor) {
         return {
             stroke: options.color || defaultColor,
-            "stroke-width": options.width,
+            'stroke-width': options.width,
             dashStyle: options.dashStyle || 'solid'
         };
     },
@@ -107,12 +107,12 @@ var lineMethods = {
         var that = this;
         that._elementsGroup && that._elementsGroup.attr(style.elements);
         _each(that._graphics || [], function(_, graphic) {
-            graphic.line && graphic.line.attr({ 'stroke-width': style.elements["stroke-width"] }).sharp();
+            graphic.line && graphic.line.attr({ 'stroke-width': style.elements['stroke-width'] }).sharp();
         });
     },
 
     _drawElement: function(segment, group) {
-        return { line: this._createMainElement(segment.line, { "stroke-width": this._styles.normal.elements["stroke-width"] }).append(group) };
+        return { line: this._createMainElement(segment.line, { 'stroke-width': this._styles.normal.elements['stroke-width'] }).append(group) };
     },
 
     _removeElement: function(element) {
@@ -151,7 +151,7 @@ var lineMethods = {
     },
 
     _createMainElement: function(points, settings) {
-        return this._renderer.path(points, "line").attr(settings).sharp();
+        return this._renderer.path(points, 'line').attr(settings).sharp();
     },
 
     _sortPoints: function(points, rotated) {
@@ -181,10 +181,10 @@ var lineMethods = {
     _getTrackerSettings: function() {
         var that = this,
             defaultTrackerWidth = that._defaultTrackerWidth,
-            strokeWidthFromElements = that._styles.normal.elements["stroke-width"];
+            strokeWidthFromElements = that._styles.normal.elements['stroke-width'];
         return {
-            "stroke-width": strokeWidthFromElements > defaultTrackerWidth ? strokeWidthFromElements : defaultTrackerWidth,
-            fill: "none"
+            'stroke-width': strokeWidthFromElements > defaultTrackerWidth ? strokeWidthFromElements : defaultTrackerWidth,
+            fill: 'none'
         };
     },
 
@@ -245,17 +245,17 @@ var lineMethods = {
     }
 };
 
-var lineSeries = exports.chart["line"] = _extend({}, chartScatterSeries, lineMethods, {
+var lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
     getPointCenterByArg(arg) {
         const value = this.getArgumentAxis().getTranslator().translate(arg);
         return { x: value, y: value };
     }
 });
 
-exports.chart["stepline"] = _extend({}, lineSeries, {
+exports.chart['stepline'] = _extend({}, lineSeries, {
     _calculateStepLinePoints(points) {
         const segment = [];
-        const coordName = this._options.rotated ? "x" : "y";
+        const coordName = this._options.rotated ? 'x' : 'y';
 
         _each(points, function(i, pt) {
             let point;
@@ -283,8 +283,8 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
         let oppositeCoord;
         const rotated = this._options.rotated;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
-        const coordName = !isOpposite ? "vx" : "vy";
-        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const coordName = !isOpposite ? 'vx' : 'vy';
+        const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
         const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
 
         for(let i = 0; i < nearestPoints.length; i++) {
@@ -307,7 +307,7 @@ exports.chart["stepline"] = _extend({}, lineSeries, {
     }
 });
 
-exports.chart["spline"] = _extend({}, lineSeries, {
+exports.chart['spline'] = _extend({}, lineSeries, {
 
     _calculateBezierPoints: function(src, rotated) {
         var bezierPoints = [],
@@ -418,7 +418,7 @@ exports.chart["spline"] = _extend({}, lineSeries, {
     },
 
     _createMainElement: function(points, settings) {
-        return this._renderer.path(points, "bezier").attr(settings).sharp();
+        return this._renderer.path(points, 'bezier').attr(settings).sharp();
     },
 
 
@@ -426,10 +426,10 @@ exports.chart["spline"] = _extend({}, lineSeries, {
         const that = this;
         let oppositeCoord = null;
         const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
-        const coordName = !isOpposite ? "vx" : "vy";
-        const bezierCoordName = !isOpposite ? "x" : "y";
-        const oppositeCoordName = !isOpposite ? "vy" : "vx";
-        const bezierOppositeCoordName = !isOpposite ? "y" : "x";
+        const coordName = !isOpposite ? 'vx' : 'vy';
+        const bezierCoordName = !isOpposite ? 'x' : 'y';
+        const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
+        const bezierOppositeCoordName = !isOpposite ? 'y' : 'x';
         const axis = !isArgument ? that.getArgumentAxis() : that.getValueAxis();
         const visibleArea = axis.getVisibleArea();
         const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
@@ -464,7 +464,7 @@ exports.chart["spline"] = _extend({}, lineSeries, {
         const that = this;
         const rotated = that.getOptions().rotated;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
-        const coordName = isOpposite ? "vy" : "vx";
+        const coordName = isOpposite ? 'vy' : 'vx';
         const points = that.getVisiblePoints();
         const allPoints = that.getPoints();
         const bezierPoints = that._segments.length > 0 ? that._segments.reduce((a, seg) => a.concat(seg.line), []) : [];

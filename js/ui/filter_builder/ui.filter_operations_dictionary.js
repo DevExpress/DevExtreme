@@ -1,32 +1,32 @@
 var OPERATION_ICONS = {
-        "=": "equal",
-        "<>": "notequal",
-        "<": "less",
-        "<=": "lessorequal",
-        ">": "greater",
-        ">=": "greaterorequal",
-        "notcontains": "doesnotcontain",
-        "contains": "contains",
-        "startswith": "startswith",
-        "endswith": "endswith",
-        "isblank": "isblank",
-        "isnotblank": "isnotblank"
+        '=': 'equal',
+        '<>': 'notequal',
+        '<': 'less',
+        '<=': 'lessorequal',
+        '>': 'greater',
+        '>=': 'greaterorequal',
+        'notcontains': 'doesnotcontain',
+        'contains': 'contains',
+        'startswith': 'startswith',
+        'endswith': 'endswith',
+        'isblank': 'isblank',
+        'isnotblank': 'isnotblank'
     },
 
     OPERATION_NAME = {
-        "=": "equal",
-        "<>": "notEqual",
-        "<": "lessThan",
-        "<=": "lessThanOrEqual",
-        ">": "greaterThan",
-        ">=": "greaterThanOrEqual",
-        "startswith": "startsWith",
-        "contains": "contains",
-        "notcontains": "notContains",
-        "endswith": "endsWith",
-        "isblank": "isBlank",
-        "isnotblank": "isNotBlank",
-        "between": "between"
+        '=': 'equal',
+        '<>': 'notEqual',
+        '<': 'lessThan',
+        '<=': 'lessThanOrEqual',
+        '>': 'greaterThan',
+        '>=': 'greaterThanOrEqual',
+        'startswith': 'startsWith',
+        'contains': 'contains',
+        'notcontains': 'notContains',
+        'endswith': 'endsWith',
+        'isblank': 'isBlank',
+        'isnotblank': 'isNotBlank',
+        'between': 'between'
     };
 
 module.exports = {

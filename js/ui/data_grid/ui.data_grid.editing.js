@@ -1,10 +1,10 @@
-import "./ui.data_grid.editor_factory";
+import './ui.data_grid.editor_factory';
 
-import gridCore from "./ui.data_grid.core";
-import editingModule from "../grid_core/ui.grid_core.editing";
+import gridCore from './ui.data_grid.core';
+import editingModule from '../grid_core/ui.grid_core.editing';
 import { extend } from '../../core/utils/extend';
 
-gridCore.registerModule("editing", extend(true, {}, editingModule, {
+gridCore.registerModule('editing', extend(true, {}, editingModule, {
     extenders: {
         controllers: {
             data: {

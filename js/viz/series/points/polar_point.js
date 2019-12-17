@@ -1,21 +1,21 @@
-var extend = require("../../../core/utils/extend").extend,
+var extend = require('../../../core/utils/extend').extend,
     _extend = extend,
 
-    symbolPoint = require("./symbol_point"),
-    barPoint = require("./bar_point"),
-    piePoint = require("./pie_point"),
-    isDefined = require("../../../core/utils/type").isDefined,
-    vizUtils = require("../../core/utils"),
+    symbolPoint = require('./symbol_point'),
+    barPoint = require('./bar_point'),
+    piePoint = require('./pie_point'),
+    isDefined = require('../../../core/utils/type').isDefined,
+    vizUtils = require('../../core/utils'),
     normalizeAngle = vizUtils.normalizeAngle,
 
     _math = Math,
     _max = _math.max,
 
-    RADIAL_LABEL_INDENT = require("../../components/consts").radialLabelIndent,
+    RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent,
 
     ERROR_BARS_ANGLE_OFFSET = 90,
-    CANVAS_POSITION_END = "canvas_position_end",
-    CANVAS_POSITION_DEFAULT = "canvas_position_default";
+    CANVAS_POSITION_END = 'canvas_position_end',
+    CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 
 exports.polarSymbolPoint = _extend({}, symbolPoint, {
 
@@ -24,7 +24,7 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     _moveLabelOnCanvas: barPoint._moveLabelOnCanvas,
 
     _getLabelPosition: function() {
-        return "outside";
+        return 'outside';
     },
 
     _getCoords: function(argument, value) {
@@ -82,7 +82,7 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
         isDefined(that.highError) && (that._highErrorCoord = that.centerY - translator.translate(that.highError));
         that._errorBarPos = that.centerX;
 
-        that._baseErrorBarPos = errorBars.type === "stdDeviation" ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : that.centerY - that.radius;
+        that._baseErrorBarPos = errorBars.type === 'stdDeviation' ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : that.centerY - that.radius;
     },
 
     _getTranslates: function(animationEnabled) {
@@ -210,7 +210,7 @@ exports.polarBarPoint = _extend({}, barPoint, {
             y = start.y;
         }
 
-        that.graphic = renderer.arc(x, y, innerRadius, outerRadius, coords.startAngle, coords.endAngle).attr(styles).data({ "chart-data-point": that }).append(group);
+        that.graphic = renderer.arc(x, y, innerRadius, outerRadius, coords.startAngle, coords.endAngle).attr(styles).data({ 'chart-data-point': that }).append(group);
     },
 
     _checkLabelPosition: function(label, coord) {

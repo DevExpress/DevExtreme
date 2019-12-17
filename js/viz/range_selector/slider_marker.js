@@ -1,17 +1,17 @@
-var patchFontOptions = require("../core/utils").patchFontOptions,
+var patchFontOptions = require('../core/utils').patchFontOptions,
 
     SLIDER_MARKER_UPDATE_DELAY = 75,
-    POINTER_SIZE = require("./common").consts.pointerSize;
+    POINTER_SIZE = require('./common').consts.pointerSize;
 
 function SliderMarker(renderer, root, isLeftPointer) {
     var that = this;
     that._isLeftPointer = isLeftPointer;
     that._isOverlapped = false;
 
-    that._group = renderer.g().attr({ "class": "slider-marker" }).append(root);
-    that._area = renderer.path(null, "area").append(that._group);
-    that._label = renderer.text().attr({ align: "left" }).append(that._group);
-    that._tracker = renderer.rect().attr({ "class": "slider-marker-tracker", fill: "#000000", opacity: 0.0001 }).css({ cursor: "pointer" }).append(that._group);
+    that._group = renderer.g().attr({ 'class': 'slider-marker' }).append(root);
+    that._area = renderer.path(null, 'area').append(that._group);
+    that._label = renderer.text().attr({ align: 'left' }).append(that._group);
+    that._tracker = renderer.rect().attr({ 'class': 'slider-marker-tracker', fill: '#000000', opacity: 0.0001 }).css({ cursor: 'pointer' }).append(that._group);
     that._border = renderer.rect(0, 0, 1, 0);
 }
 
@@ -116,7 +116,7 @@ SliderMarker.prototype = {
 
         clearTimeout(that._timeout);
 
-        that._label.attr({ text: that._text || "" });
+        that._label.attr({ text: that._text || '' });
 
         currentTextSize = that._getTextSize();
         rectSize = that._getRectSize(currentTextSize);

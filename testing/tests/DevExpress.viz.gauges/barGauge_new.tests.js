@@ -1,17 +1,17 @@
-import $ from "jquery";
-import legendModule, { Legend } from "viz/components/legend";
-import { stubClass } from "../../helpers/vizMocks.js";
-import vizMocks from "../../helpers/vizMocks.js";
-import rendererModule from "viz/core/renderers/renderer";
-import titleModule from "viz/core/title";
-import tooltipModule from "viz/core/tooltip";
-import loadingIndicatorModule from "viz/core/loading_indicator";
+import $ from 'jquery';
+import legendModule, { Legend } from 'viz/components/legend';
+import { stubClass } from '../../helpers/vizMocks.js';
+import vizMocks from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
 
-import "viz/gauges/bar_gauge";
+import 'viz/gauges/bar_gauge';
 
 const stubLegend = stubClass(Legend);
 
-$('<div id="test-container" style="width: 400px; height: 400px;"></div>').appendTo("#qunit-fixture");
+$('<div id="test-container" style="width: 400px; height: 400px;"></div>').appendTo('#qunit-fixture');
 
 var _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
@@ -19,14 +19,14 @@ titleModule.Title = vizMocks.Title;
 tooltipModule.Tooltip = vizMocks.Tooltip;
 loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
 
-QUnit.module("Misc", {
+QUnit.module('Misc', {
     beforeEach: function() {
         var renderer = this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 
     create: function(options) {
-        this.widget = $("#test-container").dxBarGauge(options).dxBarGauge("instance");
+        this.widget = $('#test-container').dxBarGauge(options).dxBarGauge('instance');
         return this.widget;
     },
 
@@ -35,73 +35,73 @@ QUnit.module("Misc", {
     }
 });
 
-QUnit.test("palette in repeat mode", function(assert) {
+QUnit.test('palette in repeat mode', function(assert) {
     this.create({
         values: [1, 2, 3, 4],
-        paletteExtensionMode: "alternate"
+        paletteExtensionMode: 'alternate'
     });
     this.renderer.arc.reset();
 
-    this.widget.option("palette", ["red", "green", "yellow"]);
+    this.widget.option('palette', ['red', 'green', 'yellow']);
 
-    assert.deepEqual(this.bar(0).attr.getCall(1).args[0].fill, "red", "bar 1 color");
-    assert.deepEqual(this.bar(1).attr.getCall(1).args[0].fill, "green", "bar 2 color");
-    assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, "yellow", "bar 3 color");
-    assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, "#ff3232", "bar 4 color");
+    assert.deepEqual(this.bar(0).attr.getCall(1).args[0].fill, 'red', 'bar 1 color');
+    assert.deepEqual(this.bar(1).attr.getCall(1).args[0].fill, 'green', 'bar 2 color');
+    assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, 'yellow', 'bar 3 color');
+    assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, '#ff3232', 'bar 4 color');
 });
 
-QUnit.test("palette in blend mode", function(assert) {
+QUnit.test('palette in blend mode', function(assert) {
     this.create({
         values: [1, 2, 3, 4],
-        paletteExtensionMode: "blend"
+        paletteExtensionMode: 'blend'
     });
     this.renderer.arc.reset();
 
-    this.widget.option("palette", ["red", "green", "yellow"]);
+    this.widget.option('palette', ['red', 'green', 'yellow']);
 
-    assert.deepEqual(this.bar(0).attr.getCall(1).args[0].fill, "red", "bar 1 color");
-    assert.deepEqual(this.bar(1).attr.getCall(1).args[0].fill, "green", "bar 2 color");
-    assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, "#80c000", "bar 3 color");
-    assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, "yellow", "bar 4 color");
+    assert.deepEqual(this.bar(0).attr.getCall(1).args[0].fill, 'red', 'bar 1 color');
+    assert.deepEqual(this.bar(1).attr.getCall(1).args[0].fill, 'green', 'bar 2 color');
+    assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, '#80c000', 'bar 3 color');
+    assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, 'yellow', 'bar 4 color');
 });
 
 
-QUnit.test("palette extension mode can be changed", function(assert) {
+QUnit.test('palette extension mode can be changed', function(assert) {
     this.create({
         values: [1, 2, 3, 4],
-        paletteExtensionMode: "blend",
-        palette: ["red", "green", "yellow"]
+        paletteExtensionMode: 'blend',
+        palette: ['red', 'green', 'yellow']
     });
     this.renderer.arc.reset();
 
-    this.widget.option({ paletteExtensionMode: "alternate" });
+    this.widget.option({ paletteExtensionMode: 'alternate' });
 
-    assert.deepEqual(this.bar(0).attr.getCall(1).args[0].fill, "red", "bar 1 color");
-    assert.deepEqual(this.bar(1).attr.getCall(1).args[0].fill, "green", "bar 2 color");
-    assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, "yellow", "bar 3 color");
-    assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, "#ff3232", "bar 4 color");
+    assert.deepEqual(this.bar(0).attr.getCall(1).args[0].fill, 'red', 'bar 1 color');
+    assert.deepEqual(this.bar(1).attr.getCall(1).args[0].fill, 'green', 'bar 2 color');
+    assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, 'yellow', 'bar 3 color');
+    assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, '#ff3232', 'bar 4 color');
 });
 
-QUnit.test("Animation after false resizing", function(assert) {
+QUnit.test('Animation after false resizing', function(assert) {
     this.create({ values: [1, 2] });
-    this.widget.option("size", { width: 400, height: 400 });
+    this.widget.option('size', { width: 400, height: 400 });
 
     this.renderer.g.returnValues[5].animate.reset();
 
     this.widget.values([2, 3]);
 
-    assert.strictEqual(this.renderer.g.returnValues[5].animate.callCount, 1, "animation");
+    assert.strictEqual(this.renderer.g.returnValues[5].animate.callCount, 1, 'animation');
 });
 
-QUnit.test("Change theme when loading indicator is shown", function(assert) {
+QUnit.test('Change theme when loading indicator is shown', function(assert) {
     loadingIndicatorModule.LoadingIndicator = _LoadingIndicator;
     try {
         this.create({ values: [1, 2] });
         this.widget.showLoadingIndicator();
 
-        this.widget.option("theme", "test");
+        this.widget.option('theme', 'test');
 
-        assert.ok(true, "no errors");
+        assert.ok(true, 'no errors');
     } finally {
         loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
     }
@@ -135,21 +135,21 @@ QUnit.test('Too many bars. Animation true', function(assert) {
     assert.equal(this.renderer.arc.callCount, 16);
 });
 
-QUnit.module("Legend", {
+QUnit.module('Legend', {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
 
-        sinon.stub(rendererModule, "Renderer", () => {
+        sinon.stub(rendererModule, 'Renderer', () => {
             return this.renderer;
         });
 
-        sinon.stub(legendModule, "Legend", () => {
+        sinon.stub(legendModule, 'Legend', () => {
             var stub = new stubLegend();
-            stub.stub("measure").returns([120, 120]);
-            stub.stub("layoutOptions").returns({
-                horizontalAlignment: "right",
-                verticalAlignment: "top",
-                side: "horizontal"
+            stub.stub('measure').returns([120, 120]);
+            stub.stub('layoutOptions').returns({
+                horizontalAlignment: 'right',
+                verticalAlignment: 'top',
+                side: 'horizontal'
             });
             return stub;
         });
@@ -160,11 +160,11 @@ QUnit.module("Legend", {
     },
 
     createGauge(options) {
-        return $("<div>").appendTo($("#qunit-fixture")).dxBarGauge(options).dxBarGauge("instance");
+        return $('<div>').appendTo($('#qunit-fixture')).dxBarGauge(options).dxBarGauge('instance');
     }
 });
 
-QUnit.test("Create a legend on widget initialization", function(assert) {
+QUnit.test('Create a legend on widget initialization', function(assert) {
     this.createGauge({
         values: [1, 2],
         legend: { visible: true }
@@ -173,54 +173,54 @@ QUnit.test("Create a legend on widget initialization", function(assert) {
     const legendCtorArgs = legendModule.Legend.lastCall.args[0];
     const legendGroup = this.renderer.g.getCall(3).returnValue;
 
-    assert.equal(legendGroup.attr.lastCall.args[0].class, "dxg-legend");
+    assert.equal(legendGroup.attr.lastCall.args[0].class, 'dxg-legend');
     assert.equal(legendCtorArgs.renderer, this.renderer);
-    assert.equal(legendCtorArgs.textField, "text");
+    assert.equal(legendCtorArgs.textField, 'text');
 });
 
-QUnit.test("Create legend item", function(assert) {
+QUnit.test('Create legend item', function(assert) {
     this.createGauge({
         values: [1, 5],
         legend: { visible: true },
-        palette: ["black", "green"]
+        palette: ['black', 'green']
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
     assert.equal(passedItems.length, 2);
     assert.deepEqual(passedItems[0], {
         id: 0,
-        text: "1.0",
+        text: '1.0',
         item: {
             value: 1,
-            color: "black",
+            color: 'black',
             index: 0
         },
         states: {
-            normal: { fill: "black" }
+            normal: { fill: 'black' }
         },
         visible: true
     });
 
     assert.deepEqual(passedItems[1], {
         id: 1,
-        text: "5.0",
+        text: '5.0',
         item: {
             value: 5,
-            color: "green",
+            color: 'green',
             index: 1
         },
         states: {
-            normal: { fill: "green" }
+            normal: { fill: 'green' }
         },
         visible: true
     });
 });
 
-QUnit.test("Update legend items", function(assert) {
+QUnit.test('Update legend items', function(assert) {
     const gauge = this.createGauge({
         values: [1, 5],
         legend: { visible: true },
-        palette: ["black", "green"]
+        palette: ['black', 'green']
     });
 
     gauge.values([10]);
@@ -229,20 +229,20 @@ QUnit.test("Update legend items", function(assert) {
     assert.equal(passedItems.length, 1);
     assert.deepEqual(passedItems[0], {
         id: 0,
-        text: "10.0",
+        text: '10.0',
         item: {
             value: 10,
-            color: "black",
+            color: 'black',
             index: 0
         },
         states: {
-            normal: { fill: "black" }
+            normal: { fill: 'black' }
         },
         visible: true
     });
 });
 
-QUnit.test("Bar is rendered after layout legend", function(assert) {
+QUnit.test('Bar is rendered after layout legend', function(assert) {
     this.createGauge({
         values: [1, 5],
         size: {
@@ -255,11 +255,11 @@ QUnit.test("Bar is rendered after layout legend", function(assert) {
     assert.equal(bar.attr.lastCall.args[0].outerRadius, 50);
 });
 
-QUnit.test("Format legend as labels", function(assert) {
+QUnit.test('Format legend as labels', function(assert) {
     this.createGauge({
         label: {
             format: {
-                type: "currency"
+                type: 'currency'
             }
         },
         values: [10000],
@@ -267,25 +267,25 @@ QUnit.test("Format legend as labels", function(assert) {
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
-    assert.equal(passedItems[0].text, "$10,000");
+    assert.equal(passedItems[0].text, '$10,000');
 });
 
-QUnit.test("Format legend with custom type", function(assert) {
+QUnit.test('Format legend with custom type', function(assert) {
     this.createGauge({
         label: {
             format: {
-                type: "currency"
+                type: 'currency'
             }
         },
         legend: {
             visible: true,
             itemTextFormat: {
-                type: "thousands"
+                type: 'thousands'
             }
         },
         values: [5700]
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
-    assert.deepEqual(passedItems[0].text, "6K");
+    assert.deepEqual(passedItems[0].text, '6K');
 });

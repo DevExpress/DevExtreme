@@ -1,18 +1,18 @@
-var config = require("../config"),
-    getLDMLFormatter = require("../../localization/ldml/date.formatter").getFormatter,
-    defaultDateNames = require("../../localization/default_date_names"),
-    typeUtils = require("./type"),
+var config = require('../config'),
+    getLDMLFormatter = require('../../localization/ldml/date.formatter').getFormatter,
+    defaultDateNames = require('../../localization/default_date_names'),
+    typeUtils = require('./type'),
     isString = typeUtils.isString,
     isDate = typeUtils.isDate,
     isNumber = typeUtils.isNumeric;
 
-var NUMBER_SERIALIZATION_FORMAT = "number",
-    DATE_SERIALIZATION_FORMAT = "yyyy/MM/dd",
-    DATETIME_SERIALIZATION_FORMAT = "yyyy/MM/dd HH:mm:ss";
+var NUMBER_SERIALIZATION_FORMAT = 'number',
+    DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd',
+    DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
 
 var ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 var ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
-var ISO8601_PATTERN_PARTS = ["", "yyyy", "", "MM", "", "dd", "THH", "", "mm", "", "ss", ".SSS"];
+var ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
 
 var MILLISECOND_LENGHT = 3;
 
@@ -57,7 +57,7 @@ var parseISO8601String = function(text) {
     timeZoneHour = timePart(parts[14]);
     timeZoneMinute = timePart(parts[16]);
 
-    if(parts[13] === "-") {
+    if(parts[13] === '-') {
         timeZoneHour = -timeZoneHour;
         timeZoneMinute = -timeZoneMinute;
     }
@@ -66,7 +66,7 @@ var parseISO8601String = function(text) {
         minute = timePart(parts[8]) - timeZoneMinute,
         second = timePart(parts[10]),
         parseMilliseconds = function(part) {
-            part = part || "";
+            part = part || '';
             return timePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
         },
         millisecond = parseMilliseconds(parts[11]);
@@ -80,12 +80,12 @@ var parseISO8601String = function(text) {
 
 var getIso8601Format = function(text, useUtc) {
     var parts = text.match(ISO8601_PATTERN),
-        result = "";
+        result = '';
 
     if(!parts) {
         parts = text.match(ISO8601_TIME_PATTERN);
         if(parts) {
-            return parts[3] ? "HH:mm:ss" : "HH:mm";
+            return parts[3] ? 'HH:mm:ss' : 'HH:mm';
         }
         return;
     }
@@ -97,17 +97,17 @@ var getIso8601Format = function(text, useUtc) {
         }
     }
 
-    if(parts[12] === "Z") {
-        result += "'Z'";
+    if(parts[12] === 'Z') {
+        result += '\'Z\'';
     }
 
     if(parts[14]) {
         if(parts[15]) {
-            result += "xxx";
+            result += 'xxx';
         } else if(parts[16]) {
-            result += "xx";
+            result += 'xx';
         } else {
-            result += "x";
+            result += 'x';
         }
     }
 
@@ -115,7 +115,7 @@ var getIso8601Format = function(text, useUtc) {
 };
 
 var deserializeDate = function(value) {
-    if(typeof value === "number") {
+    if(typeof value === 'number') {
         return new Date(value);
     }
 
@@ -139,7 +139,7 @@ var serializeDate = function(value, serializationFormat) {
 };
 
 var getDateSerializationFormat = function(value) {
-    if(typeof value === "number") {
+    if(typeof value === 'number') {
         return NUMBER_SERIALIZATION_FORMAT;
     } else if(isString(value)) {
         var format;
@@ -149,7 +149,7 @@ var getDateSerializationFormat = function(value) {
         }
         if(format) {
             return format;
-        } else if(value.indexOf(":") >= 0) {
+        } else if(value.indexOf(':') >= 0) {
             return DATETIME_SERIALIZATION_FORMAT;
         } else {
             return DATE_SERIALIZATION_FORMAT;

@@ -1,22 +1,22 @@
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    fx = require("../fx"),
-    animationPresetsModule = require("../presets/presets"),
-    deferredUtils = require("../../core/utils/deferred"),
+var $ = require('../../core/renderer'),
+    Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    fx = require('../fx'),
+    animationPresetsModule = require('../presets/presets'),
+    deferredUtils = require('../../core/utils/deferred'),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
 
 var directionPostfixes = {
-        forward: " dx-forward",
-        backward: " dx-backward",
-        none: " dx-no-direction",
-        undefined: " dx-no-direction"
+        forward: ' dx-forward',
+        backward: ' dx-backward',
+        none: ' dx-no-direction',
+        undefined: ' dx-no-direction'
     },
-    DX_ANIMATING_CLASS = "dx-animating";
+    DX_ANIMATING_CLASS = 'dx-animating';
 
 var TransitionExecutor = Class.inherit({
     ctor: function() {
@@ -53,7 +53,7 @@ var TransitionExecutor = Class.inherit({
     _prepareElementAnimationConfig: function(config, configModifier, type) {
         var result;
 
-        if(typeof config === "string") {
+        if(typeof config === 'string') {
             var presetName = config;
             config = animationPresetsModule.presets.getPreset(presetName);
         }
@@ -68,13 +68,13 @@ var TransitionExecutor = Class.inherit({
                 cleanupWhen: this._completePromise
             }, config, configModifier);
 
-            if(!result.type || result.type === "css") {
-                var cssClass = "dx-" + type,
-                    extraCssClasses = (result.extraCssClasses ? " " + result.extraCssClasses : "") + directionPostfixes[result.direction];
+            if(!result.type || result.type === 'css') {
+                var cssClass = 'dx-' + type,
+                    extraCssClasses = (result.extraCssClasses ? ' ' + result.extraCssClasses : '') + directionPostfixes[result.direction];
 
-                result.type = "css";
+                result.type = 'css';
                 result.from = (result.from || cssClass) + extraCssClasses;
-                result.to = result.to || (cssClass + "-active");
+                result.to = result.to || (cssClass + '-active');
             }
 
             result.staggerDelay = result.staggerDelay || 0;
@@ -145,7 +145,7 @@ var TransitionExecutor = Class.inherit({
     * @param2 animation:animationConfig|string
     */
     enter: function($elements, animationConfig, configModifier) {
-        var animations = this._createAnimations($elements, animationConfig, configModifier, "enter");
+        var animations = this._createAnimations($elements, animationConfig, configModifier, 'enter');
         this._animations.push.apply(this._animations, animations);
     },
     /**
@@ -155,7 +155,7 @@ var TransitionExecutor = Class.inherit({
     * @param2 animation:animationConfig|string
     */
     leave: function($elements, animationConfig, configModifier) {
-        var animations = this._createAnimations($elements, animationConfig, configModifier, "leave");
+        var animations = this._createAnimations($elements, animationConfig, configModifier, 'leave');
         this._animations.push.apply(this._animations, animations);
     },
     /**

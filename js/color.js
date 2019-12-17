@@ -256,7 +256,7 @@ function Color(value) {
 }
 
 function parseColor(color) {
-    if(color === "transparent") {
+    if(color === 'transparent') {
         return [0, 0, 0, 0];
     }
 
@@ -394,10 +394,10 @@ function toHslFromRgb(r, g, b) {
 
 function makeColorTint(colorPart, h) {
     var colorTint = h;
-    if(colorPart === "r") {
+    if(colorPart === 'r') {
         colorTint = h + 1 / 3;
     }
-    if(colorPart === "b") {
+    if(colorPart === 'b') {
         colorTint = h - 1 / 3;
     }
 
@@ -441,9 +441,9 @@ function hslToRgb(h, s, l) {
     } else {
         var q = l < 0.5 ? l * (1 + s) : l + s - l * s,
             p = 2 * l - q;
-        r = hueToRgb(p, q, makeColorTint("r", h));
-        g = hueToRgb(p, q, makeColorTint("g", h));
-        b = hueToRgb(p, q, makeColorTint("b", h));
+        r = hueToRgb(p, q, makeColorTint('r', h));
+        g = hueToRgb(p, q, makeColorTint('g', h));
+        b = hueToRgb(p, q, makeColorTint('b', h));
     }
 
     return [_round(r * 255), _round(g * 255), _round(b * 255)];
@@ -511,7 +511,7 @@ Color.prototype = {
 
     getPureColor: function() {
         var rgb = hsvToRgb(this.hsv.h, 100, 100);
-        return new Color("rgb(" + rgb.join(",") + ")");
+        return new Color('rgb(' + rgb.join(',') + ')');
     },
 
     isValidHex: function(hex) {

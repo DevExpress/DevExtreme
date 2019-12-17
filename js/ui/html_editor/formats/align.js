@@ -1,8 +1,8 @@
-import { getQuill } from "../quill_importer";
+import { getQuill } from '../quill_importer';
 
 const quill = getQuill();
-const AlignStyle = quill.import("attributors/style/align");
+const AlignStyle = quill.import('attributors/style/align');
 
-AlignStyle.whitelist.push("left");
+AlignStyle.whitelist.push('left');
 
 export default AlignStyle;

@@ -1,7 +1,7 @@
-var $ = require("./renderer");
-var callbacks = require("./component_registrator_callbacks");
-var errors = require("./errors");
-var publicComponentUtils = require("./utils/public_component");
+var $ = require('./renderer');
+var callbacks = require('./component_registrator_callbacks');
+var errors = require('./errors');
+var publicComponentUtils = require('./utils/public_component');
 
 /**
  * @name registerComponent
@@ -35,7 +35,7 @@ var registerComponent = function(name, namespace, componentClass) {
 
 var registerRendererComponent = function(name, componentClass) {
     $.fn[name] = function(options) {
-        var isMemberInvoke = typeof options === "string",
+        var isMemberInvoke = typeof options === 'string',
             result;
 
         if(isMemberInvoke) {
@@ -46,7 +46,7 @@ var registerRendererComponent = function(name, componentClass) {
                 var instance = componentClass.getInstance(this);
 
                 if(!instance) {
-                    throw errors.Error("E0009", name);
+                    throw errors.Error('E0009', name);
                 }
 
                 var member = instance[memberName],

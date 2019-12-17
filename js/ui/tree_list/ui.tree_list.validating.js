@@ -6,7 +6,7 @@ var EditingControllerExtender = extend({}, validatingModule.extenders.controller
 delete EditingControllerExtender.processItems;
 delete EditingControllerExtender.processDataItem;
 
-treeListCore.registerModule("validating", {
+treeListCore.registerModule('validating', {
     defaultOptions: validatingModule.defaultOptions,
     controllers: validatingModule.controllers,
     extenders: {

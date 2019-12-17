@@ -1,4 +1,4 @@
-import { getWindow } from "core/utils/window";
+import { getWindow } from 'core/utils/window';
 
 const READ_DELAY = 10;
 

@@ -1,13 +1,13 @@
-var proto = require("./tree_map.base").prototype;
+var proto = require('./tree_map.base').prototype;
 
-proto._optionChangesMap.idField = proto._optionChangesMap.parentField = "NODES_CREATE";
+proto._optionChangesMap.idField = proto._optionChangesMap.parentField = 'NODES_CREATE';
 
 proto._processDataSourceItems = function(items) {
     var i,
         struct = {},
         currentItem,
-        idField = this._getOption("idField", true),
-        parentField = this._getOption("parentField", true),
+        idField = this._getOption('idField', true),
+        parentField = this._getOption('parentField', true),
         parentId,
         rootNodes = [],
         tmpItems,

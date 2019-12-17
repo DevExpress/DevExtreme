@@ -1,16 +1,16 @@
-import $ from "jquery";
-import { EdmLiteral } from "data/odata/utils";
-import query from "data/query";
-import config from "core/config";
-import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
-import ajaxMock from "../../helpers/ajaxMock.js";
+import $ from 'jquery';
+import { EdmLiteral } from 'data/odata/utils';
+import query from 'data/query';
+import config from 'core/config';
+import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
+import ajaxMock from '../../helpers/ajaxMock.js';
 
-import "data/odata/query_adapter";
+import 'data/odata/query_adapter';
 
-var MUST_NOT_REACH_MESSAGE = "Shouldn't reach this point";
+var MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
 
 function QUERY(url, options) {
-    return query(url, $.extend({ adapter: "odata" }, options));
+    return query(url, $.extend({ adapter: 'odata' }, options));
 }
 
 var moduleConfig = {
@@ -22,7 +22,7 @@ var moduleConfig = {
 var moduleWithMockConfig = {
     beforeEach: function() {
         ajaxMock.setup({
-            url: "odata.org",
+            url: 'odata.org',
             callback: function(bag) {
                 this.responseText = { value: [bag] };
             }
@@ -34,34 +34,34 @@ var moduleWithMockConfig = {
     }
 };
 
-QUnit.module("Common", moduleConfig);
-QUnit.test("existing query string is kept", function(assert) {
+QUnit.module('Common', moduleConfig);
+QUnit.test('existing query string is kept', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "url?customParam=1",
+        url: 'url?customParam=1',
         callback: function(bag) {
             this.responseText = { value: [bag] };
         }
     });
 
-    QUERY("url?customParam=1")
-        .sortBy("f")
+    QUERY('url?customParam=1')
+        .sortBy('f')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(r[0].url.indexOf("customParam"));
+            assert.ok(r[0].url.indexOf('customParam'));
         })
         .always(done);
 });
 
-QUnit.test("Custom headers, query string params, async and request timeout (beforeSend event)", function(assert) {
+QUnit.test('Custom headers, query string params, async and request timeout (beforeSend event)', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         callback: function(bag) {
             this.responseText = { value: [bag] };
         }
@@ -69,16 +69,16 @@ QUnit.test("Custom headers, query string params, async and request timeout (befo
 
     var beforeSend = function(options) {
         assert.equal(options.async, true);
-        assert.equal(options.method, "get");
+        assert.equal(options.method, 'get');
         assert.equal(options.timeout, 30000);
 
         options.async = false;
         options.timeout = 1122;
         options.params.myParam = 111;
-        options.headers["x-my-header"] = 222;
+        options.headers['x-my-header'] = 222;
     };
 
-    QUERY("odata.org", { beforeSend: beforeSend })
+    QUERY('odata.org', { beforeSend: beforeSend })
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -87,7 +87,7 @@ QUnit.test("Custom headers, query string params, async and request timeout (befo
             assert.equal(r[0].async, false);
             assert.equal(r[0].timeout, 1122);
             assert.equal(r[0].data.myParam, 111);
-            assert.equal(r[0].headers["x-my-header"], 222);
+            assert.equal(r[0].headers['x-my-header'], 222);
         })
         .always(function() {
             ajaxMock.clear();
@@ -95,20 +95,20 @@ QUnit.test("Custom headers, query string params, async and request timeout (befo
         .always(done);
 });
 
-QUnit.test("JSONP for cross-domain requests", function(assert) {
+QUnit.test('JSONP for cross-domain requests', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         callback: function(bag) {
-            assert.equal(bag.dataType, "jsonp");
-            assert.equal(bag.data.$format, "json", "JSONPSupportBehavior requirement");
+            assert.equal(bag.dataType, 'jsonp');
+            assert.equal(bag.data.$format, 'json', 'JSONPSupportBehavior requirement');
 
             this.responseText = { value: [1, 2, 3] };
         }
     });
 
-    QUERY("odata.org", { jsonp: true })
+    QUERY('odata.org', { jsonp: true })
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -123,93 +123,93 @@ QUnit.test("JSONP for cross-domain requests", function(assert) {
 });
 
 
-QUnit.module("Query string generation", moduleWithMockConfig);
-QUnit.test("sort", function(assert) {
+QUnit.module('Query string generation', moduleWithMockConfig);
+QUnit.test('sort', function(assert) {
     assert.expect(2);
 
     var done = assert.async();
 
     var check = function(desc, expectation) {
-        return QUERY("odata.org")
-            .sortBy("a", desc)
+        return QUERY('odata.org')
+            .sortBy('a', desc)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$orderby"], expectation);
+                assert.equal(r[0].data['$orderby'], expectation);
             });
     };
 
-    $.when(check(false, "a"), check(true, "a desc"))
+    $.when(check(false, 'a'), check(true, 'a desc'))
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
 });
 
-QUnit.test("second sortBy overrides the first", function(assert) {
+QUnit.test('second sortBy overrides the first', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .sortBy("name1")
-        .sortBy("name2")
+    QUERY('odata.org')
+        .sortBy('name1')
+        .sortBy('name2')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$orderby"], "name2");
+            assert.equal(r[0].data['$orderby'], 'name2');
         })
         .always(done);
 });
 
-QUnit.test("thenBy", function(assert) {
+QUnit.test('thenBy', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .sortBy("name1")
-        .thenBy("name2")
+    QUERY('odata.org')
+        .sortBy('name1')
+        .thenBy('name2')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$orderby"], "name1,name2");
+            assert.equal(r[0].data['$orderby'], 'name1,name2');
         })
         .always(done);
 });
 
-QUnit.test("sortBy nested fields", function(assert) {
+QUnit.test('sortBy nested fields', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .sortBy("a.b.c")
+    QUERY('odata.org')
+        .sortBy('a.b.c')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$orderby"], "a/b/c");
+            assert.equal(r[0].data['$orderby'], 'a/b/c');
         })
         .always(done);
 });
 
-QUnit.test("slice", function(assert) {
+QUnit.test('slice', function(assert) {
     assert.expect(8);
 
     var done = assert.async();
 
     var check = function(skip, take, expectSkip) {
-        return QUERY("odata.org")
+        return QUERY('odata.org')
             .slice(skip, take)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$skip"], expectSkip);
-                assert.equal(r[0].data["$top"], take);
+                assert.equal(r[0].data['$skip'], expectSkip);
+                assert.equal(r[0].data['$top'], take);
             });
     };
 
@@ -220,38 +220,38 @@ QUnit.test("slice", function(assert) {
         .always(done);
 });
 
-QUnit.test("select", function(assert) {
+QUnit.test('select', function(assert) {
     var done = assert.async();
 
-    QUERY("odata.org")
-        .select("a.x", "a.y", "b")
+    QUERY('odata.org')
+        .select('a.x', 'a.y', 'b')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$select"], "a/x,a/y,b");
-            assert.equal(r[0].data["$expand"], "a");
+            assert.equal(r[0].data['$select'], 'a/x,a/y,b');
+            assert.equal(r[0].data['$expand'], 'a');
         })
         .always(done);
 });
 
-QUnit.test("expand to third level", function(assert) {
+QUnit.test('expand to third level', function(assert) {
     var done = assert.async();
 
-    QUERY("odata.org")
-        .select("a.b.c")
+    QUERY('odata.org')
+        .select('a.b.c')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$expand"], "a/b");
+            assert.equal(r[0].data['$expand'], 'a/b');
         })
         .always(done);
 });
 
-QUnit.test("select and expand in OData 4", function(assert) {
+QUnit.test('select and expand in OData 4', function(assert) {
     var done = assert.async();
 
     var checker = function(selectClause, expandClause) {
@@ -261,7 +261,7 @@ QUnit.test("select and expand in OData 4", function(assert) {
             options.expand = expandClause;
         }
 
-        var q = QUERY("odata.org", options);
+        var q = QUERY('odata.org', options);
         if(selectClause) {
             q = q.select(selectClause);
         }
@@ -270,56 +270,56 @@ QUnit.test("select and expand in OData 4", function(assert) {
     };
 
     var promises = [
-        checker(["a.x", "a.y.z"], null)
+        checker(['a.x', 'a.y.z'], null)
             .done(function(results) {
                 assert.deepEqual(results[0].data, {
-                    $expand: "a($select=x;$expand=y($select=z))",
+                    $expand: 'a($select=x;$expand=y($select=z))',
                 });
             }),
 
-        checker(null, ["a.b", "a.b.c", "a.b.c.d"])
+        checker(null, ['a.b', 'a.b.c', 'a.b.c.d'])
             .done(function(results) {
                 assert.deepEqual(results[0].data, {
-                    $expand: "a($expand=b($expand=c($expand=d)))"
+                    $expand: 'a($expand=b($expand=c($expand=d)))'
                 });
             }),
 
         checker(
-            ["*"],
-            ["b"]
+            ['*'],
+            ['b']
         ).done(function(results) {
             assert.deepEqual(results[0].data, {
-                $expand: "b",
-                $select: "*"
+                $expand: 'b',
+                $select: '*'
             });
         }),
 
         checker(
-            ["a"],
-            ["b.c"]
+            ['a'],
+            ['b.c']
         ).done(function(results) {
             assert.deepEqual(results[0].data, {
-                $expand: "b($expand=c)",
-                $select: "a"
+                $expand: 'b($expand=c)',
+                $select: 'a'
             });
         }),
 
         checker(
-            ["a.b.c"],
-            ["a.b"]
+            ['a.b.c'],
+            ['a.b']
         ).done(function(results) {
             assert.deepEqual(results[0].data, {
-                $expand: "a($expand=b($select=c))"
+                $expand: 'a($expand=b($select=c))'
             });
         }),
 
         checker(
-            ["a.a1.a11", "a.a2.a21", "a.a2.a22", "a.a2.a23.*", "b"],
-            ["x"]
+            ['a.a1.a11', 'a.a2.a21', 'a.a2.a22', 'a.a2.a23.*', 'b'],
+            ['x']
         ).done(function(results) {
             assert.deepEqual(results[0].data, {
-                $expand: "x,a($expand=a1($select=a11),a2($select=a21,a22;$expand=a23($select=*)))",
-                $select: "b"
+                $expand: 'x,a($expand=a1($select=a11),a2($select=a21,a22;$expand=a23($select=*)))',
+                $select: 'b'
             });
         })
     ];
@@ -331,56 +331,56 @@ QUnit.test("select and expand in OData 4", function(assert) {
         .always(done);
 });
 
-QUnit.module("Dates transformation", moduleConfig);
-QUnit.test("works", function(assert) {
+QUnit.module('Dates transformation', moduleConfig);
+QUnit.test('works', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         responseText: { d: { results: [] } },
         callback: function(bag) {
             var expected = [
-                "(date eq datetime'1996-07-04T01:01:01.001')",
-                "(date eq datetime'1996-07-04T01:01:01.010')",
-                "(date eq datetime'1996-07-04T01:01:01.100')",
-                "(date eq datetime'1996-07-04T01:01:01.123')"
-            ].join(" and ");
+                '(date eq datetime\'1996-07-04T01:01:01.001\')',
+                '(date eq datetime\'1996-07-04T01:01:01.010\')',
+                '(date eq datetime\'1996-07-04T01:01:01.100\')',
+                '(date eq datetime\'1996-07-04T01:01:01.123\')'
+            ].join(' and ');
 
-            assert.equal(bag.data.$filter, expected, "second version should transform date to datetime'yyyy-mm-ddThh:mm[:ss[.fffffff]]' format");
+            assert.equal(bag.data.$filter, expected, 'second version should transform date to datetime\'yyyy-mm-ddThh:mm[:ss[.fffffff]]\' format');
         }
     });
 
     ajaxMock.setup({
-        url: "odata4.org",
+        url: 'odata4.org',
         responseText: { d: { results: [] } },
         callback: function(bag) {
             var expected = [
-                "(date eq 1996-07-04T01:01:01.001Z)",
-                "(date eq 1996-07-04T01:01:01.010Z)",
-                "(date eq 1996-07-04T01:01:01.100Z)",
-                "(date eq 1996-07-04T01:01:01.123Z)"
-            ].join(" and ");
+                '(date eq 1996-07-04T01:01:01.001Z)',
+                '(date eq 1996-07-04T01:01:01.010Z)',
+                '(date eq 1996-07-04T01:01:01.100Z)',
+                '(date eq 1996-07-04T01:01:01.123Z)'
+            ].join(' and ');
 
-            assert.equal(bag.data.$filter, expected, "fourth version should transform date to ISO8601 like format");
+            assert.equal(bag.data.$filter, expected, 'fourth version should transform date to ISO8601 like format');
         }
     });
 
     var promises = [
-        QUERY("odata.org")
+        QUERY('odata.org')
             .filter([
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 1)],
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 10)],
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 100)],
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 123)]
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 1)],
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 10)],
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 100)],
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 123)]
             ])
             .enumerate(),
 
-        QUERY("odata4.org", { version: 4 })
+        QUERY('odata4.org', { version: 4 })
             .filter([
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 1)],
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 10)],
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 100)],
-                ["date", new Date(1996, 6, 4, 1, 1, 1, 123)]
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 1)],
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 10)],
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 100)],
+                ['date', new Date(1996, 6, 4, 1, 1, 1, 123)]
             ])
             .enumerate()
     ];
@@ -392,28 +392,28 @@ QUnit.test("works", function(assert) {
         .always(done);
 });
 
-QUnit.module("Criteria transformation", moduleWithMockConfig);
-QUnit.test("comparison operators", function(assert) {
+QUnit.module('Criteria transformation', moduleWithMockConfig);
+QUnit.test('comparison operators', function(assert) {
     assert.expect(6);
 
     var done = assert.async();
 
     var check = function(criteria, expectation) {
-        return QUERY("odata.org")
+        return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check(["f", "=", 2], "f eq 2"),
-        check(["f", "<>", 2], "f ne 2"),
-        check(["f", ">", 2], "f gt 2"),
-        check(["f", ">=", 2], "f ge 2"),
-        check(["f", "<", 2], "f lt 2"),
-        check(["f", "<=", 2], "f le 2")
+        check(['f', '=', 2], 'f eq 2'),
+        check(['f', '<>', 2], 'f ne 2'),
+        check(['f', '>', 2], 'f gt 2'),
+        check(['f', '>=', 2], 'f ge 2'),
+        check(['f', '<', 2], 'f lt 2'),
+        check(['f', '<=', 2], 'f le 2')
     ];
 
     $.when.apply($, promises)
@@ -423,9 +423,9 @@ QUnit.test("comparison operators", function(assert) {
         .always(done);
 });
 
-QUnit.test("unknown filter operation", function(assert) {
-    QUERY("odata.org")
-        .filter("a", "nonsense", "b")
+QUnit.test('unknown filter operation', function(assert) {
+    QUERY('odata.org')
+        .filter('a', 'nonsense', 'b')
         .enumerate()
         .fail(function(error) {
             assert.ok(/unknown filter/i.test(error.message));
@@ -435,19 +435,19 @@ QUnit.test("unknown filter operation", function(assert) {
         });
 });
 
-QUnit.test("mixin and/or conditions inside a single group throws", function(assert) {
+QUnit.test('mixin and/or conditions inside a single group throws', function(assert) {
     assert.expect(4);
 
     var mustNotReach = function() {
-        assert.ok(false, "Shouldn't reach this point");
+        assert.ok(false, 'Shouldn\'t reach this point');
     };
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .filter([
-            ["foo"],
-            ["bar"],
-            "or",
-            ["foobar"]
+            ['foo'],
+            ['bar'],
+            'or',
+            ['foobar']
         ])
         .enumerate()
         .done(mustNotReach)
@@ -455,13 +455,13 @@ QUnit.test("mixin and/or conditions inside a single group throws", function(asse
             assert.ok(true);
         });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .filter([
-            ["foo"],
-            "&&",
-            ["bar"],
-            "||",
-            ["foobar"]
+            ['foo'],
+            '&&',
+            ['bar'],
+            '||',
+            ['foobar']
         ])
         .enumerate()
         .done(mustNotReach)
@@ -469,12 +469,12 @@ QUnit.test("mixin and/or conditions inside a single group throws", function(asse
             assert.ok(true);
         });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .filter([
-            ["foo"],
-            "or",
-            ["bar"],
-            ["foobar"]
+            ['foo'],
+            'or',
+            ['bar'],
+            ['foobar']
         ])
         .enumerate()
         .done(mustNotReach)
@@ -482,13 +482,13 @@ QUnit.test("mixin and/or conditions inside a single group throws", function(asse
             assert.ok(true);
         });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .filter([
-            ["foo"],
-            "or",
-            ["bar"],
-            "and",
-            ["foobar"]
+            ['foo'],
+            'or',
+            ['bar'],
+            'and',
+            ['foobar']
         ])
         .enumerate()
         .done(mustNotReach)
@@ -497,227 +497,227 @@ QUnit.test("mixin and/or conditions inside a single group throws", function(asse
         });
 });
 
-QUnit.test("OR", function(assert) {
+QUnit.test('OR', function(assert) {
     assert.expect(2);
 
     var done = assert.async();
 
     var check = function(criteria) {
-        return QUERY("odata.org")
+        return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], "(f eq 2) or (k ge 4)");
+                assert.equal(r[0].data['$filter'], '(f eq 2) or (k ge 4)');
             });
     };
 
-    $.when(check([["f", "=", 2], "or", ["k", ">=", 4]]), check([["f", "=", 2], "||", ["k", ">=", 4]]))
+    $.when(check([['f', '=', 2], 'or', ['k', '>=', 4]]), check([['f', '=', 2], '||', ['k', '>=', 4]]))
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
 });
 
-QUnit.test("AND", function(assert) {
+QUnit.test('AND', function(assert) {
     assert.expect(2);
 
     var done = assert.async();
 
     var check = function(criteria) {
-        return QUERY("odata.org")
+        return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], "(f eq 2) and (k ge 4)");
+                assert.equal(r[0].data['$filter'], '(f eq 2) and (k ge 4)');
             });
     };
 
-    $.when(check([["f", "=", 2], "and", ["k", ">=", 4]]), check([["f", "=", 2], "&&", ["k", ">=", 4]]))
+    $.when(check([['f', '=', 2], 'and', ['k', '>=', 4]]), check([['f', '=', 2], '&&', ['k', '>=', 4]]))
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
 });
 
-QUnit.test("chain produces AND", function(assert) {
+QUnit.test('chain produces AND', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter(["f", "=", 2])
-        .filter(["k", ">=", 4])
+    QUERY('odata.org')
+        .filter(['f', '=', 2])
+        .filter(['k', '>=', 4])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "(f eq 2) and (k ge 4)");
+            assert.equal(r[0].data['$filter'], '(f eq 2) and (k ge 4)');
         })
         .always(done);
 });
 
-QUnit.test("NOT with binary operation", function(assert) {
+QUnit.test('NOT with binary operation', function(assert) {
     var done = assert.async();
 
     var check = function(criteria) {
-        return QUERY("odata.org")
+        return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], "not (f gt 2)");
+                assert.equal(r[0].data['$filter'], 'not (f gt 2)');
             });
     };
 
     $.when(
-        check(["!", ["f", ">", 2]]))
+        check(['!', ['f', '>', 2]]))
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
 });
 
-QUnit.test("NOT with group operation", function(assert) {
+QUnit.test('NOT with group operation', function(assert) {
     var done = assert.async();
 
     var check = function(criteria) {
-        return QUERY("odata.org")
+        return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], "not ((f gt 2) and (k ne 'ab'))");
+                assert.equal(r[0].data['$filter'], 'not ((f gt 2) and (k ne \'ab\'))');
             });
     };
 
     $.when(
-        check(["!", [["f", ">", 2], "&&", ["k", "<>", "ab"]]]))
+        check(['!', [['f', '>', 2], '&&', ['k', '<>', 'ab']]]))
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
 });
 
-QUnit.test("string values", function(assert) {
+QUnit.test('string values', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter(["f", "=", "a'b<a"])
+    QUERY('odata.org')
+        .filter(['f', '=', 'a\'b<a'])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "f eq 'a''b<a'");
+            assert.equal(r[0].data['$filter'], 'f eq \'a\'\'b<a\'');
         })
         .always(done);
 });
 
-QUnit.test("child field", function(assert) {
+QUnit.test('child field', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter("a.b")
+    QUERY('odata.org')
+        .filter('a.b')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "a/b eq true");
+            assert.equal(r[0].data['$filter'], 'a/b eq true');
         })
         .always(done);
 });
 
-QUnit.test("missing operation means equal", function(assert) {
+QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter(["f", 2])
+    QUERY('odata.org')
+        .filter(['f', 2])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "f eq 2");
+            assert.equal(r[0].data['$filter'], 'f eq 2');
         })
         .always(done);
 });
 
-QUnit.test("missing value means true", function(assert) {
+QUnit.test('missing value means true', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter(["f"])
+    QUERY('odata.org')
+        .filter(['f'])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "f eq true");
+            assert.equal(r[0].data['$filter'], 'f eq true');
         })
         .always(done);
 });
 
-QUnit.test("missing logic operator means AND", function(assert) {
+QUnit.test('missing logic operator means AND', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter([["f", "=", 1], ["k", ">", 2]])
+    QUERY('odata.org')
+        .filter([['f', '=', 1], ['k', '>', 2]])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "(f eq 1) and (k gt 2)");
+            assert.equal(r[0].data['$filter'], '(f eq 1) and (k gt 2)');
         })
         .always(done);
 });
 
-QUnit.test("when arguments are not array", function(assert) {
+QUnit.test('when arguments are not array', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter("f", "=", 1)
+    QUERY('odata.org')
+        .filter('f', '=', 1)
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "f eq 1");
+            assert.equal(r[0].data['$filter'], 'f eq 1');
         })
         .always(done);
 });
 
-QUnit.test("string functions", function(assert) {
+QUnit.test('string functions', function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org")
-            .filter("f.p", operation, "Ab")
+        return QUERY('odata.org')
+            .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check("startsWith", "startswith(tolower(f/p),'ab')"),
-        check("endsWith", "endswith(tolower(f/p),'ab')"),
-        check("contains", "substringof('ab',tolower(f/p))"),
-        check("notContains", "not substringof('ab',tolower(f/p))")
+        check('startsWith', 'startswith(tolower(f/p),\'ab\')'),
+        check('endsWith', 'endswith(tolower(f/p),\'ab\')'),
+        check('contains', 'substringof(\'ab\',tolower(f/p))'),
+        check('notContains', 'not substringof(\'ab\',tolower(f/p))')
     ];
 
     $.when.apply($, promises)
@@ -727,25 +727,25 @@ QUnit.test("string functions", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions with filterToLower equal false", function(assert) {
+QUnit.test('string functions with filterToLower equal false', function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org", { filterToLower: false })
-            .filter("f.p", operation, "Ab")
+        return QUERY('odata.org', { filterToLower: false })
+            .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'Ab')"),
-        check("endsWith", "endswith(f/p,'Ab')"),
-        check("contains", "substringof('Ab',f/p)"),
-        check("notContains", "not substringof('Ab',f/p)")
+        check('startsWith', 'startswith(f/p,\'Ab\')'),
+        check('endsWith', 'endswith(f/p,\'Ab\')'),
+        check('contains', 'substringof(\'Ab\',f/p)'),
+        check('notContains', 'not substringof(\'Ab\',f/p)')
     ];
 
     $.when.apply($, promises)
@@ -755,7 +755,7 @@ QUnit.test("string functions with filterToLower equal false", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions with global filterToLower equal false", function(assert) {
+QUnit.test('string functions with global filterToLower equal false', function(assert) {
     assert.expect(4);
 
     var done = assert.async();
@@ -763,19 +763,19 @@ QUnit.test("string functions with global filterToLower equal false", function(as
     config({ oDataFilterToLower: false });
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org")
-            .filter("f.p", operation, "Ab")
+        return QUERY('odata.org')
+            .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'Ab')"),
-        check("endsWith", "endswith(f/p,'Ab')"),
-        check("contains", "substringof('Ab',f/p)"),
-        check("notContains", "not substringof('Ab',f/p)")
+        check('startsWith', 'startswith(f/p,\'Ab\')'),
+        check('endsWith', 'endswith(f/p,\'Ab\')'),
+        check('contains', 'substringof(\'Ab\',f/p)'),
+        check('notContains', 'not substringof(\'Ab\',f/p)')
     ];
 
     $.when.apply($, promises)
@@ -788,25 +788,25 @@ QUnit.test("string functions with global filterToLower equal false", function(as
         });
 });
 
-QUnit.test("string functions (v4)", function(assert) {
+QUnit.test('string functions (v4)', function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org", { version: 4 })
-            .filter("f.p", operation, "Ab")
+        return QUERY('odata.org', { version: 4 })
+            .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check("startsWith", "startswith(tolower(f/p),'ab')"),
-        check("endsWith", "endswith(tolower(f/p),'ab')"),
-        check("contains", "contains(tolower(f/p),'ab')"),
-        check("notContains", "not contains(tolower(f/p),'ab')")
+        check('startsWith', 'startswith(tolower(f/p),\'ab\')'),
+        check('endsWith', 'endswith(tolower(f/p),\'ab\')'),
+        check('contains', 'contains(tolower(f/p),\'ab\')'),
+        check('notContains', 'not contains(tolower(f/p),\'ab\')')
     ];
 
     $.when.apply($, promises)
@@ -816,25 +816,25 @@ QUnit.test("string functions (v4)", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions (v4) with filterToLower equal false", function(assert) {
+QUnit.test('string functions (v4) with filterToLower equal false', function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org", { version: 4, filterToLower: false })
-            .filter("f.p", operation, "Ab")
+        return QUERY('odata.org', { version: 4, filterToLower: false })
+            .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'Ab')"),
-        check("endsWith", "endswith(f/p,'Ab')"),
-        check("contains", "contains(f/p,'Ab')"),
-        check("notContains", "not contains(f/p,'Ab')")
+        check('startsWith', 'startswith(f/p,\'Ab\')'),
+        check('endsWith', 'endswith(f/p,\'Ab\')'),
+        check('contains', 'contains(f/p,\'Ab\')'),
+        check('notContains', 'not contains(f/p,\'Ab\')')
     ];
 
     $.when.apply($, promises)
@@ -844,7 +844,7 @@ QUnit.test("string functions (v4) with filterToLower equal false", function(asse
         .always(done);
 });
 
-QUnit.test("string functions (v4) with global filterToLower equal false", function(assert) {
+QUnit.test('string functions (v4) with global filterToLower equal false', function(assert) {
     assert.expect(4);
 
     var done = assert.async();
@@ -852,19 +852,19 @@ QUnit.test("string functions (v4) with global filterToLower equal false", functi
     config({ oDataFilterToLower: false });
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org", { version: 4 })
-            .filter("f.p", operation, "Ab")
+        return QUERY('odata.org', { version: 4 })
+            .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], expectation);
+                assert.equal(r[0].data['$filter'], expectation);
             });
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'Ab')"),
-        check("endsWith", "endswith(f/p,'Ab')"),
-        check("contains", "contains(f/p,'Ab')"),
-        check("notContains", "not contains(f/p,'Ab')")
+        check('startsWith', 'startswith(f/p,\'Ab\')'),
+        check('endsWith', 'endswith(f/p,\'Ab\')'),
+        check('contains', 'contains(f/p,\'Ab\')'),
+        check('notContains', 'not contains(f/p,\'Ab\')')
     ];
 
     $.when.apply($, promises)
@@ -877,67 +877,67 @@ QUnit.test("string functions (v4) with global filterToLower equal false", functi
         });
 });
 
-QUnit.test("Explicit Edm literals (Q441230 case)", function(assert) {
+QUnit.test('Explicit Edm literals (Q441230 case)', function(assert) {
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter("x", new EdmLiteral("123M"))
+    QUERY('odata.org')
+        .filter('x', new EdmLiteral('123M'))
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data.$filter, "x eq 123M");
+            assert.equal(r[0].data.$filter, 'x eq 123M');
         })
         .always(done);
 });
 
-QUnit.test("Edm literals for case conversion (Q522002)", function(assert) {
+QUnit.test('Edm literals for case conversion (Q522002)', function(assert) {
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter(new EdmLiteral("tolower(Name)"), "contains", new EdmLiteral("tolower('abc')"))
+    QUERY('odata.org')
+        .filter(new EdmLiteral('tolower(Name)'), 'contains', new EdmLiteral('tolower(\'abc\')'))
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data.$filter, "substringof(tolower('abc'),tolower(Name))");
+            assert.equal(r[0].data.$filter, 'substringof(tolower(\'abc\'),tolower(Name))');
         })
         .always(done);
 });
 
-QUnit.test("Values are converted according to 'fieldTypes' property", function(assert) {
+QUnit.test('Values are converted according to \'fieldTypes\' property', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org", {
+    QUERY('odata.org', {
         fieldTypes: {
-            id1: "Int64",
-            name: "String",
-            total: "Decimal" // T566307
+            id1: 'Int64',
+            name: 'String',
+            total: 'Decimal' // T566307
         }
     })
-        .filter([["id1", "=", 123], "and", ["id2", "=", 456], "and", ["name", "=", 789], "and", ["total", "=", null]])
+        .filter([['id1', '=', 123], 'and', ['id2', '=', 456], 'and', ['name', '=', 789], 'and', ['total', '=', null]])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (name eq '789') and (total eq null)");
+            assert.equal(r[0].data['$filter'], '(id1 eq 123L) and (id2 eq 456) and (name eq \'789\') and (total eq null)');
         })
         .always(done);
 });
 
-QUnit.module("Server side capabilities", moduleConfig);
-QUnit.test("can be done on server: any number of sort and filter before slice, first select, first slice", function(assert) {
+QUnit.module('Server side capabilities', moduleConfig);
+QUnit.test('can be done on server: any number of sort and filter before slice, first select, first slice', function(assert) {
     assert.expect(2 * 5);
 
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         callback: function(bag) {
             this.responseText = { value: [bag] };
         }
@@ -946,29 +946,29 @@ QUnit.test("can be done on server: any number of sort and filter before slice, f
     var assertFunc = function(r) {
         var d = r[0].data;
 
-        assert.equal(d["$orderby"], "a");
-        assert.equal(d["$filter"], "(a gt 1) and (a lt 2)");
-        assert.equal(d["$skip"], 3);
-        assert.equal(d["$top"], 4);
-        assert.equal(d["$select"], "a");
+        assert.equal(d['$orderby'], 'a');
+        assert.equal(d['$filter'], '(a gt 1) and (a lt 2)');
+        assert.equal(d['$skip'], 3);
+        assert.equal(d['$top'], 4);
+        assert.equal(d['$select'], 'a');
     };
 
     var promises = [
-        QUERY("odata.org")
-            .sortBy("phantom")
-            .filter(["a", ">", 1])
-            .sortBy("a")
-            .filter(["a", "<", 2])
+        QUERY('odata.org')
+            .sortBy('phantom')
+            .filter(['a', '>', 1])
+            .sortBy('a')
+            .filter(['a', '<', 2])
             .slice(3, 4)
-            .select("a")
+            .select('a')
             .enumerate()
             .done(assertFunc),
 
-        QUERY("odata.org")
-            .filter(["a", ">", 1])
-            .select("a")
-            .sortBy("a")
-            .filter(["a", "<", 2])
+        QUERY('odata.org')
+            .filter(['a', '>', 1])
+            .select('a')
+            .sortBy('a')
+            .filter(['a', '<', 2])
             .slice(3, 4)
             .enumerate()
             .done(assertFunc)
@@ -981,35 +981,35 @@ QUnit.test("can be done on server: any number of sort and filter before slice, f
         .always(done);
 });
 
-QUnit.test("count on server", function(assert) {
+QUnit.test('count on server', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata2.org",
+        url: 'odata2.org',
         responseText: { d: { __count: 123 } }
     });
 
     ajaxMock.setup({
-        url: "odata4.org",
-        responseText: { "@odata.count": 321 }
+        url: 'odata4.org',
+        responseText: { '@odata.count': 321 }
     });
 
     var promises = [
-        QUERY("odata2.org")
-            .sortBy("x")
-            .filter(["y", "=", 1])
+        QUERY('odata2.org')
+            .sortBy('x')
+            .filter(['y', '=', 1])
             .slice(1, 2)
-            .select("z")
+            .select('z')
             .count()
             .done(function(count) {
                 assert.equal(count, 123);
             }),
 
-        QUERY("odata4.org", { version: 4 })
-            .sortBy("x")
-            .filter(["y", "=", 1])
+        QUERY('odata4.org', { version: 4 })
+            .sortBy('x')
+            .filter(['y', '=', 1])
             .slice(1, 2)
-            .select("z")
+            .select('z')
             .count()
             .done(function(count) {
                 assert.equal(count, 321);
@@ -1023,30 +1023,30 @@ QUnit.test("count on server", function(assert) {
         .always(done);
 });
 
-QUnit.test("count rejects in case of non-number result", function(assert) {
+QUnit.test('count rejects in case of non-number result', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata2.org",
+        url: 'odata2.org',
         responseText: { d: { __count: undefined } }
     });
 
     ajaxMock.setup({
-        url: "odata4.org",
-        responseText: { "@odata.count": undefined }
+        url: 'odata4.org',
+        responseText: { '@odata.count': undefined }
     });
 
     var assertFunc = function(err) {
         assert.ok(true);
-        assert.equal(err.__id, "E4018");
+        assert.equal(err.__id, 'E4018');
     };
 
     var promises = $.map([
-        QUERY("odata2.org")
+        QUERY('odata2.org')
             .count()
             .fail(assertFunc),
 
-        QUERY("odata4.org")
+        QUERY('odata4.org')
             .count()
             .fail(assertFunc)
 
@@ -1067,33 +1067,33 @@ QUnit.test("count rejects in case of non-number result", function(assert) {
         .always(done);
 });
 
-QUnit.test("enumerate with/without requireTotalCount", function(assert) {
+QUnit.test('enumerate with/without requireTotalCount', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            assert.ok(!bag["$inlinecount"]);
+            assert.ok(!bag['$inlinecount']);
         }
     });
 
     ajaxMock.setup({
-        url: "odata.org/count",
+        url: 'odata.org/count',
         responseText: { d: { results: [], __count: 123 } },
         callback: function(bag) {
-            assert.equal(bag.data["$inlinecount"], "allpages");
+            assert.equal(bag.data['$inlinecount'], 'allpages');
         }
     });
 
     var promises = [
-        QUERY("odata.org")
+        QUERY('odata.org')
             .enumerate()
             .done(function(r, extra) {
                 assert.ok(!extra);
             }),
 
-        QUERY("odata.org/count", { requireTotalCount: true })
+        QUERY('odata.org/count', { requireTotalCount: true })
             .enumerate()
             .done(function(r, extra) {
                 assert.equal(extra.totalCount, 123);
@@ -1107,54 +1107,54 @@ QUnit.test("enumerate with/without requireTotalCount", function(assert) {
         .always(done);
 });
 
-QUnit.test("$skiptoken support", function(assert) {
+QUnit.test('$skiptoken support', function(assert) {
     assert.expect(2);
 
     var done = assert.async();
 
     // v2
     ajaxMock.setup({
-        url: "http://odata.org/DataSet",
-        responseText: { d: { results: [1], __next: "DataSet?$skipToken=1" } }
+        url: 'http://odata.org/DataSet',
+        responseText: { d: { results: [1], __next: 'DataSet?$skipToken=1' } }
     });
 
     ajaxMock.setup({
-        url: "http://odata.org/DataSet?$skipToken=1",
-        responseText: { d: { results: [2], __next: "http://odata.org/DataSet?$skipToken=2" } }
+        url: 'http://odata.org/DataSet?$skipToken=1',
+        responseText: { d: { results: [2], __next: 'http://odata.org/DataSet?$skipToken=2' } }
     });
 
     ajaxMock.setup({
-        url: "http://odata.org/DataSet?$skipToken=2",
+        url: 'http://odata.org/DataSet?$skipToken=2',
         responseText: { d: { results: [3] } }
     });
 
     // v4
     ajaxMock.setup({
-        url: "http://odata4.org/DataSet",
-        responseText: { value: ["a"], "@odata.nextLink": "DataSet?$skipToken=1" }
+        url: 'http://odata4.org/DataSet',
+        responseText: { value: ['a'], '@odata.nextLink': 'DataSet?$skipToken=1' }
     });
 
     ajaxMock.setup({
-        url: "http://odata4.org/DataSet?$skipToken=1",
-        responseText: { value: ["b"], "@odata.nextLink": "http://odata4.org/DataSet?$skipToken=2" }
+        url: 'http://odata4.org/DataSet?$skipToken=1',
+        responseText: { value: ['b'], '@odata.nextLink': 'http://odata4.org/DataSet?$skipToken=2' }
     });
 
     ajaxMock.setup({
-        url: "http://odata4.org/DataSet?$skipToken=2",
-        responseText: { value: ["c"] }
+        url: 'http://odata4.org/DataSet?$skipToken=2',
+        responseText: { value: ['c'] }
     });
 
     var promises = [
-        QUERY("http://odata.org/DataSet")
+        QUERY('http://odata.org/DataSet')
             .enumerate()
             .done(function(r) {
                 assert.deepEqual(r, [1, 2, 3]);
             }),
 
-        QUERY("http://odata4.org/DataSet")
+        QUERY('http://odata4.org/DataSet')
             .enumerate()
             .done(function(r) {
-                assert.deepEqual(r, ["a", "b", "c"]);
+                assert.deepEqual(r, ['a', 'b', 'c']);
             })
     ];
 
@@ -1165,16 +1165,16 @@ QUnit.test("$skiptoken support", function(assert) {
         .always(done);
 });
 
-QUnit.test("T560045 - ignore next link when $top is specified", function(assert) {
+QUnit.test('T560045 - ignore next link when $top is specified', function(assert) {
     var done = assert.async(),
-        urlPrefix = "https://graph.microsoft.com/v1.0/me/messages";
+        urlPrefix = 'https://graph.microsoft.com/v1.0/me/messages';
 
     ajaxMock.setup({
         url: urlPrefix,
         callback: function(bag) {
             this.responseText = {
-                "@odata.nextLink": urlPrefix + "?$top=1&$skip=" + (bag.data.$top + bag.data.$skip),
-                "value": [ 1 ]
+                '@odata.nextLink': urlPrefix + '?$top=1&$skip=' + (bag.data.$top + bag.data.$skip),
+                'value': [ 1 ]
             };
         }
     });
@@ -1188,153 +1188,153 @@ QUnit.test("T560045 - ignore next link when $top is specified", function(assert)
         });
 });
 
-QUnit.test("Lift functional select after slice", function(assert) {
+QUnit.test('Lift functional select after slice', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "/",
+        url: '/',
         callback: function(bag) {
             assert.equal(bag.data.$top, 20);
             this.responseText = [];
         }
     });
 
-    QUERY("/")
+    QUERY('/')
         .select(function(i) { return 2 * i; })
         .slice(0, 20)
         .enumerate()
         .done(done);
 });
 
-QUnit.module("Switching to array mode", moduleWithMockConfig);
-QUnit.test("sort by function", function(assert) {
+QUnit.module('Switching to array mode', moduleWithMockConfig);
+QUnit.test('sort by function', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .sortBy(function() { return 0; })
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(!r[0].data["$orderby"]);
+            assert.ok(!r[0].data['$orderby']);
         })
         .always(done);
 });
 
-QUnit.test("filter by function", function(assert) {
+QUnit.test('filter by function', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .filter(function() { return true; })
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(!r[0].data["$filter"]);
+            assert.ok(!r[0].data['$filter']);
         })
         .always(done);
 });
 
-QUnit.test("filter where getter is function", function(assert) {
+QUnit.test('filter where getter is function', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .filter([["url", "odata.org"], "and", [function(obj) { return true; }, true]])
+    QUERY('odata.org')
+        .filter([['url', 'odata.org'], 'and', [function(obj) { return true; }, true]])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(!r[0].data["$filter"]);
+            assert.ok(!r[0].data['$filter']);
         })
         .always(done);
 });
 
-QUnit.test("sort after slice", function(assert) {
+QUnit.test('sort after slice', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .slice(0, 10)
-        .sortBy("a")
+        .sortBy('a')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(!r[0].data["$orderby"]);
+            assert.ok(!r[0].data['$orderby']);
         })
         .always(done);
 });
 
-QUnit.test("filter after slice", function(assert) {
+QUnit.test('filter after slice', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .slice(0, 10)
-        .filter(["a", "<>", ""])
+        .filter(['a', '<>', ''])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(!r[0].data["$filter"]);
+            assert.ok(!r[0].data['$filter']);
         })
         .always(done);
 });
 
-QUnit.test("select after select", function(assert) {
+QUnit.test('select after select', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .select("data", "server")
-        .select("data", "client")
+    QUERY('odata.org')
+        .select('data', 'server')
+        .select('data', 'client')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$select"], "data,server");
+            assert.equal(r[0].data['$select'], 'data,server');
         })
         .always(done);
 });
 
-QUnit.test("select by function", function(assert) {
+QUnit.test('select by function', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .select(function(obj) { return obj; })
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.ok(!r[0].data["$select"]);
+            assert.ok(!r[0].data['$select']);
         })
         .always(done);
 });
 
-QUnit.test("slice after slice", function(assert) {
+QUnit.test('slice after slice', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .slice(0, 20)
         .slice(0, 3)
         .enumerate()
@@ -1342,22 +1342,22 @@ QUnit.test("slice after slice", function(assert) {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$top"], 20);
+            assert.equal(r[0].data['$top'], 20);
         })
         .always(done);
 });
 
-QUnit.module("Client side fallbacks", {
+QUnit.module('Client side fallbacks', {
     beforeEach: function() {
         ajaxMock.setup({
-            url: "odata.org",
+            url: 'odata.org',
             responseText: {
                 value: [
-                    { id: 3, name: "name1", group: "a", bool: true },
-                    { id: 2, name: "name2", group: "a", bool: false },
-                    { id: 5, name: "name3", group: "b", bool: true },
-                    { id: 1, name: "name4", group: "c", bool: false },
-                    { id: 4, name: "name5", group: "c", bool: true }
+                    { id: 3, name: 'name1', group: 'a', bool: true },
+                    { id: 2, name: 'name2', group: 'a', bool: false },
+                    { id: 5, name: 'name3', group: 'b', bool: true },
+                    { id: 1, name: 'name4', group: 'c', bool: false },
+                    { id: 4, name: 'name5', group: 'c', bool: true }
                 ]
             }
         });
@@ -1367,13 +1367,13 @@ QUnit.module("Client side fallbacks", {
     }
 });
 
-QUnit.test("groupBy", function(assert) {
+QUnit.test('groupBy', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
-        .groupBy("group")
+    QUERY('odata.org')
+        .groupBy('group')
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -1384,12 +1384,12 @@ QUnit.test("groupBy", function(assert) {
         .always(done);
 });
 
-QUnit.test("sort by function", function(assert) {
+QUnit.test('sort by function', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .sortBy(function(i) { return -i.id; })
         .select(function(i) { return i.id; })
         .enumerate()
@@ -1402,40 +1402,40 @@ QUnit.test("sort by function", function(assert) {
         .always(done);
 });
 
-QUnit.test("aggregates", function(assert) {
+QUnit.test('aggregates', function(assert) {
     var done = assert.async();
 
     var promises = [
-        QUERY("odata.org")
-            .max("id")
+        QUERY('odata.org')
+            .max('id')
             .done(function(max) {
                 assert.equal(max, 5);
             }),
 
-        QUERY("odata.org")
-            .min("id")
+        QUERY('odata.org')
+            .min('id')
             .done(function(min) {
                 assert.equal(min, 1);
             }),
 
-        QUERY("odata.org")
-            .sum("id")
+        QUERY('odata.org')
+            .sum('id')
             .done(function(sum) {
                 assert.equal(sum, 15);
             }),
 
-        QUERY("odata.org")
-            .avg("id")
+        QUERY('odata.org')
+            .avg('id')
             .done(function(avg) {
                 assert.equal(avg, 3);
             }),
 
-        QUERY("odata.org").aggregate(
-            "<",
+        QUERY('odata.org').aggregate(
+            '<',
             function(accumulator, i) { return accumulator + i.id; },
-            function(accumulator) { return accumulator + ">"; }
+            function(accumulator) { return accumulator + '>'; }
         ).done(function(r) {
-            assert.equal(r, "<32514>");
+            assert.equal(r, '<32514>');
         })
     ];
 
@@ -1447,21 +1447,21 @@ QUnit.test("aggregates", function(assert) {
 });
 
 
-QUnit.module("Error handling", moduleConfig);
-QUnit.test("generic HTTP error", function(assert) {
+QUnit.module('Error handling', moduleConfig);
+QUnit.test('generic HTTP error', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         status: 404,
-        statusText: "Not Found",
-        responseText: "Expected 404"
+        statusText: 'Not Found',
+        responseText: 'Expected 404'
     });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .enumerate()
         .fail(function(error) {
-            assert.equal(error.message, "Not Found");
+            assert.equal(error.message, 'Not Found');
         })
         .done(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -1469,23 +1469,23 @@ QUnit.test("generic HTTP error", function(assert) {
         .always(done);
 });
 
-QUnit.test("OData service error", function(assert) {
+QUnit.test('OData service error', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata2.org",
-        responseText: { error: { message: "expected message" } }
+        url: 'odata2.org',
+        responseText: { error: { message: 'expected message' } }
     });
 
     ajaxMock.setup({
-        url: "odata3.org",
+        url: 'odata3.org',
         // In case of WCF implementation, the "error" key would be prefixed by "odata."
-        responseText: { "odata.error": { message: "expected message" } }
+        responseText: { 'odata.error': { message: 'expected message' } }
     });
 
     ajaxMock.setup({
-        url: "odata4.org",
-        responseText: { "@odata.error": { message: "expected message" } }
+        url: 'odata4.org',
+        responseText: { '@odata.error': { message: 'expected message' } }
     });
 
     function onDone() {
@@ -1493,22 +1493,22 @@ QUnit.test("OData service error", function(assert) {
     }
 
     function onFail(error) {
-        assert.equal(error.message, "expected message");
+        assert.equal(error.message, 'expected message');
     }
 
-    QUERY("odata2.org")
+    QUERY('odata2.org')
         .enumerate()
         .done(onDone)
         .fail(onFail)
         .fail(function() {
 
-            QUERY("odata3.org")
+            QUERY('odata3.org')
                 .enumerate()
                 .done(onDone)
                 .fail(onFail)
                 .fail(function() {
 
-                    QUERY("odata4.org")
+                    QUERY('odata4.org')
                         .enumerate()
                         .done(onDone)
                         .fail(onFail)
@@ -1517,20 +1517,20 @@ QUnit.test("OData service error", function(assert) {
         });
 });
 
-QUnit.test("OData service error with details (UseVerboseErrors = true)", function(assert) {
+QUnit.test('OData service error with details (UseVerboseErrors = true)', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         responseText: {
-            error: { "innererror": { message: "expected inner message" } }
+            error: { 'innererror': { message: 'expected inner message' } }
         }
     });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .enumerate()
         .fail(function(error) {
-            assert.equal(error.message, "expected inner message");
+            assert.equal(error.message, 'expected inner message');
         })
         .done(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -1538,20 +1538,20 @@ QUnit.test("OData service error with details (UseVerboseErrors = true)", functio
         .always(done);
 });
 
-QUnit.test("unexpected server response with 200 status", function(assert) {
+QUnit.test('unexpected server response with 200 status', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         status: 200,
-        jQueryTextStatus: "parsererror",
-        responseText: "Server gone crazy"
+        jQueryTextStatus: 'parsererror',
+        responseText: 'Server gone crazy'
     });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .enumerate()
         .fail(function(error) {
-            assert.ok("message" in error);
+            assert.ok('message' in error);
         })
         .done(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -1559,23 +1559,23 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
         .always(done);
 });
 
-QUnit.test("server error via JSONP with 200 status", function(assert) {
+QUnit.test('server error via JSONP with 200 status', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         responseText: {
             error: {
-                message: "error via jsonp",
+                message: 'error via jsonp',
                 code: 456
             }
         }
     });
 
-    QUERY("odata.org", { jsonp: true })
+    QUERY('odata.org', { jsonp: true })
         .enumerate()
         .fail(function(error) {
-            assert.equal(error.message, "error via jsonp");
+            assert.equal(error.message, 'error via jsonp');
             assert.equal(error.httpStatus, 456);
         })
         .done(function() {
@@ -1587,20 +1587,20 @@ QUnit.test("server error via JSONP with 200 status", function(assert) {
         .always(done);
 });
 
-QUnit.test("client error: before ajax", function(assert) {
+QUnit.test('client error: before ajax', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         callback: function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); }
     });
 
-    QUERY("odata.org", { adapter: "wrong adapter" })
+    QUERY('odata.org', { adapter: 'wrong adapter' })
         .enumerate()
         .fail(function(error) {
-            assert.ok("message" in error);
+            assert.ok('message' in error);
         })
         .done(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -1608,21 +1608,21 @@ QUnit.test("client error: before ajax", function(assert) {
         .always(done);
 });
 
-QUnit.test("client error: after ajax", function(assert) {
+QUnit.test('client error: after ajax', function(assert) {
     assert.expect(1);
 
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         responseText: { value: [{}] }
     });
 
-    QUERY("odata.org")
+    QUERY('odata.org')
         .select(function(i) { return i.wrong.property; })
         .enumerate()
         .fail(function(error) {
-            assert.ok("message" in error);
+            assert.ok('message' in error);
         })
         .done(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
@@ -1630,39 +1630,39 @@ QUnit.test("client error: after ajax", function(assert) {
         .always(done);
 });
 
-QUnit.test("error handlers: server-side error", function(assert) {
+QUnit.test('error handlers: server-side error', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         status: 404,
-        statusText: "Not Found",
-        responseText: "Expected 404"
+        statusText: 'Not Found',
+        responseText: 'Expected 404'
     });
 
     var helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "Not Found");
+        assert.equal(error.message, 'Not Found');
     };
 
     helper.run(
         function() {
-            return QUERY("odata.org", { errorHandler: helper.optionalHandler }).enumerate();
+            return QUERY('odata.org', { errorHandler: helper.optionalHandler }).enumerate();
         },
         done,
         assert
     );
 });
 
-QUnit.test("error handlers: client-side error", function(assert) {
+QUnit.test('error handlers: client-side error', function(assert) {
     var done = assert.async();
 
-    ajaxMock.setup({ url: "odata.org" });
+    ajaxMock.setup({ url: 'odata.org' });
 
     var helper = new ErrorHandlingHelper();
     helper.run(
         function() {
-            return QUERY("odata.org", { errorHandler: helper.optionalHandler })
+            return QUERY('odata.org', { errorHandler: helper.optionalHandler })
                 .sortBy(function() { window.MISSING_GLOABAL_NAME; })
                 .enumerate();
         },
@@ -1671,19 +1671,19 @@ QUnit.test("error handlers: client-side error", function(assert) {
     );
 });
 
-QUnit.module("T174721", moduleConfig);
-QUnit.test("sortBy(str), thenBy(func)", function(assert) {
+QUnit.module('T174721', moduleConfig);
+QUnit.test('sortBy(str), thenBy(func)', function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
-        url: "odata.org",
+        url: 'odata.org',
         responseText: {
-            value: [{ str: 2, func: "a" }, { str: 1, func: "z" }, { str: 1, func: "a" }]
+            value: [{ str: 2, func: 'a' }, { str: 1, func: 'z' }, { str: 1, func: 'a' }]
         }
     });
 
-    QUERY("odata.org")
-        .sortBy("str")
+    QUERY('odata.org')
+        .sortBy('str')
         .thenBy(function(i) { return i.func; })
         .enumerate()
         .fail(function() {

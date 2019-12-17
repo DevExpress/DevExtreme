@@ -1,19 +1,19 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import * as eventUtils from "../../events/utils";
-import { noop } from "../../core/utils/common";
-import { each } from "../../core/utils/iterator";
-import devices from "../../core/devices";
-import Class from "../../core/class";
-import Scrollbar from "./ui.scrollbar";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import * as eventUtils from '../../events/utils';
+import { noop } from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
+import devices from '../../core/devices';
+import Class from '../../core/class';
+import Scrollbar from './ui.scrollbar';
 
-const SCROLLABLE_NATIVE = "dxNativeScrollable";
-const SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native";
-const SCROLLABLE_SCROLLBAR_SIMULATED = "dx-scrollable-scrollbar-simulated";
-const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
+const SCROLLABLE_NATIVE = 'dxNativeScrollable';
+const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
+const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
+const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 
-const VERTICAL = "vertical";
-const HORIZONTAL = "horizontal";
+const VERTICAL = 'vertical';
+const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
@@ -30,9 +30,9 @@ var NativeStrategy = Class.inherit({
         this._$container = scrollable._$container;
         this._$content = scrollable._$content;
 
-        this._direction = scrollable.option("direction");
-        this._useSimulatedScrollbar = scrollable.option("useSimulatedScrollbar");
-        this._showScrollbar = scrollable.option("showScrollbar");
+        this._direction = scrollable.option('direction');
+        this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
+        this._showScrollbar = scrollable.option('showScrollbar');
 
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
@@ -48,7 +48,7 @@ var NativeStrategy = Class.inherit({
 
         this._$element
             .addClass(SCROLLABLE_NATIVE_CLASS)
-            .addClass(SCROLLABLE_NATIVE_CLASS + "-" + deviceType)
+            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType)
             .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._showScrollbar);
 
         if(this._showScrollbar && this._useSimulatedScrollbar) {
@@ -59,7 +59,7 @@ var NativeStrategy = Class.inherit({
     updateBounds: noop,
 
     _renderPushBackOffset: function() {
-        var pushBackValue = this.option("pushBackValue");
+        var pushBackValue = this.option('pushBackValue');
         if(!pushBackValue && !this._component._lastPushBackValue) {
             return;
         }
@@ -86,9 +86,9 @@ var NativeStrategy = Class.inherit({
             return;
         }
 
-        this._scrollbars[direction] = new Scrollbar($("<div>").appendTo(this._$element), {
+        this._scrollbars[direction] = new Scrollbar($('<div>').appendTo(this._$element), {
             direction: direction,
-            expandable: this._component.option("scrollByThumb")
+            expandable: this._component.option('scrollByThumb')
         });
     },
 
@@ -122,8 +122,8 @@ var NativeStrategy = Class.inherit({
     },
 
     createActions: function() {
-        this._scrollAction = this._createActionByOption("onScroll");
-        this._updateAction = this._createActionByOption("onUpdated");
+        this._scrollAction = this._createActionByOption('onScroll');
+        this._updateAction = this._createActionByOption('onUpdated');
     },
 
     _createActionArgs: function() {
@@ -139,7 +139,7 @@ var NativeStrategy = Class.inherit({
             reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
             reachedRight: this._isDirection(HORIZONTAL) ? Math.abs(location.left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
             reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(location.top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * this.option("pushBackValue") : undefined
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(location.top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * this.option('pushBackValue') : undefined
         };
     },
 
@@ -158,7 +158,7 @@ var NativeStrategy = Class.inherit({
     },
 
     _pushBackFromBoundary: function() {
-        var pushBackValue = this.option("pushBackValue");
+        var pushBackValue = this.option('pushBackValue');
         if(!pushBackValue || this._disablePushBack) {
             return;
         }
@@ -186,7 +186,7 @@ var NativeStrategy = Class.inherit({
     _moveScrollbars: function() {
         this._eachScrollbar(function(scrollbar) {
             scrollbar.moveTo(this.location());
-            scrollbar.option("visible", true);
+            scrollbar.option('visible', true);
         });
 
         this._hideScrollbars();
@@ -197,7 +197,7 @@ var NativeStrategy = Class.inherit({
 
         this._hideScrollbarTimeout = setTimeout((function() {
             this._eachScrollbar(function(scrollbar) {
-                scrollbar.option("visible", false);
+                scrollbar.option('visible', false);
             });
         }).bind(this), HIDE_SCROLLBAR_TIMEOUT);
     },
@@ -205,7 +205,7 @@ var NativeStrategy = Class.inherit({
     location: function() {
         return {
             left: -this._$container.scrollLeft(),
-            top: this.option("pushBackValue") - this._$container.scrollTop()
+            top: this.option('pushBackValue') - this._$container.scrollTop()
         };
     },
 
@@ -240,7 +240,7 @@ var NativeStrategy = Class.inherit({
 
     _updateScrollbars: function() {
         this._eachScrollbar(function(scrollbar, direction) {
-            var dimension = direction === VERTICAL ? "height" : "width";
+            var dimension = direction === VERTICAL ? 'height' : 'width';
             scrollbar.option({
                 containerSize: this._containerSize[dimension],
                 contentSize: this._componentContentSize[dimension]
@@ -258,14 +258,14 @@ var NativeStrategy = Class.inherit({
 
     dispose: function() {
         var className = this._$element.get(0).className;
-        var scrollableNativeRegexp = new RegExp(SCROLLABLE_NATIVE_CLASS + "\\S*", "g");
+        var scrollableNativeRegexp = new RegExp(SCROLLABLE_NATIVE_CLASS + '\\S*', 'g');
 
         if(scrollableNativeRegexp.test(className)) {
-            this._$element.removeClass(className.match(scrollableNativeRegexp).join(" "));
+            this._$element.removeClass(className.match(scrollableNativeRegexp).join(' '));
         }
 
-        eventsEngine.off(this._$element, "." + SCROLLABLE_NATIVE);
-        eventsEngine.off(this._$container, "." + SCROLLABLE_NATIVE);
+        eventsEngine.off(this._$element, '.' + SCROLLABLE_NATIVE);
+        eventsEngine.off(this._$container, '.' + SCROLLABLE_NATIVE);
         this._removeScrollbars();
         clearTimeout(this._hideScrollbarTimeout);
     },
@@ -278,12 +278,12 @@ var NativeStrategy = Class.inherit({
 
     scrollBy: function(distance) {
         var location = this.location();
-        this._$container.scrollTop(Math.round(-location.top - distance.top + this.option("pushBackValue")));
+        this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
         this._$container.scrollLeft(Math.round(-location.left - distance.left));
     },
 
     validate: function(e) {
-        if(this.option("disabled")) {
+        if(this.option('disabled')) {
             return false;
         }
 
@@ -318,7 +318,7 @@ var NativeStrategy = Class.inherit({
     },
 
     verticalOffset: function() {
-        return this.option("pushBackValue");
+        return this.option('pushBackValue');
     }
 });
 

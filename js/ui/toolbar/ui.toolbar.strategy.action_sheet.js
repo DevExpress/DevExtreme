@@ -1,13 +1,13 @@
-var ToolbarStrategy = require("./ui.toolbar.strategy"),
-    extend = require("../../core/utils/extend").extend,
-    ActionSheet = require("../action_sheet");
+var ToolbarStrategy = require('./ui.toolbar.strategy'),
+    extend = require('../../core/utils/extend').extend,
+    ActionSheet = require('../action_sheet');
 
 var ActionSheetStrategy = ToolbarStrategy.inherit({
 
-    NAME: "actionSheet",
+    NAME: 'actionSheet',
 
     _getMenuItemTemplate: function() {
-        return this._toolbar._getTemplate("actionSheetItem");
+        return this._toolbar._getTemplate('actionSheetItem');
     },
 
     render: function() {
@@ -34,7 +34,7 @@ var ActionSheetStrategy = ToolbarStrategy.inherit({
     },
 
     _menuButtonOptions: function() {
-        return extend({}, this.callBase(), { icon: "overflow" });
+        return extend({}, this.callBase(), { icon: 'overflow' });
     },
 
     _toggleMenu: function() {

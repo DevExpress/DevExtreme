@@ -1,47 +1,47 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = "#f05b41",
-    BACKGROUND_COLOR = "#fff",
-    TITLE_COLOR = "#333",
-    SUBTITLE_COLOR = "#8899a8",
-    TEXT_COLOR = "#707070",
-    BORDER_COLOR = "#dee1e3";
+    ACCENT_COLOR = '#f05b41',
+    BACKGROUND_COLOR = '#fff',
+    TITLE_COLOR = '#333',
+    SUBTITLE_COLOR = '#8899a8',
+    TEXT_COLOR = '#707070',
+    BORDER_COLOR = '#dee1e3';
 
 registerTheme({
-    name: "generic.carmine",
-    defaultPalette: "Carmine",
+    name: 'generic.carmine',
+    defaultPalette: 'Carmine',
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
     secondaryTitleColor: SUBTITLE_COLOR,
     gridColor: BORDER_COLOR,
     axisColor: TEXT_COLOR,
-    "export": {
+    'export': {
         backgroundColor: BACKGROUND_COLOR,
         font: {
             color: TITLE_COLOR
         },
         button: {
-            "default": {
+            'default': {
                 color: TITLE_COLOR,
-                borderColor: "#b1b7bd",
+                borderColor: '#b1b7bd',
                 backgroundColor: BACKGROUND_COLOR
             },
             hover: {
                 color: TITLE_COLOR,
-                borderColor: "#b1b7bd",
-                backgroundColor: "#faf2f0"
+                borderColor: '#b1b7bd',
+                backgroundColor: '#faf2f0'
             },
             focus: {
                 color: TITLE_COLOR,
-                borderColor: "#6d7781",
-                backgroundColor: "#faf2f0"
+                borderColor: '#6d7781',
+                backgroundColor: '#faf2f0'
             },
             active: {
                 color: TITLE_COLOR,
-                borderColor: "#6d7781",
-                backgroundColor: "#f5e7e4"
+                borderColor: '#6d7781',
+                backgroundColor: '#f5e7e4'
             }
         }
     },
@@ -59,7 +59,7 @@ registerTheme({
             color: TITLE_COLOR
         }
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -75,7 +75,7 @@ registerTheme({
             }
         },
         commonAxisSettings: {
-            breakStyle: { color: "#c1c5c7" }
+            breakStyle: { color: '#c1c5c7' }
         },
         commonAnnotationSettings: {
             font: {
@@ -89,7 +89,7 @@ registerTheme({
     },
     rangeSelector: {
         scale: {
-            breakStyle: { color: "#c1c5c7" },
+            breakStyle: { color: '#c1c5c7' },
             tick: {
                 opacity: 0.12
             }
@@ -105,8 +105,8 @@ registerTheme({
     },
     sparkline: {
         pointColor: BACKGROUND_COLOR,
-        minColor: "#f0ad4e",
-        maxColor: "#f74d61"
+        minColor: '#f0ad4e',
+        maxColor: '#f74d61'
     },
     treeMap: {
         group: {
@@ -123,14 +123,14 @@ registerTheme({
     },
     gauge: {
         valueIndicators: {
-            "rangebar": {
+            'rangebar': {
                 color: ACCENT_COLOR
             },
-            "textcloud": {
+            'textcloud': {
                 color: ACCENT_COLOR
             }
         }
     }
-}, "generic.light");
+}, 'generic.light');
 
-registerThemeAlias("generic.carmine.compact", "generic.carmine");
+registerThemeAlias('generic.carmine.compact', 'generic.carmine');

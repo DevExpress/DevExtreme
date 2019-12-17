@@ -1,11 +1,11 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    paletteModule = require("../palette"),
+var Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    typeUtils = require('../../core/utils/type'),
+    each = require('../../core/utils/iterator').each,
+    paletteModule = require('../palette'),
     _isString = typeUtils.isString,
-    _parseScalar = require("./utils").parseScalar,
-    themeModule = require("../themes"),
+    _parseScalar = require('./utils').parseScalar,
+    themeModule = require('../themes'),
     _getTheme = themeModule.getTheme,
     _addCacheItem = themeModule.addCacheItem,
     _removeCacheItem = themeModule.removeCacheItem,
@@ -13,16 +13,16 @@ var Class = require("../../core/class"),
     _each = each;
 
 // register themes
-require("./themes/generic.light");
-require("./themes/generic.dark");
-require("./themes/generic.contrast");
-require("./themes/generic.carmine");
-require("./themes/generic.darkmoon");
-require("./themes/generic.softblue");
-require("./themes/generic.darkviolet");
-require("./themes/generic.greenmist");
-require("./themes/material");
-require("./themes/ios");
+require('./themes/generic.light');
+require('./themes/generic.dark');
+require('./themes/generic.contrast');
+require('./themes/generic.carmine');
+require('./themes/generic.darkmoon');
+require('./themes/generic.softblue');
+require('./themes/generic.darkviolet');
+require('./themes/generic.greenmist');
+require('./themes/material');
+require('./themes/ios');
 
 function getThemePart(theme, path) {
     var _theme = theme;

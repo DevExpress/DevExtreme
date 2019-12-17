@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/validationSummary.tests.js");
+require('../DevExpress.ui.widgets.editors/validationSummary.tests.js');

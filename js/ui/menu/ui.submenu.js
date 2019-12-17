@@ -1,24 +1,24 @@
-import $ from "../../core/renderer";
-import { noop } from "../../core/utils/common";
-import { getPublicElement } from "../../core/utils/dom";
-import { setup } from "../../animation/position";
-import { extend } from "../../core/utils/extend";
-import ContextMenu from "../context_menu";
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import { getPublicElement } from '../../core/utils/dom';
+import { setup } from '../../animation/position';
+import { extend } from '../../core/utils/extend';
+import ContextMenu from '../context_menu';
 
-const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = "dx-context-menu-content-delimiter";
-const DX_SUBMENU_CLASS = "dx-submenu";
+const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
+const DX_SUBMENU_CLASS = 'dx-submenu';
 
 class Submenu extends ContextMenu {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            orientation: "horizontal",
+            orientation: 'horizontal',
             tabIndex: null,
             onHoverStart: noop
         });
     }
 
     _initDataAdapter() {
-        this._dataAdapter = this.option("_dataAdapter");
+        this._dataAdapter = this.option('_dataAdapter');
         if(!this._dataAdapter) {
             super._initDataAdapter();
         }
@@ -28,13 +28,13 @@ class Submenu extends ContextMenu {
         this._renderContextMenuOverlay();
         super._renderContentImpl();
 
-        const node = this._dataAdapter.getNodeByKey(this.option("_parentKey"));
+        const node = this._dataAdapter.getNodeByKey(this.option('_parentKey'));
         node && this._renderItems(this._getChildNodes(node));
         this._renderDelimiter();
     }
 
     _renderDelimiter() {
-        this.$contentDelimiter = $("<div>")
+        this.$contentDelimiter = $('<div>')
             .appendTo(this._itemContainer())
             .addClass(DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS);
     }
@@ -55,11 +55,11 @@ class Submenu extends ContextMenu {
     }
 
     _isMenuHorizontal() {
-        return this.option("orientation") === "horizontal";
+        return this.option('orientation') === 'horizontal';
     }
 
     _hoverStartHandler(e) {
-        const hoverStartAction = this.option("onHoverStart");
+        const hoverStartAction = this.option('onHoverStart');
         hoverStartAction(e);
 
         super._hoverStartHandler(e);
@@ -98,7 +98,7 @@ class Submenu extends ContextMenu {
         }
 
         const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
-        const $rootItem = this.option("position").of;
+        const $rootItem = this.option('position').of;
         const position = {
             of: $submenu
         };
@@ -113,45 +113,45 @@ class Submenu extends ContextMenu {
         const submenuWidth = $submenu.width();
         const submenuHeight = $submenu.height();
 
-        this.$contentDelimiter.css("display", "block");
+        this.$contentDelimiter.css('display', 'block');
         this.$contentDelimiter.width(this._isMenuHorizontal() ? (rootWidth < submenuWidth ? rootWidth - 2 : submenuWidth) : 2);
         this.$contentDelimiter.height(this._isMenuHorizontal() ? 2 : (rootHeight < submenuHeight ? rootHeight - 2 : submenuHeight));
 
         if(this._isMenuHorizontal()) {
             if(vLocation > offsetTop) {
                 if(Math.round(hLocation) === offsetLeft) {
-                    position.offset = "1 -1";
-                    position.at = position.my = "left top";
+                    position.offset = '1 -1';
+                    position.at = position.my = 'left top';
                 } else {
-                    position.offset = "-1 -1";
-                    position.at = position.my = "right top";
+                    position.offset = '-1 -1';
+                    position.at = position.my = 'right top';
                 }
             } else {
                 this.$contentDelimiter.height(5);
                 if(Math.round(hLocation) === offsetLeft) {
-                    position.offset = "1 4";
-                    position.at = position.my = "left bottom";
+                    position.offset = '1 4';
+                    position.at = position.my = 'left bottom';
                 } else {
-                    position.offset = "-1 2";
-                    position.at = position.my = "right bottom";
+                    position.offset = '-1 2';
+                    position.at = position.my = 'right bottom';
                 }
             }
         } else {
             if(hLocation > offsetLeft) {
                 if(Math.round(vLocation) === offsetTop) {
-                    position.offset = "-1 1";
-                    position.at = position.my = "left top";
+                    position.offset = '-1 1';
+                    position.at = position.my = 'left top';
                 } else {
-                    position.offset = "-1 -1";
-                    position.at = position.my = "left bottom";
+                    position.offset = '-1 -1';
+                    position.at = position.my = 'left bottom';
                 }
             } else {
                 if(Math.round(vLocation) === offsetTop) {
-                    position.offset = "1 1";
-                    position.at = position.my = "right top";
+                    position.offset = '1 1';
+                    position.at = position.my = 'right top';
                 } else {
-                    position.offset = "1 -1";
-                    position.at = position.my = "right bottom";
+                    position.offset = '1 -1';
+                    position.at = position.my = 'right bottom';
                 }
             }
         }
@@ -159,11 +159,11 @@ class Submenu extends ContextMenu {
     }
 
     _getContextMenuPosition() {
-        return this.option("position");
+        return this.option('position');
     }
 
     isOverlayVisible() {
-        return this._overlay.option("visible");
+        return this._overlay.option('visible');
     }
 
     getOverlayContent() {

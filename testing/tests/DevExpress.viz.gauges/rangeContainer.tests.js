@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    BaseRangeContainer = require("viz/gauges/base_range_container"),
-    CircularRangeContainer = require("viz/gauges/circular_range_container"),
-    LinearRangeContainer = require("viz/gauges/linear_range_container"),
-    Translator1D = require("viz/translators/translator1d").Translator1D,
-    themeManagerModule = require("viz/gauges/theme_manager");
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    vizMocks = require('../../helpers/vizMocks.js'),
+    BaseRangeContainer = require('viz/gauges/base_range_container'),
+    CircularRangeContainer = require('viz/gauges/circular_range_container'),
+    LinearRangeContainer = require('viz/gauges/linear_range_container'),
+    Translator1D = require('viz/translators/translator1d').Translator1D,
+    themeManagerModule = require('viz/gauges/theme_manager');
 
 var TestRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {
@@ -29,7 +29,7 @@ var environment = {
         this.container = new vizMocks.Element();
         this.translator = new Translator1D();
         this.themeManager = new themeManagerModule.ThemeManager({});
-        sinon.stub(this.themeManager, "createPalette", this.themeManager.createPalette);
+        sinon.stub(this.themeManager, 'createPalette', this.themeManager.createPalette);
         this.rangeContainer = new TestRangeContainer({
             renderer: this.renderer,
             container: this.container,
@@ -45,28 +45,28 @@ var environment = {
 
 QUnit.module('BaseRangeContainer', environment);
 
-QUnit.test("Creation", function(assert) {
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args, [{ "class": "dxg-range-container" }], "root settings");
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOn.lastCall.args, [this.container, "range-container"], "root is linked to container");
+QUnit.test('Creation', function(assert) {
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args, [{ 'class': 'dxg-range-container' }], 'root settings');
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOn.lastCall.args, [this.container, 'range-container'], 'root is linked to container');
 });
 
-QUnit.test("Disposing", function(assert) {
+QUnit.test('Disposing', function(assert) {
     this.rangeContainer.dispose();
     this.rangeContainer.dispose = noop;
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOff.lastCall.args, [], "root is unlinked");
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOff.lastCall.args, [], 'root is unlinked');
 });
 
-QUnit.test("Render", function(assert) {
+QUnit.test('Render', function(assert) {
     this.rangeContainer.render({
         width: 1,
         ranges: [{ startValue: 0, endValue: 1 }]
     });
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkAppend.lastCall.args, [], "root is appended");
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkAppend.lastCall.args, [], 'root is appended');
 });
 
-QUnit.test("Clean", function(assert) {
+QUnit.test('Clean', function(assert) {
     this.rangeContainer.clean();
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkRemove.lastCall.args, [], "root is removed");
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkRemove.lastCall.args, [], 'root is removed');
 });
 
 //  B232788
@@ -448,7 +448,7 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
             return range;
         });
         this.rangeContainer._translator = new Translator1D(0, 100, 300, 400);
-        paletteExtensionMode = paletteExtensionMode || "blend";
+        paletteExtensionMode = paletteExtensionMode || 'blend';
         this.rangeContainer.render({
             width: 1,
             ranges: ranges,
@@ -483,15 +483,15 @@ QUnit.test('palette, no colors', function(assert) {
 });
 
 QUnit.test('palette is shorter than ranges when paletteExtensionMode is alternate', function(assert) {
-    this.checkColors(assert, [null, null, null, null, null], ['p1', 'p2'], ['p1', 'p2', 'p1', 'p2'], "alternate");
+    this.checkColors(assert, [null, null, null, null, null], ['p1', 'p2'], ['p1', 'p2', 'p1', 'p2'], 'alternate');
 });
 
-QUnit.test("First range with color", function(assert) {
-    this.checkColors(assert, ["#679ec5", null], null, ['#679ec5', '#ffc720']);
+QUnit.test('First range with color', function(assert) {
+    this.checkColors(assert, ['#679ec5', null], null, ['#679ec5', '#ffc720']);
 });
 
 QUnit.test('palette is shorter than ranges when paletteExtensionMode is blend', function(assert) {
-    this.checkColors(assert, [null, null, null, null, null], ["green", "red"], ["green", "#406000", "#804000", "#bf2000", "red"]);
+    this.checkColors(assert, [null, null, null, null, null], ['green', 'red'], ['green', '#406000', '#804000', '#bf2000', 'red']);
 });
 
 QUnit.test('palette is longer than ranges', function(assert) {
@@ -540,19 +540,19 @@ QUnit.test('inside', function(assert) {
     assert.strictEqual(rangeContainer._root.children.length, 5, 'ranges count');
 
     assert.deepEqual(rangeContainer._root.children[0]._stored_settings, {
-        x: 10, y: 20, innerRadius: 88.25, outerRadius: 100, startAngle: 225, endAngle: 210, fill: 'c1', 'class': 'dxg-range dxg-range-0', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 88.25, outerRadius: 100, startAngle: 225, endAngle: 210, fill: 'c1', 'class': 'dxg-range dxg-range-0', 'stroke-linejoin': 'round'
     }, 'range 1');
     assert.deepEqual(rangeContainer._root.children[1]._stored_settings, {
-        x: 10, y: 20, innerRadius: 86.25, outerRadius: 100, startAngle: 250, endAngle: 225, fill: 'c2', 'class': 'dxg-range dxg-range-1', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 86.25, outerRadius: 100, startAngle: 250, endAngle: 225, fill: 'c2', 'class': 'dxg-range dxg-range-1', 'stroke-linejoin': 'round'
     }, 'range 2');
     assert.deepEqual(rangeContainer._root.children[2]._stored_settings, {
-        x: 10, y: 20, innerRadius: 83, outerRadius: 100, startAngle: 290, endAngle: 250, fill: 'c3', 'class': 'dxg-range dxg-range-2', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 83, outerRadius: 100, startAngle: 290, endAngle: 250, fill: 'c3', 'class': 'dxg-range dxg-range-2', 'stroke-linejoin': 'round'
     }, 'range 3');
     assert.deepEqual(rangeContainer._root.children[3]._stored_settings, {
-        x: 10, y: 20, innerRadius: 89.5, outerRadius: 100, startAngle: 210, endAngle: 200, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 89.5, outerRadius: 100, startAngle: 210, endAngle: 200, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', 'stroke-linejoin': 'round'
     }, 'range 4');
     assert.deepEqual(rangeContainer._root.children[4]._stored_settings, {
-        x: 10, y: 20, innerRadius: 80.5, outerRadius: 100, startAngle: 300, endAngle: 290, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 80.5, outerRadius: 100, startAngle: 300, endAngle: 290, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', 'stroke-linejoin': 'round'
     }, 'range 5');
 });
 
@@ -570,19 +570,19 @@ QUnit.test('outside', function(assert) {
     assert.strictEqual(rangeContainer._root.children.length, 5, 'ranges count');
 
     assert.deepEqual(rangeContainer._root.children[0]._stored_settings, {
-        x: 10, y: 20, innerRadius: 100, outerRadius: 111.75, startAngle: 225, endAngle: 210, fill: 'c1', 'class': 'dxg-range dxg-range-0', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 100, outerRadius: 111.75, startAngle: 225, endAngle: 210, fill: 'c1', 'class': 'dxg-range dxg-range-0', 'stroke-linejoin': 'round'
     }, 'range 1');
     assert.deepEqual(rangeContainer._root.children[1]._stored_settings, {
-        x: 10, y: 20, innerRadius: 100, outerRadius: 113.75, startAngle: 250, endAngle: 225, fill: 'c2', 'class': 'dxg-range dxg-range-1', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 100, outerRadius: 113.75, startAngle: 250, endAngle: 225, fill: 'c2', 'class': 'dxg-range dxg-range-1', 'stroke-linejoin': 'round'
     }, 'range 2');
     assert.deepEqual(rangeContainer._root.children[2]._stored_settings, {
-        x: 10, y: 20, innerRadius: 100, outerRadius: 117, startAngle: 290, endAngle: 250, fill: 'c3', 'class': 'dxg-range dxg-range-2', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 100, outerRadius: 117, startAngle: 290, endAngle: 250, fill: 'c3', 'class': 'dxg-range dxg-range-2', 'stroke-linejoin': 'round'
     }, 'range 3');
     assert.deepEqual(rangeContainer._root.children[3]._stored_settings, {
-        x: 10, y: 20, innerRadius: 100, outerRadius: 110.5, startAngle: 210, endAngle: 200, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 100, outerRadius: 110.5, startAngle: 210, endAngle: 200, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', 'stroke-linejoin': 'round'
     }, 'range 4');
     assert.deepEqual(rangeContainer._root.children[4]._stored_settings, {
-        x: 10, y: 20, innerRadius: 100, outerRadius: 119.5, startAngle: 300, endAngle: 290, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 100, outerRadius: 119.5, startAngle: 300, endAngle: 290, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', 'stroke-linejoin': 'round'
     }, 'range 5');
 });
 
@@ -600,19 +600,19 @@ QUnit.test('center', function(assert) {
     assert.strictEqual(rangeContainer._root.children.length, 5, 'ranges count');
 
     assert.deepEqual(rangeContainer._root.children[0]._stored_settings, {
-        x: 10, y: 20, innerRadius: 94.125, outerRadius: 105.875, startAngle: 225, endAngle: 210, fill: 'c1', 'class': 'dxg-range dxg-range-0', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 94.125, outerRadius: 105.875, startAngle: 225, endAngle: 210, fill: 'c1', 'class': 'dxg-range dxg-range-0', 'stroke-linejoin': 'round'
     }, 'range 1');
     assert.deepEqual(rangeContainer._root.children[1]._stored_settings, {
-        x: 10, y: 20, innerRadius: 93.125, outerRadius: 106.875, startAngle: 250, endAngle: 225, fill: 'c2', 'class': 'dxg-range dxg-range-1', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 93.125, outerRadius: 106.875, startAngle: 250, endAngle: 225, fill: 'c2', 'class': 'dxg-range dxg-range-1', 'stroke-linejoin': 'round'
     }, 'range 2');
     assert.deepEqual(rangeContainer._root.children[2]._stored_settings, {
-        x: 10, y: 20, innerRadius: 91.5, outerRadius: 108.5, startAngle: 290, endAngle: 250, fill: 'c3', 'class': 'dxg-range dxg-range-2', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 91.5, outerRadius: 108.5, startAngle: 290, endAngle: 250, fill: 'c3', 'class': 'dxg-range dxg-range-2', 'stroke-linejoin': 'round'
     }, 'range 3');
     assert.deepEqual(rangeContainer._root.children[3]._stored_settings, {
-        x: 10, y: 20, innerRadius: 94.75, outerRadius: 105.25, startAngle: 210, endAngle: 200, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 94.75, outerRadius: 105.25, startAngle: 210, endAngle: 200, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', 'stroke-linejoin': 'round'
     }, 'range 4');
     assert.deepEqual(rangeContainer._root.children[4]._stored_settings, {
-        x: 10, y: 20, innerRadius: 90.25, outerRadius: 109.75, startAngle: 300, endAngle: 290, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', "stroke-linejoin": "round"
+        x: 10, y: 20, innerRadius: 90.25, outerRadius: 109.75, startAngle: 300, endAngle: 290, fill: 'bcolor', 'class': 'dxg-range dxg-background-range', 'stroke-linejoin': 'round'
     }, 'range 5');
 });
 
