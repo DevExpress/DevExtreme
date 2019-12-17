@@ -1,6 +1,6 @@
-var noop = require("../../core/utils/common").noop,
+var noop = require('../../core/utils/common').noop,
     _round = Math.round,
-    objectUtils = require("../../core/utils/object"),
+    objectUtils = require('../../core/utils/object'),
     defaultOffset = {
         horizontal: 0,
         vertical: 0

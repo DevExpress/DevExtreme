@@ -1,15 +1,15 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { Deferred } from "../../core/utils/deferred";
-import { isDefined } from "../../core/utils/type";
-import Guid from "../../core/guid";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import { isDefined } from '../../core/utils/type';
+import Guid from '../../core/guid';
 
-import Widget from "../widget/ui.widget";
-import FileUploader from "../file_uploader";
+import Widget from '../widget/ui.widget';
+import FileUploader from '../file_uploader';
 
-import whenSome from "./ui.file_manager.common";
+import whenSome from './ui.file_manager.common';
 
-const FILE_MANAGER_FILE_UPLOADER_CLASS = "dx-filemanager-fileuploader";
+const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
 
 class FileManagerFileUploader extends Widget {
 
@@ -28,19 +28,19 @@ class FileManagerFileUploader extends Widget {
     _createInternalFileUploader() {
         const chunkSize = this._getController().chunkSize;
 
-        const $fileUploader = $("<div>")
+        const $fileUploader = $('<div>')
             .appendTo(this.$element());
 
         const fileUploader = this._createComponent($fileUploader, FileUploader, {
-            name: "file",
+            name: 'file',
             multiple: true,
             showFileList: false,
             activeStateEnabled: false,
             focusStateEnabled: false,
             hoverStateEnabled: false,
-            labelText: "",
-            readyToUploadMessage: "",
-            accept: "*",
+            labelText: '',
+            readyToUploadMessage: '',
+            accept: '*',
             chunkSize,
             onValueChanged: e => this._onFileUploaderValueChanged(e),
             onProgress: e => this._onFileUploaderProgress(e),
@@ -116,7 +116,7 @@ class FileManagerFileUploader extends Widget {
         const { session, fileIndex } = this._findSessionByFile(component, file);
 
         const fileValue = bytesTotal !== 0 ? bytesLoaded / bytesTotal : 1;
-        const commonValue = component.option("progress") / 100;
+        const commonValue = component.option('progress') / 100;
 
         const args = {
             sessionId: session.id,
@@ -159,7 +159,7 @@ class FileManagerFileUploader extends Widget {
         this._raiseUploadSessionStarted(sessionInfo);
 
         return whenSome(deferreds).always(() => setTimeout(() => {
-            uploaderInfo.fileUploader.option("value", []);
+            uploaderInfo.fileUploader.option('value', []);
             uploaderInfo.session = null;
         }));
     }
@@ -210,7 +210,7 @@ class FileManagerFileUploader extends Widget {
     }
 
     _getController() {
-        const controllerGetter = this.option("getController");
+        const controllerGetter = this.option('getController');
         return controllerGetter();
     }
 
@@ -224,8 +224,8 @@ class FileManagerFileUploader extends Widget {
 
     _initActions() {
         this._actions = {
-            onUploadSessionStarted: this._createActionByOption("onUploadSessionStarted"),
-            onUploadProgress: this._createActionByOption("onUploadProgress")
+            onUploadSessionStarted: this._createActionByOption('onUploadSessionStarted'),
+            onUploadProgress: this._createActionByOption('onUploadProgress')
         };
     }
 
@@ -241,11 +241,11 @@ class FileManagerFileUploader extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "getController":
+            case 'getController':
                 this.repaint();
                 break;
-            case "onUploadSessionStarted":
-            case "onUploadProgress":
+            case 'onUploadSessionStarted':
+            case 'onUploadProgress':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:

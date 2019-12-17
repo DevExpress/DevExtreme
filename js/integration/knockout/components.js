@@ -1,5 +1,5 @@
-var ko = require("knockout"),
-    iconUtils = require("../../core/utils/icon");
+var ko = require('knockout'),
+    iconUtils = require('../../core/utils/icon');
 
 ko.bindingHandlers.dxControlsDescendantBindings = {
     init: function(_, valueAccessor) {

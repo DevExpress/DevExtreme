@@ -1,17 +1,17 @@
-import arrayUtils from "../../core/utils/array";
-import { grep } from "../../core/utils/common";
-import { isDefined } from "../../core/utils/type";
-import objectUtils from "../../core/utils/object";
-import iteratorUtils from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import query from "../../data/query";
-import dataCoreUtils from "../../core/utils/data";
-import DataSourceModule from "../../data/data_source/data_source";
-import { when, Deferred } from "../../core/utils/deferred";
+import arrayUtils from '../../core/utils/array';
+import { grep } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
+import objectUtils from '../../core/utils/object';
+import iteratorUtils from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import query from '../../data/query';
+import dataCoreUtils from '../../core/utils/data';
+import DataSourceModule from '../../data/data_source/data_source';
+import { when, Deferred } from '../../core/utils/deferred';
 
-const getValueExpr = resource => resource.valueExpr || "id";
-const getDisplayExpr = resource => resource.displayExpr || "text";
+const getValueExpr = resource => resource.valueExpr || 'id';
+const getDisplayExpr = resource => resource.displayExpr || 'text';
 
 export default class ResourceManager {
     constructor(resources) {
@@ -118,7 +118,7 @@ export default class ResourceManager {
                     valueExpr: getValueExpr(resource)
                 },
                 dataField: field,
-                editorType: resource.allowMultiple ? "dxTagBox" : "dxSelectBox",
+                editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
                 label: { text: resource.label || field }
             });
         });
@@ -183,7 +183,7 @@ export default class ResourceManager {
                 let tempObject = {};
                 tempObject[fieldName] = fieldValue;
 
-                let resourceData = this.getDataAccessors(field, "getter")(tempObject);
+                let resourceData = this.getDataAccessors(field, 'getter')(tempObject);
                 if(isDefined(resourceData)) {
                     if(!result) {
                         result = {};
@@ -192,9 +192,9 @@ export default class ResourceManager {
                         resourceData = resourceData[0];
                     }
                     if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
-                        this.getDataAccessors(field, "setter")(tempObject, arrayUtils.wrapToArray(resourceData));
+                        this.getDataAccessors(field, 'setter')(tempObject, arrayUtils.wrapToArray(resourceData));
                     } else {
-                        this.getDataAccessors(field, "setter")(tempObject, resourceData);
+                        this.getDataAccessors(field, 'setter')(tempObject, resourceData);
                     }
 
                     extend(result, tempObject);
@@ -263,9 +263,9 @@ export default class ResourceManager {
     }
 
     getResourceColor(field, value) {
-        var valueExpr = this.getResourceByField(field).valueExpr || "id",
+        var valueExpr = this.getResourceByField(field).valueExpr || 'id',
             valueGetter = dataCoreUtils.compileGetter(valueExpr),
-            colorExpr = this.getResourceByField(field).colorExpr || "color",
+            colorExpr = this.getResourceByField(field).colorExpr || 'color',
             colorGetter = dataCoreUtils.compileGetter(colorExpr);
 
         var result = new Deferred(),
@@ -357,7 +357,7 @@ export default class ResourceManager {
     }
 
     _hasGroupItem(appointmentResources, groupName, itemValue) {
-        var group = this.getDataAccessors(groupName, "getter")(appointmentResources);
+        var group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
 
         if(group) {
             if(inArray(itemValue, group) > -1) {
@@ -435,7 +435,7 @@ export default class ResourceManager {
                 resourceValue = node.value,
                 resourceTitle = node.title,
                 resourceData = node.data,
-                resourceGetter = that.getDataAccessors(resourceName, "getter");
+                resourceGetter = that.getDataAccessors(resourceName, 'getter');
 
             existingAppointments.forEach(function(appointment) {
                 if(!ok) {

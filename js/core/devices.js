@@ -1,30 +1,30 @@
-var $ = require("../core/renderer"),
-    windowUtils = require("./utils/window"),
+var $ = require('../core/renderer'),
+    windowUtils = require('./utils/window'),
     navigator = windowUtils.getNavigator(),
     window = windowUtils.getWindow(),
-    extend = require("./utils/extend").extend,
-    isPlainObject = require("./utils/type").isPlainObject,
-    each = require("./utils/iterator").each,
-    Class = require("./class"),
-    errors = require("./errors"),
-    Callbacks = require("./utils/callbacks"),
-    resizeCallbacks = require("./utils/resize_callbacks"),
-    EventsStrategy = require("./events_strategy").EventsStrategy,
-    SessionStorage = require("./utils/storage").sessionStorage,
-    viewPort = require("./utils/view_port"),
-    Config = require("./config");
+    extend = require('./utils/extend').extend,
+    isPlainObject = require('./utils/type').isPlainObject,
+    each = require('./utils/iterator').each,
+    Class = require('./class'),
+    errors = require('./errors'),
+    Callbacks = require('./utils/callbacks'),
+    resizeCallbacks = require('./utils/resize_callbacks'),
+    EventsStrategy = require('./events_strategy').EventsStrategy,
+    SessionStorage = require('./utils/storage').sessionStorage,
+    viewPort = require('./utils/view_port'),
+    Config = require('./config');
 
 var KNOWN_UA_TABLE = {
-    "iPhone": "iPhone",
-    "iPhone5": "iPhone",
-    "iPhone6": "iPhone",
-    "iPhone6plus": "iPhone",
-    "iPad": "iPad",
-    "iPadMini": "iPad Mini",
-    "androidPhone": "Android Mobile",
-    "androidTablet": "Android",
-    "msSurface": "Windows ARM Tablet PC",
-    "desktop": "desktop"
+    'iPhone': 'iPhone',
+    'iPhone5': 'iPhone',
+    'iPhone6': 'iPhone',
+    'iPhone6plus': 'iPhone',
+    'iPad': 'iPad',
+    'iPadMini': 'iPad Mini',
+    'androidPhone': 'Android Mobile',
+    'androidTablet': 'Android',
+    'msSurface': 'Windows ARM Tablet PC',
+    'desktop': 'desktop'
 };
 
 /**
@@ -41,13 +41,13 @@ var DEFAULT_DEVICE = {
     * @type string
     * @acceptValues 'phone'|'tablet'|'desktop'
     */
-    deviceType: "desktop",
+    deviceType: 'desktop',
     /**
     * @name Device.platform
     * @type string
     * @acceptValues 'android'|'ios'|'generic'
     */
-    platform: "generic",
+    platform: 'generic',
     /**
     * @name Device.version
     * @type Array<number>
@@ -83,7 +83,7 @@ var DEFAULT_DEVICE = {
     * @type string
     * @acceptValues 'A'|'B'|'C'
     */
-    grade: "A",
+    grade: 'A',
 
     // TODO: For internal use (draft, do not document these options!)
     mac: false
@@ -101,10 +101,10 @@ var uaParsers = {
         }
 
         return {
-            deviceType: isPhone ? "phone" : isTablet ? "tablet" : "desktop",
-            platform: "generic",
+            deviceType: isPhone ? 'phone' : isTablet ? 'tablet' : 'desktop',
+            platform: 'generic',
             version: [],
-            grade: "A",
+            grade: 'A',
             mac: isMac
         };
     },
@@ -118,11 +118,11 @@ var uaParsers = {
             matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i),
             version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [],
             isIPhone4 = (window.screen.height === (960 / 2)),
-            grade = isIPhone4 ? "B" : "A";
+            grade = isIPhone4 ? 'B' : 'A';
 
         return {
-            deviceType: isPhone ? "phone" : "tablet",
-            platform: "ios",
+            deviceType: isPhone ? 'phone' : 'tablet',
+            platform: 'ios',
             version: version,
             grade: grade
         };
@@ -137,11 +137,11 @@ var uaParsers = {
             matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i),
             version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [],
             worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4),
-            grade = worseThan4_4 ? "B" : "A";
+            grade = worseThan4_4 ? 'B' : 'A';
 
         return {
-            deviceType: isPhone ? "phone" : "tablet",
-            platform: "android",
+            deviceType: isPhone ? 'phone' : 'tablet',
+            platform: 'android',
             version: version,
             grade: grade
         };
@@ -264,31 +264,31 @@ var Devices = Class.inherit({
 
         // TODO: use real device here?
         if(device.deviceType) {
-            result.push("dx-device-" + device.deviceType);
-            if(device.deviceType !== "desktop") {
-                result.push("dx-device-mobile");
+            result.push('dx-device-' + device.deviceType);
+            if(device.deviceType !== 'desktop') {
+                result.push('dx-device-mobile');
             }
         }
 
-        result.push("dx-device-" + realDevice.platform);
+        result.push('dx-device-' + realDevice.platform);
 
         if(realDevice.version && realDevice.version.length) {
-            result.push("dx-device-" + realDevice.platform + "-" + realDevice.version[0]);
+            result.push('dx-device-' + realDevice.platform + '-' + realDevice.version[0]);
         }
 
         if(devices.isSimulator()) {
-            result.push("dx-simulator");
+            result.push('dx-simulator');
         }
 
         if(Config().rtlEnabled) {
-            result.push("dx-rtl");
+            result.push('dx-rtl');
         }
 
         return result;
     },
 
     attachCssClasses: function(element, device) {
-        this._deviceClasses = this._getCssClasses(device).join(" ");
+        this._deviceClasses = this._getCssClasses(device).join(' ');
         $(element).addClass(this._deviceClasses);
     },
 
@@ -299,7 +299,7 @@ var Devices = Class.inherit({
     isSimulator: function() {
         // NOTE: error may happen due to same-origin policy
         try {
-            return this._isSimulator || windowUtils.hasWindow() && this._window.top !== this._window.self && this._window.top["dx-force-device"] || this.isRippleEmulator();
+            return this._isSimulator || windowUtils.hasWindow() && this._window.top !== this._window.self && this._window.top['dx-force-device'] || this.isRippleEmulator();
         } catch(e) {
             return false;
         }
@@ -310,10 +310,10 @@ var Devices = Class.inherit({
     },
 
     _getDevice: function(deviceName) {
-        if(deviceName === "genericPhone") {
+        if(deviceName === 'genericPhone') {
             deviceName = {
-                deviceType: "phone",
-                platform: "generic",
+                deviceType: 'phone',
+                platform: 'generic',
                 generic: true
             };
         }
@@ -325,7 +325,7 @@ var Devices = Class.inherit({
             if(deviceName) {
                 ua = KNOWN_UA_TABLE[deviceName];
                 if(!ua) {
-                    throw errors.Error("E0005");
+                    throw errors.Error('E0005');
                 }
             } else {
                 ua = navigator.userAgent;
@@ -337,8 +337,8 @@ var Devices = Class.inherit({
     _getDeviceOrNameFromWindowScope: function() {
         var result;
 
-        if(windowUtils.hasWindow() && (this._window.top["dx-force-device-object"] || this._window.top["dx-force-device"])) {
-            result = this._window.top["dx-force-device-object"] || this._window.top["dx-force-device"];
+        if(windowUtils.hasWindow() && (this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'])) {
+            result = this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'];
         }
 
         return result;
@@ -351,7 +351,7 @@ var Devices = Class.inherit({
             return;
         }
 
-        var deviceOrName = sessionStorage.getItem("dx-force-device");
+        var deviceOrName = sessionStorage.getItem('dx-force-device');
 
         try {
             return JSON.parse(deviceOrName);
@@ -363,11 +363,11 @@ var Devices = Class.inherit({
     _fromConfig: function(config) {
         var result = extend({}, DEFAULT_DEVICE, this._currentDevice, config),
             shortcuts = {
-                phone: result.deviceType === "phone",
-                tablet: result.deviceType === "tablet",
-                android: result.platform === "android",
-                ios: result.platform === "ios",
-                generic: result.platform === "generic"
+                phone: result.deviceType === 'phone',
+                tablet: result.deviceType === 'tablet',
+                android: result.platform === 'android',
+                ios: result.platform === 'ios',
+                generic: result.platform === 'generic'
             };
 
         return extend(result, shortcuts);
@@ -390,7 +390,7 @@ var Devices = Class.inherit({
 
     _changeOrientation: function() {
         var $window = $(this._window),
-            orientation = $window.height() > $window.width() ? "portrait" : "landscape";
+            orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
 
         if(this._currentOrientation === orientation) {
             return;
@@ -398,7 +398,7 @@ var Devices = Class.inherit({
 
         this._currentOrientation = orientation;
 
-        this._eventsStrategy.fireEvent("orientationChanged", [{
+        this._eventsStrategy.fireEvent('orientationChanged', [{
             orientation: orientation
         }]);
     },

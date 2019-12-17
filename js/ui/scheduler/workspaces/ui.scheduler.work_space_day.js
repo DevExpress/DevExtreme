@@ -1,7 +1,7 @@
-var registerComponent = require("../../../core/component_registrator"),
-    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator");
+var registerComponent = require('../../../core/component_registrator'),
+    SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
 
-var DAY_CLASS = "dx-scheduler-work-space-day";
+var DAY_CLASS = 'dx-scheduler-work-space-day';
 
 var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     _getElementClass: function() {
@@ -13,7 +13,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return this.option("intervalCount");
+        return this.option('intervalCount');
     },
 
     _setFirstViewDate: function() {
@@ -22,7 +22,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getDateByIndex: function(headerIndex) {
-        if(this.option("intervalCount") === 1) {
+        if(this.option('intervalCount') === 1) {
             return this._firstViewDate;
         }
 
@@ -36,7 +36,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _renderDateHeader: function() {
-        if(this.option("intervalCount") === 1) {
+        if(this.option('intervalCount') === 1) {
             return;
         }
 
@@ -60,6 +60,6 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     }
 });
 
-registerComponent("dxSchedulerWorkSpaceDay", SchedulerWorkSpaceDay);
+registerComponent('dxSchedulerWorkSpaceDay', SchedulerWorkSpaceDay);
 
 module.exports = SchedulerWorkSpaceDay;

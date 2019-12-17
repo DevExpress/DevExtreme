@@ -1,9 +1,9 @@
-import ajax from "../../../core/utils/ajax";
-import { ensureDefined } from "../../../core/utils/common";
-import { Deferred } from "../../../core/utils/deferred";
-import { extend } from "../../../core/utils/extend";
-import { FileProvider } from "./file_provider";
-import ArrayFileProvider from "./array";
+import ajax from '../../../core/utils/ajax';
+import { ensureDefined } from '../../../core/utils/common';
+import { Deferred } from '../../../core/utils/deferred';
+import { extend } from '../../../core/utils/extend';
+import { FileProvider } from './file_provider';
+import ArrayFileProvider from './array';
 
 /**
 * @name AjaxFileProvider
@@ -82,7 +82,7 @@ class AjaxFileProvider extends FileProvider {
     _getData() {
         return ajax.sendRequest({
             url: this._options.url,
-            dataType: "json",
+            dataType: 'json',
             cache: false
         });
     }

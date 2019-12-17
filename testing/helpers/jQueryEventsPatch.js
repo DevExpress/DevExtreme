@@ -1,6 +1,6 @@
 /* global jQuery */
 
-var eventsEngine = require("events/core/events_engine");
+var eventsEngine = require('events/core/events_engine');
 
 var originalJQueryEvent;
 var originalJQueryMethods = {};
@@ -17,7 +17,7 @@ QUnit.testStart(function() {
     };
     jQuery.Event.prototype = eventsEngine.Event.prototype;
 
-    ["on", "one", "off", "trigger", "triggerHandler"].forEach(function(methodName) {
+    ['on', 'one', 'off', 'trigger', 'triggerHandler'].forEach(function(methodName) {
         originalJQueryMethods[methodName] = jQuery[methodName];
 
         var patchedMethod = function(events, selector, data) {
@@ -27,9 +27,9 @@ QUnit.testStart(function() {
             return this;
         };
 
-        if(methodName === "on") {
+        if(methodName === 'on') {
             jQuery.fn.on = function(events, selector, data) {
-                if(typeof events === "object") {
+                if(typeof events === 'object') {
                     for(var eventName in events) {
                         patchedMethod.call(this, eventName, selector, data, events[eventName]);
                     }

@@ -26,7 +26,7 @@ function f64LE(stream, position) {
 
 function sendRequest(url, callback) {
     var request = new XMLHttpRequest();
-    request.addEventListener("load", function() {
+    request.addEventListener('load', function() {
         callback(this.response ? null : this.statusText, this.response);
     });
     request.open('GET', url);

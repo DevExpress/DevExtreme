@@ -1,20 +1,20 @@
-import Overlay from "../../overlay";
+import Overlay from '../../overlay';
 import { TooltipStrategyBase } from './tooltipStrategyBase';
-import $ from "../../../core/renderer";
-import { getWindow } from "../../../core/utils/window";
+import $ from '../../../core/renderer';
+import { getWindow } from '../../../core/utils/window';
 
-const SLIDE_PANEL_CLASS_NAME = "dx-scheduler-overlay-panel";
+const SLIDE_PANEL_CLASS_NAME = 'dx-scheduler-overlay-panel';
 const MAX_OVERLAY_HEIGHT = 250;
 
 const animationConfig = {
     show: {
-        type: "slide",
+        type: 'slide',
         duration: 300,
         from: { position: { my: 'top', at: 'bottom', of: getWindow() } },
         to: { position: { my: 'center', at: 'center', of: getWindow() } }
     },
     hide: {
-        type: "slide",
+        type: 'slide',
         duration: 300,
         to: { position: { my: 'top', at: 'bottom', of: getWindow() } },
         from: { position: { my: 'center', at: 'center', of: getWindow() } }
@@ -22,8 +22,8 @@ const animationConfig = {
 };
 
 const positionConfig = {
-    my: "bottom",
-    at: "bottom",
+    my: 'bottom',
+    at: 'bottom',
     of: getWindow()
 };
 
@@ -44,7 +44,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     }
 
     _createTooltip(target) {
-        const $overlay = $("<div>").addClass(SLIDE_PANEL_CLASS_NAME).appendTo(this.scheduler.$element());
+        const $overlay = $('<div>').addClass(SLIDE_PANEL_CLASS_NAME).appendTo(this.scheduler.$element());
         return this.scheduler._createComponent($overlay, Overlay, {
             shading: false,
             position: positionConfig,
@@ -52,8 +52,8 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
             target: this.scheduler.$element(),
             container: this.scheduler.$element(),
             closeOnOutsideClick: true,
-            width: "100%",
-            height: "auto",
+            width: '100%',
+            height: 'auto',
             onShowing: () => this._onShowing()
         });
     }

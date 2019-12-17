@@ -1,10 +1,10 @@
-var $ = require("./renderer");
-var beforeCleanData = require("./element_data").beforeCleanData;
-var eventsEngine = require("../events/core/events_engine");
-var registerEvent = require("../events/core/event_registrator");
+var $ = require('./renderer');
+var beforeCleanData = require('./element_data').beforeCleanData;
+var eventsEngine = require('../events/core/events_engine');
+var registerEvent = require('../events/core/event_registrator');
 
-var eventName = "dxremove";
-var eventPropName = "dxRemoveEvent";
+var eventName = 'dxremove';
+var eventPropName = 'dxRemoveEvent';
 
 /**
   * @name UI Events.dxremove

@@ -1,18 +1,18 @@
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    each = require("../../core/utils/iterator").each,
-    commonUtils = require("../../core/utils/common"),
-    extend = require("../../core/utils/extend").extend,
+var $ = require('../../core/renderer'),
+    Callbacks = require('../../core/utils/callbacks'),
+    each = require('../../core/utils/iterator').each,
+    commonUtils = require('../../core/utils/common'),
+    extend = require('../../core/utils/extend').extend,
     math = Math,
-    simulatedStrategy = require("./ui.scrollable.simulated"),
-    LoadIndicator = require("../load_indicator");
+    simulatedStrategy = require('./ui.scrollable.simulated'),
+    LoadIndicator = require('../load_indicator');
 
-var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = "dx-scrollview-pull-down-loading",
-    SCROLLVIEW_PULLDOWN_READY_CLASS = "dx-scrollview-pull-down-ready",
-    SCROLLVIEW_PULLDOWN_IMAGE_CLASS = "dx-scrollview-pull-down-image",
-    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = "dx-scrollview-pull-down-indicator",
-    SCROLLVIEW_PULLDOWN_TEXT_CLASS = "dx-scrollview-pull-down-text",
-    SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = "dx-scrollview-pull-down-text-visible",
+var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading',
+    SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready',
+    SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image',
+    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator',
+    SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text',
+    SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible',
 
     STATE_RELEASED = 0,
     STATE_READY = 1,
@@ -48,7 +48,7 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
             }];
 
         each(pullDownTextItems, function(_, item) {
-            var action = that._state === item.visibleState ? "addClass" : "removeClass";
+            var action = that._state === item.visibleState ? 'addClass' : 'removeClass';
             item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
         });
     },
@@ -60,7 +60,7 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _updateBounds: function() {
-        var considerPockets = this._direction !== "horizontal";
+        var considerPockets = this._direction !== 'horizontal';
 
         this._topPocketSize = considerPockets ? Math.round(this._$topPocket[this._dimension]()) : 0;
         this._bottomPocketSize = considerPockets ? Math.round(this._$bottomPocket[this._dimension]()) : 0;
@@ -253,14 +253,14 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     _renderPullDown: function() {
-        var $image = $("<div>").addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS),
-            $loadContainer = $("<div>").addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($("<div>")).$element(),
-            $text = this._$pullDownText = $("<div>").addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        var $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS),
+            $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
+            $loadIndicator = new LoadIndicator($('<div>')).$element(),
+            $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
-        this._$pullingDownText = $("<div>").text(this.option("pullingDownText")).appendTo($text);
-        this._$pulledDownText = $("<div>").text(this.option("pulledDownText")).appendTo($text);
-        this._$refreshingText = $("<div>").text(this.option("refreshingText")).appendTo($text);
+        this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
+        this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
+        this._$refreshingText = $('<div>').text(this.option('refreshingText')).appendTo($text);
 
         this._$pullDown
             .empty()
@@ -270,11 +270,11 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     pullDownEnable: function(enabled) {
-        this._eventHandler("pullDownEnabling", enabled);
+        this._eventHandler('pullDownEnabling', enabled);
     },
 
     reachBottomEnable: function(enabled) {
-        this._eventHandler("reachBottomEnabling", enabled);
+        this._eventHandler('reachBottomEnabling', enabled);
     },
 
     _createScroller: function(direction) {
@@ -298,11 +298,11 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     pendingRelease: function() {
-        this._eventHandler("pendingRelease");
+        this._eventHandler('pendingRelease');
     },
 
     release: function() {
-        return this._eventHandler("release").done(this._updateAction);
+        return this._eventHandler('release').done(this._updateAction);
     },
 
     location: function() {

@@ -1,14 +1,14 @@
-import { isPlainObject, isEmptyObject, isDefined } from "../core/utils/type";
-import config from "../core/config";
-import Guid from "../core/guid";
-import { extend } from "../core/utils/extend";
-import { errors } from "./errors";
-import objectUtils from "../core/utils/object";
-import { keysEqual, rejectedPromise, trivialPromise } from "./utils";
+import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
+import config from '../core/config';
+import Guid from '../core/guid';
+import { extend } from '../core/utils/extend';
+import { errors } from './errors';
+import objectUtils from '../core/utils/object';
+import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
     var key,
-        keys = typeof keyOrKeys === "string" ? keyOrKeys.split() : keyOrKeys.slice();
+        keys = typeof keyOrKeys === 'string' ? keyOrKeys.split() : keyOrKeys.slice();
 
     while(keys.length) {
         key = keys.shift();
@@ -78,14 +78,14 @@ function setDataByKeyMapValue(array, key, data) {
 
 function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
     batchData.forEach(item => {
-        var items = item.type === "insert" ? array : getItems(keyInfo, array, item.key, groupCount);
+        var items = item.type === 'insert' ? array : getItems(keyInfo, array, item.key, groupCount);
 
         generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
-            case "update": update(keyInfo, items, item.key, item.data, true); break;
-            case "insert": insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
-            case "remove": remove(keyInfo, items, item.key, true); break;
+            case 'update': update(keyInfo, items, item.key, item.data, true); break;
+            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
+            case 'remove': remove(keyInfo, items, item.key, true); break;
         }
     });
 }
@@ -97,14 +97,14 @@ function update(keyInfo, array, key, data, isBatch) {
 
     if(keyExpr) {
         if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
-            return !isBatch && rejectedPromise(errors.Error("E4017"));
+            return !isBatch && rejectedPromise(errors.Error('E4017'));
         }
 
         target = getCacheValue(array, key);
         if(!target) {
             let index = indexByKey(keyInfo, array, key);
             if(index < 0) {
-                return !isBatch && rejectedPromise(errors.Error("E4009"));
+                return !isBatch && rejectedPromise(errors.Error('E4009'));
             }
             target = array[index];
         }
@@ -131,14 +131,14 @@ function insert(keyInfo, array, data, index, isBatch) {
 
     if(keyExpr) {
         keyValue = keyInfo.keyOf(obj);
-        if(keyValue === undefined || typeof keyValue === "object" && isEmptyObject(keyValue)) {
+        if(keyValue === undefined || typeof keyValue === 'object' && isEmptyObject(keyValue)) {
             if(Array.isArray(keyExpr)) {
-                throw errors.Error("E4007");
+                throw errors.Error('E4007');
             }
             keyValue = obj[keyExpr] = String(new Guid());
         } else {
             if(array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
-                return !isBatch && rejectedPromise(errors.Error("E4008"));
+                return !isBatch && rejectedPromise(errors.Error('E4008'));
             }
         }
     } else {

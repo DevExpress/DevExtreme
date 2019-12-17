@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import { createElement } from "../../core/dom_adapter";
-import ko from "knockout";
-import { isDefined } from "../../core/utils/type";
-import { TemplateBase } from "../../core/templates/template_base";
-import { normalizeTemplateElement } from "../../core/utils/dom";
-import { getClosestNodeWithContext } from "./utils";
+import $ from '../../core/renderer';
+import { createElement } from '../../core/dom_adapter';
+import ko from 'knockout';
+import { isDefined } from '../../core/utils/type';
+import { TemplateBase } from '../../core/templates/template_base';
+import { normalizeTemplateElement } from '../../core/utils/dom';
+import { getClosestNodeWithContext } from './utils';
 
 const getParentContext = function(data) {
-    const parentNode = createElement("div");
+    const parentNode = createElement('div');
 
     ko.applyBindingsToNode(parentNode, null, data);
     const parentContext = ko.contextFor(parentNode);
@@ -22,7 +22,7 @@ export const KoTemplate = class extends TemplateBase {
         super();
         this._element = element;
 
-        this._template = $("<div>").append(normalizeTemplateElement(element));
+        this._template = $('<div>').append(normalizeTemplateElement(element));
         this._registerKoTemplate();
     }
 
@@ -55,14 +55,14 @@ export const KoTemplate = class extends TemplateBase {
             model.$index = options.index;
         }
 
-        const $placeholder = $("<div>").appendTo(options.container);
+        const $placeholder = $('<div>').appendTo(options.container);
 
         let $result;
         ko.renderTemplate(this._template.get(0), model, {
             afterRender: function(nodes) {
                 $result = $(nodes);
             }
-        }, $placeholder.get(0), "replaceNode");
+        }, $placeholder.get(0), 'replaceNode');
 
         return $result;
     }

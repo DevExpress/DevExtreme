@@ -1,33 +1,33 @@
-import { buildRectAppearance as _buildRectAppearance, buildTextAppearance as _buildTextAppearance } from "./common";
-import Node from "./node";
-import { getAlgorithm as _getTilingAlgorithm } from "./tiling";
-import { getColorizer as _getColorizer } from "./colorizing";
-import { patchFontOptions as _patchFontOptions } from "../core/utils";
-import { noop as _noop } from "../../core/utils/common";
-import { isDefined as _isDefined } from "../../core/utils/type";
-import { extend as _extend } from "../../core/utils/extend";
+import { buildRectAppearance as _buildRectAppearance, buildTextAppearance as _buildTextAppearance } from './common';
+import Node from './node';
+import { getAlgorithm as _getTilingAlgorithm } from './tiling';
+import { getColorizer as _getColorizer } from './colorizing';
+import { patchFontOptions as _patchFontOptions } from '../core/utils';
+import { noop as _noop } from '../../core/utils/common';
+import { isDefined as _isDefined } from '../../core/utils/type';
+import { extend as _extend } from '../../core/utils/extend';
 
 const _max = Math.max;
 const directions = {
-    "lefttoprightbottom": [+1, +1],
-    "leftbottomrighttop": [+1, -1],
-    "righttopleftbottom": [-1, +1],
-    "rightbottomlefttop": [-1, -1]
+    'lefttoprightbottom': [+1, +1],
+    'leftbottomrighttop': [+1, -1],
+    'righttopleftbottom': [-1, +1],
+    'rightbottomlefttop': [-1, -1]
 };
 
 // At least one algorithm is required.
-require("./tiling.squarified");
-require("./tiling").setDefaultAlgorithm("squarified");
+require('./tiling.squarified');
+require('./tiling').setDefaultAlgorithm('squarified');
 
 // By design discrete colorizing is used by default.
-require("./colorizing.discrete");
-require("./colorizing").setDefaultColorizer("discrete");
+require('./colorizing.discrete');
+require('./colorizing').setDefaultColorizer('discrete');
 
 function pickPositiveInteger(val) {
     return val > 0 ? Math.round(val) : 0;
 }
 
-var dxTreeMap = require("../core/base_widget").inherit({
+var dxTreeMap = require('../core/base_widget').inherit({
     _handlers: {
         beginBuildNodes: _noop,
 
@@ -42,9 +42,9 @@ var dxTreeMap = require("../core/base_widget").inherit({
         }
     },
 
-    _rootClass: "dxtm-tree-map",
+    _rootClass: 'dxtm-tree-map',
 
-    _rootClassPrefix: "dxtm",
+    _rootClassPrefix: 'dxtm',
 
     _getDefaultSize: function() {
         return { width: 400, height: 400 };
@@ -53,16 +53,16 @@ var dxTreeMap = require("../core/base_widget").inherit({
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         _extend(this._deprecatedOptions, {
-            "resolveLabelOverflow": {
-                since: "19.1",
-                message: "Use the 'tile.label.overflow' and 'group.label.textOverflow' option instead"
+            'resolveLabelOverflow': {
+                since: '19.1',
+                message: 'Use the \'tile.label.overflow\' and \'group.label.textOverflow\' option instead'
             }
         });
     },
 
-    _themeSection: "treeMap",
+    _themeSection: 'treeMap',
 
-    _fontFields: ["tile.label.font", "group.label.font"],
+    _fontFields: ['tile.label.font', 'group.label.font'],
 
     _init: function() {
         var that = this;
@@ -90,15 +90,15 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that.callBase.apply(that, arguments);
     },
 
-    _initialChanges: ["DATA_SOURCE"],
+    _initialChanges: ['DATA_SOURCE'],
 
     _initCore: function() {
         var that = this,
             renderer = that._renderer;
 
         that._createProxyType();
-        that._tilesGroup = renderer.g().linkOn(renderer.root, "tiles").linkAppend();
-        that._labelsGroup = renderer.g().linkOn(renderer.root, "labels").linkAppend();
+        that._tilesGroup = renderer.g().linkOn(renderer.root, 'tiles').linkAppend();
+        that._labelsGroup = renderer.g().linkOn(renderer.root, 'labels').linkAppend();
     },
 
     _createProxyType: _noop,
@@ -112,25 +112,25 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
     _applySize: function(rect) {
         this._tilingRect = rect.slice();
-        this._change(["TILING"]);
+        this._change(['TILING']);
     },
 
     _optionChangesMap: {
-        dataSource: "DATA_SOURCE",
-        valueField: "NODES_CREATE",
-        childrenField: "NODES_CREATE",
-        colorField: "TILES",
-        colorizer: "TILES",
-        labelField: "LABELS",
-        tile: "TILE_SETTINGS",
-        group: "GROUP_SETTINGS",
-        maxDepth: "MAX_DEPTH",
-        layoutAlgorithm: "TILING",
-        layoutDirection: "TILING",
-        resolveLabelOverflow: "LABEL_OVERFLOW"
+        dataSource: 'DATA_SOURCE',
+        valueField: 'NODES_CREATE',
+        childrenField: 'NODES_CREATE',
+        colorField: 'TILES',
+        colorizer: 'TILES',
+        labelField: 'LABELS',
+        tile: 'TILE_SETTINGS',
+        group: 'GROUP_SETTINGS',
+        maxDepth: 'MAX_DEPTH',
+        layoutAlgorithm: 'TILING',
+        layoutDirection: 'TILING',
+        resolveLabelOverflow: 'LABEL_OVERFLOW'
     },
 
-    _themeDependentChanges: ["TILE_SETTINGS", "GROUP_SETTINGS", "MAX_DEPTH"],
+    _themeDependentChanges: ['TILE_SETTINGS', 'GROUP_SETTINGS', 'MAX_DEPTH'],
 
     _changeDataSource: function() {
         var that = this;
@@ -148,16 +148,16 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
         if(that._isDataExpected) {
             that._isDataExpected = false;
-            that._change(["NODES_CREATE"]);
+            that._change(['NODES_CREATE']);
             if(!that._isSyncData) {
                 that._resumeChanges();
             }
         } else {
-            that._requestChange(["NODES_CREATE"]);
+            that._requestChange(['NODES_CREATE']);
         }
     },
 
-    _optionChangesOrder: ["DATA_SOURCE", "TILE_SETTINGS", "GROUP_SETTINGS", "MAX_DEPTH", "LABEL_OVERFLOW"],
+    _optionChangesOrder: ['DATA_SOURCE', 'TILE_SETTINGS', 'GROUP_SETTINGS', 'MAX_DEPTH', 'LABEL_OVERFLOW'],
 
     _change_DATA_SOURCE: function() {
         this._changeDataSource();
@@ -180,7 +180,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         this._changeMaxDepth();
     },
 
-    _customChangesOrder: ["NODES_CREATE", "NODES_RESET", "TILES", "LABELS", "TILING", "LABELS_LAYOUT"],
+    _customChangesOrder: ['NODES_CREATE', 'NODES_RESET', 'TILES', 'LABELS', 'TILING', 'LABELS_LAYOUT'],
 
     _change_NODES_CREATE: function() {
         this._buildNodes();
@@ -233,15 +233,15 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._handlers.beginBuildNodes();
         processedData = that._processDataSourceItems(that._dataSourceItems() || []);
         traverseDataItems(root, processedData.items, 0, {
-            itemsField: !processedData.isPlain && that._getOption("childrenField", true) || "items",
-            valueField: that._getOption("valueField", true) || "value",
+            itemsField: !processedData.isPlain && that._getOption('childrenField', true) || 'items',
+            valueField: that._getOption('valueField', true) || 'value',
             buildNode: that._handlers.buildNode,
             ctx: that._context,
             nodes: that._nodes
         });
         that._onNodesCreated();
         that._handlers.endBuildNodes();
-        that._change(["NODES_RESET"]);
+        that._change(['NODES_RESET']);
     },
 
     _onNodesCreated: _noop,
@@ -252,7 +252,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
     _changeTileSettings: function() {
         var that = this,
-            options = that._getOption("tile"),
+            options = that._getOption('tile'),
             offsets = that._rectOffsets,
             borderWidth = pickPositiveInteger(options.border.width),
             edgeOffset = borderWidth / 2,
@@ -260,22 +260,22 @@ var dxTreeMap = require("../core/base_widget").inherit({
             labelOptions = options.label,
             settings = that._context.settings[0];
 
-        that._change(["TILES", "LABELS"]);
+        that._change(['TILES', 'LABELS']);
         settings.state = that._handlers.calculateState(options);
         // TODO: There should be some way (option) to prevent filter creation
-        that._filter = that._filter || that._renderer.shadowFilter("-50%", "-50%", "200%", "200%");
+        that._filter = that._filter || that._renderer.shadowFilter('-50%', '-50%', '200%', '200%');
         that._filter.attr(labelOptions.shadow);
         that._calculateLabelSettings(settings, labelOptions, that._filter.id);
         if(offsets.tileEdge !== edgeOffset || offsets.tileInner !== innerOffset) {
             offsets.tileEdge = edgeOffset;
             offsets.tileInner = innerOffset;
-            that._change(["TILING"]);
+            that._change(['TILING']);
         }
     },
 
     _changeGroupSettings: function() {
         var that = this,
-            options = that._getOption("group"),
+            options = that._getOption('group'),
             labelOptions = options.label,
             offsets = that._rectOffsets,
             borderWidth = pickPositiveInteger(options.border.width),
@@ -285,7 +285,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
             groupPadding = pickPositiveInteger(options.padding),
             settings = that._context.settings[1];
 
-        that._change(["TILES", "LABELS"]);
+        that._change(['TILES', 'LABELS']);
         settings.state = that._handlers.calculateState(options);
         that._calculateLabelSettings(settings, labelOptions);
         if(options.headerHeight >= 0) {
@@ -295,16 +295,16 @@ var dxTreeMap = require("../core/base_widget").inherit({
         }
         if(that._headerHeight !== headerHeight) {
             that._headerHeight = headerHeight;
-            that._change(["TILING"]);
+            that._change(['TILING']);
         }
         if(that._groupPadding !== groupPadding) {
             that._groupPadding = groupPadding;
-            that._change(["TILING"]);
+            that._change(['TILING']);
         }
         if(offsets.headerEdge !== edgeOffset || offsets.headerInner !== innerOffset) {
             offsets.headerEdge = edgeOffset;
             offsets.headerInner = innerOffset;
-            that._change(["TILING"]);
+            that._change(['TILING']);
         }
     },
 
@@ -312,17 +312,17 @@ var dxTreeMap = require("../core/base_widget").inherit({
         var bBox = this._getTextBBox(options.font),
             paddingLeftRight = pickPositiveInteger(options.paddingLeftRight),
             paddingTopBottom = pickPositiveInteger(options.paddingTopBottom),
-            tileLabelOptions = this._getOption("tile.label"),
-            groupLabelOptions = this._getOption("group.label");
+            tileLabelOptions = this._getOption('tile.label'),
+            groupLabelOptions = this._getOption('group.label');
 
         settings.labelState = _buildTextAppearance(options, filter);
-        settings.labelState.visible = !("visible" in options) || !!options.visible;
+        settings.labelState.visible = !('visible' in options) || !!options.visible;
         settings.labelParams = {
             height: bBox.height,
-            rtlEnabled: this._getOption("rtlEnabled", true),
+            rtlEnabled: this._getOption('rtlEnabled', true),
             paddingTopBottom: paddingTopBottom,
             paddingLeftRight: paddingLeftRight,
-            resolveLabelOverflow: this._options.silent("resolveLabelOverflow"),
+            resolveLabelOverflow: this._options.silent('resolveLabelOverflow'),
             tileLabelWordWrap: tileLabelOptions.wordWrap,
             tileLabelOverflow: tileLabelOptions.textOverflow,
             groupLabelOverflow: groupLabelOptions.textOverflow
@@ -330,12 +330,12 @@ var dxTreeMap = require("../core/base_widget").inherit({
     },
 
     _changeMaxDepth: function() {
-        var maxDepth = this._getOption("maxDepth", true);
+        var maxDepth = this._getOption('maxDepth', true);
 
         maxDepth = maxDepth >= 1 ? Math.round(maxDepth) : Infinity;
         if(this._maxDepth !== maxDepth) {
             this._maxDepth = maxDepth;
-            this._change(["NODES_RESET"]);
+            this._change(['NODES_RESET']);
         }
     },
 
@@ -347,7 +347,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._context.forceReset = true;
         that._context.minLevel = that._topNode.level + 1;
         that._context.maxLevel = that._context.minLevel + that._maxDepth - 1;
-        that._change(["TILES", "LABELS", "TILING"]);
+        that._change(['TILES', 'LABELS', 'TILING']);
     },
 
     _processNodes: function(context, process) {
@@ -360,13 +360,13 @@ var dxTreeMap = require("../core/base_widget").inherit({
             // Passing *topNode* looks awfully dirty and is performed only because of discrete group colorizing.
             // Aforementioned colorizing requires breadth-first tree traversal and nodes processing is performed in a depth-first order.
             // TODO: Find a way to stop passing *topNode*
-            colorizer = _getColorizer(that._getOption("colorizer"), that._themeManager, that._topNode);
+            colorizer = _getColorizer(that._getOption('colorizer'), that._themeManager, that._topNode);
 
         that._processNodes({
             renderer: that._renderer,
             group: that._tilesGroup,
             setTrackerData: that._handlers.setTrackerData,
-            colorField: that._getOption("colorField", true) || "color",
+            colorField: that._getOption('colorField', true) || 'color',
             getColor: colorizer
         }, processTileAppearance);
     },
@@ -379,18 +379,18 @@ var dxTreeMap = require("../core/base_widget").inherit({
             renderer: that._renderer,
             group: that._labelsGroup,
             setTrackerData: that._handlers.setTrackerData,
-            labelField: that._getOption("labelField", true) || "name"
+            labelField: that._getOption('labelField', true) || 'name'
         }, processLabelAppearance);
         // Actually that is strange - for example if just "font.color" is changed then there is no need to layout labels.
         // But for <text> element can change its size because of rather many reasons - so for simplicity layout is always performed.
-        that._change(["LABELS_LAYOUT"]);
+        that._change(['LABELS_LAYOUT']);
     },
 
     _performTiling: function() {
         var that = this,
             context = {
-                algorithm: _getTilingAlgorithm(that._getOption("layoutAlgorithm", true)),
-                directions: directions[String(that._getOption("layoutDirection", true)).toLowerCase()] || directions["lefttoprightbottom"],
+                algorithm: _getTilingAlgorithm(that._getOption('layoutAlgorithm', true)),
+                directions: directions[String(that._getOption('layoutDirection', true)).toLowerCase()] || directions['lefttoprightbottom'],
                 headerHeight: that._headerHeight,
                 groupPadding: that._groupPadding,
                 rectOffsets: that._rectOffsets
@@ -399,7 +399,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._topNode.innerRect = that._tilingRect;
         calculateRects(context, that._topNode);
         that._processNodes(context, processTiling);
-        that._change(["LABELS_LAYOUT"]);
+        that._change(['LABELS_LAYOUT']);
         that._onTilingPerformed();
     },
 
@@ -411,7 +411,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
     _getTextBBox: function(fontOptions) {
         var renderer = this._renderer,
-            text = this._textForCalculations || renderer.text("0", 0, 0),
+            text = this._textForCalculations || renderer.text('0', 0, 0),
             bBox;
 
         this._textForCalculations = text;
@@ -601,10 +601,10 @@ function layoutTextNode(node, params) {
         tileLabelWordWrap = params.tileLabelWordWrap;
 
     if(_isDefined(resolveLabelOverflow)) {
-        if(resolveLabelOverflow === "ellipsis" && fitByHeight) {
+        if(resolveLabelOverflow === 'ellipsis' && fitByHeight) {
             text.setMaxSize(effectiveWidth, undefined, {
-                wordWrap: "none",
-                textOverflow: "ellipsis"
+                wordWrap: 'none',
+                textOverflow: 'ellipsis'
             });
             if(!fitByWidth) {
                 bBox = text.getBBox();
@@ -614,12 +614,12 @@ function layoutTextNode(node, params) {
     } else {
         fitByWidth = true;
         fitByHeight = true;
-        text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: "none" } :
+        text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: 'none' } :
             { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap, hideOverflowEllipsis: true });
     }
 
     text.attr({
-        visibility: fitByHeight && fitByWidth ? "visible" : "hidden"
+        visibility: fitByHeight && fitByWidth ? 'visible' : 'hidden'
     });
 
     if(fitByHeight && fitByWidth) {
@@ -630,9 +630,9 @@ function layoutTextNode(node, params) {
     }
 }
 
-require("../../core/component_registrator")("dxTreeMap", dxTreeMap);
+require('../../core/component_registrator')('dxTreeMap', dxTreeMap);
 
 module.exports = dxTreeMap;
 
 // PLUGINS_SECTION
-dxTreeMap.addPlugin(require("../core/data_source").plugin);
+dxTreeMap.addPlugin(require('../core/data_source').plugin);

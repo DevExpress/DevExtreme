@@ -1,25 +1,25 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    mathUtils = require("../../core/utils/math"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    devices = require("../../core/devices"),
-    browser = require("../../core/utils/browser"),
-    TextEditor = require("../text_box/ui.text_editor"),
-    eventUtils = require("../../events/utils"),
-    SpinButtons = require("./number_box.spins").default,
-    messageLocalization = require("../../localization/message"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var $ = require('../../core/renderer'),
+    domAdapter = require('../../core/dom_adapter'),
+    eventsEngine = require('../../events/core/events_engine'),
+    commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
+    mathUtils = require('../../core/utils/math'),
+    extend = require('../../core/utils/extend').extend,
+    inArray = require('../../core/utils/array').inArray,
+    devices = require('../../core/devices'),
+    browser = require('../../core/utils/browser'),
+    TextEditor = require('../text_box/ui.text_editor'),
+    eventUtils = require('../../events/utils'),
+    SpinButtons = require('./number_box.spins').default,
+    messageLocalization = require('../../localization/message'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 var math = Math;
 
-var WIDGET_CLASS = "dx-numberbox";
-var FIREFOX_CONTROL_KEYS = ["tab", "del", "backspace", "leftArrow", "rightArrow", "home", "end", "enter"];
+var WIDGET_CLASS = 'dx-numberbox';
+var FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
-var FORCE_VALUECHANGE_EVENT_NAMESPACE = "NumberBoxForceValueChange";
+var FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
 
 var NumberBoxBase = TextEditor.inherit({
 
@@ -90,14 +90,14 @@ var NumberBoxBase = TextEditor.inherit({
              * @type Enums.NumberBoxMode
              * @default "text"
              */
-            mode: "text",
+            mode: 'text',
 
             /**
              * @name dxNumberBoxOptions.invalidValueMessage
              * @type string
              * @default "Value must be a number"
              */
-            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage"),
+            invalidValueMessage: messageLocalization.format('dxNumberBox-invalidValueMessage'),
 
             /**
             * @name dxNumberBoxOptions.buttons
@@ -144,7 +144,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _getDefaultButtons: function() {
-        return this.callBase().concat([{ name: "spins", Ctor: SpinButtons }]);
+        return this.callBase().concat([{ name: 'spins', Ctor: SpinButtons }]);
     },
 
     _isSupportInputMode: function() {
@@ -169,14 +169,14 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    return devices.real().deviceType !== "desktop" && !this._isSupportInputMode();
+                    return devices.real().deviceType !== 'desktop' && !this._isSupportInputMode();
                 }.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
                      * @default 'number' @for mobile_devices
                      */
-                    mode: "number"
+                    mode: 'number'
                 }
             }
         ]);
@@ -190,20 +190,20 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _applyInputAttributes: function($input, customAttributes) {
-        $input.attr("inputmode", "decimal");
+        $input.attr('inputmode', 'decimal');
         this.callBase($input, customAttributes);
     },
 
     _renderContentImpl: function() {
-        this.option("isValid") && this._validateValue(this.option("value"));
-        this.setAria("role", "spinbutton");
+        this.option('isValid') && this._validateValue(this.option('value'));
+        this.setAria('role', 'spinbutton');
     },
 
     _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
+        this._$submitElement = $('<input>')
+            .attr('type', 'hidden')
             .appendTo(this.$element());
-        this._setSubmitValue(this.option("value"));
+        this._setSubmitValue(this.option('value'));
     },
 
     _setSubmitValue: function(value) {
@@ -241,74 +241,74 @@ var NumberBoxBase = TextEditor.inherit({
 
     _renderValue: function() {
         var inputValue = this._input().val();
-        var value = this.option("value");
+        var value = this.option('value');
 
         if(!inputValue.length || Number(inputValue) !== value) {
             this._forceValueRender();
             this._toggleEmptinessEventHandler();
         }
 
-        var valueText = typeUtils.isDefined(value) ? null : messageLocalization.format("dxNumberBox-noDataText");
+        var valueText = typeUtils.isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
         this.setAria({
-            "valuenow": commonUtils.ensureDefined(value, ""),
-            "valuetext": valueText
+            'valuenow': commonUtils.ensureDefined(value, ''),
+            'valuetext': valueText
         });
 
-        this.option("text", this._input().val());
+        this.option('text', this._input().val());
         this._updateButtons();
 
         return new Deferred().resolve();
     },
 
     _forceValueRender: function() {
-        var value = this.option("value"),
+        var value = this.option('value'),
             number = Number(value),
-            formattedValue = isNaN(number) ? "" : this._applyDisplayValueFormatter(value);
+            formattedValue = isNaN(number) ? '' : this._applyDisplayValueFormatter(value);
 
         this._renderDisplayText(formattedValue);
     },
 
     _applyDisplayValueFormatter: function(value) {
-        return this.option("displayValueFormatter")(value);
+        return this.option('displayValueFormatter')(value);
     },
 
     _renderProps: function() {
         this.callBase();
 
         this._input().prop({
-            "min": this.option("min"),
-            "max": this.option("max"),
-            "step": this.option("step")
+            'min': this.option('min'),
+            'max': this.option('max'),
+            'step': this.option('step')
         });
 
         this.setAria({
-            "valuemin": commonUtils.ensureDefined(this.option("min"), ""),
-            "valuemax": commonUtils.ensureDefined(this.option("max"), "")
+            'valuemin': commonUtils.ensureDefined(this.option('min'), ''),
+            'valuemax': commonUtils.ensureDefined(this.option('max'), '')
         });
     },
 
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
-        if(!this.option("useLargeSpinButtons") && domAdapter.getActiveElement() !== $input[0]) {
-            eventsEngine.trigger($input, "focus");
+        if(!this.option('useLargeSpinButtons') && domAdapter.getActiveElement() !== $input[0]) {
+            eventsEngine.trigger($input, 'focus');
         }
     },
 
     _spinUpChangeHandler: function(e) {
-        if(!this.option("readOnly")) {
+        if(!this.option('readOnly')) {
             this._spinValueChange(1, e.event || e);
         }
     },
 
     _spinDownChangeHandler: function(e) {
-        if(!this.option("readOnly")) {
+        if(!this.option('readOnly')) {
             this._spinValueChange(-1, e.event || e);
         }
     },
 
     _spinValueChange: function(sign, dxEvent) {
-        var step = parseFloat(this.option("step"));
+        var step = parseFloat(this.option('step'));
         if(step === 0) {
             return;
         }
@@ -317,8 +317,8 @@ var NumberBoxBase = TextEditor.inherit({
 
         value = this._correctRounding(value, step * sign);
 
-        var min = this.option("min"),
-            max = this.option("max");
+        var min = this.option('min'),
+            max = this.option('max');
 
         if(min !== undefined) {
             value = Math.max(min, value);
@@ -329,7 +329,7 @@ var NumberBoxBase = TextEditor.inherit({
         }
 
         this._saveValueChangeEvent(dxEvent);
-        this.option("value", value);
+        this.option('value', value);
     },
 
     _correctRounding: function(value, step) {
@@ -364,18 +364,18 @@ var NumberBoxBase = TextEditor.inherit({
     _renderValueChangeEvent: function() {
         this.callBase();
 
-        var forceValueChangeEvent = eventUtils.addNamespace("focusout", FORCE_VALUECHANGE_EVENT_NAMESPACE);
+        var forceValueChangeEvent = eventUtils.addNamespace('focusout', FORCE_VALUECHANGE_EVENT_NAMESPACE);
         eventsEngine.off(this.element(), forceValueChangeEvent);
         eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
     },
 
     _forceRefreshInputValue: function() {
-        if(this.option("mode") === "number") {
+        if(this.option('mode') === 'number') {
             return;
         }
 
         var $input = this._input(),
-            formattedValue = this._applyDisplayValueFormatter(this.option("value"));
+            formattedValue = this._applyDisplayValueFormatter(this.option('value'));
 
         $input.val(null);
         $input.val(formattedValue);
@@ -385,7 +385,7 @@ var NumberBoxBase = TextEditor.inherit({
         var $input = this._input(),
             inputValue = this._normalizeText(),
             value = this._parseValue(inputValue),
-            valueHasDigits = inputValue !== "." && inputValue !== "-";
+            valueHasDigits = inputValue !== '.' && inputValue !== '-';
 
         if(this._isValueValid() && !this._validateValue(value)) {
             $input.val(this._applyDisplayValueFormatter(value));
@@ -416,11 +416,11 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _replaceCommaWithPoint: function(value) {
-        return value.replace(",", ".");
+        return value.replace(',', '.');
     },
 
     _inputIsInvalid: function() {
-        var isNumberMode = this.option("mode") === "number";
+        var isNumberMode = this.option('mode') === 'number';
         var validityState = this._input().get(0).validity;
 
         return isNumberMode && validityState && validityState.badInput;
@@ -440,7 +440,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _isValueInRange: function(value) {
-        return mathUtils.inRange(value, this.option("min"), this.option("max"));
+        return mathUtils.inRange(value, this.option('min'), this.option('max'));
     },
 
     _isNumber: function(value) {
@@ -467,7 +467,7 @@ var NumberBoxBase = TextEditor.inherit({
             isValid: isValid,
             validationError: isValid ? null : {
                 editorSpecific: true,
-                message: this.option("invalidValueMessage")
+                message: this.option('invalidValueMessage')
             }
         });
 
@@ -491,47 +491,47 @@ var NumberBoxBase = TextEditor.inherit({
             return null;
         }
 
-        return mathUtils.fitIntoRange(number, this.option("min"), this.option("max"));
+        return mathUtils.fitIntoRange(number, this.option('min'), this.option('max'));
     },
 
     _clearValue: function() {
         if(this._inputIsInvalid()) {
-            this._input().val("");
+            this._input().val('');
             this._validateValue();
         }
         this.callBase();
     },
 
     reset: function() {
-        if(this.option("value") === null) {
-            this.option("text", "");
+        if(this.option('value') === null) {
+            this.option('text', '');
             this._renderValue();
         } else {
-            this.option("value", null);
+            this.option('value', null);
         }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "value":
+            case 'value':
                 this._validateValue(args.value);
                 this._setSubmitValue(args.value);
                 this.callBase(args);
                 this._resumeValueChangeAction();
                 break;
-            case "step":
+            case 'step':
                 this._renderProps();
                 break;
-            case "min":
-            case "max":
+            case 'min':
+            case 'max':
                 this._renderProps();
-                this.option("value", this._parseValue(this.option("value")));
+                this.option('value', this._parseValue(this.option('value')));
                 break;
-            case "showSpinButtons":
-            case "useLargeSpinButtons":
-                this._updateButtons(["spins"]);
+            case 'showSpinButtons':
+            case 'useLargeSpinButtons':
+                this._updateButtons(['spins']);
                 break;
-            case "invalidValueMessage":
+            case 'invalidValueMessage':
                 break;
             default:
                 this.callBase(args);

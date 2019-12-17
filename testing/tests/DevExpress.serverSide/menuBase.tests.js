@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/menuBase.markup.tests.js");
+require('../DevExpress.ui.widgets/menuBase.markup.tests.js');

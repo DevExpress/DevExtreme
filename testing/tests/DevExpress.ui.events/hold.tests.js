@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    holdEvent = require("events/hold"),
-    pointerMock = require("../../helpers/pointerMock.js");
+var $ = require('jquery'),
+    holdEvent = require('events/hold'),
+    pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
     var markup =
@@ -12,13 +12,13 @@ QUnit.testStart(function() {
             <div id="child2"></div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("hold", {
+QUnit.module('hold', {
     beforeEach: function() {
-        this.element = $("#element");
-        this.container = $("#container");
+        this.element = $('#element');
+        this.container = $('#container');
 
         this.clock = sinon.useFakeTimers();
     },
@@ -28,7 +28,7 @@ QUnit.module("hold", {
     }
 });
 
-QUnit.test("default", function(assert) {
+QUnit.test('default', function(assert) {
     var fired = 0,
         element = this.element,
         pointer = pointerMock(element);
@@ -52,7 +52,7 @@ QUnit.test("default", function(assert) {
     assert.equal(fired, 2);
 });
 
-QUnit.test("custom timeout", function(assert) {
+QUnit.test('custom timeout', function(assert) {
     var fired = 0;
 
     var element = this.element.on(holdEvent.name, { timeout: 10 }, function() {
@@ -72,7 +72,7 @@ QUnit.test("custom timeout", function(assert) {
         .up();
 });
 
-QUnit.test("handler has right args", function(assert) {
+QUnit.test('handler has right args', function(assert) {
     var element = this.element,
         pointer = pointerMock(element);
 
@@ -89,13 +89,13 @@ QUnit.test("handler has right args", function(assert) {
         .up();
 });
 
-QUnit.test("delegated handlers", function(assert) {
+QUnit.test('delegated handlers', function(assert) {
     var element = this.element,
         container = this.container;
 
-    var nested = element.append("<div>").children();
+    var nested = element.append('<div>').children();
 
-    container.on(holdEvent.name, "#element", { timeout: 10 }, function(e) {
+    container.on(holdEvent.name, '#element', { timeout: 10 }, function(e) {
         assert.strictEqual(e.target, nested[0]);
         assert.strictEqual(e.delegateTarget, container[0]);
     });
@@ -111,14 +111,14 @@ QUnit.test("delegated handlers", function(assert) {
         .up();
 });
 
-QUnit.test("hold event should be fired if content scrolled less then 5 pixels", function(assert) {
+QUnit.test('hold event should be fired if content scrolled less then 5 pixels', function(assert) {
     assert.expect(1);
 
     var element = this.element,
         container = this.container;
 
-    container.on(holdEvent.name, "#element", { timeout: 10 }, function(e) {
-        assert.ok(true, "hold should not be fired");
+    container.on(holdEvent.name, '#element', { timeout: 10 }, function(e) {
+        assert.ok(true, 'hold should not be fired');
     });
 
     var pointer = pointerMock(element);
@@ -132,14 +132,14 @@ QUnit.test("hold event should be fired if content scrolled less then 5 pixels", 
         .up();
 });
 
-QUnit.test("hold event should not be fired if content scrolled more then 5 pixels", function(assert) {
+QUnit.test('hold event should not be fired if content scrolled more then 5 pixels', function(assert) {
     assert.expect(0);
 
     var element = this.element,
         container = this.container;
 
-    container.on(holdEvent.name, "#element", { timeout: 10 }, function(e) {
-        assert.ok(false, "hold should not be fired");
+    container.on(holdEvent.name, '#element', { timeout: 10 }, function(e) {
+        assert.ok(false, 'hold should not be fired');
     });
 
     var pointer = pointerMock(element);
@@ -154,9 +154,9 @@ QUnit.test("hold event should not be fired if content scrolled more then 5 pixel
         .up();
 });
 
-QUnit.test("event stopPropagation", function(assert) {
-    var $element = $("#element");
-    var $container = $("#container");
+QUnit.test('event stopPropagation', function(assert) {
+    var $element = $('#element');
+    var $container = $('#container');
     var holdFired = 0;
 
     $container.on(holdEvent.name, function(e) {
@@ -178,38 +178,38 @@ QUnit.test("event stopPropagation", function(assert) {
         .wait(800)
         .up();
 
-    assert.equal(holdFired, 1, "hold fired once");
+    assert.equal(holdFired, 1, 'hold fired once');
 });
 
-QUnit.test("hold with multitouch", function(assert) {
+QUnit.test('hold with multitouch', function(assert) {
     var count = 0;
-    $("#parent").on(holdEvent.name, function() {
+    $('#parent').on(holdEvent.name, function() {
         count++;
     });
 
-    pointerMock("#child1").start().down();
-    pointerMock("#child2").start().down();
+    pointerMock('#child1').start().down();
+    pointerMock('#child2').start().down();
     this.clock.tick(800);
 
-    assert.equal(count, 1, "hold event fired once");
+    assert.equal(count, 1, 'hold event fired once');
 });
 
-QUnit.test("hold was prevented after second finger was moved", function(assert) {
+QUnit.test('hold was prevented after second finger was moved', function(assert) {
     var count = 0;
-    $("#parent").on(holdEvent.name, function() {
+    $('#parent').on(holdEvent.name, function() {
         count++;
     });
 
-    pointerMock("#child1").start().down();
-    pointerMock("#child2").start().down().move(10);
+    pointerMock('#child1').start().down();
+    pointerMock('#child2').start().down().move(10);
     this.clock.tick(800);
 
-    assert.equal(count, 0, "hold event was not fired");
+    assert.equal(count, 0, 'hold event was not fired');
 });
 
-QUnit.test("several handlers on one element", function(assert) {
+QUnit.test('several handlers on one element', function(assert) {
     var count = 0;
-    var $element = $("#element");
+    var $element = $('#element');
 
     $element.on(holdEvent.name, function() {
         count++;
@@ -219,5 +219,5 @@ QUnit.test("several handlers on one element", function(assert) {
 
     pointerMock($element).start().down();
     this.clock.tick(800);
-    assert.equal(count, 2, "several handlers was handled");
+    assert.equal(count, 2, 'several handlers was handled');
 });

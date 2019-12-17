@@ -1,18 +1,18 @@
-import { isFunction } from "../core/utils/type";
-import domAdapter from "../core/dom_adapter";
-import { add as ready } from "../core/utils/ready_callbacks";
-import { getWindow } from "../core/utils/window";
-import { map } from "../core/utils/iterator";
-import { toComparable } from "../core/utils/data";
-import { Deferred } from "../core/utils/deferred";
-import typeUtils from "../core/utils/type";
+import { isFunction } from '../core/utils/type';
+import domAdapter from '../core/dom_adapter';
+import { add as ready } from '../core/utils/ready_callbacks';
+import { getWindow } from '../core/utils/window';
+import { map } from '../core/utils/iterator';
+import { toComparable } from '../core/utils/data';
+import { Deferred } from '../core/utils/deferred';
+import typeUtils from '../core/utils/type';
 
-var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
+var XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
 
 var normalizeBinaryCriterion = function(crit) {
     return [
         crit[0],
-        crit.length < 3 ? "=" : String(crit[1]).toLowerCase(),
+        crit.length < 3 ? '=' : String(crit[1]).toLowerCase(),
         crit.length < 2 ? true : crit[crit.length - 1]
     ];
 };
@@ -24,8 +24,8 @@ var normalizeSortingInfo = function(info) {
 
     return map(info, function(i) {
         var result = {
-            selector: (isFunction(i) || typeof i === "string") ? i : (i.getter || i.field || i.selector),
-            desc: !!(i.desc || String(i.dir).charAt(0).toLowerCase() === "d")
+            selector: (isFunction(i) || typeof i === 'string') ? i : (i.getter || i.field || i.selector),
+            desc: !!(i.desc || String(i.dir).charAt(0).toLowerCase() === 'd')
         };
         if(i.compare) {
             result.compare = i.compare;
@@ -36,16 +36,16 @@ var normalizeSortingInfo = function(info) {
 
 var errorMessageFromXhr = (function() {
     var textStatusMessages = {
-        "timeout": "Network connection timeout",
-        "error": "Unspecified network error",
-        "parsererror": "Unexpected server response"
+        'timeout': 'Network connection timeout',
+        'error': 'Unspecified network error',
+        'parsererror': 'Unexpected server response'
     };
 
     ///#DEBUG
     var textStatusDetails = {
-        "timeout": "possible causes: the remote host is not accessible, overloaded or is not included into the domain white-list when being run in the native container",
-        "error": "if the remote host is located on another domain, make sure it properly supports cross-origin resource sharing (CORS), or use the JSONP approach instead",
-        "parsererror": "the remote host did not respond with valid JSON data"
+        'timeout': 'possible causes: the remote host is not accessible, overloaded or is not included into the domain white-list when being run in the native container',
+        'error': 'if the remote host is located on another domain, make sure it properly supports cross-origin resource sharing (CORS), or use the JSONP approach instead',
+        'parsererror': 'the remote host did not respond with valid JSON data'
     };
     ///#ENDDEBUG
 
@@ -57,7 +57,7 @@ var errorMessageFromXhr = (function() {
         }
 
         ///#DEBUG
-        result += " (" + textStatusDetails[textStatus] + ")";
+        result += ' (' + textStatusDetails[textStatus] + ')';
         ///#ENDDEBUG
 
         return result;
@@ -67,7 +67,7 @@ var errorMessageFromXhr = (function() {
     var unloading;
     ready(function() {
         var window = getWindow();
-        domAdapter.listen(window, "beforeunload", function() { unloading = true; });
+        domAdapter.listen(window, 'beforeunload', function() { unloading = true; });
     });
 
     return function(xhr, textStatus) {
@@ -170,14 +170,14 @@ var keysEqual = function(keyExpr, key1, key2) {
     return toComparable(key1, true) == toComparable(key2, true);
 };
 
-var BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+var BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
 var base64_encode = function(input) {
     if(!Array.isArray(input)) {
         input = stringToByteArray(String(input));
     }
 
-    var result = "";
+    var result = '';
 
     function getBase64Char(index) {
         return BASE64_CHARS.charAt(index);
@@ -197,7 +197,7 @@ var base64_encode = function(input) {
                 isNaN(octet3) ? 64 : octet3 & 63
             ],
             getBase64Char
-        ).join("");
+        ).join('');
     }
 
     return result;
@@ -224,11 +224,11 @@ var stringToByteArray = function(str) {
 };
 
 var isUnaryOperation = function(crit) {
-    return crit[0] === "!" && Array.isArray(crit[1]);
+    return crit[0] === '!' && Array.isArray(crit[1]);
 };
 
 var isGroupOperator = function(value) {
-    return value === "and" || value === "or";
+    return value === 'and' || value === 'or';
 };
 
 var isGroupCriterion = function(crit) {

@@ -1,14 +1,14 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import TextEditorButton from "../text_box/texteditor_button_collection/button";
-import SpinButton from "./number_box.spin";
-import { addNamespace } from "../../events/utils";
-import { down as pointerDown } from "../../events/pointer";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import TextEditorButton from '../text_box/texteditor_button_collection/button';
+import SpinButton from './number_box.spin';
+import { addNamespace } from '../../events/utils';
+import { down as pointerDown } from '../../events/pointer';
+import { extend } from '../../core/utils/extend';
 
-const SPIN_CLASS = "dx-numberbox-spin";
-const SPIN_CONTAINER_CLASS = "dx-numberbox-spin-container";
-const SPIN_TOUCH_FRIENDLY_CLASS = "dx-numberbox-spin-touch-friendly";
+const SPIN_CLASS = 'dx-numberbox-spin';
+const SPIN_CONTAINER_CLASS = 'dx-numberbox-spin-container';
+const SPIN_TOUCH_FRIENDLY_CLASS = 'dx-numberbox-spin-touch-friendly';
 
 export default class SpinButtons extends TextEditorButton {
     _attachEvents(instance, $spinContainer) {
@@ -24,26 +24,26 @@ export default class SpinButtons extends TextEditorButton {
             (e) => pointerDownAction({ event: e })
         );
 
-        SpinButton.getInstance($spinContainerChildren.eq(0)).option("onChange",
+        SpinButton.getInstance($spinContainerChildren.eq(0)).option('onChange',
             (e) => editor._spinUpChangeHandler(e)
         );
 
-        SpinButton.getInstance($spinContainerChildren.eq(1)).option("onChange",
+        SpinButton.getInstance($spinContainerChildren.eq(1)).option('onChange',
             (e) => editor._spinDownChangeHandler(e)
         );
     }
 
     _create() {
         const { editor } = this;
-        const $spinContainer = $("<div>").addClass(SPIN_CONTAINER_CLASS);
-        const $spinUp = $("<div>").appendTo($spinContainer);
-        const $spinDown = $("<div>").appendTo($spinContainer);
+        const $spinContainer = $('<div>').addClass(SPIN_CONTAINER_CLASS);
+        const $spinUp = $('<div>').appendTo($spinContainer);
+        const $spinDown = $('<div>').appendTo($spinContainer);
         const options = this._getOptions();
 
         this._addToContainer($spinContainer);
 
-        editor._createComponent($spinUp, SpinButton, extend({ direction: "up" }, options));
-        editor._createComponent($spinDown, SpinButton, extend({ direction: "down" }, options));
+        editor._createComponent($spinUp, SpinButton, extend({ direction: 'up' }, options));
+        editor._createComponent($spinDown, SpinButton, extend({ direction: 'down' }, options));
 
         this._legacyRender(editor.$element(), this._isTouchFriendly(), options.visible);
 
@@ -56,7 +56,7 @@ export default class SpinButtons extends TextEditorButton {
     _getOptions() {
         const { editor } = this;
         const visible = this._isVisible();
-        const disabled = editor.option("disabled");
+        const disabled = editor.option('disabled');
 
         return {
             visible,
@@ -67,13 +67,13 @@ export default class SpinButtons extends TextEditorButton {
     _isVisible() {
         const { editor } = this;
 
-        return super._isVisible() && editor.option("showSpinButtons");
+        return super._isVisible() && editor.option('showSpinButtons');
     }
 
     _isTouchFriendly() {
         const { editor } = this;
 
-        return editor.option("showSpinButtons") && editor.option("useLargeSpinButtons");
+        return editor.option('showSpinButtons') && editor.option('useLargeSpinButtons');
     }
 
     // TODO: get rid of it

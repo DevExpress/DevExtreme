@@ -1,19 +1,19 @@
-var $ = require("../../core/renderer"),
-    readyCallbacks = require("../../core/utils/ready_callbacks"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    dataUtils = require("../../core/element_data"),
-    Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    registerEvent = require("./event_registrator"),
-    eventUtils = require("../utils"),
-    pointerEvents = require("../pointer"),
-    wheelEvent = require("./wheel");
+var $ = require('../../core/renderer'),
+    readyCallbacks = require('../../core/utils/ready_callbacks'),
+    domAdapter = require('../../core/dom_adapter'),
+    eventsEngine = require('../../events/core/events_engine'),
+    dataUtils = require('../../core/element_data'),
+    Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    inArray = require('../../core/utils/array').inArray,
+    each = require('../../core/utils/iterator').each,
+    registerEvent = require('./event_registrator'),
+    eventUtils = require('../utils'),
+    pointerEvents = require('../pointer'),
+    wheelEvent = require('./wheel');
 
-var MANAGER_EVENT = "dxEventManager",
-    EMITTER_DATA = "dxEmitter";
+var MANAGER_EVENT = 'dxEventManager',
+    EMITTER_DATA = 'dxEmitter';
 
 var EventManager = Class.inherit({
 
@@ -30,7 +30,7 @@ var EventManager = Class.inherit({
             var document = domAdapter.getDocument();
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
-            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this));
+            eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
         }.bind(this));
     },
@@ -155,17 +155,17 @@ var EventManager = Class.inherit({
     },
 
     _cleanEmitters: function(e) {
-        this._applyToEmitters("end", e);
+        this._applyToEmitters('end', e);
         this.reset(e);
     },
 
     _fetchEmitters: function(e) {
         this._activeEmitters = this._emittersSet.slice();
-        this._applyToEmitters("start", e);
+        this._applyToEmitters('start', e);
     },
 
     _pointerMoveHandler: function(e) {
-        this._applyToEmitters("move", e);
+        this._applyToEmitters('move', e);
     },
 
     _pointerUpHandler: function(e) {
@@ -205,7 +205,7 @@ var EventManager = Class.inherit({
             }
 
             var direction = emitter.getDirection(e);
-            if(direction !== "horizontal" && !e.shiftKey || direction !== "vertical" && e.shiftKey) {
+            if(direction !== 'horizontal' && !e.shiftKey || direction !== 'vertical' && e.shiftKey) {
                 closestGestureEmitter = emitter;
                 return false;
             }
@@ -216,8 +216,8 @@ var EventManager = Class.inherit({
         }
 
         var direction = closestGestureEmitter.getDirection(e),
-            verticalGestureDirection = direction === "both" && !e.shiftKey || direction === "vertical",
-            prop = verticalGestureDirection ? "pageY" : "pageX";
+            verticalGestureDirection = direction === 'both' && !e.shiftKey || direction === 'vertical',
+            prop = verticalGestureDirection ? 'pageY' : 'pageX';
 
         e[prop] += e.delta;
     },
@@ -233,7 +233,7 @@ var EventManager = Class.inherit({
 
 var eventManager = new EventManager();
 
-var EMITTER_SUBSCRIPTION_DATA = "dxEmitterSubscription";
+var EMITTER_SUBSCRIPTION_DATA = 'dxEmitterSubscription';
 
 var registerEmitter = function(emitterConfig) {
     var emitterClass = emitterConfig.emitter,

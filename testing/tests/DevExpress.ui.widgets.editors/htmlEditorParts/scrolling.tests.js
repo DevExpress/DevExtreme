@@ -1,17 +1,17 @@
-import $ from "jquery";
-import fx from "animation/fx";
+import $ from 'jquery';
+import fx from 'animation/fx';
 
-import nativePointerMock from "../../../helpers/nativePointerMock.js";
+import nativePointerMock from '../../../helpers/nativePointerMock.js';
 
-import "ui/html_editor";
-import "ui/popup";
-import "ui/scroll_view";
+import 'ui/html_editor';
+import 'ui/popup';
+import 'ui/scroll_view';
 
 const { test } = QUnit;
 
-const MULTILINE_VALUE = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+const MULTILINE_VALUE = '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n';
 
-QUnit.module("Scrolling", {
+QUnit.module('Scrolling', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
@@ -21,7 +21,7 @@ QUnit.module("Scrolling", {
         fx.off = false;
     }
 }, () => {
-    const SCROLLABLE_CONTAINER_SELECTOR = ".dx-scrollable-container";
+    const SCROLLABLE_CONTAINER_SELECTOR = '.dx-scrollable-container';
     class TestHelper {
         constructor() {
             this.editorOptions = {
@@ -32,10 +32,10 @@ QUnit.module("Scrolling", {
         }
 
         _prepareEnvironment() {
-            this.$editor = $("#htmlEditor").wrap($("<div>"));
+            this.$editor = $('#htmlEditor').wrap($('<div>'));
             this.$container = this.$editor.parent();
-            this.editor = this.$editor.dxHtmlEditor(this.editorOptions).dxHtmlEditor("instance");
-            this.$editorContent = this.$editor.find(".dx-htmleditor-content");
+            this.editor = this.$editor.dxHtmlEditor(this.editorOptions).dxHtmlEditor('instance');
+            this.$editorContent = this.$editor.find('.dx-htmleditor-content');
             this.presetValue && this.editor.insertText(0, MULTILINE_VALUE);
             this.maxScrollValue = this._getMaxScrollValue();
         }
@@ -46,24 +46,24 @@ QUnit.module("Scrolling", {
             this.popup = this.$container.dxPopup({
                 height: 100,
                 onContentReady: ({ component }) => {
-                    $(component.content()).css("overflow", "auto").height(100);
+                    $(component.content()).css('overflow', 'auto').height(100);
                 },
                 visible: true
-            }).dxPopup("instance");
+            }).dxPopup('instance');
         }
 
         initPopupWithScrollViewTest() {
             this._prepareEnvironment();
 
-            this.$container.wrap($("<div>"));
+            this.$container.wrap($('<div>'));
             this.$container.dxScrollView({
                 height: 100,
                 useNative: false,
-                showScrollbar: "always",
+                showScrollbar: 'always',
             });
             this.popup = this.$container.parent().dxPopup({
                 visible: true
-            }).dxPopup("instance");
+            }).dxPopup('instance');
         }
 
         initScrollViewTest() {
@@ -72,12 +72,12 @@ QUnit.module("Scrolling", {
             this.scrollView = this.$container.dxScrollView({
                 height: 100,
                 useNative: false,
-                showScrollbar: "always",
-            }).dxScrollView("instance");
+                showScrollbar: 'always',
+            }).dxScrollView('instance');
         }
 
         _getMaxScrollValue(prop) {
-            return this.$editorContent.get(0)["scrollHeight"] - this.$editorContent.get(0)["clientHeight"];
+            return this.$editorContent.get(0)['scrollHeight'] - this.$editorContent.get(0)['clientHeight'];
         }
 
         getScrollableContainer() {
@@ -95,11 +95,11 @@ QUnit.module("Scrolling", {
         checkAsserts(assert, expectedOffset) {
             const $container = this.getScrollableContainer();
 
-            assert.strictEqual($container.scrollTop(), expectedOffset, "scrollTop()");
+            assert.strictEqual($container.scrollTop(), expectedOffset, 'scrollTop()');
         }
     }
 
-    test(`editor + scrollView: editor scrollTop - start`, function(assert) {
+    test('editor + scrollView: editor scrollTop - start', function(assert) {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
@@ -118,7 +118,7 @@ QUnit.module("Scrolling", {
 
     });
 
-    test(`editor + scrollView: editor scrollTop - end`, function(assert) {
+    test('editor + scrollView: editor scrollTop - end', function(assert) {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
@@ -137,7 +137,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 45);
     });
 
-    test(`editor + scrollView: editor scrollTop - middle`, function(assert) {
+    test('editor + scrollView: editor scrollTop - middle', function(assert) {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
@@ -156,7 +156,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup: editor scrollTop - start`, function(assert) {
+    test('editor + popup: editor scrollTop - start', function(assert) {
         const helper = new TestHelper();
         helper.initPopupTest();
 
@@ -174,7 +174,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup: editor scrollTop - end`, function(assert) {
+    test('editor + popup: editor scrollTop - end', function(assert) {
         const helper = new TestHelper();
         helper.initPopupTest();
 
@@ -193,7 +193,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 25);
     });
 
-    test(`editor + popup: editor scrollTop - middle`, function(assert) {
+    test('editor + popup: editor scrollTop - middle', function(assert) {
         const helper = new TestHelper();
         helper.initPopupTest();
 
@@ -212,7 +212,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup + scrollView: editor scrollTop - start`, function(assert) {
+    test('editor + popup + scrollView: editor scrollTop - start', function(assert) {
         const helper = new TestHelper();
         helper.initPopupWithScrollViewTest();
 
@@ -230,7 +230,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 30);
     });
 
-    test(`editor + popup + scrollView: editor scrollTop - end`, function(assert) {
+    test('editor + popup + scrollView: editor scrollTop - end', function(assert) {
         const helper = new TestHelper();
         helper.initPopupWithScrollViewTest();
 
@@ -249,7 +249,7 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 45);
     });
 
-    test(`editor + popup + scrollView: editor scrollTop - middle`, function(assert) {
+    test('editor + popup + scrollView: editor scrollTop - middle', function(assert) {
         const helper = new TestHelper();
         helper.initPopupWithScrollViewTest();
 
@@ -268,19 +268,19 @@ QUnit.module("Scrolling", {
         helper.checkAsserts(assert, 50);
     });
 
-    test(`editor + popup: wheel event should be passed for element with contenteditable=false`, function(assert) {
+    test('editor + popup: wheel event should be passed for element with contenteditable=false', function(assert) {
         const helper = new TestHelper();
-        const labelClass = "test-label";
+        const labelClass = 'test-label';
 
         helper.presetValue = false;
         helper.editorOptions.onInitialized = ({ component: instance }) => {
-            const Parchment = instance.get("parchment");
+            const Parchment = instance.get('parchment');
 
             class Label extends Parchment.Embed {
                 static create(value) {
                     const node = super.create(value);
                     node.innerText = value;
-                    node.contentEditable = "false";
+                    node.contentEditable = 'false';
                     return node;
                 }
 
@@ -291,18 +291,18 @@ QUnit.module("Scrolling", {
                 }
             }
 
-            Label.blotName = "label";
-            Label.tagName = "div";
+            Label.blotName = 'label';
+            Label.tagName = 'div';
             Label.className = labelClass;
 
             instance.register(Label);
         };
         helper.editorOptions.onContentReady = ({ component: instance }) => {
             const quill = instance.getQuillInstance();
-            const Delta = instance.get("delta");
+            const Delta = instance.get('delta');
 
             const newDelta = new Delta()
-                .insert({ label: "Footer (Readonly)" })
+                .insert({ label: 'Footer (Readonly)' })
                 .insert(MULTILINE_VALUE);
 
             quill.updateContents(newDelta);

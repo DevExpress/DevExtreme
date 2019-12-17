@@ -1,5 +1,5 @@
-var extend = require("../../../core/utils/extend").extend,
-    symbolPoint = require("./symbol_point"),
+var extend = require('../../../core/utils/extend').extend,
+    symbolPoint = require('./symbol_point'),
     _extend = extend,
     MIN_BUBBLE_HEIGHT = 20;
 
@@ -14,7 +14,7 @@ module.exports = _extend({}, symbolPoint, {
 
         that.graphic = renderer.circle(0, 0, animationEnabled ? 0 : that.bubbleSize)
             .smartAttr(attr)
-            .data({ "chart-data-point": that })
+            .data({ 'chart-data-point': that })
             .append(group);
     },
 
@@ -76,8 +76,8 @@ module.exports = _extend({}, symbolPoint, {
     _getLabelCoords: function(label) {
         var coords;
 
-        if(label.getLayoutOptions().position === "inside") {
-            coords = this._getLabelCoordOfPosition(label, "inside");
+        if(label.getLayoutOptions().position === 'inside') {
+            coords = this._getLabelCoordOfPosition(label, 'inside');
         } else {
             coords = symbolPoint._getLabelCoords.call(this, label);
         }

@@ -1,20 +1,20 @@
-var seriesModule = require("../series/base_series"),
-    seriesFamilyModule = require("../core/series_family"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    vizUtils = require("../core/utils"),
-    rangeModule = require("../translators/range"),
-    dataValidatorModule = require("../components/data_validator"),
-    ChartThemeManager = require("../components/chart_theme_manager").ThemeManager,
+var seriesModule = require('../series/base_series'),
+    seriesFamilyModule = require('../core/series_family'),
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    inArray = require('../../core/utils/array').inArray,
+    each = require('../../core/utils/iterator').each,
+    vizUtils = require('../core/utils'),
+    rangeModule = require('../translators/range'),
+    dataValidatorModule = require('../components/data_validator'),
+    ChartThemeManager = require('../components/chart_theme_manager').ThemeManager,
     SeriesDataSource;
 
 var createThemeManager = function(chartOptions) {
     return new ChartThemeManager({
         options: chartOptions,
-        themeSection: "rangeSelector.chart",
-        fontFields: ["commonSeriesSettings.label.font"]
+        themeSection: 'rangeSelector.chart',
+        fontFields: ['commonSeriesSettings.label.font']
     });
 };
 
@@ -103,10 +103,10 @@ SeriesDataSource.prototype = {
 
             particularSeriesOptions.rotated = false;
 
-            seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
+            seriesTheme = chartThemeManager.getOptions('series', particularSeriesOptions, allSeriesOptions.length);
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
             if(!seriesTheme.name) {
-                seriesTheme.name = "Series " + (i + 1).toString();
+                seriesTheme.name = 'Series ' + (i + 1).toString();
             }
             if(data && data.length > 0) {
                 // TODO
@@ -136,7 +136,7 @@ SeriesDataSource.prototype = {
                     type: options.axisType
                 }
             };
-            parsedData = dataValidatorModule.validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions("dataPrepareSettings"));
+            parsedData = dataValidatorModule.validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
             that.argCategories = groupsData.categories;
             for(i = 0; i < series.length; i++) {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
@@ -155,8 +155,8 @@ SeriesDataSource.prototype = {
             viewport = new rangeModule.Range(),
             axis = series[0].getArgumentAxis(),
             themeManager = this._themeManager,
-            negativesAsZeroes = themeManager.getOptions("negativesAsZeroes"),
-            negativesAsZeros = themeManager.getOptions("negativesAsZeros"); // misspelling case
+            negativesAsZeroes = themeManager.getOptions('negativesAsZeroes'),
+            negativesAsZeros = themeManager.getOptions('negativesAsZeros'); // misspelling case
 
         series.forEach(function(s) {
             viewport.addRange(s.getArgumentRange());
@@ -236,7 +236,7 @@ SeriesDataSource.prototype = {
     },
 
     getMarginOptions: function(canvas) {
-        var bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions("maxBubbleSize");
+        var bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
 
         return this._series.reduce(function(marginOptions, series) {
             var seriesOptions = series.getMarginOptions();

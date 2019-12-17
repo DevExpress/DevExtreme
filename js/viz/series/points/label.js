@@ -1,12 +1,12 @@
-import { format as _format } from "../../../format_helper";
+import { format as _format } from '../../../format_helper';
 import {
     degreesToRadians as _degreesToRadians,
     patchFontOptions as _patchFontOptions,
     getCosAndSin as _getCosAndSin,
     rotateBBox as _rotateBBox
-} from "../../core/utils";
-import { each } from "../../../core/utils/iterator";
-import { extend } from "../../../core/utils/extend";
+} from '../../core/utils';
+import { each } from '../../../core/utils/iterator';
+import { extend } from '../../../core/utils/extend';
 
 const _math = Math,
     _round = _math.round,
@@ -243,11 +243,11 @@ function disposeItem(obj, field) {
 }
 
 function checkBackground(background) {
-    return background && ((background.fill && background.fill !== "none") || (background["stroke-width"] > 0 && background.stroke && background.stroke !== "none"));
+    return background && ((background.fill && background.fill !== 'none') || (background['stroke-width'] > 0 && background.stroke && background.stroke !== 'none'));
 }
 
 function checkConnector(connector) {
-    return connector && connector["stroke-width"] > 0 && connector.stroke && connector.stroke !== "none";
+    return connector && connector['stroke-width'] > 0 && connector.stroke && connector.stroke !== 'none';
 }
 
 function formatText(data, options) {
@@ -256,7 +256,7 @@ function formatText(data, options) {
     data.valueText = _format(data.value, format);
     data.argumentText = _format(data.argument, options.argumentFormat);
     if(data.percent !== undefined) {
-        data.percentText = _format(data.percent, { type: "percent", precision: (format && format.percentPrecision) });
+        data.percentText = _format(data.percent, { type: 'percent', precision: (format && format.percentPrecision) });
     }
     if(data.total !== undefined) {
         data.totalText = _format(data.total, format);
@@ -319,7 +319,7 @@ Label.prototype = {
 
     dispose: function() {
         var that = this;
-        disposeItem(that, "_group");
+        disposeItem(that, '_group');
         that._data = that._options = that._textContent = that._visible = that._insideGroup = that._text = that._background = that._connector = that._figure = null;
     },
 
@@ -341,7 +341,7 @@ Label.prototype = {
     },
 
     _hide: function() {
-        this._setVisibility("hidden", false);
+        this._setVisibility('hidden', false);
     },
 
     show: function(holdVisible) {
@@ -364,7 +364,7 @@ Label.prototype = {
             if(!that._group) {
                 that._group = renderer.g().append(container);
                 that._insideGroup = renderer.g().append(that._group);
-                that._text = renderer.text("", 0, 0).append(that._insideGroup);
+                that._text = renderer.text('', 0, 0).append(that._insideGroup);
             }
             that._text.css(options.attributes ? _patchFontOptions(options.attributes.font) : {});
 
@@ -374,21 +374,21 @@ Label.prototype = {
                 // The following is because "this._options" is shared between all labels and so cannot be modified
                 that._color && that._background.attr({ fill: that._color });
             } else {
-                disposeItem(that, "_background");
+                disposeItem(that, '_background');
             }
 
             if(checkConnector(options.connector)) {
-                that._connector = that._connector || renderer.path([], "line").sharp().append(that._group).toBackground();
+                that._connector = that._connector || renderer.path([], 'line').sharp().append(that._group).toBackground();
                 that._connector.attr(options.connector);
                 // The following is because "this._options" is shared between all labels and so cannot be modified
                 that._color && that._connector.attr({ stroke: that._color });
             } else {
-                disposeItem(that, "_connector");
+                disposeItem(that, '_connector');
             }
 
-            that._text.attr({ text: text, align: options.textAlignment, "class": options.cssClass });
+            that._text.attr({ text: text, align: options.textAlignment, 'class': options.cssClass });
             that._updateBackground(that._text.getBBox());
-            that._setVisibility("visible", true);
+            that._setVisibility('visible', true);
             that._drawn = true;
         } else {
             that._hide();
@@ -448,7 +448,7 @@ Label.prototype = {
             points = [],
             isHorizontal;
 
-        if(!strategy.isLabelInside(bBox, figure, options.position !== "inside")) {
+        if(!strategy.isLabelInside(bBox, figure, options.position !== 'inside')) {
             isHorizontal = strategy.isHorizontal(bBox, figure);
             var figureCenter = that.getFigureCenter();
             points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
@@ -472,7 +472,7 @@ Label.prototype = {
                 rowCountChanged = true;
                 this._rowCount = rowCount;
             }
-            textIsEmpty && disposeItem(this, "_background");
+            textIsEmpty && disposeItem(this, '_background');
         }
         this._updateBackground(this._text.getBBox());
         return rowCountChanged;
@@ -484,8 +484,8 @@ Label.prototype = {
     },
 
     setTrackerData: function(point) {
-        this._text.data({ "chart-data-point": point });
-        this._background && this._background.data({ "chart-data-point": point });
+        this._text.data({ 'chart-data-point': point });
+        this._background && this._background.data({ 'chart-data-point': point });
     },
 
     hideInsideLabel: function(coords) {

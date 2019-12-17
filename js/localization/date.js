@@ -1,58 +1,58 @@
-import dependencyInjector from "../core/utils/dependency_injector";
-import { isString } from "../core/utils/type";
-import iteratorUtils from "../core/utils/iterator";
-import { inArray } from "../core/utils/array";
-import errors from "../core/errors";
-import { getFormatter as getLDMLDateFormatter } from "./ldml/date.formatter";
-import { getFormat as getLDMLDateFormat } from "./ldml/date.format";
-import { getParser as getLDMLDateParser } from "./ldml/date.parser";
-import defaultDateNames from "./default_date_names";
-import firstDayOfWeekData from "./cldr-data/first_day_of_week_data";
-import { getValueByClosestLocale } from "./core";
-import numberLocalization from "./number";
-import intlDateLocalization from "./intl/date";
-import "./core";
+import dependencyInjector from '../core/utils/dependency_injector';
+import { isString } from '../core/utils/type';
+import iteratorUtils from '../core/utils/iterator';
+import { inArray } from '../core/utils/array';
+import errors from '../core/errors';
+import { getFormatter as getLDMLDateFormatter } from './ldml/date.formatter';
+import { getFormat as getLDMLDateFormat } from './ldml/date.format';
+import { getParser as getLDMLDateParser } from './ldml/date.parser';
+import defaultDateNames from './default_date_names';
+import firstDayOfWeekData from './cldr-data/first_day_of_week_data';
+import { getValueByClosestLocale } from './core';
+import numberLocalization from './number';
+import intlDateLocalization from './intl/date';
+import './core';
 
 const DEFAULT_DAY_OF_WEEK_INDEX = 0;
-const hasIntl = typeof Intl !== "undefined";
+const hasIntl = typeof Intl !== 'undefined';
 
 const FORMATS_TO_PATTERN_MAP = {
-    "shortdate": "M/d/y",
-    "shorttime": "h:mm a",
-    "longdate": "EEEE, MMMM d, y",
-    "longtime": "h:mm:ss a",
-    "monthandday": "MMMM d",
-    "monthandyear": "MMMM y",
-    "quarterandyear": "QQQ y",
-    "day": "d",
-    "year": "y",
-    "shortdateshorttime": "M/d/y, h:mm a",
-    "mediumdatemediumtime": "MMMM d, h:mm a",
-    "longdatelongtime": "EEEE, MMMM d, y, h:mm:ss a",
-    "month": "LLLL",
-    "shortyear": "yy",
-    "dayofweek": "EEEE",
-    "quarter": "QQQ",
-    "hour": "HH",
-    "minute": "mm",
-    "second": "ss",
-    "millisecond": "SSS",
-    "datetime-local": "yyyy-MM-ddTHH':'mm':'ss"
+    'shortdate': 'M/d/y',
+    'shorttime': 'h:mm a',
+    'longdate': 'EEEE, MMMM d, y',
+    'longtime': 'h:mm:ss a',
+    'monthandday': 'MMMM d',
+    'monthandyear': 'MMMM y',
+    'quarterandyear': 'QQQ y',
+    'day': 'd',
+    'year': 'y',
+    'shortdateshorttime': 'M/d/y, h:mm a',
+    'mediumdatemediumtime': 'MMMM d, h:mm a',
+    'longdatelongtime': 'EEEE, MMMM d, y, h:mm:ss a',
+    'month': 'LLLL',
+    'shortyear': 'yy',
+    'dayofweek': 'EEEE',
+    'quarter': 'QQQ',
+    'hour': 'HH',
+    'minute': 'mm',
+    'second': 'ss',
+    'millisecond': 'SSS',
+    'datetime-local': 'yyyy-MM-ddTHH\':\'mm\':\'ss'
 };
 
 const possiblePartPatterns = {
-    year: ["y", "yy", "yyyy"],
-    day: ["d", "dd"],
-    month: ["M", "MM", "MMM", "MMMM"],
-    hours: ["H", "HH", "h", "hh", "ah"],
-    minutes: ["m", "mm"],
-    seconds: ["s", "ss"],
-    milliseconds: ["S", "SS", "SSS"]
+    year: ['y', 'yy', 'yyyy'],
+    day: ['d', 'dd'],
+    month: ['M', 'MM', 'MMM', 'MMMM'],
+    hours: ['H', 'HH', 'h', 'hh', 'ah'],
+    minutes: ['m', 'mm'],
+    seconds: ['s', 'ss'],
+    milliseconds: ['S', 'SS', 'SSS']
 };
 
 const dateLocalization = dependencyInjector({
     engine: function() {
-        return "base";
+        return 'base';
     },
     _getPatternByFormat: function(format) {
         return FORMATS_TO_PATTERN_MAP[format.toLowerCase()];
@@ -61,11 +61,11 @@ const dateLocalization = dependencyInjector({
         return this._getPatternByFormat(pattern) || pattern;
     },
     formatUsesMonthName: function(format) {
-        return this._expandPattern(format).indexOf("MMMM") !== -1;
+        return this._expandPattern(format).indexOf('MMMM') !== -1;
     },
 
     formatUsesDayName: function(format) {
-        return this._expandPattern(format).indexOf("EEEE") !== -1;
+        return this._expandPattern(format).indexOf('EEEE') !== -1;
     },
     getFormatParts: function(format) {
         const pattern = this._getPatternByFormat(format) || format;
@@ -94,7 +94,7 @@ const dateLocalization = dependencyInjector({
         return defaultDateNames.getPeriodNames(format);
     },
     getTimeSeparator: function() {
-        return ":";
+        return ':';
     },
 
     is24HourFormat: function(format) {
@@ -121,7 +121,7 @@ const dateLocalization = dependencyInjector({
 
         let formatter;
 
-        if(typeof (format) === "function") {
+        if(typeof (format) === 'function') {
             formatter = format;
         } else if(format.formatter) {
             formatter = format.formatter;
@@ -152,14 +152,14 @@ const dateLocalization = dependencyInjector({
         }
 
         if(!format) {
-            return this.parse(text, "shortdate");
+            return this.parse(text, 'shortdate');
         }
 
         if(format.parser) {
             return format.parser(text);
         }
 
-        if(typeof format === "string" && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
+        if(typeof format === 'string' && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
             ldmlFormat = format;
         } else {
             formatter = value => {
@@ -176,7 +176,7 @@ const dateLocalization = dependencyInjector({
             return getLDMLDateParser(ldmlFormat, this)(text);
         }
 
-        errors.log("W0012");
+        errors.log('W0012');
         result = new Date(text);
 
         if(!result || isNaN(result.getTime())) {

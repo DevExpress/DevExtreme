@@ -1,10 +1,10 @@
-import $ from "jquery";
-import { noop } from "core/utils/common";
-import Component from "core/component";
-import { PostponedOperations } from "core/postponed_operations";
-import errors from "core/errors";
-import devices from "core/devices";
-import config from "core/config";
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import Component from 'core/component';
+import { PostponedOperations } from 'core/postponed_operations';
+import errors from 'core/errors';
+import devices from 'core/devices';
+import config from 'core/config';
 
 const TestComponent = Component.inherit({
 
@@ -24,12 +24,12 @@ const TestComponent = Component.inherit({
         this.callBase();
 
         $.extend(this._deprecatedOptions, {
-            deprecated: { since: "15.2", alias: "deprecatedAlias" },
-            deprecatedOption: { since: "14.1", message: "Use some other option instead" },
-            deprecatedOptionWithSugarSyntax: { since: "14.2", alias: "deprecatedOptionAliasWithSugarSyntax" },
-            "secondLevel.deprecatedOption": { since: "14.2", alias: "secondLevel.deprecatedOptionAlias" },
-            "thirdLevel.option.deprecated": { since: "15.2", alias: "thirdLevel.option.deprecatedAlias" },
-            "onDeprecatedEvent": { since: "20.1", message: "Use another events instead" }
+            deprecated: { since: '15.2', alias: 'deprecatedAlias' },
+            deprecatedOption: { since: '14.1', message: 'Use some other option instead' },
+            deprecatedOptionWithSugarSyntax: { since: '14.2', alias: 'deprecatedOptionAliasWithSugarSyntax' },
+            'secondLevel.deprecatedOption': { since: '14.2', alias: 'secondLevel.deprecatedOptionAlias' },
+            'thirdLevel.option.deprecated': { since: '15.2', alias: 'thirdLevel.option.deprecatedAlias' },
+            'onDeprecatedEvent': { since: '20.1', message: 'Use another events instead' }
         });
     },
 
@@ -37,7 +37,7 @@ const TestComponent = Component.inherit({
         this.callBase();
 
         $.extend(this._getOptionAliases(), {
-            checked: "value"
+            checked: 'value'
         });
     },
 
@@ -45,25 +45,25 @@ const TestComponent = Component.inherit({
         return $.extend(
             this.callBase(),
             {
-                opt1: "default",
-                opt2: "default",
-                opt4: "default",
+                opt1: 'default',
+                opt2: 'default',
+                opt4: 'default',
                 opt5: {
-                    subOpt1: "default",
+                    subOpt1: 'default',
                     subOpt2: {
-                        value: ""
+                        value: ''
                     }
                 },
                 opt6: [{
-                    subOpt: "default"
+                    subOpt: 'default'
                 }],
-                deprecatedOption: "test",
+                deprecatedOption: 'test',
                 secondLevel: {
                     deprecatedOption: 1
                 },
                 thirdLevel: {
                     option: {
-                        deprecatedAlias: "deprecatedValue"
+                        deprecatedAlias: 'deprecatedValue'
                     }
                 },
                 funcOption() {
@@ -75,7 +75,7 @@ const TestComponent = Component.inherit({
 
     _optionChanged(name, value, prevValue) {
         this._traceLog.push({
-            method: "_optionChanged",
+            method: '_optionChanged',
             arguments: $.makeArray(arguments)
         });
 
@@ -84,7 +84,7 @@ const TestComponent = Component.inherit({
 
     _init(...args) {
         this._traceLog.push({
-            method: "_init",
+            method: '_init',
             arguments: $.makeArray(args)
         });
 
@@ -93,7 +93,7 @@ const TestComponent = Component.inherit({
 
     beginUpdate(...args) {
         this._traceLog.push({
-            method: "beginUpdate",
+            method: 'beginUpdate',
             arguments: $.makeArray(args)
         });
         this.callBase();
@@ -101,7 +101,7 @@ const TestComponent = Component.inherit({
 
     endUpdate(...args) {
         this._traceLog.push({
-            method: "endUpdate",
+            method: 'endUpdate',
             arguments: $.makeArray(args)
         });
         this.callBase();
@@ -126,65 +126,65 @@ const TestComponent = Component.inherit({
     }
 });
 
-QUnit.module("default", {}, () => {
-    QUnit.test("options api - 'option' method", function(assert) {
-        const instance = new TestComponent({ opt2: "custom" });
+QUnit.module('default', {}, () => {
+    QUnit.test('options api - \'option\' method', function(assert) {
+        const instance = new TestComponent({ opt2: 'custom' });
 
         instance.option({
-            opt1: "mass1",
-            opt2: "mass2"
+            opt1: 'mass1',
+            opt2: 'mass2'
         });
 
-        assert.equal(instance.option("opt1"), "mass1");
-        assert.equal(instance.option("opt2"), "mass2");
+        assert.equal(instance.option('opt1'), 'mass1');
+        assert.equal(instance.option('opt2'), 'mass2');
     });
 
-    QUnit.test("setOptionSilently method", function(assert) {
+    QUnit.test('setOptionSilently method', function(assert) {
         const instance = new TestComponent({
-            opt2: "custom"
+            opt2: 'custom'
         });
 
-        instance._setOptionWithoutOptionChange("opt2", "new custom");
+        instance._setOptionWithoutOptionChange('opt2', 'new custom');
 
-        assert.strictEqual(instance.option("opt2"), "new custom", "option has been changed");
-        const log = instance._getTraceLogByMethod("_optionChanged");
-        assert.strictEqual(log.length, 0, "optionChanged method has not been called");
+        assert.strictEqual(instance.option('opt2'), 'new custom', 'option has been changed');
+        const log = instance._getTraceLogByMethod('_optionChanged');
+        assert.strictEqual(log.length, 0, 'optionChanged method has not been called');
     });
 
-    QUnit.test("options api - 'onOptionChanged' action", function(assert) {
+    QUnit.test('options api - \'onOptionChanged\' action', function(assert) {
         const actionChangeLog = [];
         const eventChangeLog = [];
 
         const instance = new TestComponent({
-            option1: "value1",
-            option2: "value2",
+            option1: 'value1',
+            option2: 'value2',
             onOptionChanged(args) {
                 actionChangeLog.push(args);
             }
         });
 
-        instance.on("optionChanged", args => {
+        instance.on('optionChanged', args => {
             eventChangeLog.push(args);
         });
 
         instance.option({
-            "option1": "new value1",
-            "option2": "new value2"
+            'option1': 'new value1',
+            'option2': 'new value2'
         });
 
         const expectedLog = [
             {
-                name: "option1",
-                fullName: "option1",
-                previousValue: "value1",
-                value: "new value1",
+                name: 'option1',
+                fullName: 'option1',
+                previousValue: 'value1',
+                value: 'new value1',
                 component: instance
             },
             {
-                name: "option2",
-                fullName: "option2",
-                previousValue: "value2",
-                value: "new value2",
+                name: 'option2',
+                fullName: 'option2',
+                previousValue: 'value2',
+                value: 'new value2',
                 component: instance
             }
         ];
@@ -193,40 +193,40 @@ QUnit.module("default", {}, () => {
         assert.deepEqual(eventChangeLog, expectedLog);
     });
 
-    QUnit.test("options api - 'onOptionChanged' changing", function(assert) {
+    QUnit.test('options api - \'onOptionChanged\' changing', function(assert) {
         let called = null;
 
         const instance = new TestComponent({
-            option1: "value1",
+            option1: 'value1',
             onOptionChanged(args) {
-                called = "old handler";
+                called = 'old handler';
             }
         });
 
-        instance.option("onOptionChanged", () => {
-            called = "new handler";
+        instance.option('onOptionChanged', () => {
+            called = 'new handler';
         });
 
-        instance.option("option1", "value2");
+        instance.option('option1', 'value2');
 
-        assert.equal(called, "new handler");
+        assert.equal(called, 'new handler');
     });
 
-    QUnit.test("component should initialize PostponedOperations", function(assert) {
+    QUnit.test('component should initialize PostponedOperations', function(assert) {
         const instance = new TestComponent({ a: 1 });
 
-        assert.ok(instance.postponedOperations instanceof PostponedOperations, "Componend initialize PostponedOperations");
+        assert.ok(instance.postponedOperations instanceof PostponedOperations, 'Componend initialize PostponedOperations');
     });
 
-    QUnit.test("postponed operations should be called on endUpdate", function(assert) {
+    QUnit.test('postponed operations should be called on endUpdate', function(assert) {
         const instance = new TestComponent({ a: 1 });
-        const callPostponed = sinon.stub(instance.postponedOperations, "callPostponedOperations");
+        const callPostponed = sinon.stub(instance.postponedOperations, 'callPostponedOperations');
 
         instance.endUpdate();
-        assert.ok(callPostponed.calledOnce, "Postponed operations are called");
+        assert.ok(callPostponed.calledOnce, 'Postponed operations are called');
     });
 
-    QUnit.test("postponed operations should be called correctly without promises", function(assert) {
+    QUnit.test('postponed operations should be called correctly without promises', function(assert) {
         const instance = new TestComponent({ a: 1 });
 
         const postponedOperation = () => {
@@ -237,17 +237,17 @@ QUnit.module("default", {}, () => {
             };
         };
 
-        instance.postponedOperations.add("_firstPostponedOperation", postponedOperation, undefined);
+        instance.postponedOperations.add('_firstPostponedOperation', postponedOperation, undefined);
         delete instance.postponedOperations._postponedOperations._firstPostponedOperation.promises;
         instance.endUpdate();
-        assert.ok(true, "Postponed operations are called correctly");
+        assert.ok(true, 'Postponed operations are called correctly');
     });
 
-    QUnit.test("component lifecycle, changing a couple of options", function(assert) {
+    QUnit.test('component lifecycle, changing a couple of options', function(assert) {
         const instance = new TestComponent({ a: 1 });
         // Method is injected here (not in the TestComponent prototype) in order to not overwhelm prototype because of one test
         instance._optionChanging = function() {
-            this._traceLog.push({ method: "_optionChanging" });
+            this._traceLog.push({ method: '_optionChanging' });
         };
 
         instance.option({
@@ -256,76 +256,76 @@ QUnit.module("default", {}, () => {
             c: 3
         });
 
-        instance.option("b", 2);
+        instance.option('b', 2);
 
         const methodCallStack = $.map(instance._traceLog, i => {
             return i.method;
         });
-        const optionChangedArgs = instance._getTraceLogByMethod("_optionChanged");
+        const optionChangedArgs = instance._getTraceLogByMethod('_optionChanged');
 
         assert.deepEqual(methodCallStack, [
-            "beginUpdate",
-            "beginUpdate",
-            "endUpdate",
+            'beginUpdate',
+            'beginUpdate',
+            'endUpdate',
 
             // "beginUpdate", // optionByDevice options applying
             // "endUpdate",
-            "endUpdate",
-            "_init",
+            'endUpdate',
+            '_init',
 
-            "beginUpdate",
-            "_optionChanging",
-            "_optionChanged",
-            "_optionChanging",
-            "_optionChanged",
-            "endUpdate",
+            'beginUpdate',
+            '_optionChanging',
+            '_optionChanged',
+            '_optionChanging',
+            '_optionChanged',
+            'endUpdate',
 
-            "beginUpdate",
-            "endUpdate"
+            'beginUpdate',
+            'endUpdate'
         ]);
 
-        assert.deepEqual(optionChangedArgs[0].arguments[0].name, "b");
-        assert.deepEqual(optionChangedArgs[1].arguments[0].name, "c");
+        assert.deepEqual(optionChangedArgs[0].arguments[0].name, 'b');
+        assert.deepEqual(optionChangedArgs[1].arguments[0].name, 'c');
     });
 
-    QUnit.test("mass option change", function(assert) {
+    QUnit.test('mass option change', function(assert) {
         const instance = new TestComponent({
-            opt1: "firstCall",
-            opt2: "firstCall"
+            opt1: 'firstCall',
+            opt2: 'firstCall'
         });
 
         instance.option({
-            opt1: "secondCall",
-            opt3: "secondCall"
+            opt1: 'secondCall',
+            opt3: 'secondCall'
         });
 
-        assert.equal(instance.option("opt1"), "secondCall");
-        assert.equal(instance.option("opt2"), "firstCall");
-        assert.equal(instance.option("opt3"), "secondCall");
+        assert.equal(instance.option('opt1'), 'secondCall');
+        assert.equal(instance.option('opt2'), 'firstCall');
+        assert.equal(instance.option('opt3'), 'secondCall');
     });
 
-    QUnit.test("mass option getting", function(assert) {
+    QUnit.test('mass option getting', function(assert) {
         const instance = new TestComponent({
-            opt1: "firstCall",
-            opt2: "firstCall"
+            opt1: 'firstCall',
+            opt2: 'firstCall'
         });
         const options = instance.option();
 
         assert.ok($.isPlainObject(options));
-        assert.ok(options["opt1"]);
-        assert.ok(options["opt2"]);
+        assert.ok(options['opt1']);
+        assert.ok(options['opt2']);
     });
 
-    QUnit.test("complex options", function(assert) {
+    QUnit.test('complex options', function(assert) {
         let component1 = Component.inherit({
-            NAME: "component1",
+            NAME: 'component1',
 
             _getDefaultOptions() {
                 return $.extend(
                     this.callBase(), {
                         plain: {
                             a: {
-                                b: "b"
+                                b: 'b'
                             }
                         }
                     }
@@ -336,30 +336,30 @@ QUnit.module("default", {}, () => {
         component1 = new component1({
             plain: {
                 a: {
-                    b1: "b1"
+                    b1: 'b1'
                 },
-                a1: "a1"
+                a1: 'a1'
             }
         });
 
         assert.deepEqual(
-            component1.option("plain"),
+            component1.option('plain'),
             {
                 a: {
-                    b: "b",
-                    b1: "b1"
+                    b: 'b',
+                    b1: 'b1'
                 },
-                a1: "a1"
+                a1: 'a1'
             },
-            "plain objects are merged"
+            'plain objects are merged'
         );
 
     });
 
-    QUnit.test("option value equality comparison", function(assert) {
+    QUnit.test('option value equality comparison', function(assert) {
         let triggered;
 
-        const instance = new (Component.inherit({ NAME: "temp" }))({
+        const instance = new (Component.inherit({ NAME: 'temp' }))({
             onOptionChanged() {
                 triggered = true;
             }
@@ -375,72 +375,72 @@ QUnit.module("default", {}, () => {
         const array = [];
         const date = new Date();
 
-        checkTriggered("obj", plainObj, true);
-        checkTriggered("array", array, true);
-        checkTriggered("scalar", 1, true);
-        checkTriggered("func", noop, true);
+        checkTriggered('obj', plainObj, true);
+        checkTriggered('array', array, true);
+        checkTriggered('scalar', 1, true);
+        checkTriggered('func', noop, true);
 
         // plain objects are always treated as different
-        checkTriggered("obj", plainObj, true);
+        checkTriggered('obj', plainObj, true);
 
         // same arrays are different
-        checkTriggered("array", array, true);
+        checkTriggered('array', array, true);
 
-        checkTriggered("scalar", 1, false);
+        checkTriggered('scalar', 1, false);
 
-        checkTriggered("scalar", 2, true);
+        checkTriggered('scalar', 2, true);
 
         // must compare valueOf
-        checkTriggered("date", date, true);
+        checkTriggered('date', date, true);
 
-        checkTriggered("date", new Date('2012-10-30'), true);
+        checkTriggered('date', new Date('2012-10-30'), true);
 
-        checkTriggered("func", noop, false);
+        checkTriggered('func', noop, false);
 
-        checkTriggered("func", () => {
+        checkTriggered('func', () => {
         }, true);
     });
 
-    QUnit.test("option getter by path gets value", function(assert) {
+    QUnit.test('option getter by path gets value', function(assert) {
         const instance = new TestComponent({
             prop: {
-                name: "John",
+                name: 'John',
                 items: [1, 2, 3]
             }
         });
-        assert.equal(instance.option("prop.name"), "John");
-        assert.equal(instance.option("prop.items.1"), 2);
+        assert.equal(instance.option('prop.name'), 'John');
+        assert.equal(instance.option('prop.items.1'), 2);
     });
 
-    QUnit.test("option setter by path sets value ", function(assert) {
+    QUnit.test('option setter by path sets value ', function(assert) {
         const instance = new TestComponent({
             prop: {
-                name: "John",
+                name: 'John',
                 items: [1, 2, 3]
             }
         });
 
-        instance.option("prop.name", "Joe");
-        assert.equal(instance.option("prop.name"), "Joe");
+        instance.option('prop.name', 'Joe');
+        assert.equal(instance.option('prop.name'), 'Joe');
 
-        instance.option("prop.items.2", 10);
-        assert.equal(instance.option("prop.items.2"), 10);
+        instance.option('prop.items.2', 10);
+        assert.equal(instance.option('prop.items.2'), 10);
     });
 
-    QUnit.test("option setter by path triggers option changed callback", function(assert) {
+    QUnit.test('option setter by path triggers option changed callback', function(assert) {
         const instance = new TestComponent({
             opt3: {
-                subOpt: "value"
+                subOpt: 'value'
             }
         });
 
-        assert.ok(!instance._getTraceLogByMethod("_optionChanged").length);
+        assert.ok(!instance._getTraceLogByMethod('_optionChanged').length);
 
-        instance.option("opt3.subOpt", "newValue");
-        assert.equal(instance._getTraceLogByMethod("_optionChanged").length, 1);
+        instance.option('opt3.subOpt', 'newValue');
+        assert.equal(instance._getTraceLogByMethod('_optionChanged').length, 1);
     });
 
-    QUnit.test("option by value", function(assert) {
+    QUnit.test('option by value', function(assert) {
         const value = {
             a: 3,
             b: 4
@@ -449,32 +449,32 @@ QUnit.module("default", {}, () => {
         const instance = new TestComponent({
             byValue: value
         });
-        assert.notStrictEqual(instance.option("byValue"), value, "option initialized by value");
+        assert.notStrictEqual(instance.option('byValue'), value, 'option initialized by value');
 
-        instance.option("byValue", value);
-        assert.notStrictEqual(instance.option("byValue"), value, "option set by value");
+        instance.option('byValue', value);
+        assert.notStrictEqual(instance.option('byValue'), value, 'option set by value');
     });
 
-    QUnit.test("option by reference", function(assert) {
+    QUnit.test('option by reference', function(assert) {
         const value = { a: 3, b: 4 };
 
         const instance = new TestComponent({
             byReference: value
         });
 
-        assert.strictEqual(instance.option("byReference"), value, "option initialized by reference");
+        assert.strictEqual(instance.option('byReference'), value, 'option initialized by reference');
 
-        instance.option("byReference", value);
-        assert.strictEqual(instance.option("byReference"), value, "option set by reference");
+        instance.option('byReference', value);
+        assert.strictEqual(instance.option('byReference'), value, 'option set by reference');
     });
 
-    QUnit.test("'option' method with undefined value", function(assert) {
+    QUnit.test('\'option\' method with undefined value', function(assert) {
         const instance = new TestComponent({ optionWithUndefinedValue: undefined });
 
-        assert.strictEqual(instance.option("optionWithUndefinedValue"), undefined);
+        assert.strictEqual(instance.option('optionWithUndefinedValue'), undefined);
     });
 
-    QUnit.test("set and get option silently", function(assert) {
+    QUnit.test('set and get option silently', function(assert) {
         const instance = new TestComponent();
         let warningCount = 0;
         const _logDeprecatedWarningMock = option => {
@@ -487,13 +487,13 @@ QUnit.module("default", {}, () => {
             deprecatedOption: true,
         });
 
-        assert.equal(instance._options.silent("deprecatedOption"), true);
+        assert.equal(instance._options.silent('deprecatedOption'), true);
         assert.equal(warningCount, 0);
     });
 
-    QUnit.test("reading & writing a deprecated option must invoke the _logDeprecatedWarning method and pass the option name as a parameter", function(assert) {
+    QUnit.test('reading & writing a deprecated option must invoke the _logDeprecatedWarning method and pass the option name as a parameter', function(assert) {
         const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
+        const deprecatedOption = 'deprecatedOption';
         const _logDeprecatedWarningMock = option => {
             assert.strictEqual(option, deprecatedOption);
         };
@@ -505,42 +505,42 @@ QUnit.module("default", {}, () => {
         instance.option({ fakeOption: true, deprecatedOption: true });
     });
 
-    QUnit.test("writing a deprecated option must invoke optionChanged for deprecated option", function(assert) {
+    QUnit.test('writing a deprecated option must invoke optionChanged for deprecated option', function(assert) {
         const actionChangeLog = [];
 
         const instance = new TestComponent({
-            option1: "value1",
-            option2: "value2",
-            deprecatedOptionAliasWithSugarSyntax: "test",
+            option1: 'value1',
+            option2: 'value2',
+            deprecatedOptionAliasWithSugarSyntax: 'test',
             onOptionChanged(args) {
                 delete args.component;
                 actionChangeLog.push(args);
             }
         });
 
-        instance.option("deprecatedOptionWithSugarSyntax", "new test");
+        instance.option('deprecatedOptionWithSugarSyntax', 'new test');
 
         const expectedLog = [
             {
-                name: "deprecatedOptionAliasWithSugarSyntax",
-                fullName: "deprecatedOptionAliasWithSugarSyntax",
-                previousValue: "test",
-                value: "new test"
+                name: 'deprecatedOptionAliasWithSugarSyntax',
+                fullName: 'deprecatedOptionAliasWithSugarSyntax',
+                previousValue: 'test',
+                value: 'new test'
             },
             {
-                name: "deprecatedOptionWithSugarSyntax",
-                fullName: "deprecatedOptionWithSugarSyntax",
-                previousValue: "test",
-                value: "new test"
+                name: 'deprecatedOptionWithSugarSyntax',
+                fullName: 'deprecatedOptionWithSugarSyntax',
+                previousValue: 'test',
+                value: 'new test'
             }
         ];
 
         assert.deepEqual(actionChangeLog, expectedLog);
-        assert.deepEqual(instance.option("deprecatedOptionWithSugarSyntax"), "new test");
-        assert.deepEqual(instance.option("deprecatedOptionAliasWithSugarSyntax"), "new test");
+        assert.deepEqual(instance.option('deprecatedOptionWithSugarSyntax'), 'new test');
+        assert.deepEqual(instance.option('deprecatedOptionAliasWithSugarSyntax'), 'new test');
     });
 
-    QUnit.test("reading all options should not invoke the _logDeprecatedWarning method", function(assert) {
+    QUnit.test('reading all options should not invoke the _logDeprecatedWarning method', function(assert) {
         const instance = new TestComponent();
         let warningCount = 0;
         const _logDeprecatedWarningMock = option => {
@@ -552,9 +552,9 @@ QUnit.module("default", {}, () => {
         assert.strictEqual(warningCount, 0);
     });
 
-    QUnit.test("component should _suppressDeprecatedWarnings while initializing _defaultOptions in the constructor and _resumeDeprecatedWarnings afterwards", function(assert) {
+    QUnit.test('component should _suppressDeprecatedWarnings while initializing _defaultOptions in the constructor and _resumeDeprecatedWarnings afterwards', function(assert) {
         const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
+        const deprecatedOption = 'deprecatedOption';
         let warningCount = 0;
         const _logDeprecatedWarningMock = option => {
             ++warningCount;
@@ -567,7 +567,7 @@ QUnit.module("default", {}, () => {
         assert.strictEqual(warningCount, 1);
     });
 
-    QUnit.test("deprecated options api syntactic sugar for options having aliases", function(assert) {
+    QUnit.test('deprecated options api syntactic sugar for options having aliases', function(assert) {
         const originalLog = errors.log;
         const log = [];
 
@@ -577,8 +577,8 @@ QUnit.module("default", {}, () => {
 
         try {
             const instance = new TestComponent();
-            const option = "deprecatedOptionWithSugarSyntax";
-            const alias = "deprecatedOptionAliasWithSugarSyntax";
+            const option = 'deprecatedOptionWithSugarSyntax';
+            const alias = 'deprecatedOptionAliasWithSugarSyntax';
 
             instance.option(option, true);
             assert.strictEqual(instance.option(alias), true);
@@ -586,11 +586,11 @@ QUnit.module("default", {}, () => {
             assert.strictEqual(instance.option()[alias], instance.option(option));
             assert.equal(log.length, 3);
             assert.deepEqual(log[0], [
-                "W0001",
+                'W0001',
                 instance.NAME,
-                "deprecatedOptionWithSugarSyntax",
-                "14.2",
-                "Use the 'deprecatedOptionAliasWithSugarSyntax' option instead"
+                'deprecatedOptionWithSugarSyntax',
+                '14.2',
+                'Use the \'deprecatedOptionAliasWithSugarSyntax\' option instead'
             ]);
         } finally {
             errors.log = originalLog;
@@ -598,7 +598,7 @@ QUnit.module("default", {}, () => {
     });
 
     // T116550
-    QUnit.test("deprecated options api syntactic sugar for second level options having aliases", function(assert) {
+    QUnit.test('deprecated options api syntactic sugar for second level options having aliases', function(assert) {
         const originalLog = errors.log;
         const log = [];
 
@@ -608,8 +608,8 @@ QUnit.module("default", {}, () => {
 
         try {
             const instance = new TestComponent();
-            const option = "secondLevel.deprecatedOption";
-            const alias = "secondLevel.deprecatedOptionAlias";
+            const option = 'secondLevel.deprecatedOption';
+            const alias = 'secondLevel.deprecatedOptionAlias';
 
             instance.option({
                 secondLevel: {
@@ -621,42 +621,42 @@ QUnit.module("default", {}, () => {
             assert.strictEqual(instance.option().secondLevel.deprecatedOptionAlias, 'test');
             assert.equal(log.length, 2);
             assert.deepEqual(log[0], [
-                "W0001",
+                'W0001',
                 instance.NAME,
-                "secondLevel.deprecatedOption",
-                "14.2",
-                "Use the 'secondLevel.deprecatedOptionAlias' option instead"
+                'secondLevel.deprecatedOption',
+                '14.2',
+                'Use the \'secondLevel.deprecatedOptionAlias\' option instead'
             ]);
         } finally {
             errors.log = originalLog;
         }
     });
 
-    QUnit.test("changing a nested options triggers only top level name option change handler", function(assert) {
+    QUnit.test('changing a nested options triggers only top level name option change handler', function(assert) {
         const instance = new TestComponent({
             firstLevel: {
                 secondLevel: [0, 1, 2]
             }
         });
 
-        instance.option("firstLevel.secondLevel[0]", 10);
+        instance.option('firstLevel.secondLevel[0]', 10);
 
         assert.deepEqual(
-            instance._getTraceLogByMethod("_optionChanged")[0].arguments,
+            instance._getTraceLogByMethod('_optionChanged')[0].arguments,
             [{
-                name: "firstLevel",
-                fullName: "firstLevel.secondLevel[0]",
+                name: 'firstLevel',
+                fullName: 'firstLevel.secondLevel[0]',
                 value: 10,
                 previousValue: 0
             }]
         );
 
-        instance.option("firstLevel.secondLevel", [123, 321]);
+        instance.option('firstLevel.secondLevel', [123, 321]);
         assert.deepEqual(
-            instance._getTraceLogByMethod("_optionChanged")[1].arguments,
+            instance._getTraceLogByMethod('_optionChanged')[1].arguments,
             [{
-                name: "firstLevel",
-                fullName: "firstLevel.secondLevel",
+                name: 'firstLevel',
+                fullName: 'firstLevel.secondLevel',
                 value: [
                     123,
                     321
@@ -669,17 +669,17 @@ QUnit.module("default", {}, () => {
             }]
         );
 
-        instance.option("firstLevel", { secondLevel: 1 });
+        instance.option('firstLevel', { secondLevel: 1 });
         assert.deepEqual(
-            instance._getTraceLogByMethod("_optionChanged")[2].arguments,
+            instance._getTraceLogByMethod('_optionChanged')[2].arguments,
             [{
-                name: "firstLevel",
-                fullName: "firstLevel",
+                name: 'firstLevel',
+                fullName: 'firstLevel',
                 value: {
-                    "secondLevel": 1
+                    'secondLevel': 1
                 },
                 previousValue: {
-                    "secondLevel": 1
+                    'secondLevel': 1
                 }
             }]
         );
@@ -687,15 +687,15 @@ QUnit.module("default", {}, () => {
 
     const createDeprecatedMessageArray = (version, instanceName, deprecatedOption, aliasName) => {
         return [
-            "W0001",
+            'W0001',
             instanceName,
             deprecatedOption,
             version,
-            "Use the '" + aliasName + "' option instead"
+            'Use the \'' + aliasName + '\' option instead'
         ];
     };
 
-    QUnit.test("T320061 - the third level of nesting option deprecated message on initialize", function(assert) {
+    QUnit.test('T320061 - the third level of nesting option deprecated message on initialize', function(assert) {
         const originalLog = errors.log;
         const log = [];
 
@@ -704,9 +704,9 @@ QUnit.module("default", {}, () => {
         };
 
         try {
-            const optionName = "thirdLevel.option.deprecated";
-            const aliasName = "thirdLevel.option.deprecatedAlias";
-            const optionValue = "thirdLevelValue";
+            const optionName = 'thirdLevel.option.deprecated';
+            const aliasName = 'thirdLevel.option.deprecatedAlias';
+            const optionValue = 'thirdLevelValue';
 
             const instance = new TestComponent({
                 thirdLevel: {
@@ -716,12 +716,12 @@ QUnit.module("default", {}, () => {
                 }
             });
 
-            assert.equal(log.length, 1, "deprecated warning is printed to console after initialization");
-            assert.deepEqual(log[0], createDeprecatedMessageArray("15.2", instance.NAME, optionName, aliasName));
+            assert.equal(log.length, 1, 'deprecated warning is printed to console after initialization');
+            assert.deepEqual(log[0], createDeprecatedMessageArray('15.2', instance.NAME, optionName, aliasName));
 
-            assert.strictEqual(instance.option(aliasName), optionValue, "the alias option has correct value");
-            assert.strictEqual(instance.option(aliasName), instance.option(optionName), "the alias option has set option value");
-            assert.equal(log.length, 2, "deprecated warning is printed to console after the 'option' method is called with deprecated option");
+            assert.strictEqual(instance.option(aliasName), optionValue, 'the alias option has correct value');
+            assert.strictEqual(instance.option(aliasName), instance.option(optionName), 'the alias option has set option value');
+            assert.equal(log.length, 2, 'deprecated warning is printed to console after the \'option\' method is called with deprecated option');
 
             const expectedThirdLevelOptionObject = {
                 option: {
@@ -729,13 +729,13 @@ QUnit.module("default", {}, () => {
                 }
             };
 
-            assert.deepEqual(instance.option().thirdLevel, expectedThirdLevelOptionObject, "option object is correct");
+            assert.deepEqual(instance.option().thirdLevel, expectedThirdLevelOptionObject, 'option object is correct');
         } finally {
             errors.log = originalLog;
         }
     });
 
-    QUnit.test("T320061 - third level of nesting option deprecated message on option change using object", function(assert) {
+    QUnit.test('T320061 - third level of nesting option deprecated message on option change using object', function(assert) {
         const originalLog = errors.log;
         const log = [];
 
@@ -744,9 +744,9 @@ QUnit.module("default", {}, () => {
         };
 
         try {
-            const optionName = "thirdLevel.option.deprecated";
-            const aliasName = "thirdLevel.option.deprecatedAlias";
-            const optionValue = "thirdLevelValue";
+            const optionName = 'thirdLevel.option.deprecated';
+            const aliasName = 'thirdLevel.option.deprecatedAlias';
+            const optionValue = 'thirdLevelValue';
             const instance = new TestComponent();
 
             instance.option({
@@ -768,16 +768,16 @@ QUnit.module("default", {}, () => {
 
             assert.equal(log.length, 2);
 
-            assert.deepEqual(log[0], createDeprecatedMessageArray("15.2", instance.NAME, optionName, aliasName));
+            assert.deepEqual(log[0], createDeprecatedMessageArray('15.2', instance.NAME, optionName, aliasName));
         } finally {
             errors.log = originalLog;
         }
     });
 
-    QUnit.test("dispose options", function(assert) {
+    QUnit.test('dispose options', function(assert) {
         const component = new TestComponent();
-        const callbacks = ["_deprecatedCallback"];
-        const optionManagerCallbacks = ["_changedCallback", "_changingCallback"];
+        const callbacks = ['_deprecatedCallback'];
+        const optionManagerCallbacks = ['_changedCallback', '_changingCallback'];
 
         callbacks.forEach((callback) => {
             assert.notEqual(component._options[callback], noop);
@@ -796,7 +796,7 @@ QUnit.module("default", {}, () => {
         });
     });
 
-    QUnit.test("T320061 - third level of nesting option deprecated message on option change using string", function(assert) {
+    QUnit.test('T320061 - third level of nesting option deprecated message on option change using string', function(assert) {
         const originalLog = errors.log;
         const log = [];
 
@@ -805,9 +805,9 @@ QUnit.module("default", {}, () => {
         };
 
         try {
-            const optionName = "thirdLevel.option.deprecated";
-            const aliasName = "thirdLevel.option.deprecatedAlias";
-            const optionValue = "thirdLevelValue";
+            const optionName = 'thirdLevel.option.deprecated';
+            const aliasName = 'thirdLevel.option.deprecatedAlias';
+            const optionValue = 'thirdLevelValue';
             const instance = new TestComponent();
 
             instance.option(optionName, optionValue);
@@ -823,13 +823,13 @@ QUnit.module("default", {}, () => {
 
             assert.equal(log.length, 2);
 
-            assert.deepEqual(log[0], createDeprecatedMessageArray("15.2", instance.NAME, optionName, aliasName));
+            assert.deepEqual(log[0], createDeprecatedMessageArray('15.2', instance.NAME, optionName, aliasName));
         } finally {
             errors.log = originalLog;
         }
     });
 
-    QUnit.test("'onDisposing' action and event should be fired on component disposing", function(assert) {
+    QUnit.test('\'onDisposing\' action and event should be fired on component disposing', function(assert) {
         let actionArgs = null;
         let eventArgs = null;
 
@@ -839,7 +839,7 @@ QUnit.module("default", {}, () => {
             }
         });
 
-        component.on("disposing", args => {
+        component.on('disposing', args => {
             eventArgs = args;
         });
 
@@ -856,25 +856,25 @@ QUnit.module("default", {}, () => {
         });
     });
 
-    QUnit.test("'onDisposing' changing", function(assert) {
+    QUnit.test('\'onDisposing\' changing', function(assert) {
         let called = null;
 
         const component = new TestComponent({
             onDisposing() {
-                called = "old handler";
+                called = 'old handler';
             }
         });
 
-        component.option("onDisposing", () => {
-            called = "new handler";
+        component.option('onDisposing', () => {
+            called = 'new handler';
         });
 
         component._dispose();
 
-        assert.equal(called, "new handler");
+        assert.equal(called, 'new handler');
     });
 
-    QUnit.test("'onInitialized' action should be fired on component initialized", function(assert) {
+    QUnit.test('\'onInitialized\' action should be fired on component initialized', function(assert) {
         let actionArgs = null;
 
         const component = new TestComponent({
@@ -889,58 +889,58 @@ QUnit.module("default", {}, () => {
         });
     });
 
-    QUnit.test("'onInitialized' action should accept option changing (T313907)", function(assert) {
+    QUnit.test('\'onInitialized\' action should accept option changing (T313907)', function(assert) {
         let optionChangedCounter = 0;
 
         new TestComponent({
             onInitialized() {
-                this.option("a", "new value");
+                this.option('a', 'new value');
             },
             onOptionChanged() {
                 optionChangedCounter++;
             }
         });
 
-        assert.equal(optionChangedCounter, 0, "if option change will fired, partial re-render lead to error");
+        assert.equal(optionChangedCounter, 0, 'if option change will fired, partial re-render lead to error');
     });
 
-    QUnit.test("'hasActionSubscription' should be false if component doesn't have subscribe", function(assert) {
+    QUnit.test('\'hasActionSubscription\' should be false if component doesn\'t have subscribe', function(assert) {
         const component = new TestComponent();
 
-        assert.notOk(component.hasActionSubscription("onInitialized"), "component doesn't have onInitialized subscribe");
+        assert.notOk(component.hasActionSubscription('onInitialized'), 'component doesn\'t have onInitialized subscribe');
     });
 
-    QUnit.test("'hasActionSubscription' should be true if component has subscribe via option", function(assert) {
+    QUnit.test('\'hasActionSubscription\' should be true if component has subscribe via option', function(assert) {
         const component = new TestComponent({
             onInitialized() {
             }
         });
 
-        assert.ok(component.hasActionSubscription("onInitialized"), "component has onInitialized subscribe");
+        assert.ok(component.hasActionSubscription('onInitialized'), 'component has onInitialized subscribe');
     });
 
-    QUnit.test("'hasActionSubscription' should be true if component has subscribe via event", function(assert) {
+    QUnit.test('\'hasActionSubscription\' should be true if component has subscribe via event', function(assert) {
         const component = new TestComponent();
 
-        component.on("initialized", () => {
+        component.on('initialized', () => {
         });
 
-        assert.ok(component.hasActionSubscription("onInitialized"), "component has onInitialized subscribe");
+        assert.ok(component.hasActionSubscription('onInitialized'), 'component has onInitialized subscribe');
     });
 
-    QUnit.test("'hasActionSubscription' should not raise deprecation warning for event option", function(assert) {
+    QUnit.test('\'hasActionSubscription\' should not raise deprecation warning for event option', function(assert) {
         const instance = new TestComponent();
-        const logDeprecatedWarningSpy = sinon.spy(instance, "_logDeprecatedWarning");
+        const logDeprecatedWarningSpy = sinon.spy(instance, '_logDeprecatedWarning');
 
         try {
-            instance.hasActionSubscription("onDeprecatedEvent");
+            instance.hasActionSubscription('onDeprecatedEvent');
             assert.ok(logDeprecatedWarningSpy.notCalled);
         } finally {
             logDeprecatedWarningSpy.restore();
         }
     });
 
-    QUnit.test("changing value to NaN does not call optionChanged twice", function(assert) {
+    QUnit.test('changing value to NaN does not call optionChanged twice', function(assert) {
         let called = 0;
 
         const instance = new TestComponent({
@@ -950,15 +950,15 @@ QUnit.module("default", {}, () => {
             }
         });
 
-        instance.option("option1", NaN);
-        instance.option("option1", NaN);
+        instance.option('option1', NaN);
+        instance.option('option1', NaN);
 
-        assert.equal(called, 1, "NaN handled once");
+        assert.equal(called, 1, 'NaN handled once');
     });
 
-    QUnit.test("DOM Element comparing by reference", function(assert) {
+    QUnit.test('DOM Element comparing by reference', function(assert) {
         let called = 0;
-        const element = document.createElement("div");
+        const element = document.createElement('div');
 
         const instance = new TestComponent({
             option1: element,
@@ -967,124 +967,124 @@ QUnit.module("default", {}, () => {
             }
         });
 
-        const newElement = document.createElement("div");
+        const newElement = document.createElement('div');
 
-        instance.option("option1", element);
-        instance.option("option1", newElement);
+        instance.option('option1', element);
+        instance.option('option1', newElement);
 
-        assert.equal(called, 1, "DOM Element compared by reference");
+        assert.equal(called, 1, 'DOM Element compared by reference');
     });
 
-    QUnit.test("_optionChanging is called before inner _options object is changed", function(assert) {
+    QUnit.test('_optionChanging is called before inner _options object is changed', function(assert) {
         const instance = new TestComponent({
             option1: 1
         });
         instance._optionChanging = (name, currentValue, nextValue) => {
-            assert.strictEqual(name, "option1", "name");
-            assert.strictEqual(currentValue, 1, "current value");
-            assert.strictEqual(nextValue, 2, "next value");
-            assert.strictEqual(instance.option("option1"), 1, "instance state");
+            assert.strictEqual(name, 'option1', 'name');
+            assert.strictEqual(currentValue, 1, 'current value');
+            assert.strictEqual(nextValue, 2, 'next value');
+            assert.strictEqual(instance.option('option1'), 1, 'instance state');
         };
 
-        instance.option("option1", 2);
+        instance.option('option1', 2);
     });
 
-    QUnit.test("T359818 - option changed should be called when deprecated option is changed", function(assert) {
+    QUnit.test('T359818 - option changed should be called when deprecated option is changed', function(assert) {
         const instance = new TestComponent();
         const value = 5;
 
         instance._resetTraceLog();
-        instance.option("deprecated", value);
+        instance.option('deprecated', value);
 
-        const logRecord = instance._getTraceLogByMethod("_optionChanged");
+        const logRecord = instance._getTraceLogByMethod('_optionChanged');
 
-        assert.equal(logRecord[0].arguments[0].name, "deprecatedAlias", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[0].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[0].arguments[0].name, 'deprecatedAlias', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
 
-        assert.equal(logRecord[1].arguments[0].name, "deprecated", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[1].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[1].arguments[0].name, 'deprecated', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
-    QUnit.test("T359818 - option changed should be called when the second level deprecated option is changed", function(assert) {
+    QUnit.test('T359818 - option changed should be called when the second level deprecated option is changed', function(assert) {
         const instance = new TestComponent();
         const value = 5;
 
         instance._resetTraceLog();
-        instance.option("secondLevel.deprecatedOption", value);
+        instance.option('secondLevel.deprecatedOption', value);
 
-        const logRecord = instance._getTraceLogByMethod("_optionChanged");
+        const logRecord = instance._getTraceLogByMethod('_optionChanged');
 
-        assert.equal(logRecord[0].arguments[0].fullName, "secondLevel.deprecatedOptionAlias", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[0].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[0].arguments[0].fullName, 'secondLevel.deprecatedOptionAlias', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
 
-        assert.equal(logRecord[1].arguments[0].fullName, "secondLevel.deprecatedOption", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[1].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[1].arguments[0].fullName, 'secondLevel.deprecatedOption', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
-    QUnit.test("T359818 - option changed should be called when deprecated option is changed", function(assert) {
+    QUnit.test('T359818 - option changed should be called when deprecated option is changed', function(assert) {
         const instance = new TestComponent();
         const value = 5;
 
         instance._resetTraceLog();
-        instance.option("deprecated", value);
+        instance.option('deprecated', value);
 
-        const logRecord = instance._getTraceLogByMethod("_optionChanged");
+        const logRecord = instance._getTraceLogByMethod('_optionChanged');
 
-        assert.equal(logRecord[0].arguments[0].name, "deprecatedAlias", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[0].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[0].arguments[0].name, 'deprecatedAlias', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
 
-        assert.equal(logRecord[1].arguments[0].name, "deprecated", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[1].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[1].arguments[0].name, 'deprecated', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
-    QUnit.test("T359818 - option changed should be called when the second level deprecated option is changed", function(assert) {
+    QUnit.test('T359818 - option changed should be called when the second level deprecated option is changed', function(assert) {
         const instance = new TestComponent();
         const value = 5;
 
         instance._resetTraceLog();
-        instance.option("secondLevel.deprecatedOption", value);
+        instance.option('secondLevel.deprecatedOption', value);
 
-        const logRecord = instance._getTraceLogByMethod("_optionChanged");
+        const logRecord = instance._getTraceLogByMethod('_optionChanged');
 
-        assert.equal(logRecord[0].arguments[0].fullName, "secondLevel.deprecatedOptionAlias", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[0].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[0].arguments[0].fullName, 'secondLevel.deprecatedOptionAlias', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
 
-        assert.equal(logRecord[1].arguments[0].fullName, "secondLevel.deprecatedOption", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[1].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[1].arguments[0].fullName, 'secondLevel.deprecatedOption', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
-    QUnit.test("T359818 - deprecated option changed should be called when alias option is changed", function(assert) {
+    QUnit.test('T359818 - deprecated option changed should be called when alias option is changed', function(assert) {
         const instance = new TestComponent();
         const value = 5;
 
         instance._resetTraceLog();
-        instance.option("deprecatedAlias", value);
+        instance.option('deprecatedAlias', value);
 
-        const logRecord = instance._getTraceLogByMethod("_optionChanged");
+        const logRecord = instance._getTraceLogByMethod('_optionChanged');
 
-        assert.equal(logRecord[0].arguments[0].name, "deprecatedAlias", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[0].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[0].arguments[0].name, 'deprecatedAlias', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
 
-        assert.equal(logRecord[1].arguments[0].name, "deprecated", "the 'optionChanged' method option name is correct");
-        assert.equal(logRecord[1].arguments[0].value, value, "the 'optionChanged' method option value is correct");
+        assert.equal(logRecord[1].arguments[0].name, 'deprecated', 'the \'optionChanged\' method option name is correct');
+        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
-    QUnit.test("the isOptionDeprecated method", function(assert) {
+    QUnit.test('the isOptionDeprecated method', function(assert) {
         const instance = new TestComponent();
-        assert.ok(instance.isOptionDeprecated("deprecated"), "it is correct for deprecated option");
-        assert.ok(!instance.isOptionDeprecated("opt1"), "it is correct for an ordinary option");
+        assert.ok(instance.isOptionDeprecated('deprecated'), 'it is correct for deprecated option');
+        assert.ok(!instance.isOptionDeprecated('opt1'), 'it is correct for an ordinary option');
     });
 
-    QUnit.test("the _getOptionValue method sets the context for function option (T577942)", function(assert) {
+    QUnit.test('the _getOptionValue method sets the context for function option (T577942)', function(assert) {
         const instance = new TestComponent();
         const context = { contextField: 1 };
 
-        const value = instance._getOptionValue("funcOption", context);
-        assert.deepEqual(value, context, "context is correct");
+        const value = instance._getOptionValue('funcOption', context);
+        assert.deepEqual(value, context, 'context is correct');
     });
 });
 
-QUnit.module("defaultOptions", {
+QUnit.module('defaultOptions', {
     beforeEach: function() {
         this.originalDevice = devices.current();
         this.createClass = defaultOptionsRules => {
@@ -1099,155 +1099,155 @@ QUnit.module("defaultOptions", {
         devices.current(this.originalDevice);
     }
 }, () => {
-    QUnit.test("set default option for specific component", function(assert) {
+    QUnit.test('set default option for specific component', function(assert) {
         const TestComponent = this.createClass([{
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
 
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured");
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured');
     });
 
-    QUnit.test("set default options for specific device platform", function(assert) {
+    QUnit.test('set default options for specific device platform', function(assert) {
         const TestComponent = this.createClass([{
-            device: { platform: "ios" },
+            device: { platform: 'ios' },
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
 
-        devices._currentDevice = { platform: "ios" };
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured for ios");
+        devices._currentDevice = { platform: 'ios' };
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for ios');
 
-        devices._currentDevice = { platform: "android" };
-        assert.notEqual(new TestComponent().option("test"), "value", "test option is not configured for android");
+        devices._currentDevice = { platform: 'android' };
+        assert.notEqual(new TestComponent().option('test'), 'value', 'test option is not configured for android');
     });
 
-    QUnit.test("set default options for specific device type", function(assert) {
+    QUnit.test('set default options for specific device type', function(assert) {
         const TestComponent = this.createClass([{
-            device: { deviceType: "phone" },
+            device: { deviceType: 'phone' },
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
 
-        devices._currentDevice = { deviceType: "tablet" };
-        assert.notEqual(new TestComponent().option("test"), "value", "test option is not configured for tablet");
+        devices._currentDevice = { deviceType: 'tablet' };
+        assert.notEqual(new TestComponent().option('test'), 'value', 'test option is not configured for tablet');
 
-        devices._currentDevice = { deviceType: "phone" };
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured for phone");
+        devices._currentDevice = { deviceType: 'phone' };
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for phone');
     });
 
-    QUnit.test("set default options for device filter flags", function(assert) {
+    QUnit.test('set default options for device filter flags', function(assert) {
         const TestComponent = this.createClass([{
             device: { ios: true, phone: true },
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
 
-        devices.current("iPad");
-        assert.notEqual(new TestComponent().option("test"), "value", "test option is not configured for iPad");
+        devices.current('iPad');
+        assert.notEqual(new TestComponent().option('test'), 'value', 'test option is not configured for iPad');
 
-        devices.current("iPhone");
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured for iPhone");
+        devices.current('iPhone');
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for iPhone');
     });
 
-    QUnit.test("set default options for several devices at once", function(assert) {
+    QUnit.test('set default options for several devices at once', function(assert) {
         const TestComponent = this.createClass([{
             device: [
-                { platform: "android" },
-                { platform: "ios" }
+                { platform: 'android' },
+                { platform: 'ios' }
             ],
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
 
-        devices._currentDevice = { platform: "android" };
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured for android");
+        devices._currentDevice = { platform: 'android' };
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for android');
 
-        devices._currentDevice = { platform: "ios" };
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured for ios");
+        devices._currentDevice = { platform: 'ios' };
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for ios');
     });
 
-    QUnit.test("set default options for filtering device with custom function", function(assert) {
+    QUnit.test('set default options for filtering device with custom function', function(assert) {
         const TestComponent = this.createClass([{
             device(device) {
-                return device.platform !== "android";
+                return device.platform !== 'android';
             },
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
 
-        devices._currentDevice = { platform: "android" };
-        assert.notEqual(new TestComponent().option("test"), "value", "test option is not configured for android");
+        devices._currentDevice = { platform: 'android' };
+        assert.notEqual(new TestComponent().option('test'), 'value', 'test option is not configured for android');
 
-        devices._currentDevice = { platform: "ios" };
-        assert.equal(new TestComponent().option("test"), "value", "test option is configured for ios");
+        devices._currentDevice = { platform: 'ios' };
+        assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for ios');
     });
 
-    QUnit.test("options configuration inheritance", function(assert) {
+    QUnit.test('options configuration inheritance', function(assert) {
         const TestComponent = this.createClass([{
             options: {
-                test: "value"
+                test: 'value'
             }
         }]);
         const ChildComponent = TestComponent.inherit();
 
-        assert.equal(new ChildComponent().option("test"), "value", "test option is configured for child component");
+        assert.equal(new ChildComponent().option('test'), 'value', 'test option is configured for child component');
     });
 
-    QUnit.test("default options of child overrides default options of parent", function(assert) {
+    QUnit.test('default options of child overrides default options of parent', function(assert) {
         const TestComponent = this.createClass([{
             options: {
-                test: "parent"
+                test: 'parent'
             }
         }]);
         const ChildComponent = TestComponent.inherit({
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{
                     options: {
-                        test: "child"
+                        test: 'child'
                     }
                 }]);
             }
         });
 
-        assert.equal(new ChildComponent().option("test"), "child", "test option configured with child component defaults");
+        assert.equal(new ChildComponent().option('test'), 'child', 'test option configured with child component defaults');
     });
 
-    QUnit.test("rules priority", function(assert) {
+    QUnit.test('rules priority', function(assert) {
         const TestComponent = this.createClass([{
             options: {
-                test: "parent"
+                test: 'parent'
             }
         }]);
         const ChildComponent = TestComponent.inherit({
             _defaultOptions() {
                 return $.extend(this.callBase(), {
-                    test: "default"
+                    test: 'default'
                 });
             },
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{
                     options: {
-                        test: "byRule"
+                        test: 'byRule'
                     }
                 }]);
             }
         });
 
-        assert.equal(new ChildComponent().option("test"), "byRule", "test option configured with child component defaults");
+        assert.equal(new ChildComponent().option('test'), 'byRule', 'test option configured with child component defaults');
     });
 
-    QUnit.test("initial option test", function(assert) {
+    QUnit.test('initial option test', function(assert) {
         const TestComponent = Component.inherit({
             _getDefaultOptions() {
                 return {
-                    test: "parent"
+                    test: 'parent'
                 };
             }
         });
@@ -1256,64 +1256,64 @@ QUnit.module("defaultOptions", {
                 return $.extend(
                     this.callBase(),
                     {
-                        anotherTest: "default",
-                        test: "initial"
+                        anotherTest: 'default',
+                        test: 'initial'
                     }
                 );
             },
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{
                     options: {
-                        anotherTest: "byRule"
+                        anotherTest: 'byRule'
                     }
                 }]);
             }
         });
 
-        assert.equal(new ChildComponent().initialOption("test"), "initial", "test initial option configured with component defaults");
-        assert.equal(new ChildComponent().initialOption("anotherTest"), "byRule", "test initial option configured with child component defaults rules");
+        assert.equal(new ChildComponent().initialOption('test'), 'initial', 'test initial option configured with component defaults');
+        assert.equal(new ChildComponent().initialOption('anotherTest'), 'byRule', 'test initial option configured with child component defaults rules');
     });
 
-    QUnit.test("Checking current option value with initial option value (option value as function)", function(assert) {
+    QUnit.test('Checking current option value with initial option value (option value as function)', function(assert) {
         const TestComponent = Component.inherit({
             _getDefaultOptions() {
                 return {
                     test() {
-                        return "test1";
+                        return 'test1';
                     }
                 };
             }
         });
 
-        assert.ok(new TestComponent()._isInitialOptionValue("test"), "current value equal initial value");
+        assert.ok(new TestComponent()._isInitialOptionValue('test'), 'current value equal initial value');
         assert.notOk(new TestComponent({
             test() {
-                return "test2";
+                return 'test2';
             }
-        })._isInitialOptionValue("test"), "current value not equal initial value");
+        })._isInitialOptionValue('test'), 'current value not equal initial value');
     });
 
-    QUnit.test("Checking current option value with initial option value (option value as object)", function(assert) {
+    QUnit.test('Checking current option value with initial option value (option value as object)', function(assert) {
         const TestComponent = Component.inherit({
             _getDefaultOptions() {
                 return {
                     test: {
-                        prop1: "test1"
+                        prop1: 'test1'
                     }
                 };
             }
         });
 
-        assert.ok(new TestComponent()._isInitialOptionValue("test"), "current value equal initial value");
+        assert.ok(new TestComponent()._isInitialOptionValue('test'), 'current value equal initial value');
         assert.notOk(new TestComponent({
             test: {
-                prop1: "test2",
-                prop2: "test3"
+                prop1: 'test2',
+                prop2: 'test3'
             }
-        })._isInitialOptionValue("test"), "current value not equal initial value");
+        })._isInitialOptionValue('test'), 'current value not equal initial value');
     });
 
-    QUnit.test("'defaultOptionRules' option", function(assert) {
+    QUnit.test('\'defaultOptionRules\' option', function(assert) {
         const TestComponent = Component.inherit({
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{
@@ -1339,45 +1339,45 @@ QUnit.module("defaultOptions", {
         assert.equal(options.c, 3);
     });
 
-    QUnit.test("reset option", function(assert) {
+    QUnit.test('reset option', function(assert) {
         const instance = new TestComponent();
 
         instance.option({
-            opt4: "someValue",
-            "opt5.subOpt1": "someValue",
-            "opt5.subOpt2": {
-                value: "someValue",
-                opt: "someValue"
+            opt4: 'someValue',
+            'opt5.subOpt1': 'someValue',
+            'opt5.subOpt2': {
+                value: 'someValue',
+                opt: 'someValue'
             },
-            "opt5.subOpt3": "someValue",
-            "opt6[0].subOpt": "someValue"
+            'opt5.subOpt3': 'someValue',
+            'opt6[0].subOpt': 'someValue'
         });
 
-        assert.equal(instance.option("opt4"), "someValue");
-        assert.equal(instance.option("opt5.subOpt1"), "someValue");
-        assert.deepEqual(instance.option("opt5.subOpt2"), {
-            value: "someValue",
-            opt: "someValue"
+        assert.equal(instance.option('opt4'), 'someValue');
+        assert.equal(instance.option('opt5.subOpt1'), 'someValue');
+        assert.deepEqual(instance.option('opt5.subOpt2'), {
+            value: 'someValue',
+            opt: 'someValue'
         });
-        assert.equal(instance.option("opt5.subOpt3"), "someValue");
-        assert.equal(instance.option("opt6[0].subOpt"), "someValue");
+        assert.equal(instance.option('opt5.subOpt3'), 'someValue');
+        assert.equal(instance.option('opt6[0].subOpt'), 'someValue');
 
-        instance.resetOption("opt4");
-        instance.resetOption("opt5.subOpt1");
-        instance.resetOption("opt5.subOpt2");
-        instance.resetOption("opt5.subOpt3");
-        instance.resetOption("opt6[0].subOpt");
+        instance.resetOption('opt4');
+        instance.resetOption('opt5.subOpt1');
+        instance.resetOption('opt5.subOpt2');
+        instance.resetOption('opt5.subOpt3');
+        instance.resetOption('opt6[0].subOpt');
 
-        assert.equal(instance.option("opt4"), "default");
-        assert.equal(instance.option("opt5.subOpt1"), "default");
-        assert.deepEqual(instance.option("opt5.subOpt2"), {
-            value: ""
+        assert.equal(instance.option('opt4'), 'default');
+        assert.equal(instance.option('opt5.subOpt1'), 'default');
+        assert.deepEqual(instance.option('opt5.subOpt2'), {
+            value: ''
         });
-        assert.equal(instance.option("opt5.subOpt3"), undefined);
-        assert.equal(instance.option("opt6[0].subOpt"), "default");
+        assert.equal(instance.option('opt5.subOpt3'), undefined);
+        assert.equal(instance.option('opt6[0].subOpt'), 'default');
     });
 
-    QUnit.test("reset option with empty option name", function(assert) {
+    QUnit.test('reset option with empty option name', function(assert) {
         const instance = new TestComponent();
         let error = false;
 
@@ -1390,65 +1390,65 @@ QUnit.module("defaultOptions", {
         }
     });
 
-    QUnit.test("reset option after setting initialOption", function(assert) {
+    QUnit.test('reset option after setting initialOption', function(assert) {
         const instance = new TestComponent();
 
-        instance.resetOption("opt5.subOpt2");
+        instance.resetOption('opt5.subOpt2');
 
         instance.option({
-            "opt5.subOpt2": {
-                value: "someValue",
-                opt: "someValue"
+            'opt5.subOpt2': {
+                value: 'someValue',
+                opt: 'someValue'
             },
-            opt4: "someValue",
+            opt4: 'someValue',
         });
 
-        instance.resetOption("opt5.subOpt2");
-        instance.resetOption("opt4");
+        instance.resetOption('opt5.subOpt2');
+        instance.resetOption('opt4');
 
-        assert.equal(instance.option("opt4"), "default");
-        assert.deepEqual(instance.option("opt5.subOpt2"), {
-            value: ""
+        assert.equal(instance.option('opt4'), 'default');
+        assert.deepEqual(instance.option('opt5.subOpt2'), {
+            value: ''
         });
     });
 });
 
-QUnit.module("event API", {
+QUnit.module('event API', {
     beforeEach: function() {
         this.component = new Component();
     }
 }, () => {
-    QUnit.test("on", function(assert) {
+    QUnit.test('on', function(assert) {
         let triggered = false;
 
-        this.component.on("event", () => {
+        this.component.on('event', () => {
             triggered = true;
         });
-        this.component._eventsStrategy.fireEvent("event");
+        this.component._eventsStrategy.fireEvent('event');
 
         assert.ok(triggered);
     });
 
-    QUnit.test("hasEvent", function(assert) {
-        assert.ok(!this.component._eventsStrategy.hasEvent("event"));
-        this.component.on("event", noop);
-        assert.ok(this.component._eventsStrategy.hasEvent("event"));
-        this.component.off("event", noop);
-        assert.ok(!this.component._eventsStrategy.hasEvent("event"));
+    QUnit.test('hasEvent', function(assert) {
+        assert.ok(!this.component._eventsStrategy.hasEvent('event'));
+        this.component.on('event', noop);
+        assert.ok(this.component._eventsStrategy.hasEvent('event'));
+        this.component.off('event', noop);
+        assert.ok(!this.component._eventsStrategy.hasEvent('event'));
     });
 
-    QUnit.test("fire context and args", function(assert) {
+    QUnit.test('fire context and args', function(assert) {
         assert.expect(2);
 
         const component = this.component;
-        component.on("event", function(e) {
+        component.on('event', function(e) {
             assert.strictEqual(this, component);
-            assert.equal(e, "OK");
+            assert.equal(e, 'OK');
         });
-        component._eventsStrategy.fireEvent("event", ["OK"]);
+        component._eventsStrategy.fireEvent('event', ['OK']);
     });
 
-    QUnit.test("off", function(assert) {
+    QUnit.test('off', function(assert) {
         const component = this.component;
 
         let count = 0;
@@ -1459,19 +1459,19 @@ QUnit.module("event API", {
             count++;
         };
 
-        component.on("event", h1);
-        component.on("event", h2);
+        component.on('event', h1);
+        component.on('event', h2);
 
-        component._eventsStrategy.fireEvent("event");
+        component._eventsStrategy.fireEvent('event');
         assert.equal(count, 2);
 
-        component.on("event", h1);
-        component.off("event");
-        component._eventsStrategy.fireEvent("event");
+        component.on('event', h1);
+        component.off('event');
+        component._eventsStrategy.fireEvent('event');
         assert.equal(count, 2);
     });
 
-    QUnit.test("on with hash", function(assert) {
+    QUnit.test('on with hash', function(assert) {
         const component = this.component;
         let count = 0;
         const h1 = () => {
@@ -1486,43 +1486,43 @@ QUnit.module("event API", {
             event2: h2
         });
 
-        component._eventsStrategy.fireEvent("event1");
+        component._eventsStrategy.fireEvent('event1');
         assert.equal(count, 1);
 
-        component._eventsStrategy.fireEvent("event2");
+        component._eventsStrategy.fireEvent('event2');
         assert.equal(count, 3);
     });
 
-    QUnit.test("methods are chainable", function(assert) {
+    QUnit.test('methods are chainable', function(assert) {
         assert.strictEqual(this.component.on(), this.component);
         assert.strictEqual(this.component.off(), this.component);
         assert.strictEqual(this.component._eventsStrategy.fireEvent(), this.component);
     });
 
-    QUnit.test("event callbacks should be disposed on component disposing", function(assert) {
+    QUnit.test('event callbacks should be disposed on component disposing', function(assert) {
         assert.expect(0);
 
-        this.component.on("event", () => {
+        this.component.on('event', () => {
             assert.ok(false);
         });
         this.component._dispose();
-        this.component._eventsStrategy.fireEvent("event");
+        this.component._eventsStrategy.fireEvent('event');
     });
 });
 
-QUnit.module("action API", {}, () => {
-    QUnit.test("_createAction function makes wrong arguments if called w/o config", function(assert) {
+QUnit.module('action API', {}, () => {
+    QUnit.test('_createAction function makes wrong arguments if called w/o config', function(assert) {
         const instance = new TestComponent();
 
         instance._createAction(e => {
             assert.ok(e);
-            assert.ok(!("actionValue" in e));
+            assert.ok(!('actionValue' in e));
         })();
     });
 
-    QUnit.test("_createActionByOption should call _suppressDeprecatedWarnings before reading the action option value and then call _resumeDeprecatedWarnings", function(assert) {
+    QUnit.test('_createActionByOption should call _suppressDeprecatedWarnings before reading the action option value and then call _resumeDeprecatedWarnings', function(assert) {
         const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
+        const deprecatedOption = 'deprecatedOption';
         let warningCount = 0;
         const _logDeprecatedWarningMock = option => {
             ++warningCount;
@@ -1535,7 +1535,7 @@ QUnit.module("action API", {}, () => {
         assert.strictEqual(warningCount, 1);
     });
 
-    QUnit.test("action executing should fire event handlers with same arguments and context", function(assert) {
+    QUnit.test('action executing should fire event handlers with same arguments and context', function(assert) {
         let actionArguments = null;
         let actionContext = null;
         let eventArguments = null;
@@ -1548,21 +1548,21 @@ QUnit.module("action API", {}, () => {
             }
         });
 
-        const executeAction = instance._createActionByOption("onTestEvent", { testProp1: "testProp1" });
+        const executeAction = instance._createActionByOption('onTestEvent', { testProp1: 'testProp1' });
 
-        instance.on("testEvent", function(args) {
+        instance.on('testEvent', function(args) {
             eventArguments = args;
             eventContext = this;
         });
 
-        executeAction({ testProp2: "testProp2" });
+        executeAction({ testProp2: 'testProp2' });
 
         assert.ok(eventArguments);
         assert.deepEqual(eventArguments, actionArguments);
         assert.strictEqual(eventContext, actionContext);
     });
 
-    QUnit.test("action executing should fire event handlers when not exists option and exists subscriptions", function(assert) {
+    QUnit.test('action executing should fire event handlers when not exists option and exists subscriptions', function(assert) {
         let eventArguments = null;
         let eventContext = null;
 
@@ -1570,47 +1570,47 @@ QUnit.module("action API", {}, () => {
             onTestEvent: null
         });
 
-        const executeAction = instance._createActionByOption("onTestEvent", { testProp1: "testProp1" });
+        const executeAction = instance._createActionByOption('onTestEvent', { testProp1: 'testProp1' });
 
-        instance.on("testEvent", function(args) {
+        instance.on('testEvent', function(args) {
             eventArguments = args;
             eventContext = this;
         });
 
-        executeAction({ testProp2: "testProp2" });
+        executeAction({ testProp2: 'testProp2' });
 
-        assert.deepEqual(eventArguments, { component: instance, testProp2: "testProp2" }, "event arguments");
-        assert.strictEqual(eventContext, instance, "event context");
+        assert.deepEqual(eventArguments, { component: instance, testProp2: 'testProp2' }, 'event arguments');
+        assert.strictEqual(eventContext, instance, 'event context');
     });
 
-    QUnit.test("_createActionByOption should run 'beforeExecute' before the action handler when event was subscribed with 'on' method", function(assert) {
-        let value = "";
+    QUnit.test('_createActionByOption should run \'beforeExecute\' before the action handler when event was subscribed with \'on\' method', function(assert) {
+        let value = '';
 
         const instance = new TestComponent();
 
-        instance.on("testEvent", () => {
-            value = "value from 'onTestEvent'";
+        instance.on('testEvent', () => {
+            value = 'value from \'onTestEvent\'';
         });
 
-        const executeAction = instance._createActionByOption("onTestEvent", {
+        const executeAction = instance._createActionByOption('onTestEvent', {
             beforeExecute() {
-                value = "value from 'beforeExecute'";
+                value = 'value from \'beforeExecute\'';
             }
         });
 
         executeAction({});
 
-        assert.equal(value, "value from 'onTestEvent'", "action value was not overwritten by the 'beforeExecute' method");
+        assert.equal(value, 'value from \'onTestEvent\'', 'action value was not overwritten by the \'beforeExecute\' method');
     });
 
-    QUnit.test("_createActionByOption should not override user 'afterExecute' option", function(assert) {
+    QUnit.test('_createActionByOption should not override user \'afterExecute\' option', function(assert) {
         assert.expect(1);
 
         const instance = new TestComponent({
             onTestEvent: noop
         });
 
-        const executeAction = instance._createActionByOption("onTestEvent", {
+        const executeAction = instance._createActionByOption('onTestEvent', {
             afterExecute() {
                 assert.ok(true);
             }
@@ -1619,7 +1619,7 @@ QUnit.module("action API", {}, () => {
         executeAction({});
     });
 
-    QUnit.test("action should be wrapped only once (T611040)", function(assert) {
+    QUnit.test('action should be wrapped only once (T611040)', function(assert) {
         const originFlag = config().wrapActionsBeforeExecute;
         config({ wrapActionsBeforeExecute: true });
 
@@ -1628,14 +1628,14 @@ QUnit.module("action API", {}, () => {
         });
         let count = 0;
 
-        instance.option("beforeActionExecute", (component, action, config) => {
+        instance.option('beforeActionExecute', (component, action, config) => {
             return (...args) => {
                 count++;
                 return action.apply(this, args);
             };
         });
 
-        const executeAction = instance._createActionByOption("onTestEvent");
+        const executeAction = instance._createActionByOption('onTestEvent');
 
         executeAction();
         executeAction();

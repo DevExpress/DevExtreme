@@ -225,7 +225,7 @@ const Component = Class.inherit({
         } finally {
             this._initializing = false;
             this._lockUpdate();
-            this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+            this._createActionByOption('onInitialized', { excludeValidators: ['disabled', 'readOnly'] })();
             this._unlockUpdate();
             this._initialized = true;
         }
