@@ -453,7 +453,7 @@ QUnit.test('change selectedItemKeys to invisible items should perform load with 
     });
 
     const instance = $element.dxList('instance');
-    var loading = sinon.spy();
+    const loading = sinon.spy();
     ds.store().on('loading', loading);
 
     // act
@@ -597,7 +597,7 @@ QUnit.test('Selecting all filtered items when selectAllMode is \'allPages\'', fu
     assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'), 'selectAll checkbox is indeterminate');
 });
 
-var LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
 QUnit.module('selecting in grouped list', {
     beforeEach: function() {
@@ -638,7 +638,7 @@ QUnit.module('selecting in grouped list', {
     }
 });
 
-var LIST_GROUP_CLASS = 'dx-list-group';
+const LIST_GROUP_CLASS = 'dx-list-group';
 
 QUnit.test('selectItem by node should add item to selectedItems', function(assert) {
     const $list = $('#templated-list').dxList({

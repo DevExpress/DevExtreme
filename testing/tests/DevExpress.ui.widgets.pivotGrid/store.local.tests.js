@@ -197,7 +197,7 @@ QUnit.test('Async loading when more 10000 items', function(assert) {
     const clock = sinon.useFakeTimers();
 
     let doneCalled;
-    var progresses = [];
+    const progresses = [];
     this.store.load({
         rows: [{
             selector: function(data) {

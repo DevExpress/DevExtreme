@@ -553,7 +553,7 @@ module('Drag and drop appointments', moduleConfig, () => {
             startDayHour: 9
         });
 
-        const $appointment = scheduler.appointments.find('Task 1').first();
+        let $appointment = scheduler.appointments.find('Task 1').first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
         const pointer = pointerMock($appointment).start();
         const cellHeight = scheduler.workSpace.getCellHeight();

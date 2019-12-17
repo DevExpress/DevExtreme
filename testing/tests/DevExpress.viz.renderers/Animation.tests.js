@@ -431,7 +431,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
             animationController.addAnimation(secondAnimation);
         };
         const firstAnimation = new this.Animation(2, completeAnimation);
-        var secondAnimation = new this.Animation(3);
+        const secondAnimation = new this.Animation(3);
         const endAnimation = sinon.stub();
         const complete = function() {
             endAnimation();

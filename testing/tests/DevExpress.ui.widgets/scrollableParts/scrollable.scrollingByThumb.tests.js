@@ -327,8 +327,8 @@ QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
 
     const $thumb = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const mouse = pointerMock($thumb).start();
-    var distance = 10;
-    var containerToContentRatio = (containerHeight / contentHeight);
+    const distance = 10;
+    const containerToContentRatio = (containerHeight / contentHeight);
 
     $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS).height(containerHeight);
 

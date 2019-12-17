@@ -25,6 +25,11 @@ QUnit.begin(function() {
         test.renderer.g = sinon.spy(function() {
             const group = new vizMocks.Element();
             group.animate = function(settings, options) {
+                let that;
+                let step;
+                let complete;
+                let pos;
+
                 this.animateSettings = settings;
                 this.animateArguments = arguments;
                 if(arguments.length >= 2) {
@@ -58,10 +63,10 @@ QUnit.begin(function() {
 
 
                 if(arguments[1] && typeof arguments[1].step === 'function') {
-                    var that = this;
-                    var step = arguments[1].step;
-                    var complete = arguments[1].complete || noop;
-                    var pos = 0;
+                    that = this;
+                    step = arguments[1].step;
+                    complete = arguments[1].complete || noop;
+                    pos = 0;
 
                     tick();
                 }

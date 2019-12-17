@@ -178,7 +178,7 @@ QUnit.test('Two Series, one of them is not visible', function(assert) {
     assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ['D', 'E', 'F']);
 });
 
-var assertRange = commonMethodsForTests.assertRange;
+const assertRange = commonMethodsForTests.assertRange;
 
 // /////////////////////////////////////////////////////
 // ////      Canvas creation

@@ -60,9 +60,9 @@ QUnit.test('animation option', function(assert) {
             done();
         }
     };
-    var enterLog = [];
-    var startLog = [];
-    var $test = $('#animation');
+    const enterLog = [];
+    const startLog = [];
+    const $test = $('#animation');
 
     TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
         enter: function($el, config) {
@@ -110,8 +110,8 @@ QUnit.test('staggering animation options', function(assert) {
             done();
         }
     };
-    var enterLog = [];
-    var startLog = [];
+    const enterLog = [];
+    const startLog = [];
     const $test = $('#staggering-animation')
         .clone()
         .appendTo($('body'));
@@ -159,8 +159,8 @@ QUnit.test('staggering animation with items that are outside the screen', functi
             done();
         }
     };
-    var enterLog = [];
-    var startLog = [];
+    const enterLog = [];
+    const startLog = [];
     const $test = $('#staggering-animation')
         .clone()
         .appendTo($('body'))

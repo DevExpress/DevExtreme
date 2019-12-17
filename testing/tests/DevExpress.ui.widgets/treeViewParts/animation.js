@@ -55,7 +55,7 @@ QUnit.test('expand item should be animated if option animationEnabled is true', 
             animationEnabled: true
         });
 
-        var $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
+        const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
         const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').expandItem($item.get(0));
@@ -108,7 +108,7 @@ QUnit.test('collapse item should be animated if option animationEnabled is true'
 
         const $node = $treeView.find('.' + internals.NODE_CLASS).eq(0);
         const $item = $node.find('.' + internals.ITEM_CLASS).eq(0);
-        var $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
+        const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
 
         $treeView.dxTreeView('instance').collapseItem($item.get(0));
     } finally {

@@ -349,6 +349,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
 
     QUnit.test('Collapsed appointment should raise the onAppointmentClick event', function(assert) {
         let tooltipItemElement = null;
+        let instance;
         const spy = sinon.spy();
         const appointments = [
             { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30) },
@@ -384,7 +385,7 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
         const showAppointmentPopup = this.instance.showAppointmentPopup;
         this.instance.showAppointmentPopup = spy;
         try {
-            var instance = this.instance;
+            instance = this.instance;
 
             instance.option('dataSource', appointments);
             this.scheduler.appointments.compact.click();

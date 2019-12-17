@@ -1005,7 +1005,7 @@ QUnit.test('seriesTemplate, incorrect nameField', function(assert) {
     assert.ok(!series.length);
 });
 
-var checkPoints = function(assert, series, argumentArray, valueArray) {
+const checkPoints = function(assert, series, argumentArray, valueArray) {
     for(let i = 0; i < series.getPoints().length; i++) {
         assert.equal(series.getPoints()[i].argument, argumentArray[i]);
         assert.equal(series.getPoints()[i].value, valueArray[i]);

@@ -133,7 +133,7 @@ QUnit.test('renderWhen option (deferred)', function(assert) {
             done();
         }
     };
-    var $test = $('#renderWhen');
+    const $test = $('#renderWhen');
 
     $test
         .find('.defer-rendering')
@@ -160,7 +160,7 @@ QUnit.test('renderWhen option (boolean)', function(assert) {
             done();
         }
     };
-    var $test = $('#renderWhen');
+    const $test = $('#renderWhen');
 
     const deferRendering = $test
         .find('.defer-rendering')
@@ -190,7 +190,7 @@ QUnit.test('children are hidden while pending rendering', function(assert) {
             done();
         }
     };
-    var $test = $('#hiddenUntilRendered');
+    const $test = $('#hiddenUntilRendered');
 
     $test
         .find('.defer-rendering')
@@ -328,9 +328,9 @@ QUnit.test('loading state with rendered content', function(assert) {
             renderCount++;
         }
     };
-    var $test = $('#showLoadIndicator');
+    const $test = $('#showLoadIndicator');
 
-    var deferRendering = $test
+    const deferRendering = $test
         .find('.defer-rendering')
         .dxDeferRendering(options)
         .dxDeferRendering('instance');
@@ -354,7 +354,7 @@ QUnit.test('should support Promise/A+ standard', function(assert) {
             assert.equal($test.find('.dx-pending-rendering-manual').length, 0);
         }
     };
-    var $test = $('#renderWhen');
+    const $test = $('#renderWhen');
 
     $test
         .find('.defer-rendering')

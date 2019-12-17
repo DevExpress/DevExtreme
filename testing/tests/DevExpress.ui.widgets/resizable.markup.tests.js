@@ -29,7 +29,7 @@ QUnit.test('resizable should have correct handle for handles', function(assert) 
         return $handle.length === 1;
     };
 
-    var $resizable = $('#resizable').dxResizable({ handles: 'all' });
+    const $resizable = $('#resizable').dxResizable({ handles: 'all' });
     const resizable = $resizable.dxResizable('instance');
 
     assert.ok(isHandleExist('top'), 'top handle exists');

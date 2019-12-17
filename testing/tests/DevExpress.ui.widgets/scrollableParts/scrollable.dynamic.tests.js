@@ -80,7 +80,7 @@ QUnit.test('inertia', function(assert) {
     });
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
     let location;
-    var distance = -10;
+    const distance = -10;
 
     mouse
         .down()
@@ -138,7 +138,7 @@ QUnit.test('no inertia when gesture end is deferred', function(assert) {
 
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const mouse = pointerMock($content);
-    var moveDistance = -10;
+    const moveDistance = -10;
     const moveDuration = 10;
 
     mouse
@@ -268,7 +268,7 @@ QUnit.test('bounce bottom', function(assert) {
         inertiaEnabled: false
     });
 
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const mouse = pointerMock($content);
 
     mouse

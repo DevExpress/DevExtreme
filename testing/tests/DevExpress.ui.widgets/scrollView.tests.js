@@ -211,9 +211,9 @@ QUnit.test('bottom position calculation', function(assert) {
         }
     });
 
-    var $container = $scrollView.find('.dx-scrollable-container');
-    var $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+    const $container = $scrollView.find('.dx-scrollable-container');
+    const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
     const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
     pointerMock($content)
@@ -477,7 +477,7 @@ QUnit.test('pulling down without release', function(assert) {
         }
     });
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+    const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
     pointerMock($content)
         .start()
@@ -596,8 +596,8 @@ QUnit.test('pulled down adds loading state', function(assert) {
         }
     });
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
-    var $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+    const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+    const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
     pointerMock($content)
         .start()
@@ -625,8 +625,8 @@ QUnit.test('release cause release state', function(assert) {
         }
     });
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
-    var $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+    const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+    const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
     pointerMock($content)
         .start()
@@ -683,7 +683,7 @@ QUnit.test('pulled down adds loading state for Material theme', function(assert)
     });
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
-    var $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+    const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
     pointerMock($content)
         .start()
@@ -720,8 +720,8 @@ QUnit.test('scrollview locked while pulldown loading', function(assert) {
     });
 
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
-    var mouse = pointerMock($content).start();
+    const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+    const mouse = pointerMock($content).start();
 
     mouse
         .down()
@@ -741,8 +741,8 @@ QUnit.test('scrollview onReachBottom action fired when bottom position is reache
         }
     });
 
-    var $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
     const mouse = pointerMock($content).start();
 
     mouse
@@ -772,7 +772,7 @@ QUnit.test('scrollview should go to released state if release method was called 
             }
         }
     });
-    var scrollView = $scrollView.dxScrollView('instance');
+    const scrollView = $scrollView.dxScrollView('instance');
 
     scrollView.toggleLoading(true);
     scrollView.scrollTo({ x: 0, y: 220 });
@@ -794,7 +794,7 @@ QUnit.test('onReachBottom should not be called when scroll delta is 0', function
             done();
         }
     });
-    var scrollView = $scrollView.dxScrollView('instance');
+    const scrollView = $scrollView.dxScrollView('instance');
 
     scrollView.scrollTo({ x: 0, y: 150 });
     $(scrollView.content()).trigger('scroll');
@@ -825,8 +825,8 @@ QUnit.test('scrollview locked while loading', function(assert) {
     });
 
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
-    var mouse = pointerMock($content).start();
+    const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+    const mouse = pointerMock($content).start();
 
     mouse
         .down()
@@ -852,8 +852,8 @@ QUnit.test('release after loading cause bounce to the bottom bound', function(as
         }
     });
 
-    var $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
 
     pointerMock($content)
         .start()
@@ -981,7 +981,7 @@ QUnit.test('moving scrollView moves scrollbar in correct position', function(ass
 
     const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
     const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var $scroll = $scrollView.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scroll = $scrollView.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.empty().height(contentHeight);
@@ -1063,7 +1063,7 @@ QUnit.test('release', function(assert) {
     });
 
     const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+    const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
     pointerMock($content)
         .start()
@@ -1175,11 +1175,11 @@ QUnit.test('release calls update', function(assert) {
         }
     });
 
-    var $container = $scrollView.find('.dx-scrollable-container');
-    var $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollView.find('.dx-scrollable-container');
+    const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
-    var mouse = pointerMock($content).start();
+    const mouse = pointerMock($content).start();
 
     mouse
         .down()
@@ -1206,10 +1206,10 @@ QUnit.test('release calls update for scrollbar', function(assert) {
         }
     });
 
-    var $container = $scrollView.find('.dx-scrollable-container');
-    var $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
+    const $container = $scrollView.find('.dx-scrollable-container');
+    const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
     const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
-    var $scroll = $scrollView.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scroll = $scrollView.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     pointerMock($content)
         .start()
@@ -1272,9 +1272,9 @@ QUnit.test('toggleLoading turns off reachBottom behavior', function(assert) {
         }
     });
 
-    var $container = $scrollView.find('.dx-scrollable-container');
-    var $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    var $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+    const $container = $scrollView.find('.dx-scrollable-container');
+    const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
     const mouse = pointerMock($content)
         .start()
@@ -1350,7 +1350,7 @@ QUnit.test('refresh show load panel', function(assert) {
         }
     }).dxScrollView('instance');
 
-    var loadPanel = $scrollView.find('.' + SCROLLVIEW_LOADPANEL).dxLoadPanel('instance');
+    const loadPanel = $scrollView.find('.' + SCROLLVIEW_LOADPANEL).dxLoadPanel('instance');
 
     scrollView.refresh();
 
@@ -1668,9 +1668,9 @@ QUnit.test('onPullDown action', function(assert) {
     });
 
     const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
-    var $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
-    var topPocketHeight = $topPocket.height();
+    const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+    const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+    const topPocketHeight = $topPocket.height();
 
 
     const pointer = pointerMock($container).start().down();
@@ -1693,7 +1693,7 @@ QUnit.test('release', function(assert) {
             });
         }
     });
-    var scrollView = $scrollView.dxScrollView('instance');
+    const scrollView = $scrollView.dxScrollView('instance');
 
     const $wrapper = $scrollView.find('.' + SCROLLABLE_WRAPPER_CLASS);
     const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
@@ -1941,7 +1941,7 @@ QUnit.test('release', function(assert) {
         }
     });
 
-    var scrollView = $scrollView.dxScrollView('instance');
+    const scrollView = $scrollView.dxScrollView('instance');
 
     const $pullDown = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
     const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);

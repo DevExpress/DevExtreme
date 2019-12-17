@@ -112,6 +112,7 @@ QUnit.test('Render when summary is defined', function(assert) {
 
 // T298904
 QUnit.test('rowClick event when summary is defined', function(assert) {
+    const rowClickArgs = [];
     this.options = {
         onRowClick: function(e) {
             rowClickArgs.push(e);
@@ -120,12 +121,9 @@ QUnit.test('rowClick event when summary is defined', function(assert) {
 
     // arrange
     const footerView = this.createFooterView(this.defaultFooterOptions);
-    let $summary;
-    var rowClickArgs = [];
-
 
     footerView.render($('#container'));
-    $summary = $('.dx-datagrid-summary-item');
+    const $summary = $('.dx-datagrid-summary-item');
 
     // act
     $summary.eq(1).trigger('dxclick');

@@ -764,7 +764,7 @@ QUnit.test('onAppointmentDblClick should fires when item is dbl clicked', functi
         }
     });
 
-    var $item = $('.dx-scheduler-appointment').eq(0);
+    const $item = $('.dx-scheduler-appointment').eq(0);
     $($item).trigger(dblclickEvent.name);
 });
 

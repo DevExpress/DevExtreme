@@ -106,7 +106,7 @@ const createPoint = function() {
     return stub;
 };
 
-var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint()];
+const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint()];
 
 function checkElementPoints(assert, elementPoints, expectedPoints, defaultCoord, comment) {
     assert.ok(elementPoints, comment);

@@ -478,6 +478,7 @@ QUnit.test('Post process of data with different dataType (same domain)', functio
     ];
     let error;
     let status;
+    let i;
     const setResult = function(data) {
         result[i] = data;
     };
@@ -487,7 +488,7 @@ QUnit.test('Post process of data with different dataType (same domain)', functio
         status = statusText;
     };
 
-    for(var i = 0; i < dataTypes.length; i++) {
+    for(i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: '/json-url',
             dataType: dataTypes[i].type

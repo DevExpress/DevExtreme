@@ -68,7 +68,7 @@ QUnit.test('stop', function(assert) {
             assert.ok(false, 'complete shouldn`t be fired');
         }
     });
-    var animator = new TestAnimator();
+    const animator = new TestAnimator();
 
     animator.start();
     this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);

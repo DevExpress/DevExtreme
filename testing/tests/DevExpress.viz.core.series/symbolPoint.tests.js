@@ -2569,7 +2569,7 @@ QUnit.test('Get tooltip format object with aggreagation info when format range r
     assert.equal(formatObject.valueText, '10:undefined');
 });
 
-var checkTooltipFormatObject = function(assert, point, argument, value, originalValue, originalArgument, seriesName, percent, total) {
+const checkTooltipFormatObject = function(assert, point, argument, value, originalValue, originalArgument, seriesName, percent, total) {
     assert.equal(point.argument, argument);
     assert.equal(point.value, value);
     assert.equal(point.seriesName, seriesName);

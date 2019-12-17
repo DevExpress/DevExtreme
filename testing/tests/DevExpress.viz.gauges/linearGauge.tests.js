@@ -44,7 +44,7 @@ factory.createIndicator = function(parameters) {
     return item;
 };
 
-var TestElement = Class.inherit({
+const TestElement = Class.inherit({
     ctor: function(parameters) {
         this.renderer = parameters.renderer;
         this.translator = parameters.translator;
@@ -86,7 +86,7 @@ var TestElement = Class.inherit({
     }
 });
 
-var TestPointerElement = TestElement.inherit({
+const TestPointerElement = TestElement.inherit({
     value: function(val) {
         if(arguments.length) {
             val = Number(val);

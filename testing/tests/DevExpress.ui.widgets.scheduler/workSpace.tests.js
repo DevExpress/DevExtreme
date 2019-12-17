@@ -2462,7 +2462,7 @@ QUnit.testStart(function() {
             }
         });
 
-        var $cell = $element.find('.' + CELL_CLASS).eq(0);
+        const $cell = $element.find('.' + CELL_CLASS).eq(0);
         $($cell).trigger('dxclick');
     });
 
@@ -2516,7 +2516,7 @@ QUnit.testStart(function() {
             }
         });
 
-        var $cell = $element.find('.' + CELL_CLASS).eq(1);
+        const $cell = $element.find('.' + CELL_CLASS).eq(1);
         $($cell).trigger('dxcontextmenu');
     });
 

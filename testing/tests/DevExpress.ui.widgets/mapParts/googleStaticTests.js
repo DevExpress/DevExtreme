@@ -32,7 +32,7 @@ const mapUrl = function(map) {
     return backgroundUrl((map.element ? map.$element() : map).find('.' + MAP_CONTAINER_CLASS));
 };
 
-var backgroundUrl = function($element) {
+const backgroundUrl = function($element) {
     return $element.css('backgroundImage').replace(/^url|[("")]/g, '');
 };
 

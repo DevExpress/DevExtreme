@@ -772,7 +772,7 @@ QUnit.test('polymorph widget correctly renders nested widgets', function(assert)
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    let scope = $markup.scope();
 
     scope.$apply(function() {
         scope.disabled = true;
@@ -801,7 +801,7 @@ QUnit.test('dxPopup - bindingOptions for a title property should be worked', fun
 
     initMarkup($markup, controller, this);
 
-    var scope = $markup.scope();
+    let scope = $markup.scope();
 
     const done = assert.async();
     setTimeout(function() {
@@ -1115,7 +1115,7 @@ noModelWidgets.forEach(function(widget) {
 
         initMarkup($markup, controller, this);
 
-        var scope = $markup.scope();
+        let scope = $markup.scope();
         this.clock.tick(300);
 
         const instance = $('.inner-widget').dxTest('instance');

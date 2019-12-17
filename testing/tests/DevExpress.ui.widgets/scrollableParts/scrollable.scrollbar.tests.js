@@ -110,7 +110,7 @@ QUnit.test('scrollbar is hidden when scrolling is completed', function(assert) {
         }
     });
 
-    var scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
 
     pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
         .start()
@@ -277,7 +277,7 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
 
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);

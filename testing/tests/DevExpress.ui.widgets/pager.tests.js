@@ -91,6 +91,8 @@ QUnit.test('Markup init', function(assert) {
 });
 
 QUnit.test('Events are called', function(assert) {
+    let testPageIndex = null;
+    let testPageSize = null;
     const $pager = $('#container').dxPager({
         pageIndexChanged: function(pageIndex) {
             testPageIndex = pageIndex;
@@ -99,8 +101,6 @@ QUnit.test('Events are called', function(assert) {
             testPageSize = pageSize;
         }
     });
-    var testPageIndex = null;
-    var testPageSize = null;
 
     $($pager.find('.dx-page')[1]).trigger('dxclick');
     assert.equal(testPageIndex, 2, 'pageIndex is changed');

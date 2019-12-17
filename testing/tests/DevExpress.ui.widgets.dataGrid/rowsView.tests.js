@@ -358,8 +358,8 @@ QUnit.test('Resized event not raised for grouped column', function(assert) {
         { dataField: 'test2', groupIndex: 0, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test2'); resizedColumnWidths.push(width); }) },
         { dataField: 'test3', groupIndex: null, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test3'); resizedColumnWidths.push(width); }) }
     ]);
-    var resizedColumns = [];
-    var resizedColumnWidths = [];
+    const resizedColumns = [];
+    const resizedColumnWidths = [];
     const testElement = $('#container');
 
     rowsView.render(testElement);
@@ -382,8 +382,8 @@ QUnit.test('Resized event on resize after second render', function(assert) {
     ];
 
     const rowsView = this.createRowsView(this.items, null, columns);
-    var resizedColumns = [];
-    var resizedColumnWidths = [];
+    const resizedColumns = [];
+    const resizedColumnWidths = [];
     const testElement = $('#container');
 
     rowsView.render(testElement);
@@ -407,7 +407,7 @@ QUnit.test('Resized event on second resize not raised', function(assert) {
         { dataField: 'test2', resizedCallbacks: $.Callbacks().add(function() { resizedColumns.push('test2'); }) },
         { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function() { resizedColumns.push('test3'); }) }
     ]);
-    var resizedColumns = [];
+    let resizedColumns = [];
     const testElement = $('#container');
 
     rowsView.render(testElement);
@@ -428,7 +428,7 @@ QUnit.test('Resized event on second resize when container resized and columns wi
         { dataField: 'test2', resizedCallbacks: $.Callbacks().add(function() { resizedColumns.push('test2'); }) },
         { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function() { resizedColumns.push('test3'); }) }
     ]);
-    var resizedColumns = [];
+    let resizedColumns = [];
     const testElement = $('#container');
 
     rowsView.render(testElement);
@@ -454,8 +454,8 @@ QUnit.test('Resized event on update width of column', function(assert) {
     ];
 
     const rowsView = this.createRowsView(this.items, null, columns);
-    var resizedColumns = [];
-    var widths = [];
+    let resizedColumns = [];
+    let widths = [];
     const testElement = $('#container');
 
     rowsView.render(testElement);
@@ -1489,7 +1489,6 @@ QUnit.test('Custom extern column template without allowRenderToDetachedContainer
         cellTemplate: 'testTemplate'
     }]);
     const testElement = $('#container');
-    let cells;
 
     rowsView.component._getTemplate = function() {
         return {
@@ -1504,7 +1503,7 @@ QUnit.test('Custom extern column template without allowRenderToDetachedContainer
 
     // act
 
-    var contentPositionUpdated = false;
+    let contentPositionUpdated = false;
     rowsView._updateContentPosition = function(isRender) {
         if(!isRender) {
             contentPositionUpdated = true;
@@ -1513,7 +1512,7 @@ QUnit.test('Custom extern column template without allowRenderToDetachedContainer
 
     rowsView.render(testElement);
     rowsView.resize();
-    cells = testElement.find('td');
+    const cells = testElement.find('td');
 
     // assert
     assert.equal($(cells[0]).text(), 'Custom Template - 1');
@@ -4158,7 +4157,7 @@ QUnit.test('Touch click on cell should raise rowClick with correct target argume
 
     this.rowsView.render(testElement);
 
-    var $targetTouchCell = testElement.find('tbody > tr').eq(1).children().eq(1);
+    const $targetTouchCell = testElement.find('tbody > tr').eq(1).children().eq(1);
     const $targetClickCell = testElement.find('tbody > tr').eq(0).children().eq(1);
 
     // fix wrong clickEmitter prevented state after running another tests

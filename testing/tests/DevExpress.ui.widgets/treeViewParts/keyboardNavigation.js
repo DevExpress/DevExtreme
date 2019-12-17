@@ -766,7 +766,7 @@ QUnit.test('T179601', function(assert) {
 
     $item.trigger('dxpointerdown');
 
-    var actualSelectedState = true;
+    let actualSelectedState = true;
     keyboard.keyDown('space');
     assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
 

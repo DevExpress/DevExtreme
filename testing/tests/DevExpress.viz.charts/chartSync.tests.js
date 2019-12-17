@@ -1045,7 +1045,7 @@ const environment = {
         assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
-    var testEverythingWasDrawn = function(assert, chart, options) {
+    const testEverythingWasDrawn = function(assert, chart, options) {
         options = options || {};
         const firstDraw = options.firstDraw;
         const withNewData = options.withNewData;
@@ -1091,7 +1091,7 @@ const environment = {
         }
     };
 
-    var testNothingWasDrawn = function(assert, chart, nothingBut) {
+    const testNothingWasDrawn = function(assert, chart, nothingBut) {
         nothingBut = nothingBut || {};
 
         if(!nothingBut.containerWasKilled) {
@@ -1296,7 +1296,7 @@ const environment = {
     });
 
     QUnit.module('Animation', environment);
-    var DEFAULT_ANIMATION_LIMIT = 300;
+    const DEFAULT_ANIMATION_LIMIT = 300;
 
     QUnit.test('Disabled animation', function(assert) {
         // arrange
@@ -1595,7 +1595,7 @@ const environment = {
     });
 }());
 
-var getPoints = function(count) {
+const getPoints = function(count) {
     let i;
     const points = [];
     for(i = 0; i < count; i++) {

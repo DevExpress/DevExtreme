@@ -1130,13 +1130,13 @@ QUnit.test('Exception shouldn\'t be throw when start value more than end value',
 
         const instance = $rangeSlider.dxRangeSlider('instance');
 
-        var startValue = $('#start-value').dxNumberBox({
+        const startValue = $('#start-value').dxNumberBox({
             onValueChanged: function(data) {
                 instance.option('start', data.value);
             }
         }).dxNumberBox('instance');
 
-        var endValue = $('#end-value').dxNumberBox({
+        const endValue = $('#end-value').dxNumberBox({
             onValueChanged: function(data) {
                 instance.option('end', data.value);
             }

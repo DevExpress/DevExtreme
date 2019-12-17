@@ -408,7 +408,7 @@ QUnit.test('center changing from map', function(assert) {
             d.resolve();
         }
     });
-    var map = $map.dxMap('instance');
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -461,7 +461,7 @@ QUnit.test('zoom changing from map', function(assert) {
             d.resolve();
         }
     });
-    var map = $map.dxMap('instance');
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -565,7 +565,7 @@ QUnit.test('bounds changing from map', function(assert) {
             d.resolve();
         }
     });
-    var map = $map.dxMap('instance');
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {

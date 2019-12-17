@@ -431,7 +431,7 @@ QUnit.test('markers option change should not render incorrect markers', function
             });
         }
     });
-    var map = $map.dxMap('instance');
+    const map = $map.dxMap('instance');
 
     const markers = [MARKERS[0]];
     map.option('markers', markers);
@@ -781,7 +781,7 @@ QUnit.test('routes option change should not render incorrect routes', function(a
             });
         }
     });
-    var map = $map.dxMap('instance');
+    const map = $map.dxMap('instance');
 
     const routes = [ROUTES[0]];
     map.option('routes', routes);

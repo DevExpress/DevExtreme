@@ -1926,7 +1926,7 @@ module('deleting from dataSource', {
         });
 
         let args;
-        var instance = new TestComponent($('#cmp'), {
+        const instance = new TestComponent($('#cmp'), {
             dataSource: dataSource,
             onItemDeleted: function(e) {
                 args = e;
@@ -2127,7 +2127,7 @@ module('reordering of items', () => {
             }
         });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index).get(0);
         };
 

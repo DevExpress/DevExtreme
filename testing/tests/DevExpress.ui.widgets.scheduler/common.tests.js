@@ -2941,7 +2941,7 @@ QUnit.testStart(function() {
             }
         });
 
-        var $item = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
+        const $item = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
         $($item).trigger('dxclick');
     });
 
@@ -3119,7 +3119,7 @@ QUnit.testStart(function() {
             }
         });
 
-        var $item = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
+        const $item = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
         $($item).trigger('dxcontextmenu');
     });
 
@@ -3493,8 +3493,8 @@ QUnit.testStart(function() {
                 assert.deepEqual(zeroDurationFilter[1], ['startDate', startViewDate]);
             }
         });
-        var startViewDate = new Date(2015, 11, 7);
-        var endViewDate = new Date(2015, 11, 14);
+        const startViewDate = new Date(2015, 11, 7);
+        const endViewDate = new Date(2015, 11, 14);
 
         this.createInstance({
             currentDate: new Date(2015, 11, 12),
