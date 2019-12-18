@@ -1,20 +1,20 @@
-var $ = require("jquery");
-var noop = require("core/utils/common").noop;
-var BaseStrategy = require("events/pointer/base");
-var registerEvent = require("events/core/event_registrator");
-var special = require("../../../helpers/eventHelper.js").special;
+var $ = require('jquery');
+var noop = require('core/utils/common').noop;
+var BaseStrategy = require('events/pointer/base');
+var registerEvent = require('events/core/event_registrator');
+var special = require('../../../helpers/eventHelper.js').special;
 
 
 var BubbledTestEventMap = {
-    "dxpointerdown": "testdown",
-    "dxpointermove": "testmove",
-    "dxpointerup": "testup",
-    "dxpointercancel": "testcancel"
+    'dxpointerdown': 'testdown',
+    'dxpointermove': 'testmove',
+    'dxpointerup': 'testup',
+    'dxpointercancel': 'testcancel'
 };
 
 var NoBubbledTestEventMap = {
-    "dxpointerenter": "testenter",
-    "dxpointerleave": "testleave"
+    'dxpointerenter': 'testenter',
+    'dxpointerleave': 'testleave'
 };
 
 var TestEventMap = $.extend({},
@@ -23,7 +23,7 @@ var TestEventMap = $.extend({},
 );
 
 
-QUnit.module("base events", {
+QUnit.module('base events', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -41,14 +41,14 @@ QUnit.module("base events", {
 });
 
 $.each({
-    "dxpointerdown": [0, 1, 1, 1],
-    "dxpointermove": [0, 0, 1, 1],
-    "dxpointerup": [0, 0, 0, 1]
+    'dxpointerdown': [0, 1, 1, 1],
+    'dxpointermove': [0, 0, 1, 1],
+    'dxpointerup': [0, 0, 0, 1]
 }, function(eventName, assertions) {
-    QUnit.test("'" + eventName + "' event triggers", function(assert) {
+    QUnit.test('\'' + eventName + '\' event triggers', function(assert) {
         var triggered = 0;
 
-        var $element = $("#element");
+        var $element = $('#element');
         $element.on(eventName, function(e) {
             triggered++;
             assert.strictEqual(e.target, $element[0]);
@@ -56,27 +56,27 @@ $.each({
 
         assert.equal(triggered, assertions[0]);
 
-        $element.trigger("testdown");
+        $element.trigger('testdown');
         assert.equal(triggered, assertions[1]);
 
-        $element.trigger("testmove");
+        $element.trigger('testmove');
         assert.equal(triggered, assertions[2]);
 
-        $element.trigger("testup");
+        $element.trigger('testup');
         assert.equal(triggered, assertions[3]);
     });
 });
 
 $.each(TestEventMap, function(pointerEvent, originalEvent) {
-    QUnit.test("'" + pointerEvent + "' event should be prevented if original event was prevented", function(assert) {
-        var $element = $("#element");
+    QUnit.test('\'' + pointerEvent + '\' event should be prevented if original event was prevented', function(assert) {
+        var $element = $('#element');
 
         $element.on(originalEvent, function(e) {
             e.preventDefault();
         });
 
         $element.on(pointerEvent, function(e) {
-            assert.strictEqual(e.isDefaultPrevented(), true, "'" + pointerEvent + "' event was prevented");
+            assert.strictEqual(e.isDefaultPrevented(), true, '\'' + pointerEvent + '\' event was prevented');
         });
 
         $element.trigger(originalEvent);
@@ -84,15 +84,15 @@ $.each(TestEventMap, function(pointerEvent, originalEvent) {
 });
 
 $.each(NoBubbledTestEventMap, function(pointerEvent, originalEvent) {
-    QUnit.test("'" + pointerEvent + "' event should not bubble", function(assert) {
-        var $element = $("#element");
+    QUnit.test('\'' + pointerEvent + '\' event should not bubble', function(assert) {
+        var $element = $('#element');
         var counter = 0;
         $(document).on(originalEvent, function(e) {
             counter++;
         });
 
         $element.on(pointerEvent, function(e) {
-            assert.strictEqual(counter, 0, "'" + pointerEvent + "' did not bubble");
+            assert.strictEqual(counter, 0, '\'' + pointerEvent + '\' did not bubble');
         });
 
         $element.trigger(originalEvent);
@@ -100,28 +100,28 @@ $.each(NoBubbledTestEventMap, function(pointerEvent, originalEvent) {
         $(document).off(originalEvent);
     });
 
-    QUnit.test("'" + pointerEvent + "' event should have delegated subscriptions", function(assert) {
-        var $element = $("#element");
+    QUnit.test('\'' + pointerEvent + '\' event should have delegated subscriptions', function(assert) {
+        var $element = $('#element');
 
-        $element.on(pointerEvent, "#delegated", function(e) {
-            assert.strictEqual(e.originalEvent.delegateTarget.id, "element", "'" + pointerEvent + "'  have subscription");
+        $element.on(pointerEvent, '#delegated', function(e) {
+            assert.strictEqual(e.originalEvent.delegateTarget.id, 'element', '\'' + pointerEvent + '\'  have subscription');
         });
 
 
-        $element.children("#delegated").trigger(originalEvent);
+        $element.children('#delegated').trigger(originalEvent);
     });
 });
 
 $.each(BubbledTestEventMap, function(pointerEvent, originalEvent) {
-    QUnit.test("'" + pointerEvent + "' event should bubble", function(assert) {
-        var $element = $("#element");
+    QUnit.test('\'' + pointerEvent + '\' event should bubble', function(assert) {
+        var $element = $('#element');
         var counter = 0;
         $(document).on(originalEvent, function(e) {
             counter++;
         });
 
         $element.on(pointerEvent, function(e) {
-            assert.strictEqual(counter, 1, "'" + pointerEvent + "' bubbled");
+            assert.strictEqual(counter, 1, '\'' + pointerEvent + '\' bubbled');
         });
 
         $element.trigger(originalEvent);
@@ -129,125 +129,125 @@ $.each(BubbledTestEventMap, function(pointerEvent, originalEvent) {
         $(document).off(originalEvent);
     });
 
-    QUnit.test("'" + pointerEvent + "' event should not have delegated subscriptions", function(assert) {
-        var $element = $("#element");
+    QUnit.test('\'' + pointerEvent + '\' event should not have delegated subscriptions', function(assert) {
+        var $element = $('#element');
 
-        $element.on(pointerEvent, "#delegated", function(e) {
-            assert.strictEqual(e.originalEvent.delegateTarget.id, undefined, "'" + pointerEvent + "' not have subscription");
+        $element.on(pointerEvent, '#delegated', function(e) {
+            assert.strictEqual(e.originalEvent.delegateTarget.id, undefined, '\'' + pointerEvent + '\' not have subscription');
         });
 
-        $element.children("#delegated").trigger(originalEvent);
+        $element.children('#delegated').trigger(originalEvent);
     });
 });
 
-QUnit.test("event trigger order", function(assert) {
+QUnit.test('event trigger order', function(assert) {
     var LOG = [],
         log = function(e) {
             LOG.push(e.type);
         };
 
-    var $element = $("#element");
+    var $element = $('#element');
     $element
-        .on("testdown testup", log)
-        .on("dxpointerdown dxpointerup", log)
-        .on("testdown testup", log);
+        .on('testdown testup', log)
+        .on('dxpointerdown dxpointerup', log)
+        .on('testdown testup', log);
 
     $element
-        .trigger("testdown")
-        .trigger("testup");
+        .trigger('testdown')
+        .trigger('testup');
 
     assert.deepEqual(LOG, [
-        "testdown",
-        "testdown",
-        "dxpointerdown",
-        "testup",
-        "testup",
-        "dxpointerup"
+        'testdown',
+        'testdown',
+        'dxpointerdown',
+        'testup',
+        'testup',
+        'dxpointerup'
     ]);
 });
 
-QUnit.test("pointer events should unsubscribe on .off method", function(assert) {
-    var $element = $("#element"),
+QUnit.test('pointer events should unsubscribe on .off method', function(assert) {
+    var $element = $('#element'),
         getEvents = function() {
-            return $.map($._data($element.get(0), "events") || [], function(i) { return i; });
+            return $.map($._data($element.get(0), 'events') || [], function(i) { return i; });
         };
 
     assert.equal(getEvents().length, 0);
 
     $element
-        .on("dxpointerdown dxpointermove dxpointerup", noop)
-        .off("dxpointerdown dxpointermove dxpointerup");
+        .on('dxpointerdown dxpointermove dxpointerup', noop)
+        .off('dxpointerdown dxpointermove dxpointerup');
 
     assert.equal(getEvents().length, 0);
 });
 
-QUnit.test("one pointer event should not unsubscribe another events", function(assert) {
+QUnit.test('one pointer event should not unsubscribe another events', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element");
+    var $element = $('#element');
 
     $element
-        .on("dxpointerdown dxpointerup", function(e) {
-            assert.equal(e.type, "dxpointerup");
+        .on('dxpointerdown dxpointerup', function(e) {
+            assert.equal(e.type, 'dxpointerup');
         })
-        .off("dxpointerdown");
+        .off('dxpointerdown');
 
-    $element.trigger("dxpointerdown");
-    $element.trigger("dxpointerup");
+    $element.trigger('dxpointerdown');
+    $element.trigger('dxpointerup');
 });
 
-QUnit.test("empty original event should not unsubscribe the whole namespace", function(assert) {
+QUnit.test('empty original event should not unsubscribe the whole namespace', function(assert) {
     assert.expect(1);
 
-    var element = document.getElementById("element"),
+    var element = document.getElementById('element'),
         $element = $(element);
 
     var handlerSpy = sinon.spy();
-    $element.on("any.dxPointerEvents", handlerSpy);
+    $element.on('any.dxPointerEvents', handlerSpy);
 
-    var strategy = new BaseStrategy("other", "");
+    var strategy = new BaseStrategy('other', '');
     strategy.noBubble = true;
     strategy.teardown($element);
 
-    $element.trigger("any.dxPointerEvents");
+    $element.trigger('any.dxPointerEvents');
 
-    assert.ok(handlerSpy.calledOnce, "handlers for '.dxPointerEvents' remain");
+    assert.ok(handlerSpy.calledOnce, 'handlers for \'.dxPointerEvents\' remain');
 });
 
-QUnit.test("event is triggered one time after refresh", function(assert) {
+QUnit.test('event is triggered one time after refresh', function(assert) {
     assert.expect(1);
 
-    var $element = $("#element");
+    var $element = $('#element');
 
     $element
-        .on("dxpointerdown", function(e) {
+        .on('dxpointerdown', function(e) {
             assert.ok(true);
         })
-        .off("dxpointerdown")
-        .on("dxpointerdown", function(e) {
+        .off('dxpointerdown')
+        .on('dxpointerdown', function(e) {
             assert.ok(true);
         });
 
-    $element.trigger("dxpointerdown");
+    $element.trigger('dxpointerdown');
 });
 
-QUnit.test("pointer event base strategy should have 'setup' implementation, because jQuery adds a browser event via addEventListener/attachEvent otherwise (T208653)", function(assert) {
-    assert.ok($.isFunction((new BaseStrategy("", "")).setup));
+QUnit.test('pointer event base strategy should have \'setup\' implementation, because jQuery adds a browser event via addEventListener/attachEvent otherwise (T208653)', function(assert) {
+    assert.ok($.isFunction((new BaseStrategy('', '')).setup));
 });
 
-QUnit.test("pointer events should correctly unsubscribe events with target", function(assert) {
-    var $element = $("#element"),
+QUnit.test('pointer events should correctly unsubscribe events with target', function(assert) {
+    var $element = $('#element'),
         getEvents = function() {
-            return $.map($._data($element.get(0), "events") || [], function(i) { return i; });
+            return $.map($._data($element.get(0), 'events') || [], function(i) { return i; });
         };
 
     assert.equal(getEvents().length, 0);
 
     $element
-        .on("dxpointerenter dxpointerleave", "#target1", noop)
-        .on("dxpointerenter dxpointerleave", "#target2", noop)
-        .off("dxpointerenter dxpointerleave", "#target1")
-        .off("dxpointerenter dxpointerleave", "#target2");
+        .on('dxpointerenter dxpointerleave', '#target1', noop)
+        .on('dxpointerenter dxpointerleave', '#target2', noop)
+        .off('dxpointerenter dxpointerleave', '#target1')
+        .off('dxpointerenter dxpointerleave', '#target2');
 
     assert.equal(getEvents().length, 0);
 });

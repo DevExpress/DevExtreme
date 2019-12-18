@@ -1,47 +1,47 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = "#7ab8eb",
-    BACKGROUND_COLOR = "#fff",
-    TITLE_COLOR = "#333",
-    SUBTITLE_COLOR = "#99a1a8",
-    TEXT_COLOR = "#707070",
-    BORDER_COLOR = "#e8eaeb";
+    ACCENT_COLOR = '#7ab8eb',
+    BACKGROUND_COLOR = '#fff',
+    TITLE_COLOR = '#333',
+    SUBTITLE_COLOR = '#99a1a8',
+    TEXT_COLOR = '#707070',
+    BORDER_COLOR = '#e8eaeb';
 
 registerTheme({
-    name: "generic.softblue",
-    defaultPalette: "Soft Blue",
+    name: 'generic.softblue',
+    defaultPalette: 'Soft Blue',
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
     secondaryTitleColor: SUBTITLE_COLOR,
     gridColor: BORDER_COLOR,
     axisColor: TEXT_COLOR,
-    "export": {
+    'export': {
         backgroundColor: BACKGROUND_COLOR,
         font: {
             color: TITLE_COLOR
         },
         button: {
-            "default": {
+            'default': {
                 color: TITLE_COLOR,
-                borderColor: "#c9d0d4",
+                borderColor: '#c9d0d4',
                 backgroundColor: BACKGROUND_COLOR
             },
             hover: {
                 color: TITLE_COLOR,
-                borderColor: "#a7b2b9",
-                backgroundColor: "#e6e6e6"
+                borderColor: '#a7b2b9',
+                backgroundColor: '#e6e6e6'
             },
             focus: {
                 color: TITLE_COLOR,
-                borderColor: "#82929b",
-                backgroundColor: "#e6e6e6"
+                borderColor: '#82929b',
+                backgroundColor: '#e6e6e6'
             },
             active: {
                 color: TITLE_COLOR,
-                borderColor: "#82929b",
-                backgroundColor: "#d4d4d4"
+                borderColor: '#82929b',
+                backgroundColor: '#d4d4d4'
             }
         }
     },
@@ -59,7 +59,7 @@ registerTheme({
             color: TITLE_COLOR
         }
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -75,7 +75,7 @@ registerTheme({
             }
         },
         commonAxisSettings: {
-            breakStyle: { color: "#cfd2d3" }
+            breakStyle: { color: '#cfd2d3' }
         },
         commonAnnotationSettings: {
             color: BACKGROUND_COLOR,
@@ -89,7 +89,7 @@ registerTheme({
     },
     rangeSelector: {
         scale: {
-            breakStyle: { color: "#cfd2d3" },
+            breakStyle: { color: '#cfd2d3' },
             tick: {
                 opacity: 0.12
             }
@@ -105,8 +105,8 @@ registerTheme({
     },
     sparkline: {
         pointColor: BACKGROUND_COLOR,
-        minColor: "#f0ad4e",
-        maxColor: "#d9534f"
+        minColor: '#f0ad4e',
+        maxColor: '#d9534f'
     },
     treeMap: {
         group: {
@@ -123,14 +123,14 @@ registerTheme({
     },
     gauge: {
         valueIndicators: {
-            "rangebar": {
+            'rangebar': {
                 color: ACCENT_COLOR
             },
-            "textcloud": {
+            'textcloud': {
                 color: ACCENT_COLOR
             }
         }
     }
-}, "generic.light");
+}, 'generic.light');
 
-registerThemeAlias("generic.softblue.compact", "generic.softblue");
+registerThemeAlias('generic.softblue.compact', 'generic.softblue');

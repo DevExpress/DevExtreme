@@ -1,50 +1,50 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import Guid from "../../core/guid";
-import registerComponent from "../../core/component_registrator";
-import { noop } from "../../core/utils/common";
-import { isObject, isRenderer, isWindow, isFunction, isPlainObject, isDefined } from "../../core/utils/type";
-import { contains, getPublicElement } from "../../core/utils/dom";
-import { each } from "../../core/utils/iterator";
-import { inArray } from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
-import { hasWindow } from "../../core/utils/window";
-import fx from "../../animation/fx";
-import { setup } from "../../animation/position";
-import devices from "../../core/devices";
-import { addNamespace } from "../../events/utils";
-import Overlay from "../overlay";
-import MenuBase from "./ui.menu_base";
-import { Deferred } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import Guid from '../../core/guid';
+import registerComponent from '../../core/component_registrator';
+import { noop } from '../../core/utils/common';
+import { isObject, isRenderer, isWindow, isFunction, isPlainObject, isDefined } from '../../core/utils/type';
+import { contains, getPublicElement } from '../../core/utils/dom';
+import { each } from '../../core/utils/iterator';
+import { inArray } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
+import fx from '../../animation/fx';
+import { setup } from '../../animation/position';
+import devices from '../../core/devices';
+import { addNamespace } from '../../events/utils';
+import Overlay from '../overlay';
+import MenuBase from './ui.menu_base';
+import { Deferred } from '../../core/utils/deferred';
 
-const DX_MENU_CLASS = "dx-menu";
-const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item";
-const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + "-expanded";
-const DX_MENU_PHONE_CLASS = "dx-menu-phone-overlay";
-const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container";
-const DX_MENU_ITEM_WRAPPER_CLASS = DX_MENU_ITEM_CLASS + "-wrapper";
-const DX_SUBMENU_CLASS = "dx-submenu";
-const DX_CONTEXT_MENU_CLASS = "dx-context-menu";
-const DX_HAS_CONTEXT_MENU_CLASS = "dx-has-context-menu";
-const DX_STATE_DISABLED_CLASS = "dx-state-disabled";
-const DX_STATE_FOCUSED_CLASS = "dx-state-focused";
-const DX_STATE_HOVER_CLASS = "dx-state-hover";
+const DX_MENU_CLASS = 'dx-menu';
+const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
+const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + '-expanded';
+const DX_MENU_PHONE_CLASS = 'dx-menu-phone-overlay';
+const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + '-items-container';
+const DX_MENU_ITEM_WRAPPER_CLASS = DX_MENU_ITEM_CLASS + '-wrapper';
+const DX_SUBMENU_CLASS = 'dx-submenu';
+const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
+const DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
+const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
+const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
+const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
-const FOCUS_UP = "up";
-const FOCUS_DOWN = "down";
-const FOCUS_LEFT = "left";
-const FOCUS_RIGHT = "right";
-const FOCUS_FIRST = "first";
-const FOCUS_LAST = "last";
+const FOCUS_UP = 'up';
+const FOCUS_DOWN = 'down';
+const FOCUS_LEFT = 'left';
+const FOCUS_RIGHT = 'right';
+const FOCUS_FIRST = 'first';
+const FOCUS_LAST = 'last';
 
 const ACTIONS = [
-    "onShowing", "onShown", "onSubmenuCreated",
-    "onHiding", "onHidden", "onPositioning", "onLeftFirstItem",
-    "onLeftLastItem", "onCloseRootSubmenu", "onExpandLastSubmenu"
+    'onShowing', 'onShown', 'onSubmenuCreated',
+    'onHiding', 'onHidden', 'onPositioning', 'onLeftFirstItem',
+    'onLeftLastItem', 'onCloseRootSubmenu', 'onExpandLastSubmenu'
 ];
 const LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST];
-const DEFAULT_SHOW_EVENT = "dxcontextmenu";
+const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
 
 class ContextMenu extends MenuBase {
     getShowEvent(showEventOption) {
@@ -67,6 +67,11 @@ class ContextMenu extends MenuBase {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            /**
+             * @name dxContextMenuOptions.dataSource
+             * @type string|Array<dxContextMenuItem>|DataSource|DataSourceOptions
+             * @default null
+             */
             /**
             * @name dxContextMenuOptions.items
             * @type Array<dxContextMenuItem>
@@ -104,8 +109,8 @@ class ContextMenu extends MenuBase {
             * @ref
             */
             position: {
-                at: "top left",
-                my: "top left"
+                at: 'top left',
+                my: 'top left'
             },
 
             /**
@@ -161,7 +166,7 @@ class ContextMenu extends MenuBase {
             * @type Enums.ContextMenuSubmenuDirection
             * @default "auto"
             */
-            submenuDirection: "auto",
+            submenuDirection: 'auto',
 
             /**
             * @name dxContextMenuOptions.visible
@@ -252,7 +257,7 @@ class ContextMenu extends MenuBase {
 
     _supportedKeys() {
         const selectItem = () => {
-            const $item = $(this.option("focusedElement"));
+            const $item = $(this.option('focusedElement'));
 
             this.hide();
 
@@ -290,7 +295,7 @@ class ContextMenu extends MenuBase {
         const $items = this._getItemsByLocation(location);
         const $oldTarget = this._getActiveItem(true);
         const $hoveredItem = this.itemsContainer().find(`.${DX_STATE_HOVER_CLASS}`);
-        const $focusedItem = $(this.option("focusedElement"));
+        const $focusedItem = $(this.option('focusedElement'));
         const $activeItemHighlighted = !!($focusedItem.length || $hoveredItem.length);
         let $newTarget;
 
@@ -310,10 +315,10 @@ class ContextMenu extends MenuBase {
                 }
                 break;
             case FOCUS_RIGHT:
-                $newTarget = this.option("rtlEnabled") ? this._hideSubmenuHandler() : this._expandSubmenuHandler($items, location);
+                $newTarget = this.option('rtlEnabled') ? this._hideSubmenuHandler() : this._expandSubmenuHandler($items, location);
                 break;
             case FOCUS_LEFT:
-                $newTarget = this.option("rtlEnabled") ? this._expandSubmenuHandler($items, location) : this._hideSubmenuHandler();
+                $newTarget = this.option('rtlEnabled') ? this._expandSubmenuHandler($items, location) : this._hideSubmenuHandler();
                 break;
             case FOCUS_FIRST:
                 $newTarget = $items.first();
@@ -326,7 +331,7 @@ class ContextMenu extends MenuBase {
         }
 
         if($newTarget.length !== 0) {
-            this.option("focusedElement", getPublicElement($newTarget));
+            this.option('focusedElement', getPublicElement($newTarget));
         }
     }
 
@@ -379,7 +384,7 @@ class ContextMenu extends MenuBase {
         const $submenu = $curItem.children(`.${DX_SUBMENU_CLASS}`);
 
         if(isItemHasSubmenu && !$curItem.hasClass(DX_STATE_DISABLED_CLASS)) {
-            if(!$submenu.length || $submenu.css("visibility") === "hidden") {
+            if(!$submenu.length || $submenu.css('visibility') === 'hidden') {
                 this._showSubmenu($curItem);
             }
 
@@ -408,7 +413,7 @@ class ContextMenu extends MenuBase {
 
     _render() {
         super._render();
-        this._renderVisibility(this.option("visible"));
+        this._renderVisibility(this.option('visible'));
         this._addWidgetClass();
     }
 
@@ -428,7 +433,7 @@ class ContextMenu extends MenuBase {
 
         const overlayOptions = this._getOverlayOptions();
 
-        this._overlay = this._createComponent($("<div>").appendTo(this._$element), Overlay, overlayOptions);
+        this._overlay = this._createComponent($('<div>').appendTo(this._$element), Overlay, overlayOptions);
 
         let $overlayContent = this._overlay.$content();
         $overlayContent.addClass(DX_CONTEXT_MENU_CLASS);
@@ -450,7 +455,7 @@ class ContextMenu extends MenuBase {
     }
 
     _detachShowContextMenuEvents(target) {
-        const showEvent = this.getShowEvent(this.option("showEvent"));
+        const showEvent = this.getShowEvent(this.option('showEvent'));
 
         if(!showEvent) {
             return;
@@ -467,7 +472,7 @@ class ContextMenu extends MenuBase {
 
     _attachShowContextMenuEvents() {
         const target = this._getTarget();
-        const showEvent = this.getShowEvent(this.option("showEvent"));
+        const showEvent = this.getShowEvent(this.option('showEvent'));
 
         if(!showEvent) {
             return;
@@ -475,14 +480,14 @@ class ContextMenu extends MenuBase {
 
         const eventName = addNamespace(showEvent, this.NAME);
         let contextMenuAction = this._createAction((e) => {
-            const delay = this.getShowDelay(this.option("showEvent"));
+            const delay = this.getShowDelay(this.option('showEvent'));
 
             if(delay) {
                 setTimeout(() => this._show(e.event), delay);
             } else {
                 this._show(e.event);
             }
-        }, { validatingTargetName: "target" });
+        }, { validatingTargetName: 'target' });
 
         const handler = e => contextMenuAction({ event: e, target: $(e.currentTarget) });
 
@@ -507,12 +512,12 @@ class ContextMenu extends MenuBase {
     _renderContainer($wrapper, submenuContainer) {
         const $holder = submenuContainer || this._itemContainer();
 
-        $wrapper = $("<div>");
+        $wrapper = $('<div>');
 
         $wrapper
             .appendTo($holder)
             .addClass(DX_SUBMENU_CLASS)
-            .css("visibility", submenuContainer ? "hidden" : "visible");
+            .css('visibility', submenuContainer ? 'hidden' : 'visible');
 
         let $itemsContainer = super._renderContainer($wrapper);
 
@@ -520,11 +525,11 @@ class ContextMenu extends MenuBase {
             return $itemsContainer;
         }
 
-        if(this.option("width")) {
-            return $itemsContainer.css("minWidth", this.option("width"));
+        if(this.option('width')) {
+            return $itemsContainer.css('minWidth', this.option('width'));
         }
-        if(this.option("height")) {
-            return $itemsContainer.css("minHeight", this.option("height"));
+        if(this.option('height')) {
+            return $itemsContainer.css('minHeight', this.option('height'));
         }
 
         return $itemsContainer;
@@ -540,11 +545,11 @@ class ContextMenu extends MenuBase {
     }
 
     _getOverlayOptions() {
-        const position = this.option("position");
+        const position = this.option('position');
 
         const overlayOptions = {
-            focusStateEnabled: this.option("focusStateEnabled"),
-            animation: this.option("animation"),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            animation: this.option('animation'),
             innerOverlay: true,
             closeOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
             propagateOutsideClick: true,
@@ -554,12 +559,12 @@ class ContextMenu extends MenuBase {
                 at: position.at,
                 my: position.my,
                 of: this._getTarget(),
-                collision: "flipfit"
+                collision: 'flipfit'
             },
             shading: false,
             showTitle: false,
-            height: "auto",
-            width: "auto",
+            height: 'auto',
+            width: 'auto',
             onShown: this._overlayShownActionHandler.bind(this),
             onHiding: this._overlayHidingActionHandler.bind(this),
             onHidden: this._overlayHiddenActionHandler.bind(this)
@@ -576,7 +581,7 @@ class ContextMenu extends MenuBase {
         this._actions.onHiding(arg);
         if(!arg.cancel) {
             this._hideAllShownSubmenus();
-            this._setOptionSilent("visible", false);
+            this._setOptionSilent('visible', false);
         }
     }
 
@@ -585,7 +590,7 @@ class ContextMenu extends MenuBase {
     }
 
     _closeOnOutsideClickHandler(e) {
-        const closeOnOutsideClick = this.option("closeOnOutsideClick");
+        const closeOnOutsideClick = this.option('closeOnOutsideClick');
 
         if(isFunction(closeOnOutsideClick)) {
             return closeOnOutsideClick(e);
@@ -607,7 +612,7 @@ class ContextMenu extends MenuBase {
         const isInnerOverlayClicked = this._isIncludeOverlay($activeItemContainer, $itemContainers) && $clickedItem.length;
 
         if(isInnerOverlayClicked || isRootItemClicked) {
-            if(this._getShowSubmenuMode() === "onClick") {
+            if(this._getShowSubmenuMode() === 'onClick') {
                 this._hideAllShownChildSubmenus($clickedItem);
             }
             return false;
@@ -692,15 +697,15 @@ class ContextMenu extends MenuBase {
     }
 
     _isSubmenuVisible($submenu) {
-        return $submenu.css("visibility") === "visible";
+        return $submenu.css('visibility') === 'visible';
     }
 
     _drawSubmenu($itemElement) {
-        const animation = this.option("animation") ? this.option("animation").show : {};
+        const animation = this.option('animation') ? this.option('animation').show : {};
         const $submenu = $itemElement.children(`.${DX_SUBMENU_CLASS}`);
         const submenuPosition = this._getSubmenuPosition($itemElement);
 
-        if(this._overlay && this._overlay.option("visible")) {
+        if(this._overlay && this._overlay.option('visible')) {
             if(!isDefined(this._shownSubmenus)) {
                 this._shownSubmenus = [];
             }
@@ -721,7 +726,7 @@ class ContextMenu extends MenuBase {
                 }
                 this._animate($submenu, animation);
             }
-            $submenu.css("visibility", "visible");
+            $submenu.css('visibility', 'visible');
         }
     }
 
@@ -730,30 +735,30 @@ class ContextMenu extends MenuBase {
     }
 
     _getSubmenuPosition($rootItem) {
-        const submenuDirection = this.option("submenuDirection").toLowerCase();
+        const submenuDirection = this.option('submenuDirection').toLowerCase();
         const $rootItemWrapper = $rootItem.parent(`.${DX_MENU_ITEM_WRAPPER_CLASS}`);
         let position = {
-            collision: "flip",
+            collision: 'flip',
             of: $rootItemWrapper,
             offset: { h: 0, v: -1 }
         };
 
         switch(submenuDirection) {
-            case "left":
-                position.at = "left top";
-                position.my = "right top";
+            case 'left':
+                position.at = 'left top';
+                position.my = 'right top';
                 break;
-            case "right":
-                position.at = "right top";
-                position.my = "left top";
+            case 'right':
+                position.at = 'right top';
+                position.my = 'left top';
                 break;
             default:
-                if(this.option("rtlEnabled")) {
-                    position.at = "left top";
-                    position.my = "right top";
+                if(this.option('rtlEnabled')) {
+                    position.at = 'left top';
+                    position.my = 'right top';
                 } else {
-                    position.at = "right top";
-                    position.my = "left top";
+                    position.at = 'right top';
+                    position.my = 'left top';
                 }
                 break;
         }
@@ -779,7 +784,7 @@ class ContextMenu extends MenuBase {
             $submenu = $itemElement.find(`.${DX_SUBMENU_CLASS}`);
         }
 
-        if($itemElement.context === $submenu.context && $submenu.css("visibility") === "visible") {
+        if($itemElement.context === $submenu.context && $submenu.css('visibility') === 'visible') {
             return;
         }
 
@@ -794,8 +799,8 @@ class ContextMenu extends MenuBase {
         if($submenu.length === 0) {
             const $prevSubmenu = $($itemElement.parents(`.${DX_SUBMENU_CLASS}`)[0]);
             this._hideSubmenu($prevSubmenu);
-            if(!actionArgs.canceled && this._overlay && this._overlay.option("visible")) {
-                this.option("visible", false);
+            if(!actionArgs.canceled && this._overlay && this._overlay.option('visible')) {
+                this.option('visible', false);
             }
         } else {
             if(this._shownSubmenus && this._shownSubmenus.length > 0) {
@@ -821,7 +826,7 @@ class ContextMenu extends MenuBase {
 
     _hideSubmenuCore($submenu) {
         const index = inArray($submenu, this._shownSubmenus);
-        let animation = this.option("animation") ? this.option("animation").hide : null;
+        let animation = this.option('animation') ? this.option('animation').hide : null;
 
         if(index >= 0) {
             this._shownSubmenus.splice(index, 1);
@@ -829,7 +834,7 @@ class ContextMenu extends MenuBase {
 
         this._stopAnimate($submenu);
         animation && this._animate($submenu, animation);
-        $submenu.css("visibility", "hidden");
+        $submenu.css('visibility', 'hidden');
     }
 
     _stopAnimate($container) {
@@ -860,19 +865,19 @@ class ContextMenu extends MenuBase {
         }
 
         switch(args.name) {
-            case "visible":
+            case 'visible':
                 this._renderVisibility(args.value);
                 break;
-            case "showEvent":
-            case "position":
-            case "submenuDirection":
+            case 'showEvent':
+            case 'position':
+            case 'submenuDirection':
                 this._invalidate();
                 break;
-            case "target":
+            case 'target':
                 args.previousValue && this._detachShowContextMenuEvents(args.previousValue);
                 this._invalidate();
                 break;
-            case "closeOnOutsideClick":
+            case 'closeOnOutsideClick':
                 break;
             default:
                 super._optionChanged(args);
@@ -907,8 +912,8 @@ class ContextMenu extends MenuBase {
                 this._renderItems(this._dataAdapter.getRootNodes());
             }
 
-            this._setOptionSilent("visible", true);
-            this._overlay.option("position", position);
+            this._setOptionSilent('visible', true);
+            this._overlay.option('position', position);
             promise = this._overlay.show();
             event && event.stopPropagation();
 
@@ -921,27 +926,27 @@ class ContextMenu extends MenuBase {
     _setAriaAttributes() {
         this._overlayContentId = `dx-${new Guid()}`;
 
-        this.setAria("owns", this._overlayContentId);
-        this.setAria({ "id": this._overlayContentId, "role": "menu" }, this._overlay.$content());
+        this.setAria('owns', this._overlayContentId);
+        this.setAria({ 'id': this._overlayContentId, 'role': 'menu' }, this._overlay.$content());
     }
 
     _cleanAriaAttributes() {
-        this._overlay && this.setAria("id", null, this._overlay.$content());
-        this.setAria("owns", undefined);
+        this._overlay && this.setAria('id', null, this._overlay.$content());
+        this.setAria('owns', undefined);
     }
 
     _getTarget() {
-        return this.option("target") || this.option("position").of || $(domAdapter.getDocument());
+        return this.option('target') || this.option('position').of || $(domAdapter.getDocument());
     }
 
     _getContextMenuPosition() {
-        return extend({}, this.option("position"), { of: this._getTarget() });
+        return extend({}, this.option('position'), { of: this._getTarget() });
     }
 
     _positionContextMenu(jQEvent) {
         let position = this._getContextMenuPosition();
-        const isInitialPosition = this._isInitialOptionValue("position");
-        const positioningAction = this._createActionByOption("onPositioning", actionArgs);
+        const isInitialPosition = this._isInitialOptionValue('position');
+        const positioningAction = this._createActionByOption('onPositioning', actionArgs);
 
         if(jQEvent && jQEvent.preventDefault && isInitialPosition) {
             position.of = jQEvent;
@@ -971,9 +976,9 @@ class ContextMenu extends MenuBase {
             super._refresh();
         } else {
             if(this._overlay) {
-                const lastPosition = this._overlay.option("position");
+                const lastPosition = this._overlay.option('position');
                 super._refresh();
-                this._overlay && this._overlay.option("position", lastPosition);
+                this._overlay && this._overlay.option('position', lastPosition);
             } else {
                 super._refresh();
             }
@@ -985,11 +990,11 @@ class ContextMenu extends MenuBase {
 
         if(this._overlay) {
             promise = this._overlay.hide();
-            this._setOptionSilent("visible", false);
+            this._setOptionSilent('visible', false);
         }
 
         this._cleanAriaAttributes();
-        this.option("focusedElement", null);
+        this.option('focusedElement', null);
 
         return promise || new Deferred().reject().promise();
     }
@@ -1001,7 +1006,7 @@ class ContextMenu extends MenuBase {
     * @return Promise<void>
     */
     toggle(showing) {
-        const visible = this.option("visible");
+        const visible = this.option('visible');
 
         showing = showing === undefined ? !visible : showing;
 
@@ -1027,6 +1032,6 @@ class ContextMenu extends MenuBase {
     }
 }
 
-registerComponent("dxContextMenu", ContextMenu);
+registerComponent('dxContextMenu', ContextMenu);
 
 module.exports = ContextMenu;

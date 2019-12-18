@@ -26,7 +26,7 @@ virtualScrollingModule.extenders.dataSourceAdapter = extend({}, originalDataSour
     }
 });
 
-gridCore.registerModule("virtualScrolling", extend({}, virtualScrollingModule, {
+gridCore.registerModule('virtualScrolling', extend({}, virtualScrollingModule, {
     defaultOptions: function() {
         return extend(true, oldDefaultOptions(), {
             scrolling: {
@@ -35,7 +35,7 @@ gridCore.registerModule("virtualScrolling", extend({}, virtualScrollingModule, {
                  * @type Enums.TreeListScrollingMode
                  * @default "virtual"
                  */
-                mode: "virtual"
+                mode: 'virtual'
             }
         });
     }

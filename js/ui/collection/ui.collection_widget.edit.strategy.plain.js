@@ -1,11 +1,11 @@
-var inArray = require("../../core/utils/array").inArray,
-    EditStrategy = require("./ui.collection_widget.edit.strategy");
+var inArray = require('../../core/utils/array').inArray,
+    EditStrategy = require('./ui.collection_widget.edit.strategy');
 
 
 var PlainEditStrategy = EditStrategy.inherit({
 
     _getPlainItems: function() {
-        return this._collectionWidget.option("items") || [];
+        return this._collectionWidget.option('items') || [];
     },
 
     getIndexByItemData: function(itemData) {
@@ -49,7 +49,7 @@ var PlainEditStrategy = EditStrategy.inherit({
             cache.keys = keys;
         }
 
-        if(typeof key === "object") {
+        if(typeof key === 'object') {
             for(var i = 0, length = keys.length; i < length; i++) {
                 if(this._equalKeys(key, keys[i])) return i;
             }
@@ -73,7 +73,7 @@ var PlainEditStrategy = EditStrategy.inherit({
     },
 
     _isItemIndex: function(index) {
-        return (typeof index === "number") && Math.round(index) === index;
+        return (typeof index === 'number') && Math.round(index) === index;
     },
 
     _getNormalizedItemIndex: function(itemElement) {

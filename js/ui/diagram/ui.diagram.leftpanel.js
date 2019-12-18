@@ -1,36 +1,36 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
-import DiagramPanel from "./diagram.panel";
-import Accordion from "../accordion";
-import ScrollView from "../scroll_view";
-import { Deferred } from "../../core/utils/deferred";
+import DiagramPanel from './diagram.panel';
+import Accordion from '../accordion';
+import ScrollView from '../scroll_view';
+import { Deferred } from '../../core/utils/deferred';
 
-const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
+const DIAGRAM_LEFT_PANEL_CLASS = 'dx-diagram-left-panel';
 
 class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered", {
-            excludeValidators: ["disabled"]
+        this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered', {
+            excludeValidators: ['disabled']
         });
     }
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_LEFT_PANEL_CLASS);
-        const $scrollViewWrapper = $("<div>")
+        const $scrollViewWrapper = $('<div>')
             .appendTo(this.$element());
 
         this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
 
-        const $accordion = $("<div>")
+        const $accordion = $('<div>')
             .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
         var result = [];
-        var toolboxGroups = this.option("toolboxGroups");
+        var toolboxGroups = this.option('toolboxGroups');
         for(var i = 0; i < toolboxGroups.length; i++) {
             var category = toolboxGroups[i].category;
             var title = toolboxGroups[i].title;
@@ -58,9 +58,9 @@ class DiagramLeftPanel extends DiagramPanel {
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
-            displayExpr: "title",
+            displayExpr: 'title',
             dataSource: data,
-            disabled: this.option("disabled"),
+            disabled: this.option('disabled'),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element, data),
             onContentReady: (e) => {
                 this._updateScrollAnimateSubscription(e.component);
@@ -86,10 +86,10 @@ class DiagramLeftPanel extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "disabled":
+            case 'disabled':
                 this._accordionInstance.option('disabled', args.value);
                 break;
-            case "toolboxGroups":
+            case 'toolboxGroups':
                 this._invalidate();
                 break;
             default:

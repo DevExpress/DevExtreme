@@ -15,7 +15,7 @@ const map = (values, callback) => {
 const each = (values, callback) => {
     if(!values) return;
 
-    if("length" in values) {
+    if('length' in values) {
         for(let i = 0; i < values.length; i++) {
             if(callback.call(values[i], i, values[i]) === false) {
                 break;
@@ -33,7 +33,7 @@ const each = (values, callback) => {
 };
 
 const reverseEach = (array, callback) => {
-    if(!array || !("length" in array) || array.length === 0) return;
+    if(!array || !('length' in array) || array.length === 0) return;
 
     for(let i = array.length - 1; i >= 0; i--) {
         if(callback.call(array[i], i, array[i]) === false) {

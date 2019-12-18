@@ -1,4 +1,4 @@
-var rangeModule = require("viz/translators/range");
+var rangeModule = require('viz/translators/range');
 
 QUnit.module('Life cycle');
 
@@ -429,7 +429,7 @@ QUnit.test('Merge categories', function(assert) {
 
     var checkRules = function(rangeCategories, otherRangeCategories, expected, message) {
     // arrange
-        that.createRange({ categories: rangeCategories, dataType: "datetime" });
+        that.createRange({ categories: rangeCategories, dataType: 'datetime' });
 
         // act
         var returnValue = that.range.addRange({ categories: otherRangeCategories });
@@ -1177,7 +1177,7 @@ QUnit.module('discrete zooming');
 
 QUnit.test('min/max categories after create range with min and max categories', function(assert) {
     // arrange,act
-    var range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: "discrete" });
+    var range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: 'discrete' });
 
     // arrange
     assert.strictEqual(range.minVisible, 'someStartCategories');
@@ -1186,7 +1186,7 @@ QUnit.test('min/max categories after create range with min and max categories', 
 
 QUnit.test('min/max categories after call add range (create without min/max categories)', function(assert) {
     // arrange
-    var range = new rangeModule.Range({ axisType: "discrete" });
+    var range = new rangeModule.Range({ axisType: 'discrete' });
 
     // act
     range.addRange({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories' });
@@ -1198,7 +1198,7 @@ QUnit.test('min/max categories after call add range (create without min/max cate
 
 QUnit.test('min/max categories after call add range (create with min/max categories)', function(assert) {
     // arrange
-    var range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: "discrete" });
+    var range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: 'discrete' });
 
     // act
     range.addRange({ minVisible: 'anotherStartCategories', maxVisible: 'someEndCategories' });

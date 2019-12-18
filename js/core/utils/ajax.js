@@ -1,18 +1,18 @@
-var Deferred = require("./deferred").Deferred;
-var domAdapter = require("../../core/dom_adapter");
-var httpRequest = require("../../core/http_request");
-var windowUtils = require("../../core/utils/window");
+var Deferred = require('./deferred').Deferred;
+var domAdapter = require('../../core/dom_adapter');
+var httpRequest = require('../../core/http_request');
+var windowUtils = require('../../core/utils/window');
 var window = windowUtils.getWindow();
-var extendFromObject = require("./extend").extendFromObject;
-var isDefined = require("./type").isDefined;
-var Promise = require("../polyfills/promise");
-var injector = require("./dependency_injector");
+var extendFromObject = require('./extend').extendFromObject;
+var isDefined = require('./type').isDefined;
+var Promise = require('../polyfills/promise');
+var injector = require('./dependency_injector');
 
-var SUCCESS = "success",
-    ERROR = "error",
-    TIMEOUT = "timeout",
-    NO_CONTENT = "nocontent",
-    PARSER_ERROR = "parsererror";
+var SUCCESS = 'success',
+    ERROR = 'error',
+    TIMEOUT = 'timeout',
+    NO_CONTENT = 'nocontent',
+    PARSER_ERROR = 'parsererror';
 
 
 var isStatusSuccess = function(status) {
@@ -34,17 +34,17 @@ var paramsConvert = function(params) {
         }
 
         if(value === null) {
-            value = "";
+            value = '';
         }
 
-        result.push(encodeURIComponent(name) + "=" + encodeURIComponent(value));
+        result.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
     }
 
-    return result.join("&");
+    return result.join('&');
 };
 
 var createScript = function(options) {
-    var script = domAdapter.createElement("script");
+    var script = domAdapter.createElement('script');
     for(var name in options) {
         script[name] = options[name];
     }
@@ -70,8 +70,8 @@ var evalCrossDomainScript = function(url) {
 
     return new Promise(function(resolve, reject) {
         var events = {
-            "load": resolve,
-            "error": reject
+            'load': resolve,
+            'error': reject
         };
 
         var loadHandler = function(e) {
@@ -89,28 +89,28 @@ var evalCrossDomainScript = function(url) {
 
 var getAcceptHeader = function(options) {
 
-    var dataType = options.dataType || "*",
-        scriptAccept = "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript",
+    var dataType = options.dataType || '*',
+        scriptAccept = 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript',
         accepts = {
-            "*": "*/*",
-            text: "text/plain",
-            html: "text/html",
-            xml: "application/xml, text/xml",
-            json: "application/json, text/javascript",
+            '*': '*/*',
+            text: 'text/plain',
+            html: 'text/html',
+            xml: 'application/xml, text/xml',
+            json: 'application/json, text/javascript',
             jsonp: scriptAccept,
             script: scriptAccept
         };
     extendFromObject(accepts, options.accepts, true);
 
     return accepts[dataType] ?
-        accepts[dataType] + (dataType !== "*" ? ", */*; q=0.01" : "") :
-        accepts["*"];
+        accepts[dataType] + (dataType !== '*' ? ', */*; q=0.01' : '') :
+        accepts['*'];
 };
 
 var getContentTypeHeader = function(options) {
     var defaultContentType;
-    if(options.data && !options.upload && getMethod(options) !== "GET") {
-        defaultContentType = "application/x-www-form-urlencoded;charset=utf-8";
+    if(options.data && !options.upload && getMethod(options) !== 'GET') {
+        defaultContentType = 'application/x-www-form-urlencoded;charset=utf-8';
     }
 
     return options.contentType ||
@@ -118,7 +118,7 @@ var getContentTypeHeader = function(options) {
 };
 
 var getDataFromResponse = function(xhr) {
-    return xhr.responseType && xhr.responseType !== "text" || typeof xhr.responseText !== "string"
+    return xhr.responseType && xhr.responseType !== 'text' || typeof xhr.responseText !== 'string'
         ? xhr.response
         : xhr.responseText;
 };
@@ -128,16 +128,16 @@ var postProcess = function(deferred, xhr, dataType) {
     var data = getDataFromResponse(xhr);
 
     switch(dataType) {
-        case "jsonp":
+        case 'jsonp':
             evalScript(data);
             break;
 
-        case "script":
+        case 'script':
             evalScript(data);
             deferred.resolve(data, SUCCESS, xhr);
             break;
 
-        case "json":
+        case 'json':
             try {
                 deferred.resolve(JSON.parse(data), SUCCESS, xhr);
             } catch(e) {
@@ -156,8 +156,8 @@ var isCrossDomain = function(url) {
     }
 
     var crossDomain = false,
-        originAnchor = domAdapter.createElement("a"),
-        urlAnchor = domAdapter.createElement("a");
+        originAnchor = domAdapter.createElement('a'),
+        urlAnchor = domAdapter.createElement('a');
 
     originAnchor.href = window.location.href;
 
@@ -168,8 +168,8 @@ var isCrossDomain = function(url) {
         // eslint-disable-next-line no-self-assign
         urlAnchor.href = urlAnchor.href;
 
-        crossDomain = originAnchor.protocol + "//" + originAnchor.host !==
-            urlAnchor.protocol + "//" + urlAnchor.host;
+        crossDomain = originAnchor.protocol + '//' + originAnchor.host !==
+            urlAnchor.protocol + '//' + urlAnchor.host;
     } catch(e) {
         crossDomain = true;
     }
@@ -184,10 +184,10 @@ var setHttpTimeout = function(timeout, xhr) {
 };
 
 var getJsonpOptions = function(options) {
-    if(options.dataType === "jsonp") {
-        var random = Math.random().toString().replace(/\D/g, ""),
-            callbackName = options.jsonpCallback || "dxCallback" + Date.now() + "_" + random,
-            callbackParameter = options.jsonp || "callback";
+    if(options.dataType === 'jsonp') {
+        var random = Math.random().toString().replace(/\D/g, ''),
+            callbackName = options.jsonpCallback || 'dxCallback' + Date.now() + '_' + random,
+            callbackParameter = options.jsonp || 'callback';
 
         options.data = options.data || {};
         options.data[callbackParameter] = callbackName;
@@ -199,12 +199,12 @@ var getJsonpOptions = function(options) {
 var getRequestOptions = function(options, headers) {
 
     var params = options.data,
-        paramsAlreadyString = typeof params === "string",
+        paramsAlreadyString = typeof params === 'string',
         url = options.url || window.location.href;
 
     if(!paramsAlreadyString && !options.cache) {
         params = params || {};
-        params["_"] = Date.now();
+        params['_'] = Date.now();
     }
 
     if(params && !options.upload) {
@@ -212,13 +212,13 @@ var getRequestOptions = function(options, headers) {
             params = paramsConvert(params);
         }
 
-        if(getMethod(options) === "GET") {
-            if(params !== "") {
-                url += (url.indexOf("?") > -1 ? "&" : "?") + params;
+        if(getMethod(options) === 'GET') {
+            if(params !== '') {
+                url += (url.indexOf('?') > -1 ? '&' : '?') + params;
             }
             params = null;
-        } else if(headers["Content-Type"] && headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1) {
-            params = params.replace(/%20/g, "+");
+        } else if(headers['Content-Type'] && headers['Content-Type'].indexOf('application/x-www-form-urlencoded') > -1) {
+            params = params.replace(/%20/g, '+');
         }
     }
 
@@ -229,17 +229,17 @@ var getRequestOptions = function(options, headers) {
 };
 
 var getMethod = function(options) {
-    return (options.method || "GET").toUpperCase();
+    return (options.method || 'GET').toUpperCase();
 };
 
 var getRequestHeaders = function(options) {
     var headers = options.headers || {};
 
-    headers["Content-Type"] = headers["Content-Type"] || getContentTypeHeader(options);
-    headers["Accept"] = headers["Accept"] || getAcceptHeader(options);
+    headers['Content-Type'] = headers['Content-Type'] || getContentTypeHeader(options);
+    headers['Accept'] = headers['Accept'] || getAcceptHeader(options);
 
-    if(!options.crossDomain && !headers["X-Requested-With"]) {
-        headers["X-Requested-With"] = "XMLHttpRequest";
+    if(!options.crossDomain && !headers['X-Requested-With']) {
+        headers['X-Requested-With'] = 'XMLHttpRequest';
     }
     return headers;
 };
@@ -255,7 +255,7 @@ var sendRequest = function(options) {
         timeoutId;
 
     options.crossDomain = isCrossDomain(options.url);
-    var needScriptEvaluation = dataType === "jsonp" || dataType === "script";
+    var needScriptEvaluation = dataType === 'jsonp' || dataType === 'script';
 
     if(options.cache === undefined) {
         options.cache = !needScriptEvaluation;
@@ -278,7 +278,7 @@ var sendRequest = function(options) {
                 d.reject(xhr, ERROR);
             },
             resolve = function() {
-                if(dataType === "jsonp") return;
+                if(dataType === 'jsonp') return;
                 d.resolve(null, SUCCESS, xhr);
             };
 
@@ -286,7 +286,7 @@ var sendRequest = function(options) {
         return result;
     }
 
-    if(options.crossDomain && !("withCredentials" in xhr)) {
+    if(options.crossDomain && !('withCredentials' in xhr)) {
         d.reject(xhr, ERROR);
         return result;
     }
@@ -303,7 +303,7 @@ var sendRequest = function(options) {
         timeoutId = setHttpTimeout(timeout, xhr, d);
     }
 
-    xhr["onreadystatechange"] = function(e) {
+    xhr['onreadystatechange'] = function(e) {
         if(xhr.readyState === 4) {
             clearTimeout(timeoutId);
             if(isStatusSuccess(xhr.status)) {
@@ -319,9 +319,9 @@ var sendRequest = function(options) {
     };
 
     if(options.upload) {
-        xhr.upload["onprogress"] = options.upload["onprogress"];
-        xhr.upload["onloadstart"] = options.upload["onloadstart"];
-        xhr.upload["onabort"] = options.upload["onabort"];
+        xhr.upload['onprogress'] = options.upload['onprogress'];
+        xhr.upload['onloadstart'] = options.upload['onloadstart'];
+        xhr.upload['onabort'] = options.upload['onabort'];
     }
 
     if(options.xhrFields) {
@@ -330,7 +330,7 @@ var sendRequest = function(options) {
         }
     }
 
-    if(options.responseType === "arraybuffer") {
+    if(options.responseType === 'arraybuffer') {
         xhr.responseType = options.responseType;
     }
 

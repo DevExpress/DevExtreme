@@ -1,7 +1,7 @@
-import { unique, getAddFunction, getLog } from "../../core/utils";
-import { isDefined } from "../../../core/utils/type";
-import { noop } from "../../../core/utils/common";
-const DISCRETE = "discrete";
+import { unique, getAddFunction, getLog } from '../../core/utils';
+import { isDefined } from '../../../core/utils/type';
+import { noop } from '../../../core/utils/common';
+const DISCRETE = 'discrete';
 const { abs, floor, ceil, min } = Math;
 
 function continuousRangeCalculator(range, minValue, maxValue) {
@@ -10,7 +10,7 @@ function continuousRangeCalculator(range, minValue, maxValue) {
 }
 
 function createGetLogFunction(axisType, axis) {
-    if(axisType !== "logarithmic") {
+    if(axisType !== 'logarithmic') {
         return null;
     }
     const base = axis.getOptions().logarithmBase;
@@ -85,7 +85,7 @@ function getValueForArgument(point, extraPoint, x, range) {
             x2 = extraPoint.argument;
 
         const r = ((x - x1) * (y2 - y1)) / (x2 - x1) + y1.valueOf();
-        return range.dataType === "datetime" ? new Date(r) : r;
+        return range.dataType === 'datetime' ? new Date(r) : r;
     } else {
         return point.value;
     }
@@ -97,7 +97,7 @@ function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, b
 }
 
 function isLineSeries(series) {
-    return series.type.toLowerCase().indexOf("line") >= 0 || series.type.toLowerCase().indexOf("area") >= 0;
+    return series.type.toLowerCase().indexOf('line') >= 0 || series.type.toLowerCase().indexOf('area') >= 0;
 }
 
 function getViewportReducer(series) {

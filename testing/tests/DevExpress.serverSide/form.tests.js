@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.form/form.markup.tests.js");
+require('../DevExpress.ui.widgets.form/form.markup.tests.js');

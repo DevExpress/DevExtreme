@@ -1,15 +1,15 @@
-import Class from "../core/class";
-import { extend } from "../core/utils/extend";
-import { inArray } from "../core/utils/array";
-import { each } from "../core/utils/iterator";
-import EventsMixin from "../core/events_mixin";
-import errors from "../core/errors";
-import { grep } from "../core/utils/common";
-import typeUtils from "../core/utils/type";
-import numberLocalization from "../localization/number";
-import messageLocalization from "../localization/message";
-import Promise from "../core/polyfills/promise";
-import { fromPromise, Deferred } from "../core/utils/deferred";
+import Class from '../core/class';
+import { extend } from '../core/utils/extend';
+import { inArray } from '../core/utils/array';
+import { each } from '../core/utils/iterator';
+import EventsMixin from '../core/events_mixin';
+import errors from '../core/errors';
+import { grep } from '../core/utils/common';
+import typeUtils from '../core/utils/type';
+import numberLocalization from '../localization/number';
+import messageLocalization from '../localization/message';
+import Promise from '../core/polyfills/promise';
+import { fromPromise, Deferred } from '../core/utils/deferred';
 
 const STATUS = {
     valid: 'valid',
@@ -19,7 +19,7 @@ const STATUS = {
 
 class BaseRuleValidator {
     constructor() {
-        this.NAME = "base";
+        this.NAME = 'base';
     }
     defaultMessage(value) {
         return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
@@ -50,7 +50,7 @@ class BaseRuleValidator {
 class RequiredRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "required";
+        this.NAME = 'required';
     }
 
     /**
@@ -76,14 +76,14 @@ class RequiredRuleValidator extends BaseRuleValidator {
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
-        return value !== "";
+        return value !== '';
     }
 }
 
 class NumericRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "numeric";
+        this.NAME = 'numeric';
     }
 
     /**
@@ -115,7 +115,7 @@ class NumericRuleValidator extends BaseRuleValidator {
 class RangeRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "range";
+        this.NAME = 'range';
     }
 
     /**
@@ -149,8 +149,8 @@ class RangeRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        const validNumber = rulesValidators["numeric"].validate(value, rule),
-            validValue = typeUtils.isDefined(value) && value !== "",
+        const validNumber = rulesValidators['numeric'].validate(value, rule),
+            validValue = typeUtils.isDefined(value) && value !== '',
             number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
             min = rule.min,
             max = rule.max;
@@ -166,7 +166,7 @@ class RangeRuleValidator extends BaseRuleValidator {
             if(typeUtils.isDefined(max)) {
                 return number <= max;
             } else {
-                throw errors.Error("E0101");
+                throw errors.Error('E0101');
             }
         }
     }
@@ -175,7 +175,7 @@ class RangeRuleValidator extends BaseRuleValidator {
 class StringLengthRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "stringLength";
+        this.NAME = 'stringLength';
     }
 
     /**
@@ -206,7 +206,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
      * @default false
      */
     _validate(value, rule) {
-        value = typeUtils.isDefined(value) ? String(value) : "";
+        value = typeUtils.isDefined(value) ? String(value) : '';
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
@@ -221,7 +221,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
 class CustomRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "custom";
+        this.NAME = 'custom';
     }
 
     /**
@@ -260,7 +260,7 @@ class CustomRuleValidator extends BaseRuleValidator {
             return true;
         }
         const validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
+            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter'),
             extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
@@ -277,7 +277,7 @@ class CustomRuleValidator extends BaseRuleValidator {
 class AsyncRuleValidator extends CustomRuleValidator {
     constructor() {
         super();
-        this.NAME = "async";
+        this.NAME = 'async';
     }
 
     /**
@@ -319,7 +319,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
             return true;
         }
         const validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
+            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter'),
             extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
@@ -331,7 +331,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
         }
         const callbackResult = rule.validationCallback(params);
         if(!typeUtils.isPromise(callbackResult)) {
-            throw errors.Error("E0103");
+            throw errors.Error('E0103');
         }
         return this._getWrappedPromise(fromPromise(callbackResult).promise());
     }
@@ -341,7 +341,17 @@ class AsyncRuleValidator extends CustomRuleValidator {
         promise.then(function(res) {
             deferred.resolve(res);
         }, function(err) {
-            deferred.resolve(typeUtils.isDefined(err) ? err : false);
+            let res = {
+                isValid: false
+            };
+            if(typeUtils.isDefined(err)) {
+                if(typeUtils.isString(err)) {
+                    res.message = err;
+                } else if(typeUtils.isObject(err) && typeUtils.isDefined(err.message) && typeUtils.isString(err.message)) {
+                    res.message = err.message;
+                }
+            }
+            deferred.resolve(res);
         });
         return deferred.promise();
     }
@@ -350,7 +360,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
 class CompareRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "compare";
+        this.NAME = 'compare';
     }
 
     /**
@@ -384,30 +394,30 @@ class CompareRuleValidator extends BaseRuleValidator {
      */
     _validate(value, rule) {
         if(!rule.comparisonTarget) {
-            throw errors.Error("E0102");
+            throw errors.Error('E0102');
         }
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
         extend(rule, { reevaluate: true });
         const otherValue = rule.comparisonTarget(),
-            type = rule.comparisonType || "==";
+            type = rule.comparisonType || '==';
         switch(type) {
-            case "==":
+            case '==':
                 return value == otherValue; // eslint-disable-line eqeqeq
-            case "!=":
+            case '!=':
                 return value != otherValue; // eslint-disable-line eqeqeq
-            case "===":
+            case '===':
                 return value === otherValue;
-            case "!==":
+            case '!==':
                 return value !== otherValue;
-            case ">":
+            case '>':
                 return value > otherValue;
-            case ">=":
+            case '>=':
                 return value >= otherValue;
-            case "<":
+            case '<':
                 return value < otherValue;
-            case "<=":
+            case '<=':
                 return value <= otherValue;
         }
     }
@@ -416,7 +426,7 @@ class CompareRuleValidator extends BaseRuleValidator {
 class PatternRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "pattern";
+        this.NAME = 'pattern';
     }
 
     /**
@@ -452,7 +462,7 @@ class PatternRuleValidator extends BaseRuleValidator {
 class EmailRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "email";
+        this.NAME = 'email';
     }
 
     /**
@@ -488,63 +498,63 @@ const rulesValidators = {
      * @section dxValidator
      * @type object
      */
-    "required": new RequiredRuleValidator(),
+    'required': new RequiredRuleValidator(),
 
     /**
      * @name NumericRule
      * @section dxValidator
      * @type object
      */
-    "numeric": new NumericRuleValidator(),
+    'numeric': new NumericRuleValidator(),
 
     /**
      * @name RangeRule
      * @section dxValidator
      * @type object
      */
-    "range": new RangeRuleValidator(),
+    'range': new RangeRuleValidator(),
 
     /**
      * @name StringLengthRule
      * @section dxValidator
      * @type object
      */
-    "stringLength": new StringLengthRuleValidator(),
+    'stringLength': new StringLengthRuleValidator(),
 
     /**
      * @name CustomRule
      * @section dxValidator
      * @type object
      */
-    "custom": new CustomRuleValidator(),
+    'custom': new CustomRuleValidator(),
 
     /**
      * @name AsyncRule
      * @section dxValidator
      * @type object
      */
-    "async": new AsyncRuleValidator(),
+    'async': new AsyncRuleValidator(),
 
     /**
      * @name CompareRule
      * @section dxValidator
      * @type object
      */
-    "compare": new CompareRuleValidator(),
+    'compare': new CompareRuleValidator(),
 
     /**
      * @name PatternRule
      * @section dxValidator
      * @type object
      */
-    "pattern": new PatternRuleValidator(),
+    'pattern': new PatternRuleValidator(),
 
     /**
      * @name EmailRule
      * @section dxValidator
      * @type object
      */
-    "email": new EmailRuleValidator()
+    'email': new EmailRuleValidator()
 };
 
 const GroupConfig = Class.inherit({
@@ -615,13 +625,13 @@ const GroupConfig = Class.inherit({
     },
 
     _subscribeToChangeEvents(validator) {
-        validator.on("validating", this._onValidatorStatusChanged);
-        validator.on("validated", this._onValidatorStatusChanged);
+        validator.on('validating', this._onValidatorStatusChanged);
+        validator.on('validated', this._onValidatorStatusChanged);
     },
 
     _unsubscribeFromChangeEvents(validator) {
-        validator.off("validating", this._onValidatorStatusChanged);
-        validator.off("validated", this._onValidatorStatusChanged);
+        validator.off('validating', this._onValidatorStatusChanged);
+        validator.off('validated', this._onValidatorStatusChanged);
     },
 
     _unsubscribeFromAllChangeEvents() {
@@ -713,7 +723,7 @@ const GroupConfig = Class.inherit({
     },
 
     _raiseValidatedEvent(result) {
-        this.fireEvent("validated", [result]);
+        this.fireEvent('validated', [result]);
     },
 
     _resetValidationInfo() {
@@ -791,10 +801,10 @@ const ValidationEngine = {
 
     findGroup($element, model) {
         // try to find out if this control is child of validation group
-        const $dxGroup = $element.parents(".dx-validationgroup").first();
+        const $dxGroup = $element.parents('.dx-validationgroup').first();
 
         if($dxGroup.length) {
-            return $dxGroup.dxValidationGroup("instance");
+            return $dxGroup.dxValidationGroup('instance');
         }
 
         // Trick to be able to securely get ViewModel instance ($data) in Knockout
@@ -911,7 +921,7 @@ const ValidationEngine = {
                     return true;
                 }
                 rule.value = value;
-                if(rule.type === "async") {
+                if(rule.type === 'async') {
                     asyncRuleItems.push({
                         rule: rule,
                         ruleValidator: ruleValidator
@@ -936,7 +946,7 @@ const ValidationEngine = {
                     return false;
                 }
             } else {
-                throw errors.Error("E0100");
+                throw errors.Error('E0100');
             }
         });
         if(result.isValid && !result.brokenRules && asyncRuleItems.length) {
@@ -1046,7 +1056,7 @@ const ValidationEngine = {
 
     _shouldRemoveGroup(group, validatorsInGroup) {
         const isDefaultGroup = group === undefined,
-            isValidationGroupInstance = group && group.NAME === "dxValidationGroup";
+            isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
 
@@ -1138,7 +1148,7 @@ const ValidationEngine = {
     validateGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
-            throw errors.Error("E0110");
+            throw errors.Error('E0110');
         }
         return groupConfig.validate();
     },
@@ -1159,7 +1169,7 @@ const ValidationEngine = {
     resetGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
-            throw errors.Error("E0110");
+            throw errors.Error('E0110');
         }
         return groupConfig.reset();
     }

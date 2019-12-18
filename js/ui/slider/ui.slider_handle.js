@@ -1,21 +1,21 @@
-var $ = require("../../core/renderer"),
-    Widget = require("../widget/ui.widget"),
-    Tooltip = require("../tooltip"),
-    translator = require("../../animation/translator"),
-    positionUtils = require("../../animation/position"),
-    mathUtils = require("../../core/utils/math"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    numberLocalization = require("../../localization/number");
+var $ = require('../../core/renderer'),
+    Widget = require('../widget/ui.widget'),
+    Tooltip = require('../tooltip'),
+    translator = require('../../animation/translator'),
+    positionUtils = require('../../animation/position'),
+    mathUtils = require('../../core/utils/math'),
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    numberLocalization = require('../../localization/number');
 
-var SLIDER_CLASS = "dx-slider",
-    SLIDER_HANDLE_CLASS = "dx-slider-handle";
+var SLIDER_CLASS = 'dx-slider',
+    SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
 var POSITION_ALIASES = {
-    "top": { my: "bottom center", at: "top center", collision: "none" },
-    "bottom": { my: "top center", at: "bottom center", collision: "none" },
-    "right": { my: "left center", at: "right center", collision: "none" },
-    "left": { my: "right center", at: "left center", collision: "none" }
+    'top': { my: 'bottom center', at: 'top center', collision: 'none' },
+    'bottom': { my: 'top center', at: 'bottom center', collision: 'none' },
+    'right': { my: 'left center', at: 'right center', collision: 'none' },
+    'left': { my: 'right center', at: 'left center', collision: 'none' }
 };
 
 var SliderHandle = Widget.inherit({
@@ -25,8 +25,8 @@ var SliderHandle = Widget.inherit({
             value: 0,
             tooltipEnabled: false,
             tooltipFormat: function(v) { return v; },
-            tooltipPosition: "top",
-            tooltipShowMode: "onHover",
+            tooltipPosition: 'top',
+            tooltipShowMode: 'onHover',
             tooltipFitIn: null
         });
     },
@@ -36,8 +36,8 @@ var SliderHandle = Widget.inherit({
         this.$element().addClass(SLIDER_HANDLE_CLASS);
 
         this.setAria({
-            "role": "slider",
-            "valuenow": this.option("value")
+            'role': 'slider',
+            'valuenow': this.option('value')
         });
     },
 
@@ -48,11 +48,11 @@ var SliderHandle = Widget.inherit({
     },
 
     _renderTooltip: function() {
-        if(this.option("tooltipEnabled")) {
+        if(this.option('tooltipEnabled')) {
             if(!this._$tooltip) {
-                this._$tooltip = $("<div>").appendTo(this.$element());
+                this._$tooltip = $('<div>').appendTo(this.$element());
             }
-            this._$slider = this.$element().closest("." + SLIDER_CLASS);
+            this._$slider = this.$element().closest('.' + SLIDER_CLASS);
 
             this._updateTooltip();
         } else {
@@ -100,19 +100,19 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        var position = this.option("tooltipPosition");
+        var position = this.option('tooltipPosition');
 
         this._saveTooltipElements();
         this._resetTooltipPosition();
 
-        if(typeUtils.type(position) === "string") {
+        if(typeUtils.type(position) === 'string') {
             position = extend({
                 boundary: this._$slider,
                 boundaryOffset: { h: 1, v: 1 }
             }, POSITION_ALIASES[position]);
         }
 
-        this._tooltip.option("position", position);
+        this._tooltip.option('position', position);
 
         this._saveTooltipLocation();
     },
@@ -120,7 +120,7 @@ var SliderHandle = Widget.inherit({
     _saveTooltipElements: function(tooltip) {
         tooltip = this._tooltip || tooltip;
         this._$tooltipContent = tooltip.$content().parent();
-        this._$tooltipArrow = this._$tooltipContent.find(".dx-popover-arrow");
+        this._$tooltipArrow = this._$tooltipContent.find('.dx-popover-arrow');
     },
 
     _resetTooltipPosition: function() {
@@ -137,7 +137,7 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        this._$tooltipContent.outerWidth("auto");
+        this._$tooltipContent.outerWidth('auto');
 
         var outerWidthWithoutRounding = this._$tooltipContent.get(0).getBoundingClientRect().width;
         var tooltipOuterWidth = Math.ceil(outerWidthWithoutRounding);
@@ -151,7 +151,7 @@ var SliderHandle = Widget.inherit({
         this._contentLocate.left = -tooltipCenter;
         this._$tooltipArrow.css({
             marginLeft: -this._$tooltipArrow.outerWidth() / 2,
-            left: "50%"
+            left: '50%'
         });
 
         this._fitTooltip();
@@ -162,9 +162,9 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        var position = this.option("tooltipPosition");
+        var position = this.option('tooltipPosition');
 
-        if(typeUtils.type(position) === "string") {
+        if(typeUtils.type(position) === 'string') {
             position = extend({
                 of: this.$element(),
                 boundary: this._$slider,
@@ -173,7 +173,7 @@ var SliderHandle = Widget.inherit({
         }
 
         var calculatePosition = positionUtils.calculate(this._$tooltipContent, position);
-        var isLeftSide = calculatePosition.h.collisionSide === "left";
+        var isLeftSide = calculatePosition.h.collisionSide === 'left';
 
         var arrowLeft = (isLeftSide ? -1 : 1) * calculatePosition.h.oversize,
             arrowMinLeft = this._contentLocate.left,
@@ -184,7 +184,7 @@ var SliderHandle = Widget.inherit({
     },
 
     _getFormattedValue: function(value) {
-        return numberLocalization.format(value, this.option("tooltipFormat"));
+        return numberLocalization.format(value, this.option('tooltipFormat'));
     },
 
     _renderValue: function() {
@@ -192,17 +192,17 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        var value = this.option("value");
+        var value = this.option('value');
         this._tooltip.$content().html(this._getFormattedValue(value));
         this._fitTooltip();
     },
 
     _updateTooltip: function() {
-        var hoverMode = /^onhover$/i.test(this.option("tooltipShowMode"));
+        var hoverMode = /^onhover$/i.test(this.option('tooltipShowMode'));
         if(!hoverMode) {
             this._createTooltip();
         }
-        this.$element().toggleClass("dx-slider-tooltip-on-hover", hoverMode);
+        this.$element().toggleClass('dx-slider-tooltip-on-hover', hoverMode);
 
         this._renderTooltipPosition();
         this._renderValue();
@@ -223,29 +223,29 @@ var SliderHandle = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "tooltipFormat":
+            case 'tooltipFormat':
                 this._renderValue();
                 break;
-            case "value":
+            case 'value':
                 this._renderValue();
 
                 var value = this._getFormattedValue(args.value);
                 var previousValue = this._getFormattedValue(args.previousValue);
                 this._ensureTooltipIsCentered(value, previousValue);
 
-                this.setAria("valuenow", args.value);
+                this.setAria('valuenow', args.value);
                 break;
-            case "tooltipEnabled":
+            case 'tooltipEnabled':
                 this._renderTooltip();
                 break;
-            case "tooltipPosition":
+            case 'tooltipPosition':
                 this._renderTooltipPosition();
                 this._centeredTooltipPosition();
                 break;
-            case "tooltipShowMode":
+            case 'tooltipShowMode':
                 this._updateTooltip();
                 break;
-            case "tooltipFitIn":
+            case 'tooltipFitIn':
                 this._fitTooltip();
                 break;
             default:

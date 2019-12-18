@@ -5,15 +5,15 @@ var EditDecoratorMenuHelperMixin = {
     },
 
     _menuItems: function() {
-        return this._list.option("menuItems");
+        return this._list.option('menuItems');
     },
 
     _deleteEnabled: function() {
-        return this._list.option("allowItemDeleting");
+        return this._list.option('allowItemDeleting');
     },
 
     _fireMenuAction: function($itemElement, action) {
-        this._list._itemEventHandlerByHandler($itemElement, action, {}, { excludeValidators: ["disabled", "readOnly"] });
+        this._list._itemEventHandlerByHandler($itemElement, action, {}, { excludeValidators: ['disabled', 'readOnly'] });
     }
 
 };

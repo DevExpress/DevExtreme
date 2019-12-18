@@ -168,19 +168,6 @@ class Button extends Widget {
             * @default 'contained'
             */
             stylingMode: 'contained'
-
-            /**
-            * @name dxButtonDefaultTemplate
-            * @type object
-            */
-            /**
-            * @name dxButtonDefaultTemplate.text
-            * @type String
-            */
-            /**
-            * @name dxButtonDefaultTemplate.icon
-            * @type String
-            */
         });
     }
 

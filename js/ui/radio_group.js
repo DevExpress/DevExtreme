@@ -5,4 +5,4 @@
 * @module ui/radio_group
 * @export default
 */
-module.exports = require("./radio_group/radio_group");
+module.exports = require('./radio_group/radio_group');

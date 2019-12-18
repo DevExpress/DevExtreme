@@ -1,12 +1,12 @@
-import Class from "../../core/class";
-import { isDefined } from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import { format } from "../../format_helper";
-import { parse } from "../../localization/number";
-import clientExporter, { excel as excelExporter } from "../../exporter";
-import exportMixin from "../grid_core/ui.grid_core.export_mixin";
-import { when, Deferred } from "../../core/utils/deferred";
+import Class from '../../core/class';
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { format } from '../../format_helper';
+import { parse } from '../../localization/number';
+import clientExporter, { excel as excelExporter } from '../../exporter';
+import exportMixin from '../grid_core/ui.grid_core.export_mixin';
+import { when, Deferred } from '../../core/utils/deferred';
 
 var DEFAULT_DATA_TYPE = 'string',
     COLUMN_HEADER_STYLE_ID = 0,
@@ -23,11 +23,11 @@ exports.ExportMixin = extend({}, exportMixin, {
         var that = this;
 
         clientExporter.export(that.getDataProvider(), {
-            fileName: that.option("export.fileName"),
-            proxyUrl: that.option("export.proxyUrl"),
-            format: "EXCEL",
-            rtlEnabled: that.option("rtlEnabled"),
-            ignoreErrors: that.option("export.ignoreExcelErrors"),
+            fileName: that.option('export.fileName'),
+            proxyUrl: that.option('export.proxyUrl'),
+            format: 'EXCEL',
+            rtlEnabled: that.option('rtlEnabled'),
+            ignoreErrors: that.option('export.ignoreExcelErrors'),
             exportingAction: that._actions.onExporting,
             exportedAction: that._actions.onExported,
             fileSavingAction: that._actions.onFileSaving
@@ -92,7 +92,7 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
             {
-                alignment: this._options.rtlEnabled ? "right" : "left",
+                alignment: this._options.rtlEnabled ? 'right' : 'left',
                 colspan: rowsLength,
                 rowspan: headerRowsCount
             }));
@@ -117,16 +117,16 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         return new exports.DataProvider({
             items: items,
-            rtlEnabled: this.option("rtlEnabled"),
-            dataFields: this.getDataSource().getAreaFields("data"),
-            customizeExcelCell: this.option("export.customizeExcelCell"),
+            rtlEnabled: this.option('rtlEnabled'),
+            dataFields: this.getDataSource().getAreaFields('data'),
+            customizeExcelCell: this.option('export.customizeExcelCell'),
         });
     }
 });
 
 function getCellDataType(field) {
     if(field && field.customizeText) {
-        return "string";
+        return 'string';
     }
 
     if(field.dataType) {
@@ -135,10 +135,10 @@ function getCellDataType(field) {
 
     if(field.format) {
         if(parse(format(1, field.format)) === 1) {
-            return "number";
+            return 'number';
         }
         if(format(new Date(), field.format)) {
-            return "date";
+            return 'date';
         }
     }
 
@@ -159,11 +159,11 @@ exports.DataProvider = Class.inherit({
         return when(options.items).done(function(items) {
             var headerSize = items[0][0].rowspan,
                 columns = items[headerSize - 1],
-                dataItemStyle = { alignment: options.rtlEnabled ? "left" : "right" };
+                dataItemStyle = { alignment: options.rtlEnabled ? 'left' : 'right' };
 
             that._styles = [
-                { alignment: "center", dataType: "string" },
-                { alignment: options.rtlEnabled ? "right" : "left", dataType: "string" }
+                { alignment: 'center', dataType: 'string' },
+                { alignment: options.rtlEnabled ? 'right' : 'left', dataType: 'string' }
             ];
 
             if(dataFields.length) {
@@ -216,7 +216,7 @@ exports.DataProvider = Class.inherit({
 
     getCellType: function(rowIndex, cellIndex) {
         var style = this._styles[this.getStyleId(rowIndex, cellIndex)];
-        return style && style.dataType || "string";
+        return style && style.dataType || 'string';
     },
 
     getCellData: function(rowIndex, cellIndex) {
@@ -224,7 +224,7 @@ exports.DataProvider = Class.inherit({
         var items = this._options.items,
             item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(this.getCellType(rowIndex, cellIndex) === "string") {
+        if(this.getCellType(rowIndex, cellIndex) === 'string') {
             result.value = item.text;
         } else {
             result.value = item.value;

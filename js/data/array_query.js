@@ -1,11 +1,11 @@
-var Class = require("../core/class"),
-    typeUtils = require("../core/utils/type"),
-    iteratorUtils = require("../core/utils/iterator"),
-    compileGetter = require("../core/utils/data").compileGetter,
-    toComparable = require("../core/utils/data").toComparable,
-    Deferred = require("../core/utils/deferred").Deferred,
-    errorsModule = require("./errors"),
-    dataUtils = require("./utils");
+var Class = require('../core/class'),
+    typeUtils = require('../core/utils/type'),
+    iteratorUtils = require('../core/utils/iterator'),
+    compileGetter = require('../core/utils/data').compileGetter,
+    toComparable = require('../core/utils/data').toComparable,
+    Deferred = require('../core/utils/deferred').Deferred,
+    errorsModule = require('./errors'),
+    dataUtils = require('./utils');
 
 var Iterator = Class.inherit({
 
@@ -232,7 +232,7 @@ var compileCriteria = (function() {
         iteratorUtils.each(crit, function() {
             if(Array.isArray(this) || typeUtils.isFunction(this)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
-                    throw new errorsModule.errors.Error("E4019");
+                    throw new errorsModule.errors.Error('E4019');
                 }
 
                 ops.push(compileCriteria(this));
@@ -271,21 +271,21 @@ var compileCriteria = (function() {
         value = toComparable(value);
 
         switch(op.toLowerCase()) {
-            case "=":
+            case '=':
                 return compileEquals(getter, value);
-            case "<>":
+            case '<>':
                 return compileEquals(getter, value, true);
-            case ">":
+            case '>':
                 return function(obj) { return toComparable(getter(obj)) > value; };
-            case "<":
+            case '<':
                 return function(obj) { return toComparable(getter(obj)) < value; };
-            case ">=":
+            case '>=':
                 return function(obj) { return toComparable(getter(obj)) >= value; };
-            case "<=":
+            case '<=':
                 return function(obj) { return toComparable(getter(obj)) <= value; };
-            case "startswith":
+            case 'startswith':
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === 0; };
-            case "endswith":
+            case 'endswith':
                 return function(obj) {
                     var getterValue = toComparable(toString(getter(obj))),
                         searchValue = toString(value);
@@ -296,13 +296,13 @@ var compileCriteria = (function() {
 
                     return getterValue.lastIndexOf(value) === getterValue.length - value.length;
                 };
-            case "contains":
+            case 'contains':
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) > -1; };
-            case "notcontains":
+            case 'notcontains':
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === -1; };
         }
 
-        throw errorsModule.errors.Error("E4003", op);
+        throw errorsModule.errors.Error('E4003', op);
     };
 
     function compileEquals(getter, value, negate) {
@@ -318,18 +318,18 @@ var compileCriteria = (function() {
     }
 
     function useStrictComparison(value) {
-        return value === "" || value === 0 || value === false;
+        return value === '' || value === 0 || value === false;
     }
 
     function compileUnary(crit) {
         var op = crit[0],
             criteria = compileCriteria(crit[1]);
 
-        if(op === "!") {
+        if(op === '!') {
             return function(obj) { return !criteria(obj); };
         }
 
-        throw errorsModule.errors.Error("E4003", op);
+        throw errorsModule.errors.Error('E4003', op);
     }
 
     return function(crit) {
@@ -508,7 +508,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
 
         try {
             iter.reset();
-            if("seed" in aggregator) {
+            if('seed' in aggregator) {
                 seed = aggregator.seed;
             } else {
                 seed = iter.next() ? iter.current() : NaN;
@@ -583,7 +583,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
                 return chainQuery(iter.thenBy(getter, desc, compare));
             }
 
-            throw errorsModule.errors.Error("E4004");
+            throw errorsModule.errors.Error('E4004');
         },
 
         filter: function(criteria) {
@@ -621,35 +621,35 @@ var arrayQueryImpl = function(iter, queryOptions) {
                 return d.promise();
             }
 
-            return standardAggregate("count");
+            return standardAggregate('count');
         },
 
         sum: function(getter) {
             if(getter) {
                 return selectProp(getter).sum();
             }
-            return standardAggregate("sum");
+            return standardAggregate('sum');
         },
 
         min: function(getter) {
             if(getter) {
                 return selectProp(getter).min();
             }
-            return standardAggregate("min");
+            return standardAggregate('min');
         },
 
         max: function(getter) {
             if(getter) {
                 return selectProp(getter).max();
             }
-            return standardAggregate("max");
+            return standardAggregate('max');
         },
 
         avg: function(getter) {
             if(getter) {
                 return selectProp(getter).avg();
             }
-            return standardAggregate("avg");
+            return standardAggregate('avg');
         }
 
     };

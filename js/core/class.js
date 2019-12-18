@@ -1,5 +1,5 @@
-var errors = require("./errors"),
-    typeUtils = require("./utils/type");
+var errors = require('./errors'),
+    typeUtils = require('./utils/type');
 
 var wrapOverridden = function(baseProto, methodName, method) {
     return function() {
@@ -31,7 +31,7 @@ var redefine = function(members) {
 
     for(memberName in members) {
         member = members[memberName];
-        overridden = typeof that.prototype[memberName] === "function" && typeof member === "function";
+        overridden = typeof that.prototype[memberName] === 'function' && typeof member === 'function';
         that.prototype[memberName] = overridden ? wrapOverridden(that.parent.prototype, memberName, member) : member;
     }
 
@@ -64,12 +64,12 @@ var include = function() {
         }
 
         for(name in argument) {
-            if(name === "ctor" || name === "postCtor") {
+            if(name === 'ctor' || name === 'postCtor') {
                 continue;
             }
             ///#DEBUG
             if(name in classObj.prototype) {
-                throw errors.Error("E0002", name);
+                throw errors.Error('E0002', name);
             }
             ///#ENDDEBUG
             classObj.prototype[name] = argument[name];
@@ -80,7 +80,7 @@ var include = function() {
 };
 
 var subclassOf = function(parentClass) {
-    const hasParentProperty = Object.prototype.hasOwnProperty.bind(this)("parent");
+    const hasParentProperty = Object.prototype.hasOwnProperty.bind(this)('parent');
     const isES6Class = !hasParentProperty && this.parent;
 
     if(isES6Class) {
@@ -101,7 +101,7 @@ var subclassOf = function(parentClass) {
 };
 
 var abstract = function() {
-    throw errors.Error("E0001");
+    throw errors.Error('E0001');
 };
 
 var copyStatic = (function() {
@@ -122,8 +122,8 @@ var classImpl = function() { };
 
 classImpl.inherit = function(members) {
     var inheritor = function() {
-        if(!this || typeUtils.isWindow(this) || typeof this.constructor !== "function") {
-            throw errors.Error("E0003");
+        if(!this || typeUtils.isWindow(this) || typeof this.constructor !== 'function') {
+            throw errors.Error('E0003');
         }
 
         var instance = this,

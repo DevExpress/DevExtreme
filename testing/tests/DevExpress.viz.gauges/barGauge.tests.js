@@ -1,21 +1,21 @@
 /* global createTestContainer, currentTest */
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    dxBarGauge = require("viz/bar_gauge"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    loadingIndicatorModule = require("viz/core/loading_indicator"),
-    titleModule = require("viz/core/title"),
-    tooltipModule = require("viz/core/tooltip"),
-    barGaugeModule = require("viz/gauges/bar_gauge"),
-    exportModule = require("viz/core/export"),
-    themeModule = require("viz/themes"),
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    vizMocks = require('../../helpers/vizMocks.js'),
+    dxBarGauge = require('viz/bar_gauge'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    loadingIndicatorModule = require('viz/core/loading_indicator'),
+    titleModule = require('viz/core/title'),
+    tooltipModule = require('viz/core/tooltip'),
+    barGaugeModule = require('viz/gauges/bar_gauge'),
+    exportModule = require('viz/core/export'),
+    themeModule = require('viz/themes'),
     BarWrapper = barGaugeModule.BarWrapper,
     stubBarWrapper = barGaugeModule.stubBarWrapper,
     restoreBarWrapper = barGaugeModule.restoreBarWrapper;
 
-$('<div id="test-container">').appendTo("#qunit-fixture");
+$('<div id="test-container">').appendTo('#qunit-fixture');
 
 var renderer;
 QUnit.begin(function() {
@@ -85,7 +85,7 @@ QUnit.begin(function() {
     exportModule.ExportMenu = function(parameters) {
         return new vizMocks.ExportMenu(parameters);
     };
-    var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return "tooltip_enabled"; } });
+    var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
     tooltipModule.Tooltip = function(parameters) {
         return new StubTooltip(parameters);
     };
@@ -120,14 +120,14 @@ QUnit.test('Groups creation', function(assert) {
     this.$container.dxBarGauge();
     assert.strictEqual(rendererModule.Renderer.lastCall.args[0]['cssClass'], 'dxg dxbg-bar-gauge', 'root class');
     var group = this.getBarsGroup();
-    assert.deepEqual(group.attr.firstCall.args, [{ "class": "dxbg-bars" }], "bars group settings");
-    assert.deepEqual(group.linkOn.lastCall.args, [this.renderer.root, "bars"], "bars group is linked to container");
+    assert.deepEqual(group.attr.firstCall.args, [{ 'class': 'dxbg-bars' }], 'bars group settings');
+    assert.deepEqual(group.linkOn.lastCall.args, [this.renderer.root, 'bars'], 'bars group is linked to container');
 
 });
 
 QUnit.test('Groups disposing', function(assert) {
     this.$container.dxBarGauge().remove();
-    assert.deepEqual(this.getBarsGroup().linkOff.lastCall.args, [], "bars group is unlinked");
+    assert.deepEqual(this.getBarsGroup().linkOff.lastCall.args, [], 'bars group is unlinked');
 });
 
 QUnit.test('Bars creation', function(assert) {
@@ -244,10 +244,10 @@ QUnit.module('Positioning', $.extend({}, environment, {
             elementSettings = elements[i * step + 2]._stored_settings;
             assert.deepEqual({
                 points: elementSettings.points,
-                "stroke-width": elementSettings["stroke-width"]
+                'stroke-width': elementSettings['stroke-width']
             }, {
                 points: [commonSettings.x, commonSettings.y - linePositions[i][0], commonSettings.x, commonSettings.y - commonSettings.textRadius],
-                "stroke-width": commonSettings.lineWidth
+                'stroke-width': commonSettings.lineWidth
             }, 'line' + message);
             assert.strictEqual(Math.round(elements[i * step + 2].rotate.firstCall.args[0]), linePositions[i][1], 'line rotation' + message);
             elementSettings = elements[i * step + 3]._stored_settings;
@@ -263,7 +263,7 @@ QUnit.module('Positioning', $.extend({}, environment, {
 }));
 
 function checkPositioning(name, options, callback) {
-    options.resolveLabelOverlapping = "none";
+    options.resolveLabelOverlapping = 'none';
     QUnit.test(name, function(assert) {
         this.$container.dxBarGauge($.extend({}, options, { animation: false }));
         callback.apply(this, arguments);
@@ -496,7 +496,7 @@ QUnit.test('background is moved properly when container is resized', function(as
     delete settings.fill;
     assert.deepEqual(settings, {
         x: 250, y: 174, outerRadius: 144, innerRadius: 43, startAngle: -45, endAngle: 225,
-        "stroke-linejoin": "round"
+        'stroke-linejoin': 'round'
     });
 });
 
@@ -504,7 +504,7 @@ QUnit.test('Values are changed', function(assert) {
     var done = assert.async(),
         gauge = this.$container.dxBarGauge({
             values: [10, 20, 30],
-            resolveLabelOverlapping: "none"
+            resolveLabelOverlapping: 'none'
         }).dxBarGauge('instance');
     var group = this.getBarsGroup();
     group.animationComplete = $.proxy(function() {
@@ -537,7 +537,7 @@ QUnit.test('Some values are not changed', function(assert) {
     var done = assert.async(),
         gauge = this.$container.dxBarGauge({
             values: [10, 20, 30],
-            resolveLabelOverlapping: "none"
+            resolveLabelOverlapping: 'none'
         }).dxBarGauge('instance');
     var group = this.getBarsGroup();
     group.animationComplete = $.proxy(function() {
@@ -594,9 +594,9 @@ QUnit.test('labels straight lines (indent = 0)', function(assert) {
 });
 
 // T725337
-QUnit.test("Half circle up - leave margin on bottom", function(assert) {
+QUnit.test('Half circle up - leave margin on bottom', function(assert) {
     this.$container.width(800).height(200).dxBarGauge({
-        resolveLabelOverlapping: "none",
+        resolveLabelOverlapping: 'none',
         animation: false,
         geometry: {
             startAngle: 180,
@@ -612,11 +612,11 @@ QUnit.test("Half circle up - leave margin on bottom", function(assert) {
 });
 
 // T803467
-QUnit.test("Update bars on values changing", function(assert) {
+QUnit.test('Update bars on values changing', function(assert) {
     var gauge = this.$container.dxBarGauge({
         animation: false,
         values: [100]
-    }).dxBarGauge("instance");
+    }).dxBarGauge('instance');
 
     gauge.values([1, 2]);
     gauge.values([3]);
@@ -625,9 +625,9 @@ QUnit.test("Update bars on values changing", function(assert) {
 });
 
 // T725337
-QUnit.test("Half circle down - leave margin on top", function(assert) {
+QUnit.test('Half circle down - leave margin on top', function(assert) {
     this.$container.width(800).height(200).dxBarGauge({
-        resolveLabelOverlapping: "none",
+        resolveLabelOverlapping: 'none',
         animation: false,
         geometry: {
             startAngle: 0,
@@ -639,9 +639,9 @@ QUnit.test("Half circle down - leave margin on top", function(assert) {
 });
 
 // T725337
-QUnit.test("Half circle left - leave margin on right", function(assert) {
+QUnit.test('Half circle left - leave margin on right', function(assert) {
     this.$container.width(300).height(800).dxBarGauge({
-        resolveLabelOverlapping: "none",
+        resolveLabelOverlapping: 'none',
         animation: false,
         geometry: {
             startAngle: 90,
@@ -653,9 +653,9 @@ QUnit.test("Half circle left - leave margin on right", function(assert) {
 });
 
 // T725337
-QUnit.test("Half circle right - leave margin on left", function(assert) {
+QUnit.test('Half circle right - leave margin on left', function(assert) {
     this.$container.width(300).height(800).dxBarGauge({
-        resolveLabelOverlapping: "none",
+        resolveLabelOverlapping: 'none',
         animation: false,
         geometry: {
             startAngle: -90,
@@ -703,9 +703,9 @@ QUnit.test('Custom palette', function(assert) {
 });
 
 QUnit.test('Default palette', function(assert) {
-    themeModule.registerTheme({ name: "defaultPaletteTheme", defaultPalette: ['c1', 'c2', 'c3', 'c4'] });
+    themeModule.registerTheme({ name: 'defaultPaletteTheme', defaultPalette: ['c1', 'c2', 'c3', 'c4'] });
     this.$container.dxBarGauge({
-        theme: "defaultPaletteTheme",
+        theme: 'defaultPaletteTheme',
         values: [1, 2, 3, 4]
     });
     this.checkColors(assert, '#e0e0e0', ['c1', 'c2', 'c3', 'c4']);
@@ -714,7 +714,7 @@ QUnit.test('Default palette', function(assert) {
 QUnit.test('Background color', function(assert) {
     this.$container.dxBarGauge({
         values: [10, 20, 30],
-        palette: "office",
+        palette: 'office',
         backgroundColor: 'black'
     });
     this.checkColors(assert, 'black', ['#5f8b95', '#ba4d51', '#af8a53']);
@@ -722,14 +722,14 @@ QUnit.test('Background color', function(assert) {
 
 //  B254364
 QUnit.test('Colors order is preserved during increasing bars count', function(assert) {
-    this.$container.dxBarGauge({ values: [10, 20, 30, 40], palette: "office" });
+    this.$container.dxBarGauge({ values: [10, 20, 30, 40], palette: 'office' });
     this.$container.dxBarGauge('instance').values([5, 15, 25, 35, 45]);
     this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53', '#955f71', '#859666']);
 });
 
 //  B254364
 QUnit.test('Colors order is preserved during decreasing bars count', function(assert) {
-    this.$container.dxBarGauge({ values: [10, 20, 30, 40], palette: "office" });
+    this.$container.dxBarGauge({ values: [10, 20, 30, 40], palette: 'office' });
     this.$container.dxBarGauge('instance').values([5, 15, 25]);
     this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53']);
 });
@@ -738,7 +738,7 @@ QUnit.test('Colors order is preserved during decreasing bars count', function(as
 QUnit.test('Connector color', function(assert) {
     this.$container.dxBarGauge({
         values: [10, 20, 30],
-        palette: "office",
+        palette: 'office',
         label: {
             connectorColor: 'red'
         }
@@ -755,7 +755,7 @@ QUnit.test('Hide connector for empty label', function(assert) {
         label: {
             customizeText: function(e) {
                 if(e.value === 20) {
-                    return "";
+                    return '';
                 }
                 return e.valueText;
             }
@@ -763,8 +763,8 @@ QUnit.test('Hide connector for empty label', function(assert) {
     });
     var elements = this.getBarsGroup().children;
 
-    assert.strictEqual(elements[0 * 4 + 2]._stored_settings.visibility, null, "first connector");
-    assert.strictEqual(elements[1 * 4 + 2]._stored_settings.visibility, "hidden", "empty label connector");
+    assert.strictEqual(elements[0 * 4 + 2]._stored_settings.visibility, null, 'first connector');
+    assert.strictEqual(elements[1 * 4 + 2]._stored_settings.visibility, 'hidden', 'empty label connector');
 });
 
 QUnit.test('repair visibility for hidden connector', function(assert) {
@@ -776,23 +776,23 @@ QUnit.test('repair visibility for hidden connector', function(assert) {
         label: {
             customizeText: function(e) {
                 if(e.value === 20) {
-                    return "";
+                    return '';
                 }
                 return e.valueText;
             }
         }
     });
 
-    this.$container.dxBarGauge("instance").values([10]);
+    this.$container.dxBarGauge('instance').values([10]);
     var elements = this.getBarsGroup().children;
-    assert.strictEqual(elements[0 * 4 + 2]._stored_settings.visibility, null, "first connector");
+    assert.strictEqual(elements[0 * 4 + 2]._stored_settings.visibility, null, 'first connector');
 });
 
 //  Q467887
 QUnit.test('Font color', function(assert) {
     this.$container.dxBarGauge({
         values: [10, 20, 30],
-        palette: "office",
+        palette: 'office',
         label: {
             font: { color: 'blue' }
         }
@@ -941,7 +941,7 @@ QUnit.test('set values', function(assert) {
 
     assert.deepEqual(gauge.values(), [10, 20, 30], 'method');
     assert.deepEqual(gauge.option('values'), [10, 20, 30], 'option');
-    assert.strictEqual(spy.callCount, 1, "event");
+    assert.strictEqual(spy.callCount, 1, 'event');
 });
 
 QUnit.test('set "values" option', function(assert) {
@@ -952,11 +952,11 @@ QUnit.test('set "values" option', function(assert) {
         });
     spy.reset();
 
-    gauge.option("values", [10, '20', 30]);
+    gauge.option('values', [10, '20', 30]);
 
     assert.deepEqual(gauge.values(), [10, 20, 30], 'method');
     assert.deepEqual(gauge.option('values'), [10, 20, 30], 'option');
-    assert.strictEqual(spy.callCount, 2, "event");
+    assert.strictEqual(spy.callCount, 2, 'event');
 });
 
 QUnit.test('set values - scalar', function(assert) {
@@ -971,7 +971,7 @@ QUnit.test('set values - scalar', function(assert) {
 
     assert.deepEqual(gauge.values(), [80], 'method');
     assert.deepEqual(gauge.option('values'), [80], 'option');
-    assert.strictEqual(spy.callCount, 1, "event");
+    assert.strictEqual(spy.callCount, 1, 'event');
 });
 
 QUnit.test('set values - not valid', function(assert) {
@@ -986,7 +986,7 @@ QUnit.test('set values - not valid', function(assert) {
 
     assert.deepEqual(gauge.values(), [], 'method');
     assert.deepEqual(gauge.option('values'), [], 'option');
-    assert.strictEqual(spy.callCount, 1, "event");
+    assert.strictEqual(spy.callCount, 1, 'event');
 });
 
 QUnit.test('API method values when container is invisible', function(assert) {
@@ -1066,7 +1066,7 @@ QUnit.test('Render all hidden bars after resize', function(assert) {
         label: { visible: false }
     });
 
-    this.$container.width(1000).height(1000).dxBarGauge("render");
+    this.$container.width(1000).height(1000).dxBarGauge('render');
 
     var bars = StubBarWrapper.instances;
     assert.strictEqual(bars.length, 8, 'count');
@@ -1145,14 +1145,14 @@ QUnit.test('Draw with animation in small container, change values', function(ass
         animation: true
     });
 
-    gauge.option("size", { width: 50, height: 50 });
+    gauge.option('size', { width: 50, height: 50 });
 
     gauge.values([5, 6, 7, 8]);
 
     assert.deepEqual(this.getTrackersGroup().children.length, 2);
 });
 
-QUnit.module("Label overlapping behavior", function(hooks) {
+QUnit.module('Label overlapping behavior', function(hooks) {
     hooks.beforeEach(function() {
         environment.beforeEach.apply(this, arguments);
     });
@@ -1161,10 +1161,10 @@ QUnit.module("Label overlapping behavior", function(hooks) {
         environment.afterEach.apply(this, arguments);
     });
 
-    QUnit.test("None", function(assert) {
+    QUnit.test('None', function(assert) {
         this.$container.dxBarGauge({
             values: [19, 20],
-            resolveLabelOverlapping: "none",
+            resolveLabelOverlapping: 'none',
             animation: {
                 enabled: false
             }
@@ -1172,27 +1172,27 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         var elements = environment.getBarsGroup.call(this).children;
         var labels = $.grep(elements, function(element) {
-            if(element.typeOfNode === "text") return element;
+            if(element.typeOfNode === 'text') return element;
         });
         var lines = $.grep(elements, function(element) {
-            if(element.typeOfNode === "path") return element;
+            if(element.typeOfNode === 'path') return element;
         });
 
-        assert.equal(labels.length, 2, "labels count should be correct value");
-        assert.equal(lines.length, 2, "lines and lables should be same count");
+        assert.equal(labels.length, 2, 'labels count should be correct value');
+        assert.equal(lines.length, 2, 'lines and lables should be same count');
 
         var firstLabelArgs = labels[0].attr.lastCall.args[0];
-        assert.strictEqual(firstLabelArgs.text, "19.0", "first label should have correct text");
-        assert.strictEqual(firstLabelArgs.visibility, null, "first label should be visible");
-        assert.strictEqual(lines[0].attr.lastCall.args[0].visibility, null, "first line should be visible");
+        assert.strictEqual(firstLabelArgs.text, '19.0', 'first label should have correct text');
+        assert.strictEqual(firstLabelArgs.visibility, null, 'first label should be visible');
+        assert.strictEqual(lines[0].attr.lastCall.args[0].visibility, null, 'first line should be visible');
 
         var lastLabelArgs = labels[1].attr.lastCall.args[0];
-        assert.strictEqual(lastLabelArgs.text, "20.0", "last label should have correct text");
-        assert.strictEqual(lastLabelArgs.visibility, null, "last label should be visible");
-        assert.strictEqual(lines[1].attr.lastCall.args[0].visibility, null, "last line should be visible");
+        assert.strictEqual(lastLabelArgs.text, '20.0', 'last label should have correct text');
+        assert.strictEqual(lastLabelArgs.visibility, null, 'last label should be visible');
+        assert.strictEqual(lines[1].attr.lastCall.args[0].visibility, null, 'last line should be visible');
     });
 
-    QUnit.test("Hide", function(assert) {
+    QUnit.test('Hide', function(assert) {
         var bBoxes = [
                 // render test
                 { x: 0, y: 0, width: 10, height: 10 },
@@ -1223,7 +1223,7 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         this.$container.dxBarGauge({
             values: [19, 20, 39, 40],
-            resolveLabelOverlapping: "hide",
+            resolveLabelOverlapping: 'hide',
             animation: {
                 enabled: false
             }
@@ -1231,72 +1231,72 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         var elements = environment.getBarsGroup.call(this).children;
         var labels = $.grep(elements, function(element) {
-            if(element.typeOfNode === "text") return element;
+            if(element.typeOfNode === 'text') return element;
         });
         var lines = $.grep(elements, function(element) {
-            if(element.typeOfNode === "path") return element;
+            if(element.typeOfNode === 'path') return element;
         });
 
-        assert.equal(labels.length, 4, "labels count should be correct value");
-        assert.equal(lines.length, 4, "lines and lables should be same count");
+        assert.equal(labels.length, 4, 'labels count should be correct value');
+        assert.equal(lines.length, 4, 'lines and lables should be same count');
 
         var firstLabelSettings = labels[0]._stored_settings;
-        assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
-        assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
-        assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+        assert.strictEqual(firstLabelSettings.text, '19.0', 'first label should have correct text');
+        assert.strictEqual(firstLabelSettings.visibility, null, 'first label should be visible');
+        assert.strictEqual(lines[0]._stored_settings.visibility, null, 'first line should be visible');
 
         var secondLabelSettings = labels[1]._stored_settings;
-        assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
-        assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
-        assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
+        assert.strictEqual(secondLabelSettings.text, '20.0', 'second label should have correct text');
+        assert.equal(secondLabelSettings.visibility, 'hidden', 'second label should be hidden');
+        assert.strictEqual(lines[1]._stored_settings.visibility, 'hidden', 'second line should be hidden');
 
         var thirdLabelSettings = labels[2]._stored_settings;
-        assert.strictEqual(thirdLabelSettings.text, "39.0", "third label should have correct text");
-        assert.strictEqual(thirdLabelSettings.visibility, null, "third label should be visible");
-        assert.strictEqual(lines[2]._stored_settings.visibility, null, "third line should be visible");
+        assert.strictEqual(thirdLabelSettings.text, '39.0', 'third label should have correct text');
+        assert.strictEqual(thirdLabelSettings.visibility, null, 'third label should be visible');
+        assert.strictEqual(lines[2]._stored_settings.visibility, null, 'third line should be visible');
 
         var lastLabelSettings = labels[3]._stored_settings;
-        assert.strictEqual(lastLabelSettings.text, "40.0", "last label should have correct text");
-        assert.equal(lastLabelSettings.visibility, "hidden", "last label should be hidden");
-        assert.strictEqual(lines[3]._stored_settings.visibility, "hidden", "third line should be hidden");
+        assert.strictEqual(lastLabelSettings.text, '40.0', 'last label should have correct text');
+        assert.equal(lastLabelSettings.visibility, 'hidden', 'last label should be hidden');
+        assert.strictEqual(lines[3]._stored_settings.visibility, 'hidden', 'third line should be hidden');
     });
 
-    QUnit.test("[with animation] None", function(assert) {
+    QUnit.test('[with animation] None', function(assert) {
         var done = assert.async();
         var that = this;
         this.$container.dxBarGauge({
             values: [19, 20],
-            resolveLabelOverlapping: "none",
+            resolveLabelOverlapping: 'none',
             animation: true
         });
 
         environment.getBarsGroup.call(that).animationComplete = function() {
             var elements = environment.getBarsGroup.call(that).children;
             var labels = $.grep(elements, function(element) {
-                if(element.typeOfNode === "text") return element;
+                if(element.typeOfNode === 'text') return element;
             });
             var lines = $.grep(elements, function(element) {
-                if(element.typeOfNode === "path") return element;
+                if(element.typeOfNode === 'path') return element;
             });
 
-            assert.equal(labels.length, 2, "labels count should be correct value");
-            assert.equal(lines.length, 2, "lines and lables should be same count");
+            assert.equal(labels.length, 2, 'labels count should be correct value');
+            assert.equal(lines.length, 2, 'lines and lables should be same count');
 
             var firstLabelArgs = labels[0].attr.lastCall.args[0];
-            assert.strictEqual(firstLabelArgs.text, "19.0", "first label should have correct text");
-            assert.strictEqual(firstLabelArgs.visibility, null, "first label should be visible");
-            assert.strictEqual(lines[0].attr.lastCall.args[0].visibility, null, "first line should be visible");
+            assert.strictEqual(firstLabelArgs.text, '19.0', 'first label should have correct text');
+            assert.strictEqual(firstLabelArgs.visibility, null, 'first label should be visible');
+            assert.strictEqual(lines[0].attr.lastCall.args[0].visibility, null, 'first line should be visible');
 
             var lastLabelArgs = labels[1].attr.lastCall.args[0];
-            assert.strictEqual(lastLabelArgs.text, "20.0", "last label should have correct text");
-            assert.strictEqual(lastLabelArgs.visibility, null, "last label should be visible");
-            assert.strictEqual(lines[1].attr.lastCall.args[0].visibility, null, "last line should be visible");
+            assert.strictEqual(lastLabelArgs.text, '20.0', 'last label should have correct text');
+            assert.strictEqual(lastLabelArgs.visibility, null, 'last label should be visible');
+            assert.strictEqual(lines[1].attr.lastCall.args[0].visibility, null, 'last line should be visible');
 
             done();
         };
     });
 
-    QUnit.test("[with animation] Hide", function(assert) {
+    QUnit.test('[with animation] Hide', function(assert) {
         var done = assert.async();
         var that = this;
         var bBoxes = [
@@ -1329,50 +1329,50 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         this.$container.dxBarGauge({
             values: [19, 20, 39, 40],
-            resolveLabelOverlapping: "hide",
+            resolveLabelOverlapping: 'hide',
             animation: true
         });
 
         environment.getBarsGroup.call(that).animationComplete = function() {
             var elements = environment.getBarsGroup.call(that).children;
             var labels = $.grep(elements, function(element) {
-                if(element.typeOfNode === "text") return element;
+                if(element.typeOfNode === 'text') return element;
             });
             var lines = $.grep(elements, function(element) {
-                if(element.typeOfNode === "path") return element;
+                if(element.typeOfNode === 'path') return element;
             });
 
-            assert.equal(labels.length, 4, "labels count should be correct value");
-            assert.equal(lines.length, 4, "lines and lables should be same count");
+            assert.equal(labels.length, 4, 'labels count should be correct value');
+            assert.equal(lines.length, 4, 'lines and lables should be same count');
 
             var firstLabelSettings = labels[0]._stored_settings;
-            assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
-            assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
-            assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+            assert.strictEqual(firstLabelSettings.text, '19.0', 'first label should have correct text');
+            assert.strictEqual(firstLabelSettings.visibility, null, 'first label should be visible');
+            assert.strictEqual(lines[0]._stored_settings.visibility, null, 'first line should be visible');
 
             var secondLabelSettings = labels[1]._stored_settings;
-            assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
-            assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
-            assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
+            assert.strictEqual(secondLabelSettings.text, '20.0', 'second label should have correct text');
+            assert.equal(secondLabelSettings.visibility, 'hidden', 'second label should be hidden');
+            assert.strictEqual(lines[1]._stored_settings.visibility, 'hidden', 'second line should be hidden');
 
             var thirdLabelSettings = labels[2]._stored_settings;
-            assert.strictEqual(thirdLabelSettings.text, "39.0", "third label should have correct text");
-            assert.strictEqual(thirdLabelSettings.visibility, null, "third label should be visible");
-            assert.strictEqual(lines[2]._stored_settings.visibility, null, "third line should be visible");
+            assert.strictEqual(thirdLabelSettings.text, '39.0', 'third label should have correct text');
+            assert.strictEqual(thirdLabelSettings.visibility, null, 'third label should be visible');
+            assert.strictEqual(lines[2]._stored_settings.visibility, null, 'third line should be visible');
 
             var lastLabelSettings = labels[3]._stored_settings;
-            assert.strictEqual(lastLabelSettings.text, "40.0", "last label should have correct text");
-            assert.equal(lastLabelSettings.visibility, "hidden", "last label should be hidden");
-            assert.strictEqual(lines[3]._stored_settings.visibility, "hidden", "third line should be hidden");
+            assert.strictEqual(lastLabelSettings.text, '40.0', 'last label should have correct text');
+            assert.equal(lastLabelSettings.visibility, 'hidden', 'last label should be hidden');
+            assert.strictEqual(lines[3]._stored_settings.visibility, 'hidden', 'third line should be hidden');
 
             done();
         };
     });
 
-    QUnit.test("Change mode. None -> Hide", function(assert) {
+    QUnit.test('Change mode. None -> Hide', function(assert) {
         this.$container.dxBarGauge({
             values: [19, 20],
-            resolveLabelOverlapping: "none",
+            resolveLabelOverlapping: 'none',
             animation: {
                 enabled: false
             }
@@ -1399,35 +1399,35 @@ QUnit.module("Label overlapping behavior", function(hooks) {
         };
 
         this.$container.dxBarGauge({
-            resolveLabelOverlapping: "hide"
+            resolveLabelOverlapping: 'hide'
         });
 
         var elements = environment.getBarsGroup.call(this).children;
         var labels = $.grep(elements, function(element) {
-            if(element.typeOfNode === "text") return element;
+            if(element.typeOfNode === 'text') return element;
         });
         var lines = $.grep(elements, function(element) {
-            if(element.typeOfNode === "path") return element;
+            if(element.typeOfNode === 'path') return element;
         });
 
-        assert.equal(labels.length, 2, "labels count should be correct value");
-        assert.equal(lines.length, 2, "lines and lables should be same count");
+        assert.equal(labels.length, 2, 'labels count should be correct value');
+        assert.equal(lines.length, 2, 'lines and lables should be same count');
 
         var firstLabelSettings = labels[0]._stored_settings;
-        assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
-        assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
-        assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+        assert.strictEqual(firstLabelSettings.text, '19.0', 'first label should have correct text');
+        assert.strictEqual(firstLabelSettings.visibility, null, 'first label should be visible');
+        assert.strictEqual(lines[0]._stored_settings.visibility, null, 'first line should be visible');
 
         var secondLabelSettings = labels[1]._stored_settings;
-        assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
-        assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
-        assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
+        assert.strictEqual(secondLabelSettings.text, '20.0', 'second label should have correct text');
+        assert.equal(secondLabelSettings.visibility, 'hidden', 'second label should be hidden');
+        assert.strictEqual(lines[1]._stored_settings.visibility, 'hidden', 'second line should be hidden');
     });
 
 });
 
-QUnit.module("Checking intersection of labels", function() {
-    QUnit.test("Other bar matches with current bar", function(assert) {
+QUnit.module('Checking intersection of labels', function() {
+    QUnit.test('Other bar matches with current bar', function(assert) {
         var coords = {
             topLeft: {
                 x: 0,
@@ -1450,10 +1450,10 @@ QUnit.module("Checking intersection of labels", function() {
 
         otherBar.calculateLabelCoords = function() { return coords; };
 
-        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+        assert.ok(currentBar.checkIntersect(otherBar), 'current bar crossed with other');
     });
 
-    QUnit.test("Other bar shift on right and top of current bar", function(assert) {
+    QUnit.test('Other bar shift on right and top of current bar', function(assert) {
         var currentBar = new BarWrapper(0, {
             renderer: new vizMocks.Renderer()
         });
@@ -1488,10 +1488,10 @@ QUnit.module("Checking intersection of labels", function() {
             };
         };
 
-        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+        assert.ok(currentBar.checkIntersect(otherBar), 'current bar crossed with other');
     });
 
-    QUnit.test("Other bar shift on left and top of current bar", function(assert) {
+    QUnit.test('Other bar shift on left and top of current bar', function(assert) {
         var currentBar = new BarWrapper(0, {
             renderer: new vizMocks.Renderer()
         });
@@ -1526,10 +1526,10 @@ QUnit.module("Checking intersection of labels", function() {
             };
         };
 
-        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+        assert.ok(currentBar.checkIntersect(otherBar), 'current bar crossed with other');
     });
 
-    QUnit.test("Other bar shift on right and bottom of current bar", function(assert) {
+    QUnit.test('Other bar shift on right and bottom of current bar', function(assert) {
         var currentBar = new BarWrapper(0, {
             renderer: new vizMocks.Renderer()
         });
@@ -1564,10 +1564,10 @@ QUnit.module("Checking intersection of labels", function() {
             };
         };
 
-        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+        assert.ok(currentBar.checkIntersect(otherBar), 'current bar crossed with other');
     });
 
-    QUnit.test("Other bar shift on left and bottom of current bar", function(assert) {
+    QUnit.test('Other bar shift on left and bottom of current bar', function(assert) {
         var currentBar = new BarWrapper(0, {
             renderer: new vizMocks.Renderer()
         });
@@ -1602,10 +1602,10 @@ QUnit.module("Checking intersection of labels", function() {
             };
         };
 
-        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+        assert.ok(currentBar.checkIntersect(otherBar), 'current bar crossed with other');
     });
 
-    QUnit.test("Current bar doesn't crossed with other bar", function(assert) {
+    QUnit.test('Current bar doesn\'t crossed with other bar', function(assert) {
         var currentBar = new BarWrapper(0, {
             renderer: new vizMocks.Renderer()
         });
@@ -1640,7 +1640,7 @@ QUnit.module("Checking intersection of labels", function() {
             };
         };
 
-        assert.ok(!currentBar.checkIntersect(otherBar), "current bar doesn't intersect with other");
+        assert.ok(!currentBar.checkIntersect(otherBar), 'current bar doesn\'t intersect with other');
     });
 
 });

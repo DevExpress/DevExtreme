@@ -1,9 +1,9 @@
-import $ from "../../core/renderer";
-import Widget from "../widget/ui.widget";
-import messageLocalization from "../../localization/message";
+import $ from '../../core/renderer';
+import Widget from '../widget/ui.widget';
+import messageLocalization from '../../localization/message';
 
-var Popup = require("../popup"),
-    extend = require("../../core/utils/extend").extend;
+var Popup = require('../popup'),
+    extend = require('../../core/utils/extend').extend;
 
 class DiagramDialog extends Widget {
     _init() {
@@ -16,15 +16,15 @@ class DiagramDialog extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._command = this.option("command");
+        this._command = this.option('command');
 
-        this._$popupElement = $("<div>")
+        this._$popupElement = $('<div>')
             .appendTo(this.$element());
         this._popupInstance = this._createComponent(this._$popupElement, Popup, {
-            title: this.option("title"),
-            maxWidth: this.option("maxWidth"),
-            height: this.option("height"),
-            toolbarItems: this.option("toolbarItems"),
+            title: this.option('title'),
+            maxWidth: this.option('maxWidth'),
+            height: this.option('height'),
+            toolbarItems: this.option('toolbarItems'),
             onHidden: this._onHiddenAction
         });
     }
@@ -34,9 +34,9 @@ class DiagramDialog extends Widget {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            title: "",
+            title: '',
             maxWidth: 500,
-            height: "auto",
+            height: 'auto',
             toolbarItems: this._getToolbarItems()
         });
     }
@@ -45,11 +45,11 @@ class DiagramDialog extends Widget {
     }
     _getOkToolbarItem() {
         return {
-            widget: "dxButton",
-            location: "after",
-            toolbar: "bottom",
+            widget: 'dxButton',
+            location: 'after',
+            toolbar: 'bottom',
             options: {
-                text: messageLocalization.format("dxDiagram-dialogButtonOK"),
+                text: messageLocalization.format('dxDiagram-dialogButtonOK'),
                 onClick: function() {
                     this._command.execute(this._commandParameter);
                     this._hide();
@@ -59,30 +59,30 @@ class DiagramDialog extends Widget {
     }
     _getCancelToolbarItem() {
         return {
-            widget: "dxButton",
-            location: "after",
-            toolbar: "bottom",
+            widget: 'dxButton',
+            location: 'after',
+            toolbar: 'bottom',
             options: {
-                text: messageLocalization.format("dxDiagram-dialogButtonCancel"),
+                text: messageLocalization.format('dxDiagram-dialogButtonCancel'),
                 onClick: this._hide.bind(this)
             }
         };
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "title":
-            case "maxWidth":
-            case "height":
-            case "toolbarItems":
+            case 'title':
+            case 'maxWidth':
+            case 'height':
+            case 'toolbarItems':
                 this._popupInstance.option(args.name, args.value);
                 break;
-            case "command":
+            case 'command':
                 this._command = args.value;
                 break;
-            case "onGetContent":
+            case 'onGetContent':
                 this._createOnGetContentOption();
                 break;
-            case "onHidden":
+            case 'onHidden':
                 this._createOnHiddenOption();
                 break;
             default:
@@ -90,10 +90,10 @@ class DiagramDialog extends Widget {
         }
     }
     _createOnGetContentOption() {
-        this._onGetContentAction = this._createActionByOption("onGetContent");
+        this._onGetContentAction = this._createActionByOption('onGetContent');
     }
     _createOnHiddenOption() {
-        this._onHiddenAction = this._createActionByOption("onHidden");
+        this._onHiddenAction = this._createActionByOption('onHidden');
     }
     _hide() {
         this._popupInstance.hide();
