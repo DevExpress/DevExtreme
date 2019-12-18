@@ -615,37 +615,42 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
 });
 
 QUnit.test('Duplicated elements should not be rendered when resources are loaded asynchronously (T661335)', function(assert) {
-    this.clock = sinon.useFakeTimers();
-    this.createInstance({
-        currentView: 'day',
-        groups: ['owner'],
-        resources: [
-            {
-                fieldExpr: 'owner',
-                dataSource: [{ id: 1 }]
-            },
-            {
-                fieldExpr: 'room',
-                dataSource: new CustomStore({
-                    load: function() {
-                        var d = $.Deferred();
-                        setTimeout(function() {
-                            d.resolve([{ id: 1 }]);
-                        }, 100);
-                        return d.promise();
-                    }
-                })
-            }
-        ],
-        dataSource: []
-    });
+    const clock = sinon.useFakeTimers();
 
-    this.instance.option('groups', ['room']);
-    this.instance.repaint();
-    this.clock.tick(100);
+    try {
+        this.createInstance({
+            currentView: 'day',
+            groups: ['owner'],
+            resources: [
+                {
+                    fieldExpr: 'owner',
+                    dataSource: [{ id: 1 }]
+                },
+                {
+                    fieldExpr: 'room',
+                    dataSource: new CustomStore({
+                        load: function() {
+                            var d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([{ id: 1 }]);
+                            }, 100);
+                            return d.promise();
+                        }
+                    })
+                }
+            ],
+            dataSource: []
+        });
 
-    var $workspace = this.instance.$element().find('.dx-scheduler-work-space');
-    assert.equal($workspace.length, 1, 'Duplicated workSpace wasn\'t rendered');
+        this.instance.option('groups', ['room']);
+        this.instance.repaint();
+        clock.tick(100);
+
+        var $workspace = this.instance.$element().find('.dx-scheduler-work-space');
+        assert.equal($workspace.length, 1, 'Duplicated workSpace wasn\'t rendered');
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test('Cell data should be updated after view changing', function(assert) {
