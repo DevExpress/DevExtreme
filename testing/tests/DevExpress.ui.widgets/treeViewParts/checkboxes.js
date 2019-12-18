@@ -560,16 +560,20 @@ configs.forEach(config => {
             wrapper.instance.unselectItem(2);
 
             let expectedKeys = [1],
+                expectedNodes = [0],
                 expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectNodesRecursive) {
                 expectedKeys = [];
+                expectedNodes = [];
             }
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1];
+                expectedNodes = [0];
                 expectedCallbacks = [];
             }
             wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks(expectedCallbacks);
             wrapper.clearCallbacksCalls();
 
@@ -577,8 +581,10 @@ configs.forEach(config => {
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1, 2];
+                expectedNodes = [0, 1];
             }
             wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([]);
         });
 
@@ -589,16 +595,23 @@ configs.forEach(config => {
                 { id: 3, text: 'item1_1_1', parentId: 2, selected: false, expanded: config.expanded }]);
 
             let expectedKeys = [1];
+            let expectedNodes = [0];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2, 3];
+                    expectedNodes = [0, 1, 2];
                 }
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
                     expectedKeys = [1];
                 }
             }
+            if(!config.expanded) {
+                // unexpected result
+                expectedNodes = [0];
+            }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
@@ -611,17 +624,21 @@ configs.forEach(config => {
             wrapper.instance.expandAll();
 
             let expectedKeys = [1];
+            let expectedNodes = [0];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2, 3];
+                    expectedNodes = [0, 1, 2];
                 }
                 if(!config.expanded && isLazyDataSourceMode(wrapper) && config.selectNodesRecursive) {
                     // unexpected result
                     expectedKeys = [1, 2];
+                    expectedNodes = [0, 1];
                 }
             }
 
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
@@ -639,24 +656,35 @@ configs.forEach(config => {
             wrapper.instance.selectAll();
 
             let expectedKeys = [1, 2, 3];
-            if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+            let expectedNodes = [0, 1, 2];
+            if(!config.expanded) {
                 // unexpected result
-                expectedKeys = [1];
+                if(isLazyDataSourceMode(wrapper)) {
+                    expectedKeys = [1];
+                }
+
+                expectedNodes = [0];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
-            if(!config.expanded && isLazyDataSourceMode(wrapper)) {
-                // unexpected result
-                if(config.selectNodesRecursive) {
-                    expectedKeys = [1, 2];
-                } else {
-                    expectedKeys = [1];
+            if(!config.expanded) {
+                expectedNodes = [0, 1, 2];
+                if(isLazyDataSourceMode(wrapper)) {
+                    expectedNodes = [0];
+                    // unexpected result
+                    if(config.selectNodesRecursive) {
+                        expectedKeys = [1, 2];
+                    } else {
+                        expectedKeys = [1];
+                    }
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
