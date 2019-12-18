@@ -2911,7 +2911,9 @@ module.exports = {
                         editingController.closeEditCell();
                     }
 
-                    return eventName === startEditAction && allowEditing && (editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex));
+                    if(allowEditing && eventName === startEditAction) {
+                        return editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
+                    }
                 },
                 _rowPointerDown: function(e) {
                     this._pointerDownTimeout = setTimeout(() => {
