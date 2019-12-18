@@ -279,16 +279,17 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
 var VirtualScrollingRowsViewExtender = (function() {
     var removeEmptyRows = function($emptyRows, className) {
-        var rowCount,
-            $tBodies = $emptyRows.parent("." + className);
+        let rowCount,
+            getRowParent = row => $(row).parent('.' + className).get(0),
+            tBodies = $emptyRows.toArray().map(getRowParent).filter(row => row);
 
-        if($tBodies.length) {
-            $emptyRows = $tBodies;
+        if(tBodies.length) {
+            $emptyRows = $(tBodies);
         }
 
         rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
 
-        for(var i = 0; i < rowCount; i++) {
+        for(let i = 0; i < rowCount; i++) {
             $emptyRows.eq(i).remove();
         }
     };
