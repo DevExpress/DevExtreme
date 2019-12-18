@@ -20,12 +20,14 @@ const { assert } = QUnit;
 class TreeViewTestWrapper {
     constructor(options) {
         if(!options.onItemSelectionChanged) {
-            options.onItemSelectionChanged = sinon.stub();
-        }
-        if(!options.onSelectionChanged) {
-            options.onSelectionChanged = sinon.stub();
+            options.onItemSelectionChanged = () => this.calledEventNames.push('itemSelectionChanged');
         }
 
+        if(!options.onSelectionChanged) {
+            options.onSelectionChanged = () => this.calledEventNames.push('selectionChanged');
+        }
+
+        this.calledEventNames = [];
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option("showCheckBoxesMode") === "normal";
     }
@@ -79,19 +81,17 @@ class TreeViewTestWrapper {
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
-    checkSelectedKeys(expectedSelectedKeys) {
-        const actualSelectedKeys = this.instance._dataAdapter.getSelectedNodesKeys();
-        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort());
+    checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
+        const actualSelectedKeys = this.instance.getSelectedNodesKeys();
+        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method' + (additionalErrorMessage || ''));
     }
 
-    checkCallbackCallCount(eventName, expectedCallCount) {
-        const eventCallbackStub = this.instance.option(eventName);
-        assert.deepEqual(eventCallbackStub.callCount, expectedCallCount, `check ${eventName}`);
+    checkCallbacks(expectedEventNames, additionalErrorMessage) {
+        assert.deepEqual(this.calledEventNames, expectedEventNames, 'called events' + (additionalErrorMessage || ''));
     }
 
-    checkCallbacksCallOrder(orderedEventNames) {
-        const stubs = orderedEventNames.map((eventName) => this.instance.option(eventName));
-        sinon.assert.callOrder.apply(sinon.assert, stubs);
+    clearCallbacksCalls() {
+        this.calledEventNames = [];
     }
 
     convertTreeToFlatList(items) {
