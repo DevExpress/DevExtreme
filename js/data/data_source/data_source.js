@@ -1,19 +1,19 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    ajax = require("../../core/utils/ajax"),
-    typeUtils = require("../../core/utils/type"),
-    dataUtils = require("../utils"),
-    arrayUtils = require("../array_utils"),
-    Store = require("../abstract_store"),
-    ArrayStore = require("../array_store"),
-    CustomStore = require("../custom_store"),
-    EventsMixin = require("../../core/events_mixin"),
-    errors = require("../errors").errors,
-    array = require("../../core/utils/array"),
-    queue = require("../../core/utils/queue"),
-    deferredUtils = require("../../core/utils/deferred"),
+var Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    commonUtils = require('../../core/utils/common'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    ajax = require('../../core/utils/ajax'),
+    typeUtils = require('../../core/utils/type'),
+    dataUtils = require('../utils'),
+    arrayUtils = require('../array_utils'),
+    Store = require('../abstract_store'),
+    ArrayStore = require('../array_store'),
+    CustomStore = require('../custom_store'),
+    EventsMixin = require('../../core/events_mixin'),
+    errors = require('../errors').errors,
+    array = require('../../core/utils/array'),
+    queue = require('../../core/utils/queue'),
+    deferredUtils = require('../../core/utils/deferred'),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
 
@@ -22,7 +22,7 @@ var Class = require("../../core/class"),
     __isBoolean = typeUtils.isBoolean,
     __isDefined = typeUtils.isDefined;
 
-var CANCELED_TOKEN = "canceled";
+var CANCELED_TOKEN = 'canceled';
 
 function OperationManager() {
     this._counter = -1;
@@ -54,7 +54,7 @@ OperationManager.prototype.cancelAll = function() {
 };
 
 function isPending(deferred) {
-    return deferred.state() === "pending";
+    return deferred.state() === 'pending';
 }
 
 function normalizeDataSourceOptions(options, normalizationOptions) {
@@ -63,7 +63,7 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
     function createCustomStoreFromLoadFunc() {
         var storeConfig = {};
 
-        iteratorUtils.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
+        iteratorUtils.each(['useDefaultSearch', 'key', 'load', 'loadMode', 'cacheRawData', 'byKey', 'lookup', 'totalCount', 'insert', 'update', 'remove'], function() {
             storeConfig[this] = options[this];
             delete options[this];
         });
@@ -84,14 +84,14 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
             load: function() {
                 return ajax.sendRequest({
                     url: url,
-                    dataType: "json"
+                    dataType: 'json'
                 });
             },
             loadMode: normalizationOptions && normalizationOptions.fromUrlLoadMode
         });
     }
 
-    if(typeof options === "string") {
+    if(typeof options === 'string') {
         options = {
             paginate: false,
             store: createCustomStoreFromUrl(options)
@@ -114,7 +114,7 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
 
     store = options.store;
 
-    if("load" in options) {
+    if('load' in options) {
         store = createCustomStoreFromLoadFunc();
     } else if(Array.isArray(store)) {
         store = new ArrayStore(store);
@@ -162,7 +162,7 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
                 key: item.key,
                 items: mapRecursive(item.items, level - 1)
             };
-            if("aggregates" in item) {
+            if('aggregates' in item) {
                 result.aggregates = item.aggregates;
             }
             return result;
@@ -247,7 +247,7 @@ var DataSource = Class.inherit({
         * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
-        this._store.on("push", this._onPushHandler);
+        this._store.on('push', this._onPushHandler);
 
         /**
         * @name DataSourceOptions.sort
@@ -318,14 +318,14 @@ var DataSource = Class.inherit({
         * @type any
         * @default null
         */
-        this._searchValue = ("searchValue" in options) ? options.searchValue : null;
+        this._searchValue = ('searchValue' in options) ? options.searchValue : null;
 
         /**
         * @name DataSourceOptions.searchOperation
         * @type string
         * @default "contains"
         */
-        this._searchOperation = options.searchOperation || "contains";
+        this._searchOperation = options.searchOperation || 'contains';
 
         /**
         * @name DataSourceOptions.searchExpr
@@ -356,7 +356,7 @@ var DataSource = Class.inherit({
                  * @type_function_param1_field1 changes:Array<any>
                  * @action
                  */
-                "onChanged",
+                'onChanged',
 
                 /**
                  * @name DataSourceOptions.onLoadError
@@ -365,7 +365,7 @@ var DataSource = Class.inherit({
                  * @type_function_param1_field1 message:string
                  * @action
                  */
-                "onLoadError",
+                'onLoadError',
 
                 /**
                  * @name DataSourceOptions.onLoadingChanged
@@ -373,10 +373,10 @@ var DataSource = Class.inherit({
                  * @type_function_param1 isLoading:boolean
                  * @action
                  */
-                "onLoadingChanged",
+                'onLoadingChanged',
 
-                "onCustomizeLoadResult",
-                "onCustomizeStoreLoadOptions"
+                'onCustomizeLoadResult',
+                'onCustomizeStoreLoadOptions'
             ],
             function(_, optionName) {
                 if(optionName in options) {
@@ -406,7 +406,7 @@ var DataSource = Class.inherit({
     * @publicName dispose()
     */
     dispose: function() {
-        this._store.off("push", this._onPushHandler);
+        this._store.off('push', this._onPushHandler);
         this._disposeEvents();
         clearTimeout(this._aggregationTimeoutId);
 
@@ -423,7 +423,7 @@ var DataSource = Class.inherit({
 
     _extractLoadOptions: function(options) {
         var result = {},
-            names = ["sort", "filter", "select", "group", "requireTotalCount"],
+            names = ['sort', 'filter', 'select', 'group', 'requireTotalCount'],
             customNames = this._store._customLoadOptions();
 
         if(customNames) {
@@ -531,7 +531,7 @@ var DataSource = Class.inherit({
     * @publicName sort(sortExpr)
     * @param1 sortExpr:any
     */
-    sort: generateStoreLoadOptionAccessor("sort"),
+    sort: generateStoreLoadOptionAccessor('sort'),
 
     /**
     * @name DataSourceMethods.filter
@@ -563,7 +563,7 @@ var DataSource = Class.inherit({
     * @publicName group(groupExpr)
     * @param1 groupExpr:object
     */
-    group: generateStoreLoadOptionAccessor("group"),
+    group: generateStoreLoadOptionAccessor('group'),
 
     /**
     * @name DataSourceMethods.select
@@ -575,7 +575,7 @@ var DataSource = Class.inherit({
     * @publicName select(expr)
     * @param1 expr:any
     */
-    select: generateStoreLoadOptionAccessor("select"),
+    select: generateStoreLoadOptionAccessor('select'),
 
     /**
     * @name DataSourceMethods.requireTotalCount
@@ -723,7 +723,7 @@ var DataSource = Class.inherit({
         newLoading = this.isLoading();
 
         if(oldLoading ^ newLoading) {
-            this.fireEvent("loadingChanged", [newLoading]);
+            this.fireEvent('loadingChanged', [newLoading]);
         }
     },
 
@@ -745,13 +745,13 @@ var DataSource = Class.inherit({
                 return;
             }
 
-            that.fireEvent("loadError", arguments);
+            that.fireEvent('loadError', arguments);
         });
     },
 
     _fireChanged: function(args) {
         var date = new Date();
-        this.fireEvent("changed", args);
+        this.fireEvent('changed', args);
         this._changedTime = new Date() - date;
     },
 
@@ -770,7 +770,7 @@ var DataSource = Class.inherit({
             options = this._createStoreLoadOptions(),
             handleDone = function(data) {
                 if(!__isDefined(data) || array.isEmpty(data)) {
-                    d.reject(new errors.Error("E4009"));
+                    d.reject(new errors.Error('E4009'));
                 } else {
                     if(!Array.isArray(data)) {
                         data = [data];
@@ -843,10 +843,10 @@ var DataSource = Class.inherit({
 
         loadOperation = this._createLoadOperation(d);
 
-        this.fireEvent("customizeStoreLoadOptions", [loadOperation]);
+        this.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 
         this._loadQueue.add(function() {
-            if(typeof loadOperation.delay === "number") {
+            if(typeof loadOperation.delay === 'number') {
                 that._delayedLoadTask = commonUtils.executeAsync(loadTask, loadOperation.delay);
             } else {
                 loadTask();
@@ -863,12 +863,12 @@ var DataSource = Class.inherit({
         if(this._reshapeOnPush) {
             this.load();
         } else {
-            this.fireEvent("changing", [{ changes: changes }]);
+            this.fireEvent('changing', [{ changes: changes }]);
 
             let group = this.group(),
                 items = this.items(),
                 groupLevel = 0,
-                dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === "update") : changes;
+                dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === 'update') : changes;
 
             if(group) {
                 groupLevel = Array.isArray(group) ? group.length : 1;
@@ -876,7 +876,7 @@ var DataSource = Class.inherit({
 
             if(this._mapFunc) {
                 dataSourceChanges.forEach((item) => {
-                    if(item.type === "insert") {
+                    if(item.type === 'insert') {
                         item.data = this._mapFunc(item.data);
                     }
                 });
@@ -970,7 +970,7 @@ var DataSource = Class.inherit({
         }
 
         if(!selector) {
-            selector = "this";
+            selector = 'this';
         }
 
         if(!Array.isArray(selector)) {
@@ -981,7 +981,7 @@ var DataSource = Class.inherit({
 
         iteratorUtils.each(selector, function(i, item) {
             if(searchFilter.length) {
-                searchFilter.push("or");
+                searchFilter.push('or');
             }
 
             searchFilter.push([item, op, value]);
@@ -1001,7 +1001,7 @@ var DataSource = Class.inherit({
             function processResult() {
                 var loadResult = extend(normalizeLoadResult(data, extra), loadOptions);
 
-                that.fireEvent("customizeLoadResult", [loadResult]);
+                that.fireEvent('customizeLoadResult', [loadResult]);
                 when(loadResult.data).done(function(data) {
                     loadResult.data = data;
                     that._processStoreLoadResult(loadResult, pendingDeferred);

@@ -1,5 +1,5 @@
-var noop = require("../../core/utils/common").noop,
-    DataHelperMixin = require("../../data_helper"),
+var noop = require('../../core/utils/common').noop,
+    DataHelperMixin = require('../../data_helper'),
     postCtor = DataHelperMixin.postCtor,
     name,
     members = {
@@ -13,7 +13,7 @@ var noop = require("../../core/utils/common").noop,
 
         _updateDataSource: function() {
             this._refreshDataSource();
-            if(!this.option("dataSource")) {
+            if(!this.option('dataSource')) {
                 this._dataSourceChangedHandler();
             }
         },
@@ -28,7 +28,7 @@ var noop = require("../../core/utils/common").noop,
     };
 
 for(name in DataHelperMixin) {
-    if(name === "postCtor") {
+    if(name === 'postCtor') {
         continue;
     }
 
@@ -36,7 +36,7 @@ for(name in DataHelperMixin) {
 }
 
 exports.plugin = {
-    name: "data_source",
+    name: 'data_source',
     init: function() {
         postCtor.call(this);
     },

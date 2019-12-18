@@ -1,5 +1,5 @@
-var $ = require("../../core/renderer"),
-    TemplateBase = require("./ui.template_base");
+var $ = require('../../core/renderer'),
+    TemplateBase = require('./ui.template_base');
 
 var EmptyTemplate = TemplateBase.inherit({
 

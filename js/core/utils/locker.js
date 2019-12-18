@@ -1,4 +1,4 @@
-var errors = require("../errors");
+var errors = require('../errors');
 
 var Locker = function() {
     var info = {};
@@ -16,7 +16,7 @@ var Locker = function() {
             var count = currentCount(lockName);
 
             if(count < 1) {
-                throw errors.Error("E0014");
+                throw errors.Error('E0014');
             }
 
             if(count === 1) {

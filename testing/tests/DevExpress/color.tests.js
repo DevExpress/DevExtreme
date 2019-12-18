@@ -1,9 +1,9 @@
-var Color = require("color");
+var Color = require('color');
 
 QUnit.module('Colors parsing', {
     beforeEach: function() {
         this.check = function(color, expected, message, assert) {
-            if(typeof expected.colorIsInvalid === "undefined") {
+            if(typeof expected.colorIsInvalid === 'undefined') {
                 expected.colorIsInvalid = false;
             }
 
@@ -148,10 +148,10 @@ QUnit.test('to hex', function(assert) {
     assert.strictEqual(new Color('rgba(10, 20, 40, .5)').toHex(), '#0a1428', 'rgba(10,20,40)');
 });
 
-QUnit.test("T266166 - color should be converted from hsv to rgb correctly when hue is 360", function(assert) {
+QUnit.test('T266166 - color should be converted from hsv to rgb correctly when hue is 360', function(assert) {
     var color = new Color();
     color.hsv.h = 360;
-    assert.equal(color.getPureColor().toHex(), "#ff0000", "converted color is correct");
+    assert.equal(color.getPureColor().toHex(), '#ff0000', 'converted color is correct');
 });
 
 QUnit.module('Darkening and highlighting');
@@ -162,7 +162,7 @@ QUnit.test('Highlight color on the edge', function(assert) {
     var color = new Color('red');
     // assert
     assert.ok(color);
-    assert.equal(color.highlight(), "#ff0a0a");
+    assert.equal(color.highlight(), '#ff0a0a');
 
 });
 
@@ -172,7 +172,7 @@ QUnit.test('Highlight intermediate color with custom step', function(assert) {
     var color = new Color('#010101');
     // assert
     assert.ok(color);
-    assert.equal(color.highlight(11), "#0c0c0c");
+    assert.equal(color.highlight(11), '#0c0c0c');
 });
 
 QUnit.test('Highlight intermediate color', function(assert) {
@@ -181,7 +181,7 @@ QUnit.test('Highlight intermediate color', function(assert) {
     var color = new Color('#010101');
     // assert
     assert.ok(color);
-    assert.equal(color.highlight(), "#0b0b0b");
+    assert.equal(color.highlight(), '#0b0b0b');
 });
 
 QUnit.test('Darken color on the edge', function(assert) {
@@ -189,7 +189,7 @@ QUnit.test('Darken color on the edge', function(assert) {
     // act
     var color = new Color('#001F00');
     // assert
-    assert.equal(color.darken(), "#001500");
+    assert.equal(color.darken(), '#001500');
 });
 
 QUnit.test('Darken intermediate color', function(assert) {
@@ -197,7 +197,7 @@ QUnit.test('Darken intermediate color', function(assert) {
     // act
     var color = new Color('#1F1F1F');
     // assert
-    assert.equal(color.darken(), "#151515");
+    assert.equal(color.darken(), '#151515');
 });
 
 QUnit.test('Darken intermediate color with custom step', function(assert) {
@@ -205,7 +205,7 @@ QUnit.test('Darken intermediate color with custom step', function(assert) {
     // act
     var color = new Color('#1F1F1F');
     // assert
-    assert.equal(color.darken(11), "#141414");
+    assert.equal(color.darken(11), '#141414');
 });
 
 QUnit.test('Alter color width positive step', function(assert) {
@@ -236,7 +236,7 @@ QUnit.test('blend - paired', function(assert) {
     assert.strictEqual(new Color('#8eefd4').blend('#09a0dd', 0.3).toHex(), '#66d7d7', '#8eefd4 - #09a0dd 0.3');
 });
 
-QUnit.module("Color validation");
+QUnit.module('Color validation');
 
 QUnit.test('is valid hex', function(assert) {
     var color = new Color();
@@ -256,7 +256,7 @@ QUnit.test('is valid RGB', function(assert) {
     assert.equal(color.isValidRGB(250, 100, 255), true);
     assert.equal(color.isValidRGB(-250, 100, 255), false);
     assert.equal(color.isValidRGB(250, 400, 255), false);
-    assert.equal(color.isValidRGB(250, "sdsd", 255), false);
+    assert.equal(color.isValidRGB(250, 'sdsd', 255), false);
     assert.equal(color.isValidRGB(250, null, 100), false);
     assert.equal(color.isValidRGB(250, 100), false);
     assert.equal(color.isValidRGB(250, 100, NaN), false);
@@ -271,5 +271,5 @@ QUnit.test('is valid alpha', function(assert) {
     assert.equal(color.isValidAlpha(-0.5), false);
     assert.equal(color.isValidAlpha(), false);
     assert.equal(color.isValidAlpha(100), false);
-    assert.equal(color.isValidAlpha("sdss"), false);
+    assert.equal(color.isValidAlpha('sdss'), false);
 });

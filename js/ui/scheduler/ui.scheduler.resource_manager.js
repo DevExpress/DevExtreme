@@ -1,23 +1,23 @@
-var Class = require("../../core/class"),
-    arrayUtils = require("../../core/utils/array"),
-    grep = require("../../core/utils/common").grep,
-    isDefined = require("../../core/utils/type").isDefined,
-    objectUtils = require("../../core/utils/object"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    query = require("../../data/query"),
-    dataCoreUtils = require("../../core/utils/data"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    deferredUtils = require("../../core/utils/deferred"),
+var Class = require('../../core/class'),
+    arrayUtils = require('../../core/utils/array'),
+    grep = require('../../core/utils/common').grep,
+    isDefined = require('../../core/utils/type').isDefined,
+    objectUtils = require('../../core/utils/object'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    extend = require('../../core/utils/extend').extend,
+    inArray = require('../../core/utils/array').inArray,
+    query = require('../../data/query'),
+    dataCoreUtils = require('../../core/utils/data'),
+    DataSourceModule = require('../../data/data_source/data_source'),
+    deferredUtils = require('../../core/utils/deferred'),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
 
 var getValueExpr = function(resource) {
-        return resource.valueExpr || "id";
+        return resource.valueExpr || 'id';
     },
     getDisplayExpr = function(resource) {
-        return resource.displayExpr || "text";
+        return resource.displayExpr || 'text';
     };
 
 var ResourceManager = Class.inherit({
@@ -125,7 +125,7 @@ var ResourceManager = Class.inherit({
                     valueExpr: getValueExpr(resource)
                 },
                 dataField: field,
-                editorType: resource.allowMultiple ? "dxTagBox" : "dxSelectBox",
+                editorType: resource.allowMultiple ? 'dxTagBox' : 'dxSelectBox',
                 label: { text: resource.label || field }
             });
         });
@@ -192,7 +192,7 @@ var ResourceManager = Class.inherit({
             iteratorUtils.each(itemData, function(fieldName, fieldValue) {
                 var tmp = {};
                 tmp[fieldName] = fieldValue;
-                var resourceData = that.getDataAccessors(field, "getter")(tmp);
+                var resourceData = that.getDataAccessors(field, 'getter')(tmp);
                 if(isDefined(resourceData)) {
                     if(!result) {
                         result = {};
@@ -201,9 +201,9 @@ var ResourceManager = Class.inherit({
                         resourceData = resourceData[0];
                     }
                     if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && that._isMultipleResource(field))) {
-                        that.getDataAccessors(field, "setter")(tmp, arrayUtils.wrapToArray(resourceData));
+                        that.getDataAccessors(field, 'setter')(tmp, arrayUtils.wrapToArray(resourceData));
                     } else {
-                        that.getDataAccessors(field, "setter")(tmp, resourceData);
+                        that.getDataAccessors(field, 'setter')(tmp, resourceData);
                     }
 
                     extend(result, tmp);
@@ -272,9 +272,9 @@ var ResourceManager = Class.inherit({
     },
 
     getResourceColor: function(field, value) {
-        var valueExpr = this.getResourceByField(field).valueExpr || "id",
+        var valueExpr = this.getResourceByField(field).valueExpr || 'id',
             valueGetter = dataCoreUtils.compileGetter(valueExpr),
-            colorExpr = this.getResourceByField(field).colorExpr || "color",
+            colorExpr = this.getResourceByField(field).colorExpr || 'color',
             colorGetter = dataCoreUtils.compileGetter(colorExpr);
 
         var result = new Deferred(),
@@ -366,7 +366,7 @@ var ResourceManager = Class.inherit({
     },
 
     _hasGroupItem: function(appointmentResources, groupName, itemValue) {
-        var group = this.getDataAccessors(groupName, "getter")(appointmentResources);
+        var group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
 
         if(group) {
             if(inArray(itemValue, group) > -1) {
@@ -444,7 +444,7 @@ var ResourceManager = Class.inherit({
                 resourceValue = node.value,
                 resourceTitle = node.title,
                 resourceData = node.data,
-                resourceGetter = that.getDataAccessors(resourceName, "getter");
+                resourceGetter = that.getDataAccessors(resourceName, 'getter');
 
             existingAppointments.forEach(function(appointment) {
                 if(!ok) {

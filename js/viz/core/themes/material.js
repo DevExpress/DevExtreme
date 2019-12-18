@@ -1,29 +1,29 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
 
-    FONT_FAMILY = "'Roboto', 'RobotoFallback', 'Helvetica', 'Arial', sans-serif",
+    FONT_FAMILY = '\'Roboto\', \'RobotoFallback\', \'Helvetica\', \'Arial\', sans-serif',
 
-    LIGHT_TITLE_COLOR = "rgba(0,0,0,0.87)",
-    LIGHT_LABEL_COLOR = "rgba(0,0,0,0.54)",
+    LIGHT_TITLE_COLOR = 'rgba(0,0,0,0.87)',
+    LIGHT_LABEL_COLOR = 'rgba(0,0,0,0.54)',
 
-    DARK_TITLE_COLOR = "rgba(255,255,255,0.87)",
-    DARK_LABEL_COLOR = "rgba(255,255,255,0.54)",
-    DARK_BACKGROUND_COLOR = "#363640",
+    DARK_TITLE_COLOR = 'rgba(255,255,255,0.87)',
+    DARK_LABEL_COLOR = 'rgba(255,255,255,0.54)',
+    DARK_BACKGROUND_COLOR = '#363640',
 
-    WHITE = "#ffffff",
-    BLACK = "#000000",
-    RANGE_COLOR = "#b5b5b5",
-    AREA_LAYER_COLOR = "#686868",
-    LINE_COLOR = "#c7c7c7",
-    TARGET_COLOR = "#8e8e8e",
-    POSITIVE_COLOR = "#b8b8b8",
-    LABEL_BORDER_COLOR = "#494949",
-    BREAK_STYLE_COLOR = "#818181";
+    WHITE = '#ffffff',
+    BLACK = '#000000',
+    RANGE_COLOR = '#b5b5b5',
+    AREA_LAYER_COLOR = '#686868',
+    LINE_COLOR = '#c7c7c7',
+    TARGET_COLOR = '#8e8e8e',
+    POSITIVE_COLOR = '#b8b8b8',
+    LABEL_BORDER_COLOR = '#494949',
+    BREAK_STYLE_COLOR = '#818181';
 
 registerTheme({
-    name: "material",
-    defaultPalette: "Material",
+    name: 'material',
+    defaultPalette: 'Material',
 
     font: {
         family: FONT_FAMILY
@@ -40,13 +40,13 @@ registerTheme({
             family: FONT_FAMILY,
             weight: 500
         },
-        horizontalAlignment: "left",
+        horizontalAlignment: 'left',
 
         subtitle: {
             font: {
                 size: 14
             },
-            horizontalAlignment: "left"
+            horizontalAlignment: 'left'
         }
     },
 
@@ -60,8 +60,8 @@ registerTheme({
         paddingLeftRight: 8,
         paddingTopBottom: 6,
         arrowLength: 0,
-        location: "edge",
-        color: "#616161",
+        location: 'edge',
+        color: '#616161',
         font: {
             color: WHITE
         },
@@ -84,9 +84,9 @@ registerTheme({
                 color: WHITE
             },
             border: {
-                color: "#616161"
+                color: '#616161'
             },
-            color: "#616161",
+            color: '#616161',
             arrowLength: 14,
             arrowWidth: 0,
             shadow: {
@@ -100,9 +100,9 @@ registerTheme({
 
     pie: {
         title: {
-            horizontalAlignment: "center",
+            horizontalAlignment: 'center',
             subtitle: {
-                horizontalAlignment: "center"
+                horizontalAlignment: 'center'
             }
         }
     },
@@ -114,36 +114,36 @@ registerTheme({
             }
         },
         title: {
-            horizontalAlignment: "center",
+            horizontalAlignment: 'center',
             subtitle: {
-                horizontalAlignment: "center"
+                horizontalAlignment: 'center'
             }
         }
     },
 
     funnel: {
         title: {
-            horizontalAlignment: "center",
+            horizontalAlignment: 'center',
             subtitle: {
-                horizontalAlignment: "center"
+                horizontalAlignment: 'center'
             }
         }
     },
 
     gauge: {
         title: {
-            horizontalAlignment: "center",
+            horizontalAlignment: 'center',
             subtitle: {
-                horizontalAlignment: "center"
+                horizontalAlignment: 'center'
             }
         }
     },
 
     barGauge: {
         title: {
-            horizontalAlignment: "center",
+            horizontalAlignment: 'center',
             subtitle: {
-                horizontalAlignment: "center"
+                horizontalAlignment: 'center'
             }
         }
     },
@@ -163,11 +163,11 @@ registerTheme({
             }
         }
     }
-}, "generic.light");
+}, 'generic.light');
 
 registerTheme({
-    name: "material.light",
-    gridColor: "#e0e0e0",
+    name: 'material.light',
+    gridColor: '#e0e0e0',
     axisColor: LIGHT_LABEL_COLOR,
     primaryTitleColor: LIGHT_TITLE_COLOR,
 
@@ -179,25 +179,25 @@ registerTheme({
 
     chart: {
         scrollBar: {
-            color: "#bfbfbf",
+            color: '#bfbfbf',
             opacity: 0.7
         }
     },
 
     gauge: {
         rangeContainer: {
-            backgroundColor: "rgba(0,0,0,0.2)"
+            backgroundColor: 'rgba(0,0,0,0.2)'
         }
     },
 
     barGauge: {
-        backgroundColor: "#efefef"
+        backgroundColor: '#efefef'
     }
-}, "material");
+}, 'material');
 
 registerTheme({
-    name: "material.dark",
-    gridColor: "#515159",
+    name: 'material.dark',
+    gridColor: '#515159',
     backgroundColor: DARK_BACKGROUND_COLOR,
     axisColor: DARK_LABEL_COLOR,
     font: {
@@ -207,40 +207,40 @@ registerTheme({
     secondaryTitleColor: DARK_TITLE_COLOR,
 
     tooltip: {
-        color: "#000"
+        color: '#000'
     },
 
-    "export": {
+    'export': {
         backgroundColor: DARK_BACKGROUND_COLOR,
         font: {
-            color: "#dbdbdb"
+            color: '#dbdbdb'
         },
         button: {
-            "default": {
-                color: "#dedede",
-                borderColor: "#4d4d4d",
+            'default': {
+                color: '#dedede',
+                borderColor: '#4d4d4d',
                 backgroundColor: DARK_BACKGROUND_COLOR
             },
             hover: {
-                color: "#dedede",
-                borderColor: "#6c6c6c",
-                backgroundColor: "#3f3f4b"
+                color: '#dedede',
+                borderColor: '#6c6c6c',
+                backgroundColor: '#3f3f4b'
             },
             focus: {
-                color: "#dedede",
-                borderColor: "#8d8d8d",
-                backgroundColor: "#494956"
+                color: '#dedede',
+                borderColor: '#8d8d8d',
+                backgroundColor: '#494956'
             },
             active: {
-                color: "#dedede",
-                borderColor: "#8d8d8d",
-                backgroundColor: "#494956"
+                color: '#dedede',
+                borderColor: '#8d8d8d',
+                backgroundColor: '#494956'
             }
         },
-        shadowColor: "#292929"
+        shadowColor: '#292929'
     },
 
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -252,7 +252,7 @@ registerTheme({
             }
         }
     },
-    "chart:common:axis": {
+    'chart:common:axis': {
         constantLineStyle: {
             color: WHITE
         }
@@ -275,9 +275,9 @@ registerTheme({
         },
         commonAnnotationSettings: {
             border: {
-                color: "#000"
+                color: '#000'
             },
-            color: "#000"
+            color: '#000'
         }
     },
     gauge: {
@@ -288,22 +288,22 @@ registerTheme({
             _default: {
                 color: RANGE_COLOR
             },
-            "rangebar": {
-                color: "#84788b"
+            'rangebar': {
+                color: '#84788b'
             },
-            "twocolorneedle": {
-                secondColor: "#ba544d"
+            'twocolorneedle': {
+                secondColor: '#ba544d'
             },
-            "trianglemarker": {
-                color: "#b7918f"
+            'trianglemarker': {
+                color: '#b7918f'
             },
-            "textcloud": {
-                color: "#ba544d"
+            'textcloud': {
+                color: '#ba544d'
             }
         }
     },
     barGauge: {
-        backgroundColor: "#3c3c3c"
+        backgroundColor: '#3c3c3c'
     },
     rangeSelector: {
         scale: {
@@ -337,7 +337,7 @@ registerTheme({
     },
     map: {
         background: {
-            borderColor: "#3f3f3f"
+            borderColor: '#3f3f3f'
         },
         layer: {
             label: {
@@ -347,28 +347,28 @@ registerTheme({
                 }
             }
         },
-        "layer:area": {
+        'layer:area': {
             borderColor: DARK_BACKGROUND_COLOR,
             color: AREA_LAYER_COLOR,
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
-        "layer:line": {
-            color: "#c77244",
-            hoveredColor: "#ff5d04",
-            selectedColor: "#ff784f"
+        'layer:line': {
+            color: '#c77244',
+            hoveredColor: '#ff5d04',
+            selectedColor: '#ff784f'
         },
-        "layer:marker:bubble": {
+        'layer:marker:bubble': {
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
-        "layer:marker:pie": {
+        'layer:marker:pie': {
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
         legend: {
             border: {
-                color: "#3f3f3f"
+                color: '#3f3f3f'
             },
             font: {
                 color: WHITE
@@ -381,10 +381,10 @@ registerTheme({
     },
     treeMap: {
         group: {
-            color: "#4c4c4c",
+            color: '#4c4c4c',
             label: {
                 font: {
-                    color: "#a3a3a3"
+                    color: '#a3a3a3'
                 }
             }
         }
@@ -415,11 +415,11 @@ registerTheme({
             }
         }
     }
-}, "material");
+}, 'material');
 
 function registerMaterialColorScheme(accentName, themeName, accentColor) {
     registerTheme({
-        name: "material." + accentName + "." + themeName,
+        name: 'material.' + accentName + '.' + themeName,
 
         rangeSelector: {
             selectedRangeColor: accentColor,
@@ -432,10 +432,10 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
         },
 
         map: {
-            "layer:marker:dot": {
+            'layer:marker:dot': {
                 color: accentColor
             },
-            "layer:marker:bubble": {
+            'layer:marker:bubble': {
                 color: accentColor
             },
             legend: {
@@ -449,30 +449,30 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
 
         gauge: {
             valueIndicators: {
-                "rangebar": {
+                'rangebar': {
                     color: accentColor
                 },
-                "textcloud": {
+                'textcloud': {
                     color: accentColor
                 }
             }
         }
-    }, "material." + themeName);
+    }, 'material.' + themeName);
 }
 
 var materialAccents = {
-    "blue": "#03a9f4",
-    "lime": "#cddc39",
-    "orange": "#ff5722",
-    "purple": "#9c27b0",
-    "teal": "#009688"
+    'blue': '#03a9f4',
+    'lime': '#cddc39',
+    'orange': '#ff5722',
+    'purple': '#9c27b0',
+    'teal': '#009688'
 };
 
 for(var accent in materialAccents) {
     if(Object.prototype.hasOwnProperty.call(materialAccents, accent)) {
         var color = materialAccents[accent];
-        registerMaterialColorScheme(accent, "light", color);
-        registerMaterialColorScheme(accent, "dark", color);
+        registerMaterialColorScheme(accent, 'light', color);
+        registerMaterialColorScheme(accent, 'dark', color);
         registerThemeAlias(`material.${accent}.light.compact`, `material.${accent}.light`);
         registerThemeAlias(`material.${accent}.dark.compact`, `material.${accent}.dark`);
     }

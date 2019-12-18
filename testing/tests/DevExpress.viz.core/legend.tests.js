@@ -1,8 +1,8 @@
-import $ from "jquery";
-import { noop } from "core/utils/common";
-import vizMocks from "../../helpers/vizMocks.js";
-import legendModule from "viz/components/legend";
-import module from "viz/core/title";
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import legendModule from 'viz/components/legend';
+import module from 'viz/core/title';
 
 const Legend = legendModule.Legend;
 
@@ -101,8 +101,8 @@ var environment = {
         for(i = 0; i < itemCount; i++) {
             data.push({
                 id: i,
-                text: "Marker " + (i + 1),
-                states: { normal: { fill: "color-" + (i + 1) } },
+                text: 'Marker ' + (i + 1),
+                states: { normal: { fill: 'color-' + (i + 1) } },
                 visible: true
             });
         }
@@ -114,7 +114,7 @@ var environment = {
         var insideLegendGroup = this.renderer.g.secondCall.returnValue;
         for(var i = 0; i < insideLegendGroup.children.length; i++) {
             var child = insideLegendGroup.children[i];
-            if(child.attr.firstCall.args[0].class === "dxc-item") {
+            if(child.attr.firstCall.args[0].class === 'dxc-item') {
                 return child;
             }
         }
@@ -129,10 +129,10 @@ var environment = {
             borderCorrection = this.options.border.visible ? 1 : 0,
             items = markersGroup.children.slice(0);
 
-        assert.equal(markersGroup.children.length, itemsCount * 2, "Legend created the correct items count.");
+        assert.equal(markersGroup.children.length, itemsCount * 2, 'Legend created the correct items count.');
         for(i = 0; i < itemsCount; i++) {
-            assert.equal(items[i * 2], that.renderer.rect.getCall(i + borderCorrection).returnValue, "first element is marker rect. " + i + " ID");
-            assert.equal(items[i * 2 + 1], that.renderer.text.getCall(i + titleCorrection + subtitleCorrection).returnValue, "second element is text, " + i + " ID");
+            assert.equal(items[i * 2], that.renderer.rect.getCall(i + borderCorrection).returnValue, 'first element is marker rect. ' + i + ' ID');
+            assert.equal(items[i * 2 + 1], that.renderer.text.getCall(i + titleCorrection + subtitleCorrection).returnValue, 'second element is text, ' + i + ' ID');
         }
     },
     _checkCreatingMarkerAndLabel: function(assert, itemsCount) {
@@ -160,14 +160,14 @@ var environment = {
 
         $.each(markerAttr, function(key, value) {
             switch(key) {
-                case "translateX":
-                    assert.equal(marker.move.lastCall.args[0], value, key + " marker attr; " + index + " id");
+                case 'translateX':
+                    assert.equal(marker.move.lastCall.args[0], value, key + ' marker attr; ' + index + ' id');
                     break;
-                case "translateY":
-                    assert.equal(marker.move.lastCall.args[1], value, key + " marker attr; " + index + " id");
+                case 'translateY':
+                    assert.equal(marker.move.lastCall.args[1], value, key + ' marker attr; ' + index + ' id');
                     break;
                 default:
-                    assert.equal(settings[key], value, key + " marker attr; " + index + " id");
+                    assert.equal(settings[key], value, key + ' marker attr; ' + index + ' id');
             }
         });
     },
@@ -177,31 +177,31 @@ var environment = {
 
         $.each(labelAttr, function(key, value) {
             switch(key) {
-                case "translateX":
-                    assert.equal(label.move.lastCall.args[0], value, key + " label attr; " + index + " id");
+                case 'translateX':
+                    assert.equal(label.move.lastCall.args[0], value, key + ' label attr; ' + index + ' id');
                     break;
-                case "translateY":
-                    assert.equal(label.move.lastCall.args[1], value, key + " label attr; " + index + " id");
+                case 'translateY':
+                    assert.equal(label.move.lastCall.args[1], value, key + ' label attr; ' + index + ' id');
                     break;
                 default:
-                    assert.equal(settings[key], value, key + " label attr; " + index + " id");
+                    assert.equal(settings[key], value, key + ' label attr; ' + index + ' id');
             }
         });
     },
     checkTrackers: function(assert, trackerAttr, indexItem) {
         var tracker = this.legend._items[indexItem].tracker;
-        assert.equal(tracker.left, trackerAttr.left, "left");
-        assert.equal(tracker.top, trackerAttr.top, "top");
-        assert.equal(tracker.right, trackerAttr.right, "right");
-        assert.equal(tracker.bottom, trackerAttr.bottom, "bottom");
+        assert.equal(tracker.left, trackerAttr.left, 'left');
+        assert.equal(tracker.top, trackerAttr.top, 'top');
+        assert.equal(tracker.right, trackerAttr.right, 'right');
+        assert.equal(tracker.bottom, trackerAttr.bottom, 'bottom');
     }
 };
 
 function getDefaultStates() {
     return {
-        hover: { hatching: { direction: "right" }, fill: 'blue' },
+        hover: { hatching: { direction: 'right' }, fill: 'blue' },
         normal: { fill: '#00FF00' },
-        selection: { hatching: { direction: "right" }, fill: 'black' }
+        selection: { hatching: { direction: 'right' }, fill: 'black' }
     };
 }
 
@@ -220,13 +220,13 @@ function getLegendOptions(options) {
         },
         font: {
             color: '#7F7F7F',
-            family: "Helvetica",
+            family: 'Helvetica',
             size: 14
         },
         border: {
             visible: false,
             width: 1,
-            color: "red"
+            color: 'red'
         },
         position: 'outside',
         paddingLeftRight: 10,
@@ -234,7 +234,7 @@ function getLegendOptions(options) {
         columnItemSpacing: 8,
         rowItemSpacing: 8,
         hoverMode: 'includePoints',
-        cutSide: "vertical"
+        cutSide: 'vertical'
     }, options);
 }
 
@@ -245,10 +245,10 @@ function getLegendData(count) {
 
     for(i = 0; i < count; i++) {
         array.push({
-            text: i + "",
+            text: i + '',
             id: i,
-            argument: "argument" + i,
-            argumentIndex: "argumentIndex" + i,
+            argument: 'argument' + i,
+            argumentIndex: 'argumentIndex' + i,
             states: states,
             visible: true
         });
@@ -257,18 +257,18 @@ function getLegendData(count) {
     return array;
 }
 
-QUnit.module("constructor", environment);
+QUnit.module('constructor', environment);
 
-QUnit.test("getOptions", function(assert) {
-    this.options.hoverMode = "customHoverMode";
+QUnit.test('getOptions', function(assert) {
+    this.options.hoverMode = 'customHoverMode';
     var legend = this.createSimpleLegend();
 
-    assert.strictEqual(legend.getOptions().hoverMode, "customhovermode");
+    assert.strictEqual(legend.getOptions().hoverMode, 'customhovermode');
 });
 
-QUnit.module("draw legend", environment);
+QUnit.module('draw legend', environment);
 
-QUnit.test("visible = false", function(assert) {
+QUnit.test('visible = false', function(assert) {
     this.options.visible = false;
     this.createSimpleLegend();
     assert.ok(!this.renderer.g.called);
@@ -282,9 +282,9 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
     elements = this.getRenderedElements();
 
     assert.equal(elements.insideLegendGroup.append.firstCall.args[0], this.rootGroup, 'Series groups were added, trackers was added');
-    assert.equal(this.renderer.g.callCount, 3, "renderer must create 3 groups (insideLegendGroup, titleGroup, markersGroup");
-    assert.equal(elements.insideLegendGroup.children.length, 1, "insideLegendGroup must contain just markers group");
-    assert.equal(elements.insideLegendGroup.children[0].children.length, this.data.length * 2, "markersGroup must contain all rects and labels");
+    assert.equal(this.renderer.g.callCount, 3, 'renderer must create 3 groups (insideLegendGroup, titleGroup, markersGroup');
+    assert.equal(elements.insideLegendGroup.children.length, 1, 'insideLegendGroup must contain just markers group');
+    assert.equal(elements.insideLegendGroup.children[0].children.length, this.data.length * 2, 'markersGroup must contain all rects and labels');
 
     for(var i = 0; i < this.data.length; i++) {
         marker = this.renderer.rect.getCall(i).returnValue;
@@ -292,7 +292,7 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
         assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: undefined }, 'Rect element not found for series ' + i);
 
         assert.equal(text.typeOfNode, 'text', 'Text element for series ' + i);
-        assert.equal(text.stub("setTitle").callCount, 0, 'Text element for series ' + i);
+        assert.equal(text.stub('setTitle').callCount, 0, 'Text element for series ' + i);
         assert.equal(text._stored_settings.text, this.data[i].text, 'Text value for series ' + i);
     }
 });
@@ -308,7 +308,7 @@ QUnit.test('Draw with Title', function(assert) {
     this.createAndDrawLegend(200, 200);
 
     for(var i = 0; i < this.data.length; i++) {
-        var expectedValue = this.data[i].text + " " + this.data[i].states.normal.fill + " " + this.data[i].id;
+        var expectedValue = this.data[i].text + ' ' + this.data[i].states.normal.fill + ' ' + this.data[i].id;
         assert.equal(this.renderer.text.getCall(i).returnValue.setTitle.firstCall.args[0], expectedValue, 'Text element for series ' + i);
         assert.equal(this.renderer.rect.getCall(i).returnValue.setTitle.firstCall.args[0], expectedValue, 'Hint on marker element for series ' + i);
     }
@@ -345,14 +345,14 @@ QUnit.test('Create legend, hover fill is "none"', function(assert) {
 
     states = $.map(legend._items, function(item) { return item.states; });
 
-    assert.equal(states[0].hovered.fill, "#00FF00");
-    assert.equal(states[0].selected.fill, "black");
+    assert.equal(states[0].hovered.fill, '#00FF00');
+    assert.equal(states[0].selected.fill, 'black');
 
-    assert.equal(states[1].hovered.fill, "#99FF99");
-    assert.equal(states[1].selected.fill, "black");
+    assert.equal(states[1].hovered.fill, '#99FF99');
+    assert.equal(states[1].selected.fill, 'black');
 
-    assert.equal(states[2].hovered.fill, "blue");
-    assert.equal(states[2].selected.fill, "black");
+    assert.equal(states[2].hovered.fill, 'blue');
+    assert.equal(states[2].selected.fill, 'black');
 });
 
 QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
@@ -374,7 +374,7 @@ QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
     this.createSimpleLegend()
         .draw(200, 200);
 
-    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.5, "Label should have opacity");
+    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.5, 'Label should have opacity');
 });
 
 QUnit.test('Create legend, textOpacity less than font opacity', function(assert) {
@@ -394,7 +394,7 @@ QUnit.test('Create legend, textOpacity less than font opacity', function(assert)
     ];
     this.createAndDrawLegend();
 
-    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.3, "Label should be changed");
+    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.3, 'Label should be changed');
 });
 
 QUnit.test('Create legend, selected fill is "none"', function(assert) {
@@ -426,14 +426,14 @@ QUnit.test('Create legend, selected fill is "none"', function(assert) {
     assert.ok(legend._insideLegendGroup);
     states = $.map(legend._items, function(item) { return item.states; });
 
-    assert.equal(states[0].hovered.fill, "red");
-    assert.equal(states[0].selected.fill, "#00FF00");
+    assert.equal(states[0].hovered.fill, 'red');
+    assert.equal(states[0].selected.fill, '#00FF00');
 
-    assert.equal(states[1].hovered.fill, "red");
-    assert.equal(states[1].selected.fill, "#99FF99");
+    assert.equal(states[1].hovered.fill, 'red');
+    assert.equal(states[1].selected.fill, '#99FF99');
 
-    assert.equal(states[2].hovered.fill, "red");
-    assert.equal(states[2].selected.fill, "blue");
+    assert.equal(states[2].hovered.fill, 'red');
+    assert.equal(states[2].selected.fill, 'blue');
 });
 
 QUnit.test('Update', function(assert) {
@@ -460,9 +460,9 @@ QUnit.test('Update', function(assert) {
 
     states = $.map(legend._items, function(item) { return item.states; });
 
-    assert.equal(states[0].hovered.fill, "green1");
-    assert.deepEqual(states[0].hovered.hatching.direction, "right", "hover hatching");
-    assert.equal(states[0].selected.fill, "blue1");
+    assert.equal(states[0].hovered.fill, 'green1');
+    assert.deepEqual(states[0].hovered.hatching.direction, 'right', 'hover hatching');
+    assert.equal(states[0].selected.fill, 'blue1');
     assert.deepEqual(states[0].selected.hatching.direction, 'left');
 });
 
@@ -480,12 +480,12 @@ QUnit.test('Draw legend, orientation = "horizontal"', function(assert) {
     this.checkItems(assert, [{
         id: 0,
         marker: {
-            fill: "#00FF00",
+            fill: '#00FF00',
             width: 14,
             height: 14
         },
         label: {
-            text: "First"
+            text: 'First'
         },
         tracker: {
             left: -4,
@@ -508,12 +508,12 @@ QUnit.test('Draw legend, orientation = "vertical"', function(assert) {
     this.checkItems(assert, [{
         id: 0,
         marker: {
-            fill: "#00FF00",
+            fill: '#00FF00',
             width: 14,
             height: 14
         },
         label: {
-            text: "First"
+            text: 'First'
         },
         tracker: {
             left: -4,
@@ -538,12 +538,12 @@ QUnit.test('Draw legend, itemTextPosition = "bottom"', function(assert) {
     this.checkItems(assert, [{
         id: 0,
         marker: {
-            fill: "#00FF00",
+            fill: '#00FF00',
             width: 14,
             height: 14
         },
         label: {
-            text: "First"
+            text: 'First'
         },
         tracker: {
             left: -4,
@@ -554,19 +554,19 @@ QUnit.test('Draw legend, itemTextPosition = "bottom"', function(assert) {
     }]);
 });
 
-QUnit.test("Clear group if the size is too small. Width", function(assert) {
+QUnit.test('Clear group if the size is too small. Width', function(assert) {
     this.createSimpleLegend()
         .draw(4, 200);
 
     assert.ok(this.renderer.g.returnValues[1].dispose.calledOnce);
     assert.ok(this.options._incidentOccurred.calledOnce);
-    assert.ok(this.options._incidentOccurred.calledWith("W2104"));
+    assert.ok(this.options._incidentOccurred.calledWith('W2104'));
 });
 
-QUnit.module("Check items position", environment);
+QUnit.module('Check items position', environment);
 
-QUnit.test("Vertical orientation", function(assert) {
-    this.options.itemTextPosition = "bottom";
+QUnit.test('Vertical orientation', function(assert) {
+    this.options.itemTextPosition = 'bottom';
     this.data = this.createData(1);
     this.createSimpleLegend().draw(200, 200);
 
@@ -575,8 +575,8 @@ QUnit.test("Vertical orientation", function(assert) {
     ]);
 });
 
-QUnit.test("Vertical orientation. ItemTextPosition = 'top'", function(assert) {
-    this.options.itemTextPosition = "top";
+QUnit.test('Vertical orientation. ItemTextPosition = \'top\'', function(assert) {
+    this.options.itemTextPosition = 'top';
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
@@ -586,7 +586,7 @@ QUnit.test("Vertical orientation. ItemTextPosition = 'top'", function(assert) {
     ]);
 });
 
-QUnit.test("Vertical orientation. ItemTextPosition = 'right'", function(assert) {
+QUnit.test('Vertical orientation. ItemTextPosition = \'right\'', function(assert) {
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
@@ -596,8 +596,8 @@ QUnit.test("Vertical orientation. ItemTextPosition = 'right'", function(assert) 
     ]);
 });
 
-QUnit.test("Vertical orientation. Two columns", function(assert) {
-    this.options.itemTextPosition = "bottom";
+QUnit.test('Vertical orientation. Two columns', function(assert) {
+    this.options.itemTextPosition = 'bottom';
     this.data = this.createData(4);
     this.createSimpleLegend().draw(200, 130);
 
@@ -609,7 +609,7 @@ QUnit.test("Vertical orientation. Two columns", function(assert) {
     ]);
 });
 
-QUnit.test("Vertical orientation. Two columns. ItemTextPosition = 'right'", function(assert) {
+QUnit.test('Vertical orientation. Two columns. ItemTextPosition = \'right\'', function(assert) {
     this.options.border.visible = true;
     this.createSimpleLegend().draw(200, 91);
 
@@ -620,8 +620,8 @@ QUnit.test("Vertical orientation. Two columns. ItemTextPosition = 'right'", func
     ]);
 });
 
-QUnit.test("Vertical orientation. Three columns", function(assert) {
-    this.options.itemTextPosition = "bottom";
+QUnit.test('Vertical orientation. Three columns', function(assert) {
+    this.options.itemTextPosition = 'bottom';
     this.createSimpleLegend().draw(200, 70);
 
     this.checkItems(assert, [
@@ -631,9 +631,9 @@ QUnit.test("Vertical orientation. Three columns", function(assert) {
     ]);
 });
 
-QUnit.test("Horizontal orientation", function(assert) {
+QUnit.test('Horizontal orientation', function(assert) {
     this.options.orientation = 'horizontal';
-    this.options.itemTextPosition = "right";
+    this.options.itemTextPosition = 'right';
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
@@ -643,9 +643,9 @@ QUnit.test("Horizontal orientation", function(assert) {
     ]);
 });
 
-QUnit.test("Horizontal orientation. itemTextPosition = 'top'", function(assert) {
+QUnit.test('Horizontal orientation. itemTextPosition = \'top\'', function(assert) {
     this.options.orientation = 'horizontal';
-    this.options.itemTextPosition = "top";
+    this.options.itemTextPosition = 'top';
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
@@ -655,9 +655,9 @@ QUnit.test("Horizontal orientation. itemTextPosition = 'top'", function(assert) 
     ]);
 });
 
-QUnit.test("Horizontal orientation. two rows", function(assert) {
+QUnit.test('Horizontal orientation. two rows', function(assert) {
     this.options.orientation = 'horizontal';
-    this.options.itemTextPosition = "top";
+    this.options.itemTextPosition = 'top';
     this.createSimpleLegend().draw(91, 200);
 
     this.checkItems(assert, [
@@ -667,9 +667,9 @@ QUnit.test("Horizontal orientation. two rows", function(assert) {
     ]);
 });
 
-QUnit.test("Horizontal orientation. itemTextPosition = 'left'", function(assert) {
+QUnit.test('Horizontal orientation. itemTextPosition = \'left\'', function(assert) {
     this.options.orientation = 'horizontal';
-    this.options.itemTextPosition = "left";
+    this.options.itemTextPosition = 'left';
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
@@ -679,7 +679,7 @@ QUnit.test("Horizontal orientation. itemTextPosition = 'left'", function(assert)
     ]);
 });
 
-QUnit.test("rowCount options", function(assert) {
+QUnit.test('rowCount options', function(assert) {
     this.options.rowCount = 1;
     this.createSimpleLegend().draw(200, 200);
 
@@ -690,7 +690,7 @@ QUnit.test("rowCount options", function(assert) {
     ]);
 });
 
-QUnit.test("columnCount options. vertical orientation", function(assert) {
+QUnit.test('columnCount options. vertical orientation', function(assert) {
     this.options.columnCount = 3;
     this.createSimpleLegend().draw(200, 200);
 
@@ -701,7 +701,7 @@ QUnit.test("columnCount options. vertical orientation", function(assert) {
     ]);
 });
 
-QUnit.test("Horizontal orientation. bottom", function(assert) {
+QUnit.test('Horizontal orientation. bottom', function(assert) {
     this.options.orientation = 'horizontal';
     this.createSimpleLegend().draw(200, 200);
 
@@ -712,7 +712,7 @@ QUnit.test("Horizontal orientation. bottom", function(assert) {
     ]);
 });
 
-QUnit.test("columnCount options", function(assert) {
+QUnit.test('columnCount options', function(assert) {
     this.options.columnCount = 1;
     this.options.orientation = 'horizontal';
     this.createSimpleLegend().draw(200, 200);
@@ -724,7 +724,7 @@ QUnit.test("columnCount options", function(assert) {
     ]);
 });
 
-QUnit.test("rowCount options. horizontal orientation", function(assert) {
+QUnit.test('rowCount options. horizontal orientation', function(assert) {
     this.options.rowCount = 3;
     this.options.orientation = 'horizontal';
     this.createSimpleLegend().draw(200, 200);
@@ -736,7 +736,7 @@ QUnit.test("rowCount options. horizontal orientation", function(assert) {
     ]);
 });
 
-QUnit.test("columnItemSpacing options", function(assert) {
+QUnit.test('columnItemSpacing options', function(assert) {
     this.options.orientation = 'horizontal';
     this.options.columnItemSpacing = 10;
     this.createSimpleLegend().draw(200, 200);
@@ -748,7 +748,7 @@ QUnit.test("columnItemSpacing options", function(assert) {
     ]);
 });
 
-QUnit.test("rowItemSpacing options", function(assert) {
+QUnit.test('rowItemSpacing options', function(assert) {
     this.options.rowItemSpacing = 10;
     this.createSimpleLegend().draw(200, 200);
 
@@ -759,7 +759,7 @@ QUnit.test("rowItemSpacing options", function(assert) {
     ]);
 });
 
-QUnit.test("paddingLeftRight options", function(assert) {
+QUnit.test('paddingLeftRight options', function(assert) {
     this.options.border.visible = true;
     this.options.paddingLeftRight = 20;
     this.options.orientation = 'horizontal';
@@ -772,7 +772,7 @@ QUnit.test("paddingLeftRight options", function(assert) {
     ]);
 });
 
-QUnit.test("paddingTopBottom options", function(assert) {
+QUnit.test('paddingTopBottom options', function(assert) {
     this.options.border.visible = true;
     this.options.paddingTopBottom = 20;
     this.createSimpleLegend().draw(200, 101);
@@ -784,7 +784,7 @@ QUnit.test("paddingTopBottom options", function(assert) {
     ]);
 });
 
-QUnit.test("T405783, border is visible", function(assert) {
+QUnit.test('T405783, border is visible', function(assert) {
     this.options.border.visible = true;
     this.options.columnCount = 2;
     this.createSimpleLegend().draw(200, 56);
@@ -796,7 +796,7 @@ QUnit.test("T405783, border is visible", function(assert) {
     ]);
 });
 
-QUnit.test("T405783, border is not visible", function(assert) {
+QUnit.test('T405783, border is not visible', function(assert) {
     this.options.border.visible = false;
     this.options.columnCount = 2;
     this.createSimpleLegend().draw(200, 72);
@@ -808,11 +808,11 @@ QUnit.test("T405783, border is not visible", function(assert) {
     ]);
 });
 
-QUnit.test("itemsAlignment options. Center. items in one line.", function(assert) {
-    this.options.itemsAlignment = "center";
+QUnit.test('itemsAlignment options. Center. items in one line.', function(assert) {
+    this.options.itemsAlignment = 'center';
     this.options.columnCount = 2;
     this.options.orientation = 'horizontal';
-    this.options.itemTextPosition = "right";
+    this.options.itemTextPosition = 'right';
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
@@ -822,8 +822,8 @@ QUnit.test("itemsAlignment options. Center. items in one line.", function(assert
     ]);
 });
 
-QUnit.test("itemsAlignment options. Left", function(assert) {
-    this.options.itemsAlignment = "left";
+QUnit.test('itemsAlignment options. Left', function(assert) {
+    this.options.itemsAlignment = 'left';
     this.options.columnCount = 2;
     this.options.orientation = 'horizontal';
 
@@ -836,8 +836,8 @@ QUnit.test("itemsAlignment options. Left", function(assert) {
     ]);
 });
 
-QUnit.test("itemsAlignment options. Center", function(assert) {
-    this.options.itemsAlignment = "center";
+QUnit.test('itemsAlignment options. Center', function(assert) {
+    this.options.itemsAlignment = 'center';
     this.options.columnCount = 2;
     this.options.orientation = 'horizontal';
     this.createSimpleLegend().draw(200, 200);
@@ -849,8 +849,8 @@ QUnit.test("itemsAlignment options. Center", function(assert) {
     ]);
 });
 
-QUnit.test("itemsAlignment options. Right", function(assert) {
-    this.options.itemsAlignment = "right";
+QUnit.test('itemsAlignment options. Right', function(assert) {
+    this.options.itemsAlignment = 'right';
     this.options.columnCount = 2;
     this.options.orientation = 'horizontal';
     this.createSimpleLegend().draw(200, 200);
@@ -862,7 +862,7 @@ QUnit.test("itemsAlignment options. Right", function(assert) {
     ]);
 });
 
-QUnit.test("Vertical orientation. Transform must be rounded", function(assert) {
+QUnit.test('Vertical orientation. Transform must be rounded', function(assert) {
     this.data[2].size = 13;
     this.createSimpleLegend().draw(200, 200);
 
@@ -873,56 +873,56 @@ QUnit.test("Vertical orientation. Transform must be rounded", function(assert) {
     ]);
 });
 
-QUnit.test("item size > legend canvas", function(assert) {
+QUnit.test('item size > legend canvas', function(assert) {
     assert.expect(0);
 
     this.createSimpleLegend().draw(10, 10);
 });
 
-QUnit.module("Label align", environment);
+QUnit.module('Label align', environment);
 
-QUnit.test("text align. right", function(assert) {
-    this.options.cssClass = "legend_class";
+QUnit.test('text align. right', function(assert) {
+    this.options.cssClass = 'legend_class';
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "left", "class": "legend_class" } },
-        { id: 0, label: { align: "left", "class": "legend_class" } },
-        { id: 0, label: { align: "left", "class": "legend_class" } }
+        { id: 0, label: { align: 'left', 'class': 'legend_class' } },
+        { id: 0, label: { align: 'left', 'class': 'legend_class' } },
+        { id: 0, label: { align: 'left', 'class': 'legend_class' } }
     ]);
 });
 
-QUnit.test("text align. left", function(assert) {
-    this.options.itemTextPosition = "left";
+QUnit.test('text align. left', function(assert) {
+    this.options.itemTextPosition = 'left';
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "right" } },
-        { id: 0, label: { align: "right" } },
-        { id: 0, label: { align: "right" } }
+        { id: 0, label: { align: 'right' } },
+        { id: 0, label: { align: 'right' } },
+        { id: 0, label: { align: 'right' } }
     ]);
 });
 
-QUnit.test("text align. top", function(assert) {
-    this.options.itemTextPosition = "top";
+QUnit.test('text align. top', function(assert) {
+    this.options.itemTextPosition = 'top';
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "center" } },
-        { id: 0, label: { align: "center" } },
-        { id: 0, label: { align: "center" } }
+        { id: 0, label: { align: 'center' } },
+        { id: 0, label: { align: 'center' } },
+        { id: 0, label: { align: 'center' } }
     ]);
 });
 
-QUnit.test("text align. bottom", function(assert) {
-    this.options.itemTextPosition = "bottom";
+QUnit.test('text align. bottom', function(assert) {
+    this.options.itemTextPosition = 'bottom';
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "center" } },
-        { id: 0, label: { align: "center" } },
-        { id: 0, label: { align: "center" } }
+        { id: 0, label: { align: 'center' } },
+        { id: 0, label: { align: 'center' } },
+        { id: 0, label: { align: 'center' } }
     ]);
 });
 
-QUnit.test("bottom", function(assert) {
-    this.options.orientation = "horizontal";
+QUnit.test('bottom', function(assert) {
+    this.options.orientation = 'horizontal';
     this.bBoxes = [{ x: 0, y: 0, width: 20, height: 40 },
         { x: 0, y: 0, width: 20, height: 10 },
         { x: 0, y: 0, width: 20, height: 10 }];
@@ -936,9 +936,9 @@ QUnit.test("bottom", function(assert) {
     ]);
 });
 
-QUnit.test("top", function(assert) {
-    this.options.orientation = "horizontal";
-    this.options.itemTextPosition = "top";
+QUnit.test('top', function(assert) {
+    this.options.orientation = 'horizontal';
+    this.options.itemTextPosition = 'top';
     this.bBoxes = [{ x: 0, y: 0, width: 20, height: 40 },
         { x: 0, y: 0, width: 20, height: 10 },
         { x: 0, y: 0, width: 20, height: 10 }];
@@ -952,8 +952,8 @@ QUnit.test("top", function(assert) {
     ]);
 });
 
-QUnit.test("left", function(assert) {
-    this.options.itemTextPosition = "left";
+QUnit.test('left', function(assert) {
+    this.options.itemTextPosition = 'left';
     this.bBoxes = [{ x: 0, y: 0, width: 40, height: 10 },
         { x: 0, y: 0, width: 20, height: 10 },
         { x: 0, y: 0, width: 20, height: 10 }];
@@ -967,7 +967,7 @@ QUnit.test("left", function(assert) {
     ]);
 });
 
-QUnit.test("right", function(assert) {
+QUnit.test('right', function(assert) {
     this.bBoxes = [{ x: 0, y: 0, width: 40, height: 10 },
         { x: 0, y: 0, width: 20, height: 10 },
         { x: 0, y: 0, width: 20, height: 10 }];
@@ -997,31 +997,31 @@ QUnit.test('Draw trackers after enabled legend after disable legend', function(a
     });
 
     assert.deepEqual(trackers, [{
-        "bottom": 18,
-        "id": 0,
-        "left": -4,
-        "right": 45,
-        "top": -4,
-        "argument": undefined,
-        "argumentIndex": undefined
+        'bottom': 18,
+        'id': 0,
+        'left': -4,
+        'right': 45,
+        'top': -4,
+        'argument': undefined,
+        'argumentIndex': undefined
     },
     {
-        "bottom": 40,
-        "id": 1,
-        "left": -4,
-        "right": 45,
-        "top": 18,
-        "argument": undefined,
-        "argumentIndex": undefined
+        'bottom': 40,
+        'id': 1,
+        'left': -4,
+        'right': 45,
+        'top': 18,
+        'argument': undefined,
+        'argumentIndex': undefined
     },
     {
-        "bottom": 62,
-        "id": 2,
-        "left": -4,
-        "right": 45,
-        "top": 40,
-        "argument": undefined,
-        "argumentIndex": undefined
+        'bottom': 62,
+        'id': 2,
+        'left': -4,
+        'right': 45,
+        'top': 40,
+        'argument': undefined,
+        'argumentIndex': undefined
     }]);
 });
 
@@ -1147,7 +1147,7 @@ QUnit.test('Border is drawn', function(assert) {
     var borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, 'none');
     assert.equal(borderGroup.attr.firstCall.args[0]['class'], 'dxc-border');
-    assert.equal(borderGroup._stored_settings["stroke-width"], 1);
+    assert.equal(borderGroup._stored_settings['stroke-width'], 1);
     assert.equal(borderGroup._stored_settings.stroke, 'black');
     assert.equal(borderGroup._stored_settings.dashStyle, 'dot');
 });
@@ -1183,7 +1183,7 @@ QUnit.test('Border is drawn, position = "inside"', function(assert) {
     var borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, '#ffffff');
     assert.equal(borderGroup.attr.firstCall.args[0]['class'], 'dxc-border');
-    assert.equal(borderGroup._stored_settings["stroke-width"], 1);
+    assert.equal(borderGroup._stored_settings['stroke-width'], 1);
     assert.equal(borderGroup._stored_settings.stroke, 'black');
     assert.equal(borderGroup._stored_settings.dashStyle, 'dot');
 });
@@ -1195,7 +1195,7 @@ QUnit.test('Draw background rect.Legend with border', function(assert) {
                 visible: true,
                 color: 'green',
                 width: 1,
-                dashStyle: "dash",
+                dashStyle: 'dash',
                 opacity: 0.5
             },
             paddingLeftRight: 5,
@@ -1221,22 +1221,22 @@ QUnit.test('Draw background rect.Legend with border', function(assert) {
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
 
-    legend._legendGroup.stub("getBBox") && (legend._legendGroup.getBBox = function() { return legendMockBBox; });
+    legend._legendGroup.stub('getBBox') && (legend._legendGroup.getBBox = function() { return legendMockBBox; });
 
     legend.draw(200, 200);
 
     var borderRect = legend._insideLegendGroup.children[0];
 
     assert.deepEqual(borderRect._stored_settings, {
-        'class': "dxc-border",
-        "fill": "none",
+        'class': 'dxc-border',
+        'fill': 'none',
         x: -4,
         y: -7,
         width: 20 + 2 * options.paddingLeftRight,
         height: 10 + 2 * options.paddingTopBottom,
-        "stroke-width": options.border.width,
+        'stroke-width': options.border.width,
         stroke: options.border.color,
-        "stroke-opacity": options.border.opacity,
+        'stroke-opacity': options.border.opacity,
         dashStyle: options.border.dashStyle,
         rx: 0,
         ry: 0,
@@ -1252,7 +1252,7 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
                 visible: false,
                 color: 'green',
                 width: 1,
-                dashStyle: "dash",
+                dashStyle: 'dash',
                 opacity: 0.5
             },
             paddingLeftRight: 5,
@@ -1278,15 +1278,15 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
 
-    legend._legendGroup.stub("getBBox") && (legend._legendGroup.getBBox = function() { return mockBBox; });
+    legend._legendGroup.stub('getBBox') && (legend._legendGroup.getBBox = function() { return mockBBox; });
 
     legend.draw(200, 200);
 
     var borderRect = legend._insideLegendGroup.children[0];
 
     assert.deepEqual(borderRect._stored_settings, {
-        'class': "dxc-border",
-        "fill": "red",
+        'class': 'dxc-border',
+        'fill': 'red',
         x: -4,
         y: -7,
         width: 20 + 2 * options.paddingLeftRight,
@@ -1303,7 +1303,7 @@ QUnit.test('Legend with incorrect margin number', function(assert) {
 });
 
 QUnit.test('Legend with incorrect margin number - string', function(assert) {
-    this.options.margin = "bad";
+    this.options.margin = 'bad';
     var legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 10, right: 10, top: 10, bottom: 10 }, 'Margin should have default margin');
@@ -1437,7 +1437,7 @@ QUnit.test('coordsIn after erase', function(assert) {
 });
 
 // T205280
-QUnit.test("coordsIn after update without data", function(assert) {
+QUnit.test('coordsIn after update without data', function(assert) {
     // arrange
     var legend = this.createSimpleLegend(),
         legendSize = { width: 200, height: 200, top: 0, bottom: 0, left: 0, right: 0 };
@@ -1464,8 +1464,8 @@ QUnit.test('getItemByCoord', function(assert) {
             left: -4,
             right: 45,
             top: -4,
-            argument: "argument0",
-            argumentIndex: "argumentIndex0"
+            argument: 'argument0',
+            argumentIndex: 'argumentIndex0'
         },
         element2 = {
             bottom: 40,
@@ -1473,8 +1473,8 @@ QUnit.test('getItemByCoord', function(assert) {
             left: -4,
             right: 45,
             top: 18,
-            argument: "argument1",
-            argumentIndex: "argumentIndex1"
+            argument: 'argument1',
+            argumentIndex: 'argumentIndex1'
         };
 
     assert.strictEqual(legend.getItemByCoord(12, 30), null);
@@ -1542,37 +1542,37 @@ QUnit.test('Pass color & opacity to markers on update', function(assert) {
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5 });
 });
 
-QUnit.module("getLayoutOptions", environment);
+QUnit.module('getLayoutOptions', environment);
 
-QUnit.test("Without draw. vertical position", function(assert) {
+QUnit.test('Without draw. vertical position', function(assert) {
     assert.deepEqual(this.createSimpleLegend().getLayoutOptions(), {
-        cutLayoutSide: "right",
+        cutLayoutSide: 'right',
         height: 0,
-        cutSide: "horizontal",
+        cutSide: 'horizontal',
         position: {
-            horizontal: "right",
-            vertical: "top"
+            horizontal: 'right',
+            vertical: 'top'
         },
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top',
         width: 0,
         x: 0,
         y: 0
     });
 });
 
-QUnit.test("Without draw. horizontal position", function(assert) {
-    this.options.orientation = "horizontal";
+QUnit.test('Without draw. horizontal position', function(assert) {
+    this.options.orientation = 'horizontal';
     assert.deepEqual(this.createSimpleLegend().getLayoutOptions(), {
-        cutLayoutSide: "top",
+        cutLayoutSide: 'top',
         height: 0,
-        cutSide: "vertical",
+        cutSide: 'vertical',
         position: {
-            horizontal: "right",
-            vertical: "top"
+            horizontal: 'right',
+            vertical: 'top'
         },
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top',
         width: 0,
         x: 0,
         y: 0
@@ -1581,28 +1581,28 @@ QUnit.test("Without draw. horizontal position", function(assert) {
 
 QUnit.test('T121386. getLayoutOptions cutLayoutOptions when horizontal alignment === center and vertical alignment === top', function(assert) {
     this.options = getLegendOptions({
-        orientation: "vertical",
+        orientation: 'vertical',
         horizontalAlignment: 'center',
         verticalAlignment: 'top'
     });
 
     assert.deepEqual(this.createSimpleLegend().getLayoutOptions(), {
-        cutLayoutSide: "top",
+        cutLayoutSide: 'top',
         height: 0,
-        cutSide: "vertical",
+        cutSide: 'vertical',
         position: {
-            horizontal: "center",
-            vertical: "top"
+            horizontal: 'center',
+            vertical: 'top'
         },
-        horizontalAlignment: "center",
-        verticalAlignment: "top",
+        horizontalAlignment: 'center',
+        verticalAlignment: 'top',
         width: 0,
         x: 0,
         y: 0
     });
 });
 
-QUnit.test("After draw", function(assert) {
+QUnit.test('After draw', function(assert) {
     assert.deepEqual(this.createSimpleLegend().draw(200, 200).getLayoutOptions(), {
         width: 20 + this.options.margin.left + this.options.margin.right,
         height: 10 + this.options.margin.top + this.options.margin.bottom,
@@ -1611,17 +1611,17 @@ QUnit.test("After draw", function(assert) {
         y: -5,
         horizontalAlignment: 'right',
         verticalAlignment: 'top',
-        cutSide: "horizontal",
+        cutSide: 'horizontal',
         position: {
-            horizontal: "right",
-            vertical: "top"
+            horizontal: 'right',
+            vertical: 'top'
         },
         cutLayoutSide: 'right'
     });
 });
 
-QUnit.test("After draw. horizontalAlignment = \"center\"", function(assert) {
-    this.options.horizontalAlignment = "center";
+QUnit.test('After draw. horizontalAlignment = "center"', function(assert) {
+    this.options.horizontalAlignment = 'center';
 
     assert.deepEqual(this.createSimpleLegend().draw(200, 200).getLayoutOptions(), {
         height: 26,
@@ -1629,10 +1629,10 @@ QUnit.test("After draw. horizontalAlignment = \"center\"", function(assert) {
         verticalAlignment: 'bottom',
         width: 36,
         widthWithoutMargins: 20,
-        cutSide: "vertical",
+        cutSide: 'vertical',
         position: {
-            horizontal: "center",
-            vertical: "bottom"
+            horizontal: 'center',
+            vertical: 'bottom'
         },
         cutLayoutSide: 'bottom',
         x: -7,
@@ -1640,33 +1640,33 @@ QUnit.test("After draw. horizontalAlignment = \"center\"", function(assert) {
     });
 });
 
-QUnit.test("layoutOptions", function(assert) {
+QUnit.test('layoutOptions', function(assert) {
     var options = this.createSimpleLegend().layoutOptions();
 
-    assert.equal(options.horizontalAlignment, "right");
-    assert.equal(options.verticalAlignment, "top");
-    assert.equal(options.side, "horizontal");
+    assert.equal(options.horizontalAlignment, 'right');
+    assert.equal(options.verticalAlignment, 'top');
+    assert.equal(options.side, 'horizontal');
     assert.equal(options.priority, 1);
 });
 
-QUnit.test("layoutOptions is null if legend is not visible", function(assert) {
+QUnit.test('layoutOptions is null if legend is not visible', function(assert) {
     this.options.visible = false;
     var options = this.createSimpleLegend().layoutOptions();
 
     assert.strictEqual(options, null);
 });
 
-QUnit.test("measure", function(assert) {
+QUnit.test('measure', function(assert) {
     assert.deepEqual(this.createSimpleLegend().measure(100, 200), [36, 26]);
 });
 
-QUnit.test("move", function(assert) {
+QUnit.test('move', function(assert) {
     this.createAndDrawLegend().move([10, 15]);
 
     assert.deepEqual(this.renderer.g.returnValues[1].attr.args[0][0], { translateX: 17, translateY: 20 });
 });
 
-QUnit.test("free space", function(assert) {
+QUnit.test('free space', function(assert) {
     var legend = this.createSimpleLegend();
     legend.measure(100, 200);
 
@@ -1674,7 +1674,7 @@ QUnit.test("free space", function(assert) {
 
     assert.ok(this.renderer.g.returnValues[1].dispose.calledOnce);
     assert.ok(this.options._incidentOccurred.calledOnce);
-    assert.ok(this.options._incidentOccurred.calledWith("W2104"));
+    assert.ok(this.options._incidentOccurred.calledWith('W2104'));
 });
 
 QUnit.module('Legend Options', environment);
@@ -1706,14 +1706,14 @@ QUnit.test('horizontalAlignment specified incorrectly', function(assert) {
 });
 
 
-QUnit.module("Life cycle", $.extend({}, environment, {
+QUnit.module('Life cycle', $.extend({}, environment, {
     beforeEach: function() {
         this.legend = this.createSimpleLegend()
             .draw(200, 200);
     }
 }));
 
-QUnit.test("Disposing", function(assert) {
+QUnit.test('Disposing', function(assert) {
     var legend = this.legend;
 
     legend.dispose();
@@ -1748,72 +1748,72 @@ QUnit.module('States', $.extend({}, environment, {
 }));
 
 QUnit.test('applyHover', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.applyHover(0);
 
-    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "blue");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: "right", step: 5, width: 2 });
+    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, 'blue');
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: 'right', step: 5, width: 2 });
     assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 QUnit.test('applySelected', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.applySelected(0);
 
-    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "black");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: "right", step: 5, width: 2 });
+    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, 'black');
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: 'right', step: 5, width: 2 });
     assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 QUnit.test('resetItem', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.resetItem(0);
 
-    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "#00FF00");
+    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, '#00FF00');
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, undefined);
     assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 QUnit.test('applyHover from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.applyHover(4);
 
-    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub("smartAttr").callCount, 0);
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 QUnit.test('applySelected from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.applySelected(4);
 
-    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub("smartAttr").callCount, 0);
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 QUnit.test('resetItem from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.resetItem(4);
 
-    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub("smartAttr").callCount, 0);
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 QUnit.test('resetItem from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
     this.legend.resetItem(4);
 
-    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub("smartAttr").callCount, 0);
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub('smartAttr').callCount, 0);
 });
 
 // T164539
@@ -1856,7 +1856,7 @@ QUnit.test('Erasing', function(assert) {
 QUnit.test('Erase legend on update options', function(assert) {
     this.createAndDrawLegend();
     this.options.title = {
-        text: "title"
+        text: 'title'
     };
     const titleGroup = this.renderer.g.firstCall.returnValue;
     titleGroup.linkRemove.reset();
@@ -1868,7 +1868,7 @@ QUnit.test('Erase legend on update options', function(assert) {
 
 QUnit.test('Check groups order', function(assert) {
     this.options.title = {
-        text: "title"
+        text: 'title'
     };
     this.options.border.visible = true;
 
@@ -2044,8 +2044,8 @@ QUnit.test('markers centering(partial markers sizes).', function(assert) {
     createMarker = this.createMarker;
 
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: undefined }]);
-        assert.deepEqual(createMarker.getCall(i).args[1], i + 4, "marker size");
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: undefined }]);
+        assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');
     });
 });
 
@@ -2061,38 +2061,38 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
 
     createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: undefined }]);
-        assert.deepEqual(createMarker.getCall(i).args[1], i + 4, "marker size");
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: 'color-' + (1 + i), opacity: undefined }]);
+        assert.deepEqual(createMarker.getCall(i).args[1], i + 4, 'marker size');
     });
 });
 
-QUnit.module("probeDraw", environment);
+QUnit.module('probeDraw', environment);
 
-QUnit.test("probeDraw", function(assert) {
+QUnit.test('probeDraw', function(assert) {
     var legend = this.createSimpleLegend();
     legend.draw = sinon.stub();
     legend.probeDraw();
     assert.ok(legend.draw.calledOnce);
 });
 
-QUnit.module("getActionCallback", environment);
+QUnit.module('getActionCallback', environment);
 
-QUnit.test("applying some action", function(assert) {
+QUnit.test('applying some action', function(assert) {
     var legend = this.createSimpleLegend();
     legend.draw = sinon.stub();
     legend.applyAction = sinon.stub();
-    legend.getActionCallback({ index: 1 })("applyAction");
+    legend.getActionCallback({ index: 1 })('applyAction');
 
     assert.ok(legend.applyAction.called);
     assert.strictEqual(legend.applyAction.args[0][0], 1);
 });
 
-QUnit.test("legend is not visible", function(assert) {
+QUnit.test('legend is not visible', function(assert) {
     this.options.visible = false;
     var legend = this.createSimpleLegend();
 
     legend.applyAction = sinon.stub();
-    legend.getActionCallback({ index: 1 })("applyAction");
+    legend.getActionCallback({ index: 1 })('applyAction');
 
     assert.ok(!legend.applyAction.called);
 });
@@ -2124,7 +2124,7 @@ var titleEnvironment = $.extend({}, environment, {
         };
 
         that.themeManagerTitleOptions = {
-            backgroundColor: "#ffffff",
+            backgroundColor: '#ffffff',
             font: {
                 size: 28,
                 weight: 200
@@ -2146,20 +2146,20 @@ var titleEnvironment = $.extend({}, environment, {
             markersGroup = this.findMarkersGroup(),
             insideLegendGroup = this.renderer.g.secondCall.returnValue;
 
-        assert.equal(titleGroup.linkOn.lastCall.args[0], insideLegendGroup, "title must be into insideLegendGroup");
+        assert.equal(titleGroup.linkOn.lastCall.args[0], insideLegendGroup, 'title must be into insideLegendGroup');
         assert.equal(titleGroup.linkAppend.callCount, 2);
-        assert.equal(titleGroup.children.length, titleText + subtitleText, "titleGroup must have children");
+        assert.equal(titleGroup.children.length, titleText + subtitleText, 'titleGroup must have children');
 
         if(titleText) {
-            assert.equal(this.renderer.text.getCall(0).returnValue, titleGroup.children[0], "first child in titleGroup must be a main text");
+            assert.equal(this.renderer.text.getCall(0).returnValue, titleGroup.children[0], 'first child in titleGroup must be a main text');
         }
 
         if(subtitleText) {
-            assert.equal(this.renderer.text.getCall(1).returnValue, titleGroup.children[1], "second child in titleGroup must be a subtitle text");
+            assert.equal(this.renderer.text.getCall(1).returnValue, titleGroup.children[1], 'second child in titleGroup must be a subtitle text');
         }
 
         assert.equal(markersGroup.children[0].move.firstCall.args[0], titleDescription.expectedOffset.x);
-        var sign = this.options.title.verticalAlignment === "bottom" ? -1 : 1;
+        var sign = this.options.title.verticalAlignment === 'bottom' ? -1 : 1;
         assert.equal(markersGroup.children[0].move.firstCall.args[1], sign * titleDescription.expectedOffset.y);
     },
 
@@ -2168,11 +2168,11 @@ var titleEnvironment = $.extend({}, environment, {
     }
 });
 
-QUnit.module("Title", titleEnvironment);
+QUnit.module('Title', titleEnvironment);
 
-QUnit.test("Simple title; legend options by default", function(assert) {
+QUnit.test('Simple title; legend options by default', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: 0
     };
 
@@ -2187,12 +2187,12 @@ QUnit.test("Simple title; legend options by default", function(assert) {
     this.checkItems(assert, [{
         id: 0,
         marker: {
-            fill: "#00FF00",
+            fill: '#00FF00',
             width: 14,
             height: 14
         },
         label: {
-            text: "First"
+            text: 'First'
         },
         tracker: {
             left: -4,
@@ -2203,12 +2203,12 @@ QUnit.test("Simple title; legend options by default", function(assert) {
     }]);
 });
 
-QUnit.test("Simple title with subtitle; legend options by default", function(assert) {
+QUnit.test('Simple title with subtitle; legend options by default', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: 0,
         subtitle: {
-            text: "Simple subtitle"
+            text: 'Simple subtitle'
         }
     };
 
@@ -2223,12 +2223,12 @@ QUnit.test("Simple title with subtitle; legend options by default", function(ass
     this.checkItems(assert, [{
         id: 0,
         marker: {
-            fill: "#00FF00",
+            fill: '#00FF00',
             width: 14,
             height: 14
         },
         label: {
-            text: "First"
+            text: 'First'
         },
         tracker: {
             left: -4,
@@ -2239,9 +2239,9 @@ QUnit.test("Simple title with subtitle; legend options by default", function(ass
     }]);
 });
 
-QUnit.test("Title width more than markers width; legend horizontalAlignment = 'center'", function(assert) {
+QUnit.test('Title width more than markers width; legend horizontalAlignment = \'center\'', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: {
             left: 0,
             right: 0,
@@ -2249,7 +2249,7 @@ QUnit.test("Title width more than markers width; legend horizontalAlignment = 'c
             bottom: 4
         }
     };
-    this.options.horizontalAlignment = "center";
+    this.options.horizontalAlignment = 'center';
     this.titleLayout.width = 30;
 
     var legend = this.createSimpleLegend();
@@ -2257,7 +2257,7 @@ QUnit.test("Title width more than markers width; legend horizontalAlignment = 'c
     legend.shift(0, 0);
 
     var markersGroup = this.findMarkersGroup();
-    assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 5, translateY: 17 }, "markers must moved");
+    assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 5, translateY: 17 }, 'markers must moved');
 
     this.checkTrackers(assert, {
         left: 1,
@@ -2267,9 +2267,9 @@ QUnit.test("Title width more than markers width; legend horizontalAlignment = 'c
     }, 0);
 });
 
-QUnit.test("Title width less than markers width; legend horizontalAlignment = 'center'", function(assert) {
+QUnit.test('Title width less than markers width; legend horizontalAlignment = \'center\'', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: {
             left: 0,
             right: 0,
@@ -2277,7 +2277,7 @@ QUnit.test("Title width less than markers width; legend horizontalAlignment = 'c
             bottom: 4
         }
     };
-    this.options.horizontalAlignment = "center";
+    this.options.horizontalAlignment = 'center';
     this.titleLayout.width = 10;
 
     var legend = this.createSimpleLegend();
@@ -2285,18 +2285,18 @@ QUnit.test("Title width less than markers width; legend horizontalAlignment = 'c
     legend.shift(0, 0);
 
     var markersGroup = this.findMarkersGroup();
-    assert.deepEqual(markersGroup.attr.callCount, 2, "attr function just calling for set class name and set Y position");
-    assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 0, translateY: 17 }, "markers must move under title");
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [0, 0], "title must have moved");
-    assert.deepEqual(this.title.shift.lastCall.args, [5, -5], "title must have moved");
-    assert.strictEqual(this.title.getOptions().horizontalAlignment, "center");
+    assert.deepEqual(markersGroup.attr.callCount, 2, 'attr function just calling for set class name and set Y position');
+    assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 0, translateY: 17 }, 'markers must move under title');
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.firstCall.args, [0, 0], 'title must have moved');
+    assert.deepEqual(this.title.shift.lastCall.args, [5, -5], 'title must have moved');
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, 'center');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment = 'bottom'; margins not zero", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'center\' verticalAlignment = \'bottom\'; margins not zero', function(assert) {
     this.options.title = {
-        text: "Simple title",
-        verticalAlignment: "bottom",
+        text: 'Simple title',
+        verticalAlignment: 'bottom',
         margin: {
             left: 3,
             right: 3,
@@ -2305,7 +2305,7 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment
         }
     };
 
-    this.options.horizontalAlignment = "center";
+    this.options.horizontalAlignment = 'center';
     this.titleLayout.width = 12;
 
     var legend = this.createSimpleLegend();
@@ -2313,14 +2313,14 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment
     legend.shift(0, 0);
 
     var markersGroup = this.findMarkersGroup();
-    assert.deepEqual(markersGroup.attr.callCount, 1, "attr function just calling for set class name");
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [1, 5], "title must have moved");
+    assert.deepEqual(markersGroup.attr.callCount, 1, 'attr function just calling for set class name');
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [1, 5], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment = 'top'; margins not zero", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'right\' verticalAlignment = \'top\'; margins not zero', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: {
             left: 0,
             right: 0,
@@ -2329,19 +2329,19 @@ QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment 
         }
     };
 
-    this.options.horizontalAlignment = "right";
+    this.options.horizontalAlignment = 'right';
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [0, -5], "title must have moved");
-    assert.strictEqual(this.title.getOptions().horizontalAlignment, "left");
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [0, -5], 'title must have moved');
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, 'left');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'center\'; border exist', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: {
             left: 0,
             right: 0,
@@ -2350,7 +2350,7 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", f
         }
     };
 
-    this.options.horizontalAlignment = "center";
+    this.options.horizontalAlignment = 'center';
     this.options.paddingLeftRight = 4;
     this.options.border.visible = true;
     this.titleLayout.width = 18;
@@ -2359,13 +2359,13 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", f
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [-3, -5], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [-3, -5], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 'inside'", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'center\'; legend position \'inside\'', function(assert) {
     this.options.title = {
-        text: "Simple title",
+        text: 'Simple title',
         margin: {
             left: 0,
             right: 0,
@@ -2374,125 +2374,125 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 
         }
     };
 
-    this.options.horizontalAlignment = "center";
+    this.options.horizontalAlignment = 'center';
     this.options.paddingLeftRight = 4;
     this.options.border.visible = false;
-    this.options.position = "inside";
+    this.options.position = 'inside';
     this.titleLayout.width = 18;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [-3, -5], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [-3, -5], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; itemTextPosition = 'left'", function(assert) {
-    this.options.title = { text: "Simple title" };
+QUnit.test('Shift simple title; itemTextPosition = \'left\'', function(assert) {
+    this.options.title = { text: 'Simple title' };
 
-    this.options.itemTextPosition = "left";
+    this.options.itemTextPosition = 'left';
     this.titleLayout.width = 16;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.strictEqual(this.title.getOptions().horizontalAlignment, "right");
-    assert.deepEqual(this.title.shift.lastCall.args, [4, 2], "title must have moved");
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, 'right');
+    assert.deepEqual(this.title.shift.lastCall.args, [4, 2], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'right'", function(assert) {
-    this.options.title = { text: "Simple title" };
+QUnit.test('Shift simple title; horizontalAlignment = \'right\'', function(assert) {
+    this.options.title = { text: 'Simple title' };
 
-    this.options.horizontalAlignment = "right";
+    this.options.horizontalAlignment = 'right';
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; itemTextPosition = 'top'", function(assert) {
-    this.options.title = { text: "Simple title" };
+QUnit.test('Shift simple title; itemTextPosition = \'top\'', function(assert) {
+    this.options.title = { text: 'Simple title' };
 
-    this.options.itemTextPosition = "top";
+    this.options.itemTextPosition = 'top';
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; itemTextPosition = 'bottom'", function(assert) {
-    this.options.title = { text: "Simple title" };
+QUnit.test('Shift simple title; itemTextPosition = \'bottom\'', function(assert) {
+    this.options.title = { text: 'Simple title' };
 
-    this.options.itemTextPosition = "bottom";
+    this.options.itemTextPosition = 'bottom';
     this.titleLayout.width = 16;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.deepEqual(this.title.shift.lastCall.args, [2, 2], "title must have moved");
+    assert.deepEqual(this.title.shift.lastCall.args, [2, 2], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment = 'top' title.horizontalAlignment = 'center'; margins not zero", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'right\' verticalAlignment = \'top\' title.horizontalAlignment = \'center\'; margins not zero', function(assert) {
     this.options.title = {
-        text: "Simple title",
-        horizontalAlignment: "center",
+        text: 'Simple title',
+        horizontalAlignment: 'center',
         margin: {
             left: 5,
             right: 0
         }
     };
 
-    this.options.horizontalAlignment = "right";
+    this.options.horizontalAlignment = 'right';
     this.titleLayout.width = 10;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [2.5, 2], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [2.5, 2], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment = 'bottom' title.horizontalAlignment = 'right'; margins not zero", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'center\' verticalAlignment = \'bottom\' title.horizontalAlignment = \'right\'; margins not zero', function(assert) {
     this.options.title = {
-        text: "Simple title",
-        horizontalAlignment: "right",
+        text: 'Simple title',
+        horizontalAlignment: 'right',
         margin: {
             left: 0,
             right: 5
         }
     };
 
-    this.options.horizontalAlignment = "center";
-    this.options.verticalAlignment = "bottom";
+    this.options.horizontalAlignment = 'center';
+    this.options.verticalAlignment = 'bottom';
     this.titleLayout.width = 10;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [5, 2], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [5, 2], 'title must have moved');
 });
 
-QUnit.test("Shift simple title; horizontalAlignment = 'left' verticalAlignment = 'top' title.horizontalAlignment = 'left'; margins not zero", function(assert) {
+QUnit.test('Shift simple title; horizontalAlignment = \'left\' verticalAlignment = \'top\' title.horizontalAlignment = \'left\'; margins not zero', function(assert) {
     this.options.title = {
-        text: "Simple title",
-        horizontalAlignment: "right",
+        text: 'Simple title',
+        horizontalAlignment: 'right',
         margin: {
             left: 10,
             right: 10
         }
     };
 
-    this.options.horizontalAlignment = "left";
+    this.options.horizontalAlignment = 'left';
     this.titleLayout.width = 20;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
-    assert.equal(this.legend._boundingRect.width, 56, "boundingRect must be expanded");
+    assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
+    assert.equal(this.legend._boundingRect.width, 56, 'boundingRect must be expanded');
 });

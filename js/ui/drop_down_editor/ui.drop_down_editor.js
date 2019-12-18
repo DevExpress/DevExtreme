@@ -1,37 +1,37 @@
-var $ = require("../../core/renderer"),
-    AsyncTemplateMixin = require("../shared/async_template_mixin"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Guid = require("../../core/guid"),
-    registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
-    domUtils = require("../../core/utils/dom"),
-    focused = require("../widget/selectors").focused,
-    each = require("../../core/utils/iterator").each,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    errors = require("../widget/ui.errors"),
-    positionUtils = require("../../animation/position"),
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    DropDownButton = require("./ui.drop_down_button").default,
-    messageLocalization = require("../../localization/message"),
-    eventUtils = require("../../events/utils"),
-    TextBox = require("../text_box"),
-    clickEvent = require("../../events/click"),
-    devices = require("../../core/devices"),
-    FunctionTemplate = require("../widget/function_template"),
-    Popup = require("../popup");
+var $ = require('../../core/renderer'),
+    AsyncTemplateMixin = require('../shared/async_template_mixin'),
+    eventsEngine = require('../../events/core/events_engine'),
+    Guid = require('../../core/guid'),
+    registerComponent = require('../../core/component_registrator'),
+    commonUtils = require('../../core/utils/common'),
+    domUtils = require('../../core/utils/dom'),
+    focused = require('../widget/selectors').focused,
+    each = require('../../core/utils/iterator').each,
+    isDefined = require('../../core/utils/type').isDefined,
+    extend = require('../../core/utils/extend').extend,
+    getPublicElement = require('../../core/utils/dom').getPublicElement,
+    errors = require('../widget/ui.errors'),
+    positionUtils = require('../../animation/position'),
+    getDefaultAlignment = require('../../core/utils/position').getDefaultAlignment,
+    DropDownButton = require('./ui.drop_down_button').default,
+    messageLocalization = require('../../localization/message'),
+    eventUtils = require('../../events/utils'),
+    TextBox = require('../text_box'),
+    clickEvent = require('../../events/click'),
+    devices = require('../../core/devices'),
+    FunctionTemplate = require('../widget/function_template'),
+    Popup = require('../popup');
 
-var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
-    DROP_DOWN_EDITOR_INPUT_WRAPPER = "dx-dropdowneditor-input-wrapper",
-    DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
-    DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
-    DROP_DOWN_EDITOR_OVERLAY_FLIPPED = "dx-dropdowneditor-overlay-flipped",
-    DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
-    DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable",
-    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
+var DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor',
+    DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper',
+    DROP_DOWN_EDITOR_BUTTON_ICON = 'dx-dropdowneditor-icon',
+    DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay',
+    DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped',
+    DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active',
+    DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable',
+    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 
-var isIOs = devices.current().platform === "ios";
+var isIOs = devices.current().platform === 'ios';
 
 /**
 * @name dxDropDownEditor
@@ -44,7 +44,7 @@ var DropDownEditor = TextBox.inherit({
 
     _supportedKeys: function() {
         var homeEndHandler = function(e) {
-            if(this.option("opened")) {
+            if(this.option('opened')) {
                 e.preventDefault();
                 return true;
             }
@@ -53,11 +53,11 @@ var DropDownEditor = TextBox.inherit({
 
         return extend({}, this.callBase(), {
             tab: function(e) {
-                if(!this.option("opened")) {
+                if(!this.option('opened')) {
                     return;
                 }
 
-                if(this.option("applyValueMode") === "instantly") {
+                if(this.option('applyValueMode') === 'instantly') {
                     this.close();
                     return;
                 }
@@ -66,11 +66,11 @@ var DropDownEditor = TextBox.inherit({
                     ? this._getLastPopupElement()
                     : this._getFirstPopupElement();
 
-                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
+                $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
                 e.preventDefault();
             },
             escape: function(e) {
-                if(this.option("opened")) {
+                if(this.option('opened')) {
                     e.preventDefault();
                 }
                 this.close();
@@ -96,7 +96,7 @@ var DropDownEditor = TextBox.inherit({
                 return true;
             },
             enter: function(e) {
-                if(this.option("opened")) {
+                if(this.option('opened')) {
                     e.preventDefault();
                     this._valueChangeEventHandler(e);
                 }
@@ -108,7 +108,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _getDefaultButtons: function() {
-        return this.callBase().concat([{ name: "dropDown", Ctor: DropDownButton }]);
+        return this.callBase().concat([{ name: 'dropDown', Ctor: DropDownButton }]);
     },
 
     _getDefaultOptions: function() {
@@ -155,7 +155,7 @@ var DropDownEditor = TextBox.inherit({
             * @type Enums.EditorApplyValueMode
             * @default "instantly"
             */
-            applyValueMode: "instantly",
+            applyValueMode: 'instantly',
 
             /**
             * @name dxDropDownEditorOptions.deferRendering
@@ -210,9 +210,9 @@ var DropDownEditor = TextBox.inherit({
             dropDownOptions: {},
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
-            applyButtonText: messageLocalization.format("OK"),
-            cancelButtonText: messageLocalization.format("Cancel"),
-            buttonsLocation: "default",
+            applyButtonText: messageLocalization.format('OK'),
+            cancelButtonText: messageLocalization.format('Cancel'),
+            buttonsLocation: 'default',
             showPopupTitle: false,
             useHiddenSubmitElement: false
 
@@ -254,13 +254,13 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _getDefaultPopupPosition: function() {
-        var position = getDefaultAlignment(this.option("rtlEnabled"));
+        var position = getDefaultAlignment(this.option('rtlEnabled'));
 
         return {
             offset: { h: 0, v: -1 },
-            my: position + " top",
-            at: position + " bottom",
-            collision: "flip flip"
+            my: position + ' top',
+            at: position + ' bottom',
+            collision: 'flip flip'
         };
     },
 
@@ -268,7 +268,7 @@ var DropDownEditor = TextBox.inherit({
         return this.callBase().concat([
             {
                 device: function(device) {
-                    var isGeneric = device.platform === "generic";
+                    var isGeneric = device.platform === 'generic';
                     return isGeneric;
                 },
                 options: {
@@ -279,29 +279,29 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER);
+        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
     },
 
     _init: function() {
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
-        this._initInnerOptionCache("dropDownOptions");
+        this._initInnerOptionCache('dropDownOptions');
     },
 
     _initVisibilityActions: function() {
-        this._openAction = this._createActionByOption("onOpened", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._openAction = this._createActionByOption('onOpened', {
+            excludeValidators: ['disabled', 'readOnly']
         });
 
-        this._closeAction = this._createActionByOption("onClosed", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._closeAction = this._createActionByOption('onClosed', {
+            excludeValidators: ['disabled', 'readOnly']
         });
     },
 
     _initPopupInitializedAction: function() {
-        this._popupInitializedAction = this._createActionByOption("onPopupInitialized", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._popupInitializedAction = this._createActionByOption('onPopupInitialized', {
+            excludeValidators: ['disabled', 'readOnly']
         });
     },
 
@@ -313,7 +313,7 @@ var DropDownEditor = TextBox.inherit({
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
-        this.setAria("role", "combobox");
+        this.setAria('role', 'combobox');
     },
 
     _render: function() {
@@ -325,7 +325,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderContentImpl: function() {
-        if(!this.option("deferRendering")) {
+        if(!this.option('deferRendering')) {
             this._createPopup();
         }
     },
@@ -333,7 +333,7 @@ var DropDownEditor = TextBox.inherit({
     _renderInput: function() {
         this.callBase();
 
-        this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
+        this.$element().wrapInner($('<div>').addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
         this._$container = this.$element().children().eq(0);
 
         this._setDefaultAria();
@@ -341,25 +341,25 @@ var DropDownEditor = TextBox.inherit({
 
     _setDefaultAria: function() {
         this.setAria({
-            "haspopup": "true",
-            "autocomplete": "list"
+            'haspopup': 'true',
+            'autocomplete': 'list'
         });
     },
 
     _readOnlyPropValue: function() {
-        return !this.option("acceptCustomValue") || this.callBase();
+        return !this.option('acceptCustomValue') || this.callBase();
     },
 
     _cleanFocusState: function() {
         this.callBase();
 
-        if(this.option("fieldTemplate")) {
+        if(this.option('fieldTemplate')) {
             this._detachFocusEvents();
         }
     },
 
     _getFieldTemplate: function() {
-        return this.option("fieldTemplate") && this._getTemplateByOption("fieldTemplate");
+        return this.option('fieldTemplate') && this._getTemplateByOption('fieldTemplate');
     },
 
     _renderField: function() {
@@ -377,7 +377,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderValue: function() {
-        if(this.option("useHiddenSubmitElement")) {
+        if(this.option('useHiddenSubmitElement')) {
             this._setSubmitValue();
         }
 
@@ -401,7 +401,7 @@ var DropDownEditor = TextBox.inherit({
         this._detachFocusEvents();
         $container.empty();
 
-        var $templateWrapper = $("<div>").addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
+        var $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
 
         fieldTemplate.render({
             model: data,
@@ -410,13 +410,13 @@ var DropDownEditor = TextBox.inherit({
                 var $input = this._input();
 
                 if(!$input.length) {
-                    throw errors.Error("E1010");
+                    throw errors.Error('E1010');
                 }
 
                 this._refreshEvents();
                 this._refreshValueChangeEvent();
                 this._renderFocusState();
-                isFocused && eventsEngine.trigger($input, "focus");
+                isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
 
@@ -425,14 +425,14 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _fieldRenderData: function() {
-        return this.option("value");
+        return this.option('value');
     },
 
     _initTemplates: function() {
         this.callBase();
 
         this._defaultTemplates['dropDownButton'] = new FunctionTemplate(function(options) {
-            var $icon = $("<div>").addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
+            var $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
             $(options.container).append($icon);
         }, this);
     },
@@ -441,7 +441,7 @@ var DropDownEditor = TextBox.inherit({
         var that = this,
             $inputWrapper = that._inputWrapper(),
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
-            openOnFieldClick = that.option("openOnFieldClick");
+            openOnFieldClick = that.option('openOnFieldClick');
 
         eventsEngine.off($inputWrapper, eventName);
         eventsEngine.on($inputWrapper, eventName, that._getInputClickHandler(openOnFieldClick));
@@ -455,11 +455,11 @@ var DropDownEditor = TextBox.inherit({
     _attachFocusOutHandler: function() {
         if(isIOs) {
             this._detachFocusOutEvents();
-            eventsEngine.on(this._inputWrapper(), eventUtils.addNamespace("focusout", this.NAME), function(event) {
+            eventsEngine.on(this._inputWrapper(), eventUtils.addNamespace('focusout', this.NAME), function(event) {
                 var newTarget = event.relatedTarget;
-                var popupWrapper = this.content ? $(this.content()).closest("." + DROP_DOWN_EDITOR_OVERLAY) : this._$popup;
-                if(newTarget && this.option("opened")) {
-                    var isNewTargetOutside = $(newTarget).closest("." + DROP_DOWN_EDITOR_OVERLAY, popupWrapper).length === 0;
+                var popupWrapper = this.content ? $(this.content()).closest('.' + DROP_DOWN_EDITOR_OVERLAY) : this._$popup;
+                if(newTarget && this.option('opened')) {
+                    var isNewTargetOutside = $(newTarget).closest('.' + DROP_DOWN_EDITOR_OVERLAY, popupWrapper).length === 0;
                     if(isNewTargetOutside) {
                         this.close();
                     }
@@ -469,7 +469,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _detachFocusOutEvents: function() {
-        isIOs && eventsEngine.off(this._inputWrapper(), eventUtils.addNamespace("focusout", this.NAME));
+        isIOs && eventsEngine.off(this._inputWrapper(), eventUtils.addNamespace('focusout', this.NAME));
     },
 
     _getInputClickHandler: function(openOnFieldClick) {
@@ -493,12 +493,12 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _focusInput: function() {
-        if(this.option("disabled")) {
+        if(this.option('disabled')) {
             return false;
         }
 
-        if(this.option("focusStateEnabled") && !focused(this._input())) {
-            eventsEngine.trigger(this._input(), "focus");
+        if(this.option('focusStateEnabled') && !focused(this._input())) {
+            eventsEngine.trigger(this._input(), 'focus');
         }
 
         return true;
@@ -509,26 +509,26 @@ var DropDownEditor = TextBox.inherit({
             return;
         }
 
-        if(!this.option("readOnly")) {
-            isVisible = arguments.length ? isVisible : !this.option("opened");
-            this.option("opened", isVisible);
+        if(!this.option('readOnly')) {
+            isVisible = arguments.length ? isVisible : !this.option('opened');
+            this.option('opened', isVisible);
         }
     },
 
     _renderOpenedState: function() {
-        var opened = this.option("opened");
+        var opened = this.option('opened');
         if(opened) {
             this._createPopup();
         }
 
         this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE, opened);
-        this._setPopupOption("visible", opened);
+        this._setPopupOption('visible', opened);
 
         this.setAria({
-            "expanded": opened
+            'expanded': opened
         });
 
-        this.setAria("owns", ((opened || undefined) && this._popupContentId), this.$element());
+        this.setAria('owns', ((opened || undefined) && this._popupContentId), this.$element());
     },
 
     _createPopup: function() {
@@ -536,8 +536,8 @@ var DropDownEditor = TextBox.inherit({
             return;
         }
 
-        this._$popup = $("<div>").addClass(DROP_DOWN_EDITOR_OVERLAY)
-            .addClass(this.option("customOverlayCssClass"))
+        this._$popup = $('<div>').addClass(DROP_DOWN_EDITOR_OVERLAY)
+            .addClass(this.option('customOverlayCssClass'))
             .appendTo(this.$element());
 
         this._renderPopup();
@@ -545,26 +545,26 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderPopup: function() {
-        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._getInnerOptionsCache("dropDownOptions")));
+        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._getInnerOptionsCache('dropDownOptions')));
 
         this._popup.on({
-            "showing": this._popupShowingHandler.bind(this),
-            "shown": this._popupShownHandler.bind(this),
-            "hiding": this._popupHidingHandler.bind(this),
-            "hidden": this._popupHiddenHandler.bind(this)
+            'showing': this._popupShowingHandler.bind(this),
+            'shown': this._popupShownHandler.bind(this),
+            'hiding': this._popupHidingHandler.bind(this),
+            'hidden': this._popupHiddenHandler.bind(this)
         });
 
-        this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
+        this._popup.option('onContentReady', this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
 
         this._setPopupContentId(this._popup.$content());
 
-        this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
+        this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
     },
 
     _setPopupContentId($popupContent) {
-        this._popupContentId = "dx-" + new Guid();
-        this.setAria("id", this._popupContentId, $popupContent);
+        this._popupContentId = 'dx-' + new Guid();
+        this.setAria('id', this._popupContentId, $popupContent);
     },
 
     _contentReadyHandler: commonUtils.noop,
@@ -573,18 +573,18 @@ var DropDownEditor = TextBox.inherit({
 
         return {
             onInitialized: this._popupInitializedHandler(),
-            position: extend(this.option("popupPosition"), {
+            position: extend(this.option('popupPosition'), {
                 of: this.$element()
             }),
-            showTitle: this.option("showPopupTitle"),
-            width: "auto",
-            height: "auto",
+            showTitle: this.option('showPopupTitle'),
+            width: 'auto',
+            height: 'auto',
             shading: false,
             closeOnTargetScroll: true,
             closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {
-                show: { type: "fade", duration: 0, from: 0, to: 1 },
-                hide: { type: "fade", duration: 400, from: 1, to: 0 }
+                show: { type: 'fade', duration: 0, from: 0, to: 1 },
+                hide: { type: 'fade', duration: 400, from: 1, to: 0 }
             },
             deferRendering: false,
             focusStateEnabled: false,
@@ -596,7 +596,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _popupInitializedHandler: function() {
-        if(!this.option("onPopupInitialized")) {
+        if(!this.option('onPopupInitialized')) {
             return;
         }
 
@@ -612,41 +612,41 @@ var DropDownEditor = TextBox.inherit({
     _popupShowingHandler: commonUtils.noop,
 
     _popupHidingHandler: function() {
-        this.option("opened", false);
+        this.option('opened', false);
     },
 
     _popupShownHandler: function() {
         this._openAction();
 
         if(this._$validationMessage) {
-            this._$validationMessage.dxOverlay("option", "position", this._getValidationMessagePosition());
+            this._$validationMessage.dxOverlay('option', 'position', this._getValidationMessagePosition());
         }
     },
 
     _popupHiddenHandler: function() {
         this._closeAction();
         if(this._$validationMessage) {
-            this._$validationMessage.dxOverlay("option", "position", this._getValidationMessagePosition());
+            this._$validationMessage.dxOverlay('option', 'position', this._getValidationMessagePosition());
         }
     },
 
     _getValidationMessagePosition: function() {
-        var positionRequest = "below";
+        var positionRequest = 'below';
 
-        if(this._popup && this._popup.option("visible")) {
+        if(this._popup && this._popup.option('visible')) {
             var myTop = positionUtils.setup(this.$element()).top,
                 popupTop = positionUtils.setup(this._popup.$content()).top;
 
-            positionRequest = (myTop + this.option("popupPosition").offset.v) > popupTop ? "below" : "above";
+            positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
         }
 
         return this.callBase(positionRequest);
     },
 
     _renderPopupContent: function() {
-        var contentTemplate = this._getTemplateByOption("contentTemplate");
+        var contentTemplate = this._getTemplateByOption('contentTemplate');
 
-        if(!(contentTemplate && this.option("contentTemplate"))) {
+        if(!(contentTemplate && this.option('contentTemplate'))) {
             return;
         }
 
@@ -666,7 +666,7 @@ var DropDownEditor = TextBox.inherit({
 
     _closeOutsideDropDownHandler: function({ target }) {
         var $target = $(target);
-        var dropDownButton = this.getButton("dropDown");
+        var dropDownButton = this.getButton('dropDown');
         var $dropDownButton = dropDownButton && dropDownButton.$element();
         var isInputClicked = !!$target.closest(this.$element()).length;
         var isDropDownButtonClicked = !!$target.closest($dropDownButton).length;
@@ -687,27 +687,27 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _setPopupOption: function(optionName, value) {
-        this._setWidgetOption("_popup", arguments);
+        this._setWidgetOption('_popup', arguments);
     },
 
     _validatedOpening: function() {
-        if(!this.option("readOnly")) {
+        if(!this.option('readOnly')) {
             this._toggleOpenState(true);
         }
     },
 
     _getPopupToolbarItems: function() {
-        return this.option("applyValueMode") === "useButtons"
+        return this.option('applyValueMode') === 'useButtons'
             ? this._popupToolbarItemsConfig()
             : [];
     },
 
     _getFirstPopupElement: function() {
-        return this._popup._wrapper().find(".dx-popup-done.dx-button");
+        return this._popup._wrapper().find('.dx-popup-done.dx-button');
     },
 
     _getLastPopupElement: function() {
-        return this._popup._wrapper().find(".dx-popup-cancel.dx-button");
+        return this._popup._wrapper().find('.dx-popup-cancel.dx-button');
     },
 
     _popupElementTabHandler: function(e) {
@@ -716,36 +716,36 @@ var DropDownEditor = TextBox.inherit({
         if((e.shiftKey && $element.is(this._getFirstPopupElement()))
             || (!e.shiftKey && $element.is(this._getLastPopupElement()))) {
 
-            eventsEngine.trigger(this._input(), "focus");
+            eventsEngine.trigger(this._input(), 'focus');
             e.preventDefault();
         }
     },
 
     _popupElementEscHandler: function() {
-        eventsEngine.trigger(this._input(), "focus");
+        eventsEngine.trigger(this._input(), 'focus');
         this.close();
     },
 
     _popupButtonInitializedHandler: function(e) {
-        e.component.registerKeyHandler("tab", this._popupElementTabHandler.bind(this));
-        e.component.registerKeyHandler("escape", this._popupElementEscHandler.bind(this));
+        e.component.registerKeyHandler('tab', this._popupElementTabHandler.bind(this));
+        e.component.registerKeyHandler('escape', this._popupElementEscHandler.bind(this));
     },
 
     _popupToolbarItemsConfig: function() {
         var buttonsConfig = [
             {
-                shortcut: "done",
+                shortcut: 'done',
                 options: {
                     onClick: this._applyButtonHandler.bind(this),
-                    text: this.option("applyButtonText"),
+                    text: this.option('applyButtonText'),
                     onInitialized: this._popupButtonInitializedHandler.bind(this)
                 }
             },
             {
-                shortcut: "cancel",
+                shortcut: 'cancel',
                 options: {
                     onClick: this._cancelButtonHandler.bind(this),
-                    text: this.option("cancelButtonText"),
+                    text: this.option('cancelButtonText'),
                     onInitialized: this._popupButtonInitializedHandler.bind(this)
                 }
             }
@@ -755,10 +755,10 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _applyButtonsLocation: function(buttonsConfig) {
-        var buttonsLocation = this.option("buttonsLocation"),
+        var buttonsLocation = this.option('buttonsLocation'),
             resultConfig = buttonsConfig;
 
-        if(buttonsLocation !== "default") {
+        if(buttonsLocation !== 'default') {
             var position = commonUtils.splitPair(buttonsLocation);
 
             each(resultConfig, function(_, element) {
@@ -774,12 +774,12 @@ var DropDownEditor = TextBox.inherit({
 
     _applyButtonHandler: function() {
         this.close();
-        this.option("focusStateEnabled") && this.focus();
+        this.option('focusStateEnabled') && this.focus();
     },
 
     _cancelButtonHandler: function() {
         this.close();
-        this.option("focusStateEnabled") && this.focus();
+        this.option('focusStateEnabled') && this.focus();
     },
 
     _updatePopupWidth: commonUtils.noop,
@@ -789,25 +789,25 @@ var DropDownEditor = TextBox.inherit({
 
         this._setPopupOption(options);
 
-        if(Object.keys(options).indexOf("width") !== -1 && options["width"] === undefined) {
+        if(Object.keys(options).indexOf('width') !== -1 && options['width'] === undefined) {
             this._updatePopupWidth();
         }
     },
 
     _renderSubmitElement: function() {
-        if(this.option("useHiddenSubmitElement")) {
-            this._$submitElement = $("<input>")
-                .attr("type", "hidden")
+        if(this.option('useHiddenSubmitElement')) {
+            this._$submitElement = $('<input>')
+                .attr('type', 'hidden')
                 .appendTo(this.$element());
         }
     },
 
     _setSubmitValue: function() {
-        this._getSubmitElement().val(this.option("value"));
+        this._getSubmitElement().val(this.option('value'));
     },
 
     _getSubmitElement: function() {
-        if(this.option("useHiddenSubmitElement")) {
+        if(this.option('useHiddenSubmitElement')) {
             return this._$submitElement;
         } else {
             return this.callBase();
@@ -821,49 +821,49 @@ var DropDownEditor = TextBox.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "opened":
+            case 'opened':
                 this._renderOpenedState();
                 break;
-            case "onOpened":
-            case "onClosed":
+            case 'onOpened':
+            case 'onClosed':
                 this._initVisibilityActions();
                 break;
-            case "onPopupInitialized":
+            case 'onPopupInitialized':
                 this._initPopupInitializedAction();
                 break;
-            case "fieldTemplate":
+            case 'fieldTemplate':
                 if(isDefined(args.value)) {
                     this._renderField();
                 } else {
                     this._invalidate();
                 }
                 break;
-            case "contentTemplate":
-            case "acceptCustomValue":
-            case "openOnFieldClick":
+            case 'contentTemplate':
+            case 'acceptCustomValue':
+            case 'openOnFieldClick':
                 this._invalidate();
                 break;
-            case "dropDownButtonTemplate":
-            case "showDropDownButton":
-                this._updateButtons(["dropDown"]);
+            case 'dropDownButtonTemplate':
+            case 'showDropDownButton':
+                this._updateButtons(['dropDown']);
                 break;
-            case "dropDownOptions":
+            case 'dropDownOptions':
                 this._popupOptionChanged(args);
-                this._cacheInnerOptions("dropDownOptions", args.value);
+                this._cacheInnerOptions('dropDownOptions', args.value);
                 break;
-            case "popupPosition":
-            case "deferRendering":
+            case 'popupPosition':
+            case 'deferRendering':
                 break;
-            case "applyValueMode":
-            case "applyButtonText":
-            case "cancelButtonText":
-            case "buttonsLocation":
-                this._setPopupOption("toolbarItems", this._getPopupToolbarItems());
+            case 'applyValueMode':
+            case 'applyButtonText':
+            case 'cancelButtonText':
+            case 'buttonsLocation':
+                this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
                 break;
-            case "showPopupTitle":
-                this._setPopupOption("showTitle", args.value);
+            case 'showPopupTitle':
+                this._setPopupOption('showTitle', args.value);
                 break;
-            case "useHiddenSubmitElement":
+            case 'useHiddenSubmitElement':
                 if(this._$submitElement) {
                     this._$submitElement.remove();
                     this._$submitElement = undefined;
@@ -881,7 +881,7 @@ var DropDownEditor = TextBox.inherit({
     * @publicName open()
     */
     open: function() {
-        this.option("opened", true);
+        this.option('opened', true);
     },
 
     /**
@@ -889,7 +889,7 @@ var DropDownEditor = TextBox.inherit({
     * @publicName close()
     */
     close: function() {
-        this.option("opened", false);
+        this.option('opened', false);
     },
 
     /**
@@ -911,6 +911,6 @@ var DropDownEditor = TextBox.inherit({
     }
 }).include(AsyncTemplateMixin);
 
-registerComponent("dxDropDownEditor", DropDownEditor);
+registerComponent('dxDropDownEditor', DropDownEditor);
 
 module.exports = DropDownEditor;

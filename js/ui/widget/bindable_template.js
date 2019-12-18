@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    TemplateBase = require("./ui.template_base"),
-    eventsEngine = require("../../events/core/events_engine"),
-    removeEvent = require("../../core/remove_event"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    isPrimitive = require("../../core/utils/type").isPrimitive;
+var $ = require('../../core/renderer'),
+    TemplateBase = require('./ui.template_base'),
+    eventsEngine = require('../../events/core/events_engine'),
+    removeEvent = require('../../core/remove_event'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    isPrimitive = require('../../core/utils/type').isPrimitive;
 
 var watchChanges = (function() {
 

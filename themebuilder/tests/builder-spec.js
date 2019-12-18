@@ -1,14 +1,14 @@
 /* global __dirname */
-const fs = require("fs");
-const path = require("path");
-const assert = require("chai").assert;
-const buildTheme = require("../modules/builder").buildTheme;
-const commands = require("../modules/commands");
+const fs = require('fs');
+const path = require('path');
+const assert = require('chai').assert;
+const buildTheme = require('../modules/builder').buildTheme;
+const commands = require('../modules/commands');
 
 const fileReader = (filename) => {
-    filename = filename.replace("devextreme-themebuilder/", "");
+    filename = filename.replace('devextreme-themebuilder/', '');
     return new Promise((resolve) => {
-        fs.readFile(filename, "utf8", (error, data) => {
+        fs.readFile(filename, 'utf8', (error, data) => {
             resolve(data);
         });
     });
@@ -16,13 +16,13 @@ const fileReader = (filename) => {
 
 const normalizeCss = (css) => css
     .toLowerCase()
-    .replace(/\s*\/\*[\s\S]*?\*\//g, "")
+    .replace(/\s*\/\*[\s\S]*?\*\//g, '')
     .trim();
 
-const lessCompiler = require("less/lib/less-node");
+const lessCompiler = require('less/lib/less-node');
 
-describe("Builder - testing exported function", () => {
-    it("Build base theme with swatch", () => {
+describe('Builder - testing exported function', () => {
+    it('Build base theme with swatch', () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
@@ -31,55 +31,55 @@ describe("Builder - testing exported function", () => {
         };
 
         return buildTheme(config).then((result) => {
-            assert.notEqual(result.css, "", "Has css in result");
-            assert.equal(result.swatchSelector, ".dx-swatch-custom-scheme");
+            assert.notEqual(result.css, '', 'Has css in result');
+            assert.equal(result.swatchSelector, '.dx-swatch-custom-scheme');
         });
     }).timeout(5000);
 
-    it("Build theme according to bootstrap", () => {
+    it('Build theme according to bootstrap', () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
             lessCompiler: lessCompiler,
-            inputFile: "some.less",
-            data: ""
+            inputFile: 'some.less',
+            data: ''
         };
 
         return buildTheme(config).then((result) => {
-            assert.notEqual(result.css, "", "Has css in result");
+            assert.notEqual(result.css, '', 'Has css in result');
         });
     }).timeout(5000);
 
-    it("Build theme with changed color constants (generic)", () => {
+    it('Build theme with changed color constants (generic)', () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
             lessCompiler: lessCompiler,
-            items: [{ key: "@base-bg", value: "#abcdef" }]
+            items: [{ key: '@base-bg', value: '#abcdef' }]
         };
 
         return buildTheme(config).then((result) => {
-            assert.notEqual(result.css, "", "Has css in result");
-            assert.ok(/#abcdef/.test(result.css), "Color was changed");
+            assert.notEqual(result.css, '', 'Has css in result');
+            assert.ok(/#abcdef/.test(result.css), 'Color was changed');
         });
     }).timeout(5000);
 
-    it("Build theme with changed color constants (material)", () => {
+    it('Build theme with changed color constants (material)', () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
             lessCompiler: lessCompiler,
-            baseTheme: "material.blue.light",
-            items: [{ key: "@base-bg", value: "#abcdef" }]
+            baseTheme: 'material.blue.light',
+            items: [{ key: '@base-bg', value: '#abcdef' }]
         };
 
         return buildTheme(config).then((result) => {
-            assert.notEqual(result.css, "", "Has css in result");
-            assert.ok(/#abcdef/.test(result.css), "Color was changed");
+            assert.notEqual(result.css, '', 'Has css in result');
+            assert.ok(/#abcdef/.test(result.css), 'Color was changed');
         });
     }).timeout(5000);
 
-    it("Theme built without parameters is the same that in distribution (generic)", () => {
+    it('Theme built without parameters is the same that in distribution (generic)', () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
@@ -89,23 +89,23 @@ describe("Builder - testing exported function", () => {
 
         return buildTheme(config).then((result) => {
             const themeBuilderCss = normalizeCss(result.css);
-            const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, "../../artifacts/css/dx.light.css"), "utf8"));
+            const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, '../../artifacts/css/dx.light.css'), 'utf8'));
             assert.ok(themeBuilderCss === distributionCss);
         });
     }).timeout(5000);
 
-    it("Theme built without parameters is the same that in distribution (material)", () => {
+    it('Theme built without parameters is the same that in distribution (material)', () => {
         const config = {
             command: commands.BUILD_THEME,
             reader: fileReader,
             lessCompiler: lessCompiler,
-            baseTheme: "material.blue.light",
+            baseTheme: 'material.blue.light',
             items: []
         };
 
         return buildTheme(config).then((result) => {
             const themeBuilderCss = normalizeCss(result.css);
-            const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, "../../artifacts/css/dx.material.blue.light.css"), "utf8"));
+            const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, '../../artifacts/css/dx.material.blue.light.css'), 'utf8'));
             assert.ok(themeBuilderCss === distributionCss);
         });
     }).timeout(5000);

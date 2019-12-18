@@ -1,6 +1,6 @@
-var _extend = require("../../../core/utils/extend").extend,
-    symbolPoint = require("./symbol_point"),
-    barPoint = require("./bar_point"),
+var _extend = require('../../../core/utils/extend').extend,
+    symbolPoint = require('./symbol_point'),
+    barPoint = require('./bar_point'),
 
     _math = Math,
     _abs = _math.abs,
@@ -83,7 +83,7 @@ module.exports = _extend({}, barPoint, {
 
     _drawMarkerInGroup: function(group, attributes, renderer) {
         var that = this;
-        that.graphic = renderer.path(that._getPoints(), "area").attr({ "stroke-linecap": "square" }).attr(attributes).data({ "chart-data-point": that }).sharp().append(group);
+        that.graphic = renderer.path(that._getPoints(), 'area').attr({ 'stroke-linecap': 'square' }).attr(attributes).data({ 'chart-data-point': that }).sharp().append(group);
     },
 
     _fillStyle: function() {
@@ -201,7 +201,7 @@ module.exports = _extend({}, barPoint, {
             const centerCoord = that.getCenterCoord();
 
             if(location === 'edge') {
-                centerCoord[rotated ? "x" : "y"] = rotated ? max : min;
+                centerCoord[rotated ? 'x' : 'y'] = rotated ? max : min;
             }
 
             centerCoord.offset = 0;
@@ -268,30 +268,30 @@ module.exports = _extend({}, barPoint, {
             yValue,
             argument = that.argument,
             coords,
-            coord = "low";
+            coord = 'low';
 
         if(_abs(that.lowY - origY) < _abs(that.closeY - origY)) {
             yValue = that.lowY;
         } else {
             yValue = that.closeY;
-            coord = "close";
+            coord = 'close';
         }
 
         if(_abs(yValue - origY) >= _abs(that.openY - origY)) {
             yValue = that.openY;
-            coord = "open";
+            coord = 'open';
         }
 
         if(_abs(yValue - origY) >= _abs(that.highY - origY)) {
             yValue = that.highY;
-            coord = "high";
+            coord = 'high';
         }
 
         if(rotated) {
             coords = {
                 y: that.vy,
                 x: yValue,
-                xValue: that[coord + "Value"],
+                xValue: that[coord + 'Value'],
                 yValue: argument
             };
         } else {
@@ -299,7 +299,7 @@ module.exports = _extend({}, barPoint, {
                 x: that.vx,
                 y: yValue,
                 xValue: argument,
-                yValue: that[coord + "Value"]
+                yValue: that[coord + 'Value']
             };
         }
 
@@ -371,7 +371,7 @@ module.exports = _extend({}, barPoint, {
             formatObject = symbolMethods._getFormatObject.call(that, tooltip);
 
         return _extend({}, formatObject, {
-            valueText: "h: " + highValue + (openValue !== "" ? " o: " + openValue : "") + (closeValue !== "" ? " c: " + closeValue : "") + " l: " + lowValue,
+            valueText: 'h: ' + highValue + (openValue !== '' ? ' o: ' + openValue : '') + (closeValue !== '' ? ' c: ' + closeValue : '') + ' l: ' + lowValue,
             highValueText: highValue,
             openValueText: openValue,
             closeValueText: closeValue,

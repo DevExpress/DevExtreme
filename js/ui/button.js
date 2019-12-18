@@ -1,39 +1,39 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    iconUtils = require("../core/utils/icon"),
-    domUtils = require("../core/utils/dom"),
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    ValidationMixin = require("./validation/validation_mixin"),
-    ValidationEngine = require("./validation_engine"),
-    Widget = require("./widget/ui.widget"),
-    inkRipple = require("./widget/utils.ink_ripple"),
-    eventUtils = require("../events/utils"),
-    themes = require("./themes"),
-    clickEvent = require("../events/click"),
-    FunctionTemplate = require("./widget/function_template");
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    iconUtils = require('../core/utils/icon'),
+    domUtils = require('../core/utils/dom'),
+    devices = require('../core/devices'),
+    registerComponent = require('../core/component_registrator'),
+    extend = require('../core/utils/extend').extend,
+    ValidationMixin = require('./validation/validation_mixin'),
+    ValidationEngine = require('./validation_engine'),
+    Widget = require('./widget/ui.widget'),
+    inkRipple = require('./widget/utils.ink_ripple'),
+    eventUtils = require('../events/utils'),
+    themes = require('./themes'),
+    clickEvent = require('../events/click'),
+    FunctionTemplate = require('./widget/function_template');
 
-var BUTTON_CLASS = "dx-button",
-    BUTTON_CONTENT_CLASS = "dx-button-content",
-    BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
-    BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
-    BUTTON_ICON_RIGHT_CLASS = "dx-button-icon-right",
-    ICON_RIGHT_CLASS = "dx-icon-right",
-    BUTTON_STYLING_MODE_CLASS_PREFIX = "dx-button-mode-",
+var BUTTON_CLASS = 'dx-button',
+    BUTTON_CONTENT_CLASS = 'dx-button-content',
+    BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text',
+    BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon',
+    BUTTON_ICON_RIGHT_CLASS = 'dx-button-icon-right',
+    ICON_RIGHT_CLASS = 'dx-icon-right',
+    BUTTON_STYLING_MODE_CLASS_PREFIX = 'dx-button-mode-',
     ALLOWED_STYLE_CLASSES = [
-        BUTTON_STYLING_MODE_CLASS_PREFIX + "contained",
-        BUTTON_STYLING_MODE_CLASS_PREFIX + "text",
-        BUTTON_STYLING_MODE_CLASS_PREFIX + "outlined"
+        BUTTON_STYLING_MODE_CLASS_PREFIX + 'contained',
+        BUTTON_STYLING_MODE_CLASS_PREFIX + 'text',
+        BUTTON_STYLING_MODE_CLASS_PREFIX + 'outlined'
     ],
 
-    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
+    TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper',
 
-    BUTTON_TEXT_CLASS = "dx-button-text",
+    BUTTON_TEXT_CLASS = 'dx-button-text',
 
-    ANONYMOUS_TEMPLATE_NAME = "content",
+    ANONYMOUS_TEMPLATE_NAME = 'content',
 
-    BUTTON_LEFT_ICON_POSITION = "left",
+    BUTTON_LEFT_ICON_POSITION = 'left',
 
     BUTTON_FEEDBACK_HIDE_TIMEOUT = 100;
 
@@ -90,21 +90,21 @@ var Button = Widget.inherit({
             * @type Enums.ButtonType
             * @default 'normal'
             */
-            type: "normal",
+            type: 'normal',
 
             /**
             * @name dxButtonOptions.text
             * @type string
             * @default ""
             */
-            text: "",
+            text: '',
 
             /**
             * @name dxButtonOptions.icon
             * @type string
             * @default ""
             */
-            icon: "",
+            icon: '',
 
             iconPosition: BUTTON_LEFT_ICON_POSITION,
 
@@ -132,7 +132,7 @@ var Button = Widget.inherit({
             * @type_function_param2 contentElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            template: "content",
+            template: 'content',
 
             /**
             * @name dxButtonOptions.useSubmitBehavior
@@ -148,7 +148,7 @@ var Button = Widget.inherit({
             * @type Enums.ButtonStylingMode
             * @default 'contained'
             */
-            stylingMode: "contained"
+            stylingMode: 'contained'
 
             /**
             * @name dxButtonDefaultTemplate
@@ -169,7 +169,7 @@ var Button = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -202,15 +202,15 @@ var Button = Widget.inherit({
         this.callBase();
         var that = this;
 
-        this._defaultTemplates["content"] = new FunctionTemplate(function(options) {
+        this._defaultTemplates['content'] = new FunctionTemplate(function(options) {
             var data = options.model,
                 $iconElement = iconUtils.getImageContainer(data && data.icon),
-                $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined,
+                $textContainer = data && data.text ? $('<span>').text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined,
                 $container = $(options.container);
 
             $container.append($textContainer);
 
-            if(that.option("iconPosition") === BUTTON_LEFT_ICON_POSITION) {
+            if(that.option('iconPosition') === BUTTON_LEFT_ICON_POSITION) {
                 $container.prepend($iconElement);
             } else {
                 $iconElement.addClass(ICON_RIGHT_CLASS);
@@ -224,10 +224,10 @@ var Button = Widget.inherit({
         this._renderType();
         this._renderStylingMode();
 
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
         this._renderClick();
 
-        this.setAria("role", "button");
+        this.setAria('role', 'button');
         this._updateAriaLabel();
 
         this.callBase();
@@ -236,7 +236,7 @@ var Button = Widget.inherit({
     },
 
     _renderInkRipple: function() {
-        var isOnlyIconButton = (!this.option("text") && this.option("icon")) || (this.option("type") === "back"),
+        var isOnlyIconButton = (!this.option('text') && this.option('icon')) || (this.option('type') === 'back'),
             config = {};
 
         if(isOnlyIconButton) {
@@ -276,18 +276,18 @@ var Button = Widget.inherit({
         if(this._$content) {
             this._$content.empty();
         } else {
-            this._$content = $("<div>")
+            this._$content = $('<div>')
                 .addClass(BUTTON_CONTENT_CLASS)
                 .appendTo($element);
         }
 
         $element
             .toggleClass(BUTTON_HAS_ICON_CLASS, !!data.icon)
-            .toggleClass(BUTTON_ICON_RIGHT_CLASS, !!data.icon && this.option("iconPosition") !== BUTTON_LEFT_ICON_POSITION)
+            .toggleClass(BUTTON_ICON_RIGHT_CLASS, !!data.icon && this.option('iconPosition') !== BUTTON_LEFT_ICON_POSITION)
             .toggleClass(BUTTON_HAS_TEXT_CLASS, !!data.text);
 
-        const transclude = this._getAnonymousTemplateName() === this.option("template"),
-            template = this._getTemplateByOption("template"),
+        const transclude = this._getAnonymousTemplateName() === this.option('template'),
+            template = this._getTemplateByOption('template'),
             $result = $(template.render({
                 model: data,
                 container: domUtils.getPublicElement(this._$content),
@@ -300,7 +300,7 @@ var Button = Widget.inherit({
             this._$content.addClass(BUTTON_CONTENT_CLASS);
         }
 
-        if(this.option("useSubmitBehavior")) {
+        if(this.option('useSubmitBehavior')) {
             this._renderSubmitInput();
         }
     },
@@ -316,24 +316,24 @@ var Button = Widget.inherit({
             e.stopPropagation();
         });
 
-        this._$submitInput = $("<input>")
-            .attr("type", "submit")
-            .attr("tabindex", -1)
-            .addClass("dx-button-submit-input")
+        this._$submitInput = $('<input>')
+            .attr('type', 'submit')
+            .attr('tabindex', -1)
+            .addClass('dx-button-submit-input')
             .appendTo(this._$content);
 
-        eventsEngine.on(this._$submitInput, "click", function(e) {
+        eventsEngine.on(this._$submitInput, 'click', function(e) {
             submitAction({ event: e });
         });
     },
 
     _getContentData: function() {
-        var icon = this.option("icon"),
-            text = this.option("text"),
-            back = this.option("type") === "back";
+        var icon = this.option('icon'),
+            text = this.option('text'),
+            back = this.option('type') === 'back';
 
         if(back && !icon) {
-            icon = "back";
+            icon = 'back';
         }
 
         return {
@@ -345,9 +345,9 @@ var Button = Widget.inherit({
     _renderClick: function() {
         var that = this,
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            actionConfig = { excludeValidators: ["readOnly"] };
+            actionConfig = { excludeValidators: ['readOnly'] };
 
-        if(this.option("useSubmitBehavior")) {
+        if(this.option('useSubmitBehavior')) {
             actionConfig.afterExecute = function(e) {
                 setTimeout(function() {
                     e.component._$submitInput.get(0).click();
@@ -355,7 +355,7 @@ var Button = Widget.inherit({
             };
         }
 
-        this._clickAction = this._createActionByOption("onClick", actionConfig);
+        this._clickAction = this._createActionByOption('onClick', actionConfig);
 
         eventsEngine.off(this.$element(), eventName);
         eventsEngine.on(this.$element(), eventName, function(e) {
@@ -368,32 +368,32 @@ var Button = Widget.inherit({
     },
 
     _updateAriaLabel: function() {
-        var icon = this.option("icon"),
-            text = this.option("text");
+        var icon = this.option('icon'),
+            text = this.option('text');
 
-        if(iconUtils.getImageSourceType(icon) === "image") {
-            if(icon.indexOf("base64") === -1) {
-                icon = icon.replace(/.+\/([^.]+)\..+$/, "$1");
+        if(iconUtils.getImageSourceType(icon) === 'image') {
+            if(icon.indexOf('base64') === -1) {
+                icon = icon.replace(/.+\/([^.]+)\..+$/, '$1');
             } else {
-                icon = "Base64";
+                icon = 'Base64';
             }
         }
 
-        var ariaLabel = text || icon || "";
+        var ariaLabel = text || icon || '';
         ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", ariaLabel.length ? ariaLabel : null);
+        this.setAria('label', ariaLabel.length ? ariaLabel : null);
     },
 
     _renderType: function() {
-        var type = this.option("type");
+        var type = this.option('type');
         if(type) {
-            this.$element().addClass("dx-button-" + type);
+            this.$element().addClass('dx-button-' + type);
         }
     },
 
     _renderStylingMode: function() {
-        const optionName = "stylingMode";
+        const optionName = 'stylingMode';
         ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
         let stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + this.option(optionName);
         if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
@@ -404,41 +404,41 @@ var Button = Widget.inherit({
     },
 
     _refreshType: function(prevType) {
-        var type = this.option("type");
+        var type = this.option('type');
 
         prevType && this.$element()
-            .removeClass("dx-button-" + prevType)
-            .addClass("dx-button-" + type);
+            .removeClass('dx-button-' + prevType)
+            .addClass('dx-button-' + type);
 
-        if(!this.$element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
+        if(!this.$element().hasClass(BUTTON_HAS_ICON_CLASS) && type === 'back') {
             this._updateContent();
         }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onClick":
+            case 'onClick':
                 this._renderClick();
                 break;
-            case "icon":
-            case "text":
+            case 'icon':
+            case 'text':
                 this._updateContent();
                 this._updateAriaLabel();
                 break;
-            case "type":
+            case 'type':
                 this._refreshType(args.previousValue);
                 this._updateContent();
                 this._updateAriaLabel();
                 break;
-            case "template":
-            case "iconPosition":
+            case 'template':
+            case 'iconPosition':
                 this._updateContent();
                 break;
-            case "stylingMode":
+            case 'stylingMode':
                 this._renderStylingMode();
                 break;
-            case "useInkRipple":
-            case "useSubmitBehavior":
+            case 'useInkRipple':
+            case 'useSubmitBehavior':
                 this._invalidate();
                 break;
             default:
@@ -454,6 +454,6 @@ var Button = Widget.inherit({
 
 }).include(ValidationMixin);
 
-registerComponent("dxButton", Button);
+registerComponent('dxButton', Button);
 
 module.exports = Button;

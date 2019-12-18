@@ -1,6 +1,6 @@
-import Guid from "../../core/guid";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
+import Guid from '../../core/guid';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
 
 export default class FormItemsRunTimeInfo {
     constructor() {

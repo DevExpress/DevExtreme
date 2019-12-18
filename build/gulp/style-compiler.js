@@ -50,7 +50,7 @@ gulp.task('style-compiler-themes', function(callback) {
 });
 
 gulp.task('style-compiler-themes-dev', function(callback) {
-    return gulp.watch("styles/**", ['style-compiler-themes']);
+    return gulp.watch('styles/**', ['style-compiler-themes']);
 });
 
 gulp.task('style-compiler-generic-legacy-light', function(callback) {

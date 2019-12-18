@@ -1,18 +1,18 @@
-var $ = require("../../core/renderer"),
-    Editor = require("../editor/editor"),
-    DateViewRoller = require("./ui.date_view_roller"),
-    dateUtils = require("../../core/utils/date"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    uiDateUtils = require("./ui.date_utils"),
-    registerComponent = require("../../core/component_registrator"),
-    dateLocalization = require("../../localization/date");
+var $ = require('../../core/renderer'),
+    Editor = require('../editor/editor'),
+    DateViewRoller = require('./ui.date_view_roller'),
+    dateUtils = require('../../core/utils/date'),
+    each = require('../../core/utils/iterator').each,
+    extend = require('../../core/utils/extend').extend,
+    uiDateUtils = require('./ui.date_utils'),
+    registerComponent = require('../../core/component_registrator'),
+    dateLocalization = require('../../localization/date');
 
-var DATEVIEW_CLASS = "dx-dateview",
-    DATEVIEW_COMPACT_CLASS = "dx-dateview-compact",
-    DATEVIEW_WRAPPER_CLASS = "dx-dateview-wrapper",
-    DATEVIEW_ROLLER_CONTAINER_CLASS = "dx-dateview-rollers",
-    DATEVIEW_ROLLER_CLASS = "dx-dateviewroller";
+var DATEVIEW_CLASS = 'dx-dateview',
+    DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact',
+    DATEVIEW_WRAPPER_CLASS = 'dx-dateview-wrapper',
+    DATEVIEW_ROLLER_CONTAINER_CLASS = 'dx-dateview-rollers',
+    DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 
 var TYPE = {
     date: 'date',
@@ -29,7 +29,7 @@ var ROLLER_TYPE = {
 
 var DateView = Editor.inherit({
     _valueOption: function() {
-        var value = this.option("value"),
+        var value = this.option('value'),
             date = new Date(value);
 
         return !value || isNaN(date) ? this._getDefaultDate() : date;
@@ -38,7 +38,7 @@ var DateView = Editor.inherit({
     _getDefaultDate: function() {
         var date = new Date();
 
-        if(this.option("type") === TYPE.date) {
+        if(this.option('type') === TYPE.date) {
             return new Date(date.getFullYear(), date.getMonth(), date.getDate());
         }
 
@@ -60,7 +60,7 @@ var DateView = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
+                    return device.platform === 'win' && device.version && device.version[0] === 8;
                 },
                 options: {
                     showNames: true
@@ -68,7 +68,7 @@ var DateView = Editor.inherit({
             },
             {
                 device: function(device) {
-                    return device.deviceType !== "desktop";
+                    return device.deviceType !== 'desktop';
                 },
                 options: {
                     applyCompactClass: true
@@ -80,18 +80,18 @@ var DateView = Editor.inherit({
     _render: function() {
         this.callBase();
         this.$element().addClass(DATEVIEW_CLASS);
-        this._toggleFormatClasses(this.option("type"));
+        this._toggleFormatClasses(this.option('type'));
         this._toggleCompactClass();
     },
 
     _toggleFormatClasses: function(currentFormat, previousFormat) {
-        this.$element().addClass(DATEVIEW_CLASS + "-" + currentFormat);
+        this.$element().addClass(DATEVIEW_CLASS + '-' + currentFormat);
 
-        previousFormat && this.$element().removeClass(DATEVIEW_CLASS + "-" + previousFormat);
+        previousFormat && this.$element().removeClass(DATEVIEW_CLASS + '-' + previousFormat);
     },
 
     _toggleCompactClass: function() {
-        this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, this.option("applyCompactClass"));
+        this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, this.option('applyCompactClass'));
     },
 
     _wrapper: function() {
@@ -99,14 +99,14 @@ var DateView = Editor.inherit({
     },
 
     _renderContentImpl: function() {
-        this._$wrapper = $("<div>").addClass(DATEVIEW_WRAPPER_CLASS);
+        this._$wrapper = $('<div>').addClass(DATEVIEW_WRAPPER_CLASS);
         this._renderRollers();
         this._$wrapper.appendTo(this.$element());
     },
 
     _renderRollers: function() {
         if(!this._$rollersContainer) {
-            this._$rollersContainer = $("<div>").addClass(DATEVIEW_ROLLER_CONTAINER_CLASS);
+            this._$rollersContainer = $('<div>').addClass(DATEVIEW_ROLLER_CONTAINER_CLASS);
         }
 
         this._$rollersContainer.empty();
@@ -117,8 +117,8 @@ var DateView = Editor.inherit({
         var that = this;
 
         each(that._rollerConfigs, function(name) {
-            var $roller = $("<div>").appendTo(that._$rollersContainer)
-                .addClass(DATEVIEW_ROLLER_CLASS + "-" + that._rollerConfigs[name].type);
+            var $roller = $('<div>').appendTo(that._$rollersContainer)
+                .addClass(DATEVIEW_ROLLER_CLASS + '-' + that._rollerConfigs[name].type);
 
             that._rollers[that._rollerConfigs[name].type] = that._createComponent($roller, DateViewRoller, {
                 items: that._rollerConfigs[name].displayItems,
@@ -127,7 +127,7 @@ var DateView = Editor.inherit({
                 onStart: function(e) {
                     var roller = e.component;
                     roller._toggleActive(true);
-                    that._setActiveRoller(that._rollerConfigs[name], roller.option("selectedIndex"));
+                    that._setActiveRoller(that._rollerConfigs[name], roller.option('selectedIndex'));
                 },
                 onEnd: function(e) {
                     var roller = e.component;
@@ -136,13 +136,13 @@ var DateView = Editor.inherit({
                 onClick: function(e) {
                     var roller = e.component;
                     roller._toggleActive(true);
-                    that._setActiveRoller(that._rollerConfigs[name], roller.option("selectedIndex"));
-                    that._setRollerState(that._rollerConfigs[name], roller.option("selectedIndex"));
+                    that._setActiveRoller(that._rollerConfigs[name], roller.option('selectedIndex'));
+                    that._setRollerState(that._rollerConfigs[name], roller.option('selectedIndex'));
                     roller._toggleActive(false);
                 },
                 onSelectedIndexChanged: function(e) {
                     var roller = e.component;
-                    that._setRollerState(that._rollerConfigs[name], roller.option("selectedIndex"));
+                    that._setRollerState(that._rollerConfigs[name], roller.option('selectedIndex'));
                 }
             });
         });
@@ -151,7 +151,7 @@ var DateView = Editor.inherit({
 
     _createRollerConfigs: function(type) {
         var that = this;
-        type = type || that.option("type");
+        type = type || that.option('type');
         that._rollerConfigs = {};
 
         dateLocalization.getFormatParts(uiDateUtils.FORMATS_MAP[type]).forEach(function(partName) {
@@ -167,7 +167,7 @@ var DateView = Editor.inherit({
             endValue = valueRange.endValue,
 
             formatter = componentInfo.formatter,
-            showNames = this.option("showNames"),
+            showNames = this.option('showNames'),
 
             curDate = this._getCurrentDate();
 
@@ -203,7 +203,7 @@ var DateView = Editor.inherit({
         var that = this;
         each(this._rollers, function(type) {
             var correctIndex = that._rollerConfigs[type].getIndex(that._getCurrentDate());
-            this.option("selectedIndex", correctIndex);
+            this.option('selectedIndex', correctIndex);
         });
     },
 
@@ -213,8 +213,8 @@ var DateView = Editor.inherit({
                 setValue = roller.setValue,
                 currentValue = new Date(this._getCurrentDate()),
                 currentDate = currentValue.getDate(),
-                minDate = this.option("minDate"),
-                maxDate = this.option("maxDate");
+                minDate = this.option('minDate'),
+                maxDate = this.option('maxDate');
 
             if(roller.type === ROLLER_TYPE.month) {
                 currentDate = Math.min(currentDate, uiDateUtils.getMaxMonthDay(currentValue.getFullYear(), rollerValue));
@@ -226,10 +226,10 @@ var DateView = Editor.inherit({
             currentValue[setValue](rollerValue);
 
             var normalizedDate = dateUtils.normalizeDate(currentValue, minDate, maxDate);
-            currentValue = uiDateUtils.mergeDates(normalizedDate, currentValue, "time");
+            currentValue = uiDateUtils.mergeDates(normalizedDate, currentValue, 'time');
             currentValue = dateUtils.normalizeDate(currentValue, minDate, maxDate);
 
-            this.option("value", currentValue);
+            this.option('value', currentValue);
 
             roller.selectedIndex = selectedIndex;
         }
@@ -250,7 +250,7 @@ var DateView = Editor.inherit({
         if(roller) {
             this._createRollerConfig(rollerType);
             var rollerConfig = this._rollerConfigs[rollerType];
-            if(rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== roller.option("items").toString()) {
+            if(rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== roller.option('items').toString()) {
                 roller.option({
                     items: rollerConfig.displayItems,
                     selectedIndex: rollerConfig.selectedIndex
@@ -261,16 +261,16 @@ var DateView = Editor.inherit({
 
     _getCurrentDate: function() {
         var curDate = this._valueOption(),
-            minDate = this.option("minDate"),
-            maxDate = this.option("maxDate");
+            minDate = this.option('minDate'),
+            maxDate = this.option('maxDate');
 
         return dateUtils.normalizeDate(curDate, minDate, maxDate);
     },
 
     _calculateRollerConfigValueRange: function(componentName) {
         var curDate = this._getCurrentDate(),
-            minDate = this.option("minDate"),
-            maxDate = this.option("maxDate"),
+            minDate = this.option('minDate'),
+            maxDate = this.option('maxDate'),
 
             minYear = dateUtils.sameYear(curDate, minDate),
             minMonth = minYear && curDate.getMonth() === minDate.getMonth(),
@@ -327,21 +327,21 @@ var DateView = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "showNames":
-            case "minDate":
-            case "maxDate":
-            case "type":
+            case 'showNames':
+            case 'minDate':
+            case 'maxDate':
+            case 'type':
                 this._renderRollers();
                 this._toggleFormatClasses(args.value, args.previousValue);
                 break;
-            case "visible":
+            case 'visible':
                 this.callBase(args);
                 if(args.value) {
                     this._renderRollers();
                 }
                 break;
-            case "value":
-                this.option("value", this._valueOption());
+            case 'value':
+                this.option('value', this._valueOption());
                 this._refreshRollers();
                 this._updateRollersPosition();
                 break;
@@ -362,6 +362,6 @@ var DateView = Editor.inherit({
     }
 });
 
-registerComponent("dxDateView", DateView);
+registerComponent('dxDateView', DateView);
 
 module.exports = DateView;

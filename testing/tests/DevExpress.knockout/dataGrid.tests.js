@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    ko = require("knockout"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    logger = require("core/utils/console").logger,
-    fx = require("animation/fx"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js");
+var $ = require('jquery'),
+    ko = require('knockout'),
+    DataSource = require('data/data_source/data_source').DataSource,
+    logger = require('core/utils/console').logger,
+    fx = require('animation/fx'),
+    dataGridMocks = require('../../helpers/dataGridMocks.js');
 
-require("ui/data_grid/ui.data_grid");
-require("integration/knockout");
+require('ui/data_grid/ui.data_grid');
+require('integration/knockout');
 
 QUnit.testStart(function() {
     var markup =
@@ -35,7 +35,7 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 var processColumnsForCompare = function(columns, parameterNames) {
@@ -69,7 +69,7 @@ var processColumnsForCompare = function(columns, parameterNames) {
 
 fx.off = true;
 
-QUnit.module("Assign options", {
+QUnit.module('Assign options', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -87,14 +87,14 @@ QUnit.test('Lookup dataSource is observable value', function(assert) {
     };
 
     // act
-    $("#dataGrid").dxDataGrid({
+    $('#dataGrid').dxDataGrid({
         columns: [{ dataField: 'field1', lookup: { dataSource: ko.observableArray([]) } }],
         loadingTimeout: undefined,
         dataSource: [{ field1: 1 }]
     });
 
     // assert
-    assert.ok(errorMessage.indexOf("Unexpected type of data source is provided for a lookup column") > -1, "Error message");
+    assert.ok(errorMessage.indexOf('Unexpected type of data source is provided for a lookup column') > -1, 'Error message');
 });
 
 var setupModule = function() {
@@ -119,10 +119,10 @@ var teardownModule = function() {
     this.dispose();
 };
 
-QUnit.module("initialization from dataSource", { beforeEach: setupModule, afterEach: teardownModule });
+QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterEach: teardownModule });
 
 // T111157
-QUnit.test("Initialize from array store with observable fields", function(assert) {
+QUnit.test('Initialize from array store with observable fields', function(assert) {
     var dataSource = new DataSource([
         { name: ko.observable('Alex'), age: ko.observable(15), birthDate: ko.observable(new Date(1995, 5, 23)) },
         { name: ko.observable('Dan'), age: ko.observable(19), birthDate: ko.observable(new Date(1991, 6, 15)) }
@@ -145,7 +145,7 @@ QUnit.test("Initialize from array store with observable fields", function(assert
 });
 
 // T387248
-QUnit.test("Set selectedRows where there is a nested knockout observable value inside dataSource", function(assert) {
+QUnit.test('Set selectedRows where there is a nested knockout observable value inside dataSource', function(assert) {
     // arrange
     var items;
 
@@ -166,14 +166,14 @@ QUnit.test("Set selectedRows where there is a nested knockout observable value i
 
     // assert
     items = this.dataController.items();
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [this.array[1]], "keys of the selected rows");
-    assert.equal(items.length, 3, "count item");
-    assert.ok(!items[0].isSelected, "first item isn't selected");
-    assert.ok(items[1].isSelected, "second item is selected");
-    assert.ok(!items[2].isSelected, "third item isn't selected");
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [this.array[1]], 'keys of the selected rows');
+    assert.equal(items.length, 3, 'count item');
+    assert.ok(!items[0].isSelected, 'first item isn\'t selected');
+    assert.ok(items[1].isSelected, 'second item is selected');
+    assert.ok(!items[2].isSelected, 'third item isn\'t selected');
 });
 
-QUnit.module("Work with knockout", {
+QUnit.module('Work with knockout', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -183,10 +183,10 @@ QUnit.module("Work with knockout", {
                     store: {
                         type: 'array',
                         data: [
-                            { field1: "test1", field2: "test2" },
-                            { field1: "test3", field2: "test4" },
-                            { field1: "test5", field2: "test6" },
-                            { field1: "test7", field2: "test8" }
+                            { field1: 'test1', field2: 'test2' },
+                            { field1: 'test3', field2: 'test4' },
+                            { field1: 'test5', field2: 'test6' },
+                            { field1: 'test7', field2: 'test8' }
                         ]
                     },
                     paginate: false
@@ -195,14 +195,14 @@ QUnit.module("Work with knockout", {
                     visible: true
                 },
                 columns: [
-                    "field1", "field2"
+                    'field1', 'field2'
                 ]
             }
         };
         this.createDataGrid = function() {
-            ko.applyBindings(this.viewModel, $("#landOfKO").get(0));
+            ko.applyBindings(this.viewModel, $('#landOfKO').get(0));
 
-            var dataGrid = $("#dataGridKO").dxDataGrid("instance");
+            var dataGrid = $('#dataGridKO').dxDataGrid('instance');
             this.clock.tick(500);
             return dataGrid;
         };
@@ -212,14 +212,14 @@ QUnit.module("Work with knockout", {
     }
 });
 
-QUnit.test("Check that header filter shows without errors when using KO", function(assert) {
+QUnit.test('Check that header filter shows without errors when using KO', function(assert) {
     this.createDataGrid();
 
     // act
-    $("#landOfKO")
-        .find(".dx-header-filter")
+    $('#landOfKO')
+        .find('.dx-header-filter')
         .first()
-        .trigger("dxclick"); // Without the fix for T269782 we will get error after that
+        .trigger('dxclick'); // Without the fix for T269782 we will get error after that
 
 
     // assert
@@ -227,26 +227,26 @@ QUnit.test("Check that header filter shows without errors when using KO", functi
 });
 
 // T266949
-QUnit.test("Root view model in cellTemplate", function(assert) {
+QUnit.test('Root view model in cellTemplate', function(assert) {
     var getCellTextCallCount = 0;
 
     this.viewModel.getCellText = function(options) {
         getCellTextCallCount++;
-        return options.rowIndex + " - " + options.text;
+        return options.rowIndex + ' - ' + options.text;
     };
     this.viewModel.gridOptions.columns[0] = {
-        dataField: "field1",
-        cssClass: "test-cell",
-        cellTemplate: "testCellTemplate"
+        dataField: 'field1',
+        cssClass: 'test-cell',
+        cellTemplate: 'testCellTemplate'
     };
 
     // act
     this.createDataGrid();
 
     // assert
-    assert.equal(getCellTextCallCount, 4, "cell template call count");
-    assert.ok($(".dx-data-row .test-cell").eq(0).text().indexOf("0 - test1") >= 0, "test cell 0 text");
-    assert.ok($(".dx-data-row .test-cell").eq(1).text().indexOf("1 - test3") >= 0, "test cell 1 text");
+    assert.equal(getCellTextCallCount, 4, 'cell template call count');
+    assert.ok($('.dx-data-row .test-cell').eq(0).text().indexOf('0 - test1') >= 0, 'test cell 0 text');
+    assert.ok($('.dx-data-row .test-cell').eq(1).text().indexOf('1 - test3') >= 0, 'test cell 1 text');
 });
 
 QUnit.test('Two-way binding', function(assert) {
@@ -262,19 +262,19 @@ QUnit.test('Two-way binding', function(assert) {
     var dataGrid = this.createDataGrid();
 
     // assert
-    var $rows = $(dataGrid.$element().find(".dx-data-row"));
-    assert.equal($rows.length, 2, "row count");
-    assert.equal($rows.eq(0).children().eq(0).text(), "1");
-    assert.equal($rows.eq(1).children().eq(0).text(), "3");
+    var $rows = $(dataGrid.$element().find('.dx-data-row'));
+    assert.equal($rows.length, 2, 'row count');
+    assert.equal($rows.eq(0).children().eq(0).text(), '1');
+    assert.equal($rows.eq(1).children().eq(0).text(), '3');
 
     // act
     data[0].field1(666);
 
     // assert
-    $rows = $(dataGrid.$element().find(".dx-data-row"));
-    assert.equal($rows.length, 2, "row count");
-    assert.equal($rows.eq(0).children().eq(0).text(), "666");
-    assert.equal($rows.eq(1).children().eq(0).text(), "3");
+    $rows = $(dataGrid.$element().find('.dx-data-row'));
+    assert.equal($rows.length, 2, 'row count');
+    assert.equal($rows.eq(0).children().eq(0).text(), '666');
+    assert.equal($rows.eq(1).children().eq(0).text(), '3');
 });
 
 QUnit.test('Two-way binding disabled', function(assert) {
@@ -291,19 +291,19 @@ QUnit.test('Two-way binding disabled', function(assert) {
     var dataGrid = this.createDataGrid();
 
     // assert
-    var $rows = $(dataGrid.$element().find(".dx-data-row"));
-    assert.equal($rows.length, 2, "row count");
-    assert.equal($rows.eq(0).children().eq(0).text(), "1");
-    assert.equal($rows.eq(1).children().eq(0).text(), "3");
+    var $rows = $(dataGrid.$element().find('.dx-data-row'));
+    assert.equal($rows.length, 2, 'row count');
+    assert.equal($rows.eq(0).children().eq(0).text(), '1');
+    assert.equal($rows.eq(1).children().eq(0).text(), '3');
 
     // act
     data[0].field1(666);
 
     // assert
-    $rows = $(dataGrid.$element().find(".dx-data-row"));
-    assert.equal($rows.length, 2, "row count");
-    assert.equal($rows.eq(0).children().eq(0).text(), "1");
-    assert.equal($rows.eq(1).children().eq(0).text(), "3");
+    $rows = $(dataGrid.$element().find('.dx-data-row'));
+    assert.equal($rows.length, 2, 'row count');
+    assert.equal($rows.eq(0).children().eq(0).text(), '1');
+    assert.equal($rows.eq(1).children().eq(0).text(), '3');
 });
 
 QUnit.test('$root model in rowTemplate', function(assert) {
@@ -311,33 +311,33 @@ QUnit.test('$root model in rowTemplate', function(assert) {
 
     this.viewModel.rowClick = sinon.spy();
     this.viewModel.gridOptions = {
-        rowTemplate: "testRowTemplate",
+        rowTemplate: 'testRowTemplate',
         dataSource: [{ id: 1 }, { id: 2 }]
     };
 
     var dataGrid = this.createDataGrid();
-    var $rows = $(dataGrid.$element().find(".test-row"));
+    var $rows = $(dataGrid.$element().find('.test-row'));
 
     // act
     $rows.eq(1).click();
 
     // assert
-    assert.equal($rows.length, 2, "row count");
-    assert.ok(this.viewModel.rowClick.calledOnce, "rowClick called once");
-    assert.equal(this.viewModel.rowClick.getCall(0).args[0].data.id, 2, "rowClick args");
+    assert.equal($rows.length, 2, 'row count');
+    assert.ok(this.viewModel.rowClick.calledOnce, 'rowClick called once');
+    assert.equal(this.viewModel.rowClick.getCall(0).args[0].data.id, 2, 'rowClick args');
 });
 
-QUnit.module("Editing", {
+QUnit.module('Editing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         this.array = ko.observableArray([]);
         this.array.push({
-            FirstName: ko.observable("Jon"),
-            LastName: ko.observable("Smith")
+            FirstName: ko.observable('Jon'),
+            LastName: ko.observable('Smith')
         });
         this.editing = {
-            mode: "row",
+            mode: 'row',
             allowUpdating: true,
             allowAdding: true,
             allowDeleting: true
@@ -350,9 +350,9 @@ QUnit.module("Editing", {
             }
         };
         this.createDataGrid = function() {
-            ko.applyBindings(this.viewModel, $("#landOfKO").get(0));
+            ko.applyBindings(this.viewModel, $('#landOfKO').get(0));
 
-            var dataGrid = $("#dataGridKO").dxDataGrid("instance");
+            var dataGrid = $('#dataGridKO').dxDataGrid('instance');
             this.clock.tick(500);
             return dataGrid;
         };
@@ -362,35 +362,35 @@ QUnit.module("Editing", {
     }
 }, function() {
     // T566012
-    QUnit.test("Row mode: DataSource fields should not be changed when editing row", function(assert) {
+    QUnit.test('Row mode: DataSource fields should not be changed when editing row', function(assert) {
         // arrange
         var $input,
             dataGrid = this.createDataGrid();
 
         dataGrid.editRow(0);
-        $input = $(dataGrid.element()).find(".dx-datagrid-rowsview .dx-editor-cell input").first();
+        $input = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-editor-cell input').first();
 
         // assert
-        assert.strictEqual($input.length, 1, "has input");
+        assert.strictEqual($input.length, 1, 'has input');
 
         // act
-        $input.val("Test");
-        $input.trigger("change");
+        $input.val('Test');
+        $input.trigger('change');
 
         // assert
-        assert.strictEqual(this.array()[0].FirstName(), "Jon", "first name has not changed");
+        assert.strictEqual(this.array()[0].FirstName(), 'Jon', 'first name has not changed');
     });
 
     // T566012
-    QUnit.test("Batch mode: DataSource fields should not be changed when editing cell", function(assert) {
+    QUnit.test('Batch mode: DataSource fields should not be changed when editing cell', function(assert) {
         // arrange
-        this.editing.mode = "batch";
+        this.editing.mode = 'batch';
         var dataGrid = this.createDataGrid();
 
         // act
-        dataGrid.cellValue(0, 0, "Test");
+        dataGrid.cellValue(0, 0, 'Test');
 
         // assert
-        assert.strictEqual(this.array()[0].FirstName(), "Jon", "first name has not changed");
+        assert.strictEqual(this.array()[0].FirstName(), 'Jon', 'first name has not changed');
     });
 });

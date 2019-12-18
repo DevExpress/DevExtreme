@@ -15,7 +15,7 @@ TooltipViewer.prototype = {
 
     _subscribeToTracker: function(tracker, tooltip, layerCollection) {
         this._offTracker = tracker.on({
-            "focus-on": function(arg) {
+            'focus-on': function(arg) {
                 var result = false,
                     layer,
                     proxy;
@@ -30,10 +30,10 @@ TooltipViewer.prototype = {
                 arg.done(result);
             },
             // There are no checks for `tooltip.isEnabled()` in the following two handlers because they are called only if the previous one has finished with `true`
-            "focus-move": function(arg) {
+            'focus-move': function(arg) {
                 tooltip.move(arg.x, arg.y, TOOLTIP_OFFSET);
             },
-            "focus-off": function() {
+            'focus-off': function() {
                 tooltip.hide();
             }
         });

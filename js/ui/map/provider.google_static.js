@@ -1,17 +1,17 @@
-var each = require("../../core/utils/iterator").each,
-    eventsEngine = require("../../events/core/events_engine"),
-    Promise = require("../../core/polyfills/promise"),
-    Provider = require("./provider"),
-    Color = require("../../color"),
-    clickEvent = require("../../events/click");
+var each = require('../../core/utils/iterator').each,
+    eventsEngine = require('../../events/core/events_engine'),
+    Promise = require('../../core/polyfills/promise'),
+    Provider = require('./provider'),
+    Color = require('../../color'),
+    clickEvent = require('../../events/click');
 
-var GOOGLE_STATIC_URL = "https://maps.google.com/maps/api/staticmap?";
+var GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
 var GoogleStaticProvider = Provider.inherit({
 
     _locationToString: function(location) {
         var latLng = this._getLatLng(location);
-        return latLng ? (latLng.lat + "," + latLng.lng) : location.toString().replace(/ /g, "+");
+        return latLng ? (latLng.lat + ',' + latLng.lng) : location.toString().replace(/ /g, '+');
     },
 
     _renderImpl: function() {
@@ -99,7 +99,7 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     clean: function() {
-        this._$container.css("backgroundImage", "none");
+        this._$container.css('backgroundImage', 'none');
         eventsEngine.off(this._$container, this._addEventNamespace(clickEvent.name));
 
         return Promise.resolve();
@@ -110,25 +110,25 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     _updateMap: function() {
-        var key = this._keyOption("googleStatic"),
+        var key = this._keyOption('googleStatic'),
             $container = this._$container;
 
         var requestOptions = [
-            "sensor=false",
-            "size=" + Math.round($container.width()) + "x" + Math.round($container.height()),
-            "maptype=" + this._option("type"),
-            "center=" + this._locationToString(this._option("center")),
-            "zoom=" + this._option("zoom"),
+            'sensor=false',
+            'size=' + Math.round($container.width()) + 'x' + Math.round($container.height()),
+            'maptype=' + this._option('type'),
+            'center=' + this._locationToString(this._option('center')),
+            'zoom=' + this._option('zoom'),
             this._markersSubstring()
         ];
         requestOptions.push.apply(requestOptions, this._routeSubstrings());
         if(key) {
-            requestOptions.push("key=" + key);
+            requestOptions.push('key=' + key);
         }
 
-        var request = GOOGLE_STATIC_URL + requestOptions.join("&");
+        var request = GOOGLE_STATIC_URL + requestOptions.join('&');
 
-        this._$container.css("background", "url(\"" + request + "\") no-repeat 0 0");
+        this._$container.css('background', 'url("' + request + '") no-repeat 0 0');
 
         this._attachClickEvent();
 
@@ -138,24 +138,24 @@ var GoogleStaticProvider = Provider.inherit({
     _markersSubstring: function() {
         var that = this,
             markers = [],
-            markerIcon = this._option("markerIconSrc");
+            markerIcon = this._option('markerIconSrc');
 
         if(markerIcon) {
-            markers.push("icon:" + markerIcon);
+            markers.push('icon:' + markerIcon);
         }
 
-        each(this._option("markers"), function(_, marker) {
+        each(this._option('markers'), function(_, marker) {
             markers.push(that._locationToString(marker.location));
         });
 
-        return "markers=" + markers.join("|");
+        return 'markers=' + markers.join('|');
     },
 
     _routeSubstrings: function() {
         var that = this,
             routes = [];
 
-        each(this._option("routes"), function(_, route) {
+        each(this._option('routes'), function(_, route) {
             var color = new Color(route.color || that._defaultRouteColor()).toHex().replace('#', '0x'),
                 opacity = Math.round((route.opacity || that._defaultRouteOpacity()) * 255).toString(16),
                 width = route.weight || that._defaultRouteWeight(),
@@ -164,7 +164,7 @@ var GoogleStaticProvider = Provider.inherit({
                 locations.push(that._locationToString(routePoint));
             });
 
-            routes.push("path=color:" + color + opacity + "|weight:" + width + "|" + locations.join("|"));
+            routes.push('path=color:' + color + opacity + '|weight:' + width + '|' + locations.join('|'));
         });
 
         return routes;

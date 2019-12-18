@@ -1,10 +1,10 @@
-var $ = require("./renderer"),
-    config = require("./config"),
-    window = require("./utils/window").getWindow(),
-    typeUtils = require("./utils/type"),
-    each = require("./utils/iterator").each,
-    Class = require("./class"),
-    errors = require("./errors");
+var $ = require('./renderer'),
+    config = require('./config'),
+    window = require('./utils/window').getWindow(),
+    typeUtils = require('./utils/type'),
+    each = require('./utils/iterator').each,
+    Class = require('./class'),
+    errors = require('./errors');
 
 var Action = Class.inherit({
 
@@ -42,19 +42,19 @@ var Action = Class.inherit({
         var argsBag = e.args[0] || {};
 
         ///#DEBUG
-        if("jQueryEvent" in argsBag && !argsBag.event) {
-            throw "The jQueryEvent field is deprecated. Please, use the `event` field instead";
+        if('jQueryEvent' in argsBag && !argsBag.event) {
+            throw 'The jQueryEvent field is deprecated. Please, use the `event` field instead';
         }
         ///#ENDDEBUG
 
-        if(!("jQueryEvent" in argsBag) && argsBag.event && config().useJQuery) {
+        if(!('jQueryEvent' in argsBag) && argsBag.event && config().useJQuery) {
             Object.defineProperty(argsBag, 'jQueryEvent', {
                 get: function() {
-                    errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead");
+                    errors.log('W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead');
                     return argsBag.event;
                 },
                 set: function(value) {
-                    errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead");
+                    errors.log('W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead');
                     argsBag.event = value;
                 }
             });
@@ -141,7 +141,7 @@ Action.unregisterExecutor = function() {
 
 
 Action.registerExecutor({
-    "undefined": {
+    'undefined': {
         execute: function(e) {
             if(!e.action) {
                 e.result = undefined;
@@ -149,7 +149,7 @@ Action.registerExecutor({
             }
         }
     },
-    "func": {
+    'func': {
         execute: function(e) {
             if(typeUtils.isFunction(e.action)) {
                 e.result = e.action.call(e.context, e.args[0]);
@@ -176,15 +176,15 @@ var createValidatorByTargetElement = function(condition) {
 };
 
 Action.registerExecutor({
-    "disabled": {
+    'disabled': {
         validate: createValidatorByTargetElement(function($target) {
-            return $target.is(".dx-state-disabled, .dx-state-disabled *");
+            return $target.is('.dx-state-disabled, .dx-state-disabled *');
         })
     },
 
-    "readOnly": {
+    'readOnly': {
         validate: createValidatorByTargetElement(function($target) {
-            return $target.is(".dx-state-readonly, .dx-state-readonly *");
+            return $target.is('.dx-state-readonly, .dx-state-readonly *');
         })
     }
 });

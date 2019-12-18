@@ -1,17 +1,17 @@
-import $ from "jquery";
-import { setupDataGridModules, MockDataController } from "../../helpers/dataGridMocks.js";
-import ArrayStore from "data/array_store";
-import Promise from "core/polyfills/promise";
-import fx from "animation/fx";
+import $ from 'jquery';
+import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
+import ArrayStore from 'data/array_store';
+import Promise from 'core/polyfills/promise';
+import fx from 'animation/fx';
 
-import "ui/data_grid/ui.data_grid";
-import "common.css!";
-import "generic_light.css!";
+import 'ui/data_grid/ui.data_grid';
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     var markup = '<div id="container" class="dx-datagrid"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 QUnit.module('Local storage', {
@@ -154,7 +154,7 @@ QUnit.test('Transformation state in string JSON and parsing string JSON back ', 
     this.clock.tick();
 
     // assert
-    assert.equal(localStorage.getItem('TestNameSpace'), "{\"testSetting1\":100,\"testSetting2\":\"test\"}");
+    assert.equal(localStorage.getItem('TestNameSpace'), '{"testSetting1":100,"testSetting2":"test"}');
 
     // act
     this.stateStoringController.load();
@@ -197,7 +197,7 @@ QUnit.test('Custom function load', function(assert) {
     assert.ok(!localStorage.getItem('TestNameSpace'));
 });
 
-QUnit.test("customLoad with native Promise", function(assert) {
+QUnit.test('customLoad with native Promise', function(assert) {
     // arrange
     this.clock.restore();
 
@@ -209,7 +209,7 @@ QUnit.test("customLoad with native Promise", function(assert) {
         customLoad: function() {
             return new Promise(function(resolve) {
                 setTimeout(function() {
-                    resolve({ test: "ok" });
+                    resolve({ test: 'ok' });
                 });
             });
         }
@@ -217,7 +217,7 @@ QUnit.test("customLoad with native Promise", function(assert) {
 
     // act, assert
     that.stateStoringController.load().done(function() {
-        assert.deepEqual(that.stateStoringController.state(), { test: "ok" });
+        assert.deepEqual(that.stateStoringController.state(), { test: 'ok' });
         done();
     });
 });
@@ -227,7 +227,7 @@ QUnit.test('Custom function load when state contains date', function(assert) {
     // arrange
     this.applyOptions({
         type: 'custom', customLoad: function() {
-            return JSON.parse(localStorage.getItem("TestNameSpace"));
+            return JSON.parse(localStorage.getItem('TestNameSpace'));
         } });
 
     localStorage.setItem('TestNameSpace', JSON.stringify({ testSetting: new Date(2011, 2, 3) }));
@@ -302,10 +302,10 @@ QUnit.test('Custom function save not defined', function(assert) {
     assert.ok(1);
 });
 
-QUnit.test("Restore isSelected item keys", function(assert) {
+QUnit.test('Restore isSelected item keys', function(assert) {
     // arrange
     var that = this,
-        testKeys = ["Test1", "Test2"];
+        testKeys = ['Test1', 'Test2'];
 
     that.applyOptions({ type: 'localStorage', storageKey: 'TestNameSpace' });
 
@@ -314,13 +314,13 @@ QUnit.test("Restore isSelected item keys", function(assert) {
     that.stateStoringController.load();
     this.clock.tick();
 
-    assert.deepEqual(that.option("selectedRowKeys"), testKeys, "keys rows");
+    assert.deepEqual(that.option('selectedRowKeys'), testKeys, 'keys rows');
 });
 
-QUnit.test("Restore selectionFilter", function(assert) {
+QUnit.test('Restore selectionFilter', function(assert) {
     // arrange
     var that = this,
-        filter = ["id", "=", 1];
+        filter = ['id', '=', 1];
 
     that.applyOptions({ type: 'localStorage', storageKey: 'TestNameSpace' });
 
@@ -329,7 +329,7 @@ QUnit.test("Restore selectionFilter", function(assert) {
     that.stateStoringController.load();
     this.clock.tick();
 
-    assert.deepEqual(that.option("selectionFilter"), filter, "selectionFilter is applied");
+    assert.deepEqual(that.option('selectionFilter'), filter, 'selectionFilter is applied');
 });
 
 QUnit.module('Session storage', {
@@ -406,7 +406,7 @@ QUnit.test('Transformation state in string JSON and parsing string JSON back ', 
     this.clock.tick();
 
     // assert
-    assert.equal(sessionStorage.getItem('TestNameSpace'), "{\"testSetting1\":100,\"testSetting2\":\"test\"}");
+    assert.equal(sessionStorage.getItem('TestNameSpace'), '{"testSetting1":100,"testSetting2":"test"}');
 
     // act
     this.stateStoringController.load();
@@ -448,7 +448,7 @@ QUnit.test('Custom function load with object deferred', function(assert) {
     // assert
     assert.equal(changeCallCount, 1);
     assert.ok(!stateStoringController.isLoading());
-    assert.deepEqual(stateStoringController.state(), { "searchText": "123" });
+    assert.deepEqual(stateStoringController.state(), { 'searchText': '123' });
 });
 
 QUnit.module('State Storing with real controllers', {
@@ -529,12 +529,12 @@ QUnit.test('State loading by user load function without dataSource', function(as
     });
 
     // act
-    this.dataController.optionChanged({ name: "dataSource" });
-    this.stateStoringController.optionChanged({ name: "stateStoring" });
+    this.dataController.optionChanged({ name: 'dataSource' });
+    this.stateStoringController.optionChanged({ name: 'stateStoring' });
     this.clock.tick();
 
     // assert
-    assert.equal(countCallCustomLoad, 1, "count call customLoad");
+    assert.equal(countCallCustomLoad, 1, 'count call customLoad');
 });
 
 QUnit.test('stateStoringController correctly loads after switch stateStoring.enabled to true in runtime', function(assert) {
@@ -549,24 +549,24 @@ QUnit.test('stateStoringController correctly loads after switch stateStoring.ena
     this.option({
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
-                return { columns: [{ dataField: "id", visibleIndex: 0, sortIndex: 0, sortOrder: "desc" }] };
+                return { columns: [{ dataField: 'id', visibleIndex: 0, sortIndex: 0, sortOrder: 'desc' }] };
             }
         }
     });
 
-    this.stateStoringController.optionChanged({ name: "stateStoring" });
+    this.stateStoringController.optionChanged({ name: 'stateStoring' });
     this.clock.tick();
 
 
     // assert
     var items = this.dataController.items();
 
-    assert.equal(this.stateStoringController.isLoaded(), true, "stateStoring controller is loaded");
-    assert.equal(this.dataController.isLoaded(), true, "dataController is loaded");
-    assert.equal(items.length, 2, "There is 2 items");
-    assert.equal(items[0].data.id, 2222, "Sort state is applied");
+    assert.equal(this.stateStoringController.isLoaded(), true, 'stateStoring controller is loaded');
+    assert.equal(this.dataController.isLoaded(), true, 'dataController is loaded');
+    assert.equal(items.length, 2, 'There is 2 items');
+    assert.equal(items[0].data.id, 2222, 'Sort state is applied');
 });
 
 // T605891
@@ -586,19 +586,19 @@ QUnit.test('apply filterValues', function(assert) {
     });
 
     // act
-    this.state({ columns: [{ dataField: "id", filterValues: ["2"], visible: true }] });
+    this.state({ columns: [{ dataField: 'id', filterValues: ['2'], visible: true }] });
     this.clock.tick();
 
     // assert
     items = this.dataController.items();
-    assert.equal(items.length, 1, "count item");
-    assert.deepEqual(items[0].data, data[1], "Apply filterValues");
+    assert.equal(items.length, 1, 'count item');
+    assert.deepEqual(items[0].data, data[1], 'Apply filterValues');
 });
 
 QUnit.test('not apply filter for hidden column', function(assert) {
     // arrange
     var items,
-        data = [{ id: 1, name: "test1" }, { id: 2, name: "test2" }];
+        data = [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }];
 
     this.setupDataGridModules({
         loadingTimeout: null,
@@ -611,16 +611,16 @@ QUnit.test('not apply filter for hidden column', function(assert) {
         columnChooser: {
             enabled: true
         },
-        columns: ["id", { dataField: "name", filterValue: "test2" }]
+        columns: ['id', { dataField: 'name', filterValue: 'test2' }]
     });
 
     // act
-    this.state({ columns: [{ dataField: "id", visible: true }, { dataField: "name", filterValue: "test2", visible: false }] });
+    this.state({ columns: [{ dataField: 'id', visible: true }, { dataField: 'name', filterValue: 'test2', visible: false }] });
     this.clock.tick();
 
     // assert
     items = this.dataController.items();
-    assert.equal(items.length, 2, "count item");
+    assert.equal(items.length, 2, 'count item');
 });
 
 QUnit.test('Load pageIndex from state', function(assert) {
@@ -643,9 +643,9 @@ QUnit.test('Load pageIndex from state', function(assert) {
     });
 
     // assert
-    assert.strictEqual(this.dataController.pageIndex(), 1, "pageSize is loaded from state");
-    assert.strictEqual(this.dataController.pageSize(), 2, "pageSize is not loaded from state");
-    assert.strictEqual(this.dataController.items().length, 1, "items on second page");
+    assert.strictEqual(this.dataController.pageIndex(), 1, 'pageSize is loaded from state');
+    assert.strictEqual(this.dataController.pageSize(), 2, 'pageSize is not loaded from state');
+    assert.strictEqual(this.dataController.items().length, 1, 'items on second page');
 });
 
 QUnit.test('Load pageIndex from state (with ignore timers)', function(assert) {
@@ -714,7 +714,7 @@ QUnit.test('Not Load pageSize from state when scrolling mode is virtual', functi
             customSave: function() {
             }
         },
-        scrolling: { mode: "virtual" },
+        scrolling: { mode: 'virtual' },
         loadingTimeout: null,
         dataSource: {
             store: [{ id: 1 }, { id: 2 }, { id: 3 }]
@@ -738,7 +738,7 @@ QUnit.test('Load pageSize from state when scrolling mode is virtual and pager.vi
             customSave: function() {
             }
         },
-        scrolling: { mode: "virtual" },
+        scrolling: { mode: 'virtual' },
         loadingTimeout: null,
         dataSource: {
             store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
@@ -766,7 +766,7 @@ QUnit.test('Load pageSize from state when scrolling mode is infinite and pager.v
             customSave: function() {
             }
         },
-        scrolling: { mode: "infinite" },
+        scrolling: { mode: 'infinite' },
         loadingTimeout: null,
         dataSource: {
             store: [{ id: 1 }, { id: 2 }, { id: 3 }]
@@ -794,7 +794,7 @@ QUnit.test('Not Load pageSize from state when scrolling mode is virtual and page
             customSave: function() {
             }
         },
-        scrolling: { mode: "infinite" },
+        scrolling: { mode: 'infinite' },
         loadingTimeout: null,
         dataSource: {
             store: [{ id: 1 }, { id: 2 }, { id: 3 }]
@@ -870,16 +870,16 @@ QUnit.test('Load selectedRowKeys from user state', function(assert) {
         loadingTimeout: null,
         dataSource: {
             store: {
-                type: "array",
+                type: 'array',
                 data: [{ id: 1 }, { id: 2 }, { id: 3 }],
-                key: "id"
+                key: 'id'
             }
         }
     });
 
     // assert
-    assert.deepEqual(this.getSelectedRowKeys(), [1, 3], "isSelected row keys");
-    assert.deepEqual(this.getSelectedRowsData(), [{ id: 1 }, { id: 3 }], "isSelected row data");
+    assert.deepEqual(this.getSelectedRowKeys(), [1, 3], 'isSelected row keys');
+    assert.deepEqual(this.getSelectedRowsData(), [{ id: 1 }, { id: 3 }], 'isSelected row data');
 });
 
 QUnit.test('Load columns state', function(assert) {
@@ -989,13 +989,13 @@ QUnit.test('Save user state after selection is changed', function(assert) {
         },
         loadingTimeout: null,
         dataSource: {
-            store: new ArrayStore({ data: [{ id: 1 }, { id: 2 }, { id: 3 }], key: "id" })
+            store: new ArrayStore({ data: [{ id: 1 }, { id: 2 }, { id: 3 }], key: 'id' })
         }
     });
 
     // act
     this.selectionController.selectAll();
-    this.clock.tick(this.option("stateStoring.savingTimeout"));
+    this.clock.tick(this.option('stateStoring.savingTimeout'));
 
     // assert
     assert.strictEqual(customSave.callCount, 1);
@@ -1021,18 +1021,18 @@ QUnit.test('Save user state after selection is changed. Deferred selection', fun
             deferred: true
         },
         dataSource: {
-            store: new ArrayStore({ data: [{ id: 1 }, { id: 2 }, { id: 3 }], key: "id" })
+            store: new ArrayStore({ data: [{ id: 1 }, { id: 2 }, { id: 3 }], key: 'id' })
         }
     });
 
     // act
     this.selectionController.selectRows([1]);
-    this.clock.tick(this.option("stateStoring.savingTimeout"));
+    this.clock.tick(this.option('stateStoring.savingTimeout'));
 
     // assert
     assert.strictEqual(customSave.callCount, 1);
     assert.deepEqual(customSave.lastCall.args[0].selectedRowKeys, undefined);
-    assert.deepEqual(customSave.lastCall.args[0].selectionFilter, ["id", "=", 1]);
+    assert.deepEqual(customSave.lastCall.args[0].selectionFilter, ['id', '=', 1]);
 });
 
 QUnit.test('Save user state when columns changed', function(assert) {
@@ -1099,11 +1099,11 @@ QUnit.test('Save user state when grouping a column', function(assert) {
         dataSource: {
             store: [{ id: 1 }, { id: 2 }, { id: 3 }]
         },
-        columns: [{ dataField: "id", sortOrder: "asc" }]
+        columns: [{ dataField: 'id', sortOrder: 'asc' }]
     });
 
     // act
-    this.columnsController.columnOption(0, "groupIndex", 0);
+    this.columnsController.columnOption(0, 'groupIndex', 0);
 
     this.clock.tick(2000);
 
@@ -1121,16 +1121,16 @@ QUnit.test('Save user state when grouping a column', function(assert) {
 });
 
 // T308264
-QUnit.test("Not save user state when the visibleWidth option in column changed", function(assert) {
+QUnit.test('Not save user state when the visibleWidth option in column changed', function(assert) {
     // arrange, act
     var userState,
         customSaveCallCount = 0;
 
     this.setupDataGridModules({
-        sorting: { mode: "single" },
+        sorting: { mode: 'single' },
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return {};
             },
@@ -1147,36 +1147,36 @@ QUnit.test("Not save user state when the visibleWidth option in column changed",
     });
 
     // assert
-    assert.strictEqual(customSaveCallCount, 1, "customSave call count");
+    assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
 
     // act
-    this.columnsController.columnOption(0, "visibleWidth", 50);
+    this.columnsController.columnOption(0, 'visibleWidth', 50);
     this.clock.tick();
 
     // assert
-    assert.strictEqual(customSaveCallCount, 1, "customSave call count");
+    assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
     assert.deepEqual(userState, {
-        columns: [{ visibleIndex: 0, dataField: "id", visible: true, dataType: "number" }],
+        columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number' }],
         pageIndex: 0,
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
-        searchText: "",
+        searchText: '',
         filterPanel: {},
         filterValue: null
     });
 
     // act
-    this.columnsController.columnOption(0, "width", 100);
+    this.columnsController.columnOption(0, 'width', 100);
     this.clock.tick();
 
     // assert
-    assert.strictEqual(customSaveCallCount, 2, "customSave call count");
+    assert.strictEqual(customSaveCallCount, 2, 'customSave call count');
     assert.deepEqual(userState, {
-        columns: [{ visibleIndex: 0, dataField: "id", visible: true, dataType: "number", width: 100 }],
+        columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number', width: 100 }],
         pageIndex: 0,
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
-        searchText: "",
+        searchText: '',
         filterPanel: {},
         filterValue: null
     });
@@ -1219,7 +1219,7 @@ QUnit.test('visible columns during state loading', function(assert) {
 });
 
 // T354512
-QUnit.test("Update state when applying header filter", function(assert) {
+QUnit.test('Update state when applying header filter', function(assert) {
     // arrange
     var userState;
 
@@ -1240,27 +1240,27 @@ QUnit.test("Update state when applying header filter", function(assert) {
             pageSize: 10,
             store: [{ id: 1 }, { id: 2 }, { id: 3 }]
         },
-        columns: [{ dataField: "id", filterValues: [2] }]
+        columns: [{ dataField: 'id', filterValues: [2] }]
     });
 
     // act
-    this.columnOption("id", "filterValues", [3]);
+    this.columnOption('id', 'filterValues', [3]);
     this.clock.tick();
 
     // assert
     assert.deepEqual(userState.columns, [{
-        dataField: "id",
-        dataType: "number",
+        dataField: 'id',
+        dataType: 'number',
         filterValues: [3],
         visible: true,
         visibleIndex: 0
     }]);
 });
 
-QUnit.test("Hide loading when dataSource is empty", function(assert) {
+QUnit.test('Hide loading when dataSource is empty', function(assert) {
     // arrange, act
     this.$element = function() {
-        return $("#container");
+        return $('#container');
     };
 
     this.setupDataGridModules({
@@ -1278,7 +1278,7 @@ QUnit.test("Hide loading when dataSource is empty", function(assert) {
     this.clock.tick(200);
 
     // assert
-    assert.equal($(".dx-loadpanel-content.dx-state-invisible").length, 1, "loading panel should be hidden");
+    assert.equal($('.dx-loadpanel-content.dx-state-invisible').length, 1, 'loading panel should be hidden');
 });
 
 // T668808
@@ -1290,7 +1290,7 @@ QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
     };
 
     this.$element = function() {
-        return $("#container");
+        return $('#container');
     };
 
     this.setupDataGridModules({
@@ -1308,8 +1308,8 @@ QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
         },
         scrolling: {
             timeout: 0,
-            mode: "virtual",
-            rowRenderingMode: "virtual"
+            mode: 'virtual',
+            rowRenderingMode: 'virtual'
         },
         height: 100,
         loadingTimeout: null,
@@ -1323,16 +1323,16 @@ QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
     this.gridView.update();
     this.clock.tick(200);
 
-    var $dataRows = this.gridView.element().find("tr.dx-data-row");
+    var $dataRows = this.gridView.element().find('tr.dx-data-row');
     assert.strictEqual(this.dataController.pageIndex(), 3);
-    assert.strictEqual($dataRows.eq(0).text(), "6");
+    assert.strictEqual($dataRows.eq(0).text(), '6');
     assert.strictEqual($dataRows.length, 4);
 });
 
-QUnit.test("Show NoData message when dataSource is empty and state is loaded", function(assert) {
+QUnit.test('Show NoData message when dataSource is empty and state is loaded', function(assert) {
     // arrange, act
     this.$element = function() {
-        return $("#container");
+        return $('#container');
     };
 
     this.setupDataGridModules({
@@ -1349,11 +1349,11 @@ QUnit.test("Show NoData message when dataSource is empty and state is loaded", f
     this.clock.tick(200);
 
     // assert
-    assert.equal($(".dx-datagrid-nodata").length, 1, "NoData message should be shown");
+    assert.equal($('.dx-datagrid-nodata').length, 1, 'NoData message should be shown');
 });
 
 // T620172
-QUnit.test("Load pageSize from state when it is zero", function(assert) {
+QUnit.test('Load pageSize from state when it is zero', function(assert) {
     // arrange, act
     this.setupDataGridModules({
         stateStoring: {
@@ -1373,11 +1373,11 @@ QUnit.test("Load pageSize from state when it is zero", function(assert) {
     });
 
     // assert
-    assert.strictEqual(this.dataController.pageSize(), 0, "pageSize");
+    assert.strictEqual(this.dataController.pageSize(), 0, 'pageSize');
 });
 
 // T619069
-QUnit.test("The filter should be cleared after resetting the grid's state", function(assert) {
+QUnit.test('The filter should be cleared after resetting the grid\'s state', function(assert) {
     // arrange
     this.setupDataGridModules({
         loadingTimeout: null,
@@ -1389,7 +1389,7 @@ QUnit.test("The filter should be cleared after resetting the grid's state", func
             type: 'custom',
             customLoad: function() {
                 return {
-                    columns: [{ dataField: "id", filterValue: 2 }]
+                    columns: [{ dataField: 'id', filterValue: 2 }]
                 };
             },
             customSave: function() {
@@ -1404,34 +1404,34 @@ QUnit.test("The filter should be cleared after resetting the grid's state", func
     });
 
     // assert
-    assert.strictEqual(this.dataController.items().length, 1, "item count");
-    assert.deepEqual(this.dataController.getCombinedFilter(true), ["id", "=", 2], "filter");
+    assert.strictEqual(this.dataController.items().length, 1, 'item count');
+    assert.deepEqual(this.dataController.getCombinedFilter(true), ['id', '=', 2], 'filter');
 
     // act
     this.state({});
 
     // assert
-    assert.strictEqual(this.dataController.items().length, 3, "item count");
-    assert.strictEqual(this.dataController.getCombinedFilter(true), undefined, "no filter");
+    assert.strictEqual(this.dataController.items().length, 3, 'item count');
+    assert.strictEqual(this.dataController.getCombinedFilter(true), undefined, 'no filter');
 });
 
 // T630977
-QUnit.test("Render columns when the stateStoring.enabled=true and dataSource is not defined", function(assert) {
-    var $testElement = $("#container"),
+QUnit.test('Render columns when the stateStoring.enabled=true and dataSource is not defined', function(assert) {
+    var $testElement = $('#container'),
         deferred = $.Deferred(),
         columns = [{
-            dataField: "field1",
-            dataType: "string"
+            dataField: 'field1',
+            dataType: 'string'
         }, {
-            dataField: "field2",
-            dataType: "string"
+            dataField: 'field2',
+            dataType: 'string'
         }];
     // arrange
     this.setupDataGridModules({
         columns: columns,
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return deferred.promise();
             }
@@ -1440,11 +1440,11 @@ QUnit.test("Render columns when the stateStoring.enabled=true and dataSource is 
 
     this.columnHeadersView.render($testElement);
     deferred.resolve({ columns: columns });
-    assert.equal(this.columnHeadersView.element().find("col").length, 2);
+    assert.equal(this.columnHeadersView.element().find('col').length, 2);
 });
 
 // T629814
-QUnit.test("Selected filter operation should be reset to the default state after resetting the filter value", function(assert) {
+QUnit.test('Selected filter operation should be reset to the default state after resetting the filter value', function(assert) {
     // arrange
     fx.off = true;
 
@@ -1453,17 +1453,17 @@ QUnit.test("Selected filter operation should be reset to the default state after
             filterMenuItem;
 
         this.$element = function() {
-            return $("#container");
+            return $('#container');
         };
 
         this.setupDataGridModules({
             loadingTimeout: undefined,
             stateStoring: {
                 enabled: true,
-                type: "custom",
+                type: 'custom',
                 customLoad: function() {
                     return {
-                        columns: [{ dataField: "id", filterValue: 2, selectedFilterOperation: "startswith" }]
+                        columns: [{ dataField: 'id', filterValue: 2, selectedFilterOperation: 'startswith' }]
                     };
                 },
                 customSave: function(state) {
@@ -1483,30 +1483,30 @@ QUnit.test("Selected filter operation should be reset to the default state after
         this.clock.tick();
 
         filterMenu = this.$element().find('.dx-menu .dx-menu-item').first();
-        $(filterMenu).trigger("dxclick"); // open filter menu
-        filterMenuItem = $("body").find('.dx-overlay-content').first().find('.dx-menu-item').last();
+        $(filterMenu).trigger('dxclick'); // open filter menu
+        filterMenuItem = $('body').find('.dx-overlay-content').first().find('.dx-menu-item').last();
 
         // act
         filterMenuItem.trigger('dxclick'); // Reset filter
         this.clock.tick();
 
         // assert
-        assert.strictEqual(this.columnOption("id", "filterValue"), null, "filterValue");
-        assert.strictEqual(this.columnOption("id", "selectedFilterOperation"), null, "selectedFilterOperation");
+        assert.strictEqual(this.columnOption('id', 'filterValue'), null, 'filterValue');
+        assert.strictEqual(this.columnOption('id', 'selectedFilterOperation'), null, 'selectedFilterOperation');
     } finally {
         fx.off = false;
     }
 });
 
 // T643374
-QUnit.test("ScrollTop should be correct after loading pageIndex from state", function(assert) {
+QUnit.test('ScrollTop should be correct after loading pageIndex from state', function(assert) {
     // arrange
     this.clock.restore();
 
     var that = this,
         scrollTop,
         done = assert.async(),
-        $testElement = $("#container").height(60);
+        $testElement = $('#container').height(60);
 
     that.$element = function() {
         return $testElement;
@@ -1515,7 +1515,7 @@ QUnit.test("ScrollTop should be correct after loading pageIndex from state", fun
     that.setupDataGridModules({
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return { pageIndex: 3 };
             },
@@ -1523,7 +1523,7 @@ QUnit.test("ScrollTop should be correct after loading pageIndex from state", fun
             }
         },
         scrolling: {
-            mode: "virtual"
+            mode: 'virtual'
         },
         loadingTimeout: null,
         dataSource: {
@@ -1539,8 +1539,8 @@ QUnit.test("ScrollTop should be correct after loading pageIndex from state", fun
     setTimeout(function() {
         // assert
         scrollTop = that.getScrollable().scrollTop();
-        assert.ok(scrollTop > 0, "scrollTop");
-        assert.ok($testElement.find(".dx-virtual-row").first().children().first().height() <= scrollTop, "scrollTop should be less than or equal to virtual row height");
+        assert.ok(scrollTop > 0, 'scrollTop');
+        assert.ok($testElement.find('.dx-virtual-row').first().children().first().height() <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
         done();
     });
 });
@@ -1561,15 +1561,15 @@ QUnit.test('Load focusedRowKey state', function(assert) {
         loadingTimeout: null,
         dataSource: {
             store: {
-                type: "array",
+                type: 'array',
                 data: [{ id: 1 }, { id: 2 }, { id: 3 }],
-                key: "id"
+                key: 'id'
             }
         }
     });
 
     // assert
-    assert.strictEqual(this.option("focusedRowKey"), 2);
+    assert.strictEqual(this.option('focusedRowKey'), 2);
 });
 
 QUnit.test('Save focused row state when data changed', function(assert) {
@@ -1591,16 +1591,16 @@ QUnit.test('Save focused row state when data changed', function(assert) {
         loadingTimeout: null,
         dataSource: {
             store: {
-                type: "array",
+                type: 'array',
                 data: [{ id: 1 }, { id: 2 }, { id: 3 }],
-                key: "id"
+                key: 'id'
             }
         }
     });
 
     // act
     this.options.focusedRowKey = 1;
-    this.focusController.optionChanged({ name: "focusedRowKey", value: 1 });
+    this.focusController.optionChanged({ name: 'focusedRowKey', value: 1 });
     this.clock.tick(2000);
 
     // assert
@@ -1616,30 +1616,30 @@ QUnit.test('Save focused row state when data changed', function(assert) {
     });
 });
 
-QUnit.test("customSave should not fired on render if state is not changed (T807890)", function(assert) {
+QUnit.test('customSave should not fired on render if state is not changed (T807890)', function(assert) {
     // arrange, act
     var customSaveCallCount = 0;
 
     var state = {
-        "columns": [{
-            "visibleIndex": 0,
-            "dataField": "field1",
-            "dataType": "number",
-            "visible": true
+        'columns': [{
+            'visibleIndex': 0,
+            'dataField': 'field1',
+            'dataType': 'number',
+            'visible': true
         }],
-        "allowedPageSizes": [10, 20, 40],
-        "filterPanel": {},
-        "filterValue": null,
-        "searchText": "",
-        "pageIndex": 0,
-        "pageSize": 20
+        'allowedPageSizes': [10, 20, 40],
+        'filterPanel': {},
+        'filterValue': null,
+        'searchText': '',
+        'pageIndex': 0,
+        'pageSize': 20
     };
 
     this.setupDataGridModules({
         dataSource: [{ field1: 1 }],
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return state;
             },
@@ -1652,10 +1652,10 @@ QUnit.test("customSave should not fired on render if state is not changed (T8078
     this.clock.tick(2000);
 
     // assert
-    assert.strictEqual(customSaveCallCount, 0, "customSave is not fired");
+    assert.strictEqual(customSaveCallCount, 0, 'customSave is not fired');
 });
 
-QUnit.test("customSave should fired on render if state is changed (T807890)", function(assert) {
+QUnit.test('customSave should fired on render if state is changed (T807890)', function(assert) {
     // arrange, act
     var customSaveCallCount = 0;
 
@@ -1663,7 +1663,7 @@ QUnit.test("customSave should fired on render if state is changed (T807890)", fu
         dataSource: [{ field1: 1 }],
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
             },
             customSave: function() {
@@ -1675,10 +1675,10 @@ QUnit.test("customSave should fired on render if state is changed (T807890)", fu
     this.clock.tick(2000);
 
     // assert
-    assert.strictEqual(customSaveCallCount, 1, "customSave is fired");
+    assert.strictEqual(customSaveCallCount, 1, 'customSave is fired');
 });
 
-QUnit.test("customSave should not fired after refresh (T807890)", function(assert) {
+QUnit.test('customSave should not fired after refresh (T807890)', function(assert) {
     // arrange
     var customSaveCallCount = 0;
 
@@ -1686,7 +1686,7 @@ QUnit.test("customSave should not fired after refresh (T807890)", function(asser
         dataSource: [{ field1: 1 }],
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
             },
             customSave: function() {
@@ -1696,7 +1696,7 @@ QUnit.test("customSave should not fired after refresh (T807890)", function(asser
     });
 
     this.clock.tick(2000);
-    assert.strictEqual(customSaveCallCount, 1, "customSave is fired");
+    assert.strictEqual(customSaveCallCount, 1, 'customSave is fired');
     customSaveCallCount = 0;
 
     // act
@@ -1704,7 +1704,7 @@ QUnit.test("customSave should not fired after refresh (T807890)", function(asser
     this.clock.tick(2000);
 
     // assert
-    assert.strictEqual(customSaveCallCount, 0, "customSave is not fired");
+    assert.strictEqual(customSaveCallCount, 0, 'customSave is not fired');
 });
 
 QUnit.module('State Storing for filterPanel', {
@@ -1752,14 +1752,14 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             stateStoring: getStateStoringWithEmptyState(),
             dataSource: [{ id: 1 }, { id: 2 }],
-            filterValue: ["id", "=", 2],
-            columns: [{ dataField: "id", dataType: "number" }]
+            filterValue: ['id', '=', 2],
+            columns: [{ dataField: 'id', dataType: 'number' }]
         });
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 2, "default filterValue is not changed");
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 2, 'default filterValue is not changed');
     });
 
     QUnit.test('apply default columns.filterValue if state is empty', function(assert) {
@@ -1769,17 +1769,17 @@ QUnit.module('State Storing for filterPanel', {
             stateStoring: getStateStoringWithEmptyState(),
             dataSource: [{ id: 1 }, { id: 2 }],
             columns: [{
-                dataField: "id",
-                dataType: "number",
+                dataField: 'id',
+                dataType: 'number',
                 filterValue: 1
             }]
         });
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 1, "default filterValue is not changed");
-        assert.deepEqual(this.option("filterValue"), ["id", "=", 1]);
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 1, 'default filterValue is not changed');
+        assert.deepEqual(this.option('filterValue'), ['id', '=', 1]);
     });
 
     QUnit.test('apply filterValue from state', function(assert) {
@@ -1788,24 +1788,24 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             stateStoring: getStateStoringConfig({
                 columns: [{
-                    dataField: "id",
-                    dataType: "number",
+                    dataField: 'id',
+                    dataType: 'number',
                     visibleIndex: 0
                 }],
-                filterValue: ["id", "=", 2]
+                filterValue: ['id', '=', 2]
             }),
             dataSource: [{ id: 1 }, { id: 2 }],
             columns: [{
-                dataField: "id",
-                dataType: "number",
+                dataField: 'id',
+                dataType: 'number',
                 filterValue: 1
             }]
         });
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 2, "filterValue is applied");
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 2, 'filterValue is applied');
     });
 
     QUnit.test('apply filterValue null from state if columns.filterValue is defined', function(assert) {
@@ -1814,23 +1814,23 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             stateStoring: getStateStoringConfig({
                 columns: [{
-                    dataField: "id",
-                    dataType: "number",
+                    dataField: 'id',
+                    dataType: 'number',
                     visibleIndex: 0
                 }],
                 filterValue: null
             }),
             dataSource: [{ id: 1 }, { id: 2 }],
             columns: [{
-                dataField: "id",
-                dataType: "number",
+                dataField: 'id',
+                dataType: 'number',
                 filterValue: 2
             }]
         });
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 2, "items are not filtered");
+        assert.equal(items.length, 2, 'items are not filtered');
     });
 
     QUnit.test('apply columns.filterValue from state', function(assert) {
@@ -1839,23 +1839,23 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             stateStoring: getStateStoringConfig({
                 columns: [{
-                    dataField: "id",
+                    dataField: 'id',
                     visibleIndex: 0,
                     filterValue: 2
                 }]
             }),
             dataSource: [{ id: 1 }, { id: 2 }],
             columns: [{
-                dataField: "id",
-                dataType: "number",
+                dataField: 'id',
+                dataType: 'number',
                 filterValue: 1
             }]
         });
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 2, "filterValue is applied");
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 2, 'filterValue is applied');
     });
 
     QUnit.test('reset state if columns.filterValue is defined', function(assert) {
@@ -1864,15 +1864,15 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             stateStoring: getStateStoringConfig({
                 columns: [{
-                    dataField: "id",
+                    dataField: 'id',
                     visibleIndex: 0
                 }],
-                filterValue: ["id", "=", 2]
+                filterValue: ['id', '=', 2]
             }),
             dataSource: [{ id: 1 }, { id: 2 }],
             columns: [{
-                dataField: "id",
-                dataType: "number",
+                dataField: 'id',
+                dataType: 'number',
                 filterValue: 1
             }]
         });
@@ -1882,8 +1882,8 @@ QUnit.module('State Storing for filterPanel', {
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 1, "default filterValue is applied");
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 1, 'default filterValue is applied');
     });
 
     QUnit.test('reset state if filterValue is defined', function(assert) {
@@ -1892,16 +1892,16 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             stateStoring: getStateStoringConfig({
                 columns: [{
-                    dataField: "id",
+                    dataField: 'id',
                     visibleIndex: 0
                 }],
-                filterValue: ["id", "=", 2]
+                filterValue: ['id', '=', 2]
             }),
             dataSource: [{ id: 1 }, { id: 2 }],
-            filterValue: ["id", "=", 1],
+            filterValue: ['id', '=', 1],
             columns: [{
-                dataField: "id",
-                dataType: "number"
+                dataField: 'id',
+                dataType: 'number'
             }]
         });
 
@@ -1910,8 +1910,8 @@ QUnit.module('State Storing for filterPanel', {
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 1, "default filterValue is applied");
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 1, 'default filterValue is applied');
     });
 
     QUnit.test('apply state with filterValue', function(assert) {
@@ -1919,20 +1919,20 @@ QUnit.module('State Storing for filterPanel', {
         this.setupDataGridModules({
             dataSource: [{ id: 1 }, { id: 2 }],
             columns: [{
-                dataField: "id",
-                dataType: "number",
+                dataField: 'id',
+                dataType: 'number',
                 filterValue: 1
             }]
         });
 
         // act
-        this.state({ filterValue: ["id", "=", 2] });
+        this.state({ filterValue: ['id', '=', 2] });
         this.clock.tick();
 
         // assert
         const items = this.dataController.items();
-        assert.equal(items.length, 1, "count item");
-        assert.deepEqual(items[0].data.id, 2, "filterValue is applied");
+        assert.equal(items.length, 1, 'count item');
+        assert.deepEqual(items[0].data.id, 2, 'filterValue is applied');
     });
 });
 

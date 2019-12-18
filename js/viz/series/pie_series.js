@@ -1,12 +1,12 @@
 // there are pie, doughnut
-var noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
-    scatterSeries = require("./scatter_series"),
-    vizUtils = require("../core/utils"),
-    extend = require("../../core/utils/extend").extend,
+var noop = require('../../core/utils/common').noop,
+    each = require('../../core/utils/iterator').each,
+    scatterSeries = require('./scatter_series'),
+    vizUtils = require('../core/utils'),
+    extend = require('../../core/utils/extend').extend,
 
     chartScatterSeries = scatterSeries.chart,
-    barSeries = require("./bar_series").chart.bar,
+    barSeries = require('./bar_series').chart.bar,
 
     _extend = extend,
     _each = each,
@@ -18,12 +18,12 @@ var noop = require("../../core/utils/common").noop,
     _max = Math.max,
 
     ANIMATION_DURATION = 0.7,
-    INSIDE = "inside";
+    INSIDE = 'inside';
 
 exports.pie = _extend({}, barSeries, {
     _setGroupsSettings: function() {
         chartScatterSeries._setGroupsSettings.apply(this, arguments);
-        this._labelsGroup.attr({ "pointer-events": null });
+        this._labelsGroup.attr({ 'pointer-events': null });
     },
 
     _createErrorBarGroup: _noop,
@@ -91,7 +91,7 @@ exports.pie = _extend({}, barSeries, {
 
     _updateOptions: function(options) {
         this.labelSpace = 0;
-        this.innerRadius = this.type === "pie" ? 0 : options.innerRadius;
+        this.innerRadius = this.type === 'pie' ? 0 : options.innerRadius;
     },
 
     _checkData: function(data, skippedFields) {
@@ -102,7 +102,7 @@ exports.pie = _extend({}, barSeries, {
     _createGroups: chartScatterSeries._createGroups,
 
     _setMarkerGroupSettings: function() {
-        this._markersGroup.attr({ "class": "dxc-markers" });
+        this._markersGroup.attr({ 'class': 'dxc-markers' });
     },
 
     _getMainColor(data, point) {
@@ -158,7 +158,7 @@ exports.pie = _extend({}, barSeries, {
 
     _applyArrangeCorrection: function(points, minShownValue, total) {
         var options = this._options,
-            isClockWise = options.segmentsDirection !== "anticlockwise",
+            isClockWise = options.segmentsDirection !== 'anticlockwise',
             shiftedAngle = _isFinite(options.startAngle) ? vizUtils.normalizeAngle(options.startAngle) : 0,
             minSegmentSize = options.minSegmentSize,
             percent,
@@ -235,13 +235,13 @@ exports.pie = _extend({}, barSeries, {
 
     correctPosition: function(correction, canvas) {
         ///#DEBUG
-        var debug = require("../../core/utils/console").debug;
-        debug.assert(correction, "correction was not passed");
-        debug.assertParam(correction.centerX, "correction.centerX was not passed");
-        debug.assertParam(correction.centerY, "correction.centerY was not passed");
-        debug.assertParam(correction.radiusInner, "correction.radiusInner was not passed");
-        debug.assertParam(correction.radiusOuter, "correction.radiusOuter was not passed");
-        debug.assertParam(canvas, "correction.canvas was not passed");
+        var debug = require('../../core/utils/console').debug;
+        debug.assert(correction, 'correction was not passed');
+        debug.assertParam(correction.centerX, 'correction.centerX was not passed');
+        debug.assertParam(correction.centerY, 'correction.centerY was not passed');
+        debug.assertParam(correction.radiusInner, 'correction.radiusInner was not passed');
+        debug.assertParam(correction.radiusOuter, 'correction.radiusOuter was not passed');
+        debug.assertParam(canvas, 'correction.canvas was not passed');
         ///#ENDDEBUG
         _each(this._points, function(_, point) {
             point.correctPosition(correction);

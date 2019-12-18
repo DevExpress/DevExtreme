@@ -1,29 +1,29 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import readyCallback from "../../core/utils/ready_callbacks";
-import translator from "../../animation/translator";
-import Widget from "../widget/ui.widget";
-import eventUtils from "../../events/utils";
-import commonUtils from "../../core/utils/common";
-import { isPlainObject } from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import pointerEvents from "../../events/pointer";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import readyCallback from '../../core/utils/ready_callbacks';
+import translator from '../../animation/translator';
+import Widget from '../widget/ui.widget';
+import eventUtils from '../../events/utils';
+import commonUtils from '../../core/utils/common';
+import { isPlainObject } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import pointerEvents from '../../events/pointer';
 
-const SCROLLBAR = "dxScrollbar";
-const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLBAR = 'dxScrollbar';
+const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = `${SCROLLABLE_SCROLLBAR_CLASS}-active`;
-const SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll";
-const SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content";
-const HOVER_ENABLED_STATE = "dx-scrollbar-hoverable";
-const HORIZONTAL = "horizontal";
+const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
+const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
+const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
+const HORIZONTAL = 'horizontal';
 const THUMB_MIN_SIZE = 15;
 
 const SCROLLBAR_VISIBLE = {
-    onScroll: "onScroll",
-    onHover: "onHover",
-    always: "always",
-    never: "never"
+    onScroll: 'onScroll',
+    onHover: 'onHover',
+    always: 'always',
+    never: 'never'
 };
 
 var Scrollbar = Widget.inherit({
@@ -57,14 +57,14 @@ var Scrollbar = Widget.inherit({
         this._renderDirection();
         this._update();
         this._attachPointerDownHandler();
-        this.option("hoverStateEnabled", this._isHoverMode());
+        this.option('hoverStateEnabled', this._isHoverMode());
 
-        this.$element().toggleClass(HOVER_ENABLED_STATE, this.option("hoverStateEnabled"));
+        this.$element().toggleClass(HOVER_ENABLED_STATE, this.option('hoverStateEnabled'));
     },
 
     _renderThumb: function() {
-        this._$thumb = $("<div>").addClass(SCROLLABLE_SCROLL_CLASS);
-        $("<div>").addClass(SCROLLABLE_SCROLL_CONTENT_CLASS).appendTo(this._$thumb);
+        this._$thumb = $('<div>').addClass(SCROLLABLE_SCROLL_CLASS);
+        $('<div>').addClass(SCROLLABLE_SCROLL_CONTENT_CLASS).appendTo(this._$thumb);
 
         this.$element().addClass(SCROLLABLE_SCROLLBAR_CLASS).append(this._$thumb);
     },
@@ -74,15 +74,15 @@ var Scrollbar = Widget.inherit({
     },
 
     _isHoverMode: function() {
-        var visibilityMode = this.option("visibilityMode");
-        return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option("expandable");
+        var visibilityMode = this.option('visibilityMode');
+        return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
     },
 
     _renderDirection: function() {
-        var direction = this.option("direction");
-        this.$element().addClass("dx-scrollbar-" + direction);
-        this._dimension = direction === HORIZONTAL ? "width" : "height";
-        this._prop = direction === HORIZONTAL ? "left" : "top";
+        var direction = this.option('direction');
+        this.$element().addClass('dx-scrollbar-' + direction);
+        this._dimension = direction === HORIZONTAL ? 'width' : 'height';
+        this._prop = direction === HORIZONTAL ? 'left' : 'top';
     },
 
     _attachPointerDownHandler: function() {
@@ -102,32 +102,32 @@ var Scrollbar = Widget.inherit({
     cursorEnter: function() {
         this._isHovered = true;
         if(this._needScrollbar()) {
-            this.option("visible", true);
+            this.option('visible', true);
         }
     },
 
     cursorLeave: function() {
         this._isHovered = false;
-        this.option("visible", false);
+        this.option('visible', false);
     },
 
     _renderDimensions: function() {
         this._$thumb.css({
-            width: this.option("width"),
-            height: this.option("height")
+            width: this.option('width'),
+            height: this.option('height')
         });
     },
 
     _toggleVisibility: function(visible) {
-        if(this.option("visibilityMode") === SCROLLBAR_VISIBLE.onScroll) {
+        if(this.option('visibilityMode') === SCROLLBAR_VISIBLE.onScroll) {
             // NOTE: need to relayout thumb and show it instantly
-            this._$thumb.css("opacity");
+            this._$thumb.css('opacity');
         }
 
         visible = this._adjustVisibility(visible);
 
         this.option().visible = visible;
-        this._$thumb.toggleClass("dx-state-invisible", !visible);
+        this._$thumb.toggleClass('dx-state-invisible', !visible);
     },
 
     _adjustVisibility: function(visible) {
@@ -135,7 +135,7 @@ var Scrollbar = Widget.inherit({
             return false;
         }
 
-        switch(this.option("visibilityMode")) {
+        switch(this.option('visibilityMode')) {
             case SCROLLBAR_VISIBLE.onScroll:
                 break;
             case SCROLLBAR_VISIBLE.onHover:
@@ -172,10 +172,10 @@ var Scrollbar = Widget.inherit({
 
 
     _update: function() {
-        var containerSize = Math.round(this.option("containerSize")),
-            contentSize = Math.round(this.option("contentSize")),
-            baseContainerSize = Math.round(this.option("baseContainerSize")),
-            baseContentSize = Math.round(this.option("baseContentSize"));
+        var containerSize = Math.round(this.option('containerSize')),
+            contentSize = Math.round(this.option('contentSize')),
+            baseContainerSize = Math.round(this.option('baseContainerSize')),
+            baseContentSize = Math.round(this.option('baseContentSize'));
 
         // NOTE: if current scrollbar's using outside of scrollable
         if(isNaN(baseContainerSize)) {
@@ -186,14 +186,14 @@ var Scrollbar = Widget.inherit({
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
         this._realContainerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
         var thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
-        this._thumbRatio = (containerSize - thumbSize) / (this.option("scaleRatio") * (contentSize - containerSize));
+        this._thumbRatio = (containerSize - thumbSize) / (this.option('scaleRatio') * (contentSize - containerSize));
 
-        this.option(this._dimension, thumbSize / this.option("scaleRatio"));
-        this.$element().css("display", this._needScrollbar() ? "" : "none");
+        this.option(this._dimension, thumbSize / this.option('scaleRatio'));
+        this.$element().css('display', this._needScrollbar() ? '' : 'none');
     },
 
     _isHidden: function() {
-        return this.option("visibilityMode") === SCROLLBAR_VISIBLE.never;
+        return this.option('visibilityMode') === SCROLLBAR_VISIBLE.never;
     },
 
     _needScrollbar: function() {
@@ -214,7 +214,7 @@ var Scrollbar = Widget.inherit({
             activeScrollbar = null;
         }
 
-        eventsEngine.off(this._$thumb, "." + SCROLLBAR);
+        eventsEngine.off(this._$thumb, '.' + SCROLLBAR);
     },
 
     _optionChanged: function(args) {
@@ -223,20 +223,20 @@ var Scrollbar = Widget.inherit({
         }
 
         switch(args.name) {
-            case "containerSize":
-            case "contentSize":
+            case 'containerSize':
+            case 'contentSize':
                 this.option()[args.name] = this._normalizeSize(args.value);
                 this._update();
                 break;
-            case "baseContentSize":
-            case "baseContainerSize":
+            case 'baseContentSize':
+            case 'baseContainerSize':
                 this._update();
                 break;
-            case "visibilityMode":
-            case "direction":
+            case 'visibilityMode':
+            case 'direction':
                 this._invalidate();
                 break;
-            case "scaleRatio":
+            case 'scaleRatio':
                 this._update();
                 break;
             default:
@@ -245,7 +245,7 @@ var Scrollbar = Widget.inherit({
     },
 
     update: commonUtils.deferRenderer(function() {
-        this._adjustVisibility() && this.option("visible", true);
+        this._adjustVisibility() && this.option('visible', true);
     })
 });
 

@@ -1,25 +1,25 @@
-var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
-    DateView = require("./ui.date_view"),
-    DateBoxStrategy = require("./ui.date_box.strategy"),
-    support = require("../../core/utils/support"),
-    extend = require("../../core/utils/extend").extend,
-    dateUtils = require("./ui.date_utils"),
-    messageLocalization = require("../../localization/message");
+var $ = require('../../core/renderer'),
+    window = require('../../core/utils/window').getWindow(),
+    DateView = require('./ui.date_view'),
+    DateBoxStrategy = require('./ui.date_box.strategy'),
+    support = require('../../core/utils/support'),
+    extend = require('../../core/utils/extend').extend,
+    dateUtils = require('./ui.date_utils'),
+    messageLocalization = require('../../localization/message');
 
 var DateViewStrategy = DateBoxStrategy.inherit({
 
-    NAME: "DateView",
+    NAME: 'DateView',
 
     getDefaultOptions: function() {
         return extend(this.callBase(), {
             openOnFieldClick: true,
-            applyButtonText: messageLocalization.format("OK")
+            applyButtonText: messageLocalization.format('OK')
         });
     },
 
     getDisplayFormat: function(displayFormat) {
-        return displayFormat || dateUtils.FORMATS_MAP[this.dateBox.option("type")];
+        return displayFormat || dateUtils.FORMATS_MAP[this.dateBox.option('type')];
     },
 
     popupConfig: function(config) {
@@ -32,7 +32,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
             defaultOptionsRules: [
                 {
                     device: function(device) {
-                        return device.platform === "win" && device.version && device.version[0] === 8;
+                        return device.platform === 'win' && device.version && device.version[0] === 8;
                     },
                     options: {
                         showNames: true
@@ -40,14 +40,14 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function(device) {
-                        return device.platform === "win" && device.phone && device.version && device.version[0] === 8;
+                        return device.platform === 'win' && device.phone && device.version && device.version[0] === 8;
                     },
                     options: {
                         animation: null
                     }
                 },
                 {
-                    device: { platform: "android" },
+                    device: { platform: 'android' },
                     options: {
                         width: 333,
                         height: 331
@@ -57,11 +57,11 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                     device: function(device) {
                         var platform = device.platform,
                             version = device.version;
-                        return platform === "generic" || platform === "ios" || (platform === "win" && version && version[0] === 10);
+                        return platform === 'generic' || platform === 'ios' || (platform === 'win' && version && version[0] === 10);
                     },
                     options: {
-                        width: "auto",
-                        height: "auto"
+                        width: 'auto',
+                        height: 'auto'
                     }
                 },
                 {
@@ -69,25 +69,25 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                         var platform = device.platform,
                             phone = device.phone;
 
-                        return platform === "generic" && phone;
+                        return platform === 'generic' && phone;
                     },
                     options: {
                         width: 333,
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        height: "auto",
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        height: 'auto',
                         position: {
-                            collision: "flipfit flip"
+                            collision: 'flipfit flip'
                         }
                     }
                 },
                 {
-                    device: { platform: "ios", phone: true },
+                    device: { platform: 'ios', phone: true },
                     options: {
-                        width: "100%",
+                        width: '100%',
                         position: {
-                            my: "bottom",
-                            at: "bottom",
+                            my: 'bottom',
+                            at: 'bottom',
                             of: window
                         }
                     }
@@ -97,7 +97,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
     },
 
     _renderWidget: function() {
-        if(support.inputType(this.dateBox.option("mode")) && this.dateBox._isNativeType() || this.dateBox.option("readOnly")) {
+        if(support.inputType(this.dateBox.option('mode')) && this.dateBox._isNativeType() || this.dateBox.option('readOnly')) {
             if(this._widget) {
                 this._widget.$element().remove();
                 this._widget = null;
@@ -111,7 +111,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
         if(this._widget) {
             this._widget.option(this._getWidgetOptions());
         } else {
-            var element = $("<div>").appendTo(popup.$content());
+            var element = $('<div>').appendTo(popup.$content());
             this._widget = this._createWidget(element);
         }
 
@@ -125,9 +125,9 @@ var DateViewStrategy = DateBoxStrategy.inherit({
     _getWidgetOptions: function() {
         return {
             value: this.dateBoxValue() || new Date(),
-            type: this.dateBox.option("type"),
-            minDate: this.dateBox.dateOption("min") || new Date(1900, 0, 1),
-            maxDate: this.dateBox.dateOption("max") || new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
+            type: this.dateBox.option('type'),
+            minDate: this.dateBox.dateOption('min') || new Date(1900, 0, 1),
+            maxDate: this.dateBox.dateOption('max') || new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
             onDisposing: (function() {
                 this._widget = null;
             }).bind(this)

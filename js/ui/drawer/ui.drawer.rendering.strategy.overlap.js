@@ -1,11 +1,11 @@
-import { animation } from "./ui.drawer.rendering.strategy";
-import DrawerStrategy from "./ui.drawer.rendering.strategy";
-import $ from "../../core/renderer";
-import translator from "../../animation/translator";
-import Overlay from "../overlay";
-import typeUtils from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { camelize } from "../../core/utils/inflector";
+import { animation } from './ui.drawer.rendering.strategy';
+import DrawerStrategy from './ui.drawer.rendering.strategy';
+import $ from '../../core/renderer';
+import translator from '../../animation/translator';
+import Overlay from '../overlay';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { camelize } from '../../core/utils/inflector';
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -21,9 +21,9 @@ class OverlapStrategy extends DrawerStrategy {
             shading: false,
             container: drawer.getOverlayTarget(),
             position: position,
-            width: opened ? "auto" : minSize || 0,
-            height: "100%",
-            templatesRenderAsynchronously: drawer.option("templatesRenderAsynchronously"),
+            width: opened ? 'auto' : minSize || 0,
+            height: '100%',
+            templatesRenderAsynchronously: drawer.option('templatesRenderAsynchronously'),
             animation: {
                 show: {
                     duration: 0
@@ -32,7 +32,7 @@ class OverlapStrategy extends DrawerStrategy {
             onPositioned: (function(e) {
                 this._fixOverlayPosition(e.component.$content());
             }).bind(this),
-            contentTemplate: drawer.option("template"),
+            contentTemplate: drawer.option('template'),
             onContentReady: (args) => {
                 whenPanelRendered.resolve();
                 this._processOverlayZIndex(args.component.content());
@@ -49,10 +49,10 @@ class OverlapStrategy extends DrawerStrategy {
         if(typeUtils.isDefined(this._initialPosition)) {
             translator.move($overlayContent, { left: this._initialPosition.left, top: this._initialPosition.top });
         }
-        if(drawer.getDrawerPosition() === "right") {
-            $overlayContent.css("left", "auto");
+        if(drawer.getDrawerPosition() === 'right') {
+            $overlayContent.css('left', 'auto');
 
-            if(drawer.option("rtlEnabled")) {
+            if(drawer.option('rtlEnabled')) {
                 translator.move($overlayContent, { left: 0 });
             }
         }
@@ -64,22 +64,22 @@ class OverlapStrategy extends DrawerStrategy {
 
         let result = {};
 
-        if(panelPosition === "left") {
+        if(panelPosition === 'left') {
             result = {
-                my: "top left",
-                at: "top left",
+                my: 'top left',
+                at: 'top left',
             };
         }
-        if(panelPosition === "right") {
-            let my = drawer.option("rtlEnabled") ? "top left" : "top right";
+        if(panelPosition === 'right') {
+            let my = drawer.option('rtlEnabled') ? 'top left' : 'top right';
 
             result = {
                 my: my,
-                at: "top right",
+                at: 'top right',
             };
         }
 
-        if(panelPosition === "top" || panelPosition === "bottom") {
+        if(panelPosition === 'top' || panelPosition === 'bottom') {
             result = {
                 my: panelPosition,
                 at: panelPosition,
@@ -96,19 +96,19 @@ class OverlapStrategy extends DrawerStrategy {
         const overlay = drawer.getOverlay();
 
         if(drawer.isHorizontalDirection()) {
-            overlay.option("height", "100%");
-            overlay.option("width", keepMaxSize ? drawer.getRealPanelWidth() : this._getPanelSize(drawer.option("opened")));
+            overlay.option('height', '100%');
+            overlay.option('width', keepMaxSize ? drawer.getRealPanelWidth() : this._getPanelSize(drawer.option('opened')));
         } else {
-            overlay.option("width", overlay.option("container").width());
-            overlay.option("height", keepMaxSize ? drawer.getRealPanelHeight() : this._getPanelSize(drawer.option("opened")));
+            overlay.option('width', overlay.option('container').width());
+            overlay.option('height', keepMaxSize ? drawer.getRealPanelHeight() : this._getPanelSize(drawer.option('opened')));
         }
     }
 
     setupContent($content, position) {
         const drawer = this.getDrawerInstance();
 
-        $content.css("padding" + camelize(position, true), drawer.option("minSize"));
-        $content.css("transform", "inherit");
+        $content.css('padding' + camelize(position, true), drawer.option('minSize'));
+        $content.css('transform', 'inherit');
     }
 
     slidePositionRendering(config, offset, animate) {
@@ -123,7 +123,7 @@ class OverlapStrategy extends DrawerStrategy {
             let animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 position: config.panelOffset,
-                duration: drawer.option("animationDuration"),
+                duration: drawer.option('animationDuration'),
                 direction: position,
             });
 
@@ -151,7 +151,7 @@ class OverlapStrategy extends DrawerStrategy {
         let animationConfig = extend(config.defaultAnimationConfig, {
             $element: config.$panelOverlayContent,
             size: config.size,
-            duration: drawer.option("animationDuration"),
+            duration: drawer.option('animationDuration'),
             direction: position,
             marginTop: config.marginTop,
         });
@@ -160,12 +160,12 @@ class OverlapStrategy extends DrawerStrategy {
             animation.size(animationConfig);
         } else {
             if(drawer.isHorizontalDirection()) {
-                $(config.$panelOverlayContent).css("width", config.size);
+                $(config.$panelOverlayContent).css('width', config.size);
             } else {
-                $(config.$panelOverlayContent).css("height", config.size);
+                $(config.$panelOverlayContent).css('height', config.size);
 
-                if(position === "bottom") {
-                    $(config.$panelOverlayContent).css("marginTop", config.marginTop);
+                if(position === 'bottom') {
+                    $(config.$panelOverlayContent).css('marginTop', config.marginTop);
                 }
             }
         }
@@ -194,7 +194,7 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     needOrderContent(position) {
-        return position === "right" || position === "bottom";
+        return position === 'right' || position === 'bottom';
     }
 }
 

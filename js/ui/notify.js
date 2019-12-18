@@ -1,9 +1,9 @@
-var $ = require("../core/renderer"),
-    Action = require("../core/action"),
-    viewPortUtils = require("../core/utils/view_port"),
-    extend = require("../core/utils/extend").extend,
-    isPlainObject = require("../core/utils/type").isPlainObject,
-    Toast = require("./toast");
+var $ = require('../core/renderer'),
+    Action = require('../core/action'),
+    viewPortUtils = require('../core/utils/view_port'),
+    extend = require('../core/utils/extend').extend,
+    isPlainObject = require('../core/utils/type').isPlainObject,
+    Toast = require('./toast');
 
 
 var $notify = null;
@@ -25,7 +25,7 @@ var notify = function(message, /* optional */ type, displayTime) {
         }
     });
 
-    $notify = $("<div>").appendTo(viewPortUtils.value());
+    $notify = $('<div>').appendTo(viewPortUtils.value());
     new Toast($notify, options).show();
 };
 

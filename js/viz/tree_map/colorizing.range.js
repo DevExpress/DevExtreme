@@ -1,4 +1,4 @@
-var _createColorCodeGetter = require("./colorizing").createColorCodeGetter;
+var _createColorCodeGetter = require('./colorizing').createColorCodeGetter;
 
 function getPaletteIndex(value, items) {
     var start = 0,
@@ -33,5 +33,5 @@ function rangeColorizer(options, themeManager) {
     };
 }
 
-require("./colorizing").addColorizer("range", rangeColorizer);
+require('./colorizing').addColorizer('range', rangeColorizer);
 module.exports = rangeColorizer;

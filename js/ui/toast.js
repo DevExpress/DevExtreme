@@ -1,29 +1,29 @@
 // TODOs
 // 1. animation
 
-var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
-    domAdapter = require("../core/dom_adapter"),
-    eventsEngine = require("../events/core/events_engine"),
-    ready = require("../core/utils/ready_callbacks").add,
-    commonUtils = require("../core/utils/common"),
-    typeUtils = require("../core/utils/type"),
-    extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
-    pointerEvents = require("../events/pointer"),
-    registerComponent = require("../core/component_registrator"),
-    Overlay = require("./overlay"),
-    themes = require("./themes");
+var $ = require('../core/renderer'),
+    window = require('../core/utils/window').getWindow(),
+    domAdapter = require('../core/dom_adapter'),
+    eventsEngine = require('../events/core/events_engine'),
+    ready = require('../core/utils/ready_callbacks').add,
+    commonUtils = require('../core/utils/common'),
+    typeUtils = require('../core/utils/type'),
+    extend = require('../core/utils/extend').extend,
+    inArray = require('../core/utils/array').inArray,
+    pointerEvents = require('../events/pointer'),
+    registerComponent = require('../core/component_registrator'),
+    Overlay = require('./overlay'),
+    themes = require('./themes');
 
-var TOAST_CLASS = "dx-toast",
-    TOAST_CLASS_PREFIX = TOAST_CLASS + "-",
-    TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + "wrapper",
-    TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + "content",
-    TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + "message",
-    TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + "icon",
+var TOAST_CLASS = 'dx-toast',
+    TOAST_CLASS_PREFIX = TOAST_CLASS + '-',
+    TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper',
+    TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + 'content',
+    TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + 'message',
+    TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + 'icon',
 
-    WIDGET_NAME = "dxToast",
-    toastTypes = ["info", "warning", "error", "success"],
+    WIDGET_NAME = 'dxToast',
+    toastTypes = ['info', 'warning', 'error', 'success'],
 
     TOAST_STACK = [],
     FIRST_Z_INDEX_OFFSET = 8000,
@@ -31,11 +31,11 @@ var TOAST_CLASS = "dx-toast",
     visibleToastInstance = null,
 
     POSITION_ALIASES = {
-        "top": { my: "top", at: "top", of: null, offset: "0 0" },
-        "bottom": { my: "bottom", at: "bottom", of: null, offset: "0 -20" },
-        "center": { my: "center", at: "center", of: null, offset: "0 0" },
-        "right": { my: "center right", at: "center right", of: null, offset: "0 0" },
-        "left": { my: "center left", at: "center left", of: null, offset: "0 0" }
+        'top': { my: 'top', at: 'top', of: null, offset: '0 0' },
+        'bottom': { my: 'bottom', at: 'bottom', of: null, offset: '0 -20' },
+        'center': { my: 'center', at: 'center', of: null, offset: '0 0' },
+        'right': { my: 'center right', at: 'center right', of: null, offset: '0 0' },
+        'left': { my: 'center left', at: 'center left', of: null, offset: '0 0' }
     };
 
 ready(function() {
@@ -63,14 +63,14 @@ var Toast = Overlay.inherit({
             * @type string
             * @default ""
             */
-            message: "",
+            message: '',
 
             /**
             * @name dxToastOptions.type
             * @type Enums.ToastType
             * @default 'info'
             */
-            type: "info",
+            type: 'info',
 
             /**
             * @name dxToastOptions.displayTime
@@ -84,7 +84,7 @@ var Toast = Overlay.inherit({
             * @type positionConfig|string
             * @default "bottom center"
             */
-            position: "bottom center",
+            position: 'bottom center',
 
             /**
             * @name dxToastOptions.animation
@@ -98,7 +98,7 @@ var Toast = Overlay.inherit({
                 * @default { type: "fade", duration: 400, from: 0, to: 1 }
                 */
                 show: {
-                    type: "fade",
+                    type: 'fade',
                     duration: 400,
                     from: 0,
                     to: 1
@@ -109,7 +109,7 @@ var Toast = Overlay.inherit({
                 * @default { type: "fade", duration: 400, to: 0 }
                 */
                 hide: {
-                    type: "fade",
+                    type: 'fade',
                     duration: 400,
                     to: 0
                 }
@@ -136,7 +136,7 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions.height
             * @default 'auto'
             */
-            height: "auto",
+            height: 'auto',
 
             closeOnBackButton: false,
 
@@ -171,13 +171,13 @@ var Toast = Overlay.inherit({
         return this.callBase().concat([
             {
                 device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
+                    return device.platform === 'win' && device.version && device.version[0] === 8;
                 },
                 options: {
                     /**
                     * @name dxToastOptions.position
                     */
-                    position: "top center",
+                    position: 'top center',
 
                     /**
                     * @name dxToastOptions.width
@@ -187,24 +187,24 @@ var Toast = Overlay.inherit({
             },
             {
                 device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 10;
+                    return device.platform === 'win' && device.version && device.version[0] === 10;
                 },
                 options: {
                     /**
                    * @name dxToastOptions.position
                    * @default 'bottom right' @for Windows_10_Mobile
                    */
-                    position: "bottom right",
+                    position: 'bottom right',
 
                     /**
                     * @name dxToastOptions.width
                     * @default 'auto' @for Android|Windows_10_Mobile
                     */
-                    width: "auto"
+                    width: 'auto'
                 }
             },
             {
-                device: { platform: "android" },
+                device: { platform: 'android' },
                 options: {
                     /**
                     * @name dxToastOptions.closeOnOutsideClick
@@ -212,16 +212,16 @@ var Toast = Overlay.inherit({
                     */
                     closeOnOutsideClick: true,
 
-                    width: "auto",
+                    width: 'auto',
 
                     /**
                     * @name dxToastOptions.position
                     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
                     */
                     position: {
-                        at: "bottom left",
-                        my: "bottom left",
-                        offset: "20 -20"
+                        at: 'bottom left',
+                        my: 'bottom left',
+                        offset: '20 -20'
                     },
 
                     /**
@@ -230,23 +230,23 @@ var Toast = Overlay.inherit({
                     */
                     animation: {
                         show: {
-                            type: "slide",
+                            type: 'slide',
                             duration: 200,
                             from: {
                                 position: {
-                                    my: "top",
-                                    at: "bottom",
+                                    my: 'top',
+                                    at: 'bottom',
                                     of: window
                                 }
                             },
                         },
                         hide: {
-                            type: "slide",
+                            type: 'slide',
                             duration: 200,
                             to: {
                                 position: {
-                                    my: "top",
-                                    at: "bottom",
+                                    my: 'top',
+                                    at: 'bottom',
                                     of: window
                                 }
                             },
@@ -256,9 +256,9 @@ var Toast = Overlay.inherit({
             },
             {
                 device: function(device) {
-                    var isPhone = device.deviceType === "phone",
-                        isAndroid = device.platform === "android",
-                        isWin10 = device.platform === "win" && device.version && device.version[0] === 10;
+                    var isPhone = device.deviceType === 'phone',
+                        isAndroid = device.platform === 'android',
+                        isWin10 = device.platform === 'win' && device.version && device.version[0] === 10;
 
                     return isPhone && (isAndroid || isWin10);
                 },
@@ -274,9 +274,9 @@ var Toast = Overlay.inherit({
                     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
                     */
                     position: {
-                        at: "bottom center",
-                        my: "bottom center",
-                        offset: "0 0"
+                        at: 'bottom center',
+                        my: 'bottom center',
+                        offset: '0 0'
                     }
                 }
             },
@@ -312,17 +312,17 @@ var Toast = Overlay.inherit({
     },
 
     _renderContentImpl: function() {
-        if(this.option("message")) {
-            this._message = $("<div>")
+        if(this.option('message')) {
+            this._message = $('<div>')
                 .addClass(TOAST_MESSAGE_CLASS)
-                .text(this.option("message"))
+                .text(this.option('message'))
                 .appendTo(this.$content());
         }
 
-        this.setAria("role", "alert", this._message);
+        this.setAria('role', 'alert', this._message);
 
-        if(inArray(this.option("type").toLowerCase(), toastTypes) > -1) {
-            this.$content().prepend($("<div>").addClass(TOAST_ICON_CLASS));
+        if(inArray(this.option('type').toLowerCase(), toastTypes) > -1) {
+            this.$content().prepend($('<div>').addClass(TOAST_ICON_CLASS));
         }
 
         this.callBase();
@@ -333,36 +333,36 @@ var Toast = Overlay.inherit({
 
         this.$element().addClass(TOAST_CLASS);
         this._wrapper().addClass(TOAST_WRAPPER_CLASS);
-        this._$content.addClass(TOAST_CLASS_PREFIX + String(this.option("type")).toLowerCase());
+        this._$content.addClass(TOAST_CLASS_PREFIX + String(this.option('type')).toLowerCase());
         this.$content().addClass(TOAST_CONTENT_CLASS);
 
-        this._toggleCloseEvents("Swipe");
-        this._toggleCloseEvents("Click");
+        this._toggleCloseEvents('Swipe');
+        this._toggleCloseEvents('Click');
     },
 
     _renderScrollTerminator: commonUtils.noop,
 
     _toggleCloseEvents: function(event) {
-        var dxEvent = "dx" + event.toLowerCase();
+        var dxEvent = 'dx' + event.toLowerCase();
 
         eventsEngine.off(this._$content, dxEvent);
-        this.option("closeOn" + event) && eventsEngine.on(this._$content, dxEvent, this.hide.bind(this));
+        this.option('closeOn' + event) && eventsEngine.on(this._$content, dxEvent, this.hide.bind(this));
     },
 
     _posStringToObject: function() {
-        if(!typeUtils.isString(this.option("position"))) return;
+        if(!typeUtils.isString(this.option('position'))) return;
 
-        var verticalPosition = this.option("position").split(" ")[0],
-            horizontalPosition = this.option("position").split(" ")[1];
+        var verticalPosition = this.option('position').split(' ')[0],
+            horizontalPosition = this.option('position').split(' ')[1];
 
-        this.option("position", extend({}, POSITION_ALIASES[verticalPosition]));
+        this.option('position', extend({}, POSITION_ALIASES[verticalPosition]));
 
         switch(horizontalPosition) {
-            case "center":
-            case "left":
-            case "right":
-                this.option("position").at += " " + horizontalPosition;
-                this.option("position").my += " " + horizontalPosition;
+            case 'center':
+            case 'left':
+            case 'right':
+                this.option('position').at += ' ' + horizontalPosition;
+                this.option('position').my += ' ' + horizontalPosition;
                 break;
         }
     },
@@ -378,7 +378,7 @@ var Toast = Overlay.inherit({
         return this.callBase.apply(this, arguments).done((function() {
             clearTimeout(this._hideTimeout);
 
-            this._hideTimeout = setTimeout(this.hide.bind(this), this.option("displayTime"));
+            this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
         }).bind(this));
     },
 
@@ -403,23 +403,23 @@ var Toast = Overlay.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "type":
+            case 'type':
                 this._$content.removeClass(TOAST_CLASS_PREFIX + args.previousValue);
                 this._$content.addClass(TOAST_CLASS_PREFIX + String(args.value).toLowerCase());
                 break;
-            case "message":
+            case 'message':
                 if(this._message) {
                     this._message.text(args.value);
                 }
                 break;
-            case "closeOnSwipe":
-                this._toggleCloseEvents("Swipe");
+            case 'closeOnSwipe':
+                this._toggleCloseEvents('Swipe');
                 break;
-            case "closeOnClick":
-                this._toggleCloseEvents("Click");
+            case 'closeOnClick':
+                this._toggleCloseEvents('Click');
                 break;
-            case "displayTime":
-            case "position":
+            case 'displayTime':
+            case 'position':
                 break;
             default:
                 this.callBase(args);

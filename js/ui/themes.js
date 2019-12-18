@@ -1,24 +1,24 @@
-var $ = require("../core/renderer"),
-    domAdapter = require("../core/dom_adapter"),
-    windowUtils = require("../core/utils/window"),
+var $ = require('../core/renderer'),
+    domAdapter = require('../core/dom_adapter'),
+    windowUtils = require('../core/utils/window'),
     window = windowUtils.getWindow(),
-    Deferred = require("../core/utils/deferred").Deferred,
-    errors = require("./widget/ui.errors"),
-    domUtils = require("../core/utils/dom"),
-    readyCallbacks = require("../core/utils/ready_callbacks"),
+    Deferred = require('../core/utils/deferred').Deferred,
+    errors = require('./widget/ui.errors'),
+    domUtils = require('../core/utils/dom'),
+    readyCallbacks = require('../core/utils/ready_callbacks'),
     ready = readyCallbacks.add,
-    each = require("../core/utils/iterator").each,
-    devices = require("../core/devices"),
-    viewPortUtils = require("../core/utils/view_port"),
-    themeReadyCallback = require("./themes_callback"),
+    each = require('../core/utils/iterator').each,
+    devices = require('../core/devices'),
+    viewPortUtils = require('../core/utils/view_port'),
+    themeReadyCallback = require('./themes_callback'),
     viewPort = viewPortUtils.value,
-    Promise = require("../core/polyfills/promise"),
+    Promise = require('../core/polyfills/promise'),
     viewPortChanged = viewPortUtils.changeCallback;
 
-var DX_LINK_SELECTOR = "link[rel=dx-theme]",
-    THEME_ATTR = "data-theme",
-    ACTIVE_ATTR = "data-active",
-    DX_HAIRLINES_CLASS = "dx-hairlines";
+var DX_LINK_SELECTOR = 'link[rel=dx-theme]',
+    THEME_ATTR = 'data-theme',
+    ACTIVE_ATTR = 'data-active',
+    DX_HAIRLINES_CLASS = 'dx-hairlines';
 
 var context,
     $activeThemeLink,
@@ -28,22 +28,22 @@ var context,
 
 var timerId;
 
-var THEME_MARKER_PREFIX = "dx.";
+var THEME_MARKER_PREFIX = 'dx.';
 
 function readThemeMarker() {
     if(!windowUtils.hasWindow()) {
         return null;
     }
-    var element = $("<div>", context).addClass("dx-theme-marker").appendTo(context.documentElement),
+    var element = $('<div>', context).addClass('dx-theme-marker').appendTo(context.documentElement),
         result;
 
     try {
-        result = element.css("fontFamily");
+        result = element.css('fontFamily');
         if(!result) {
             return null;
         }
 
-        result = result.replace(/["']/g, "");
+        result = result.replace(/["']/g, '');
         if(result.substr(0, THEME_MARKER_PREFIX.length) !== THEME_MARKER_PREFIX) {
             return null;
         }
@@ -77,7 +77,7 @@ function waitForThemeLoad(themeName) {
                 isTimeout = !isLoaded && Date.now() - waitStartTime > 15 * 1000;
 
             if(isTimeout) {
-                errors.log("W0004", pendingThemeName);
+                errors.log('W0004', pendingThemeName);
             }
 
             if(isLoaded || isTimeout) {
@@ -101,13 +101,13 @@ function processMarkup() {
     }
 
     knownThemes = {};
-    $activeThemeLink = $(domUtils.createMarkupFromString("<link rel=stylesheet>"), context);
+    $activeThemeLink = $(domUtils.createMarkupFromString('<link rel=stylesheet>'), context);
 
     $allThemeLinks.each(function() {
         var link = $(this, context),
             fullThemeName = link.attr(THEME_ATTR),
-            url = link.attr("href"),
-            isActive = link.attr(ACTIVE_ATTR) === "true";
+            url = link.attr('href'),
+            isActive = link.attr(ACTIVE_ATTR) === 'true';
 
         knownThemes[fullThemeName] = {
             url: url,
@@ -120,7 +120,7 @@ function processMarkup() {
 }
 
 function resolveFullThemeName(desiredThemeName) {
-    var desiredThemeParts = desiredThemeName.split("."),
+    var desiredThemeParts = desiredThemeName.split('.'),
         result = null;
 
     if(knownThemes) {
@@ -129,7 +129,7 @@ function resolveFullThemeName(desiredThemeName) {
         }
 
         each(knownThemes, function(knownThemeName, themeData) {
-            var knownThemeParts = knownThemeName.split(".");
+            var knownThemeParts = knownThemeName.split('.');
 
             if(knownThemeParts[0] !== desiredThemeParts[0]) {
                 return;
@@ -188,7 +188,7 @@ function current(options) {
     detachCssClasses(viewPort());
 
     options = options || {};
-    if(typeof options === "string") {
+    if(typeof options === 'string') {
         options = { theme: options };
     }
 
@@ -217,7 +217,7 @@ function current(options) {
         // 2. We have no reliable info, why this hack has been applied and whether it is still relevant.
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
-        $activeThemeLink.attr("href", knownThemes[currentThemeName].url);
+        $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
         if((themeReadyCallback.has() || options._forceTimeout) && !timerId) {
             waitForThemeLoad(currentThemeName);
         } else {
@@ -230,7 +230,7 @@ function current(options) {
             themeReadyCallback.fire();
             themeReadyCallback.empty();
         } else {
-            throw errors.Error("E0021", currentThemeName);
+            throw errors.Error('E0021', currentThemeName);
         }
     }
 
@@ -243,11 +243,11 @@ function themeNameFromDevice(device) {
     var themeName = device.platform;
 
     switch(themeName) {
-        case "ios":
-            return "ios7";
-        case "android":
-        case "win":
-            return "generic";
+        case 'ios':
+            return 'ios7';
+        case 'android':
+        case 'win':
+            return 'generic';
     }
 
     return themeName;
@@ -257,16 +257,16 @@ function getCssClasses(themeName) {
     themeName = themeName || current();
 
     var result = [],
-        themeNameParts = themeName && themeName.split(".");
+        themeNameParts = themeName && themeName.split('.');
 
     if(themeNameParts) {
         result.push(
-            "dx-theme-" + themeNameParts[0],
-            "dx-theme-" + themeNameParts[0] + "-typography"
+            'dx-theme-' + themeNameParts[0],
+            'dx-theme-' + themeNameParts[0] + '-typography'
         );
 
         if(themeNameParts.length > 1) {
-            result.push("dx-color-scheme-" + themeNameParts[1] + (isMaterial(themeName) ? ("-" + themeNameParts[2]) : ""));
+            result.push('dx-color-scheme-' + themeNameParts[1] + (isMaterial(themeName) ? ('-' + themeNameParts[2]) : ''));
         }
     }
 
@@ -275,7 +275,7 @@ function getCssClasses(themeName) {
 
 var themeClasses;
 function attachCssClasses(element, themeName) {
-    themeClasses = getCssClasses(themeName).join(" ");
+    themeClasses = getCssClasses(themeName).join(' ');
     $(element).addClass(themeClasses);
 
     var activateHairlines = function() {
@@ -285,12 +285,12 @@ function attachCssClasses(element, themeName) {
             return;
         }
 
-        var $tester = $("<div>");
-        $tester.css("border", ".5px solid transparent");
-        $("body").append($tester);
+        var $tester = $('<div>');
+        $tester.css('border', '.5px solid transparent');
+        $('body').append($tester);
         if($tester.outerHeight() === 1) {
             $(element).addClass(DX_HAIRLINES_CLASS);
-            themeClasses += " " + DX_HAIRLINES_CLASS;
+            themeClasses += ' ' + DX_HAIRLINES_CLASS;
         }
         $tester.remove();
     };
@@ -315,36 +315,36 @@ function isTheme(themeRegExp, themeName) {
 }
 
 function isMaterial(themeName) {
-    return isTheme("material", themeName);
+    return isTheme('material', themeName);
 }
 
 function isIos7(themeName) {
-    return isTheme("ios7", themeName);
+    return isTheme('ios7', themeName);
 }
 
 function isGeneric(themeName) {
-    return isTheme("generic", themeName);
+    return isTheme('generic', themeName);
 }
 
 function checkThemeDeprecation() {
     if(isIos7()) {
-        errors.log("W0010", "The 'ios7' theme", "19.1", "Use the 'generic' theme instead.");
+        errors.log('W0010', 'The \'ios7\' theme', '19.1', 'Use the \'generic\' theme instead.');
     }
 }
 
 function isWebFontLoaded(text, fontWeight) {
-    const testedFont = "Roboto, RobotoFallback, Arial";
-    const etalonFont = "Arial";
+    const testedFont = 'Roboto, RobotoFallback, Arial';
+    const etalonFont = 'Arial';
 
     const document = domAdapter.getDocument();
-    const testElement = document.createElement("span");
+    const testElement = document.createElement('span');
 
-    testElement.style.position = "absolute";
-    testElement.style.top = "-9999px";
-    testElement.style.left = "-9999px";
-    testElement.style.visibility = "hidden";
+    testElement.style.position = 'absolute';
+    testElement.style.top = '-9999px';
+    testElement.style.left = '-9999px';
+    testElement.style.visibility = 'hidden';
     testElement.style.fontFamily = etalonFont;
-    testElement.style.fontSize = "250px";
+    testElement.style.fontSize = '250px';
     testElement.style.fontWeight = fontWeight;
     testElement.innerHTML = text;
 
@@ -390,7 +390,7 @@ function autoInit() {
     });
 
     if($(DX_LINK_SELECTOR, context).length) {
-        throw errors.Error("E0022");
+        throw errors.Error('E0022');
     }
 
     initDeferred.resolve();
@@ -456,7 +456,7 @@ exports.waitWebFont = waitWebFont;
 
 
 exports.resetTheme = function() {
-    $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
+    $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
 };

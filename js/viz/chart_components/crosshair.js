@@ -1,19 +1,19 @@
-import { patchFontOptions } from "../core/utils";
-import { extend } from "../../core/utils/extend";
+import { patchFontOptions } from '../core/utils';
+import { extend } from '../../core/utils/extend';
 const math = Math;
 const mathAbs = math.abs;
 const mathMin = math.min;
 const mathMax = math.max;
 const mathFloor = math.floor;
-const HORIZONTAL = "horizontal";
-const VERTICAL = "vertical";
+const HORIZONTAL = 'horizontal';
+const VERTICAL = 'vertical';
 const LABEL_BACKGROUND_PADDING_X = 8;
 const LABEL_BACKGROUND_PADDING_Y = 4;
-const CENTER = "center";
-const RIGHT = "right";
-const LEFT = "left";
-const TOP = "top";
-const BOTTOM = "bottom";
+const CENTER = 'center';
+const RIGHT = 'right';
+const LEFT = 'left';
+const TOP = 'top';
+const BOTTOM = 'bottom';
 
 exports.getMargins = function() {
     return {
@@ -32,7 +32,7 @@ function getRectangleBBox(bBox) {
 }
 
 function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
-    var params = isHorizontal ? ["x", "width", "y", "height", y, 0] : ["y", "height", "x", "width", x, 1];
+    var params = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
 
     return function(bBox, position, coord) {
         var labelCoord = { x: coord.x, y: coord.y },
@@ -93,15 +93,15 @@ Crosshair.prototype = {
     },
 
     _prepareOptions: function(options, direction) {
-        var lineOptions = options[direction + "Line"];
+        var lineOptions = options[direction + 'Line'];
         this._options[direction] = {
             visible: lineOptions.visible,
             line: {
                 stroke: lineOptions.color || options.color,
-                "stroke-width": lineOptions.width || options.width,
+                'stroke-width': lineOptions.width || options.width,
                 dashStyle: lineOptions.dashStyle || options.dashStyle,
                 opacity: lineOptions.opacity || options.opacity,
-                "stroke-linecap": "butt"
+                'stroke-linecap': 'butt'
             },
             label: extend(true, {}, options.label, lineOptions.label)
         };
@@ -112,7 +112,7 @@ Crosshair.prototype = {
             canvas = this._canvas,
             points = [canvas.left, canvas.top, canvas.left, canvas.top];
         for(var i = 0; i < 2; i++) {
-            lines.push(this._renderer.path(points, "line").attr(options).sharp(sharpParam).append(group));
+            lines.push(this._renderer.path(points, 'line').attr(options).sharp(sharpParam).append(group));
         }
         return lines;
     },
@@ -124,7 +124,7 @@ Crosshair.prototype = {
             verticalOptions = options.vertical,
             horizontalOptions = options.horizontal,
             extraOptions = horizontalOptions.visible ? horizontalOptions.line : verticalOptions.line,
-            circleOptions = { stroke: extraOptions.stroke, "stroke-width": extraOptions["stroke-width"], dashStyle: extraOptions.dashStyle, opacity: extraOptions.opacity },
+            circleOptions = { stroke: extraOptions.stroke, 'stroke-width': extraOptions['stroke-width'], dashStyle: extraOptions.dashStyle, opacity: extraOptions.opacity },
             canvas = that._canvas;
 
         that._horizontal = {};
@@ -135,11 +135,11 @@ Crosshair.prototype = {
         that._verticalGroup = renderer.g().append(that._crosshairGroup);
 
         if(verticalOptions.visible) {
-            that._vertical.lines = that._createLines(verticalOptions.line, "h", that._verticalGroup);
+            that._vertical.lines = that._createLines(verticalOptions.line, 'h', that._verticalGroup);
             that._vertical.labels = that._createLabels(that._axes[0], verticalOptions, false, that._verticalGroup);
         }
         if(horizontalOptions.visible) {
-            that._horizontal.lines = that._createLines(horizontalOptions.line, "v", that._horizontalGroup);
+            that._horizontal.lines = that._createLines(horizontalOptions.line, 'v', that._horizontalGroup);
             that._horizontal.labels = that._createLabels(that._axes[1], horizontalOptions, true, that._horizontalGroup);
         }
 
@@ -176,9 +176,9 @@ Crosshair.prototype = {
                 }
                 align = position === TOP || position === BOTTOM ? CENTER : (position === RIGHT ? LEFT : RIGHT);
                 background = renderer.rect(0, 0, 0, 0).attr({ fill: labelOptions.backgroundColor || options.line.stroke }).append(group);
-                text = renderer.text("0", 0, 0).css(patchFontOptions(options.label.font)).attr({
+                text = renderer.text('0', 0, 0).css(patchFontOptions(options.label.font)).attr({
                     align: align,
-                    "class": labelOptions.cssClass
+                    'class': labelOptions.cssClass
                 }).append(group);
 
                 labels.push({ text: text, background: background, axis: axis, options: labelOptions, pos: { coord: currentLabelPos, side: position }, startXY: { x: x, y: y } });
@@ -196,7 +196,7 @@ Crosshair.prototype = {
                 coord = label.startXY,
                 textElement = label.text,
                 backgroundElement = label.background,
-                text = "";
+                text = '';
 
             if(!axis.name || axis.name === axisName) {
                 text = axis.getFormattedValue(value, label.options, point);
@@ -209,7 +209,7 @@ Crosshair.prototype = {
                 that._updateLinesCanvas(label);
                 backgroundElement.attr(getRectangleBBox(textElement.getBBox()));
             } else {
-                textElement.attr({ text: "" });
+                textElement.attr({ text: '' });
                 backgroundElement.attr({
                     x: 0,
                     y: 0,
@@ -221,7 +221,7 @@ Crosshair.prototype = {
     },
 
     hide: function() {
-        this._crosshairGroup.attr({ visibility: "hidden" });
+        this._crosshairGroup.attr({ visibility: 'hidden' });
     },
 
     _updateLinesCanvas: function(label) {
@@ -246,7 +246,7 @@ Crosshair.prototype = {
                     [canvas.left, y + r, canvas.left, mathMax(coords.bottom, y + r)]
                 ];
         for(var i = 0; i < 2; i++) {
-            lines[i].attr({ points: points[i] }).sharp(isHorizontal ? "v" : "h", isHorizontal ? (y === canvas.bottom ? -1 : 1) : (x === canvas.right ? -1 : 1));
+            lines[i].attr({ points: points[i] }).sharp(isHorizontal ? 'v' : 'h', isHorizontal ? (y === canvas.bottom ? -1 : 1) : (x === canvas.right ? -1 : 1));
         }
     },
 
@@ -286,9 +286,9 @@ Crosshair.prototype = {
             y = mathFloor(pointData.y);
 
         if(x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom) {
-            that._crosshairGroup.attr({ visibility: "visible" });
+            that._crosshairGroup.attr({ visibility: 'visible' });
             that._resetLinesCanvas();
-            that._circle.attr({ cx: x, cy: y, r: rad, "clip-path": that._getClipRectForPane(x, y).id });
+            that._circle.attr({ cx: x, cy: y, r: rad, 'clip-path': that._getClipRectForPane(x, y).id });
 
             if(horizontal.lines) {
                 that._updateText(pointData.yValue, pointData.axis, horizontal.labels, point, getLabelCheckerPosition(x, y, true, canvas));

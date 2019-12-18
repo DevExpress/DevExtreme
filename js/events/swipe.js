@@ -1,10 +1,10 @@
-var eventUtils = require("./utils"),
-    GestureEmitter = require("./gesture/emitter.gesture"),
-    registerEmitter = require("./core/emitter_registrator");
+var eventUtils = require('./utils'),
+    GestureEmitter = require('./gesture/emitter.gesture'),
+    registerEmitter = require('./core/emitter_registrator');
 
-var SWIPE_START_EVENT = "dxswipestart",
-    SWIPE_EVENT = "dxswipe",
-    SWIPE_END_EVENT = "dxswipeend";
+var SWIPE_START_EVENT = 'dxswipestart',
+    SWIPE_EVENT = 'dxswipe',
+    SWIPE_END_EVENT = 'dxswipeend';
 
 
 var HorizontalStrategy = {
@@ -55,8 +55,8 @@ var VerticalStrategy = {
 
 
 var STRATEGIES = {
-    "horizontal": HorizontalStrategy,
-    "vertical": VerticalStrategy
+    'horizontal': HorizontalStrategy,
+    'vertical': VerticalStrategy
 };
 
 var SwipeEmitter = GestureEmitter.inherit({
@@ -67,7 +67,7 @@ var SwipeEmitter = GestureEmitter.inherit({
     ctor: function(element) {
         this.callBase(element);
 
-        this.direction = "horizontal";
+        this.direction = 'horizontal';
         this.elastic = true;
     },
 

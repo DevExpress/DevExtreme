@@ -1,13 +1,13 @@
-var vizUtils = require("../core/utils"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    constants = require("./axes_constants"),
+var vizUtils = require('../core/utils'),
+    isDefined = require('../../core/utils/type').isDefined,
+    extend = require('../../core/utils/extend').extend,
+    constants = require('./axes_constants'),
     circularAxes,
-    xyAxesLinear = require("./xy_axes").linear,
-    tick = require("./tick").tick,
+    xyAxesLinear = require('./xy_axes').linear,
+    tick = require('./tick').tick,
     polarAxes,
     _map = vizUtils.map,
-    baseAxisModule = require("./base_axis"),
+    baseAxisModule = require('./base_axis'),
 
     _math = Math,
     _abs = _math.abs,
@@ -15,7 +15,7 @@ var vizUtils = require("../core/utils"),
     convertPolarToXY = vizUtils.convertPolarToXY,
 
     _extend = extend,
-    _noop = require("../../core/utils/common").noop,
+    _noop = require('../../core/utils/common').noop,
 
     HALF_PI_ANGLE = 90;
 
@@ -271,7 +271,7 @@ circularAxes = polarAxes.circular = {
                 center: -0.5,
                 outside: 0
             },
-            radiusWithTicks = this.getRadius() + length * corrections[this._options.tickOrientation || "center"];
+            radiusWithTicks = this.getRadius() + length * corrections[this._options.tickOrientation || 'center'];
         return [
             center.x + radiusWithTicks + shift,
             center.y,
@@ -377,7 +377,7 @@ circularAxes = polarAxes.circular = {
         var box = strip.labelBBox;
 
         return {
-            translateY: strip.label.attr("y") - box.y - box.height / 2
+            translateY: strip.label.attr('y') - box.y - box.height / 2
         };
     },
 
@@ -395,7 +395,7 @@ circularAxes = polarAxes.circular = {
     },
 
     _validateDisplayMode: function() {
-        return "standard";
+        return 'standard';
     },
 
     _getStep: function(boxes) {
@@ -414,13 +414,13 @@ circularAxes = polarAxes.circular = {
             angle1 = _abs(2 * (_math.atan(maxLabelBox.height / (2 * radius - maxLabelBox.width))) * 180 / _math.PI),
             angle2 = _abs(2 * (_math.atan(maxLabelBox.width / (2 * radius - maxLabelBox.height))) * 180 / _math.PI);
 
-        return constants.getTicksCountInRange(that._majorTicks, "angle", _math.max(angle1, angle2));
+        return constants.getTicksCountInRange(that._majorTicks, 'angle', _math.max(angle1, angle2));
     },
 
     _checkBoundedLabelsOverlapping: function(majorTicks, boxes, mode) {
         const labelOpt = this._options.label;
         mode = mode || this._validateOverlappingMode(labelOpt.overlappingBehavior);
-        if(mode !== "hide") {
+        if(mode !== 'hide') {
             return;
         }
         const lastVisibleLabelIndex = majorTicks.reduce((lastVisibleLabelIndex, tick, index) => tick.label ? index : lastVisibleLabelIndex, null);
@@ -430,7 +430,7 @@ circularAxes = polarAxes.circular = {
         }
 
         if(constants.areLabelsOverlap(boxes[0], boxes[lastVisibleLabelIndex], labelOpt.minSpacing, constants.center)) {
-            labelOpt.hideFirstOrLast === "first" ? majorTicks[0].label.remove() : majorTicks[lastVisibleLabelIndex].label.remove();
+            labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].label.remove() : majorTicks[lastVisibleLabelIndex].label.remove();
         }
     },
 
@@ -441,7 +441,7 @@ circularAxes = polarAxes.circular = {
 
 polarAxes.circularSpider = _extend({}, circularAxes, {
     _createAxisElement: function() {
-        return this._renderer.path([], "area");
+        return this._renderer.path([], 'area');
     },
 
     _updateAxisElementPosition: function() {
@@ -511,7 +511,7 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
     },
 
     _createStrip: function({ points }) {
-        return this._renderer.path(points, "area");
+        return this._renderer.path(points, 'area');
     },
 
     _getTranslatedCoord: function(value, offset) {
@@ -702,13 +702,13 @@ polarAxes.linear = {
                 return _math.max(prevValue, func(box));
             }, 0);
 
-        return constants.getTicksCountInRange(this._majorTicks, (quarter === 2 || quarter === 4) ? "x" : "y", maxLabelLength);
+        return constants.getTicksCountInRange(this._majorTicks, (quarter === 2 || quarter === 4) ? 'x' : 'y', maxLabelLength);
     }
 };
 
 polarAxes.linearSpider = _extend({}, polarAxes.linear, {
     _createPathElement: function(points, attr) {
-        return this._renderer.path(points, "area").attr(attr).sharp();
+        return this._renderer.path(points, 'area').attr(attr).sharp();
     },
 
     setSpiderTicks: function(ticks) {

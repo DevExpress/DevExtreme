@@ -1,8 +1,8 @@
-var each = require("../../core/utils/iterator").each,
-    Class = require("../../core/class"),
-    EventsMixin = require("../../core/events_mixin"),
-    ValidationEngine = require("../../ui/validation_engine"),
-    ko = require("knockout");
+var each = require('../../core/utils/iterator').each,
+    Class = require('../../core/class'),
+    EventsMixin = require('../../core/events_mixin'),
+    ValidationEngine = require('../../ui/validation_engine'),
+    ko = require('knockout');
 
 var koDxValidator = Class.inherit({
     ctor: function(target, option) {
@@ -37,7 +37,7 @@ var koDxValidator = Class.inherit({
 
         this.target.dxValidator.isValid(result.isValid);
         this.target.dxValidator.validationError(result.brokenRule);
-        this.fireEvent("validated", [result]);
+        this.fireEvent('validated', [result]);
     }
 
 }).include(EventsMixin);

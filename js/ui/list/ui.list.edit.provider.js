@@ -1,18 +1,18 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    errors = require("../widget/ui.errors"),
-    decoratorRegistry = require("./ui.list.edit.decorator_registry");
+var $ = require('../../core/renderer'),
+    noop = require('../../core/utils/common').noop,
+    Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    errors = require('../widget/ui.errors'),
+    decoratorRegistry = require('./ui.list.edit.decorator_registry');
 
-require("./ui.list.edit.decorator.static");
-require("./ui.list.edit.decorator.switchable.button");
-require("./ui.list.edit.decorator.switchable.slide");
-require("./ui.list.edit.decorator.swipe");
-require("./ui.list.edit.decorator.context");
-require("./ui.list.edit.decorator.selection");
-require("./ui.list.edit.decorator.reorder");
+require('./ui.list.edit.decorator.static');
+require('./ui.list.edit.decorator.switchable.button');
+require('./ui.list.edit.decorator.switchable.slide');
+require('./ui.list.edit.decorator.swipe');
+require('./ui.list.edit.decorator.context');
+require('./ui.list.edit.decorator.selection');
+require('./ui.list.edit.decorator.reorder');
 
 
 var editOptionsRegistry = [];
@@ -28,33 +28,33 @@ var registerOption = function(enabledFunc, decoratorTypeFunc, decoratorSubTypeFu
 // NOTE: option registration order does matter
 registerOption(
     function() {
-        return this.option("menuItems").length;
+        return this.option('menuItems').length;
     },
     function() {
-        return "menu";
+        return 'menu';
     },
     function() {
-        return this.option("menuMode");
+        return this.option('menuMode');
     }
 );
 registerOption(
     function() {
-        return !this.option("menuItems").length && this.option("allowItemDeleting");
+        return !this.option('menuItems').length && this.option('allowItemDeleting');
     },
     function() {
-        var mode = this.option("itemDeleteMode");
+        var mode = this.option('itemDeleteMode');
 
-        return mode === "toggle" || mode === "slideButton" || mode === "swipe" || mode === "static" ? "delete" : "menu";
+        return mode === 'toggle' || mode === 'slideButton' || mode === 'swipe' || mode === 'static' ? 'delete' : 'menu';
     },
     function() {
-        var mode = this.option("itemDeleteMode");
+        var mode = this.option('itemDeleteMode');
 
-        if(mode === "slideItem") {
-            mode = "slide";
+        if(mode === 'slideItem') {
+            mode = 'slide';
         }
 
-        if(mode === "hold") {
-            mode = "context";
+        if(mode === 'hold') {
+            mode = 'context';
         }
 
         return mode;
@@ -62,36 +62,36 @@ registerOption(
 );
 registerOption(
     function() {
-        return this.option("selectionMode") !== "none" && this.option("showSelectionControls");
+        return this.option('selectionMode') !== 'none' && this.option('showSelectionControls');
     },
     function() {
-        return "selection";
+        return 'selection';
     },
     function() {
-        return "default";
+        return 'default';
     }
 );
 registerOption(
     function() {
-        return this.option("allowItemReordering");
+        return this.option('allowItemReordering');
     },
     function() {
-        return "reorder";
+        return 'reorder';
     },
     function() {
-        return "default";
+        return 'default';
     }
 );
 
 
-var LIST_ITEM_BEFORE_BAG_CLASS = "dx-list-item-before-bag",
-    LIST_ITEM_AFTER_BAG_CLASS = "dx-list-item-after-bag",
+var LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag',
+    LIST_ITEM_AFTER_BAG_CLASS = 'dx-list-item-after-bag',
 
-    DECORATOR_BEFORE_BAG_CREATE_METHOD = "beforeBag",
-    DECORATOR_AFTER_BAG_CREATE_METHOD = "afterBag",
-    DECORATOR_MODIFY_ELEMENT_METHOD = "modifyElement",
-    DECORATOR_AFTER_RENDER_METHOD = "afterRender",
-    DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = "getExcludedSelectors";
+    DECORATOR_BEFORE_BAG_CREATE_METHOD = 'beforeBag',
+    DECORATOR_AFTER_BAG_CREATE_METHOD = 'afterBag',
+    DECORATOR_MODIFY_ELEMENT_METHOD = 'modifyElement',
+    DECORATOR_AFTER_RENDER_METHOD = 'afterRender',
+    DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = 'getExcludedSelectors';
 
 var EditProvider = Class.inherit({
 
@@ -134,7 +134,7 @@ var EditProvider = Class.inherit({
         var foundDecorator = decoratorRegistry.registry[type][subType];
 
         if(!foundDecorator) {
-            throw errors.Error("E1012", type, subType);
+            throw errors.Error('E1012', type, subType);
         }
 
         return foundDecorator;
@@ -167,10 +167,10 @@ var EditProvider = Class.inherit({
     },
 
     _collectDecoratorsMarkup: function(method, config, containerClass) {
-        var $collector = $("<div>");
+        var $collector = $('<div>');
 
         each(this._decorators, function() {
-            var $container = $("<div>").addClass(containerClass);
+            var $container = $('<div>').addClass(containerClass);
             this[method](extend({
                 $container: $container
             }, config));
@@ -223,23 +223,23 @@ var EditProvider = Class.inherit({
     },
 
     handleClick: function($itemElement, e) {
-        return this._eventHandler("handleClick", $itemElement, e);
+        return this._eventHandler('handleClick', $itemElement, e);
     },
 
     handleKeyboardEvents: function(currentFocusedIndex, moveFocusUp) {
-        return this._eventHandler("handleKeyboardEvents", currentFocusedIndex, moveFocusUp);
+        return this._eventHandler('handleKeyboardEvents', currentFocusedIndex, moveFocusUp);
     },
 
     handleEnterPressing: function() {
-        return this._eventHandler("handleEnterPressing");
+        return this._eventHandler('handleEnterPressing');
     },
 
     contextMenuHandlerExists: function() {
-        return this._handlerExists("handleContextMenu");
+        return this._handlerExists('handleContextMenu');
     },
 
     handleContextMenu: function($itemElement, e) {
-        return this._eventHandler("handleContextMenu", $itemElement, e);
+        return this._eventHandler('handleContextMenu', $itemElement, e);
     },
 
     getExcludedItemSelectors: function() {
@@ -247,7 +247,7 @@ var EditProvider = Class.inherit({
 
         this._applyDecorators(DECORATOR_GET_EXCLUDED_SELECTORS_METHOD, excludedSelectors);
 
-        return excludedSelectors.join(",");
+        return excludedSelectors.join(',');
     }
 });
 

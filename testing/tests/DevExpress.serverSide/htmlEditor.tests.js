@@ -1,10 +1,10 @@
-import "common.css!";
+import 'common.css!';
 
 QUnit.testStart(() => {
-    let element = document.createElement("div");
-    element.setAttribute("id", "htmlEditor");
+    let element = document.createElement('div');
+    element.setAttribute('id', 'htmlEditor');
 
-    document.getElementById("qunit-fixture").appendChild(element);
+    document.getElementById('qunit-fixture').appendChild(element);
 });
 
-import "../DevExpress.ui.widgets.editors/htmlEditorParts/markup.tests.js";
+import '../DevExpress.ui.widgets.editors/htmlEditorParts/markup.tests.js';
