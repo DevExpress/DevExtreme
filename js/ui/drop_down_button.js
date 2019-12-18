@@ -1,33 +1,34 @@
-import $ from "../core/renderer";
-import Widget from "./widget/ui.widget";
-import { FunctionTemplate } from "../core/templates/function_template";
-import registerComponent from "../core/component_registrator";
-import ButtonGroup from "./button_group";
-import Popup from "./popup";
-import List from "./list";
-import { compileGetter } from "../core/utils/data";
-import domUtils from "../core/utils/dom";
-import { getImageContainer } from "../core/utils/icon";
-import DataHelperMixin from "../data_helper";
-import { DataSource } from "../data/data_source/data_source";
-import ArrayStore from "../data/array_store";
-import { Deferred } from "../core/utils/deferred";
-import { extend } from "../core/utils/extend";
-import { isPlainObject } from "../core/utils/type";
-import { ensureDefined } from "../core/utils/common";
-import Guid from "../core/guid";
-import { format as formatMessage } from "../localization/message";
-import windowUtils from "../core/utils/window";
+
+import $ from '../core/renderer';
+import Widget from './widget/ui.widget';
+import { FunctionTemplate } from '../core/templates/function_template';
+import registerComponent from '../core/component_registrator';
+import ButtonGroup from './button_group';
+import Popup from './popup';
+import List from './list';
+import { compileGetter } from '../core/utils/data';
+import domUtils from '../core/utils/dom';
+import { getImageContainer } from '../core/utils/icon';
+import DataHelperMixin from '../data_helper';
+import { DataSource } from '../data/data_source/data_source';
+import ArrayStore from '../data/array_store';
+import { Deferred } from '../core/utils/deferred';
+import { extend } from '../core/utils/extend';
+import { isPlainObject } from '../core/utils/type';
+import { ensureDefined } from '../core/utils/common';
+import Guid from '../core/guid';
+import { format as formatMessage } from '../localization/message';
+import windowUtils from '../core/utils/window';
 
 const window = windowUtils.getWindow();
 
-const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
-const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
-const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
-const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
-const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = "dx-dropdownbutton-popup-wrapper";
-const DX_BUTTON_TEXT_CLASS = "dx-button-text";
-const DX_ICON_RIGHT_CLASS = "dx-icon-right";
+const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
+const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
+const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
+const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
+const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
+const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
 const toggleButtonWidth = 26;
 
@@ -65,14 +66,14 @@ let DropDownButton = Widget.inherit({
              * @type_function_param3 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
-            itemTemplate: "item",
+            itemTemplate: 'item',
 
             /**
              * @name dxDropDownButtonOptions.keyExpr
              * @type string
              * @default 'this'
              */
-            keyExpr: "this",
+            keyExpr: 'this',
 
             /**
              * @name dxDropDownButtonOptions.displayExpr
@@ -81,7 +82,7 @@ let DropDownButton = Widget.inherit({
              * @type_function_param1 itemData:object
              * @type_function_return string
              */
-            displayExpr: "this",
+            displayExpr: 'this',
 
             /**
              * @name dxDropDownButtonOptions.selectedItem
@@ -103,7 +104,7 @@ let DropDownButton = Widget.inherit({
              * @type Enums.ButtonStylingMode
              * @default 'outlined'
              */
-            stylingMode: "outlined",
+            stylingMode: 'outlined',
 
             /**
              * @name dxDropDownButtonOptions.deferRendering
@@ -117,7 +118,7 @@ let DropDownButton = Widget.inherit({
              * @type string
              * @default 'No data to display'
              */
-            noDataText: formatMessage("dxCollectionWidget-noDataText"),
+            noDataText: formatMessage('dxCollectionWidget-noDataText'),
 
             /**
              * @name dxDropDownButtonOptions.useSelectMode
@@ -145,7 +146,7 @@ let DropDownButton = Widget.inherit({
              * @type string
              * @default ""
              */
-            text: "",
+            text: '',
 
             /**
              * @name dxDropDownButtonOptions.icon
@@ -238,7 +239,7 @@ let DropDownButton = Widget.inherit({
              * @type_function_param2 contentElement:dxElement
              * @type_function_return string|Node|jQuery
              */
-            dropDownContentTemplate: "content",
+            dropDownContentTemplate: 'content',
 
             /**
              * @name dxDropDownButtonOptions.wrapItemText
@@ -248,7 +249,7 @@ let DropDownButton = Widget.inherit({
             wrapItemText: false,
 
             grouped: false,
-            groupTemplate: "group",
+            groupTemplate: 'group',
             buttonGroupOptions: {}
         });
     },
@@ -270,21 +271,21 @@ let DropDownButton = Widget.inherit({
         this._compileDisplayGetter();
         this._initDataSource();
         this._itemsToDataSource();
-        this._initInnerOptionCache("buttonGroupOptions");
-        this._initInnerOptionCache("dropDownOptions");
+        this._initInnerOptionCache('buttonGroupOptions');
+        this._initInnerOptionCache('dropDownOptions');
     },
 
     _initTemplates() {
         this._templateManager.addDefaultTemplates({
             content: new FunctionTemplate((options) => {
                 const $popupContent = $(options.container);
-                const $listContainer = $("<div>").appendTo($popupContent);
+                const $listContainer = $('<div>').appendTo($popupContent);
                 this._list = this._createComponent($listContainer, List, this._listOptions());
 
-                this._list.registerKeyHandler("escape", this._escHandler.bind(this));
-                this._list.registerKeyHandler("tab", this._escHandler.bind(this));
-                this._list.registerKeyHandler("leftArrow", this._escHandler.bind(this));
-                this._list.registerKeyHandler("rightArrow", this._escHandler.bind(this));
+                this._list.registerKeyHandler('escape', this._escHandler.bind(this));
+                this._list.registerKeyHandler('tab', this._escHandler.bind(this));
+                this._list.registerKeyHandler('leftArrow', this._escHandler.bind(this));
+                this._list.registerKeyHandler('rightArrow', this._escHandler.bind(this));
             })
         });
         this.callBase();
@@ -293,18 +294,18 @@ let DropDownButton = Widget.inherit({
     _itemsToDataSource: function() {
         if(!this._dataSource) {
             this._dataSource = new DataSource({
-                store: new ArrayStore(this.option("items")),
+                store: new ArrayStore(this.option('items')),
                 pageSize: 0
             });
         }
     },
 
     _compileKeyGetter() {
-        this._keyGetter = compileGetter(this.option("keyExpr"));
+        this._keyGetter = compileGetter(this.option('keyExpr'));
     },
 
     _compileDisplayGetter() {
-        this._displayGetter = compileGetter(this.option("displayExpr"));
+        this._displayGetter = compileGetter(this.option('displayExpr'));
     },
 
     _initMarkup() {
@@ -312,7 +313,7 @@ let DropDownButton = Widget.inherit({
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._loadSelectedItem().done(this._updateActionButton.bind(this));
-        if(!this.option("deferRendering") || this.option("opened")) {
+        if(!this.option('deferRendering') || this.option('opened')) {
             this._renderPopup();
         }
     },
@@ -321,29 +322,29 @@ let DropDownButton = Widget.inherit({
         const d = new Deferred();
 
         if(this._list) {
-            return d.resolve(this._list.option("selectedItem"));
+            return d.resolve(this._list.option('selectedItem'));
         }
 
-        const selectedItemKey = this.option("selectedItemKey");
-        this._loadSingle(this.option("keyExpr"), selectedItemKey)
+        const selectedItemKey = this.option('selectedItemKey');
+        this._loadSingle(this.option('keyExpr'), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
-                d.resolve(this.option("selectedItem"));
+                d.resolve(this.option('selectedItem'));
             });
 
         return d.promise();
     },
 
     _createActionClickAction() {
-        this._actionClickAction = this._createActionByOption("onButtonClick");
+        this._actionClickAction = this._createActionByOption('onButtonClick');
     },
 
     _createSelectionChangedAction() {
-        this._selectionChangedAction = this._createActionByOption("onSelectionChanged");
+        this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     },
 
     _createItemClickAction() {
-        this._itemClickAction = this._createActionByOption("onItemClick");
+        this._itemClickAction = this._createActionByOption('onItemClick');
     },
 
     _fireSelectionChangedAction({ previousValue, value }) {
@@ -362,15 +363,15 @@ let DropDownButton = Widget.inherit({
     },
 
     _getActionButtonFullWidth() {
-        const iconWidth = this.option("icon") ? 20 : 0;
-        const allButtonContents = this.$element().find(".dx-button-content");
+        const iconWidth = this.option('icon') ? 20 : 0;
+        const allButtonContents = this.$element().find('.dx-button-content');
 
         if(allButtonContents.length === 0) {
             return 0;
         }
 
         const $buttonContent = allButtonContents[0];
-        const $buttonContentCopy = domUtils.createTextElementHiddenCopy($buttonContent, this.option("text"));
+        const $buttonContentCopy = domUtils.createTextElementHiddenCopy($buttonContent, this.option('text'));
 
         $buttonContentCopy.appendTo(this.$element());
 
@@ -387,13 +388,13 @@ let DropDownButton = Widget.inherit({
 
     _actionButtonConfig() {
         let config = {
-            text: this.option("text"),
-            icon: this.option("icon"),
+            text: this.option('text'),
+            icon: this.option('icon'),
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
 
         const necessaryWidth = this._getActionButtonFullWidth();
-        let width = this.option("width");
+        let width = this.option('width');
 
         if((width < necessaryWidth) && this.option('splitButton')) {
             config.width = width - toggleButtonWidth;
@@ -407,9 +408,9 @@ let DropDownButton = Widget.inherit({
     _getButtonGroupItems() {
         const items = [];
         items.push(this._actionButtonConfig());
-        if(this.option("splitButton")) {
+        if(this.option('splitButton')) {
             items.push({
-                icon: "spindown",
+                icon: 'spindown',
                 width: toggleButtonWidth,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
             });
@@ -426,10 +427,10 @@ let DropDownButton = Widget.inherit({
         } else if(isActionButton) {
             this._actionClickAction({
                 event,
-                selectedItem: this.option("selectedItem")
+                selectedItem: this.option('selectedItem')
             });
 
-            if(!this.option("splitButton")) {
+            if(!this.option('splitButton')) {
                 this.toggle();
             }
         }
@@ -438,48 +439,48 @@ let DropDownButton = Widget.inherit({
     _buttonGroupOptions() {
         return extend({
             items: this._getButtonGroupItems(),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            hoverStateEnabled: this.option('hoverStateEnabled'),
             onItemClick: this._buttonGroupItemClick.bind(this),
-            width: "100%",
-            height: "100%",
-            stylingMode: this.option("stylingMode"),
-            selectionMode: "none",
+            width: '100%',
+            height: '100%',
+            stylingMode: this.option('stylingMode'),
+            selectionMode: 'none',
             buttonTemplate: ({ text, icon }, buttonContent) => {
-                if(this.option("splitButton") || !this.option("showArrowIcon")) {
-                    return "content";
+                if(this.option('splitButton') || !this.option('showArrowIcon')) {
+                    return 'content';
                 }
 
                 const $firstIcon = getImageContainer(icon);
-                const $textContainer = text ? $("<span>").text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
-                const $secondIcon = getImageContainer("spindown").addClass(DX_ICON_RIGHT_CLASS);
+                const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
+                const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
 
                 $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
             }
-        }, this._getInnerOptionsCache("buttonGroupOptions"));
+        }, this._getInnerOptionsCache('buttonGroupOptions'));
     },
 
     _renderPopupContent() {
         const $content = this._popup.$content();
-        const template = this._getTemplateByOption("dropDownContentTemplate");
+        const template = this._getTemplateByOption('dropDownContentTemplate');
 
         $content.empty();
 
-        this._popupContentId = "dx-" + new Guid();
-        this.setAria("id", this._popupContentId, $content);
+        this._popupContentId = 'dx-' + new Guid();
+        this.setAria('id', this._popupContentId, $content);
 
         return template.render({
             container: domUtils.getPublicElement($content),
-            model: this.option("items") || this._dataSource
+            model: this.option('items') || this._dataSource
         });
     },
 
     _popupOptions() {
-        const horizontalAlignment = this.option("rtlEnabled") ? "right" : "left";
+        const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
         return extend({
             dragEnabled: false,
             focusStateEnabled: false,
-            deferRendering: this.option("deferRendering"),
+            deferRendering: this.option('deferRendering'),
             minWidth: () => {
                 return this.$element().outerWidth();
             },
@@ -490,43 +491,43 @@ let DropDownButton = Widget.inherit({
             },
             showTitle: false,
             animation: {
-                show: { type: "fade", duration: 0, from: 0, to: 1 },
-                hide: { type: "fade", duration: 400, from: 1, to: 0 }
+                show: { type: 'fade', duration: 0, from: 0, to: 1 },
+                hide: { type: 'fade', duration: 400, from: 1, to: 0 }
             },
-            width: "auto",
-            height: "auto",
+            width: 'auto',
+            height: 'auto',
             shading: false,
-            visible: this.option("opened"),
+            visible: this.option('opened'),
             position: {
                 of: this.$element(),
-                collision: "flipfit",
-                my: "top " + horizontalAlignment,
-                at: "bottom " + horizontalAlignment,
+                collision: 'flipfit',
+                my: 'top ' + horizontalAlignment,
+                at: 'bottom ' + horizontalAlignment,
                 offset: {
                     y: -1
                 }
             }
-        }, this._getInnerOptionsCache("dropDownOptions"));
+        }, this._getInnerOptionsCache('dropDownOptions'));
     },
 
     _listOptions() {
-        const selectedItemKey = this.option("selectedItemKey");
+        const selectedItemKey = this.option('selectedItemKey');
         return {
-            selectionMode: "single",
-            wrapItemText: this.option("wrapItemText"),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
+            selectionMode: 'single',
+            wrapItemText: this.option('wrapItemText'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            hoverStateEnabled: this.option('hoverStateEnabled'),
             showItemDataTitle: true,
             selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
-            grouped: this.option("grouped"),
-            keyExpr: this.option("keyExpr"),
-            noDataText: this.option("noDataText"),
-            displayExpr: this.option("displayExpr"),
-            itemTemplate: this.option("itemTemplate"),
-            items: this.option("items"),
+            grouped: this.option('grouped'),
+            keyExpr: this.option('keyExpr'),
+            noDataText: this.option('noDataText'),
+            displayExpr: this.option('displayExpr'),
+            itemTemplate: this.option('itemTemplate'),
+            items: this.option('items'),
             dataSource: this._dataSource,
             onItemClick: (e) => {
-                this.option("selectedItemKey", this._keyGetter(e.itemData));
+                this.option('selectedItemKey', this._keyGetter(e.itemData));
                 const actionResult = this._fireItemClickAction(e);
                 if(actionResult !== false) {
                     this.toggle(false);
@@ -537,7 +538,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _upDownKeyHandler() {
-        if(this._popup && this._popup.option("visible") && this._list) {
+        if(this._popup && this._popup.option('visible') && this._list) {
             this._list.focus();
         } else {
             this.open();
@@ -550,19 +551,19 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderPopup() {
-        const $popup = $("<div>");
+        const $popup = $('<div>');
         this.$element().append($popup);
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
         this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
         this._popup._wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
-        this._popup.on("hiding", this._popupHidingHandler.bind(this));
-        this._popup.on("showing", this._popupShowingHandler.bind(this));
+        this._popup.on('hiding', this._popupHidingHandler.bind(this));
+        this._popup.on('showing', this._popupShowingHandler.bind(this));
         this._renderPopupContent();
-        this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
+        this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
     },
 
     _popupHidingHandler() {
-        this.option("opened", false);
+        this.option('opened', false);
         this.setAria({
             expanded: false,
             owns: undefined
@@ -570,7 +571,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _popupShowingHandler() {
-        this.option("opened", true);
+        this.option('opened', true);
         this.setAria({
             expanded: true,
             owns: this._popupContentId
@@ -578,19 +579,19 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderButtonGroup() {
-        let $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $("<div>");
+        let $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
         if(!this._buttonGroup) {
             this.$element().append($buttonGroup);
         }
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
 
-        this._buttonGroup.registerKeyHandler("downArrow", this._upDownKeyHandler.bind(this));
-        this._buttonGroup.registerKeyHandler("tab", this.close.bind(this));
-        this._buttonGroup.registerKeyHandler("upArrow", this._upDownKeyHandler.bind(this));
-        this._buttonGroup.registerKeyHandler("escape", this._escHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('tab', this.close.bind(this));
+        this._buttonGroup.registerKeyHandler('upArrow', this._upDownKeyHandler.bind(this));
+        this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
-        this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
+        this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
     },
 
     /**
@@ -634,18 +635,18 @@ let DropDownButton = Widget.inherit({
     _getDisplayValue(item) {
         const isPrimitiveItem = !isPlainObject(item);
         const displayValue = isPrimitiveItem ? item : this._displayGetter(item);
-        return !isPlainObject(displayValue) ? String(ensureDefined(displayValue, "")) : "";
+        return !isPlainObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
     },
 
     _updateActionButton(selectedItem) {
-        if(this.option("useSelectMode")) {
+        if(this.option('useSelectMode')) {
             this.option({
                 text: this._getDisplayValue(selectedItem),
                 icon: isPlainObject(selectedItem) ? selectedItem.icon : undefined
             });
         }
 
-        this._setOptionWithoutOptionChange("selectedItem", selectedItem);
+        this._setOptionWithoutOptionChange('selectedItem', selectedItem);
     },
 
     _clean() {
@@ -654,8 +655,8 @@ let DropDownButton = Widget.inherit({
     },
 
     _selectedItemKeyChanged(value) {
-        this._setListOption("selectedItemKeys", value ? [value] : []);
-        const previousItem = this.option("selectedItem");
+        this._setListOption('selectedItemKeys', value ? [value] : []);
+        const previousItem = this.option('selectedItem');
         this._loadSelectedItem().done((selectedItem) => {
             this._updateActionButton(selectedItem);
 
@@ -671,98 +672,98 @@ let DropDownButton = Widget.inherit({
     _actionButtonOptionChanged({ name, value }) {
         const newConfig = {};
         newConfig[name] = value;
-        this._buttonGroup.option("items[0]", extend({}, this._actionButtonConfig(), newConfig));
+        this._buttonGroup.option('items[0]', extend({}, this._actionButtonConfig(), newConfig));
         this._popup && this._popup.repaint();
     },
 
     _updateItemCollection(optionName) {
-        this._setWidgetOption("_list", [optionName]);
-        this._setListOption("selectedItemKeys", []);
+        this._setWidgetOption('_list', [optionName]);
+        this._setListOption('selectedItemKeys', []);
         this._loadSelectedItem().done(this._updateActionButton.bind(this));
     },
 
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
-            case "useSelectMode":
+            case 'useSelectMode':
                 break;
-            case "splitButton":
+            case 'splitButton':
                 this._renderButtonGroup();
                 break;
-            case "displayExpr":
+            case 'displayExpr':
                 this._compileDisplayGetter();
                 break;
-            case "keyExpr":
+            case 'keyExpr':
                 this._compileKeyGetter();
                 break;
-            case "buttonGroupOptions":
+            case 'buttonGroupOptions':
                 this._innerOptionChanged(this._buttonGroup, args);
                 break;
-            case "dropDownOptions":
+            case 'dropDownOptions':
                 this._innerOptionChanged(this._popup, args);
                 break;
-            case "opened":
+            case 'opened':
                 this.toggle(value);
                 break;
-            case "focusStateEnabled":
-            case "hoverStateEnabled":
+            case 'focusStateEnabled':
+            case 'hoverStateEnabled':
                 this._setListOption(name, value);
                 this._buttonGroup.option(name, value);
                 break;
-            case "items":
+            case 'items':
                 this._dataSource = null;
                 this._itemsToDataSource();
                 this._updateItemCollection(name);
                 break;
-            case "dataSource":
+            case 'dataSource':
                 this._initDataSource();
                 this._updateItemCollection(name);
                 break;
-            case "icon":
-            case "text":
+            case 'icon':
+            case 'text':
                 this._actionButtonOptionChanged(args);
                 break;
-            case "showArrowIcon":
+            case 'showArrowIcon':
                 this._buttonGroup.repaint();
                 this._popup && this._popup.repaint();
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._renderButtonGroup();
                 this._popup && this._popup.repaint();
                 break;
-            case "height":
+            case 'height':
                 this.callBase(args);
                 this._popup && this._popup.repaint();
                 break;
-            case "stylingMode":
+            case 'stylingMode':
                 this._buttonGroup.option(name, value);
                 break;
-            case "itemTemplate":
-            case "grouped":
-            case "noDataText":
-            case "groupTemplate":
-            case "wrapItemText":
+            case 'itemTemplate':
+            case 'grouped':
+            case 'noDataText':
+            case 'groupTemplate':
+            case 'wrapItemText':
                 this._setListOption(name, value);
                 break;
-            case "dropDownContentTemplate":
+            case 'dropDownContentTemplate':
                 this._popup && this._renderPopupContent();
                 break;
-            case "selectedItemKey":
+            case 'selectedItemKey':
                 this._selectedItemKeyChanged(value);
                 break;
-            case "selectedItem":
+            case 'selectedItem':
                 break;
-            case "onItemClick":
+            case 'onItemClick':
                 this._createItemClickAction();
                 break;
-            case "onButtonClick":
+            case 'onButtonClick':
                 this._createActionClickAction();
                 break;
-            case "onSelectionChanged":
+            case 'onSelectionChanged':
                 this._createSelectionChangedAction();
                 break;
-            case "deferRendering":
+            case 'deferRendering':
                 if(!value && !this._popup) {
                     this._renderPopup();
                 }
@@ -773,5 +774,5 @@ let DropDownButton = Widget.inherit({
     }
 }).include(DataHelperMixin);
 
-registerComponent("dxDropDownButton", DropDownButton);
+registerComponent('dxDropDownButton', DropDownButton);
 module.exports = DropDownButton;

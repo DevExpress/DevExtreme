@@ -1,29 +1,29 @@
-var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
-    List = require("../list"),
-    DateBoxStrategy = require("./ui.date_box.strategy"),
-    noop = require("../../core/utils/common").noop,
-    ensureDefined = require("../../core/utils/common").ensureDefined,
-    isDate = require("../../core/utils/type").isDate,
-    extend = require("../../core/utils/extend").extend,
-    dateUtils = require("./ui.date_utils"),
-    dateLocalization = require("../../localization/date");
+var $ = require('../../core/renderer'),
+    window = require('../../core/utils/window').getWindow(),
+    List = require('../list'),
+    DateBoxStrategy = require('./ui.date_box.strategy'),
+    noop = require('../../core/utils/common').noop,
+    ensureDefined = require('../../core/utils/common').ensureDefined,
+    isDate = require('../../core/utils/type').isDate,
+    extend = require('../../core/utils/extend').extend,
+    dateUtils = require('./ui.date_utils'),
+    dateLocalization = require('../../localization/date');
 
-var DATE_FORMAT = "date";
+var DATE_FORMAT = 'date';
 
 var BOUNDARY_VALUES = {
-    "min": new Date(0, 0, 0, 0, 0),
-    "max": new Date(0, 0, 0, 23, 59)
+    'min': new Date(0, 0, 0, 0, 0),
+    'max': new Date(0, 0, 0, 23, 59)
 };
 
 var ListStrategy = DateBoxStrategy.inherit({
 
-    NAME: "List",
+    NAME: 'List',
 
     supportedKeys: function() {
         return {
             tab: function() {
-                if(this.option("opened")) {
+                if(this.option('opened')) {
                     this.close();
                 }
             },
@@ -35,12 +35,12 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     getDefaultOptions: function() {
         return extend(this.callBase(), {
-            applyValueMode: "instantly"
+            applyValueMode: 'instantly'
         });
     },
 
     getDisplayFormat: function(displayFormat) {
-        return displayFormat || "shorttime";
+        return displayFormat || 'shorttime';
     },
 
     popupConfig: function(popupConfig) {
@@ -80,18 +80,18 @@ var ListStrategy = DateBoxStrategy.inherit({
             onItemClick: this._listItemClickHandler.bind(this),
             tabIndex: -1,
             onFocusedItemChanged: this._refreshActiveDescendant.bind(this),
-            selectionMode: "single"
+            selectionMode: 'single'
         };
     },
 
     _refreshActiveDescendant: function(e) {
-        this.dateBox.setAria("activedescendant", "");
-        this.dateBox.setAria("activedescendant", e.actionValue);
+        this.dateBox.setAria('activedescendant', '');
+        this.dateBox.setAria('activedescendant', e.actionValue);
     },
 
     _refreshItems: function() {
         this._widgetItems = this._getTimeListItems();
-        this._widget.option("items", this._widgetItems);
+        this._widget.option('items', this._widgetItems);
     },
 
     renderOpenedState: function() {
@@ -99,10 +99,10 @@ var ListStrategy = DateBoxStrategy.inherit({
             return;
         }
 
-        this._widget.option("focusedElement", null);
+        this._widget.option('focusedElement', null);
 
         this._setSelectedItemsByValue();
-        if(this._widget.option("templatesRenderAsynchronously")) {
+        if(this._widget.option('templatesRenderAsynchronously')) {
             this._asyncScrollTimeout = setTimeout(this._scrollToSelectedItem.bind(this));
         } else {
             this._scrollToSelectedItem();
@@ -130,14 +130,14 @@ var ListStrategy = DateBoxStrategy.inherit({
         var dateIndex = this._getDateIndex(value);
 
         if(dateIndex === -1) {
-            this._widget.option("selectedItems", []);
+            this._widget.option('selectedItems', []);
         } else {
-            this._widget.option("selectedIndex", dateIndex);
+            this._widget.option('selectedIndex', dateIndex);
         }
     },
 
     _scrollToSelectedItem: function() {
-        this._widget.scrollToItem(this._widget.option("selectedIndex"));
+        this._widget.scrollToItem(this._widget.option('selectedIndex'));
     },
 
     _getDateIndex: function(date) {
@@ -160,11 +160,11 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getTimeListItems: function() {
-        var min = this.dateBox.dateOption("min") || this._getBoundaryDate("min"),
-            max = this.dateBox.dateOption("max") || this._getBoundaryDate("max"),
-            value = this.dateBox.dateOption("value") || null,
+        var min = this.dateBox.dateOption('min') || this._getBoundaryDate('min'),
+            max = this.dateBox.dateOption('max') || this._getBoundaryDate('max'),
+            value = this.dateBox.dateOption('value') || null,
             delta = max - min,
-            minutes = min.getMinutes() % this.dateBox.option("interval");
+            minutes = min.getMinutes() % this.dateBox.option('interval');
 
         if(delta < 0) {
             return [];
@@ -178,7 +178,7 @@ var ListStrategy = DateBoxStrategy.inherit({
             return this._getRangeItems(min, new Date(min), delta);
         }
 
-        min = this._getBoundaryDate("min");
+        min = this._getBoundaryDate('min');
         min.setMinutes(minutes);
 
         if(value && Math.abs(value - max) < dateUtils.ONE_DAY) {
@@ -190,7 +190,7 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     _getRangeItems: function(startValue, currentValue, rangeDuration) {
         var rangeItems = [];
-        var interval = this.dateBox.option("interval");
+        var interval = this.dateBox.option('interval');
 
         while(currentValue - startValue < rangeDuration) {
             rangeItems.push(new Date(currentValue));
@@ -202,7 +202,7 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     _getBoundaryDate: function(boundary) {
         var boundaryValue = BOUNDARY_VALUES[boundary],
-            currentValue = new Date(ensureDefined(this.dateBox.dateOption("value"), 0));
+            currentValue = new Date(ensureDefined(this.dateBox.dateOption('value'), 0));
 
         return new Date(
             currentValue.getFullYear(),
@@ -214,14 +214,14 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _timeListItemTemplate: function(itemData) {
-        var displayFormat = this.dateBox.option("displayFormat");
+        var displayFormat = this.dateBox.option('displayFormat');
         return dateLocalization.format(itemData, this.getDisplayFormat(displayFormat));
     },
 
     _listItemClickHandler: function(e) {
-        this.dateBox.option("opened", false);
+        this.dateBox.option('opened', false);
 
-        let date = this.dateBox.option("value");
+        let date = this.dateBox.option('value');
         const { itemData } = e;
         const hours = itemData.getHours();
         const minutes = itemData.getMinutes();
@@ -260,15 +260,15 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _updatePopupWidth: function() {
-        this.dateBox._setPopupOption("width", this._getPopupWidth());
+        this.dateBox._setPopupOption('width', this._getPopupWidth());
     },
 
     _updatePopupHeight: function() {
-        this.dateBox._setPopupOption("height", "auto");
+        this.dateBox._setPopupOption('height', 'auto');
 
         var popupHeight = this._widget.$element().outerHeight();
         var maxHeight = $(window).height() * 0.45;
-        this.dateBox._setPopupOption("height", Math.min(popupHeight, maxHeight));
+        this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
     },
 

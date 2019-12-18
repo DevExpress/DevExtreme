@@ -1,11 +1,11 @@
-var proto = require("./tree_map.base").prototype,
-    _expand = require("../core/helpers").expand;
+var proto = require('./tree_map.base').prototype,
+    _expand = require('../core/helpers').expand;
 
-require("./api");
+require('./api');
 
-proto._eventsMap.onDrill = { name: "drill" };
+proto._eventsMap.onDrill = { name: 'drill' };
 
-_expand(proto, "_extendProxyType", function(proto) {
+_expand(proto, '_extendProxyType', function(proto) {
     var that = this;
 
     proto.drillDown = function() {
@@ -13,7 +13,7 @@ _expand(proto, "_extendProxyType", function(proto) {
     };
 });
 
-_expand(proto, "_onNodesCreated", function() {
+_expand(proto, '_onNodesCreated', function() {
     this._drilldownIndex = -1;
 });
 
@@ -27,9 +27,9 @@ proto._drillToNode = function(index) {
             that._drilldownIndex = index;
             that._topNode = node;
             that._context.suspend();
-            that._context.change(["MAX_DEPTH", "NODES_RESET"]);
+            that._context.change(['MAX_DEPTH', 'NODES_RESET']);
             that._context.resume();
-            that._eventTrigger("drill", { node: node.proxy });
+            that._eventTrigger('drill', { node: node.proxy });
         }
     }
 };

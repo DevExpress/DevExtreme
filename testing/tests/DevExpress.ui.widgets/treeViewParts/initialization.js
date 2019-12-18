@@ -1,9 +1,9 @@
 /* global initTree */
-import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
-import $ from "jquery";
-QUnit.module("Initialization");
+import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import $ from 'jquery';
+QUnit.module('Initialization');
 
-QUnit.test("Init tree view", function(assert) {
+QUnit.test('Init tree view', function(assert) {
     var $treeView = initTree();
     assert.ok($treeView);
 });
@@ -12,7 +12,7 @@ QUnit.test("Init tree view", function(assert) {
 ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
     [false, true].forEach((virtualModeEnabled) => {
         QUnit.module(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
-            QUnit.test(`rootValue`, function(assert) {
+            QUnit.test('rootValue', function(assert) {
                 const configs = [
                     { rootValue: 1, expectedItemId: 2, rootItemIndex: 1 },
                     { rootValue: 2, expectedItemId: 3, rootItemIndex: 2 },
@@ -28,9 +28,9 @@ QUnit.test("Init tree view", function(assert) {
                         virtualModeEnabled,
                         testRootItemIndex: config.rootItemIndex,
                         testItems: [
-                            { id: 1, text: "item1", parentId: 3 },
-                            { id: 2, text: "item2", parentId: 1 },
-                            { id: 3, text: "item3", parentId: 2 }]
+                            { id: 1, text: 'item1', parentId: 3 },
+                            { id: 2, text: 'item2', parentId: 1 },
+                            { id: 3, text: 'item3', parentId: 2 }]
                     });
                     options['rootValue'] = config.rootValue;
                     const wrapper = new TreeViewTestWrapper(options);
@@ -47,7 +47,7 @@ QUnit.test("Init tree view", function(assert) {
             });
 
             function createOptions(options) {
-                const result = $.extend({ dataStructure: "plain", rootValue: 1 }, options);
+                const result = $.extend({ dataStructure: 'plain', rootValue: 1 }, options);
                 if(result.dataSourceOption === 'createChildren') {
                     const createChildFunction = (parent) => {
                         return parent == null

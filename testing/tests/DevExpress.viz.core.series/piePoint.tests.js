@@ -1,10 +1,10 @@
-import * as vizMocks from "../../helpers/vizMocks.js";
-import { noop } from "core/utils/common";
-import pointModule from "viz/series/points/base_point";
-import labelModule from "viz/series/points/label";
-import { MockAngularTranslator } from "../../helpers/chartMocks.js";
-import { states as statesConsts } from "viz/components/consts";
-import tooltipModule from "viz/core/tooltip";
+import * as vizMocks from '../../helpers/vizMocks.js';
+import { noop } from 'core/utils/common';
+import pointModule from 'viz/series/points/base_point';
+import labelModule from 'viz/series/points/label';
+import { MockAngularTranslator } from '../../helpers/chartMocks.js';
+import { states as statesConsts } from 'viz/components/consts';
+import tooltipModule from 'viz/core/tooltip';
 
 const originalLabel = labelModule.Label;
 
@@ -19,7 +19,7 @@ var defaultCorrection = {
 var createPoint = function(series, data, options) {
     var point;
     options = options || {};
-    options.type = options.type || "pie";
+    options.type = options.type || 'pie';
     point = new pointModule.Point(series, data, options);
     point.correctPosition(defaultCorrection);
     return point;
@@ -49,19 +49,19 @@ function environmentWithStubLabels() {
         minValue: 0
     },
     this.options = {
-        widgetType: "pie",
+        widgetType: 'pie',
         styles: {
             normal: {
-                "stroke-width": 0
+                'stroke-width': 0
             }
         },
         label: {
-            position: "columns",
+            position: 'columns',
             visible: true,
             radialOffset: 0,
             background: {},
             connector: {
-                "stroke-width": 1
+                'stroke-width': 1
             },
             connectorOffset: 0
         }
@@ -69,7 +69,7 @@ function environmentWithStubLabels() {
     this.series = {
         _visibleArea: { minX: 0, maxX: 600, minY: 0, maxY: 600 },
         getVisibleArea: function() { return this._visibleArea; },
-        name: "series1",
+        name: 'series1',
         areLabelsVisible: function() {
             return true;
         },
@@ -77,7 +77,7 @@ function environmentWithStubLabels() {
             return this._options;
         },
         _options: {
-            containerBackgroundColor: "#ffffff"
+            containerBackgroundColor: '#ffffff'
         },
         getLabelVisibility: function() { return true; },
         getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
@@ -124,7 +124,7 @@ function createPointWithStubLabel(translateData, labelBBox) {
 function environment() {
     var that = this;
     this.series = {
-        name: "series1",
+        name: 'series1',
         getOptions: function() {
             return this._options;
         },
@@ -136,12 +136,12 @@ function environment() {
         _valueChecker: function() { return true; }
     };
     this.opt = {
-        widgetType: "pie",
+        widgetType: 'pie',
         label: { visible: false },
         visibilityChanged: noop,
         styles: {
             normal: {
-                fill: "normalColor"
+                fill: 'normalColor'
             },
             hover: {},
             selection: {},
@@ -157,29 +157,29 @@ function environment() {
     });
 }
 
-QUnit.module("Creation. Pie", {
+QUnit.module('Creation. Pie', {
     beforeEach: environment
 });
 
-QUnit.test("point color/legendStyles", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('point color/legendStyles', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     assert.deepEqual(point.getLegendStyles(), this.opt.styles.legendStyles);
-    assert.strictEqual(point.getColor(), "normalColor");
+    assert.strictEqual(point.getColor(), 'normalColor');
 });
 
-QUnit.test("Creation with index", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0, index: "index" }, this.opt);
+QUnit.test('Creation with index', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0, index: 'index' }, this.opt);
 
-    assert.strictEqual(point.index, "index");
+    assert.strictEqual(point.index, 'index');
 });
 
-QUnit.module("Point coordinates translation. Pie", {
+QUnit.module('Point coordinates translation. Pie', {
     beforeEach: environment
 });
 
-QUnit.test("Angles translation, shiftedAngle is zero", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('Angles translation, shiftedAngle is zero', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.shiftedAngle = 0;
     point.translate();
@@ -189,8 +189,8 @@ QUnit.test("Angles translation, shiftedAngle is zero", function(assert) {
     assert.equal(point.middleAngle, this.translateData[5]);
 });
 
-QUnit.test("Angles translation, shiftedAngle is not zero", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('Angles translation, shiftedAngle is not zero', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.shiftedAngle = 30;
     point.translate();
@@ -200,8 +200,8 @@ QUnit.test("Angles translation, shiftedAngle is not zero", function(assert) {
     assert.equal(point.middleAngle, this.translateData[5] + 30);
 });
 
-QUnit.test("translate when point is invisible", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('translate when point is invisible', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.hide();
     point.shiftedAngle = 30;
@@ -212,16 +212,16 @@ QUnit.test("translate when point is invisible", function(assert) {
     assert.equal(point.middleAngle, point.fromAngle);
 });
 
-QUnit.module("Values correction", {
+QUnit.module('Values correction', {
     beforeEach: function() {
         this.point = createPoint({
-            name: "series1",
+            name: 'series1',
             _options: {},
             getLabelVisibility: function() { return false; },
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         }, { value: 10, argument: 5 }, {
-            widgetType: "pie",
+            widgetType: 'pie',
             styles: {
                 normal: {}
             },
@@ -231,7 +231,7 @@ QUnit.module("Values correction", {
     }
 });
 
-QUnit.test("Positive correction", function(assert) {
+QUnit.test('Positive correction', function(assert) {
     var correction = 10 / 20;
     this.point.correctValue(correction);
 
@@ -240,7 +240,7 @@ QUnit.test("Positive correction", function(assert) {
     assert.strictEqual(this.point.minValue, 0.5);
 });
 
-QUnit.test("Zero Correction", function(assert) {
+QUnit.test('Zero Correction', function(assert) {
     var correction = 0;
     this.point.correctValue(correction);
 
@@ -249,7 +249,7 @@ QUnit.test("Zero Correction", function(assert) {
     assert.strictEqual(this.point.minValue, 0);
 });
 
-QUnit.test("Correction with base", function(assert) {
+QUnit.test('Correction with base', function(assert) {
     var correction = 10;
     this.point.correctValue(correction, undefined, 100);
 
@@ -258,26 +258,26 @@ QUnit.test("Correction with base", function(assert) {
     assert.strictEqual(this.point.minValue, 10);
 });
 
-QUnit.test("Correction with percent", function(assert) {
+QUnit.test('Correction with percent', function(assert) {
     this.point._label.setDataField = sinon.spy();
-    this.point.correctValue(undefined, "percentValue");
+    this.point.correctValue(undefined, 'percentValue');
 
     assert.ok(this.point._label.setDataField.calledOnce);
-    assert.strictEqual(this.point._label.setDataField.lastCall.args[0], "percent");
-    assert.strictEqual(this.point._label.setDataField.lastCall.args[1], "percentValue");
+    assert.strictEqual(this.point._label.setDataField.lastCall.args[0], 'percent');
+    assert.strictEqual(this.point._label.setDataField.lastCall.args[1], 'percentValue');
 });
 
 
-QUnit.module("Point radiuses correction", {
+QUnit.module('Point radiuses correction', {
     beforeEach: function() {
         this.point = createPoint({
-            name: "series1",
+            name: 'series1',
             _options: {},
             getLabelVisibility: function() { return false; },
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         }, { value: 10, argument: 5 }, {
-            widgetType: "pie",
+            widgetType: 'pie',
             styles: {
                 normal: {}
             },
@@ -286,7 +286,7 @@ QUnit.module("Point radiuses correction", {
     }
 });
 
-QUnit.test("Zero inner radius", function(assert) {
+QUnit.test('Zero inner radius', function(assert) {
     var correction = {
         radiusInner: 0,
         radiusOuter: 20,
@@ -303,7 +303,7 @@ QUnit.test("Zero inner radius", function(assert) {
     assert.equal(this.point.radiusLabels, 50);
 });
 
-QUnit.test("Positive offset", function(assert) {
+QUnit.test('Positive offset', function(assert) {
     var correction = {
         radiusInner: 10,
         radiusOuter: 20,
@@ -320,11 +320,11 @@ QUnit.test("Positive offset", function(assert) {
     assert.equal(this.point.radiusLabels, 50);
 });
 
-QUnit.module("coordsIn API", {
+QUnit.module('coordsIn API', {
     beforeEach: function() {
         var that = this;
         this.series = {
-            name: "series1",
+            name: 'series1',
             _options: {},
             getLabelVisibility: function() { return false; },
             getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
@@ -332,7 +332,7 @@ QUnit.module("coordsIn API", {
             _valueChecker: function() { return true; }
         };
         this.options = {
-            widgetType: "pie",
+            widgetType: 'pie',
             styles: {
                 normal: {}
             },
@@ -341,7 +341,7 @@ QUnit.module("coordsIn API", {
     }
 });
 
-QUnit.test("fromAngle > to Angle", function(assert) {
+QUnit.test('fromAngle > to Angle', function(assert) {
     this.angleTranslator = new MockAngularTranslator({
         translate: { 0: 200, 5: 150, 10: 100 }
     });
@@ -366,10 +366,10 @@ QUnit.test("fromAngle > to Angle", function(assert) {
     assert.equal(point.fromAngle, 200);
     assert.equal(point.toAngle, 150);
 
-    assert.ok(!point.coordsIn(21, 40), "out innerRadius");
+    assert.ok(!point.coordsIn(21, 40), 'out innerRadius');
     assert.ok(point.coordsIn(20, 40));
 
-    assert.ok(!point.coordsIn(9, 40), "out outerRadius");
+    assert.ok(!point.coordsIn(9, 40), 'out outerRadius');
     assert.ok(point.coordsIn(10, 40));
 
     var sinFrom = Math.sin(point.fromAngle * Math.PI / 180),
@@ -387,7 +387,7 @@ QUnit.test("fromAngle > to Angle", function(assert) {
     assert.ok(!point.coordsIn(x2, yMin + 1));
 });
 
-QUnit.test("toAngle > fromAngle", function(assert) {
+QUnit.test('toAngle > fromAngle', function(assert) {
     this.angleTranslator = new MockAngularTranslator({
         translate: { 0: 380, 5: 340, 10: 100 }
     });
@@ -412,12 +412,12 @@ QUnit.test("toAngle > fromAngle", function(assert) {
     assert.equal(point.fromAngle, 380);
     assert.equal(point.toAngle, 340);
 
-    assert.ok(!point.coordsIn(39, 40), "out innerRadius");
+    assert.ok(!point.coordsIn(39, 40), 'out innerRadius');
     assert.ok(point.coordsIn(40, 40));
 
     assert.ok(point.coordsIn(45, 40));
 
-    assert.ok(!point.coordsIn(51, 40), "out outerRadius");
+    assert.ok(!point.coordsIn(51, 40), 'out outerRadius');
     assert.ok(point.coordsIn(50, 40));
 
 
@@ -437,7 +437,7 @@ QUnit.test("toAngle > fromAngle", function(assert) {
     assert.ok(!point.coordsIn(x2, yMin + 1));
 });
 
-QUnit.test("circle point", function(assert) {
+QUnit.test('circle point', function(assert) {
     this.angleTranslator = new MockAngularTranslator({
         translate: { 0: 0, 5: 360 }
     });
@@ -462,7 +462,7 @@ QUnit.test("circle point", function(assert) {
     assert.equal(point.fromAngle, 0);
     assert.equal(point.toAngle, 360);
 
-    assert.ok(!point.coordsIn(39, 40), "out innerRadius");
+    assert.ok(!point.coordsIn(39, 40), 'out innerRadius');
     assert.ok(point.coordsIn(40, 40));
     assert.ok(point.coordsIn(50, 40));
     assert.ok(point.coordsIn(45, 40));
@@ -472,17 +472,17 @@ QUnit.test("circle point", function(assert) {
     assert.ok(point.coordsIn(50, 40));
     assert.ok(point.coordsIn(30, 60));
 
-    assert.ok(!point.coordsIn(51, 40), "out outerRadius");
+    assert.ok(!point.coordsIn(51, 40), 'out outerRadius');
 
 });
 
-QUnit.test("getMarkerVisibility", function(assert) {
+QUnit.test('getMarkerVisibility', function(assert) {
     let point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
 
     assert.strictEqual(point.getMarkerVisibility(), true);
 });
 
-QUnit.module("Draw Point", {
+QUnit.module('Draw Point', {
     beforeEach: function() {
         var that = this;
         this.renderer = new vizMocks.Renderer();
@@ -492,7 +492,7 @@ QUnit.module("Draw Point", {
             translate: this.translateData
         });
         this.series = {
-            name: "series1",
+            name: 'series1',
             areLabelsVisible: function() { return false; },
             getOptions: function() {
                 return this._options;
@@ -505,8 +505,8 @@ QUnit.module("Draw Point", {
             _valueChecker: function() { return true; }
         };
         this.options = {
-            widgetType: "pie",
-            styles: { normal: { style: "normal" }, hover: { style: "hover" }, selection: { style: "selection" } },
+            widgetType: 'pie',
+            styles: { normal: { style: 'normal' }, hover: { style: 'hover' }, selection: { style: 'selection' } },
             label: {
                 visible: false
             },
@@ -518,8 +518,8 @@ QUnit.module("Draw Point", {
     }
 });
 
-QUnit.test("Marker", function(assert) {
-    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+QUnit.test('Marker', function(assert) {
+    var point = createPoint(this.series, { argument: '2', value: 1 }, this.options);
 
     point.centerX = 11;
     point.centerY = 22;
@@ -531,19 +531,19 @@ QUnit.test("Marker", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(this.renderer.stub("arc").firstCall.args, [11, 22, 33, 44, 55, 66]);
-    assert.equal(point.graphic, this.renderer.stub("arc").firstCall.returnValue);
-    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], { "stroke-linejoin": "round" });
-    assert.deepEqual(point.graphic.stub("attr").secondCall.args[0], this.options.styles.normal);
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(this.renderer.stub('arc').firstCall.args, [11, 22, 33, 44, 55, 66]);
+    assert.equal(point.graphic, this.renderer.stub('arc').firstCall.returnValue);
+    assert.deepEqual(point.graphic.stub('attr').firstCall.args[0], { 'stroke-linejoin': 'round' });
+    assert.deepEqual(point.graphic.stub('attr').secondCall.args[0], this.options.styles.normal);
     assert.equal(point.graphic.sharp.callCount, 1);
     assert.ok(point.graphic.sharp.firstCall.calledAfter(point.graphic.attr.lastCall), 1);
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
     assert.deepEqual(point.graphic.data.lastCall.args, [{ 'chart-data-point': point }]);
 });
 
-QUnit.test("Update marker", function(assert) {
-    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+QUnit.test('Update marker', function(assert) {
+    var point = createPoint(this.series, { argument: '2', value: 1 }, this.options);
 
     point.centerX = 11;
     point.centerY = 22;
@@ -554,7 +554,7 @@ QUnit.test("Update marker", function(assert) {
 
     point.draw(this.renderer, this.groups);
 
-    this.options.styles.normal.fill = "red";
+    this.options.styles.normal.fill = 'red';
     point.updateOptions(this.options);
 
     point.centerX = 111;
@@ -567,27 +567,27 @@ QUnit.test("Update marker", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(this.renderer.stub("arc").firstCall.args, [11, 22, 33, 44, 55, 66]);
-    assert.equal(point.graphic, this.renderer.stub("arc").firstCall.returnValue);
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], {
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(this.renderer.stub('arc').firstCall.args, [11, 22, 33, 44, 55, 66]);
+    assert.equal(point.graphic, this.renderer.stub('arc').firstCall.returnValue);
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], {
         endAngle: 666,
-        fill: "red",
+        fill: 'red',
         innerRadius: 333,
         outerRadius: 444,
         startAngle: 555,
-        style: "normal",
+        style: 'normal',
         x: 111,
         y: 222
     });
     assert.equal(point.graphic.sharp.callCount, 2);
     assert.ok(point.graphic.sharp.lastCall.calledAfter(point.graphic.attr.lastCall), 1);
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
     assert.deepEqual(point.graphic.data.lastCall.args, [{ 'chart-data-point': point }]);
 });
 
-QUnit.test("Update marker when animation enabled", function(assert) {
-    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+QUnit.test('Update marker when animation enabled', function(assert) {
+    var point = createPoint(this.series, { argument: '2', value: 1 }, this.options);
 
     point.centerX = 11;
     point.centerY = 22;
@@ -598,7 +598,7 @@ QUnit.test("Update marker when animation enabled", function(assert) {
 
     point.draw(this.renderer, this.groups);
 
-    this.options.styles.normal.fill = "red";
+    this.options.styles.normal.fill = 'red';
     point.updateOptions(this.options);
 
     point.centerX = 111;
@@ -611,20 +611,20 @@ QUnit.test("Update marker when animation enabled", function(assert) {
     point.draw(this.renderer, this.groups, true);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(this.renderer.stub("arc").firstCall.args, [11, 22, 33, 44, 55, 66]);
-    assert.equal(point.graphic, this.renderer.stub("arc").firstCall.returnValue);
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], {
-        fill: "red",
-        style: "normal"
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(this.renderer.stub('arc').firstCall.args, [11, 22, 33, 44, 55, 66]);
+    assert.equal(point.graphic, this.renderer.stub('arc').firstCall.returnValue);
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], {
+        fill: 'red',
+        style: 'normal'
     });
     assert.equal(point.graphic.sharp.callCount, 2);
     assert.ok(point.graphic.sharp.lastCall.calledAfter(point.graphic.attr.lastCall), 1);
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test("Update marker location", function(assert) {
-    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+QUnit.test('Update marker location', function(assert) {
+    var point = createPoint(this.series, { argument: '2', value: 1 }, this.options);
 
     point.centerX = 11;
     point.centerY = 22;
@@ -645,8 +645,8 @@ QUnit.test("Update marker location", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], {
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], {
         endAngle: 600,
         innerRadius: 300,
         outerRadius: 400,
@@ -655,11 +655,11 @@ QUnit.test("Update marker location", function(assert) {
         y: 200,
         style: 'normal'
     });
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test("Draw point without state", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Draw point without state', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
 
     point.series = {
         areLabelsVisible: function() { return false; },
@@ -683,8 +683,8 @@ QUnit.test("Draw point without state", function(assert) {
     assert.strictEqual(point.fullState, statesConsts.normalMark);
 });
 
-QUnit.test("Animation. Draw point when animation enabled. First drawing", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Animation. Draw point when animation enabled. First drawing', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
     point.centerX = 11;
     point.centerY = 22;
     point.radiusInner = 33;
@@ -695,15 +695,15 @@ QUnit.test("Animation. Draw point when animation enabled. First drawing", functi
     point.draw(this.renderer, this.groups, true, true);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(this.renderer.stub("arc").firstCall.args, [11, 22, 0, 0, 55, 66]);
-    assert.equal(point.graphic, this.renderer.stub("arc").firstCall.returnValue);
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "normal" });
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(this.renderer.stub('arc').firstCall.args, [11, 22, 0, 0, 55, 66]);
+    assert.equal(point.graphic, this.renderer.stub('arc').firstCall.returnValue);
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], { style: 'normal' });
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test("Animation. Draw point when animation enabled. Second drawing", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Animation. Draw point when animation enabled. Second drawing', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
     point.centerX = 11;
     point.centerY = 22;
     point.radiusInner = 33;
@@ -715,15 +715,15 @@ QUnit.test("Animation. Draw point when animation enabled. Second drawing", funct
     point.draw(this.renderer, this.groups, true, false);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(this.renderer.stub("arc").firstCall.args, [11, 22, 0, 0, 0, 0]);
-    assert.equal(point.graphic, this.renderer.stub("arc").firstCall.returnValue);
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "normal" });
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(this.renderer.stub('arc').firstCall.args, [11, 22, 0, 0, 0, 0]);
+    assert.equal(point.graphic, this.renderer.stub('arc').firstCall.returnValue);
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], { style: 'normal' });
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test("Animation. Draw point when animation enabled with startAngle. Second drawing", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Animation. Draw point when animation enabled with startAngle. Second drawing', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
     point.centerX = 11;
     point.centerY = 22;
     point.radiusInner = 33;
@@ -735,15 +735,15 @@ QUnit.test("Animation. Draw point when animation enabled with startAngle. Second
     point.draw(this.renderer, this.groups, true, false);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.deepEqual(this.renderer.stub("arc").firstCall.args, [11, 22, 0, 0, 100, 100]);
-    assert.equal(point.graphic, this.renderer.stub("arc").firstCall.returnValue);
-    assert.deepEqual(point.graphic.stub("smartAttr").firstCall.args[0], { style: "normal" });
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.deepEqual(this.renderer.stub('arc').firstCall.args, [11, 22, 0, 0, 100, 100]);
+    assert.equal(point.graphic, this.renderer.stub('arc').firstCall.returnValue);
+    assert.deepEqual(point.graphic.stub('smartAttr').firstCall.args[0], { style: 'normal' });
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
-QUnit.test("Animation. Animate point", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options),
+QUnit.test('Animation. Animate point', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options),
         complete = function() { };
     point.centerX = 11;
     point.centerY = 22;
@@ -756,10 +756,10 @@ QUnit.test("Animation. Animate point", function(assert) {
     point.animate(complete, 100, 0.1);
 
     assert.ok(point.graphic);
-    assert.equal(this.renderer.stub("arc").callCount, 1);
-    assert.equal(point.graphic.stub("append").lastCall.args[0], this.group);
+    assert.equal(this.renderer.stub('arc').callCount, 1);
+    assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
 
-    assert.deepEqual(point.graphic.stub("animate").lastCall.args[0], {
+    assert.deepEqual(point.graphic.stub('animate').lastCall.args[0], {
         endAngle: 66,
         innerRadius: 33,
         outerRadius: 44,
@@ -767,33 +767,33 @@ QUnit.test("Animation. Animate point", function(assert) {
         x: 11,
         y: 22
     });
-    assert.deepEqual(point.graphic.stub("animate").lastCall.args[1].partitionDuration, 100);
-    assert.equal(point.graphic.stub("animate").lastCall.args[1].delay, 0.1);
-    assert.equal(point.graphic.stub("animate").lastCall.args[2], complete);
+    assert.deepEqual(point.graphic.stub('animate').lastCall.args[1].partitionDuration, 100);
+    assert.equal(point.graphic.stub('animate').lastCall.args[1].delay, 0.1);
+    assert.equal(point.graphic.stub('animate').lastCall.args[2], complete);
 });
 
-QUnit.test("Hide marker when marker is visible", function(assert) {
-    this.options.styles.normal.visibility = "visible";
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Hide marker when marker is visible', function(assert) {
+    this.options.styles.normal.visibility = 'visible';
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
 
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "draw");
+    var labelSpy = sinon.spy(point._label, 'draw');
 
     point.setInvisibility();
 
-    assert.strictEqual(point.graphic._stored_settings.visibility, "visible");
+    assert.strictEqual(point.graphic._stored_settings.visibility, 'visible');
     assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
-QUnit.test("Hide marker when marker has no visibility setting", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Hide marker when marker has no visibility setting', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
 
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "draw");
+    var labelSpy = sinon.spy(point._label, 'draw');
 
     point.setInvisibility();
 
@@ -801,9 +801,9 @@ QUnit.test("Hide marker when marker has no visibility setting", function(assert)
     assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
-QUnit.test("Draw point if option visible is false", function(assert) {
+QUnit.test('Draw point if option visible is false', function(assert) {
     this.options.visible = false;
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
 
     point.translate();
     point.draw(this.renderer, this.groups);
@@ -811,19 +811,19 @@ QUnit.test("Draw point if option visible is false", function(assert) {
     assert.ok(point.graphic);
 });
 
-QUnit.test("Apply style", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+QUnit.test('Apply style', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
     point.translate();
     point.draw(this.renderer, this.groups);
 
     point.fullState = 2;
     point.applyView();
 
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], { style: 'selection' });
 });
 
-QUnit.test("Apply style with legend callback", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options),
+QUnit.test('Apply style with legend callback', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options),
         callback = sinon.stub();
 
     point.translate();
@@ -832,12 +832,12 @@ QUnit.test("Apply style with legend callback", function(assert) {
     point.fullState = 2;
     point.applyView(callback);
 
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], { style: 'selection' });
     assert.strictEqual(callback.callCount, 1);
 });
 
-QUnit.test("Apply view with legend callback", function(assert) {
-    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options),
+QUnit.test('Apply view with legend callback', function(assert) {
+    var point = createPoint(this.series, { argument: '4', value: 3 }, this.options),
         callback = sinon.stub();
 
     point.fullState = 2;
@@ -845,38 +845,38 @@ QUnit.test("Apply view with legend callback", function(assert) {
 
     point.applyView(callback);
 
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
+    assert.deepEqual(point.graphic.stub('attr').lastCall.args[0], { style: 'selection' });
     assert.strictEqual(callback.callCount, 1);
 });
 
-QUnit.test("Point should preserve visibility state on data updating", function(assert) {
+QUnit.test('Point should preserve visibility state on data updating', function(assert) {
     this.options.visibilityChanged = noop;
-    let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
+    let point = createPoint(this.series, { argument: 'a1', value: 1 }, this.options);
 
     point.hide();
-    point.updateData({ argument: "a1", value: 10 });
+    point.updateData({ argument: 'a1', value: 10 });
 
     assert.strictEqual(point.isVisible(), false);
 });
 
-QUnit.test("Point should reset hidden state if argument changed", function(assert) {
+QUnit.test('Point should reset hidden state if argument changed', function(assert) {
     this.options.visibilityChanged = noop;
-    let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
+    let point = createPoint(this.series, { argument: 'a1', value: 1 }, this.options);
 
     point.hide();
-    point.updateData({ argument: "a2", value: 10 });
+    point.updateData({ argument: 'a2', value: 10 });
 
     assert.strictEqual(point.isVisible(), true);
 });
 
-QUnit.module("Tooltip", {
+QUnit.module('Tooltip', {
     beforeEach: function() {
         this.data = {
             value: 10,
             argument: 1
         };
         this.options = {
-            widgetType: "pie",
+            widgetType: 'pie',
             attributes: {},
             label: { visible: false },
             styles: {
@@ -884,7 +884,7 @@ QUnit.module("Tooltip", {
             }
         };
         this.series = {
-            name: "series1",
+            name: 'series1',
             getLabelVisibility: function() { return false; },
             getOptions: function() {
                 return this._options;
@@ -902,7 +902,7 @@ QUnit.module("Tooltip", {
     }
 });
 
-QUnit.test("Get tooltip coordinates", function(assert) {
+QUnit.test('Get tooltip coordinates', function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point.middleAngle = 90;
     point.centerX = 310;
@@ -917,7 +917,7 @@ QUnit.test("Get tooltip coordinates", function(assert) {
     assert.equal(cc.offset, 0);
 });
 
-QUnit.test("Get tooltip coordinates, radiusInner != 0", function(assert) {
+QUnit.test('Get tooltip coordinates, radiusInner != 0', function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point.middleAngle = 90;
     point.centerX = 310;
@@ -932,30 +932,30 @@ QUnit.test("Get tooltip coordinates, radiusInner != 0", function(assert) {
     assert.equal(cc.offset, 0);
 });
 
-QUnit.test("Get tooltip format object", function(assert) {
+QUnit.test('Get tooltip format object', function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point.percent = 100;
     var cc = point.getTooltipFormatObject(this.tooltip);
 
     assert.equal(cc.argument, 1);
-    assert.equal(cc.argumentText, "1:argument");
+    assert.equal(cc.argumentText, '1:argument');
     assert.equal(cc.percent, 100);
-    assert.equal(cc.percentText, "100:percent");
+    assert.equal(cc.percentText, '100:percent');
 
     assert.equal(cc.value, 10);
-    assert.equal(cc.valueText, "10:undefined");
-    assert.equal(cc.seriesName, "series1");
+    assert.equal(cc.valueText, '10:undefined');
+    assert.equal(cc.seriesName, 'series1');
     assert.equal(cc.point, point);
     assert.equal(cc.originalArgument, 1);
     assert.equal(cc.originalValue, 10);
 });
 
 
-QUnit.module("Label", {
+QUnit.module('Label', {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("Draw label, position outside (-0.1 < angleFunctions.cos < 0.1)", function(assert) {
+QUnit.test('Draw label, position outside (-0.1 < angleFunctions.cos < 0.1)', function(assert) {
     this.options.label.position = 'outside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
@@ -963,7 +963,7 @@ QUnit.test("Draw label, position outside (-0.1 < angleFunctions.cos < 0.1)", fun
     assert.equal(label.shift.args[0][1], 295);
 });
 
-QUnit.test("Draw label, position is invalid", function(assert) {
+QUnit.test('Draw label, position is invalid', function(assert) {
     this.options.label.position = 'abc';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
@@ -971,7 +971,7 @@ QUnit.test("Draw label, position is invalid", function(assert) {
     assert.equal(label.shift.args[0][1], 295);
 });
 
-QUnit.test("Label position outside (angleFunctions.cos > 0.1)", function(assert) {
+QUnit.test('Label position outside (angleFunctions.cos > 0.1)', function(assert) {
     this.options.label.position = 'outside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 10, 20: 240 });
 
@@ -979,7 +979,7 @@ QUnit.test("Label position outside (angleFunctions.cos > 0.1)", function(assert)
     assert.equal(label.shift.args[0][1], 119);
 });
 
-QUnit.test("Label position outside (angleFunctions.cos < -0.1)", function(assert) {
+QUnit.test('Label position outside (angleFunctions.cos < -0.1)', function(assert) {
     this.options.label.position = 'outside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 180, 20: 240 });
 
@@ -987,7 +987,7 @@ QUnit.test("Label position outside (angleFunctions.cos < -0.1)", function(assert
     assert.equal(label.shift.args[0][1], 145);
 });
 
-QUnit.test("Draw label, position columns and angleFunctions.cos < 0 (> -0.1)", function(assert) {
+QUnit.test('Draw label, position columns and angleFunctions.cos < 0 (> -0.1)', function(assert) {
     this.options.label.position = 'columns';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 269, 20: 240 });
 
@@ -995,7 +995,7 @@ QUnit.test("Draw label, position columns and angleFunctions.cos < 0 (> -0.1)", f
     assert.equal(label.shift.args[0][1], 295);
 });
 
-QUnit.test("Draw label, position columns and angleFunctions.cos > 0 (< 0.1)", function(assert) {
+QUnit.test('Draw label, position columns and angleFunctions.cos > 0 (< 0.1)', function(assert) {
     this.options.label.position = 'columns';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 271, 20: 240 });
 
@@ -1003,7 +1003,7 @@ QUnit.test("Draw label, position columns and angleFunctions.cos > 0 (< 0.1)", fu
     assert.equal(label.shift.args[0][1], 295);
 });
 
-QUnit.test("Draw label, position columns and angleFunctions.cos === 0", function(assert) {
+QUnit.test('Draw label, position columns and angleFunctions.cos === 0', function(assert) {
     this.options.label.position = 'columns';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
@@ -1011,15 +1011,15 @@ QUnit.test("Draw label, position columns and angleFunctions.cos === 0", function
     assert.equal(label.shift.args[0][1], 295);
 });
 
-QUnit.test("Draw label, position inside", function(assert) {
-    this.options.label.position = "inside";
+QUnit.test('Draw label, position inside', function(assert) {
+    this.options.label.position = 'inside';
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
     assert.equal(label.shift.args[0][0], 290);
     assert.equal(label.shift.args[0][1], 205);
 });
 
-QUnit.test("hide label on draw if it invisible", function(assert) {
+QUnit.test('hide label on draw if it invisible', function(assert) {
     var point = createPointWithStubLabelForDraw.call(this, { 0: 300, 10: 270, 20: 240 });
 
     this.series.getLabelVisibility = function() {
@@ -1032,54 +1032,54 @@ QUnit.test("hide label on draw if it invisible", function(assert) {
     assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
-QUnit.test("Set label tracker data", function(assert) {
+QUnit.test('Set label tracker data', function(assert) {
     var point = createPointWithStubLabelForDraw.call(this, { 0: 300, 10: 270, 20: 240 });
 
     point.setLabelTrackerData();
 
-    assert.deepEqual(point.getLabel().setTrackerData.getCall(0).args[0], point, "trackerData");
+    assert.deepEqual(point.getLabel().setTrackerData.getCall(0).args[0], point, 'trackerData');
 });
 
 
-QUnit.module("get columns coord", {
+QUnit.module('get columns coord', {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("columns if label in the left side", function(assert) {
+QUnit.test('columns if label in the left side', function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 170, 10: 210, 20: 250 });
     var coord = point._correctLabelCoord({ x: 20, y: 10 });
 
     assert.deepEqual(coord, { x: 0, y: 10 });
 });
 
-QUnit.test("columns if label in the right side", function(assert) {
+QUnit.test('columns if label in the right side', function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     var coord = point._correctLabelCoord({ x: 400, y: 10 });
 
     assert.deepEqual(coord, { x: 580, y: 10 });
 });
 
-QUnit.test("columns if label in center", function(assert) {
+QUnit.test('columns if label in center', function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 330, 10: 90, 20: 30 });
     var coord = point._correctLabelCoord({ x: 300, y: 10 });
 
     assert.deepEqual(coord, { x: 580, y: 10 });
 });
 
-QUnit.test("not columns", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('not columns', function(assert) {
+    this.options.label.position = 'outside';
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     var coord = point._correctLabelCoord({ x: 10, y: 10 });
 
     assert.deepEqual(coord, { x: 10, y: 10 });
 });
 
-QUnit.module("update Coord", {
+QUnit.module('update Coord', {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("Outside", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('Outside', function(assert) {
+    this.options.label.position = 'outside';
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     point.updateLabelCoord();
 
@@ -1087,8 +1087,8 @@ QUnit.test("Outside", function(assert) {
     assert.equal(point._label.shift.args[0][1], 15);
 });
 
-QUnit.test("Outside. with check position", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('Outside. with check position', function(assert) {
+    this.options.label.position = 'outside';
     this.series._visibleArea = { minX: 15, maxX: 600, minY: 300, maxY: 600 };
     var point = createPointWithStubLabel.call(this, { 0: 350, 10: 330, 20: 310 });
     point.updateLabelCoord();
@@ -1097,8 +1097,8 @@ QUnit.test("Outside. with check position", function(assert) {
     assert.equal(point._label.shift.args[0][1], 15);
 });
 
-QUnit.test("T586419. Outside, move from center", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('T586419. Outside, move from center', function(assert) {
+    this.options.label.position = 'outside';
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 295, y: 10, width: 10, height: 10 }),
         point2 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 295, y: 10, width: 10, height: 10 }),
         point3 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 320, y: 10, width: 10, height: 10 }),
@@ -1115,8 +1115,8 @@ QUnit.test("T586419. Outside, move from center", function(assert) {
     assert.equal(point4._label.shift.args[0][0], 280);
 });
 
-QUnit.test("Outside, move from center but with connector - correct x coordinate by connector offset", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('Outside, move from center but with connector - correct x coordinate by connector offset', function(assert) {
+    this.options.label.position = 'outside';
     this.options.label.connectorOffset = 20;
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 305, y: 10, width: 10, height: 10 }),
         point2 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 285, y: 10, width: 10, height: 10 }),
@@ -1134,16 +1134,16 @@ QUnit.test("Outside, move from center but with connector - correct x coordinate 
     assert.equal(point4._label.shift.args[0][0], 260);
 });
 
-QUnit.test("T626329. Outside, move from center. Shrink big label with half canvas width", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('T626329. Outside, move from center. Shrink big label with half canvas width', function(assert) {
+    this.options.label.position = 'outside';
     var point = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 110, y: 10, width: 410, height: 10 });
 
     point.applyWordWrap(true);
     assert.equal(point._label.fit.args[0][0], 300);
 });
 
-QUnit.test("Inside - do not correct coordinates even if 'move from center'", function(assert) {
-    this.options.label.position = "inside";
+QUnit.test('Inside - do not correct coordinates even if \'move from center\'', function(assert) {
+    this.options.label.position = 'inside';
     var point1 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 295, y: 10, width: 10, height: 10 }),
         point2 = createPointWithStubLabel.call(this, { 0: 145, 10: 135, 20: 125 }, { x: 295, y: 10, width: 10, height: 10 }),
         point3 = createPointWithStubLabel.call(this, { 0: 55, 10: 45, 20: 35 }, { x: 320, y: 10, width: 10, height: 10 }),
@@ -1160,11 +1160,11 @@ QUnit.test("Inside - do not correct coordinates even if 'move from center'", fun
     assert.equal(point4._label.shift.args[0][0], 280);
 });
 
-QUnit.module("Check label position", {
+QUnit.module('Check label position', {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("Draw label (area of label < minY area of canvas)", function(assert) {
+QUnit.test('Draw label (area of label < minY area of canvas)', function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 300, maxY: 600 };
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
@@ -1172,7 +1172,7 @@ QUnit.test("Draw label (area of label < minY area of canvas)", function(assert) 
     assert.equal(label.shift.args[0][1], 300);
 });
 
-QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) {
+QUnit.test('Draw label (area of label > maxY area of canvas)', function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 });
 
@@ -1180,7 +1180,7 @@ QUnit.test("Draw label (area of label > maxY area of canvas)", function(assert) 
     assert.equal(label.shift.args[0][1], 290);
 });
 
-QUnit.test("Draw label (area of label < minY area of canvas), first drawing", function(assert) {
+QUnit.test('Draw label (area of label < minY area of canvas), first drawing', function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 300, maxY: 600 };
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
 
@@ -1188,7 +1188,7 @@ QUnit.test("Draw label (area of label < minY area of canvas), first drawing", fu
     assert.equal(label.shift.args[0][1], 300);
 });
 
-QUnit.test("Draw label (area of label > maxY area of canvas), first drawing", function(assert) {
+QUnit.test('Draw label (area of label > maxY area of canvas), first drawing', function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 600, minY: 0, maxY: 300 };
     this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
@@ -1197,7 +1197,7 @@ QUnit.test("Draw label (area of label > maxY area of canvas), first drawing", fu
     assert.equal(label.shift.args[0][1], 290);
 });
 
-QUnit.test("Draw label (area of label > maxX area of canvas)", function(assert) {
+QUnit.test('Draw label (area of label > maxX area of canvas)', function(assert) {
     var point = createPointWithStubLabelForDraw.call(this, { 0: 300, 10: 270, 20: 240 });
     var coord = point._checkHorizontalLabelPosition({ x: 595, y: 295, width: 20, height: 10 }, point._label.getBoundingRect(), point._getVisibleArea());
 
@@ -1205,7 +1205,7 @@ QUnit.test("Draw label (area of label > maxX area of canvas)", function(assert) 
     assert.equal(coord.y, 295);
 });
 
-QUnit.test("Draw label (area of label < minX area of canvas)", function(assert) {
+QUnit.test('Draw label (area of label < minX area of canvas)', function(assert) {
     var point = createPointWithStubLabelForDraw.call(this, { 0: 300, 10: 270, 20: 240 });
     var coord = point._checkHorizontalLabelPosition({ x: -10, y: 295, width: 20, height: 10 }, point._label.getBoundingRect(), point._getVisibleArea());
 
@@ -1213,7 +1213,7 @@ QUnit.test("Draw label (area of label < minX area of canvas)", function(assert) 
     assert.equal(coord.y, 295);
 });
 
-QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", function(assert) {
+QUnit.test('Draw label (area of label > maxX area of canvas), first drawing', function(assert) {
     this.series._visibleArea = { minX: 0, maxX: 300, minY: 0, maxY: 600 };
     this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
@@ -1222,7 +1222,7 @@ QUnit.test("Draw label (area of label > maxX area of canvas), first drawing", fu
     assert.equal(label.shift.args[0][1], 325);
 });
 
-QUnit.test("Draw label (area of label < minX area of canvas), first drawing", function(assert) {
+QUnit.test('Draw label (area of label < minX area of canvas), first drawing', function(assert) {
     this.series._visibleArea = { minX: 300, maxX: 600, minY: 0, maxY: 600 };
     this.options.label.radialOffset = 30;
     var label = createCorrectionLabel.call(this, { 0: 300, 10: 270, 20: 240 }, true);
@@ -1231,34 +1231,34 @@ QUnit.test("Draw label (area of label < minX area of canvas), first drawing", fu
     assert.equal(label.shift.args[0][1], 325);
 });
 
-QUnit.module("set label ellipsis", {
+QUnit.module('set label ellipsis', {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("Single series, label is outside right bound - fit in reduced space", function(assert) {
+QUnit.test('Single series, label is outside right bound - fit in reduced space', function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
     var textEllipsis = point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 10);
-    assert.strictEqual(textEllipsis, true, "text has ellipsis");
+    assert.strictEqual(textEllipsis, true, 'text has ellipsis');
 });
 
-QUnit.test("Single series, label is outside left bound - fit in reduced space", function(assert) {
+QUnit.test('Single series, label is outside left bound - fit in reduced space', function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: -15, width: 30, y: 10, height: 30 });
     point.applyWordWrap();
 
     assert.deepEqual(point._label.fit.args[0][0], 15);
 });
 
-QUnit.test("Single series, label is inside bounds - do not fit", function(assert) {
+QUnit.test('Single series, label is inside bounds - do not fit', function(assert) {
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 400, width: 30, y: 10, height: 30 });
     var textEllipsis = point.applyWordWrap();
 
     assert.strictEqual(point._label.fit.callCount, 0);
-    assert.strictEqual(textEllipsis, false, "text do not have ellipsis");
+    assert.strictEqual(textEllipsis, false, 'text do not have ellipsis');
 });
 
-QUnit.test("Multiple series, first series, columns, label is outside right bound - fit in reduced space", function(assert) {
+QUnit.test('Multiple series, first series, columns, label is outside right bound - fit in reduced space', function(assert) {
     this.series.index = 0;
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
     point.applyWordWrap();
@@ -1266,7 +1266,7 @@ QUnit.test("Multiple series, first series, columns, label is outside right bound
     assert.deepEqual(point._label.fit.args[0][0], 10);
 });
 
-QUnit.test("Multiple series, non-first series, columns - fit in column width", function(assert) {
+QUnit.test('Multiple series, non-first series, columns - fit in column width', function(assert) {
     this.series.index = 1;
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 185, y: 10, height: 30 });
     point.applyWordWrap();
@@ -1274,15 +1274,15 @@ QUnit.test("Multiple series, non-first series, columns - fit in column width", f
     assert.deepEqual(point._label.fit.args[0][0], 150);
 });
 
-QUnit.test("set label ellipsis. not drawn point", function(assert) {
+QUnit.test('set label ellipsis. not drawn point', function(assert) {
     assert.expect(3);
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 });
     point.applyWordWrap();
     point.updateLabelCoord();
 });
 
-QUnit.test("Inside. Label is outside bound but label width less that visible area - do not reduce label", function(assert) {
-    this.options.label.position = "inside";
+QUnit.test('Inside. Label is outside bound but label width less that visible area - do not reduce label', function(assert) {
+    this.options.label.position = 'inside';
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
 
     point.applyWordWrap();
@@ -1290,8 +1290,8 @@ QUnit.test("Inside. Label is outside bound but label width less that visible are
     assert.strictEqual(point._label.fit.callCount, 0);
 });
 
-QUnit.test("Inside. Label width more that visible area - fit in visible area", function(assert) {
-    this.options.label.position = "inside";
+QUnit.test('Inside. Label width more that visible area - fit in visible area', function(assert) {
+    this.options.label.position = 'inside';
     var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 620, y: 10, height: 30 });
 
     point.applyWordWrap();
@@ -1299,7 +1299,7 @@ QUnit.test("Inside. Label width more that visible area - fit in visible area", f
     assert.deepEqual(point._label.fit.args[0][0], 600);
 });
 
-QUnit.module("Connector", {
+QUnit.module('Connector', {
     beforeEach: function() {
         var that = this;
         this.renderer = new vizMocks.Renderer();
@@ -1313,7 +1313,7 @@ QUnit.module("Connector", {
             minValue: 0
         };
         this.options = {
-            widgetType: "pie",
+            widgetType: 'pie',
             styles: {
                 normal: {
                     'stroke-width': 0
@@ -1329,7 +1329,7 @@ QUnit.module("Connector", {
             }
         };
         this.series = {
-            name: "series1",
+            name: 'series1',
             areLabelsVisible: function() {
                 return true;
             },
@@ -1338,7 +1338,7 @@ QUnit.module("Connector", {
             },
             getVisibleArea: function() { return {}; },
             _options: {
-                containerBackgroundColor: "#ffffff"
+                containerBackgroundColor: '#ffffff'
             },
             getLabelVisibility: function() { return true; },
             getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
@@ -1357,39 +1357,39 @@ QUnit.module("Connector", {
     }
 });
 
-QUnit.test("Draw connector", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('Draw connector', function(assert) {
+    this.options.label.position = 'outside';
     var label = createLabelWithConnector.call(this);
 
     assert.ok(label.setFigureToDrawConnector.calledOnce);
     assert.deepEqual(label.setFigureToDrawConnector.firstCall.args[0], { x: 300, y: 270, angle: 270 });
 });
 
-QUnit.test("Draw connector, color of border and containerBackgroundColor are different", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('Draw connector, color of border and containerBackgroundColor are different', function(assert) {
+    this.options.label.position = 'outside';
     this.options.styles.normal['stroke-width'] = 4;
-    this.options.styles.normal.stroke = "black";
+    this.options.styles.normal.stroke = 'black';
     var label = createLabelWithConnector.call(this);
 
     assert.deepEqual(label.setFigureToDrawConnector.firstCall.args[0], { x: 300, y: 272, angle: 270 });
 });
 
-QUnit.test("Draw connector, color of border and containerBackgroundColor are equal", function(assert) {
-    this.options.label.position = "outside";
+QUnit.test('Draw connector, color of border and containerBackgroundColor are equal', function(assert) {
+    this.options.label.position = 'outside';
     this.options.styles.normal['stroke-width'] = 4;
-    this.options.styles.normal.stroke = "#ffffff";
+    this.options.styles.normal.stroke = '#ffffff';
     var label = createLabelWithConnector.call(this);
 
     assert.deepEqual(label.setFigureToDrawConnector.firstCall.args[0], { x: 300, y: 268, angle: 270 });
 });
 
 
-QUnit.module("show/hide API", {
+QUnit.module('show/hide API', {
     beforeEach: function() {
         var that = this;
         this.visibilityChanged = sinon.spy();
         this.series = {
-            name: "series1",
+            name: 'series1',
             getOptions: function() {
                 return this._options;
             },
@@ -1403,8 +1403,8 @@ QUnit.module("show/hide API", {
             _valueChecker: function() { return true; }
         };
         this.opt = {
-            type: "pie",
-            widgetType: "pie",
+            type: 'pie',
+            widgetType: 'pie',
             label: { visible: false },
             visibilityChanged: this.visibilityChanged,
             styles: {
@@ -1425,15 +1425,15 @@ QUnit.module("show/hide API", {
     }
 });
 
-QUnit.test("Create point", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('Create point', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
     assert.ok(point.isVisible());
     assert.ok(!this.visibilityChanged.called);
     assert.ok(point.isInVisibleArea());
 });
 
-QUnit.test("hide point", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt),
+QUnit.test('hide point', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt),
         hideTooltipSpy = sinon.spy(point, 'hideTooltip');
 
     point.hide();
@@ -1444,8 +1444,8 @@ QUnit.test("hide point", function(assert) {
     assert.ok(point.isInVisibleArea());
 });
 
-QUnit.test("double hide point", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('double hide point', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.hide();
     point.hide();
@@ -1455,8 +1455,8 @@ QUnit.test("double hide point", function(assert) {
     assert.ok(this.visibilityChanged.calledOnce);
 });
 
-QUnit.test("show", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('show', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.show();
 
@@ -1465,8 +1465,8 @@ QUnit.test("show", function(assert) {
     assert.ok(!this.visibilityChanged.called);
 });
 
-QUnit.test("show after hide point", function(assert) {
-    var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
+QUnit.test('show after hide point', function(assert) {
+    var point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.hide();
     this.visibilityChanged.reset();

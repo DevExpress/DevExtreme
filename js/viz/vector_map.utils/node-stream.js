@@ -24,7 +24,7 @@ function f64LE(stream, position) {
     return stream.readDoubleLE(position);
 }
 
-var fs = require("fs");
+var fs = require('fs');
 function sendRequest(path, callback) {
     fs.readFile(path, callback);
 }

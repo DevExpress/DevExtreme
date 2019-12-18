@@ -1,1 +1,1 @@
-module.exports = "%VERSION%";
+module.exports = '%VERSION%';

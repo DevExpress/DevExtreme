@@ -86,18 +86,18 @@
 */
 
 
-var $ = require("../core/renderer"),
-    commonUtils = require("../core/utils/common"),
-    each = require("../core/utils/iterator").each,
-    windowUtils = require("../core/utils/window"),
+var $ = require('../core/renderer'),
+    commonUtils = require('../core/utils/common'),
+    each = require('../core/utils/iterator').each,
+    windowUtils = require('../core/utils/window'),
     window = windowUtils.getWindow(),
-    domAdapter = require("../core/dom_adapter"),
-    isWindow = require("../core/utils/type").isWindow,
-    extend = require("../core/utils/extend").extend,
-    browser = require("../core/utils/browser"),
+    domAdapter = require('../core/dom_adapter'),
+    isWindow = require('../core/utils/type').isWindow,
+    extend = require('../core/utils/extend').extend,
+    browser = require('../core/utils/browser'),
 
-    translator = require("./translator"),
-    support = require("../core/utils/support");
+    translator = require('./translator'),
+    support = require('../core/utils/support');
 
 var horzRe = /left|right/,
     vertRe = /top|bottom/,
@@ -106,8 +106,8 @@ var horzRe = /left|right/,
 
 var normalizeAlign = function(raw) {
     var result = {
-        h: "center",
-        v: "center"
+        h: 'center',
+        v: 'center'
     };
 
     var pair = commonUtils.splitPair(raw);
@@ -136,7 +136,7 @@ var normalizeCollision = function(raw) {
         v = String(pair && pair[1]).toLowerCase();
 
     if(!collisionRe.test(h)) {
-        h = "none";
+        h = 'none';
     }
     if(!collisionRe.test(v)) {
         v = h;
@@ -147,10 +147,10 @@ var normalizeCollision = function(raw) {
 
 var getAlignFactor = function(align) {
     switch(align) {
-        case "center":
+        case 'center':
             return 0.5;
-        case "right":
-        case "bottom":
+        case 'right':
+        case 'bottom':
             return 1;
         default:
             return 0;
@@ -159,14 +159,14 @@ var getAlignFactor = function(align) {
 
 var inverseAlign = function(align) {
     switch(align) {
-        case "left":
-            return "right";
-        case "right":
-            return "left";
-        case "top":
-            return "bottom";
-        case "bottom":
-            return "top";
+        case 'left':
+            return 'right';
+        case 'right':
+            return 'left';
+        case 'top':
+            return 'bottom';
+        case 'bottom':
+            return 'top';
         default:
             return align;
     }
@@ -188,12 +188,12 @@ var calculateOversize = function(data, bounds) {
 
 var collisionSide = function(direction, data, bounds) {
     if(data.myLocation < bounds.min) {
-        return direction === "h" ? "left" : "top";
+        return direction === 'h' ? 'left' : 'top';
     }
     if(data.myLocation > bounds.max) {
-        return direction === "h" ? "right" : "bottom";
+        return direction === 'h' ? 'right' : 'bottom';
     }
-    return "none";
+    return 'none';
 };
 
 // TODO: rename?
@@ -206,7 +206,7 @@ var initMyLocation = function(data) {
 
 var collisionResolvers = {
 
-    "fit": function(data, bounds) {
+    'fit': function(data, bounds) {
         var result = false;
         if(data.myLocation > bounds.max) {
             data.myLocation = bounds.max;
@@ -220,10 +220,10 @@ var collisionResolvers = {
         data.fit = result;
     },
 
-    "flip": function(data, bounds) {
+    'flip': function(data, bounds) {
         data.flip = false;
 
-        if(data.myAlign === "center" && data.atAlign === "center") {
+        if(data.myAlign === 'center' && data.atAlign === 'center') {
             return;
         }
 
@@ -245,12 +245,12 @@ var collisionResolvers = {
         }
     },
 
-    "flipfit": function(data, bounds) {
+    'flipfit': function(data, bounds) {
         this.flip(data, bounds);
         this.fit(data, bounds);
     },
 
-    "none": function(data) {
+    'none': function(data) {
         data.oversize = 0;
     }
 };
@@ -258,13 +258,13 @@ var collisionResolvers = {
 var scrollbarWidth;
 
 var calculateScrollbarWidth = function() {
-    var $scrollDiv = $("<div>").css({
+    var $scrollDiv = $('<div>').css({
             width: 100,
             height: 100,
-            overflow: "scroll",
-            position: "absolute",
+            overflow: 'scroll',
+            position: 'absolute',
             top: -9999
-        }).appendTo($("body")),
+        }).appendTo($('body')),
         result = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
 
     $scrollDiv.remove();
@@ -397,8 +397,8 @@ var calculatePosition = function(what, options) {
     h.oversize = calculateOversize(h, bounds.h);
     v.oversize = calculateOversize(v, bounds.v);
 
-    h.collisionSide = collisionSide("h", h, bounds.h);
-    v.collisionSide = collisionSide("v", v, bounds.v);
+    h.collisionSide = collisionSide('h', h, bounds.h);
+    v.collisionSide = collisionSide('v', v, bounds.v);
 
     if(collisionResolvers[h.collision]) {
         collisionResolvers[h.collision](h, bounds.h);
@@ -449,7 +449,7 @@ var offset = function(element) {
     element = $(element).get(0);
     if(isWindow(element)) {
         return null;
-    } else if(element && "pageY" in element && "pageX" in element) {
+    } else if(element && 'pageY' in element && 'pageX' in element) {
         return { top: element.pageY, left: element.pageX };
     }
 

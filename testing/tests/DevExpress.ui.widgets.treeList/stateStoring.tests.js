@@ -7,7 +7,7 @@ QUnit.testStart(function() {
         </div>\
     ';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 import 'common.css!';
@@ -16,28 +16,28 @@ import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
-QUnit.module("State Storing", {
+QUnit.module('State Storing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options) {
-            setupTreeListModules(this, ["data", "columns", "stateStoring", "filterRow", "search", "selection"], {
+            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: $.extend({
                     dataSource: [
-                        { id: 1, parentId: 0, name: "Name 1", age: 17 },
-                        { id: 2, parentId: 1, name: "Name 2", age: 18 },
-                        { id: 3, parentId: 2, name: "Name 3", age: 19 },
-                        { id: 4, parentId: 2, name: "Name 4", age: 20 },
-                        { id: 5, parentId: 2, name: "Name 5", age: 14 },
-                        { id: 6, parentId: 0, name: "test", age: 13 }
+                        { id: 1, parentId: 0, name: 'Name 1', age: 17 },
+                        { id: 2, parentId: 1, name: 'Name 2', age: 18 },
+                        { id: 3, parentId: 2, name: 'Name 3', age: 19 },
+                        { id: 4, parentId: 2, name: 'Name 4', age: 20 },
+                        { id: 5, parentId: 2, name: 'Name 5', age: 14 },
+                        { id: 6, parentId: 0, name: 'test', age: 13 }
                     ],
-                    columns: [{ dataField: "name", dataType: "string" }, { dataField: "age", dataType: "number" }],
-                    keyExpr: "id",
-                    parentIdExpr: "parentId",
+                    columns: [{ dataField: 'name', dataType: 'string' }, { dataField: 'age', dataType: 'number' }],
+                    keyExpr: 'id',
+                    parentIdExpr: 'parentId',
                     loadingTimeout: undefined,
                     scrolling: {
-                        mode: "virtual"
+                        mode: 'virtual'
                     }
                 }, options)
             });
@@ -49,7 +49,7 @@ QUnit.module("State Storing", {
     }
 });
 
-QUnit.test("Apply state storing", function(assert) {
+QUnit.test('Apply state storing', function(assert) {
     // arrange
     var rows;
 
@@ -58,17 +58,17 @@ QUnit.test("Apply state storing", function(assert) {
         filterRow: { visible: true },
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return {
                     columns: [
-                        { dataField: "name" },
-                        { dataField: "age", filterValue: 14, selectedFilterOperation: ">" }
+                        { dataField: 'name' },
+                        { dataField: 'age', filterValue: 14, selectedFilterOperation: '>' }
                     ],
                     expandedRowKeys: [1, 2],
                     selectedRowKeys: [3],
                     searchPanel: {
-                        text: "Name"
+                        text: 'Name'
                     }
                 };
             }
@@ -76,15 +76,15 @@ QUnit.test("Apply state storing", function(assert) {
     });
 
     rows = this.getVisibleRows();
-    assert.strictEqual(rows.length, 4, "row count");
-    assert.strictEqual(rows[0].key, 1, "key of the first row");
-    assert.strictEqual(rows[1].key, 2, "key of the second row");
-    assert.strictEqual(rows[2].key, 3, "key of the third row");
-    assert.ok(rows[2].isSelected, "third row is selected");
-    assert.strictEqual(rows[3].key, 4, "key of the fourth row");
+    assert.strictEqual(rows.length, 4, 'row count');
+    assert.strictEqual(rows[0].key, 1, 'key of the first row');
+    assert.strictEqual(rows[1].key, 2, 'key of the second row');
+    assert.strictEqual(rows[2].key, 3, 'key of the third row');
+    assert.ok(rows[2].isSelected, 'third row is selected');
+    assert.strictEqual(rows[3].key, 4, 'key of the fourth row');
 });
 
-QUnit.test("Save user state", function(assert) {
+QUnit.test('Save user state', function(assert) {
     // arrange
     var state = {};
 
@@ -93,7 +93,7 @@ QUnit.test("Save user state", function(assert) {
         expandedRowKeys: [1],
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return state;
             },
@@ -107,19 +107,19 @@ QUnit.test("Save user state", function(assert) {
     // assert
     assert.deepEqual(state, {
         columns: [
-            { dataField: "name", dataType: "string", visible: true, visibleIndex: 0 },
-            { dataField: "age", dataType: "number", visible: true, visibleIndex: 1 }
+            { dataField: 'name', dataType: 'string', visible: true, visibleIndex: 0 },
+            { dataField: 'age', dataType: 'number', visible: true, visibleIndex: 1 }
         ],
         filterPanel: {},
         filterValue: null,
         expandedRowKeys: [1],
         pageIndex: 0,
         pageSize: 20,
-        searchText: ""
-    }, "state");
+        searchText: ''
+    }, 'state');
 });
 
-QUnit.test("The expandRowKeys state should not persist when autoExpandAll is enabled", function(assert) {
+QUnit.test('The expandRowKeys state should not persist when autoExpandAll is enabled', function(assert) {
     // arrange
     var state = {};
 
@@ -128,7 +128,7 @@ QUnit.test("The expandRowKeys state should not persist when autoExpandAll is ena
         autoExpandAll: true,
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return state;
             },
@@ -140,23 +140,23 @@ QUnit.test("The expandRowKeys state should not persist when autoExpandAll is ena
     });
 
     // assert
-    assert.notOk(Object.prototype.hasOwnProperty.call(state, "expandedRowKeys"), "state doesn't have expandedRowKeys");
+    assert.notOk(Object.prototype.hasOwnProperty.call(state, 'expandedRowKeys'), 'state doesn\'t have expandedRowKeys');
 });
 
 // T811724, T824333
-QUnit.test("customSave should be fired after expand", function(assert) {
+QUnit.test('customSave should be fired after expand', function(assert) {
     // arrange
     var state = {
             columns: [
-                { visibleIndex: 0, dataField: "name", dataType: "string", visible: true },
-                { visibleIndex: 1, dataField: "age", dataType: "number", visible: true }
+                { visibleIndex: 0, dataField: 'name', dataType: 'string', visible: true },
+                { visibleIndex: 1, dataField: 'age', dataType: 'number', visible: true }
             ],
             filterPanel: {},
             filterValue: null,
             expandedRowKeys: [1],
             pageIndex: 0,
             pageSize: 20,
-            searchText: ""
+            searchText: ''
         },
         customSaveCallCount = 0;
 
@@ -165,7 +165,7 @@ QUnit.test("customSave should be fired after expand", function(assert) {
         expandedRowKeys: [],
         stateStoring: {
             enabled: true,
-            type: "custom",
+            type: 'custom',
             customLoad: function() {
                 return state;
             },
@@ -178,13 +178,13 @@ QUnit.test("customSave should be fired after expand", function(assert) {
     });
 
     this.clock.tick();
-    assert.strictEqual(customSaveCallCount, 0, "customSave is not called");
+    assert.strictEqual(customSaveCallCount, 0, 'customSave is not called');
 
     // act
     this.expandRow(2);
     this.clock.tick();
 
     // assert
-    assert.strictEqual(customSaveCallCount, 1, "customSave is called once after expandRow");
-    assert.deepEqual(state.expandedRowKeys, [1, 2], "expandedRowKeys in state is correct");
+    assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
+    assert.deepEqual(state.expandedRowKeys, [1, 2], 'expandedRowKeys in state is correct');
 });

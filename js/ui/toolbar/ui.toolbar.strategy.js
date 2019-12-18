@@ -1,14 +1,14 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
-    errors = require("../../core/errors"),
-    compileGetter = require("../../core/utils/data").compileGetter,
-    Class = require("../../core/class"),
-    Button = require("../button"),
+var $ = require('../../core/renderer'),
+    noop = require('../../core/utils/common').noop,
+    each = require('../../core/utils/iterator').each,
+    errors = require('../../core/errors'),
+    compileGetter = require('../../core/utils/data').compileGetter,
+    Class = require('../../core/class'),
+    Button = require('../button'),
     abstract = Class.abstract;
 
-var TOOLBAR_MENU_CONTAINER_CLASS = "dx-toolbar-menu-container",
-    TOOLBAR_MENU_BUTTON_CLASS = "dx-toolbar-menu-button";
+var TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container',
+    TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 
 var ToolbarStrategy = Class.inherit({
 
@@ -22,7 +22,7 @@ var ToolbarStrategy = Class.inherit({
     },
 
     _widgetOptions: function() {
-        var itemClickAction = this._toolbar._createActionByOption("onItemClick");
+        var itemClickAction = this._toolbar._createActionByOption('onItemClick');
 
         return {
             itemTemplate: this._getMenuItemTemplate.bind(this),
@@ -34,11 +34,11 @@ var ToolbarStrategy = Class.inherit({
     },
 
     _getMenuItemTemplate: function() {
-        return this._toolbar._getTemplateByOption("menuItemTemplate");
+        return this._toolbar._getTemplateByOption('menuItemTemplate');
     },
 
     _renderWidget: function() {
-        var $menu = $("<div>").appendTo(this._menuContainer());
+        var $menu = $('<div>').appendTo(this._menuContainer());
 
         this._menu = this._toolbar._createComponent($menu, this._menuWidgetClass(), this._widgetOptions());
         this.renderMenuItems();
@@ -49,28 +49,28 @@ var ToolbarStrategy = Class.inherit({
     _menuWidgetClass: abstract,
 
     _hasVisibleMenuItems: function(items) {
-        var menuItems = items || this._toolbar.option("items"),
+        var menuItems = items || this._toolbar.option('items'),
             result = false;
 
-        var optionGetter = compileGetter("visible"),
-            overflowGetter = compileGetter("locateInMenu");
+        var optionGetter = compileGetter('visible'),
+            overflowGetter = compileGetter('locateInMenu');
 
         var menuLocation = false;
         each(menuItems, function(index, item) {
             var itemVisible = optionGetter(item, { functionsAsIs: true }),
                 itemOverflow = overflowGetter(item, { functionsAsIs: true });
 
-            if(item.location === "menu") {
+            if(item.location === 'menu') {
                 menuLocation = true;
             }
 
-            if(itemVisible !== false && (itemOverflow === "auto" || itemOverflow === "always" || item.location === "menu")) {
+            if(itemVisible !== false && (itemOverflow === 'auto' || itemOverflow === 'always' || item.location === 'menu')) {
                 result = true;
             }
         });
 
         if(menuLocation) {
-            errors.log("W0001", "dxToolbar - 'location' item field", "menu", "16.1", "Use 'locateInMenu' item field instead.");
+            errors.log('W0001', 'dxToolbar - \'location\' item field', 'menu', '16.1', 'Use \'locateInMenu\' item field instead.');
         }
 
         return result;
@@ -86,7 +86,7 @@ var ToolbarStrategy = Class.inherit({
         var buttonOptions = this._menuButtonOptions();
 
         this._renderMenuButtonContainer();
-        this._$button = $("<div>").appendTo(this._$menuButtonContainer)
+        this._$button = $('<div>').appendTo(this._$menuButtonContainer)
             .addClass(TOOLBAR_MENU_BUTTON_CLASS);
         this._toolbar._createComponent(this._$button, Button, buttonOptions);
     },
@@ -104,13 +104,13 @@ var ToolbarStrategy = Class.inherit({
     _renderMenuButtonContainer: function() {
         var $afterSection = this._toolbar._$afterSection;
 
-        this._$menuButtonContainer = $("<div>").appendTo($afterSection)
+        this._$menuButtonContainer = $('<div>').appendTo($afterSection)
             .addClass(this._toolbar._buttonClass())
             .addClass(TOOLBAR_MENU_CONTAINER_CLASS);
     },
 
     renderMenuItems: function() {
-        this._menu && this._menu.option("items", this._getMenuItems());
+        this._menu && this._menu.option('items', this._getMenuItems());
     },
 
     toggleMenuVisibility: function(visible, animate) {

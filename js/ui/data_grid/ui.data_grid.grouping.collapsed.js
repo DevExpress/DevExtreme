@@ -1,11 +1,11 @@
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import { combineFilters, normalizeSortingInfo } from "./ui.data_grid.core";
-import { GroupingHelper, createOffsetFilter } from "./ui.data_grid.grouping.core";
-import { createGroupFilter } from "./ui.data_grid.utils";
-import errors from "../widget/ui.errors";
-import { errors as dataErrors } from "../../data/errors";
-import { when, Deferred } from "../../core/utils/deferred";
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
+import { GroupingHelper, createOffsetFilter } from './ui.data_grid.grouping.core';
+import { createGroupFilter } from './ui.data_grid.utils';
+import errors from '../widget/ui.errors';
+import { errors as dataErrors } from '../../data/errors';
+import { when, Deferred } from '../../core/utils/deferred';
 
 exports.GroupingHelper = GroupingHelper.inherit((function() {
     var foreachExpandedGroups = function(that, callback, updateGroups) {
@@ -290,7 +290,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         var filter = options.storeLoadOptions.filter;
 
         if(!options.storeLoadOptions.isLoadingAll) {
-            filter = combineFilters([filter, combineFilters(expandedFilters, "or")]);
+            filter = combineFilters([filter, combineFilters(expandedFilters, 'or')]);
         }
 
         var loadOptions = extend({}, options.storeLoadOptions, {
@@ -334,7 +334,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
             var count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
             if(!isFinite(count)) {
-                throw dataErrors.Error(isGrouping ? "E4022" : "E4021");
+                throw dataErrors.Error(isGrouping ? 'E4022' : 'E4021');
             }
             d.resolve(count);
         }).fail(d.reject.bind(d));
@@ -529,7 +529,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 totalCount = updateGroupInfos(that, options, options.data, loadedGroupCount);
 
                 if(totalCount < 0) {
-                    throw errors.Error("E1037");
+                    throw errors.Error('E1037');
                 }
 
                 if(!options.remoteOperations.paging) {
@@ -540,7 +540,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 }
 
                 if(groupCount && options.storeLoadOptions.requireGroupCount && !isFinite(options.extra.groupCount)) {
-                    throw dataErrors.Error("E4022");
+                    throw dataErrors.Error('E4022');
                 }
 
                 that.updateTotalItemsCount(options);

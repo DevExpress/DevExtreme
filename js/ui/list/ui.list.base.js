@@ -1,69 +1,69 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    iconUtils = require("../../core/utils/icon"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    each = require("../../core/utils/iterator").each,
-    compileGetter = require("../../core/utils/data").compileGetter,
-    extend = require("../../core/utils/extend").extend,
-    fx = require("../../animation/fx"),
-    clickEvent = require("../../events/click"),
-    swipeEvents = require("../../events/swipe"),
-    support = require("../../core/utils/support"),
-    messageLocalization = require("../../localization/message"),
-    inkRipple = require("../widget/utils.ink_ripple"),
-    devices = require("../../core/devices"),
-    ListItem = require("./item"),
-    Button = require("../button"),
-    eventUtils = require("../../events/utils"),
-    themes = require("../themes"),
-    windowUtils = require("../../core/utils/window"),
-    ScrollView = require("../scroll_view"),
-    deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
-    CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
-    BindableTemplate = require("../../core/templates/bindable_template").BindableTemplate,
-    Deferred = require("../../core/utils/deferred").Deferred,
-    DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
+    iconUtils = require('../../core/utils/icon'),
+    getPublicElement = require('../../core/utils/dom').getPublicElement,
+    each = require('../../core/utils/iterator').each,
+    compileGetter = require('../../core/utils/data').compileGetter,
+    extend = require('../../core/utils/extend').extend,
+    fx = require('../../animation/fx'),
+    clickEvent = require('../../events/click'),
+    swipeEvents = require('../../events/swipe'),
+    support = require('../../core/utils/support'),
+    messageLocalization = require('../../localization/message'),
+    inkRipple = require('../widget/utils.ink_ripple'),
+    devices = require('../../core/devices'),
+    ListItem = require('./item'),
+    Button = require('../button'),
+    eventUtils = require('../../events/utils'),
+    themes = require('../themes'),
+    windowUtils = require('../../core/utils/window'),
+    ScrollView = require('../scroll_view'),
+    deviceDependentOptions = require('../scroll_view/ui.scrollable').deviceDependentOptions,
+    CollectionWidget = require('../collection/ui.collection_widget.live_update').default,
+    BindableTemplate = require('../../core/templates/bindable_template').BindableTemplate,
+    Deferred = require('../../core/utils/deferred').Deferred,
+    DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
 
-var LIST_CLASS = "dx-list",
-    LIST_ITEM_CLASS = "dx-list-item",
-    LIST_ITEM_SELECTOR = "." + LIST_ITEM_CLASS,
-    LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container",
-    LIST_ITEM_ICON_CLASS = "dx-list-item-icon",
-    LIST_GROUP_CLASS = "dx-list-group",
-    LIST_GROUP_HEADER_CLASS = "dx-list-group-header",
-    LIST_GROUP_BODY_CLASS = "dx-list-group-body",
-    LIST_COLLAPSIBLE_GROUPS_CLASS = "dx-list-collapsible-groups",
-    LIST_GROUP_COLLAPSED_CLASS = "dx-list-group-collapsed",
-    LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
-    LIST_HAS_NEXT_CLASS = "dx-has-next",
-    LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
-    WRAP_ITEM_TEXT_CLASS = "dx-wrap-item-text",
-    SELECT_ALL_ITEM_SELECTOR = ".dx-list-select-all",
+var LIST_CLASS = 'dx-list',
+    LIST_ITEM_CLASS = 'dx-list-item',
+    LIST_ITEM_SELECTOR = '.' + LIST_ITEM_CLASS,
+    LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container',
+    LIST_ITEM_ICON_CLASS = 'dx-list-item-icon',
+    LIST_GROUP_CLASS = 'dx-list-group',
+    LIST_GROUP_HEADER_CLASS = 'dx-list-group-header',
+    LIST_GROUP_BODY_CLASS = 'dx-list-group-body',
+    LIST_COLLAPSIBLE_GROUPS_CLASS = 'dx-list-collapsible-groups',
+    LIST_GROUP_COLLAPSED_CLASS = 'dx-list-group-collapsed',
+    LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator',
+    LIST_HAS_NEXT_CLASS = 'dx-has-next',
+    LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button',
+    WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text',
+    SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all',
 
-    LIST_ITEM_DATA_KEY = "dxListItemData",
+    LIST_ITEM_DATA_KEY = 'dxListItemData',
     LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
-var groupItemsGetter = compileGetter("items");
+var groupItemsGetter = compileGetter('items');
 
 var ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(","),
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
 
     _supportedKeys: function() {
         var that = this;
 
         var moveFocusPerPage = function(direction) {
             var $item = getEdgeVisibleItem(direction),
-                isFocusedItem = $item.is(that.option("focusedElement"));
+                isFocusedItem = $item.is(that.option('focusedElement'));
 
             if(isFocusedItem) {
                 scrollListTo($item, direction);
                 $item = getEdgeVisibleItem(direction);
             }
 
-            that.option("focusedElement", getPublicElement($item));
+            that.option('focusedElement', getPublicElement($item));
             that.scrollToItem($item);
         };
 
@@ -71,7 +71,7 @@ var ListBase = CollectionWidget.inherit({
             var scrollTop = that.scrollTop(),
                 containerHeight = that.$element().height();
 
-            var $item = $(that.option("focusedElement")),
+            var $item = $(that.option('focusedElement')),
                 isItemVisible = true;
 
             if(!$item.length) {
@@ -99,7 +99,7 @@ var ListBase = CollectionWidget.inherit({
         var scrollListTo = function($item, direction) {
             var resultPosition = $item.position().top;
 
-            if(direction === "prev") {
+            if(direction === 'prev') {
                 resultPosition = $item.position().top - that.$element().height() + $item.outerHeight();
             }
 
@@ -110,11 +110,11 @@ var ListBase = CollectionWidget.inherit({
             leftArrow: commonUtils.noop,
             rightArrow: commonUtils.noop,
             pageUp: function() {
-                moveFocusPerPage("prev");
+                moveFocusPerPage('prev');
                 return false;
             },
             pageDown: function() {
-                moveFocusPerPage("next");
+                moveFocusPerPage('next');
                 return false;
             }
         });
@@ -164,7 +164,7 @@ var ListBase = CollectionWidget.inherit({
             * @default 'onScroll'
             * @default 'onHover' @for desktop
             */
-            showScrollbar: "onScroll",
+            showScrollbar: 'onScroll',
 
             useNativeScrolling: true,
 
@@ -197,28 +197,28 @@ var ListBase = CollectionWidget.inherit({
             * @type string
             * @default "Pull down to refresh..."
             */
-            pullingDownText: messageLocalization.format("dxList-pullingDownText"),
+            pullingDownText: messageLocalization.format('dxList-pullingDownText'),
 
             /**
             * @name dxListOptions.pulledDownText
             * @type string
             * @default "Release to refresh..."
             */
-            pulledDownText: messageLocalization.format("dxList-pulledDownText"),
+            pulledDownText: messageLocalization.format('dxList-pulledDownText'),
 
             /**
             * @name dxListOptions.refreshingText
             * @type string
             * @default "Refreshing..."
             */
-            refreshingText: messageLocalization.format("dxList-refreshingText"),
+            refreshingText: messageLocalization.format('dxList-refreshingText'),
 
             /**
             * @name dxListOptions.pageLoadingText
             * @type string
             * @default "Loading..."
             */
-            pageLoadingText: messageLocalization.format("dxList-pageLoadingText"),
+            pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
 
             /**
             * @name dxListOptions.onScroll
@@ -255,14 +255,14 @@ var ListBase = CollectionWidget.inherit({
             * @type Enums.ListPageLoadMode
             * @default "scrollBottom"
             */
-            pageLoadMode: "scrollBottom",
+            pageLoadMode: 'scrollBottom',
 
             /**
             * @name dxListOptions.nextButtonText
             * @type string
             * @default "More"
             */
-            nextButtonText: messageLocalization.format("dxList-nextButtonText"),
+            nextButtonText: messageLocalization.format('dxList-nextButtonText'),
 
             /**
             * @name dxListOptions.onItemSwipe
@@ -314,7 +314,7 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param3 groupElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            groupTemplate: "group",
+            groupTemplate: 'group',
 
             /**
             * @name dxListOptions.indicateLoading
@@ -342,8 +342,8 @@ var ListBase = CollectionWidget.inherit({
              */
             activeStateEnabled: true,
 
-            _itemAttributes: { "role": "option" },
-            _listAttributes: { "role": "listbox" },
+            _itemAttributes: { 'role': 'option' },
+            _listAttributes: { 'role': 'listbox' },
 
             useInkRipple: false,
 
@@ -450,25 +450,25 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function(device) {
-                    return !support.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
+                    return !support.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
                 },
                 options: {
                     /**
                     * @name dxListOptions.showScrollbar
                     * @default 'onHover' @for desktop
                     */
-                    showScrollbar: "onHover",
+                    showScrollbar: 'onHover',
 
                     /**
                     * @name dxListOptions.pageLoadMode
                     * @default 'nextButton' @for desktop
                     */
-                    pageLoadMode: "nextButton"
+                    pageLoadMode: 'nextButton'
                 }
             },
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -489,28 +489,28 @@ var ListBase = CollectionWidget.inherit({
                     * @type string
                     * @default "" @for Material
                     */
-                    pullingDownText: "",
+                    pullingDownText: '',
 
                     /**
                     * @name dxListOptions.pulledDownText
                     * @type string
                     * @default "" @for Material
                     */
-                    pulledDownText: "",
+                    pulledDownText: '',
 
                     /**
                     * @name dxListOptions.refreshingText
                     * @type string
                     * @default "" @for Material
                     */
-                    refreshingText: "",
+                    refreshingText: '',
 
                     /**
                     * @name dxListOptions.pageLoadingText
                     * @type string
                     * @default "" @for Material
                     */
-                    pageLoadingText: "",
+                    pageLoadingText: '',
                     useInkRipple: true
                 }
             }
@@ -536,12 +536,12 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _refreshItemElements: function() {
-        if(!this.option("grouped")) {
+        if(!this.option('grouped')) {
             this._itemElementsCache = this._itemContainer().children(this._itemSelector());
         } else {
             this._itemElementsCache = this._itemContainer()
-                .children("." + LIST_GROUP_CLASS)
-                .children("." + LIST_GROUP_BODY_CLASS)
+                .children('.' + LIST_GROUP_CLASS)
+                .children('.' + LIST_GROUP_BODY_CLASS)
                 .children(this._itemSelector());
         }
     },
@@ -574,7 +574,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _itemSelectHandler: function(e) {
-        if(this.option("selectionMode") === "single" && this.isItemSelected(e.currentTarget)) {
+        if(this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
             return;
         }
 
@@ -596,11 +596,11 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _scrollBottomMode: function() {
-        return this.option("pageLoadMode") === "scrollBottom";
+        return this.option('pageLoadMode') === 'scrollBottom';
     },
 
     _nextButtonMode: function() {
-        return this.option("pageLoadMode") === "nextButton";
+        return this.option('pageLoadMode') === 'nextButton';
     },
 
     _dataSourceOptions: function() {
@@ -613,38 +613,38 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _getGroupedOption: function() {
-        return this.option("grouped");
+        return this.option('grouped');
     },
 
     _dataSourceFromUrlLoadMode: function() {
-        return "raw";
+        return 'raw';
     },
 
     _initScrollView: function() {
-        var scrollingEnabled = this.option("scrollingEnabled"),
-            pullRefreshEnabled = scrollingEnabled && this.option("pullRefreshEnabled"),
+        var scrollingEnabled = this.option('scrollingEnabled'),
+            pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled'),
             autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
-            disabled: this.option("disabled") || !scrollingEnabled,
+            disabled: this.option('disabled') || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
             onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
-            showScrollbar: this.option("showScrollbar"),
-            useNative: this.option("useNativeScrolling"),
-            bounceEnabled: this.option("bounceEnabled"),
-            scrollByContent: this.option("scrollByContent"),
-            scrollByThumb: this.option("scrollByThumb"),
-            pullingDownText: this.option("pullingDownText"),
-            pulledDownText: this.option("pulledDownText"),
-            refreshingText: this.option("refreshingText"),
-            reachBottomText: this.option("pageLoadingText"),
+            showScrollbar: this.option('showScrollbar'),
+            useNative: this.option('useNativeScrolling'),
+            bounceEnabled: this.option('bounceEnabled'),
+            scrollByContent: this.option('scrollByContent'),
+            scrollByThumb: this.option('scrollByThumb'),
+            pullingDownText: this.option('pullingDownText'),
+            pulledDownText: this.option('pulledDownText'),
+            refreshingText: this.option('refreshingText'),
+            reachBottomText: this.option('pageLoadingText'),
             useKeyboard: false
         });
 
         this._$container = $(this._scrollView.content());
 
-        if(this.option("wrapItemText")) {
+        if(this.option('wrapItemText')) {
             this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
         }
 
@@ -652,9 +652,9 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _createScrollViewActions: function() {
-        this._scrollAction = this._createActionByOption("onScroll");
-        this._pullRefreshAction = this._createActionByOption("onPullRefresh");
-        this._pageLoadingAction = this._createActionByOption("onPageLoading");
+        this._scrollAction = this._createActionByOption('onScroll');
+        this._pullRefreshAction = this._createActionByOption('onPullRefresh');
+        this._pageLoadingAction = this._createActionByOption('onPageLoading');
     },
 
     _scrollHandler: function(e) {
@@ -662,7 +662,6 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _initTemplates: function() {
-        this.callBase();
         this._templateManager.addDefaultTemplates({
             group: new BindableTemplate(function($container, data) {
                 if(typeUtils.isPlainObject(data)) {
@@ -672,8 +671,9 @@ var ListBase = CollectionWidget.inherit({
                 } else {
                     $container.text(String(data));
                 }
-            }, ["key"], this.option("integrationOptions.watchMethod"))
+            }, ['key'], this.option('integrationOptions.watchMethod'))
         });
+        this.callBase();
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {
@@ -681,7 +681,7 @@ var ListBase = CollectionWidget.inherit({
 
         if(data.icon) {
             var $icon = iconUtils.getImageContainer(data.icon).addClass(LIST_ITEM_ICON_CLASS),
-                $iconContainer = $("<div>").addClass(LIST_ITEM_ICON_CONTAINER_CLASS);
+                $iconContainer = $('<div>').addClass(LIST_ITEM_ICON_CONTAINER_CLASS);
 
             $iconContainer.append($icon);
 
@@ -690,7 +690,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _getBindableFields: function() {
-        return ["text", "html", "icon"];
+        return ['text', 'html', 'icon'];
     },
 
     _updateLoadingState: function(tryLoadMore) {
@@ -717,7 +717,7 @@ var ListBase = CollectionWidget.inherit({
             return;
         }
 
-        if(isLoading && this.option("indicateLoading")) {
+        if(isLoading && this.option('indicateLoading')) {
             this._showLoadingIndicatorTimer = setTimeout((function() {
                 var isEmpty = !this._itemElements().length;
                 if(this._scrollView && !isEmpty) {
@@ -744,7 +744,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _hideLoadingIfLoadIndicationOff: function() {
-        if(!this.option("indicateLoading")) {
+        if(!this.option('indicateLoading')) {
             this._dataSourceLoadingChangedHandler(false);
         }
     },
@@ -773,7 +773,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _infiniteDataLoading: function() {
-        var isElementVisible = this.$element().is(":visible");
+        var isElementVisible = this.$element().is(':visible');
 
         if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
             clearTimeout(this._loadNextPageTimer);
@@ -792,7 +792,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
-        if(this.option("grouped")) {
+        if(this.option('grouped')) {
             each(items, this._renderGroup.bind(this));
             this._attachGroupCollapseEvent();
             this._renderEmptyMessage();
@@ -810,9 +810,9 @@ var ListBase = CollectionWidget.inherit({
 
     _attachGroupCollapseEvent: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            selector = "." + LIST_GROUP_HEADER_CLASS,
+            selector = '.' + LIST_GROUP_HEADER_CLASS,
             $element = this.$element(),
-            collapsibleGroups = this.option("collapsibleGroups");
+            collapsibleGroups = this.option('collapsibleGroups');
 
         $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
 
@@ -822,11 +822,11 @@ var ListBase = CollectionWidget.inherit({
                 this._createAction((function(e) {
                     var $group = $(e.event.currentTarget).parent();
                     this._collapseGroupHandler($group);
-                    if(this.option("focusStateEnabled")) {
-                        this.option("focusedElement", getPublicElement($group.find("." + LIST_ITEM_CLASS).eq(0)));
+                    if(this.option('focusStateEnabled')) {
+                        this.option('focusedElement', getPublicElement($group.find('.' + LIST_ITEM_CLASS).eq(0)));
                     }
                 }).bind(this), {
-                    validatingTargetName: "element"
+                    validatingTargetName: 'element'
                 })({
                     event: e
                 });
@@ -841,15 +841,15 @@ var ListBase = CollectionWidget.inherit({
             return deferred.resolve();
         }
 
-        var $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
+        var $groupBody = $group.children('.' + LIST_GROUP_BODY_CLASS);
 
         var startHeight = $groupBody.outerHeight();
-        var endHeight = startHeight === 0 ? $groupBody.height("auto").outerHeight() : 0;
+        var endHeight = startHeight === 0 ? $groupBody.height('auto').outerHeight() : 0;
 
         $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
 
         fx.animate($groupBody, {
-            type: "custom",
+            type: 'custom',
             from: { height: startHeight },
             to: { height: endHeight },
             duration: 200,
@@ -877,9 +877,9 @@ var ListBase = CollectionWidget.inherit({
 
         this.$element().addClass(LIST_CLASS);
         this.callBase();
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
 
-        this.setAria("role", this.option("_listAttributes").role);
+        this.setAria('role', this.option('_listAttributes').role);
     },
 
     _renderInkRipple: function() {
@@ -917,7 +917,7 @@ var ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
-        if(this.option("onItemSwipe")) {
+        if(this.option('onItemSwipe')) {
             this._attachSwipeEvent($(args.itemElement));
         }
     },
@@ -929,8 +929,8 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _itemSwipeEndHandler: function(e) {
-        this._itemDXEventHandler(e, "onItemSwipe", {
-            direction: e.offset < 0 ? "left" : "right"
+        this._itemDXEventHandler(e, 'onItemSwipe', {
+            direction: e.offset < 0 ? 'left' : 'right'
         });
     },
 
@@ -946,15 +946,15 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _renderGroup: function(index, group) {
-        var $groupElement = $("<div>")
+        var $groupElement = $('<div>')
             .addClass(LIST_GROUP_CLASS)
             .appendTo(this._itemContainer());
 
-        var $groupHeaderElement = $("<div>")
+        var $groupHeaderElement = $('<div>')
             .addClass(LIST_GROUP_HEADER_CLASS)
             .appendTo($groupElement);
 
-        var groupTemplateName = this.option("groupTemplate"),
+        var groupTemplateName = this.option('groupTemplate'),
             groupTemplate = this._getTemplate(group.template || groupTemplateName, group, index, $groupHeaderElement),
             renderArgs = {
                 index: index,
@@ -965,14 +965,14 @@ var ListBase = CollectionWidget.inherit({
         this._createItemByTemplate(groupTemplate, renderArgs);
 
         if(themes.isMaterial()) {
-            $("<div>")
+            $('<div>')
                 .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
                 .prependTo($groupHeaderElement);
         }
 
         this._renderingGroupIndex = index;
 
-        var $groupBody = $("<div>")
+        var $groupBody = $('<div>')
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
@@ -989,20 +989,20 @@ var ListBase = CollectionWidget.inherit({
 
     attachGroupHeaderInkRippleEvents: function() {
         var that = this,
-            selector = "." + LIST_GROUP_HEADER_CLASS,
+            selector = '.' + LIST_GROUP_HEADER_CLASS,
             $element = this.$element();
 
-        eventsEngine.on($element, "dxpointerdown", selector, function(e) {
+        eventsEngine.on($element, 'dxpointerdown', selector, function(e) {
             that._toggleActiveState($(e.currentTarget), true, e);
         });
 
-        eventsEngine.on($element, "dxpointerup dxhoverend", selector, function(e) {
+        eventsEngine.on($element, 'dxpointerup dxhoverend', selector, function(e) {
             that._toggleActiveState($(e.currentTarget), false);
         });
     },
 
     _createGroupRenderAction: function() {
-        this._groupRenderAction = this._createActionByOption("onGroupRendered");
+        this._groupRenderAction = this._createActionByOption('onGroupRendered');
     },
 
     _clean: function() {
@@ -1023,7 +1023,7 @@ var ListBase = CollectionWidget.inherit({
 
     _toggleDisabledState: function(value) {
         this.callBase(value);
-        this._scrollView.option("disabled", value || !this.option("scrollingEnabled"));
+        this._scrollView.option('disabled', value || !this.option('scrollingEnabled'));
     },
 
     _toggleNextButton: function(value) {
@@ -1049,14 +1049,14 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _createNextButton: function() {
-        var $result = $("<div>").addClass(LIST_NEXT_BUTTON_CLASS);
+        var $result = $('<div>').addClass(LIST_NEXT_BUTTON_CLASS);
 
-        var $button = $("<div>").appendTo($result);
+        var $button = $('<div>').appendTo($result);
 
         this._createComponent($button, Button, {
-            text: this.option("nextButtonText"),
+            text: this.option('nextButtonText'),
             onClick: this._nextButtonHandler.bind(this),
-            type: themes.isMaterial() ? "default" : undefined,
+            type: themes.isMaterial() ? 'default' : undefined,
             integrationOptions: {}
         });
 
@@ -1066,7 +1066,7 @@ var ListBase = CollectionWidget.inherit({
     _moveFocus: function() {
         this.callBase.apply(this, arguments);
 
-        this.scrollToItem(this.option("focusedElement"));
+        this.scrollToItem(this.option('focusedElement'));
     },
 
     _refresh: function() {
@@ -1081,71 +1081,71 @@ var ListBase = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "pageLoadMode":
+            case 'pageLoadMode':
                 this._toggleNextButton(args.value);
                 this._initScrollView();
                 break;
-            case "dataSource":
+            case 'dataSource':
                 this.callBase(args);
                 this._initScrollView();
                 break;
-            case "pullingDownText":
-            case "pulledDownText":
-            case "refreshingText":
-            case "pageLoadingText":
-            case "useNative":
-            case "showScrollbar":
-            case "bounceEnabled":
-            case "scrollByContent":
-            case "scrollByThumb":
-            case "scrollingEnabled":
-            case "pullRefreshEnabled":
+            case 'pullingDownText':
+            case 'pulledDownText':
+            case 'refreshingText':
+            case 'pageLoadingText':
+            case 'useNative':
+            case 'showScrollbar':
+            case 'bounceEnabled':
+            case 'scrollByContent':
+            case 'scrollByThumb':
+            case 'scrollingEnabled':
+            case 'pullRefreshEnabled':
                 this._initScrollView();
                 this._updateLoadingState();
                 break;
-            case "nextButtonText":
-            case "onItemSwipe":
-            case "useInkRipple":
+            case 'nextButtonText':
+            case 'onItemSwipe':
+            case 'useInkRipple':
                 this._invalidate();
                 break;
-            case "onScroll":
-            case "onPullRefresh":
-            case "onPageLoading":
+            case 'onScroll':
+            case 'onPullRefresh':
+            case 'onPageLoading':
                 this._createScrollViewActions();
                 this._invalidate();
                 break;
-            case "grouped":
-            case "collapsibleGroups":
-            case "groupTemplate":
+            case 'grouped':
+            case 'collapsibleGroups':
+            case 'groupTemplate':
                 this._invalidate();
                 break;
-            case "wrapItemText":
+            case 'wrapItemText':
                 this._$container.toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
                 break;
-            case "onGroupRendered":
+            case 'onGroupRendered':
                 this._createGroupRenderAction();
                 break;
-            case "width":
-            case "height":
+            case 'width':
+            case 'height':
                 this.callBase(args);
                 this._scrollView.update();
                 break;
-            case "indicateLoading":
+            case 'indicateLoading':
                 this._hideLoadingIfLoadIndicationOff();
                 break;
-            case "visible":
+            case 'visible':
                 this.callBase(args);
                 this._scrollView.update();
                 break;
-            case "rtlEnabled":
+            case 'rtlEnabled':
                 this._initScrollView();
                 this.callBase(args);
                 break;
-            case "showChevronExpr":
-            case "badgeExpr":
+            case 'showChevronExpr':
+            case 'badgeExpr':
                 this._invalidate();
                 break;
-            case "_listAttributes":
+            case '_listAttributes':
                 break;
             default:
                 this.callBase(args);
@@ -1153,12 +1153,12 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _extendActionArgs: function($itemElement) {
-        if(!this.option("grouped")) {
+        if(!this.option('grouped')) {
             return this.callBase($itemElement);
         }
 
-        var $group = $itemElement.closest("." + LIST_GROUP_CLASS);
-        var $item = $group.find("." + LIST_ITEM_CLASS);
+        var $group = $itemElement.closest('.' + LIST_GROUP_CLASS);
+        var $item = $group.find('.' + LIST_ITEM_CLASS);
         return extend(this.callBase($itemElement), {
             itemIndex: {
                 group: $group.index(),
@@ -1175,7 +1175,7 @@ var ListBase = CollectionWidget.inherit({
     */
     expandGroup: function(groupIndex) {
         var deferred = new Deferred(),
-            $group = this._itemContainer().find("." + LIST_GROUP_CLASS).eq(groupIndex);
+            $group = this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, false).done((function() {
             deferred.resolveWith(this);
@@ -1192,7 +1192,7 @@ var ListBase = CollectionWidget.inherit({
     */
     collapseGroup: function(groupIndex) {
         var deferred = new Deferred(),
-            $group = this._itemContainer().find("." + LIST_GROUP_CLASS).eq(groupIndex);
+            $group = this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, true).done((function() {
             deferred.resolveWith(this);

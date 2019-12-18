@@ -1,8 +1,8 @@
-import { compileGetter } from "../../../core/utils/data";
-import { pathCombine, getFileExtension, PATH_SEPARATOR } from "../ui.file_manager.utils";
-import { ensureDefined } from "../../../core/utils/common";
-import { deserializeDate } from "../../../core/utils/date_serialization";
-import { each } from "../../../core/utils/iterator";
+import { compileGetter } from '../../../core/utils/data';
+import { pathCombine, getFileExtension, PATH_SEPARATOR } from '../ui.file_manager.utils';
+import { ensureDefined } from '../../../core/utils/common';
+import { deserializeDate } from '../../../core/utils/date_serialization';
+import { each } from '../../../core/utils/iterator';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
@@ -48,7 +48,7 @@ class FileProvider {
          * @name FileProviderOptions.thumbnailExpr
          * @type string|function(fileItem)
          */
-        this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
+        this._thumbnailGetter = compileGetter(options.thumbnailExpr || 'thumbnail');
     }
 
     getItems(pathInfo) {
@@ -126,7 +126,7 @@ class FileProvider {
             fileItem.key = fileItem.relativeName;
         }
 
-        fileItem.thumbnail = this._thumbnailGetter(dataObj) || "";
+        fileItem.thumbnail = this._thumbnailGetter(dataObj) || '';
         fileItem.dataItem = dataObj;
         return fileItem;
     }
@@ -144,23 +144,23 @@ class FileProvider {
             fileItem.__KEY__ = arguments[1];
             return;
         }
-        return Object.prototype.hasOwnProperty.call(fileItem, "__KEY__") ? fileItem.__KEY__ : null;
+        return Object.prototype.hasOwnProperty.call(fileItem, '__KEY__') ? fileItem.__KEY__ : null;
     }
 
     _getNameExpr(options) {
-        return options.nameExpr || "name";
+        return options.nameExpr || 'name';
     }
 
     _getIsDirExpr(options) {
-        return options.isDirectoryExpr || "isDirectory";
+        return options.isDirectoryExpr || 'isDirectory';
     }
 
     _getSizeExpr(options) {
-        return options.sizeExpr || "size";
+        return options.sizeExpr || 'size';
     }
 
     _getDateModifiedExpr(options) {
-        return options.dateModifiedExpr || "dateModified";
+        return options.dateModifiedExpr || 'dateModified';
     }
 
 }
@@ -179,8 +179,8 @@ class FileManagerItem {
         this.size = 0;
         this.dateModified = new Date();
 
-        this.thumbnail = "";
-        this.tooltipText = "";
+        this.thumbnail = '';
+        this.tooltipText = '';
     }
 
     getFullPathInfo() {
@@ -193,7 +193,7 @@ class FileManagerItem {
     }
 
     getExtension() {
-        return this.isDirectory ? "" : getFileExtension(this.name);
+        return this.isDirectory ? '' : getFileExtension(this.name);
     }
 
     equals(item) {
@@ -221,9 +221,9 @@ class FileManagerItem {
 
 class FileManagerRootItem extends FileManagerItem {
     constructor() {
-        super(null, "Files", true);
-        this.key = "__dxfmroot_394CED1B-58CF-4925-A5F8-042BC0822B31_51558CB8-C170-4655-A9E0-C454ED8EA2C1";
-        this.relativeName = "";
+        super(null, 'Files', true);
+        this.key = '__dxfmroot_394CED1B-58CF-4925-A5F8-042BC0822B31_51558CB8-C170-4655-A9E0-C454ED8EA2C1';
+        this.relativeName = '';
         this.isRoot = true;
     }
 }

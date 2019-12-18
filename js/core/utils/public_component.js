@@ -1,11 +1,11 @@
-var dataUtils = require("../../core/element_data"),
-    eventsEngine = require("../../events/core/events_engine"),
-    WeakMap = require("../polyfills/weak_map"),
-    isDefined = require("./type").isDefined,
-    removeEvent = require("../remove_event");
+var dataUtils = require('../../core/element_data'),
+    eventsEngine = require('../../events/core/events_engine'),
+    WeakMap = require('../polyfills/weak_map'),
+    isDefined = require('./type').isDefined,
+    removeEvent = require('../remove_event');
 
-var COMPONENT_NAMES_DATA_KEY = "dxComponents",
-    ANONYMOUS_COMPONENT_DATA_KEY = "dxPrivateComponent";
+var COMPONENT_NAMES_DATA_KEY = 'dxComponents',
+    ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 
 var componentNames = new WeakMap(),
     nextAnonymousComponent = 0;

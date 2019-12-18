@@ -1,27 +1,27 @@
-import $ from "../../core/renderer";
-import { noop } from "../../core/utils/common";
-import { isDefined, isPlainObject, isEmptyObject, isString, isFunction } from "../../core/utils/type";
-import { each, map } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { compileGetter } from "../../core/utils/data";
-import errors from "../widget/ui.errors";
-import gridCore from "./ui.data_grid.core";
-import messageLocalization from "../../localization/message";
-import dataSourceAdapter from "./ui.data_grid.data_source_adapter";
-import columnsView from "../grid_core/ui.grid_core.columns_view";
-import AggregateCalculator from "./aggregate_calculator";
-import dataQuery from "../../data/query";
-import { multiLevelGroup } from "../../data/store_helper";
-import { normalizeSortingInfo } from "../../data/utils";
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import { isDefined, isPlainObject, isEmptyObject, isString, isFunction } from '../../core/utils/type';
+import { each, map } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { compileGetter } from '../../core/utils/data';
+import errors from '../widget/ui.errors';
+import gridCore from './ui.data_grid.core';
+import messageLocalization from '../../localization/message';
+import dataSourceAdapter from './ui.data_grid.data_source_adapter';
+import columnsView from '../grid_core/ui.grid_core.columns_view';
+import AggregateCalculator from './aggregate_calculator';
+import dataQuery from '../../data/query';
+import { multiLevelGroup } from '../../data/store_helper';
+import { normalizeSortingInfo } from '../../data/utils';
 
-var DATAGRID_TOTAL_FOOTER_CLASS = "dx-datagrid-total-footer",
-    DATAGRID_SUMMARY_ITEM_CLASS = "dx-datagrid-summary-item",
-    DATAGRID_TEXT_CONTENT_CLASS = "dx-datagrid-text-content",
-    DATAGRID_GROUP_FOOTER_CLASS = "dx-datagrid-group-footer",
-    DATAGRID_GROUP_TEXT_CONTENT_CLASS = "dx-datagrid-group-text-content",
-    DATAGRID_NOWRAP_CLASS = "dx-datagrid-nowrap",
+var DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer',
+    DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item',
+    DATAGRID_TEXT_CONTENT_CLASS = 'dx-datagrid-text-content',
+    DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer',
+    DATAGRID_GROUP_TEXT_CONTENT_CLASS = 'dx-datagrid-group-text-content',
+    DATAGRID_NOWRAP_CLASS = 'dx-datagrid-nowrap',
 
-    DATAGRID_GROUP_FOOTER_ROW_TYPE = "groupFooter";
+    DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 
 var renderSummaryCell = function(cell, options) {
         var i,
@@ -34,19 +34,19 @@ var renderSummaryCell = function(cell, options) {
         if(!column.command && summaryItems) {
             for(i = 0; i < summaryItems.length; i++) {
                 summaryItem = summaryItems[i];
-                $summaryItems.push($("<div>")
-                    .css("textAlign", summaryItem.alignment || column.alignment)
+                $summaryItems.push($('<div>')
+                    .css('textAlign', summaryItem.alignment || column.alignment)
                     .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
                     .addClass(DATAGRID_TEXT_CONTENT_CLASS)
                     .addClass(summaryItem.cssClass)
-                    .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === "group")
+                    .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
                     .text(gridCore.getSummaryText(summaryItem, options.summaryTexts)));
             }
             $cell.append($summaryItems);
         }
     },
     getSummaryCellOptions = function(that, options) {
-        var summaryTexts = that.option("summary.texts") || {};
+        var summaryTexts = that.option('summary.texts') || {};
 
         return {
             totalItem: options.row,
@@ -60,7 +60,7 @@ var getGroupAggregates = function(data) {
 };
 
 var recalculateWhileEditing = function(that) {
-    return that.option("summary.recalculateWhileEditing");
+    return that.option('summary.recalculateWhileEditing');
 };
 
 exports.FooterView = columnsView.ColumnsView.inherit((function() {
@@ -85,7 +85,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
                 this.element()
                     .empty()
                     .addClass(DATAGRID_TOTAL_FOOTER_CLASS)
-                    .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option("wordWrapEnabled"));
+                    .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option('wordWrapEnabled'));
             }
 
             if(totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
@@ -94,9 +94,9 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _updateContent: function($newTable, change) {
-            if(change && change.changeType === "update" && change.columnIndices) {
-                var $row = this._getTableElement().find(".dx-row"),
-                    $newRow = $newTable.find(".dx-row");
+            if(change && change.changeType === 'update' && change.columnIndices) {
+                var $row = this._getTableElement().find('.dx-row'),
+                    $newRow = $newTable.find('.dx-row');
 
                 this._updateCells($row, $newRow, change.columnIndices[0]);
             } else {
@@ -106,7 +106,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
 
         _rowClick: function(e) {
             var item = this._dataController.footerItems()[e.rowIndex] || {};
-            this.executeAction("onRowClick", extend({}, e, item));
+            this.executeAction('onRowClick', extend({}, e, item));
         },
 
         _columnOptionChanged: function(e) {
@@ -122,13 +122,13 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         _handleDataChanged: function(e) {
             var changeType = e.changeType;
 
-            if(e.changeType === "update" && e.repaintChangesOnly) {
+            if(e.changeType === 'update' && e.repaintChangesOnly) {
                 if(!e.totalColumnIndices) {
                     this.render();
                 } else if(e.totalColumnIndices.length) {
-                    this.render(null, { changeType: "update", columnIndices: [e.totalColumnIndices] });
+                    this.render(null, { changeType: 'update', columnIndices: [e.totalColumnIndices] });
                 }
-            } else if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
+            } else if(changeType === 'refresh' || changeType === 'append' || changeType === 'prepend') {
                 this.render();
             }
         },
@@ -241,7 +241,7 @@ var SummaryDataSourceAdapterClientExtender = (function() {
         var calculator;
 
         if(recalculateWhileEditing(that)) {
-            var editingController = that.getController("editing");
+            var editingController = that.getController('editing');
             if(editingController) {
                 var insertedData = editingController.getInsertedData();
                 if(insertedData.length) {
@@ -375,7 +375,7 @@ dataSourceAdapter.extend(SummaryDataSourceAdapterClientExtender);
 
 exports.renderSummaryCell = renderSummaryCell;
 
-gridCore.registerModule("summary", {
+gridCore.registerModule('summary', {
     defaultOptions: function() {
         return {
             /**
@@ -533,55 +533,55 @@ gridCore.registerModule("summary", {
                      * @type string
                      * @default "Sum={0}"
                      */
-                    sum: messageLocalization.getFormatter("dxDataGrid-summarySum"),
+                    sum: messageLocalization.getFormatter('dxDataGrid-summarySum'),
                     /**
                      * @name dxDataGridOptions.summary.texts.sumOtherColumn
                      * @type string
                      * @default "Sum of {1} is {0}"
                      */
-                    sumOtherColumn: messageLocalization.getFormatter("dxDataGrid-summarySumOtherColumn"),
+                    sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn'),
                     /**
                      * @name dxDataGridOptions.summary.texts.min
                      * @type string
                      * @default "Min={0}"
                      */
-                    min: messageLocalization.getFormatter("dxDataGrid-summaryMin"),
+                    min: messageLocalization.getFormatter('dxDataGrid-summaryMin'),
                     /**
                      * @name dxDataGridOptions.summary.texts.minOtherColumn
                      * @type string
                      * @default "Min of {1} is {0}"
                      */
-                    minOtherColumn: messageLocalization.getFormatter("dxDataGrid-summaryMinOtherColumn"),
+                    minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn'),
                     /**
                      * @name dxDataGridOptions.summary.texts.max
                      * @type string
                      * @default "Max={0}"
                      */
-                    max: messageLocalization.getFormatter("dxDataGrid-summaryMax"),
+                    max: messageLocalization.getFormatter('dxDataGrid-summaryMax'),
                     /**
                      * @name dxDataGridOptions.summary.texts.maxOtherColumn
                      * @type string
                      * @default "Max of {1} is {0}"
                      */
-                    maxOtherColumn: messageLocalization.getFormatter("dxDataGrid-summaryMaxOtherColumn"),
+                    maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn'),
                     /**
                      * @name dxDataGridOptions.summary.texts.avg
                      * @type string
                      * @default "Avg={0}"
                      */
-                    avg: messageLocalization.getFormatter("dxDataGrid-summaryAvg"),
+                    avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg'),
                     /**
                      * @name dxDataGridOptions.summary.texts.avgOtherColumn
                      * @type string
                      * @default "Avg of {1} is {0}"
                      */
-                    avgOtherColumn: messageLocalization.getFormatter("dxDataGrid-summaryAvgOtherColumn"),
+                    avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn'),
                     /**
                      * @name dxDataGridOptions.summary.texts.count
                      * @type string
                      * @default "Count={0}"
                      */
-                    count: messageLocalization.getFormatter("dxDataGrid-summaryCount")
+                    count: messageLocalization.getFormatter('dxDataGrid-summaryCount')
                 }
             },
             /**
@@ -620,7 +620,7 @@ gridCore.registerModule("summary", {
                     },
 
                     _isGroupFooterVisible: function() {
-                        var groupItems = this.option("summary.groupItems") || [],
+                        var groupItems = this.option('summary.groupItems') || [],
                             groupItem,
                             column,
                             i;
@@ -662,9 +662,9 @@ gridCore.registerModule("summary", {
                         var that = this;
 
                         if(!options.summaryGroupItems) {
-                            options.summaryGroupItems = that.option("summary.groupItems") || [];
+                            options.summaryGroupItems = that.option('summary.groupItems') || [];
                         }
-                        if(groupItem.rowType === "group") {
+                        if(groupItem.rowType === 'group') {
                             var groupColumnIndex = -1,
                                 afterGroupColumnIndex = -1;
 
@@ -675,7 +675,7 @@ gridCore.registerModule("summary", {
                                     groupColumnIndex = this.index;
                                 }
 
-                                if(visibleIndex > 0 && prevColumn.command === "expand" && this.command !== "expand") {
+                                if(visibleIndex > 0 && prevColumn.command === 'expand' && this.command !== 'expand') {
                                     afterGroupColumnIndex = this.index;
                                 }
                             });
@@ -722,7 +722,7 @@ gridCore.registerModule("summary", {
                                     var valueFormat;
                                     if(isDefined(summaryItem.valueFormat)) {
                                         valueFormat = summaryItem.valueFormat;
-                                    } else if(summaryItem.summaryType !== "count") {
+                                    } else if(summaryItem.summaryType !== 'count') {
                                         valueFormat = gridCore.getFormatByDataType(column && column.dataType);
                                     }
                                     summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
@@ -758,7 +758,7 @@ gridCore.registerModule("summary", {
                             dataSource = that._dataSource,
                             footerItems = that._footerItems,
                             oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells,
-                            summaryTotalItems = that.option("summary.totalItems");
+                            summaryTotalItems = that.option('summary.totalItems');
 
                         that._footerItems = [];
                         if(dataSource && summaryTotalItems && summaryTotalItems.length) {
@@ -776,7 +776,7 @@ gridCore.registerModule("summary", {
 
                             if(summaryCells.length) {
                                 that._footerItems.push({
-                                    rowType: "totalFooter",
+                                    rowType: 'totalFooter',
                                     summaryCells: summaryCells
                                 });
                             }
@@ -788,7 +788,7 @@ gridCore.registerModule("summary", {
                         var that = this;
 
                         if(recalculateWhileEditing(that)) {
-                            var editingController = that.getController("editing");
+                            var editingController = that.getController('editing');
                             if(editingController) {
                                 return function(data) {
                                     data = editingController.getUpdatedData(data);
@@ -803,7 +803,7 @@ gridCore.registerModule("summary", {
                     _prepareAggregateSelector: function(selector, aggregator) {
                         selector = this._prepareUnsavedDataSelector(selector);
 
-                        if(aggregator === "avg" || aggregator === "sum") {
+                        if(aggregator === 'avg' || aggregator === 'sum') {
                             return function(data) {
                                 var value = selector(data);
                                 return isDefined(value) ? Number(value) : value;
@@ -815,15 +815,15 @@ gridCore.registerModule("summary", {
 
                     _getAggregates: function(summaryItems, remoteOperations) {
                         var that = this,
-                            columnsController = that.getController("columns"),
-                            calculateCustomSummary = that.option("summary.calculateCustomSummary"),
-                            commonSkipEmptyValues = that.option("summary.skipEmptyValues");
+                            columnsController = that.getController('columns'),
+                            calculateCustomSummary = that.option('summary.calculateCustomSummary'),
+                            commonSkipEmptyValues = that.option('summary.skipEmptyValues');
 
                         return map(summaryItems || [], function(summaryItem) {
 
                             var column = columnsController.columnOption(summaryItem.column),
                                 calculateCellValue = (column && column.calculateCellValue) ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column),
-                                aggregator = summaryItem.summaryType || "count",
+                                aggregator = summaryItem.summaryType || 'count',
                                 selector = summaryItem.column,
                                 skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues,
                                 options;
@@ -836,9 +836,9 @@ gridCore.registerModule("summary", {
                             } else {
                                 selector = that._prepareAggregateSelector(calculateCellValue, aggregator);
 
-                                if(aggregator === "custom") {
+                                if(aggregator === 'custom') {
                                     if(!calculateCustomSummary) {
-                                        errors.log("E1026");
+                                        errors.log('E1026');
                                         calculateCustomSummary = function() { };
                                     }
                                     options = {
@@ -846,10 +846,10 @@ gridCore.registerModule("summary", {
                                         name: summaryItem.name
                                     };
                                     calculateCustomSummary(options);
-                                    options.summaryProcess = "calculate";
+                                    options.summaryProcess = 'calculate';
                                     aggregator = {
                                         seed: function(groupIndex) {
-                                            options.summaryProcess = "start";
+                                            options.summaryProcess = 'start';
                                             options.totalValue = undefined;
                                             options.groupIndex = groupIndex;
                                             delete options.value;
@@ -857,14 +857,14 @@ gridCore.registerModule("summary", {
                                             return options.totalValue;
                                         },
                                         step: function(totalValue, value) {
-                                            options.summaryProcess = "calculate";
+                                            options.summaryProcess = 'calculate';
                                             options.totalValue = totalValue;
                                             options.value = value;
                                             calculateCustomSummary(options);
                                             return options.totalValue;
                                         },
                                         finalize: function(totalValue) {
-                                            options.summaryProcess = "finalize";
+                                            options.summaryProcess = 'finalize';
                                             options.totalValue = totalValue;
                                             delete options.value;
                                             calculateCustomSummary(options);
@@ -890,7 +890,7 @@ gridCore.registerModule("summary", {
                                 sortByGroups[groupIndex] = sortByGroups[groupIndex] || [];
                                 sortByGroups[groupIndex].push({
                                     selector: selector,
-                                    desc: sortOrder === "desc"
+                                    desc: sortOrder === 'desc'
                                 });
                             }
                         }
@@ -903,7 +903,7 @@ gridCore.registerModule("summary", {
                             var summaryType = summaryItem.summaryType,
                                 column = summaryItem.column;
 
-                            return summaryType && column && summaryType + "_" + column;
+                            return summaryType && column && summaryType + '_' + column;
                         };
 
                         if(isDefined(name)) {
@@ -961,9 +961,9 @@ gridCore.registerModule("summary", {
 
                     _getSummaryOptions: function(remoteOperations) {
                         var that = this,
-                            groupSummaryItems = that.option("summary.groupItems"),
-                            totalSummaryItems = that.option("summary.totalItems"),
-                            sortByGroupSummaryInfo = that.option("sortByGroupSummaryInfo"),
+                            groupSummaryItems = that.option('summary.groupItems'),
+                            totalSummaryItems = that.option('summary.totalItems'),
+                            sortByGroupSummaryInfo = that.option('sortByGroupSummaryInfo'),
                             groupAggregates = that._getAggregates(groupSummaryItems, remoteOperations && remoteOperations.grouping && remoteOperations.summary),
                             totalAggregates = that._getAggregates(totalSummaryItems, remoteOperations && remoteOperations.summary),
                             sortByGroups = function() {
@@ -981,7 +981,7 @@ gridCore.registerModule("summary", {
 
                     publicMethods: function() {
                         var methods = this.callBase();
-                        methods.push("getTotalSummaryValue");
+                        methods.push('getTotalSummaryValue');
                         return methods;
                     },
 
@@ -992,7 +992,7 @@ gridCore.registerModule("summary", {
                      * @return any
                      */
                     getTotalSummaryValue: function(summaryItemName) {
-                        var summaryItemIndex = this._findSummaryItem(this.option("summary.totalItems"), summaryItemName),
+                        var summaryItemIndex = this._findSummaryItem(this.option('summary.totalItems'), summaryItemName),
                             aggregates = this._dataSource.totalAggregates();
 
                         if(aggregates.length && summaryItemIndex > -1) {
@@ -1001,8 +1001,8 @@ gridCore.registerModule("summary", {
                     },
 
                     optionChanged: function(args) {
-                        if(args.name === "summary" || args.name === "sortByGroupSummaryInfo") {
-                            args.name = "dataSource";
+                        if(args.name === 'summary' || args.name === 'sortByGroupSummaryInfo') {
+                            args.name = 'dataSource';
                         }
                         this.callBase(args);
                     },
@@ -1059,14 +1059,14 @@ gridCore.registerModule("summary", {
                     _createRow: function(row) {
                         var $row = this.callBase(row);
 
-                        row && $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : "");
+                        row && $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : '');
                         return $row;
                     },
 
                     _renderCells: function($row, options) {
                         this.callBase.apply(this, arguments);
 
-                        if(options.row.rowType === "group" && options.row.summaryCells && options.row.summaryCells.length) {
+                        if(options.row.rowType === 'group' && options.row.summaryCells && options.row.summaryCells.length) {
                             this._renderGroupSummaryCells($row, options);
                         }
                     },
@@ -1089,7 +1089,7 @@ gridCore.registerModule("summary", {
 
                     _renderGroupSummaryCells: function($row, options) {
                         var $groupCell = $row.children().last(),
-                            groupCellColSpan = Number($groupCell.attr("colSpan")) || 1,
+                            groupCellColSpan = Number($groupCell.attr('colSpan')) || 1,
                             alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
 
                         this._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
@@ -1097,7 +1097,7 @@ gridCore.registerModule("summary", {
 
                     _renderGroupSummaryCellsCore: function($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
                         if(alignByColumnCellCount > 0) {
-                            $groupCell.attr("colSpan", groupCellColSpan - alignByColumnCellCount);
+                            $groupCell.attr('colSpan', groupCellColSpan - alignByColumnCellCount);
 
                             for(var i = 0; i < alignByColumnCellCount; i++) {
                                 var columnIndex = options.columns.length - alignByColumnCellCount + i;

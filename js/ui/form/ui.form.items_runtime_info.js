@@ -1,7 +1,7 @@
-import Guid from "../../core/guid";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { isString } from "../../core/utils/type";
+import Guid from '../../core/guid';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { isString } from '../../core/utils/type';
 
 export default class FormItemsRunTimeInfo {
     constructor() {
@@ -26,7 +26,7 @@ export default class FormItemsRunTimeInfo {
         let result;
         each(this._map, function(key, value) {
             if(callback(value)) {
-                result = valueExpr === "guid" ? key : value[valueExpr];
+                result = valueExpr === 'guid' ? key : value[valueExpr];
                 return false;
             }
         });
@@ -80,15 +80,15 @@ export default class FormItemsRunTimeInfo {
     }
 
     getGroupOrTabLayoutManagerByPath(targetPath) {
-        return this._findFieldByCondition(({ path }) => path === targetPath, "layoutManager");
+        return this._findFieldByCondition(({ path }) => path === targetPath, 'layoutManager');
     }
 
     getKeyByPath(targetPath) {
-        return this._findFieldByCondition(({ path }) => path === targetPath, "guid");
+        return this._findFieldByCondition(({ path }) => path === targetPath, 'guid');
     }
 
     getPathFromItem(targetItem) {
-        return this._findFieldByCondition(({ item }) => item === targetItem, "path");
+        return this._findFieldByCondition(({ item }) => item === targetItem, 'path');
     }
 
     findWidgetInstanceByName(name) {
@@ -109,7 +109,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     findItemIndexByItem(targetItem) {
-        return this._findFieldByCondition(({ item }) => item === targetItem, "itemIndex");
+        return this._findFieldByCondition(({ item }) => item === targetItem, 'itemIndex');
     }
 
     getItems() {
@@ -124,7 +124,7 @@ export default class FormItemsRunTimeInfo {
 
     removeItemsByPathStartWith(path) {
         const keys = Object.keys(this._map);
-        const filteredKeys = keys.filter(key => this._map[key].path.startsWith(path));
+        const filteredKeys = keys.filter(key => this._map[key].path.indexOf(path, 0) > -1);
         filteredKeys.forEach(key => this.removeItemByKey(key));
     }
 }

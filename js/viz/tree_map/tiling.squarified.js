@@ -1,5 +1,5 @@
 var _max = Math.max,
-    _squarify = require("./tiling.squarified.base");
+    _squarify = require('./tiling.squarified.base');
 
 function accumulate(total, current) {
     return _max(total, current);
@@ -9,5 +9,5 @@ function squarified(data) {
     return _squarify(data, accumulate, false);
 }
 
-require("./tiling").addAlgorithm("squarified", squarified);
+require('./tiling').addAlgorithm('squarified', squarified);
 module.exports = squarified;

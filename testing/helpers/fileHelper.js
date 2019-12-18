@@ -2,11 +2,11 @@ var createBlobFile = function(name, size, type) {
     return {
         name: name,
         size: size,
-        type: type || "image/png",
+        type: type || 'image/png',
         blob: (function(size) {
-            var str = "";
+            var str = '';
             while(str.length < size) {
-                str += "a";
+                str += 'a';
             }
             return new Blob([str], { type: 'application/octet-binary' });
         })(size),

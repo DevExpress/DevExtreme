@@ -1,11 +1,11 @@
-var proto = require("./tree_map.base").prototype,
-    nodeProto = require("./node").prototype,
-    expand = require("../core/helpers").expand,
-    common = require("./common"),
+var proto = require('./tree_map.base').prototype,
+    nodeProto = require('./node').prototype,
+    expand = require('../core/helpers').expand,
+    common = require('./common'),
 
     _buildRectAppearance = common.buildRectAppearance,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    _inArray = require("../../core/utils/array").inArray,
+    _normalizeEnum = require('../core/utils').normalizeEnum,
+    _inArray = require('../../core/utils/array').inArray,
 
     MODE_NONE = 0,
     MODE_SINGLE = 1,
@@ -13,23 +13,23 @@ var proto = require("./tree_map.base").prototype,
 
     STATE_CODE = 2;
 
-require("./api");
-require("./states");
+require('./api');
+require('./states');
 
-proto._eventsMap.onSelectionChanged = { name: "selectionChanged" };
+proto._eventsMap.onSelectionChanged = { name: 'selectionChanged' };
 
-expand(proto._handlers, "calculateAdditionalStates", function(states, options) {
+expand(proto._handlers, 'calculateAdditionalStates', function(states, options) {
     states[2] = options.selectionStyle ? _buildRectAppearance(options.selectionStyle) : {};
 });
 
 nodeProto.statesMap[2] = nodeProto.statesMap[3] = STATE_CODE;
 nodeProto.additionalStates.push(2);
 
-expand(proto, "_onNodesCreated", function() {
+expand(proto, '_onNodesCreated', function() {
     this._selectionList.length = 0;
 });
 
-expand(proto, "_extendProxyType", function(proto) {
+expand(proto, '_extendProxyType', function(proto) {
     var that = this;
 
     proto.select = function(state) {
@@ -41,16 +41,16 @@ expand(proto, "_extendProxyType", function(proto) {
     that._selectionList = [];
 });
 
-require("./tree_map.base").addChange({
-    code: "SELECTION_MODE",
+require('./tree_map.base').addChange({
+    code: 'SELECTION_MODE',
     handler: function() {
         var that = this,
-            option = _normalizeEnum(that._getOption("selectionMode", true)),
+            option = _normalizeEnum(that._getOption('selectionMode', true)),
             mode,
             selectionList = that._selectionList,
             tmp;
 
-        mode = option === "none" ? MODE_NONE : (option === "multiple" ? MODE_MULTIPLE : MODE_SINGLE);
+        mode = option === 'none' ? MODE_NONE : (option === 'multiple' ? MODE_MULTIPLE : MODE_SINGLE);
         if(mode === MODE_SINGLE && selectionList.length > 1) {
             tmp = selectionList.pop();
             that.clearSelection();
@@ -62,10 +62,10 @@ require("./tree_map.base").addChange({
     },
     isThemeDependent: true,
     isOptionChange: true,
-    option: "selectionMode"
+    option: 'selectionMode'
 });
 
-expand(proto, "_applyTilesAppearance", function() {
+expand(proto, '_applyTilesAppearance', function() {
     if(this._selectionList.length) {
         bringSelectedTilesToForeground(this._nodes, this._selectionList);
     }
@@ -97,7 +97,7 @@ proto._applySelectionState = function(index, state) {
     var node = this._nodes[index];
 
     node.setState(STATE_CODE, state);
-    this._eventTrigger("selectionChanged", { node: node.proxy });
+    this._eventTrigger('selectionChanged', { node: node.proxy });
 };
 
 proto._selectNode = function(index, state) {

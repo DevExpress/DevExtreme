@@ -1,12 +1,12 @@
 /* global currentAssert */
 
-var $ = require("jquery"),
-    animationFrame = require("animation/frame"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    animationModule = require("viz/core/renderers/animation"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    vizMocks = require("../../helpers/vizMocks.js");
+var $ = require('jquery'),
+    animationFrame = require('animation/frame'),
+    commonUtils = require('core/utils/common'),
+    typeUtils = require('core/utils/type'),
+    animationModule = require('viz/core/renderers/animation'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    vizMocks = require('../../helpers/vizMocks.js');
 
 (function() {
     QUnit.module('AnimationController', {
@@ -195,7 +195,7 @@ var $ = require("jquery"),
         assert.deepEqual(animation2.stopArguments, [true]);
     });
 
-    QUnit.test("lock with unstoppable = true", function(assert) {
+    QUnit.test('lock with unstoppable = true', function(assert) {
         var animationController = this.createAnimationController(),
             animation1 = new this.Animation(undefined, undefined, {}),
             animation2 = new this.Animation(undefined, undefined, {
@@ -211,14 +211,14 @@ var $ = require("jquery"),
         animationController.lock();
 
         // assert
-        assert.equal(animation1.stopArguments.length, 1, "stop does called");
-        assert.ok(!animation2.stopArguments, "stop doesn't called");
+        assert.equal(animation1.stopArguments.length, 1, 'stop does called');
+        assert.ok(!animation2.stopArguments, 'stop doesn\'t called');
         assert.ok(!animationController.stop.called);
 
         originalStop.call(animationController);
     });
 
-    QUnit.test("lock with unstoppable = false", function(assert) {
+    QUnit.test('lock with unstoppable = false', function(assert) {
         var animationController = this.createAnimationController(),
             animation1 = new this.Animation(undefined, undefined, {}),
             animation2 = new this.Animation(undefined, undefined, {
@@ -235,8 +235,8 @@ var $ = require("jquery"),
         animationController.lock();
 
         // assert
-        assert.equal(animation1.stopArguments.length, 1, "stop does called");
-        assert.equal(animation2.stopArguments.length, 1, "stop does called");
+        assert.equal(animation1.stopArguments.length, 1, 'stop does called');
+        assert.equal(animation2.stopArguments.length, 1, 'stop does called');
         assert.equal(animationController.stop.callCount, 1);
 
         originalStop.call(animationController);
@@ -754,7 +754,7 @@ var $ = require("jquery"),
         assert.equal(completeCallCount, 1);
     });
 
-    QUnit.module("Delayed animation", {
+    QUnit.module('Delayed animation', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
             environment.beforeEach.call(this);
@@ -769,7 +769,7 @@ var $ = require("jquery"),
             animation = new this.Animation(this.element, this.params, $.extend(this.options,
                 {
                     step: step,
-                    easing: "linear",
+                    easing: 'linear',
                     duration: 100,
                     delay: 0.2
                 }));
@@ -793,7 +793,7 @@ var $ = require("jquery"),
             animation = new this.Animation(this.element, this.params, $.extend(this.options,
                 {
                     step: step,
-                    easing: "linear",
+                    easing: 'linear',
                     duration: 100,
                     delay: 0.2
                 }));
@@ -996,41 +996,41 @@ QUnit.test('Segments step', function(assert) {
     var step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
-        from: [["M", 10, 20], ["L", 10, 40], ["L", 50, 1], ["Z"]],
-        to: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]]
+        from: [['M', 10, 20], ['L', 10, 40], ['L', 50, 1], ['Z']],
+        to: [['M', 0, 10], ['L', 10, 30], ['L', 40, 2], ['Z']]
     }, 0.5, this.easing(assert), this.currentParams);
 
-    assert.deepEqual(this.currentParams, { segments: [["M", 5, 15], ["L", 10, 35], ["L", 45, 1.5], ["Z"]] });
+    assert.deepEqual(this.currentParams, { segments: [['M', 5, 15], ['L', 10, 35], ['L', 45, 1.5], ['Z']] });
     assert.strictEqual(this.element.stub('attr').callCount, 1);
-    assert.deepEqual(this.element.stub('attr').firstCall.args[0], { segments: [["M", 5, 15], ["L", 10, 35], ["L", 45, 1.5], ["Z"]] });
+    assert.deepEqual(this.element.stub('attr').firstCall.args[0], { segments: [['M', 5, 15], ['L', 10, 35], ['L', 45, 1.5], ['Z']] });
 });
 
 QUnit.test('Segments step with end param', function(assert) {
     var step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
-        from: [["M", 10, 20], ["L", 10, 40], ["L", 50, 1], ["Z"]],
-        to: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]],
-        end: [["M", 1, 2], ["L", 3, 4]]
+        from: [['M', 10, 20], ['L', 10, 40], ['L', 50, 1], ['Z']],
+        to: [['M', 0, 10], ['L', 10, 30], ['L', 40, 2], ['Z']],
+        end: [['M', 1, 2], ['L', 3, 4]]
     }, 0.5, this.easing(assert), this.currentParams);
 
-    assert.deepEqual(this.currentParams, { segments: [["M", 5, 15], ["L", 10, 35], ["L", 45, 1.5], ["Z"]] });
+    assert.deepEqual(this.currentParams, { segments: [['M', 5, 15], ['L', 10, 35], ['L', 45, 1.5], ['Z']] });
     assert.strictEqual(this.element.stub('attr').callCount, 1);
-    assert.deepEqual(this.element.stub('attr').firstCall.args[0], { segments: [["M", 5, 15], ["L", 10, 35], ["L", 45, 1.5], ["Z"]] });
+    assert.deepEqual(this.element.stub('attr').firstCall.args[0], { segments: [['M', 5, 15], ['L', 10, 35], ['L', 45, 1.5], ['Z']] });
 });
 
 QUnit.test('Segments last step with end param', function(assert) {
     var step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
-        from: [["M", 10, 20], ["L", 10, 40], ["L", 50, 1], ["Z"]],
-        to: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]],
-        end: [["M", 1, 2], ["L", 3, 4]]
+        from: [['M', 10, 20], ['L', 10, 40], ['L', 50, 1], ['Z']],
+        to: [['M', 0, 10], ['L', 10, 30], ['L', 40, 2], ['Z']],
+        end: [['M', 1, 2], ['L', 3, 4]]
     }, 1, this.easing(assert), this.currentParams);
 
-    assert.deepEqual(this.currentParams, { segments: [["M", 1, 2], ["L", 3, 4]] });
+    assert.deepEqual(this.currentParams, { segments: [['M', 1, 2], ['L', 3, 4]] });
     assert.strictEqual(this.element.stub('attr').callCount, 1);
-    assert.deepEqual(this.element.stub('attr').firstCall.args[0], { segments: [["M", 0, 10], ["L", 10, 30], ["L", 40, 2], ["Z"]] });
+    assert.deepEqual(this.element.stub('attr').firstCall.args[0], { segments: [['M', 0, 10], ['L', 10, 30], ['L', 40, 2], ['Z']] });
 });
 
 QUnit.test('Complete action', function(assert) {

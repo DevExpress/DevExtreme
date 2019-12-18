@@ -1,16 +1,16 @@
-var extend = require("../../core/utils/extend").extend,
-    BaseStrategy = require("./base"),
-    Observer = require("./observer");
+var extend = require('../../core/utils/extend').extend,
+    BaseStrategy = require('./base'),
+    Observer = require('./observer');
 
 var eventMap = {
-    "dxpointerdown": "mousedown",
-    "dxpointermove": "mousemove",
-    "dxpointerup": "mouseup",
-    "dxpointercancel": "",
-    "dxpointerover": "mouseover",
-    "dxpointerout": "mouseout",
-    "dxpointerenter": "mouseenter",
-    "dxpointerleave": "mouseleave"
+    'dxpointerdown': 'mousedown',
+    'dxpointermove': 'mousemove',
+    'dxpointerup': 'mouseup',
+    'dxpointercancel': '',
+    'dxpointerover': 'mouseover',
+    'dxpointerout': 'mouseout',
+    'dxpointerenter': 'mouseenter',
+    'dxpointerleave': 'mouseleave'
 };
 
 var normalizeMouseEvent = function(e) {

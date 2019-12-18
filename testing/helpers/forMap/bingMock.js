@@ -4,13 +4,13 @@ var Microsoft = window.Microsoft = {};
 
 Microsoft.Maps = {
     MapTypeId: {
-        "aerial": 1,
-        "auto": 2,
-        "birdseye": 3,
-        "collinsBart": 4,
-        "mercator": 5,
-        "ordnanceSurvey": 6,
-        "road": 7
+        'aerial': 1,
+        'auto': 2,
+        'birdseye': 3,
+        'collinsBart': 4,
+        'mercator': 5,
+        'ordnanceSurvey': 6,
+        'road': 7
     },
     Directions: {
         DirectionsManager: function(map) {
@@ -72,14 +72,14 @@ Microsoft.Maps = {
     Events: {
         addHandler: function(_, name, callback) {
             switch(name) {
-                case "tiledownloadcomplete":
+                case 'tiledownloadcomplete':
                     Microsoft.mapInitialized = true;
                     setTimeout(callback);
-                    return "tiledownloadcompleteHandler";
-                case "click":
+                    return 'tiledownloadcompleteHandler';
+                case 'click':
                     Microsoft.clickActionCallback = callback;
-                    return "clickHandler";
-                case "directionsUpdated":
+                    return 'clickHandler';
+                case 'directionsUpdated':
                     if(Microsoft.abortDirectionsUpdate) {
                         return;
                     }
@@ -93,53 +93,53 @@ Microsoft.Maps = {
                             }]
                         });
                     });
-                    return "directionsUpdatedHandler";
-                case "directionsError":
+                    return 'directionsUpdatedHandler';
+                case 'directionsError':
                     if(!Microsoft.abortDirectionsUpdate) {
                         return;
                     }
 
                     setTimeout(function() {
                         callback({
-                            responseCode: 1, message: "Directions error"
+                            responseCode: 1, message: 'Directions error'
                         });
                     });
-                    return "directionsErrorHandler";
-                case "viewchange":
+                    return 'directionsErrorHandler';
+                case 'viewchange':
                     Microsoft.viewChangeCallback = callback;
-                    return "viewchangeHandler";
-                case "viewchangeend":
+                    return 'viewchangeHandler';
+                case 'viewchangeend':
                     Microsoft.viewChangeEndCallback = callback;
-                    return "viewchangeendHandler";
+                    return 'viewchangeendHandler';
             }
         },
         addThrottledHandler: function() {}, // (target:object, eventName:string, handler:function, throttleInterval:number)
         hasHandler: function() {}, // (target:object, eventName:string)
         invoke: function(_, handler) {
             switch(handler) {
-                case "viewchange":
+                case 'viewchange':
                     Microsoft.viewChangeCallback();
                     break;
             }
         },
         removeHandler: function(handler) {
             switch(handler) {
-                case "tiledownloadcompleteHandler":
-                    Microsoft["tiledownloadcompleteHandlerRemoved"] = true;
+                case 'tiledownloadcompleteHandler':
+                    Microsoft['tiledownloadcompleteHandlerRemoved'] = true;
                     break;
-                case "clickHandler":
+                case 'clickHandler':
                     Microsoft.clickHandlerRemoved = true;
                     break;
-                case "directionsUpdatedHandler":
-                case "directionsErrorHandler":
+                case 'directionsUpdatedHandler':
+                case 'directionsErrorHandler':
                     Microsoft.directionsUpdatedHandlerRemoved = true;
                     Microsoft.directionsErrorHandlerRemoved = true;
                     break;
-                case "viewchangeHandler":
-                    Microsoft["viewchangeHandlerRemoved"] = true;
+                case 'viewchangeHandler':
+                    Microsoft['viewchangeHandlerRemoved'] = true;
                     break;
-                case "viewchangeendHandler":
-                    Microsoft["viewchangeendHandlerRemoved"] = true;
+                case 'viewchangeendHandler':
+                    Microsoft['viewchangeendHandlerRemoved'] = true;
                     break;
             }
         }
@@ -208,7 +208,7 @@ Microsoft.Maps = {
         };
         this.setView = function(options) {
             if(options.animate) {
-                throw new Error("Animation turned should be turned off");
+                throw new Error('Animation turned should be turned off');
             }
             Microsoft.assignedOptions = jQuery.extend(Microsoft.assignedOptions || {}, options);
             if(options.bounds) {
@@ -224,8 +224,8 @@ Microsoft.Maps = {
         };
     },
     LabelOverlay: {
-        visible: "visible",
-        hidden: "hidden"
+        visible: 'visible',
+        hidden: 'hidden'
     },
     Location: function(latitude, longitude, altitude, altitudeReference) {
         this.altitude = altitude;
@@ -340,7 +340,7 @@ Microsoft.Maps = {
             this.geocode = function(options) {
                 Microsoft.geocodeCalled = (Microsoft.geocodeCalled || 0) + 1;
                 var results = [];
-                if(options.where !== "") {
+                if(options.where !== '') {
                     results.push({
                         name: options.where,
                         location: { latitude: -1.12345, longitude: -1.12345 }
@@ -358,7 +358,7 @@ Microsoft.Maps = {
         this.y = y;
     },
     MouseEventArgs: function(x, y) {
-        this.targetType = "map";
+        this.targetType = 'map';
         this.target = new Microsoft.Maps.Map();
         this.getX = function() {
             return x;

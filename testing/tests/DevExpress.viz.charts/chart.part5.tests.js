@@ -1,40 +1,40 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    commons = require("./chartParts/commons.js"),
-    scrollBarClassModule = require("viz/chart_components/scroll_bar"),
-    trackerModule = require("viz/chart_components/tracker"),
-    chartMocks = require("../../helpers/chartMocks.js"),
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    commons = require('./chartParts/commons.js'),
+    scrollBarClassModule = require('viz/chart_components/scroll_bar'),
+    trackerModule = require('viz/chart_components/tracker'),
+    chartMocks = require('../../helpers/chartMocks.js'),
     MockSeries = chartMocks.MockSeries,
     categories = chartMocks.categories;
 
-$('<div id="chartContainer">').appendTo("#qunit-fixture");
+$('<div id="chartContainer">').appendTo('#qunit-fixture');
 
 var OldEventsName = {
-    "seriesClick": "onSeriesClick",
-    "pointClick": "onPointClick",
-    "argumentAxisClick": "onArgumentAxisClick",
-    "legendClick": "onLegendClick",
-    "pointHoverChanged": "onPointHoverChanged",
-    "seriesSelectionChanged": "onSeriesSelectionChanged",
-    "pointSelectionChanged": "onPointSelectionChanged",
-    "seriesHoverChanged": "onSeriesHoverChanged",
-    "tooltipShown": "onTooltipShown",
-    "tooltipHidden": "onTooltipHidden"
+    'seriesClick': 'onSeriesClick',
+    'pointClick': 'onPointClick',
+    'argumentAxisClick': 'onArgumentAxisClick',
+    'legendClick': 'onLegendClick',
+    'pointHoverChanged': 'onPointHoverChanged',
+    'seriesSelectionChanged': 'onSeriesSelectionChanged',
+    'pointSelectionChanged': 'onPointSelectionChanged',
+    'seriesHoverChanged': 'onSeriesHoverChanged',
+    'tooltipShown': 'onTooltipShown',
+    'tooltipHidden': 'onTooltipHidden'
 };
 
-QUnit.module("Zooming", commons.environment);
+QUnit.module('Zooming', commons.environment);
 
-QUnit.test("chart with single value axis. Zooming with all null/undefined values", function(assert) {
+QUnit.test('chart with single value axis. Zooming with all null/undefined values', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
             argumentAxis: {
-                argumentType: "numeric"
+                argumentType: 'numeric'
             },
             series: [{
-                type: "line"
+                type: 'line'
             }]
         }),
-        chartRenderSpy = sinon.spy(chart, "_doRender");
+        chartRenderSpy = sinon.spy(chart, '_doRender');
 
     // act
     chart.zoomArgument(undefined, undefined);
@@ -42,20 +42,20 @@ QUnit.test("chart with single value axis. Zooming with all null/undefined values
     assert.equal(chartRenderSpy.callCount, 0);
 });
 
-QUnit.test("chart with single value axis. Zooming with one null/undefined values", function(assert) {
+QUnit.test('chart with single value axis. Zooming with one null/undefined values', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
     chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
             argumentAxis: {
-                argumentType: "numeric"
+                argumentType: 'numeric'
             },
             series: [{
-                type: "line"
+                type: 'line'
             }, {
-                type: "line"
+                type: 'line'
             }]
         }),
-        chartRenderSpy = sinon.spy(chart, "_doRender");
+        chartRenderSpy = sinon.spy(chart, '_doRender');
 
     // act
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
@@ -64,7 +64,7 @@ QUnit.test("chart with single value axis. Zooming with one null/undefined values
     assert.equal(chartRenderSpy.callCount, 1);
 });
 
-QUnit.test("No reset zooming on series changed", function(assert) {
+QUnit.test('No reset zooming on series changed', function(assert) {
     var series1 = new MockSeries(),
         series2 = new MockSeries();
 
@@ -73,10 +73,10 @@ QUnit.test("No reset zooming on series changed", function(assert) {
 
     var chart = this.createChart({
         argumentAxis: {
-            argumentType: "numeric"
+            argumentType: 'numeric'
         },
         series: [{
-            type: "line"
+            type: 'line'
         }]
     });
 
@@ -92,8 +92,8 @@ QUnit.test("No reset zooming on series changed", function(assert) {
     chart._valueAxes[0].adjust.reset();
     // act
     chart.option({
-        series: { type: "area" },
-        palette: ["black", "red"]
+        series: { type: 'area' },
+        palette: ['black', 'red']
     });
 
     // assert
@@ -101,7 +101,7 @@ QUnit.test("No reset zooming on series changed", function(assert) {
     assert.strictEqual(series2.getValueAxis().adjust.lastCall.args[0], false);
 });
 
-QUnit.test("No reset zooming on series changed with not zoomed axis", function(assert) {
+QUnit.test('No reset zooming on series changed with not zoomed axis', function(assert) {
     var series1 = new MockSeries(),
         series2 = new MockSeries();
 
@@ -110,10 +110,10 @@ QUnit.test("No reset zooming on series changed with not zoomed axis", function(a
 
     var chart = this.createChart({
         argumentAxis: {
-            argumentType: "numeric"
+            argumentType: 'numeric'
         },
         series: [{
-            type: "line"
+            type: 'line'
         }]
     });
 
@@ -129,8 +129,8 @@ QUnit.test("No reset zooming on series changed with not zoomed axis", function(a
     chart._valueAxes[0].adjust.reset();
     // act
     chart.option({
-        series: { type: "area" },
-        palette: ["black", "red"]
+        series: { type: 'area' },
+        palette: ['black', 'red']
     });
 
     // assert
@@ -138,24 +138,24 @@ QUnit.test("No reset zooming on series changed with not zoomed axis", function(a
     assert.strictEqual(series2.getValueAxis().adjust.lastCall.args[0], true);
 });
 
-QUnit.test("chart with single value axis. Adjust on zoom = false", function(assert) {
+QUnit.test('chart with single value axis. Adjust on zoom = false', function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
     chartMocks.seriesMockData.series.push(series1, series2);
 
     var chart = this.createChart({
-        series: [{ type: "line" }, { type: "line" }],
+        series: [{ type: 'line' }, { type: 'line' }],
         adjustOnZoom: false
     });
     // act
 
     chart.zoomArgument(10, 50);
     // assert
-    assert.ok(!series1.getValueAxis().adjust.called, "value axis are not zoomed");
+    assert.ok(!series1.getValueAxis().adjust.called, 'value axis are not zoomed');
 });
 
-QUnit.test("MultiAxis chart", function(assert) {
+QUnit.test('MultiAxis chart', function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
@@ -164,15 +164,15 @@ QUnit.test("MultiAxis chart", function(assert) {
     var chart = this.createChart({
 
         series: [{
-            type: "line",
-            axis: "axis1"
+            type: 'line',
+            axis: 'axis1'
         }, {
-            axis: "axis2",
-            type: "line"
+            axis: 'axis2',
+            type: 'line'
         }],
         valueAxis: [
-            { name: "axis1" },
-            { name: "axis1" }
+            { name: 'axis1' },
+            { name: 'axis1' }
         ]
     });
 
@@ -182,13 +182,13 @@ QUnit.test("MultiAxis chart", function(assert) {
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
     // assert
 
-    assert.deepEqual(series1.getValueAxis().adjust.callCount, 1, "axis 1 viewport adjusted");
-    assert.deepEqual(series2.getValueAxis().adjust.callCount, 1, "axis 2 viewport adjusted");
+    assert.deepEqual(series1.getValueAxis().adjust.callCount, 1, 'axis 1 viewport adjusted');
+    assert.deepEqual(series2.getValueAxis().adjust.callCount, 1, 'axis 2 viewport adjusted');
     assert.strictEqual(series1.getValueAxis().adjust.firstCall.args[0], false);
     assert.strictEqual(series2.getValueAxis().adjust.firstCall.args[0], false);
 });
 
-QUnit.test("Set visual range for all argument axis except original target one", function(assert) {
+QUnit.test('Set visual range for all argument axis except original target one', function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
@@ -196,16 +196,16 @@ QUnit.test("Set visual range for all argument axis except original target one", 
 
     var chart = this.createChart({
         series: [{
-            type: "line",
-            pane: "p1"
+            type: 'line',
+            pane: 'p1'
         }, {
-            pane: "p2",
-            type: "line"
+            pane: 'p2',
+            type: 'line'
         }],
         panes: [{
-            name: "p1"
+            name: 'p1'
         }, {
-            name: "p2"
+            name: 'p2'
         }]
     });
     chart._argumentAxes[0].visualRange.reset();
@@ -217,7 +217,7 @@ QUnit.test("Set visual range for all argument axis except original target one", 
     assert.equal(chart._argumentAxes[1], chart.getArgumentAxis());
 });
 
-QUnit.test("chart with single value with aggregation. Adjust on zoom = true", function(assert) {
+QUnit.test('chart with single value with aggregation. Adjust on zoom = true', function(assert) {
     var series1 = new MockSeries({});
 
     series1.useAggregation.returns(true);
@@ -231,7 +231,7 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = true", fu
     this.createChart({
         adjustOnZoom: true,
         series: [{
-            type: "line"
+            type: 'line'
         }]
     });
 
@@ -239,7 +239,7 @@ QUnit.test("chart with single value with aggregation. Adjust on zoom = true", fu
     assert.strictEqual(series1.getValueAxis().adjust.callCount, 1);
 });
 
-QUnit.test("Aggregation with min and max on argument axis, without zooming", function(assert) {
+QUnit.test('Aggregation with min and max on argument axis, without zooming', function(assert) {
     var series1 = new MockSeries({
         range: {
             val: { min: 0, max: 1 },
@@ -254,7 +254,7 @@ QUnit.test("Aggregation with min and max on argument axis, without zooming", fun
     this.createChart({
         adjustOnZoom: true,
         series: [{
-            type: "line"
+            type: 'line'
         }]
     });
     // assert
@@ -262,7 +262,7 @@ QUnit.test("Aggregation with min and max on argument axis, without zooming", fun
 });
 
 // T557040
-QUnit.test("Aggregation. One of the series without points", function(assert) {
+QUnit.test('Aggregation. One of the series without points', function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
@@ -283,16 +283,16 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
     this.createChart({
         adjustOnZoom: true,
         series: [{
-            type: "line"
+            type: 'line'
         }, {}]
     });
 
     assert.strictEqual(series1.getValueAxis().adjust.callCount, 1);
 });
 
-QUnit.module("Pane synchronization", commons.environment);
+QUnit.module('Pane synchronization', commons.environment);
 
-QUnit.test("simple chart with two panes", function(assert) {
+QUnit.test('simple chart with two panes', function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
@@ -305,15 +305,15 @@ QUnit.test("simple chart with two panes", function(assert) {
             categories: categories
         },
         panes: [{
-            name: "top"
+            name: 'top'
         },
         {
-            name: "bottom"
+            name: 'bottom'
         }
         ],
         series: [
-            { pane: "top", type: "line" },
-            { pane: "bottom", type: "line" }
+            { pane: 'top', type: 'line' },
+            { pane: 'bottom', type: 'line' }
         ],
         valueAxis: {
             maxPadding: 0.3,
@@ -330,7 +330,7 @@ QUnit.test("simple chart with two panes", function(assert) {
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 });
 
-QUnit.test("Rotated chart with two panes", function(assert) {
+QUnit.test('Rotated chart with two panes', function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
         stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
@@ -344,15 +344,15 @@ QUnit.test("Rotated chart with two panes", function(assert) {
             categories: categories
         },
         panes: [{
-            name: "top"
+            name: 'top'
         },
         {
-            name: "bottom"
+            name: 'bottom'
         }
         ],
         series: [
-            { pane: "top", type: "line" },
-            { pane: "bottom", type: "line" }
+            { pane: 'top', type: 'line' },
+            { pane: 'bottom', type: 'line' }
         ],
         valueAxis: {
             mockTickValues: [20, 40, 60, 80],
@@ -368,7 +368,7 @@ QUnit.test("Rotated chart with two panes", function(assert) {
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 });
 
-QUnit.test("chart with one empty pane", function(assert) {
+QUnit.test('chart with one empty pane', function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
     chartMocks.seriesMockData.series.push(stubSeries1);
@@ -379,11 +379,11 @@ QUnit.test("chart with one empty pane", function(assert) {
             categories: categories
         },
         panes: [
-            { name: "empty" },
-            { name: "bottom" }
+            { name: 'empty' },
+            { name: 'bottom' }
         ],
         series: [
-            { pane: "bottom", type: "line" }
+            { pane: 'bottom', type: 'line' }
         ],
         valueAxis: {
             mockTickValues: [20, 40, 60, 80]
@@ -402,7 +402,7 @@ QUnit.test("chart with one empty pane", function(assert) {
     assert.equal(chart._valueAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), true);
 });
 
-QUnit.test("Rotated chart with one empty pane", function(assert) {
+QUnit.test('Rotated chart with one empty pane', function(assert) {
     var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 }, arg: { min: -1, max: 10 } } });
 
     chartMocks.seriesMockData.series.push(stubSeries1);
@@ -413,11 +413,11 @@ QUnit.test("Rotated chart with one empty pane", function(assert) {
             categories: categories
         },
         panes: [
-            { name: "empty" },
-            { name: "left" }
+            { name: 'empty' },
+            { name: 'left' }
         ],
         series: [
-            { pane: "left", type: "line" }
+            { pane: 'left', type: 'line' }
         ],
         valueAxis: {
             mockTickValues: [20, 40, 60, 80]
@@ -427,7 +427,7 @@ QUnit.test("Rotated chart with one empty pane", function(assert) {
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 2);
     // assert
-    assert.strictEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0], chart._argumentAxes[0].setBusinessRange.lastCall.args[0], "all argument axes have same range");
+    assert.strictEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0], chart._argumentAxes[0].setBusinessRange.lastCall.args[0], 'all argument axes have same range');
 
     assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
     assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
@@ -436,7 +436,7 @@ QUnit.test("Rotated chart with one empty pane", function(assert) {
     assert.equal(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), false);
 });
 
-QUnit.test("Update axis canvas. One pane", function(assert) {
+QUnit.test('Update axis canvas. One pane', function(assert) {
     // act
     var chart = this.createChart({});
     // assert
@@ -444,31 +444,31 @@ QUnit.test("Update axis canvas. One pane", function(assert) {
     assert.deepEqual(chart._valueAxes[0].updateSize.lastCall.args[0], chart.panes[0].canvas);
 });
 
-QUnit.test("Update axis canvas. Two panes", function(assert) {
+QUnit.test('Update axis canvas. Two panes', function(assert) {
     // act
     var chart = this.createChart({
         panes: [
-            { name: "top" },
-            { name: "bottom" }
+            { name: 'top' },
+            { name: 'bottom' }
         ],
         valueAxis: [
-            { pane: "top" },
-            { pane: "bottom" },
-            { pane: "top" }
+            { pane: 'top' },
+            { pane: 'bottom' },
+            { pane: 'top' }
         ]
     });
     // assert
     assert.deepEqual(chart._argumentAxes[0].updateSize.lastCall.args[0], chart.panes[0].canvas);
     assert.deepEqual(chart._argumentAxes[1].updateSize.lastCall.args[0], chart.panes[1].canvas);
 
-    assert.deepEqual(chart._valueAxes[0].updateSize.lastCall.args[0], chart.panes[0].canvas, "first value axis");
-    assert.deepEqual(chart._valueAxes[1].updateSize.lastCall.args[0], chart.panes[1].canvas, "second value axis");
-    assert.deepEqual(chart._valueAxes[2].updateSize.lastCall.args[0], chart.panes[0].canvas, "third value axis");
+    assert.deepEqual(chart._valueAxes[0].updateSize.lastCall.args[0], chart.panes[0].canvas, 'first value axis');
+    assert.deepEqual(chart._valueAxes[1].updateSize.lastCall.args[0], chart.panes[1].canvas, 'second value axis');
+    assert.deepEqual(chart._valueAxes[2].updateSize.lastCall.args[0], chart.panes[0].canvas, 'third value axis');
 });
 
-QUnit.module("scrollBar", commons.environment);
+QUnit.module('scrollBar', commons.environment);
 
-QUnit.test("chart with invisible scrollBar", function(assert) {
+QUnit.test('chart with invisible scrollBar', function(assert) {
     this.createChart({
         margin: {
             width: 100,
@@ -481,7 +481,7 @@ QUnit.test("chart with invisible scrollBar", function(assert) {
     assert.ok(!scrollBarClassModule.ScrollBar.called);
 });
 
-QUnit.test("chart with visible scrollBar", function(assert) {
+QUnit.test('chart with visible scrollBar', function(assert) {
     var chart = this.createChart({
             scrollBar: {
                 visible: true
@@ -499,7 +499,7 @@ QUnit.test("chart with visible scrollBar", function(assert) {
         visible: true
     }]);
 
-    assert.ok(scrollBar, "scroll bar");
+    assert.ok(scrollBar, 'scroll bar');
 
     assert.ok(scrollBar.init.calledOnce);
     assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
@@ -512,7 +512,7 @@ QUnit.test("chart with visible scrollBar", function(assert) {
     assert.ok(scrollBar.updateSize.calledOnce);
 });
 
-QUnit.test("chart with visible scrollBar. Rotated", function(assert) {
+QUnit.test('chart with visible scrollBar. Rotated', function(assert) {
     var chart = this.createChart({
             rotated: true,
             scrollBar: {
@@ -544,7 +544,7 @@ QUnit.test("chart with visible scrollBar. Rotated", function(assert) {
     assert.ok(scrollBar.updateSize.calledOnce);
 });
 
-QUnit.test("chart with visible scrollBar, argumentAxis.valueMarginsEnabled = true - init scrollBar with stick false", function(assert) {
+QUnit.test('chart with visible scrollBar, argumentAxis.valueMarginsEnabled = true - init scrollBar with stick false', function(assert) {
     this.createChart({
         scrollBar: {
             visible: true
@@ -557,17 +557,17 @@ QUnit.test("chart with visible scrollBar, argumentAxis.valueMarginsEnabled = tru
     assert.strictEqual(scrollBarClassModule.ScrollBar.lastCall.returnValue.init.lastCall.args[1], false);
 });
 
-QUnit.test("T172802. Scroll bar after zooming. One categories", function(assert) {
+QUnit.test('T172802. Scroll bar after zooming. One categories', function(assert) {
     var chart = this.createChart({
             scrollBar: {
                 visible: true
             },
             argumentAxis: {
                 mockRange: {
-                    axisType: "discrete",
-                    categories: ["January"],
-                    minVisible: "January",
-                    maxVisible: "January"
+                    axisType: 'discrete',
+                    categories: ['January'],
+                    minVisible: 'January',
+                    maxVisible: 'January'
                 }
             }
         }),
@@ -575,14 +575,14 @@ QUnit.test("T172802. Scroll bar after zooming. One categories", function(assert)
 
     scrollBar.setPosition.reset();
 
-    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: "January", endValue: "January" });
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 'January', endValue: 'January' });
 
     assert.ok(scrollBar.setPosition.calledOnce);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [undefined, undefined]);
 });
 
-QUnit.test("applyTheme", function(assert) {
-    this.themeManager.getOptions.withArgs("scrollBar").returns({
+QUnit.test('applyTheme', function(assert) {
+    this.themeManager.getOptions.withArgs('scrollBar').returns({
         scrollBarThemeApplied: true,
         visible: true
     });
@@ -602,11 +602,11 @@ QUnit.test("applyTheme", function(assert) {
     }]);
 });
 
-QUnit.test("ScrollBar option changed", function(assert) {
+QUnit.test('ScrollBar option changed', function(assert) {
     var chart = this.createChart({
             scrollBar: {
                 visible: true,
-                color: "old"
+                color: 'old'
             }
         }),
         scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue,
@@ -615,15 +615,15 @@ QUnit.test("ScrollBar option changed", function(assert) {
     scrollBar.init.reset();
     scrollBar.setPosition.reset();
 
-    this.themeManager.getOptions.withArgs("scrollBar").returns({
+    this.themeManager.getOptions.withArgs('scrollBar').returns({
         visible: true,
-        color: "new"
+        color: 'new'
     });
     // act
 
-    chart.option("scrollBar", {
+    chart.option('scrollBar', {
         visible: true,
-        color: "new"
+        color: 'new'
     });
 
     range = chart._argumentAxes[0].getTranslator().getBusinessRange();
@@ -636,36 +636,36 @@ QUnit.test("ScrollBar option changed", function(assert) {
     assert.deepEqual(scrollBar.update.lastCall.args, [{
         rotated: false,
         visible: true,
-        color: "new"
+        color: 'new'
     }]);
 
-    assert.equal(scrollBar.init.callCount, 1, "scroll bar init calls");
+    assert.equal(scrollBar.init.callCount, 1, 'scroll bar init calls');
     assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
     assert.equal(scrollBar.setPosition.callCount, 1);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);
 });
 
-QUnit.test("Options changed - hide scrollBar", function(assert) {
+QUnit.test('Options changed - hide scrollBar', function(assert) {
     var chart = this.createChart({
             scrollBar: {
                 visible: true,
-                color: "old"
+                color: 'old'
             }
         }),
         scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
     scrollBar.init.reset();
     scrollBar.setPosition.reset();
 
-    this.themeManager.getOptions.withArgs("scrollBar").returns({
+    this.themeManager.getOptions.withArgs('scrollBar').returns({
         visible: false,
-        color: "new"
+        color: 'new'
     });
     // act
 
-    chart.option("scrollBar", {
+    chart.option('scrollBar', {
         visible: false,
-        color: "new"
+        color: 'new'
     });
 
     // assert
@@ -673,30 +673,30 @@ QUnit.test("Options changed - hide scrollBar", function(assert) {
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.args, [chart._renderer, chart._scrollBarGroup]);
     assert.ok(scrollBar.update.calledOnce);
 
-    assert.equal(scrollBar.dispose.callCount, 1, "scrollBar disposed");
+    assert.equal(scrollBar.dispose.callCount, 1, 'scrollBar disposed');
 
     assert.ok(chart._scrollBarGroup.linkRemove.called);
 });
 
-QUnit.test("Options changed - show scrollBar", function(assert) {
+QUnit.test('Options changed - show scrollBar', function(assert) {
     var chart = this.createChart({
             scrollBar: {
                 visible: false,
-                color: "old"
+                color: 'old'
             }
         }),
         scrollBar,
         range;
 
-    this.themeManager.getOptions.withArgs("scrollBar").returns({
+    this.themeManager.getOptions.withArgs('scrollBar').returns({
         visible: true,
-        color: "new"
+        color: 'new'
     });
     // act
 
-    chart.option("scrollBar", {
+    chart.option('scrollBar', {
         visible: true,
-        color: "new"
+        color: 'new'
     });
     scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
     // assert
@@ -707,12 +707,12 @@ QUnit.test("Options changed - show scrollBar", function(assert) {
     assert.deepEqual(scrollBar.update.lastCall.args, [{
         rotated: false,
         visible: true,
-        color: "new"
+        color: 'new'
     }]);
 
     range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
-    assert.equal(scrollBar.init.callCount, 1, "scroll bar init calls");
+    assert.equal(scrollBar.init.callCount, 1, 'scroll bar init calls');
     assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
     assert.equal(scrollBar.setPosition.callCount, 1);
@@ -720,7 +720,7 @@ QUnit.test("Options changed - show scrollBar", function(assert) {
 });
 
 // T207760
-QUnit.test("Options changed - rotated (false->true)", function(assert) {
+QUnit.test('Options changed - rotated (false->true)', function(assert) {
     // arrange
     var chart = this.createChart({
             rotated: false,
@@ -730,10 +730,10 @@ QUnit.test("Options changed - rotated (false->true)", function(assert) {
         }),
         scrollBar;
 
-    this.themeManager.getOptions.withArgs("rotated").returns(true);
+    this.themeManager.getOptions.withArgs('rotated').returns(true);
 
     // act
-    chart.option("rotated", true);
+    chart.option('rotated', true);
     scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
     // assert
@@ -741,7 +741,7 @@ QUnit.test("Options changed - rotated (false->true)", function(assert) {
 });
 
 // T207760
-QUnit.test("Options changed - rotated (true->false)", function(assert) {
+QUnit.test('Options changed - rotated (true->false)', function(assert) {
     // arrange
     var chart = this.createChart({
             rotated: true,
@@ -751,10 +751,10 @@ QUnit.test("Options changed - rotated (true->false)", function(assert) {
         }),
         scrollBar;
 
-    this.themeManager.getOptions.withArgs("rotated").returns(false);
+    this.themeManager.getOptions.withArgs('rotated').returns(false);
 
     // act
-    chart.option("rotated", false);
+    chart.option('rotated', false);
     scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
     // assert
@@ -762,24 +762,24 @@ QUnit.test("Options changed - rotated (true->false)", function(assert) {
 });
 
 // T382491
-QUnit.test("empty categories in axis & continuous data", function(assert) {
+QUnit.test('empty categories in axis & continuous data', function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries({
         range: {
-            val: { min: 0, max: 10 }, arg: { categories: [], axisType: "continuous", min: 1, max: 3 }
+            val: { min: 0, max: 10 }, arg: { categories: [], axisType: 'continuous', min: 1, max: 3 }
         }
     }));
     var chart = this.createChart({
             dataSource: [{ x: 1, y: 3 }, { x: 3, y: 3 }],
             series: [{
-                type: "bar",
-                argumentField: "x",
-                valueField: "y"
+                type: 'bar',
+                argumentField: 'x',
+                valueField: 'y'
             }],
             argumentAxis: { categories: [] },
             scrollBar: { visible: true },
-            zoomingMode: "all",
-            scrollingMode: "all"
+            zoomingMode: 'all',
+            scrollingMode: 'all'
         }),
         businessRange = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
@@ -790,7 +790,7 @@ QUnit.test("empty categories in axis & continuous data", function(assert) {
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.returnValue.setPosition.lastCall.args, [businessRange.minVisible, businessRange.maxVisible]);
 });
 
-QUnit.module("Map events", $.extend({}, commons.environment, {
+QUnit.module('Map events', $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.call(this);
         this.addArgumentAxis = noop;
@@ -802,11 +802,11 @@ QUnit.module("Map events", $.extend({}, commons.environment, {
     }
 }));
 
-QUnit.test("chart events", function(assert) {
+QUnit.test('chart events', function(assert) {
     var events = {},
         target = { isTarget: true },
         event = { isEvent: true },
-        targetArg = { target: target, event: event, argument: "argument" };
+        targetArg = { target: target, event: event, argument: 'argument' };
 
     $.each(OldEventsName, function(oldName, newName) {
         events[newName] = sinon.stub();
@@ -819,9 +819,9 @@ QUnit.test("chart events", function(assert) {
     this.clock.tick(100);
     // assert
     $.each(events, function(eventName, callBack) {
-        assert.strictEqual(callBack.callCount, 1, eventName + " callback called");
-        assert.strictEqual(callBack.lastCall.args[0].target, target, eventName + " target is correct");
-        assert.strictEqual(callBack.lastCall.args[0].event, event, eventName + " event is correct");
-        assert.strictEqual(callBack.lastCall.args[0].argument, "argument", eventName + " argument is correct");
+        assert.strictEqual(callBack.callCount, 1, eventName + ' callback called');
+        assert.strictEqual(callBack.lastCall.args[0].target, target, eventName + ' target is correct');
+        assert.strictEqual(callBack.lastCall.args[0].event, event, eventName + ' event is correct');
+        assert.strictEqual(callBack.lastCall.args[0].argument, 'argument', eventName + ' argument is correct');
     });
 });

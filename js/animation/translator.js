@@ -1,7 +1,7 @@
-var dataUtils = require("../core/element_data"),
-    type = require("../core/utils/type").type;
+var dataUtils = require('../core/element_data'),
+    type = require('../core/utils/type').type;
 
-var TRANSLATOR_DATA_KEY = "dxTranslator",
+var TRANSLATOR_DATA_KEY = 'dxTranslator',
     TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/,
     TRANSLATE_REGEX = /translate(?:3d)?\((.+?)\)/;
 
@@ -40,20 +40,20 @@ var move = function($element, position) {
 };
 
 var isPercentValue = function(value) {
-    return type(value) === "string" && value[value.length - 1] === "%";
+    return type(value) === 'string' && value[value.length - 1] === '%';
 };
 
 var getTranslate = function($element) {
     var result = $element.length ? dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
-        var transformValue = $element.css("transform") || getTranslateCss({ x: 0, y: 0 }),
+        var transformValue = $element.css('transform') || getTranslateCss({ x: 0, y: 0 }),
             matrix = transformValue.match(TRANSFORM_MATRIX_REGEX),
             is3D = matrix && matrix[1];
 
         if(matrix) {
-            matrix = matrix[2].split(",");
-            if(is3D === "3d") {
+            matrix = matrix[2].split(',');
+            if(is3D === '3d') {
                 matrix = matrix.slice(12, 15);
             } else {
                 matrix.push(0);
@@ -92,12 +92,12 @@ var resetPosition = function($element, finishTransition) {
         stylesConfig = {
             left: 0,
             top: 0,
-            transform: "none",
+            transform: 'none',
         };
 
     if(finishTransition) {
-        originalTransition = $element.css("transition");
-        stylesConfig.transition = "none";
+        originalTransition = $element.css('transition');
+        stylesConfig.transition = 'none';
     }
 
     $element.css(stylesConfig);
@@ -106,7 +106,7 @@ var resetPosition = function($element, finishTransition) {
 
     if(finishTransition) {
         $element.get(0).offsetHeight;
-        $element.css("transition", originalTransition);
+        $element.css('transition', originalTransition);
     }
 };
 
@@ -117,7 +117,7 @@ var parseTranslate = function(translateString) {
         return;
     }
 
-    result = result[1].split(",");
+    result = result[1].split(',');
 
     result = {
         x: parseFloat(result[0]),
@@ -132,10 +132,10 @@ var getTranslateCss = function(translate) {
     translate.x = translate.x || 0;
     translate.y = translate.y || 0;
 
-    var xValueString = isPercentValue(translate.x) ? translate.x : translate.x + "px";
-    var yValueString = isPercentValue(translate.y) ? translate.y : translate.y + "px";
+    var xValueString = isPercentValue(translate.x) ? translate.x : translate.x + 'px';
+    var yValueString = isPercentValue(translate.y) ? translate.y : translate.y + 'px';
 
-    return "translate(" + xValueString + ", " + yValueString + ")";
+    return 'translate(' + xValueString + ', ' + yValueString + ')';
 };
 
 exports.move = move;

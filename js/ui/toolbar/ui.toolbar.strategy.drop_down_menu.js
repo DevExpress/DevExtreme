@@ -1,13 +1,13 @@
-var extend = require("../../core/utils/extend").extend,
-    ToolbarStrategy = require("./ui.toolbar.strategy"),
-    ToolbarMenu = require("./ui.toolbar.menu"),
-    DropDownMenu = require("../drop_down_menu");
+var extend = require('../../core/utils/extend').extend,
+    ToolbarStrategy = require('./ui.toolbar.strategy'),
+    ToolbarMenu = require('./ui.toolbar.menu'),
+    DropDownMenu = require('../drop_down_menu');
 
-var MENU_INVISIBLE_CLASS = "dx-state-invisible";
+var MENU_INVISIBLE_CLASS = 'dx-state-invisible';
 
 var DropDownMenuStrategy = ToolbarStrategy.inherit({
 
-    NAME: "dropDownMenu",
+    NAME: 'dropDownMenu',
 
     render: function() {
         if(!this._hasVisibleMenuItems()) {
@@ -24,7 +24,7 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
         }
 
         this.callBase();
-        if(this._menu && !this._menu.option("items").length) {
+        if(this._menu && !this._menu.option('items').length) {
             this._menu.close();
         }
     },
@@ -37,16 +37,16 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
         var that = this;
         return extend(this.callBase(), {
             deferRendering: true,
-            container: that._toolbar.option("menuContainer"),
+            container: that._toolbar.option('menuContainer'),
             menuWidget: ToolbarMenu,
             onOptionChanged: function(e) {
-                if(e.name === "items") {
+                if(e.name === 'items') {
                     that._updateMenuVisibility(e.value);
                 }
             },
             popupPosition: {
-                at: "bottom right",
-                my: "top right"
+                at: 'bottom right',
+                my: 'top right'
             }
         });
     },

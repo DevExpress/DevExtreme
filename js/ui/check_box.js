@@ -1,20 +1,20 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    devices = require("../core/devices"),
-    extend = require("../core/utils/extend").extend,
-    inkRipple = require("./widget/utils.ink_ripple"),
-    Editor = require("./editor/editor"),
-    registerComponent = require("../core/component_registrator"),
-    eventUtils = require("../events/utils"),
-    clickEvent = require("../events/click");
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    devices = require('../core/devices'),
+    extend = require('../core/utils/extend').extend,
+    inkRipple = require('./widget/utils.ink_ripple'),
+    Editor = require('./editor/editor'),
+    registerComponent = require('../core/component_registrator'),
+    eventUtils = require('../events/utils'),
+    clickEvent = require('../events/click');
 
-var CHECKBOX_CLASS = "dx-checkbox",
-    CHECKBOX_ICON_CLASS = "dx-checkbox-icon",
-    CHECKBOX_CHECKED_CLASS = "dx-checkbox-checked",
-    CHECKBOX_CONTAINER_CLASS = "dx-checkbox-container",
-    CHECKBOX_TEXT_CLASS = "dx-checkbox-text",
-    CHECKBOX_HAS_TEXT_CLASS = "dx-checkbox-has-text",
-    CHECKBOX_INDETERMINATE_CLASS = "dx-checkbox-indeterminate",
+var CHECKBOX_CLASS = 'dx-checkbox',
+    CHECKBOX_ICON_CLASS = 'dx-checkbox-icon',
+    CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked',
+    CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container',
+    CHECKBOX_TEXT_CLASS = 'dx-checkbox-text',
+    CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text',
+    CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate',
     CHECKBOX_FEEDBACK_HIDE_TIMEOUT = 100;
 
 /**
@@ -65,7 +65,7 @@ var CheckBox = Editor.inherit({
              * @type string
              * @default ""
              */
-            text: "",
+            text: '',
 
             useInkRipple: false
 
@@ -81,7 +81,7 @@ var CheckBox = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -103,8 +103,8 @@ var CheckBox = Editor.inherit({
 
     _initMarkup: function() {
         this._renderSubmitElement();
-        this._$container = $("<div>").addClass(CHECKBOX_CONTAINER_CLASS);
-        this.setAria("role", "checkbox");
+        this._$container = $('<div>').addClass(CHECKBOX_CONTAINER_CLASS);
+        this.setAria('role', 'checkbox');
 
         this.$element()
             .addClass(CHECKBOX_CLASS);
@@ -112,7 +112,7 @@ var CheckBox = Editor.inherit({
         this._renderValue();
         this._renderIcon();
         this._renderText();
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
 
         this.$element()
             .append(this._$container);
@@ -127,8 +127,8 @@ var CheckBox = Editor.inherit({
     },
 
     _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
+        this._$submitElement = $('<input>')
+            .attr('type', 'hidden')
             .appendTo(this.$element());
     },
 
@@ -174,13 +174,13 @@ var CheckBox = Editor.inherit({
     },
 
     _renderIcon: function() {
-        this._$icon = $("<span>")
+        this._$icon = $('<span>')
             .addClass(CHECKBOX_ICON_CLASS)
             .prependTo(this._$container);
     },
 
     _renderText: function() {
-        var textValue = this.option("text");
+        var textValue = this.option('text');
 
         if(!textValue) {
             if(this._$text) {
@@ -191,7 +191,7 @@ var CheckBox = Editor.inherit({
         }
 
         if(!this._$text) {
-            this._$text = $("<span>").addClass(CHECKBOX_TEXT_CLASS);
+            this._$text = $('<span>').addClass(CHECKBOX_TEXT_CLASS);
         }
 
         this._$text.text(textValue);
@@ -216,31 +216,31 @@ var CheckBox = Editor.inherit({
         var that = args.component;
 
         that._saveValueChangeEvent(args.event);
-        that.option("value", !that.option("value"));
+        that.option('value', !that.option('value'));
     },
 
     _renderValue: function() {
         var $element = this.$element(),
-            checked = this.option("value"),
+            checked = this.option('value'),
             indeterminate = checked === undefined;
 
         $element.toggleClass(CHECKBOX_CHECKED_CLASS, Boolean(checked));
         $element.toggleClass(CHECKBOX_INDETERMINATE_CLASS, indeterminate);
 
         this._getSubmitElement().val(checked);
-        this.setAria("checked", indeterminate ? "mixed" : checked || "false");
+        this.setAria('checked', indeterminate ? 'mixed' : checked || 'false');
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "useInkRipple":
+            case 'useInkRipple':
                 this._invalidate();
                 break;
-            case "value":
+            case 'value':
                 this._renderValue();
                 this.callBase(args);
                 break;
-            case "text":
+            case 'text':
                 this._renderText();
                 this._renderDimensions();
                 break;
@@ -255,6 +255,6 @@ var CheckBox = Editor.inherit({
     }
 });
 
-registerComponent("dxCheckBox", CheckBox);
+registerComponent('dxCheckBox', CheckBox);
 
 module.exports = CheckBox;
