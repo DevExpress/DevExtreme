@@ -53,14 +53,14 @@ const SIDE_BORDER_WIDTH_STYLES = {
 
 const isFirefox = browser.mozilla;
 
+const getEventNameByOption = function(optionValue) {
+    return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
+};
 const getEventName = function(that, optionName) {
     const optionValue = that.option(optionName);
 
     return getEventNameByOption(optionValue);
 };
-function getEventNameByOption(optionValue) {
-    return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
-}
 const getEventDelay = function(that, optionName) {
     const optionValue = that.option(optionName);
 
@@ -615,9 +615,6 @@ const Popover = Popup.inherit({
     },
 
     _optionChanged: function(args) {
-        const name = args.name.substring(0, 4);
-        const event = getEventNameByOption(args.previousValue);
-
         switch(args.name) {
             case 'boundaryOffset':
             case 'arrowPosition':
@@ -634,12 +631,15 @@ const Popover = Popup.inherit({
                 this.callBase(args);
                 break;
             case 'showEvent':
-            case 'hideEvent':
+            case 'hideEvent': {
+                const name = args.name.substring(0, 4);
+                const event = getEventNameByOption(args.previousValue);
 
                 this.hide();
                 detachEvent(this, this.option('target'), name, event);
                 attachEvent(this, name);
                 break;
+            }
             case 'visible':
                 this._clearEventTimeout(args.value ? 'show' : 'hide');
                 this.callBase(args);
