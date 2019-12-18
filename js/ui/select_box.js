@@ -591,7 +591,7 @@ var SelectBox = DropDownList.inherit({
             this._clearSearchTimer();
             this._restoreInputText();
 
-            if(!this._isOverlayNestedTarget(e.relatedTarget) && this._isEditable()) {
+            if(this._isEditable() && !this._isOverlayNestedTarget(e.relatedTarget)) {
                 this._searchCanceled();
             }
         }
