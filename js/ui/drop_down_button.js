@@ -17,6 +17,9 @@ import { isPlainObject } from "../core/utils/type";
 import { ensureDefined } from "../core/utils/common";
 import Guid from "../core/guid";
 import { format as formatMessage } from "../localization/message";
+import windowUtils from "../core/utils/window";
+
+const window = windowUtils.getWindow();
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
@@ -25,6 +28,8 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = "dx-dropdownbutton-popup-wrapper";
 const DX_BUTTON_TEXT_CLASS = "dx-button-text";
 const DX_ICON_RIGHT_CLASS = "dx-icon-right";
+
+const toggleButtonWidth = 26;
 
 /**
  * @name dxDropDownButton
@@ -356,12 +361,47 @@ let DropDownButton = Widget.inherit({
         });
     },
 
+    _getActionButtonFullWidth() {
+        const iconWidth = this.option("icon") ? 20 : 0;
+        const allButtonContents = this.$element().find(".dx-button-content");
+
+        if(allButtonContents.length === 0) {
+            return 0;
+        }
+
+        const $buttonContent = allButtonContents[0];
+        const $buttonContentCopy = domUtils.createTextElementHiddenCopy($buttonContent, this.option("text"));
+
+        $buttonContentCopy.appendTo(this.$element());
+
+        const buttonContentStyles = window.getComputedStyle($buttonContent);
+        const textWidth = parseFloat(window.getComputedStyle($buttonContentCopy.get(0)).width);
+        const paddingLeft = parseFloat(buttonContentStyles.paddingLeft);
+        const paddingRight = parseFloat(buttonContentStyles.paddingRight);
+
+        $buttonContentCopy.remove();
+
+        const resultWidth = textWidth + toggleButtonWidth + paddingLeft + paddingRight + iconWidth;
+        return resultWidth;
+    },
+
     _actionButtonConfig() {
-        return {
+        let config = {
             text: this.option("text"),
             icon: this.option("icon"),
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
+
+        const necessaryWidth = this._getActionButtonFullWidth();
+        let width = this.option("width");
+
+        if((width < necessaryWidth) && this.option('splitButton')) {
+            config.width = width - toggleButtonWidth;
+        } else {
+            config.width = null;
+        }
+
+        return config;
     },
 
     _getButtonGroupItems() {
@@ -370,7 +410,7 @@ let DropDownButton = Widget.inherit({
         if(this.option("splitButton")) {
             items.push({
                 icon: "spindown",
-                width: 26,
+                width: toggleButtonWidth,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
             });
         }
@@ -687,6 +727,10 @@ let DropDownButton = Widget.inherit({
                 this._popup && this._popup.repaint();
                 break;
             case "width":
+                this.callBase(args);
+                this._renderButtonGroup();
+                this._popup && this._popup.repaint();
+                break;
             case "height":
                 this.callBase(args);
                 this._popup && this._popup.repaint();

@@ -5,6 +5,7 @@ import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 
 import "common.css!";
+import "generic_light.css!";
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
@@ -128,6 +129,34 @@ QUnit.module("markup", {
         mainButtonHeight = actionButton.height();
         dropDownButtonHeight = toggleButton.height();
         assert.strictEqual(mainButtonHeight, dropDownButtonHeight, "heights are equal after toggle button content change");
+    });
+
+    [true, false].forEach(wrapItemText => {
+        QUnit.test(`toggleButton should render inside of dropDownButton when width option is defined and useSelectMode=true, splitButton=true, wrapItemText=${wrapItemText}`, function(assert) {
+            const dropDownButton = $("#dropDownButton").dxDropDownButton({
+                items: [{
+                    "id": 1,
+                    "name": "VeryVeryVeryVeryLongString",
+                    "icon": "alignright"
+                }],
+                displayExpr: "name",
+                keyExpr: "id",
+                stylingMode: "text",
+                useSelectMode: true,
+                width: 120,
+                splitButton: true,
+                selectedItemKey: 1,
+                wrapItemText
+            }).dxDropDownButton("instance");
+
+            const dropDownButtonElement = dropDownButton.$element().get(0);
+            const toggleButtonElement = getToggleButton(dropDownButton).get(0);
+
+            const dropDownButtonRightPosition = dropDownButtonElement.getBoundingClientRect(0).right;
+            const toggleButtonRightPosition = toggleButtonElement.getBoundingClientRect(0).right;
+
+            assert.strictEqual(dropDownButtonRightPosition, toggleButtonRightPosition, "toggleButton position is correct");
+        });
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", function(assert) {
@@ -269,7 +298,8 @@ QUnit.module("popup integration", {
         });
 
         const instance = $dropDownButton.dxDropDownButton("instance");
-        const $popupContent = $(getPopup(instance).content());
+        const $popupContent = $(getPopup(instance)._$content);
+
         assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal on init");
         assert.equal($popupContent.outerWidth(), 500, "width are equal on init");
 
@@ -297,11 +327,12 @@ QUnit.module("popup integration", {
         const instance = $dropDownButton.dxDropDownButton("instance"),
             dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
 
-        let popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
+        let popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, "popup position is correct, rtlEnabled = false");
 
         instance.option("rtlEnabled", true);
-        popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
+
+        popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, "popup position is correct, rtlEnabled = true");
     });
 
@@ -312,16 +343,17 @@ QUnit.module("popup integration", {
             dropDownContentTemplate: function(data, $container) {
                 $("<div>")
                     .addClass("custom-color-picker")
+                    .css({
+                        width: 82,
+                        padding: 5
+                    })
                     .appendTo($container);
             }
         });
 
-        const colorPicker = $(".custom-color-picker");
-        colorPicker.css("width:82px; padding:5px;");
-
         const instance = $dropDownButton.dxDropDownButton("instance");
         const $popupContent = $(getPopup(instance).content());
-        assert.equal(`${$popupContent.outerWidth()}px`, colorPicker.css("width"), "width is right");
+        assert.equal($popupContent.outerWidth(), 84, "width is right");
     });
 
     QUnit.test("popup should have correct options after rendering", function(assert) {
