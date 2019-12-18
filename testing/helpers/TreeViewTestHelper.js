@@ -20,14 +20,14 @@ const { assert } = QUnit;
 class TreeViewTestWrapper {
     constructor(options) {
         if(!options.onItemSelectionChanged) {
-            options.onItemSelectionChanged = () => this.calledCallbacksNames.push('itemSelectionChanged');
+            options.onItemSelectionChanged = () => this.eventLog.push('itemSelectionChanged');
         }
 
         if(!options.onSelectionChanged) {
-            options.onSelectionChanged = () => this.calledCallbacksNames.push('selectionChanged');
+            options.onSelectionChanged = () => this.eventLog.push('selectionChanged');
         }
 
-        this.calledCallbacksNames = [];
+        this.eventLog = [];
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option('showCheckBoxesMode') === 'normal';
     }
@@ -86,12 +86,12 @@ class TreeViewTestWrapper {
         assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
     }
 
-    checkEventLog(expectedEventsNames, additionalErrorMessage) {
-        assert.deepEqual(this.calledCallbacksNames, expectedEventsNames, 'eventLog ' + additionalErrorMessage);
+    checkEventLog(expectedEventLog, additionalErrorMessage) {
+        assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
     clearEventLog() {
-        this.calledCallbacksNames = [];
+        this.eventLog = [];
     }
 
     convertTreeToFlatList(items) {
