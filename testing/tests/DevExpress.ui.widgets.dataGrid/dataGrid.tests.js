@@ -17223,6 +17223,44 @@ QUnit.test('rowTemplate via dxTemplate should works with masterDetail template',
     assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
 });
 
+// T821418
+QUnit.test('rowTemplate with tbody should works with virtual scrolling', function(assert) {
+    // arrange, act
+    const data = [...Array(20)].map((_, i) => ({ id: i + 1 }));
+    const rowHeight = 50;
+    const dataGrid = createDataGrid({
+        height: rowHeight,
+        loadingTimeout: undefined,
+        dataSource: data,
+        columns: ['id'],
+        scrolling: {
+            mode: 'virtual'
+        },
+        paging: {
+            pageSize: 2
+        },
+        rowTemplate: function(container, options) {
+            $(container).append(`<tbody class='dx-row'><tr style="height: ${rowHeight}px"><td>${options.data.id}</td></tr></tbody>`);
+        }
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 4 * rowHeight });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 3, 'first visible row');
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '3', 'first visible cell text');
+    assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 2, 'virtual row count');
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 0 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 1, 'first visible row');
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '1', 'first visible cell text');
+    assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 1, 'virtual row count');
+});
+
 // T120698
 QUnit.test('totalCount', function(assert) {
     // arrange, act
