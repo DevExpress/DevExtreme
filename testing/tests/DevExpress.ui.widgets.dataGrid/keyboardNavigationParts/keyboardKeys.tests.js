@@ -42,10 +42,11 @@ QUnit.module('Keyboard keys', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         if(this.dispose) {
             this.dispose();
         }
+
+        this.clock.restore();
     }
 }, function() {
     QUnit.testInActiveWindow('Save focusedCellPosition by click on self', function(assert) {
