@@ -68,6 +68,16 @@ export class SchedulerTestWrapper {
             getAppointmentCount: () => this.appointments.getAppointments().length,
             getAppointment: (index = 0) => this.appointments.getAppointments().eq(index),
             getTitleText: (index = 0) => this.appointments.getAppointment(index).find('.dx-scheduler-appointment-title').text(),
+            getDateText: (index = 0) => {
+                let result = '';
+
+                const appointment = this.appointments.getAppointment(index);
+                appointment.find('.dx-scheduler-appointment-content-date').each((index, element) => {
+                    result += element.innerHTML;
+                });
+
+                return result;
+            },
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
             getAppointmentPosition: (index = 0) => translator.locate($(this.appointments.getAppointment(index))),
@@ -253,5 +263,10 @@ export class SchedulerTestWrapper {
     drawControl() {
         $(`#${TEST_ROOT_ELEMENT_ID}`).css('top', 0);
         $(`#${TEST_ROOT_ELEMENT_ID}`).css('left', 0);
+    }
+
+    hideControl() {
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css('top', '');
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css('left', '');
     }
 }
