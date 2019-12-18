@@ -1,7 +1,7 @@
-var typeUtils = require("./type"),
-    adjust = require("./math").adjust,
-    each = require("./iterator").each,
-    camelize = require("./inflector").camelize,
+var typeUtils = require('./type'),
+    adjust = require('./math').adjust,
+    each = require('./iterator').each,
+    camelize = require('./inflector').camelize,
 
     isObject = typeUtils.isObject,
     isString = typeUtils.isString,
@@ -46,24 +46,24 @@ var getNextDateUnit = function(unit, withWeeks) {
     var interval = getDateUnitInterval(unit);
 
     switch(interval) {
-        case "millisecond":
-            return "second";
-        case "second":
-            return "minute";
-        case "minute":
-            return "hour";
-        case "hour":
-            return "day";
-        case "day":
-            return withWeeks ? "week" : "month";
-        case "week":
-            return "month";
-        case "month":
-            return "quarter";
-        case "quarter":
-            return "year";
-        case "year":
-            return "year";
+        case 'millisecond':
+            return 'second';
+        case 'second':
+            return 'minute';
+        case 'minute':
+            return 'hour';
+        case 'hour':
+            return 'day';
+        case 'day':
+            return withWeeks ? 'week' : 'month';
+        case 'week':
+            return 'month';
+        case 'month':
+            return 'quarter';
+        case 'quarter':
+            return 'year';
+        case 'year':
+            return 'year';
         default:
             return 0;
     }
@@ -129,21 +129,21 @@ var getDateUnitInterval = function(tickInterval) {
 
 // T375972
 var tickIntervalToFormatMap = {
-    millisecond: "millisecond",
-    second: "longtime",
-    minute: "shorttime",
-    hour: "shorttime",
-    day: "day",
-    week: "day",
-    month: "month",
-    quarter: "quarter",
-    year: "year"
+    millisecond: 'millisecond',
+    second: 'longtime',
+    minute: 'shorttime',
+    hour: 'shorttime',
+    day: 'day',
+    week: 'day',
+    month: 'month',
+    quarter: 'quarter',
+    year: 'year'
 };
 
 // Because of changes in formatting (Globalize has been updated) common date formatting has been changed.
 // The purpose of the following method is to preserve original dates formatting in axes and range selector slider markers.
 function getDateFormatByTickInterval(tickInterval) {
-    return tickIntervalToFormatMap[getDateUnitInterval(tickInterval)] || "";
+    return tickIntervalToFormatMap[getDateUnitInterval(tickInterval)] || '';
 }
 
 var getQuarter = function(month) {
@@ -196,14 +196,14 @@ var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, 
             break;
     }
 
-    if(withCorrection && dateUnitInterval !== "hour" && dateUnitInterval !== "minute" && dateUnitInterval !== "second") {
+    if(withCorrection && dateUnitInterval !== 'hour' && dateUnitInterval !== 'minute' && dateUnitInterval !== 'second') {
         fixTimezoneGap(oldDate, date);
     }
     return date;
 };
 
 var trimTime = function(date) {
-    return dateUtils.correctDateWithUnitBeginning(date, "day");
+    return dateUtils.correctDateWithUnitBeginning(date, 'day');
 };
 
 var setToDayEnd = function(date) {
@@ -296,37 +296,37 @@ var getSequenceByInterval = function(min, max, interval) {
 };
 
 var getViewFirstCellDate = function(viewType, date) {
-    if(viewType === "month") { return new Date(date.getFullYear(), date.getMonth(), 1); }
-    if(viewType === "year") { return new Date(date.getFullYear(), 0, date.getDate()); }
-    if(viewType === "decade") { return new Date(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
-    if(viewType === "century") { return new Date(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
+    if(viewType === 'month') { return new Date(date.getFullYear(), date.getMonth(), 1); }
+    if(viewType === 'year') { return new Date(date.getFullYear(), 0, date.getDate()); }
+    if(viewType === 'decade') { return new Date(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
+    if(viewType === 'century') { return new Date(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
 };
 
 var getViewLastCellDate = function(viewType, date) {
-    if(viewType === "month") { return new Date(date.getFullYear(), date.getMonth(), getLastMonthDay(date)); }
-    if(viewType === "year") { return new Date(date.getFullYear(), 11, date.getDate()); }
-    if(viewType === "decade") { return new Date(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
-    if(viewType === "century") { return new Date(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
+    if(viewType === 'month') { return new Date(date.getFullYear(), date.getMonth(), getLastMonthDay(date)); }
+    if(viewType === 'year') { return new Date(date.getFullYear(), 11, date.getDate()); }
+    if(viewType === 'decade') { return new Date(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
+    if(viewType === 'century') { return new Date(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
 };
 
 var getViewMinBoundaryDate = function(viewType, date) {
     var resultDate = new Date(date.getFullYear(), date.getMonth(), 1);
 
-    if(viewType === "month") {
+    if(viewType === 'month') {
         return resultDate;
     }
 
     resultDate.setMonth(0);
 
-    if(viewType === "year") {
+    if(viewType === 'year') {
         return resultDate;
     }
 
-    if(viewType === "decade") {
+    if(viewType === 'decade') {
         resultDate.setFullYear(getFirstYearInDecade(date));
     }
 
-    if(viewType === "century") {
+    if(viewType === 'century') {
         resultDate.setFullYear(getFirstDecadeInCentury(date));
     }
 
@@ -337,22 +337,22 @@ var getViewMaxBoundaryDate = function(viewType, date) {
     var resultDate = new Date(date);
     resultDate.setDate(getLastMonthDay(date));
 
-    if(viewType === "month") {
+    if(viewType === 'month') {
         return resultDate;
     }
 
     resultDate.setMonth(11);
     resultDate.setDate(getLastMonthDay(resultDate));
 
-    if(viewType === "year") {
+    if(viewType === 'year') {
         return resultDate;
     }
 
-    if(viewType === "decade") {
+    if(viewType === 'decade') {
         resultDate.setFullYear(getFirstYearInDecade(date) + 9);
     }
 
-    if(viewType === "century") {
+    if(viewType === 'century') {
         resultDate.setFullYear(getFirstDecadeInCentury(date) + 99);
     }
 
@@ -365,17 +365,17 @@ var getLastMonthDay = function(date) {
 };
 
 var sameView = function(view, date1, date2) {
-    return dateUtils[camelize("same " + view)](date1, date2);
+    return dateUtils[camelize('same ' + view)](date1, date2);
 };
 
 var getViewUp = function(typeView) {
     switch(typeView) {
-        case "month":
-            return "year";
-        case "year":
-            return "decade";
-        case "decade":
-            return "century";
+        case 'month':
+            return 'year';
+        case 'year':
+            return 'decade';
+        case 'decade':
+            return 'century';
         default:
             break;
     }
@@ -383,12 +383,12 @@ var getViewUp = function(typeView) {
 
 var getViewDown = function(typeView) {
     switch(typeView) {
-        case "century":
-            return "decade";
-        case "decade":
-            return "year";
-        case "year":
-            return "month";
+        case 'century':
+            return 'decade';
+        case 'decade':
+            return 'year';
+        case 'year':
+            return 'month';
         default:
             break;
     }
@@ -397,9 +397,9 @@ var getViewDown = function(typeView) {
 var getDifferenceInMonth = function(typeView) {
     var difference = 1;
 
-    if(typeView === "year") { difference = 12; }
-    if(typeView === "decade") { difference = 12 * 10; }
-    if(typeView === "century") { difference = 12 * 100; }
+    if(typeView === 'year') { difference = 12; }
+    if(typeView === 'decade') { difference = 12 * 10; }
+    if(typeView === 'century') { difference = 12 * 100; }
 
     return difference;
 };
@@ -407,8 +407,8 @@ var getDifferenceInMonth = function(typeView) {
 var getDifferenceInMonthForCells = function(typeView) {
     var difference = 1;
 
-    if(typeView === "decade") { difference = 12; }
-    if(typeView === "century") { difference = 12 * 10; }
+    if(typeView === 'decade') { difference = 12; }
+    if(typeView === 'century') { difference = 12 * 10; }
 
     return difference;
 };
@@ -486,7 +486,7 @@ var getFirstYearInDecade = function(date) {
 };
 
 var getShortDateFormat = function() {
-    return "yyyy/MM/dd";
+    return 'yyyy/MM/dd';
 };
 
 var getFirstMonthDate = function(date) {
@@ -511,7 +511,7 @@ var getFirstWeekDate = function(date, firstDayOfWeek) {
 };
 
 var normalizeDateByWeek = function(date, currentDate) {
-    var differenceInDays = dateUtils.getDatesInterval(date, currentDate, "day"),
+    var differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day'),
         resultDate = new Date(date);
 
     if(differenceInDays >= 6) {
@@ -522,10 +522,10 @@ var normalizeDateByWeek = function(date, currentDate) {
 };
 
 var dateInRange = function(date, min, max, format) {
-    if(format === "date") {
-        min = min && dateUtils.correctDateWithUnitBeginning(min, "day");
-        max = max && dateUtils.correctDateWithUnitBeginning(max, "day");
-        date = date && dateUtils.correctDateWithUnitBeginning(date, "day");
+    if(format === 'date') {
+        min = min && dateUtils.correctDateWithUnitBeginning(min, 'day');
+        max = max && dateUtils.correctDateWithUnitBeginning(max, 'day');
+        date = date && dateUtils.correctDateWithUnitBeginning(date, 'day');
     }
 
     return normalizeDate(date, min, max) === date;

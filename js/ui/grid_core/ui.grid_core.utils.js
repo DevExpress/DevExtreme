@@ -1,45 +1,45 @@
-import $ from "../../core/renderer";
-import { equalByValue } from "../../core/utils/common";
-import { isDefined, isFunction } from "../../core/utils/type";
-import { when } from "../../core/utils/deferred";
-import { getGroupInterval } from "../shared/filtering";
-import { format } from "../../core/utils/string";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { extendFromObject } from "../../core/utils/extend";
-import { toComparable } from "../../core/utils/data";
-import LoadPanel from "../load_panel";
-import { normalizeSortingInfo } from "../../data/utils";
-import formatHelper from "../../format_helper";
-import { deepExtendArraySafe } from "../../core/utils/object";
-import { getWindow } from "../../core/utils/window";
-import eventsEngine from "../../events/core/events_engine";
+import $ from '../../core/renderer';
+import { equalByValue } from '../../core/utils/common';
+import { isDefined, isFunction } from '../../core/utils/type';
+import { when } from '../../core/utils/deferred';
+import { getGroupInterval } from '../shared/filtering';
+import { format } from '../../core/utils/string';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { extendFromObject } from '../../core/utils/extend';
+import { toComparable } from '../../core/utils/data';
+import LoadPanel from '../load_panel';
+import { normalizeSortingInfo } from '../../data/utils';
+import formatHelper from '../../format_helper';
+import { deepExtendArraySafe } from '../../core/utils/object';
+import { getWindow } from '../../core/utils/window';
+import eventsEngine from '../../events/core/events_engine';
 
-var DATAGRID_SELECTION_DISABLED_CLASS = "dx-selection-disabled",
-    DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
-    DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
-    DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
-    NO_DATA_CLASS = "nodata",
+var DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled',
+    DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened',
+    DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed',
+    DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand',
+    NO_DATA_CLASS = 'nodata',
     DATE_INTERVAL_SELECTORS = {
-        "year": function(value) {
+        'year': function(value) {
             return value && value.getFullYear();
         },
-        "month": function(value) {
+        'month': function(value) {
             return value && (value.getMonth() + 1);
         },
-        "day": function(value) {
+        'day': function(value) {
             return value && value.getDate();
         },
-        "quarter": function(value) {
+        'quarter': function(value) {
             return value && (Math.floor(value.getMonth() / 3) + 1);
         },
-        "hour": function(value) {
+        'hour': function(value) {
             return value && value.getHours();
         },
-        "minute": function(value) {
+        'minute': function(value) {
             return value && value.getMinutes();
         },
-        "second": function(value) {
+        'second': function(value) {
             return value && value.getSeconds();
         }
     };
@@ -56,7 +56,7 @@ module.exports = (function() {
         } else if(isDateType(this.dataType)) {
             nameIntervalSelector = arguments[0];
             return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
-        } else if(this.dataType === "number") {
+        } else if(this.dataType === 'number') {
             groupInterval = arguments[0];
             return Math.floor(Number(value) / groupInterval) * groupInterval;
         }
@@ -73,11 +73,11 @@ module.exports = (function() {
     };
 
     var isDateType = function(dataType) {
-        return dataType === "date" || dataType === "datetime";
+        return dataType === 'date' || dataType === 'datetime';
     };
 
     var setEmptyText = function($container) {
-        $container.get(0).textContent = "\u00A0";
+        $container.get(0).textContent = '\u00A0';
     };
 
     var getWidgetInstance = function($element) {
@@ -98,23 +98,23 @@ module.exports = (function() {
             }
 
             var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
-                noDataElement = $element.find("." + noDataClass).last(),
+                noDataElement = $element.find('.' + noDataClass).last(),
                 isVisible = this._dataController.isEmpty(),
                 isLoading = this._dataController.isLoading();
 
             if(!noDataElement.length) {
-                noDataElement = $("<span>")
+                noDataElement = $('<span>')
                     .addClass(noDataClass)
                     .appendTo($element);
             }
 
             if(isVisible && !isLoading) {
                 noDataElement
-                    .removeClass("dx-hidden")
+                    .removeClass('dx-hidden')
                     .text(that._getNoDataText());
             } else {
                 noDataElement
-                    .addClass("dx-hidden");
+                    .addClass('dx-hidden');
             }
         },
 
@@ -123,9 +123,9 @@ module.exports = (function() {
                 loadPanelOptions;
 
             that._loadPanel && that._loadPanel.$element().remove();
-            loadPanelOptions = that.option("loadPanel");
+            loadPanelOptions = that.option('loadPanel');
 
-            if(loadPanelOptions && (loadPanelOptions.enabled === "auto" ? !isLocalStore : loadPanelOptions.enabled)) {
+            if(loadPanelOptions && (loadPanelOptions.enabled === 'auto' ? !isLocalStore : loadPanelOptions.enabled)) {
                 loadPanelOptions = extend({
                     shading: false,
                     message: loadPanelOptions.text,
@@ -135,7 +135,7 @@ module.exports = (function() {
                             return {
                                 of: $window,
                                 boundary: $element,
-                                collision: "fit"
+                                collision: 'fit'
                             };
                         }
                         return { of: $element };
@@ -143,7 +143,7 @@ module.exports = (function() {
                     container: $container
                 }, loadPanelOptions);
 
-                that._loadPanel = that._createComponent($("<div>").appendTo($container), LoadPanel, loadPanelOptions);
+                that._loadPanel = that._createComponent($('<div>').appendTo($container), LoadPanel, loadPanelOptions);
             } else {
                 that._loadPanel = null;
             }
@@ -154,7 +154,7 @@ module.exports = (function() {
                 item;
 
             if(key !== undefined && Array.isArray(items)) {
-                keyName = arguments.length <= 2 ? "key" : keyName;
+                keyName = arguments.length <= 2 ? 'key' : keyName;
                 for(var i = 0; i < items.length; i++) {
                     item = isDefined(keyName) ? items[i][keyName] : items[i];
 
@@ -172,7 +172,7 @@ module.exports = (function() {
             var resultFilter = [],
                 i;
 
-            operation = operation || "and";
+            operation = operation || 'and';
 
             for(i = 0; i < filters.length; i++) {
                 if(!filters[i]) continue;
@@ -233,11 +233,11 @@ module.exports = (function() {
         },
 
         formatValue: function(value, options) {
-            var valueText = formatHelper.format(value, options.format) || (value && value.toString()) || "",
+            var valueText = formatHelper.format(value, options.format) || (value && value.toString()) || '',
                 formatObject = {
                     value: value,
                     valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
-                    target: options.target || "row",
+                    target: options.target || 'row',
                     groupInterval: options.groupInterval
                 };
 
@@ -258,28 +258,28 @@ module.exports = (function() {
         getDisplayValue: function(column, value, data, rowType) {
             if(column.displayValueMap && column.displayValueMap[value] !== undefined) {
                 return column.displayValueMap[value];
-            } else if(column.calculateDisplayValue && data && rowType !== "group") {
+            } else if(column.calculateDisplayValue && data && rowType !== 'group') {
                 return column.calculateDisplayValue(data);
-            } else if(column.lookup && !(rowType === "group" && (column.calculateGroupValue || column.calculateDisplayValue))) {
+            } else if(column.lookup && !(rowType === 'group' && (column.calculateGroupValue || column.calculateDisplayValue))) {
                 return column.lookup.calculateCellValue(value);
             }
             return value;
         },
 
         getGroupRowSummaryText: function(summaryItems, summaryTexts) {
-            var result = "(",
+            var result = '(',
                 i,
                 summaryItem;
 
             for(i = 0; i < summaryItems.length; i++) {
                 summaryItem = summaryItems[i];
-                result += (i > 0 ? ", " : "") + module.exports.getSummaryText(summaryItem, summaryTexts);
+                result += (i > 0 ? ', ' : '') + module.exports.getSummaryText(summaryItem, summaryTexts);
             }
-            return result += ")";
+            return result += ')';
         },
 
         getSummaryText: function(summaryItem, summaryTexts) {
-            var displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[summaryItem.summaryType + "OtherColumn"]) || summaryTexts[summaryItem.summaryType];
+            var displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[summaryItem.summaryType + 'OtherColumn']) || summaryTexts[summaryItem.summaryType];
 
             return this.formatValue(summaryItem.value, {
                 format: summaryItem.valueFormat,
@@ -310,10 +310,10 @@ module.exports = (function() {
 
         getFormatByDataType: function(dataType) {
             switch(dataType) {
-                case "date":
-                    return "shortDate";
-                case "datetime":
-                    return "shortDateShortTime";
+                case 'date':
+                    return 'shortDate';
+                case 'datetime':
+                    return 'shortDateShortTime';
             }
         },
 
@@ -335,7 +335,7 @@ module.exports = (function() {
             } else {
                 result = function(data) {
                     var result = column.calculateCellValue(data);
-                    if(result === undefined || result === "") {
+                    if(result === undefined || result === '') {
                         result = null;
                     }
                     return result;
@@ -387,7 +387,7 @@ module.exports = (function() {
                 if(i < cellsLength) {
                     item = items.eq(i);
                     offset = item.offset();
-                    rtlEnabled = item.css("direction") === "rtl";
+                    rtlEnabled = item.css('direction') === 'rtl';
                 }
 
                 point = {
@@ -433,16 +433,16 @@ module.exports = (function() {
                         $container = $(container);
 
                     if(isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.isNewRow) {
-                        rowsView = options.component.getView("rowsView");
+                        rowsView = options.component.getView('rowsView');
                         $container
                             .addClass(DATAGRID_EXPAND_CLASS)
                             .addClass(DATAGRID_SELECTION_DISABLED_CLASS);
 
-                        $("<div>")
+                        $('<div>')
                             .addClass(options.value ? DATAGRID_GROUP_OPENED_CLASS : DATAGRID_GROUP_CLOSED_CLASS)
                             .appendTo($container);
 
-                        rowsView.setAria("label", options.value ? rowsView.localize("dxDataGrid-ariaCollapse") : rowsView.localize("dxDataGrid-ariaExpand"), $container);
+                        rowsView.setAria('label', options.value ? rowsView.localize('dxDataGrid-ariaCollapse') : rowsView.localize('dxDataGrid-ariaExpand'), $container);
                     } else {
                         setEmptyText($container);
                     }
@@ -476,14 +476,14 @@ module.exports = (function() {
         },
 
         focusAndSelectElement: function(component, $element) {
-            eventsEngine.trigger($element, "focus");
+            eventsEngine.trigger($element, 'focus');
 
-            let isSelectTextOnEditingStart = component.option("editing.selectTextOnEditStart"),
-                keyboardController = component.getController("keyboardNavigation"),
+            let isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart'),
+                keyboardController = component.getController('keyboardNavigation'),
                 isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
 
-            if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is(".dx-texteditor-input")) {
-                var editor = getWidgetInstance($element.closest(".dx-texteditor"));
+            if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input')) {
+                var editor = getWidgetInstance($element.closest('.dx-texteditor'));
 
                 when(editor && editor._loadItemDeferred).done(function() {
                     $element.get(0).select();
@@ -501,7 +501,7 @@ module.exports = (function() {
                     width = resultWidths && resultWidths[lastColumnIndex],
                     allowResizing = !hasResizableColumns || column.allowResizing !== false;
 
-                if(!column.command && !column.fixed && width !== "adaptiveHidden" && allowResizing) {
+                if(!column.command && !column.fixed && width !== 'adaptiveHidden' && allowResizing) {
                     break;
                 }
             }
@@ -511,7 +511,7 @@ module.exports = (function() {
 
         isElementInCurrentGrid: function(controller, $element) {
             if($element && $element.length) {
-                var $grid = $element.closest("." + controller.getWidgetContainerClass()).parent();
+                var $grid = $element.closest('.' + controller.getWidgetContainerClass()).parent();
                 return $grid.is(controller.component.$element());
             }
             return false;

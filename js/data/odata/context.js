@@ -1,15 +1,15 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    errorsModule = require("../errors"),
-    ODataStore = require("./store"),
-    mixins = require("./mixins"),
-    deferredUtils = require("../../core/utils/deferred"),
+var Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    typeUtils = require('../../core/utils/type'),
+    each = require('../../core/utils/iterator').each,
+    errorsModule = require('../errors'),
+    ODataStore = require('./store'),
+    mixins = require('./mixins'),
+    deferredUtils = require('../../core/utils/deferred'),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
 
-require("./query_adapter");
+require('./query_adapter');
 
 /**
 * @name ODataContext
@@ -83,7 +83,7 @@ var ODataContext = Class.inherit({
                 {},
                 options,
                 {
-                    url: that._url + "/" + encodeURIComponent(entityOptions.name || entityAlias)
+                    url: that._url + '/' + encodeURIComponent(entityOptions.name || entityAlias)
                 },
                 entityOptions
             ));
@@ -98,7 +98,7 @@ var ODataContext = Class.inherit({
      * @return Promise<any>
      */
     get: function(operationName, params) {
-        return this.invoke(operationName, params, "GET");
+        return this.invoke(operationName, params, 'GET');
     },
 
     /**
@@ -111,17 +111,17 @@ var ODataContext = Class.inherit({
      */
     invoke: function(operationName, params, httpMethod) {
         params = params || {};
-        httpMethod = (httpMethod || "POST").toLowerCase();
+        httpMethod = (httpMethod || 'POST').toLowerCase();
 
         var d = new Deferred(),
-            url = this._url + "/" + encodeURIComponent(operationName),
+            url = this._url + '/' + encodeURIComponent(operationName),
             payload;
 
         if(this.version() === 4) {
-            if(httpMethod === "get") {
+            if(httpMethod === 'get') {
                 url = mixins.formatFunctionInvocationUrl(url, mixins.escapeServiceOperationParams(params, this.version()));
                 params = null;
-            } else if(httpMethod === "post") {
+            } else if(httpMethod === 'post') {
                 payload = params;
                 params = null;
             }
@@ -151,7 +151,7 @@ var ODataContext = Class.inherit({
     objectLink: function(entityAlias, key) {
         var store = this[entityAlias];
         if(!store) {
-            throw errorsModule.errors.Error("E4015", entityAlias);
+            throw errorsModule.errors.Error('E4015', entityAlias);
         }
 
         if(!typeUtils.isDefined(key)) {

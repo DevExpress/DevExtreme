@@ -1,11 +1,11 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
 
-import FileManagerDialogBase from "./ui.file_manager.dialog.js";
-import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
+import FileManagerDialogBase from './ui.file_manager.dialog.js';
+import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
 
-const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = "dx-filemanager-dialog-folder-chooser";
-const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = "dx-filemanager-dialog-folder-chooser-popup";
+const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = 'dx-filemanager-dialog-folder-chooser';
+const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = 'dx-filemanager-dialog-folder-chooser-popup';
 
 class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
@@ -18,8 +18,8 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
-            title: "Select Destination Folder",
-            buttonText: "Select",
+            title: 'Select Destination Folder',
+            buttonText: 'Select',
             contentCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER,
             popupCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP
         });
@@ -28,8 +28,8 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     _createContentTemplate(element) {
         super._createContentTemplate(element);
 
-        this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
-            getItems: this.option("getItems")
+        this._filesTreeView = this._createComponent($('<div>'), FileManagerFilesTreeView, {
+            getItems: this.option('getItems')
         });
 
         this._$contentElement.append(this._filesTreeView.$element());

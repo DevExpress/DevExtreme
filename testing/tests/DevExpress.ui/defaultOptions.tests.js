@@ -1,61 +1,61 @@
 window.includeThemesLinks();
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    browser = require("core/utils/browser"),
-    devices = require("core/devices"),
-    themes = require("ui/themes"),
-    support = require("core/utils/support"),
-    publicComponentUtils = require("core/utils/public_component"),
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    browser = require('core/utils/browser'),
+    devices = require('core/devices'),
+    themes = require('ui/themes'),
+    support = require('core/utils/support'),
+    publicComponentUtils = require('core/utils/public_component'),
 
-    ActionSheet = require("ui/action_sheet"),
-    Accordion = require("ui/accordion"),
-    Box = require("ui/box"),
-    ColorBox = require("ui/color_box"),
-    DataGrid = require("ui/data_grid"),
-    DateBox = require("ui/date_box"),
-    DateView = require("ui/date_box/ui.date_view"),
-    DateViewRoller = require("ui/date_box/ui.date_view_roller"),
-    FakeDialogComponent = require("ui/dialog").FakeDialogComponent,
-    DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
-    DropDownBox = require("ui/drop_down_box"),
-    DropDownButton = require("ui/drop_down_button"),
-    DropDownList = require("ui/drop_down_editor/ui.drop_down_list"),
-    DropDownMenu = require("ui/drop_down_menu"),
-    TextEditor = require("ui/text_box/ui.text_editor"),
-    Gallery = require("ui/gallery"),
-    Lookup = require("ui/lookup"),
-    LoadIndicator = require("ui/load_indicator"),
-    LoadPanel = require("ui/load_panel"),
-    List = require("ui/list"),
-    MenuBase = require("ui/context_menu/ui.menu_base"),
-    Menu = require("ui/menu/ui.menu"),
-    ContextMenu = require("ui/context_menu/ui.context_menu"),
-    NumberBox = require("ui/number_box"),
-    NavBar = require("ui/nav_bar"),
-    Popup = require("ui/popup"),
-    Popover = require("ui/popover"),
-    RadioGroup = require("ui/radio_group"),
-    Scheduler = require("ui/scheduler/ui.scheduler"),
-    Scrollable = require("ui/scroll_view/ui.scrollable"),
-    ScrollView = require("ui/scroll_view"),
-    SelectBox = require("ui/select_box"),
-    Tabs = require("ui/tabs"),
-    TabPanel = require("ui/tab_panel"),
-    TagBox = require("ui/tag_box"),
-    Toast = require("ui/toast"),
-    TreeList = require("ui/tree_list"),
-    TreeView = require("ui/tree_view"),
-    FileUploader = require("ui/file_uploader"),
-    Toolbar = require("ui/toolbar"),
-    Form = require("ui/form");
+    ActionSheet = require('ui/action_sheet'),
+    Accordion = require('ui/accordion'),
+    Box = require('ui/box'),
+    ColorBox = require('ui/color_box'),
+    DataGrid = require('ui/data_grid'),
+    DateBox = require('ui/date_box'),
+    DateView = require('ui/date_box/ui.date_view'),
+    DateViewRoller = require('ui/date_box/ui.date_view_roller'),
+    FakeDialogComponent = require('ui/dialog').FakeDialogComponent,
+    DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor'),
+    DropDownBox = require('ui/drop_down_box'),
+    DropDownButton = require('ui/drop_down_button'),
+    DropDownList = require('ui/drop_down_editor/ui.drop_down_list'),
+    DropDownMenu = require('ui/drop_down_menu'),
+    TextEditor = require('ui/text_box/ui.text_editor'),
+    Gallery = require('ui/gallery'),
+    Lookup = require('ui/lookup'),
+    LoadIndicator = require('ui/load_indicator'),
+    LoadPanel = require('ui/load_panel'),
+    List = require('ui/list'),
+    MenuBase = require('ui/context_menu/ui.menu_base'),
+    Menu = require('ui/menu/ui.menu'),
+    ContextMenu = require('ui/context_menu/ui.context_menu'),
+    NumberBox = require('ui/number_box'),
+    NavBar = require('ui/nav_bar'),
+    Popup = require('ui/popup'),
+    Popover = require('ui/popover'),
+    RadioGroup = require('ui/radio_group'),
+    Scheduler = require('ui/scheduler/ui.scheduler'),
+    Scrollable = require('ui/scroll_view/ui.scrollable'),
+    ScrollView = require('ui/scroll_view'),
+    SelectBox = require('ui/select_box'),
+    Tabs = require('ui/tabs'),
+    TabPanel = require('ui/tab_panel'),
+    TagBox = require('ui/tag_box'),
+    Toast = require('ui/toast'),
+    TreeList = require('ui/tree_list'),
+    TreeView = require('ui/tree_view'),
+    FileUploader = require('ui/file_uploader'),
+    Toolbar = require('ui/toolbar'),
+    Form = require('ui/form');
 
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="cmp"></div>');
+    $('#qunit-fixture').html('<div id="cmp"></div>');
 });
 
-QUnit.module("widgets defaults");
+QUnit.module('widgets defaults');
 
 var testComponentDefaults = function(componentClass, forcedDevices, options, before, after) {
     var componentName = publicComponentUtils.name(componentClass);
@@ -64,13 +64,13 @@ var testComponentDefaults = function(componentClass, forcedDevices, options, bef
     before = before || noop;
     after = after || noop;
 
-    QUnit.test(componentName + " default options", function(assert) {
+    QUnit.test(componentName + ' default options', function(assert) {
         var originalDevice = devices._currentDevice;
         before.call(this);
 
         $.each(forcedDevices, function(_, device) {
             devices._currentDevice = device;
-            var component = new componentClass("#cmp");
+            var component = new componentClass('#cmp');
             options = $.isFunction(options) ? options.call(component) : options;
 
             var defaults = component.option();
@@ -93,14 +93,14 @@ var checkOptions = function(expectedOptions, resultOptions, deviceString, assert
         if($.isPlainObject(expectedValue)) {
             checkOptions(expectedValue, resultValue, null, assert);
         } else {
-            assert.equal(resultValue, expectedValue, optionName + " is configured on device " + deviceString);
+            assert.equal(resultValue, expectedValue, optionName + ' is configured on device ' + deviceString);
         }
     });
 };
 
 testComponentDefaults(ActionSheet,
     [
-        { platform: "ios", tablet: true }
+        { platform: 'ios', tablet: true }
     ],
     { usePopover: true }
 );
@@ -111,7 +111,7 @@ testComponentDefaults(NumberBox,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "generic", generic: true });
+        devices.real({ platform: 'generic', generic: true });
     },
     function() {
         devices.real(this._origDevice);
@@ -128,11 +128,11 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateBox,
-    { platform: "android" },
-    { pickerType: "rollers" },
+    { platform: 'android' },
+    { pickerType: 'rollers' },
     function() {
         this._origDevice = devices.real();
-        var deviceConfig = { platform: "android", android: true, version: [4, 3] };
+        var deviceConfig = { platform: 'android', android: true, version: [4, 3] };
         devices.real(deviceConfig);
     },
     function() {
@@ -141,12 +141,12 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateBox,
-    { platform: "win" },
-    { pickerType: "rollers" },
+    { platform: 'win' },
+    { pickerType: 'rollers' },
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "win", win: true, phone: true });
+        devices.real({ platform: 'win', win: true, phone: true });
     },
     function() {
         devices.real(this._origDevice);
@@ -155,13 +155,13 @@ testComponentDefaults(DateBox,
 
 testComponentDefaults(DateBox,
     [
-        { platform: "generic", deviceType: "desktop" },
+        { platform: 'generic', deviceType: 'desktop' },
     ],
-    { pickerType: "calendar" },
+    { pickerType: 'calendar' },
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "generic", deviceType: "desktop", phone: false });
+        devices.real({ platform: 'generic', deviceType: 'desktop', phone: false });
     },
     function() {
         devices.real(this._origDevice);
@@ -169,12 +169,12 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateBox,
-    { platform: "win" },
-    { pickerType: "calendar" },
+    { platform: 'win' },
+    { pickerType: 'calendar' },
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "win", win: true, phone: false });
+        devices.real({ platform: 'win', win: true, phone: false });
     },
     function() {
         devices.real(this._origDevice);
@@ -182,12 +182,12 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateView,
-    { platform: "win", version: [8] },
+    { platform: 'win', version: [8] },
     { showNames: true }
 );
 
 testComponentDefaults(DateViewRoller,
-    { platform: "win", version: [8] },
+    { platform: 'win', version: [8] },
     {
         showOnClick: true
     }
@@ -199,7 +199,7 @@ testComponentDefaults(Box,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "android", android: true, version: [4, 3] });
+        devices.real({ platform: 'android', android: true, version: [4, 3] });
     },
     function() {
         devices.real(this._origDevice);
@@ -212,7 +212,7 @@ testComponentDefaults(Box,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "ios", android: true, version: [6, 0] });
+        devices.real({ platform: 'ios', android: true, version: [6, 0] });
     },
     function() {
         devices.real(this._origDevice);
@@ -233,22 +233,22 @@ testComponentDefaults(Box,
 
 testComponentDefaults(FakeDialogComponent,
     [
-        { platform: "ios" }
+        { platform: 'ios' }
     ],
     { width: 276 }
 );
 
 testComponentDefaults(FakeDialogComponent,
-    { platform: "android" },
+    { platform: 'android' },
     {
-        lWidth: "60%",
-        pWidth: "80%"
+        lWidth: '60%',
+        pWidth: '80%'
     }
 );
 
 testComponentDefaults(DropDownMenu,
     [
-        { platform: "ios", version: [6, 7, 8] }
+        { platform: 'ios', version: [6, 7, 8] }
     ],
     { usePopover: true }
 );
@@ -270,7 +270,7 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: "underlined"
+        stylingMode: 'underlined'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -284,20 +284,20 @@ testComponentDefaults(TextEditor,
 testComponentDefaults(TextEditor,
     {},
     {
-        showMaskMode: "always"
+        showMaskMode: 'always'
     }
 );
 
 testComponentDefaults(DropDownEditor,
     [
-        { platform: "generic" }
+        { platform: 'generic' }
     ],
     {
         popupPosition: {
             offset: { h: 0, v: 0 },
-            my: "left top",
-            at: "left bottom",
-            collision: "flip flip"
+            my: 'left top',
+            at: 'left bottom',
+            collision: 'flip flip'
         }
     }
 );
@@ -307,17 +307,17 @@ testComponentDefaults(DropDownBox,
     {
         openOnFieldClick: true,
         acceptCustomValue: false,
-        contentTemplate: "content",
-        valueChangeEvent: "change"
+        contentTemplate: 'content',
+        valueChangeEvent: 'change'
     }
 );
 
 testComponentDefaults(DropDownButton, {}, {
     dataSource: null,
     deferRendering: true,
-    text: "",
-    keyExpr: "this",
-    displayExpr: "this",
+    text: '',
+    keyExpr: 'this',
+    displayExpr: 'this',
     useSelectMode: false,
     opened: false,
     splitButton: false,
@@ -328,22 +328,22 @@ testComponentDefaults(DropDownButton, {}, {
     selectedItem: null,
     icon: undefined,
     grouped: false,
-    itemTemplate: "item",
-    groupTemplate: "group",
+    itemTemplate: 'item',
+    groupTemplate: 'group',
     buttonGroupOptions: {},
     dropDownOptions: {}
 });
 
 testComponentDefaults(DropDownList,
     [
-        { platform: "win", version: [8] }
+        { platform: 'win', version: [8] }
     ],
     {
         popupPosition: {
-            my: "left top",
-            at: "left bottom",
+            my: 'left top',
+            at: 'left bottom',
             offset: { h: 0, v: -6 },
-            collision: "flip"
+            collision: 'flip'
         }
     }
 );
@@ -351,7 +351,7 @@ testComponentDefaults(DropDownList,
 testComponentDefaults(DropDownList,
     {},
     {
-        groupTemplate: "group",
+        groupTemplate: 'group',
         grouped: false
     }
 );
@@ -369,29 +369,29 @@ testComponentDefaults(List,
 );
 
 testComponentDefaults(List,
-    { platform: "ios" },
+    { platform: 'ios' },
     {
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     }
 );
 
 testComponentDefaults(List,
-    { platform: "android" },
+    { platform: 'android' },
     {
-        itemDeleteMode: "swipe"
+        itemDeleteMode: 'swipe'
     }
 );
 
 testComponentDefaults(List,
-    { platform: "win" },
+    { platform: 'win' },
     {
-        itemDeleteMode: "context",
-        menuMode: "context"
+        itemDeleteMode: 'context',
+        menuMode: 'context'
     }
 );
 
 testComponentDefaults(List,
-    { platform: "win" },
+    { platform: 'win' },
     {
         bounceEnabled: false
     },
@@ -407,7 +407,7 @@ testComponentDefaults(List,
 );
 
 testComponentDefaults(List,
-    { platform: "win" },
+    { platform: 'win' },
     {
         bounceEnabled: true
     },
@@ -423,23 +423,23 @@ testComponentDefaults(List,
 );
 
 testComponentDefaults(List,
-    { platform: "generic" },
+    { platform: 'generic' },
     {
-        itemDeleteMode: "static"
+        itemDeleteMode: 'static'
     }
 );
 
 testComponentDefaults(List,
-    { platform: "generic" },
+    { platform: 'generic' },
     {
-        showScrollbar: "onHover",
+        showScrollbar: 'onHover',
         pullRefreshEnabled: false,
-        pageLoadMode: "nextButton"
+        pageLoadMode: 'nextButton'
     },
     function() {
         this._realDevice = devices.real();
         this._supportNativeScrolling = support.nativeScrolling;
-        devices.real({ platform: "generic" });
+        devices.real({ platform: 'generic' });
         support.nativeScrolling = false;
     },
     function() {
@@ -454,7 +454,7 @@ if(!(/chrome/i.test(navigator.userAgent))) {
         { viaImage: true },
         function() {
             this._originalRealDevice = devices.real();
-            devices.real({ platform: "android", version: [4, 0] });
+            devices.real({ platform: 'android', version: [4, 0] });
         },
         function() {
             devices.real(this._originalRealDevice);
@@ -471,7 +471,7 @@ testComponentDefaults(Lookup,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ deviceType: "desktop" });
+        devices.real({ deviceType: 'desktop' });
     },
     function() {
         devices.real(this._origDevice);
@@ -479,27 +479,27 @@ testComponentDefaults(Lookup,
 );
 
 testComponentDefaults(Lookup,
-    { platform: "win", version: [8], phone: true },
+    { platform: 'win', version: [8], phone: true },
     { showCancelButton: false, fullScreen: true }
 );
 
 
 testComponentDefaults(Lookup,
     [
-        { platform: "ios", phone: true }
+        { platform: 'ios', phone: true }
     ],
     { fullScreen: true }
 );
 
 testComponentDefaults(Lookup,
     [
-        { platform: "ios", tablet: true },
-        { platform: "generic" }
+        { platform: 'ios', tablet: true },
+        { platform: 'generic' }
     ],
     { usePopover: true },
     function() {
         this._realDevice = devices.real();
-        devices.real({ platform: "generic" });
+        devices.real({ platform: 'generic' });
     },
     function() {
         devices.real(this._realDevice);
@@ -507,14 +507,14 @@ testComponentDefaults(Lookup,
 );
 
 testComponentDefaults(Lookup,
-    { platform: "generic" },
+    { platform: 'generic' },
     {
-        pageLoadMode: "scrollBottom"
+        pageLoadMode: 'scrollBottom'
     },
     function() {
         this._realDevice = devices.real();
         this._supportNativeScrolling = support.nativeScrolling;
-        devices.real({ platform: "generic" });
+        devices.real({ platform: 'generic' });
         support.nativeScrolling = false;
     },
     function() {
@@ -532,8 +532,8 @@ testComponentDefaults(Lookup,
         showCancelButton: false,
         showPopupTitle: false,
         position: {
-            my: "left top",
-            at: "left top"
+            my: 'left top',
+            at: 'left top'
         }
     },
     function() {
@@ -552,7 +552,7 @@ testComponentDefaults(Popup,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ deviceType: "desktop" });
+        devices.real({ deviceType: 'desktop' });
     },
     function() {
         devices.real(this._origDevice);
@@ -561,41 +561,41 @@ testComponentDefaults(Popup,
 
 testComponentDefaults(Popup,
     [
-        { platform: "ios" }
+        { platform: 'ios' }
     ],
     {
         animation: {
             show: {
-                type: "slide",
+                type: 'slide',
                 duration: 400,
                 from: {
                     position: {
-                        my: "top",
-                        at: "bottom"
+                        my: 'top',
+                        at: 'bottom'
                     }
                 },
                 to: {
                     position: {
-                        my: "center",
-                        at: "center"
+                        my: 'center',
+                        at: 'center'
                     }
                 }
             },
             hide: {
-                type: "slide",
+                type: 'slide',
                 duration: 400,
                 from: {
                     opacity: 1,
                     position: {
-                        my: "center",
-                        at: "center"
+                        my: 'center',
+                        at: 'center'
                     }
                 },
                 to: {
                     opacity: 1,
                     position: {
-                        my: "top",
-                        at: "bottom"
+                        my: 'top',
+                        at: 'bottom'
                     }
                 }
             }
@@ -605,15 +605,15 @@ testComponentDefaults(Popup,
 
 testComponentDefaults(Popup,
     [
-        { platform: "android" }
+        { platform: 'android' }
     ],
     function() {
-        this.option("fullScreen", true);
+        this.option('fullScreen', true);
 
         return {
             animation: {
-                show: { type: "slide", duration: 300, from: { top: "30%", opacity: 0 }, to: { top: 0, opacity: 1 } },
-                hide: { type: "slide", duration: 300, from: { top: 0, opacity: 1 }, to: { top: "30%", opacity: 0 } }
+                show: { type: 'slide', duration: 300, from: { top: '30%', opacity: 0 }, to: { top: 0, opacity: 1 } },
+                hide: { type: 'slide', duration: 300, from: { top: 0, opacity: 1 }, to: { top: '30%', opacity: 0 } }
             }
         };
     }
@@ -621,12 +621,12 @@ testComponentDefaults(Popup,
 
 testComponentDefaults(Popup,
     [
-        { platform: "android" }
+        { platform: 'android' }
     ],
     {
         animation: {
-            show: { type: "fade", duration: 400, from: 0, to: 1 },
-            hide: { type: "fade", duration: 400, from: 1, to: 0 }
+            show: { type: 'fade', duration: 400, from: 0, to: 1 },
+            hide: { type: 'fade', duration: 400, from: 1, to: 0 }
         }
     }
 );
@@ -634,15 +634,15 @@ testComponentDefaults(Popup,
 testComponentDefaults(Popover,
     {},
     {
-        position: "bottom",
+        position: 'bottom',
         animation: {
             show: {
-                type: "fade",
+                type: 'fade',
                 from: 0,
                 to: 1
             },
             hide: {
-                type: "fade",
+                type: 'fade',
                 to: 0
             }
         }
@@ -651,7 +651,7 @@ testComponentDefaults(Popover,
 
 testComponentDefaults(RadioGroup,
     { tablet: true },
-    { layout: "horizontal" }
+    { layout: 'horizontal' }
 );
 
 testComponentDefaults(Gallery,
@@ -659,7 +659,7 @@ testComponentDefaults(Gallery,
     {
         loopItemFocus: false,
         selectOnFocus: true,
-        selectionMode: "single",
+        selectionMode: 'single',
         selectionRequired: true,
         selectionByClick: false
     }
@@ -682,12 +682,12 @@ testComponentDefaults(Scrollable,
 
 testComponentDefaults(Scrollable,
     [
-        { platform: "generic" }
+        { platform: 'generic' }
     ],
     {
         scrollByThumb: true,
         scrollByContent: false,
-        showScrollbar: "onHover",
+        showScrollbar: 'onHover',
         bounceEnabled: false
     },
     function() {
@@ -696,7 +696,7 @@ testComponentDefaults(Scrollable,
         this._supportTouch = support.touch;
         support.touch = false;
         this._originalRealDevice = devices.real();
-        devices.real({ platform: "generic" });
+        devices.real({ platform: 'generic' });
     },
     function() {
         support.nativeScrolling = this._supportNativeScrolling;
@@ -712,7 +712,7 @@ testComponentDefaults(Scrollable,
         this._supportNativeScrolling = support.nativeScrolling;
         support.nativeScrolling = true;
         this._originalRealDevice = devices.real();
-        devices.real({ platform: "android", version: [4] });
+        devices.real({ platform: 'android', version: [4] });
     },
     function() {
         support.nativeScrolling = this._supportNativeScrolling;
@@ -722,10 +722,10 @@ testComponentDefaults(Scrollable,
 
 testComponentDefaults(ScrollView,
     {},
-    { refreshStrategy: "swipeDown" },
+    { refreshStrategy: 'swipeDown' },
     function() {
         this._originalRealDevice = devices.real();
-        devices.real({ platform: "android" });
+        devices.real({ platform: 'android' });
     },
     function() {
         devices.real(this._originalRealDevice);
@@ -734,10 +734,10 @@ testComponentDefaults(ScrollView,
 
 testComponentDefaults(ScrollView,
     {},
-    { refreshStrategy: "slideDown" },
+    { refreshStrategy: 'slideDown' },
     function() {
         this._originalRealDevice = devices.real();
-        devices.real({ platform: "win" });
+        devices.real({ platform: 'win' });
     },
     function() {
         devices.real(this._originalRealDevice);
@@ -747,10 +747,10 @@ testComponentDefaults(ScrollView,
 testComponentDefaults(ScrollView,
     {},
     {
-        pullingDownText: "",
-        pulledDownText: "",
-        refreshingText: "",
-        reachBottomText: ""
+        pullingDownText: '',
+        pulledDownText: '',
+        refreshingText: '',
+        reachBottomText: ''
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -762,65 +762,65 @@ testComponentDefaults(ScrollView,
 );
 
 testComponentDefaults(TagBox,
-    { platform: "android" },
+    { platform: 'android' },
     { showDropDownButton: false }
 );
 
 testComponentDefaults(Toast,
-    [{ platform: "android" }],
+    [{ platform: 'android' }],
     {
         position: {
-            at: "bottom left",
-            my: "bottom left",
+            at: 'bottom left',
+            my: 'bottom left',
             of: null,
-            offset: "20 -20"
+            offset: '20 -20'
         },
-        width: "auto"
+        width: 'auto'
     }
 );
 
 testComponentDefaults(Toast,
-    { platform: "android", deviceType: "phone" },
+    { platform: 'android', deviceType: 'phone' },
     {
         position: {
-            my: "bottom center",
-            at: "bottom center",
-            offset: "0 0"
+            my: 'bottom center',
+            at: 'bottom center',
+            offset: '0 0'
         }
     }
 );
 
 testComponentDefaults(Toast,
-    { platform: "win", version: [8] },
+    { platform: 'win', version: [8] },
     {
         position: {
-            my: "top center",
-            at: "top center",
-            offset: "0 0"
+            my: 'top center',
+            at: 'top center',
+            offset: '0 0'
         }
     }
 );
 
 testComponentDefaults(Toast,
-    { platform: "win", version: [10] },
+    { platform: 'win', version: [10] },
     {
         position: {
-            at: "bottom right",
-            my: "bottom right",
+            at: 'bottom right',
+            my: 'bottom right',
             of: null,
-            offset: "0 -20"
+            offset: '0 -20'
         },
-        width: "auto"
+        width: 'auto'
     }
 );
 
 testComponentDefaults(Toast,
-    { platform: "win", version: [10], deviceType: "phone" },
+    { platform: 'win', version: [10], deviceType: 'phone' },
     {
         position: {
-            my: "bottom center",
-            at: "bottom center",
-            offset: "0 0"
+            my: 'bottom center',
+            at: 'bottom center',
+            offset: '0 0'
         }
     }
 );
@@ -845,17 +845,17 @@ testComponentDefaults(Toast,
 
 testComponentDefaults(Toolbar,
     {},
-    { submenuType: "actionSheet" },
+    { submenuType: 'actionSheet' },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("ios7");
+        themes.current('ios7');
     }, function() {
         themes.current(this.originalCurrentTheme);
     }
 );
 
 testComponentDefaults(TabPanel,
-    { platform: "generic" },
+    { platform: 'generic' },
     {
         animationEnabled: false
     }
@@ -876,7 +876,7 @@ testComponentDefaults(LoadIndicator,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("material");
+        themes.current('material');
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -891,7 +891,7 @@ testComponentDefaults(LoadIndicator,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("generic");
+        themes.current('generic');
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -906,7 +906,7 @@ testComponentDefaults(LoadIndicator,
     },
     function() {
         this.originalCurrentTheme = themes.current();
-        themes.current("ios7");
+        themes.current('ios7');
     },
     function() {
         themes.current(this.originalCurrentTheme);
@@ -920,7 +920,7 @@ testComponentDefaults(LoadPanel,
         height: 60,
         maxWidth: 60,
         maxHeight: 60,
-        message: ""
+        message: ''
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -941,7 +941,7 @@ testComponentDefaults(LoadPanel,
 testComponentDefaults(ColorBox,
     { },
     {
-        valueChangeEvent: "change"
+        valueChangeEvent: 'change'
     }
 );
 
@@ -949,10 +949,10 @@ testComponentDefaults(List,
     { platform: devices.current().platform },
     {
         useInkRipple: true,
-        pullingDownText: "",
-        pulledDownText: "",
-        refreshingText: "",
-        pageLoadingText: ""
+        pullingDownText: '',
+        pulledDownText: '',
+        refreshingText: '',
+        pageLoadingText: ''
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -1014,16 +1014,16 @@ testComponentDefaults(TreeView,
     {},
     {
         selectNodesRecursive: true,
-        dataStructure: "tree",
+        dataStructure: 'tree',
         expandAllEnabled: false,
-        hasItemsExpr: "hasItems",
+        hasItemsExpr: 'hasItems',
         expandNodesRecursive: true,
-        scrollDirection: "vertical",
+        scrollDirection: 'vertical',
         virtualModeEnabled: false,
         rootValue: 0,
-        searchValue: "",
-        selectionMode: "multiple",
-        showCheckBoxesMode: "none",
+        searchValue: '',
+        selectionMode: 'multiple',
+        showCheckBoxesMode: 'none',
         selectByClick: false
     }
 );
@@ -1058,7 +1058,7 @@ testComponentDefaults(Tabs,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "generic", generic: true });
+        devices.real({ platform: 'generic', generic: true });
     },
     function() {
         devices.real(this._origDevice);
@@ -1074,7 +1074,7 @@ testComponentDefaults(Tabs,
     function() {
         this.originalRealDevice = devices.real();
         devices.real({
-            platform: "ios"
+            platform: 'ios'
         });
     },
     function() {
@@ -1083,15 +1083,15 @@ testComponentDefaults(Tabs,
 );
 
 [
-    { name: "chrome", version: "65.9", mode: "number" },
-    { name: "chrome", version: "66.0", mode: "text" },
-    { name: "msie", version: "74.9", mode: "number" },
-    { name: "msie", version: "75.0", mode: "text" },
-    { name: "safari", version: "11.9", mode: "number" },
-    { name: "safari", version: "12.0", mode: "text" }
+    { name: 'chrome', version: '65.9', mode: 'number' },
+    { name: 'chrome', version: '66.0', mode: 'text' },
+    { name: 'msie', version: '74.9', mode: 'number' },
+    { name: 'msie', version: '75.0', mode: 'text' },
+    { name: 'safari', version: '11.9', mode: 'number' },
+    { name: 'safari', version: '12.0', mode: 'text' }
 ].forEach(function(item) {
     testComponentDefaults(NumberBox,
-        { browser: item.name, version: item.version, platform: "ios" },
+        { browser: item.name, version: item.version, platform: 'ios' },
         { mode: item.mode },
         function() {
             this.originalRealDevice = devices.real();
@@ -1103,7 +1103,7 @@ testComponentDefaults(Tabs,
             browser.version = item.version;
             browser[item.name] = true;
 
-            devices.real({ platform: "ios" });
+            devices.real({ platform: 'ios' });
         },
         function() {
             browser = this._origBrowser;
@@ -1115,7 +1115,7 @@ testComponentDefaults(Tabs,
 
 testComponentDefaults(FileUploader,
     { },
-    { _uploadButtonType: "default" },
+    { _uploadButtonType: 'default' },
     function() {
         this.origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
@@ -1128,7 +1128,7 @@ testComponentDefaults(FileUploader,
 testComponentDefaults(Form,
     {},
     {
-        labelLocation: "top",
+        labelLocation: 'top',
         showColonAfterLabel: false
     },
     function() {
@@ -1159,13 +1159,13 @@ testComponentDefaults(DataGrid,
 testComponentDefaults(DataGrid,
     {},
     {
-        grouping: { expandMode: "rowClick" },
+        grouping: { expandMode: 'rowClick' },
         showRowLines: true
     },
     function() {
         this.originalRealDevice = devices.real();
         devices.real({
-            platform: "ios"
+            platform: 'ios'
         });
     },
     function() {
@@ -1177,7 +1177,7 @@ testComponentDefaults(Accordion,
     {},
     {
         animationDuration: 200,
-        _animationEasing: "cubic-bezier(0.4, 0, 0.2, 1)"
+        _animationEasing: 'cubic-bezier(0.4, 0, 0.2, 1)'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -1192,9 +1192,9 @@ testComponentDefaults(Scheduler,
     {},
     {
         _appointmentTooltipOffset: { x: 0, y: 11 },
-        _appointmentTooltipButtonsPosition: "top",
+        _appointmentTooltipButtonsPosition: 'top',
         _appointmentTooltipOpenButtonText: null,
-        _dropDownButtonIcon: "chevrondown",
+        _dropDownButtonIcon: 'chevrondown',
         _appointmentCountPerCell: 1,
         _collectorOffset: 20,
         _appointmentOffset: 30

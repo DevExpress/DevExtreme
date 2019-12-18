@@ -1,15 +1,15 @@
-import ajax from "../../../core/utils/ajax";
-import { ensureDefined, noop } from "../../../core/utils/common";
-import Guid from "../../../core/guid";
-import { getWindow } from "../../../core/utils/window";
-import { each } from "../../../core/utils/iterator";
-import { Deferred } from "../../../core/utils/deferred";
+import ajax from '../../../core/utils/ajax';
+import { ensureDefined, noop } from '../../../core/utils/common';
+import Guid from '../../../core/guid';
+import { getWindow } from '../../../core/utils/window';
+import { each } from '../../../core/utils/iterator';
+import { Deferred } from '../../../core/utils/deferred';
 
-import { FileProvider } from "./file_provider";
-import { compileGetter } from "../../../core/utils/data";
+import { FileProvider } from './file_provider';
+import { compileGetter } from '../../../core/utils/data';
 
 const window = getWindow();
-const FILE_CHUNK_BLOB_NAME = "chunk";
+const FILE_CHUNK_BLOB_NAME = 'chunk';
 
 /**
 * @name WebApiFileProvider
@@ -32,7 +32,7 @@ class WebApiFileProvider extends FileProvider {
          * @name WebApiFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)
          */
-        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
+        this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 
     getItems(path, itemType) {
@@ -40,34 +40,34 @@ class WebApiFileProvider extends FileProvider {
     }
 
     renameItem(item, name) {
-        return this._executeRequest("Rename", {
+        return this._executeRequest('Rename', {
             id: item.relativeName,
             name
         });
     }
 
     createFolder(parentFolder, name) {
-        return this._executeRequest("CreateDir", {
+        return this._executeRequest('CreateDir', {
             parentId: parentFolder.relativeName,
             name
         });
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest("Remove", { id: item.relativeName }));
+        return items.map(item => this._executeRequest('Remove', { id: item.relativeName }));
     }
 
     moveItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest("Move", {
+        return items.map(item => this._executeRequest('Move', {
             sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName + "/" + item.name
+            destinationId: destinationFolder.relativeName + '/' + item.name
         }));
     }
 
     copyItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest("Copy", {
+        return items.map(item => this._executeRequest('Copy', {
             sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName + "/" + item.name
+            destinationId: destinationFolder.relativeName + '/' + item.name
         }));
     }
 
@@ -89,14 +89,14 @@ class WebApiFileProvider extends FileProvider {
 
         const formData = new window.FormData();
         formData.append(FILE_CHUNK_BLOB_NAME, chunk.blob);
-        formData.append("arguments", JSON.stringify(args));
-        formData.append("command", "UploadChunk");
+        formData.append('arguments', JSON.stringify(args));
+        formData.append('command', 'UploadChunk');
 
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._endpointUrl,
-            method: "POST",
-            dataType: "json",
+            method: 'POST',
+            dataType: 'json',
             data: formData,
             upload: {
                 onprogress: noop,
@@ -112,7 +112,7 @@ class WebApiFileProvider extends FileProvider {
     }
 
     abortFileUpload(uploadInfo) {
-        return this._executeRequest("AbortUpload", { uploadId: uploadInfo.customData.uploadId });
+        return this._executeRequest('AbortUpload', { uploadId: uploadInfo.customData.uploadId });
     }
 
     _getItems(path, itemType) {
@@ -125,17 +125,17 @@ class WebApiFileProvider extends FileProvider {
     }
 
     _getEntriesByPath(path) {
-        return this._executeRequest("GetDirContents", { parentId: path });
+        return this._executeRequest('GetDirContents', { parentId: path });
     }
 
     _executeRequest(command, args) {
-        const method = command === "GetDirContents" ? "GET" : "POST";
+        const method = command === 'GetDirContents' ? 'GET' : 'POST';
 
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._getEndpointUrl(command, args),
             method,
-            dataType: "json",
+            dataType: 'json',
             cache: false
         }).then(result => {
             !result.success && deferred.reject(result) || deferred.resolve(result);
@@ -149,7 +149,7 @@ class WebApiFileProvider extends FileProvider {
             command,
             arguments: JSON.stringify(args)
         });
-        const separator = this._endpointUrl && this._endpointUrl.indexOf("?") > 0 ? "&" : "?";
+        const separator = this._endpointUrl && this._endpointUrl.indexOf('?') > 0 ? '&' : '?';
         return this._endpointUrl + separator + queryString;
     }
 
@@ -166,7 +166,7 @@ class WebApiFileProvider extends FileProvider {
             }
 
             if(value === null) {
-                value = "";
+                value = '';
             }
 
             if(Array.isArray(value)) {
@@ -177,7 +177,7 @@ class WebApiFileProvider extends FileProvider {
             }
         }
 
-        return pairs.join("&");
+        return pairs.join('&');
     }
 
     _processQueryStringArrayParam(key, array, pairs) {
@@ -188,12 +188,12 @@ class WebApiFileProvider extends FileProvider {
     }
 
     _getQueryStringPair(key, value) {
-        return encodeURIComponent(key) + "=" + encodeURIComponent(value);
+        return encodeURIComponent(key) + '=' + encodeURIComponent(value);
     }
 
     _hasSubDirs(dataObj) {
         const hasSubDirs = this._hasSubDirsGetter(dataObj);
-        return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
+        return typeof hasSubDirs === 'boolean' ? hasSubDirs : true;
     }
 
 }

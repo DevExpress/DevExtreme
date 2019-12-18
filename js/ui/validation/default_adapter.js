@@ -1,5 +1,5 @@
-var Callbacks = require("../../core/utils/callbacks"),
-    Class = require("../../core/class");
+var Callbacks = require('../../core/utils/callbacks'),
+    Class = require('../../core/class');
 
 var DefaultAdapter = Class.inherit({
     ctor: function(editor, validator) {
@@ -15,21 +15,21 @@ var DefaultAdapter = Class.inherit({
 
         editor.validationRequest.add(handler);
 
-        editor.on("disposing", function() {
+        editor.on('disposing', function() {
             editor.validationRequest.remove(handler);
         });
     },
 
     getValue: function() {
-        return this.editor.option("value");
+        return this.editor.option('value');
     },
 
     getCurrentValidationError: function() {
-        return this.editor.option("validationError");
+        return this.editor.option('validationError');
     },
 
     bypass: function() {
-        return this.editor.option("disabled");
+        return this.editor.option('disabled');
     },
 
     applyValidationResults: function(params) {

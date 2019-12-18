@@ -1,19 +1,19 @@
-var swipeEvents = require("../swipe"),
-    eventsEngine = require("../../events/core/events_engine"),
-    DOMComponent = require("../../core/dom_component"),
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../utils"),
-    extend = require("../../core/utils/extend").extend,
-    publicComponentUtils = require("../../core/utils/public_component");
+var swipeEvents = require('../swipe'),
+    eventsEngine = require('../../events/core/events_engine'),
+    DOMComponent = require('../../core/dom_component'),
+    each = require('../../core/utils/iterator').each,
+    eventUtils = require('../utils'),
+    extend = require('../../core/utils/extend').extend,
+    publicComponentUtils = require('../../core/utils/public_component');
 
-var DX_SWIPEABLE = "dxSwipeable",
-    SWIPEABLE_CLASS = "dx-swipeable",
+var DX_SWIPEABLE = 'dxSwipeable',
+    SWIPEABLE_CLASS = 'dx-swipeable',
 
     ACTION_TO_EVENT_MAP = {
-        "onStart": swipeEvents.start,
-        "onUpdated": swipeEvents.swipe,
-        "onEnd": swipeEvents.end,
-        "onCancel": "dxswipecancel"
+        'onStart': swipeEvents.start,
+        'onUpdated': swipeEvents.swipe,
+        'onEnd': swipeEvents.end,
+        'onCancel': 'dxswipecancel'
     };
 
 
@@ -23,7 +23,7 @@ var Swipeable = DOMComponent.inherit({
         return extend(this.callBase(), {
             elastic: true,
             immediate: false,
-            direction: "horizontal",
+            direction: 'horizontal',
             itemSizeFunc: null,
             onStart: null,
             onUpdated: null,
@@ -42,7 +42,7 @@ var Swipeable = DOMComponent.inherit({
     _attachEventHandlers: function() {
         this._detachEventHandlers();
 
-        if(this.option("disabled")) {
+        if(this.option('disabled')) {
             return;
         }
 
@@ -63,32 +63,32 @@ var Swipeable = DOMComponent.inherit({
 
     _createEventData: function() {
         this._eventData = {
-            elastic: this.option("elastic"),
-            itemSizeFunc: this.option("itemSizeFunc"),
-            direction: this.option("direction"),
-            immediate: this.option("immediate")
+            elastic: this.option('elastic'),
+            itemSizeFunc: this.option('itemSizeFunc'),
+            direction: this.option('direction'),
+            immediate: this.option('immediate')
         };
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this.$element(), "." + DX_SWIPEABLE);
+        eventsEngine.off(this.$element(), '.' + DX_SWIPEABLE);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "disabled":
-            case "onStart":
-            case "onUpdated":
-            case "onEnd":
-            case "onCancel":
-            case "elastic":
-            case "immediate":
-            case "itemSizeFunc":
-            case "direction":
+            case 'disabled':
+            case 'onStart':
+            case 'onUpdated':
+            case 'onEnd':
+            case 'onCancel':
+            case 'elastic':
+            case 'immediate':
+            case 'itemSizeFunc':
+            case 'direction':
                 this._detachEventHandlers();
                 this._attachEventHandlers();
                 break;
-            case "rtlEnabled":
+            case 'rtlEnabled':
                 break;
             default:
                 this.callBase(args);

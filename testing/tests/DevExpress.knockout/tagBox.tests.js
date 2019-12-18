@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    TagBox = require("ui/tag_box"),
-    fx = require("animation/fx"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    TagBox = require('ui/tag_box'),
+    fx = require('animation/fx'),
+    ko = require('knockout');
 
-require("integration/knockout");
+require('integration/knockout');
 
 QUnit.testStart(function() {
     var markup =
@@ -19,10 +19,10 @@ QUnit.testStart(function() {
             <span data-options="dxTemplate: { name: \'tag\' }" data-bind="text: $parent.someValue"></span>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-var TAGBOX_TAG_REMOVE_BUTTON_CLASS = "dx-tag-remove-button";
+var TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 
 var moduleSetup = {
     beforeEach: function() {
@@ -37,28 +37,28 @@ var moduleSetup = {
 };
 
 
-QUnit.module("basic", moduleSetup);
+QUnit.module('basic', moduleSetup);
 
-QUnit.test("fieldTemplate is bound to selected items", function(assert) {
+QUnit.test('fieldTemplate is bound to selected items', function(assert) {
     var viewModel = {
         dataSource: [
-            { key: 1, name: "one" },
-            { key: 2, name: "two" },
-            { key: 3, name: "three" }
+            { key: 1, name: 'one' },
+            { key: 2, name: 'two' },
+            { key: 3, name: 'three' }
         ],
         value: [1, 2]
     };
 
-    var $selectBox = $("#tagBoxWithFieldTemplate");
+    var $selectBox = $('#tagBoxWithFieldTemplate');
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    assert.equal($("#customField").text(), "onetwo", "fieldTemplate got item in viewModel");
+    assert.equal($('#customField').text(), 'onetwo', 'fieldTemplate got item in viewModel');
 });
 
 
-QUnit.module("ko integration");
+QUnit.module('ko integration');
 
-QUnit.test("values should be provided to ko.observableArray", function(assert) {
+QUnit.test('values should be provided to ko.observableArray', function(assert) {
     assert.expect(1);
 
     var vm = {
@@ -66,23 +66,23 @@ QUnit.test("values should be provided to ko.observableArray", function(assert) {
     };
 
     vm.value.subscribe(function(value) {
-        assert.deepEqual(value, [1, 2], "observable array changed");
+        assert.deepEqual(value, [1, 2], 'observable array changed');
     });
 
-    ko.applyBindings(vm, $("#koTagBox").get(0));
+    ko.applyBindings(vm, $('#koTagBox').get(0));
 
-    var $close = $("#koTagBox").find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
-    $close.trigger("dxclick");
+    var $close = $('#koTagBox').find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
+    $close.trigger('dxclick');
 });
 
-QUnit.test("$parent should be correct for tag", function(assert) {
+QUnit.test('$parent should be correct for tag', function(assert) {
     var vm = {
-        someValue: "parent"
+        someValue: 'parent'
     };
 
-    var $markup = $("#koTagBoxWithTagTemplate");
+    var $markup = $('#koTagBoxWithTagTemplate');
     ko.applyBindings(vm, $markup.get(0));
 
-    var $tag = $markup.find(".dx-tag");
+    var $tag = $markup.find('.dx-tag');
     assert.equal($.trim($tag.text()), vm.someValue);
 });

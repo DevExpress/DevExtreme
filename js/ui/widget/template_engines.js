@@ -1,7 +1,7 @@
-import { extractTemplateMarkup } from "../../core/utils/dom";
+import { extractTemplateMarkup } from '../../core/utils/dom';
 import { registerTemplateEngine } from './template_engine_registry';
 
-registerTemplateEngine("jquery-tmpl", {
+registerTemplateEngine('jquery-tmpl', {
     compile: (element) => {
         return extractTemplateMarkup(element);
     },
@@ -11,7 +11,7 @@ registerTemplateEngine("jquery-tmpl", {
     }
 });
 
-registerTemplateEngine("jsrender", {
+registerTemplateEngine('jsrender', {
     compile: (element) => {
         /* global jsrender */
         return (jQuery ? jQuery : jsrender).templates(extractTemplateMarkup(element));
@@ -21,7 +21,7 @@ registerTemplateEngine("jsrender", {
     }
 });
 
-registerTemplateEngine("mustache", {
+registerTemplateEngine('mustache', {
     compile: (element) => {
         /* global Mustache */
         return extractTemplateMarkup(element);
@@ -31,7 +31,7 @@ registerTemplateEngine("mustache", {
     }
 });
 
-registerTemplateEngine("hogan", {
+registerTemplateEngine('hogan', {
     compile: (element) => {
         /* global Hogan */
         return Hogan.compile(extractTemplateMarkup(element));
@@ -41,7 +41,7 @@ registerTemplateEngine("hogan", {
     }
 });
 
-registerTemplateEngine("underscore", {
+registerTemplateEngine('underscore', {
     compile: (element) => {
         /* global _ */
         return _.template(extractTemplateMarkup(element));
@@ -51,7 +51,7 @@ registerTemplateEngine("underscore", {
     }
 });
 
-registerTemplateEngine("handlebars", {
+registerTemplateEngine('handlebars', {
     compile: (element) => {
         /* global Handlebars */
         return Handlebars.compile(extractTemplateMarkup(element));
@@ -61,7 +61,7 @@ registerTemplateEngine("handlebars", {
     }
 });
 
-registerTemplateEngine("doT", {
+registerTemplateEngine('doT', {
     compile: (element) => {
         /* global doT */
         return doT.template(extractTemplateMarkup(element));

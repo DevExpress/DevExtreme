@@ -1,11 +1,11 @@
-var eventsEngine = require("../events/core/events_engine"),
-    domAdapter = require("../core/dom_adapter"),
-    windowUtils = require("../core/utils/window"),
+var eventsEngine = require('../events/core/events_engine'),
+    domAdapter = require('../core/dom_adapter'),
+    windowUtils = require('../core/utils/window'),
     window = windowUtils.getWindow(),
-    Class = require("../core/class"),
+    Class = require('../core/class'),
     abstract = Class.abstract,
-    errors = require("./errors").errors,
-    ArrayStore = require("./array_store");
+    errors = require('./errors').errors,
+    ArrayStore = require('./array_store');
 
 var LocalStoreBackend = Class.inherit({
 
@@ -20,9 +20,9 @@ var LocalStoreBackend = Class.inherit({
         if(!immediate) {
             var saveProxy = this.save.bind(this);
             setInterval(saveProxy, flushInterval);
-            eventsEngine.on(window, "beforeunload", saveProxy);
+            eventsEngine.on(window, 'beforeunload', saveProxy);
             if(window.cordova) {
-                domAdapter.listen(domAdapter.getDocument(), "pause", saveProxy, false);
+                domAdapter.listen(domAdapter.getDocument(), 'pause', saveProxy, false);
             }
         }
     },
@@ -57,9 +57,9 @@ var DomLocalStoreBackend = LocalStoreBackend.inherit({
     ctor: function(store, storeOptions) {
         var name = storeOptions.name;
         if(!name) {
-            throw errors.Error("E4013");
+            throw errors.Error('E4013');
         }
-        this._key = "dx-data-localStore-" + name;
+        this._key = 'dx-data-localStore-' + name;
 
         this.callBase(store, storeOptions);
     },
@@ -83,7 +83,7 @@ var DomLocalStoreBackend = LocalStoreBackend.inherit({
 });
 
 var localStoreBackends = {
-    "dom": DomLocalStoreBackend
+    'dom': DomLocalStoreBackend
 };
 
 
@@ -101,7 +101,7 @@ var LocalStore = ArrayStore.inherit({
          * @name LocalStoreOptions.name
          * @type string
          */
-        if(typeof options === "string") {
+        if(typeof options === 'string') {
             options = { name: options };
         } else {
             options = options || {};
@@ -119,7 +119,7 @@ var LocalStore = ArrayStore.inherit({
          * @type number
          * @default 10000
          */
-        this._backend = new localStoreBackends[options.backend || "dom"](this, options);
+        this._backend = new localStoreBackends[options.backend || 'dom'](this, options);
         this._backend.load();
     },
 
@@ -146,6 +146,6 @@ var LocalStore = ArrayStore.inherit({
         var b = this._backend;
         return this.callBase(key).done(b.notifyChanged.bind(b));
     }
-}, "local");
+}, 'local');
 
 module.exports = LocalStore;

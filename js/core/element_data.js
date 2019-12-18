@@ -1,7 +1,7 @@
-var WeakMap = require("./polyfills/weak_map");
-var domAdapter = require("./dom_adapter");
-var eventsEngine = require("../events/core/events_engine");
-var MemorizedCallbacks = require("./memorized_callbacks");
+var WeakMap = require('./polyfills/weak_map');
+var domAdapter = require('./dom_adapter');
+var eventsEngine = require('../events/core/events_engine');
+var MemorizedCallbacks = require('./memorized_callbacks');
 
 var dataMap = new WeakMap();
 var strategy;
@@ -108,7 +108,7 @@ exports.cleanDataRecursive = function(element, cleanSelf) {
         return;
     }
 
-    var childElements = element.getElementsByTagName("*");
+    var childElements = element.getElementsByTagName('*');
 
     strategy.cleanData(childElements);
 

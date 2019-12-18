@@ -1,5 +1,5 @@
-import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
+import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 
 const math = Math;
 const round = math.round;
@@ -10,7 +10,7 @@ const cos = math.cos;
 const asin = math.asin;
 const PI = math.PI;
 
-const buildPath = (...points) => points.join("");
+const buildPath = (...points) => points.join('');
 
 function getArc(cornerRadius, xDirection, yDirection) {
     return `a ${cornerRadius} ${cornerRadius} 0 0 1 ${xDirection * cornerRadius} ${yDirection * cornerRadius}`;
@@ -101,7 +101,7 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
     // 8 | 0 | 4
     // 7 | 6 | 5
     if(!bounded || xl <= anchorX && anchorX <= xr && yt <= anchorY && anchorY <= yb) { // 0
-        points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), "L", rightTopCorner, getArc(cornerRadius, 1, 1), "L", rightBottomCorner, getArc(cornerRadius, -1, 1), "L", leftBottomCorner, getArc(cornerRadius, -1, -1));
+        points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), 'L', rightTopCorner, getArc(cornerRadius, 1, 1), 'L', rightBottomCorner, getArc(cornerRadius, -1, 1), 'L', leftBottomCorner, getArc(cornerRadius, -1, -1));
     } else if(anchorX > xr && anchorY < yt) { // 3
         const arrowAngle = (arrowWidth / cornerRadius) || 0;
         const angle = PI / 4 + arrowAngle / 2;
@@ -110,26 +110,26 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
         let arrowEndPointX = rightTopCorner[0] + cos(endAngle) * cornerRadius;
         let arrowEndPointY = rightTopCorner[1] + (1 - sin(endAngle)) * cornerRadius;
 
-        let arrowArc = buildPath("L", rightTopCorner, getArc(cornerRadius, cos(angle), 1 - sin(angle)), "L", [anchorX, anchorY, arrowEndPointX, arrowEndPointY],
+        let arrowArc = buildPath('L', rightTopCorner, getArc(cornerRadius, cos(angle), 1 - sin(angle)), 'L', [anchorX, anchorY, arrowEndPointX, arrowEndPointY],
             getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius, rightTopCorner[1] + cornerRadius));
 
         if(Math.abs(angle) > PI / 2) {
-            arrowArc = buildPath("L", [arrowBaseLeft, yt, anchorX, anchorY, xr, arrowBaseBottom]);
+            arrowArc = buildPath('L', [arrowBaseLeft, yt, anchorX, anchorY, xr, arrowBaseBottom]);
         }
 
-        points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), arrowArc, "L", rightBottomCorner, getArc(cornerRadius, -1, 1), "L", leftBottomCorner, getArc(cornerRadius, -1, -1));
+        points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), arrowArc, 'L', rightBottomCorner, getArc(cornerRadius, -1, 1), 'L', leftBottomCorner, getArc(cornerRadius, -1, -1));
     } else if(anchorX > xr && anchorY >= yt && anchorY <= yb) { // 4
         let arrowArc;
 
         if(arrowBaseTop >= rightTopCorner[1] + cornerRadius && arrowBaseBottom <= rightBottomCorner[1]) {
-            arrowArc = buildPath(getArc(cornerRadius, 1, 1), "L", [xr, arrowBaseTop, anchorX, anchorY, xr, arrowBaseBottom], "L", rightBottomCorner, getArc(cornerRadius, -1, 1));
+            arrowArc = buildPath(getArc(cornerRadius, 1, 1), 'L', [xr, arrowBaseTop, anchorX, anchorY, xr, arrowBaseBottom], 'L', rightBottomCorner, getArc(cornerRadius, -1, 1));
         } else if(arrowBaseTop < rightTopCorner[1] + cornerRadius && arrowBaseBottom >= rightTopCorner[1] + cornerRadius && arrowBaseBottom <= rightBottomCorner[1]) {
             const arrowWidthRest = rightTopCorner[1] + cornerRadius - arrowBaseTop;
             const angle = arrowWidthRest / cornerRadius;
 
             const arrowBaseTopX = rightTopCorner[0] + cos(angle) * cornerRadius;
             const arrowBaseTopY = rightTopCorner[1] + (1 - sin(angle)) * cornerRadius;
-            arrowArc = buildPath(getArc(cornerRadius, cos(angle), 1 - sin(angle)), "L", [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, xr, arrowBaseBottom], "L", rightBottomCorner, getArc(cornerRadius, -1, 1));
+            arrowArc = buildPath(getArc(cornerRadius, cos(angle), 1 - sin(angle)), 'L', [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, xr, arrowBaseBottom], 'L', rightBottomCorner, getArc(cornerRadius, -1, 1));
         } else if(arrowBaseTop < rightTopCorner[1] + cornerRadius && arrowBaseBottom < rightTopCorner[1] + cornerRadius) {
             const arrowWidthRest = rightTopCorner[1] + cornerRadius - arrowBaseTop;
             const arrowAngle = arrowWidthRest / cornerRadius;
@@ -145,9 +145,9 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
 
 
             arrowArc = buildPath(getArc(cornerRadius, cos(angle), 1 - sin(angle)),
-                "L", [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
+                'L', [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
                 getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius, rightTopCorner[1] + cornerRadius),
-                "L", rightBottomCorner,
+                'L', rightBottomCorner,
                 getArc(cornerRadius, -1, 1));
         } else if(arrowBaseTop <= rightTopCorner[1] + cornerRadius && arrowBaseBottom >= rightBottomCorner[1]) {
             const topAngle = asin((rightTopCorner[1] + cornerRadius - arrowBaseTop) / cornerRadius);
@@ -159,7 +159,7 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
             const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * (sin(bottomAngle));
 
             arrowArc = buildPath(getArc(cornerRadius, cos(topAngle), 1 - sin(topAngle)),
-                "L", [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
+                'L', [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
                 getAbsoluteArc(cornerRadius, rightBottomCorner[0] - cornerRadius, rightBottomCorner[1] + cornerRadius)
             );
         } else if(arrowBaseTop > rightTopCorner[1] + cornerRadius && arrowBaseTop <= rightBottomCorner[1] && arrowBaseBottom > rightBottomCorner[1]) {
@@ -168,7 +168,7 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
             const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * (sin(bottomAngle));
 
             arrowArc = buildPath(getArc(cornerRadius, 1, 1),
-                "L", [xr, arrowBaseTop, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
+                'L', [xr, arrowBaseTop, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
                 getAbsoluteArc(cornerRadius, rightBottomCorner[0] - cornerRadius, rightBottomCorner[1] + cornerRadius)
             );
         } else if(arrowBaseTop > rightTopCorner[1] + cornerRadius && arrowBaseBottom > rightBottomCorner[1]) {
@@ -183,18 +183,18 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
             const arrowBaseTopY = rightBottomCorner[1] + cornerRadius * (sin(topAngle));
 
             arrowArc = buildPath(getArc(cornerRadius, 1, 1),
-                "L", rightBottomCorner,
+                'L', rightBottomCorner,
                 getArc(cornerRadius, cos(topAngle) - 1, sin(topAngle)),
-                "L", [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
+                'L', [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
                 getAbsoluteArc(cornerRadius, rightBottomCorner[0] - cornerRadius, rightBottomCorner[1] + cornerRadius)
             );
         }
 
-        points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), "L", rightTopCorner, arrowArc, "L", leftBottomCorner, getArc(cornerRadius, -1, -1)
+        points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), 'L', rightTopCorner, arrowArc, 'L', leftBottomCorner, getArc(cornerRadius, -1, -1)
         );
     }
 
-    return buildPath("M", points, "Z");
+    return buildPath('M', points, 'Z');
 }
 
 export class Plaque {
@@ -234,7 +234,7 @@ export class Plaque {
             this._draw();
         }
 
-        const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
+        const shadowSettings = extend({ x: '-50%', y: '-50%', width: '200%', height: '200%' }, options.shadow);
 
         const contentWidth = options.width > 0 ? options.width : null;
         const contentHeight = options.height > 0 ? options.height : null;
@@ -317,19 +317,19 @@ export class Plaque {
         const renderer = this.widget._renderer;
         const options = this.options;
 
-        let cloudSettings = { opacity: options.opacity, "stroke-width": 0, fill: options.color };
+        let cloudSettings = { opacity: options.opacity, 'stroke-width': 0, fill: options.color };
         let borderOptions = options.border || {};
 
         if(borderOptions.visible) {
             extend(cloudSettings, {
-                "stroke-width": borderOptions.width,
+                'stroke-width': borderOptions.width,
                 stroke: borderOptions.color,
-                "stroke-opacity": borderOptions.opacity,
+                'stroke-opacity': borderOptions.opacity,
                 dashStyle: borderOptions.dashStyle
             });
         }
 
-        const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
+        const shadowSettings = extend({ x: '-50%', y: '-50%', width: '200%', height: '200%' }, options.shadow);
         const shadow = this._shadow = renderer.shadowFilter().attr(shadowSettings);
 
         const group = this._root = renderer.g().append(this.root);
@@ -337,7 +337,7 @@ export class Plaque {
             group.attr({ class: `dxc-${options.type}-annotation` });
         }
         const cloudGroup = renderer.g().attr({ filter: shadow.id }).append(group);
-        this._cloud = renderer.path([], "area").attr(cloudSettings).sharp().append(cloudGroup);
+        this._cloud = renderer.path([], 'area').attr(cloudSettings).sharp().append(cloudGroup);
 
         this._contentGroup = renderer.g().append(group);
     }

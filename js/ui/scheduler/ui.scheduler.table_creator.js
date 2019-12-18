@@ -1,15 +1,15 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    dataUtils = require("../../core/element_data"),
-    typeUtils = require("../../core/utils/type"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement;
+var $ = require('../../core/renderer'),
+    domAdapter = require('../../core/dom_adapter'),
+    dataUtils = require('../../core/element_data'),
+    typeUtils = require('../../core/utils/type'),
+    getPublicElement = require('../../core/utils/dom').getPublicElement;
 
-var ROW_SELECTOR = "tr";
+var ROW_SELECTOR = 'tr';
 
 var SchedulerTableCreator = {
 
-    VERTICAL: "vertical",
-    HORIZONTAL: "horizontal",
+    VERTICAL: 'vertical',
+    HORIZONTAL: 'horizontal',
 
     insertAllDayRow: function(allDayElements, tableBody, index) {
         if(allDayElements[index]) {
@@ -25,7 +25,7 @@ var SchedulerTableCreator = {
     },
 
     makeTable: function(options) {
-        var tableBody = domAdapter.createElement("tbody"),
+        var tableBody = domAdapter.createElement('tbody'),
             templateCallbacks = [],
             row,
             rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
@@ -52,7 +52,7 @@ var SchedulerTableCreator = {
             }
 
             for(var j = 0; j < options.cellCount; j++) {
-                var td = domAdapter.createElement("td");
+                var td = domAdapter.createElement('td');
                 row.appendChild(td);
 
                 if(options.cellClass) {
@@ -78,7 +78,7 @@ var SchedulerTableCreator = {
                 if(options.cellTemplate && options.cellTemplate.render) {
                     var templateOptions = {
                         model: {
-                            text: options.getCellText ? options.getCellText(i, j) : "",
+                            text: options.getCellText ? options.getCellText(i, j) : '',
                             date: options.getCellDate ? options.getCellDate(i) : undefined
                         },
                         container: getPublicElement($(td)),
@@ -87,19 +87,19 @@ var SchedulerTableCreator = {
 
                     if(dataValue) {
                         if(dataValue.startDate) {
-                            templateOptions.model["startDate"] = dataValue.startDate;
+                            templateOptions.model['startDate'] = dataValue.startDate;
                         }
 
                         if(dataValue.endDate) {
-                            templateOptions.model["endDate"] = dataValue.endDate;
+                            templateOptions.model['endDate'] = dataValue.endDate;
                         }
 
                         if(dataValue.groups) {
-                            templateOptions.model["groups"] = dataValue.groups;
+                            templateOptions.model['groups'] = dataValue.groups;
                         }
 
                         if(dataValue.allDay) {
-                            templateOptions.model["allDay"] = dataValue.allDay;
+                            templateOptions.model['allDay'] = dataValue.allDay;
                         }
                     }
 
@@ -107,7 +107,7 @@ var SchedulerTableCreator = {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
+                        td.innerHTML = '<div>' + options.getCellText(i, j) + '</div>';
                     }
                 }
             }
@@ -140,16 +140,16 @@ var SchedulerTableCreator = {
 
         config = config || {};
 
-        var cellTag = config.cellTag || "td",
-            childrenField = config.childrenField || "children",
-            titleField = config.titleField || "title",
+        var cellTag = config.cellTag || 'td',
+            childrenField = config.childrenField || 'children',
+            titleField = config.titleField || 'title',
             groupTableClass = config.groupTableClass,
             groupRowClass = config.groupRowClass,
             groupCellClass = config.groupCellClass,
             groupCellCustomContent = config.groupCellCustomContent;
 
         function createTable() {
-            table = domAdapter.createElement("table");
+            table = domAdapter.createElement('table');
 
             if(groupTableClass) {
                 table.className = groupTableClass;
@@ -174,7 +174,7 @@ var SchedulerTableCreator = {
             }
 
             var cellText = domAdapter.createTextNode(text);
-            if(typeof groupCellCustomContent === "function") {
+            if(typeof groupCellCustomContent === 'function') {
                 groupCellCustomContent(cell.element, cellText, index, data);
             } else {
                 cell.element.appendChild(cellText);
@@ -222,7 +222,7 @@ var SchedulerTableCreator = {
 
                 cells.forEach(function(cell, index) {
                     if(rowspans[index]) {
-                        cell.element.setAttribute("rowSpan", rowspans[index]);
+                        cell.element.setAttribute('rowSpan', rowspans[index]);
                     }
                     row.appendChild(cell.element);
                 });
@@ -267,7 +267,7 @@ var SchedulerTableCreator = {
             maxCellCount = arr[groupCount - 1].length;
 
         for(i = 0; i < maxCellCount; i++) {
-            rows.push($("<tr>").addClass(cssClasses.groupHeaderRowClass));
+            rows.push($('<tr>').addClass(cssClasses.groupHeaderRowClass));
         }
 
         for(i = groupCount - 1; i >= 0; i--) {
@@ -278,7 +278,7 @@ var SchedulerTableCreator = {
                 var currentRowIndex = j * rowspan,
                     row = rows[currentRowIndex];
 
-                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
+                row.prepend(arr[i][j].element.attr('rowSpan', rowspan));
             }
         }
 
@@ -312,23 +312,23 @@ var SchedulerTableCreator = {
             var cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
 
             rows.push(
-                $("<tr>")
+                $('<tr>')
                     .addClass(cssClasses.groupRowClass)
                     .append(cells.map(cellIterator))
             );
         }
 
-        var maxCellCount = rows[groupCount - 1].find("th").length;
+        var maxCellCount = rows[groupCount - 1].find('th').length;
 
         for(var j = 0; j < groupCount; j++) {
-            var $cell = rows[j].find("th"),
+            var $cell = rows[j].find('th'),
                 colspan = maxCellCount / $cell.length;
 
             if(!groupByDate) {
                 colspan = colspan * cellCount;
             }
             if((colspan > 1 && repeatByDate === 1) || (groupByDate && groupCount > 1)) {
-                $cell.attr("colSpan", colspan);
+                $cell.attr('colSpan', colspan);
             }
         }
 
@@ -349,7 +349,7 @@ var SchedulerTableCreator = {
 
         for(var i = 0; i < repeatCount; i++) {
             for(var j = 0; j < itemCount; j++) {
-                var $container = $("<div>"),
+                var $container = $('<div>'),
                     cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
@@ -366,7 +366,7 @@ var SchedulerTableCreator = {
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
                     $container.text(items[j].text);
-                    $container = $("<div>").append($container);
+                    $container = $('<div>').append($container);
                 }
 
                 $container.addClass(cssClasses.groupHeaderContentClass);
@@ -379,7 +379,7 @@ var SchedulerTableCreator = {
                     cssClass = cssClasses.groupHeaderClass;
                 }
 
-                cell.element = $("<th>").addClass(cssClass).append($container);
+                cell.element = $('<th>').addClass(cssClass).append($container);
 
                 cells.push(cell);
             }

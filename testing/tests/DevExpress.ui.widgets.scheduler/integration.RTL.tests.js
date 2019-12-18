@@ -1,10 +1,10 @@
-import fx from "animation/fx";
-import { createWrapper, initTestMarkup, isDesktopEnvironment } from "./helpers.js";
-import translator from "animation/translator";
+import fx from 'animation/fx';
+import { createWrapper, initTestMarkup, isDesktopEnvironment } from './helpers.js';
+import translator from 'animation/translator';
 
-import "ui/scheduler/ui.scheduler";
-import "common.css!";
-import "generic_light.css!";
+import 'ui/scheduler/ui.scheduler';
+import 'common.css!';
+import 'generic_light.css!';
 
 const { test, module } = QUnit;
 
@@ -21,10 +21,10 @@ const moduleConfig = {
     }
 };
 
-module("RTL", moduleConfig, () => {
+module('RTL', moduleConfig, () => {
     if(isDesktopEnvironment()) {
-        test("Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)", assert => {
-            const views = ["month", "week", "day"];
+        test('Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)', assert => {
+            const views = ['month', 'week', 'day'];
 
             const expectedValues = {
                 month: [
@@ -61,7 +61,7 @@ module("RTL", moduleConfig, () => {
                 currentView: views[0],
                 rtlEnabled: true,
                 dataSource: [{
-                    text: "Apt1",
+                    text: 'Apt1',
                     roomId: [1, 2],
                     startDate: new Date(2017, 4, 22),
                     endDate: new Date(2017, 4, 22, 1, 30)
@@ -69,13 +69,13 @@ module("RTL", moduleConfig, () => {
                 currentDate: new Date(2017, 4, 22),
                 groups: ['roomId'],
                 resources: [{
-                    fieldExpr: "roomId",
+                    fieldExpr: 'roomId',
                     dataSource: [
                         {
-                            text: "Room 1",
+                            text: 'Room 1',
                             id: 1
                         }, {
-                            text: "Room 2",
+                            text: 'Room 2',
                             id: 2
                         }
                     ],
@@ -88,7 +88,7 @@ module("RTL", moduleConfig, () => {
                 const { getAppointment } = scheduler.appointments;
                 const expectedValue = expectedValues[view];
 
-                scheduler.option("currentView", view);
+                scheduler.option('currentView', view);
 
                 [getAppointment(0), getAppointment(1)].forEach((appointment, index) => {
                     const position = translator.locate(appointment);
@@ -100,14 +100,14 @@ module("RTL", moduleConfig, () => {
         });
     }
 
-    module("Task positions", () => {
+    module('Task positions', () => {
         const createScheduler = view => {
             return createWrapper({
                 currentView: view,
                 currentDate: new Date(2015, 1, 9),
                 height: 600,
                 dataSource: [{
-                    text: "Task 1",
+                    text: 'Task 1',
                     startDate: new Date(2015, 1, 9, 1, 0),
                     endDate: new Date(2015, 1, 9, 2, 0)
                 }],
@@ -116,31 +116,31 @@ module("RTL", moduleConfig, () => {
             });
         };
 
-        test("Day view", assert => {
-            const scheduler = createScheduler("day");
+        test('Day view', assert => {
+            const scheduler = createScheduler('day');
 
             const cell = scheduler.workSpace.getCell(8);
             const appointment = scheduler.appointments.getAppointment();
 
-            assert.equal(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), "task position is correct");
+            assert.equal(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 'task position is correct');
         });
 
-        test("Week view", assert => {
-            const scheduler = createScheduler("week");
+        test('Week view', assert => {
+            const scheduler = createScheduler('week');
 
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();
 
-            assert.equal(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), "task position is correct");
+            assert.equal(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), 'task position is correct');
         });
 
-        test("Month view", assert => {
-            const scheduler = createScheduler("month");
+        test('Month view', assert => {
+            const scheduler = createScheduler('month');
 
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();
 
-            assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1, "task position is correct");
+            assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1, 'task position is correct');
         });
     });
 });

@@ -1,4 +1,4 @@
-import typeUtils from "../../../core/utils/type";
+import typeUtils from '../../../core/utils/type';
 
 const COLLECTOR_DEFAULT_WIDTH = 24;
 
@@ -42,19 +42,19 @@ class AppointmentPositioningStrategy {
             return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
         }
 
-        return this.getRenderingStrategy().instance.option("_appointmentOffset");
+        return this.getRenderingStrategy().instance.option('_appointmentOffset');
     }
 
     getDynamicAppointmentCountPerCell() {
         let renderingStrategy = this.getRenderingStrategy();
 
-        let cellHeight = renderingStrategy.instance.fire("getCellHeight");
+        let cellHeight = renderingStrategy.instance.fire('getCellHeight');
         let allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
 
         // NOTE: Simplify using only object
         if(renderingStrategy.hasAllDayAppointments()) {
             return {
-                allDay: renderingStrategy.instance._groupOrientation === "vertical" ? allDayCount : renderingStrategy.instance.option("_appointmentCountPerCell"),
+                allDay: renderingStrategy.instance._groupOrientation === 'vertical' ? allDayCount : renderingStrategy.instance.option('_appointmentCountPerCell'),
                 simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
             };
         } else {

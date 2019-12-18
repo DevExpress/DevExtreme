@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import eventsEngine from "../../events/core/events_engine";
-import { addNamespace } from "../../events/utils";
-import clickEvent from "../../events/click";
-import { getImageContainer } from "../../core/utils/icon";
-import Overlay from "../overlay";
-import inkRipple from "../widget/utils.ink_ripple";
-import themes from "../themes";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import eventsEngine from '../../events/core/events_engine';
+import { addNamespace } from '../../events/utils';
+import clickEvent from '../../events/click';
+import { getImageContainer } from '../../core/utils/icon';
+import Overlay from '../overlay';
+import inkRipple from '../widget/utils.ink_ripple';
+import themes from '../themes';
 
-const FAB_CLASS = "dx-fa-button";
-const FAB_ICON_CLASS = "dx-fa-button-icon";
-const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
+const FAB_CLASS = 'dx-fa-button';
+const FAB_ICON_CLASS = 'dx-fa-button-icon';
+const OVERLAY_CONTENT_SELECTOR = '.dx-overlay-content';
 
 class SpeedDialItem extends Overlay {
     _getDefaultOptions() {
@@ -38,14 +38,14 @@ class SpeedDialItem extends Overlay {
         this.$element().addClass(FAB_CLASS);
         super._render();
         this._renderIcon();
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
         this._renderClick();
     }
 
     _renderButtonIcon($element, icon, iconClass) {
         !!$element && $element.remove();
 
-        $element = $("<div>").addClass(iconClass);
+        $element = $('<div>').addClass(iconClass);
         const $iconElement = getImageContainer(icon);
 
         $element
@@ -69,12 +69,12 @@ class SpeedDialItem extends Overlay {
     }
 
     _getActionComponent() {
-        return this.option("actionComponent") || this.option("actions")[0];
+        return this.option('actionComponent') || this.option('actions')[0];
     }
 
     _initContentReadyAction() {
-        this._contentReadyAction = this._getActionComponent()._createActionByOption("onContentReady", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._contentReadyAction = this._getActionComponent()._createActionByOption('onContentReady', {
+            excludeValidators: ['disabled', 'readOnly']
         }, true);
     }
 
@@ -86,7 +86,7 @@ class SpeedDialItem extends Overlay {
         const $wrapper = this._$wrapper;
         const $container = this._getContainer();
 
-        $wrapper.css("position", this._isWindow($container) ? "fixed" : "absolute");
+        $wrapper.css('position', this._isWindow($container) ? 'fixed' : 'absolute');
     }
 
     _setClickAction() {
@@ -112,7 +112,7 @@ class SpeedDialItem extends Overlay {
     }
 
     _renderClick() {
-        this._clickAction = this._getActionComponent()._createActionByOption("onClick");
+        this._clickAction = this._getActionComponent()._createActionByOption('onClick');
         this._setClickAction();
     }
 
@@ -141,13 +141,13 @@ class SpeedDialItem extends Overlay {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "icon":
+            case 'icon':
                 this._renderIcon();
                 break;
-            case "onClick":
+            case 'onClick':
                 this._renderClick();
                 break;
-            case "useInkRipple":
+            case 'useInkRipple':
                 this._render();
                 break;
             default:

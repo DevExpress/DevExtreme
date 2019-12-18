@@ -4,4 +4,4 @@
 * @module ui/file_manager
 * @export default
 */
-module.exports = require("./file_manager/ui.file_manager");
+module.exports = require('./file_manager/ui.file_manager');

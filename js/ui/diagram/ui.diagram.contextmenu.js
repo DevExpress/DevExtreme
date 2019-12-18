@@ -1,9 +1,9 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
-import Widget from "../widget/ui.widget";
-import ContextMenu from "../context_menu";
-import DiagramCommands from "./ui.diagram.commands";
-import DiagramBar from "./diagram_bar";
+import Widget from '../widget/ui.widget';
+import ContextMenu from '../context_menu';
+import DiagramCommands from './ui.diagram.commands';
+import DiagramBar from './diagram_bar';
 
 class DiagramContextMenu extends Widget {
     _init() {
@@ -16,12 +16,12 @@ class DiagramContextMenu extends Widget {
     _initMarkup() {
         super._initMarkup();
         const items = DiagramCommands.getContextMenu();
-        const $contextMenu = $("<div>")
+        const $contextMenu = $('<div>')
             .appendTo(this.$element());
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
-            target: this.option("container"),
+            target: this.option('container'),
             dataSource: items,
-            displayExpr: "text",
+            displayExpr: 'text',
             onItemClick: ({ itemData }) => this._onItemClick(itemData.command),
             onShowing: (e) => {
                 this._tempState = true;
@@ -46,20 +46,20 @@ class DiagramContextMenu extends Widget {
         }
     }
     _setEnabled(enabled) {
-        this._contextMenuInstance.option("disabled", !enabled);
+        this._contextMenuInstance.option('disabled', !enabled);
     }
     isVisible() {
         if(this._tempState !== undefined) {
             return this._tempState;
         }
-        return !!this._contextMenuInstance.option("visible");
+        return !!this._contextMenuInstance.option('visible');
     }
     _createOnVisibleChangedAction() {
-        this._onVisibleChangedAction = this._createActionByOption("onVisibleChanged");
+        this._onVisibleChangedAction = this._createActionByOption('onVisibleChanged');
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "onVisibleChanged":
+            case 'onVisibleChanged':
                 this._createOnVisibleChangedAction();
                 break;
             default:

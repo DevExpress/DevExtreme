@@ -1,32 +1,32 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html(
+    $('#qunit-fixture').html(
         '<div id="scheduler">\
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+require('common.css!');
+require('generic_light.css!');
 
-var fx = require("animation/fx"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource;
+var fx = require('animation/fx'),
+    dragEvents = require('events/drag'),
+    DataSource = require('data/data_source/data_source').DataSource;
 
-require("ui/scheduler/ui.scheduler");
+require('ui/scheduler/ui.scheduler');
 
-QUnit.module("Integration: recurrence rules validation", {
+QUnit.module('Integration: recurrence rules validation', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
 
         this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
-                text: "Task 1",
+                text: 'Task 1',
                 startDate: new Date(2015, 1, 9, 1, 0),
                 endDate: new Date(2015, 1, 9, 2, 0)
             }
@@ -38,52 +38,52 @@ QUnit.module("Integration: recurrence rules validation", {
     }
 });
 
-QUnit.test("Incorrect recurrence rule should not be applied", function(assert) {
-    var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: "FREQ=DAILY,INTERVAL=1" };
+QUnit.test('Incorrect recurrence rule should not be applied', function(assert) {
+    var item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
 
     var data = new DataSource({
         store: [item]
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week" });
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
-    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has only one item");
+    assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'dxSchedulerAppointments has only one item');
 });
 
-QUnit.test("Appointment with incorrect recurrence rule should not have specific class", function(assert) {
-    var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9), recurrenceRule: "FREQ=DAILY,INTERVAL=1" };
+QUnit.test('Appointment with incorrect recurrence rule should not have specific class', function(assert) {
+    var item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
 
     var data = new DataSource({
         store: [item]
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week" });
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
 
-    assert.notOk($appointment.hasClass("dx-scheduler-appointment-recurrence"), "Appointment has not specific class");
+    assert.notOk($appointment.hasClass('dx-scheduler-appointment-recurrence'), 'Appointment has not specific class');
 });
 
-QUnit.test("Recurrence rule with incorrect ruleName should not be applied ", function(assert) {
-    var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: "FREQ=DAILY;INTERVAL=1;AA=2" };
+QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', function(assert) {
+    var item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY;INTERVAL=1;AA=2' };
 
     var data = new DataSource({
         store: [item]
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week" });
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
-    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has only one item");
+    assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'dxSchedulerAppointments has only one item');
 });
 
-QUnit.test("Confirmation dialog should not be shown if rrule is invalid", function(assert) {
+QUnit.test('Confirmation dialog should not be shown if rrule is invalid', function(assert) {
     var data = new DataSource({
         store: [
             {
-                text: "Task 1",
+                text: 'Task 1',
                 startDate: new Date(2015, 1, 9, 1, 0),
                 endDate: new Date(2015, 1, 9, 2, 0),
-                recurrenceRule: "FREQ=DAILY,INTERVAL=1"
+                recurrenceRule: 'FREQ=DAILY,INTERVAL=1'
             }
         ]
     });
@@ -91,13 +91,13 @@ QUnit.test("Confirmation dialog should not be shown if rrule is invalid", functi
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: data,
-        currentView: "week",
+        currentView: 'week',
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger(dragEvents.end);
 
-    assert.notOk($(".dx-dialog.dx-overlay-modal").length, "Dialog was not shown");
+    assert.notOk($('.dx-dialog.dx-overlay-modal').length, 'Dialog was not shown');
 });

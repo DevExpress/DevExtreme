@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    Swipeable = require("events/gesture/swipeable"),
-    swipeEvents = require("events/swipe"),
-    pointerMock = require("../../helpers/pointerMock.js");
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    Swipeable = require('events/gesture/swipeable'),
+    swipeEvents = require('events/swipe'),
+    pointerMock = require('../../helpers/pointerMock.js');
 
-QUnit.module("swipeable", {
+QUnit.module('swipeable', {
     beforeEach: function() {
-        this.element = $("<div></div>").appendTo("body").css("width", 100);
+        this.element = $('<div></div>').appendTo('body').css('width', 100);
         this.pointer = pointerMock(this.element);
         this.clock = sinon.useFakeTimers();
     },
@@ -16,19 +16,19 @@ QUnit.module("swipeable", {
     }
 });
 
-QUnit.test("render", function(assert) {
+QUnit.test('render', function(assert) {
     new Swipeable(this.element);
-    assert.ok(this.element.hasClass("dx-swipeable"));
+    assert.ok(this.element.hasClass('dx-swipeable'));
 });
 
 
 $.each({
-    "onStart": "start",
-    "onUpdated": "",
-    "onEnd": "end",
-    "onCancel": "cancel"
+    'onStart': 'start',
+    'onUpdated': '',
+    'onEnd': 'end',
+    'onCancel': 'cancel'
 }, function(key, value) {
-    QUnit.test("'" + key + "' handler attached", function(assert) {
+    QUnit.test('\'' + key + '\' handler attached', function(assert) {
         var called = 0,
             options = {};
 
@@ -42,7 +42,7 @@ $.each({
         assert.equal(called, 1);
     });
 
-    QUnit.test("'" + key + "' option change", function(assert) {
+    QUnit.test('\'' + key + '\' option change', function(assert) {
         var called = 0,
             options = {};
 
@@ -61,7 +61,7 @@ $.each({
     });
 });
 
-QUnit.test("'elastic' option", function(assert) {
+QUnit.test('\'elastic\' option', function(assert) {
     assert.expect(2);
 
     var swipeable = new Swipeable(this.element, {
@@ -97,7 +97,7 @@ QUnit.test("'elastic' option", function(assert) {
         .up();
 });
 
-QUnit.test("'itemSizeFunc' option", function(assert) {
+QUnit.test('\'itemSizeFunc\' option', function(assert) {
     assert.expect(2);
 
     var swipeable = new Swipeable(this.element, {

@@ -1,10 +1,10 @@
-var Class = require("../../core/class"),
-    deferredStrategy = require("./selection.strategy.deferred"),
-    standardStrategy = require("./selection.strategy.standard"),
-    extend = require("../../core/utils/extend").extend,
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    Deferred = require("../../core/utils/deferred").Deferred;
+var Class = require('../../core/class'),
+    deferredStrategy = require('./selection.strategy.deferred'),
+    standardStrategy = require('./selection.strategy.standard'),
+    extend = require('../../core/utils/extend').extend,
+    noop = require('../../core/utils/common').noop,
+    isDefined = require('../../core/utils/type').isDefined,
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -25,7 +25,7 @@ module.exports = Class.inherit({
             allowNullValue: false,
             deferred: false,
             equalByReference: false,
-            mode: "multiple",
+            mode: 'multiple',
             selectedItems: [],
             selectionFilter: [],
             maxFilterLengthInRequest: 0,
@@ -122,12 +122,12 @@ module.exports = Class.inherit({
 
         keys = keys || {};
 
-        if(keys.shift && this.options.mode === "multiple" && this._focusedItemIndex >= 0) {
+        if(keys.shift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
             isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items);
         } else if(keys.control) {
             this._resetItemSelectionWhenShiftKeyPressed();
             var isSelected = this._selectionStrategy.isItemDataSelected(itemData);
-            if(this.options.mode === "single") {
+            if(this.options.mode === 'single') {
                 this.clearSelectedItems();
             }
             if(isSelected) {
@@ -157,7 +157,7 @@ module.exports = Class.inherit({
     },
 
     isSelectable: function() {
-        return this.options.mode === "single" || this.options.mode === "multiple";
+        return this.options.mode === 'single' || this.options.mode === 'multiple';
     },
 
     isItemDataSelected: function(data) {

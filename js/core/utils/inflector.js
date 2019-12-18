@@ -1,8 +1,8 @@
-var map = require("./iterator").map;
+var map = require('./iterator').map;
 
 var _normalize = function(text) {
     if(text === undefined || text === null) {
-        return "";
+        return '';
     }
     return String(text);
 };
@@ -13,16 +13,16 @@ var _upperCaseFirst = function(text) {
 
 var _chop = function(text) {
     return _normalize(text)
-        .replace(/([a-z\d])([A-Z])/g, "$1 $2")
+        .replace(/([a-z\d])([A-Z])/g, '$1 $2')
         .split(/[\s_-]+/);
 };
 
 var dasherize = function(text) {
-    return map(_chop(text), function(p) { return p.toLowerCase(); }).join("-");
+    return map(_chop(text), function(p) { return p.toLowerCase(); }).join('-');
 };
 
 var underscore = function(text) {
-    return dasherize(text).replace(/-/g, "_");
+    return dasherize(text).replace(/-/g, '_');
 };
 
 var camelize = function(text, upperFirst) {
@@ -32,20 +32,20 @@ var camelize = function(text, upperFirst) {
             p = _upperCaseFirst(p);
         }
         return p;
-    }).join("");
+    }).join('');
 };
 
 var humanize = function(text) {
-    return _upperCaseFirst(dasherize(text).replace(/-/g, " "));
+    return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
 var titleize = function(text) {
     return map(_chop(text), function(p) {
         return _upperCaseFirst(p.toLowerCase());
-    }).join(" ");
+    }).join(' ');
 };
 
-var DIGIT_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+var DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 var captionize = function(name) {
     var captionList = [],
@@ -56,22 +56,22 @@ var captionize = function(name) {
 
     for(i = 0; i < name.length; i++) {
         char = name.charAt(i);
-        isNewWord = (char === char.toUpperCase() && char !== "-" && char !== ")" && char !== "/") || (char in DIGIT_CHARS);
-        if(char === "_" || char === ".") {
-            char = " ";
+        isNewWord = (char === char.toUpperCase() && char !== '-' && char !== ')' && char !== '/') || (char in DIGIT_CHARS);
+        if(char === '_' || char === '.') {
+            char = ' ';
             isNewWord = true;
         } else if(i === 0) {
             char = char.toUpperCase();
             isNewWord = true;
         } else if(!isPrevCharNewWord && isNewWord) {
             if(captionList.length > 0) {
-                captionList.push(" ");
+                captionList.push(' ');
             }
         }
         captionList.push(char);
         isPrevCharNewWord = isNewWord;
     }
-    return captionList.join("");
+    return captionList.join('');
 };
 
 exports.dasherize = dasherize;

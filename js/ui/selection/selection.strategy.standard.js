@@ -1,13 +1,13 @@
-var commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
+var commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
     getKeyHash = commonUtils.getKeyHash,
-    dataQuery = require("../../data/query"),
-    deferredUtils = require("../../core/utils/deferred"),
-    SelectionFilterCreator = require("../../core/utils/selection_filter").SelectionFilterCreator,
+    dataQuery = require('../../data/query'),
+    deferredUtils = require('../../core/utils/deferred'),
+    SelectionFilterCreator = require('../../core/utils/selection_filter').SelectionFilterCreator,
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
-    errors = require("../widget/ui.errors"),
-    SelectionStrategy = require("./selection.strategy");
+    errors = require('../widget/ui.errors'),
+    SelectionStrategy = require('./selection.strategy');
 
 module.exports = SelectionStrategy.inherit({
     ctor: function(options) {
@@ -16,7 +16,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _initSelectedItemKeyHash: function() {
-        this._setOption("keyHashIndices", this.options.equalByReference ? null : {});
+        this._setOption('keyHashIndices', this.options.equalByReference ? null : {});
     },
 
     getSelectedItemKeys: function() {
@@ -138,7 +138,7 @@ module.exports = SelectionStrategy.inherit({
             var key = keys[i];
 
             if((!allowNullValue || key !== null) && !this.isItemKeySelected(key)) {
-                errors.log("W1002", key);
+                errors.log('W1002', key);
             }
         }
     },
@@ -320,8 +320,8 @@ module.exports = SelectionStrategy.inherit({
             this.updateSelectedItemKeyHash(keys);
         }
 
-        this._setOption("selectedItemKeys", keys);
-        this._setOption("selectedItems", items);
+        this._setOption('selectedItemKeys', keys);
+        this._setOption('selectedItems', items);
 
         this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
     },

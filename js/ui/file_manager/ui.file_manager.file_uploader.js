@@ -1,29 +1,29 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import eventsEngine from "../../events/core/events_engine";
-import { Deferred, when } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import eventsEngine from '../../events/core/events_engine';
+import { Deferred, when } from '../../core/utils/deferred';
 
-import Widget from "../widget/ui.widget";
-import Button from "../button";
-import ProgressBar from "../progress_bar";
-import Popup from "../popup";
+import Widget from '../widget/ui.widget';
+import Button from '../button';
+import ProgressBar from '../progress_bar';
+import Popup from '../popup';
 
-const FILE_MANAGER_FILE_UPLOADER_CLASS = "dx-filemanager-fileuploader";
-const FILE_MANAGER_FILE_UPLOADER_FILE_INPUT_CLASS = FILE_MANAGER_FILE_UPLOADER_CLASS + "-fileinput";
+const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
+const FILE_MANAGER_FILE_UPLOADER_FILE_INPUT_CLASS = FILE_MANAGER_FILE_UPLOADER_CLASS + '-fileinput';
 
-const FILE_MANAGER_PROGRESS_PANEL = "dx-filemanager-progresspanel";
+const FILE_MANAGER_PROGRESS_PANEL = 'dx-filemanager-progresspanel';
 
-const FILE_MANAGER_PROGRESS_BOX = "dx-filemanager-progressbox";
-const FILE_MANAGER_PROGRESS_BOX_TITLE = FILE_MANAGER_PROGRESS_BOX + "-title";
-const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR = FILE_MANAGER_PROGRESS_BOX + "-progressbar";
-const FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON = FILE_MANAGER_PROGRESS_BOX + "-cancel-button";
+const FILE_MANAGER_PROGRESS_BOX = 'dx-filemanager-progressbox';
+const FILE_MANAGER_PROGRESS_BOX_TITLE = FILE_MANAGER_PROGRESS_BOX + '-title';
+const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR = FILE_MANAGER_PROGRESS_BOX + '-progressbar';
+const FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON = FILE_MANAGER_PROGRESS_BOX + '-cancel-button';
 
 class FileManagerFileUploader extends Widget {
 
     _initMarkup() {
         this._initActions();
 
-        this._progressPanel = this._createComponent($("<div>"), FileManagerUploadProgressPanel, {});
+        this._progressPanel = this._createComponent($('<div>'), FileManagerUploadProgressPanel, {});
 
         this.$element()
             .addClass(FILE_MANAGER_FILE_UPLOADER_CLASS)
@@ -35,16 +35,16 @@ class FileManagerFileUploader extends Widget {
     }
 
     _renderFileInput() {
-        this._$fileInput = $("<input>")
-            .attr("type", "file")
+        this._$fileInput = $('<input>')
+            .attr('type', 'file')
             .prop({
-                multiple: "multiple",
+                multiple: 'multiple',
                 tabIndex: -1
             })
             .addClass(FILE_MANAGER_FILE_UPLOADER_FILE_INPUT_CLASS);
 
-        eventsEngine.on(this._$fileInput, "change", this._onFileInputChange.bind(this));
-        eventsEngine.on(this._$fileInput, "click", e => {
+        eventsEngine.on(this._$fileInput, 'change', this._onFileInputChange.bind(this));
+        eventsEngine.on(this._$fileInput, 'click', e => {
             e.stopPropagation();
             return true;
         });
@@ -53,13 +53,13 @@ class FileManagerFileUploader extends Widget {
     }
 
     _onFileInputChange() {
-        const files = this._$fileInput.prop("files");
+        const files = this._$fileInput.prop('files');
         if(files.length === 0) {
             return;
         }
 
-        eventsEngine.off(this._$fileInput, "change");
-        eventsEngine.off(this._$fileInput, "click");
+        eventsEngine.off(this._$fileInput, 'change');
+        eventsEngine.off(this._$fileInput, 'click');
 
         const $fileInput = this._$fileInput;
         this._uploadFiles(files).always(() => {
@@ -79,14 +79,14 @@ class FileManagerFileUploader extends Widget {
         const progressBoxTitle = `Uploading ${files.length} files`;
         const progressBox = this._progressPanel.addProgressBox(progressBoxTitle, null);
 
-        const controllerGetter = this.option("getController");
+        const controllerGetter = this.option('getController');
         const session = new FileManagerUploadSession({
             controller: controllerGetter(),
             onProgress: value => progressBox.updateProgress(value * 100),
             onError: reason => this._raiseOnErrorOccurred(reason)
         });
 
-        progressBox.option("onCancel", () => session.cancelUpload());
+        progressBox.option('onCancel', () => session.cancelUpload());
 
         const deferreds = session.uploadFiles(files);
 
@@ -114,8 +114,8 @@ class FileManagerFileUploader extends Widget {
 
     _initActions() {
         this._actions = {
-            onFilesUploaded: this._createActionByOption("onFilesUploaded"),
-            onErrorOccurred: this._createActionByOption("onErrorOccurred")
+            onFilesUploaded: this._createActionByOption('onFilesUploaded'),
+            onErrorOccurred: this._createActionByOption('onErrorOccurred')
         };
     }
 
@@ -131,11 +131,11 @@ class FileManagerFileUploader extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "getController":
+            case 'getController':
                 this.repaint();
                 break;
-            case "onFilesUploaded":
-            case "onErrorOccurred":
+            case 'onFilesUploaded':
+            case 'onErrorOccurred':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -285,7 +285,7 @@ class FileManagerUploadProgressPanel extends Widget {
         this._popup = this._createComponent(this.$element(), Popup, {
             width: 200,
             height: 145,
-            position: "right bottom",
+            position: 'right bottom',
             showTitle: false,
             visible: false,
             shading: false,
@@ -298,7 +298,7 @@ class FileManagerUploadProgressPanel extends Widget {
     }
 
     addProgressBox(title, onCancel) {
-        const progressBox = this._createComponent($("<div>"), FileManagerUploadProgressBox, {
+        const progressBox = this._createComponent($('<div>'), FileManagerUploadProgressBox, {
             title,
             onCancel
         });
@@ -325,7 +325,7 @@ class FileManagerUploadProgressPanel extends Widget {
     }
 
     _getPopupContentTemplate() {
-        this._$container = $("<div>").addClass(FILE_MANAGER_PROGRESS_PANEL);
+        this._$container = $('<div>').addClass(FILE_MANAGER_PROGRESS_PANEL);
         return this._$container;
     }
 
@@ -336,19 +336,19 @@ class FileManagerUploadProgressBox extends Widget {
     _initMarkup() {
         this._createOnCancelAction();
 
-        const titleText = this.option("title");
-        const $title = $("<span>").text(titleText).addClass(FILE_MANAGER_PROGRESS_BOX_TITLE);
+        const titleText = this.option('title');
+        const $title = $('<span>').text(titleText).addClass(FILE_MANAGER_PROGRESS_BOX_TITLE);
 
-        this._cancelButton = this._createComponent($("<div>"), Button, {
-            text: "Cancel",
+        this._cancelButton = this._createComponent($('<div>'), Button, {
+            text: 'Cancel',
             onClick: this._onCancelButtonClick.bind(this)
         });
         this._cancelButton.$element().addClass(FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON);
 
-        this._progressBar = this._createComponent($("<div>"), ProgressBar, {
+        this._progressBar = this._createComponent($('<div>'), ProgressBar, {
             min: 0,
             max: 100,
-            width: "100%",
+            width: '100%',
             showStatus: false
         });
         this._progressBar.$element().addClass(FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR);
@@ -364,25 +364,25 @@ class FileManagerUploadProgressBox extends Widget {
     }
 
     updateProgress(value) {
-        this._progressBar.option("value", value);
+        this._progressBar.option('value', value);
     }
 
     _onCancelButtonClick() {
         this._cancelButton.option({
             disabled: true,
-            text: "Canceling..."
+            text: 'Canceling...'
         });
 
         this._onCancelAction();
     }
 
     _createOnCancelAction() {
-        this._onCancelAction = this._createActionByOption("onCancel");
+        this._onCancelAction = this._createActionByOption('onCancel');
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            title: "",
+            title: '',
             onCancel: null
         });
     }
@@ -391,10 +391,10 @@ class FileManagerUploadProgressBox extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "title":
+            case 'title':
                 this.repaint();
                 break;
-            case "onCancel":
+            case 'onCancel':
                 this._createOnCancelAction();
                 break;
             default:

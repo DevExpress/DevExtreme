@@ -1,10 +1,10 @@
-var proto = require("./tree_map.base").prototype,
-    nodeProto = require("./node").prototype,
+var proto = require('./tree_map.base').prototype,
+    nodeProto = require('./node').prototype,
 
     handlers = proto._handlers,
     _calculateState = handlers.calculateState,
     _buildState = nodeProto._buildState,
-    _extend = require("../../core/utils/extend").extend;
+    _extend = require('../../core/utils/extend').extend;
 
 handlers.calculateState = function(options) {
     var states = { 0: _calculateState(options) };
@@ -13,7 +13,7 @@ handlers.calculateState = function(options) {
     return states;
 };
 
-handlers.calculateAdditionalStates = require("../../core/utils/common").noop;
+handlers.calculateAdditionalStates = require('../../core/utils/common').noop;
 
 nodeProto.code = 0;
 
@@ -40,7 +40,7 @@ nodeProto.setState = function(code, state) {
     } else {
         this.code &= ~code;
     }
-    this.ctx.change(["TILES"]);
+    this.ctx.change(['TILES']);
 };
 
 function buildAdditionalStates(states, base, source, list) {

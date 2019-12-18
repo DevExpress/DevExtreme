@@ -1,22 +1,22 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../../events/utils"),
-    clickEvent = require("../../events/click"),
-    Scrollable = require("../scroll_view/ui.scrollable"),
-    fx = require("../../animation/fx"),
-    translator = require("../../animation/translator");
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    registerComponent = require('../../core/component_registrator'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    eventUtils = require('../../events/utils'),
+    clickEvent = require('../../events/click'),
+    Scrollable = require('../scroll_view/ui.scrollable'),
+    fx = require('../../animation/fx'),
+    translator = require('../../animation/translator');
 
-var DATEVIEW_ROLLER_CLASS = "dx-dateviewroller",
-    DATEVIEW_ROLLER_ACTIVE_CLASS = "dx-state-active",
-    DATEVIEW_ROLLER_CURRENT_CLASS = "dx-dateviewroller-current",
+var DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller',
+    DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active',
+    DATEVIEW_ROLLER_CURRENT_CLASS = 'dx-dateviewroller-current',
 
-    DATEVIEW_ROLLER_ITEM_CLASS = "dx-dateview-item",
-    DATEVIEW_ROLLER_ITEM_SELECTED_CLASS = "dx-dateview-item-selected",
-    DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS = "dx-dateview-item-selected-frame",
-    DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS = "dx-dateview-item-selected-border";
+    DATEVIEW_ROLLER_ITEM_CLASS = 'dx-dateview-item',
+    DATEVIEW_ROLLER_ITEM_SELECTED_CLASS = 'dx-dateview-item-selected',
+    DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS = 'dx-dateview-item-selected-frame',
+    DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS = 'dx-dateview-item-selected-border';
 
 var DateViewRoller = Scrollable.inherit({
     _getDefaultOptions: function() {
@@ -35,13 +35,13 @@ var DateViewRoller = Scrollable.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([{
             device: function(device) {
-                return device.platform === "win" && device.version && device.version[0] === 8;
+                return device.platform === 'win' && device.version && device.version[0] === 8;
             },
             options: {
                 showOnClick: true
             }
         }, {
-            device: { platform: "generic" },
+            device: { platform: 'generic' },
             options: {
                 scrollByContent: true
             }
@@ -63,22 +63,22 @@ var DateViewRoller = Scrollable.inherit({
         this._renderItems();
         this._renderSelectedValue();
         this._renderItemsClick();
-        this._wrapAction("_endAction", this._endActionHandler.bind(this));
+        this._wrapAction('_endAction', this._endActionHandler.bind(this));
         this._renderSelectedIndexChanged();
     },
 
     _renderSelectedIndexChanged: function() {
-        this._selectedIndexChanged = this._createActionByOption("onSelectedIndexChanged");
+        this._selectedIndexChanged = this._createActionByOption('onSelectedIndexChanged');
     },
 
     _renderContainerClick: function() {
-        if(!this.option("showOnClick")) {
+        if(!this.option('showOnClick')) {
             return;
         }
 
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        var clickAction = this._createActionByOption("onClick");
+        var clickAction = this._createActionByOption('onClick');
 
 
         eventsEngine.off(this._$container, eventName);
@@ -98,14 +98,14 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _renderItems: function() {
-        var items = this.option("items") || [],
+        var items = this.option('items') || [],
             $items = $();
 
         this._$content.empty();
         // NOTE: rendering ~166+30+12+24+60 <div>s >> 50mc
         items.forEach(function(item) {
             $items = $items.add(
-                $("<div>")
+                $('<div>')
                     .addClass(DATEVIEW_ROLLER_ITEM_CLASS)
                     .append(item)
             );
@@ -117,21 +117,21 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _renderSelectedItemFrame: function() {
-        $("<div>")
+        $('<div>')
             .addClass(DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS)
-            .append($("<div>").addClass(DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS))
+            .append($('<div>').addClass(DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS))
             .appendTo(this._$container);
     },
 
     _renderSelectedValue: function(selectedIndex) {
-        var index = this._fitIndex(selectedIndex || this.option("selectedIndex"));
+        var index = this._fitIndex(selectedIndex || this.option('selectedIndex'));
 
         this._moveTo({ top: this._getItemPosition(index) });
         this._renderActiveStateItem();
     },
 
     _fitIndex: function(index) {
-        var items = this.option("items") || [],
+        var items = this.option('items') || [],
             itemCount = items.length;
 
         if(index >= itemCount) {
@@ -158,11 +158,11 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _getItemSelector: function() {
-        return "." + DATEVIEW_ROLLER_ITEM_CLASS;
+        return '.' + DATEVIEW_ROLLER_ITEM_CLASS;
     },
 
     _itemClickHandler: function(e) {
-        this.option("selectedIndex", this._itemElementIndex(e.currentTarget));
+        this.option('selectedIndex', this._itemElementIndex(e.currentTarget));
     },
 
     _itemElementIndex: function(itemElement) {
@@ -174,7 +174,7 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _renderActiveStateItem: function() {
-        var selectedIndex = this.option("selectedIndex");
+        var selectedIndex = this.option('selectedIndex');
 
         each(this._$items, function(index) {
             $(this).toggleClass(DATEVIEW_ROLLER_ITEM_SELECTED_CLASS, selectedIndex === index);
@@ -198,7 +198,7 @@ var DateViewRoller = Scrollable.inherit({
                 fx.stop(this._$content);
                 fx.animate(this._$content, {
                     duration: 200,
-                    type: "slide",
+                    type: 'slide',
                     to: { top: Math.floor(delta.y) },
                     complete: function() {
                         translator.resetPosition(that._$content);
@@ -217,7 +217,7 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _endActionHandler: function() {
-        var currentSelectedIndex = this.option("selectedIndex"),
+        var currentSelectedIndex = this.option('selectedIndex'),
             ratio = -this._location().top / this._itemHeight(),
             newSelectedIndex = Math.round(ratio);
 
@@ -226,7 +226,7 @@ var DateViewRoller = Scrollable.inherit({
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);
         } else {
-            this.option("selectedIndex", newSelectedIndex);
+            this.option('selectedIndex', newSelectedIndex);
         }
     },
 
@@ -241,7 +241,7 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _isVisible: function() {
-        return this._$container.is(":visible");
+        return this._$container.is(':visible');
     },
 
     _fireSelectedIndexChanged: function(value, previousValue) {
@@ -256,7 +256,7 @@ var DateViewRoller = Scrollable.inherit({
         this.callBase(visible);
 
         if(visible) {
-            this._renderSelectedValue(this.option("selectedIndex"));
+            this._renderSelectedValue(this.option('selectedIndex'));
         }
         this.toggleActiveState(false);
     },
@@ -266,27 +266,27 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _refreshSelectedIndex: function() {
-        var selectedIndex = this.option("selectedIndex");
+        var selectedIndex = this.option('selectedIndex');
         var fitIndex = this._fitIndex(selectedIndex);
 
-        fitIndex === selectedIndex ? this._renderActiveStateItem() : this.option("selectedIndex", fitIndex);
+        fitIndex === selectedIndex ? this._renderActiveStateItem() : this.option('selectedIndex', fitIndex);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "selectedIndex":
+            case 'selectedIndex':
                 this._fireSelectedIndexChanged(args.value, args.previousValue);
                 this._renderSelectedValue(args.value);
                 break;
-            case "items":
+            case 'items':
                 this._renderItems();
                 this._refreshSelectedIndex();
                 break;
-            case "onClick":
-            case "showOnClick":
+            case 'onClick':
+            case 'showOnClick':
                 this._renderContainerClick();
                 break;
-            case "onSelectedIndexChanged":
+            case 'onSelectedIndexChanged':
                 this._renderSelectedIndexChanged();
                 break;
             default:
@@ -295,6 +295,6 @@ var DateViewRoller = Scrollable.inherit({
     }
 });
 
-registerComponent("dxDateViewRoller", DateViewRoller);
+registerComponent('dxDateViewRoller', DateViewRoller);
 
 module.exports = DateViewRoller;

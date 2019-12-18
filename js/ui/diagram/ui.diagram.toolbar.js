@@ -1,27 +1,27 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
-import DiagramPanel from "./diagram.panel";
-import Toolbar from "../toolbar";
-import ContextMenu from "../context_menu";
-import DiagramCommands from "./ui.diagram.commands";
-import DiagramBar from "./diagram_bar";
-import { extend } from "../../core/utils/extend";
-import "../select_box";
-import "../color_box";
-import "../check_box";
+import DiagramPanel from './diagram.panel';
+import Toolbar from '../toolbar';
+import ContextMenu from '../context_menu';
+import DiagramCommands from './ui.diagram.commands';
+import DiagramBar from './diagram_bar';
+import { extend } from '../../core/utils/extend';
+import '../select_box';
+import '../color_box';
+import '../check_box';
 
-const ACTIVE_FORMAT_CLASS = "dx-format-active";
-const TOOLBAR_CLASS = "dx-diagram-toolbar";
+const ACTIVE_FORMAT_CLASS = 'dx-format-active';
+const TOOLBAR_CLASS = 'dx-diagram-toolbar';
 const WIDGET_COMMANDS = [
     {
-        command: "options",
-        icon: "preferences",
-        hint: "Show Properties",
-        text: "Properties",
+        command: 'options',
+        icon: 'preferences',
+        hint: 'Show Properties',
+        text: 'Properties',
     }
 ];
-const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
-const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
+const TOOLBAR_SEPARATOR_CLASS = 'dx-diagram-toolbar-separator';
+const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
@@ -34,15 +34,15 @@ class DiagramToolbar extends DiagramPanel {
 
     _initMarkup() {
         super._initMarkup();
-        const $toolbar = $("<div>")
+        const $toolbar = $('<div>')
             .addClass(TOOLBAR_CLASS)
             .appendTo(this._$element);
         this._renderToolbar($toolbar);
     }
 
     _renderToolbar($toolbar) {
-        let dataSource = this._prepareToolbarItems(DiagramCommands.getToolbar(), "before", this._execDiagramCommand);
-        dataSource = dataSource.concat(this._prepareToolbarItems(WIDGET_COMMANDS, "after", this._execWidgetCommand));
+        let dataSource = this._prepareToolbarItems(DiagramCommands.getToolbar(), 'before', this._execDiagramCommand);
+        dataSource = dataSource.concat(this._prepareToolbarItems(WIDGET_COMMANDS, 'after', this._execWidgetCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, {
             dataSource
         });
@@ -50,7 +50,7 @@ class DiagramToolbar extends DiagramPanel {
 
     _prepareToolbarItems(items, location, actionHandler) {
         return items.map(item => extend(true,
-            { location: location, locateInMenu: "auto" },
+            { location: location, locateInMenu: 'auto' },
             this._createItem(item, location, actionHandler),
             this._createItemOptions(item),
             this._createItemActionOptions(item, actionHandler)
@@ -58,7 +58,7 @@ class DiagramToolbar extends DiagramPanel {
     }
 
     _createItem(item, location, actionHandler) {
-        if(item.widget === "separator") {
+        if(item.widget === 'separator') {
             return {
                 template: (data, index, element) => {
                     $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
@@ -69,10 +69,10 @@ class DiagramToolbar extends DiagramPanel {
             };
         }
         return {
-            widget: item.widget || "dxButton",
+            widget: item.widget || 'dxButton',
             cssClass: item.cssClass,
             options: {
-                stylingMode: "text",
+                stylingMode: 'text',
                 text: item.text,
                 hint: item.hint,
                 icon: item.icon,
@@ -82,13 +82,13 @@ class DiagramToolbar extends DiagramPanel {
         };
     }
     _createItemOptions({ widget, items, valueExpr, displayExpr, showText, hint, icon }) {
-        if(widget === "dxSelectBox") {
+        if(widget === 'dxSelectBox') {
             return this._createSelectBoxItemOptions(hint, items, valueExpr, displayExpr);
-        } else if(widget === "dxColorBox") {
+        } else if(widget === 'dxColorBox') {
             return this._createColorBoxItemOptions(hint, icon);
-        } else if(!widget || widget === "dxButton") {
+        } else if(!widget || widget === 'dxButton') {
             return {
-                showText: showText || "inMenu"
+                showText: showText || 'inMenu'
             };
         }
     }
@@ -106,12 +106,12 @@ class DiagramToolbar extends DiagramPanel {
             options = extend(true, options, {
                 options: {
                     fieldTemplate: (data, container) => {
-                        $("<i>")
+                        $('<i>')
                             .addClass(data && data.icon)
                             .appendTo(container);
-                        $("<div>").dxTextBox({
+                        $('<div>').dxTextBox({
                             readOnly: true,
-                            stylingMode: "outlined"
+                            stylingMode: 'outlined'
                         }).appendTo(container);
                     },
                     itemTemplate: (data) => {
@@ -129,13 +129,13 @@ class DiagramToolbar extends DiagramPanel {
                 options: {
                     openOnFieldClick: true,
                     fieldTemplate: (data, container) => {
-                        $("<i>")
+                        $('<i>')
                             .addClass(icon)
-                            .css("borderBottomColor", data)
+                            .css('borderBottomColor', data)
                             .appendTo(container);
-                        $("<div>").dxTextBox({
+                        $('<div>').dxTextBox({
                             readOnly: true,
-                            stylingMode: "outlined"
+                            stylingMode: 'outlined'
                         }).appendTo(container);
                     }
                 }
@@ -146,19 +146,19 @@ class DiagramToolbar extends DiagramPanel {
     _createSelectBoxBaseItemOptions(hint) {
         return {
             options: {
-                stylingMode: "filled",
+                stylingMode: 'filled',
                 hint: hint,
             }
         };
     }
     _createItemActionOptions(item, handler) {
         switch(item.widget) {
-            case "dxSelectBox":
-            case "dxColorBox":
+            case 'dxSelectBox':
+            case 'dxColorBox':
                 return {
                     options: {
                         onValueChanged: (e) => {
-                            const parameter = this._getExecCommandParameter(item, e.component.option("value"));
+                            const parameter = this._getExecCommandParameter(item, e.component.option('value'));
                             handler.call(this, item.command, parameter);
                         }
                     }
@@ -188,16 +188,16 @@ class DiagramToolbar extends DiagramPanel {
         }
     }
     _onItemContentReady(widget, item, actionHandler) {
-        if(widget.NAME === "dxButton" && item.items) {
-            const $menuContainer = $("<div>")
+        if(widget.NAME === 'dxButton' && item.items) {
+            const $menuContainer = $('<div>')
                 .appendTo(this.$element());
             this._createComponent($menuContainer, ContextMenu, {
                 dataSource: item.items,
-                displayExpr: "text",
-                valueExpr: "command",
+                displayExpr: 'text',
+                valueExpr: 'command',
                 target: widget.$element(),
-                showEvent: "dxclick",
-                position: { at: "left bottom" },
+                showEvent: 'dxclick',
+                position: { at: 'left bottom' },
                 onItemClick: ({ itemData }) => {
                     if(itemData.command !== undefined) {
                         const parameter = this._getExecCommandParameter(itemData);
@@ -230,7 +230,7 @@ class DiagramToolbar extends DiagramPanel {
     }
 
     _createOnWidgetCommand() {
-        this._onWidgetCommandAction = this._createActionByOption("onWidgetCommand");
+        this._onWidgetCommandAction = this._createActionByOption('onWidgetCommand');
     }
 
     _setItemEnabled(command, enabled) {
@@ -239,8 +239,8 @@ class DiagramToolbar extends DiagramPanel {
         }
     }
     _setEnabled(enabled) {
-        this._toolbarInstance.option("disabled", !enabled);
-        this._contextMenus.forEach(cm => cm.option("disabled", !enabled));
+        this._toolbarInstance.option('disabled', !enabled);
+        this._contextMenus.forEach(cm => cm.option('disabled', !enabled));
     }
     _setItemValue(command, value) {
         try {
@@ -254,10 +254,10 @@ class DiagramToolbar extends DiagramPanel {
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "onWidgetCommand":
+            case 'onWidgetCommand':
                 this._createOnWidgetCommand();
                 break;
-            case "export":
+            case 'export':
                 break;
             default:
                 super._optionChanged(args);
@@ -265,8 +265,8 @@ class DiagramToolbar extends DiagramPanel {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            "export": {
-                fileName: "Diagram",
+            'export': {
+                fileName: 'Diagram',
                 proxyUrl: undefined
             }
         });
@@ -298,11 +298,11 @@ class ToolbarItemHelper {
         this._widget = widget;
     }
     setEnabled(enabled) {
-        this._widget.option("disabled", !enabled);
+        this._widget.option('disabled', !enabled);
     }
     setValue(value) {
-        if("value" in this._widget.option()) {
-            this._widget.option("value", value);
+        if('value' in this._widget.option()) {
+            this._widget.option('value', value);
         } else if(value !== undefined) {
             this._widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
         }

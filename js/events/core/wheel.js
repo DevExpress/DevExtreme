@@ -1,15 +1,15 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    domAdapter = require("../../core/dom_adapter"),
-    callOnce = require("../../core/utils/call_once"),
-    registerEvent = require("./event_registrator"),
-    eventUtils = require("../utils");
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    domAdapter = require('../../core/dom_adapter'),
+    callOnce = require('../../core/utils/call_once'),
+    registerEvent = require('./event_registrator'),
+    eventUtils = require('../utils');
 
-var EVENT_NAME = "dxmousewheel",
-    EVENT_NAMESPACE = "dxWheel";
+var EVENT_NAME = 'dxmousewheel',
+    EVENT_NAMESPACE = 'dxWheel';
 
 var getWheelEventName = callOnce(function() {
-    return domAdapter.hasDocumentProperty("onwheel") ? "wheel" : "mousewheel";
+    return domAdapter.hasDocumentProperty('onwheel') ? 'wheel' : 'mousewheel';
 });
 
 var wheel = {
@@ -20,7 +20,7 @@ var wheel = {
     },
 
     teardown: function(element) {
-        eventsEngine.off(element, "." + EVENT_NAMESPACE);
+        eventsEngine.off(element, '.' + EVENT_NAMESPACE);
     },
 
     _wheelHandler: function(e) {
@@ -30,7 +30,7 @@ var wheel = {
             type: EVENT_NAME,
             originalEvent: e,
             delta: delta,
-            pointerType: "mouse"
+            pointerType: 'mouse'
         });
 
         e.stopPropagation();

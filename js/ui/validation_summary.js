@@ -1,15 +1,15 @@
-var registerComponent = require("../core/component_registrator"),
-    eventsEngine = require("../events/core/events_engine"),
-    grep = require("../core/utils/common").grep,
-    extend = require("../core/utils/extend").extend,
-    iteratorUtils = require("../core/utils/iterator"),
-    ValidationMixin = require("./validation/validation_mixin"),
-    ValidationEngine = require("./validation_engine"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit");
+var registerComponent = require('../core/component_registrator'),
+    eventsEngine = require('../events/core/events_engine'),
+    grep = require('../core/utils/common').grep,
+    extend = require('../core/utils/extend').extend,
+    iteratorUtils = require('../core/utils/iterator'),
+    ValidationMixin = require('./validation/validation_mixin'),
+    ValidationEngine = require('./validation_engine'),
+    CollectionWidget = require('./collection/ui.collection_widget.edit');
 
-var VALIDATION_SUMMARY_CLASS = "dx-validationsummary",
-    ITEM_CLASS = VALIDATION_SUMMARY_CLASS + "-item",
-    ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + "-item-data";
+var VALIDATION_SUMMARY_CLASS = 'dx-validationsummary',
+    ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item',
+    ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
 
 /**
 * @name dxValidationSummary
@@ -166,12 +166,12 @@ var ValidationSummary = CollectionWidget.inherit({
         this._validationGroup = group;
 
         this.groupSubscription = this._groupValidationHandler.bind(this);
-        groupConfig.on("validated", this.groupSubscription);
+        groupConfig.on('validated', this.groupSubscription);
     },
 
     _unsubscribeGroup: function() {
         var groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
-        groupConfig && groupConfig.off("validated", this.groupSubscription);
+        groupConfig && groupConfig.off('validated', this.groupSubscription);
     },
 
     _getOrderedItems: function(validators, items) {
@@ -207,21 +207,21 @@ var ValidationSummary = CollectionWidget.inherit({
             if(validator._validationSummary !== this) {
                 var handler = that._itemValidationHandler.bind(that),
                     disposingHandler = function() {
-                        validator.off("validated", handler);
+                        validator.off('validated', handler);
                         validator._validationSummary = null;
                         handler = null;
                     };
-                validator.on("validated", handler);
-                validator.on("disposing", disposingHandler);
+                validator.on('validated', handler);
+                validator.on('disposing', disposingHandler);
                 validator._validationSummary = this;
             }
         });
 
-        that.option("items", items);
+        that.option('items', items);
     },
 
     _itemValidationHandler: function(itemValidationResult) {
-        var items = this.option("items"),
+        var items = this.option('items'),
             isValid = itemValidationResult.isValid,
             elementIndex,
             replacementFound = false,
@@ -255,7 +255,7 @@ var ValidationSummary = CollectionWidget.inherit({
         }
 
         items = this._getOrderedItems(this.validators, items);
-        this.option("items", items);
+        this.option('items', items);
     },
 
     _initMarkup: function() {
@@ -265,7 +265,7 @@ var ValidationSummary = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "validationGroup":
+            case 'validationGroup':
                 this._initGroupRegistration();
                 break;
             default:
@@ -282,7 +282,7 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(params) {
-        eventsEngine.on(params.itemElement, "click", function() {
+        eventsEngine.on(params.itemElement, 'click', function() {
             params.itemData.validator && params.itemData.validator.focus && params.itemData.validator.focus();
         });
     },
@@ -312,6 +312,6 @@ var ValidationSummary = CollectionWidget.inherit({
 
 }).include(ValidationMixin);
 
-registerComponent("dxValidationSummary", ValidationSummary);
+registerComponent('dxValidationSummary', ValidationSummary);
 
 module.exports = ValidationSummary;

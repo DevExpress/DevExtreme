@@ -1,5 +1,5 @@
-var states = ["normal", "hover"],
-    isDefined = require("../../core/utils/type").isDefined;
+var states = ['normal', 'hover'],
+    isDefined = require('../../core/utils/type').isDefined;
 
 function compileAttrs(color, itemOptions, itemBaseOptions) {
 
@@ -21,7 +21,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
 }
 
 function compileLabelAttrs(labelOptions, filter, node) {
-    var _patchFontOptions = require("../core/utils").patchFontOptions;
+    var _patchFontOptions = require('../core/utils').patchFontOptions;
 
     if(labelOptions.useNodeColors) {
         labelOptions.font.color = node.color;
@@ -37,8 +37,8 @@ function compileLabelAttrs(labelOptions, filter, node) {
 
     if(borderVisible && borderWidth) {
         attr.stroke = borderColor;
-        attr["stroke-width"] = borderVisible ? borderWidth : 0;
-        attr["stroke-opacity"] = borderOpacity;
+        attr['stroke-width'] = borderVisible ? borderWidth : 0;
+        attr['stroke-opacity'] = borderOpacity;
     }
 
     return {
@@ -108,14 +108,14 @@ Node.prototype = {
     },
 
     hover: function(state) {
-        if(!this.widget._getOption("hoverEnabled", true) || state === this.isHovered()) {
+        if(!this.widget._getOption('hoverEnabled', true) || state === this.isHovered()) {
             return;
         }
 
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(1, state);
-        this.widget._eventTrigger("nodeHoverChanged", { target: this });
+        this.widget._eventTrigger('nodeHoverChanged', { target: this });
         this.widget._resume();
     },
 
@@ -124,7 +124,7 @@ Node.prototype = {
     },
 
     showTooltip: function(coords) {
-        this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
+        this.widget._getOption('hoverEnabled', true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'node',
             info: {
                 title: this.title,

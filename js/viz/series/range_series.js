@@ -1,13 +1,13 @@
 // there are rangebar, rangearea
-var extend = require("../../core/utils/extend").extend,
+var extend = require('../../core/utils/extend').extend,
     _extend = extend,
-    _isDefined = require("../../core/utils/type").isDefined,
-    _map = require("../core/utils").map,
-    _noop = require("../../core/utils/common").noop,
+    _isDefined = require('../../core/utils/type').isDefined,
+    _map = require('../core/utils').map,
+    _noop = require('../../core/utils/common').noop,
 
-    scatterSeries = require("./scatter_series").chart,
-    barSeries = require("./bar_series").chart.bar,
-    areaSeries = require("./area_series").chart.area;
+    scatterSeries = require('./scatter_series').chart,
+    barSeries = require('./bar_series').chart.bar,
+    areaSeries = require('./area_series').chart.area;
 
 exports.chart = {};
 
@@ -45,7 +45,7 @@ var baseRangeSeries = {
         };
     },
 
-    _defaultAggregator: "range",
+    _defaultAggregator: 'range',
 
     _aggregators: {
         range({ intervalStart, data }, series) {
@@ -88,16 +88,16 @@ var baseRangeSeries = {
     },
 
     getValueFields: function() {
-        return [this._options.rangeValue1Field || "val1", this._options.rangeValue2Field || "val2"];
+        return [this._options.rangeValue1Field || 'val1', this._options.rangeValue2Field || 'val2'];
     },
 
     getSeriesPairCoord(coord, isArgument) {
         let oppositeCoord = null;
         const { rotated } = this._options;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
-        const coordName = isOpposite ? "vy" : "vx";
-        const minCoordName = rotated ? "minX" : "minY";
-        const oppositeCoordName = isOpposite ? "vx" : "vy";
+        const coordName = isOpposite ? 'vy' : 'vx';
+        const minCoordName = rotated ? 'minX' : 'minY';
+        const oppositeCoordName = isOpposite ? 'vx' : 'vy';
         const points = this.getPoints();
 
         for(let i = 0; i < points.length; i++) {
@@ -121,9 +121,9 @@ var baseRangeSeries = {
     }
 };
 
-exports.chart["rangebar"] = _extend({}, barSeries, baseRangeSeries);
+exports.chart['rangebar'] = _extend({}, barSeries, baseRangeSeries);
 
-exports.chart["rangearea"] = _extend({}, areaSeries, {
+exports.chart['rangearea'] = _extend({}, areaSeries, {
     _drawPoint: function(options) {
         var point = options.point;
 
@@ -132,10 +132,10 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
             point.draw(this._renderer, options.groups);
             this._drawnPoints.push(point);
             if(!point.visibleTopMarker) {
-                point.hideMarker("top");
+                point.hideMarker('top');
             }
             if(!point.visibleBottomMarker) {
-                point.hideMarker("bottom");
+                point.hideMarker('bottom');
             }
         } else {
             point.setInvisibility();
@@ -168,7 +168,7 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
     _drawElement: function(segment, group) {
         var that = this,
             drawnElement = areaSeries._drawElement.call(that, segment, group);
-        drawnElement.bottomLine = that._bordersGroup && that._createBorderElement(segment.bottomLine, { "stroke-width": that._styles.normal.border["stroke-width"] }).append(that._bordersGroup);
+        drawnElement.bottomLine = that._bordersGroup && that._createBorderElement(segment.bottomLine, { 'stroke-width': that._styles.normal.border['stroke-width'] }).append(that._bordersGroup);
 
         return drawnElement;
     },
@@ -181,8 +181,8 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
         elementsGroup && elementsGroup.smartAttr(style.elements);
         bordersGroup && bordersGroup.attr(style.border);
         (that._graphics || []).forEach(function(graphic) {
-            graphic.line && graphic.line.attr({ "stroke-width": style.border["stroke-width"] });
-            graphic.bottomLine && graphic.bottomLine.attr({ "stroke-width": style.border["stroke-width"] });
+            graphic.line && graphic.line.attr({ 'stroke-width': style.border['stroke-width'] });
+            graphic.bottomLine && graphic.bottomLine.attr({ 'stroke-width': style.border['stroke-width'] });
         });
     },
 

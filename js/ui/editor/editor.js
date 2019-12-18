@@ -1,29 +1,29 @@
-var $ = require("../../core/renderer"),
-    dataUtils = require("../../core/element_data"),
-    Callbacks = require("../../core/utils/callbacks"),
-    commonUtils = require("../../core/utils/common"),
-    windowUtils = require("../../core/utils/window"),
-    Guid = require("../../core/guid"),
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    extend = require("../../core/utils/extend").extend,
-    Widget = require("../widget/ui.widget"),
-    ValidationMixin = require("../validation/validation_mixin"),
-    Overlay = require("../overlay"),
-    EventsEngine = require("../../events/core/events_engine"),
-    eventUtils = require("../../events/utils");
+var $ = require('../../core/renderer'),
+    dataUtils = require('../../core/element_data'),
+    Callbacks = require('../../core/utils/callbacks'),
+    commonUtils = require('../../core/utils/common'),
+    windowUtils = require('../../core/utils/window'),
+    Guid = require('../../core/guid'),
+    getDefaultAlignment = require('../../core/utils/position').getDefaultAlignment,
+    extend = require('../../core/utils/extend').extend,
+    Widget = require('../widget/ui.widget'),
+    ValidationMixin = require('../validation/validation_mixin'),
+    Overlay = require('../overlay'),
+    EventsEngine = require('../../events/core/events_engine'),
+    eventUtils = require('../../events/utils');
 
-var READONLY_STATE_CLASS = "dx-state-readonly",
-    INVALID_CLASS = "dx-invalid",
-    INVALID_MESSAGE = "dx-invalid-message",
-    INVALID_MESSAGE_CONTENT = "dx-invalid-message-content",
-    INVALID_MESSAGE_AUTO = "dx-invalid-message-auto",
-    INVALID_MESSAGE_ALWAYS = "dx-invalid-message-always",
+var READONLY_STATE_CLASS = 'dx-state-readonly',
+    INVALID_CLASS = 'dx-invalid',
+    INVALID_MESSAGE = 'dx-invalid-message',
+    INVALID_MESSAGE_CONTENT = 'dx-invalid-message-content',
+    INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto',
+    INVALID_MESSAGE_ALWAYS = 'dx-invalid-message-always',
 
-    VALIDATION_TARGET = "dx-validation-target",
+    VALIDATION_TARGET = 'dx-validation-target',
 
     VALIDATION_MESSAGE_MIN_WIDTH = 100,
 
-    READONLY_NAMESPACE = "editorReadOnly";
+    READONLY_NAMESPACE = 'editorReadOnly';
 
 /**
 * @name Editor
@@ -47,7 +47,7 @@ var Editor = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this._initInnerOptionCache("validationTooltipOptions");
+        this._initInnerOptionCache('validationTooltipOptions');
     },
 
     _getDefaultOptions: function() {
@@ -66,7 +66,7 @@ var Editor = Widget.inherit({
             * @default ""
             * @hidden
             */
-            name: "",
+            name: '',
 
             /**
             * @name EditorOptions.onValueChanged
@@ -108,7 +108,7 @@ var Editor = Widget.inherit({
              * @type Enums.ValidationMessageMode
              * @default "auto"
              */
-            validationMessageMode: "auto",
+            validationMessageMode: 'auto',
 
             validationBoundary: undefined,
 
@@ -119,7 +119,7 @@ var Editor = Widget.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        if(this.option("readOnly")) {
+        if(this.option('readOnly')) {
             return;
         }
 
@@ -141,8 +141,8 @@ var Editor = Widget.inherit({
     },
 
     _createValueChangeAction: function() {
-        this._valueChangeAction = this._createActionByOption("onValueChanged", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._valueChangeAction = this._createActionByOption('onValueChanged', {
+            excludeValidators: ['disabled', 'readOnly']
         });
     },
 
@@ -156,7 +156,7 @@ var Editor = Widget.inherit({
 
     _initMarkup: function() {
         this._toggleReadOnlyState();
-        this._setSubmitElementName(this.option("name"));
+        this._setSubmitElementName(this.option('name'));
 
         this.callBase();
         this._renderValidationState();
@@ -182,7 +182,7 @@ var Editor = Widget.inherit({
     },
 
     _focusInHandler: function(e) {
-        const isValidationMessageShownOnFocus = this.option("validationMessageMode") === "auto";
+        const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
 
         // NOTE: The click should be processed before the validation message is shown because
         // it can change the editor's value
@@ -206,13 +206,13 @@ var Editor = Widget.inherit({
     },
 
     _renderValidationState: function() {
-        var isValid = this.option("isValid"),
-            validationError = this.option("validationError"),
-            validationMessageMode = this.option("validationMessageMode"),
+        var isValid = this.option('isValid'),
+            validationError = this.option('validationError'),
+            validationMessageMode = this.option('validationMessageMode'),
             $element = this.$element();
 
         $element.toggleClass(INVALID_CLASS, !isValid);
-        this.setAria("invalid", !isValid || undefined);
+        this.setAria('invalid', !isValid || undefined);
 
         if(!windowUtils.hasWindow()) {
             return;
@@ -220,12 +220,12 @@ var Editor = Widget.inherit({
 
         if(this._$validationMessage) {
             this._$validationMessage.remove();
-            this.setAria("describedby", null);
+            this.setAria('describedby', null);
             this._$validationMessage = null;
         }
 
         if(!isValid && validationError && validationError.message) {
-            this._$validationMessage = $("<div>").addClass(INVALID_MESSAGE)
+            this._$validationMessage = $('<div>').addClass(INVALID_MESSAGE)
                 .html(validationError.message)
                 .appendTo($element);
 
@@ -239,29 +239,29 @@ var Editor = Widget.inherit({
                 width: 'auto',
                 height: 'auto',
                 container: $element,
-                position: this._getValidationMessagePosition("below"),
+                position: this._getValidationMessagePosition('below'),
                 closeOnOutsideClick: false,
                 closeOnTargetScroll: false,
                 animation: null,
                 visible: true,
                 propagateOutsideClick: true,
                 _checkParentVisibility: false
-            }, this._getInnerOptionsCache("validationTooltipOptions")));
+            }, this._getInnerOptionsCache('validationTooltipOptions')));
 
             this._$validationMessage
-                .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
-                .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === "always");
+                .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === 'auto')
+                .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === 'always');
 
-            var messageId = "dx-" + new Guid();
+            var messageId = 'dx-' + new Guid();
 
             this._validationMessage.$content()
                 .addClass(INVALID_MESSAGE_CONTENT)
-                .attr("id", messageId);
+                .attr('id', messageId);
 
-            this.setAria("describedby", messageId);
+            this.setAria('describedby', messageId);
 
             this._setValidationMessageMaxWidth();
-            this._bindInnerWidgetOptions(this._validationMessage, "validationTooltipOptions");
+            this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
         }
     },
 
@@ -271,12 +271,12 @@ var Editor = Widget.inherit({
         }
 
         if(this._getValidationMessageTarget().outerWidth() === 0) {
-            this._validationMessage.option("maxWidth", "100%");
+            this._validationMessage.option('maxWidth', '100%');
             return;
         }
 
         var validationMessageMaxWidth = Math.max(VALIDATION_MESSAGE_MIN_WIDTH, this._getValidationMessageTarget().outerWidth());
-        this._validationMessage.option("maxWidth", validationMessageMaxWidth);
+        this._validationMessage.option('maxWidth', validationMessageMaxWidth);
     },
 
     _getValidationMessageTarget: function() {
@@ -284,41 +284,41 @@ var Editor = Widget.inherit({
     },
 
     _getValidationMessagePosition: function(positionRequest) {
-        var rtlEnabled = this.option("rtlEnabled"),
+        var rtlEnabled = this.option('rtlEnabled'),
             messagePositionSide = getDefaultAlignment(rtlEnabled),
-            messageOriginalOffset = this.option("validationMessageOffset"),
+            messageOriginalOffset = this.option('validationMessageOffset'),
             messageOffset = { h: messageOriginalOffset.h, v: messageOriginalOffset.v },
-            verticalPositions = positionRequest === "below" ? [" top", " bottom"] : [" bottom", " top"];
+            verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
 
         if(rtlEnabled) messageOffset.h = -messageOffset.h;
-        if(positionRequest !== "below") messageOffset.v = -messageOffset.v;
+        if(positionRequest !== 'below') messageOffset.v = -messageOffset.v;
 
         return {
             offset: messageOffset,
-            boundary: this.option("validationBoundary"),
+            boundary: this.option('validationBoundary'),
             my: messagePositionSide + verticalPositions[0],
             at: messagePositionSide + verticalPositions[1],
-            collision: "none flip"
+            collision: 'none flip'
         };
     },
 
     _toggleReadOnlyState: function() {
-        const readOnly = this.option("readOnly");
+        const readOnly = this.option('readOnly');
 
         this._toggleBackspaceHandler(readOnly);
         this.$element().toggleClass(READONLY_STATE_CLASS, !!readOnly);
-        this.setAria("readonly", readOnly || undefined);
+        this.setAria('readonly', readOnly || undefined);
     },
 
     _toggleBackspaceHandler: function(isReadOnly) {
         var $eventTarget = this._keyboardEventBindingTarget();
-        var eventName = eventUtils.addNamespace("keydown", READONLY_NAMESPACE);
+        var eventName = eventUtils.addNamespace('keydown', READONLY_NAMESPACE);
 
         EventsEngine.off($eventTarget, eventName);
 
         if(isReadOnly) {
             EventsEngine.on($eventTarget, eventName, (e) => {
-                if(eventUtils.normalizeKeyName(e) === "backspace") {
+                if(eventUtils.normalizeKeyName(e) === 'backspace') {
                     e.preventDefault();
                 }
             });
@@ -341,9 +341,9 @@ var Editor = Widget.inherit({
         }
 
         if(name.length > 0) {
-            $submitElement.attr("name", name);
+            $submitElement.attr('name', name);
         } else {
-            $submitElement.removeAttr("name");
+            $submitElement.removeAttr('name');
         }
     },
 
@@ -353,23 +353,23 @@ var Editor = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onValueChanged":
+            case 'onValueChanged':
                 this._createValueChangeAction();
                 break;
-            case "isValid":
-            case "validationError":
-            case "validationBoundary":
-            case "validationMessageMode":
+            case 'isValid':
+            case 'validationError':
+            case 'validationBoundary':
+            case 'validationMessageMode':
                 this._renderValidationState();
                 break;
-            case "validationTooltipOptions":
+            case 'validationTooltipOptions':
                 this._innerOptionChanged(this._validationMessage, args);
                 break;
-            case "readOnly":
+            case 'readOnly':
                 this._toggleReadOnlyState();
                 this._refreshFocusState();
                 break;
-            case "value":
+            case 'value':
                 if(!this._valueChangeActionSuppressed) {
                     this._raiseValueChangeAction(args.value, args.previousValue);
                     this._saveValueChangeEvent(undefined);
@@ -381,11 +381,11 @@ var Editor = Widget.inherit({
                     });
                 }
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._setValidationMessageMaxWidth();
                 break;
-            case "name":
+            case 'name':
                 this._setSubmitElementName(args.value);
                 break;
             default:
@@ -399,7 +399,7 @@ var Editor = Widget.inherit({
     */
     reset: function() {
         var defaultOptions = this._getDefaultOptions();
-        this.option("value", defaultOptions.value);
+        this.option('value', defaultOptions.value);
     }
 }).include(ValidationMixin);
 

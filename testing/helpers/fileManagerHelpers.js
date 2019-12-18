@@ -1,33 +1,33 @@
-import $ from "jquery";
+import $ from 'jquery';
 
 export const Consts = {
-    WIDGET_CLASS: "dx-filemanager",
-    TOOLBAR_CLASS: "dx-filemanager-toolbar",
-    GENERAL_TOOLBAR_CLASS: "dx-filemanager-general-toolbar",
-    FILE_TOOLBAR_CLASS: "dx-filemanager-file-toolbar",
-    CONTAINER_CLASS: "dx-filemanager-container",
-    DIALOG_CLASS: "dx-filemanager-dialog",
-    THUMBNAILS_ITEM_LIST_CLASS: "dx-filemanager-thumbnails",
-    THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
-    GRID_DATA_ROW_CLASS: "dx-data-row",
-    FILE_ACTION_BUTTON_CLASS: "dx-filemanager-file-actions-button",
-    FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
-    FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
-    BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
-    ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
-    FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
-    CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
-    TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
-    DETAILS_ITEM_NAME_CLASS: "dx-filemanager-details-item-name",
-    POPUP_BOTTOM_CLASS: "dx-popup-bottom",
-    BUTTON_CLASS: "dx-button",
-    BUTTON_TEXT_CLASS: "dx-button-text",
-    SELECT_BOX_CLASS: "dx-selectbox",
-    TEXT_EDITOR_INPUT_CLASS: "dx-texteditor-input",
-    MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
-    CONTEXT_MENU_CLASS: "dx-context-menu",
-    MENU_ITEM_CLASS: "dx-menu-item",
-    SELECTION_CLASS: "dx-selection"
+    WIDGET_CLASS: 'dx-filemanager',
+    TOOLBAR_CLASS: 'dx-filemanager-toolbar',
+    GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
+    FILE_TOOLBAR_CLASS: 'dx-filemanager-file-toolbar',
+    CONTAINER_CLASS: 'dx-filemanager-container',
+    DIALOG_CLASS: 'dx-filemanager-dialog',
+    THUMBNAILS_ITEM_LIST_CLASS: 'dx-filemanager-thumbnails',
+    THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
+    GRID_DATA_ROW_CLASS: 'dx-data-row',
+    FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
+    FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
+    BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
+    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
+    FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
+    CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
+    TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
+    POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
+    BUTTON_CLASS: 'dx-button',
+    BUTTON_TEXT_CLASS: 'dx-button-text',
+    SELECT_BOX_CLASS: 'dx-selectbox',
+    TEXT_EDITOR_INPUT_CLASS: 'dx-texteditor-input',
+    MENU_ITEM_WITH_TEXT_CLASS: 'dx-menu-item-has-text',
+    CONTEXT_MENU_CLASS: 'dx-context-menu',
+    MENU_ITEM_CLASS: 'dx-menu-item',
+    SELECTION_CLASS: 'dx-selection'
 };
 
 export class FileManagerWrapper {
@@ -68,7 +68,7 @@ export class FileManagerWrapper {
     }
 
     getBreadcrumbsPath() {
-        let result = "";
+        let result = '';
         const $elements = this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
         $elements.each((_, element) => {
             const name = $(element).text();
@@ -119,11 +119,11 @@ export class FileManagerWrapper {
     }
 
     getSelectCheckBoxInDetailsView(index) {
-        return this.getRowInDetailsView(index).find("td").eq(0);
+        return this.getRowInDetailsView(index).find('td').eq(0);
     }
 
     getRowNameCellInDetailsView(index) {
-        return this.getRowInDetailsView(index).find("td").eq(1);
+        return this.getRowInDetailsView(index).find('td').eq(1);
     }
 
     getRowInDetailsView(index) {
@@ -133,7 +133,7 @@ export class FileManagerWrapper {
     getContextMenuItems(visible) {
         let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
         if(visible) {
-            selector += ":visible";
+            selector += ':visible';
         }
         return $(selector);
     }
@@ -151,66 +151,66 @@ export class FileManagerWrapper {
 export const createTestFileSystem = () => {
     return [
         {
-            name: "Folder 1",
+            name: 'Folder 1',
             isDirectory: true,
             items: [
                 {
-                    name: "Folder 1.1",
+                    name: 'Folder 1.1',
                     isDirectory: true,
                     items: [
                         {
-                            name: "File 1-1.txt",
+                            name: 'File 1-1.txt',
                             isDirectory: false
                         },
                         {
-                            name: "File 1-2.txt",
+                            name: 'File 1-2.txt',
                             isDirectory: false
                         },
                         {
-                            name: "File 1-3.png",
+                            name: 'File 1-3.png',
                             isDirectory: false
                         },
                         {
-                            name: "File 1-4.jpg",
+                            name: 'File 1-4.jpg',
                             isDirectory: false
                         }]
                 },
                 {
-                    name: "Folder 1.2",
+                    name: 'Folder 1.2',
                     isDirectory: true
                 },
                 {
-                    name: "File 1-1.txt",
+                    name: 'File 1-1.txt',
                     isDirectory: false
                 },
                 {
-                    name: "File 1-2.jpg",
+                    name: 'File 1-2.jpg',
                     isDirectory: false
                 }]
         },
         {
-            name: "Folder 2",
+            name: 'Folder 2',
             isDirectory: true,
             items: [
                 {
-                    name: "File 2-1.jpg",
+                    name: 'File 2-1.jpg',
                     isDirectory: false
                 }]
         },
         {
-            name: "Folder 3",
+            name: 'Folder 3',
             isDirectory: true
         },
         {
-            name: "File 1.txt",
+            name: 'File 1.txt',
             isDirectory: false
         },
         {
-            name: "File 2.jpg",
+            name: 'File 2.jpg',
             isDirectory: false
         },
         {
-            name: "File 3.xml",
+            name: 'File 3.xml',
             isDirectory: false
         }
     ];

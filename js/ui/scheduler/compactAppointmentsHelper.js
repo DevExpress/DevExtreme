@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import Button from "../button";
-import translator from "../../animation/translator";
-import messageLocalization from "../../localization/message";
-import FunctionTemplate from "../widget/function_template";
-import deferredUtils from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import Button from '../button';
+import translator from '../../animation/translator';
+import messageLocalization from '../../localization/message';
+import FunctionTemplate from '../widget/function_template';
+import deferredUtils from '../../core/utils/deferred';
 
-const APPOINTMENT_COLLECTOR_CLASS = "dx-scheduler-appointment-collector",
-    COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-compact",
-    APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-content";
+const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector',
+    COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact',
+    APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-content';
 
 const WEEK_VIEW_COLLECTOR_OFFSET = 5;
 const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
@@ -29,7 +29,7 @@ export class CompactAppointmentsHelper {
         this._makeBackgroundDarker($button);
 
         this.elements.push($button);
-        $button.data("items", this._createAppointmentsData(items));
+        $button.data('items', this._createAppointmentsData(items));
 
         return $button;
     }
@@ -53,11 +53,11 @@ export class CompactAppointmentsHelper {
 
     _onButtonClick(e) {
         const $button = $(e.element);
-        this.instance.showAppointmentTooltipCore($button, $button.data("items"));
+        this.instance.showAppointmentTooltipCore($button, $button.data('items'));
     }
 
     _getCollectorOffset(width) {
-        return this.instance.fire("getCellWidth") - width - this._getCollectorRightOffset();
+        return this.instance.fire('getCellWidth') - width - this._getCollectorRightOffset();
     }
 
     _getCollectorRightOffset() {
@@ -65,7 +65,7 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundDarker(button) {
-        button.css("boxShadow", `inset ${button.get(0).getBoundingClientRect().width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
+        button.css('boxShadow', `inset ${button.get(0).getBoundingClientRect().width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
     }
 
     _makeBackgroundColor($button, colors, color) {
@@ -90,7 +90,7 @@ export class CompactAppointmentsHelper {
                     currentItemColor = color;
                 }
             }
-            color && paintButton && $button.css("backgroundColor", color);
+            color && paintButton && $button.css('backgroundColor', color);
         }.bind(this));
     }
 
@@ -114,7 +114,7 @@ export class CompactAppointmentsHelper {
     }
 
     _createCompactButtonElement($container, width, isCompact, applyOffset, coordinates) {
-        const result = $("<div>")
+        const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
@@ -139,20 +139,20 @@ export class CompactAppointmentsHelper {
 
     _createTemplate(count, isCompact) {
         this._initButtonTemplate(count, isCompact);
-        return this.instance._getAppointmentTemplate("appointmentCollectorTemplate");
+        return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
     }
 
     _initButtonTemplate(count, isCompact) {
-        this.instance._defaultTemplates["appointmentCollector"] = new FunctionTemplate(options => {
+        this.instance._defaultTemplates['appointmentCollector'] = new FunctionTemplate(options => {
             return this._createButtonTemplate(count, $(options.container), isCompact);
         });
     }
 
     _createButtonTemplate(appointmentCount, element, isCompact) {
-        const text = isCompact ? appointmentCount : messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount);
+        const text = isCompact ? appointmentCount : messageLocalization.getFormatter('dxScheduler-moreAppointments')(appointmentCount);
 
         return element
-            .append($("<span>").text(text))
+            .append($('<span>').text(text))
             .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
     }
 }

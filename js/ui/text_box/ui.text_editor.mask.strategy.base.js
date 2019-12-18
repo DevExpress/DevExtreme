@@ -1,24 +1,24 @@
-import EventsEngine from "../../events/core/events_engine";
-import { addNamespace } from "../../events/utils";
-import { inArray } from "../../core/utils/array";
-import { clipboardText as getClipboardText } from "../../core/utils/dom";
+import EventsEngine from '../../events/core/events_engine';
+import { addNamespace } from '../../events/utils';
+import { inArray } from '../../core/utils/array';
+import { clipboardText as getClipboardText } from '../../core/utils/dom';
 
-const MASK_EVENT_NAMESPACE = "dxMask";
-const BLUR_EVENT = "blur beforedeactivate";
-const EMPTY_CHAR = " ";
+const MASK_EVENT_NAMESPACE = 'dxMask';
+const BLUR_EVENT = 'blur beforedeactivate';
+const EMPTY_CHAR = ' ';
 
 export default class BaseMaskStrategy {
     constructor(editor) {
         this.editor = editor;
         this.DIRECTION = {
-            FORWARD: "forward",
-            BACKWARD: "backward"
+            FORWARD: 'forward',
+            BACKWARD: 'backward'
         };
         this.NAME = this._getStrategyName();
     }
 
     _getStrategyName() {
-        return "base";
+        return 'base';
     }
 
     editorOption() {
@@ -55,7 +55,7 @@ export default class BaseMaskStrategy {
     }
 
     getHandleEventNames() {
-        return ["focusIn", "focusOut", "keyDown", "input", "paste", "cut", "drop"];
+        return ['focusIn', 'focusOut', 'keyDown', 'input', 'paste', 'cut', 'drop'];
     }
 
     getEventHandler(eventName) {
@@ -67,7 +67,7 @@ export default class BaseMaskStrategy {
     }
 
     _attachChangeEventHandlers() {
-        if(inArray("change", this.editorOption("valueChangeEvent").split(" ")) === -1) {
+        if(inArray('change', this.editorOption('valueChangeEvent').split(' ')) === -1) {
             return;
         }
 
@@ -82,7 +82,7 @@ export default class BaseMaskStrategy {
         this.editor._showMaskPlaceholder();
         this.editor._direction(this.DIRECTION.FORWARD);
 
-        if(!this.editor._isValueEmpty() && this.editorOption("isValid")) {
+        if(!this.editor._isValueEmpty() && this.editorOption('isValid')) {
             this.editor._adjustCaret();
         } else {
             var caret = this.editor._maskRulesChain.first();
@@ -95,9 +95,9 @@ export default class BaseMaskStrategy {
     _focusOutHandler(event) {
         this.editor._changeHandler(event);
 
-        if(this.editorOption("showMaskMode") === "onFocus" && this.editor._isValueEmpty()) {
-            this.editorOption("text", "");
-            this.editor._renderDisplayText("");
+        if(this.editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
+            this.editorOption('text', '');
+            this.editor._renderDisplayText('');
         }
     }
 
@@ -111,7 +111,7 @@ export default class BaseMaskStrategy {
     _dropHandler() {
         this._clearDragTimer();
         this._dragTimer = setTimeout((function() {
-            this.option("value", this._convertToValue(this._input().val()));
+            this.option('value', this._convertToValue(this._input().val()));
         }).bind(this.editor));
     }
 

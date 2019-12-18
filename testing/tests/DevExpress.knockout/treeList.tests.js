@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    ko = require('knockout');
 
-require("ui/tree_list");
-require("integration/knockout");
+require('ui/tree_list');
+require('integration/knockout');
 
 var testArray = [
     { Id: 1, Head_ID: 0, Name: 'Name1' },
@@ -21,19 +21,19 @@ QUnit.testStart(function() {
             <div id="testElement" data-bind="foreach: keys"><div data-bind="text: $data"></div></div>\
         <div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.test("Two-way binding works well with the 'expandedRowKeys' option", function(assert) {
-    var $testContainer = $("#testContainer"),
+QUnit.test('Two-way binding works well with the \'expandedRowKeys\' option', function(assert) {
+    var $testContainer = $('#testContainer'),
         keys = ko.observableArray([1]),
         clock = sinon.useFakeTimers(),
         viewModel = {
             treeListOptions: {
                 dataSource: testArray,
-                columns: ["Name"],
-                keyExpr: "Id",
-                parentIdExpr: "Head_ID",
+                columns: ['Name'],
+                keyExpr: 'Id',
+                parentIdExpr: 'Head_ID',
                 expandedRowKeys: keys
             },
             keys: keys
@@ -44,27 +44,27 @@ QUnit.test("Two-way binding works well with the 'expandedRowKeys' option", funct
     clock.tick();
 
     $testContainer
-        .find(".dx-treelist-collapsed")
+        .find('.dx-treelist-collapsed')
         .first()
-        .trigger("dxclick");
+        .trigger('dxclick');
 
     clock.tick();
 
-    assert.equal($("#testElement").text(), "12", "Observable correctly notify its subscribers");
+    assert.equal($('#testElement').text(), '12', 'Observable correctly notify its subscribers');
     clock.restore();
 });
 
-QUnit.test("Two-way binding works well with the 'expandedRowKeys' and 'autoExpandAll' options", function(assert) {
-    var $testContainer = $("#testContainer"),
+QUnit.test('Two-way binding works well with the \'expandedRowKeys\' and \'autoExpandAll\' options', function(assert) {
+    var $testContainer = $('#testContainer'),
         keys = ko.observableArray([]),
         clock = sinon.useFakeTimers(),
         viewModel = {
             treeListOptions: {
                 dataSource: testArray,
                 autoExpandAll: true,
-                columns: ["Name"],
-                keyExpr: "Id",
-                parentIdExpr: "Head_ID",
+                columns: ['Name'],
+                keyExpr: 'Id',
+                parentIdExpr: 'Head_ID',
                 expandedRowKeys: keys
             },
             keys: keys
@@ -74,6 +74,6 @@ QUnit.test("Two-way binding works well with the 'expandedRowKeys' and 'autoExpan
 
     clock.tick();
 
-    assert.equal($("#testElement").text(), "231", "Observable correctly notify its subscribers");
+    assert.equal($('#testElement').text(), '231', 'Observable correctly notify its subscribers');
     clock.restore();
 });

@@ -1,13 +1,13 @@
-import eventsEngine from "../../events/core/events_engine";
-import { getWindow } from "../../core/utils/window";
-import modules from "./ui.grid_core.modules";
-import errors from "../widget/ui.errors";
-import browser from "../../core/utils/browser";
-import { sessionStorage } from "../../core/utils/storage";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import { isDefined, isPlainObject } from "../../core/utils/type";
-import { fromPromise } from "../../core/utils/deferred";
+import eventsEngine from '../../events/core/events_engine';
+import { getWindow } from '../../core/utils/window';
+import modules from './ui.grid_core.modules';
+import errors from '../widget/ui.errors';
+import browser from '../../core/utils/browser';
+import { sessionStorage } from '../../core/utils/storage';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { isDefined, isPlainObject } from '../../core/utils/type';
+import { fromPromise } from '../../core/utils/deferred';
 
 var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
@@ -17,7 +17,7 @@ var parseDates = function(state) {
         var date;
         if(isPlainObject(value) || Array.isArray(value)) {
             parseDates(value);
-        } else if(typeof value === "string") {
+        } else if(typeof value === 'string') {
             date = DATE_REGEX.exec(value);
             if(date) {
                 state[key] = new Date(Date.UTC(+date[1], +date[2] - 1, +date[3], +date[4], +date[5], +date[6]));
@@ -28,13 +28,13 @@ var parseDates = function(state) {
 
 exports.StateStoringController = modules.ViewController.inherit((function() {
     var getStorage = function(options) {
-        var storage = options.type === "sessionStorage" ? sessionStorage() : getWindow().localStorage;
+        var storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
 
         if(!storage) {
-            if(getWindow().location.protocol === "file:" && browser.msie) {
-                throw new Error("E1038");
+            if(getWindow().location.protocol === 'file:' && browser.msie) {
+                throw new Error('E1038');
             } else {
-                throw new Error("E1007");
+                throw new Error('E1007');
             }
         }
 
@@ -42,14 +42,14 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
     };
 
     var getUniqueStorageKey = function(options) {
-        return isDefined(options.storageKey) ? options.storageKey : "storage";
+        return isDefined(options.storageKey) ? options.storageKey : 'storage';
     };
 
     return {
         _loadState: function() {
-            var options = this.option("stateStoring");
+            var options = this.option('stateStoring');
 
-            if(options.type === "custom") {
+            if(options.type === 'custom') {
                 return options.customLoad && options.customLoad();
             }
             try {
@@ -60,9 +60,9 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         _saveState: function(state) {
-            var options = this.option("stateStoring");
+            var options = this.option('stateStoring');
 
-            if(options.type === "custom") {
+            if(options.type === 'custom') {
                 options.customSave && options.customSave(state);
                 return;
             }
@@ -73,11 +73,11 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
         },
 
         publicMethods: function() {
-            return ["state"];
+            return ['state'];
         },
 
         isEnabled: function() {
-            return this.option("stateStoring.enabled");
+            return this.option('stateStoring.enabled');
         },
 
         init: function() {
@@ -93,7 +93,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
                 }
             };
 
-            eventsEngine.on(getWindow(), "unload", that._windowUnloadHandler);
+            eventsEngine.on(getWindow(), 'unload', that._windowUnloadHandler);
 
             return that;
         },
@@ -138,14 +138,14 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
             that._savingTimeoutID = setTimeout(function() {
                 that._saveState(that.state());
                 that._savingTimeoutID = undefined;
-            }, that.option("stateStoring.savingTimeout"));
+            }, that.option('stateStoring.savingTimeout'));
         },
 
         optionChanged: function(args) {
             var that = this;
 
             switch(args.name) {
-                case "stateStoring":
+                case 'stateStoring':
                     if(that.isEnabled() && !that.isLoading()) {
                         that.load();
                     }
@@ -159,7 +159,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
 
         dispose: function() {
             clearTimeout(this._savingTimeoutID);
-            eventsEngine.off(getWindow(), "unload", this._windowUnloadHandler);
+            eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
         }
     };
 })());

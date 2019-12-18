@@ -1,6 +1,6 @@
-var Callbacks = require("../../core/utils/callbacks"),
-    NativeStrategy = require("./ui.scrollable.native"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var Callbacks = require('../../core/utils/callbacks'),
+    NativeStrategy = require('./ui.scrollable.native'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 var STATE_RELEASED = 0,
     STATE_READY = 1,
@@ -39,7 +39,7 @@ var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _renderBottom: function() {
         this._$bottomPocket.empty()
-            .append("<progress>");
+            .append('<progress>');
     },
 
     _releaseState: function() {
@@ -51,14 +51,14 @@ var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _updateDimensions: function() {
-        this._scrollOffset = this._$container.prop("scrollHeight") - this._$container.prop("clientHeight");
+        this._scrollOffset = this._$container.prop('scrollHeight') - this._$container.prop('clientHeight');
         this._containerSize = {
-            height: this._$container.prop("clientHeight"),
-            width: this._$container.prop("clientWidth")
+            height: this._$container.prop('clientHeight'),
+            width: this._$container.prop('clientWidth')
         };
         this._contentSize = this._componentContentSize = {
-            height: this._$container.prop("scrollHeight"),
-            width: this._$container.prop("scrollWidth")
+            height: this._$container.prop('scrollHeight'),
+            width: this._$container.prop('scrollWidth')
         };
     },
 
@@ -70,7 +70,7 @@ var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function(location) {
-        this._scrollContent = this._$container.prop("scrollHeight") - this._$container.prop("clientHeight");
+        this._scrollContent = this._$container.prop('scrollHeight') - this._$container.prop('clientHeight');
         return this._reachBottomEnabled && location < -this._scrollContent + LOADING_HEIGHT;
     },
 

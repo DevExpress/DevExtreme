@@ -1,13 +1,13 @@
-import $ from "../../../core/renderer";
+import $ from '../../../core/renderer';
 import { TooltipStrategyBase, createDefaultTooltipTemplate } from './tooltipStrategyBase';
-import Tooltip from "../../tooltip";
-import translator from "../../../animation/translator";
-import dragEvents from "../../../events/drag";
-import eventsEngine from "../../../events/core/events_engine";
-import FunctionTemplate from "../../widget/function_template";
-import { touch } from "../../../core/utils/support";
+import Tooltip from '../../tooltip';
+import translator from '../../../animation/translator';
+import dragEvents from '../../../events/drag';
+import eventsEngine from '../../../events/core/events_engine';
+import FunctionTemplate from '../../widget/function_template';
+import { touch } from '../../../core/utils/support';
 
-const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
+const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = 'dx-scheduler-appointment-tooltip-wrapper';
 const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 const SCROLLABLE_WRAPPER_CLASS_NAME = '.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper';
 
@@ -26,11 +26,11 @@ class TooltipBehaviorBase {
     }
 
     getItemListTemplateName() {
-        return "appointmentTooltipTemplate";
+        return 'appointmentTooltipTemplate';
     }
 
     getItemListDefaultTemplateName() {
-        return "appointmentTooltip";
+        return 'appointmentTooltip';
     }
 
     createFunctionTemplate(template, data, targetData, index) {
@@ -77,20 +77,20 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     getItemListTemplateName() {
-        return this._isEmptyDropDownAppointmentTemplate() ? "appointmentTooltipTemplate" : "dropDownAppointmentTemplate";
+        return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltipTemplate' : 'dropDownAppointmentTemplate';
     }
 
     getItemListDefaultTemplateName() {
-        return this._isEmptyDropDownAppointmentTemplate() ? "appointmentTooltip" : "dropDownAppointment";
+        return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltip' : 'dropDownAppointment';
     }
 
     _isEmptyDropDownAppointmentTemplate() {
-        return this.scheduler.option("dropDownAppointmentTemplate") === "dropDownAppointment";
+        return this.scheduler.option('dropDownAppointmentTemplate') === 'dropDownAppointment';
     }
 
     _onAppointmentDragStart(itemData, settings, eventArgs) {
         const appointmentInstance = this.scheduler.getAppointmentsInstance(),
-            appointmentIndex = appointmentInstance.option("items").length;
+            appointmentIndex = appointmentInstance.option('items').length;
 
         settings[0].isCompact = false;
         settings[0].virtual = false;
@@ -113,7 +113,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             top: this._startPosition.top + eventArgs.offset.y
         };
 
-        this.scheduler.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
+        this.scheduler.getAppointmentsInstance().notifyObserver('correctAppointmentCoordinates', {
             coordinates: coordinates,
             allDay: allDay,
             isFixedContainer: false,
@@ -162,7 +162,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         let result;
         for(var i = 0; i < appointments.length; i++) {
             const $appointment = appointments[i],
-                appointmentStartDate = $appointment.data("dxAppointmentStartDate");
+                appointmentStartDate = $appointment.data('dxAppointmentStartDate');
             if(appointmentStartDate.getTime() === startDate.getTime()) {
                 result = $appointment;
             }
@@ -181,13 +181,13 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     _showCore(target, dataList, isSingleBehavior) {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
-        this.tooltip.option("position", this._getTooltipPosition(dataList));
+        this.tooltip.option('position', this._getTooltipPosition(dataList));
     }
 
     _onShown() {
         super._onShown();
         this.list.focus();
-        this.list.option("focusedElement", null);
+        this.list.option('focusedElement', null);
     }
 
     _createBehavior(isSingleBehavior, target) {
@@ -197,12 +197,12 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
     _getTooltipPosition(dataList) {
         return {
-            my: "bottom",
-            at: "top",
+            my: 'bottom',
+            at: 'top',
             of: this.target,
-            collision: "fit flipfit",
+            collision: 'fit flipfit',
             boundary: this._getBoundary(dataList),
-            offset: this.scheduler.option("_appointmentTooltipOffset")
+            offset: this.scheduler.option('_appointmentTooltipOffset')
         };
     }
 
@@ -214,7 +214,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         const workSpace = this.scheduler._workSpace,
             itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
 
-        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option("showAllDayPanel");
+        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
@@ -233,7 +233,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         const result = super._createListOption(target, dataList);
         // TODO:T724287 this condition is not covered by tests, because touch variable cannot be overridden.
         // In the future, it is necessary to cover the tests
-        result.showScrollbar = touch ? "always" : "onHover";
+        result.showScrollbar = touch ? 'always' : 'onHover';
         return result;
     }
 
@@ -245,7 +245,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             onShowing: this._onTooltipShowing.bind(this),
             closeOnTargetScroll: () => this.skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option("rtlEnabled")
+            rtlEnabled: this.scheduler.option('rtlEnabled')
         });
     }
 
@@ -264,7 +264,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     }
 
     _createTooltipElement() {
-        return $("<div>").appendTo(this.scheduler.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
+        return $('<div>').appendTo(this.scheduler.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
     }
 
     _onListItemRendered(e) {

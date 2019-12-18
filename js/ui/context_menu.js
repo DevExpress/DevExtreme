@@ -1,4 +1,4 @@
-import ContextMenu from "./context_menu/ui.context_menu";
+import ContextMenu from './context_menu/ui.context_menu';
 
 /**
 * @name dxContextMenu

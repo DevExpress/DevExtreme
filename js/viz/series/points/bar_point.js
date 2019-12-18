@@ -1,4 +1,4 @@
-var extend = require("../../../core/utils/extend").extend,
+var extend = require('../../../core/utils/extend').extend,
 
     _extend = extend,
 
@@ -6,15 +6,15 @@ var extend = require("../../../core/utils/extend").extend,
     _floor = _math.floor,
     _abs = _math.abs,
 
-    symbolPoint = require("./symbol_point"),
+    symbolPoint = require('./symbol_point'),
 
-    CANVAS_POSITION_DEFAULT = "canvas_position_default",
+    CANVAS_POSITION_DEFAULT = 'canvas_position_default',
     DEFAULT_BAR_TRACKER_SIZE = 9,
     CORRECTING_BAR_TRACKER_VALUE = 4,
-    RIGHT = "right",
-    LEFT = "left",
-    TOP = "top",
-    BOTTOM = "bottom";
+    RIGHT = 'right',
+    LEFT = 'left',
+    TOP = 'top',
+    BOTTOM = 'bottom';
 
 module.exports = _extend({}, symbolPoint, {
 
@@ -51,7 +51,7 @@ module.exports = _extend({}, symbolPoint, {
             position,
             initialValue = that.initialValue,
             invert = that._getValTranslator().getBusinessRange().invert,
-            isDiscreteValue = that.series.valueAxisType === "discrete",
+            isDiscreteValue = that.series.valueAxisType === 'discrete',
             isFullStacked = that.series.isFullStackedSeries(),
             notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert) ||
                 (initialValue < 0 && invert))) ||
@@ -77,8 +77,8 @@ module.exports = _extend({}, symbolPoint, {
             } else {
                 coords = that._getLabelCoordOfPosition(label, RIGHT);
             }
-        } else if(label.getLayoutOptions().position === "inside") {
-            coords = that._getLabelCoordOfPosition(label, "inside");
+        } else if(label.getLayoutOptions().position === 'inside') {
+            coords = that._getLabelCoordOfPosition(label, 'inside');
         } else {
             coords = symbolPoint._getLabelCoords.call(this, label);
         }
@@ -156,7 +156,7 @@ module.exports = _extend({}, symbolPoint, {
         that.graphic = renderer.rect(x, y, width, height)
             .attr({ rx: r, ry: r })
             .smartAttr(style)
-            .data({ "chart-data-point": that })
+            .data({ 'chart-data-point': that })
             .append(group);
     },
 
@@ -190,10 +190,10 @@ module.exports = _extend({}, symbolPoint, {
     getGraphicSettings: function() {
         var graphic = this.graphic;
         return {
-            x: graphic.attr("x"),
-            y: graphic.attr("y"),
-            height: graphic.attr("height"),
-            width: graphic.attr("width")
+            x: graphic.attr('x'),
+            y: graphic.attr('y'),
+            height: graphic.attr('height'),
+            width: graphic.attr('width')
         };
     },
 
@@ -266,10 +266,10 @@ module.exports = _extend({}, symbolPoint, {
     _translate: function() {
         var that = this,
             rotated = that._options.rotated,
-            valAxis = rotated ? "x" : "y",
-            argAxis = rotated ? "y" : "x",
-            valIntervalName = rotated ? "width" : "height",
-            argIntervalName = rotated ? "height" : "width",
+            valAxis = rotated ? 'x' : 'y',
+            argAxis = rotated ? 'y' : 'x',
+            valIntervalName = rotated ? 'width' : 'height',
+            argIntervalName = rotated ? 'height' : 'width',
             argTranslator = that._getArgTranslator(),
             valTranslator = that._getValTranslator(),
             argVisibleArea = that.series.getArgumentAxis().getVisibleArea(),
@@ -280,13 +280,13 @@ module.exports = _extend({}, symbolPoint, {
 
         arg = argTranslator.translate(that.argument);
 
-        that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + "Correction"] || 0);
+        that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + 'Correction'] || 0);
 
         val = valTranslator.translate(that.value, 1);
         minVal = valTranslator.translate(that.minValue);
 
-        that["v" + valAxis] = val;
-        that["v" + argAxis] = arg + that[argIntervalName] / 2;
+        that['v' + valAxis] = val;
+        that['v' + argAxis] = arg + that[argIntervalName] / 2;
 
         val = that._truncateCoord(val, valVisibleArea[0], valVisibleArea[1]);
         minVal = that._truncateCoord(minVal, valVisibleArea[0], valVisibleArea[1]);
@@ -297,9 +297,9 @@ module.exports = _extend({}, symbolPoint, {
 
         that._calculateVisibility(rotated ? val : arg, rotated ? arg : val, that.width, that.height);
 
-        that[valAxis] = val === null ? val : val + (that[valAxis + "Correction"] || 0);
-        that["min" + valAxis.toUpperCase()] = minVal === null ? minVal : minVal + (that[valAxis + "Correction"] || 0);
-        that["default" + valAxis.toUpperCase()] = valTranslator.translate(CANVAS_POSITION_DEFAULT);
+        that[valAxis] = val === null ? val : val + (that[valAxis + 'Correction'] || 0);
+        that['min' + valAxis.toUpperCase()] = minVal === null ? minVal : minVal + (that[valAxis + 'Correction'] || 0);
+        that['default' + valAxis.toUpperCase()] = valTranslator.translate(CANVAS_POSITION_DEFAULT);
         that._translateErrorBars(argVisibleArea);
 
         if(that.inVisibleArea && that[argAxis] !== null) {

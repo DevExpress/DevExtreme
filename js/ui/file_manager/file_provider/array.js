@@ -1,12 +1,12 @@
-import { ensureDefined } from "../../../core/utils/common";
-import { compileGetter, compileSetter } from "../../../core/utils/data";
-import { each } from "../../../core/utils/iterator";
-import typeUtils from "../../../core/utils/type";
-import { errors } from "../../../data/errors";
+import { ensureDefined } from '../../../core/utils/common';
+import { compileGetter, compileSetter } from '../../../core/utils/data';
+import { each } from '../../../core/utils/iterator';
+import typeUtils from '../../../core/utils/type';
+import { errors } from '../../../data/errors';
 
-import { FileProvider } from "./file_provider";
-import { ErrorCode } from "../ui.file_manager.common";
-import { pathCombine } from "../ui.file_manager.utils";
+import { FileProvider } from './file_provider';
+import { ErrorCode } from '../ui.file_manager.common';
+import { pathCombine } from '../ui.file_manager.utils';
 
 /**
 * @name ArrayFileProvider
@@ -23,7 +23,7 @@ class ArrayFileProvider extends FileProvider {
 
         const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errors.Error("E4006");
+            throw errors.Error('E4006');
         }
 
         /**
@@ -34,7 +34,7 @@ class ArrayFileProvider extends FileProvider {
          * @name ArrayFileProviderOptions.itemsExpr
          * @type string|function(fileItem)
          */
-        const itemsExpr = options.itemsExpr || "items";
+        const itemsExpr = options.itemsExpr || 'items';
         this._subFileItemsGetter = compileGetter(itemsExpr);
         this._subFileItemsSetter = typeUtils.isFunction(itemsExpr) ? itemsExpr : compileSetter(itemsExpr);
 
@@ -116,7 +116,7 @@ class ArrayFileProvider extends FileProvider {
 
     _deleteItem({ parentPath, dataItem }) {
         let array = this._data;
-        if(parentPath !== "") {
+        if(parentPath !== '') {
             const folder = this._findItem(parentPath);
             array = this._subFileItemsGetter(folder);
         }
@@ -138,8 +138,8 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _getItems(path, itemType) {
-        if(path === "" || path === undefined) {
-            return this._convertDataObjectsToFileItems(this._data, "", itemType);
+        if(path === '' || path === undefined) {
+            return this._convertDataObjectsToFileItems(this._data, '', itemType);
         }
 
         const folderEntry = this._findItem(path);
@@ -148,13 +148,13 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _findItem(path) {
-        if(path === "") {
+        if(path === '') {
             return null;
         }
 
         let result = null;
         let data = this._data;
-        const parts = path.split("/");
+        const parts = path.split('/');
         for(let i = 0; i < parts.length; i++) {
             const part = parts[i];
             result = data.filter(entry => this._isDirGetter(entry) && this._nameGetter(entry) === part)[0];

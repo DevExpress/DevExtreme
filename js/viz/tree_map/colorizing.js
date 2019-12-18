@@ -1,5 +1,5 @@
-var _normalizeEnum = require("../core/utils").normalizeEnum,
-    _noop = require("../../core/utils/common").noop,
+var _normalizeEnum = require('../core/utils').normalizeEnum,
+    _noop = require('../../core/utils/common').noop,
 
     colorizers = {},
     defaultColorizerName;

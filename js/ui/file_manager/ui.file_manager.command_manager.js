@@ -1,5 +1,5 @@
-import { extend } from "../../core/utils/extend";
-import { isString } from "../../core/utils/type";
+import { extend } from '../../core/utils/extend';
+import { isString } from '../../core/utils/type';
 
 export class FileManagerCommandManager {
 
@@ -13,75 +13,75 @@ export class FileManagerCommandManager {
     _initCommands() {
         this._commands = [
             {
-                name: "create",
-                text: "New folder",
-                icon: "plus",
+                name: 'create',
+                text: 'New folder',
+                icon: 'plus',
                 enabled: this._permissions.create,
                 noFileItemRequired: true
             },
             {
-                name: "rename",
-                text: "Rename",
+                name: 'rename',
+                text: 'Rename',
                 enabled: this._permissions.rename,
                 isSingleFileItemCommand: true
             },
             {
-                name: "move",
-                text: "Move",
+                name: 'move',
+                text: 'Move',
                 enabled: this._permissions.move
             },
             {
-                name: "copy",
-                text: "Copy",
+                name: 'copy',
+                text: 'Copy',
                 enabled: this._permissions.copy
             },
             {
-                name: "delete",
-                text: "Delete",
-                icon: "trash",
+                name: 'delete',
+                text: 'Delete',
+                icon: 'trash',
                 enabled: this._permissions.remove,
             },
             {
-                name: "download",
-                text: "Download",
-                icon: "download",
+                name: 'download',
+                text: 'Download',
+                icon: 'download',
                 enabled: false
             },
             {
-                name: "upload",
-                text: "Upload files",
-                icon: "upload",
+                name: 'upload',
+                text: 'Upload files',
+                icon: 'upload',
                 enabled: this._permissions.upload,
                 noFileItemRequired: true
             },
             {
-                name: "refresh",
-                text: "Refresh",
-                icon: "refresh",
+                name: 'refresh',
+                text: 'Refresh',
+                icon: 'refresh',
                 enabled: true,
                 noFileItemRequired: true
             },
             {
-                name: "thumbnails",
-                text: "Thumbnails View",
+                name: 'thumbnails',
+                text: 'Thumbnails View',
                 enabled: true,
                 noFileItemRequired: true
             },
             {
-                name: "details",
-                text: "Details View",
+                name: 'details',
+                text: 'Details View',
                 enabled: true,
                 noFileItemRequired: true
             },
             {
-                name: "clear",
-                text: "Clear selection",
-                icon: "remove",
+                name: 'clear',
+                text: 'Clear selection',
+                icon: 'remove',
                 enabled: true
             },
             {
-                name: "showDirsPanel",
-                icon: "menu",
+                name: 'showDirsPanel',
+                icon: 'menu',
                 enabled: false,
                 noFileItemRequired: true
             }

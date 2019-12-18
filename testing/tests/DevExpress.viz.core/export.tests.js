@@ -1,14 +1,14 @@
-var vizMocks = require("../../helpers/vizMocks.js"),
-    exportModule = require("viz/core/export"),
-    themeModule = require("viz/themes"),
-    clientExporter = require("exporter");
+var vizMocks = require('../../helpers/vizMocks.js'),
+    exportModule = require('viz/core/export'),
+    themeModule = require('viz/themes'),
+    clientExporter = require('exporter');
 
 themeModule.registerTheme({
-    name: "someTheme.light",
-    backgroundColor: "some_theme_color"
+    name: 'someTheme.light',
+    backgroundColor: 'some_theme_color'
 });
 
-QUnit.module("Creation", {
+QUnit.module('Creation', {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.incidentOccurred = sinon.spy();
@@ -16,13 +16,13 @@ QUnit.module("Creation", {
         this.options = {
             enabled: true,
             printingEnabled: true,
-            formats: ["JPEG"],
-            backgroundColor: "#FFFFFF",
+            formats: ['JPEG'],
+            backgroundColor: '#FFFFFF',
             font: {
                 size: 16,
-                color: "#707070",
-                family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-                cursor: "pointer",
+                color: '#707070',
+                family: '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+                cursor: 'pointer',
                 weight: 200
             },
             button: {
@@ -32,32 +32,32 @@ QUnit.module("Creation", {
                     bottom: 3,
                     right: 4
                 },
-                "default": {
-                    color: "#707070",
-                    borderColor: "#b6b6b6",
-                    backgroundColor: "#f5f5f5"
+                'default': {
+                    color: '#707070',
+                    borderColor: '#b6b6b6',
+                    backgroundColor: '#f5f5f5'
                 },
                 hover: {
-                    color: "#333",
-                    borderColor: "#bebebe",
-                    backgroundColor: "#e6e6e6"
+                    color: '#333',
+                    borderColor: '#bebebe',
+                    backgroundColor: '#e6e6e6'
                 },
                 focus: {
-                    color: "#000",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#e6e6e6"
+                    color: '#000',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#e6e6e6'
                 },
                 active: {
-                    color: "#333",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#d4d4d4"
+                    color: '#333',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#d4d4d4'
                 }
             },
 
-            shadowColor: "#ababab"
+            shadowColor: '#ababab'
         };
 
-        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
     },
     afterEach: function() {
@@ -73,220 +73,220 @@ QUnit.module("Creation", {
     }
 });
 
-QUnit.test("Groups creation", function(assert) {
+QUnit.test('Groups creation', function(assert) {
     // arrange
     this.createExportMenu();
 
     // assert
-    assert.equal(this.renderer.g.callCount, 5, "Three groups");
-    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu", "hidden-for-export": true }, "Group attributes");
-    assert.deepEqual(this.renderer.g.getCall(1).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-button" }, "Button css-class");
-    assert.deepEqual(this.renderer.g.getCall(2).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-list" }, "List css-class");
-    assert.deepEqual(this.renderer.g.getCall(3).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-list-item" }, "List item css-class");
+    assert.equal(this.renderer.g.callCount, 5, 'Three groups');
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { 'class': 'dx-export-menu', 'hidden-for-export': true }, 'Group attributes');
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.attr.getCall(0).args[0], { 'class': 'dx-export-menu-button' }, 'Button css-class');
+    assert.deepEqual(this.renderer.g.getCall(2).returnValue.attr.getCall(0).args[0], { 'class': 'dx-export-menu-list' }, 'List css-class');
+    assert.deepEqual(this.renderer.g.getCall(3).returnValue.attr.getCall(0).args[0], { 'class': 'dx-export-menu-list-item' }, 'List item css-class');
 
     assert.equal(this.renderer.g.getCall(2).returnValue.append.getCall(0).args[0].element,
-        this.renderer.g.getCall(0).returnValue.element, "Element list is added to correct Parent");
+        this.renderer.g.getCall(0).returnValue.element, 'Element list is added to correct Parent');
 
     assert.equal(this.renderer.g.getCall(3).returnValue.append.getCall(0).args[0],
         this.renderer.g.getCall(2).returnValue);
 });
 
-QUnit.test("Button creation", function(assert) {
+QUnit.test('Button creation', function(assert) {
     // arrange, act
     this.createExportMenu();
 
     // assert
-    assert.deepEqual(this.renderer.rect.getCall(1).args, [0, 0, 35, 35], "Button rect");
+    assert.deepEqual(this.renderer.rect.getCall(1).args, [0, 0, 35, 35], 'Button rect');
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], {
         rx: 4,
         ry: 4,
-        fill: "#f5f5f5",
-        stroke: "#b6b6b6",
-        "stroke-width": 1,
-        cursor: "pointer"
-    }, "Button rect style");
-    assert.deepEqual(this.renderer.path.getCall(0).args[0], [[9, 12, 26, 12, 26, 14, 9, 14], [9, 17, 26, 17, 26, 19, 9, 19], [9, 22, 26, 22, 26, 24, 9, 24]], "button icon coords");
+        fill: '#f5f5f5',
+        stroke: '#b6b6b6',
+        'stroke-width': 1,
+        cursor: 'pointer'
+    }, 'Button rect style');
+    assert.deepEqual(this.renderer.path.getCall(0).args[0], [[9, 12, 26, 12, 26, 14, 9, 14], [9, 17, 26, 17, 26, 19, 9, 19], [9, 22, 26, 22, 26, 24, 9, 24]], 'button icon coords');
     assert.deepEqual(this.renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], {
-        fill: "#707070",
-        cursor: "pointer"
-    }, "Button arrow style");
+        fill: '#707070',
+        cursor: 'pointer'
+    }, 'Button arrow style');
     assert.deepEqual(this.renderer.path.getCall(0).returnValue.data.getCall(0).args[0], {
-        "export-element-type": "button"
-    }, "Button events data");
+        'export-element-type': 'button'
+    }, 'Button events data');
 
-    assert.deepEqual(this.renderer.g.getCall(1).returnValue.setTitle.getCall(0).args[0], "Exporting/Printing", "Hint for button");
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.setTitle.getCall(0).args[0], 'Exporting/Printing', 'Hint for button');
 });
 
-QUnit.test("List creation", function(assert) {
+QUnit.test('List creation', function(assert) {
     // arrange, act
-    this.options.formats = ["JPEG", "PNG"];
+    this.options.formats = ['JPEG', 'PNG'];
     this.createExportMenu();
 
     // assert
     // rect
-    assert.deepEqual(this.renderer.rect.getCall(0).args, [-85, 39, 120, 0], "List rect");
+    assert.deepEqual(this.renderer.rect.getCall(0).args, [-85, 39, 120, 0], 'List rect');
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], {
-        "stroke-width": 1,
-        cursor: "pointer",
-        filter: "shadowFilter.id",
+        'stroke-width': 1,
+        cursor: 'pointer',
+        filter: 'shadowFilter.id',
         rx: 4,
         ry: 4
-    }, "List rect style");
+    }, 'List rect style');
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0], {
-        fill: "#f5f5f5",
-        stroke: "#b6b6b6",
+        fill: '#f5f5f5',
+        stroke: '#b6b6b6',
         height: 92
-    }, "List rect style");
+    }, 'List rect style');
 
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.data.getCall(0).args[0], { "export-element-type": "list" }, "Rect data");
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.data.getCall(0).args[0], { 'export-element-type': 'list' }, 'Rect data');
     assert.strictEqual(this.renderer.rect.getCall(0).returnValue.append.lastCall.args[0], this.renderer.g.getCall(2).returnValue);
-    assert.deepEqual(this.renderer.shadowFilter.getCall(0).args, ["-50%", "-50%", "200%", "200%", 2, 6, 3], "Rect shadow creating");
-    assert.deepEqual(this.renderer.shadowFilter.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.8 }, "Rect shadow set opacity");
-    assert.deepEqual(this.renderer.shadowFilter.getCall(0).returnValue.attr.getCall(1).args[0], { color: "#ababab" }, "Rect shadow set Color");
+    assert.deepEqual(this.renderer.shadowFilter.getCall(0).args, ['-50%', '-50%', '200%', '200%', 2, 6, 3], 'Rect shadow creating');
+    assert.deepEqual(this.renderer.shadowFilter.getCall(0).returnValue.attr.getCall(0).args[0], { opacity: 0.8 }, 'Rect shadow set opacity');
+    assert.deepEqual(this.renderer.shadowFilter.getCall(0).returnValue.attr.getCall(1).args[0], { color: '#ababab' }, 'Rect shadow set Color');
 
     // separator
 
-    assert.equal(this.renderer.path.getCall(1).args[1], "line", "List separator type");
+    assert.equal(this.renderer.path.getCall(1).args[1], 'line', 'List separator type');
     assert.deepEqual(this.renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], {
-        d: "M -85 69 L 35 69",
-        stroke: "#b6b6b6",
-        "stroke-width": 1,
-        sharp: "v",
-        cursor: "pointer"
-    }, "List separator style");
+        d: 'M -85 69 L 35 69',
+        stroke: '#b6b6b6',
+        'stroke-width': 1,
+        sharp: 'v',
+        cursor: 'pointer'
+    }, 'List separator style');
 
     // texts
-    assert.equal(this.renderer.text.callCount, 3, "Texts count");
+    assert.equal(this.renderer.text.callCount, 3, 'Texts count');
 
     // printing text
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["Print"], "Printing text params");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['Print'], 'Printing text params');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "font-size": 16,
-        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-        fill: "#707070",
-        "font-weight": 200,
-        "pointer-events": "none",
-        cursor: "pointer"
-    }, "Printing text style");
+        'font-size': 16,
+        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fill: '#707070',
+        'font-weight': 200,
+        'pointer-events': 'none',
+        cursor: 'pointer'
+    }, 'Printing text style');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
-        "x": -70,
-        "y": 62
-    }, "Printing text attributes");
+        'x': -70,
+        'y': 62
+    }, 'Printing text attributes');
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.data.getCall(0).args[0], {
-        "export-element-type": "printing"
-    }, "Printing rect events data");
+        'export-element-type': 'printing'
+    }, 'Printing rect events data');
 
     // JPEG group
-    assert.deepEqual(this.renderer.text.getCall(1).args, ["JPEG file"], "JPEG text params");
+    assert.deepEqual(this.renderer.text.getCall(1).args, ['JPEG file'], 'JPEG text params');
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.css.getCall(0).args[0], {
-        "font-size": 16,
-        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-        fill: "#707070",
-        "pointer-events": "none",
-        "font-weight": 200,
-        cursor: "pointer"
-    }, "JPEG text style");
+        'font-size': 16,
+        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fill: '#707070',
+        'pointer-events': 'none',
+        'font-weight': 200,
+        cursor: 'pointer'
+    }, 'JPEG text style');
     assert.deepEqual(this.renderer.rect.getCall(3).returnValue.data.getCall(0).args[0], {
-        "export-element-type": "exporting",
-        "export-element-format": "JPEG"
-    }, "JPEG rect events data");
+        'export-element-type': 'exporting',
+        'export-element-format': 'JPEG'
+    }, 'JPEG rect events data');
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], {
         x: -70,
         y: 92
-    }, "JPEG text attrs");
+    }, 'JPEG text attrs');
 
     // PNG group
-    assert.deepEqual(this.renderer.text.getCall(2).args, ["PNG file"], "PNG text params");
+    assert.deepEqual(this.renderer.text.getCall(2).args, ['PNG file'], 'PNG text params');
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.css.getCall(0).args[0], {
-        "font-size": 16,
-        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-        fill: "#707070",
-        "pointer-events": "none",
-        "font-weight": 200,
-        cursor: "pointer"
-    }, "PNG text style");
+        'font-size': 16,
+        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fill: '#707070',
+        'pointer-events': 'none',
+        'font-weight': 200,
+        cursor: 'pointer'
+    }, 'PNG text style');
     assert.deepEqual(this.renderer.rect.getCall(4).returnValue.data.getCall(0).args[0], {
-        "export-element-type": "exporting",
-        "export-element-format": "PNG"
-    }, "PNG rect events data");
+        'export-element-type': 'exporting',
+        'export-element-format': 'PNG'
+    }, 'PNG rect events data');
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.attr.getCall(0).args[0], {
         x: -70,
         y: 122
-    }, "PNG text attrs");
+    }, 'PNG text attrs');
 });
 
-QUnit.test("List creation, without printing", function(assert) {
+QUnit.test('List creation, without printing', function(assert) {
     // arrange, act
     this.options.printingEnabled = false;
     this.createExportMenu();
 
     // assert
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], {
-        "stroke-width": 1,
-        cursor: "pointer",
-        filter: "shadowFilter.id",
+        'stroke-width': 1,
+        cursor: 'pointer',
+        filter: 'shadowFilter.id',
         rx: 4,
         ry: 4
-    }, "list rect style");
+    }, 'list rect style');
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0], {
-        fill: "#f5f5f5",
-        stroke: "#b6b6b6",
+        fill: '#f5f5f5',
+        stroke: '#b6b6b6',
         height: 32
-    }, "list rect style");
+    }, 'list rect style');
 
-    assert.equal(this.renderer.path.callCount, 1, "paths count");
-    assert.equal(this.renderer.text.callCount, 1, "texts count");
+    assert.equal(this.renderer.path.callCount, 1, 'paths count');
+    assert.equal(this.renderer.text.callCount, 1, 'texts count');
 
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["JPEG file"], "jpeg text params");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['JPEG file'], 'jpeg text params');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         x: -70,
         y: 62
-    }, "JPEG text attrs");
+    }, 'JPEG text attrs');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "font-size": 16,
-        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-        fill: "#707070",
-        "pointer-events": "none",
-        "font-weight": 200,
-        cursor: "pointer"
-    }, "jpeg text style");
+        'font-size': 16,
+        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fill: '#707070',
+        'pointer-events': 'none',
+        'font-weight': 200,
+        cursor: 'pointer'
+    }, 'jpeg text style');
 });
 
-QUnit.test("List creation, without formats", function(assert) {
+QUnit.test('List creation, without formats', function(assert) {
     // arrange, act
     this.options.formats = [];
     this.createExportMenu();
 
     // assert
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0].height, 32, "List rect");
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0].height, 32, 'List rect');
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.css.getCall(0).args[0], {
-        cursor: "pointer",
-        "pointer-events": "all"
-    }, "List rect style");
+        cursor: 'pointer',
+        'pointer-events': 'all'
+    }, 'List rect style');
 
-    assert.equal(this.renderer.path.callCount, 2, "Paths count");
-    assert.equal(this.renderer.text.callCount, 1, "Texts count");
+    assert.equal(this.renderer.path.callCount, 2, 'Paths count');
+    assert.equal(this.renderer.text.callCount, 1, 'Texts count');
 
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["Print"], "Printing text params");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['Print'], 'Printing text params');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         x: -70,
         y: 62
-    }, "Printing text attributes");
+    }, 'Printing text attributes');
 
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "font-size": 16,
-        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-        fill: "#707070",
-        "pointer-events": "none",
-        "font-weight": 200,
-        cursor: "pointer"
-    }, "Printing text style");
+        'font-size': 16,
+        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fill: '#707070',
+        'pointer-events': 'none',
+        'font-weight': 200,
+        cursor: 'pointer'
+    }, 'Printing text style');
 });
 
-QUnit.test("List creation with unsupported image format - do not create item nor throw incident", function(assert) {
+QUnit.test('List creation with unsupported image format - do not create item nor throw incident', function(assert) {
     // arrange
-    this.toDataURLStub.withArgs("image/jpeg").returns("image/png");
-    this.toDataURLStub.withArgs("image/gif").returns("image/png");
+    this.toDataURLStub.withArgs('image/jpeg').returns('image/png');
+    this.toDataURLStub.withArgs('image/gif').returns('image/png');
 
     this.options.formats = null;
     this.options.printingEnabled = false;
@@ -296,18 +296,18 @@ QUnit.test("List creation with unsupported image format - do not create item nor
 
     // assert
     assert.equal(this.renderer.text.callCount, 3);
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "PNG text params");
-    assert.deepEqual(this.renderer.text.getCall(1).args, ["PDF file"], "PDF text params");
-    assert.deepEqual(this.renderer.text.getCall(2).args, ["SVG file"], "SVG text params");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['PNG file'], 'PNG text params');
+    assert.deepEqual(this.renderer.text.getCall(1).args, ['PDF file'], 'PDF text params');
+    assert.deepEqual(this.renderer.text.getCall(2).args, ['SVG file'], 'SVG text params');
     assert.equal(this.incidentOccurred.callCount, 0);
 });
 
-QUnit.test("List creation with unsupported image format in options - do not create item but throw incident", function(assert) {
+QUnit.test('List creation with unsupported image format in options - do not create item but throw incident', function(assert) {
     // arrange
-    this.toDataURLStub.withArgs("image/jpeg").returns("image/png");
-    this.toDataURLStub.withArgs("image/gif").returns("image/png");
+    this.toDataURLStub.withArgs('image/jpeg').returns('image/png');
+    this.toDataURLStub.withArgs('image/gif').returns('image/png');
 
-    this.options.formats = ["PNG", "GIF", "JPEG"];
+    this.options.formats = ['PNG', 'GIF', 'JPEG'];
     this.options.printingEnabled = false;
 
     // act
@@ -315,135 +315,135 @@ QUnit.test("List creation with unsupported image format in options - do not crea
 
     // assert
     assert.equal(this.renderer.text.callCount, 1);
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "SUPPORTED text params");
-    assert.deepEqual(this.incidentOccurred.getCall(0).args, ["W2108", ["GIF"]]);
-    assert.deepEqual(this.incidentOccurred.getCall(1).args, ["W2108", ["JPEG"]]);
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['PNG file'], 'SUPPORTED text params');
+    assert.deepEqual(this.incidentOccurred.getCall(0).args, ['W2108', ['GIF']]);
+    assert.deepEqual(this.incidentOccurred.getCall(1).args, ['W2108', ['JPEG']]);
 });
 
-QUnit.test("Without printing and formats", function(assert) {
+QUnit.test('Without printing and formats', function(assert) {
     // arrange, act
     this.options.formats = [];
     this.options.printingEnabled = false;
     this.createExportMenu();
 
     // assert
-    assert.equal(this.renderer.stub("rect").callCount, 1, "List rect");
-    assert.strictEqual(this.renderer.stub("rect").getCall(0).returnValue.stub("append").callCount, 0, "List rect");
-    assert.equal(this.renderer.stub("path").callCount, 0, "No paths");
-    assert.equal(this.renderer.stub("text").callCount, 0, "No texts");
+    assert.equal(this.renderer.stub('rect').callCount, 1, 'List rect');
+    assert.strictEqual(this.renderer.stub('rect').getCall(0).returnValue.stub('append').callCount, 0, 'List rect');
+    assert.equal(this.renderer.stub('path').callCount, 0, 'No paths');
+    assert.equal(this.renderer.stub('text').callCount, 0, 'No texts');
 });
 
-QUnit.test("Enabled options is false", function(assert) {
+QUnit.test('Enabled options is false', function(assert) {
     // arrange, act
     this.options.enabled = false;
     this.createExportMenu();
 
     // assert
-    assert.equal(this.renderer.stub("rect").callCount, 1, "List rect");
-    assert.strictEqual(this.renderer.stub("rect").getCall(0).returnValue.stub("append").callCount, 0, "List rect");
-    assert.equal(this.renderer.stub("path").callCount, 0, "No paths");
-    assert.equal(this.renderer.stub("text").callCount, 0, "No texts");
+    assert.equal(this.renderer.stub('rect').callCount, 1, 'List rect');
+    assert.strictEqual(this.renderer.stub('rect').getCall(0).returnValue.stub('append').callCount, 0, 'List rect');
+    assert.equal(this.renderer.stub('path').callCount, 0, 'No paths');
+    assert.equal(this.renderer.stub('text').callCount, 0, 'No texts');
 });
 
-QUnit.module("API. Markup manipulations");
+QUnit.module('API. Markup manipulations');
 
-QUnit.test("getMarkup method", function(assert) {
+QUnit.test('getMarkup method', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg </svg>"),
+                svg: sinon.stub().returns('<svg </svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
+                    if(param === 'backgroundColor') return 'backgroundColor';
                 }
             };
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"><svg </svg></g><g transform=\"translate(0,25)\"><svg </svg></g></svg>");
+    assert.equal(markup, '<svg data-backgroundcolor="backgroundColor" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
 });
 
-QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
+QUnit.test('getMarkup. BackgroundColor in theme', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg </svg>"),
+                svg: sinon.stub().returns('<svg </svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "theme") return "someTheme.light";
+                    if(param === 'theme') return 'someTheme.light';
                 }
             };
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"><svg </svg></g><g transform=\"translate(0,25)\"><svg </svg></g></svg>");
+    assert.equal(markup, '<svg data-backgroundcolor="some_theme_color" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
 });
 
-QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result", function(assert) {
-    var colors = ["color_1", "color_2"],
+QUnit.test('getMarkup. Different colors in charts. No backgroundColor in result', function(assert) {
+    var colors = ['color_1', 'color_2'],
         i = 0,
         createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg </svg>"),
+                svg: sinon.stub().returns('<svg </svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return colors[i++];
+                    if(param === 'backgroundColor') return colors[i++];
                 }
             };
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"><svg </svg></g><g transform=\"translate(0,25)\"><svg </svg></g></svg>");
+    assert.equal(markup, '<svg data-backgroundcolor="" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
 });
 
-QUnit.test("Combine widgets markups (combineMarkups), just widget", function(assert) {
+QUnit.test('Combine widgets markups (combineMarkups), just widget', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg></svg>"),
+                svg: sinon.stub().returns('<svg></svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
+                    if(param === 'backgroundColor') return 'backgroundColor';
                 }
             };
         },
         markupData = exportModule.combineMarkups(createWidget({ width: 10, height: 25 }));
 
     assert.deepEqual(markupData, {
-        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"25\" width=\"10\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(0,0)\"><svg></svg></g>"
-            + "</svg>",
+        markup: '<svg data-backgroundcolor="backgroundColor" height="25" width="10" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+            + '<g transform="translate(0,0)"><svg></svg></g>'
+            + '</svg>',
         width: 10,
         height: 25
     });
 });
 
-QUnit.test("Combine widgets markups (combineMarkups), array of widgets - column", function(assert) {
+QUnit.test('Combine widgets markups (combineMarkups), array of widgets - column', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg></svg>"),
+                svg: sinon.stub().returns('<svg></svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
+                    if(param === 'backgroundColor') return 'backgroundColor';
                 }
             };
         },
         markupData = exportModule.combineMarkups([createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })]);
 
     assert.deepEqual(markupData, {
-        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(0,0)\"><svg></svg></g>"
-            + "<g transform=\"translate(0,25)\"><svg></svg></g>"
-            + "</svg>",
+        markup: '<svg data-backgroundcolor="backgroundColor" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+            + '<g transform="translate(0,0)"><svg></svg></g>'
+            + '<g transform="translate(0,25)"><svg></svg></g>'
+            + '</svg>',
         width: 15,
         height: 40
     });
 });
 
-QUnit.test("Combine widgets markups (combineMarkups), array of arrays of widgets - nested arrays are rows", function(assert) {
+QUnit.test('Combine widgets markups (combineMarkups), array of arrays of widgets - nested arrays are rows', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg></svg>"),
+                svg: sinon.stub().returns('<svg></svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
+                    if(param === 'backgroundColor') return 'backgroundColor';
                 }
             };
         },
@@ -453,22 +453,22 @@ QUnit.test("Combine widgets markups (combineMarkups), array of arrays of widgets
         ]);
 
     assert.deepEqual(markupData, {
-        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"30\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(0,0)\"><svg></svg></g><g transform=\"translate(10,0)\"><svg></svg></g>"
-            + "<g transform=\"translate(0,25)\"><svg></svg></g><g transform=\"translate(20,25)\"><svg></svg></g>"
-            + "</svg>",
+        markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="30" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+            + '<g transform="translate(0,0)"><svg></svg></g><g transform="translate(10,0)"><svg></svg></g>'
+            + '<g transform="translate(0,25)"><svg></svg></g><g transform="translate(20,25)"><svg></svg></g>'
+            + '</svg>',
         width: 30,
         height: 60
     });
 });
 
-QUnit.test("Combine widgets markups (combineMarkups) in grid layout with center-center alignments", function(assert) {
+QUnit.test('Combine widgets markups (combineMarkups) in grid layout with center-center alignments', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg></svg>"),
+                svg: sinon.stub().returns('<svg></svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
+                    if(param === 'backgroundColor') return 'backgroundColor';
                 }
             };
         },
@@ -477,27 +477,27 @@ QUnit.test("Combine widgets markups (combineMarkups) in grid layout with center-
             [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
         ], {
             gridLayout: true,
-            verticalAlignment: "center",
-            horizontalAlignment: "center"
+            verticalAlignment: 'center',
+            horizontalAlignment: 'center'
         });
 
     assert.deepEqual(markupData, {
-        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"40\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(5,0)\"><svg></svg></g><g transform=\"translate(22,5)\"><svg></svg></g>"
-            + "<g transform=\"translate(0,35)\"><svg></svg></g><g transform=\"translate(25,25)\"><svg></svg></g>"
-            + "</svg>",
+        markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+            + '<g transform="translate(5,0)"><svg></svg></g><g transform="translate(22,5)"><svg></svg></g>'
+            + '<g transform="translate(0,35)"><svg></svg></g><g transform="translate(25,25)"><svg></svg></g>'
+            + '</svg>',
         width: 40,
         height: 60
     });
 });
 
-QUnit.test("Combine widgets markups (combineMarkups) in grid layout with bottom-right alignments", function(assert) {
+QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-right alignments', function(assert) {
     var createWidget = function(size) {
             return {
-                svg: sinon.stub().returns("<svg></svg>"),
+                svg: sinon.stub().returns('<svg></svg>'),
                 getSize: sinon.stub().returns(size),
                 option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
+                    if(param === 'backgroundColor') return 'backgroundColor';
                 }
             };
         },
@@ -506,25 +506,25 @@ QUnit.test("Combine widgets markups (combineMarkups) in grid layout with bottom-
             [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
         ], {
             gridLayout: true,
-            verticalAlignment: "bottom",
-            horizontalAlignment: "right"
+            verticalAlignment: 'bottom',
+            horizontalAlignment: 'right'
         });
 
     assert.deepEqual(markupData, {
-        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"40\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
-            + "<g transform=\"translate(10,0)\"><svg></svg></g><g transform=\"translate(24,10)\"><svg></svg></g>"
-            + "<g transform=\"translate(0,45)\"><svg></svg></g><g transform=\"translate(30,25)\"><svg></svg></g>"
-            + "</svg>",
+        markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+            + '<g transform="translate(10,0)"><svg></svg></g><g transform="translate(24,10)"><svg></svg></g>'
+            + '<g transform="translate(0,45)"><svg></svg></g><g transform="translate(30,25)"><svg></svg></g>'
+            + '</svg>',
         width: 40,
         height: 60
     });
 });
 
-QUnit.module("API. Export methods", {
+QUnit.module('API. Export methods', {
     beforeEach: function() {
-        sinon.stub(clientExporter, "export");
-        sinon.stub(exportModule, "combineMarkups");
-        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        sinon.stub(clientExporter, 'export');
+        sinon.stub(exportModule, 'combineMarkups');
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
     },
     afterEach: function() {
@@ -534,23 +534,23 @@ QUnit.module("API. Export methods", {
     }
 });
 
-QUnit.test("exportFromMarkup method. Defaults", function(assert) {
+QUnit.test('exportFromMarkup method. Defaults', function(assert) {
     // arrange
     var options = {
             width: 600,
             height: 400
         },
-        markup = "testMarkup";
+        markup = 'testMarkup';
 
     // act
     exportModule.exportFromMarkup(markup, options);
 
     // assert
-    assert.equal(clientExporter.export.callCount, 1, "Export was called");
-    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.equal(clientExporter.export.callCount, 1, 'Export was called');
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], 'testMarkup', 'Export data');
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        format: "PNG",
-        fileName: "file",
+        format: 'PNG',
+        fileName: 'file',
         width: 600,
         height: 400,
         margin: 10,
@@ -558,65 +558,65 @@ QUnit.test("exportFromMarkup method. Defaults", function(assert) {
         exportingAction: undefined,
         exportedAction: undefined,
         backgroundColor: undefined
-    }, "Export options");
+    }, 'Export options');
 });
 
-QUnit.test("exportFromMarkup method. Set options", function(assert) {
+QUnit.test('exportFromMarkup method. Set options', function(assert) {
     // arrange
     var options = {
-            format: "jpeg",
-            fileName: "file1",
-            proxyUrl: "testUrl",
+            format: 'jpeg',
+            fileName: 'file1',
+            proxyUrl: 'testUrl',
             width: 600,
             height: 400,
             margin: 0,
-            backgroundColor: "#00ff00",
-            onFileSaving: "file saving callback",
-            onExporting: "exporting callback",
-            onExported: "exported callback",
+            backgroundColor: '#00ff00',
+            onFileSaving: 'file saving callback',
+            onExporting: 'exporting callback',
+            onExported: 'exported callback',
             forceProxy: true
         },
-        markup = "testMarkup";
+        markup = 'testMarkup';
 
     // act
     exportModule.exportFromMarkup(markup, options);
 
     // assert
-    assert.equal(clientExporter.export.callCount, 1, "Export was called");
-    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.equal(clientExporter.export.callCount, 1, 'Export was called');
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], 'testMarkup', 'Export data');
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        format: "JPEG",
-        fileName: "file1",
-        proxyUrl: "testUrl",
+        format: 'JPEG',
+        fileName: 'file1',
+        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
         forceProxy: true,
-        backgroundColor: "#00ff00",
-        onFileSaving: "file saving callback",
-        onExporting: "exporting callback",
-        onExported: "exported callback",
-        fileSavingAction: "file saving callback",
-        exportingAction: "exporting callback",
-        exportedAction: "exported callback"
-    }, "Export options");
+        backgroundColor: '#00ff00',
+        onFileSaving: 'file saving callback',
+        onExporting: 'exporting callback',
+        onExported: 'exported callback',
+        fileSavingAction: 'file saving callback',
+        exportingAction: 'exporting callback',
+        exportedAction: 'exported callback'
+    }, 'Export options');
 });
 
-QUnit.test("exportFromMarkup unsupported image format - export as PNG", function(assert) {
+QUnit.test('exportFromMarkup unsupported image format - export as PNG', function(assert) {
     // arrange
-    this.toDataURLStub.withArgs("image/gif").returns("image/png");
+    this.toDataURLStub.withArgs('image/gif').returns('image/png');
 
     var options = {
-            format: "gif",
-            fileName: "file1",
-            proxyUrl: "testUrl",
+            format: 'gif',
+            fileName: 'file1',
+            proxyUrl: 'testUrl',
             width: 600,
             height: 400,
             margin: 0,
-            backgroundColor: "#00ff00",
-            onFileSaving: "file saving callback",
-            onExporting: "exporting callback",
-            onExported: "exported callback",
+            backgroundColor: '#00ff00',
+            onFileSaving: 'file saving callback',
+            onExporting: 'exporting callback',
+            onExported: 'exported callback',
             forceProxy: true
         },
         markup = 'testMarkup data-backgroundcolor="someColor"';
@@ -626,24 +626,24 @@ QUnit.test("exportFromMarkup unsupported image format - export as PNG", function
 
     // assert
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        format: "PNG",
-        fileName: "file1",
-        proxyUrl: "testUrl",
+        format: 'PNG',
+        fileName: 'file1',
+        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
         forceProxy: true,
-        backgroundColor: "#00ff00",
-        onFileSaving: "file saving callback",
-        onExporting: "exporting callback",
-        onExported: "exported callback",
-        fileSavingAction: "file saving callback",
-        exportingAction: "exporting callback",
-        exportedAction: "exported callback"
-    }, "Export options");
+        backgroundColor: '#00ff00',
+        onFileSaving: 'file saving callback',
+        onExporting: 'exporting callback',
+        onExported: 'exported callback',
+        fileSavingAction: 'file saving callback',
+        exportingAction: 'exporting callback',
+        exportedAction: 'exported callback'
+    }, 'Export options');
 });
 
-QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
+QUnit.test('exportFromMarkup. backgroundColor from markup', function(assert) {
     // arrange
     var options = {
             width: 600,
@@ -655,23 +655,23 @@ QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
     exportModule.exportFromMarkup(markup, options);
 
     // assert
-    assert.equal(clientExporter.export.callCount, 1, "Export was called");
+    assert.equal(clientExporter.export.callCount, 1, 'Export was called');
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        backgroundColor: "someColor",
-        format: "PNG",
-        fileName: "file",
+        backgroundColor: 'someColor',
+        format: 'PNG',
+        fileName: 'file',
         width: 600,
         height: 400,
         margin: 10,
         fileSavingAction: undefined,
         exportingAction: undefined,
         exportedAction: undefined
-    }, "Export options");
+    }, 'Export options');
 });
 
-QUnit.test("exportWidgets method. Defaults", function(assert) {
+QUnit.test('exportWidgets method. Defaults', function(assert) {
     // arrange
-    exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
+    exportModule.combineMarkups.returns({ markup: 'testMarkup', width: 600, height: 400 });
 
     // act
     exportModule.exportWidgets([{ widget1: true }, { widget2: true }]);
@@ -685,11 +685,11 @@ QUnit.test("exportWidgets method. Defaults", function(assert) {
             horizontalAlignment: undefined
         }
     ]);
-    assert.equal(clientExporter.export.callCount, 1, "Export was called");
-    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.equal(clientExporter.export.callCount, 1, 'Export was called');
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], 'testMarkup', 'Export data');
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        format: "PNG",
-        fileName: "file",
+        format: 'PNG',
+        fileName: 'file',
         width: 600,
         height: 400,
         margin: 10,
@@ -697,28 +697,28 @@ QUnit.test("exportWidgets method. Defaults", function(assert) {
         exportingAction: undefined,
         exportedAction: undefined,
         backgroundColor: undefined
-    }, "Export options");
+    }, 'Export options');
 });
 
-QUnit.test("exportWidgets method. Set options. Size options are ignored", function(assert) {
+QUnit.test('exportWidgets method. Set options. Size options are ignored', function(assert) {
     // arrange
     var options = {
-        format: "jpeg",
-        fileName: "file1",
-        proxyUrl: "testUrl",
+        format: 'jpeg',
+        fileName: 'file1',
+        proxyUrl: 'testUrl',
         width: 1000,
         height: 2000,
         margin: 0,
-        backgroundColor: "#00ff00",
-        onFileSaving: "file saving callback",
-        onExporting: "exporting callback",
-        onExported: "exported callback",
+        backgroundColor: '#00ff00',
+        onFileSaving: 'file saving callback',
+        onExporting: 'exporting callback',
+        onExported: 'exported callback',
         forceProxy: true,
         gridLayout: true,
-        verticalAlignment: "bottom",
-        horizontalAlignment: "right"
+        verticalAlignment: 'bottom',
+        horizontalAlignment: 'right'
     };
-    exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
+    exportModule.combineMarkups.returns({ markup: 'testMarkup', width: 600, height: 400 });
 
     // act
     exportModule.exportWidgets([{ widget1: true }, { widget2: true }], options);
@@ -728,42 +728,42 @@ QUnit.test("exportWidgets method. Set options. Size options are ignored", functi
         [{ widget1: true }, { widget2: true }],
         {
             gridLayout: true,
-            verticalAlignment: "bottom",
-            horizontalAlignment: "right"
+            verticalAlignment: 'bottom',
+            horizontalAlignment: 'right'
         }
     ]);
-    assert.equal(clientExporter.export.callCount, 1, "Export was called");
-    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.equal(clientExporter.export.callCount, 1, 'Export was called');
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], 'testMarkup', 'Export data');
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        format: "JPEG",
-        fileName: "file1",
-        proxyUrl: "testUrl",
+        format: 'JPEG',
+        fileName: 'file1',
+        proxyUrl: 'testUrl',
         width: 600,
         height: 400,
         margin: 0,
         forceProxy: true,
-        backgroundColor: "#00ff00",
-        onFileSaving: "file saving callback",
-        onExporting: "exporting callback",
-        onExported: "exported callback",
-        fileSavingAction: "file saving callback",
-        exportingAction: "exporting callback",
-        exportedAction: "exported callback",
+        backgroundColor: '#00ff00',
+        onFileSaving: 'file saving callback',
+        onExporting: 'exporting callback',
+        onExported: 'exported callback',
+        fileSavingAction: 'file saving callback',
+        exportingAction: 'exporting callback',
+        exportedAction: 'exported callback',
         gridLayout: true,
-        verticalAlignment: "bottom",
-        horizontalAlignment: "right"
-    }, "Export options");
+        verticalAlignment: 'bottom',
+        horizontalAlignment: 'right'
+    }, 'Export options');
 });
 
-QUnit.module("API", {
+QUnit.module('API', {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, "export");
+        sinon.stub(clientExporter, 'export');
         this.options = {
             printingEnabled: true,
-            formats: ["JPEG"],
+            formats: ['JPEG'],
             enabled: true,
             font: {},
 
@@ -774,25 +774,25 @@ QUnit.module("API", {
                     bottom: 3,
                     right: 4
                 },
-                "default": {
-                    color: "#707070",
-                    borderColor: "#b6b6b6",
-                    backgroundColor: "#f5f5f5"
+                'default': {
+                    color: '#707070',
+                    borderColor: '#b6b6b6',
+                    backgroundColor: '#f5f5f5'
                 },
                 hover: {
-                    color: "#333",
-                    borderColor: "#bebebe",
-                    backgroundColor: "#e6e6e6"
+                    color: '#333',
+                    borderColor: '#bebebe',
+                    backgroundColor: '#e6e6e6'
                 },
                 focus: {
-                    color: "#000",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#e6e6e6"
+                    color: '#000',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#e6e6e6'
                 },
                 active: {
-                    color: "#333",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#d4d4d4"
+                    color: '#333',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#d4d4d4'
                 }
             },
             exportOptions: {
@@ -800,7 +800,7 @@ QUnit.module("API", {
                 height: 200
             }
         };
-        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
         this.srcCurrentTheme = themeModule.currentTheme();
     },
@@ -819,7 +819,7 @@ QUnit.module("API", {
     }
 });
 
-QUnit.test("Get layout options", function(assert) {
+QUnit.test('Get layout options', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu(),
         layout;
@@ -829,23 +829,23 @@ QUnit.test("Get layout options", function(assert) {
 
     // assert
     assert.deepEqual(layout, {
-        cutLayoutSide: "top",
-        cutSide: "vertical",
+        cutLayoutSide: 'top',
+        cutSide: 'vertical',
         height: 20,
         width: 20,
         x: 1,
         y: 2,
-        horizontalAlignment: "right",
+        horizontalAlignment: 'right',
         position: {
-            horizontal: "right",
-            vertical: "top"
+            horizontal: 'right',
+            vertical: 'top'
         },
-        verticalAlignment: "top"
-    }, "layout options");
-    assert.equal(this.renderer.g.getCall(1).returnValue.getBBox.callCount, 1, "getBBox is called");
+        verticalAlignment: 'top'
+    }, 'layout options');
+    assert.equal(this.renderer.g.getCall(1).returnValue.getBBox.callCount, 1, 'getBBox is called');
 });
 
-QUnit.test("Draw", function(assert) {
+QUnit.test('Draw', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -853,10 +853,10 @@ QUnit.test("Draw", function(assert) {
     exportMenu.draw(100, 60, { width: 30, height: 30, left: 50 });
 
     // assert
-    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.getCall(0).args, [110, 12], "group moving");
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.getCall(0).args, [110, 12], 'group moving');
 });
 
-QUnit.test("Shift", function(assert) {
+QUnit.test('Shift', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -866,10 +866,10 @@ QUnit.test("Shift", function(assert) {
     exportMenu.shift(10, 20);
 
     // assert
-    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(1).args[0], { translateY: 20 }, "y shifting");
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(1).args[0], { translateY: 20 }, 'y shifting');
 });
 
-QUnit.test("Move", function(assert) {
+QUnit.test('Move', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -882,7 +882,7 @@ QUnit.test("Move", function(assert) {
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 11, translateY: 22 });
 });
 
-QUnit.test("Measure", function(assert) {
+QUnit.test('Measure', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
     // act
@@ -891,7 +891,7 @@ QUnit.test("Measure", function(assert) {
     assert.deepEqual(size, [40, 40]);
 });
 
-QUnit.test("Hide", function(assert) {
+QUnit.test('Hide', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -899,10 +899,10 @@ QUnit.test("Hide", function(assert) {
     exportMenu.hide();
 
     // assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, "link is removed");
+    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, 'link is removed');
 });
 
-QUnit.test("Show", function(assert) {
+QUnit.test('Show', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -910,10 +910,10 @@ QUnit.test("Show", function(assert) {
     exportMenu.show();
 
     // assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 2, "link is appended");
+    assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 2, 'link is appended');
 });
 
-QUnit.test("Set options", function(assert) {
+QUnit.test('Set options', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -924,79 +924,79 @@ QUnit.test("Set options", function(assert) {
     // act
     exportMenu.setOptions({
         enabled: true,
-        formats: ["png", "abc"],
+        formats: ['png', 'abc'],
         printingEnabled: false,
         font: {
             size: 16,
-            color: "#707070",
-            cursor: "pointer",
-            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            color: '#707070',
+            cursor: 'pointer',
+            family: '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
             weight: 200
         },
         button: {
-            "default": {
-                color: "#707070",
-                borderColor: "#b6b6b6",
-                backgroundColor: "#f5f5f5"
+            'default': {
+                color: '#707070',
+                borderColor: '#b6b6b6',
+                backgroundColor: '#f5f5f5'
             },
             hover: {
-                color: "#333",
-                borderColor: "#bebebe",
-                backgroundColor: "#e6e6e6"
+                color: '#333',
+                borderColor: '#bebebe',
+                backgroundColor: '#e6e6e6'
             },
             focus: {
-                color: "#000",
-                borderColor: "#9d9d9d",
-                backgroundColor: "#e6e6e6"
+                color: '#000',
+                borderColor: '#9d9d9d',
+                backgroundColor: '#e6e6e6'
             },
             active: {
-                color: "#333",
-                borderColor: "#9d9d9d",
-                backgroundColor: "#d4d4d4"
+                color: '#333',
+                borderColor: '#9d9d9d',
+                backgroundColor: '#d4d4d4'
             }
         },
-        backgroundColor: "#f5f5f5",
-        menuButtonColor: "#f5f5f5",
-        borderColor: "#b6b6b6"
+        backgroundColor: '#f5f5f5',
+        menuButtonColor: '#f5f5f5',
+        borderColor: '#b6b6b6'
     });
 
     // assert
     var listGroup = this.renderer.g.getCall(2).returnValue;
 
-    assert.equal(listGroup.clear.callCount, 2, "clearing");
-    assert.equal(this.renderer.rect.callCount, 1, "rect");
-    assert.equal(this.renderer.path.callCount, 0, "path");
-    assert.equal(this.renderer.text.callCount, 1, "text");
+    assert.equal(listGroup.clear.callCount, 2, 'clearing');
+    assert.equal(this.renderer.rect.callCount, 1, 'rect');
+    assert.equal(this.renderer.path.callCount, 0, 'path');
+    assert.equal(this.renderer.text.callCount, 1, 'text');
 
-    assert.deepEqual(this.renderer.rect.getCall(0).args, [], "List rect");
+    assert.deepEqual(this.renderer.rect.getCall(0).args, [], 'List rect');
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], {
         height: 30,
         width: 118,
         x: -84,
         y: 40
-    }, "List rect attributes");
+    }, 'List rect attributes');
 
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.css.getCall(0).args[0], {
-        "pointer-events": "all",
-        cursor: "pointer"
-    }, "List rect style");
+        'pointer-events': 'all',
+        cursor: 'pointer'
+    }, 'List rect style');
 
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "PNG text params");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['PNG file'], 'PNG text params');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
-        "x": -70,
-        "y": 62
-    }, "PNG text attributes");
+        'x': -70,
+        'y': 62
+    }, 'PNG text attributes');
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
-        "font-size": 16,
-        "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-        fill: "#707070",
-        "pointer-events": "none",
-        "font-weight": 200,
-        cursor: "pointer"
-    }, "PNG text style");
+        'font-size': 16,
+        'font-family': '\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
+        fill: '#707070',
+        'pointer-events': 'none',
+        'font-weight': 200,
+        cursor: 'pointer'
+    }, 'PNG text style');
 });
 
-QUnit.test("Dispose", function(assert) {
+QUnit.test('Dispose', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -1004,43 +1004,43 @@ QUnit.test("Dispose", function(assert) {
     exportMenu.dispose();
 
     // assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.dispose.callCount, 1, "Group dispose was called");
-    assert.equal(this.renderer.shadowFilter.getCall(0).returnValue.dispose.callCount, 1, "Shadow filter dispose was called");
+    assert.equal(this.renderer.g.getCall(0).returnValue.dispose.callCount, 1, 'Group dispose was called');
+    assert.equal(this.renderer.shadowFilter.getCall(0).returnValue.dispose.callCount, 1, 'Shadow filter dispose was called');
 });
 
-QUnit.module("Events", {
+QUnit.module('Events', {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, "export");
+        sinon.stub(clientExporter, 'export');
 
         this.options = {
             enabled: true,
             printingEnabled: true,
-            formats: ["JPEG"],
+            formats: ['JPEG'],
             font: {},
-            backgroundColor: "#001122",
+            backgroundColor: '#001122',
             button: {
-                "default": {
-                    color: "#707070",
-                    borderColor: "#b6b6b6",
-                    backgroundColor: "#123456"
+                'default': {
+                    color: '#707070',
+                    borderColor: '#b6b6b6',
+                    backgroundColor: '#123456'
                 },
                 hover: {
-                    color: "#333",
-                    borderColor: "#bebebe",
-                    backgroundColor: "#e6e6e6"
+                    color: '#333',
+                    borderColor: '#bebebe',
+                    backgroundColor: '#e6e6e6'
                 },
                 focus: {
-                    color: "#000",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#e6e6e6"
+                    color: '#000',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#e6e6e6'
                 },
                 active: {
-                    color: "#333",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#d4d4d4"
+                    color: '#333',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#d4d4d4'
                 }
             },
             exportOptions: {}
@@ -1061,26 +1061,26 @@ QUnit.module("Events", {
     }
 });
 
-QUnit.test("'On' subscribe", function(assert) {
+QUnit.test('\'On\' subscribe', function(assert) {
     // arrange, act
     this.createExportMenu();
 
     // assert
-    assert.equal(this.renderer.root.on.callCount, 1, "one subscribe");
-    assert.equal(this.renderer.root.on.getCall(0).args[0], "dxpointerup.export", "event name");
-    assert.ok(this.renderer.root.on.getCall(0).args[1], "event handler");
+    assert.equal(this.renderer.root.on.callCount, 1, 'one subscribe');
+    assert.equal(this.renderer.root.on.getCall(0).args[0], 'dxpointerup.export', 'event name');
+    assert.ok(this.renderer.root.on.getCall(0).args[1], 'event handler');
 
-    assert.equal(this.renderer.rect.getCall(2).returnValue.on.callCount, 2, "menu item subscribe count");
-    assert.equal(this.renderer.rect.getCall(2).returnValue.on.getCall(0).args[0], "dxhoverstart.export", "menu item subscribe hover start");
-    assert.equal(this.renderer.rect.getCall(2).returnValue.on.getCall(1).args[0], "dxhoverend.export", "menu item subscribe hover end");
-    assert.equal(this.renderer.rect.getCall(2).returnValue.on.getCall(1).args[0], "dxhoverend.export", "menu item subscribe hover end");
-    assert.equal(this.renderer.g.getCall(1).returnValue.on.getCall(2).args[0], "dxpointerdown.export", "button subscribe mousedown end");
+    assert.equal(this.renderer.rect.getCall(2).returnValue.on.callCount, 2, 'menu item subscribe count');
+    assert.equal(this.renderer.rect.getCall(2).returnValue.on.getCall(0).args[0], 'dxhoverstart.export', 'menu item subscribe hover start');
+    assert.equal(this.renderer.rect.getCall(2).returnValue.on.getCall(1).args[0], 'dxhoverend.export', 'menu item subscribe hover end');
+    assert.equal(this.renderer.rect.getCall(2).returnValue.on.getCall(1).args[0], 'dxhoverend.export', 'menu item subscribe hover end');
+    assert.equal(this.renderer.g.getCall(1).returnValue.on.getCall(2).args[0], 'dxpointerdown.export', 'button subscribe mousedown end');
 
-    assert.equal(this.renderer.g.getCall(2).returnValue.on.callCount, 1, "list subscribing");
-    assert.equal(this.renderer.g.getCall(1).returnValue.on.callCount, 3, "button subscribing");
+    assert.equal(this.renderer.g.getCall(2).returnValue.on.callCount, 1, 'list subscribing');
+    assert.equal(this.renderer.g.getCall(1).returnValue.on.callCount, 3, 'button subscribing');
 });
 
-QUnit.test("'Off' unsubscribe", function(assert) {
+QUnit.test('\'Off\' unsubscribe', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -1088,51 +1088,51 @@ QUnit.test("'Off' unsubscribe", function(assert) {
     exportMenu.dispose();
 
     // assert
-    assert.equal(this.renderer.root.off.callCount, 1, "one unsubscribe");
-    assert.equal(this.renderer.root.off.getCall(0).args[0], ".export", "event name");
-    assert.equal(this.renderer.g.getCall(1).returnValue.off.callCount, 1, "off for button");
-    assert.equal(this.renderer.g.getCall(2).returnValue.off.callCount, 1, "off for list");
+    assert.equal(this.renderer.root.off.callCount, 1, 'one unsubscribe');
+    assert.equal(this.renderer.root.off.getCall(0).args[0], '.export', 'event name');
+    assert.equal(this.renderer.g.getCall(1).returnValue.off.callCount, 1, 'off for button');
+    assert.equal(this.renderer.g.getCall(2).returnValue.off.callCount, 1, 'off for list');
 });
 
-QUnit.test("Button hover", function(assert) {
+QUnit.test('Button hover', function(assert) {
     // arrange
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
     // act
-    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#e6e6e6", stroke: "#bebebe" }, "hovered button");
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: '#e6e6e6', stroke: '#bebebe' }, 'hovered button');
 });
 
-QUnit.test("Button mousedown", function(assert) {
+QUnit.test('Button mousedown', function(assert) {
     // arrange
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     // act
-    this.renderer.g.getCall(1).returnValue.on.getCall(2).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(2).args[1]({ target: { 'export-element-type': 'button' } });
     // assert
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#d4d4d4", stroke: "#9d9d9d" }, "Button set active state");
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: '#d4d4d4', stroke: '#9d9d9d' }, 'Button set active state');
 });
 
-QUnit.test("Button unhover", function(assert) {
+QUnit.test('Button unhover', function(assert) {
     // arrange
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
     // act
-    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
-    this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(1).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unhovered button");
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(1).args[0], { fill: '#123456', stroke: '#b6b6b6' }, 'unhovered button');
 });
 
-QUnit.test("menuItem hover", function(assert) {
+QUnit.test('menuItem hover', function(assert) {
     // arrange
     this.createExportMenu();
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
@@ -1143,10 +1143,10 @@ QUnit.test("menuItem hover", function(assert) {
     menuItemRect.on.getCall(0).args[1]();
 
     // assert
-    assert.deepEqual(menuItemRect.attr.getCall(0).args[0], { fill: "#e6e6e6" }, "Menu item hovered");
+    assert.deepEqual(menuItemRect.attr.getCall(0).args[0], { fill: '#e6e6e6' }, 'Menu item hovered');
 });
 
-QUnit.test("menuItem unhover", function(assert) {
+QUnit.test('menuItem unhover', function(assert) {
     // arrange
     this.createExportMenu();
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
@@ -1158,38 +1158,38 @@ QUnit.test("menuItem unhover", function(assert) {
     menuItemRect.on.getCall(1).args[1]();
 
     // assert
-    assert.deepEqual(menuItemRect.attr.getCall(0).args[0], { fill: "#e6e6e6" }, "Menu item unhovered");
-    assert.deepEqual(menuItemRect.attr.getCall(1).args[0], { fill: null }, "Menu item unhovered");
+    assert.deepEqual(menuItemRect.attr.getCall(0).args[0], { fill: '#e6e6e6' }, 'Menu item unhovered');
+    assert.deepEqual(menuItemRect.attr.getCall(1).args[0], { fill: null }, 'Menu item unhovered');
 });
 
-QUnit.test("Button hover when button is selected", function(assert) {
+QUnit.test('Button hover when button is selected', function(assert) {
     // arrange
     this.createExportMenu();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
-    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
-    assert.equal(this.renderer.rect.getCall(1).returnValue.attr.callCount, 1, "non-hovered but selected button");
+    assert.equal(this.renderer.rect.getCall(1).returnValue.attr.callCount, 1, 'non-hovered but selected button');
 });
 
-QUnit.test("Button unhover when button is selected", function(assert) {
+QUnit.test('Button unhover when button is selected', function(assert) {
     // arrange
     this.createExportMenu();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
-    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
-    this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
-    assert.equal(this.renderer.rect.getCall(1).returnValue.attr.callCount, 1, "non-hovered but selected button");
+    assert.equal(this.renderer.rect.getCall(1).returnValue.attr.callCount, 1, 'non-hovered but selected button');
 });
 
-QUnit.test("List opening", function(assert) {
+QUnit.test('List opening', function(assert) {
     // arrange
     this.createExportMenu();
 
@@ -1197,39 +1197,39 @@ QUnit.test("List opening", function(assert) {
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
-    assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, "showing call count");
-    assert.deepEqual(this.renderer.g.getCall(2).returnValue.append.getCall(0).args[0], this.renderer.g.getCall(2).returnValue.append.getCall(1).args[0], "visible list");
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#e6e6e6", stroke: "#9d9d9d" }, "selected button has focused state style");
+    assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, 'showing call count');
+    assert.deepEqual(this.renderer.g.getCall(2).returnValue.append.getCall(0).args[0], this.renderer.g.getCall(2).returnValue.append.getCall(1).args[0], 'visible list');
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: '#e6e6e6', stroke: '#9d9d9d' }, 'selected button has focused state style');
 });
 
-QUnit.test("Correct texts positions on list opening", function(assert) {
+QUnit.test('Correct texts positions on list opening', function(assert) {
     // arrange
     this.createExportMenu();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.move.lastCall.args, [-71]);
 });
 
-QUnit.test("Correct texts positions on list opening. RTL", function(assert) {
+QUnit.test('Correct texts positions on list opening. RTL', function(assert) {
     // arrange
     this.options.rtl = true;
     this.options.printingEnabled = false;
     this.createExportMenu();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.move.lastCall.args, [-1]);
 });
 
-QUnit.test("List closing by menu button", function(assert) {
+QUnit.test('List closing by menu button', function(assert) {
     // arrange
     this.createExportMenu();
 
@@ -1237,46 +1237,46 @@ QUnit.test("List closing by menu button", function(assert) {
     this.renderer.rect.getCall(1).returnValue.attr.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
-    assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "showing call count");
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(1).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button has default state style");
+    assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, 'showing call count');
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(1).args[0], { fill: '#123456', stroke: '#b6b6b6' }, 'unselected button has default state style');
 });
 
-QUnit.test("List closing by any place", function(assert) {
+QUnit.test('List closing by any place', function(assert) {
     // arrange
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.root.on.getCall(0).args[1]({ target: {} });
 
     // assert
-    assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "showing call count");
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button");
+    assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, 'showing call count');
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: '#123456', stroke: '#b6b6b6' }, 'unselected button');
 });
 
-QUnit.test("List isn't closing by click on list", function(assert) {
+QUnit.test('List isn\'t closing by click on list', function(assert) {
     // arrange
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "list" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'list' } });
 
     // assert
-    assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, "Appending call count");
-    assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 1, "Removing call count");
+    assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, 'Appending call count');
+    assert.equal(this.renderer.g.getCall(2).returnValue.remove.callCount, 1, 'Removing call count');
 });
 
-QUnit.test("Exporting by click on format text", function(assert) {
+QUnit.test('Exporting by click on format text', function(assert) {
     // arrange
     this.exportTo = sinon.spy();
 
@@ -1287,24 +1287,24 @@ QUnit.test("Exporting by click on format text", function(assert) {
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
     this.renderer.root.on.getCall(0).args[1]({
         target: {
-            "export-element-type": "exporting",
-            "export-element-format": "JPEG"
+            'export-element-type': 'exporting',
+            'export-element-format': 'JPEG'
         }
     });
 
     // assert
     assert.equal(this.exportTo.callCount, 1);
-    assert.deepEqual(this.exportTo.getCall(0).args, ["JPEG"]);
+    assert.deepEqual(this.exportTo.getCall(0).args, ['JPEG']);
 
-    assert.deepEqual(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "list is closed");
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button");
+    assert.deepEqual(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, 'list is closed');
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: '#123456', stroke: '#b6b6b6' }, 'unselected button');
 });
 
-QUnit.test("Open list after exporting - previously clicked item is unhovered. T511729", function(assert) {
+QUnit.test('Open list after exporting - previously clicked item is unhovered. T511729', function(assert) {
     var exportMenu = this.createExportMenu();
     exportMenu.draw(50, 50, { width: 15, height: 25 });
 
@@ -1312,22 +1312,22 @@ QUnit.test("Open list after exporting - previously clicked item is unhovered. T5
     menuItemRect.attr.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     menuItemRect.on.getCall(0).args[1]();
     this.renderer.root.on.getCall(0).args[1]({
         target: {
-            "export-element-type": "exporting",
-            "export-element-format": "JPEG"
+            'export-element-type': 'exporting',
+            'export-element-format': 'JPEG'
         }
     });
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
     assert.deepEqual(menuItemRect.attr.callCount, 2);
-    assert.deepEqual(menuItemRect.attr.lastCall.args[0], { fill: null }, "Menu item unhovered");
+    assert.deepEqual(menuItemRect.attr.lastCall.args[0], { fill: null }, 'Menu item unhovered');
 });
 
-QUnit.test("Printing by menu - close list", function(assert) {
+QUnit.test('Printing by menu - close list', function(assert) {
     this.print = sinon.spy();
 
     this.createExportMenu();
@@ -1336,73 +1336,73 @@ QUnit.test("Printing by menu - close list", function(assert) {
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
     // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     this.renderer.rect.getCall(1).returnValue.attr.reset();
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "printing" } });
+    this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'printing' } });
 
     // assert
     assert.equal(this.print.callCount, 1);
 
-    assert.deepEqual(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "list is closed");
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button");
+    assert.deepEqual(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, 'list is closed');
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: '#123456', stroke: '#b6b6b6' }, 'unselected button');
 });
 
 // T397838
-QUnit.test("Localization", function(assert) {
+QUnit.test('Localization', function(assert) {
     // assert
-    var localization = require("localization");
+    var localization = require('localization');
 
     localization.loadMessages({
         it: {
-            "vizExport-printingButtonText": "Stampa",
-            "vizExport-exportButtonText": "{0} formato",
-            "vizExport-titleMenuText": "Esportazione / stampa"
+            'vizExport-printingButtonText': 'Stampa',
+            'vizExport-exportButtonText': '{0} formato',
+            'vizExport-titleMenuText': 'Esportazione / stampa'
         }
     });
 
-    this.options.formats = ["PNG"];
+    this.options.formats = ['PNG'];
 
     localization.locale('it');
     this.createExportMenu();
 
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["Stampa"], "Printing button text");
-    assert.deepEqual(this.renderer.text.getCall(1).args, ["PNG formato"], "Export button text");
-    assert.deepEqual(this.renderer.g.getCall(1).returnValue.setTitle.getCall(0).args, ["Esportazione / stampa"], "Export menu button title text");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['Stampa'], 'Printing button text');
+    assert.deepEqual(this.renderer.text.getCall(1).args, ['PNG formato'], 'Export button text');
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.setTitle.getCall(0).args, ['Esportazione / stampa'], 'Export menu button title text');
 
 });
 
-QUnit.module("Layout", {
+QUnit.module('Layout', {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, "export");
+        sinon.stub(clientExporter, 'export');
 
         this.options = {
             enabled: true,
             printingEnabled: true,
-            formats: ["JPEG"],
+            formats: ['JPEG'],
             font: {},
             button: {
-                "default": {
-                    color: "#707070",
-                    borderColor: "#b6b6b6",
-                    backgroundColor: "#123456"
+                'default': {
+                    color: '#707070',
+                    borderColor: '#b6b6b6',
+                    backgroundColor: '#123456'
                 },
                 hover: {
-                    color: "#333",
-                    borderColor: "#bebebe",
-                    backgroundColor: "#e6e6e6"
+                    color: '#333',
+                    borderColor: '#bebebe',
+                    backgroundColor: '#e6e6e6'
                 },
                 focus: {
-                    color: "#000",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#e6e6e6"
+                    color: '#000',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#e6e6e6'
                 },
                 active: {
-                    color: "#333",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#d4d4d4"
+                    color: '#333',
+                    borderColor: '#9d9d9d',
+                    backgroundColor: '#d4d4d4'
                 }
             },
             exportOptions: {}
@@ -1421,7 +1421,7 @@ QUnit.module("Layout", {
     }
 });
 
-QUnit.test("Menu is hidden if there is no enough space", function(assert) {
+QUnit.test('Menu is hidden if there is no enough space', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -1432,7 +1432,7 @@ QUnit.test("Menu is hidden if there is no enough space", function(assert) {
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
-QUnit.test("freeSpace", function(assert) {
+QUnit.test('freeSpace', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(100, 200, { width: 30, height: 30 });
@@ -1444,7 +1444,7 @@ QUnit.test("freeSpace", function(assert) {
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
-QUnit.test("Return empty layout options if was hidden due to small container", function(assert) {
+QUnit.test('Return empty layout options if was hidden due to small container', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
@@ -1453,10 +1453,10 @@ QUnit.test("Return empty layout options if was hidden due to small container", f
     var layout = exportMenu.getLayoutOptions();
 
     // assert
-    assert.deepEqual(layout, { width: 0, height: 0, cutSide: "vertical", cutLayoutSide: "top" });
+    assert.deepEqual(layout, { width: 0, height: 0, cutSide: 'vertical', cutLayoutSide: 'top' });
 });
 
-QUnit.test("Send warning message if was hidden due to small container", function(assert) {
+QUnit.test('Send warning message if was hidden due to small container', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
 
@@ -1464,10 +1464,10 @@ QUnit.test("Send warning message if was hidden due to small container", function
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
     // assert
-    assert.ok(this.incidentOccurred.calledWith("W2107"));
+    assert.ok(this.incidentOccurred.calledWith('W2107'));
 });
 
-QUnit.test("Menu is hidden first time and shown if container gets bigger", function(assert) {
+QUnit.test('Menu is hidden first time and shown if container gets bigger', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
@@ -1480,7 +1480,7 @@ QUnit.test("Menu is hidden first time and shown if container gets bigger", funct
     assert.equal(this.renderer.g.getCall(0).returnValue._stored_settings.visibility, null);
 });
 
-QUnit.test("Return real layout options if container gets bigger", function(assert) {
+QUnit.test('Return real layout options if container gets bigger', function(assert) {
     // arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
@@ -1492,17 +1492,17 @@ QUnit.test("Return real layout options if container gets bigger", function(asser
 
     // assert
     assert.deepEqual(layout, {
-        cutLayoutSide: "top",
-        cutSide: "vertical",
+        cutLayoutSide: 'top',
+        cutSide: 'vertical',
         height: 20,
         width: 20,
         x: 1,
         y: 2,
-        horizontalAlignment: "right",
+        horizontalAlignment: 'right',
         position: {
-            horizontal: "right",
-            vertical: "top"
+            horizontal: 'right',
+            vertical: 'top'
         },
-        verticalAlignment: "top"
+        verticalAlignment: 'top'
     });
 });

@@ -1,19 +1,19 @@
 var types = {
-    "[object Array]": "array",
-    "[object Date]": "date",
-    "[object Object]": "object",
-    "[object String]": "string",
-    "[object Null]": "null" };
+    '[object Array]': 'array',
+    '[object Date]': 'date',
+    '[object Object]': 'object',
+    '[object String]': 'string',
+    '[object Null]': 'null' };
 
 var type = function(object) {
     var typeOfObject = Object.prototype.toString.call(object);
 
-    return typeof object === "object" ?
-        types[typeOfObject] || "object" : typeof object;
+    return typeof object === 'object' ?
+        types[typeOfObject] || 'object' : typeof object;
 };
 
 var isBoolean = function(object) {
-    return typeof object === "boolean";
+    return typeof object === 'boolean';
 };
 
 var isExponential = function(value) {
@@ -37,7 +37,7 @@ var isString = function(object) {
 };
 
 var isNumeric = function(object) {
-    return ((typeof object === "number") && isFinite(object) || !isNaN(object - parseFloat(object)));
+    return ((typeof object === 'number') && isFinite(object) || !isNaN(object - parseFloat(object)));
 };
 
 var isObject = function(object) {
@@ -55,18 +55,18 @@ var isEmptyObject = function(object) {
 };
 
 var isPlainObject = function(object) {
-    if(!object || Object.prototype.toString.call(object) !== "[object Object]") {
+    if(!object || Object.prototype.toString.call(object) !== '[object Object]') {
         return false;
     }
     var proto = Object.getPrototypeOf(object),
-        ctor = Object.hasOwnProperty.call(proto, "constructor") && proto.constructor;
+        ctor = Object.hasOwnProperty.call(proto, 'constructor') && proto.constructor;
 
-    return typeof ctor === "function"
+    return typeof ctor === 'function'
         && Object.toString.call(ctor) === Object.toString.call(Object);
 };
 
 var isPrimitive = function(value) {
-    return ["object", "array", "function"].indexOf(type(value)) === -1;
+    return ['object', 'array', 'function'].indexOf(type(value)) === -1;
 };
 
 var isWindow = function(object) {

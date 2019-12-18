@@ -1,16 +1,16 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Widget = require("../widget/ui.widget"),
-    extend = require("../../core/utils/extend").extend,
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    feedbackEvents = require("../../events/core/emitter.feedback"),
-    holdEvent = require("../../events/hold"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var $ = require('../../core/renderer'),
+    domAdapter = require('../../core/dom_adapter'),
+    eventsEngine = require('../../events/core/events_engine'),
+    Widget = require('../widget/ui.widget'),
+    extend = require('../../core/utils/extend').extend,
+    eventUtils = require('../../events/utils'),
+    pointerEvents = require('../../events/pointer'),
+    feedbackEvents = require('../../events/core/emitter.feedback'),
+    holdEvent = require('../../events/hold'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
-var SPIN_CLASS = "dx-numberbox-spin",
-    SPIN_BUTTON_CLASS = "dx-numberbox-spin-button",
+var SPIN_CLASS = 'dx-numberbox-spin',
+    SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button',
 
     SPIN_HOLD_DELAY = 100,
 
@@ -22,7 +22,7 @@ var SpinButton = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            direction: "up",
+            direction: 'up',
             onChange: null,
             activeStateEnabled: true,
             hoverStateEnabled: true
@@ -32,13 +32,13 @@ var SpinButton = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        var direction = SPIN_CLASS + "-" + this.option("direction");
+        var direction = SPIN_CLASS + '-' + this.option('direction');
 
         this.$element()
             .addClass(SPIN_BUTTON_CLASS)
             .addClass(direction);
 
-        this._spinIcon = $("<div>").addClass(direction + "-icon").appendTo(this.$element());
+        this._spinIcon = $('<div>').addClass(direction + '-icon').appendTo(this.$element());
     },
 
     _render: function() {
@@ -50,7 +50,7 @@ var SpinButton = Widget.inherit({
         eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, this._spinDownHandler.bind(this));
 
-        this._spinChangeHandler = this._createActionByOption("onChange");
+        this._spinChangeHandler = this._createActionByOption('onChange');
     },
 
     _spinDownHandler: function(e) {
@@ -94,8 +94,8 @@ var SpinButton = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onChange":
-            case "direction":
+            case 'onChange':
+            case 'direction':
                 this._invalidate();
                 break;
             default:

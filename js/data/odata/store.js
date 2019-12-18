@@ -1,18 +1,18 @@
-var isDefined = require("../../core/utils/type").isDefined,
-    config = require("../../core/config"),
-    odataUtils = require("./utils"),
-    proxyUrlFormatter = require("../proxy_url_formatter"),
-    errors = require("../errors").errors,
-    query = require("../query"),
-    Store = require("../abstract_store"),
-    mixins = require("./mixins"),
-    deferredUtils = require("../../core/utils/deferred"),
+var isDefined = require('../../core/utils/type').isDefined,
+    config = require('../../core/config'),
+    odataUtils = require('./utils'),
+    proxyUrlFormatter = require('../proxy_url_formatter'),
+    errors = require('../errors').errors,
+    query = require('../query'),
+    Store = require('../abstract_store'),
+    mixins = require('./mixins'),
+    deferredUtils = require('../../core/utils/deferred'),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
 
-require("./query_adapter");
+require('./query_adapter');
 
-var ANONYMOUS_KEY_NAME = "5d46402c-7899-4ea9-bd81-8b73c47c7683";
+var ANONYMOUS_KEY_NAME = '5d46402c-7899-4ea9-bd81-8b73c47c7683';
 
 function expandKeyType(key, keyType) {
     var result = {};
@@ -30,7 +30,7 @@ function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
     for(var keyName in keyType) {
         if(keyName in result) {
             if(result[keyName] !== keyType[keyName]) {
-                errors.log("W4001", keyName);
+                errors.log('W4001', keyName);
             }
         } else {
             result[keyName] = keyType[keyName];
@@ -117,7 +117,7 @@ var ODataStore = Store.inherit({
             keyType = options.keyType;
 
         if(keyType) {
-            var keyTypeIsString = (typeof keyType === "string");
+            var keyTypeIsString = (typeof keyType === 'string');
 
             if(!key) {
                 key = keyTypeIsString ? ANONYMOUS_KEY_NAME : Object.keys(keyType);
@@ -139,14 +139,14 @@ var ODataStore = Store.inherit({
         this._fieldTypes = fieldTypes || {};
 
         if(this.version() === 2) {
-            this._updateMethod = "MERGE";
+            this._updateMethod = 'MERGE';
         } else {
-            this._updateMethod = "PATCH";
+            this._updateMethod = 'PATCH';
         }
     },
 
     _customLoadOptions: function() {
-        return ["expand", "customQueryParams"];
+        return ['expand', 'customQueryParams'];
     },
 
     /**
@@ -162,11 +162,11 @@ var ODataStore = Store.inherit({
         var params = {};
 
         if(extraOptions) {
-            params["$expand"] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
-            params["$select"] = odataUtils.generateSelect(this._version, extraOptions.select) || undefined;
+            params['$expand'] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
+            params['$select'] = odataUtils.generateSelect(this._version, extraOptions.select) || undefined;
         }
 
-        return this._sendRequest(this._byKeyUrl(key), "GET", params);
+        return this._sendRequest(this._byKeyUrl(key), 'GET', params);
     },
 
     /**
@@ -181,7 +181,7 @@ var ODataStore = Store.inherit({
 
         loadOptions = loadOptions || {};
         queryOptions = {
-            adapter: "odata",
+            adapter: 'odata',
 
             beforeSend: this._beforeSend,
             errorHandler: this._errorHandler,
@@ -224,7 +224,7 @@ var ODataStore = Store.inherit({
         var that = this,
             d = new Deferred();
 
-        when(this._sendRequest(this._url, "POST", null, values))
+        when(this._sendRequest(this._url, 'POST', null, values))
             .done(function(serverResponse) {
                 d.resolve(config().useLegacyStoreResult ? values : (serverResponse || values), that.keyOf(serverResponse));
             })
@@ -255,7 +255,7 @@ var ODataStore = Store.inherit({
         var d = new Deferred();
 
         when(
-            this._sendRequest(this._byKeyUrl(key), "DELETE")
+            this._sendRequest(this._byKeyUrl(key), 'DELETE')
         ).done(
             function() {
                 d.resolve(key);
@@ -290,9 +290,9 @@ var ODataStore = Store.inherit({
 
         var convertedKey = this._convertKey(value);
 
-        return baseUrl + "(" + encodeURIComponent(odataUtils.serializeKey(convertedKey, this._version)) + ")";
+        return baseUrl + '(' + encodeURIComponent(odataUtils.serializeKey(convertedKey, this._version)) + ')';
     }
 
-}, "odata").include(mixins.SharedMethods);
+}, 'odata').include(mixins.SharedMethods);
 
 module.exports = ODataStore;

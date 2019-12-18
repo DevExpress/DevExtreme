@@ -1,24 +1,24 @@
 define(function(require) {
-    var $ = require("jquery"),
-        Component = require("core/component"),
-        devices = require("core/devices"),
-        GoogleStaticProvider = require("ui/map/provider.google_static"),
-        fx = require("animation/fx"),
-        executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-        DataSource = require("data/data_source/data_source").DataSource;
+    var $ = require('jquery'),
+        Component = require('core/component'),
+        devices = require('core/devices'),
+        GoogleStaticProvider = require('ui/map/provider.google_static'),
+        fx = require('animation/fx'),
+        executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
+        DataSource = require('data/data_source/data_source').DataSource;
 
-    require("bundles/modules/parts/widgets-all");
+    require('bundles/modules/parts/widgets-all');
 
     if(!devices.real().generic) {
         return;
     }
 
     fx.off = true;
-    GoogleStaticProvider.remapConstant("/mapURL?");
+    GoogleStaticProvider.remapConstant('/mapURL?');
 
-    QUnit.module("OptionChanged", {
+    QUnit.module('OptionChanged', {
         beforeEach: function() {
-            this.$element = $("<div />").appendTo("body");
+            this.$element = $('<div />').appendTo('body');
 
             this._originalOptionChanged = Component.prototype._optionChanged;
 
@@ -26,22 +26,22 @@ define(function(require) {
                 var name = args.name;
 
                 if(this._getDeprecatedOptions()[name] ||
-                    name === "rtlEnabled" ||
-                    name === "onOptionChanged" ||
-                    name === "onDisposing" ||
-                    name === "onInitialized" ||
-                    name === "defaultOptionsRules" ||
-                    name === "useNativeScrolling" ||
-                    name === "exportingAction" ||
-                    name === "exportedAction" ||
-                    name === "fileSavingAction" ||
-                    name === "validationMessageOffset" ||
-                    name === "templatesRenderAsynchronously" ||
-                    name === "ignoreChildEvents" ||
-                    name === "_checkParentVisibility") {
+                    name === 'rtlEnabled' ||
+                    name === 'onOptionChanged' ||
+                    name === 'onDisposing' ||
+                    name === 'onInitialized' ||
+                    name === 'defaultOptionsRules' ||
+                    name === 'useNativeScrolling' ||
+                    name === 'exportingAction' ||
+                    name === 'exportedAction' ||
+                    name === 'fileSavingAction' ||
+                    name === 'validationMessageOffset' ||
+                    name === 'templatesRenderAsynchronously' ||
+                    name === 'ignoreChildEvents' ||
+                    name === '_checkParentVisibility') {
                     return;
                 }
-                this.QUnitAssert.ok(false, "Option '" + name + "' is not processed after runtime change");
+                this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
             };
 
             executeAsyncMock.setup();
@@ -54,15 +54,15 @@ define(function(require) {
     });
 
     var excludedComponents = [
-        "dxLayoutManager"
+        'dxLayoutManager'
     ];
 
     var getDefaultOptions = function(componentName) {
         switch(componentName) {
-            case "dxValidator":
+            case 'dxValidator':
                 return { adapter: {} };
-            case "dxMap":
-                return { provider: "googleStatic" };
+            case 'dxMap':
+                return { provider: 'googleStatic' };
             default:
                 return {};
         }
@@ -73,7 +73,7 @@ define(function(require) {
             return;
         }
 
-        var widgetName = componentName.replace("dx", "").toLowerCase();
+        var widgetName = componentName.replace('dx', '').toLowerCase();
 
         if($.fn[componentName]) {
             componentConstructor.prototype._defaultOptionsRules = function() {
@@ -84,24 +84,24 @@ define(function(require) {
                 var done = assert.async();
 
                 var $element = this.$element,
-                    component = $element[componentName](getDefaultOptions(componentName))[componentName]("instance"),
+                    component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance'),
                     options = component.option(),
                     optionCount = 0;
 
                 component.QUnitAssert = assert;
 
-                var classes = $element.attr("class").split(" ");
+                var classes = $element.attr('class').split(' ');
 
                 $.each(classes, function(_, className) {
-                    className = className.replace("dx-", "");
+                    className = className.replace('dx-', '');
 
                     if(className.indexOf(widgetName) === 0) {
-                        assert.ok(true, " class name was checked");
+                        assert.ok(true, ' class name was checked');
                     } else {
-                        className = className.replace("-", "");
+                        className = className.replace('-', '');
 
                         if(className.indexOf(widgetName) === 0) {
-                            assert.ok(false, className + " is failed");
+                            assert.ok(false, className + ' is failed');
                         }
                     }
                 });
@@ -111,16 +111,16 @@ define(function(require) {
                         newValue = prevValue;
 
                     // NOTE: some widgets doesn't support dataSource === null
-                    if(option === "dataSource") {
+                    if(option === 'dataSource') {
                         // NOTE: dxResponsiveBox supports only plain object in items
-                        var item = componentName === "dxResponsiveBox" ? { text: 1 } : 1;
-                        item = componentName === "dxScheduler" ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
+                        var item = componentName === 'dxResponsiveBox' ? { text: 1 } : 1;
+                        item = componentName === 'dxScheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
                         newValue = new DataSource([item]);
                         options[option] = newValue;
                     }
 
-                    if(componentName === "dxDateViewRoller" && option === "selectedIndex") {
+                    if(componentName === 'dxDateViewRoller' && option === 'selectedIndex') {
                         return;
                     }
 
@@ -132,7 +132,7 @@ define(function(require) {
                     optionCount++;
                 });
 
-                assert.ok(true, optionCount + " options was checked");
+                assert.ok(true, optionCount + ' options was checked');
 
                 // Since jQuery 2.2.0 have the following code
                 // https://github.com/jquery/jquery/blob/2.2-stable/src/ajax/xhr.js#L133

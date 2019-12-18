@@ -1,20 +1,20 @@
-import $ from "jquery";
-import { logger } from "core/utils/console";
-import { DataSource } from "data/data_source/data_source";
-import ArrayStore from "data/array_store";
-import CustomStore from "data/custom_store";
-import ODataStore from "data/odata/store";
-import dataQuery from "data/query";
-import { queryByOptions } from "data/store_helper";
-import gridCore from "ui/data_grid/ui.data_grid.core";
-import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
-import { loadTotalCount } from "ui/data_grid/ui.data_grid.grouping.expanded";
-import { createOffsetFilter } from "ui/data_grid/ui.data_grid.grouping.core";
-import { getContinuationGroupCount } from "ui/data_grid/ui.data_grid.grouping.collapsed";
-import { GroupingHelper as ExpandedGroupingHelper } from "ui/data_grid/ui.data_grid.grouping.expanded";
-import { GroupingHelper as CollapsedGroupingHelper } from "ui/data_grid/ui.data_grid.grouping.collapsed";
+import $ from 'jquery';
+import { logger } from 'core/utils/console';
+import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'data/array_store';
+import CustomStore from 'data/custom_store';
+import ODataStore from 'data/odata/store';
+import dataQuery from 'data/query';
+import { queryByOptions } from 'data/store_helper';
+import gridCore from 'ui/data_grid/ui.data_grid.core';
+import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { loadTotalCount } from 'ui/data_grid/ui.data_grid.grouping.expanded';
+import { createOffsetFilter } from 'ui/data_grid/ui.data_grid.grouping.core';
+import { getContinuationGroupCount } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
+import { GroupingHelper as ExpandedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.expanded';
+import { GroupingHelper as CollapsedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
 
-import "ui/data_grid/ui.data_grid";
+import 'ui/data_grid/ui.data_grid';
 
 
 var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -40,15 +40,15 @@ var createDataSource = function(options) {
     var origItems = dataSourceAdapter.items;
     var processItems = function(items) {
         for(var i = 0; i < items.length; i++) {
-            if(typeof items[i] === "object") {
-                if("items" in items[i] && items[i].items !== null) {
+            if(typeof items[i] === 'object') {
+                if('items' in items[i] && items[i].items !== null) {
                     processItems(items[i].items);
                 }
-                if("collapsedItems" in items[i]) {
-                    delete items[i]["collapsedItems"];
+                if('collapsedItems' in items[i]) {
+                    delete items[i]['collapsedItems'];
                 }
-                if("key" in items[i] && "items" in items[i] && "count" in items[i]) {
-                    delete items[i]["count"];
+                if('key' in items[i] && 'items' in items[i] && 'count' in items[i]) {
+                    delete items[i]['count'];
                 }
             }
         }
@@ -66,7 +66,7 @@ var createDataSource = function(options) {
 };
 
 
-QUnit.module("Grid DataSource", {
+QUnit.module('Grid DataSource', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -76,7 +76,7 @@ QUnit.module("Grid DataSource", {
     }
 });
 
-QUnit.test("page index parallel change", function(assert) {
+QUnit.test('page index parallel change', function(assert) {
     var loadingPages = [],
         source = createDataSource({
             store: {
@@ -117,7 +117,7 @@ QUnit.test("page index parallel change", function(assert) {
     assert.ok(!source.isLoading(), 'loading completed');
 });
 
-QUnit.test("get page size if paginate enabled", function(assert) {
+QUnit.test('get page size if paginate enabled', function(assert) {
     var source = createDataSource({
             store: TEN_NUMBERS,
             pageSize: 3
@@ -134,7 +134,7 @@ QUnit.test("get page size if paginate enabled", function(assert) {
     assert.equal(source.pageSize(), 3);
 });
 
-QUnit.test("get page size if paginate disabled", function(assert) {
+QUnit.test('get page size if paginate disabled', function(assert) {
     var source = createDataSource({
             store: TEN_NUMBERS,
             pageSize: 3,
@@ -152,7 +152,7 @@ QUnit.test("get page size if paginate disabled", function(assert) {
     assert.equal(source.pageSize(), 0);
 });
 
-QUnit.test("page size change", function(assert) {
+QUnit.test('page size change', function(assert) {
     var source = createDataSource({
             store: TEN_NUMBERS,
             pageSize: 3
@@ -173,7 +173,7 @@ QUnit.test("page size change", function(assert) {
     assert.deepEqual(source.items(), [1, 2, 3, 4, 5]);
 });
 
-QUnit.test("reload do not reset pageIndex", function(assert) {
+QUnit.test('reload do not reset pageIndex', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3
@@ -191,7 +191,7 @@ QUnit.test("reload do not reset pageIndex", function(assert) {
     assert.equal(source.items()[0], 4);
 });
 
-QUnit.test("reload full reset isLoaded", function(assert) {
+QUnit.test('reload full reset isLoaded', function(assert) {
     var source = createDataSource({
             store: TEN_NUMBERS,
             pageSize: 3,
@@ -214,7 +214,7 @@ QUnit.test("reload full reset isLoaded", function(assert) {
 });
 
 
-QUnit.test("reload calls before last load complete", function(assert) {
+QUnit.test('reload calls before last load complete', function(assert) {
     var totalCountDeferred = $.Deferred(),
         source = createDataSource({
             store: new CustomStore({
@@ -258,7 +258,7 @@ QUnit.test("reload calls before last load complete", function(assert) {
     assert.equal(source.totalCount(), 3);
 });
 
-QUnit.test("pageIndex in dataSource options", function(assert) {
+QUnit.test('pageIndex in dataSource options', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -273,7 +273,7 @@ QUnit.test("pageIndex in dataSource options", function(assert) {
 });
 
 // B233043
-QUnit.test("pageIndex greater then pageCount in dataSource options", function(assert) {
+QUnit.test('pageIndex greater then pageCount in dataSource options', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -289,7 +289,7 @@ QUnit.test("pageIndex greater then pageCount in dataSource options", function(as
 });
 
 // B233043
-QUnit.test("pageIndex equals pageCount in dataSource options", function(assert) {
+QUnit.test('pageIndex equals pageCount in dataSource options', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -304,7 +304,7 @@ QUnit.test("pageIndex equals pageCount in dataSource options", function(assert) 
     assert.equal(source.pageIndex(), 3);
 });
 
-QUnit.test("pageIndex correction before change event", function(assert) {
+QUnit.test('pageIndex correction before change event', function(assert) {
     var source = createDataSource({
             store: new ArrayStore(TEN_NUMBERS),
             pageSize: 3,
@@ -327,7 +327,7 @@ QUnit.test("pageIndex correction before change event", function(assert) {
     assert.equal(source.pageIndex(), 3);
 });
 
-QUnit.test("change pageIndex to greater then pageSize", function(assert) {
+QUnit.test('change pageIndex to greater then pageSize', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -344,7 +344,7 @@ QUnit.test("change pageIndex to greater then pageSize", function(assert) {
     assert.equal(source.pageIndex(), 3);
 });
 
-QUnit.test("itemsCount calculation", function(assert) {
+QUnit.test('itemsCount calculation', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -359,7 +359,7 @@ QUnit.test("itemsCount calculation", function(assert) {
 });
 
 
-QUnit.test("pageCount calculation", function(assert) {
+QUnit.test('pageCount calculation', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -373,7 +373,7 @@ QUnit.test("pageCount calculation", function(assert) {
     assert.equal(source.pageCount(), 4);
 });
 
-QUnit.test("pageCount calculation after change pageSize", function(assert) {
+QUnit.test('pageCount calculation after change pageSize', function(assert) {
     var source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
@@ -388,7 +388,7 @@ QUnit.test("pageCount calculation after change pageSize", function(assert) {
     assert.equal(source.pageCount(), 2);
 });
 
-QUnit.test("isLastPage and hasKnownLastPage for first page", function(assert) {
+QUnit.test('isLastPage and hasKnownLastPage for first page', function(assert) {
     var source = createDataSource({
         store: new ArrayStore(TEN_NUMBERS),
         pageSize: 3,
@@ -403,7 +403,7 @@ QUnit.test("isLastPage and hasKnownLastPage for first page", function(assert) {
     assert.ok(source.hasKnownLastPage());
 });
 
-QUnit.test("isLastPage for first page when totalCount = -1", function(assert) {
+QUnit.test('isLastPage for first page when totalCount = -1', function(assert) {
     var source = createDataSource({
         store: new CustomStore({
             load: function() {
@@ -427,7 +427,7 @@ QUnit.test("isLastPage for first page when totalCount = -1", function(assert) {
 });
 
 
-QUnit.test("isLastPage and hasKnownLastPage for last page", function(assert) {
+QUnit.test('isLastPage and hasKnownLastPage for last page', function(assert) {
     var source = createDataSource({
         store: new ArrayStore(TEN_NUMBERS),
         pageSize: 3,
@@ -443,7 +443,7 @@ QUnit.test("isLastPage and hasKnownLastPage for last page", function(assert) {
     assert.ok(source.hasKnownLastPage());
 });
 
-QUnit.test("groupingHelper when remoteOperations is auto and ArrayStore", function(assert) {
+QUnit.test('groupingHelper when remoteOperations is auto and ArrayStore', function(assert) {
     // act
     var dataSource = createDataSource({
         store: TEN_NUMBERS,
@@ -454,7 +454,7 @@ QUnit.test("groupingHelper when remoteOperations is auto and ArrayStore", functi
     assert.ok(dataSource._grouping instanceof CollapsedGroupingHelper);
 });
 
-QUnit.test("groupingHelper when remoteOperations is auto and CustomStore", function(assert) {
+QUnit.test('groupingHelper when remoteOperations is auto and CustomStore', function(assert) {
     // act
     var dataSource = createDataSource({
         load: function() { },
@@ -465,12 +465,12 @@ QUnit.test("groupingHelper when remoteOperations is auto and CustomStore", funct
     assert.ok(dataSource._grouping instanceof CollapsedGroupingHelper);
 });
 
-QUnit.test("groupingHelper when remoteOperations is auto and ODataStore", function(assert) {
+QUnit.test('groupingHelper when remoteOperations is auto and ODataStore', function(assert) {
     // act
     var dataSource = createDataSource({
         store: {
-            type: "odata",
-            url: "test"
+            type: 'odata',
+            url: 'test'
         },
         remoteOperations: 'auto'
     });
@@ -480,13 +480,13 @@ QUnit.test("groupingHelper when remoteOperations is auto and ODataStore", functi
 });
 
 // T298483
-QUnit.test("ODataStore customQueryParams/select when remoteOperations false", function(assert) {
+QUnit.test('ODataStore customQueryParams/select when remoteOperations false', function(assert) {
     var store = new ODataStore({
-            url: "test"
+            url: 'test'
         }),
         source = createDataSource({
             store: store,
-            select: ["field1", "field2"],
+            select: ['field1', 'field2'],
             customQueryParams: { test: true },
             remoteOperations: false,
             pageSize: 3,
@@ -505,13 +505,13 @@ QUnit.test("ODataStore customQueryParams/select when remoteOperations false", fu
     assert.ok(source.hasKnownLastPage());
     assert.equal(store.load.callCount, 1);
     assert.deepEqual(store.load.firstCall.args[0].customQueryParams, { test: true });
-    assert.deepEqual(store.load.firstCall.args[0].select, ["field1", "field2"]);
+    assert.deepEqual(store.load.firstCall.args[0].select, ['field1', 'field2']);
 });
 
 // T298483
-QUnit.test("ODataStore customQueryParams when remoteOperations true", function(assert) {
+QUnit.test('ODataStore customQueryParams when remoteOperations true', function(assert) {
     var store = new ODataStore({
-            url: "test"
+            url: 'test'
         }),
         source = createDataSource({
             store: store,
@@ -538,7 +538,7 @@ QUnit.test("ODataStore customQueryParams when remoteOperations true", function(a
 });
 
 // T474591
-QUnit.test("No error when store returned non-array", function(assert) {
+QUnit.test('No error when store returned non-array', function(assert) {
     // arrange
     var source = createDataSource({
         load: function() {
@@ -550,10 +550,10 @@ QUnit.test("No error when store returned non-array", function(assert) {
     source.load();
 
     // assert
-    assert.ok(true, "There are no exceptions");
+    assert.ok(true, 'There are no exceptions');
 });
 
-QUnit.test("createOffsetFilter should generate filters with =/<> filter operations for boolean values", function(assert) {
+QUnit.test('createOffsetFilter should generate filters with =/<> filter operations for boolean values', function(assert) {
     // arrange
 
     var booleanValues = [null, false, true];
@@ -564,8 +564,8 @@ QUnit.test("createOffsetFilter should generate filters with =/<> filter operatio
             if(Array.isArray(filter[0])) {
                 filter.forEach(checkFilter);
             } else {
-                if(filter[1] !== "=" && filter[1] !== "<>") {
-                    assert.ok(false, "filter contains incorrect filter operation '" + filter[1] + "'");
+                if(filter[1] !== '=' && filter[1] !== '<>') {
+                    assert.ok(false, 'filter contains incorrect filter operation \'' + filter[1] + '\'');
                 }
             }
         }
@@ -573,15 +573,15 @@ QUnit.test("createOffsetFilter should generate filters with =/<> filter operatio
 
     descValues.forEach(function(desc) {
         booleanValues.forEach(function(value, index) {
-            var filter = createOffsetFilter([value], { group: [{ selector: "this", desc: desc }] });
+            var filter = createOffsetFilter([value], { group: [{ selector: 'this', desc: desc }] });
 
             checkFilter(filter);
-            assert.deepEqual(dataQuery(booleanValues).filter(filter).toArray(), desc ? booleanValues.slice(index + 1) : booleanValues.slice(0, index), "filter for value " + value + " and desc " + false + " is correct");
+            assert.deepEqual(dataQuery(booleanValues).filter(filter).toArray(), desc ? booleanValues.slice(index + 1) : booleanValues.slice(0, index), 'filter for value ' + value + ' and desc ' + false + ' is correct');
         });
     });
 });
 
-QUnit.test("Custom store with remote paging and with local filtering", function(assert) {
+QUnit.test('Custom store with remote paging and with local filtering', function(assert) {
     // arrange
     var loadArgs = [];
     var source = createDataSource({
@@ -593,15 +593,15 @@ QUnit.test("Custom store with remote paging and with local filtering", function(
     });
 
     // act
-    source.filter(["x", ">", 1]);
+    source.filter(['x', '>', 1]);
     source.load();
 
     // assert
-    assert.strictEqual(source.items().length, 1, "items are filtered");
+    assert.strictEqual(source.items().length, 1, 'items are filtered');
     assert.strictEqual(loadArgs.length, 1);
-    assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
-    assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
-    assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+    assert.strictEqual(loadArgs[0].skip, undefined, 'skip is not exists');
+    assert.strictEqual(loadArgs[0].take, undefined, 'take is not exists');
+    assert.strictEqual(loadArgs[0].filter, undefined, 'filter is not exists');
 
     // act
     loadArgs = [];
@@ -609,15 +609,15 @@ QUnit.test("Custom store with remote paging and with local filtering", function(
     source.load();
 
     // assert
-    assert.strictEqual(source.items().length, 2, "items are not filtered");
+    assert.strictEqual(source.items().length, 2, 'items are not filtered');
     assert.strictEqual(loadArgs.length, 1);
-    assert.strictEqual(loadArgs[0].skip, 0, "skip is not exists");
-    assert.strictEqual(loadArgs[0].take, 20, "take is not exists");
-    assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+    assert.strictEqual(loadArgs[0].skip, 0, 'skip is not exists');
+    assert.strictEqual(loadArgs[0].take, 20, 'take is not exists');
+    assert.strictEqual(loadArgs[0].filter, undefined, 'filter is not exists');
 });
 
 // T748688
-QUnit.test("Custom store with remote paging and with local sorting", function(assert) {
+QUnit.test('Custom store with remote paging and with local sorting', function(assert) {
     // arrange
     var loadArgs = [];
     var source = createDataSource({
@@ -634,16 +634,16 @@ QUnit.test("Custom store with remote paging and with local sorting", function(as
     });
 
     // act
-    source.sort([{ selector: "x", desc: true }]);
+    source.sort([{ selector: 'x', desc: true }]);
     source.load();
 
     // assert
-    assert.strictEqual(source.items().length, 2, "items are paged");
-    assert.strictEqual(source.items()[0].x, 3, "items are sorted");
+    assert.strictEqual(source.items().length, 2, 'items are paged');
+    assert.strictEqual(source.items()[0].x, 3, 'items are sorted');
     assert.strictEqual(loadArgs.length, 1);
-    assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
-    assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
-    assert.strictEqual(loadArgs[0].sort, undefined, "sort is not exists");
+    assert.strictEqual(loadArgs[0].skip, undefined, 'skip is not exists');
+    assert.strictEqual(loadArgs[0].take, undefined, 'take is not exists');
+    assert.strictEqual(loadArgs[0].sort, undefined, 'sort is not exists');
 
     // act
     loadArgs = [];
@@ -651,15 +651,15 @@ QUnit.test("Custom store with remote paging and with local sorting", function(as
     source.load();
 
     // assert
-    assert.strictEqual(source.items().length, 2, "items are paged");
-    assert.strictEqual(source.items()[0].x, 1, "items are not sorted");
+    assert.strictEqual(source.items().length, 2, 'items are paged');
+    assert.strictEqual(source.items()[0].x, 1, 'items are not sorted');
     assert.strictEqual(loadArgs.length, 1);
-    assert.strictEqual(loadArgs[0].skip, 0, "skip is not exists");
-    assert.strictEqual(loadArgs[0].take, 2, "take is not exists");
-    assert.strictEqual(loadArgs[0].sort, undefined, "sort is not exists");
+    assert.strictEqual(loadArgs[0].skip, 0, 'skip is not exists');
+    assert.strictEqual(loadArgs[0].take, 2, 'take is not exists');
+    assert.strictEqual(loadArgs[0].sort, undefined, 'sort is not exists');
 });
 
-QUnit.module("DataSource when not requireTotalCount", {
+QUnit.module('DataSource when not requireTotalCount', {
     beforeEach: function() {
         this.dataSource = createDataSource({
             store: new ArrayStore(TEN_NUMBERS),
@@ -669,7 +669,7 @@ QUnit.module("DataSource when not requireTotalCount", {
     }
 });
 
-QUnit.test("isLastPage and hasKnownLastPagefor first page", function(assert) {
+QUnit.test('isLastPage and hasKnownLastPagefor first page', function(assert) {
     var source = this.dataSource;
     // act
     source.load();
@@ -679,7 +679,7 @@ QUnit.test("isLastPage and hasKnownLastPagefor first page", function(assert) {
     assert.ok(!source.hasKnownLastPage());
 });
 
-QUnit.test("isLastPage and hasKnownLastPage for last page", function(assert) {
+QUnit.test('isLastPage and hasKnownLastPage for last page', function(assert) {
     var source = this.dataSource;
     source.pageIndex(3);
     // act
@@ -690,7 +690,7 @@ QUnit.test("isLastPage and hasKnownLastPage for last page", function(assert) {
     assert.ok(source.hasKnownLastPage());
 });
 
-QUnit.test("isLastPage and hasKnownLastPage for first page after last page", function(assert) {
+QUnit.test('isLastPage and hasKnownLastPage for first page after last page', function(assert) {
     var source = this.dataSource;
     source.pageIndex(3);
     source.load();
@@ -704,7 +704,7 @@ QUnit.test("isLastPage and hasKnownLastPage for first page after last page", fun
     assert.ok(source.hasKnownLastPage());
 });
 
-QUnit.test("totalCount for first page", function(assert) {
+QUnit.test('totalCount for first page', function(assert) {
     var source = this.dataSource;
     // act
     source.load();
@@ -713,7 +713,7 @@ QUnit.test("totalCount for first page", function(assert) {
     assert.equal(source.totalCount(), 3);
 });
 
-QUnit.test("totalCount for last page", function(assert) {
+QUnit.test('totalCount for last page', function(assert) {
     var source = this.dataSource;
     source.pageIndex(3);
     // act
@@ -723,7 +723,7 @@ QUnit.test("totalCount for last page", function(assert) {
     assert.equal(source.totalCount(), 10);
 });
 
-QUnit.test("totalCount for page after last", function(assert) {
+QUnit.test('totalCount for page after last', function(assert) {
     var source = this.dataSource;
     source.pageIndex(5);
     // act
@@ -733,7 +733,7 @@ QUnit.test("totalCount for page after last", function(assert) {
     assert.equal(source.totalCount(), 15);
 });
 
-QUnit.test("pageIndex greater then pages count", function(assert) {
+QUnit.test('pageIndex greater then pages count', function(assert) {
     var source = this.dataSource;
     source.pageIndex(5);
     // act
@@ -743,7 +743,7 @@ QUnit.test("pageIndex greater then pages count", function(assert) {
     assert.equal(source.pageIndex(), 4);
 });
 
-QUnit.test("pageIndex equals pages count when last page has items count equals pageSize", function(assert) {
+QUnit.test('pageIndex equals pages count when last page has items count equals pageSize', function(assert) {
     var source = this.dataSource;
     source.pageSize(5);
     source.pageIndex(2);
@@ -756,7 +756,7 @@ QUnit.test("pageIndex equals pages count when last page has items count equals p
 });
 
 
-QUnit.module("DataSource without cache", {
+QUnit.module('DataSource without cache', {
     beforeEach: function() {
         this.dataSource = createDataSource({
             store: TEN_NUMBERS,
@@ -766,7 +766,7 @@ QUnit.module("DataSource without cache", {
     }
 });
 
-QUnit.test("first load", function(assert) {
+QUnit.test('first load', function(assert) {
     var loadedCount = 0;
     var source = this.dataSource;
 
@@ -783,7 +783,7 @@ QUnit.test("first load", function(assert) {
     assert.equal(loadedCount, 1);
 });
 
-QUnit.test("load next page", function(assert) {
+QUnit.test('load next page', function(assert) {
     var loadedCount = 0;
     var source = this.dataSource;
 
@@ -804,7 +804,7 @@ QUnit.test("load next page", function(assert) {
     assert.strictEqual(loadedCount, 2);
 });
 
-QUnit.test("second load page", function(assert) {
+QUnit.test('second load page', function(assert) {
     var loadedCount = 0;
     var source = this.dataSource;
 
@@ -828,7 +828,7 @@ QUnit.test("second load page", function(assert) {
 });
 
 
-QUnit.test("integer pageIndex", function(assert) {
+QUnit.test('integer pageIndex', function(assert) {
     var source = this.dataSource;
 
     source.load();
@@ -843,7 +843,7 @@ QUnit.test("integer pageIndex", function(assert) {
     assert.deepEqual(source.items(), [4, 5, 6]);
 });
 
-QUnit.module("Grouping with basic remoteOperations", {
+QUnit.module('Grouping with basic remoteOperations', {
     beforeEach: function() {
         this.array = [
             { field1: 1, field2: 2, field3: 3 },
@@ -867,7 +867,7 @@ QUnit.module("Grouping with basic remoteOperations", {
     }
 });
 
-QUnit.test("grouping without paginate", function(assert) {
+QUnit.test('grouping without paginate', function(assert) {
     var source = this.createDataSource({
         paginate: false
     });
@@ -887,7 +887,7 @@ QUnit.test("grouping without paginate", function(assert) {
 });
 
 // T137160
-QUnit.test("collapse group with undefined value when grouping without paginate", function(assert) {
+QUnit.test('collapse group with undefined value when grouping without paginate', function(assert) {
     var source = this.createDataSource({
         paginate: false,
         group: 'field0'
@@ -906,7 +906,7 @@ QUnit.test("collapse group with undefined value when grouping without paginate",
 });
 
 // T136667
-QUnit.test("collapse group with date value when grouping without paginate", function(assert) {
+QUnit.test('collapse group with date value when grouping without paginate', function(assert) {
     var source = this.createDataSource({
         store: [
             { field1: new Date(2012, 1, 5), field2: 1 },
@@ -930,7 +930,7 @@ QUnit.test("collapse group with date value when grouping without paginate", func
     }]);
 });
 
-QUnit.test("keys for items in groups", function(assert) {
+QUnit.test('keys for items in groups', function(assert) {
     var source = this.createDataSource({
         store: new ArrayStore({ key: 'field3', data: this.array }),
         paginate: false
@@ -953,7 +953,7 @@ QUnit.test("keys for items in groups", function(assert) {
     }]);
 });
 
-QUnit.test("grouping with pageSize more items count", function(assert) {
+QUnit.test('grouping with pageSize more items count', function(assert) {
     var source = this.createDataSource();
 
     // act
@@ -974,7 +974,7 @@ QUnit.test("grouping with pageSize more items count", function(assert) {
 });
 
 // T105748
-QUnit.test("grouping with sorting", function(assert) {
+QUnit.test('grouping with sorting', function(assert) {
     var source = this.createDataSource({
         sort: 'field3',
         store: [
@@ -1018,7 +1018,7 @@ QUnit.test("grouping with sorting", function(assert) {
     assert.equal(source.itemsCount(), 11);
 });
 
-QUnit.test("grouping with pageSize less items count", function(assert) {
+QUnit.test('grouping with pageSize less items count', function(assert) {
     var source = this.createDataSource({
         pageSize: 2
     });
@@ -1036,7 +1036,7 @@ QUnit.test("grouping with pageSize less items count", function(assert) {
     assert.equal(source.itemsCount(), 2);
 });
 
-QUnit.test("grouping with pageSize less items count. Continue group parameter", function(assert) {
+QUnit.test('grouping with pageSize less items count. Continue group parameter', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         pageIndex: 1
@@ -1056,7 +1056,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter", 
     assert.equal(source.itemsCount(), 2, 'items count with continue group');
 });
 
-QUnit.test("grouping with pageSize less items count. Continue group parameter when virtual scrolling", function(assert) {
+QUnit.test('grouping with pageSize less items count. Continue group parameter when virtual scrolling', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         pageIndex: 1,
@@ -1077,7 +1077,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter wh
     assert.equal(source.itemsCount(), 2, 'items count without continue group');
 });
 
-QUnit.test("collapse group on first page after loading second page", function(assert) {
+QUnit.test('collapse group on first page after loading second page', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         scrolling: { mode: 'virtual', preventPreload: true }
@@ -1106,7 +1106,7 @@ QUnit.test("collapse group on first page after loading second page", function(as
 });
 
 
-QUnit.test("changed callback fired after changeRowExpand", function(assert) {
+QUnit.test('changed callback fired after changeRowExpand', function(assert) {
     var source = this.createDataSource({
         pageSize: 3,
         store: [
@@ -1136,7 +1136,7 @@ QUnit.test("changed callback fired after changeRowExpand", function(assert) {
     source.load();
 });
 
-QUnit.test("changed callback fired after changeRowExpand when no groups", function(assert) {
+QUnit.test('changed callback fired after changeRowExpand when no groups', function(assert) {
     var source = this.createDataSource({
         pageSize: 3,
         group: null,
@@ -1163,7 +1163,7 @@ QUnit.test("changed callback fired after changeRowExpand when no groups", functi
     assert.ok(isChanged, 'changed called');
 });
 
-QUnit.test("grouping with pageSize less items count. Continue group parameter not set when previous page ends with collapsed group", function(assert) {
+QUnit.test('grouping with pageSize less items count. Continue group parameter not set when previous page ends with collapsed group', function(assert) {
     var source = this.createDataSource({
         pageSize: 3,
         store: [
@@ -1186,7 +1186,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter no
     }]);
 });
 
-QUnit.test("grouping with pageSize less items count. Continue group parameter not set", function(assert) {
+QUnit.test('grouping with pageSize less items count. Continue group parameter not set', function(assert) {
     var source = this.createDataSource({
         pageSize: 3,
         pageIndex: 1
@@ -1201,7 +1201,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter no
     }]);
 });
 
-QUnit.test("grouping with pageSize less items count. Continue on next page group parameter", function(assert) {
+QUnit.test('grouping with pageSize less items count. Continue on next page group parameter', function(assert) {
     var source = this.createDataSource({
         pageSize: 2
     });
@@ -1218,7 +1218,7 @@ QUnit.test("grouping with pageSize less items count. Continue on next page group
     }]);
 });
 
-QUnit.test("grouping with pageSize less items count. Continue on next page group parameter when has collapsed item", function(assert) {
+QUnit.test('grouping with pageSize less items count. Continue on next page group parameter when has collapsed item', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         store: [
@@ -1244,7 +1244,7 @@ QUnit.test("grouping with pageSize less items count. Continue on next page group
     }]);
 });
 
-QUnit.test("grouping with pageSize less items count. Not Continue on next page group parameter when all items on group on current page", function(assert) {
+QUnit.test('grouping with pageSize less items count. Not Continue on next page group parameter when all items on group on current page', function(assert) {
     var source = this.createDataSource({
         pageSize: 3
     });
@@ -1262,7 +1262,7 @@ QUnit.test("grouping with pageSize less items count. Not Continue on next page g
     }]);
 });
 
-QUnit.test("grouping without paginate. Collapse group", function(assert) {
+QUnit.test('grouping without paginate. Collapse group', function(assert) {
     var source = this.createDataSource({
         paginate: false
     });
@@ -1280,7 +1280,7 @@ QUnit.test("grouping without paginate. Collapse group", function(assert) {
     assert.equal(source.itemsCount(), 2);
 });
 
-QUnit.test("grouping without paginate. Expand group after collapse", function(assert) {
+QUnit.test('grouping without paginate. Expand group after collapse', function(assert) {
     var source = this.createDataSource({
         paginate: false
     });
@@ -1305,7 +1305,7 @@ QUnit.test("grouping without paginate. Expand group after collapse", function(as
 });
 
 
-QUnit.test("grouping with paginate. Collapse group", function(assert) {
+QUnit.test('grouping with paginate. Collapse group', function(assert) {
     var source = this.createDataSource({});
 
     source.load();
@@ -1322,9 +1322,9 @@ QUnit.test("grouping with paginate. Collapse group", function(assert) {
 });
 
 // T635726
-QUnit.test("expand group item if group level is collapsed", function(assert) {
+QUnit.test('expand group item if group level is collapsed', function(assert) {
     var source = this.createDataSource({
-        group: [{ selector: "field1", isExpanded: false }]
+        group: [{ selector: 'field1', isExpanded: false }]
     });
 
     source.load();
@@ -1339,23 +1339,23 @@ QUnit.test("expand group item if group level is collapsed", function(assert) {
     }]);
 });
 
-QUnit.test("grouping with paginate. Collapse group when remote sorting and local sorting are different", function(assert) {
+QUnit.test('grouping with paginate. Collapse group when remote sorting and local sorting are different', function(assert) {
     var arrayStore = new ArrayStore([
-        { field1: "ES", field2: 1 },
-        { field1: "ES", field2: 2 },
-        { field1: "ES", field2: 3 },
-        { field1: "ES", field2: 4 },
-        { field1: "ES", field2: 5 },
-        { field1: "Győr", field2: 6 },
-        { field1: "Győr", field2: 7 },
-        { field1: "Győr", field2: 8 },
-        { field1: "Győr", field2: 9 },
-        { field1: "Győr", field2: 10 },
-        { field1: "Göd", field2: 11 },
-        { field1: "Göd", field2: 12 },
-        { field1: "Göd", field2: 13 },
-        { field1: "Göd", field2: 14 },
-        { field1: "Göd", field2: 15 }
+        { field1: 'ES', field2: 1 },
+        { field1: 'ES', field2: 2 },
+        { field1: 'ES', field2: 3 },
+        { field1: 'ES', field2: 4 },
+        { field1: 'ES', field2: 5 },
+        { field1: 'Győr', field2: 6 },
+        { field1: 'Győr', field2: 7 },
+        { field1: 'Győr', field2: 8 },
+        { field1: 'Győr', field2: 9 },
+        { field1: 'Győr', field2: 10 },
+        { field1: 'Göd', field2: 11 },
+        { field1: 'Göd', field2: 12 },
+        { field1: 'Göd', field2: 13 },
+        { field1: 'Göd', field2: 14 },
+        { field1: 'Göd', field2: 15 }
     ]);
 
     var source = this.createDataSource({
@@ -1365,7 +1365,7 @@ QUnit.test("grouping with paginate. Collapse group when remote sorting and local
                 var d = $.Deferred();
                 if(options.sort) {
                     options.sort[0].selector = function(data) {
-                        return $.inArray(data.field1, ["ES", "Göd", "Győr"]);
+                        return $.inArray(data.field1, ['ES', 'Göd', 'Győr']);
                     };
                 }
                 $.when(arrayStore.load(options), arrayStore.totalCount(options)).done(function(items, totalCount) {
@@ -1379,38 +1379,38 @@ QUnit.test("grouping with paginate. Collapse group when remote sorting and local
     source.load();
 
     // act
-    source.changeRowExpand(["ES"]);
+    source.changeRowExpand(['ES']);
     source.load();
-    source.changeRowExpand(["Göd"]);
+    source.changeRowExpand(['Göd']);
     source.load();
 
     // assert
     assert.deepEqual(source.items(), [{
-        key: "ES", items: null
+        key: 'ES', items: null
     }, {
-        key: "Göd", items: null
+        key: 'Göd', items: null
     }, {
-        key: "Győr", isContinuationOnNextPage: true, items: [
-            { field1: "Győr", field2: 6 },
-            { field1: "Győr", field2: 7 }
+        key: 'Győr', isContinuationOnNextPage: true, items: [
+            { field1: 'Győr', field2: 6 },
+            { field1: 'Győr', field2: 7 }
         ]
     }]);
 
     // act
-    source.changeRowExpand(["Győr"]);
+    source.changeRowExpand(['Győr']);
     source.load();
 
     // assert
     assert.deepEqual(source.items(), [{
-        key: "ES", items: null
+        key: 'ES', items: null
     }, {
-        key: "Göd", items: null
+        key: 'Göd', items: null
     }, {
-        key: "Győr", items: null
+        key: 'Győr', items: null
     }]);
 });
 
-QUnit.test("grouping with paginate. Collapse group when CustomStore used", function(assert) {
+QUnit.test('grouping with paginate. Collapse group when CustomStore used', function(assert) {
     var arrayStore = new ArrayStore(this.array);
 
     var source = this.createDataSource({
@@ -1439,12 +1439,12 @@ QUnit.test("grouping with paginate. Collapse group when CustomStore used", funct
 });
 
 // T720420
-QUnit.test("grouping with paginate. Collapse group and paging when ODataStore used", function(assert) {
+QUnit.test('grouping with paginate. Collapse group and paging when ODataStore used', function(assert) {
     var arrayStore = new ArrayStore(this.array);
 
     var source = this.createDataSource({
         pageSize: 2,
-        group: "field2",
+        group: 'field2',
         store: new CustomStore({
             load: function(options) {
                 var d = $.Deferred();
@@ -1472,7 +1472,7 @@ QUnit.test("grouping with paginate. Collapse group and paging when ODataStore us
     }]);
 });
 
-QUnit.test("grouping with paginate. Collapse group when dataSource has filter", function(assert) {
+QUnit.test('grouping with paginate. Collapse group when dataSource has filter', function(assert) {
     var source = this.createDataSource({
         store: [
             { field1: 1, field2: 2, field3: 3 },
@@ -1496,7 +1496,7 @@ QUnit.test("grouping with paginate. Collapse group when dataSource has filter", 
     }]);
 });
 
-QUnit.test("grouping with paginate. Collapse group when dataSource has filter 2", function(assert) {
+QUnit.test('grouping with paginate. Collapse group when dataSource has filter 2', function(assert) {
     var source = this.createDataSource({
         store: [
             { field1: 1, field2: 2, field3: 3 },
@@ -1521,7 +1521,7 @@ QUnit.test("grouping with paginate. Collapse group when dataSource has filter 2"
     assert.equal(source.itemsCount(), 3);
 });
 
-QUnit.test("grouping with paginate. Expand group after collapse", function(assert) {
+QUnit.test('grouping with paginate. Expand group after collapse', function(assert) {
     var source = this.createDataSource({});
 
     source.load();
@@ -1543,7 +1543,7 @@ QUnit.test("grouping with paginate. Expand group after collapse", function(asser
     }]);
 });
 
-QUnit.test("grouping with paginate. Update group offsets after expand by correct page offset", function(assert) {
+QUnit.test('grouping with paginate. Update group offsets after expand by correct page offset', function(assert) {
     var array = [
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 },
@@ -1587,7 +1587,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
     }]);
 });
 
-QUnit.test("sort group on add groupsInfo", function(assert) {
+QUnit.test('sort group on add groupsInfo', function(assert) {
     var source = this.createDataSource({
         store: [],
         pageSize: 3
@@ -1595,10 +1595,10 @@ QUnit.test("sort group on add groupsInfo", function(assert) {
 
     source.load();
 
-    source._grouping.addGroupInfo({ offset: 3, path: "1" });
-    source._grouping.addGroupInfo({ offset: 2, path: "2" });
-    source._grouping.addGroupInfo({ offset: 0, path: "3" });
-    source._grouping.addGroupInfo({ offset: 7, path: "4" });
+    source._grouping.addGroupInfo({ offset: 3, path: '1' });
+    source._grouping.addGroupInfo({ offset: 2, path: '2' });
+    source._grouping.addGroupInfo({ offset: 0, path: '3' });
+    source._grouping.addGroupInfo({ offset: 7, path: '4' });
 
     var offsets = $.map(source.getGroupsInfo(), function(g) {
         return g.offset;
@@ -1608,7 +1608,7 @@ QUnit.test("sort group on add groupsInfo", function(assert) {
 });
 
 // T231326
-QUnit.test("grouping with paginate. Update group offsets after expand by correct page offset 2", function(assert) {
+QUnit.test('grouping with paginate. Update group offsets after expand by correct page offset 2', function(assert) {
     var array = [
         { field1: 1, field2: 1, field3: 1 },
         { field1: 1, field2: 2, field3: 2 },
@@ -1713,7 +1713,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
     ];
     var source = this.createDataSource({
         store: array,
-        group: ["field1", "field2"],
+        group: ['field1', 'field2'],
         pageSize: 20,
         scrolling: { mode: 'virtual', preventPreload: true }
     });
@@ -1751,7 +1751,7 @@ QUnit.test("grouping with paginate. Update group offsets after expand by correct
 });
 
 // B254194, T310036
-QUnit.test("hide collapsed group when after filtering group has no elements", function(assert) {
+QUnit.test('hide collapsed group when after filtering group has no elements', function(assert) {
     var arrayStore = new ArrayStore(this.array);
 
     var source = this.createDataSource({
@@ -1799,7 +1799,7 @@ QUnit.test("hide collapsed group when after filtering group has no elements", fu
     assert.equal(source.itemsCount(), 1, 'visible items count');
 });
 
-QUnit.test("collapseAll when no grouped columns", function(assert) {
+QUnit.test('collapseAll when no grouped columns', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         group: null
@@ -1811,14 +1811,14 @@ QUnit.test("collapseAll when no grouped columns", function(assert) {
     source.load();
 
     // assert
-    assert.equal(source.pageCount(), 2, "pageCount");
+    assert.equal(source.pageCount(), 2, 'pageCount');
     assert.deepEqual(source.items(), [
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 }
-    ], "items");
+    ], 'items');
 });
 
-QUnit.test("expandAll when no grouped columns", function(assert) {
+QUnit.test('expandAll when no grouped columns', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         group: null
@@ -1830,14 +1830,14 @@ QUnit.test("expandAll when no grouped columns", function(assert) {
     source.load();
 
     // assert
-    assert.equal(source.pageCount(), 2, "pageCount");
+    assert.equal(source.pageCount(), 2, 'pageCount');
     assert.deepEqual(source.items(), [
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 }
-    ], "items");
+    ], 'items');
 });
 
-QUnit.test("loadTotalCount for CustomStore when totalCount in extra", function(assert) {
+QUnit.test('loadTotalCount for CustomStore when totalCount in extra', function(assert) {
     var lastLoadOptions;
 
     var store = new CustomStore({
@@ -1854,7 +1854,7 @@ QUnit.test("loadTotalCount for CustomStore when totalCount in extra", function(a
     // T329728
     if(store._customLoadOptions) {
         store._customLoadOptions = function() {
-            return ["param1"];
+            return ['param1'];
         };
     }
 
@@ -1884,7 +1884,7 @@ QUnit.test("loadTotalCount for CustomStore when totalCount in extra", function(a
     assert.strictEqual(totalCount, 10);
 });
 
-QUnit.test("loadTotalCount for CustomStore when no totalCount in extra", function(assert) {
+QUnit.test('loadTotalCount for CustomStore when no totalCount in extra', function(assert) {
     var lastLoadOptions,
         lastTotalCountOptions;
 
@@ -1929,7 +1929,7 @@ QUnit.test("loadTotalCount for CustomStore when no totalCount in extra", functio
 });
 
 // T545211
-QUnit.test("Ungrouping with custom store - there are no exceptions when remote paging", function(assert) {
+QUnit.test('Ungrouping with custom store - there are no exceptions when remote paging', function(assert) {
     // arrange
     var that = this,
         dataSource = createDataSource({
@@ -1944,7 +1944,7 @@ QUnit.test("Ungrouping with custom store - there are no exceptions when remote p
             remoteOperations: { paging: true }
         });
 
-    dataSource.group("field1");
+    dataSource.group('field1');
     dataSource.load();
 
     try {
@@ -1953,14 +1953,14 @@ QUnit.test("Ungrouping with custom store - there are no exceptions when remote p
         dataSource.load();
 
         // assert
-        assert.ok(true, "There are no exceptions");
+        assert.ok(true, 'There are no exceptions');
     } catch(error) {
         // assert
-        assert.ok(false, "exception was threw:" + error);
+        assert.ok(false, 'exception was threw:' + error);
     }
 });
 
-QUnit.module("Grouping with basic remoteOperations. Second level", {
+QUnit.module('Grouping with basic remoteOperations. Second level', {
     beforeEach: function() {
         this.array = [
             { field1: 1, field2: 2, field3: 3 },
@@ -1984,7 +1984,7 @@ QUnit.module("Grouping with basic remoteOperations. Second level", {
         this.clock.restore();
     }
 });
-QUnit.test("grouping with paginate", function(assert) {
+QUnit.test('grouping with paginate', function(assert) {
     var source = this.createDataSource({
         pageSize: 3
     });
@@ -2008,7 +2008,7 @@ QUnit.test("grouping with paginate", function(assert) {
 });
 
 // T134180
-QUnit.test("grouping with paginate and totalCount from extra", function(assert) {
+QUnit.test('grouping with paginate and totalCount from extra', function(assert) {
     var array = this.array;
     var source = this.createDataSource({
         load: function() {
@@ -2035,7 +2035,7 @@ QUnit.test("grouping with paginate and totalCount from extra", function(assert) 
     }]);
 });
 
-QUnit.test("grouping without paginate", function(assert) {
+QUnit.test('grouping without paginate', function(assert) {
     var source = this.createDataSource({
         paginate: false
     });
@@ -2065,7 +2065,7 @@ QUnit.test("grouping without paginate", function(assert) {
     }]);
 });
 
-QUnit.test("change group order when remote data", function(assert) {
+QUnit.test('change group order when remote data', function(assert) {
     var arrayStore = new ArrayStore([
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 },
@@ -2141,7 +2141,7 @@ QUnit.test("change group order when remote data", function(assert) {
 });
 
 
-QUnit.test("Continue group parameter for first group level only", function(assert) {
+QUnit.test('Continue group parameter for first group level only', function(assert) {
     var source = this.createDataSource({
         pageSize: 2,
         pageIndex: 1
@@ -2161,7 +2161,7 @@ QUnit.test("Continue group parameter for first group level only", function(asser
     }]);
 });
 
-QUnit.test("Continue group parameter for both group levels", function(assert) {
+QUnit.test('Continue group parameter for both group levels', function(assert) {
     var source = this.createDataSource({
         pageSize: 3,
         pageIndex: 1
@@ -2182,7 +2182,7 @@ QUnit.test("Continue group parameter for both group levels", function(assert) {
     }]);
 });
 
-QUnit.test("Continue on next page group parameter for first group level only", function(assert) {
+QUnit.test('Continue on next page group parameter for first group level only', function(assert) {
     var source = this.createDataSource({
         pageSize: 2
     });
@@ -2204,7 +2204,7 @@ QUnit.test("Continue on next page group parameter for first group level only", f
 
 });
 
-QUnit.test("Continue on next page group parameter for both group levels", function(assert) {
+QUnit.test('Continue on next page group parameter for both group levels', function(assert) {
     var source = this.createDataSource({
         pageSize: 3
     });
@@ -2231,7 +2231,7 @@ QUnit.test("Continue on next page group parameter for both group levels", functi
 
 });
 
-QUnit.test("Collapse second level group", function(assert) {
+QUnit.test('Collapse second level group', function(assert) {
     var source = this.createDataSource({
         pageSize: 4
     });
@@ -2260,7 +2260,7 @@ QUnit.test("Collapse second level group", function(assert) {
     }]);
 });
 
-QUnit.test("Collapse second level group and first level group", function(assert) {
+QUnit.test('Collapse second level group and first level group', function(assert) {
     var source = this.createDataSource({
         pageSize: 4
     });
@@ -2286,7 +2286,7 @@ QUnit.test("Collapse second level group and first level group", function(assert)
 });
 
 // T406350
-QUnit.test("Collapse second level group and first level group when scrolling mode is virtual", function(assert) {
+QUnit.test('Collapse second level group and first level group when scrolling mode is virtual', function(assert) {
     this.array = [
         { field1: 1, field2: 1, field3: 1 },
         { field1: 1, field2: 2, field3: 2 },
@@ -2325,7 +2325,7 @@ QUnit.test("Collapse second level group and first level group when scrolling mod
 });
 
 // T371565
-QUnit.test("Collapse several second level groups", function(assert) {
+QUnit.test('Collapse several second level groups', function(assert) {
     this.array = [
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 },
@@ -2362,7 +2362,7 @@ QUnit.test("Collapse several second level groups", function(assert) {
     }]);
 });
 
-QUnit.test("Collapse state of items restore after expand", function(assert) {
+QUnit.test('Collapse state of items restore after expand', function(assert) {
     var source = this.createDataSource({
         pageSize: 4
     });
@@ -2395,7 +2395,7 @@ QUnit.test("Collapse state of items restore after expand", function(assert) {
     }]);
 });
 
-QUnit.test("change sortOrder of group", function(assert) {
+QUnit.test('change sortOrder of group', function(assert) {
     var loadingChangedCount = 0;
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
@@ -2437,7 +2437,7 @@ QUnit.test("change sortOrder of group", function(assert) {
     assert.ok(!source.isLoading(), 'load completed');
 });
 
-QUnit.test("reset groups info when change group fields", function(assert) {
+QUnit.test('reset groups info when change group fields', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
     var source = this.createDataSource({
@@ -2454,7 +2454,7 @@ QUnit.test("reset groups info when change group fields", function(assert) {
     assert.deepEqual(source.getGroupsInfo(), []);
 });
 
-QUnit.test("reset groups info when clear group fields", function(assert) {
+QUnit.test('reset groups info when clear group fields', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
     var source = this.createDataSource({
@@ -2471,7 +2471,7 @@ QUnit.test("reset groups info when clear group fields", function(assert) {
     assert.deepEqual(source.getGroupsInfo(), []);
 });
 
-QUnit.test("clear second level groups info when change second level group field", function(assert) {
+QUnit.test('clear second level groups info when change second level group field', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
     var source = this.createDataSource({
@@ -2499,7 +2499,7 @@ QUnit.test("clear second level groups info when change second level group field"
     ]);
 });
 
-QUnit.test("clear second level groups info when change change groups count to one", function(assert) {
+QUnit.test('clear second level groups info when change change groups count to one', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
     var source = this.createDataSource({
@@ -2528,7 +2528,7 @@ QUnit.test("clear second level groups info when change change groups count to on
 });
 
 // T307341
-QUnit.test("Update group offset for expanded grouped row of the first level when change sortOrder of the first level group field", function(assert) {
+QUnit.test('Update group offset for expanded grouped row of the first level when change sortOrder of the first level group field', function(assert) {
     // arrange
     this.array = [
         { field1: 1, field2: 2, field3: 3 },
@@ -2581,7 +2581,7 @@ QUnit.test("Update group offset for expanded grouped row of the first level when
 });
 
 // T318433, T318206
-QUnit.test("change filter after collapse second level group", function(assert) {
+QUnit.test('change filter after collapse second level group', function(assert) {
     var source = this.createDataSource({
         pageSize: 3
     });
@@ -2591,12 +2591,12 @@ QUnit.test("change filter after collapse second level group", function(assert) {
     source.load();
 
     var loadArgs = [];
-    source.store().on("loading", function(e) {
+    source.store().on('loading', function(e) {
         loadArgs.push(e);
     });
 
     // act
-    source.filter(["field1", ">=", 1]);
+    source.filter(['field1', '>=', 1]);
     source.load();
 
     // assert
@@ -2613,13 +2613,13 @@ QUnit.test("change filter after collapse second level group", function(assert) {
         ]
     }]);
     assert.equal(loadArgs.length, 3);
-    assert.deepEqual(loadArgs[0].filter, [["field1", "=", 1], "and", ["field2", "=", 2], "and", ["field1", ">=", 1]]);
-    assert.deepEqual(loadArgs[1].filter, [[[["field1", "<", 1], "or", ["field1", "=", null]], "or", [["field1", "=", 1], "and", [["field2", "<", 2], "or", ["field2", "=", null]]]], "and", ["field1", ">=", 1]]);
-    assert.deepEqual(loadArgs[2].filter, [[["field1", "<>", 1], "or", [["field1", "=", 1], "and", ["field2", "<>", 2]]], "and", ["field1", ">=", 1]]);
+    assert.deepEqual(loadArgs[0].filter, [['field1', '=', 1], 'and', ['field2', '=', 2], 'and', ['field1', '>=', 1]]);
+    assert.deepEqual(loadArgs[1].filter, [[[['field1', '<', 1], 'or', ['field1', '=', null]], 'or', [['field1', '=', 1], 'and', [['field2', '<', 2], 'or', ['field2', '=', null]]]], 'and', ['field1', '>=', 1]]);
+    assert.deepEqual(loadArgs[2].filter, [[['field1', '<>', 1], 'or', [['field1', '=', 1], 'and', ['field2', '<>', 2]]], 'and', ['field1', '>=', 1]]);
 });
 
 function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOptions) {
-    if($.isArray(options.store) || (options.store && options.store.type === "array") || options.load) {
+    if($.isArray(options.store) || (options.store && options.store.type === 'array') || options.load) {
         var arrayStore = new ArrayStore(options.store || []);
         options.executeAsync = options.executeAsync || function(func) { func(); };
         brokeOptions = brokeOptions || {};
@@ -2647,7 +2647,7 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
             options.executeAsync(function() {
                 if(brokeOptions.errorOnFirstLoad) {
                     brokeOptions.errorOnFirstLoad = false;
-                    d.reject("Error");
+                    d.reject('Error');
                     return;
                 }
                 arrayStore.load(loadOptions).done(function(data) {
@@ -2682,7 +2682,7 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
     return createDataSource(options);
 }
 
-QUnit.module("Remote group paging", {
+QUnit.module('Remote group paging', {
     beforeEach: function() {
         this.array = [
             { field1: 1, field2: 2, field3: 3 },
@@ -2711,14 +2711,14 @@ QUnit.module("Remote group paging", {
     }
 });
 
-QUnit.test("Load collapsed group", function(assert) {
+QUnit.test('Load collapsed group', function(assert) {
     var dataSource = this.createDataSource({
-            group: "field2",
+            group: 'field2',
             pageSize: 2
         }),
         loadingChanged = sinon.stub();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.load();
 
@@ -2726,9 +2726,9 @@ QUnit.test("Load collapsed group", function(assert) {
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 
-    assert.equal(dataSource.totalItemsCount(), 4, "total items count");
+    assert.equal(dataSource.totalItemsCount(), 4, 'total items count');
     assert.strictEqual(loadingChanged.callCount, 1);
     // assert.deepEqual(loadingChanged.lastCall.args[0].group, "field2");
     assert.strictEqual(loadingChanged.lastCall.args[0].requireTotalCount, true);
@@ -2738,16 +2738,16 @@ QUnit.test("Load collapsed group", function(assert) {
 
 });
 
-QUnit.test("Load collapsed group and expand first item", function(assert) {
+QUnit.test('Load collapsed group and expand first item', function(assert) {
     var dataSource = this.createDataSource({
-            group: "field2",
+            group: 'field2',
             pageSize: 3
         }),
         loadingChanged = sinon.stub();
 
     dataSource.load();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.changeRowExpand([2]);
 
@@ -2756,53 +2756,53 @@ QUnit.test("Load collapsed group and expand first item", function(assert) {
     assert.deepEqual(dataSource.items(), [
         {
             key: 2,
-            items: [{ "field1": 1, "field2": 2, "field3": 3 },
-                { "field1": 1, "field2": 2, "field3": 4 }]
-        }], "items");
+            items: [{ 'field1': 1, 'field2': 2, 'field3': 3 },
+                { 'field1': 1, 'field2': 2, 'field3': 4 }]
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 6, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 2, "loading count");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field2" }], "group by for second level loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, "require total count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for first level");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for first level");
+    assert.equal(dataSource.totalItemsCount(), 6, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 2, 'loading count');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'field2' }], 'group by for second level loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, 'require total count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, 'require group count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip for first level');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take for first level');
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, null, "group by for second level loading");
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field2", "=", 2], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, false, "require group count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, undefined, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 2, "take for second level");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, null, 'group by for second level loading');
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ['field2', '=', 2], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, 'require total count is passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, false, 'require group count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, undefined, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 2, 'take for second level');
 });
 
 // T511907
-QUnit.test("Load collapsed group and expand group item that contain items with white space at the end", function(assert) {
+QUnit.test('Load collapsed group and expand group item that contain items with white space at the end', function(assert) {
     var loadStub = sinon.stub(),
         dataSource = this.createDataSource({
             load: loadStub,
-            group: "name",
+            group: 'name',
             pageSize: 3
         });
 
     loadStub.onCall(0).returns($.Deferred().resolve({ data: [
-        { key: "test1", items: null, count: 3 },
-        { key: "test2", items: null, count: 3 },
-        { key: "test3", items: null, count: 3 }
+        { key: 'test1', items: null, count: 3 },
+        { key: 'test2', items: null, count: 3 },
+        { key: 'test3', items: null, count: 3 }
     ], totalCount: 9, groupCount: 3 }));
 
     loadStub.onCall(1).returns($.Deferred().resolve({ data: [
-        { key: "test1", items: null, count: 3 }
+        { key: 'test1', items: null, count: 3 }
     ], totalCount: 9, groupCount: 3 }));
 
     loadStub.onCall(2).returns($.Deferred().resolve({ data: [
-        { name: "test1", id: 1 },
-        { name: "test1 ", id: 2 }
+        { name: 'test1', id: 1 },
+        { name: 'test1 ', id: 2 }
     ] }));
 
     dataSource.load();
 
-    dataSource.changeRowExpand(["test1"]);
+    dataSource.changeRowExpand(['test1']);
 
     // act
     dataSource.load();
@@ -2810,64 +2810,64 @@ QUnit.test("Load collapsed group and expand group item that contain items with w
     // assert
     assert.deepEqual(dataSource.items(), [
         {
-            key: "test1",
+            key: 'test1',
             isContinuationOnNextPage: true,
             items: [
-                { name: "test1", id: 1 },
-                { name: "test1 ", id: 2 }
+                { name: 'test1', id: 1 },
+                { name: 'test1 ', id: 2 }
             ]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 7, "total items count");
+    assert.equal(dataSource.totalItemsCount(), 7, 'total items count');
 
-    assert.strictEqual(loadStub.callCount, 3, "loading count");
-    assert.deepEqual(loadStub.getCall(0).args[0].group, [{ "desc": false, "selector": "name" }], "load 0 group");
-    assert.deepEqual(loadStub.getCall(1).args[0].group, [{ "desc": false, "selector": "name" }], "load 1 group");
+    assert.strictEqual(loadStub.callCount, 3, 'loading count');
+    assert.deepEqual(loadStub.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'name' }], 'load 0 group');
+    assert.deepEqual(loadStub.getCall(1).args[0].group, [{ 'desc': false, 'selector': 'name' }], 'load 1 group');
 
-    assert.deepEqual(loadStub.getCall(2).args[0].group, null, "load 2 group");
-    assert.deepEqual(loadStub.getCall(2).args[0].filter, ["name", "=", "test1"], "load 2 filter");
-    assert.strictEqual(loadStub.getCall(2).args[0].skip, undefined, "load 2 skip");
-    assert.strictEqual(loadStub.getCall(2).args[0].take, 2, "load 2 skip");
+    assert.deepEqual(loadStub.getCall(2).args[0].group, null, 'load 2 group');
+    assert.deepEqual(loadStub.getCall(2).args[0].filter, ['name', '=', 'test1'], 'load 2 filter');
+    assert.strictEqual(loadStub.getCall(2).args[0].skip, undefined, 'load 2 skip');
+    assert.strictEqual(loadStub.getCall(2).args[0].take, 2, 'load 2 skip');
 });
 
-QUnit.test("Expand group if group key is object", function(assert) {
+QUnit.test('Expand group if group key is object', function(assert) {
     var dataSource = this.createDataSource({
         load: function() {
             return $.Deferred().resolve({ data: [
-                { key: { groupId: 1, groupName: "test 1" }, items: [{ id: 1 }] },
-                { key: { groupId: 2, groupName: "test 2" }, items: [{ id: 2 }] }
+                { key: { groupId: 1, groupName: 'test 1' }, items: [{ id: 1 }] },
+                { key: { groupId: 2, groupName: 'test 2' }, items: [{ id: 2 }] }
             ], totalCount: 2, groupCount: 2 });
         },
-        group: "group"
+        group: 'group'
     });
 
     dataSource.load();
 
     // act
-    dataSource.changeRowExpand([{ groupId: 1, groupName: "test 1" }]);
+    dataSource.changeRowExpand([{ groupId: 1, groupName: 'test 1' }]);
     dataSource.load();
 
     // assert
-    assert.equal(dataSource.totalItemsCount(), 3, "total items count");
+    assert.equal(dataSource.totalItemsCount(), 3, 'total items count');
     assert.deepEqual(dataSource.items(), [{
-        key: { groupId: 1, groupName: "test 1" },
+        key: { groupId: 1, groupName: 'test 1' },
         items: [{ id: 1 }]
     }, {
-        key: { groupId: 2, groupName: "test 2" },
+        key: { groupId: 2, groupName: 'test 2' },
         items: null
-    }], "items");
+    }], 'items');
 });
 
-QUnit.test("Load collapsed group and expand first item when native promise is used", function(assert) {
+QUnit.test('Load collapsed group and expand first item when native promise is used', function(assert) {
     var dataSource = this.createDataSource({
-            group: "field2",
+            group: 'field2',
             pageSize: 3
         }, { useNativePromise: true }),
         loadingChanged = sinon.stub();
 
     dataSource.load();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.changeRowExpand([2]);
 
@@ -2876,21 +2876,21 @@ QUnit.test("Load collapsed group and expand first item when native promise is us
     assert.deepEqual(dataSource.items(), [
         {
             key: 2,
-            items: [{ "field1": 1, "field2": 2, "field3": 3 },
-                { "field1": 1, "field2": 2, "field3": 4 }]
-        }], "items");
+            items: [{ 'field1': 1, 'field2': 2, 'field3': 3 },
+                { 'field1': 1, 'field2': 2, 'field3': 4 }]
+        }], 'items');
 });
 
-QUnit.test("Send count query on row expand when next level is group", function(assert) {
+QUnit.test('Send count query on row expand when next level is group', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field2", "field1"],
+            group: ['field2', 'field1'],
             pageSize: 2
         }),
         loadingChanged = sinon.stub();
 
     dataSource.load();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.changeRowExpand([2]);
 
@@ -2898,29 +2898,29 @@ QUnit.test("Send count query on row expand when next level is group", function(a
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 
-    assert.equal(dataSource.totalItemsCount(), 4, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 1, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 4, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 1, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, "require total count is not passed on loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is not passed on loading");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ["field2", "=", 2], "filter");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, 'require total count is not passed on loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, 'require group count is not passed on loading');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ['field2', '=', 2], 'filter');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take');
 });
 
-QUnit.test("Send count query on row expand when next level is group if group by 3 levels", function(assert) {
+QUnit.test('Send count query on row expand when next level is group if group by 3 levels', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field2", "field1", "field3"],
+            group: ['field2', 'field1', 'field3'],
             pageSize: 2
         }),
         loadingChanged = sinon.stub();
 
     dataSource.load();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.changeRowExpand([2]);
 
@@ -2928,30 +2928,30 @@ QUnit.test("Send count query on row expand when next level is group if group by 
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 
-    assert.equal(dataSource.totalItemsCount(), 4, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 1, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 4, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 1, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, "require total count is not passed on loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is not passed on loading");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ["field2", "=", 2], "filter");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, 'require total count is not passed on loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, 'require group count is not passed on loading');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ['field2', '=', 2], 'filter');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take');
 });
 
 // T493778
-QUnit.test("Send count query on row expand when next level is group if use native promises", function(assert) {
+QUnit.test('Send count query on row expand when next level is group if use native promises', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field2", "field1"],
+            group: ['field2', 'field1'],
             pageSize: 2
         }, { useNativePromise: true }),
         loaded = sinon.stub();
 
     dataSource.load();
 
-    dataSource.store().on("loaded", loaded);
+    dataSource.store().on('loaded', loaded);
 
     dataSource.changeRowExpand([2]);
 
@@ -2959,37 +2959,37 @@ QUnit.test("Send count query on row expand when next level is group if use nativ
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 
-    assert.equal(dataSource.totalItemsCount(), 4, "total items count");
-    assert.strictEqual(loaded.callCount, 1, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 4, 'total items count');
+    assert.strictEqual(loaded.callCount, 1, 'loading count');
 
-    assert.deepEqual(loaded.getCall(0).args[0], { data: [{ key: 1, items: null, count: 2 }], groupCount: 1, totalCount: undefined }, "loaded data");
+    assert.deepEqual(loaded.getCall(0).args[0], { data: [{ key: 1, items: null, count: 2 }], groupCount: 1, totalCount: undefined }, 'loaded data');
 
-    assert.deepEqual(loaded.getCall(0).args[1].group, [{ "desc": false, "selector": "field1" }], "group");
-    assert.strictEqual(loaded.getCall(0).args[1].requireTotalCount, false, "require total count is not passed on loading");
-    assert.strictEqual(loaded.getCall(0).args[1].requireGroupCount, true, "require group count is not passed on loading");
-    assert.deepEqual(loaded.getCall(0).args[1].filter, ["field2", "=", 2], "filter");
-    assert.strictEqual(loaded.getCall(0).args[1].skip, 0, "skip");
-    assert.strictEqual(loaded.getCall(0).args[1].take, 1, "take");
+    assert.deepEqual(loaded.getCall(0).args[1].group, [{ 'desc': false, 'selector': 'field1' }], 'group');
+    assert.strictEqual(loaded.getCall(0).args[1].requireTotalCount, false, 'require total count is not passed on loading');
+    assert.strictEqual(loaded.getCall(0).args[1].requireGroupCount, true, 'require group count is not passed on loading');
+    assert.deepEqual(loaded.getCall(0).args[1].filter, ['field2', '=', 2], 'filter');
+    assert.strictEqual(loaded.getCall(0).args[1].skip, 0, 'skip');
+    assert.strictEqual(loaded.getCall(0).args[1].take, 1, 'take');
 });
 
-QUnit.test("Load collapsed groups and expand first item when two groups", function(assert) {
+QUnit.test('Load collapsed groups and expand first item when two groups', function(assert) {
     var dataSource = this.createDataSource({
             executeAsync: function(func, loadOptions) {
                 setTimeout(func, 10);
             },
-            group: ["field1", "field2"],
+            group: ['field1', 'field2'],
             pageSize: 3
         }),
         loadingChanged = sinon.stub();
 
     dataSource.summary({
         groupAggregates: [{
-            summaryType: "count"
+            summaryType: 'count'
         }],
         totalAggregates: [{
-            summaryType: "count"
+            summaryType: 'count'
         }]
     });
 
@@ -2999,7 +2999,7 @@ QUnit.test("Load collapsed groups and expand first item when two groups", functi
     dataSource.changeRowExpand([1]);
     this.clock.tick(10);
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.load();
     this.clock.tick(10);
@@ -3016,30 +3016,30 @@ QUnit.test("Load collapsed groups and expand first item when two groups", functi
                 key: 3,
                 items: null
             }]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 6, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 2, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 6, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 2, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group by for second level loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, "require total count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for first level");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for first level");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].groupSummary, [{ summaryType: "count" }], "groupSummary for first loading");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].totalSummary, [{ summaryType: "count" }], "totalSummary for first loading");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group by for second level loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, 'require total count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, 'require group count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip for first level');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take for first level');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].groupSummary, [{ summaryType: 'count' }], 'groupSummary for first loading');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].totalSummary, [{ summaryType: 'count' }], 'totalSummary for first loading');
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, [{ "desc": false, "selector": "field2" }], "group by for second level loading");
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "=", 1], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 2, "take for second level");
-    assert.deepEqual(loadingChanged.getCall(1).args[0].groupSummary, [{ summaryType: "count" }], "groupSummary for second loading");
-    assert.deepEqual(loadingChanged.getCall(1).args[0].totalSummary, undefined, "no totalSummary for second loading");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, [{ 'desc': false, 'selector': 'field2' }], 'group by for second level loading');
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ['field1', '=', 1], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, 'require total count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, 'require group count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 2, 'take for second level');
+    assert.deepEqual(loadingChanged.getCall(1).args[0].groupSummary, [{ summaryType: 'count' }], 'groupSummary for second loading');
+    assert.deepEqual(loadingChanged.getCall(1).args[0].totalSummary, undefined, 'no totalSummary for second loading');
 });
 
-QUnit.test("Load collapsed groups, expand second big item and go to third page when two groups", function(assert) {
+QUnit.test('Load collapsed groups, expand second big item and go to third page when two groups', function(assert) {
     var array = [{ field1: 1, field2: 2, field3: 3 },
         { field1: 2, field2: 3, field3: 4 },
         { field1: 2, field2: 4, field3: 5 },
@@ -3051,7 +3051,7 @@ QUnit.test("Load collapsed groups, expand second big item and go to third page w
 
     var dataSource = this.createDataSource({
         store: array,
-        group: ["field1", "field2"],
+        group: ['field1', 'field2'],
         pageSize: 3
     });
 
@@ -3080,12 +3080,12 @@ QUnit.test("Load collapsed groups, expand second big item and go to third page w
                 key: 7,
                 items: null
             }]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 12, "total items count");
+    assert.equal(dataSource.totalItemsCount(), 12, 'total items count');
 });
 
-QUnit.test("Load collapsed groups, expand second level item, expand third level big item and go to third page when two groups", function(assert) {
+QUnit.test('Load collapsed groups, expand second level item, expand third level big item and go to third page when two groups', function(assert) {
     var array = [{ field1: 1, field2: 2, field3: 3 },
         { field1: 2, field2: 3, field3: 4 },
         { field1: 2, field2: 4, field3: 5 },
@@ -3097,7 +3097,7 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
 
     var dataSource = this.createDataSource({
         store: array,
-        group: ["field1", "field2"],
+        group: ['field1', 'field2'],
         pageSize: 4
     });
 
@@ -3127,13 +3127,13 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
                 isContinuationOnNextPage: true,
                 items: [array[4], array[5]]
             }]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 16, "total items count");
+    assert.equal(dataSource.totalItemsCount(), 16, 'total items count');
 });
 
 // T623492
-QUnit.test("Change page several times after expand groups if data is grouped by two fields", function(assert) {
+QUnit.test('Change page several times after expand groups if data is grouped by two fields', function(assert) {
     var array = [];
     var i, j;
     for(i = 0; i < 4; i++) {
@@ -3147,7 +3147,7 @@ QUnit.test("Change page several times after expand groups if data is grouped by 
 
     var dataSource = this.createDataSource({
         store: array,
-        group: ["group1", "group2"],
+        group: ['group1', 'group2'],
         pageSize: 20,
         scrolling: { mode: 'virtual' }
     });
@@ -3183,51 +3183,51 @@ QUnit.test("Change page several times after expand groups if data is grouped by 
     dataSource.load();
 
     // assert
-    assert.deepEqual(dataSource.items().length, 4, "first level group count");
+    assert.deepEqual(dataSource.items().length, 4, 'first level group count');
 
-    assert.deepEqual(dataSource.items()[2].key, 3, "prev last group key");
+    assert.deepEqual(dataSource.items()[2].key, 3, 'prev last group key');
     assert.deepEqual(dataSource.items()[2].items, [{
-        "key": 0,
-        "isContinuationOnNextPage": true,
-        "items": [{
-            "group1": 3,
-            "group2": 0,
-            "id": 28
+        'key': 0,
+        'isContinuationOnNextPage': true,
+        'items': [{
+            'group1': 3,
+            'group2': 0,
+            'id': 28
         }, {
-            "group1": 3,
-            "group2": 0,
-            "id": 29
+            'group1': 3,
+            'group2': 0,
+            'id': 29
         }],
-    }], "prev last group items");
+    }], 'prev last group items');
 
-    assert.deepEqual(dataSource.items()[3].key, 3, "last group key");
+    assert.deepEqual(dataSource.items()[3].key, 3, 'last group key');
     assert.deepEqual(dataSource.items()[3].items, [{
-        "key": 0,
-        "isContinuation": true,
-        "items": [{
-            "group1": 3,
-            "group2": 0,
-            "id": 30
+        'key': 0,
+        'isContinuation': true,
+        'items': [{
+            'group1': 3,
+            'group2': 0,
+            'id': 30
         }, {
-            "group1": 3,
-            "group2": 0,
-            "id": 31
+            'group1': 3,
+            'group2': 0,
+            'id': 31
         }, {
-            "group1": 3,
-            "group2": 0,
-            "id": 32
+            'group1': 3,
+            'group2': 0,
+            'id': 32
         }, {
-            "group1": 3,
-            "group2": 0,
-            "id": 33
+            'group1': 3,
+            'group2': 0,
+            'id': 33
         }]
     }, {
-        "key": 1,
-        "items": null
-    }], "last group items");
+        'key': 1,
+        'items': null
+    }], 'last group items');
 });
 
-QUnit.test("Expand third level group", function(assert) {
+QUnit.test('Expand third level group', function(assert) {
     var array = [
         /* 1 */
         /* 2 */
@@ -3243,7 +3243,7 @@ QUnit.test("Expand third level group", function(assert) {
 
     var dataSource = this.createDataSource({
         store: array,
-        group: ["field1", "field2", "field3"],
+        group: ['field1', 'field2', 'field3'],
         pageSize: 6
     });
 
@@ -3260,7 +3260,7 @@ QUnit.test("Expand third level group", function(assert) {
     dataSource.load();
 
     // assert
-    assert.deepEqual(dataSource.items().length, 2, "group count on first levetl");
+    assert.deepEqual(dataSource.items().length, 2, 'group count on first levetl');
 
     assert.deepEqual(dataSource.items()[0].items, [{
         key: 2,
@@ -3268,14 +3268,14 @@ QUnit.test("Expand third level group", function(assert) {
             key: 3,
             items: [array[0], array[1]]
         }]
-    }], "items");
+    }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 9, "total items count");
+    assert.equal(dataSource.totalItemsCount(), 9, 'total items count');
 });
 
-QUnit.test("Load collapsed groups and expand two items when two groups", function(assert) {
+QUnit.test('Load collapsed groups and expand two items when two groups', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field1", "field2"],
+            group: ['field1', 'field2'],
             pageSize: 5
         }),
         loadingChanged = sinon.stub();
@@ -3286,7 +3286,7 @@ QUnit.test("Load collapsed groups and expand two items when two groups", functio
     dataSource.load();
 
     dataSource.changeRowExpand([2]);
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
     dataSource.load();
 
     assert.deepEqual(dataSource.items(), [
@@ -3307,28 +3307,28 @@ QUnit.test("Load collapsed groups and expand two items when two groups", functio
             key: 2,
             isContinuationOnNextPage: true,
             items: []
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 7, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 2, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 7, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 2, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group by for second level loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, "require total count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for first level");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 2, "take for first level");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group by for second level loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, 'require total count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, 'require group count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip for first level');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 2, 'take for first level');
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, [{ "desc": false, "selector": "field2" }], "group by for second level loading");
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "=", 1], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count should be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].take, undefined, "take for second level");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, [{ 'desc': false, 'selector': 'field2' }], 'group by for second level loading');
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ['field1', '=', 1], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, 'require total count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, 'require group count should be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].take, undefined, 'take for second level');
 });
 
-QUnit.test("Load collapsed group and expand second level item", function(assert) {
+QUnit.test('Load collapsed group and expand second level item', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field1", "field2"],
+            group: ['field1', 'field2'],
             pageSize: 3
         }),
         loadingChanged = sinon.stub();
@@ -3340,7 +3340,7 @@ QUnit.test("Load collapsed group and expand second level item", function(assert)
 
     dataSource.changeRowExpand([1, 2]);
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     dataSource.load();
 
@@ -3352,36 +3352,36 @@ QUnit.test("Load collapsed group and expand second level item", function(assert)
                 key: 2,
                 isContinuationOnNextPage: true,
                 items: [
-                    { "field1": 1, "field2": 2, "field3": 3 }
+                    { 'field1': 1, 'field2': 2, 'field3': 3 }
                 ]
             }]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 10, "total items count"); // ?
-    assert.strictEqual(loadingChanged.callCount, 3, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 10, 'total items count'); // ?
+    assert.strictEqual(loadingChanged.callCount, 3, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ "desc": false, "selector": "field1" }], "group by for second level loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, "require total count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for first level");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for first level");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group by for second level loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, 'require total count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip for first level');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take for first level');
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, [{ "desc": false, "selector": "field2" }], "group by for second level loading");
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ["field1", "=", 1], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 1, "take for second level");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, [{ 'desc': false, 'selector': 'field2' }], 'group by for second level loading');
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, ['field1', '=', 1], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, 'require total count is passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 1, 'take for second level');
 
-    assert.deepEqual(loadingChanged.getCall(2).args[0].group, null, "group by for second level loading");
-    assert.deepEqual(loadingChanged.getCall(2).args[0].filter, [["field1", "=", 1], "and", ["field2", "=", 2]], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].requireTotalCount, false, "require total count is passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].skip, undefined, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, "take for second level");
+    assert.deepEqual(loadingChanged.getCall(2).args[0].group, null, 'group by for second level loading');
+    assert.deepEqual(loadingChanged.getCall(2).args[0].filter, [['field1', '=', 1], 'and', ['field2', '=', 2]], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].requireTotalCount, false, 'require total count is passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].skip, undefined, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, 'take for second level');
 });
 
 // T452323
-QUnit.test("Reload dataSource when one expanded group and two group levels exist", function(assert) {
+QUnit.test('Reload dataSource when one expanded group and two group levels exist', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field1", "field2"],
+            group: ['field1', 'field2'],
             pageSize: 3
         }),
         loadingChanged = sinon.stub();
@@ -3391,7 +3391,7 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
     dataSource.changeRowExpand([1]);
     dataSource.load();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     // act
     dataSource.reload(true);
@@ -3407,43 +3407,43 @@ QUnit.test("Reload dataSource when one expanded group and two group levels exist
                 key: 3,
                 items: null
             }]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 6, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 4, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 6, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 4, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, ["field2"], "group for group count request");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ["field1", "=", 1], "filter for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, "require total count is not passed for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, "require group count is passed for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for group count request");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, ['field2'], 'group for group count request');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ['field1', '=', 1], 'filter for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, false, 'require total count is not passed for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, true, 'require group count is passed for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take for group count request');
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); // T452323, T477410
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, [["field1", "<", 1], "or", ["field1", "=", null]], "filter for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is not passed for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count is passed for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 1, "take for group offset request");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ['field1'], 'group for group offset request'); // T452323, T477410
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, [['field1', '<', 1], 'or', ['field1', '=', null]], 'filter for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, 'require total count is not passed for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, 'require group count is passed for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, 'skip for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 1, 'take for group offset request');
 
-    assert.deepEqual(loadingChanged.getCall(2).args[0].group, [{ "desc": false, "selector": "field1" }], "group by for second level loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].requireTotalCount, true, "require total count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].requireGroupCount, true, "require group count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].skip, 0, "skip for first level");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, "take for first level");
+    assert.deepEqual(loadingChanged.getCall(2).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group by for second level loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].requireTotalCount, true, 'require total count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].requireGroupCount, true, 'require group count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].skip, 0, 'skip for first level');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, 'take for first level');
 
-    assert.deepEqual(loadingChanged.getCall(3).args[0].group, [{ "desc": false, "selector": "field2" }], "group by for second level loading");
-    assert.deepEqual(loadingChanged.getCall(3).args[0].filter, ["field1", "=", 1], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].requireTotalCount, false, "require total count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].requireGroupCount, true, "require group count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].skip, 0, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, "take for second level");
+    assert.deepEqual(loadingChanged.getCall(3).args[0].group, [{ 'desc': false, 'selector': 'field2' }], 'group by for second level loading');
+    assert.deepEqual(loadingChanged.getCall(3).args[0].filter, ['field1', '=', 1], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].requireTotalCount, false, 'require total count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].requireGroupCount, true, 'require group count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].skip, 0, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, 'take for second level');
 });
 
-QUnit.test("Error on change grouping when one expanded group and two group levels exist", function(assert) {
+QUnit.test('Error on change grouping when one expanded group and two group levels exist', function(assert) {
     var brokeOptions = {},
         dataSource = this.createDataSource({
-            group: ["field1"],
+            group: ['field1'],
             pageSize: 3
         }, brokeOptions),
         changed = sinon.stub(),
@@ -3459,20 +3459,20 @@ QUnit.test("Error on change grouping when one expanded group and two group level
 
     // act
     brokeOptions.errorOnFirstLoad = true;
-    dataSource.group(["field1", "field2"]);
+    dataSource.group(['field1', 'field2']);
     dataSource.load();
 
     // assert
-    assert.strictEqual(changed.callCount, 1, "changed call count");
-    assert.strictEqual(loadError.callCount, 1, "last error call count");
-    assert.strictEqual(changed.lastCall.args[0].changeType, "loadError", "last change is error");
-    assert.strictEqual(loadError.lastCall.args[0].message, "Error", "last error message");
+    assert.strictEqual(changed.callCount, 1, 'changed call count');
+    assert.strictEqual(loadError.callCount, 1, 'last error call count');
+    assert.strictEqual(changed.lastCall.args[0].changeType, 'loadError', 'last change is error');
+    assert.strictEqual(loadError.lastCall.args[0].message, 'Error', 'last error message');
 });
 
 // T477410
-QUnit.test("Reload dataSource when one expanded group and one group level exist", function(assert) {
+QUnit.test('Reload dataSource when one expanded group and one group level exist', function(assert) {
     var dataSource = this.createDataSource({
-            group: ["field1"],
+            group: ['field1'],
             pageSize: 3
         }),
         loadingChanged = sinon.stub();
@@ -3482,7 +3482,7 @@ QUnit.test("Reload dataSource when one expanded group and one group level exist"
     dataSource.changeRowExpand([1]);
     dataSource.load();
 
-    dataSource.store().on("loading", loadingChanged);
+    dataSource.store().on('loading', loadingChanged);
 
     // act
     dataSource.reload(true);
@@ -3495,61 +3495,61 @@ QUnit.test("Reload dataSource when one expanded group and one group level exist"
                 { field1: 1, field2: 2, field3: 3 },
                 { field1: 1, field2: 2, field3: 4 }
             ]
-        }], "items");
+        }], 'items');
 
-    assert.equal(dataSource.totalItemsCount(), 7, "total items count");
-    assert.strictEqual(loadingChanged.callCount, 4, "loading count");
+    assert.equal(dataSource.totalItemsCount(), 7, 'total items count');
+    assert.strictEqual(loadingChanged.callCount, 4, 'loading count');
 
-    assert.deepEqual(loadingChanged.getCall(0).args[0].group, null, "group is empty for group count request");
-    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ["field1", "=", 1], "filter for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, "require total count is not passed for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, false, "require group count is passed for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, "skip for group count request");
-    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, "take for group count request");
+    assert.deepEqual(loadingChanged.getCall(0).args[0].group, null, 'group is empty for group count request');
+    assert.deepEqual(loadingChanged.getCall(0).args[0].filter, ['field1', '=', 1], 'filter for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireTotalCount, true, 'require total count is not passed for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].requireGroupCount, false, 'require group count is passed for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].skip, 0, 'skip for group count request');
+    assert.strictEqual(loadingChanged.getCall(0).args[0].take, 1, 'take for group count request');
 
-    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ["field1"], "group for group offset request"); // T452323, T477410
-    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, [["field1", "<", 1], "or", ["field1", "=", null]], "filter for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, "require total count is not passed for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, "require group count is passed for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, "skip for group offset request");
-    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 1, "take for group offset request");
+    assert.deepEqual(loadingChanged.getCall(1).args[0].group, ['field1'], 'group for group offset request'); // T452323, T477410
+    assert.deepEqual(loadingChanged.getCall(1).args[0].filter, [['field1', '<', 1], 'or', ['field1', '=', null]], 'filter for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireTotalCount, false, 'require total count is not passed for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, true, 'require group count is passed for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].skip, 0, 'skip for group offset request');
+    assert.strictEqual(loadingChanged.getCall(1).args[0].take, 1, 'take for group offset request');
 
-    assert.deepEqual(loadingChanged.getCall(2).args[0].group, [{ "desc": false, "selector": "field1" }], "group by for second level loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].requireTotalCount, true, "require total count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].requireGroupCount, true, "require group count is passed on first loading");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].skip, 0, "skip for first level");
-    assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, "take for first level");
+    assert.deepEqual(loadingChanged.getCall(2).args[0].group, [{ 'desc': false, 'selector': 'field1' }], 'group by for second level loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].requireTotalCount, true, 'require total count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].requireGroupCount, true, 'require group count is passed on first loading');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].skip, 0, 'skip for first level');
+    assert.strictEqual(loadingChanged.getCall(2).args[0].take, 1, 'take for first level');
 
-    assert.deepEqual(loadingChanged.getCall(3).args[0].group, null, "group is empty for second level loading");
-    assert.deepEqual(loadingChanged.getCall(3).args[0].filter, ["field1", "=", 1], "filter on second loading");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].requireTotalCount, false, "require total count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].requireGroupCount, false, "require group count should not be passed on second loading");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].skip, undefined, "skip for second level");
-    assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, "take for second level");
+    assert.deepEqual(loadingChanged.getCall(3).args[0].group, null, 'group is empty for second level loading');
+    assert.deepEqual(loadingChanged.getCall(3).args[0].filter, ['field1', '=', 1], 'filter on second loading');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].requireTotalCount, false, 'require total count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].requireGroupCount, false, 'require group count should not be passed on second loading');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].skip, undefined, 'skip for second level');
+    assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, 'take for second level');
 });
 
 // T454240
-QUnit.test("Exception when store not returned groupCount", function(assert) {
+QUnit.test('Exception when store not returned groupCount', function(assert) {
     // arrange
     var dataSource = this.createDataSource({
-        group: "field2"
+        group: 'field2'
     }, { skipGroupCount: true });
 
     // act
     try {
         dataSource.load();
-        assert.ok(false, "exception should be rised");
+        assert.ok(false, 'exception should be rised');
     } catch(e) {
-        assert.ok(e.message.indexOf("E4022") >= 0, "name of error");
+        assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
     }
 });
 
 // T477410
-QUnit.test("Exception when store not returned groupCount during expand not last level group", function(assert) {
+QUnit.test('Exception when store not returned groupCount during expand not last level group', function(assert) {
     // arrange
     var brokeOptions = {};
     var dataSource = this.createDataSource({
-        group: ["field1", "field2"]
+        group: ['field1', 'field2']
     }, brokeOptions);
 
     dataSource.load();
@@ -3559,18 +3559,18 @@ QUnit.test("Exception when store not returned groupCount during expand not last 
 
     try {
         dataSource.changeRowExpand([1]);
-        assert.ok(false, "exception should be rised");
+        assert.ok(false, 'exception should be rised');
     } catch(e) {
-        assert.ok(e.message.indexOf("E4022") >= 0, "name of error");
+        assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
     }
 });
 
 // T477410
-QUnit.test("Exception when store not returned totalCount after full reload", function(assert) {
+QUnit.test('Exception when store not returned totalCount after full reload', function(assert) {
     // arrange
     var brokeOptions = {};
     var dataSource = this.createDataSource({
-        group: ["field1"]
+        group: ['field1']
     }, brokeOptions);
 
     dataSource.load();
@@ -3581,17 +3581,17 @@ QUnit.test("Exception when store not returned totalCount after full reload", fun
     try {
         brokeOptions.skipTotalCount = true;
         dataSource.reload(true);
-        assert.ok(false, "exception should be rised");
+        assert.ok(false, 'exception should be rised');
     } catch(e) {
-        assert.ok(e.message.indexOf("E4021") >= 0, "name of error");
+        assert.ok(e.message.indexOf('E4021') >= 0, 'name of error');
     }
 });
 
 // T754708
-QUnit.test("The collapseAll method should work after expanding group row", function(assert) {
+QUnit.test('The collapseAll method should work after expanding group row', function(assert) {
     // arrange
     var dataSource = this.createDataSource({
-        group: "field2",
+        group: 'field2',
         pageSize: 2
     });
 
@@ -3602,7 +3602,7 @@ QUnit.test("The collapseAll method should work after expanding group row", funct
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 
     dataSource.changeRowExpand([2]); // expand group row
     dataSource.load();
@@ -3620,7 +3620,7 @@ QUnit.test("The collapseAll method should work after expanding group row", funct
             ],
             key: 2
         }
-    ], "loaded items");
+    ], 'loaded items');
 
     // act
     dataSource.collapseAll();
@@ -3631,14 +3631,14 @@ QUnit.test("The collapseAll method should work after expanding group row", funct
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 });
 
 // T754708
-QUnit.test("The expandAll method  should work after collapsing group row", function(assert) {
+QUnit.test('The expandAll method  should work after collapsing group row', function(assert) {
     // arrange
     var dataSource = this.createDataSource({
-        group: "field2",
+        group: 'field2',
         pageSize: 2
     });
 
@@ -3649,7 +3649,7 @@ QUnit.test("The expandAll method  should work after collapsing group row", funct
         key: 2, items: null
     }, {
         key: 3, items: null
-    }], "loaded items");
+    }], 'loaded items');
 
     dataSource.expandAll();
     dataSource.load();
@@ -3667,7 +3667,7 @@ QUnit.test("The expandAll method  should work after collapsing group row", funct
             ],
             key: 2
         }
-    ], "loaded items");
+    ], 'loaded items');
 
     dataSource.changeRowExpand([2]); // collapse group row
     dataSource.load();
@@ -3680,7 +3680,7 @@ QUnit.test("The expandAll method  should work after collapsing group row", funct
         isContinuationOnNextPage: true,
         items: [],
         key: 3
-    }], "loaded items");
+    }], 'loaded items');
 
     // act
     dataSource.expandAll();
@@ -3699,11 +3699,11 @@ QUnit.test("The expandAll method  should work after collapsing group row", funct
             ],
             key: 2
         }
-    ], "loaded items");
+    ], 'loaded items');
 });
 
 
-$.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "Grouping with remoteOperations and with remote groupPaging"], function(moduleIndex, moduleName) {
+$.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', 'Grouping with remoteOperations and with remote groupPaging'], function(moduleIndex, moduleName) {
 
     QUnit.module(moduleName, {
         beforeEach: function() {
@@ -3726,7 +3726,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             };
             this.processItems = function(items) {
                 for(var i = 0; i < items.length; i++) {
-                    if("key" in items[i]) {
+                    if('key' in items[i]) {
                         delete items[i].count;
                         if(items[i].items) {
                             this.processItems(items[i].items);
@@ -3739,11 +3739,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     });
 
     if(moduleIndex === 1) {
-        QUnit.test("grouping with paginate. Group is collapsed. Async loading", function(assert) {
+        QUnit.test('grouping with paginate. Group is collapsed. Async loading', function(assert) {
             var clock = sinon.useFakeTimers(),
                 changedCount = 0,
                 source = this.createDataSource({
-                    group: [{ selector: "field2", isExpanded: false }],
+                    group: [{ selector: 'field2', isExpanded: false }],
                     pageSize: 2,
                     executeAsync: function(func) {
                         setTimeout(function() {
@@ -3768,13 +3768,13 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             clock.restore();
         });
 
-        QUnit.test("grouping with paginate. Group is expanded. Async loading", function(assert) {
+        QUnit.test('grouping with paginate. Group is expanded. Async loading', function(assert) {
             var clock = sinon.useFakeTimers(),
                 loadArgs = [],
                 changedCount = 0,
                 source = this.createDataSource({
-                    group: [{ selector: "field2", isExpanded: true }],
-                    select: ["field2", "field3"],
+                    group: [{ selector: 'field2', isExpanded: true }],
+                    select: ['field2', 'field3'],
                     pageSize: 3,
                     executeAsync: function(func, loadOptions) {
                         loadArgs.push(loadOptions);
@@ -3797,15 +3797,15 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             // assert
             assert.equal(loadArgs.length, 2);
 
-            assert.deepEqual(loadArgs[0].group, [{ selector: "field2", isExpanded: false, desc: false }]);
-            assert.deepEqual(loadArgs[0].select, ["field2", "field3"]);
+            assert.deepEqual(loadArgs[0].group, [{ selector: 'field2', isExpanded: false, desc: false }]);
+            assert.deepEqual(loadArgs[0].select, ['field2', 'field3']);
             assert.deepEqual(loadArgs[0].filter, undefined);
             assert.strictEqual(loadArgs[0].skip, undefined);
             assert.strictEqual(loadArgs[0].take, undefined);
 
             assert.deepEqual(loadArgs[1].group, null);
-            assert.deepEqual(loadArgs[1].select, ["field2", "field3"]); // T328457
-            assert.deepEqual(loadArgs[1].filter, ["field2", "=", 2]);
+            assert.deepEqual(loadArgs[1].select, ['field2', 'field3']); // T328457
+            assert.deepEqual(loadArgs[1].filter, ['field2', '=', 2]);
             assert.strictEqual(loadArgs[1].skip, undefined);
             assert.strictEqual(loadArgs[1].take, 2);
 
@@ -3829,11 +3829,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             clock.restore();
         });
 
-        QUnit.test("grouping with paginate. Several groups are expanded. Async loading", function(assert) {
+        QUnit.test('grouping with paginate. Several groups are expanded. Async loading', function(assert) {
             var clock = sinon.useFakeTimers(),
                 loadArgs = [],
                 source = this.createDataSource({
-                    group: [{ selector: "field1", isExpanded: true }, { selector: "field2", isExpanded: true }],
+                    group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }],
                     pageSize: 3,
                     executeAsync: function(func, loadOptions) {
                         loadArgs.push(loadOptions);
@@ -3853,20 +3853,20 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             // assert
             assert.equal(loadArgs.length, 2);
 
-            assert.deepEqual(loadArgs[0].group, [{ selector: "field1", isExpanded: true, desc: false }, { selector: "field2", isExpanded: false, desc: false }], "isExpanded is false for last group");
+            assert.deepEqual(loadArgs[0].group, [{ selector: 'field1', isExpanded: true, desc: false }, { selector: 'field2', isExpanded: false, desc: false }], 'isExpanded is false for last group');
             assert.deepEqual(loadArgs[0].filter, undefined);
             assert.strictEqual(loadArgs[0].skip, undefined);
             assert.strictEqual(loadArgs[0].take, undefined);
 
             assert.deepEqual(loadArgs[1].group, null);
-            assert.deepEqual(loadArgs[1].filter, [["field1", "=", 1], "and", ["field2", "=", 2]]);
+            assert.deepEqual(loadArgs[1].filter, [['field1', '=', 1], 'and', ['field2', '=', 2]]);
             assert.strictEqual(loadArgs[1].skip, undefined);
             assert.strictEqual(loadArgs[1].take, 1);
 
             clock.restore();
         });
     }
-    QUnit.test("grouping without paginate", function(assert) {
+    QUnit.test('grouping without paginate', function(assert) {
         var source = this.createDataSource({
             paginate: false
         });
@@ -3884,7 +3884,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 3);
     });
 
-    QUnit.test("grouping with map function", function(assert) {
+    QUnit.test('grouping with map function', function(assert) {
         var source = this.createDataSource({
             map: function(data) {
                 return data;
@@ -3904,7 +3904,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 3);
     });
 
-    QUnit.test("grouping with pageSize more items count", function(assert) {
+    QUnit.test('grouping with pageSize more items count', function(assert) {
         var source = this.createDataSource();
 
         // act
@@ -3921,7 +3921,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 3);
     });
 
-    QUnit.test("grouping with pageSize less items count", function(assert) {
+    QUnit.test('grouping with pageSize less items count', function(assert) {
         var source = this.createDataSource({
             pageSize: 2
         });
@@ -3939,9 +3939,9 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     });
 
     // T356413
-    QUnit.test("grouping with pageSize less items count. Change pageSize at runtime", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Change pageSize at runtime', function(assert) {
         var source = this.createDataSource({
-            group: "group",
+            group: 'group',
             store: [
                 { group: 1, id: 1 },
                 { group: 1, id: 2 },
@@ -3977,7 +3977,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     });
 
     // B254928
-    QUnit.test("grouping with pageSize less items count when no requireTotalCount", function(assert) {
+    QUnit.test('grouping with pageSize less items count when no requireTotalCount', function(assert) {
         var source = this.createDataSource({
             pageSize: 5,
             group: [{ selector: 'field2', isExpanded: true }],
@@ -4003,7 +4003,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     });
 
     // B239382
-    QUnit.test("grouping with isExpanded group on previous page and isExpanded current group that continues on the next page", function(assert) {
+    QUnit.test('grouping with isExpanded group on previous page and isExpanded current group that continues on the next page', function(assert) {
         var source = this.createDataSource({
             pageSize: 4,
             store: [
@@ -4045,7 +4045,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     });
 
     // B239382
-    QUnit.test("grouping on last page when group continued from several pages", function(assert) {
+    QUnit.test('grouping on last page when group continued from several pages', function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
             store: [
@@ -4078,7 +4078,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.ok(changeRowExpandResult && changeRowExpandResult.done);
     });
 
-    QUnit.test("grouping with pageSize less items count. Continue group parameter", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Continue group parameter', function(assert) {
         var source = this.createDataSource({
             pageSize: 2
         });
@@ -4099,7 +4099,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 2);
     });
 
-    QUnit.test("grouping with pageSize less items count. Continue group parameter when sort exists and several groups expanded", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Continue group parameter when sort exists and several groups expanded', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 3 },
@@ -4109,8 +4109,8 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                 { field1: 1, field2: 3, field3: 7 },
                 { field1: 2, field2: 4, field3: 8 }
             ],
-            group: "field2",
-            sort: [{ selector: "field3", desc: true }],
+            group: 'field2',
+            sort: [{ selector: 'field3', desc: true }],
             pageSize: 4
         });
 
@@ -4137,7 +4137,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 4);
     });
 
-    QUnit.test("grouping with pageSize less items count. Continue group parameter when virtual scrolling", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Continue group parameter when virtual scrolling', function(assert) {
         var source = this.createDataSource({
             pageSize: 2,
             scrolling: { mode: 'virtual', preventPreload: true }
@@ -4161,7 +4161,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 2);
     });
 
-    QUnit.test("grouping with pageSize less items count. Continue on next page group parameter", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Continue on next page group parameter', function(assert) {
         var source = this.createDataSource({
             pageSize: 2
         });
@@ -4181,7 +4181,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 2);
     });
 
-    QUnit.test("grouping with pageSize less items count. Continue group parameter not set", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Continue group parameter not set', function(assert) {
         var source = this.createDataSource({
             pageSize: 2,
             pageIndex: 1
@@ -4195,7 +4195,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         }]);
     });
 
-    QUnit.test("grouping without paginate. Expand group", function(assert) {
+    QUnit.test('grouping without paginate. Expand group', function(assert) {
         var source = this.createDataSource({
             paginate: false
         });
@@ -4217,7 +4217,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         }]);
     });
 
-    QUnit.test("grouping without paginate. Collapse group after expand", function(assert) {
+    QUnit.test('grouping without paginate. Collapse group after expand', function(assert) {
         var source = this.createDataSource({
             paginate: false
         });
@@ -4238,7 +4238,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
     });
 
 
-    QUnit.test("grouping with paginate. Expand group", function(assert) {
+    QUnit.test('grouping with paginate. Expand group', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -4256,7 +4256,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         }]);
     });
 
-    QUnit.test("grouping with pageSize less items count. Collapse group with undefined key", function(assert) {
+    QUnit.test('grouping with pageSize less items count. Collapse group with undefined key', function(assert) {
         var source = this.createDataSource({
             group: [{ selector: 'field1', isExpanded: true, desc: true }],
             store: [
@@ -4284,7 +4284,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 3);
     });
 
-    QUnit.test("grouping with paginate. Collapse group after expand", function(assert) {
+    QUnit.test('grouping with paginate. Collapse group after expand', function(assert) {
         var source = this.createDataSource({});
 
         source.load();
@@ -4304,7 +4304,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
 
     if(moduleIndex === 0) {
 
-        QUnit.test("getContinuationGroupCount", function(assert) {
+        QUnit.test('getContinuationGroupCount', function(assert) {
             assert.equal(getContinuationGroupCount(0, 3, 2), 1, '1 continuation groups');
             assert.equal(getContinuationGroupCount(0, 3, 3), 2, '2 continuation groups');
             assert.equal(getContinuationGroupCount(0, 3, 5), 3, '3 continuation groups');
@@ -4334,7 +4334,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.equal(getContinuationGroupCount(-2, 3, 10), 4, '4 continuation groups');
         });
 
-        QUnit.test("collapseAll when no grouped columns", function(assert) {
+        QUnit.test('collapseAll when no grouped columns', function(assert) {
             var source = this.createDataSource({
                 pageSize: 2,
                 group: null
@@ -4346,21 +4346,21 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             source.load();
 
             // assert
-            assert.equal(source.pageCount(), 2, "pageCount");
+            assert.equal(source.pageCount(), 2, 'pageCount');
             assert.deepEqual(source.items(), [
                 { field1: 1, field2: 2, field3: 3 },
                 { field1: 1, field2: 2, field3: 4 }
-            ], "items");
+            ], 'items');
         });
 
         // T112478
-        QUnit.test("collapseAll for remote data", function(assert) {
+        QUnit.test('collapseAll for remote data', function(assert) {
             // arrange
             var source = this.createDataSource({
-                    load: function() { return [{ group: "group 1", text: "text 1" }, { group: "group 1", text: "text 2" }, { group: "group 2", text: "text 3" }]; },
+                    load: function() { return [{ group: 'group 1', text: 'text 1' }, { group: 'group 1', text: 'text 2' }, { group: 'group 2', text: 'text 3' }]; },
                     totalCount: function() { return -1; },
                     pageSize: 2,
-                    group: [{ selector: "group", isExpanded: true }],
+                    group: [{ selector: 'group', isExpanded: true }],
                     remoteOperations: { filtering: true, sorting: true, paging: true }
                 }),
                 messageError;
@@ -4371,7 +4371,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                 messageError = message;
             };
 
-            assert.ok(source._grouping instanceof ExpandedGroupingHelper, "expanded grouping helper");
+            assert.ok(source._grouping instanceof ExpandedGroupingHelper, 'expanded grouping helper');
 
 
             // act
@@ -4379,12 +4379,12 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             source.load();
 
             // assert
-            assert.ok(source._grouping instanceof CollapsedGroupingHelper, "collapsed grouping helper");
-            assert.ok(!messageError, "no error");
-            assert.deepEqual(this.processItems(source.items()), [{ key: "group 1", items: null }, { key: "group 2", items: null }]);
+            assert.ok(source._grouping instanceof CollapsedGroupingHelper, 'collapsed grouping helper');
+            assert.ok(!messageError, 'no error');
+            assert.deepEqual(this.processItems(source.items()), [{ key: 'group 1', items: null }, { key: 'group 2', items: null }]);
         });
 
-        QUnit.test("expandAll when no grouped columns", function(assert) {
+        QUnit.test('expandAll when no grouped columns', function(assert) {
             var source = this.createDataSource({
                 pageSize: 2,
                 group: null
@@ -4396,15 +4396,15 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             source.load();
 
             // assert
-            assert.equal(source.pageCount(), 2, "pageCount");
+            assert.equal(source.pageCount(), 2, 'pageCount');
             assert.deepEqual(source.items(), [
                 { field1: 1, field2: 2, field3: 3 },
                 { field1: 1, field2: 2, field3: 4 }
-            ], "items");
+            ], 'items');
         });
 
         // T183365
-        QUnit.test("change grouping and reload with custom store", function(assert) {
+        QUnit.test('change grouping and reload with custom store', function(assert) {
             var source = this.createDataSource({
                 load: function() {
                     return [
@@ -4435,19 +4435,19 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         });
 
         // T266248
-        QUnit.test("change sortOrder of group", function(assert) {
+        QUnit.test('change sortOrder of group', function(assert) {
             var source = this.createDataSource({
                 pageSize: 5,
-                group: [{ selector: "field1", isExpanded: true }]
+                group: [{ selector: 'field1', isExpanded: true }]
             });
             source.load();
 
             // act
-            source.group([{ selector: "field1", isExpanded: true, desc: true }]);
+            source.group([{ selector: 'field1', isExpanded: true, desc: true }]);
             source.reload();
 
             // assert
-            assert.equal(source.pageCount(), 2, "pageCount");
+            assert.equal(source.pageCount(), 2, 'pageCount');
             assert.deepEqual(source.items(), [
                 {
                     items: [{ field1: 2, field2: 4, field3: 6 }],
@@ -4461,13 +4461,13 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                     ],
                     key: 1
                 }
-            ], "items");
+            ], 'items');
         });
     }
 });
 
 
-$.each(["Grouping without remoteOperations. Second level", "Grouping with remote grouping. Second level", "Grouping with remote grouping and remote group paging. Second level"], function(moduleIndex, moduleName) {
+$.each(['Grouping without remoteOperations. Second level', 'Grouping with remote grouping. Second level', 'Grouping with remote grouping and remote group paging. Second level'], function(moduleIndex, moduleName) {
 
     QUnit.module(moduleName, {
         beforeEach: function() {
@@ -4491,7 +4491,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             };
             this.processItems = function(items) {
                 for(var i = 0; i < items.length; i++) {
-                    if("key" in items[i]) {
+                    if('key' in items[i]) {
                         delete items[i].count;
                         if(items[i].items) {
                             this.processItems(items[i].items);
@@ -4503,7 +4503,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }
     });
 
-    QUnit.test("grouping with paginate", function(assert) {
+    QUnit.test('grouping with paginate', function(assert) {
         var source = this.createDataSource({
             pageSize: 2
         });
@@ -4519,7 +4519,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("grouping with paginate. Expand first level group", function(assert) {
+    QUnit.test('grouping with paginate. Expand first level group', function(assert) {
         var loadCount = 0,
             source = this.createDataSource({
                 pageSize: 3,
@@ -4545,13 +4545,13 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
 
         if(moduleIndex === 2) {
-            assert.equal(loadCount, 3, "loading three times when remoteOperations with groupPaging is true");
+            assert.equal(loadCount, 3, 'loading three times when remoteOperations with groupPaging is true');
         } else {
-            assert.equal(loadCount, 0, "loading from cache when remoteOperations.groupPaging is false");
+            assert.equal(loadCount, 0, 'loading from cache when remoteOperations.groupPaging is false');
         }
     });
 
-    QUnit.test("grouping with paginate. Expand first level group and second level group", function(assert) {
+    QUnit.test('grouping with paginate. Expand first level group and second level group', function(assert) {
         var source = this.createDataSource({
             group: [{ selector: 'field1', desc: true, isExpanded: true }, { selector: 'field2', isExpanded: true }],
             pageSize: 5
@@ -4575,7 +4575,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             }]);
     });
 
-    QUnit.test("grouping without paginate", function(assert) {
+    QUnit.test('grouping without paginate', function(assert) {
         var source = this.createDataSource({
             paginate: false
         });
@@ -4591,7 +4591,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("grouping without paginate. Expand first level group", function(assert) {
+    QUnit.test('grouping without paginate. Expand first level group', function(assert) {
         var source = this.createDataSource({
             paginate: false
         });
@@ -4613,7 +4613,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
 
-    QUnit.test("Continue group parameter for first group level only", function(assert) {
+    QUnit.test('Continue group parameter for first group level only', function(assert) {
         var source = this.createDataSource({
             pageSize: 2
         });
@@ -4632,7 +4632,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Continue group parameter for first group level only when virtual scrolling", function(assert) {
+    QUnit.test('Continue group parameter for first group level only when virtual scrolling', function(assert) {
         var source = this.createDataSource({
             pageSize: 2,
             scrolling: { mode: 'virtual', preventPreload: true }
@@ -4654,7 +4654,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Continue group parameter for first group level only when page ends with group header", function(assert) {
+    QUnit.test('Continue group parameter for first group level only when page ends with group header', function(assert) {
         var source = this.createDataSource({
             pageSize: 2
         });
@@ -4675,7 +4675,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Continue group parameter for both group levels", function(assert) {
+    QUnit.test('Continue group parameter for both group levels', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -4699,7 +4699,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.equal(source.itemsCount(), 3);
     });
 
-    QUnit.test("Continue group parameter for both group levels when virtual scrolling", function(assert) {
+    QUnit.test('Continue group parameter for both group levels when virtual scrolling', function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
             scrolling: { mode: 'virtual', preventPreload: true }
@@ -4736,7 +4736,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.equal(source.itemsCount(), 6);
     });
 
-    QUnit.test("Expand second level group", function(assert) {
+    QUnit.test('Expand second level group', function(assert) {
         var source = this.createDataSource({
             pageSize: 5
         });
@@ -4767,7 +4767,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     if(moduleIndex !== 2) {
-        QUnit.test("Expand second level group ends on previous page", function(assert) {
+        QUnit.test('Expand second level group ends on previous page', function(assert) {
             var source = this.createDataSource({
                 pageSize: 5
             });
@@ -4788,7 +4788,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             }]);
         });
 
-        QUnit.test("Expand second level group ends on previous page when virtual scrolling", function(assert) {
+        QUnit.test('Expand second level group ends on previous page when virtual scrolling', function(assert) {
             var source = this.createDataSource({
                 pageSize: 5,
                 scrolling: { mode: 'virtual', preventPreload: true }
@@ -4823,7 +4823,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         });
     }
 
-    QUnit.test("isExpanded state of items restore after collapse/expand", function(assert) {
+    QUnit.test('isExpanded state of items restore after collapse/expand', function(assert) {
         var source = this.createDataSource({
             pageSize: 5
         });
@@ -4855,7 +4855,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("isExpanded all group levels", function(assert) {
+    QUnit.test('isExpanded all group levels', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -4878,7 +4878,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("isExpanded all first group level", function(assert) {
+    QUnit.test('isExpanded all first group level', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -4909,7 +4909,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Collapsed all group levels", function(assert) {
+    QUnit.test('Collapsed all group levels', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -4928,7 +4928,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Collapse all second group level", function(assert) {
+    QUnit.test('Collapse all second group level', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -4954,7 +4954,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Collapse all second group level when all groups isExpanded", function(assert) {
+    QUnit.test('Collapse all second group level when all groups isExpanded', function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }],
@@ -4979,7 +4979,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("isExpanded group parameter", function(assert) {
+    QUnit.test('isExpanded group parameter', function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, 'field2']
@@ -4999,7 +4999,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     // B254818
-    QUnit.test("isExpanded group parameters. Apply filter", function(assert) {
+    QUnit.test('isExpanded group parameters. Apply filter', function(assert) {
         var source = this.createDataSource({
             pageSize: 5,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }]
@@ -5024,7 +5024,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("change sortOrder for first group level", function(assert) {
+    QUnit.test('change sortOrder for first group level', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -5047,7 +5047,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
 
-    QUnit.test("change sortOrder for second group level", function(assert) {
+    QUnit.test('change sortOrder for second group level', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -5069,7 +5069,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     // T382926
-    QUnit.test("change sortOrder for second group level when all groups expanded", function(assert) {
+    QUnit.test('change sortOrder for second group level when all groups expanded', function(assert) {
         var array = [
             { field1: 1, field2: 2, field3: 1 },
             { field1: 1, field2: 2, field3: 2 },
@@ -5108,7 +5108,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     // B254110
-    QUnit.test("change isExpanded for first group level", function(assert) {
+    QUnit.test('change isExpanded for first group level', function(assert) {
         var source = this.createDataSource({
             pageSize: 3
         });
@@ -5134,7 +5134,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     // B254110
-    QUnit.test("change isExpanded for second group level", function(assert) {
+    QUnit.test('change isExpanded for second group level', function(assert) {
         var source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }]
@@ -5160,7 +5160,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Second page for big group", function(assert) {
+    QUnit.test('Second page for big group', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
@@ -5200,7 +5200,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Last pages for very big group", function(assert) {
+    QUnit.test('Last pages for very big group', function(assert) {
         var array = [];
         var i;
         for(i = 0; i < 29; i++) {
@@ -5275,7 +5275,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Third page for big group", function(assert) {
+    QUnit.test('Third page for big group', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
@@ -5318,7 +5318,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Last page for big first level group", function(assert) {
+    QUnit.test('Last page for big first level group', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
@@ -5363,7 +5363,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Last page for big second level group", function(assert) {
+    QUnit.test('Last page for big second level group', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
@@ -5409,7 +5409,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Page ends with 2 group headers", function(assert) {
+    QUnit.test('Page ends with 2 group headers', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
@@ -5473,7 +5473,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 
-    QUnit.test("Page ends with 1 first group header", function(assert) {
+    QUnit.test('Page ends with 1 first group header', function(assert) {
         var source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
@@ -5534,7 +5534,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     // T180076
-    QUnit.test("Four groups with paging", function(assert) {
+    QUnit.test('Four groups with paging', function(assert) {
         var array = [
                 { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
                 { field1: 2, field2: 3, field3: 4, field4: 5, field5: 6 },
@@ -5563,7 +5563,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
     });
 
     // T180076
-    QUnit.test("Four groups with paging after collapse group", function(assert) {
+    QUnit.test('Four groups with paging after collapse group', function(assert) {
         var array = [
                 { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
                 { field1: 2, field2: 3, field3: 4, field4: 5, field5: 6 },
@@ -5593,7 +5593,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         }]);
     });
 });
-QUnit.module("Summary", {
+QUnit.module('Summary', {
     beforeEach: function() {
         this.createDataSource = function(options) {
             return createDataSource($.extend({
@@ -5607,14 +5607,14 @@ QUnit.module("Summary", {
     }
 });
 
-QUnit.test("Total summary without grouping", function(assert) {
+QUnit.test('Total summary without grouping', function(assert) {
     var dataSource = this.createDataSource({});
 
     dataSource.summary({
         totalAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }, {
-            aggregator: "sum"
+            aggregator: 'sum'
         }]
     });
 
@@ -5626,19 +5626,19 @@ QUnit.test("Total summary without grouping", function(assert) {
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
 
-QUnit.test("Total summary and group summary", function(assert) {
+QUnit.test('Total summary and group summary', function(assert) {
     var dataSource = this.createDataSource({
         group: 'this'
     });
 
     dataSource.summary({
         totalAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }, {
-            aggregator: "sum"
+            aggregator: 'sum'
         }],
         groupAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }]
     });
 
@@ -5651,7 +5651,7 @@ QUnit.test("Total summary and group summary", function(assert) {
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
 
-QUnit.test("Total summary and group summary when map defines", function(assert) {
+QUnit.test('Total summary and group summary when map defines', function(assert) {
     var dataSource = this.createDataSource({
         group: 'this',
         map: function(data) {
@@ -5661,12 +5661,12 @@ QUnit.test("Total summary and group summary when map defines", function(assert) 
 
     dataSource.summary({
         totalAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }, {
-            aggregator: "sum"
+            aggregator: 'sum'
         }],
         groupAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }]
     });
 
@@ -5679,7 +5679,7 @@ QUnit.test("Total summary and group summary when map defines", function(assert) 
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
 
-QUnit.test("Total summary with CustomStore when remoteOperations filtering and sorting", function(assert) {
+QUnit.test('Total summary with CustomStore when remoteOperations filtering and sorting', function(assert) {
     var storeLoadOptions,
         dataSource = this.createDataSource({
             filter: ['this', '>=', 0],
@@ -5698,9 +5698,9 @@ QUnit.test("Total summary with CustomStore when remoteOperations filtering and s
 
     dataSource.summary({
         totalAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }, {
-            aggregator: "sum"
+            aggregator: 'sum'
         }]
     });
 
@@ -5714,7 +5714,7 @@ QUnit.test("Total summary with CustomStore when remoteOperations filtering and s
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
 
-QUnit.test("Total summary with CustomStore when remoteOperations false", function(assert) {
+QUnit.test('Total summary with CustomStore when remoteOperations false', function(assert) {
     var storeLoadOptions,
         dataSource = this.createDataSource({
             filter: ['this', '>=', 0],
@@ -5730,9 +5730,9 @@ QUnit.test("Total summary with CustomStore when remoteOperations false", functio
 
     dataSource.summary({
         totalAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }, {
-            aggregator: "sum"
+            aggregator: 'sum'
         }]
     });
 
@@ -5746,9 +5746,9 @@ QUnit.test("Total summary with CustomStore when remoteOperations false", functio
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
 
-QUnit.test("Total summary and group summary with CustomStore", function(assert) {
+QUnit.test('Total summary and group summary with CustomStore', function(assert) {
     var dataSource = this.createDataSource({
-        group: "this",
+        group: 'this',
         remoteOperations: false,
         store: new CustomStore({
             load: function() {
@@ -5759,12 +5759,12 @@ QUnit.test("Total summary and group summary with CustomStore", function(assert) 
 
     dataSource.summary({
         totalAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }, {
-            aggregator: "sum"
+            aggregator: 'sum'
         }],
         groupAggregates: [{
-            aggregator: "count"
+            aggregator: 'count'
         }]
     });
 
@@ -5777,7 +5777,7 @@ QUnit.test("Total summary and group summary with CustomStore", function(assert) 
     assert.deepEqual(dataSource.totalAggregates(), [10, 55]);
 });
 
-QUnit.module("Cache", {
+QUnit.module('Cache', {
     beforeEach: function() {
         this.createDataSource = function(options) {
             var that = this;
@@ -5787,7 +5787,7 @@ QUnit.module("Cache", {
                     onLoading: function(e) {
                         that.loadingCount++;
                     },
-                    type: "array",
+                    type: 'array',
                     data: TEN_NUMBERS.slice()
                 },
                 pageSize: 3,
@@ -5804,7 +5804,7 @@ QUnit.module("Cache", {
     }
 });
 
-QUnit.test("caching when all remoteOperations", function(assert) {
+QUnit.test('caching when all remoteOperations', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true,
@@ -5819,10 +5819,10 @@ QUnit.test("caching when all remoteOperations", function(assert) {
     dataSource.reload();
 
     // assert
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
-QUnit.test("no caching when all remoteOperations and legacyRendering is true", function(assert) {
+QUnit.test('no caching when all remoteOperations and legacyRendering is true', function(assert) {
     var dataSource = this.createDataSource({
         legacyRendering: true,
         remoteOperations: {
@@ -5838,10 +5838,10 @@ QUnit.test("no caching when all remoteOperations and legacyRendering is true", f
     dataSource.reload();
 
     // assert
-    assert.deepEqual(this.loadingCount, 3, "three loadings");
+    assert.deepEqual(this.loadingCount, 3, 'three loadings');
 });
 
-QUnit.test("caching pages when all remoteOperations", function(assert) {
+QUnit.test('caching pages when all remoteOperations', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: true
     });
@@ -5857,11 +5857,11 @@ QUnit.test("caching pages when all remoteOperations", function(assert) {
     dataSource.load();
 
     // assert
-    assert.deepEqual(this.loadingCount, 0, "no loading");
-    assert.deepEqual(dataSource.items(), [1, 2, 3], "items are correct");
+    assert.deepEqual(this.loadingCount, 0, 'no loading');
+    assert.deepEqual(dataSource.items(), [1, 2, 3], 'items are correct');
 });
 
-QUnit.test("reset pages cache on pageSize change when all remoteOperations", function(assert) {
+QUnit.test('reset pages cache on pageSize change when all remoteOperations', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: true
     });
@@ -5874,11 +5874,11 @@ QUnit.test("reset pages cache on pageSize change when all remoteOperations", fun
     dataSource.load();
 
     // assert
-    assert.deepEqual(this.loadingCount, 1, "one loading");
-    assert.deepEqual(dataSource.items(), [1, 2], "items are correct");
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
+    assert.deepEqual(dataSource.items(), [1, 2], 'items are correct');
 });
 
-QUnit.test("reset pages cache on filtering change when all remoteOperations", function(assert) {
+QUnit.test('reset pages cache on filtering change when all remoteOperations', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: true
     });
@@ -5887,15 +5887,15 @@ QUnit.test("reset pages cache on filtering change when all remoteOperations", fu
     this.loadingCount = 0;
 
     // act
-    dataSource.filter(["this", ">", "4"]);
+    dataSource.filter(['this', '>', '4']);
     dataSource.load();
 
     // assert
-    assert.deepEqual(this.loadingCount, 1, "one loading");
-    assert.deepEqual(dataSource.items(), [5, 6, 7], "items are correct");
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
+    assert.deepEqual(dataSource.items(), [5, 6, 7], 'items are correct');
 });
 
-QUnit.test("caching totalCount and summary on paging when all remoteOperations", function(assert) {
+QUnit.test('caching totalCount and summary on paging when all remoteOperations', function(assert) {
     var that = this;
     that.loadingArgs = [];
 
@@ -5914,8 +5914,8 @@ QUnit.test("caching totalCount and summary on paging when all remoteOperations",
 
     dataSource.summary({
         totalAggregates: [{
-            selector: "this",
-            aggregator: "sum"
+            selector: 'this',
+            aggregator: 'sum'
         }]
     });
 
@@ -5926,15 +5926,15 @@ QUnit.test("caching totalCount and summary on paging when all remoteOperations",
     dataSource.load();
 
     // assert
-    assert.deepEqual(this.loadingArgs.length, 2, "two loading");
-    assert.deepEqual(this.loadingArgs[0].requireTotalCount, true, "requireTotalCount for first page");
-    assert.deepEqual(this.loadingArgs[0].totalSummary, [{ selector: "this", aggregator: "sum" }], "totalSummary for first page");
-    assert.deepEqual(this.loadingArgs[1].requireTotalCount, undefined, "no requireTotalCount for second page");
-    assert.deepEqual(this.loadingArgs[1].totalSummary, undefined, "no totalSummary for second page");
+    assert.deepEqual(this.loadingArgs.length, 2, 'two loading');
+    assert.deepEqual(this.loadingArgs[0].requireTotalCount, true, 'requireTotalCount for first page');
+    assert.deepEqual(this.loadingArgs[0].totalSummary, [{ selector: 'this', aggregator: 'sum' }], 'totalSummary for first page');
+    assert.deepEqual(this.loadingArgs[1].requireTotalCount, undefined, 'no requireTotalCount for second page');
+    assert.deepEqual(this.loadingArgs[1].totalSummary, undefined, 'no totalSummary for second page');
 });
 
 [false, true].forEach(function(groupPaging) {
-    QUnit.test("caching pages when remote " + (groupPaging ? "group paging" : "grouping"), function(assert) {
+    QUnit.test('caching pages when remote ' + (groupPaging ? 'group paging' : 'grouping'), function(assert) {
         var that = this;
         that.loadingArgs = [];
 
@@ -5943,13 +5943,13 @@ QUnit.test("caching totalCount and summary on paging when all remoteOperations",
                 onLoading: function(e) {
                     that.loadingArgs.push(e);
                 },
-                type: "array",
+                type: 'array',
                 data: TEN_NUMBERS
             },
             paginate: true,
             requireTotalCount: true,
             pageSize: 3,
-            group: ["this"]
+            group: ['this']
         }, groupPaging);
 
         dataSource.load();
@@ -5959,7 +5959,7 @@ QUnit.test("caching totalCount and summary on paging when all remoteOperations",
         dataSource.pageIndex(1);
         dataSource.load();
 
-        assert.deepEqual(this.loadingArgs.length, groupPaging ? 4 : 2, "loading count before cache");
+        assert.deepEqual(this.loadingArgs.length, groupPaging ? 4 : 2, 'loading count before cache');
 
         this.loadingArgs = [];
 
@@ -5968,16 +5968,16 @@ QUnit.test("caching totalCount and summary on paging when all remoteOperations",
         dataSource.load();
 
         // assert
-        assert.deepEqual(this.loadingArgs.length, 0, "no loading");
+        assert.deepEqual(this.loadingArgs.length, 0, 'no loading');
         assert.deepEqual(dataSource.items(), [
             { key: 1, items: [1] },
             { key: 2, items: null },
-        ], "items are correct");
-        assert.deepEqual(dataSource.totalItemsCount(), 11, "totalCount");
+        ], 'items are correct');
+        assert.deepEqual(dataSource.totalItemsCount(), 11, 'totalCount');
     });
 });
 
-QUnit.test("no caching when cacheEnabled false", function(assert) {
+QUnit.test('no caching when cacheEnabled false', function(assert) {
     var dataSource = this.createDataSource({
         cacheEnabled: false
     });
@@ -5988,71 +5988,71 @@ QUnit.test("no caching when cacheEnabled false", function(assert) {
     dataSource.reload();
 
     // assert
-    assert.deepEqual(this.loadingCount, 3, "three loading");
+    assert.deepEqual(this.loadingCount, 3, 'three loading');
 });
 
-QUnit.test("second load from cache after change filter/sort", function(assert) {
+QUnit.test('second load from cache after change filter/sort', function(assert) {
     var dataSource = this.createDataSource({});
     dataSource.load();
 
     // act
-    dataSource.sort({ selector: "this", desc: true });
-    dataSource.filter(["this", ">", 5]);
+    dataSource.sort({ selector: 'this', desc: true });
+    dataSource.filter(['this', '>', 5]);
     dataSource.load();
 
     // assert
-    assert.strictEqual(dataSource.items().length, 3, "item Count");
-    assert.strictEqual(dataSource.items()[0], 10, "first item");
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.strictEqual(dataSource.items().length, 3, 'item Count');
+    assert.strictEqual(dataSource.items()[0], 10, 'first item');
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
-QUnit.test("full reload reset cache", function(assert) {
+QUnit.test('full reload reset cache', function(assert) {
     var dataSource = this.createDataSource({});
     dataSource.load();
 
     // act
-    dataSource.filter(["this", ">", 5]);
+    dataSource.filter(['this', '>', 5]);
     dataSource.reload(true);
 
     // assert
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 2, "two loading");
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 2, 'two loading');
 });
 
-QUnit.test("reload from original dataSource reset cache", function(assert) {
+QUnit.test('reload from original dataSource reset cache', function(assert) {
     var dataSource = this.createDataSource({});
     dataSource.load();
 
     // act
-    dataSource.filter(["this", ">", 5]);
+    dataSource.filter(['this', '>', 5]);
     dataSource._dataSource.reload();
 
     // assert
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 2, "two loading");
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 2, 'two loading');
 });
 
-QUnit.test("load from cache when remote filtering is not changed and pageIndex is changed", function(assert) {
+QUnit.test('load from cache when remote filtering is not changed and pageIndex is changed', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true
         }
     });
-    dataSource.filter(["this", "<", 5]);
+    dataSource.filter(['this', '<', 5]);
     dataSource.load();
 
     // act
-    dataSource.filter(["this", "<", 5]);
+    dataSource.filter(['this', '<', 5]);
     dataSource.pageIndex(1);
     dataSource.load();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 4, "first item on page");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items()[0], 4, 'first item on page');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
-QUnit.test("load from cache when pageSize and pageIndex is changed", function(assert) {
+QUnit.test('load from cache when pageSize and pageIndex is changed', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true
@@ -6066,12 +6066,12 @@ QUnit.test("load from cache when pageSize and pageIndex is changed", function(as
     dataSource.reload();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 5, "first item on page");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items()[0], 5, 'first item on page');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
 // T328467
-QUnit.test("load from cache when remote paging but summary exists and pageIndex is changed", function(assert) {
+QUnit.test('load from cache when remote paging but summary exists and pageIndex is changed', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true,
@@ -6081,16 +6081,16 @@ QUnit.test("load from cache when remote paging but summary exists and pageIndex 
 
     dataSource.summary({
         totalAggregates: [{
-            selector: "this",
-            aggregator: "count"
+            selector: 'this',
+            aggregator: 'count'
         }, {
-            selector: "this",
-            aggregator: "sum"
+            selector: 'this',
+            aggregator: 'sum'
         }]
     });
 
     dataSource.load();
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 
     // act
     dataSource.pageSize(4);
@@ -6098,32 +6098,32 @@ QUnit.test("load from cache when remote paging but summary exists and pageIndex 
     dataSource.reload();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 5, "first item on page");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
-    assert.deepEqual(dataSource.totalAggregates(), [10, 55], "total aggregates");
+    assert.deepEqual(dataSource.items()[0], 5, 'first item on page');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
+    assert.deepEqual(dataSource.totalAggregates(), [10, 55], 'total aggregates');
 });
 
 
-QUnit.test("reset cache when remote filtering is changed", function(assert) {
+QUnit.test('reset cache when remote filtering is changed', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true
         }
     });
-    dataSource.filter(["this", ">", 5]);
+    dataSource.filter(['this', '>', 5]);
     dataSource.load();
 
     // act
-    dataSource.filter(["this", ">", 6]);
+    dataSource.filter(['this', '>', 6]);
     dataSource.reload();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 7, "first item on page");
-    assert.deepEqual(dataSource.totalCount(), 4, "totalCount");
-    assert.deepEqual(this.loadingCount, 2, "one loading");
+    assert.deepEqual(dataSource.items()[0], 7, 'first item on page');
+    assert.deepEqual(dataSource.totalCount(), 4, 'totalCount');
+    assert.deepEqual(this.loadingCount, 2, 'one loading');
 });
 
-QUnit.test("reset cache when remote sorting is changed", function(assert) {
+QUnit.test('reset cache when remote sorting is changed', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             sorting: true
@@ -6132,16 +6132,16 @@ QUnit.test("reset cache when remote sorting is changed", function(assert) {
     dataSource.load();
 
     // act
-    dataSource.sort({ selector: "this", desc: true });
+    dataSource.sort({ selector: 'this', desc: true });
     dataSource.reload();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 10, "first item on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(this.loadingCount, 2, "one loading");
+    assert.deepEqual(dataSource.items()[0], 10, 'first item on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(this.loadingCount, 2, 'one loading');
 });
 
-QUnit.test("reset cache when remote sorting is not changed and grouping is changed", function(assert) {
+QUnit.test('reset cache when remote sorting is not changed and grouping is changed', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: {
             sorting: true
@@ -6150,16 +6150,16 @@ QUnit.test("reset cache when remote sorting is not changed and grouping is chang
     dataSource.load();
 
     // act
-    dataSource.group({ selector: "this", desc: true });
+    dataSource.group({ selector: 'this', desc: true });
     dataSource.reload();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], { key: 10, items: null }, "first item on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items()[0], { key: 10, items: null }, 'first item on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
-QUnit.test("update cache on push", function(assert) {
+QUnit.test('update cache on push', function(assert) {
     var dataSource = this.createDataSource({
         reshapeOnPush: true
     });
@@ -6167,16 +6167,16 @@ QUnit.test("update cache on push", function(assert) {
     this.clock.tick();
 
     // act
-    dataSource.store().push([{ type: "remove", key: 1 }]);
+    dataSource.store().push([{ type: 'remove', key: 1 }]);
     this.clock.tick();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 2, "first item on page");
-    assert.deepEqual(dataSource.totalCount(), 9, "totalCount is refreshed");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items()[0], 2, 'first item on page');
+    assert.deepEqual(dataSource.totalCount(), 9, 'totalCount is refreshed');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
-QUnit.test("update cache on push without reshapeOnPush", function(assert) {
+QUnit.test('update cache on push without reshapeOnPush', function(assert) {
     var dataSource = this.createDataSource({
         pushAggregationTimeout: 0
     });
@@ -6184,16 +6184,16 @@ QUnit.test("update cache on push without reshapeOnPush", function(assert) {
     this.clock.tick();
 
     // act
-    dataSource.store().push([{ type: "remove", key: 1 }]);
+    dataSource.store().push([{ type: 'remove', key: 1 }]);
     this.clock.tick();
 
     // assert
-    assert.deepEqual(dataSource.items()[0], 2, "first item on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount is not refreshed");
-    assert.deepEqual(this.loadingCount, 1, "one loading");
+    assert.deepEqual(dataSource.items()[0], 2, 'first item on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount is not refreshed');
+    assert.deepEqual(this.loadingCount, 1, 'one loading');
 });
 
-QUnit.module("Custom Load", {
+QUnit.module('Custom Load', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.createDataSource = function(options) {
@@ -6202,14 +6202,14 @@ QUnit.module("Custom Load", {
             return (options.remoteOperations === true ? createDataSourceWithRemoteGrouping : createDataSource)($.extend({
                 store: {
                     onLoading: function(e) {
-                        if(e.group && e.group.length === 1 && e.group[0].selector === "this" && e.group[0].groupInterval) {
+                        if(e.group && e.group.length === 1 && e.group[0].selector === 'this' && e.group[0].groupInterval) {
                             e.group[0].selector = function(data) {
                                 return Math.floor(data / e.group[0].groupInterval);
                             };
                         }
                         that.loadingCount++;
                     },
-                    type: "array",
+                    type: 'array',
                     data: TEN_NUMBERS
                 },
                 pageSize: 3,
@@ -6225,7 +6225,7 @@ QUnit.module("Custom Load", {
 });
 
 // T344031
-QUnit.test("load when loadingTimeout is defined", function(assert) {
+QUnit.test('load when loadingTimeout is defined', function(assert) {
     var dataSource = this.createDataSource({
         loadingTimeout: 10
     });
@@ -6249,7 +6249,7 @@ QUnit.test("load when loadingTimeout is defined", function(assert) {
 
     // act
     dataSource.load({
-        filter: ["this", ">", 8]
+        filter: ['this', '>', 8]
     }).done(function(data) {
         customLoadData = data;
     });
@@ -6257,20 +6257,20 @@ QUnit.test("load when loadingTimeout is defined", function(assert) {
     this.clock.tick(9);
 
     // assert
-    assert.ok(!customLoadData, "custom load data is not loaded");
-    assert.deepEqual(loadingChangedArgs, [true], "loadingChanged args when data is not loaded");
+    assert.ok(!customLoadData, 'custom load data is not loaded');
+    assert.deepEqual(loadingChangedArgs, [true], 'loadingChanged args when data is not loaded');
 
     // act
     this.clock.tick(1);
 
     // assert
-    assert.deepEqual(customLoadData, [9, 10], "custom load data");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [9, 10], 'custom load data');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 });
 
-QUnit.test("load without cache with group/filter/paging options", function(assert) {
+QUnit.test('load without cache with group/filter/paging options', function(assert) {
     var dataSource = this.createDataSource({
-        filter: ["this", ">", "5"],
+        filter: ['this', '>', '5'],
         remoteOperations: { filtering: true }
     });
     dataSource.load();
@@ -6290,8 +6290,8 @@ QUnit.test("load without cache with group/filter/paging options", function(asser
 
     // act
     dataSource.load({
-        filter: ["this", ">", "1"],
-        group: "this",
+        filter: ['this', '>', '1'],
+        group: 'this',
         skip: 2,
         take: 2
     }).done(function(data) {
@@ -6300,19 +6300,19 @@ QUnit.test("load without cache with group/filter/paging options", function(asser
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 4, items: [4] }, { key: 5, items: [5] }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 4, items: [4] }, { key: 5, items: [5] }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [6, 7, 8], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 2, "loading count");
+    assert.deepEqual(dataSource.items(), [6, 7, 8], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 2, 'loading count');
 });
 
 // T317818
-QUnit.test("load from cache with group/filter/paging options", function(assert) {
+QUnit.test('load from cache with group/filter/paging options', function(assert) {
     var dataSource = this.createDataSource({
-        filter: ["this", ">", "5"],
+        filter: ['this', '>', '5'],
         remoteOperations: { filtering: true }
     });
     dataSource.load();
@@ -6332,8 +6332,8 @@ QUnit.test("load from cache with group/filter/paging options", function(assert) 
 
     // act
     dataSource.load({
-        filter: ["this", ">", "5"],
-        group: "this",
+        filter: ['this', '>', '5'],
+        group: 'this',
         skip: 2,
         take: 2
     }).done(function(data) {
@@ -6342,19 +6342,19 @@ QUnit.test("load from cache with group/filter/paging options", function(assert) 
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 8, items: [8] }, { key: 9, items: [9] }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 8, items: [8] }, { key: 9, items: [9] }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [6, 7, 8], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "loading count");
+    assert.deepEqual(dataSource.items(), [6, 7, 8], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'loading count');
 });
 
 // T341843
-QUnit.test("load from cache with group as function options", function(assert) {
+QUnit.test('load from cache with group as function options', function(assert) {
     var dataSource = this.createDataSource({
-        group: [{ selector: "this", desc: false }],
+        group: [{ selector: 'this', desc: false }],
         remoteOperations: false
     });
     dataSource.load();
@@ -6381,18 +6381,18 @@ QUnit.test("load from cache with group as function options", function(assert) {
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 0, items: [2, 4, 6, 8, 10] }, { key: 1, items: [1, 3, 5, 7, 9] }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 0, items: [2, 4, 6, 8, 10] }, { key: 1, items: [1, 3, 5, 7, 9] }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "loading count");
+    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'loading count');
 });
 
-QUnit.test("load when remote grouping and not isLoadingAll", function(assert) {
+QUnit.test('load when remote grouping and not isLoadingAll', function(assert) {
     var dataSource = this.createDataSource({
-        filter: ["this", ">", "5"],
+        filter: ['this', '>', '5'],
         remoteOperations: true
     });
     dataSource.load();
@@ -6412,8 +6412,8 @@ QUnit.test("load when remote grouping and not isLoadingAll", function(assert) {
     this.loadingCount = 0;
     // act
     dataSource.load({
-        filter: ["this", ">", "5"],
-        group: "this",
+        filter: ['this', '>', '5'],
+        group: 'this',
         skip: 2,
         take: 2
     }).done(function(data) {
@@ -6422,19 +6422,19 @@ QUnit.test("load when remote grouping and not isLoadingAll", function(assert) {
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 8, items: null, count: 1 }, { key: 9, items: null, count: 1 }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 8, items: null, count: 1 }, { key: 9, items: null, count: 1 }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [6, 7, 8], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "loading count");
+    assert.deepEqual(dataSource.items(), [6, 7, 8], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'loading count');
 });
 
 // T368828
-QUnit.test("load when remote grouping and first page", function(assert) {
+QUnit.test('load when remote grouping and first page', function(assert) {
     var dataSource = this.createDataSource({
-        group: "this",
+        group: 'this',
         remoteOperations: true,
         pageSize: 3
     });
@@ -6455,7 +6455,7 @@ QUnit.test("load when remote grouping and first page", function(assert) {
     this.loadingCount = 0;
     // act
     dataSource.load({
-        group: "this",
+        group: 'this',
         skip: 0,
         take: 3
     }).done(function(data) {
@@ -6464,19 +6464,19 @@ QUnit.test("load when remote grouping and first page", function(assert) {
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 1, items: null, count: 1 }, { key: 2, items: null, count: 1 }, { key: 3, items: null, count: 1 }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 1, items: null, count: 1 }, { key: 2, items: null, count: 1 }, { key: 3, items: null, count: 1 }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(this.loadingCount, 0, "loading count");
+    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(this.loadingCount, 0, 'loading count');
 });
 
 // T368828
-QUnit.test("load when remote grouping and second page", function(assert) {
+QUnit.test('load when remote grouping and second page', function(assert) {
     var dataSource = this.createDataSource({
-        group: "this",
+        group: 'this',
         remoteOperations: true
     });
     dataSource.load();
@@ -6497,7 +6497,7 @@ QUnit.test("load when remote grouping and second page", function(assert) {
     // act
 
     dataSource.load({
-        group: "this",
+        group: 'this',
         skip: 2,
         take: 2
     }).done(function(data) {
@@ -6506,19 +6506,19 @@ QUnit.test("load when remote grouping and second page", function(assert) {
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 3, items: null, count: 1 }, { key: 4, items: null, count: 1 }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 3, items: null, count: 1 }, { key: 4, items: null, count: 1 }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "loading count");
+    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'loading count');
 });
 
 // T368875
-QUnit.test("load when remote grouping and groupInterval is defined", function(assert) {
+QUnit.test('load when remote grouping and groupInterval is defined', function(assert) {
     var dataSource = this.createDataSource({
-        group: "this",
+        group: 'this',
         remoteOperations: true,
         pageSize: 3
     });
@@ -6539,7 +6539,7 @@ QUnit.test("load when remote grouping and groupInterval is defined", function(as
     this.loadingCount = 0;
     // act
     dataSource.load({
-        group: [{ selector: "this", groupInterval: 2 }],
+        group: [{ selector: 'this', groupInterval: 2 }],
         skip: 0,
         take: 3
     }).done(function(data) {
@@ -6548,17 +6548,17 @@ QUnit.test("load when remote grouping and groupInterval is defined", function(as
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 0, items: null, count: 1 }, { key: 1, items: null, count: 2 }, { key: 2, items: null, count: 2 }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 0, items: null, count: 1 }, { key: 1, items: null, count: 2 }, { key: 2, items: null, count: 2 }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "loading count");
+    assert.deepEqual(dataSource.items(), [{ key: 1, items: null }, { key: 2, items: null }, { key: 3, items: null }], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'loading count');
 });
 
 // T375388
-QUnit.test("load when remote summary and summary is not defined", function(assert) {
+QUnit.test('load when remote summary and summary is not defined', function(assert) {
     var dataSource = this.createDataSource({
         remoteOperations: { summary: true }
     });
@@ -6567,8 +6567,8 @@ QUnit.test("load when remote summary and summary is not defined", function(asser
     var customLoadData = false;
     // act
     dataSource.load({
-        filter: ["this", ">=", "5"],
-        group: "this",
+        filter: ['this', '>=', '5'],
+        group: 'this',
         take: 2
     }).done(function(data) {
         customLoadData = data;
@@ -6576,18 +6576,18 @@ QUnit.test("load when remote summary and summary is not defined", function(asser
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 5, items: [5] }, { key: 6, items: [6] }], "custom load data");
+    assert.deepEqual(customLoadData, [{ key: 5, items: [5] }, { key: 6, items: [6] }], 'custom load data');
 
-    assert.deepEqual(dataSource.items(), [1, 2, 3], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
+    assert.deepEqual(dataSource.items(), [1, 2, 3], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
 });
 
 // T344271
-QUnit.test("load when remote grouping and not isLoadingAll and expand one item", function(assert) {
+QUnit.test('load when remote grouping and not isLoadingAll and expand one item', function(assert) {
     var dataSource = this.createDataSource({
-        filter: ["this", ">", "5"],
+        filter: ['this', '>', '5'],
         remoteOperations: true,
-        group: "this"
+        group: 'this'
     });
     dataSource.load();
 
@@ -6608,7 +6608,7 @@ QUnit.test("load when remote grouping and not isLoadingAll and expand one item",
 
     dataSource.changeRowExpand([6]);
 
-    dataSource.store().on("loading", function(e) {
+    dataSource.store().on('loading', function(e) {
         loadingArgs.push(e);
     });
 
@@ -6618,26 +6618,26 @@ QUnit.test("load when remote grouping and not isLoadingAll and expand one item",
     });
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 6, items: [6], count: 1 }, { key: 7, items: null, collapsedItems: null, count: 1 }], "custom load data");
-    assert.equal(changedArgs.length, 1, "changed is fired");
-    assert.deepEqual(loadingChangedArgs, [true, false, true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 6, items: [6], count: 1 }, { key: 7, items: null, collapsedItems: null, count: 1 }], 'custom load data');
+    assert.equal(changedArgs.length, 1, 'changed is fired');
+    assert.deepEqual(loadingChangedArgs, [true, false, true, false], 'loadingChanged args');
     assert.deepEqual(loadingArgs, [{
-        group: null, requireTotalCount: false, requireGroupCount: false, searchOperation: "contains", searchValue: null, userData: {},
-        sort: [{ selector: "this", desc: false }],
-        filter: [["this", ">", "5"], "and", ["this", "=", 6]],
+        group: null, requireTotalCount: false, requireGroupCount: false, searchOperation: 'contains', searchValue: null, userData: {},
+        sort: [{ selector: 'this', desc: false }],
+        filter: [['this', '>', '5'], 'and', ['this', '=', 6]],
         skip: undefined,
         take: undefined
-    }], "loading args");
+    }], 'loading args');
 
-    assert.deepEqual(dataSource.items(), [{ key: 6, items: [6] }, { key: 7, items: null }], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
-    assert.deepEqual(this.loadingCount, 1, "loading count");
+    assert.deepEqual(dataSource.items(), [{ key: 6, items: [6] }, { key: 7, items: null }], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
+    assert.deepEqual(this.loadingCount, 1, 'loading count');
 });
 
 // T324247
-QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
+QUnit.test('load when remote grouping and isLoadingAll', function(assert) {
     var dataSource = this.createDataSource({
-        filter: ["this", ">", "5"],
+        filter: ['this', '>', '5'],
         remoteOperations: true
     });
     dataSource.load();
@@ -6659,8 +6659,8 @@ QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
     // act
     dataSource.load({
         isLoadingAll: true,
-        filter: ["this", ">", "5"],
-        group: "this"
+        filter: ['this', '>', '5'],
+        group: 'this'
     }).done(function(data) {
         customLoadData = data;
     });
@@ -6668,25 +6668,25 @@ QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
     // assert
     assert.deepEqual(customLoadData, [6, 7, 8, 9, 10].map(function(key) {
         return { key: key, items: [key], count: 1 };
-    }), "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    }), 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [6, 7, 8], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 5, "totalCount");
+    assert.deepEqual(dataSource.items(), [6, 7, 8], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 5, 'totalCount');
 
-    assert.deepEqual(this.loadingCount, 2, "loading count");
+    assert.deepEqual(this.loadingCount, 2, 'loading count');
 });
 
 // T359403
-QUnit.test("load with group and paging options", function(assert) {
+QUnit.test('load with group and paging options', function(assert) {
     var loadingCount = 0,
         dataSource = this.createDataSource({
             store: {
                 onLoading: function() {
                     loadingCount++;
                 },
-                type: "array",
+                type: 'array',
                 data: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
             },
 
@@ -6710,7 +6710,7 @@ QUnit.test("load with group and paging options", function(assert) {
 
     // act
     dataSource.load({
-        group: "this",
+        group: 'this',
         skip: 2,
         take: 2
     }).done(function(data) {
@@ -6719,12 +6719,12 @@ QUnit.test("load with group and paging options", function(assert) {
 
 
     // assert
-    assert.deepEqual(customLoadData, [{ key: 3, items: [3, 3] }, { key: 4, items: [4, 4] }], "custom load data");
-    assert.ok(!changedArgs.length, "changed is not fired");
-    assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
+    assert.deepEqual(customLoadData, [{ key: 3, items: [3, 3] }, { key: 4, items: [4, 4] }], 'custom load data');
+    assert.ok(!changedArgs.length, 'changed is not fired');
+    assert.deepEqual(loadingChangedArgs, [true, false], 'loadingChanged args');
 
-    assert.deepEqual(dataSource.items(), [1, 1, 2, 2, 3], "items on page");
-    assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
-    assert.deepEqual(loadingCount, 2, "loading count");
+    assert.deepEqual(dataSource.items(), [1, 1, 2, 2, 3], 'items on page');
+    assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
+    assert.deepEqual(loadingCount, 2, 'loading count');
 });
 
