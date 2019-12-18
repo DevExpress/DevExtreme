@@ -20,14 +20,14 @@ const { assert } = QUnit;
 class TreeViewTestWrapper {
     constructor(options) {
         if(!options.onItemSelectionChanged) {
-            options.onItemSelectionChanged = () => this.calledEventNames.push('itemSelectionChanged');
+            options.onItemSelectionChanged = () => this.calledCallbacksNames.push('itemSelectionChanged');
         }
 
         if(!options.onSelectionChanged) {
-            options.onSelectionChanged = () => this.calledEventNames.push('selectionChanged');
+            options.onSelectionChanged = () => this.calledCallbacksNames.push('selectionChanged');
         }
 
-        this.calledEventNames = [];
+        this.calledCallbacksNames = [];
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option('showCheckBoxesMode') === 'normal';
     }
@@ -86,12 +86,12 @@ class TreeViewTestWrapper {
         assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method' + (additionalErrorMessage || ''));
     }
 
-    checkCallbacks(expectedEventNames, additionalErrorMessage) {
-        assert.deepEqual(this.calledEventNames, expectedEventNames, 'called events' + (additionalErrorMessage || ''));
+    checkCallbacks(expectedCallbacksNames, additionalErrorMessage) {
+        assert.deepEqual(this.calledCallbacksNames, expectedCallbacksNames, 'called events' + (additionalErrorMessage || ''));
     }
 
     clearCallbacksCalls() {
-        this.calledEventNames = [];
+        this.calledCallbacksNames = [];
     }
 
     convertTreeToFlatList(items) {

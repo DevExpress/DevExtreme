@@ -463,8 +463,8 @@ configs.forEach(config => {
 
             wrapper.instance.expandAll();
 
-            let expectedKeys = [1, 2];
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys([1, 2], ' - check via dataSource items');
+            wrapper.checkSelectedNodes([0, 1]);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
@@ -481,7 +481,9 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
+            let expectedNodes = [];
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
             wrapper.clearCallbacksCalls();
 
@@ -489,11 +491,14 @@ configs.forEach(config => {
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [2];
+                expectedNodes = [1];
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2];
+                    expectedNodes = [0, 1];
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
@@ -510,14 +515,20 @@ configs.forEach(config => {
             wrapper.instance.unselectItem(1);
 
             let expectedKeys = [2];
+            let expectedNodes = [1];
             if(config.selectNodesRecursive) {
                 expectedKeys = [];
+                expectedNodes = [];
             }
-            if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+            if(!config.expanded) {
                 // unexpected result
-                expectedKeys = [];
+                if(isLazyDataSourceMode(wrapper)) {
+                    expectedKeys = [];
+                }
+                expectedNodes = [];
             }
             wrapper.checkSelectedKeys(expectedKeys);
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks(['itemSelectionChanged', 'selectionChanged']);
             wrapper.clearCallbacksCalls();
 
@@ -525,11 +536,14 @@ configs.forEach(config => {
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [2];
+                expectedNodes = [1];
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2];
+                    expectedNodes = [0, 1];
                 }
             }
             wrapper.checkSelectedKeys(expectedKeys);
+            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([]);
         });
 
