@@ -59,41 +59,50 @@ QUnit.test('container should consider tabs height', (assert) => {
 
 QUnit.test('container should consider tabs height for async datasource', (assert) => {
     const clock = sinon.useFakeTimers();
-    const $tabPanel = $('#tabPanel').dxTabPanel({
-        dataSource: {
-            load() {
-                const d = $.Deferred();
-                setTimeout(() => {
-                    d.resolve([{ tabTemplate() { return $('<div>').height(100); } }]);
-                });
-                return d;
+
+    try {
+        const $tabPanel = $('#tabPanel').dxTabPanel({
+            dataSource: {
+                load() {
+                    const d = $.Deferred();
+                    setTimeout(() => {
+                        d.resolve([{ tabTemplate() { return $('<div>').height(100); } }]);
+                    });
+                    return d;
+                }
             }
-        }
-    });
+        });
 
-    const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-    const $tabs = $tabPanel.find('.' + TABS_CLASS);
+        const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
+        const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-    clock.tick();
+        clock.tick();
 
-    assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-    assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
+        assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
+        assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test('container should consider tabs height for async templates', (assert) => {
     const clock = sinon.useFakeTimers();
-    const $tabPanel = $('#tabPanel').hide().dxTabPanel({
-        items: [{ text: 'test' }],
-        templatesRenderAsynchronously: true
-    }).show();
+    try {
+        const $tabPanel = $('#tabPanel').hide().dxTabPanel({
+            items: [{ text: 'test' }],
+            templatesRenderAsynchronously: true
+        }).show();
 
-    const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-    const $tabs = $tabPanel.find('.' + TABS_CLASS);
+        const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
+        const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-    clock.tick();
+        clock.tick();
 
-    assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-    assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
+        assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
+        assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test('container should consider tabs height when it rendered in hiding area', (assert) => {
@@ -277,6 +286,7 @@ QUnit.module('action handlers', {
         this.tabWidgetMouse = pointerMock(this.$tabPanel.find(toSelector(TABS_ITEM_CLASS))[0]).start();
     },
     afterEach() {
+        this.clock.restore();
         fx.off = false;
     }
 });
