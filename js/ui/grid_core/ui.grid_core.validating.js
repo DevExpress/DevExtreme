@@ -465,7 +465,7 @@ module.exports = {
                 _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController('validating'),
                         columnsController = this.getController('columns'),
-                        invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand),
+                        invisibleColumns = this._getInvisibleColumns(editData),
                         groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1),
                         invisibleColumnValidators = [];
 

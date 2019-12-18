@@ -18971,6 +18971,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
+        this.clock.tick();
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -19027,6 +19028,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
+        this.clock.tick();
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
@@ -19089,6 +19091,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         scrollable.scrollTo({ y: 0 });
+        this.clock.tick();
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $input = $firstCell.find('input');
