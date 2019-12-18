@@ -39,7 +39,14 @@ const MS_INVALID_LIST_PARAGRAPH = '<p class=\'MsoListParagraphCxSpFirst\'><span>
 
 const { module: testModule, test } = QUnit;
 
-testModule('Paste from MS Word', () => {
+testModule('Paste from MS Word', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
     test('paste bullet list with indent', (assert) => {
         const done = assert.async();
         const instance = $('#htmlEditor')
