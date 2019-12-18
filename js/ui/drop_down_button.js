@@ -365,7 +365,7 @@ let DropDownButton = Widget.inherit({
         const iconWidth = this.option('icon') ? 20 : 0;
         const allButtonContents = this.$element().find('.dx-button-content');
 
-        if(allButtonContents.length === 0) {
+        if(allButtonContents.length === 0 || !windowUtils.hasWindow()) {
             return 0;
         }
 
