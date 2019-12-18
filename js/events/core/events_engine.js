@@ -29,9 +29,9 @@ const NO_BUBBLE_EVENTS = ['blur', 'focus', 'load'];
 
 const forcePassiveFalseEventNames = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
 
-const matchesSafe = function(target, selector) {
+function matchesSafe(target, selector) {
     return !isWindow(target) && target.nodeName !== '#document' && domAdapter.elementMatches(target, selector);
-};
+}
 const elementDataMap = new WeakMap();
 let guid = 0;
 let skipEvent;
@@ -385,7 +385,7 @@ function normalizeOnArguments(callback) {
     };
 }
 
-const normalizeOffArguments = function(callback) {
+function normalizeOffArguments(callback) {
     return function(element, eventName, selector, handler) {
         if(typeof selector === 'function') {
             handler = selector;
@@ -394,9 +394,9 @@ const normalizeOffArguments = function(callback) {
 
         callback(element, eventName, selector, handler);
     };
-};
+}
 
-const normalizeTriggerArguments = function(callback) {
+function normalizeTriggerArguments(callback) {
     return function(element, src, extraParameters) {
         if(typeof src === 'string') {
             src = {
@@ -420,9 +420,9 @@ const normalizeTriggerArguments = function(callback) {
 
         callback(element, (src instanceof eventsEngine.Event) ? src : eventsEngine.Event(src), extraParameters);
     };
-};
+}
 
-const normalizeEventArguments = function(callback) {
+function normalizeEventArguments(callback) {
     return function(src, config) {
         if(!(this instanceof eventsEngine.Event)) {
             return new eventsEngine.Event(src, config);
@@ -444,7 +444,7 @@ const normalizeEventArguments = function(callback) {
 
         callback.call(this, src, config);
     };
-};
+}
 
 function iterate(callback) {
     const iterateEventNames = function(element, eventName) {
@@ -474,7 +474,7 @@ function iterate(callback) {
     };
 }
 
-const callNativeMethod = function(eventName, element) {
+function callNativeMethod(eventName, element) {
     const nativeMethodName = NATIVE_EVENTS_TO_TRIGGER[eventName] || eventName;
 
     const isLinkClickEvent = function(eventName, element) {
@@ -488,9 +488,9 @@ const callNativeMethod = function(eventName, element) {
         element[nativeMethodName]();
         skipEvent = undefined;
     }
-};
+}
 
-const calculateWhich = function(event) {
+function calculateWhich(event) {
     const setForMouseEvent = function(event) {
         const mouseEventRegex = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
         return !event.which && event.button !== undefined && mouseEventRegex.test(event.type);
@@ -510,14 +510,14 @@ const calculateWhich = function(event) {
     }
 
     return event.which;
-};
+}
 
-const initEvent = function(EventClass) {
+function initEvent(EventClass) {
     if(EventClass) {
         eventsEngine.Event = EventClass;
         eventsEngine.Event.prototype = EventClass.prototype;
     }
-};
+}
 
 initEvent(normalizeEventArguments(function(src, config) {
     const that = this;
