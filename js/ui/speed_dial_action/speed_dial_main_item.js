@@ -78,7 +78,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     _renderClick() {
         this._clickAction = this.option("actions").length === 1 ?
             this._getActionComponent()._createActionByOption("onClick") :
-            this._createAction(this._clickHandler);
+            this._createAction(this._clickHandler.bind(this));
 
         this._setClickAction();
     }
