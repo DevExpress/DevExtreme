@@ -3215,10 +3215,31 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input).type('1');
-        $input.trigger('focusout');
         $('.dx-list-item').trigger('dxclick');
 
         assert.equal(instance.option('selectedItems').length, 1, 'selected items count');
+    });
+
+    QUnit.testInActiveWindow('Filter should not be canceled after Apply button click', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $element = $('#tagBox').dxTagBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true,
+            showSelectionControls: true,
+            selectAllMode: 'allPages',
+            applyValueMode: 'useButtons'
+        });
+
+        const instance = $element.dxTagBox('instance');
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input).type('1');
+        $('.dx-list-item').trigger('dxclick');
+        $('.dx-button.dx-popup-done').trigger('dxclick');
+
+        assert.equal($(instance.content()).find('.dx-list-item').length, 1, 'filter was not cleared after Apply button click');
     });
 
     QUnit.test('filter should not be cleared when no focusout and no item selection happened', function(assert) {
@@ -4074,7 +4095,8 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             .type('c');
 
         $('.dx-list-select-all-checkbox').trigger('dxclick');
-        $($input).trigger('focusout'); // Emulating the real behavior
+
+        $($input).trigger($.Event('focusout', { relatedTarget: $('.dx-popup-bottom').get(0) }));
         $('.dx-button.dx-popup-done').trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), ['ac', 'bc'], 'value is applied correctly');
