@@ -75,6 +75,112 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
     }
 });
 
+[true, false].forEach(repaintChangesOnly => {
+    [undefined, 0, 1].forEach(focusedRowKey => {
+        QUnit.test(`Paging: set focusedRowKey on the next page: repaintChangesOnly=${repaintChangesOnly}, focusedRowKey=${focusedRowKey}`, function(assert) {
+            let focusedRowChangedFiresCount = 0;
+
+            this.columns = ['id', 'c0'];
+            this.data = [
+                { id: 0, c0: 'c0_0' },
+                { id: 1, c0: 'c0_1' },
+                { id: 2, c0: 'c0_2' },
+                { id: 3, c0: 'c0_3' }
+            ];
+            this.options = {
+                width: 400,
+                paging: {
+                    pageSize: 2
+                },
+                repaintChangesOnly: repaintChangesOnly,
+                keyExpr: 'id',
+                focusedRowKey: focusedRowKey,
+                focusedRowEnabled: true,
+                onFocusedRowChanged: e => {
+                    if(++focusedRowChangedFiresCount > 1) {
+                        assert.ok(false, `onFocusedRowChanged should fire once, fired: ${focusedRowChangedFiresCount}`);
+                        throw 'Exception';
+                    }
+                }
+            };
+
+            this.setupModule();
+
+            addOptionChangedHandlers(this);
+            this.gridView.render($('#container'));
+
+            // assert
+            assert.equal(this.option('focusedRowKey'), focusedRowKey, 'focusedRowKey');
+            assert.equal(this.option('focusedRowIndex'), focusedRowKey, 'focusedRowIndex');
+            if(focusedRowKey) {
+                assert.ok(dataGridWrapper.rowsView.isFocusedRow(focusedRowKey), 'Row is focused');
+            }
+
+            // act
+            this.option('focusedRowKey', 3);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowKey'), 3, 'focusedRowKey was changed');
+            assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex was changed');
+            assert.notOk(dataGridWrapper.rowsView.isFocusedRow(0), 'Row 0 is not focused row');
+            assert.ok(dataGridWrapper.rowsView.isFocusedRow(1), 'Row 1 is focused row');
+        });
+    });
+
+    [undefined, 0, 1].forEach(focusedRowIndex => {
+        QUnit.test(`Paging: set focusedRowKey on the next page: repaintChangesOnly=${repaintChangesOnly}, focusedRowIndex=${focusedRowIndex}`, function(assert) {
+            let focusedRowChangedFiresCount = 0;
+
+            this.columns = ['id', 'c0'];
+            this.data = [
+                { id: 0, c0: 'c0_0' },
+                { id: 1, c0: 'c0_1' },
+                { id: 2, c0: 'c0_2' },
+                { id: 3, c0: 'c0_3' }
+            ];
+            this.options = {
+                width: 400,
+                paging: {
+                    pageSize: 2
+                },
+                repaintChangesOnly: repaintChangesOnly,
+                keyExpr: 'id',
+                focusedRowIndex: focusedRowIndex,
+                focusedRowEnabled: true,
+                onFocusedRowChanged: e => {
+                    if(++focusedRowChangedFiresCount > 1) {
+                        assert.ok(false, `onFocusedRowChanged should fire once, fired: ${focusedRowChangedFiresCount}`);
+                        throw 'Exception';
+                    }
+                }
+            };
+
+            this.setupModule();
+
+            addOptionChangedHandlers(this);
+            this.gridView.render($('#container'));
+
+            // assert
+            assert.equal(this.option('focusedRowKey'), focusedRowIndex, 'focusedRowKey');
+            assert.equal(this.option('focusedRowIndex'), focusedRowIndex, 'focusedRowIndex');
+            if(focusedRowIndex) {
+                assert.ok(dataGridWrapper.rowsView.isFocusedRow(focusedRowIndex), 'Row is focused');
+            }
+
+            // act
+            this.option('focusedRowKey', 3);
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowKey'), 3, 'focusedRowKey was changed');
+            assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex was changed');
+            assert.notOk(dataGridWrapper.rowsView.isFocusedRow(0), 'Row 0 is not focused row');
+            assert.ok(dataGridWrapper.rowsView.isFocusedRow(1), 'Row 1 is focused row');
+        });
+    });
+});
+
 QUnit.testInActiveWindow('FocusedRow should present if set focusedRowIndex', function(assert) {
     var rowsView;
 
