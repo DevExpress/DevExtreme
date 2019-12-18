@@ -321,12 +321,13 @@ configs.forEach(config => {
                 expectedKeys = [1];
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2];
+                } else {
+                    expectedNodes = [0];
                 }
             }
-            if(!config.selectNodesRecursive) {
-                expectedNodes = [0];
-            }
+
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
@@ -337,20 +338,28 @@ configs.forEach(config => {
             wrapper.instance.selectItem(1);
 
             let expectedKeys = [1];
+            let expectedNodes = [0];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [1, 2];
+                    expectedNodes = [0, 1];
                 }
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
                     expectedKeys = [1];
                 }
             }
+            if(!config.expanded) {
+                // unexpected result
+                expectedNodes = [0];
+            }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks(['itemSelectionChanged', 'selectionChanged'], ' - check via dataSource items');
             wrapper.clearCallbacksCalls();
 
             wrapper.instance.expandAll();
+            expectedNodes = [0];
             if(config.selectionMode === 'multiple') {
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
@@ -358,8 +367,12 @@ configs.forEach(config => {
                         expectedKeys = [1, 2];
                     }
                 }
+                if(config.selectNodesRecursive) {
+                    expectedNodes = [0, 1];
+                }
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkCallbacks([], ' - check via dataSource items');
         });
 
