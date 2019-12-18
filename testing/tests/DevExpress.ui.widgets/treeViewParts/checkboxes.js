@@ -308,9 +308,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedNodes = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after selectAll');
-            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after selectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after selectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -327,9 +327,9 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('all.selected: false -> selectItem(0) -> expandAll', function(assert) {
@@ -354,9 +354,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedNodes = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after selectItem(0)');
-            wrapper.checkSelectedNodes(expectedNodes, ' after selectItem(0)');
-            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], ' after selectItem(0)');
+            wrapper.checkSelectedKeys(expectedKeys, 'after selectItem(0)');
+            wrapper.checkSelectedNodes(expectedNodes, 'after selectItem(0)');
+            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after selectItem(0)');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -372,9 +372,9 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('all.selected: false -> selectItem(1) -> expandAll', function(assert) {
@@ -405,9 +405,9 @@ configs.forEach(config => {
                 expectedCallbacks = [];
                 expectedNodes = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after selectItem(1)');
-            wrapper.checkSelectedNodes(expectedNodes, ' after selectItem(1)');
-            wrapper.checkEventLog(expectedCallbacks, ' after selectItem(1)');
+            wrapper.checkSelectedKeys(expectedKeys, 'after selectItem(1)');
+            wrapper.checkSelectedNodes(expectedNodes, 'after selectItem(1)');
+            wrapper.checkEventLog(expectedCallbacks, 'after selectItem(1)');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -421,9 +421,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedNodes = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('all.selected: true', function(assert) {
@@ -463,9 +463,9 @@ configs.forEach(config => {
 
             wrapper.instance.expandAll();
 
-            wrapper.checkSelectedKeys([0, 1], ' after expandAll');
-            wrapper.checkSelectedNodes([0, 1], ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys([0, 1], 'after expandAll');
+            wrapper.checkSelectedNodes([0, 1], 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('all.selected: true -> unselectAll -> expandAll', function(assert) {
@@ -482,9 +482,9 @@ configs.forEach(config => {
 
             let expectedKeys = [];
             let expectedNodes = [];
-            wrapper.checkSelectedKeys(expectedKeys, ' after unselectAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after unselectAll');
-            wrapper.checkEventLog(['selectionChanged'], ' after unselectAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after unselectAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after unselectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after unselectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -497,9 +497,9 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('all.selected: true -> unselectItem(0) -> expandAll', function(assert) {
@@ -527,9 +527,9 @@ configs.forEach(config => {
                 }
                 expectedNodes = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after unselectItem(0)');
-            wrapper.checkSelectedNodes(expectedNodes, ' after unselectItem(0)');
-            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], ' after unselectItem(0)');
+            wrapper.checkSelectedKeys(expectedKeys, 'after unselectItem(0)');
+            wrapper.checkSelectedNodes(expectedNodes, 'after unselectItem(0)');
+            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after unselectItem(0)');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -542,9 +542,9 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('all.selected: true -> unselectItem(1) -> expandAll', function(assert) {
@@ -569,9 +569,9 @@ configs.forEach(config => {
                 expectedKeys = [0];
                 expectedCallbacks = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after unselectItem(1)');
-            wrapper.checkSelectedNodes(expectedKeys, ' after unselectItem(1)');
-            wrapper.checkEventLog(expectedCallbacks, ' after unselectItem(1)');
+            wrapper.checkSelectedKeys(expectedKeys, 'after unselectItem(1)');
+            wrapper.checkSelectedNodes(expectedKeys, 'after unselectItem(1)');
+            wrapper.checkEventLog(expectedCallbacks, 'after unselectItem(1)');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -579,9 +579,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0, 1];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedKeys, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedNodes(expectedKeys, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1.selected: true', function() {
@@ -630,9 +630,9 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedKeys, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedNodes(expectedKeys, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1.selected: true -> selectAll -> expandAll', function(assert) {
@@ -657,9 +657,9 @@ configs.forEach(config => {
                 }
                 expectedNodes = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after selectAll');
-            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after selectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after selectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -676,9 +676,9 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1.selected: true -> unselectAll -> expandAll', function(assert) {
@@ -689,15 +689,15 @@ configs.forEach(config => {
 
             wrapper.instance.unselectAll();
 
-            wrapper.checkSelectedKeys([], ' after unselectAll');
-            wrapper.checkSelectedNodes([], ' after unselectAll');
-            wrapper.checkEventLog(['selectionChanged'], ' after unselectAll');
+            wrapper.checkSelectedKeys([], 'after unselectAll');
+            wrapper.checkSelectedNodes([], 'after unselectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after unselectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys([], ' after expandAll');
-            wrapper.checkSelectedNodes([], ' after expandAll');
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkSelectedKeys([], 'after expandAll');
+            wrapper.checkSelectedNodes([], 'after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
 
@@ -747,9 +747,9 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1_1.selected: true -> selectAll -> expandAll', function(assert) {
@@ -769,9 +769,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after selectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -780,9 +780,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0, 1];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1_1.selected: true -> unselectAll -> expandAll', function(assert) {
@@ -794,9 +794,9 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys, ' after unselectAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after unselectAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog(['selectionChanged'], ' after unselectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after unselectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -807,9 +807,9 @@ configs.forEach(config => {
                     expectedKeys = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1_1_1.selected: true', function() {
@@ -852,9 +852,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
 
         QUnit.test('item1_1_1.selected: true -> selectAll -> expandAll', function(assert) {
@@ -874,9 +874,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.checkEventLog(['selectionChanged'], 'after selectAll');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -888,9 +888,9 @@ configs.forEach(config => {
                     expectedKeys = [0];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], ' after expandAll');
+            wrapper.checkEventLog([], 'after expandAll');
         });
     });
 });

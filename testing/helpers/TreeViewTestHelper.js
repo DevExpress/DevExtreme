@@ -83,11 +83,11 @@ class TreeViewTestWrapper {
 
     checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
         const actualSelectedKeys = this.instance.getSelectedNodesKeys();
-        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method' + (additionalErrorMessage || ''));
+        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
     }
 
     checkEventLog(expectedEventsNames, additionalErrorMessage) {
-        assert.deepEqual(this.calledCallbacksNames, expectedEventsNames, 'called events' + (additionalErrorMessage || ''));
+        assert.deepEqual(this.calledCallbacksNames, expectedEventsNames, 'eventLog ' + additionalErrorMessage);
     }
 
     clearEventLog() {
