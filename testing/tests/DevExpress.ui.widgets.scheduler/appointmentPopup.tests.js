@@ -54,6 +54,76 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         return createWrapper($.extend(defaultOption, options));
     };
 
+    QUnit.test('showAppointmentPopup method should be work properly with no argument', function(assert) {
+        const cases = [
+            () => {
+                const appointmentText = 'app';
+
+                const textEditor = scheduler.appointmentForm.getEditor('text');
+                const startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+                const endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+
+
+                textEditor.option('value', appointmentText);
+                startDateEditor.option('value', new Date(2017, 4, 22, 9, 30));
+                endDateEditor.option('value', new Date(2017, 4, 22, 9, 45));
+
+                scheduler.appointmentPopup.clickDoneButton();
+
+                assert.equal(scheduler.appointments.find(appointmentText).length, 1, 'new appointment should be created with base options');
+            },
+            () => {
+                const appointmentText = 'app';
+
+                const textEditor = scheduler.appointmentForm.getEditor('text');
+                const startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+                const endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+
+
+                textEditor.option('value', appointmentText);
+                startDateEditor.option('value', new Date(2017, 4, 22, 9, 30));
+                endDateEditor.option('value', new Date(2017, 4, 22, 9, 45));
+
+                scheduler.appointmentPopup.clickCancelButton();
+
+                assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'new appointment shouldn\'t created');
+            },
+            () => {
+                const appointmentText = 'all day app';
+
+                const recurrenceEditor = scheduler.appointmentForm.getEditor('recurrenceRule');
+                const freqEditor = recurrenceEditor._freqEditor;
+
+                const textEditor = scheduler.appointmentForm.getEditor('text');
+                const startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+                const endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+                const allDayEditor = scheduler.appointmentForm.getEditor('allDay');
+                const descriptionEditor = scheduler.appointmentForm.getEditor('description');
+
+                textEditor.option('value', appointmentText);
+                startDateEditor.option('value', new Date(2017, 4, 22, 10, 30));
+                endDateEditor.option('value', new Date(2017, 4, 22, 10, 45));
+
+                allDayEditor.option('value', true);
+                descriptionEditor.option('value', 'text');
+                freqEditor.option('value', 'daily');
+
+                scheduler.appointmentPopup.clickDoneButton();
+
+                assert.equal(scheduler.appointments.find(appointmentText).length, 21, 'recurrence appointments should be created');
+            }
+        ];
+
+        const scheduler = createScheduler();
+
+        cases.forEach(testCase => {
+            scheduler.option('dataSource', []);
+            scheduler.instance.showAppointmentPopup();
+
+            testCase();
+        });
+    });
+
     QUnit.test('onAppointmentFormOpening event should handle e.cancel value', function(assert) {
         const data = [{
             text: 'Website Re-Design Plan',
