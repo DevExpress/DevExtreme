@@ -1,4 +1,4 @@
-var _createColorCodeGetter = require("./colorizing").createColorCodeGetter,
+var _createColorCodeGetter = require('./colorizing').createColorCodeGetter,
     _min = Math.min,
     _max = Math.max;
 
@@ -41,12 +41,12 @@ function gradientColorizer(options, themeManager) {
     var palette = themeManager.createGradientPalette(options.palette),
         getValue = _createColorCodeGetter(options);
 
-    return "range" in options ? createSimpleColorizer(getColor, getRangeData(options.range || [])) : createGuessingColorizer(getColor, getValue);
+    return 'range' in options ? createSimpleColorizer(getColor, getRangeData(options.range || [])) : createGuessingColorizer(getColor, getValue);
 
     function getColor(node, arg) {
         return palette.getColor((getValue(node) - arg[0]) / arg[1]);
     }
 }
 
-require("./colorizing").addColorizer("gradient", gradientColorizer);
+require('./colorizing').addColorizer('gradient', gradientColorizer);
 module.exports = gradientColorizer;

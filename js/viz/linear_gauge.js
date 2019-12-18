@@ -1,1 +1,1 @@
-module.exports = require("./gauges/linear_gauge");
+module.exports = require('./gauges/linear_gauge');

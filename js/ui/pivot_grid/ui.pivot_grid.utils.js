@@ -1,17 +1,17 @@
-import { isNumeric, isDefined, type } from "../../core/utils/type";
-import { sendRequest } from "../../core/utils/ajax";
-import { compileGetter } from "../../core/utils/data";
-import { each, map } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
+import { isNumeric, isDefined, type } from '../../core/utils/type';
+import { sendRequest } from '../../core/utils/ajax';
+import { compileGetter } from '../../core/utils/data';
+import { each, map } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
 import {
     getMonthNames,
     format as formatDate,
     getDayNames
-} from "../../localization/date";
-import { format } from "../../format_helper";
-import { DataSource } from "../../data/data_source/data_source";
-import ArrayStore from "../../data/array_store";
-import { when, Deferred } from "../../core/utils/deferred";
+} from '../../localization/date';
+import { format } from '../../format_helper';
+import { DataSource } from '../../data/data_source/data_source';
+import ArrayStore from '../../data/array_store';
+import { when, Deferred } from '../../core/utils/deferred';
 
 var setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
     var initProperties = field._initProperties = field._initProperties || {},
@@ -160,7 +160,7 @@ exports.foreachDataLevel = function foreachDataLevel(data, callback, index, chil
     var item,
         i;
     index = index || 0;
-    childrenField = childrenField || "children";
+    childrenField = childrenField || 'children';
 
     if(data.length) {
         callback(data, index);
@@ -188,7 +188,7 @@ exports.mergeArraysByMaxValue = function(values1, values2) {
 exports.getExpandedLevel = function(options, axisName) {
     var dimensions = options[axisName],
         expandLevel = 0,
-        expandedPaths = (axisName === "columns" ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
+        expandedPaths = (axisName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
 
     if(options.headerName === axisName) {
         expandLevel = options.path.length;
@@ -208,7 +208,7 @@ exports.getExpandedLevel = function(options, axisName) {
 };
 
 function createGroupFields(item) {
-    return map(["year", "quarter", "month"], function(value, index) {
+    return map(['year', 'quarter', 'month'], function(value, index) {
         return extend({}, item, { groupInterval: value, groupIndex: index });
     });
 }
@@ -217,10 +217,10 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
     var result = [];
 
     each(fieldsList || [], function(field, value) {
-        if(field && field.indexOf("__") === 0) return;
+        if(field && field.indexOf('__') === 0) return;
 
         var dataIndex = 1,
-            currentPath = path.length ? path + "." + field : field,
+            currentPath = path.length ? path + '.' + field : field,
             dataType = fieldsDataType[currentPath],
             getter = compileGetter(currentPath),
             items;
@@ -237,14 +237,14 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
         items = [{
             dataField: currentPath,
             dataType: dataType,
-            groupName: dataType === "date" ? field : undefined,
+            groupName: dataType === 'date' ? field : undefined,
             groupInterval: undefined,
             displayFolder: path
         }];
 
-        if(dataType === "date") {
+        if(dataType === 'date') {
             items = items.concat(createGroupFields(items[0]));
-        } else if(dataType === "object") {
+        } else if(dataType === 'object') {
             items = parseFields(dataSource, value, currentPath, fieldsDataType);
         }
 
@@ -256,7 +256,7 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
 
 exports.discoverObjectFields = function(items, fields) {
     var fieldsDataType = exports.getFieldsDataType(fields);
-    return parseFields(items, items[0], "", fieldsDataType);
+    return parseFields(items, items[0], '', fieldsDataType);
 };
 
 exports.getFieldsDataType = function(fields) {
@@ -282,17 +282,17 @@ var DATE_INTERVAL_FORMATS = {
 exports.setDefaultFieldValueFormatting = function(field) {
     if(field.dataType === 'date') {
         if(!field.format) {
-            setFieldProperty(field, "format", DATE_INTERVAL_FORMATS[field.groupInterval]);
+            setFieldProperty(field, 'format', DATE_INTERVAL_FORMATS[field.groupInterval]);
         }
     } else if(field.dataType === 'number') {
         var groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
         if(groupInterval && !field.customizeText) {
-            setFieldProperty(field, "customizeText", function(formatObject) {
+            setFieldProperty(field, 'customizeText', function(formatObject) {
                 var secondValue = formatObject.value + groupInterval,
                     secondValueText = format(secondValue, field.format);
 
-                return formatObject.valueText && secondValueText ? formatObject.valueText + " - " + secondValueText : "";
+                return formatObject.valueText && secondValueText ? formatObject.valueText + ' - ' + secondValueText : '';
             });
         }
     }
@@ -306,7 +306,7 @@ exports.getFiltersByPath = function(fields, path) {
         result.push(extend({}, fields[i], {
             groupIndex: null,
             groupName: null,
-            filterType: "include",
+            filterType: 'include',
             filterValues: [path[i]]
         }));
     }
@@ -337,8 +337,8 @@ exports.storeDrillDownMixin = {
         var items = this.getDrillDownItems(descriptions, params),
             arrayStore,
             dataSource = new DataSource({
-                load: createCustomStoreMethod("load"),
-                totalCount: createCustomStoreMethod("totalCount"),
+                load: createCustomStoreMethod('load'),
+                totalCount: createCustomStoreMethod('totalCount'),
                 key: this.key()
             });
 

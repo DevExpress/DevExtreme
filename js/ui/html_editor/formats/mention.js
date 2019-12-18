@@ -1,17 +1,17 @@
 
-import { getQuill } from "../quill_importer";
+import { getQuill } from '../quill_importer';
 
 const quill = getQuill();
-const Embed = quill.import("blots/embed");
-import $ from "../../../core/renderer";
+const Embed = quill.import('blots/embed');
+import $ from '../../../core/renderer';
 
-const MENTION_CLASS = "dx-mention";
+const MENTION_CLASS = 'dx-mention';
 
 class Mention extends Embed {
     static create(data) {
         const node = super.create();
 
-        node.setAttribute("spellcheck", false);
+        node.setAttribute('spellcheck', false);
         node.dataset.marker = data.marker;
         node.dataset.mentionValue = data.value;
         node.dataset.id = data.id;
@@ -44,7 +44,7 @@ class Mention extends Embed {
     }
 
     static baseContentRender(node, data) {
-        const $marker = $("<span>").text(data.marker);
+        const $marker = $('<span>').text(data.marker);
 
         $(node)
             .append($marker)
@@ -60,8 +60,8 @@ class Mention extends Embed {
     }
 }
 
-Mention.blotName = "mention";
-Mention.tagName = "span";
+Mention.blotName = 'mention';
+Mention.tagName = 'span';
 Mention.className = MENTION_CLASS;
 Mention._templates = new Map();
 

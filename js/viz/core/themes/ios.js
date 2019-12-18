@@ -1,15 +1,15 @@
-var themeModule = require("../../themes"),
-    IOS7_DEFAULT = "ios7.default",
-    SECONDARY_TEXT_COLOR = "#767676",
-    BORDER_COLOR = "#d3d3d3",
-    BLACK = "#000000";
+var themeModule = require('../../themes'),
+    IOS7_DEFAULT = 'ios7.default',
+    SECONDARY_TEXT_COLOR = '#767676',
+    BORDER_COLOR = '#d3d3d3',
+    BLACK = '#000000';
 
 themeModule.registerTheme({
     name: IOS7_DEFAULT,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     primaryTitleColor: BLACK,
     secondaryTitleColor: SECONDARY_TEXT_COLOR,
-    gridColor: "#ececec",
+    gridColor: '#ececec',
     axisColor: SECONDARY_TEXT_COLOR,
     legend: {
         font: {
@@ -21,7 +21,7 @@ themeModule.registerTheme({
             color: SECONDARY_TEXT_COLOR
         }
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -58,4 +58,4 @@ themeModule.registerTheme({
             }
         }
     }
-}, "generic.light");
+}, 'generic.light');

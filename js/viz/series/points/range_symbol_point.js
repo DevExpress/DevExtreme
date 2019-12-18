@@ -1,11 +1,11 @@
-var each = require("../../../core/utils/iterator").each,
-    extend = require("../../../core/utils/extend").extend,
-    noop = require("../../../core/utils/common").noop,
-    labelModule = require("./label"),
-    symbolPoint = require("./symbol_point"),
+var each = require('../../../core/utils/iterator').each,
+    extend = require('../../../core/utils/extend').extend,
+    noop = require('../../../core/utils/common').noop,
+    labelModule = require('./label'),
+    symbolPoint = require('./symbol_point'),
 
     _extend = extend,
-    _isDefined = require("../../../core/utils/type").isDefined,
+    _isDefined = require('../../../core/utils/type').isDefined,
 
     _math = Math,
     _abs = _math.abs,
@@ -28,19 +28,19 @@ module.exports = _extend({}, symbolPoint, {
 
     hideMarker: function(type) {
         var graphic = this.graphic,
-            marker = graphic && graphic[type + "Marker"],
-            label = this["_" + type + "Label"];
+            marker = graphic && graphic[type + 'Marker'],
+            label = this['_' + type + 'Label'];
 
-        if(marker && marker.attr("visibility") !== "hidden") {
-            marker.attr({ visibility: "hidden" });
+        if(marker && marker.attr('visibility') !== 'hidden') {
+            marker.attr({ visibility: 'hidden' });
         }
 
         label.draw(false);
     },
 
     setInvisibility: function() {
-        this.hideMarker("top");
-        this.hideMarker("bottom");
+        this.hideMarker('top');
+        this.hideMarker('bottom');
     },
 
     clearVisibility: function() {
@@ -49,10 +49,10 @@ module.exports = _extend({}, symbolPoint, {
             topMarker = graphic && graphic.topMarker,
             bottomMarker = graphic && graphic.bottomMarker;
 
-        if(topMarker && topMarker.attr("visibility")) {
+        if(topMarker && topMarker.attr('visibility')) {
             topMarker.attr({ visibility: null });
         }
-        if(bottomMarker && bottomMarker.attr("visibility")) {
+        if(bottomMarker && bottomMarker.attr('visibility')) {
             bottomMarker.attr({ visibility: null });
         }
     },
@@ -70,12 +70,12 @@ module.exports = _extend({}, symbolPoint, {
 
     _getLabelPosition: function(markerType) {
         var position,
-            labelsInside = this._options.label.position === "inside";
+            labelsInside = this._options.label.position === 'inside';
 
         if(!this._options.rotated) {
-            position = (markerType === "top") ^ labelsInside ? "top" : "bottom";
+            position = (markerType === 'top') ^ labelsInside ? 'top' : 'bottom';
         } else {
-            position = (markerType === "top") ^ labelsInside ? "right" : "left";
+            position = (markerType === 'top') ^ labelsInside ? 'right' : 'left';
         }
 
         return position;
@@ -123,7 +123,7 @@ module.exports = _extend({}, symbolPoint, {
     _getGraphicBBox: function(location) {
         var options = this._options,
             images = this._getImage(options.image),
-            image = location === "top" ? this._checkImage(images.top) : this._checkImage(images.bottom),
+            image = location === 'top' ? this._checkImage(images.top) : this._checkImage(images.bottom),
             bBox,
             coord = this._getPositionFromLocation(location);
 
@@ -138,7 +138,7 @@ module.exports = _extend({}, symbolPoint, {
 
     _getPositionFromLocation: function(location) {
         var x, y,
-            isTop = location === "top";
+            isTop = location === 'top';
         if(!this._options.rotated) {
             x = this.x;
             y = isTop ? _min(this.y, this.minY) : _max(this.y, this.minY);
@@ -155,8 +155,8 @@ module.exports = _extend({}, symbolPoint, {
 
     _getOverlayCorrections: function(topCoords, bottomCoords) {
         var rotated = this._options.rotated,
-            coordSelector = !rotated ? "y" : "x",
-            valueSelector = !rotated ? "height" : "width",
+            coordSelector = !rotated ? 'y' : 'x',
+            valueSelector = !rotated ? 'height' : 'width',
             visibleArea = this.series.getValueAxis().getVisibleArea(),
             minBound = visibleArea[0],
             maxBound = visibleArea[1],
@@ -184,7 +184,7 @@ module.exports = _extend({}, symbolPoint, {
             corrections = {};
 
         if(!that._options.rotated) {
-            if(topLocation === "top") {
+            if(topLocation === 'top') {
                 if(this._checkOverlay(bottomCoords.y, topCoords.y, topCoords.height)) {
                     corrections = this._getOverlayCorrections(topCoords, bottomCoords);
                     that._topLabel.shift(topCoords.x, corrections.coord1);
@@ -198,7 +198,7 @@ module.exports = _extend({}, symbolPoint, {
                 }
             }
         } else {
-            if(topLocation === "top") {
+            if(topLocation === 'top') {
                 if(this._checkOverlay(topCoords.x, bottomCoords.x, bottomCoords.width)) {
                     corrections = this._getOverlayCorrections(bottomCoords, topCoords);
                     that._topLabel.shift(corrections.coord2, topCoords.y);
@@ -223,8 +223,8 @@ module.exports = _extend({}, symbolPoint, {
             topLabel = that._topLabel,
             bottomLabel = that._bottomLabel;
 
-        topLabel.pointPosition = notInverted ? "top" : "bottom";
-        bottomLabel.pointPosition = notInverted ? "bottom" : "top";
+        topLabel.pointPosition = notInverted ? 'top' : 'bottom';
+        bottomLabel.pointPosition = notInverted ? 'bottom' : 'top';
 
         if((that.series.getLabelVisibility() || customVisibility) && that.hasValue() && customVisibility !== false) {
             that.visibleTopMarker !== false && labels.push(topLabel);
@@ -245,18 +245,18 @@ module.exports = _extend({}, symbolPoint, {
         var image = {};
 
         if(_isDefined(imageOption)) {
-            if(typeof imageOption === "string") {
+            if(typeof imageOption === 'string') {
                 image.top = image.bottom = imageOption;
             } else {
                 image.top = {
-                    url: typeof imageOption.url === "string" ? imageOption.url : imageOption.url && imageOption.url.rangeMaxPoint,
-                    width: typeof imageOption.width === "number" ? imageOption.width : imageOption.width && imageOption.width.rangeMaxPoint,
-                    height: typeof imageOption.height === "number" ? imageOption.height : imageOption.height && imageOption.height.rangeMaxPoint
+                    url: typeof imageOption.url === 'string' ? imageOption.url : imageOption.url && imageOption.url.rangeMaxPoint,
+                    width: typeof imageOption.width === 'number' ? imageOption.width : imageOption.width && imageOption.width.rangeMaxPoint,
+                    height: typeof imageOption.height === 'number' ? imageOption.height : imageOption.height && imageOption.height.rangeMaxPoint
                 };
                 image.bottom = {
-                    url: typeof imageOption.url === "string" ? imageOption.url : imageOption.url && imageOption.url.rangeMinPoint,
-                    width: typeof imageOption.width === "number" ? imageOption.width : imageOption.width && imageOption.width.rangeMinPoint,
-                    height: typeof imageOption.height === "number" ? imageOption.height : imageOption.height && imageOption.height.rangeMinPoint
+                    url: typeof imageOption.url === 'string' ? imageOption.url : imageOption.url && imageOption.url.rangeMinPoint,
+                    width: typeof imageOption.width === 'number' ? imageOption.width : imageOption.width && imageOption.width.rangeMinPoint,
+                    height: typeof imageOption.height === 'number' ? imageOption.height : imageOption.height && imageOption.height.rangeMinPoint
                 };
             }
         }
@@ -267,7 +267,7 @@ module.exports = _extend({}, symbolPoint, {
         var that = this,
             oldSymbol = oldOptions.symbol,
             newSymbol = newOptions.symbol,
-            symbolChanged = (oldSymbol === "circle" && newSymbol !== "circle") || (oldSymbol !== "circle" && newSymbol === "circle"),
+            symbolChanged = (oldSymbol === 'circle' && newSymbol !== 'circle') || (oldSymbol !== 'circle' && newSymbol === 'circle'),
             oldImages = that._getImage(oldOptions.image),
             newImages = that._getImage(newOptions.image),
             topImageChanged = that._checkImage(oldImages.top) !== that._checkImage(newImages.top),
@@ -382,7 +382,7 @@ module.exports = _extend({}, symbolPoint, {
             y,
             rotated = that._options.rotated,
             minValue = !rotated ? _min(that.y, that.minY) : _min(that.x, that.minX),
-            side = !rotated ? "height" : "width",
+            side = !rotated ? 'height' : 'width',
             visibleArea = that._getVisibleArea(),
             minVisible = rotated ? visibleArea.minX : visibleArea.minY,
             maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY,
@@ -482,8 +482,8 @@ module.exports = _extend({}, symbolPoint, {
 
         return {
             argument: initialArgument,
-            argumentText: tooltip.formatValue(initialArgument, "argument"),
-            valueText: minValue + " - " + value,
+            argumentText: tooltip.formatValue(initialArgument, 'argument'),
+            valueText: minValue + ' - ' + value,
             rangeValue1Text: minValue,
             rangeValue2Text: value,
             rangeValue1: initialMinValue,
@@ -519,14 +519,14 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     getMaxValue: function() {
-        if(this.series.valueAxisType !== "discrete") {
+        if(this.series.valueAxisType !== 'discrete') {
             return this.minValue > this.value ? this.minValue : this.value;
         }
         return this.value;
     },
 
     getMinValue: function() {
-        if(this.series.valueAxisType !== "discrete") {
+        if(this.series.valueAxisType !== 'discrete') {
             return this.minValue < this.value ? this.minValue : this.value;
         }
         return this.minValue;

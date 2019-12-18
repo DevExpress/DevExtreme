@@ -12,10 +12,10 @@ createTestCafe('localhost', 1437, 1438)
             testName = args.test.trim(),
             componentFolder = args.componentFolder.trim();
 
-        componentFolder = componentFolder ? `${componentFolder}/**` : "**";
+        componentFolder = componentFolder ? `${componentFolder}/**` : '**';
 
         const runner = testCafe.createRunner()
-            .browsers(args.browsers.split(" "))
+            .browsers(args.browsers.split(' '))
             .src([`./testing/functional/tests/${componentFolder}/*.ts`]);
 
         if(testName) {
@@ -36,9 +36,9 @@ createTestCafe('localhost', 1437, 1438)
 function getArgs() {
     return parseArgs(process.argv.slice(1), {
         default: {
-            browsers: "chrome",
-            test: "",
-            componentFolder: ""
+            browsers: 'chrome',
+            test: '',
+            componentFolder: ''
         }
     });
 }

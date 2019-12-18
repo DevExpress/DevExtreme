@@ -1,7 +1,7 @@
-import $ from "jquery";
-import keyboardMock from "./keyboardMock.js";
+import $ from 'jquery';
+import keyboardMock from './keyboardMock.js';
 
-const SUPPORTED_KEYS = ["backspace", "tab", "enter", "escape", "pageUp", "pageDown", "end", "home", "leftArrow", "upArrow", "rightArrow", "downArrow", "del", "space", "F", "A", "asterisk", "minus"];
+const SUPPORTED_KEYS = ['backspace', 'tab', 'enter', 'escape', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'upArrow', 'rightArrow', 'downArrow', 'del', 'space', 'F', 'A', 'asterisk', 'minus'];
 
 const { module, test, assert } = QUnit;
 
@@ -10,12 +10,12 @@ const registerKeyHandlerTestHelper = {
 
         const { createWidget, keyPressTargetElement, checkInitialize, testNamePrefix } = config;
 
-        module("RegisterKeyHandler", {
+        module('RegisterKeyHandler', {
             beforeEach: function() {
                 this.handler = sinon.spy();
 
                 this.createWidget = (options = {}) => {
-                    this.$widget = $("<div>").appendTo("#qunit-fixture");
+                    this.$widget = $('<div>').appendTo('#qunit-fixture');
 
                     this.widget = createWidget(this.$widget, options);
 
@@ -26,7 +26,7 @@ const registerKeyHandlerTestHelper = {
                     let args = this.handler.firstCall.args[0];
 
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
-                    assert.ok(this.keyPressTargetElement.is(args.target), "event.target");
+                    assert.ok(this.keyPressTargetElement.is(args.target), 'event.target');
                 };
             },
             afterEach: function() {

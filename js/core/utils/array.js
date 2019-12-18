@@ -1,7 +1,7 @@
-var isDefined = require("./type").isDefined,
-    each = require("./iterator").each,
-    objectUtils = require("./object"),
-    config = require("../config");
+var isDefined = require('./type').isDefined,
+    each = require('./iterator').each,
+    objectUtils = require('./object'),
+    config = require('../config');
 
 var isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;

@@ -1,17 +1,17 @@
-import { find } from "../../../core/utils/array";
-import { ensureDefined } from "../../../core/utils/common";
-import { compileGetter, compileSetter } from "../../../core/utils/data";
-import Guid from "../../../core/guid";
-import typeUtils from "../../../core/utils/type";
-import { errors } from "../../../data/errors";
-import { Deferred } from "../../../core/utils/deferred";
-import { getWindow } from "../../../core/utils/window";
-import { fileSaver } from "../../../exporter/file_saver";
-import Errors from "../../widget/ui.errors";
+import { find } from '../../../core/utils/array';
+import { ensureDefined } from '../../../core/utils/common';
+import { compileGetter, compileSetter } from '../../../core/utils/data';
+import Guid from '../../../core/guid';
+import typeUtils from '../../../core/utils/type';
+import { errors } from '../../../data/errors';
+import { Deferred } from '../../../core/utils/deferred';
+import { getWindow } from '../../../core/utils/window';
+import { fileSaver } from '../../../exporter/file_saver';
+import Errors from '../../widget/ui.errors';
 
-import { FileProvider } from "./file_provider";
-import { ErrorCode } from "../ui.file_manager.common";
-import { pathCombine } from "../ui.file_manager.utils";
+import { FileProvider } from './file_provider';
+import { ErrorCode } from '../ui.file_manager.common';
+import { pathCombine } from '../ui.file_manager.utils';
 
 const window = getWindow();
 
@@ -31,7 +31,7 @@ class ArrayFileProvider extends FileProvider {
 
         const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errors.Error("E4006");
+            throw errors.Error('E4006');
         }
 
         /**
@@ -47,11 +47,11 @@ class ArrayFileProvider extends FileProvider {
          * @type string|function(fileItem)
          */
 
-        const itemsExpr = options.itemsExpr || "items";
+        const itemsExpr = options.itemsExpr || 'items';
         this._subFileItemsGetter = compileGetter(itemsExpr);
         this._subFileItemsSetter = this._getSetter(itemsExpr);
 
-        const contentExpr = options.contentExpr || "content";
+        const contentExpr = options.contentExpr || 'content';
         this._contentGetter = compileGetter(contentExpr);
         this._contentSetter = this._getSetter(contentExpr);
 
@@ -162,7 +162,7 @@ class ArrayFileProvider extends FileProvider {
             array[i] = byteString.charCodeAt(i);
         }
 
-        const blob = new window.Blob([arrayBuffer], { type: "application/octet-stream" });
+        const blob = new window.Blob([arrayBuffer], { type: 'application/octet-stream' });
         fileSaver.saveAs(file.name, null, blob);
     }
 
@@ -173,9 +173,9 @@ class ArrayFileProvider extends FileProvider {
         files.forEach(file => zip.file(file.name, this._getFileContent(file), { base64: true }));
 
         const options = {
-            type: "blob",
-            compression: "DEFLATE",
-            mimeType: "application/zip"
+            type: 'blob',
+            compression: 'DEFLATE',
+            mimeType: 'application/zip'
         };
         const deferred = new Deferred();
 
@@ -185,11 +185,11 @@ class ArrayFileProvider extends FileProvider {
             deferred.resolve(zip.generate(options));
         }
 
-        deferred.done(blob => fileSaver.saveAs("files.zip", null, blob));
+        deferred.done(blob => fileSaver.saveAs('files.zip', null, blob));
     }
 
     _getFileContent(file) {
-        return this._contentGetter(file.dataItem) || "";
+        return this._contentGetter(file.dataItem) || '';
     }
 
     _validateDirectoryExists(directoryInfo) {
@@ -204,7 +204,7 @@ class ArrayFileProvider extends FileProvider {
     _checkAbilityToMoveOrCopyItem(item, destinationDir) {
         const itemKey = this._getKeyFromDataObject(item.dataItem, item.parentPath);
         const pathInfo = destinationDir.getFullPathInfo();
-        let currentPath = "";
+        let currentPath = '';
 
         pathInfo.forEach(info => {
             currentPath = pathCombine(currentPath, info.name);
@@ -311,7 +311,7 @@ class ArrayFileProvider extends FileProvider {
             pathInfo = [ ];
         }
 
-        let currentPath = "";
+        let currentPath = '';
         let fileItemObj = null;
         let fileItemObjects = this._data;
         for(let i = 0; i < pathInfo.length && (i === 0 || fileItemObj); i++) {
@@ -394,10 +394,10 @@ function getJSZip() {
 
 function requestJSZip() {
     const window = getWindow();
-    const jsZip = window && window.JSZip || require("jszip");
+    const jsZip = window && window.JSZip || require('jszip');
 
     if(!jsZip) {
-        throw Errors.Error("E1041", "JSZip");
+        throw Errors.Error('E1041', 'JSZip');
     }
 
     return jsZip;

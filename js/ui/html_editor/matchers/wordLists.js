@@ -23,13 +23,13 @@ function removeNewLineChar(operations) {
 }
 
 const getMatcher = (quill) => {
-    const Delta = quill.import("delta");
+    const Delta = quill.import('delta');
 
     return (node, delta) => {
         let ops = delta.ops.slice();
 
         let insertOperation = ops[0];
-        insertOperation.insert = insertOperation.insert.replace(/^\s+/, "");
+        insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
         const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
         const indent = listDecoratorMatches && getIndent(node);
 

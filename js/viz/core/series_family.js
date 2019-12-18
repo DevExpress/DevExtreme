@@ -1,15 +1,15 @@
-var isNumeric = require("../../core/utils/type").isNumeric,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    isDefined = require("../../core/utils/type").isDefined,
-    sign = require("../../core/utils/math").sign,
+var isNumeric = require('../../core/utils/type').isNumeric,
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    isDefined = require('../../core/utils/type').isDefined,
+    sign = require('../../core/utils/math').sign,
     _math = Math,
     _round = _math.round,
     _abs = _math.abs,
     _pow = _math.pow,
     _each = each,
-    _noop = require("../../core/utils/common").noop,
-    vizUtils = require("./utils"),
+    _noop = require('../../core/utils/common').noop,
+    vizUtils = require('./utils'),
     DEFAULT_BAR_GROUP_PADDING = 0.3,
     _normalizeEnum = vizUtils.normalizeEnum;
 
@@ -126,7 +126,7 @@ function correctPointCoordinates(points, width, offset) {
 }
 
 function getValueType(value) {
-    return (value >= 0) ? "positive" : "negative";
+    return (value >= 0) ? 'positive' : 'negative';
 }
 
 function getVisibleSeries(that) {
@@ -208,7 +208,7 @@ function adjustStackedSeriesValues() {
             var value = point.initialValue && point.initialValue.valueOf(),
                 argument = point.argument.valueOf(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
-                isNotBarSeries = singleSeries.type !== "bar",
+                isNotBarSeries = singleSeries.type !== 'bar',
                 currentStack;
 
             if(negativesAsZeroes && value < 0) {
@@ -248,8 +248,8 @@ function adjustStackedSeriesValues() {
         singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf();
             point.resetHoles();
-            !point._skipSetLeftHole && point.setHole(holes.left[argument] || holesStack.left[argument] && 0, "left");
-            !point._skipSetRightHole && point.setHole(holes.right[argument] || holesStack.right[argument] && 0, "right");
+            !point._skipSetLeftHole && point.setHole(holes.left[argument] || holesStack.left[argument] && 0, 'left');
+            !point._skipSetRightHole && point.setHole(holes.right[argument] || holesStack.right[argument] && 0, 'right');
             point._skipSetLeftHole = null;
             point._skipSetRightHole = null;
         });
@@ -317,7 +317,7 @@ function updateStackedSeriesValues() {
 
 function updateFullStackedSeriesValues(series, stackKeepers) {
     _each(series, function(_, singleSeries) {
-        var stackName = (singleSeries.getStackName) ? singleSeries.getStackName() : "default";
+        var stackName = (singleSeries.getStackName) ? singleSeries.getStackName() : 'default';
 
         _each(singleSeries.getPoints(), function(index, point) {
             var stackSum = getAbsStackSumByArg(stackKeepers, stackName, point.argument.valueOf());
@@ -397,8 +397,8 @@ function adjustBubbleSeriesDimensions() {
 
 function SeriesFamily(options) {
     ///#DEBUG
-    var debug = require("../../core/utils/console").debug;
-    debug.assert(options.type, "type was not passed or empty");
+    var debug = require('../../core/utils/console').debug;
+    debug.assert(options.type, 'type was not passed or empty');
     ///#ENDDEBUG
 
     var that = this;
@@ -410,49 +410,49 @@ function SeriesFamily(options) {
     that.updateOptions(options);
 
     switch(that.type) {
-        case "bar":
+        case 'bar':
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.updateSeriesValues = updateBarSeriesValues;
             that.adjustSeriesValues = adjustStackedSeriesValues;
             break;
-        case "rangebar":
+        case 'rangebar':
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             break;
 
-        case "fullstackedbar":
+        case 'fullstackedbar':
             that.fullStacked = true;
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.adjustSeriesValues = adjustStackedSeriesValues;
             that.updateSeriesValues = updateStackedSeriesValues;
             break;
 
-        case "stackedbar":
+        case 'stackedbar':
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.adjustSeriesValues = adjustStackedSeriesValues;
             that.updateSeriesValues = updateStackedSeriesValues;
             break;
 
-        case "fullstackedarea":
-        case "fullstackedline":
-        case "fullstackedspline":
-        case "fullstackedsplinearea":
+        case 'fullstackedarea':
+        case 'fullstackedline':
+        case 'fullstackedspline':
+        case 'fullstackedsplinearea':
             that.fullStacked = true;
             that.adjustSeriesValues = adjustStackedSeriesValues;
             break;
 
-        case "stackedarea":
-        case "stackedsplinearea":
-        case "stackedline":
-        case "stackedspline":
+        case 'stackedarea':
+        case 'stackedsplinearea':
+        case 'stackedline':
+        case 'stackedspline':
             that.adjustSeriesValues = adjustStackedSeriesValues;
             break;
 
-        case "candlestick":
-        case "stock":
+        case 'candlestick':
+        case 'stock':
             that.adjustSeriesDimensions = adjustCandlestickSeriesDimensions;
             break;
 
-        case "bubble":
+        case 'bubble':
             that.adjustSeriesDimensions = adjustBubbleSeriesDimensions;
             break;
     }

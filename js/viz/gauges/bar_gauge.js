@@ -5,20 +5,20 @@ var PI_DIV_180 = Math.PI / 180,
     _min = Math.min,
     _max = Math.max,
 
-    registerComponent = require("../../core/component_registrator"),
-    objectUtils = require("../../core/utils/object"),
-    commonUtils = require("../../core/utils/common"),
-    extend = require("../../core/utils/extend").extend,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
+    registerComponent = require('../../core/component_registrator'),
+    objectUtils = require('../../core/utils/object'),
+    commonUtils = require('../../core/utils/common'),
+    extend = require('../../core/utils/extend').extend,
+    _normalizeEnum = require('../core/utils').normalizeEnum,
 
-    baseGaugeModule = require("./base_gauge"),
+    baseGaugeModule = require('./base_gauge'),
     dxBaseGauge = baseGaugeModule.dxBaseGauge,
     _getSampleText = baseGaugeModule.getSampleText,
     _formatValue = baseGaugeModule.formatValue,
     _compareArrays = baseGaugeModule.compareArrays,
-    dxCircularGauge = require("./circular_gauge"),
+    dxCircularGauge = require('./circular_gauge'),
     _isArray = Array.isArray,
-    vizUtils = require("../core/utils"),
+    vizUtils = require('../core/utils'),
     _convertAngleToRendererSpace = vizUtils.convertAngleToRendererSpace,
     _getCosAndSin = vizUtils.getCosAndSin,
     _patchFontOptions = vizUtils.patchFontOptions,
@@ -27,19 +27,19 @@ var PI_DIV_180 = Math.PI / 180,
     _noop = commonUtils.noop,
     _extend = extend,
 
-    OPTION_VALUES = "values";
+    OPTION_VALUES = 'values';
 
 var dxBarGauge = dxBaseGauge.inherit({
-    _rootClass: "dxbg-bar-gauge",
+    _rootClass: 'dxbg-bar-gauge',
 
-    _themeSection: "barGauge",
+    _themeSection: 'barGauge',
 
-    _fontFields: ["label.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"],
+    _fontFields: ['label.font', 'legend.font', 'legend.title.font', 'legend.title.subtitle.font'],
 
     _initCore: function() {
         var that = this;
         that.callBase.apply(that, arguments);
-        that._barsGroup = that._renderer.g().attr({ "class": "dxbg-bars" }).linkOn(that._renderer.root, "bars");
+        that._barsGroup = that._renderer.g().attr({ 'class': 'dxbg-bars' }).linkOn(that._renderer.root, 'bars');
         that._values = [];
         that._context = {
             renderer: that._renderer,
@@ -70,12 +70,12 @@ var dxBarGauge = dxBaseGauge.inherit({
 
     _setupDomainCore: function() {
         var that = this,
-            startValue = that.option("startValue"),
-            endValue = that.option("endValue");
+            startValue = that.option('startValue'),
+            endValue = that.option('endValue');
         _isFinite(startValue) || (startValue = 0);
         _isFinite(endValue) || (endValue = 100);
         that._translator.setDomain(startValue, endValue);
-        that._baseValue = that._translator.adjust(that.option("baseValue"));
+        that._baseValue = that._translator.adjust(that.option('baseValue'));
         _isFinite(that._baseValue) || (that._baseValue = startValue < endValue ? startValue : endValue);
     },
 
@@ -113,13 +113,13 @@ var dxBarGauge = dxBaseGauge.inherit({
 
     _renderContent: function() {
         var that = this,
-            labelOptions = that.option("label"),
+            labelOptions = that.option('label'),
             text,
             bBox,
             context = that._context;
 
         that._barsGroup.linkAppend();
-        context.textEnabled = labelOptions === undefined || (labelOptions && (!("visible" in labelOptions) || labelOptions.visible));
+        context.textEnabled = labelOptions === undefined || (labelOptions && (!('visible' in labelOptions) || labelOptions.visible));
 
         if(context.textEnabled) {
             context.textColor = (labelOptions && labelOptions.font && labelOptions.font.color) || null;
@@ -128,7 +128,7 @@ var dxBarGauge = dxBaseGauge.inherit({
                 format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
                 customizeText: labelOptions.customizeText
             };
-            context.textOptions = { align: "center" };
+            context.textOptions = { align: 'center' };
             context.fontStyles = _patchFontOptions(_extend({}, that._themeManager.theme().label.font, labelOptions.font, { color: null }));
 
             that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
@@ -238,7 +238,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             }
         } else {
             if(!that._dummyBackground) {
-                that._dummyBackground = that._renderer.arc().attr({ "stroke-linejoin": "round" });
+                that._dummyBackground = that._renderer.arc().attr({ 'stroke-linejoin': 'round' });
             }
             that._dummyBackground.attr({ //  Because of vizMocks
                 x: that._context.x, y: that._context.y, outerRadius: that._outerRadius, innerRadius: that._innerRadius,
@@ -255,9 +255,9 @@ var dxBarGauge = dxBaseGauge.inherit({
     _checkOverlap: function() {
         const that = this,
             bars = that._bars,
-            overlapStrategy = _normalizeEnum(that._getOption("resolveLabelOverlapping", true));
+            overlapStrategy = _normalizeEnum(that._getOption('resolveLabelOverlapping', true));
 
-        if(overlapStrategy === "none") {
+        if(overlapStrategy === 'none') {
             return;
         }
 
@@ -347,7 +347,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             }
         }
 
-        this._change(["NODES"]);
+        this._change(['NODES']);
     },
 
     values: function(arg) {
@@ -360,14 +360,14 @@ var dxBarGauge = dxBaseGauge.inherit({
     },
 
     _optionChangesMap: {
-        backgroundColor: "MOSTLY_TOTAL",
-        relativeInnerRadius: "MOSTLY_TOTAL",
-        barSpacing: "MOSTLY_TOTAL",
-        label: "MOSTLY_TOTAL",
-        resolveLabelOverlapping: "MOSTLY_TOTAL",
-        palette: "MOSTLY_TOTAL",
-        paletteExtensionMode: "MOSTLY_TOTAL",
-        values: "VALUES"
+        backgroundColor: 'MOSTLY_TOTAL',
+        relativeInnerRadius: 'MOSTLY_TOTAL',
+        barSpacing: 'MOSTLY_TOTAL',
+        label: 'MOSTLY_TOTAL',
+        resolveLabelOverlapping: 'MOSTLY_TOTAL',
+        palette: 'MOSTLY_TOTAL',
+        paletteExtensionMode: 'MOSTLY_TOTAL',
+        values: 'VALUES'
     },
 
     _change_VALUES: function() {
@@ -376,16 +376,16 @@ var dxBarGauge = dxBaseGauge.inherit({
 
     _factory: objectUtils.clone(dxBaseGauge.prototype._factory),
 
-    _optionChangesOrder: ["VALUES", "NODES"],
+    _optionChangesOrder: ['VALUES', 'NODES'],
 
-    _initialChanges: ["VALUES"],
+    _initialChanges: ['VALUES'],
 
     _change_NODES() {
         this._buildNodes();
     },
 
     _change_MOSTLY_TOTAL: function() {
-        this._change(["NODES"]);
+        this._change(['NODES']);
         this.callBase();
     },
 
@@ -423,7 +423,7 @@ var dxBarGauge = dxBaseGauge.inherit({
 var BarWrapper = function(index, context) {
     var that = this;
     that._context = context;
-    that._tracker = context.renderer.arc().attr({ "stroke-linejoin": "round" });
+    that._tracker = context.renderer.arc().attr({ 'stroke-linejoin': 'round' });
     that.index = index;
 };
 
@@ -448,12 +448,12 @@ _extend(BarWrapper.prototype, {
         this._visible = true;
         context.tracker.attach(that._tracker, that, { index: that.index });
 
-        that._background = context.renderer.arc().attr({ "stroke-linejoin": "round", fill: context.backgroundColor }).append(context.group);
+        that._background = context.renderer.arc().attr({ 'stroke-linejoin': 'round', fill: context.backgroundColor }).append(context.group);
         that._settings = that._settings || { x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle };
 
-        that._bar = context.renderer.arc().attr(_extend({ "stroke-linejoin": "round" }, that._settings)).append(context.group);
+        that._bar = context.renderer.arc().attr(_extend({ 'stroke-linejoin': 'round' }, that._settings)).append(context.group);
         if(context.textEnabled) {
-            that._line = context.renderer.path([], "line").attr({ "stroke-width": context.lineWidth }).append(context.group);
+            that._line = context.renderer.path([], 'line').attr({ 'stroke-width': context.lineWidth }).append(context.group);
             that._text = context.renderer.text().css(context.fontStyles).attr(context.textOptions).append(context.group);
         }
 
@@ -516,7 +516,7 @@ _extend(BarWrapper.prototype, {
             }
 
             var text = _formatValue(that._value, context.formatOptions, { index: that.index }),
-                visibility = text === "" ? "hidden" : null;
+                visibility = text === '' ? 'hidden' : null;
             that._text.attr({
                 text: text,
                 x: x,
@@ -531,8 +531,8 @@ _extend(BarWrapper.prototype, {
     },
 
     hideLabel: function() {
-        this._text.attr({ visibility: "hidden" });
-        this._line.attr({ visibility: "hidden" });
+        this._text.attr({ visibility: 'hidden' });
+        this._line.attr({ visibility: 'hidden' });
     },
 
     checkIntersect: function(anotherBar) {
@@ -604,10 +604,10 @@ _extend(BarWrapper.prototype, {
         if(!compareFloats(that._angle, angle)) {
             that._start = that._angle;
             that._delta = angle - that._angle;
-            that._tracker.attr({ visibility: "hidden" });
+            that._tracker.attr({ visibility: 'hidden' });
             if(that._context.textEnabled) {
-                that._line.attr({ visibility: "hidden" });
-                that._text.attr({ visibility: "hidden" });
+                that._line.attr({ visibility: 'hidden' });
+                that._text.attr({ visibility: 'hidden' });
             }
         } else {
             that.animate = _noop;
@@ -649,11 +649,11 @@ function compareFloats(value1, value2) {
     return _abs(value1 - value2) < 0.0001;
 }
 
-registerComponent("dxBarGauge", dxBarGauge);
+registerComponent('dxBarGauge', dxBarGauge);
 
 exports.dxBarGauge = dxBarGauge;
 
-dxBarGauge.addPlugin(require("../components/legend").plugin);
+dxBarGauge.addPlugin(require('../components/legend').plugin);
 
 ///#DEBUG
 var __BarWrapper = BarWrapper;

@@ -1,10 +1,10 @@
-import eventsEngine from "../../events/core/events_engine";
-import * as eventUtils from "../../events/utils";
-import { extend } from "../../core/utils/extend";
-import translator2DModule from "../translators/translator2d";
-import { isDefined } from "../../core/utils/type";
-import { noop } from "../../core/utils/common";
-import dragEvents from "../../events/drag";
+import eventsEngine from '../../events/core/events_engine';
+import * as eventUtils from '../../events/utils';
+import { extend } from '../../core/utils/extend';
+import translator2DModule from '../translators/translator2d';
+import { isDefined } from '../../core/utils/type';
+import { noop } from '../../core/utils/common';
+import dragEvents from '../../events/drag';
 
 const _min = Math.min;
 const _max = Math.max;
@@ -19,9 +19,9 @@ const ScrollBar = function(renderer, group) {
 function _getXCoord(canvas, pos, offset, width) {
     var x = 0;
 
-    if(pos === "right") {
+    if(pos === 'right') {
         x = canvas.width - canvas.right + offset;
-    } else if(pos === "left") {
+    } else if(pos === 'left') {
         x = canvas.left - offset - width;
     }
 
@@ -31,9 +31,9 @@ function _getXCoord(canvas, pos, offset, width) {
 function _getYCoord(canvas, pos, offset, width) {
     var y = 0;
 
-    if(pos === "top") {
+    if(pos === 'top') {
         y = canvas.top - offset;
-    } else if(pos === "bottom") {
+    } else if(pos === 'bottom') {
         y = canvas.height - canvas.bottom + width + offset;
     }
 
@@ -47,7 +47,7 @@ ScrollBar.prototype = {
 
         eventsEngine.on(scrollElement, dragEvents.start, e => {
             eventUtils.fireEvent({
-                type: "dxc-scroll-start",
+                type: 'dxc-scroll-start',
                 originalEvent: e,
                 target: scrollElement
             });
@@ -60,7 +60,7 @@ ScrollBar.prototype = {
             this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
 
             eventUtils.fireEvent({
-                type: "dxc-scroll-move",
+                type: 'dxc-scroll-move',
                 originalEvent: e,
                 target: scrollElement,
                 offset: {
@@ -72,7 +72,7 @@ ScrollBar.prototype = {
 
         eventsEngine.on(scrollElement, dragEvents.end, e => {
             eventUtils.fireEvent({
-                type: "dxc-scroll-end",
+                type: 'dxc-scroll-end',
                 originalEvent: e,
                 target: scrollElement,
                 offset: {
@@ -87,8 +87,8 @@ ScrollBar.prototype = {
         var that = this,
             position = options.position,
             isVertical = options.rotated,
-            defaultPosition = isVertical ? "right" : "top",
-            secondaryPosition = isVertical ? "left" : "bottom";
+            defaultPosition = isVertical ? 'right' : 'top',
+            secondaryPosition = isVertical ? 'left' : 'bottom';
 
         if(position !== defaultPosition && position !== secondaryPosition) {
             position = defaultPosition;
@@ -115,7 +115,7 @@ ScrollBar.prototype = {
 
     init: function(range, stick) {
         const that = this;
-        const isDiscrete = range.axisType === "discrete";
+        const isDiscrete = range.axisType === 'discrete';
         that._translateWithOffset = (isDiscrete && !stick && 1) || 0;
         that._translator.update(extend({}, range, {
             minVisible: null,
@@ -136,7 +136,7 @@ ScrollBar.prototype = {
         var position = this._layoutOptions.position,
             pane;
 
-        if(position === "left" || position === "top") {
+        if(position === 'left' || position === 'top') {
             pane = panes[0];
         } else {
             pane = panes[panes.length - 1];
@@ -190,8 +190,8 @@ ScrollBar.prototype = {
     setPosition: function(min, max) {
         var that = this,
             translator = that._translator,
-            minPoint = isDefined(min) ? translator.translate(min, -that._translateWithOffset) : translator.translate("canvas_position_start"),
-            maxPoint = isDefined(max) ? translator.translate(max, that._translateWithOffset) : translator.translate("canvas_position_end");
+            minPoint = isDefined(min) ? translator.translate(min, -that._translateWithOffset) : translator.translate('canvas_position_start'),
+            maxPoint = isDefined(max) ? translator.translate(max, that._translateWithOffset) : translator.translate('canvas_position_end');
 
         that._offset = _min(minPoint, maxPoint);
         that._scale = translator.getScale(min, max);

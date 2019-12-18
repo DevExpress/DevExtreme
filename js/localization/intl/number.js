@@ -3,8 +3,8 @@ import dxConfig from '../../core/config';
 import { locale } from '../core';
 import dxVersion from '../../core/version';
 import { compare as compareVersions } from '../../core/utils/version';
-import openXmlCurrencyFormat from "../open_xml_currency_format";
-import accountingFormats from "../cldr-data/accounting_formats";
+import openXmlCurrencyFormat from '../open_xml_currency_format';
+import accountingFormats from '../cldr-data/accounting_formats';
 
 const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/;
 const formattersCache = {};
@@ -22,7 +22,7 @@ const getCurrencyFormatter = currency => {
 
 module.exports = {
     engine: function() {
-        return "intl";
+        return 'intl';
     },
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === 'exponential') {
@@ -78,7 +78,7 @@ module.exports = {
 
         format = this._normalizeFormat(format);
 
-        if(format.currency === "default") {
+        if(format.currency === 'default') {
             format.currency = dxConfig().defaultCurrency;
         }
 
@@ -150,7 +150,7 @@ module.exports = {
 
         let symbolInfo = this._getCurrencySymbolInfo(currency);
         return {
-            "symbol": symbolInfo.symbol
+            'symbol': symbolInfo.symbol
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {

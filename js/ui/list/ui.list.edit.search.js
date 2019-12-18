@@ -1,9 +1,9 @@
-var ListEdit = require("./ui.list.edit"),
-    searchBoxMixin = require("../widget/ui.search_box_mixin");
+var ListEdit = require('./ui.list.edit'),
+    searchBoxMixin = require('../widget/ui.search_box_mixin');
 
 var ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     _addWidgetPrefix: function(className) {
-        return "dx-list-" + className;
+        return 'dx-list-' + className;
     },
 
     _getCombinedFilter: function() {
@@ -21,9 +21,9 @@ var ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     },
 
     _initDataSource: function() {
-        var value = this.option("searchValue"),
-            expr = this.option("searchExpr"),
-            mode = this.option("searchMode");
+        var value = this.option('searchValue'),
+            expr = this.option('searchExpr'),
+            mode = this.option('searchMode');
 
         this.callBase();
 

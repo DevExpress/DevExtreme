@@ -1,5 +1,5 @@
-var domAdapter = require("core/dom_adapter");
-var readyCallbacks = require("core/utils/ready_callbacks");
+var domAdapter = require('core/dom_adapter');
+var readyCallbacks = require('core/utils/ready_callbacks');
 
 var documentMock = (function() {
     var documentMock = {
@@ -7,7 +7,7 @@ var documentMock = (function() {
     };
 
     var errorFunc = function() {
-        throw new Error("Document fields using is prevented");
+        throw new Error('Document fields using is prevented');
     };
 
     for(var field in document) {

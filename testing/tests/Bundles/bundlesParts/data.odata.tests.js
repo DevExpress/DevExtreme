@@ -1,19 +1,19 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
-QUnit.test("data.odata", function(assert) {
+QUnit.test('data.odata', function(assert) {
 
     $.each([
-        "EdmLiteral",
-        "ODataStore",
-        "ODataContext"
+        'EdmLiteral',
+        'ODataStore',
+        'ODataContext'
     ], function(_, namespace) {
-        assert.ok(DevExpress.data[namespace], "DevExpress.data." + namespace + " present");
+        assert.ok(DevExpress.data[namespace], 'DevExpress.data.' + namespace + ' present');
     });
 
     $.each([
-        "keyConverters"
+        'keyConverters'
     ], function(_, namespace) {
-        assert.ok(DevExpress.data.utils.odata[namespace], "DevExpress.data.utils.odata" + namespace + " present");
+        assert.ok(DevExpress.data.utils.odata[namespace], 'DevExpress.data.utils.odata' + namespace + ' present');
     });
 
 });

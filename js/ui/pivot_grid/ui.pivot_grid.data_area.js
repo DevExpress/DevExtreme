@@ -1,15 +1,15 @@
-import $ from "../../core/renderer";
-import { AreaItem } from "./ui.pivot_grid.area_item";
+import $ from '../../core/renderer';
+import { AreaItem } from './ui.pivot_grid.area_item';
 
-var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
-    PIVOTGRID_AREA_DATA_CLASS = "dx-pivotgrid-area-data",
-    PIVOTGRID_TOTAL_CLASS = "dx-total",
-    PIVOTGRID_GRAND_TOTAL_CLASS = "dx-grandtotal",
-    PIVOTGRID_ROW_TOTAL_CLASS = "dx-row-total";
+var PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area',
+    PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data',
+    PIVOTGRID_TOTAL_CLASS = 'dx-total',
+    PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal',
+    PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
 
 exports.DataArea = AreaItem.inherit({
     _getAreaName: function() {
-        return "data";
+        return 'data';
     },
     _createGroupElement: function() {
         return $('<div>')
@@ -46,11 +46,11 @@ exports.DataArea = AreaItem.inherit({
     },
 
     processScroll: function(useNativeScrolling, horizontalScroll, verticalScroll) {
-        let direction = "both";
+        let direction = 'both';
         if(horizontalScroll && !verticalScroll) {
-            direction = "horizontal";
+            direction = 'horizontal';
         } else if(!horizontalScroll && verticalScroll) {
-            direction = "vertical";
+            direction = 'vertical';
         }
 
         this._groupElement.css('borderTopWidth', 0)
@@ -66,14 +66,14 @@ exports.DataArea = AreaItem.inherit({
     reset: function() {
         this.callBase();
         if(this._virtualContent) {
-            this._virtualContent.parent().css("height", "auto");
+            this._virtualContent.parent().css('height', 'auto');
         }
     },
 
     setVirtualContentParams: function(params) {
         this.callBase(params);
 
-        this._virtualContent.parent().css("height", params.height);
+        this._virtualContent.parent().css('height', params.height);
 
         this._setTableCss({
             top: params.top,

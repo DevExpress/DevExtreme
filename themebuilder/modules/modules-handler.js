@@ -1,7 +1,7 @@
 class ModulesHandler {
     constructor(widgetsList) {
-        this.SPECIAL_COMMENT = "tb_widgets_list";
-        this.FILE_FOR_PARSING = "theme.less";
+        this.SPECIAL_COMMENT = 'tb_widgets_list';
+        this.FILE_FOR_PARSING = 'theme.less';
 
         this.widgets = (widgetsList || []).map(w => w.toLowerCase());
 
@@ -10,9 +10,9 @@ class ModulesHandler {
     }
 
     getWidgetFromImport(importString) {
-        const lastSlashIndex = importString.lastIndexOf("/");
+        const lastSlashIndex = importString.lastIndexOf('/');
         const fileName = importString.substr(lastSlashIndex + 1);
-        const dotIndex = fileName.indexOf(".");
+        const dotIndex = fileName.indexOf('.');
         return fileName.substr(0, dotIndex);
     }
 
@@ -23,7 +23,7 @@ class ModulesHandler {
         if(widgetsListIndex >= 0) {
             less
                 .substr(widgetsListIndex + this.SPECIAL_COMMENT.length)
-                .split("\n")
+                .split('\n')
                 .filter(item => !!item)
                 .forEach((importString) => {
                     widgets.push({
@@ -40,7 +40,7 @@ class ModulesHandler {
         const getFileNameFromContext = (context) => {
             const fullPath = context && context.fileInfo && context.fileInfo.filename;
 
-            if(typeof fullPath !== "string") {
+            if(typeof fullPath !== 'string') {
                 return null;
             }
 
@@ -58,7 +58,7 @@ class ModulesHandler {
             if(this.widgets.length > 0) {
                 availableWidgets.forEach(widget => {
                     if(this.widgets.indexOf(widget.name) < 0) {
-                        less = less.replace(widget.import, "");
+                        less = less.replace(widget.import, '');
                     } else {
                         this.bundledWidgets.push(widget.name);
                     }

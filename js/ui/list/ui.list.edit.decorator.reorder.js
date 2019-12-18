@@ -1,25 +1,25 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    extend = require("../../core/utils/extend").extend,
-    eventUtils = require("../../events/utils"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    EditDecorator = require("./ui.list.edit.decorator"),
-    Sortable = require("../sortable");
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    extend = require('../../core/utils/extend').extend,
+    eventUtils = require('../../events/utils'),
+    registerDecorator = require('./ui.list.edit.decorator_registry').register,
+    EditDecorator = require('./ui.list.edit.decorator'),
+    Sortable = require('../sortable');
 
-var REORDER_HANDLE_CONTAINER_CLASS = "dx-list-reorder-handle-container",
-    REORDER_HANDLE_CLASS = "dx-list-reorder-handle",
-    REOREDERING_ITEM_GHOST_CLASS = "dx-list-item-ghost-reordering",
-    STATE_HOVER_CLASS = "dx-state-hover";
+var REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container',
+    REORDER_HANDLE_CLASS = 'dx-list-reorder-handle',
+    REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering',
+    STATE_HOVER_CLASS = 'dx-state-hover';
 
 registerDecorator(
-    "reorder",
-    "default",
+    'reorder',
+    'default',
     EditDecorator.inherit({
 
         _init: function() {
             let list = this._list;
 
-            this._groupedEnabled = this._list.option("grouped");
+            this._groupedEnabled = this._list.option('grouped');
 
             this._lockedDrag = false;
 
@@ -27,15 +27,15 @@ registerDecorator(
                 component: list,
                 contentTemplate: null,
                 allowReordering: false,
-                filter: ".dx-list-item",
+                filter: '.dx-list-item',
                 container: list.$element(),
-                dragDirection: list.option("itemDragging.group") ? "both" : "vertical",
-                handle: "." + REORDER_HANDLE_CLASS,
+                dragDirection: list.option('itemDragging.group') ? 'both' : 'vertical',
+                handle: '.' + REORDER_HANDLE_CLASS,
                 dragTemplate: this._dragTemplate,
                 onDragStart: this._dragStartHandler.bind(this),
                 onDragChange: this._dragChangeHandler.bind(this),
                 onReorder: this._reorderHandler.bind(this)
-            }, list.option("itemDragging")));
+            }, list.option('itemDragging')));
         },
 
         _dragTemplate: function(e) {
@@ -75,12 +75,12 @@ registerDecorator(
         afterBag: function(config) {
             var $container = config.$container;
 
-            var $handle = $("<div>").addClass(REORDER_HANDLE_CLASS);
+            var $handle = $('<div>').addClass(REORDER_HANDLE_CLASS);
 
-            eventsEngine.on($handle, "dxpointerdown", (e) => {
+            eventsEngine.on($handle, 'dxpointerdown', (e) => {
                 this._lockedDrag = !eventUtils.isMouseEvent(e);
             });
-            eventsEngine.on($handle, "dxhold", { timeout: 30 }, (e) => {
+            eventsEngine.on($handle, 'dxhold', { timeout: 30 }, (e) => {
                 e.cancel = true;
                 this._lockedDrag = false;
             });

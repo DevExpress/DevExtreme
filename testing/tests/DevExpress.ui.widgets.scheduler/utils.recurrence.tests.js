@@ -1,8 +1,8 @@
-var recurrenceUtils = require("ui/scheduler/utils.recurrence");
+var recurrenceUtils = require('ui/scheduler/utils.recurrence');
 
 QUnit.module('Recurrences');
 
-var days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+var days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
 QUnit.test('get dates with undefined rule', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: undefined, start: new Date(2015, 0, 1, 0, 0, 10), min: new Date(2015, 0, 1, 0, 0, 10), max: new Date(2015, 0, 1, 0, 0, 12) });
@@ -119,20 +119,20 @@ QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYDAY & DAIL
 });
 
 QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYDAY & WEEKLY & INTERVAL', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: "FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=2", start: new Date(2019, 2, 4, 9), min: new Date(2019, 2, 4, 10), max: new Date(2019, 6, 10) });
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=2', start: new Date(2019, 2, 4, 9), min: new Date(2019, 2, 4, 10), max: new Date(2019, 6, 10) });
 
     assert.deepEqual(dates, [new Date(2019, 2, 4, 9), new Date(2019, 2, 18, 9)], 'date are right');
 });
 
 QUnit.test('getDatesByRecurrence: FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=2', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: "FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=2",
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=2',
         start: new Date(2019, 2, 4, 9), min: new Date(2019, 2, 4, 10), max: new Date(2019, 6, 10) });
 
     assert.deepEqual(dates, [new Date(2019, 2, 4, 9), new Date(2019, 2, 18, 9)], 'date are right');
 });
 
 QUnit.test('getDatesByRecurrence: FREQ=WEEKLY;BYDAY=MO;INTERVAL=2', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: "FREQ=WEEKLY;BYDAY=MO;INTERVAL=2",
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2',
         start: new Date(2019, 2, 4, 9), min: new Date(2019, 2, 4, 10), max: new Date(2019, 2, 20) });
 
     assert.deepEqual(dates, [new Date(2019, 2, 4, 9), new Date(2019, 2, 18, 9)], 'date are right');
@@ -404,38 +404,38 @@ QUnit.test('getDatesByRecurrence should handle strings with BYSETPOS', function(
 });
 
 QUnit.test('getDatesByRecurrence should handle recurrence exception in short format, DAILY rule', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY', start: new Date(2015, 0, 1, 10), min: new Date(2015, 0, 1), max: new Date(2015, 0, 3, 15), exception: "20150102" });
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY', start: new Date(2015, 0, 1, 10), min: new Date(2015, 0, 1), max: new Date(2015, 0, 3, 15), exception: '20150102' });
 
     assert.deepEqual(dates, [new Date(2015, 0, 1, 10), new Date(2015, 0, 3, 10)], 'dates are right');
 });
 
 QUnit.test('getDatesByRecurrence should handle recurrence exception in long format, DAILY rule', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY', start: new Date(2015, 4, 24, 2), min: new Date(2015, 4, 24), max: new Date(2015, 4, 27, 10), exception: "20150525T020000" });
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY', start: new Date(2015, 4, 24, 2), min: new Date(2015, 4, 24), max: new Date(2015, 4, 27, 10), exception: '20150525T020000' });
 
     assert.deepEqual(dates, [new Date(2015, 4, 24, 2), new Date(2015, 4, 26, 2), new Date(2015, 4, 27, 2)], 'dates are right');
 });
 
-QUnit.test("getDatesByRecurrence should handle recurrence exception in long format with 'Z', DAILY rule", function(assert) {
-    var recurrenceUtilsStub = sinon.stub(recurrenceUtils, "getTimeZoneOffset", function() {
+QUnit.test('getDatesByRecurrence should handle recurrence exception in long format with \'Z\', DAILY rule', function(assert) {
+    var recurrenceUtilsStub = sinon.stub(recurrenceUtils, 'getTimeZoneOffset', function() {
         return new Date(2015, 4, 24).getTimezoneOffset();
     });
     try {
         var dates = recurrenceUtils.getDatesByRecurrence({
-            rule: "FREQ=DAILY",
+            rule: 'FREQ=DAILY',
             start: new Date(Date.UTC(2015, 4, 24)),
             min: new Date(Date.UTC(2015, 4, 23, 21)),
             max: new Date(Date.UTC(2015, 4, 27, 7)),
-            exception: "20150525T000000Z"
+            exception: '20150525T000000Z'
         });
 
-        assert.deepEqual(dates, [new Date(Date.UTC(2015, 4, 24)), new Date(Date.UTC(2015, 4, 26)), new Date(Date.UTC(2015, 4, 27))], "dates are right");
+        assert.deepEqual(dates, [new Date(Date.UTC(2015, 4, 24)), new Date(Date.UTC(2015, 4, 26)), new Date(Date.UTC(2015, 4, 27))], 'dates are right');
     } finally {
         recurrenceUtilsStub.restore();
     }
 });
 
 QUnit.test('getDatesByRecurrence should handle recurrence exception, WEEKLY rule', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO', start: new Date(2015, 0, 1), min: new Date(2015, 0, 5), max: new Date(2015, 0, 7), exception: "20150105" });
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO', start: new Date(2015, 0, 1), min: new Date(2015, 0, 5), max: new Date(2015, 0, 7), exception: '20150105' });
 
     assert.deepEqual(dates, [], 'dates are right');
 });
@@ -459,21 +459,21 @@ QUnit.test('getDatesByRecurrence should handle strings correctly for WEEKLY rule
 });
 
 QUnit.test('getRecurrenceString should handle objects with freq', function(assert) {
-    var string = recurrenceUtils.getRecurrenceString({ freq: "yearly", interval: 2 });
+    var string = recurrenceUtils.getRecurrenceString({ freq: 'yearly', interval: 2 });
 
-    assert.equal(string, "FREQ=YEARLY;INTERVAL=2", 'recurrence string is right');
+    assert.equal(string, 'FREQ=YEARLY;INTERVAL=2', 'recurrence string is right');
 });
 
 QUnit.test('getRecurrenceString should handle objects with freq & interval', function(assert) {
-    var string = recurrenceUtils.getRecurrenceString({ freq: "yearly", interval: 1 });
+    var string = recurrenceUtils.getRecurrenceString({ freq: 'yearly', interval: 1 });
 
-    assert.equal(string, "FREQ=YEARLY", 'recurrence string is right');
+    assert.equal(string, 'FREQ=YEARLY', 'recurrence string is right');
 });
 
 QUnit.test('getRecurrenceString should handle objects with freq & interval > 1', function(assert) {
-    var string = recurrenceUtils.getRecurrenceString({ freq: "yearly", interval: 2 });
+    var string = recurrenceUtils.getRecurrenceString({ freq: 'yearly', interval: 2 });
 
-    assert.equal(string, "FREQ=YEARLY;INTERVAL=2", 'recurrence string is right');
+    assert.equal(string, 'FREQ=YEARLY;INTERVAL=2', 'recurrence string is right');
 });
 
 QUnit.test('getRecurrenceString should handle objects without freq', function(assert) {
@@ -483,14 +483,14 @@ QUnit.test('getRecurrenceString should handle objects without freq', function(as
 });
 
 QUnit.test('getRecurrenceString should handle objects with until', function(assert) {
-    var recurrenceUtilsStub = sinon.stub(recurrenceUtils, "getTimeZoneOffset", function() {
+    var recurrenceUtilsStub = sinon.stub(recurrenceUtils, 'getTimeZoneOffset', function() {
         return new Date(2015, 6, 9).getTimezoneOffset();
     });
 
     try {
-        var string = recurrenceUtils.getRecurrenceString({ freq: "yearly", until: new Date(Date.UTC(2015, 6, 9)) });
+        var string = recurrenceUtils.getRecurrenceString({ freq: 'yearly', until: new Date(Date.UTC(2015, 6, 9)) });
 
-        assert.equal(string, "FREQ=YEARLY;UNTIL=20150709T000000Z", 'recurrence string is right');
+        assert.equal(string, 'FREQ=YEARLY;UNTIL=20150709T000000Z', 'recurrence string is right');
     } finally {
         recurrenceUtilsStub.restore();
     }
@@ -518,17 +518,17 @@ QUnit.test('get days of the week by byDay rule', function(assert) {
     var ruleObject = recurrenceUtils.getRecurrenceRule('FREQ=WEEKLY;BYDAY=TU,SA'),
         days = recurrenceUtils.daysFromByDayRule(ruleObject.rule);
 
-    assert.deepEqual(days, ["TU", "SA"], 'returned array is correct');
+    assert.deepEqual(days, ['TU', 'SA'], 'returned array is correct');
 });
 
 QUnit.test('getRecurrenceRule should return an object', function(assert) {
     var ruleObject = recurrenceUtils.getRecurrenceRule('FREQ=MONTHLY');
 
     assert.deepEqual(ruleObject, {
-        "isValid": true, "rule":
+        'isValid': true, 'rule':
         {
-            "freq": "MONTHLY",
-            "interval": 1
+            'freq': 'MONTHLY',
+            'interval': 1
         }
     }, 'returned ruleObject is right');
 });
@@ -606,7 +606,7 @@ QUnit.test('getDateByAsciiString should return a valid date for yyyyMMdd format'
 });
 
 QUnit.test('getDateByAsciiString should return a valid date for yyyyMMddTHHmmssZ format', function(assert) {
-    var recurrenceUtilsStub = sinon.stub(recurrenceUtils, "getTimeZoneOffset", function() {
+    var recurrenceUtilsStub = sinon.stub(recurrenceUtils, 'getTimeZoneOffset', function() {
         return new Date(2016, 6, 11).getTimezoneOffset();
     });
 

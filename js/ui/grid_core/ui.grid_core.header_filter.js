@@ -1,20 +1,20 @@
-import eventsEngine from "../../events/core/events_engine";
-import modules from "./ui.grid_core.modules";
-import filterUtils from "../shared/filtering";
-import gridCoreUtils from "./ui.grid_core.utils";
-import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from "./ui.grid_core.header_filter_core";
-import messageLocalization from "../../localization/message";
-import clickEvent from "../../events/click";
-import { compileGetter } from "../../core/utils/data";
-import { each } from "../../core/utils/iterator";
-import { isDefined, isObject, isFunction } from "../../core/utils/type";
-import { getDefaultAlignment } from "../../core/utils/position";
-import { extend } from "../../core/utils/extend";
-import { normalizeDataSourceOptions } from "../../data/data_source/data_source";
-import dateLocalization from "../../localization/date";
-import { isWrapped } from "../../core/utils/variable_wrapper";
-import { Deferred } from "../../core/utils/deferred";
-import { restoreFocus } from "../shared/accessibility";
+import eventsEngine from '../../events/core/events_engine';
+import modules from './ui.grid_core.modules';
+import filterUtils from '../shared/filtering';
+import gridCoreUtils from './ui.grid_core.utils';
+import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from './ui.grid_core.header_filter_core';
+import messageLocalization from '../../localization/message';
+import clickEvent from '../../events/click';
+import { compileGetter } from '../../core/utils/data';
+import { each } from '../../core/utils/iterator';
+import { isDefined, isObject, isFunction } from '../../core/utils/type';
+import { getDefaultAlignment } from '../../core/utils/position';
+import { extend } from '../../core/utils/extend';
+import { normalizeDataSourceOptions } from '../../data/data_source/data_source';
+import dateLocalization from '../../localization/date';
+import { isWrapped } from '../../core/utils/variable_wrapper';
+import { Deferred } from '../../core/utils/deferred';
+import { restoreFocus } from '../shared/accessibility';
 
 var DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -28,21 +28,21 @@ var DATE_INTERVAL_FORMATS = {
 var HeaderFilterController = modules.ViewController.inherit((function() {
     var getFormatOptions = function(value, column, currentLevel) {
         var groupInterval = filterUtils.getGroupInterval(column),
-            result = gridCoreUtils.getFormatOptionsByColumn(column, "headerFilter");
+            result = gridCoreUtils.getFormatOptionsByColumn(column, 'headerFilter');
 
         if(groupInterval) {
             result.groupInterval = groupInterval[currentLevel];
 
             if(gridCoreUtils.isDateType(column.dataType)) {
                 result.format = DATE_INTERVAL_FORMATS[groupInterval[currentLevel]];
-            } else if(column.dataType === "number") {
+            } else if(column.dataType === 'number') {
                 result.getDisplayFormat = function() {
-                    var formatOptions = { format: column.format, target: "headerFilter" },
+                    var formatOptions = { format: column.format, target: 'headerFilter' },
                         firstValueText = gridCoreUtils.formatValue(value, formatOptions),
                         secondValue = value + groupInterval[currentLevel],
                         secondValueText = gridCoreUtils.formatValue(secondValue, formatOptions);
 
-                    return firstValueText && secondValueText ? firstValueText + " - " + secondValueText : "";
+                    return firstValueText && secondValueText ? firstValueText + ' - ' + secondValueText : '';
                 };
             }
         }
@@ -52,19 +52,19 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
     return {
         init: function() {
-            this._columnsController = this.getController("columns");
-            this._dataController = this.getController("data");
-            this._headerFilterView = this.getView("headerFilterView");
+            this._columnsController = this.getController('columns');
+            this._dataController = this.getController('data');
+            this._headerFilterView = this.getView('headerFilterView');
         },
 
         _updateSelectedState: function(items, column) {
             var i = items.length,
-                isExclude = column.filterType === "exclude";
+                isExclude = column.filterType === 'exclude';
 
             while(i--) {
                 var item = items[i];
 
-                if("items" in items[i]) {
+                if('items' in items[i]) {
                     this._updateSelectedState(items[i].items, column);
                 }
 
@@ -99,7 +99,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             if(path.length === 1) {
                 item.value = path[0];
             } else {
-                item.value = path.join("/");
+                item.value = path.join('/');
             }
 
             item.text = this.getHeaderItemText(displayValue, column, currentLevel, options.headerFilterOptions);
@@ -142,7 +142,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     path: path
                 });
 
-                if("items" in groupItems[i]) {
+                if('items' in groupItems[i]) {
                     if(currentLevel === level || !isDefined(groupItems[i].value)) {
                         delete groupItems[i].items;
                     } else {
@@ -162,7 +162,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 dataSource = that._dataController.dataSource(),
                 group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource && dataSource.remoteOperations().grouping),
                 headerFilterDataSource = column.headerFilter && column.headerFilter.dataSource,
-                headerFilterOptions = that.option("headerFilter"),
+                headerFilterOptions = that.option('headerFilter'),
                 isLookup = false,
                 options = {
                     component: that.component
@@ -247,7 +247,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
             if(column) {
                 var visibleIndex = columnsController.getVisibleIndex(columnIndex),
-                    view = isGroupPanel ? this.getView("headerPanel") : this.getView("columnHeadersView"),
+                    view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView'),
                     $columnElement = $columnElement || view.getColumnElements().eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
                 this.showHeaderFilterMenuBase({
@@ -274,20 +274,20 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
 
                 extend(options, column, {
-                    type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
+                    type: groupInterval && groupInterval.length > 1 ? 'tree' : 'list',
                     remoteFiltering: remoteFiltering,
                     onShowing: function(e) {
-                        var dxResizableInstance = e.component.overlayContent().dxResizable("instance");
+                        var dxResizableInstance = e.component.overlayContent().dxResizable('instance');
 
-                        dxResizableInstance && dxResizableInstance.option("onResizeEnd", function(e) {
-                            var columnsController = that.getController("columns"),
-                                headerFilterByColumn = columnsController.columnOption(options.dataField, "headerFilter");
+                        dxResizableInstance && dxResizableInstance.option('onResizeEnd', function(e) {
+                            var columnsController = that.getController('columns'),
+                                headerFilterByColumn = columnsController.columnOption(options.dataField, 'headerFilter');
 
                             headerFilterByColumn = headerFilterByColumn || {};
                             headerFilterByColumn.width = e.width;
                             headerFilterByColumn.height = e.height;
 
-                            columnsController.columnOption(options.dataField, "headerFilter", headerFilterByColumn, true);
+                            columnsController.columnOption(options.dataField, 'headerFilter', headerFilterByColumn, true);
                         });
                     },
                     onHidden: () => restoreFocus(this)
@@ -297,7 +297,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                 if(options.isFilterBuilder) {
                     options.dataSource.filter = null;
-                    options.alignment = "right";
+                    options.alignment = 'right';
                 }
 
                 that._headerFilterView.showHeaderFilterMenu(options.columnElement, options);
@@ -316,15 +316,15 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
             $headerFilterIndicator,
             column = options.column;
 
-        if(!column.command && allowHeaderFiltering(column) && that.option("headerFilter.visible") && options.rowType === "header") {
+        if(!column.command && allowHeaderFiltering(column) && that.option('headerFilter.visible') && options.rowType === 'header') {
             $headerFilterIndicator = that._applyColumnState({
-                name: "headerFilter",
+                name: 'headerFilter',
                 rootElement: $cell,
                 column: column,
-                showColumnLines: that.option("showColumnLines")
+                showColumnLines: that.option('showColumnLines')
             });
 
-            $headerFilterIndicator && that._subscribeToIndicatorEvent($headerFilterIndicator, column, "headerFilter");
+            $headerFilterIndicator && that._subscribeToIndicatorEvent($headerFilterIndicator, column, 'headerFilter');
         }
 
         that.callBase($cell, options);
@@ -333,10 +333,10 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
     _subscribeToIndicatorEvent: function($indicator, column, indicatorName) {
         var that = this;
 
-        if(indicatorName === "headerFilter") {
+        if(indicatorName === 'headerFilter') {
             eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
                 e.event.stopPropagation();
-                that.getController("headerFilter").showHeaderFilterMenu(column.index, false);
+                that.getController('headerFilter').showHeaderFilterMenu(column.index, false);
             }));
         }
     },
@@ -348,8 +348,8 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
     },
 
     _updateHeaderFilterIndicators: function() {
-        if(this.option("headerFilter.visible")) {
-            this._updateIndicators("headerFilter");
+        if(this.option('headerFilter.visible')) {
+            this._updateIndicators('headerFilter');
         }
     },
 
@@ -360,7 +360,7 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
     _columnOptionChanged: function(e) {
         var optionNames = e.optionNames;
 
-        if(gridCoreUtils.checkChanges(optionNames, ["filterValues", "filterType"])) {
+        if(gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType'])) {
             if(this._needUpdateFilterIndicators()) {
                 this._updateHeaderFilterIndicators();
             }
@@ -377,12 +377,12 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
             $item = that.callBase.apply(that, arguments),
             $headerFilterIndicator;
 
-        if(!groupColumn.command && allowHeaderFiltering(groupColumn) && that.option("headerFilter.visible")) {
+        if(!groupColumn.command && allowHeaderFiltering(groupColumn) && that.option('headerFilter.visible')) {
             $headerFilterIndicator = that._applyColumnState({
-                name: "headerFilter",
+                name: 'headerFilter',
                 rootElement: $item,
                 column: {
-                    alignment: getDefaultAlignment(that.option("rtlEnabled")),
+                    alignment: getDefaultAlignment(that.option('rtlEnabled')),
                     filterValues: groupColumn.filterValues,
                     allowHeaderFiltering: true
                 },
@@ -393,7 +393,7 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
                 var event = e.event;
 
                 event.stopPropagation();
-                that.getController("headerFilter").showHeaderFilterMenu(groupColumn.index, true);
+                that.getController('headerFilter').showHeaderFilterMenu(groupColumn.index, true);
             }));
         }
 
@@ -402,7 +402,7 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
 });
 
 function invertFilterExpression(filter) {
-    return ["!", filter];
+    return ['!', filter];
 }
 
 var DataControllerFilterRowExtender = {
@@ -418,7 +418,7 @@ var DataControllerFilterRowExtender = {
         var that = this,
             filters = [that.callBase()],
             columns = that._columnsController.getVisibleColumns(null, true),
-            headerFilterController = that.getController("headerFilter"),
+            headerFilterController = that.getController('headerFilter'),
             currentColumn = headerFilterController.getCurrentColumn();
 
         each(columns, function(_, column) {
@@ -436,11 +436,11 @@ var DataControllerFilterRowExtender = {
                     if(Array.isArray(filterValue)) {
                         filter = filterValue;
                     } else {
-                        if(column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== "number") {
+                        if(column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== 'number') {
                             filterValue = column.deserializeValue(filterValue);
                         }
 
-                        filter = column.createFilterExpression(filterValue, "=", "headerFilter");
+                        filter = column.createFilterExpression(filterValue, '=', 'headerFilter');
                     }
                     if(filter) {
                         filter.columnIndex = column.index;
@@ -448,9 +448,9 @@ var DataControllerFilterRowExtender = {
                     filterValues.push(filter);
                 });
 
-                filterValues = gridCoreUtils.combineFilters(filterValues, "or");
+                filterValues = gridCoreUtils.combineFilters(filterValues, 'or');
 
-                filters.push(column.filterType === "exclude" ? ["!", filterValues] : filterValues);
+                filters.push(column.filterType === 'exclude' ? ['!', filterValues] : filterValues);
             }
         });
 
@@ -507,19 +507,19 @@ module.exports = {
                      * @type string
                      * @default "(Blanks)"
                      */
-                    emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
+                    emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
                     /**
                      * @name GridBaseOptions.headerFilter.texts.ok
                      * @type string
                      * @default "Ok"
                      */
-                    ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
+                    ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
                     /**
                      * @name GridBaseOptions.headerFilter.texts.cancel
                      * @type string
                      * @default "Cancel"
                      */
-                    cancel: messageLocalization.format("dxDataGrid-headerFilterCancel")
+                    cancel: messageLocalization.format('dxDataGrid-headerFilterCancel')
                 }
             }
         };

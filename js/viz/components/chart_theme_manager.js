@@ -1,10 +1,10 @@
-var noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager,
+var noop = require('../../core/utils/common').noop,
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager,
     _isString = typeUtils.isString,
     _isDefined = typeUtils.isDefined,
-    _normalizeEnum = require("../core/utils").normalizeEnum;
+    _normalizeEnum = require('../core/utils').normalizeEnum;
 
 var ThemeManager = BaseThemeManager.inherit((function() {
     var ctor = function(params) {
@@ -45,13 +45,13 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         axisOptions = extend(true, {}, axisOptions);
         axisOptions.title = processTitleOptions(axisOptions.title);
 
-        if(axisOptions.type === "logarithmic" && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !typeUtils.isNumeric(axisOptions.logarithmBase))) {
+        if(axisOptions.type === 'logarithmic' && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !typeUtils.isNumeric(axisOptions.logarithmBase))) {
             axisOptions.logarithmBase = undefined;
             axisOptions.logarithmBaseError = true;
         }
         if(axisOptions.label) {
             if(axisOptions.label.alignment) {
-                axisOptions.label["userAlignment"] = true;
+                axisOptions.label['userAlignment'] = true;
             }
         }
         return axisOptions;
@@ -59,9 +59,9 @@ var ThemeManager = BaseThemeManager.inherit((function() {
 
     var applyParticularAxisOptions = function(name, userOptions, rotated) {
         var theme = this._theme,
-            position = !(rotated ^ (name === "valueAxis")) ? "horizontalAxis" : "verticalAxis",
+            position = !(rotated ^ (name === 'valueAxis')) ? 'horizontalAxis' : 'verticalAxis',
             processedUserOptions = processAxisOptions(userOptions, name),
-            commonAxisSettings = processAxisOptions(this._userOptions["commonAxisSettings"], name),
+            commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings'], name),
             mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
 
         mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;
@@ -88,7 +88,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         base: mergeOptions,
         argumentAxis: applyParticularAxisOptions,
         valueAxisRangeSelector: function() {
-            return mergeOptions.call(this, "valueAxis");
+            return mergeOptions.call(this, 'valueAxis');
         },
         valueAxis: applyParticularAxisOptions,
         series: function(name, userOptions, seriesCount) {
@@ -96,17 +96,17 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 theme = that._theme,
                 userCommonSettings = that._userOptions.commonSeriesSettings || {},
                 themeCommonSettings = theme.commonSeriesSettings,
-                widgetType = that._themeSection.split(".").slice(-1)[0],
-                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === "pie" && theme.type)), // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
+                widgetType = that._themeSection.split('.').slice(-1)[0],
+                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === 'pie' && theme.type)), // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
                 settings,
                 palette = that.palette,
-                isBar = ~type.indexOf("bar"),
-                isLine = ~type.indexOf("line"),
-                isArea = ~type.indexOf("area"),
-                isBubble = type === "bubble",
+                isBar = ~type.indexOf('bar'),
+                isLine = ~type.indexOf('line'),
+                isArea = ~type.indexOf('area'),
+                isBubble = type === 'bubble',
                 mainSeriesColor,
-                resolveLabelsOverlapping = that.getOptions("resolveLabelsOverlapping"),
-                containerBackgroundColor = that.getOptions("containerBackgroundColor"),
+                resolveLabelsOverlapping = that.getOptions('resolveLabelsOverlapping'),
+                containerBackgroundColor = that.getOptions('containerBackgroundColor'),
                 seriesTemplate = applyParticularTheme.seriesTemplate.call(this),
                 seriesVisibility;
 
@@ -120,12 +120,12 @@ var ThemeManager = BaseThemeManager.inherit((function() {
 
             settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
 
-            settings.aggregation.enabled = widgetType === "chart" && normalizeAggregationEnabled(settings.aggregation, that.getOptions("useAggregation"));
+            settings.aggregation.enabled = widgetType === 'chart' && normalizeAggregationEnabled(settings.aggregation, that.getOptions('useAggregation'));
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;
 
-            if(widgetType !== "pie") {
+            if(widgetType !== 'pie') {
                 mainSeriesColor = settings.color || palette.getNextColor(seriesCount);
             } else {
 
@@ -141,8 +141,8 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             settings.mainSeriesColor = mainSeriesColor;
             settings.resolveLabelsOverlapping = resolveLabelsOverlapping;
 
-            if(settings.label && (isLine || (isArea && type !== "rangearea") || type === "scatter")) {
-                settings.label.position = "outside";
+            if(settings.label && (isLine || (isArea && type !== 'rangearea') || type === 'scatter')) {
+                settings.label.position = 'outside';
             }
 
             if(seriesTemplate) {
@@ -157,17 +157,17 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             return mergeOptions.call(this, name, userOptions);
         },
         seriesTemplate() {
-            const value = mergeOptions.call(this, "seriesTemplate");
+            const value = mergeOptions.call(this, 'seriesTemplate');
             if(value) {
-                value.nameField = value.nameField || "series";
+                value.nameField = value.nameField || 'series';
             }
             return value;
         },
         zoomAndPan() {
             function parseOption(option) {
                 option = _normalizeEnum(option);
-                const pan = option === "pan" || option === "both",
-                    zoom = option === "zoom" || option === "both";
+                const pan = option === 'pan' || option === 'both',
+                    zoom = option === 'zoom' || option === 'both';
 
                 return {
                     pan: pan,
@@ -179,26 +179,26 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             let userOptions = this._userOptions.zoomAndPan;
 
             if(!_isDefined(userOptions)) {
-                const zoomingMode = _normalizeEnum(this.getOptions("zoomingMode"));
-                const scrollingMode = _normalizeEnum(this.getOptions("scrollingMode"));
+                const zoomingMode = _normalizeEnum(this.getOptions('zoomingMode'));
+                const scrollingMode = _normalizeEnum(this.getOptions('scrollingMode'));
                 const allowZoom = ['all', 'mouse', 'touch'].indexOf(zoomingMode) !== -1;
                 const allowScroll = ['all', 'mouse', 'touch'].indexOf(scrollingMode) !== -1;
 
                 userOptions = {
-                    argumentAxis: (allowZoom && allowScroll) ? "both" : (allowZoom ? "zoom" : (allowScroll ? "pan" : "none")),
-                    allowMouseWheel: zoomingMode === "all" || zoomingMode === "mouse",
-                    allowTouchGestures: zoomingMode === "all" || zoomingMode === "touch" || scrollingMode === "all" || scrollingMode === "touch"
+                    argumentAxis: (allowZoom && allowScroll) ? 'both' : (allowZoom ? 'zoom' : (allowScroll ? 'pan' : 'none')),
+                    allowMouseWheel: zoomingMode === 'all' || zoomingMode === 'mouse',
+                    allowTouchGestures: zoomingMode === 'all' || zoomingMode === 'touch' || scrollingMode === 'all' || scrollingMode === 'touch'
                 };
             }
 
-            let options = mergeOptions.call(this, "zoomAndPan", userOptions);
+            let options = mergeOptions.call(this, 'zoomAndPan', userOptions);
 
             return {
                 valueAxis: parseOption(options.valueAxis),
                 argumentAxis: parseOption(options.argumentAxis),
                 dragToZoom: !!options.dragToZoom,
                 dragBoxStyle: {
-                    class: "dxc-shutter",
+                    class: 'dxc-shutter',
                     fill: options.dragBoxStyle.color,
                     opacity: options.dragBoxStyle.opacity
                 },
@@ -214,7 +214,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
     };
 
     return {
-        _themeSection: "chart",
+        _themeSection: 'chart',
         ctor: ctor,
         dispose: dispose,
         resetPalette: resetPalette,
@@ -238,9 +238,9 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         },
         updatePalette: function() {
             var that = this;
-            that.palette = that.createPalette(that.getOptions("palette"), {
+            that.palette = that.createPalette(that.getOptions('palette'), {
                 useHighlight: true,
-                extensionMode: that.getOptions("paletteExtensionMode")
+                extensionMode: that.getOptions('paletteExtensionMode')
             });
         }
     };

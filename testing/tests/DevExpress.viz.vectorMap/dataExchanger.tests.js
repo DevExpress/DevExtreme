@@ -1,4 +1,4 @@
-var dataExchangerModule = require("viz/vector_map/data_exchanger");
+var dataExchangerModule = require('viz/vector_map/data_exchanger');
 
 QUnit.module('DataExchanger', {
     beforeEach: function() {

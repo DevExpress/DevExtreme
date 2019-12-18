@@ -1,11 +1,11 @@
-var renderer = require("core/renderer");
-var typeUtils = require("core/utils/type");
+var renderer = require('core/renderer');
+var typeUtils = require('core/utils/type');
 
 var originalCSSMethod = renderer.fn.css;
 
 var validateStyleName = function(name) {
-    if(name.indexOf("-") > -1) {
-        throw new Error("CSS property '" + name + "' should be described in camelCase.");
+    if(name.indexOf('-') > -1) {
+        throw new Error('CSS property \'' + name + '\' should be described in camelCase.');
     }
 };
 

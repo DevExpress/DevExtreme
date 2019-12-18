@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    Class = require("../../core/class"),
-    swipeEvents = require("../../events/swipe"),
-    eventUtils = require("../../events/utils");
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    noop = require('../../core/utils/common').noop,
+    Class = require('../../core/class'),
+    swipeEvents = require('../../events/swipe'),
+    eventUtils = require('../../events/utils');
 
 
-var LIST_EDIT_DECORATOR = "dxListEditDecorator",
+var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
     SWIPE_START_EVENT_NAME = eventUtils.addNamespace(swipeEvents.start, LIST_EDIT_DECORATOR),
     SWIPE_UPDATE_EVENT_NAME = eventUtils.addNamespace(swipeEvents.swipe, LIST_EDIT_DECORATOR),
     SWIPE_END_EVENT_NAME = eventUtils.addNamespace(swipeEvents.end, LIST_EDIT_DECORATOR);
@@ -41,7 +41,7 @@ var EditDecorator = Class.inherit({
 
     _itemSwipeStartHandler: function(e) {
         var $itemElement = $(e.currentTarget);
-        if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             e.cancel = true;
             return;
         }
@@ -71,9 +71,9 @@ var EditDecorator = Class.inherit({
 
     _commonOptions: function() {
         return {
-            activeStateEnabled: this._list.option("activeStateEnabled"),
-            hoverStateEnabled: this._list.option("hoverStateEnabled"),
-            focusStateEnabled: this._list.option("focusStateEnabled")
+            activeStateEnabled: this._list.option('activeStateEnabled'),
+            hoverStateEnabled: this._list.option('hoverStateEnabled'),
+            focusStateEnabled: this._list.option('focusStateEnabled')
         };
     },
 
