@@ -8393,101 +8393,6 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
 });
 
-// T838674
-QUnit.test("Validation error hightlighting should not disappear after scrolling", function(assert) {
-    // arrange
-    var $input,
-        dataGrid,
-        $firstCell,
-        data = [];
-
-    for(let i = 0; i < 100; i++) {
-        data.push({ field: i, field2: i });
-    }
-
-    dataGrid = createDataGrid({
-        width: 500,
-        height: 400,
-        dataSource: data,
-        showBorders: true,
-        scrolling: {
-            mode: "virtual",
-            rowRenderingMode: "virtual"
-        },
-        paging: {
-            pageSize: 50
-        },
-        editing: {
-            mode: "cell",
-            allowUpdating: true,
-            allowAdding: true
-        },
-        columns: [{
-            dataField: "field",
-            dataType: "number",
-            validationRules: [{
-                type: "required",
-            }]
-        }, {
-            dataField: "field2",
-            dataType: "number",
-            validationRules: [{
-                type: "required",
-            }]
-        }]
-    });
-
-    // act
-    this.clock.tick(500);
-
-    $firstCell = $(dataGrid.getCellElement(0, 0));
-
-    $firstCell.trigger("dxclick");
-    this.clock.tick();
-
-    $firstCell = $(dataGrid.getCellElement(0, 0));
-
-    $input = $firstCell.find("input");
-
-    // assert
-    assert.ok($firstCell.hasClass("dx-editor-cell"), "editor cell");
-    assert.ok($input, "cell has input");
-
-    // act
-    $input.val("");
-    $input.trigger("change");
-
-    $firstCell.trigger("dxclick");
-
-    this.clock.tick();
-
-    $firstCell = $(dataGrid.getCellElement(0, 0));
-
-    // assert
-    assert.ok($firstCell.hasClass("dx-datagrid-invalid"), "cell is invalid");
-
-    // act
-    let scrollable = dataGrid.getScrollable();
-    scrollable.scrollTo({ y: 1000 });
-
-    $firstCell = $(dataGrid.getCellElement(0, 0));
-    $firstCell.trigger("dxclick");
-
-    // assert
-    assert.notOk(dataGrid.$element().find("dx-datagrid-invalid").length, "no invalid cells");
-
-    // act
-    scrollable.scrollTo({ y: 0 });
-
-    $firstCell = $(dataGrid.getCellElement(0, 0));
-    $input = $firstCell.find("input");
-
-    // assert
-    assert.ok($firstCell.hasClass("dx-datagrid-invalid"), "cell is invalid");
-    assert.ok($firstCell.hasClass("dx-editor-cell"), "editor cell");
-    assert.ok($input, "cell has input");
-});
-
 QUnit.test("Error row is not hidden when rowKey is undefined by mode is cell", function(assert) {
     // arrange
 
@@ -18657,4 +18562,515 @@ QUnit.test("The onFocusedRowChanged should be fired if change focusedRowKey to a
     assert.equal(onFocusedRowChangedSpy.callCount, 1, "onFocusedRowChanged is fired");
     assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 2, "onFocusedRowChanged row.key parameter");
     assert.ok(dataGrid.getView("rowsView")._tableElement, "tableElement exists");
+});
+
+QUnit.module('Validation with virtual scrolling and rendering', {
+    beforeEach: function() {
+        this.addHiddenColumn = () => {
+            this.columns.push({
+                dataField: 'hiddenField',
+                dataType: 'number',
+                visible: false,
+                validationRules: [{
+                    type: 'required',
+                }]
+            });
+        };
+
+        this.data = [];
+
+        for(let i = 0; i < 100; i++) {
+            this.data.push({ field: i, hiddenField: i });
+        }
+
+        this.columns = [{
+            dataField: 'field',
+            dataType: 'number',
+            validationRules: [{
+                type: 'required',
+            }]
+        }];
+
+        this.gridOptions = {
+            height: 400,
+            dataSource: this.data,
+            showBorders: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                pageSize: 50
+            },
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true
+            },
+            columns: this.columns
+        };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+
+    // T838674
+    QUnit.test('Validation error hightlighting should not disappear after scrolling', function(assert) {
+        // arrange
+        var $input,
+            dataGrid,
+            $firstCell;
+
+        dataGrid = createDataGrid(this.gridOptions);
+
+        // act
+        this.clock.tick(500);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $firstCell.trigger('dxclick');
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+
+        // act
+        $input.val('');
+        $input.trigger('change');
+
+        $firstCell.trigger('dxclick');
+
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+
+        // act
+        let scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 1000 });
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $firstCell.trigger('dxclick');
+
+        // assert
+        assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
+
+        // act
+        scrollable.scrollTo({ y: 0 });
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+    });
+
+    // T838674
+    QUnit.test('Validation error hightlighting should disappear after scrolling if newly added row failed validation', function(assert) {
+        // arrange
+        var $input,
+            dataGrid,
+            $firstCell;
+
+        dataGrid = createDataGrid(this.gridOptions);
+
+        // act
+        this.clock.tick(500);
+
+        dataGrid.addRow();
+
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+
+        // act
+        $firstCell.trigger('dxclick');
+
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        // assert
+        assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+
+        // act
+        let scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 1000 });
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $firstCell.trigger('dxclick');
+
+        // assert
+        assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
+
+        // act
+        scrollable.scrollTo({ y: 0 });
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+    });
+
+    // T838674
+    QUnit.test('Validation should work after editing row and scrolling if grid has hidden column with validationRules. Cell edit mode', function(assert) {
+        // arrange
+        var $input,
+            dataGrid,
+            $firstCell;
+
+        this.addHiddenColumn();
+
+        dataGrid = createDataGrid(this.gridOptions);
+
+        // act
+        this.clock.tick(500);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $firstCell.trigger('dxclick');
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+
+        // act
+        $input.val('');
+        $input.trigger('change');
+
+        $firstCell.trigger('dxclick');
+
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+
+        // act
+        let scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 1000 });
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $firstCell.trigger('dxclick');
+
+        // assert
+        assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
+
+        // act
+        scrollable.scrollTo({ y: 0 });
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+        assert.equal(this.data[0].field, 0, 'changes were not saved');
+    });
+
+    // T838674
+    QUnit.test('Validation should work after editing row and scrolling if grid has hidden column with validationRules. Batch edit mode', function(assert) {
+        // arrange
+        var $input,
+            dataGrid,
+            $firstCell,
+            $saveButton,
+            $errorRow;
+
+        this.gridOptions.editing.mode = 'batch';
+        this.addHiddenColumn();
+
+        dataGrid = createDataGrid(this.gridOptions);
+
+        // act
+        this.clock.tick(500);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $firstCell.trigger('dxclick');
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+
+        // act
+        $input.val('');
+        $input.trigger('change');
+
+        $firstCell.trigger('dxclick');
+
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has invalid class');
+        assert.ok($firstCell.hasClass('dx-cell-modified'), 'modified cell');
+
+        // act
+        let scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 1000 });
+
+        $saveButton = $('.dx-datagrid-save-button');
+        $saveButton.trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
+        assert.notOk($saveButton.hasClass('dx-state-disabled'), 'save button is not disabled');
+
+        // act
+        scrollable.scrollTo({ y: 0 });
+        this.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $input = $firstCell.find('input');
+
+        $errorRow = $(dataGrid.$element().find('.dx-error-message'));
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has invalid class');
+        assert.ok($firstCell.hasClass('dx-cell-modified'), 'modified cell');
+        assert.ok($input, 'cell has input');
+
+        assert.equal(this.data[0].field, 0, 'changes were not saved');
+
+        assert.ok($errorRow, 'error row');
+        assert.equal($errorRow.text(), 'Field is required', 'error message');
+    });
+
+    function rowAddingValidationWithInvalidHiddenColumnTest(that, assert, editMode) {
+        // arrange
+        var $input,
+            dataGrid,
+            onRowValidatingSpy = sinon.spy(),
+            $errorRow,
+            $firstCell;
+
+        that.gridOptions.editing.mode = editMode;
+        that.gridOptions.onRowValidating = onRowValidatingSpy;
+
+        that.addHiddenColumn();
+
+        dataGrid = createDataGrid(that.gridOptions);
+
+        // act
+        that.clock.tick(500);
+
+        dataGrid.addRow();
+
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+
+        // act
+        $firstCell.trigger('dxclick');
+
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        // assert
+        assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+
+        // act
+        let scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 1000 });
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        dataGrid.saveEditData();
+        that.clock.tick();
+
+        // assert
+        assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
+
+        // act
+        scrollable.scrollTo({ y: 0 });
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $input = $firstCell.find('input');
+
+        $errorRow = $(dataGrid.$element().find('.dx-error-message'));
+
+        // assert
+        if(editMode === 'cell') {
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        } else {
+            assert.ok($firstCell.hasClass('dx-cell-modified'), 'modified cell');
+        }
+        assert.ok($input, 'cell has input');
+
+        assert.ok($errorRow, 'error row');
+        assert.equal($errorRow.text(), 'Field is required, Hidden Field is required', 'error message');
+
+        assert.equal(that.data.length, 100, 'data was not modified');
+
+        assert.equal(onRowValidatingSpy.callCount, 1, 'onRowValidating call count');
+
+        let onRowValidatingArguments = onRowValidatingSpy.args[0][0],
+            brokenRules = onRowValidatingArguments.brokenRules;
+
+        assert.equal(brokenRules.length, 2, 'brokenRules length');
+
+        assert.notOk(brokenRules[0].isValid, 'is not valid');
+        assert.equal(brokenRules[0].type, 'required', 'rule type');
+        assert.equal(brokenRules[0].columnIndex, 0, 'column index');
+
+        assert.notOk(brokenRules[1].isValid, 'is not valid');
+        assert.equal(brokenRules[1].type, 'required', 'rule type');
+        assert.equal(brokenRules[1].columnIndex, 1, 'column index');
+    }
+
+    // T838674
+    QUnit.test('Validation should work after adding new row and scrolling if grid has invalid hidden column with validationRules. Cell edit mode', function(assert) {
+        rowAddingValidationWithInvalidHiddenColumnTest(this, assert, 'cell');
+    });
+
+    // T838674
+    QUnit.test('Validation should work after adding new row and scrolling if grid has invalid hidden column with validationRules. Batch edit mode', function(assert) {
+        rowAddingValidationWithInvalidHiddenColumnTest(this, assert, 'batch');
+    });
+
+    function rowAddingValidationWithValidHiddenColumnTest(that, assert, editMode) {
+        // arrange
+        var $input,
+            dataGrid,
+            onRowValidatingSpy = sinon.spy(),
+            $errorRow,
+            $firstCell;
+
+        that.addHiddenColumn();
+
+        that.gridOptions.onRowValidating = onRowValidatingSpy;
+        that.gridOptions.onInitNewRow = function(e) {
+            e.data.hiddenField = 100;
+        };
+        that.gridOptions.editing.mode = editMode;
+
+        dataGrid = createDataGrid(that.gridOptions);
+
+        // act
+        that.clock.tick(500);
+
+        dataGrid.addRow();
+
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        $input = $firstCell.find('input');
+
+        // assert
+        assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        assert.ok($input, 'cell has input');
+
+        // act
+        $firstCell.trigger('dxclick');
+
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        // assert
+        assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+
+        // act
+        let scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ y: 1000 });
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+
+        dataGrid.saveEditData();
+        that.clock.tick();
+
+        // assert
+        assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
+
+        // act
+        scrollable.scrollTo({ y: 0 });
+        that.clock.tick();
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $input = $firstCell.find('input');
+
+        $errorRow = $(dataGrid.$element().find('.dx-error-message'));
+
+        // assert
+        if(editMode === 'cell') {
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
+        } else {
+            assert.ok($firstCell.hasClass('dx-cell-modified'), 'modified cell');
+        }
+
+        assert.ok($input, 'cell has input');
+
+        assert.ok($errorRow, 'error row');
+        assert.equal($errorRow.text(), 'Field is required', 'error message');
+
+        assert.equal(that.data.length, 100, 'data was not modified');
+
+        assert.equal(onRowValidatingSpy.callCount, 1, 'onRowValidating call count');
+
+        let onRowValidatingArguments = onRowValidatingSpy.args[0][0],
+            brokenRules = onRowValidatingArguments.brokenRules;
+
+        assert.equal(brokenRules.length, 1, 'brokenRules length');
+
+        assert.notOk(brokenRules[0].isValid, 'is not valid');
+        assert.equal(brokenRules[0].type, 'required', 'rule type');
+        assert.equal(brokenRules[0].columnIndex, 0, 'column index');
+    }
+
+    // T838674
+    QUnit.test('Validation should work after adding new row and scrolling if grid has valid hidden column with validationRules. Cell edit mode', function(assert) {
+        rowAddingValidationWithValidHiddenColumnTest(this, assert, 'cell');
+    });
+
+    // T838674
+    QUnit.test('Validation should work after adding new row and scrolling if grid has valid hidden column with validationRules. Batch edit mode', function(assert) {
+        rowAddingValidationWithValidHiddenColumnTest(this, assert, 'batch');
+    });
 });

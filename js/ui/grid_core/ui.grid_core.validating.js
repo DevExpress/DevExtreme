@@ -445,10 +445,27 @@ module.exports = {
                     that.callBase.apply(that, arguments);
                 },
 
+                _getInvisibleColumns: function(editData) {
+                    var columnsController = this.getController('columns'),
+                        needAllColumns,
+                        invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand),
+                        hasHiddenColumns = invisibleColumns.length && invisibleColumns.some((column) => column.validationRules.length);
+
+                    if(this.isCellOrBatchEditMode() && hasHiddenColumns) {
+                        needAllColumns = editData.some((rowEditData) => {
+                            let rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
+
+                            return rowIndex < 0;
+                        });
+                    }
+
+                    return needAllColumns ? columnsController.getColumns().filter((column) => !column.isBand) : invisibleColumns;
+                },
+
                 _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController("validating"),
                         columnsController = this.getController("columns"),
-                        invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand),
+                        invisibleColumns = this._getInvisibleColumns(editData),
                         groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1),
                         invisibleColumnValidators = [];
 
