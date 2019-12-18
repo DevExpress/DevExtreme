@@ -560,20 +560,17 @@ configs.forEach(config => {
             wrapper.instance.unselectItem(1);
 
             let expectedKeys = [0],
-                expectedNodes = [0],
                 expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectNodesRecursive) {
                 expectedKeys = [];
-                expectedNodes = [];
             }
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [0];
-                expectedNodes = [0];
                 expectedCallbacks = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after unselectItem(1)');
-            wrapper.checkSelectedNodes(expectedNodes, ' after unselectItem(1)');
+            wrapper.checkSelectedNodes(expectedKeys, ' after unselectItem(1)');
             wrapper.checkEventLog(expectedCallbacks, ' after unselectItem(1)');
             wrapper.clearEventLog();
 
@@ -581,10 +578,9 @@ configs.forEach(config => {
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [0, 1];
-                expectedNodes = [0, 1];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
+            wrapper.checkSelectedNodes(expectedKeys, ' after expandAll');
             wrapper.checkEventLog([], ' after expandAll');
         });
 
@@ -624,21 +620,18 @@ configs.forEach(config => {
             wrapper.instance.expandAll();
 
             let expectedKeys = [0];
-            let expectedNodes = [0];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [0, 1, 2];
-                    expectedNodes = [0, 1, 2];
                 }
                 if(!config.expanded && isLazyDataSourceMode(wrapper) && config.selectNodesRecursive) {
                     // unexpected result
                     expectedKeys = [0, 1];
-                    expectedNodes = [0, 1];
                 }
             }
 
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
+            wrapper.checkSelectedNodes(expectedKeys, ' after expandAll');
             wrapper.checkEventLog([], ' after expandAll');
         });
 
@@ -662,7 +655,6 @@ configs.forEach(config => {
                 if(isLazyDataSourceMode(wrapper)) {
                     expectedKeys = [0];
                 }
-
                 expectedNodes = [0];
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
