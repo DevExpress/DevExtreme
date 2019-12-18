@@ -54,6 +54,7 @@
     "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.0",
     "gulp-eol": "^0.1.2",
+    "gulp-eslint": "^6.0.0",
     "gulp-file": "^0.3.0",
     "gulp-footer": "^1.0.5",
     "gulp-header": "^1.7.1",
