@@ -2,14 +2,14 @@ require('viz/tree_map/tree_map');
 
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
-const module = require('viz/core/title');
+const titleModule = require('viz/core/title');
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
 QUnit.module('Title', {
     beforeEach: function() {
         const title = this.title = new vizMocks.Title();
-        module.Title = sinon.spy(function() { return title; });
+        titleModule.Title = sinon.spy(function() { return title; });
         this.$container = $('#test-container');
     },
 
@@ -21,7 +21,7 @@ QUnit.module('Title', {
 QUnit.test('Creation', function(assert) {
     this.createWidget();
 
-    const params = module.Title.lastCall.args[0];
+    const params = titleModule.Title.lastCall.args[0];
     assert.ok(params.renderer, 'param - renderer');
     assert.ok(typeof params.incidentOccurred === 'function', 'param - incident occurred');
     assert.strictEqual(params.cssClass, 'dxtm-title', 'param - css class');
