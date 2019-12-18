@@ -5224,35 +5224,40 @@ QUnit.module("performance", () => {
     QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key and deferred datasource is used", assert => {
         const clock = sinon.useFakeTimers();
 
-        const $tagBox = $("#tagBox").dxTagBox({
-            dataSource: {
-                load(loadOptions) {
-                    const d = $.Deferred();
+        try {
+            const $tagBox = $("#tagBox").dxTagBox({
+                dataSource: {
+                    load(loadOptions) {
+                        const d = $.Deferred();
 
-                    setTimeout(() => {
-                        d.resolve(loadOptions.filter ? [] : [{ id: 1, text: "item 1" }]);
-                    }, 500);
+                        setTimeout(() => {
+                            d.resolve(loadOptions.filter ? [] : [{ id: 1, text: "item 1" }]);
+                        }, 500);
 
-                    return d.promise();
+                        return d.promise();
+                    },
+                    byKey() {
+                        const d = $.Deferred();
+
+                        setTimeout(() => {
+                            d.resolve({ id: 1, text: "item 1" });
+                        }, 500);
+
+                        return d.promise();
+                    },
+                    key: "id"
                 },
-                byKey() {
-                    const d = $.Deferred();
+                value: [{ id: 1, text: "item 1" }],
+                valueExpr: "this",
+                displayExpr: "text"
+            });
 
-                    setTimeout(() => {
-                        d.resolve({ id: 1, text: "item 1" });
-                    }, 500);
+            clock.tick(1000);
+            assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 1");
 
-                    return d.promise();
-                },
-                key: "id"
-            },
-            value: [{ id: 1, text: "item 1" }],
-            valueExpr: "this",
-            displayExpr: "text"
-        });
-
-        clock.tick(1000);
-        assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 1");
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test("useSubmitBehavior option", assert => {
