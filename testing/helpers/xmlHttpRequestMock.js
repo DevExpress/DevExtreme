@@ -61,7 +61,7 @@ window.XMLHttpRequestMock = function() {
         this._timeout = null;
 
         this._getLoadedSize = function() {
-            return (this.onProgressCallCount + 1) * this._stepSize;
+            return Math.floor((this.onProgressCallCount + 1) * this._stepSize);
         };
 
         this._isStatusError = function() {
