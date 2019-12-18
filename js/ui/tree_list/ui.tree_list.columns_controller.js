@@ -26,7 +26,7 @@ exports.ColumnsController = columnsControllerModule.controllers.columns.inherit(
     };
 })());
 
-treeListCore.registerModule("columns", {
+treeListCore.registerModule('columns', {
     defaultOptions: columnsControllerModule.defaultOptions,
     controllers: {
         columns: exports.ColumnsController

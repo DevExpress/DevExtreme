@@ -1,23 +1,23 @@
-import { getQuill } from "../quill_importer";
+import { getQuill } from '../quill_importer';
 
-import $ from "../../../core/renderer";
-import PopupModule from "./popup";
-import Variable from "../formats/variable";
+import $ from '../../../core/renderer';
+import PopupModule from './popup';
+import Variable from '../formats/variable';
 
-import { extend } from "../../../core/utils/extend";
+import { extend } from '../../../core/utils/extend';
 
-const VARIABLE_FORMAT_CLASS = "dx-variable-format";
-const ACTIVE_FORMAT_CLASS = "dx-format-active";
+const VARIABLE_FORMAT_CLASS = 'dx-variable-format';
+const ACTIVE_FORMAT_CLASS = 'dx-format-active';
 
 getQuill()
-    .register({ "formats/variable": Variable }, true);
+    .register({ 'formats/variable': Variable }, true);
 
 class VariableModule extends PopupModule {
     _getDefaultOptions() {
         let baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
-            escapeChar: ""
+            escapeChar: ''
         });
     }
 
@@ -34,8 +34,8 @@ class VariableModule extends PopupModule {
             altKey: true
         }, this.showPopup.bind(this));
 
-        this._popup.on("shown", (e) => {
-            const $ofElement = $(e.component.option("position").of);
+        this._popup.on('shown', (e) => {
+            const $ofElement = $(e.component.option('position').of);
             if($ofElement.hasClass(VARIABLE_FORMAT_CLASS)) {
                 $ofElement.addClass(ACTIVE_FORMAT_CLASS);
             }
@@ -54,29 +54,29 @@ class VariableModule extends PopupModule {
 
     _resetPopupPosition(event, position) {
         if(event && event.element) {
-            this._popup.option("position", {
+            this._popup.option('position', {
                 of: event.element,
                 offset: {
                     h: 0,
                     v: 0
                 },
-                my: "top center",
-                at: "bottom center",
-                collision: "fit"
+                my: 'top center',
+                at: 'bottom center',
+                collision: 'fit'
             });
         } else {
             const mentionBounds = this.quill.getBounds(position);
             const rootRect = this.quill.root.getBoundingClientRect();
 
-            this._popup.option("position", {
+            this._popup.option('position', {
                 of: this.quill.root,
                 offset: {
                     h: mentionBounds.left,
                     v: mentionBounds.bottom - rootRect.height
                 },
-                my: "top center",
-                at: "bottom left",
-                collision: "fit flip"
+                my: 'top center',
+                at: 'bottom left',
+                collision: 'fit flip'
             });
         }
     }
@@ -84,14 +84,14 @@ class VariableModule extends PopupModule {
 
     insertEmbedContent(selectionChangedEvent) {
         const caretPosition = this.getPosition();
-        const selectedItem = selectionChangedEvent.component.option("selectedItem");
+        const selectedItem = selectionChangedEvent.component.option('selectedItem');
         const variableData = extend({}, {
             value: selectedItem,
             escapeChar: this.options.escapeChar
         });
 
         setTimeout(function() {
-            this.quill.insertEmbed(caretPosition, "variable", variableData);
+            this.quill.insertEmbed(caretPosition, 'variable', variableData);
             this.quill.setSelection(caretPosition + 1);
         }.bind(this));
     }

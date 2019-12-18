@@ -1,4 +1,4 @@
-import { isObject } from "./type";
+import { isObject } from './type';
 
 var getKeyWrapper = function(item, getKey) {
     var key = getKey(item);
@@ -44,7 +44,7 @@ export const findChanges = function(oldItems, newItems, getKey, isItemEquals) {
         if(isRemoved) {
             if(nextOldItem) {
                 result.push({
-                    type: "remove",
+                    type: 'remove',
                     key: getKey(nextOldItem),
                     index: index,
                     oldItem: nextOldItem
@@ -59,14 +59,14 @@ export const findChanges = function(oldItems, newItems, getKey, isItemEquals) {
             if(!oldItem) {
                 addedCount++;
                 result.push({
-                    type: "insert",
+                    type: 'insert',
                     data: newItem,
                     index: index
                 });
             } else if(oldIndex === oldNextIndex) {
                 if(!isItemEquals(oldItem, newItem)) {
                     result.push({
-                        type: "update",
+                        type: 'update',
                         data: newItem,
                         key: getKey(newItem),
                         index: index,

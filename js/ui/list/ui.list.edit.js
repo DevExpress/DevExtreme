@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import { isTouchEvent } from "../../events/utils";
-import { extend } from "../../core/utils/extend";
-import GroupedEditStrategy from "./ui.list.edit.strategy.grouped";
-import { format as formatMessage } from "../../localization/message";
-import EditProvider from "./ui.list.edit.provider";
-import ListBase from "./ui.list.base";
+import $ from '../../core/renderer';
+import { isTouchEvent } from '../../events/utils';
+import { extend } from '../../core/utils/extend';
+import GroupedEditStrategy from './ui.list.edit.strategy.grouped';
+import { format as formatMessage } from '../../localization/message';
+import EditProvider from './ui.list.edit.provider';
+import ListBase from './ui.list.base';
 
-const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
-const LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
 
 const ListEdit = ListBase.inherit({
     _supportedKeys() {
@@ -15,15 +15,15 @@ const ListEdit = ListBase.inherit({
         const parent = this.callBase();
 
         const deleteFocusedItem = e => {
-            if(that.option("allowItemDeleting")) {
+            if(that.option('allowItemDeleting')) {
                 e.preventDefault();
-                that.deleteItem(that.option("focusedElement"));
+                that.deleteItem(that.option('focusedElement'));
             }
         };
 
         const moveFocusedItem = (e, moveUp) => {
             const editStrategy = this._editStrategy;
-            const focusedElement = this.option("focusedElement");
+            const focusedElement = this.option('focusedElement');
             const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
             const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
 
@@ -31,7 +31,7 @@ const ListEdit = ListBase.inherit({
                 return;
             }
 
-            if(e.shiftKey && that.option("itemDragging.allowReordering")) {
+            if(e.shiftKey && that.option('itemDragging.allowReordering')) {
                 const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
                 const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
@@ -92,7 +92,7 @@ const ListEdit = ListBase.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            allowItemReordering: { since: "19.2", alias: "itemDragging.allowReordering" }
+            allowItemReordering: { since: '19.2', alias: 'itemDragging.allowReordering' }
         });
     },
 
@@ -135,7 +135,7 @@ const ListEdit = ListBase.inherit({
             * @default "Select All"
             * @hidden
             */
-            selectAllText: formatMessage("dxList-selectAll"),
+            selectAllText: formatMessage('dxList-selectAll'),
 
             /**
             * @name dxListOptions.menuItems
@@ -159,7 +159,7 @@ const ListEdit = ListBase.inherit({
             * @type Enums.ListMenuMode
             * @default 'context'
             */
-            menuMode: "context",
+            menuMode: 'context',
 
             /**
             * @name dxListOptions.allowItemDeleting
@@ -173,7 +173,7 @@ const ListEdit = ListBase.inherit({
             * @type Enums.ListItemDeleteMode
              * @default 'static'
             */
-            itemDeleteMode: "static",
+            itemDeleteMode: 'static',
 
             /**
             * @name dxListOptions.allowItemReordering
@@ -233,29 +233,29 @@ const ListEdit = ListBase.inherit({
     _defaultOptionsRules() {
         return this.callBase().concat([
             {
-                device: device => device.platform === "ios",
+                device: device => device.platform === 'ios',
                 options: {
                     /**
                     * @name dxListOptions.menuMode
                     * @default 'slide' @for iOS
                     */
-                    menuMode: "slide",
+                    menuMode: 'slide',
 
                     /**
                     * @name dxListOptions.itemDeleteMode
                     * @default 'slideItem' @for iOS
                     */
-                    itemDeleteMode: "slideItem"
+                    itemDeleteMode: 'slideItem'
                 }
             },
             {
-                device: { platform: "android" },
+                device: { platform: 'android' },
                 options: {
                     /**
                     * @name dxListOptions.itemDeleteMode
                     * @default 'swipe' @for Android
                     */
-                    itemDeleteMode: "swipe"
+                    itemDeleteMode: 'swipe'
                 }
             }
         ]);
@@ -275,7 +275,7 @@ const ListEdit = ListBase.inherit({
     },
 
     _isPageSelectAll() {
-        return this.option("selectAllMode") === "page";
+        return this.option('selectAllMode') === 'page';
     },
 
     _initEditProvider() {
@@ -294,7 +294,7 @@ const ListEdit = ListBase.inherit({
     },
 
     _initEditStrategy() {
-        if(this.option("grouped")) {
+        if(this.option('grouped')) {
             this._editStrategy = new GroupedEditStrategy(this);
         } else {
             this.callBase();
@@ -321,7 +321,7 @@ const ListEdit = ListBase.inherit({
 
     _itemClickHandler(e) {
         const $itemElement = $(e.currentTarget);
-        if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             return;
         }
 
@@ -339,7 +339,7 @@ const ListEdit = ListBase.inherit({
 
     _itemHoldHandler(e) {
         const $itemElement = $(e.currentTarget);
-        if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             return;
         }
 
@@ -354,7 +354,7 @@ const ListEdit = ListBase.inherit({
 
     _itemContextMenuHandler(e) {
         const $itemElement = $(e.currentTarget);
-        if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             return;
         }
 
@@ -380,35 +380,35 @@ const ListEdit = ListBase.inherit({
     focusListItem(index) {
         const $item = this._editStrategy.getItemElement(index);
 
-        this.option("focusedElement", $item);
+        this.option('focusedElement', $item);
         this.focus();
-        this.scrollToItem(this.option("focusedElement"));
+        this.scrollToItem(this.option('focusedElement'));
     },
 
     _optionChanged(args) {
         switch(args.name) {
-            case "selectAllMode":
+            case 'selectAllMode':
                 this._initDataSource();
                 this._dataSource.pageIndex(0);
                 this._dataSource.load();
                 break;
-            case "grouped":
+            case 'grouped':
                 this._clearSelectedItems();
                 delete this._renderingGroupIndex;
                 this._initEditStrategy();
                 this.callBase(args);
                 break;
-            case "showSelectionControls":
-            case "menuItems":
-            case "menuMode":
-            case "allowItemDeleting":
-            case "itemDeleteMode":
-            case "allowItemReordering":
-            case "itemDragging":
-            case "selectAllText":
+            case 'showSelectionControls':
+            case 'menuItems':
+            case 'menuMode':
+            case 'allowItemDeleting':
+            case 'itemDeleteMode':
+            case 'allowItemReordering':
+            case 'itemDragging':
+            case 'selectAllText':
                 this._invalidate();
                 break;
-            case "onSelectAllValueChanged":
+            case 'onSelectAllValueChanged':
                 break;
             default:
                 this.callBase(args);

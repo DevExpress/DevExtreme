@@ -1,1 +1,1 @@
-require("./htmlEditorParts/importTurnDown.tests.js");
+require('./htmlEditorParts/importTurnDown.tests.js');

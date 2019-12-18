@@ -1,22 +1,22 @@
-var mathUtils = require("../core/utils/math"),
-    iteratorUtils = require("../core/utils/iterator"),
-    errors = require("../core/errors"),
-    eventUtils = require("./utils"),
-    Emitter = require("./core/emitter"),
-    registerEmitter = require("./core/emitter_registrator");
+var mathUtils = require('../core/utils/math'),
+    iteratorUtils = require('../core/utils/iterator'),
+    errors = require('../core/errors'),
+    eventUtils = require('./utils'),
+    Emitter = require('./core/emitter'),
+    registerEmitter = require('./core/emitter_registrator');
 
 
-var DX_PREFIX = "dx",
+var DX_PREFIX = 'dx',
 
-    TRANSFORM = "transform",
-    TRANSLATE = "translate",
-    ZOOM = "zoom",
-    PINCH = "pinch",
-    ROTATE = "rotate",
+    TRANSFORM = 'transform',
+    TRANSLATE = 'translate',
+    ZOOM = 'zoom',
+    PINCH = 'pinch',
+    ROTATE = 'rotate',
 
-    START_POSTFIX = "start",
-    UPDATE_POSTFIX = "",
-    END_POSTFIX = "end";
+    START_POSTFIX = 'start',
+    UPDATE_POSTFIX = '',
+    END_POSTFIX = 'end';
 
 
 var eventAliases = [];
@@ -105,7 +105,7 @@ var TransformEmitter = Emitter.inherit({
 
     configure: function(data, eventName) {
         if(eventName.indexOf(ZOOM) > -1) {
-            errors.log("W0005", eventName, "15.1", "Use '" + eventName.replace(ZOOM, PINCH) + "' event instead");
+            errors.log('W0005', eventName, '15.1', 'Use \'' + eventName.replace(ZOOM, PINCH) + '\' event instead');
         }
 
         this.callBase(data);

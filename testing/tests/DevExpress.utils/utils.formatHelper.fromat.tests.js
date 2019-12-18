@@ -1,24 +1,24 @@
 // TODO: Move this tests to localization module
 
-require("../../helpers/l10n/cldrNumberDataRu.js");
-require("../../helpers/l10n/cldrCurrencyDataRu.js");
-require("../../helpers/l10n/cldrCurrencyDataEn.js");
+require('../../helpers/l10n/cldrNumberDataRu.js');
+require('../../helpers/l10n/cldrCurrencyDataRu.js');
+require('../../helpers/l10n/cldrCurrencyDataEn.js');
 
-require("localization/globalize/core");
-require("localization/globalize/number");
-require("localization/globalize/currency");
-require("localization/globalize/date");
-require("localization/globalize/message");
+require('localization/globalize/core');
+require('localization/globalize/number');
+require('localization/globalize/currency');
+require('localization/globalize/date');
+require('localization/globalize/message');
 
-var Globalize = require("globalize");
+var Globalize = require('globalize');
 
 var NBSP = String.fromCharCode(160),
     RUB = String.fromCharCode(8381);
 
-var noop = require("core/utils/common").noop,
-    formatHelper = require("format_helper"),
-    browser = require("core/utils/browser"),
-    dateUtils = require("core/utils/date");
+var noop = require('core/utils/common').noop,
+    formatHelper = require('format_helper'),
+    browser = require('core/utils/browser'),
+    dateUtils = require('core/utils/date');
 
 QUnit.module('Numeric and dateTime formats', {
     beforeEach: function() {
@@ -34,11 +34,11 @@ QUnit.test('Currency numeric formats', function(assert) {
 QUnit.test('currency RUB large number format with different locales', function(assert) {
     var currentCultureName = Globalize.locale().locale;
 
-    assert.equal(formatHelper.format(1.204, { type: 'currency', precision: 2, currency: 'RUB' }), "RUB" + NBSP + "1.20");
+    assert.equal(formatHelper.format(1.204, { type: 'currency', precision: 2, currency: 'RUB' }), 'RUB' + NBSP + '1.20');
 
-    Globalize.locale("ru");
+    Globalize.locale('ru');
     try {
-        assert.equal(formatHelper.format(1.204, { type: 'currency', precision: 2, currency: 'RUB' }), "1,20" + NBSP + RUB);
+        assert.equal(formatHelper.format(1.204, { type: 'currency', precision: 2, currency: 'RUB' }), '1,20' + NBSP + RUB);
     } finally {
         Globalize.locale(currentCultureName);
     }
@@ -185,7 +185,7 @@ QUnit.test('Short Year date time interval format', function(assert) {
 
 function isIosWithMSKTimeZone() {
     var isIos = navigator.userAgent.indexOf('Mac OS X') > -1 && browser['webkit'],
-        hasMSKTimeZone = new Date().toString().indexOf("MSK") > -1;
+        hasMSKTimeZone = new Date().toString().indexOf('MSK') > -1;
 
     return isIos && hasMSKTimeZone;
 }
@@ -404,16 +404,16 @@ QUnit.test('exponential number type positive and negative number', function(asse
 
 QUnit.module('formatNumberEx');
 
-QUnit.test("not execute formatNumberEx for non-number value", function(assert) {
+QUnit.test('not execute formatNumberEx for non-number value', function(assert) {
     assert.equal(formatHelper.format('test string', { format: 'currency' }), 'test string');
 });
 
-QUnit.test("not execute formatNumberEx for infinite value", function(assert) {
+QUnit.test('not execute formatNumberEx for infinite value', function(assert) {
     assert.equal(formatHelper.format(Infinity, { format: 'fixedPoint' }), Infinity.toString());
     assert.equal(formatHelper.format(-Infinity, { format: 'fixedPoint' }), (-Infinity).toString());
 });
 
-QUnit.test("not execute formatNumberEx for NaN value", function(assert) {
+QUnit.test('not execute formatNumberEx for NaN value', function(assert) {
     assert.equal(formatHelper.format(NaN, { format: 'fixedPoint' }), NaN.toString());
 });
 
@@ -423,14 +423,14 @@ QUnit.test('Case insensitive currency', function(assert) {
     assert.equal(formatHelper.format(1204, { type: 'cuRrency', precision: 2 }), '$1,204.00');
 });
 
-QUnit.test("not execute formatNumberEx for string with set format", function(assert) {
+QUnit.test('not execute formatNumberEx for string with set format', function(assert) {
     /* eslint-disable no-extend-native */
 
     // arrange
     String.prototype.format = noop;
 
     // assert
-    assert.equal(formatHelper.format(123, "currency"), "$123");
+    assert.equal(formatHelper.format(123, 'currency'), '$123');
 
     // cleanup
     delete String.prototype.format;

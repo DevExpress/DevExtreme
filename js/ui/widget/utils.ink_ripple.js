@@ -1,8 +1,8 @@
-var $ = require("../../core/renderer");
-var INKRIPPLE_CLASS = "dx-inkripple",
-    INKRIPPLE_WAVE_CLASS = "dx-inkripple-wave",
-    INKRIPPLE_SHOWING_CLASS = "dx-inkripple-showing",
-    INKRIPPLE_HIDING_CLASS = "dx-inkripple-hiding";
+var $ = require('../../core/renderer');
+var INKRIPPLE_CLASS = 'dx-inkripple',
+    INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave',
+    INKRIPPLE_SHOWING_CLASS = 'dx-inkripple-showing',
+    INKRIPPLE_HIDING_CLASS = 'dx-inkripple-hiding';
 
 var DEFAULT_WAVE_SIZE_COEFFICIENT = 2,
     MAX_WAVE_SIZE = 4000, // NOTE: incorrect scaling of ink with big size (T310238)
@@ -31,10 +31,10 @@ var render = function(args) {
 };
 
 var getInkRipple = function(element) {
-    var result = element.children("." + INKRIPPLE_CLASS);
+    var result = element.children('.' + INKRIPPLE_CLASS);
 
     if(result.length === 0) {
-        result = $("<div>")
+        result = $('<div>')
             .addClass(INKRIPPLE_CLASS)
             .appendTo(element);
     }
@@ -44,10 +44,10 @@ var getInkRipple = function(element) {
 
 var getWaves = function(element, wavesNumber) {
     var inkRipple = getInkRipple(element),
-        result = inkRipple.children("." + INKRIPPLE_WAVE_CLASS).toArray();
+        result = inkRipple.children('.' + INKRIPPLE_WAVE_CLASS).toArray();
 
     for(var i = result.length; i < wavesNumber; i++) {
-        var $currentWave = $("<div>")
+        var $currentWave = $('<div>')
             .appendTo(inkRipple)
             .addClass(INKRIPPLE_WAVE_CLASS);
 
@@ -97,11 +97,11 @@ var showWave = function(args, config) {
 };
 
 var showingWaveHandler = function(args, $wave) {
-    var durationCss = args.durations.showingScale + "ms";
+    var durationCss = args.durations.showingScale + 'ms';
 
     $wave
         .addClass(INKRIPPLE_SHOWING_CLASS)
-        .css("transitionDuration", durationCss);
+        .css('transitionDuration', durationCss);
 };
 
 var getDurations = function(useHoldAnimation) {
@@ -115,7 +115,7 @@ var getDurations = function(useHoldAnimation) {
 var hideSelectedWave = function($wave) {
     $wave
         .removeClass(INKRIPPLE_HIDING_CLASS)
-        .css("transitionDuration", "");
+        .css('transitionDuration', '');
 };
 
 var hideWave = function(args, config) {
@@ -123,12 +123,12 @@ var hideWave = function(args, config) {
 
     var $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX),
         durations = args.durations,
-        durationCss = durations.hidingScale + "ms, " + durations.hidingOpacity + "ms";
+        durationCss = durations.hidingScale + 'ms, ' + durations.hidingOpacity + 'ms';
 
     $wave
         .addClass(INKRIPPLE_HIDING_CLASS)
         .removeClass(INKRIPPLE_SHOWING_CLASS)
-        .css("transitionDuration", durationCss);
+        .css('transitionDuration', durationCss);
 
     var animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
     args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);

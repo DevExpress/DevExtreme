@@ -1,4 +1,4 @@
-var Translator1D = require("viz/translators/translator1d").Translator1D;
+var Translator1D = require('viz/translators/translator1d').Translator1D;
 
 var EPSILON = 1E-8;
 

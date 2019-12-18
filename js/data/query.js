@@ -1,5 +1,5 @@
-var arrayQueryImpl = require("./array_query"),
-    remoteQueryImpl = require("./remote_query");
+var arrayQueryImpl = require('./array_query'),
+    remoteQueryImpl = require('./remote_query');
 
 var queryImpl = {
     array: arrayQueryImpl,
@@ -26,7 +26,7 @@ var queryImpl = {
 * @export default
 */
 var query = function() {
-    var impl = Array.isArray(arguments[0]) ? "array" : "remote";
+    var impl = Array.isArray(arguments[0]) ? 'array' : 'remote';
     return queryImpl[impl].apply(this, arguments);
 };
 /**

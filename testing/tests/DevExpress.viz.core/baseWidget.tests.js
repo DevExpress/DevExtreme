@@ -1,28 +1,28 @@
 /* global currentTest */
 
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    version = require("core/version"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    registerComponent = require("core/component_registrator"),
-    logger = require("core/utils/console").logger,
-    errors = require("viz/core/errors_warnings"),
-    BaseWidget = require("viz/core/base_widget"),
-    BaseThemeManager = require("viz/core/base_theme_manager").BaseThemeManager,
-    rendererModule = require("viz/core/renderers/renderer"),
+var $ = require('jquery'),
+    renderer = require('core/renderer'),
+    version = require('core/version'),
+    resizeCallbacks = require('core/utils/resize_callbacks'),
+    registerComponent = require('core/component_registrator'),
+    logger = require('core/utils/console').logger,
+    errors = require('viz/core/errors_warnings'),
+    BaseWidget = require('viz/core/base_widget'),
+    BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager,
+    rendererModule = require('viz/core/renderers/renderer'),
     dxBaseWidgetTester,
     StubThemeManager,
     StubTitle,
-    vizMocks = require("../../helpers/vizMocks.js");
+    vizMocks = require('../../helpers/vizMocks.js');
 
 // TODO: Move export tests to a separate file
-require("viz/core/export");
+require('viz/core/export');
 
 QUnit.testStart(function() {
     var markup =
         '<div id="container"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 QUnit.begin(function() {
@@ -30,8 +30,8 @@ QUnit.begin(function() {
     StubTitle = vizMocks.Title;
     dxBaseWidgetTester = BaseWidget.inherit({
         NAME: 'dxBaseWidgetTester',
-        _rootClassPrefix: "_rootClassPrefix",
-        _rootClass: "_rootClass",
+        _rootClassPrefix: '_rootClassPrefix',
+        _rootClass: '_rootClass',
         _eventsMap: $.extend({}, BaseWidget.prototype._eventsMap, {
             'onTestEvent': { name: 'testEvent' }
         }),
@@ -42,7 +42,7 @@ QUnit.begin(function() {
         _applySize: vizMocks.environmentMethodInvoker('onApplySize'),
         _clean: vizMocks.environmentMethodInvoker('onClean'),
         _render: vizMocks.environmentMethodInvoker('onRender'),
-        _createThemeManager: vizMocks.environmentMethodInvoker("onCreateThemeManager"),
+        _createThemeManager: vizMocks.environmentMethodInvoker('onCreateThemeManager'),
         // _handleThemeOptionsCore: vizMocks.environmentMethodInvoker("onHandleThemeOptionsCore")
     });
 
@@ -82,24 +82,24 @@ var environment = {
     }
 };
 
-QUnit.module("Common", environment);
+QUnit.module('Common', environment);
 
-QUnit.test("Renderer creation", function(assert) {
-    this.createWidget({ pathModified: "pathModified-option" });
+QUnit.test('Renderer creation', function(assert) {
+    this.createWidget({ pathModified: 'pathModified-option' });
 
     assert.deepEqual(rendererModule.Renderer.lastCall.args, [{
-        cssClass: "_rootClassPrefix _rootClass",
-        pathModified: "pathModified-option",
+        cssClass: '_rootClassPrefix _rootClass',
+        pathModified: 'pathModified-option',
         container: this.$container[0]
-    }], "renderer is created");
-    assert.deepEqual(this.renderer.root.enableLinks.lastCall.args, [], "links are enabled");
-    assert.deepEqual(this.renderer.root.virtualLink.getCall(0).args, ["core"], "main");
-    assert.deepEqual(this.renderer.root.virtualLink.getCall(1).args, ["peripheral"], "peripheral");
-    assert.deepEqual(this.renderer.root.linkAfter.getCall(0).args, ["core"], "linkAfter is set");
-    assert.deepEqual(this.renderer.root.linkAfter.getCall(1).args, [], "linkAfter is reset");
+    }], 'renderer is created');
+    assert.deepEqual(this.renderer.root.enableLinks.lastCall.args, [], 'links are enabled');
+    assert.deepEqual(this.renderer.root.virtualLink.getCall(0).args, ['core'], 'main');
+    assert.deepEqual(this.renderer.root.virtualLink.getCall(1).args, ['peripheral'], 'peripheral');
+    assert.deepEqual(this.renderer.root.linkAfter.getCall(0).args, ['core'], 'linkAfter is set');
+    assert.deepEqual(this.renderer.root.linkAfter.getCall(1).args, [], 'linkAfter is reset');
 });
 
-QUnit.test("sizes of widget are float numbers", function(assert) {
+QUnit.test('sizes of widget are float numbers', function(assert) {
     this.createWidget({
         size: {
             width: 100.3,
@@ -110,38 +110,38 @@ QUnit.test("sizes of widget are float numbers", function(assert) {
     assert.deepEqual(this.renderer.resize.lastCall.args, [100, 100]);
 });
 
-QUnit.test("Renderer destruction", function(assert) {
+QUnit.test('Renderer destruction', function(assert) {
     this.createWidget();
 
     this.$container.remove();
 
     assert.deepEqual(this.renderer.dispose.lastCall.args, [], 'renderer is destroyed');
-    assert.deepEqual(this.renderer.root.checkLinks.lastCall.args, [], "links are checked");
+    assert.deepEqual(this.renderer.root.checkLinks.lastCall.args, [], 'links are checked');
 });
 
-QUnit.test("Theme manager creation", function(assert) {
+QUnit.test('Theme manager creation', function(assert) {
     this.createWidget({
-        theme: "theme",
-        rtlEnabled: "rtl"
+        theme: 'theme',
+        rtlEnabled: 'rtl'
     });
 
-    assert.strictEqual(typeof this.themeManager.setCallback.lastCall.args[0], "function", "callback");
-    assert.deepEqual(this.themeManager.setTheme.lastCall.args, ["theme", "rtl"]);
+    assert.strictEqual(typeof this.themeManager.setCallback.lastCall.args[0], 'function', 'callback');
+    assert.deepEqual(this.themeManager.setTheme.lastCall.args, ['theme', 'rtl']);
 });
 
-QUnit.test("Theme manager destruction", function(assert) {
+QUnit.test('Theme manager destruction', function(assert) {
     this.createWidget();
     this.$container.remove();
 
     assert.deepEqual(this.themeManager.dispose.lastCall.args, []);
 });
 
-QUnit.test("Theme manager callback", function(assert) {
-    this.onGetAnimationOptions = function() { return "animation-option"; };
+QUnit.test('Theme manager callback', function(assert) {
+    this.onGetAnimationOptions = function() { return 'animation-option'; };
     // this.onHandleThemeOptionsCore = sinon.spy();
     this.createWidget({
-        rtlEnabled: "rtl-enabled-option",
-        encodeHtml: "encode-html-option"
+        rtlEnabled: 'rtl-enabled-option',
+        encodeHtml: 'encode-html-option'
     });
     this.renderer.lock.reset();
     this.renderer.unlock.reset();
@@ -149,10 +149,10 @@ QUnit.test("Theme manager callback", function(assert) {
     this.themeManager.setCallback.lastCall.args[0]();
 
     assert.deepEqual(this.renderer.setOptions.lastCall.args, [{
-        animation: "animation-option",
-        rtl: "rtl-enabled-option",
-        encodeHtml: "encode-html-option"
-    }], "renderer animation options");
+        animation: 'animation-option',
+        rtl: 'rtl-enabled-option',
+        encodeHtml: 'encode-html-option'
+    }], 'renderer animation options');
 
     // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
     // assert.ok(this.renderer.lock.firstCall.calledBefore(this.title.update.lastCall), "renderer is locked");
@@ -198,28 +198,28 @@ QUnit.test('T489065. Calls of begin/endUpdate during changes applying are safe',
     assert.strictEqual(callback.callCount, 1, 'callback is called');
 });
 
-QUnit.module("Option changing - mechanism", environment);
+QUnit.module('Option changing - mechanism', environment);
 
-QUnit.test("Handler is called once for all options", function(assert) {
+QUnit.test('Handler is called once for all options', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, "_applyChanges");
+    var spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.option({
         encodeHtml: true,
         redrawOnResize: false
     });
 
-    assert.strictEqual(spy.callCount, 1, "call count");
+    assert.strictEqual(spy.callCount, 1, 'call count');
 });
 
-QUnit.test("Handler is called on endUpdate", function(assert) {
+QUnit.test('Handler is called on endUpdate', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, "_applyChanges");
+    var spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.beginUpdate();
-    this.widget.option("title", {});
+    this.widget.option('title', {});
 
-    assert.strictEqual(spy.lastCall, null, "not called on option change");
+    assert.strictEqual(spy.lastCall, null, 'not called on option change');
 
     this.widget.option({
         tooltip: {}
@@ -228,19 +228,19 @@ QUnit.test("Handler is called on endUpdate", function(assert) {
     this.widget.option({
         loadingIndicator: {}
     });
-    this.widget.option("theme", 100);
+    this.widget.option('theme', 100);
     this.widget.endUpdate();
 
-    assert.strictEqual(spy.lastCall, null, "not called on `endUpdate` because of second `beginUpdate`");
+    assert.strictEqual(spy.lastCall, null, 'not called on `endUpdate` because of second `beginUpdate`');
 
     this.widget.endUpdate();
 
-    assert.strictEqual(spy.callCount, 1, "call count");
+    assert.strictEqual(spy.callCount, 1, 'call count');
 });
 
-QUnit.test("Handler is not called if there are no changed options", function(assert) {
+QUnit.test('Handler is not called if there are no changed options', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, "_applyChanges");
+    var spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.beginUpdate();
     this.widget.endUpdate();
@@ -248,66 +248,66 @@ QUnit.test("Handler is not called if there are no changed options", function(ass
     assert.strictEqual(spy.lastCall, null);
 });
 
-QUnit.test("Handler is called inside the renderer lock", function(assert) {
+QUnit.test('Handler is called inside the renderer lock', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, "_applyChanges");
+    var spy = sinon.spy(this.widget, '_applyChanges');
 
-    this.widget.option("encodeHtml", false);
+    this.widget.option('encodeHtml', false);
 
     assert.ok(this.renderer.lock.lastCall.calledBefore(spy.lastCall) && this.renderer.unlock.lastCall.calledAfter(spy.lastCall));
 });
 
 // T318992
-QUnit.test("Another handler is called if option is changed inside the handler", function(assert) {
+QUnit.test('Another handler is called if option is changed inside the handler', function(assert) {
     this.createWidget();
     var lock = false,
-        spy = sinon.stub(this.widget, "_applyChanges", function(options) {
+        spy = sinon.stub(this.widget, '_applyChanges', function(options) {
             if(!lock) {
                 lock = true;
-                this.option("rtlEnabled", "rtl-enabled");
+                this.option('rtlEnabled', 'rtl-enabled');
             } else {
-                assert.deepEqual(this.option("rtlEnabled"), "rtl-enabled", "changed option");
+                assert.deepEqual(this.option('rtlEnabled'), 'rtl-enabled', 'changed option');
             }
         });
 
-    this.widget.option("encodeHtml", false);
+    this.widget.option('encodeHtml', false);
 
-    assert.strictEqual(spy.callCount, 2, "call count");
+    assert.strictEqual(spy.callCount, 2, 'call count');
 });
 
-QUnit.module("Option changing", environment);
+QUnit.module('Option changing', environment);
 
-QUnit.test("theme", function(assert) {
-    this.createWidget({ rtlEnabled: "rtl" });
+QUnit.test('theme', function(assert) {
+    this.createWidget({ rtlEnabled: 'rtl' });
 
-    this.widget.option({ theme: "theme" });
+    this.widget.option({ theme: 'theme' });
 
-    assert.deepEqual(this.themeManager.setTheme.lastCall.args, ["theme", "rtl"], "theme manager is called");
+    assert.deepEqual(this.themeManager.setTheme.lastCall.args, ['theme', 'rtl'], 'theme manager is called');
 });
 
-QUnit.test("rtlEnabled", function(assert) {
-    this.createWidget({ theme: "theme" });
+QUnit.test('rtlEnabled', function(assert) {
+    this.createWidget({ theme: 'theme' });
 
-    this.widget.option({ rtlEnabled: "rtl" });
+    this.widget.option({ rtlEnabled: 'rtl' });
 
-    assert.deepEqual(this.themeManager.setTheme.lastCall.args, ["theme", "rtl"], "theme manager is called");
+    assert.deepEqual(this.themeManager.setTheme.lastCall.args, ['theme', 'rtl'], 'theme manager is called');
 });
 
-QUnit.test("encodeHtml", function(assert) {
-    this.onGetAnimationOptions = function() { return "animation-option"; };
+QUnit.test('encodeHtml', function(assert) {
+    this.onGetAnimationOptions = function() { return 'animation-option'; };
     // this.onHandleThemeOptionsCore = sinon.spy();
     this.createWidget({
-        rtlEnabled: "rtl-enabled-option",
-        pathModified: "path-modified-option"
+        rtlEnabled: 'rtl-enabled-option',
+        pathModified: 'path-modified-option'
     });
-    this.widget.option({ encodeHtml: "encode-html-option" });
+    this.widget.option({ encodeHtml: 'encode-html-option' });
     this.themeManager.setCallback.lastCall.args[0]();
 
     assert.deepEqual(this.renderer.setOptions.lastCall.args, [{
-        animation: "animation-option",
-        rtl: "rtl-enabled-option",
-        encodeHtml: "encode-html-option"
-    }], "renderer animation options");
+        animation: 'animation-option',
+        rtl: 'rtl-enabled-option',
+        encodeHtml: 'encode-html-option'
+    }], 'renderer animation options');
     // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
 });
 
@@ -321,22 +321,22 @@ QUnit.test("encodeHtml", function(assert) {
 //    assert.deepEqual(spy.lastCall.args, []);
 // });
 
-QUnit.test("Unknown option", function(assert) {
+QUnit.test('Unknown option', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, "_invalidate");
+    var spy = sinon.spy(this.widget, '_invalidate');
 
-    this.widget.option("test-option", "test-value");
+    this.widget.option('test-option', 'test-value');
 
     assert.strictEqual(spy.lastCall, null);
 });
 
-QUnit.module("ElementAttr support", $.extend({}, environment, {
+QUnit.module('ElementAttr support', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        $("head").append($("<style type='text/css' id='size-style'>" + ".size-class{width:300px;height:300px;}" + "</style>"));
+        $('head').append($('<style type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
     },
     afterEach: function() {
-        $("#size-style").remove();
+        $('#size-style').remove();
         environment.afterEach.apply(this, arguments);
     },
     createContainer: function() {
@@ -344,30 +344,30 @@ QUnit.module("ElementAttr support", $.extend({}, environment, {
     }
 }));
 
-QUnit.test("Set on creation", function(assert) {
-    this.createWidget({ elementAttr: { someAttr: "attr" } });
+QUnit.test('Set on creation', function(assert) {
+    this.createWidget({ elementAttr: { someAttr: 'attr' } });
 
-    assert.strictEqual(this.$container.attr("someAttr"), "attr");
+    assert.strictEqual(this.$container.attr('someAttr'), 'attr');
 });
 
-QUnit.test("Change option", function(assert) {
-    this.createWidget({ elementAttr: { class: "some-class", someAttr: "attr" } });
+QUnit.test('Change option', function(assert) {
+    this.createWidget({ elementAttr: { class: 'some-class', someAttr: 'attr' } });
 
-    this.widget.option("elementAttr", { someNewAttr: "newAttr" });
+    this.widget.option('elementAttr', { someNewAttr: 'newAttr' });
 
-    assert.strictEqual(this.$container.attr("someNewAttr"), "newAttr");
+    assert.strictEqual(this.$container.attr('someNewAttr'), 'newAttr');
 });
 
-QUnit.test("get sizes from style on creation", function(assert) {
-    this.createWidget({ elementAttr: { class: "size-class" } });
+QUnit.test('get sizes from style on creation', function(assert) {
+    this.createWidget({ elementAttr: { class: 'size-class' } });
 
     assert.deepEqual(this.renderer.resize.lastCall.args, [300, 300]);
 });
 
-QUnit.test("get sizes from style on option changing", function(assert) {
+QUnit.test('get sizes from style on option changing', function(assert) {
     this.createWidget({});
 
-    this.widget.option("elementAttr", { class: "size-class" });
+    this.widget.option('elementAttr', { class: 'size-class' });
 
     assert.deepEqual(this.renderer.resize.lastCall.args, [300, 300]);
 });
@@ -377,12 +377,12 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
         var test = this;
         environment.beforeEach.apply(test, arguments);
         test.spies = [
-            "onInitCore",
-            "onGetDefaultSize",
-            "onApplySize",
-            "onClean",
-            "onRender",
-            "onDisposeCore"
+            'onInitCore',
+            'onGetDefaultSize',
+            'onApplySize',
+            'onClean',
+            'onRender',
+            'onDisposeCore'
         ];
         $.each(test.spies, function(_, name) {
             test[name] = sinon.spy();
@@ -406,7 +406,7 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
         $.each(test.spies, function(_, name) {
             test[name].reset();
         });
-        this.renderer.stub("resize").reset();
+        this.renderer.stub('resize').reset();
     },
     checkResized: function(assert) {
         this.checkOrder(assert, [
@@ -414,15 +414,15 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
             this.renderer.resize.lastCall,
             this.onApplySize.lastCall
         ]);
-        assert.strictEqual(this.onClean.callCount, 0, "not cleaned");
-        assert.strictEqual(this.onRender.callCount, 0, "not rendered");
+        assert.strictEqual(this.onClean.callCount, 0, 'not cleaned');
+        assert.strictEqual(this.onRender.callCount, 0, 'not rendered');
     },
     checkNotResized: function(assert) {
-        assert.strictEqual(this.onGetDefaultSize.callCount, 1, "default size");
-        assert.strictEqual(this.renderer.resize.callCount, 0, "renderer is not resized");
-        assert.strictEqual(this.onApplySize.callCount, 0, "size is not applied");
-        assert.strictEqual(this.onClean.callCount, 0, "not cleaned");
-        assert.strictEqual(this.onRender.callCount, 0, "not rendered");
+        assert.strictEqual(this.onGetDefaultSize.callCount, 1, 'default size');
+        assert.strictEqual(this.renderer.resize.callCount, 0, 'renderer is not resized');
+        assert.strictEqual(this.onApplySize.callCount, 0, 'size is not applied');
+        assert.strictEqual(this.onClean.callCount, 0, 'not cleaned');
+        assert.strictEqual(this.onRender.callCount, 0, 'not rendered');
     }
 }));
 
@@ -713,7 +713,7 @@ QUnit.test('size and margin', function(assert) {
 
 QUnit.module('getSize and size manipulations', environment);
 
-QUnit.test("Call render after container is resized", function(assert) {
+QUnit.test('Call render after container is resized', function(assert) {
     this.createWidget();
     this.$container.width(400);
     this.$container.height(300);
@@ -727,7 +727,7 @@ QUnit.test("Call render after container is resized", function(assert) {
     assert.equal(size.height, 300);
 });
 
-QUnit.test("size option changed", function(assert) {
+QUnit.test('size option changed', function(assert) {
     this.createWidget({
         size: {
             width: 500,
@@ -749,7 +749,7 @@ QUnit.test("size option changed", function(assert) {
     assert.equal(size.height, 300);
 });
 
-QUnit.test("size option changed with initial size. negative width", function(assert) {
+QUnit.test('size option changed with initial size. negative width', function(assert) {
     this.$container.width(200);
     this.$container.height(200);
     this.createWidget({
@@ -773,7 +773,7 @@ QUnit.test("size option changed with initial size. negative width", function(ass
     assert.equal(size.height, 0);
 });
 
-QUnit.test("size option changed with initial size. negative height", function(assert) {
+QUnit.test('size option changed with initial size. negative height', function(assert) {
     this.$container.width(200);
     this.$container.height(200);
     this.createWidget({
@@ -797,7 +797,7 @@ QUnit.test("size option changed with initial size. negative height", function(as
     assert.equal(size.height, 0);
 });
 
-QUnit.test("size option changed with container size. negative height", function(assert) {
+QUnit.test('size option changed with container size. negative height', function(assert) {
     this.$container.width(200);
     this.$container.height(200);
     this.createWidget();
@@ -894,7 +894,7 @@ QUnit.module('Visibility changing', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.createWidget();
-        this.renderStub = sinon.stub(this.widget, "render");
+        this.renderStub = sinon.stub(this.widget, 'render');
     }
 }));
 
@@ -959,7 +959,7 @@ QUnit.test('Call renderer.fixPlacement on container visibility change (show)', f
     assert.strictEqual(this.renderer.fixPlacement.callCount, 2);
 });
 
-QUnit.module("Incident occurred", $.extend({}, environment, {
+QUnit.module('Incident occurred', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.ORIGINAL_MESSAGES = errors.ERROR_MESSAGES;
@@ -968,8 +968,8 @@ QUnit.module("Incident occurred", $.extend({}, environment, {
             E100: 'Templated text 1: {0}, Templated text 2: {1}',
             W100: 'Warning: Templated text 1: {0}, Templated text 2: {1}'
         };
-        this.error = sinon.stub(logger, "error");
-        this.warn = sinon.stub(logger, "warn");
+        this.error = sinon.stub(logger, 'error');
+        this.warn = sinon.stub(logger, 'warn');
     },
     afterEach: function() {
         this.error.restore();
@@ -994,7 +994,7 @@ QUnit.test('suppress default method if there is onIncidentOccurred subscription'
     this.createWidget();
 
     var onIncidentOccurred = sinon.spy();
-    this.widget.on("incidentOccurred", onIncidentOccurred);
+    this.widget.on('incidentOccurred', onIncidentOccurred);
 
     this.triggerIncident('E100');
 
@@ -1012,11 +1012,11 @@ QUnit.test('call with some arguments', function(assert) {
         component: this.widget,
         element: this.widget.element(),
         target: {
-            id: "E100",
-            args: ["argument1", "argument2"],
-            type: "error",
-            text: "Templated text 1: argument1, Templated text 2: argument2",
-            widget: "dxBaseWidgetTester",
+            id: 'E100',
+            args: ['argument1', 'argument2'],
+            type: 'error',
+            text: 'Templated text 1: argument1, Templated text 2: argument2',
+            widget: 'dxBaseWidgetTester',
             version: version
         }
     }]);
@@ -1032,11 +1032,11 @@ QUnit.test('call with some arguments. warning', function(assert) {
         component: this.widget,
         element: this.widget.element(),
         target: {
-            id: "W100",
-            args: ["argument1", "argument2"],
-            type: "warning",
-            text: "Warning: Templated text 1: argument1, Templated text 2: argument2",
-            widget: "dxBaseWidgetTester",
+            id: 'W100',
+            args: ['argument1', 'argument2'],
+            type: 'warning',
+            text: 'Warning: Templated text 1: argument1, Templated text 2: argument2',
+            widget: 'dxBaseWidgetTester',
             version: version
         }
     }]);
@@ -1048,7 +1048,7 @@ QUnit.test('in default output message with url in logger. without arguments', fu
     this.triggerIncident('E100');
 
     assert.ok(this.error.calledOnce);
-    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, "0_1"), 'E100 - Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/E100');
+    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/E100');
 });
 
 QUnit.test('default incidentOccurred show warning', function(assert) {
@@ -1057,7 +1057,7 @@ QUnit.test('default incidentOccurred show warning', function(assert) {
     this.triggerIncident('W100');
 
     assert.ok(this.warn.calledOnce);
-    assert.equal(this.warn.firstCall.args[0].replace(/\d+_\d+/, "0_1"), 'W100 - Warning: Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/W100');
+    assert.equal(this.warn.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'W100 - Warning: Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/W100');
 });
 
 QUnit.test('in default output message with url in logger', function(assert) {
@@ -1066,7 +1066,7 @@ QUnit.test('in default output message with url in logger', function(assert) {
     this.triggerIncident('E100', ['argument1', 'argument2']);
 
     assert.ok(this.error.calledOnce);
-    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, "0_1"), 'E100 - Templated text 1: argument1, Templated text 2: argument2. See:\nhttp://js.devexpress.com/error/0_1/E100');
+    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: argument1, Templated text 2: argument2. See:\nhttp://js.devexpress.com/error/0_1/E100');
 });
 
 QUnit.module('drawn', $.extend({}, environment, {
@@ -1460,43 +1460,43 @@ QUnit.test('get widget markup', function(assert) {
     assert.equal(this.widget.svg(), 'some markup', 'markup, returned from element');
 });
 
-QUnit.module("Disabled", environment);
+QUnit.module('Disabled', environment);
 
-QUnit.test("Create without disabled state", function(assert) {
+QUnit.test('Create without disabled state', function(assert) {
     this.createWidget();
 
-    assert.strictEqual(this.renderer.root.stub("attr").callCount, 1);
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, ["pointer-events"]);
+    assert.strictEqual(this.renderer.root.stub('attr').callCount, 1);
+    assert.deepEqual(this.renderer.root.stub('attr').lastCall.args, ['pointer-events']);
 });
 
-QUnit.test("Create with disabled state", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+QUnit.test('Create with disabled state', function(assert) {
+    sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
     this.createWidget({
         disabled: true
     });
 
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": "none",
-        filter: "grayScaleFilterRef"
+    assert.deepEqual(this.renderer.root.stub('attr').lastCall.args, [{
+        'pointer-events': 'none',
+        filter: 'grayScaleFilterRef'
     }]);
 });
 
-QUnit.test("Set disabled state, initially not disabled", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+QUnit.test('Set disabled state, initially not disabled', function(assert) {
+    sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
     var rs = this.createWidget();
 
     rs.option({
         disabled: true
     });
 
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": "none",
-        filter: "grayScaleFilterRef"
+    assert.deepEqual(this.renderer.root.stub('attr').lastCall.args, [{
+        'pointer-events': 'none',
+        filter: 'grayScaleFilterRef'
     }]);
 });
 
-QUnit.test("Reset disabled state, initially disabled", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+QUnit.test('Reset disabled state, initially disabled', function(assert) {
+    sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
     var rs = this.createWidget({
         disabled: true
     });
@@ -1505,34 +1505,34 @@ QUnit.test("Reset disabled state, initially disabled", function(assert) {
         disabled: false
     });
 
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": 0,
+    assert.deepEqual(this.renderer.root.stub('attr').lastCall.args, [{
+        'pointer-events': 0,
         filter: null
     }]);
 });
 
-QUnit.test("Change disabled option if root has pointer-events attr", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
-    this.renderer.root.attr({ "pointer-events": "some-value" });
+QUnit.test('Change disabled option if root has pointer-events attr', function(assert) {
+    sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
+    this.renderer.root.attr({ 'pointer-events': 'some-value' });
 
     var widget = this.createWidget({
         disabled: true
     });
 
-    widget.option("disabled", false);
+    widget.option('disabled', false);
 
-    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "some-value", filter: null }]);
+    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ 'pointer-events': 'some-value', filter: null }]);
 });
 
-QUnit.test("Change disabled option if root has empty pointer-events attr", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
-    this.renderer.root.attr({ "pointer-events": "" });
+QUnit.test('Change disabled option if root has empty pointer-events attr', function(assert) {
+    sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
+    this.renderer.root.attr({ 'pointer-events': '' });
 
     var widget = this.createWidget({
         disabled: true
     });
 
-    widget.option("disabled", false);
+    widget.option('disabled', false);
 
-    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "", filter: null }]);
+    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ 'pointer-events': '', filter: null }]);
 });

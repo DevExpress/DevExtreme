@@ -1,8 +1,8 @@
-var registerComponent = require("../../../core/component_registrator"),
-    SchedulerTimeline = require("./ui.scheduler.timeline"),
-    dateUtils = require("../../../core/utils/date");
+var registerComponent = require('../../../core/component_registrator'),
+    SchedulerTimeline = require('./ui.scheduler.timeline'),
+    dateUtils = require('../../../core/utils/date');
 
-var TIMELINE_CLASS = "dx-scheduler-timeline-month",
+var TIMELINE_CLASS = 'dx-scheduler-timeline-month',
     DAY_IN_MILLISECONDS = 86400000;
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -20,7 +20,7 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
     },
 
     _getDateHeaderTemplate: function() {
-        return this.option("dateCellTemplate");
+        return this.option('dateCellTemplate');
     },
 
     _getHiddenInterval: function() {
@@ -32,18 +32,18 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
     },
 
     getCellDuration: function() {
-        return toMs("day");
+        return toMs('day');
     },
 
     calculateEndViewDate: function(dateOfLastViewCell) {
-        return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs("hour"));
+        return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
     },
 
     _getCellCount: function() {
-        var currentDate = this.option("currentDate"),
+        var currentDate = this.option('currentDate'),
             cellCount = 0;
         if(this._isWorkSpaceWithCount()) {
-            var intervalCount = this.option("intervalCount");
+            var intervalCount = this.option('intervalCount');
 
             for(var i = 1; i <= intervalCount; i++) {
                 cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
@@ -56,7 +56,7 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
     },
 
     _setFirstViewDate: function() {
-        this._firstViewDate = dateUtils.getFirstMonthDate(this.option("currentDate"));
+        this._firstViewDate = dateUtils.getFirstMonthDate(this.option('currentDate'));
         this._setStartDayHour(this._firstViewDate);
     },
 
@@ -79,12 +79,12 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         var firstViewDate = this.getStartViewDate(),
             timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
-        return currentDate.getTime() - (firstViewDate.getTime() - this.option("startDayHour") * 3600000) - timeZoneOffset;
+        return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     },
 
     calculateEndDate: function(startDate) {
         var startDateCopy = new Date(startDate);
-        return new Date(startDateCopy.setHours(this.option("endDayHour")));
+        return new Date(startDateCopy.setHours(this.option('endDayHour')));
     },
 
     _calculateHiddenInterval: function() {
@@ -113,6 +113,6 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
 
 });
 
-registerComponent("dxSchedulerTimelineMonth", SchedulerTimelineMonth);
+registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);
 
 module.exports = SchedulerTimelineMonth;

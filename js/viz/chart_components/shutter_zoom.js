@@ -1,5 +1,5 @@
-var dragEvents = require("../../events/drag"),
-    SHUTTER_EVENTS_NS = ".shutter-zoom",
+var dragEvents = require('../../events/drag'),
+    SHUTTER_EVENTS_NS = '.shutter-zoom',
     DRAG_START_EVENT_NAME = dragEvents.start + SHUTTER_EVENTS_NS,
     DRAG_UPDATE_EVENT_NAME = dragEvents.move + SHUTTER_EVENTS_NS,
     DRAG_END_EVENT_NAME = dragEvents.end + SHUTTER_EVENTS_NS;
@@ -55,8 +55,8 @@ function dragHandler(ctx) {
             attr = {};
         ctx.curCoord = curCoord;
 
-        attr[ctx.rotated ? "y" : "x"] = Math.min(ctx.startCoord, curCoord);
-        attr[ctx.rotated ? "height" : "width"] = Math.abs(ctx.startCoord - curCoord);
+        attr[ctx.rotated ? 'y' : 'x'] = Math.min(ctx.startCoord, curCoord);
+        attr[ctx.rotated ? 'height' : 'width'] = Math.abs(ctx.startCoord - curCoord);
         ctx.rect.attr(attr);
     };
 }
@@ -77,12 +77,12 @@ function shutterZoom(options) {
             rect: rect,
             root: renderer.root,
             rotated: rotated,
-            triggerStart: function() { chart._eventTrigger("zoomStart"); },
+            triggerStart: function() { chart._eventTrigger('zoomStart'); },
             triggerEnd: function() {
                 var tr = chart._argumentAxes[0].getTranslator(),
                     rangeStart = Math.min(this.startCoord, this.curCoord),
                     rangeEnd = Math.max(this.startCoord, this.curCoord);
-                chart._eventTrigger("zoomEnd", { rangeStart: tr.from(rangeStart), rangeEnd: tr.from(rangeEnd) });
+                chart._eventTrigger('zoomEnd', { rangeStart: tr.from(rangeStart), rangeEnd: tr.from(rangeEnd) });
             },
             dispose: function() {
                 renderer.root.off(SHUTTER_EVENTS_NS);
@@ -109,7 +109,7 @@ function shutterZoom(options) {
         };
 
     renderer.root.off(SHUTTER_EVENTS_NS)
-        .on(DRAG_START_EVENT_NAME, { direction: rotated ? "vertical" : "horizontal", immediate: true }, dragStartHandler(shutter))
+        .on(DRAG_START_EVENT_NAME, { direction: rotated ? 'vertical' : 'horizontal', immediate: true }, dragStartHandler(shutter))
         .on(DRAG_UPDATE_EVENT_NAME, dragHandler(shutter))
         .on(DRAG_END_EVENT_NAME, dragEndHandler(shutter));
 
@@ -117,10 +117,10 @@ function shutterZoom(options) {
 }
 
 module.exports = {
-    name: "shutter_zoom",
+    name: 'shutter_zoom',
 
     init: function() {
-        var options = this.option("shutterZoom") || {};
+        var options = this.option('shutterZoom') || {};
 
         if(!options.enabled) {
             return;
@@ -129,7 +129,7 @@ module.exports = {
         this._shutterZoom = shutterZoom({
             chart: this,
             renderer: this._renderer,
-            rotated: this.option("rotated"),
+            rotated: this.option('rotated'),
             shutterOptions: options
         });
     },

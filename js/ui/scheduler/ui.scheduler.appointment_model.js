@@ -1,14 +1,15 @@
-import config from "../../core/config";
-import iteratorUtils from "../../core/utils/iterator";
-import dateSerialization from "../../core/utils/date_serialization";
-import recurrenceUtils from "./utils.recurrence";
-import dateUtils from "../../core/utils/date";
-import { equalByValue } from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-import { inArray } from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
-import arrayUtils from "../../core/utils/array";
-import query from "../../data/query";
+import config from '../../core/config';
+import iteratorUtils from '../../core/utils/iterator';
+import dateSerialization from '../../core/utils/date_serialization';
+import recurrenceUtils from './utils.recurrence';
+import dateUtils from '../../core/utils/date';
+import { equalByValue } from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { inArray } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import arrayUtils from '../../core/utils/array';
+import query from '../../data/query';
+import { Deferred } from '../../core/utils/deferred';
 
 var toMs = dateUtils.dateToMilliseconds;
 
@@ -40,19 +41,19 @@ class FilterMaker {
 
     _make(type) {
         switch(type) {
-            case "date": return (min, max, useAccessors) => {
+            case 'date': return (min, max, useAccessors) => {
                 var startDate = useAccessors ? this._dataAccessors.getter.startDate : this._dataAccessors.expr.startDateExpr,
                     endDate = useAccessors ? this._dataAccessors.getter.endDate : this._dataAccessors.expr.endDateExpr,
                     recurrenceRule = this._dataAccessors.expr.recurrenceRuleExpr;
 
                 this._filterRegistry.date = [
                     [
-                        [endDate, ">", min],
-                        [startDate, "<", max]
+                        [endDate, '>', min],
+                        [startDate, '<', max]
                     ],
-                    "or",
-                    [recurrenceRule, "startswith", "freq"],
-                    "or",
+                    'or',
+                    [recurrenceRule, 'startswith', 'freq'],
+                    'or',
                     [
                         [endDate, min],
                         [startDate, min]
@@ -63,7 +64,7 @@ class FilterMaker {
                     this._filterRegistry.date.splice(1, 2);
                 }
             };
-            case "user": return (userFilter) => {
+            case 'user': return (userFilter) => {
                 this._filterRegistry.user = userFilter;
             };
         }
@@ -95,9 +96,9 @@ const compareDateWithStartDayHour = (startDate, endDate, startDayHour, allDay, s
 };
 
 const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour, allDay, severalDays, max, min) => {
-    var hiddenInterval = (24 - endDayHour + startDayHour) * toMs("hour"),
+    var hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour'),
         apptDuration = endDate.getTime() - startDate.getTime(),
-        delta = (hiddenInterval - apptDuration) / toMs("hour"),
+        delta = (hiddenInterval - apptDuration) / toMs('hour'),
         apptStartHour = startDate.getHours(),
         apptStartMinutes = startDate.getMinutes(),
         result;
@@ -131,10 +132,10 @@ class AppointmentModel {
     }
 
     _createFilter(min, max, remoteFiltering, dateSerializationFormat) {
-        this._filterMaker.make("date", [min, max]);
+        this._filterMaker.make('date', [min, max]);
 
         var userFilterPosition = this._excessFiltering() ? this._dataSource.filter()[USER_FILTER_POSITION] : this._dataSource.filter();
-        this._filterMaker.make("user", [userFilterPosition]);
+        this._filterMaker.make('user', [userFilterPosition]);
 
         if(remoteFiltering) {
             this._dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
@@ -206,7 +207,7 @@ class AppointmentModel {
             var trimmedDates = this._trimDates(min, max);
 
             min = trimmedDates.min;
-            max = new Date(trimmedDates.max.getTime() - toMs("minute"));
+            max = new Date(trimmedDates.max.getTime() - toMs('minute'));
         }
 
         if(recurrenceRule && !recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid) {
@@ -319,12 +320,12 @@ class AppointmentModel {
 
     _initStoreChangeHandlers() {
         this._dataSource && this._dataSource.store()
-            .on("updating", ((newItem) => {
+            .on('updating', ((newItem) => {
                 this._updatedAppointment = newItem;
             }).bind(this));
 
         this._dataSource && this._dataSource.store()
-            .on("push", ((items) => {
+            .on('push', ((items) => {
                 items.forEach(((item) => {
                     this._updatedAppointmentKeys.push({ key: this._dataSource.store().key(), value: item.key });
                 }).bind(this));
@@ -359,10 +360,10 @@ class AppointmentModel {
         if(!this._filterMaker.isRegistered()) {
             this._createFilter(trimmedDates.min, trimmedDates.max, remoteFiltering, dateSerializationFormat);
         } else {
-            this._filterMaker.make("date", [trimmedDates.min, trimmedDates.max]);
+            this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max]);
 
             if(this._dataSource.filter() && this._dataSource.filter().length > 1) {
-                this._filterMaker.make("user", [this._dataSource.filter()[1]]);
+                this._filterMaker.make('user', [this._dataSource.filter()[1]]);
             }
             if(remoteFiltering) {
                 this._dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
@@ -412,7 +413,7 @@ class AppointmentModel {
         if(this._filterMaker.isRegistered()) {
             var trimmedDates = this._trimDates(filterOptions.min, filterOptions.max);
 
-            this._filterMaker.make("date", [trimmedDates.min, trimmedDates.max, true]);
+            this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
 
             var dateFilter = this.customizeDateFilter(this._filterMaker.combine(), timeZoneProcessor);
 
@@ -479,7 +480,7 @@ class AppointmentModel {
     }
 
     _getAppointmentDurationInHours(startDate, endDate) {
-        return (endDate.getTime() - startDate.getTime()) / toMs("hour");
+        return (endDate.getTime() - startDate.getTime()) / toMs('hour');
     }
 
     appointmentTakesSeveralDays(appointment) {
@@ -522,7 +523,7 @@ class AppointmentModel {
             if(this._dataAccessors.getter.allDay(appointment)) {
                 endDate = dateUtils.setToDayEnd(new Date(startDate));
             } else {
-                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs("minute"));
+                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
             }
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
@@ -540,11 +541,18 @@ class AppointmentModel {
     }
 
     update(target, data) {
-        var key = this._getStoreKey(target);
+        var key = this._getStoreKey(target),
+            d = new Deferred();
 
-        return this._dataSource.store().update(key, data).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+        this._dataSource.store().update(key, data)
+            .done(() => {
+                this._dataSource.load()
+                    .done(d.resolve)
+                    .fail(d.reject);
+            })
+            .fail(d.reject);
+
+        return d.promise();
     }
 
     remove(target) {

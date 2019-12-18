@@ -38,7 +38,7 @@ function processBundles(bundles) {
 
 function processDevBundles(bundles) {
     return bundles.map(function(bundle) {
-        return "js" + bundle;
+        return 'js' + bundle;
     });
 }
 

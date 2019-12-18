@@ -1,16 +1,16 @@
-var BaseStrategy = require("./base"),
-    Observer = require("./observer"),
-    extend = require("../../core/utils/extend").extend;
+var BaseStrategy = require('./base'),
+    Observer = require('./observer'),
+    extend = require('../../core/utils/extend').extend;
 
 var eventMap = {
-    "dxpointerdown": "pointerdown",
-    "dxpointermove": "pointermove",
-    "dxpointerup": "pointerup",
-    "dxpointercancel": "pointercancel",
-    "dxpointerover": "pointerover",
-    "dxpointerout": "pointerout",
-    "dxpointerenter": "pointerenter",
-    "dxpointerleave": "pointerleave"
+    'dxpointerdown': 'pointerdown',
+    'dxpointermove': 'pointermove',
+    'dxpointerup': 'pointerup',
+    'dxpointercancel': 'pointercancel',
+    'dxpointerover': 'pointerover',
+    'dxpointerout': 'pointerout',
+    'dxpointerenter': 'pointerenter',
+    'dxpointerleave': 'pointerleave'
 };
 
 var observer;

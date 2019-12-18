@@ -1,9 +1,9 @@
-import eventsEngine from "../../events/core/events_engine";
-import pointerEvents from "../../events/pointer";
-import windowModule from "../../core/utils/window";
-import domAdapter from "../../core/dom_adapter";
-import { each } from "../../core/utils/iterator";
-import { pointer as msPointerEnabled } from "../../core/utils/support";
+import eventsEngine from '../../events/core/events_engine';
+import pointerEvents from '../../events/pointer';
+import windowModule from '../../core/utils/window';
+import domAdapter from '../../core/dom_adapter';
+import { each } from '../../core/utils/iterator';
+import { pointer as msPointerEnabled } from '../../core/utils/support';
 
 const MIN_MANUAL_SELECTING_WIDTH = 10;
 const window = windowModule.getWindow();
@@ -14,7 +14,7 @@ function isLeftButtonPressed(event) {
         touches = e.touches,
         pointerType = (originalEvent ? originalEvent.pointerType : false),
         eventTouches = (originalEvent ? originalEvent.touches : false),
-        isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || "touch") || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || "mouse") && originalEvent.buttons === 1)),
+        isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || 'touch') || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || 'mouse') && originalEvent.buttons === 1)),
         isTouches = (touches && touches.length > 0) || (eventTouches && eventTouches.length > 0);
 
     return (e.which === 1) || isMSPointerLeftClick || isTouches;
@@ -43,7 +43,7 @@ function stopPropagationAndPreventDefault(e) {
 
 // Q375042
 function isTouchEventArgs(e) {
-    return e && e.type && e.type.indexOf("touch") === 0;
+    return e && e.type && e.type.indexOf('touch') === 0;
 }
 
 function getEventPageX(event) {
@@ -212,7 +212,7 @@ export function Tracker(params) {
     var state = this._state = {},
         targets = params.controller.getTrackerTargets();
     if(msPointerEnabled) {
-        params.renderer.root.css({ "msTouchAction": "pinch-zoom" });
+        params.renderer.root.css({ 'msTouchAction': 'pinch-zoom' });
     }
     this._docEvents = [
         initializeSelectedAreaEvents(params.controller, targets.selectedArea, state, getRootOffsetLeft),

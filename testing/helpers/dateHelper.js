@@ -1,28 +1,28 @@
 var DATE_PARTS = [
     {
-        name: "year",
-        getter: "getFullYear"
+        name: 'year',
+        getter: 'getFullYear'
     },
     {
-        name: "month",
-        getter: "getMonth"
+        name: 'month',
+        getter: 'getMonth'
     },
     {
-        name: "day",
-        getter: "getDate",
+        name: 'day',
+        getter: 'getDate',
         defaultValue: 1
     },
     {
-        name: "hours",
-        getter: "getHours"
+        name: 'hours',
+        getter: 'getHours'
     },
     {
-        name: "minutes",
-        getter: "getMinutes"
+        name: 'minutes',
+        getter: 'getMinutes'
     },
     {
-        name: "seconds",
-        getter: "getSeconds"
+        name: 'seconds',
+        getter: 'getSeconds'
     }
 ];
 

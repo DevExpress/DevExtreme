@@ -1,24 +1,24 @@
-var common = require("./commonParts/common.js"),
+var common = require('./commonParts/common.js'),
     createSankey = common.createSankey,
     environment = common.environment,
-    themeModule = require("viz/themes"),
+    themeModule = require('viz/themes'),
     find = common.find;
 
 themeModule.registerTheme({
-    name: "test-theme",
+    name: 'test-theme',
     sankey: {
         node: {
             border: {
                 visible: true,
-                color: "black"
+                color: 'black'
             }
         }
-    } }, "generic.light");
+    } }, 'generic.light');
 
 
-QUnit.module("Items: nodes", environment);
+QUnit.module('Items: nodes', environment);
 
-QUnit.test("Creation", function(assert) {
+QUnit.test('Creation', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         }),
@@ -45,7 +45,7 @@ QUnit.test("Creation", function(assert) {
     assert.equal(nodes[2].linksOut.length, 0);
 });
 
-QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
+QUnit.test('Passing nodes[].rect coordinates to SVG', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         }),
@@ -59,7 +59,7 @@ QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
     });
 });
 
-QUnit.test("Color from options applied to all nodes", function(assert) {
+QUnit.test('Color from options applied to all nodes', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         node: {
@@ -68,50 +68,50 @@ QUnit.test("Color from options applied to all nodes", function(assert) {
     });
     var nodes = this.nodes();
 
-    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, "#aabbcc");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "#aabbcc");
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, '#aabbcc');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, '#aabbcc');
 });
 
-QUnit.test("Normal style, border is not visible", function(assert) {
+QUnit.test('Normal style, border is not visible', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         node: {
             border: {
                 visible: false,
-                color: "#ffeedd",
+                color: '#ffeedd',
                 width: 2
             }
         }
     });
     var nodes = this.nodes();
 
-    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].stroke, "#ffeedd");
-    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["stroke-width"], 0);
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].stroke, '#ffeedd');
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]['stroke-width'], 0);
 
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, "#ffeedd");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, '#ffeedd');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-width'], 0);
 });
 
-QUnit.test("Hover style", function(assert) {
+QUnit.test('Hover style', function(assert) {
     var sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         node: {
             color: '#432432',
             border: {
                 visible: true,
-                color: "#ffeedd",
+                color: '#ffeedd',
                 width: 2
             },
             hoverStyle: {
                 color: '#654654',
                 border: {
                     visible: true,
-                    color: "#aabbcc",
+                    color: '#aabbcc',
                     width: 3,
                     opacity: 0.1
                 },
                 hatching: {
-                    direction: "left"
+                    direction: 'left'
                 }
             }
         }
@@ -121,19 +121,19 @@ QUnit.test("Hover style", function(assert) {
 
     var nodes = this.nodes();
 
-    assert.equal(nodes[1].smartAttr.lastCall.args[0].fill, "#654654");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, "#aabbcc");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 3);
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.1);
+    assert.equal(nodes[1].smartAttr.lastCall.args[0].fill, '#654654');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, '#aabbcc');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-width'], 3);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-opacity'], 0.1);
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].hatching, {
-        direction: "left",
+        direction: 'left',
         opacity: 0.75,
         step: 6,
         width: 2
     });
 });
 
-QUnit.test("Sankey does not fire drawn event on hover", function(assert) {
+QUnit.test('Sankey does not fire drawn event on hover', function(assert) {
     var drawn = sinon.spy(),
         sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
@@ -147,24 +147,24 @@ QUnit.test("Sankey does not fire drawn event on hover", function(assert) {
     assert.equal(drawn.callCount, 0);
 });
 
-QUnit.test("Clear hover of item", function(assert) {
+QUnit.test('Clear hover of item', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             node: {
                 color: '#111111',
                 border: {
                     visible: true,
-                    color: "#ffffff",
+                    color: '#ffffff',
                     width: 2
                 },
                 hoverStyle: {
                     border: {
                         visible: true,
-                        color: "#123123",
+                        color: '#123123',
                         width: 3
                     },
                     hatching: {
-                        direction: "left"
+                        direction: 'left'
                     }
                 }
             }
@@ -176,20 +176,20 @@ QUnit.test("Clear hover of item", function(assert) {
 
     var nodes = this.nodes();
 
-    assert.equal(nodes[1].smartAttr.lastCall.args[0].fill, "#111111");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+    assert.equal(nodes[1].smartAttr.lastCall.args[0].fill, '#111111');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, '#ffffff');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-width'], 2);
     assert.ok(!nodes[1].smartAttr.lastCall.args[0].hatching);
 });
 
-QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
+QUnit.test('Inherit border from normal style if hoverStyle.border option is not set', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             node: {
                 color: '#234234',
                 border: {
                     visible: true,
-                    color: "#ffffff",
+                    color: '#ffffff',
                     width: 2,
                     opacity: 0.4
                 }
@@ -201,19 +201,19 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
 
     var nodes = this.nodes();
 
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "#234234");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.4);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, '#234234');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, '#ffffff');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-width'], 2);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-opacity'], 0.4);
 });
 
-QUnit.test("Border for hoverStyle can be disabled", function(assert) {
+QUnit.test('Border for hoverStyle can be disabled', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             node: {
                 border: {
                     visible: true,
-                    color: "#ffffff",
+                    color: '#ffffff',
                     width: 2
                 },
                 hoverStyle: {
@@ -229,10 +229,10 @@ QUnit.test("Border for hoverStyle can be disabled", function(assert) {
 
     var nodes = this.nodes();
 
-    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['stroke-width'], 0);
 });
 
-QUnit.test("hover changed event", function(assert) {
+QUnit.test('hover changed event', function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
@@ -246,7 +246,7 @@ QUnit.test("hover changed event", function(assert) {
     assert.strictEqual(hoverChanged.lastCall.args[0].target, node);
 });
 
-QUnit.test("hover changed event after hover second item", function(assert) {
+QUnit.test('hover changed event after hover second item', function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
@@ -262,7 +262,7 @@ QUnit.test("hover changed event after hover second item", function(assert) {
     assert.equal(hoverChanged.callCount, 2);
 });
 
-QUnit.test("Hover item two times, hover changed event should fire only one time", function(assert) {
+QUnit.test('Hover item two times, hover changed event should fire only one time', function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
@@ -276,7 +276,7 @@ QUnit.test("Hover item two times, hover changed event should fire only one time"
     assert.equal(hoverChanged.callCount, 1);
 });
 
-QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fire", function(assert) {
+QUnit.test('Unhover item if it is not hovered, hover changed event shouldn\'t fire', function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
@@ -289,7 +289,7 @@ QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fir
     assert.equal(hoverChanged.callCount, 0);
 });
 
-QUnit.test("disable hover", function(assert) {
+QUnit.test('disable hover', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             hoverEnabled: false
@@ -302,7 +302,7 @@ QUnit.test("disable hover", function(assert) {
 });
 
 
-QUnit.test("isHovered method", function(assert) {
+QUnit.test('isHovered method', function(assert) {
     var sankey = createSankey({
             dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
         }),
@@ -314,7 +314,7 @@ QUnit.test("isHovered method", function(assert) {
     assert.ok(!nodes[0].isHovered());
 });
 
-QUnit.test("Default nodes.padding option", function(assert) {
+QUnit.test('Default nodes.padding option', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
     });
@@ -328,7 +328,7 @@ QUnit.test("Default nodes.padding option", function(assert) {
     assert.equal(yB - (yA + heightA), 30);
 });
 
-QUnit.test("Applying nodes.padding option", function(assert) {
+QUnit.test('Applying nodes.padding option', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         node: {
@@ -345,7 +345,7 @@ QUnit.test("Applying nodes.padding option", function(assert) {
     assert.equal(yB - (yA + heightA), 10);
 });
 
-QUnit.test("Updating nodes.padding option", function(assert) {
+QUnit.test('Updating nodes.padding option', function(assert) {
     var sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         node: {

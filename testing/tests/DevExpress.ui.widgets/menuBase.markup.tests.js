@@ -1,20 +1,20 @@
-var $ = require("jquery"),
-    MenuBase = require("ui/context_menu/ui.menu_base");
+var $ = require('jquery'),
+    MenuBase = require('ui/context_menu/ui.menu_base');
 
-require("common.css!");
+require('common.css!');
 
 QUnit.testStart(function() {
     var markup =
         '<div id="menu"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 var DX_MENU_BASE_CLASS = 'dx-menu-base';
 
 
 function createMenu(options) {
-    var element = $("#menu"),
+    var element = $('#menu'),
         instance = new MenuBase(element, options);
 
     return { instance: instance, element: element };

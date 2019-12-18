@@ -1,9 +1,9 @@
-var Action = require("../../core/action");
+var Action = require('../../core/action');
 
 Action.registerExecutor({
-    "ngExpression": {
+    'ngExpression': {
         execute: function(e) {
-            if(typeof e.action === "string") {
+            if(typeof e.action === 'string') {
                 e.context.$eval(e.action);
             }
         }

@@ -4,4 +4,4 @@
 * @module ui/gantt
 * @export default
 */
-module.exports = require("./gantt/ui.gantt");
+module.exports = require('./gantt/ui.gantt');

@@ -1,14 +1,14 @@
-var proto = require("./funnel").prototype,
-    Tracker = require("../components/tracker").Tracker,
-    DATA_KEY_BASE = "__funnel_data_",
-    isDefined = require("../../core/utils/type").isDefined,
+var proto = require('./funnel').prototype,
+    Tracker = require('../components/tracker').Tracker,
+    DATA_KEY_BASE = '__funnel_data_',
+    isDefined = require('../../core/utils/type').isDefined,
     dataKeyModifier = 0;
 
-proto._eventsMap.onItemClick = { name: "itemClick" };
-proto._eventsMap.onLegendClick = { name: "legendClick" };
+proto._eventsMap.onItemClick = { name: 'itemClick' };
+proto._eventsMap.onLegendClick = { name: 'legendClick' };
 
 exports.plugin = {
-    name: "tracker",
+    name: 'tracker',
     init: function() {
         var that = this,
             dataKey = DATA_KEY_BASE + dataKeyModifier++,
@@ -32,7 +32,7 @@ exports.plugin = {
                 }
                 proxyData = getProxyData(e);
 
-                if(tooltipData && proxyData && proxyData.type !== "inside-label") {
+                if(tooltipData && proxyData && proxyData.type !== 'inside-label') {
                     return;
                 }
 
@@ -44,7 +44,7 @@ exports.plugin = {
             click: function(e) {
                 var proxyData = getProxyData(e.event),
                     dataType = proxyData && proxyData.type,
-                    event = dataType === "legend" ? "legendClick" : "itemClick";
+                    event = dataType === 'legend' ? 'legendClick' : 'itemClick';
 
                 that._eventTrigger(event, {
                     item: e.node,

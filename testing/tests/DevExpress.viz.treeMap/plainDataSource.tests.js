@@ -1,13 +1,13 @@
-var common = require("./commonParts/common.js"),
-    $ = require("jquery");
+var common = require('./commonParts/common.js'),
+    $ = require('jquery');
 
-require("viz/tree_map/plain_data_source");
+require('viz/tree_map/plain_data_source');
 
-QUnit.module("Basic", $.extend({
+QUnit.module('Basic', $.extend({
     checkLayout: function(assert, expected) {
         var tiles = this.renderer.simpleRect.returnValues;
         $.each(expected, function(i, data) {
-            assert.checkTile(tiles[i].attr.lastCall.args[0], data, "tile " + i);
+            assert.checkTile(tiles[i].attr.lastCall.args[0], data, 'tile ' + i);
         });
     },
 
@@ -24,35 +24,35 @@ QUnit.module("Basic", $.extend({
     }
 }, common.environment));
 
-QUnit.test("creation without dataSource", function(assert) {
+QUnit.test('creation without dataSource', function(assert) {
     var widget = this.create();
 
     assert.ok(widget);
 });
 
-QUnit.test("two levels dataSource", function(assert) {
+QUnit.test('two levels dataSource', function(assert) {
     this.create({
-        idField: "id",
-        parentField: "parentId",
+        idField: 'id',
+        parentField: 'parentId',
         dataSource: [{
             value: 2,
-            id: "id_0"
+            id: 'id_0'
         }, {
-            id: "id_1"
+            id: 'id_1'
         }, {
-            id: "id_2",
-            parentId: "id_1",
+            id: 'id_2',
+            parentId: 'id_1',
             value: 2
         }, {
-            id: "id_3",
-            parentId: "id_1"
+            id: 'id_3',
+            parentId: 'id_1'
         }, {
-            id: "id_4",
-            parentId: "id_3",
+            id: 'id_4',
+            parentId: 'id_3',
             value: 1
         }, {
-            id: "id_5",
-            parentId: "id_3",
+            id: 'id_5',
+            parentId: 'id_3',
             value: 3
         }],
         group: {
@@ -72,25 +72,25 @@ QUnit.test("two levels dataSource", function(assert) {
     ]);
 });
 
-QUnit.test("idField & parentField changing", function(assert) {
+QUnit.test('idField & parentField changing', function(assert) {
     var widget = this.create({
         dataSource: [{
             value: 4,
-            id: "id_0"
+            id: 'id_0'
         }, {
             value: 2,
-            id: "id_1",
-            parentId: "id_0"
+            id: 'id_1',
+            parentId: 'id_0'
         }, {
             value: 6,
-            id: "id_2",
-            parentId: "id_0"
+            id: 'id_2',
+            parentId: 'id_0'
         }]
     });
 
     this.renderer.simpleRect.reset();
 
-    widget.option({ idField: "id", parentField: "parentId" });
+    widget.option({ idField: 'id', parentField: 'parentId' });
 
     this.checkLayout(assert, [
         [0, 0, 600, 400],
@@ -100,22 +100,22 @@ QUnit.test("idField & parentField changing", function(assert) {
     ]);
 });
 
-QUnit.test("plain dataSource with custom childrenField", function(assert) {
+QUnit.test('plain dataSource with custom childrenField', function(assert) {
     this.create({
-        childrenField: "children",
-        idField: "id",
-        parentField: "parentId",
+        childrenField: 'children',
+        idField: 'id',
+        parentField: 'parentId',
         dataSource: [{
             value: 4,
-            id: "id_0"
+            id: 'id_0'
         }, {
             value: 2,
-            id: "id_1",
-            parentId: "id_0"
+            id: 'id_1',
+            parentId: 'id_0'
         }, {
             value: 6,
-            id: "id_2",
-            parentId: "id_0"
+            id: 'id_2',
+            parentId: 'id_0'
         }]
     });
 
@@ -127,18 +127,18 @@ QUnit.test("plain dataSource with custom childrenField", function(assert) {
     ]);
 });
 
-QUnit.test("all items in DS have parentId", function(assert) {
+QUnit.test('all items in DS have parentId', function(assert) {
     this.create({
-        idField: "id",
-        parentField: "parentId",
+        idField: 'id',
+        parentField: 'parentId',
         dataSource: [{
             value: 4,
-            id: "id_0",
-            parentId: "someId"
+            id: 'id_0',
+            parentId: 'someId'
         }]
     });
 
-    assert.equal(this.renderer.simpleRect.callCount, 3, "tile with group");
+    assert.equal(this.renderer.simpleRect.callCount, 3, 'tile with group');
     this.checkLayout(assert, [
         [0, 0, 600, 400],
         [0, 0, 600, 18],

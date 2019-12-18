@@ -1,34 +1,34 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import support from "../../core/utils/support";
-import browser from "../../core/utils/browser";
-import commonUtils from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { getPublicElement } from "../../core/utils/dom";
-import windowUtils from "../../core/utils/window";
-import domAdapter from "../../core/dom_adapter";
-import devices from "../../core/devices";
-import registerComponent from "../../core/component_registrator";
-import DOMComponent from "../../core/dom_component";
-import selectors from "../widget/selectors";
-import * as eventUtils from "../../events/utils";
-import scrollEvents from "./ui.events.emitter.gesture.scroll";
-import simulatedStrategy from "./ui.scrollable.simulated";
-import NativeStrategy from "./ui.scrollable.native";
-import { when } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import support from '../../core/utils/support';
+import browser from '../../core/utils/browser';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { getPublicElement } from '../../core/utils/dom';
+import windowUtils from '../../core/utils/window';
+import domAdapter from '../../core/dom_adapter';
+import devices from '../../core/devices';
+import registerComponent from '../../core/component_registrator';
+import DOMComponent from '../../core/dom_component';
+import selectors from '../widget/selectors';
+import * as eventUtils from '../../events/utils';
+import scrollEvents from './ui.events.emitter.gesture.scroll';
+import simulatedStrategy from './ui.scrollable.simulated';
+import NativeStrategy from './ui.scrollable.native';
+import { when } from '../../core/utils/deferred';
 
-const SCROLLABLE = "dxScrollable";
-const SCROLLABLE_STRATEGY = "dxScrollableStrategy";
-const SCROLLABLE_CLASS = "dx-scrollable";
-const SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled";
-const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
-const SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
-const SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content";
-const SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = "dx-scrollable-customizable-scrollbars";
-const VERTICAL = "vertical";
-const HORIZONTAL = "horizontal";
-const BOTH = "both";
+const SCROLLABLE = 'dxScrollable';
+const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
+const SCROLLABLE_CLASS = 'dx-scrollable';
+const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
+const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
+const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+const SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = 'dx-scrollable-customizable-scrollbars';
+const VERTICAL = 'vertical';
+const HORIZONTAL = 'horizontal';
+const BOTH = 'both';
 
 var deviceDependentOptions = function() {
     return [{
@@ -45,7 +45,7 @@ var deviceDependentOptions = function() {
         }
     }, {
         device: function(device) {
-            return !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
+            return !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
         },
         options: {
             /**
@@ -70,7 +70,7 @@ var deviceDependentOptions = function() {
             * @name dxScrollableOptions.showScrollbar
             * @default 'onHover' @for desktop
             */
-            showScrollbar: "onHover"
+            showScrollbar: 'onHover'
         }
     }];
 };
@@ -121,7 +121,7 @@ var Scrollable = DOMComponent.inherit({
             * @acceptValues 'onScroll'|'onHover'|'always'|'never'
             * @default 'onScroll'
             */
-            showScrollbar: "onScroll",
+            showScrollbar: 'onScroll',
 
             /**
             * @name dxScrollableOptions.useNative
@@ -188,7 +188,7 @@ var Scrollable = DOMComponent.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return support.nativeScrolling && devices.real().platform === "android" && !browser.mozilla;
+                    return support.nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
                 },
                 options: {
                     useSimulatedScrollbar: true
@@ -196,7 +196,7 @@ var Scrollable = DOMComponent.inherit({
             },
             {
                 device: function() {
-                    return devices.real().platform === "ios";
+                    return devices.real().platform === 'ios';
                 },
                 options: {
                     pushBackValue: 1
@@ -207,14 +207,14 @@ var Scrollable = DOMComponent.inherit({
 
     _initOptions: function(options) {
         this.callBase(options);
-        if(!("useSimulatedScrollbar" in options)) {
+        if(!('useSimulatedScrollbar' in options)) {
             this._setUseSimulatedScrollbar();
         }
     },
 
     _setUseSimulatedScrollbar: function() {
-        if(!this.initialOption("useSimulatedScrollbar")) {
-            this.option("useSimulatedScrollbar", !this.option("useNative"));
+        if(!this.initialOption('useSimulatedScrollbar')) {
+            this.option('useSimulatedScrollbar', !this.option('useNative'));
         }
     },
 
@@ -237,12 +237,12 @@ var Scrollable = DOMComponent.inherit({
 
     _initScrollableMarkup: function() {
         var $element = this.$element().addClass(SCROLLABLE_CLASS),
-            $container = this._$container = $("<div>").addClass(SCROLLABLE_CONTAINER_CLASS),
-            $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
-            $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
+            $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS),
+            $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS),
+            $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
 
-        if(domAdapter.hasDocumentProperty("onbeforeactivate") && browser.msie && browser.version < 12) {
-            eventsEngine.on($element, eventUtils.addNamespace("beforeactivate", SCROLLABLE), function(e) {
+        if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
+            eventsEngine.on($element, eventUtils.addNamespace('beforeactivate', SCROLLABLE), function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();
                 }
@@ -261,7 +261,7 @@ var Scrollable = DOMComponent.inherit({
     _attachNativeScrollbarsCustomizationCss: function() {
         // NOTE: Customize native scrollbars for dashboard team
 
-        if(devices.real().deviceType === "desktop" && !(windowUtils.getNavigator().platform.indexOf('Mac') > -1 && browser['webkit'])) {
+        if(devices.real().deviceType === 'desktop' && !(windowUtils.getNavigator().platform.indexOf('Mac') > -1 && browser['webkit'])) {
             this.$element().addClass(SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS);
         }
     },
@@ -286,7 +286,7 @@ var Scrollable = DOMComponent.inherit({
 
     _updateRtlPosition: function() {
         this._updateBounds();
-        if(this.option("rtlEnabled") && this.option("direction") !== VERTICAL) {
+        if(this.option('rtlEnabled') && this.option('direction') !== VERTICAL) {
             commonUtils.deferUpdate(() => {
                 const containerElement = this._container().get(0);
                 const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
@@ -307,11 +307,11 @@ var Scrollable = DOMComponent.inherit({
         var initEventData = {
             getDirection: strategy.getDirection.bind(strategy),
             validate: this._validate.bind(this),
-            isNative: this.option("useNative"),
+            isNative: this.option('useNative'),
             scrollTarget: this._$container
         };
 
-        eventsEngine.off(this._$wrapper, "." + SCROLLABLE);
+        eventsEngine.off(this._$wrapper, '.' + SCROLLABLE);
         eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
         eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
         eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
@@ -319,8 +319,8 @@ var Scrollable = DOMComponent.inherit({
         eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
         eventsEngine.on(this._$wrapper, eventUtils.addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
 
-        eventsEngine.off(this._$container, "." + SCROLLABLE);
-        eventsEngine.on(this._$container, eventUtils.addNamespace("scroll", SCROLLABLE), strategy.handleScroll.bind(strategy));
+        eventsEngine.off(this._$container, '.' + SCROLLABLE);
+        eventsEngine.on(this._$container, eventUtils.addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
     },
 
     _validate: function(e) {
@@ -339,9 +339,9 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _renderDisabledState: function() {
-        this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option("disabled"));
+        this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option('disabled'));
 
-        if(this.option("disabled")) {
+        if(this.option('disabled')) {
             this._lock();
         } else {
             this._unlock();
@@ -350,10 +350,10 @@ var Scrollable = DOMComponent.inherit({
 
     _renderDirection: function() {
         this.$element()
-            .removeClass("dx-scrollable-" + HORIZONTAL)
-            .removeClass("dx-scrollable-" + VERTICAL)
-            .removeClass("dx-scrollable-" + BOTH)
-            .addClass("dx-scrollable-" + this.option("direction"));
+            .removeClass('dx-scrollable-' + HORIZONTAL)
+            .removeClass('dx-scrollable-' + VERTICAL)
+            .removeClass('dx-scrollable-' + BOTH)
+            .addClass('dx-scrollable-' + this.option('direction'));
     },
 
     _renderStrategy: function() {
@@ -363,7 +363,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _createStrategy: function() {
-        this._strategy = (this.option("useNative"))
+        this._strategy = (this.option('useNative'))
             ? new NativeStrategy(this)
             : new simulatedStrategy.SimulatedStrategy(this);
     },
@@ -378,39 +378,39 @@ var Scrollable = DOMComponent.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onStart":
-            case "onEnd":
-            case "onStop":
-            case "onUpdated":
-            case "onScroll":
-            case "onBounce":
+            case 'onStart':
+            case 'onEnd':
+            case 'onStop':
+            case 'onUpdated':
+            case 'onScroll':
+            case 'onBounce':
                 this._createActions();
                 break;
-            case "direction":
+            case 'direction':
                 this._resetInactiveDirection();
                 this._invalidate();
                 break;
-            case "useNative":
+            case 'useNative':
                 this._setUseSimulatedScrollbar();
                 this._invalidate();
                 break;
-            case "inertiaEnabled":
-            case "scrollByContent":
-            case "scrollByThumb":
-            case "bounceEnabled":
-            case "useKeyboard":
-            case "showScrollbar":
-            case "useSimulatedScrollbar":
-            case "pushBackValue":
+            case 'inertiaEnabled':
+            case 'scrollByContent':
+            case 'scrollByThumb':
+            case 'bounceEnabled':
+            case 'useKeyboard':
+            case 'showScrollbar':
+            case 'useSimulatedScrollbar':
+            case 'pushBackValue':
                 this._invalidate();
                 break;
-            case "disabled":
+            case 'disabled':
                 this._renderDisabledState();
                 this._strategy && this._strategy.disabledChanged();
                 break;
-            case "updateManually":
+            case 'updateManually':
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._updateRtlPosition();
                 break;
@@ -431,12 +431,12 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _getInactiveProp: function() {
-        var direction = this.option("direction");
+        var direction = this.option('direction');
         if(direction === VERTICAL) {
-            return "left";
+            return 'left';
         }
         if(direction === HORIZONTAL) {
-            return "top";
+            return 'top';
         }
     },
 
@@ -453,7 +453,7 @@ var Scrollable = DOMComponent.inherit({
                 top: typeUtils.isDefined(top) ? -top : undefined
             };
         } else {
-            var direction = this.option("direction");
+            var direction = this.option('direction');
             return {
                 left: direction !== VERTICAL ? -location : undefined,
                 top: direction !== HORIZONTAL ? -location : undefined
@@ -470,13 +470,13 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _unlock: function() {
-        if(!this.option("disabled")) {
+        if(!this.option('disabled')) {
             this._locked = false;
         }
     },
 
     _isDirection: function(direction) {
-        var current = this.option("direction");
+        var current = this.option('direction');
         if(direction === VERTICAL) {
             return current !== HORIZONTAL;
         }
@@ -640,7 +640,7 @@ var Scrollable = DOMComponent.inherit({
 
         var location = this._location();
 
-        if(!this.option("useNative")) {
+        if(!this.option('useNative')) {
             targetLocation = this._strategy._applyScaleRatio(targetLocation);
             location = this._strategy._applyScaleRatio(location);
         }
@@ -663,28 +663,28 @@ var Scrollable = DOMComponent.inherit({
     * @param1 element:Node|jQuery
     */
     scrollToElement: function(element, offset) {
-        offset = offset || {};
         var $element = $(element);
         var elementInsideContent = this.$content().find(element).length;
-        var elementIsInsideContent = ($element.parents("." + SCROLLABLE_CLASS).length - $element.parents("." + SCROLLABLE_CONTENT_CLASS).length) === 0;
+        var elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
         if(!elementInsideContent || !elementIsInsideContent) {
             return;
         }
 
         var scrollPosition = { top: 0, left: 0 };
-        var direction = this.option("direction");
+        var direction = this.option('direction');
 
         if(direction !== VERTICAL) {
-            scrollPosition.left = this._scrollToElementPosition($element, HORIZONTAL, offset);
+            scrollPosition.left = this.getScrollElementPosition($element, HORIZONTAL, offset);
         }
         if(direction !== HORIZONTAL) {
-            scrollPosition.top = this._scrollToElementPosition($element, VERTICAL, offset);
+            scrollPosition.top = this.getScrollElementPosition($element, VERTICAL, offset);
         }
 
         this.scrollTo(scrollPosition);
     },
 
-    _scrollToElementPosition: function($element, direction, offset) {
+    getScrollElementPosition: function($element, direction, offset) {
+        offset = offset || {};
         var isVertical = direction === VERTICAL;
         var startOffset = (isVertical ? offset.top : offset.left) || 0;
         var endOffset = (isVertical ? offset.bottom : offset.right) || 0;
@@ -720,10 +720,14 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _updateIfNeed: function() {
-        if(!this.option("updateManually")) {
+        if(!this.option('updateManually')) {
             this.update();
         }
-    }
+    },
+
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 registerComponent(SCROLLABLE, Scrollable);

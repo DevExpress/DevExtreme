@@ -1,19 +1,19 @@
-var _patchFontOptions = require("./utils").patchFontOptions,
+var _patchFontOptions = require('./utils').patchFontOptions,
 
     STATE_HIDDEN = 0,
     STATE_SHOWN = 1,
 
-    ANIMATION_EASING = "linear",
+    ANIMATION_EASING = 'linear',
     ANIMATION_DURATION = 400,
 
-    LOADING_INDICATOR_READY = "loadingIndicatorReady";
+    LOADING_INDICATOR_READY = 'loadingIndicatorReady';
 
 function LoadingIndicator(parameters) {
     var that = this,
         renderer = parameters.renderer;
-    that._group = renderer.g().attr({ "class": "dx-loading-indicator" }).linkOn(renderer.root, { name: "loading-indicator", after: "peripheral" });
+    that._group = renderer.g().attr({ 'class': 'dx-loading-indicator' }).linkOn(renderer.root, { name: 'loading-indicator', after: 'peripheral' });
     that._rect = renderer.rect().attr({ opacity: 0 }).append(that._group);
-    that._text = renderer.text().attr({ align: "center" }).append(that._group);
+    that._text = renderer.text().attr({ align: 'center' }).append(that._group);
     that._createStates(parameters.eventTrigger, that._group, renderer.root, parameters.notify);
 }
 
@@ -29,14 +29,14 @@ LoadingIndicator.prototype = {
             },
             complete: function() {
                 group.linkRemove();
-                root.css({ "pointer-events": "" });
+                root.css({ 'pointer-events': '' });
                 eventTrigger(LOADING_INDICATOR_READY);
             }
         }, {
             opacity: 0.85,
             start: function() {
                 group.linkAppend();
-                root.css({ "pointer-events": "none" });
+                root.css({ 'pointer-events': 'none' });
                 notify(true);
             },
             complete: function() {
@@ -55,8 +55,8 @@ LoadingIndicator.prototype = {
 
     setOptions: function(options) {
         this._rect.attr({ fill: options.backgroundColor });
-        this._text.css(_patchFontOptions(options.font)).attr({ text: options.text, "class": options.cssClass });
-        this[options.show ? "show" : "hide"]();
+        this._text.css(_patchFontOptions(options.font)).attr({ text: options.text, 'class': options.cssClass });
+        this[options.show ? 'show' : 'hide']();
     },
 
     dispose: function() {
@@ -106,7 +106,7 @@ LoadingIndicator.prototype = {
 exports.LoadingIndicator = LoadingIndicator;
 
 exports.plugin = {
-    name: "loading_indicator",
+    name: 'loading_indicator',
     init: function() {
         var that = this;
         // "exports" is used for testing purposes.
@@ -115,7 +115,7 @@ exports.plugin = {
         function notify(state) {
             // This flag is used to suppress redundant `_optionChanged` notifications caused by the mechanism that synchronizes the `loadingIndicator.show` option and the loading indicator visibility
             that._skipLoadingIndicatorOptions = true;
-            that.option("loadingIndicator", { show: state });
+            that.option('loadingIndicator', { show: state });
             that._skipLoadingIndicatorOptions = false;
             if(state) {
                 that._stopCurrentHandling();
@@ -147,7 +147,7 @@ exports.plugin = {
     },
     extenders: {
         _dataSourceLoadingChangedHandler(isLoading) {
-            if(isLoading && (this._getOptionByStealth("loadingIndicator") || {}).enabled) {
+            if(isLoading && (this._options.silent('loadingIndicator') || {}).enabled) {
                 this._loadingIndicator.show();
             }
         },
@@ -173,18 +173,18 @@ exports.plugin = {
             };
         }
         constructor.addChange({
-            code: "LOADING_INDICATOR",
+            code: 'LOADING_INDICATOR',
             handler: function() {
                 if(!this._skipLoadingIndicatorOptions) {
-                    this._loadingIndicator.setOptions(this._getOption("loadingIndicator"));
+                    this._loadingIndicator.setOptions(this._getOption('loadingIndicator'));
                 }
                 this._scheduleLoadingIndicatorHiding();
             },
             isThemeDependent: true,
-            option: "loadingIndicator",
+            option: 'loadingIndicator',
             isOptionChange: true
         });
-        proto._eventsMap.onLoadingIndicatorReady = { name: "loadingIndicatorReady" };
+        proto._eventsMap.onLoadingIndicatorReady = { name: 'loadingIndicatorReady' };
         var _drawn = proto._drawn;
         proto._drawn = function() {
             _drawn.apply(this, arguments);
@@ -193,5 +193,5 @@ exports.plugin = {
             }
         };
     },
-    fontFields: ["loadingIndicator.font"]
+    fontFields: ['loadingIndicator.font']
 };
