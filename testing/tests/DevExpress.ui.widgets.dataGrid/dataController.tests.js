@@ -3883,11 +3883,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             return dataItems;
         };
 
-        this.clock = sinon.useFakeTimers();
-    }, afterEach: function() {
-        teardownModule.call(this);
-        this.clock.restore();
-    }
+    },
+    afterEach: teardownModule
 });
 
 QUnit.test('load first page', function(assert) {
@@ -4738,12 +4735,8 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
             });
             return dataItems;
         };
-
-        this.clock = sinon.useFakeTimers();
-    }, afterEach: function() {
-        teardownModule.call(this);
-        this.clock.restore();
-    }
+    },
+    afterEach: teardownModule
 });
 
 QUnit.test('not update pageSize on viewportSize', function(assert) {
