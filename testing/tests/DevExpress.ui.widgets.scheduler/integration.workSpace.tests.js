@@ -1991,11 +1991,11 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
         height: 700
     });
 
-    let headerCells = $('.dx-scheduler-group-header');
+    let headerCells = this.scheduler.workSpace.groups.getGroupHeaders();
 
     let firstHeaderCell = headerCells.eq(0),
         fifthHeaderCell = headerCells.eq(4),
-        dateTableCell = $('.dx-scheduler-date-table-cell').eq(0);
+        dateTableCell = this.scheduler.workSpace.getCells().eq(0);
 
     assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
     assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');
