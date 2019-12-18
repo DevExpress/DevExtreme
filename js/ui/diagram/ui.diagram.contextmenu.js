@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
-import Widget from "../widget/ui.widget";
-import ContextMenu from "../context_menu";
-import DiagramCommands from "./ui.diagram.commands";
-import DiagramBar from "./diagram_bar";
-import { getDiagram } from "./diagram_importer";
+import Widget from '../widget/ui.widget';
+import ContextMenu from '../context_menu';
+import DiagramCommands from './ui.diagram.commands';
+import DiagramBar from './diagram_bar';
+import { getDiagram } from './diagram_importer';
 
-const DIAGRAM_TOUCHBAR_CLASS = "dx-diagram-touchbar";
-const DIAGRAM_TOUCHBAR_TARGET_CLASS = "dx-diagram-touchbar-target";
+const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
+const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';
 const DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH = 800;
 const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
 
@@ -25,27 +25,27 @@ class DiagramContextMenu extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
+        this._commands = DiagramCommands.getContextMenuCommands(this.option('commands'));
         this._commandToIndexMap = {};
         this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
 
-        this._$contextMenuTargetElement = $("<div>")
+        this._$contextMenuTargetElement = $('<div>')
             .addClass(DIAGRAM_TOUCHBAR_TARGET_CLASS)
             .appendTo(this.$element());
 
-        const $contextMenu = $("<div>")
+        const $contextMenu = $('<div>')
             .appendTo(this.$element());
 
         const { Browser } = getDiagram();
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             closeOnOutsideClick: false,
-            showEvent: "",
-            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : "",
+            showEvent: '',
+            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : '',
             items: this._getItems(this._commands),
             focusStateEnabled: false,
             position: (Browser.TouchUI ? {
-                my: { x: "center", y: "bottom" },
-                at: { x: "center", y: "top" },
+                my: { x: 'center', y: 'bottom' },
+                at: { x: 'center', y: 'top' },
                 of: this._$contextMenuTargetElement
             } : {}),
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
@@ -54,7 +54,7 @@ class DiagramContextMenu extends Widget {
 
                 this._inOnShowing = true;
                 this._onVisibleChangedAction({ visible: true, component: this });
-                this._contextMenuInstance.option("items", this._getItems(this._commands, true));
+                this._contextMenuInstance.option('items', this._getItems(this._commands, true));
                 delete this._inOnShowing;
             }
         });
@@ -63,7 +63,7 @@ class DiagramContextMenu extends Widget {
         var items = [];
         var beginGroup = false;
         commands.forEach(function(command) {
-            if(command.widget === "separator") {
+            if(command.widget === 'separator') {
                 beginGroup = true;
             } else if(command.visible || !onlyVisible) {
                 items.push({
@@ -97,7 +97,7 @@ class DiagramContextMenu extends Widget {
             });
             this._contextMenuInstance.show();
         } else {
-            this._contextMenuInstance.option("position", { offset: x + " " + y });
+            this._contextMenuInstance.option('position', { offset: x + ' ' + y });
             this._contextMenuInstance.show();
         }
     }
@@ -132,26 +132,26 @@ class DiagramContextMenu extends Widget {
         }
     }
     _setEnabled(enabled) {
-        this._contextMenuInstance.option("disabled", !enabled);
+        this._contextMenuInstance.option('disabled', !enabled);
     }
     isVisible() {
         return this._inOnShowing;
     }
     _createOnVisibleChangedAction() {
-        this._onVisibleChangedAction = this._createActionByOption("onVisibleChanged");
+        this._onVisibleChangedAction = this._createActionByOption('onVisibleChanged');
     }
     _createOnItemClickAction() {
-        this._onItemClickAction = this._createActionByOption("onItemClick");
+        this._onItemClickAction = this._createActionByOption('onItemClick');
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "onVisibleChanged":
+            case 'onVisibleChanged':
                 this._createOnVisibleChangedAction();
                 break;
-            case "onItemClick":
+            case 'onItemClick':
                 this._createOnItemClickAction();
                 break;
-            case "commands":
+            case 'commands':
                 this._invalidate();
                 break;
             default:

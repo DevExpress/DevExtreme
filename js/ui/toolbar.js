@@ -1,23 +1,23 @@
-var $ = require("../core/renderer"),
-    themes = require("./themes"),
-    registerComponent = require("../core/component_registrator"),
-    grep = require("../core/utils/common").grep,
-    extend = require("../core/utils/extend").extend,
-    arrayUtils = require("../core/utils/array"),
-    iteratorUtils = require("../core/utils/iterator"),
-    ActionSheetStrategy = require("./toolbar/ui.toolbar.strategy.action_sheet"),
-    DropDownMenuStrategy = require("./toolbar/ui.toolbar.strategy.drop_down_menu"),
-    ToolbarBase = require("./toolbar/ui.toolbar.base"),
-    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate;
+var $ = require('../core/renderer'),
+    themes = require('./themes'),
+    registerComponent = require('../core/component_registrator'),
+    grep = require('../core/utils/common').grep,
+    extend = require('../core/utils/extend').extend,
+    arrayUtils = require('../core/utils/array'),
+    iteratorUtils = require('../core/utils/iterator'),
+    ActionSheetStrategy = require('./toolbar/ui.toolbar.strategy.action_sheet'),
+    DropDownMenuStrategy = require('./toolbar/ui.toolbar.strategy.drop_down_menu'),
+    ToolbarBase = require('./toolbar/ui.toolbar.base'),
+    ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 
 var STRATEGIES = {
     actionSheet: ActionSheetStrategy,
     dropDownMenu: DropDownMenuStrategy
 };
 
-var TOOLBAR_AUTO_HIDE_ITEM_CLASS = "dx-toolbar-item-auto-hide",
-    TOOLBAR_AUTO_HIDE_TEXT_CLASS = "dx-toolbar-text-auto-hide",
-    TOOLBAR_HIDDEN_ITEM = "dx-toolbar-item-invisible";
+var TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide',
+    TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide',
+    TOOLBAR_HIDDEN_ITEM = 'dx-toolbar-item-invisible';
 
 /**
 * @name dxToolbar
@@ -40,7 +40,7 @@ var Toolbar = ToolbarBase.inherit({
             * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            menuItemTemplate: "menuItem",
+            menuItemTemplate: 'menuItem',
 
             /**
             * @name dxToolbarOptions.submenuType
@@ -49,7 +49,7 @@ var Toolbar = ToolbarBase.inherit({
             * @acceptValues 'actionSheet'|'dropDownMenu'
             * @hidden
             */
-            submenuType: "dropDownMenu",
+            submenuType: 'dropDownMenu',
 
             menuContainer: undefined,
 
@@ -154,14 +154,14 @@ var Toolbar = ToolbarBase.inherit({
                     return themes.isIos7(themeName);
                 },
                 options: {
-                    submenuType: "actionSheet"
+                    submenuType: 'actionSheet'
                 }
             }
         ]);
     },
 
     _dimensionChanged: function(dimension) {
-        if(dimension === "height") {
+        if(dimension === 'height') {
             return;
         }
 
@@ -172,8 +172,9 @@ var Toolbar = ToolbarBase.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
-        this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item");
+        this._templateManager.addDefaultTemplates({
+            actionSheetItem: new ChildDefaultTemplate('item')
+        });
     },
 
     _initMarkup: function() {
@@ -191,11 +192,11 @@ var Toolbar = ToolbarBase.inherit({
     _renderItem: function(index, item, itemContainer, $after) {
         var itemElement = this.callBase(index, item, itemContainer, $after);
 
-        if(item.locateInMenu === "auto") {
+        if(item.locateInMenu === 'auto') {
             itemElement.addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
         }
 
-        if(item.widget === "dxButton" && item.showText === "inMenu") {
+        if(item.widget === 'dxButton' && item.showText === 'inMenu') {
             itemElement.toggleClass(TOOLBAR_AUTO_HIDE_TEXT_CLASS);
         }
 
@@ -207,7 +208,7 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _hideOverflowItems: function(elementWidth) {
-        var overflowItems = this.$element().find("." + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
+        var overflowItems = this.$element().find('.' + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
 
         if(!overflowItems.length) {
             return;
@@ -228,13 +229,13 @@ var Toolbar = ToolbarBase.inherit({
 
     _getMenuItems: function() {
         var that = this;
-        var menuItems = grep(this.option("items") || [], function(item) {
+        var menuItems = grep(this.option('items') || [], function(item) {
             return that._isMenuItem(item);
         });
 
         var $hiddenItems = this._itemContainer()
-            .children("." + TOOLBAR_AUTO_HIDE_ITEM_CLASS + "." + TOOLBAR_HIDDEN_ITEM)
-            .not(".dx-state-invisible");
+            .children('.' + TOOLBAR_AUTO_HIDE_ITEM_CLASS + '.' + TOOLBAR_HIDDEN_ITEM)
+            .not('.dx-state-invisible');
         this._restoreItems = this._restoreItems || [];
 
         var overflowItems = [].slice.call($hiddenItems).map((item) => {
@@ -249,7 +250,7 @@ var Toolbar = ToolbarBase.inherit({
                         item: $itemMarkup
                     });
 
-                    var $container = $("<div>").addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
+                    var $container = $('<div>').addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
                     return $container.append($itemMarkup);
                 }
             }, itemData);
@@ -260,7 +261,7 @@ var Toolbar = ToolbarBase.inherit({
 
     _getToolbarItems: function() {
         var that = this;
-        return grep(this.option("items") || [], function(item) {
+        return grep(this.option('items') || [], function(item) {
             return !that._isMenuItem(item);
         });
     },
@@ -271,10 +272,10 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _renderMenuStrategy: function() {
-        var strategyName = this.option("submenuType");
+        var strategyName = this.option('submenuType');
 
         if(this._requireDropDownStrategy()) {
-            strategyName = "dropDownMenu";
+            strategyName = 'dropDownMenu';
         }
 
         var strategy = STRATEGIES[strategyName];
@@ -285,13 +286,13 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _requireDropDownStrategy: function() {
-        var items = this.option("items") || [],
+        var items = this.option('items') || [],
             result = false;
 
         iteratorUtils.each(items, function(index, item) {
-            if(item.locateInMenu === "auto") {
+            if(item.locateInMenu === 'auto') {
                 result = true;
-            } else if(item.locateInMenu === "always" && item.widget) {
+            } else if(item.locateInMenu === 'always' && item.widget) {
                 result = true;
             }
         });
@@ -300,13 +301,13 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _arrangeItems: function() {
-        if(this.$element().is(":hidden")) {
+        if(this.$element().is(':hidden')) {
             return;
         }
 
         this._$centerSection.css({
-            margin: "0 auto",
-            float: "none"
+            margin: '0 auto',
+            float: 'none'
         });
 
         iteratorUtils.each(this._restoreItems || [], function(_, obj) {
@@ -332,11 +333,11 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _isMenuItem: function(itemData) {
-        return itemData.location === "menu" || itemData.locateInMenu === "always";
+        return itemData.location === 'menu' || itemData.locateInMenu === 'always';
     },
 
     _isToolbarItem: function(itemData) {
-        return itemData.location === undefined || itemData.locateInMenu === "never";
+        return itemData.location === undefined || itemData.locateInMenu === 'never';
     },
 
     _optionChanged: function(args) {
@@ -344,22 +345,22 @@ var Toolbar = ToolbarBase.inherit({
         var value = args.value;
 
         switch(name) {
-            case "submenuType":
+            case 'submenuType':
                 this._invalidate();
                 break;
-            case "visible":
+            case 'visible':
                 this.callBase.apply(this, arguments);
                 this._menuStrategy.handleToolbarVisibilityChange(value);
                 break;
-            case "menuItemTemplate":
-                this._changeMenuOption("itemTemplate", this._getTemplate(value));
+            case 'menuItemTemplate':
+                this._changeMenuOption('itemTemplate', this._getTemplate(value));
                 break;
-            case "onItemClick":
+            case 'onItemClick':
                 this._changeMenuOption(name, value);
                 this.callBase.apply(this, arguments);
                 break;
-            case "menuContainer":
-                this._changeMenuOption("container", value);
+            case 'menuContainer':
+                this._changeMenuOption('container', value);
                 break;
             default:
                 this.callBase.apply(this, arguments);
@@ -383,6 +384,6 @@ var Toolbar = ToolbarBase.inherit({
     */
 });
 
-registerComponent("dxToolbar", Toolbar);
+registerComponent('dxToolbar', Toolbar);
 
 module.exports = Toolbar;

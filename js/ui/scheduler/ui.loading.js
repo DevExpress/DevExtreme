@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    viewPortUtils = require("../../core/utils/view_port"),
-    LoadPanel = require("../load_panel"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var $ = require('../../core/renderer'),
+    viewPortUtils = require('../../core/utils/view_port'),
+    LoadPanel = require('../load_panel'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 var loading = null;
 
 var createLoadPanel = function(options) {
-    return new LoadPanel($("<div>")
+    return new LoadPanel($('<div>')
         .appendTo(options && options.container || viewPortUtils.value()),
     options);
 };

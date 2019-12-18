@@ -1,25 +1,28 @@
-var resizeCallbacks = require("core/utils/resize_callbacks"),
-    domAdapter = require("core/dom_adapter");
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
-        var test = this;
-        test.__originalDocumentElementGetter = domAdapter.getDocumentElement;
+        const test = this;
+        test.__originalWindowElementGetter = windowUtils.getWindow;
         test.width = 400;
         test.height = 300;
 
-        domAdapter.getDocumentElement = function() {
-            return {
-                clientWidth: test.width,
-                clientHeight: test.height
-            };
+        windowUtils.getWindow = function() {
+            const fakeWindow = {};
+            fakeWindow.window = fakeWindow;
+            fakeWindow.innerHeight = test.height;
+            fakeWindow.innerWidth = test.width;
+
+            return fakeWindow;
         };
 
         test.__originalListener = domAdapter.listen;
 
-        var resizeHandlers = [];
+        const resizeHandlers = [];
         domAdapter.listen = function(element, event, handler) {
-            if(element.window === element && event === "resize") {
+            if(element.window === element && event === 'resize') {
                 resizeHandlers.push(handler);
             }
         };
@@ -39,9 +42,10 @@ QUnit.module('resizeCallbacks', {
         this.triggerResize(); //  to reset size cache
     },
     afterEach: function() {
-        domAdapter.getDocumentElement = this.__originalDocumentElementGetter;
+        windowUtils.getWindow = this.__originalWindowElementGetter;
         domAdapter.listen = this.__originalListener;
         delete this.__originalDocumentElementGetter;
+        delete this.__originalWindowElementGetter;
         delete this.__originalListener;
         delete this.width;
         delete this.height;
@@ -84,6 +88,22 @@ QUnit.test('Callback is not called if size is not changed', function(assert) {
     this.triggerResize(false);
 
     assert.ok(!called, 'callback is not called');
+});
+
+QUnit.test('Callback is called if window innerHeight is changed (T834502)', function(assert) {
+    const spy = sinon.spy();
+    this.callbacks.add(spy);
+
+    try {
+        sinon.stub(windowUtils, 'getWindow').returns({ innerHeight: 100, innerWidth: 200 });
+
+        this.triggerResize(false);
+
+        assert.strictEqual(spy.callCount, 1, 'callback is called');
+    } finally {
+        windowUtils.getWindow.restore();
+        this.callbacks.remove(spy);
+    }
 });
 
 QUnit.test('add', function(assert) {

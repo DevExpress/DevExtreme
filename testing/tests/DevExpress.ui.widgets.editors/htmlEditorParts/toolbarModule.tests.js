@@ -1,58 +1,58 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-import "ui/select_box";
-import "ui/color_box/color_view";
-import Toolbar from "ui/html_editor/modules/toolbar";
-import FormDialog from "ui/html_editor/ui/formDialog";
-import { noop } from "core/utils/common";
-import keyboardMock from "../../../helpers/keyboardMock.js";
-import fx from "animation/fx";
+import 'ui/select_box';
+import 'ui/color_box/color_view';
+import Toolbar from 'ui/html_editor/modules/toolbar';
+import FormDialog from 'ui/html_editor/ui/formDialog';
+import { noop } from 'core/utils/common';
+import keyboardMock from '../../../helpers/keyboardMock.js';
+import fx from 'animation/fx';
 
-const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
-const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
-const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
-const ACTIVE_FORMAT_CLASS = "dx-format-active";
-const FORM_CLASS = "dx-formdialog-form";
-const DIALOG_CLASS = "dx-formdialog";
-const DIALOG_TARGET_ITEM_CLASS = "dx-formdialog-field-target";
-const SEPARATOR_CLASS = "dx-htmleditor-toolbar-separator";
-const MENU_SEPARATOR_CLASS = "dx-htmleditor-toolbar-menu-separator";
+const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
+const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
+const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
+const ACTIVE_FORMAT_CLASS = 'dx-format-active';
+const FORM_CLASS = 'dx-formdialog-form';
+const DIALOG_CLASS = 'dx-formdialog';
+const DIALOG_TARGET_ITEM_CLASS = 'dx-formdialog-field-target';
+const SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
+const MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
 
-const BUTTON_CLASS = "dx-button";
-const SELECTBOX_CLASS = "dx-selectbox";
-const COLORVIEW_CLASS = "dx-colorview";
-const DROPDOWNMENU_BUTTON_CLASS = "dx-dropdownmenu-button";
-const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
-const ICON_CLASS = "dx-icon";
-const HOME_ICON_CLASS = "dx-icon-home";
-const DISABLED_STATE_CLASS = "dx-state-disabled";
-const CHECKBOX_CHECKED_CLASS = "dx-checkbox-checked";
-const CHECKBOX_TEXT_CLASS = "dx-checkbox-text";
-const FIELD_ITEM_CLASS = "dx-field-item";
-const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label-text";
-const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
-const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
-const DROPDOWNEDITOR_ICON_CLASS = "dx-dropdowneditor-icon";
-const LIST_ITEM_CLASS = "dx-list-item";
-const BOX_ITEM_CONTENT_CLASS = "dx-box-item-content";
+const BUTTON_CLASS = 'dx-button';
+const SELECTBOX_CLASS = 'dx-selectbox';
+const COLORVIEW_CLASS = 'dx-colorview';
+const DROPDOWNMENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
+const BUTTON_WITH_TEXT_CLASS = 'dx-button-has-text';
+const ICON_CLASS = 'dx-icon';
+const HOME_ICON_CLASS = 'dx-icon-home';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';
+const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
+const FIELD_ITEM_CLASS = 'dx-field-item';
+const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label-text';
+const COLOR_VIEW_HEX_FIELD_CLASS = 'dx-colorview-label-hex';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
+const LIST_ITEM_CLASS = 'dx-list-item';
+const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
 
-const BOLD_FORMAT_CLASS = "dx-bold-format";
-const ITALIC_FORMAT_CLASS = "dx-italic-format";
-const ALIGNCENTER_FORMAT_CLASS = "dx-aligncenter-format";
-const CODEBLOCK_FORMAT_CLASS = "dx-codeblock-format";
-const COLOR_FORMAT_CLASS = "dx-color-format";
-const BACKGROUND_FORMAT_CLASS = "dx-background-format";
-const ORDEREDLIST_FORMAT_CLASS = "dx-orderedlist-format";
-const BULLETLIST_FORMAT_CLASS = "dx-bulletlist-format";
-const CLEAR_FORMAT_CLASS = "dx-clear-format";
-const IMAGE_FORMAT_CLASS = "dx-image-format";
+const BOLD_FORMAT_CLASS = 'dx-bold-format';
+const ITALIC_FORMAT_CLASS = 'dx-italic-format';
+const ALIGNCENTER_FORMAT_CLASS = 'dx-aligncenter-format';
+const CODEBLOCK_FORMAT_CLASS = 'dx-codeblock-format';
+const COLOR_FORMAT_CLASS = 'dx-color-format';
+const BACKGROUND_FORMAT_CLASS = 'dx-background-format';
+const ORDEREDLIST_FORMAT_CLASS = 'dx-orderedlist-format';
+const BULLETLIST_FORMAT_CLASS = 'dx-bulletlist-format';
+const CLEAR_FORMAT_CLASS = 'dx-clear-format';
+const IMAGE_FORMAT_CLASS = 'dx-image-format';
 
 
 const simpleModuleConfig = {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $("#htmlEditor");
+        this.$element = $('#htmlEditor');
         this.log = [];
         this.quillMock = {
             format: (format, value) => {
@@ -66,7 +66,7 @@ const simpleModuleConfig = {
 
         this.options = {
             editorInstance: {
-                NAME: "dxHtmlEditor",
+                NAME: 'dxHtmlEditor',
                 addCleanCallback: noop,
                 addContentInitializedCallback: noop,
                 $element: () => {
@@ -89,7 +89,7 @@ const dialogModuleConfig = {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $("#htmlEditor");
+        this.$element = $('#htmlEditor');
         this.log = [];
         this.focusStub = sinon.stub();
 
@@ -115,7 +115,7 @@ const dialogModuleConfig = {
 
         this.options = {
             editorInstance: {
-                NAME: "dxHtmlEditor",
+                NAME: 'dxHtmlEditor',
                 addCleanCallback: noop,
                 addContentInitializedCallback: noop,
                 $element: () => {
@@ -142,74 +142,74 @@ const dialogModuleConfig = {
 
 const { test } = QUnit;
 
-QUnit.module("Toolbar module", simpleModuleConfig, () => {
-    test("Render toolbar without any options", function(assert) {
+QUnit.module('Toolbar module', simpleModuleConfig, () => {
+    test('Render toolbar without any options', function(assert) {
         new Toolbar(this.quillMock, this.options);
 
-        assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered not on the root element");
-        assert.notOk(this.$element.children().hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar isn't render inside the root element (no items)");
-        assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, "There are no format widgets");
+        assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar rendered not on the root element');
+        assert.notOk(this.$element.children().hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar isn\'t render inside the root element (no items)');
+        assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, 'There are no format widgets');
     });
 
-    test("Render toolbar with items", function(assert) {
-        this.options.items = ["bold"];
+    test('Render toolbar with items', function(assert) {
+        this.options.items = ['bold'];
         new Toolbar(this.quillMock, this.options);
 
         const $toolbarWrapper = this.$element.children();
         const $toolbar = $toolbarWrapper.children();
         const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
-        assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered not on the root element");
-        assert.ok($toolbarWrapper.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar wrapper render inside the root element");
-        assert.ok($toolbar.hasClass(TOOLBAR_CLASS), "Toolbar render inside the wrapper element");
-        assert.equal($formatWidget.length, 1, "There is one format widget");
-        assert.ok($formatWidget.hasClass("dx-bold-format"), "It's the bold format");
-        assert.equal($formatWidget.find(".dx-icon-bold").length, 1, "It has a bold icon");
+        assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar rendered not on the root element');
+        assert.ok($toolbarWrapper.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar wrapper render inside the root element');
+        assert.ok($toolbar.hasClass(TOOLBAR_CLASS), 'Toolbar render inside the wrapper element');
+        assert.equal($formatWidget.length, 1, 'There is one format widget');
+        assert.ok($formatWidget.hasClass('dx-bold-format'), 'It\'s the bold format');
+        assert.equal($formatWidget.find('.dx-icon-bold').length, 1, 'It has a bold icon');
     });
 
-    test("Render toolbar on custom container", function(assert) {
-        this.options.items = ["bold"];
+    test('Render toolbar on custom container', function(assert) {
+        this.options.items = ['bold'];
         this.options.container = this.$element;
         new Toolbar(this.quillMock, this.options);
 
         const $toolbar = this.$element.children();
 
-        assert.ok(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered on the custom element");
-        assert.ok($toolbar.hasClass(TOOLBAR_CLASS), "Toolbar rendered on the custom element");
+        assert.ok(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), 'Toolbar rendered on the custom element');
+        assert.ok($toolbar.hasClass(TOOLBAR_CLASS), 'Toolbar rendered on the custom element');
     });
 
-    test("Render toolbar with simple formats", function(assert) {
-        this.options.items = ["bold", "strike"];
+    test('Render toolbar with simple formats', function(assert) {
+        this.options.items = ['bold', 'strike'];
 
         new Toolbar(this.quillMock, this.options);
         const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
-        assert.equal($formatWidgets.length, 2, "There are 2 format widgets");
-        assert.ok($formatWidgets.first().hasClass("dx-button"), "Change simple format via Button");
+        assert.equal($formatWidgets.length, 2, 'There are 2 format widgets');
+        assert.ok($formatWidgets.first().hasClass('dx-button'), 'Change simple format via Button');
     });
 
-    test("Simple format handling", function(assert) {
+    test('Simple format handling', function(assert) {
         let isHandlerTriggered;
         this.quillMock.getFormat = () => {
             return { bold: false };
         };
-        this.options.items = ["bold", {
-            formatName: "strike",
-            widget: "dxButton",
+        this.options.items = ['bold', {
+            formatName: 'strike',
+            widget: 'dxButton',
             options: {
                 onClick: () => {
                     isHandlerTriggered = true;
                 }
             }
         }, {
-            formatName: "underline"
+            formatName: 'underline'
         }, {
-            formatName: "italic",
-            widget: "dxCheckBox"
+            formatName: 'italic',
+            widget: 'dxCheckBox'
         }, {
-            formatName: "superscript",
+            formatName: 'superscript',
             options: {
-                icon: "home"
+                icon: 'home'
             }
         }];
 
@@ -218,7 +218,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         $formatWidgets.each((index, element) => {
-            $(element).trigger("dxclick");
+            $(element).trigger('dxclick');
         });
 
         const $homeIcon = $formatWidgets.last().find(`.${HOME_ICON_CLASS}`);
@@ -226,53 +226,53 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.deepEqual(
             this.log,
             [{
-                format: "bold",
+                format: 'bold',
                 value: true
             }, {
-                format: "underline",
+                format: 'underline',
                 value: true
             }, {
-                format: "script",
-                value: "super"
+                format: 'script',
+                value: 'super'
             }]
         );
-        assert.ok(isHandlerTriggered, "Custom handler triggered");
-        assert.equal($homeIcon.length, 1, "last button has a custom icon");
+        assert.ok(isHandlerTriggered, 'Custom handler triggered');
+        assert.equal($homeIcon.length, 1, 'last button has a custom icon');
     });
 
-    test("Enum format handling", function(assert) {
+    test('Enum format handling', function(assert) {
         this.quillMock.getFormat = () => {
             return {};
         };
         this.options.items = [
-            { formatName: "size", formatValues: ["10px", "2em"] }
+            { formatName: 'size', formatValues: ['10px', '2em'] }
         ];
 
         new Toolbar(this.quillMock, this.options);
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${DROPDOWNEDITOR_ICON_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         $(`.${LIST_ITEM_CLASS}`)
             .first()
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "size",
-                value: "10px"
+                format: 'size',
+                value: '10px'
             }]
         );
     });
 
-    test("Enum with custom options format handling", function(assert) {
+    test('Enum with custom options format handling', function(assert) {
         this.quillMock.getFormat = () => {
             return {};
         };
         this.options.items = [
-            { formatName: "script", formatValues: [false, "super", "sub"], options: { placeholder: "Test" } }
+            { formatName: 'script', formatValues: [false, 'super', 'sub'], options: { placeholder: 'Test' } }
         ];
 
         new Toolbar(this.quillMock, this.options);
@@ -281,457 +281,457 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 
         $formatWidget
             .find(`.${DROPDOWNEDITOR_ICON_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         $(`.${LIST_ITEM_CLASS}`)
             .last()
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        const placeholder = $formatWidget.dxSelectBox("option", "placeholder");
+        const placeholder = $formatWidget.dxSelectBox('option', 'placeholder');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "script",
-                value: "sub"
+                format: 'script',
+                value: 'sub'
             }]
         );
-        assert.equal(placeholder, "Test", "widget has a custom placeholder");
+        assert.equal(placeholder, 'Test', 'widget has a custom placeholder');
     });
 
-    test("handle align formatting", function(assert) {
-        this.options.items = ["alignLeft", "alignCenter", "alignRight", "alignJustify"];
+    test('handle align formatting', function(assert) {
+        this.options.items = ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         $formatWidgets.each((index, element) => {
-            $(element).trigger("dxclick");
+            $(element).trigger('dxclick');
         });
 
-        this.quillMock.getFormat = () => { return { align: "justify" }; };
-        $formatWidgets.last().trigger("dxclick");
+        this.quillMock.getFormat = () => { return { align: 'justify' }; };
+        $formatWidgets.last().trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "align",
-                value: "left"
+                format: 'align',
+                value: 'left'
             }, {
-                format: "align",
-                value: "center"
+                format: 'align',
+                value: 'center'
             }, {
-                format: "align",
-                value: "right"
+                format: 'align',
+                value: 'right'
             }, {
-                format: "align",
-                value: "justify"
+                format: 'align',
+                value: 'justify'
             }, {
-                format: "align",
+                format: 'align',
                 value: false
             }]
         );
     });
 
-    test("handle codeBlock formatting", function(assert) {
-        this.options.items = ["codeBlock"];
+    test('handle codeBlock formatting', function(assert) {
+        this.options.items = ['codeBlock'];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
-        this.quillMock.getFormat = () => { return { "code-block": true }; };
+        this.quillMock.getFormat = () => { return { 'code-block': true }; };
 
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "code-block",
+                format: 'code-block',
                 value: true
             }, {
-                format: "code-block",
+                format: 'code-block',
                 value: false
             }]);
     });
 
-    test("handle orderedList formatting", function(assert) {
-        this.options.items = ["orderedList"];
+    test('handle orderedList formatting', function(assert) {
+        this.options.items = ['orderedList'];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
-        this.quillMock.getFormat = () => { return { list: "ordered" }; };
+        this.quillMock.getFormat = () => { return { list: 'ordered' }; };
 
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "list",
-                value: "ordered"
+                format: 'list',
+                value: 'ordered'
             }, {
-                format: "list",
+                format: 'list',
                 value: false
             }]);
     });
 
-    test("handle bulletList formatting", function(assert) {
-        this.options.items = ["bulletList"];
+    test('handle bulletList formatting', function(assert) {
+        this.options.items = ['bulletList'];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
-        this.quillMock.getFormat = () => { return { list: "bullet" }; };
+        this.quillMock.getFormat = () => { return { list: 'bullet' }; };
 
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "list",
-                value: "bullet"
+                format: 'list',
+                value: 'bullet'
             }, {
-                format: "list",
+                format: 'list',
                 value: false
             }]);
     });
 
-    test("Render toolbar with enum format", function(assert) {
-        this.options.items = [{ formatName: "header", formatValues: [1, 2, 3, false] }];
+    test('Render toolbar with enum format', function(assert) {
+        this.options.items = [{ formatName: 'header', formatValues: [1, 2, 3, false] }];
 
         new Toolbar(this.quillMock, this.options);
         const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
-        assert.ok($formatWidget.hasClass(SELECTBOX_CLASS), "Change enum format via SelectBox");
+        assert.ok($formatWidget.hasClass(SELECTBOX_CLASS), 'Change enum format via SelectBox');
     });
 
-    test("undo operation", function(assert) {
+    test('undo operation', function(assert) {
         const undoStub = sinon.stub();
         this.quillMock.history = {
             undo: undoStub,
-            stack: { undo: ["test"], redo: [] }
+            stack: { undo: ['test'], redo: [] }
         };
-        this.options.items = ["undo"];
+        this.options.items = ['undo'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateHistoryWidgets();
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.ok(undoStub.calledOnce, "call undo");
+        assert.ok(undoStub.calledOnce, 'call undo');
     });
 
-    test("redo operation", function(assert) {
+    test('redo operation', function(assert) {
         const redoStub = sinon.stub();
         this.quillMock.history = {
             redo: redoStub,
-            stack: { undo: [], redo: ["test"] }
+            stack: { undo: [], redo: ['test'] }
         };
-        this.options.items = ["redo"];
+        this.options.items = ['redo'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateHistoryWidgets();
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.ok(redoStub.calledOnce, "call redo");
+        assert.ok(redoStub.calledOnce, 'call redo');
     });
 
-    test("custom item without formatName shouldn't have format class", function(assert) {
-        this.options.items = ["bold", { widget: "dxButton", options: { text: "test" } }];
+    test('custom item without formatName shouldn\'t have format class', function(assert) {
+        this.options.items = ['bold', { widget: 'dxButton', options: { text: 'test' } }];
 
         new Toolbar(this.quillMock, this.options);
 
         const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
 
-        assert.ok($buttons.eq(0).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Bold");
-        assert.notOk($buttons.eq(1).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Custom button");
+        assert.ok($buttons.eq(0).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), 'Bold');
+        assert.notOk($buttons.eq(1).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), 'Custom button');
     });
 
-    test("handle indent formatting", function(assert) {
-        this.options.items = ["decreaseIndent", "increaseIndent"];
+    test('handle indent formatting', function(assert) {
+        this.options.items = ['decreaseIndent', 'increaseIndent'];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        $formatButton.eq(0).trigger("dxclick");
-        $formatButton.eq(1).trigger("dxclick");
+        $formatButton.eq(0).trigger('dxclick');
+        $formatButton.eq(1).trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "indent",
-                value: "-1"
+                format: 'indent',
+                value: '-1'
             }, {
-                format: "indent",
-                value: "+1"
+                format: 'indent',
+                value: '+1'
             }]);
     });
 
-    test("handle script formatting", function(assert) {
-        this.options.items = ["superscript", "subscript"];
+    test('handle script formatting', function(assert) {
+        this.options.items = ['superscript', 'subscript'];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        $formatButton.eq(0).trigger("dxclick");
-        $formatButton.eq(1).trigger("dxclick");
+        $formatButton.eq(0).trigger('dxclick');
+        $formatButton.eq(1).trigger('dxclick');
 
-        this.quillMock.getFormat = () => { return { script: "super" }; };
-        $formatButton.eq(0).trigger("dxclick");
+        this.quillMock.getFormat = () => { return { script: 'super' }; };
+        $formatButton.eq(0).trigger('dxclick');
 
-        this.quillMock.getFormat = () => { return { script: "sub" }; };
-        $formatButton.eq(1).trigger("dxclick");
+        this.quillMock.getFormat = () => { return { script: 'sub' }; };
+        $formatButton.eq(1).trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "script",
-                value: "super"
+                format: 'script',
+                value: 'super'
             }, {
-                format: "script",
-                value: "sub"
+                format: 'script',
+                value: 'sub'
             }, {
-                format: "script",
+                format: 'script',
                 value: false
             }, {
-                format: "script",
+                format: 'script',
                 value: false
             }]);
     });
 
-    test("separator item", function(assert) {
-        this.options.items = ["separator", { formatName: "separator", locateInMenu: "always" }];
+    test('separator item', function(assert) {
+        this.options.items = ['separator', { formatName: 'separator', locateInMenu: 'always' }];
 
         new Toolbar(this.quillMock, this.options);
 
         $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
-            .trigger("dxclick")
-            .trigger("dxclick");
+            .trigger('dxclick')
+            .trigger('dxclick');
 
         const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
         const $menuSeparator = $(`.${TOOLBAR_CLASS} .${MENU_SEPARATOR_CLASS}`);
 
-        assert.equal($separator.length, 1, "Toolbar has a separator item");
-        assert.equal($menuSeparator.length, 1, "Toolbar has a menu separator item");
+        assert.equal($separator.length, 1, 'Toolbar has a separator item');
+        assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
     });
 
-    test("toolbar should prevent default mousedown event", function(assert) {
-        this.options.items = ["bold"];
+    test('toolbar should prevent default mousedown event', function(assert) {
+        this.options.items = ['bold'];
 
         new Toolbar(this.quillMock, this.options);
 
-        this.$element.on("mousedown", (e) => {
-            assert.ok(e.isDefaultPrevented(), "Default prevented");
+        this.$element.on('mousedown', (e) => {
+            assert.ok(e.isDefaultPrevented(), 'Default prevented');
         });
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("mousedown");
+            .trigger('mousedown');
     });
 
-    test("default click handler should correctly revert defined format", function(assert) {
-        this.options.items = ["bold"];
-        this.quillMock.getFormat = () => { return { bold: "" }; };
+    test('default click handler should correctly revert defined format', function(assert) {
+        this.options.items = ['bold'];
+        this.quillMock.getFormat = () => { return { bold: '' }; };
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        $formatButton.trigger("dxclick");
+        $formatButton.trigger('dxclick');
 
         assert.deepEqual(
             this.log,
             [{
-                format: "bold",
+                format: 'bold',
                 value: false
             }]);
     });
 
-    test("adaptive menu container", function(assert) {
-        this.options.items = [{ formatName: "strike", locateInMenu: "always" }];
+    test('adaptive menu container', function(assert) {
+        this.options.items = [{ formatName: 'strike', locateInMenu: 'always' }];
 
         new Toolbar(this.quillMock, this.options);
 
-        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger("dxclick");
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger('dxclick');
 
         const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
         const isMenuLocatedInToolbar = !!$formatButton.closest(`.${TOOLBAR_CLASS}`).length;
         const isMenuLocatedInToolbarContainer = !!$formatButton.closest(`.${TOOLBAR_WRAPPER_CLASS}`).length;
 
-        assert.notOk(isMenuLocatedInToolbar, "Adaptive menu isn't located into Toolbar");
-        assert.ok(isMenuLocatedInToolbarContainer, "Adaptive menu is located into Toolbar container");
+        assert.notOk(isMenuLocatedInToolbar, 'Adaptive menu isn\'t located into Toolbar');
+        assert.ok(isMenuLocatedInToolbarContainer, 'Adaptive menu is located into Toolbar container');
     });
 });
 
-QUnit.module("Active formats", simpleModuleConfig, () => {
-    test("without active formats", function(assert) {
-        this.options.items = ["bold", "italic", "clear"];
+QUnit.module('Active formats', simpleModuleConfig, () => {
+    test('without active formats', function(assert) {
+        this.options.items = ['bold', 'italic', 'clear'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
 
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 0, "There is no active formats");
+        assert.equal($activeFormats.length, 0, 'There is no active formats');
     });
 
-    test("clear formatting", function(assert) {
+    test('clear formatting', function(assert) {
         this.quillMock.getFormat = () => { return { bold: true }; };
-        this.options.items = ["clear"];
+        this.options.items = ['clear'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         const $clearFormat = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
 
-        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), "Clear formats button is disabled by default");
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is disabled by default');
 
         toolbar.updateFormatWidgets();
 
-        assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), "Clear formats button is active because there is active format");
+        assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active because there is active format');
     });
 
-    test("simple format", function(assert) {
+    test('simple format', function(assert) {
         this.quillMock.getFormat = () => { return { bold: true }; };
-        this.options.items = ["bold", "italic", "strike"];
+        this.options.items = ['bold', 'italic', 'strike'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "Bold format button is active");
-        assert.ok($activeFormats.hasClass(BOLD_FORMAT_CLASS), "it's a bold button");
+        assert.equal($activeFormats.length, 1, 'Bold format button is active');
+        assert.ok($activeFormats.hasClass(BOLD_FORMAT_CLASS), 'it\'s a bold button');
     });
 
-    test("several simple format", function(assert) {
+    test('several simple format', function(assert) {
         this.quillMock.getFormat = () => { return { bold: true, italic: true }; };
-        this.options.items = ["bold", "italic", "strike"];
+        this.options.items = ['bold', 'italic', 'strike'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 2, "Two format buttons are active");
-        assert.ok($activeFormats.eq(0).hasClass(BOLD_FORMAT_CLASS), "it's a bold button");
-        assert.ok($activeFormats.eq(1).hasClass(ITALIC_FORMAT_CLASS), "it's an italic block button");
+        assert.equal($activeFormats.length, 2, 'Two format buttons are active');
+        assert.ok($activeFormats.eq(0).hasClass(BOLD_FORMAT_CLASS), 'it\'s a bold button');
+        assert.ok($activeFormats.eq(1).hasClass(ITALIC_FORMAT_CLASS), 'it\'s an italic block button');
 
     });
 
-    test("alias format", function(assert) {
-        this.quillMock.getFormat = () => { return { "code-block": true }; };
-        this.options.items = ["codeBlock"];
+    test('alias format', function(assert) {
+        this.quillMock.getFormat = () => { return { 'code-block': true }; };
+        this.options.items = ['codeBlock'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "Single format button is active");
-        assert.ok($activeFormats.hasClass(CODEBLOCK_FORMAT_CLASS), "it's a code block button");
+        assert.equal($activeFormats.length, 1, 'Single format button is active');
+        assert.ok($activeFormats.hasClass(CODEBLOCK_FORMAT_CLASS), 'it\'s a code block button');
     });
 
-    test("composite format", function(assert) {
-        this.quillMock.getFormat = () => { return { align: "center" }; };
-        this.options.items = ["alignLeft", "alignCenter", "alignRight", "alignJustify"];
+    test('composite format', function(assert) {
+        this.quillMock.getFormat = () => { return { align: 'center' }; };
+        this.options.items = ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "single button is active");
-        assert.ok($activeFormats.hasClass(ALIGNCENTER_FORMAT_CLASS), "it's an align center button");
+        assert.equal($activeFormats.length, 1, 'single button is active');
+        assert.ok($activeFormats.hasClass(ALIGNCENTER_FORMAT_CLASS), 'it\'s an align center button');
     });
 
-    test("color format", function(assert) {
-        this.quillMock.getFormat = () => { return { color: "#fafafa" }; };
-        this.options.items = ["color", "background", "bold"];
-
-        const toolbar = new Toolbar(this.quillMock, this.options);
-        toolbar.updateFormatWidgets();
-        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
-        const $icon = $activeFormats.find(`.${ICON_CLASS}`);
-
-        assert.equal($activeFormats.length, 1, "single button is active");
-        assert.ok($activeFormats.hasClass(COLOR_FORMAT_CLASS), "it's a color button");
-        assert.equal($icon.get(0).style.borderBottomColor, "rgb(250, 250, 250)", "icon has correct color");
-
-        this.quillMock.getFormat = () => { return {}; };
-        toolbar.updateFormatWidgets();
-        assert.equal($icon.get(0).style.borderBottomColor, "transparent", "icon has correct color after reset format");
-    });
-
-    test("background format", function(assert) {
-        this.quillMock.getFormat = () => { return { background: "#fafafa" }; };
-        this.options.items = ["color", "background", "bold"];
+    test('color format', function(assert) {
+        this.quillMock.getFormat = () => { return { color: '#fafafa' }; };
+        this.options.items = ['color', 'background', 'bold'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
         const $icon = $activeFormats.find(`.${ICON_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "single button is active");
-        assert.ok($activeFormats.hasClass(BACKGROUND_FORMAT_CLASS), "it's a background button");
-        assert.equal($icon.get(0).style.borderBottomColor, "rgb(250, 250, 250)", "icon has correct background");
+        assert.equal($activeFormats.length, 1, 'single button is active');
+        assert.ok($activeFormats.hasClass(COLOR_FORMAT_CLASS), 'it\'s a color button');
+        assert.equal($icon.get(0).style.borderBottomColor, 'rgb(250, 250, 250)', 'icon has correct color');
 
         this.quillMock.getFormat = () => { return {}; };
         toolbar.updateFormatWidgets();
-        assert.equal($icon.get(0).style.borderBottomColor, "transparent", "icon has correct background after reset format");
+        assert.equal($icon.get(0).style.borderBottomColor, 'transparent', 'icon has correct color after reset format');
     });
 
-    test("list format", function(assert) {
-        this.quillMock.getFormat = () => { return { list: "ordered" }; };
-        this.options.items = ["orderedList", "bulletList", "bold"];
+    test('background format', function(assert) {
+        this.quillMock.getFormat = () => { return { background: '#fafafa' }; };
+        this.options.items = ['color', 'background', 'bold'];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+        const $icon = $activeFormats.find(`.${ICON_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, 'single button is active');
+        assert.ok($activeFormats.hasClass(BACKGROUND_FORMAT_CLASS), 'it\'s a background button');
+        assert.equal($icon.get(0).style.borderBottomColor, 'rgb(250, 250, 250)', 'icon has correct background');
+
+        this.quillMock.getFormat = () => { return {}; };
+        toolbar.updateFormatWidgets();
+        assert.equal($icon.get(0).style.borderBottomColor, 'transparent', 'icon has correct background after reset format');
+    });
+
+    test('list format', function(assert) {
+        this.quillMock.getFormat = () => { return { list: 'ordered' }; };
+        this.options.items = ['orderedList', 'bulletList', 'bold'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         let $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "single button is active");
-        assert.ok($activeFormats.hasClass(ORDEREDLIST_FORMAT_CLASS), "it's an ordered list button");
+        assert.equal($activeFormats.length, 1, 'single button is active');
+        assert.ok($activeFormats.hasClass(ORDEREDLIST_FORMAT_CLASS), 'it\'s an ordered list button');
 
-        this.quillMock.getFormat = () => { return { list: "bullet" }; };
+        this.quillMock.getFormat = () => { return { list: 'bullet' }; };
         toolbar.updateFormatWidgets(true);
 
         $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "single button is active");
-        assert.ok($activeFormats.hasClass(BULLETLIST_FORMAT_CLASS), "it's a bullet list button");
+        assert.equal($activeFormats.length, 1, 'single button is active');
+        assert.ok($activeFormats.hasClass(BULLETLIST_FORMAT_CLASS), 'it\'s a bullet list button');
     });
 
-    test("undo/redo", function(assert) {
+    test('undo/redo', function(assert) {
         this.quillMock.history = { stack: { undo: [], redo: [] } };
-        this.options.items = ["undo", "redo"];
+        this.options.items = ['undo', 'redo'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateHistoryWidgets();
         const $historyWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
-        assert.equal($historyWidgets.length, 2, "Undo and redo buttons");
-        assert.ok($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is disabled");
-        assert.ok($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is disabled");
+        assert.equal($historyWidgets.length, 2, 'Undo and redo buttons');
+        assert.ok($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), 'Undo is disabled');
+        assert.ok($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), 'Redo is disabled');
 
-        this.quillMock.history.stack.undo.push("test");
+        this.quillMock.history.stack.undo.push('test');
         toolbar.updateHistoryWidgets();
-        assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
-        assert.ok($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is disabled");
+        assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), 'Undo is enabled');
+        assert.ok($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), 'Redo is disabled');
 
-        this.quillMock.history.stack.redo.push("test");
+        this.quillMock.history.stack.redo.push('test');
         toolbar.updateHistoryWidgets();
-        assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
-        assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is enabled");
+        assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), 'Undo is enabled');
+        assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), 'Redo is enabled');
     });
 
-    test("SelectBox should display currently applied value", function(assert) {
-        this.quillMock.getFormat = () => { return { size: "10px" }; };
-        this.options.items = [{ formatName: "size", formatValues: ["10px", "11px"] }];
+    test('SelectBox should display currently applied value', function(assert) {
+        this.quillMock.getFormat = () => { return { size: '10px' }; };
+        this.options.items = [{ formatName: 'size', formatValues: ['10px', '11px'] }];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
 
@@ -741,377 +741,377 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
             .val();
 
-        assert.strictEqual(value, "10px", "SelectBox contain selected value");
+        assert.strictEqual(value, '10px', 'SelectBox contain selected value');
     });
 
-    test("Image format", function(assert) {
-        this.quillMock.getFormat = () => { return { imageSrc: "testImage" }; };
-        this.options.items = ["image", "background", "bold"];
+    test('Image format', function(assert) {
+        this.quillMock.getFormat = () => { return { imageSrc: 'testImage' }; };
+        this.options.items = ['image', 'background', 'bold'];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "single button is active");
-        assert.ok($activeFormats.hasClass(IMAGE_FORMAT_CLASS), "it's an image button");
+        assert.equal($activeFormats.length, 1, 'single button is active');
+        assert.ok($activeFormats.hasClass(IMAGE_FORMAT_CLASS), 'it\'s an image button');
     });
 });
 
-QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
-    test("show color dialog", function(assert) {
-        this.options.items = ["color"];
+QUnit.module('Toolbar dialogs', dialogModuleConfig, () => {
+    test('show color dialog', function(assert) {
+        this.options.items = ['color'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $form = $(`.${FORM_CLASS}`);
         const $colorView = $form.find(`.${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
         const $boxItemContent = $colorView.closest(`.${BOX_ITEM_CONTENT_CLASS}`);
 
-        assert.strictEqual($form.length, 1, "Form shown");
-        assert.strictEqual($colorView.length, 1, "Form contains ColorView");
-        assert.strictEqual($hexValueInput.val(), "000000", "Base value");
-        assert.strictEqual($boxItemContent.css("flexBasis"), "auto", "Box item content flex-basis is 'auto'");
+        assert.strictEqual($form.length, 1, 'Form shown');
+        assert.strictEqual($colorView.length, 1, 'Form contains ColorView');
+        assert.strictEqual($hexValueInput.val(), '000000', 'Base value');
+        assert.strictEqual($boxItemContent.css('flexBasis'), 'auto', 'Box item content flex-basis is \'auto\'');
     });
 
-    test("show color dialog when formatted text selected", function(assert) {
-        this.options.items = ["color"];
-        this.quillMock.getFormat = () => { return { color: "#fafafa" }; };
+    test('show color dialog when formatted text selected', function(assert) {
+        this.options.items = ['color'];
+        this.quillMock.getFormat = () => { return { color: '#fafafa' }; };
 
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $colorView = $(`.${FORM_CLASS} .${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.equal($hexValueInput.val(), "fafafa", "Selected text color");
+        assert.equal($hexValueInput.val(), 'fafafa', 'Selected text color');
     });
 
-    test("change color", function(assert) {
-        this.options.items = ["color"];
+    test('change color', function(assert) {
+        this.options.items = ['color'];
 
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $colorView = $(`.${FORM_CLASS} .${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        $hexValueInput.val("");
+        $hexValueInput.val('');
         keyboardMock($hexValueInput)
-            .type("fafafa")
+            .type('fafafa')
             .change();
 
         $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .first()
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.deepEqual(this.log, [{ format: "color", value: "#fafafa" }], "format method with the right arguments");
+        assert.deepEqual(this.log, [{ format: 'color', value: '#fafafa' }], 'format method with the right arguments');
     });
 
-    test("decline change color dialog", function(assert) {
-        this.options.items = ["color"];
+    test('decline change color dialog', function(assert) {
+        this.options.items = ['color'];
 
         new Toolbar(this.quillMock, this.options);
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .last()
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.ok(this.focusStub.calledOnce, "focus method was called after closing the dialog");
+        assert.ok(this.focusStub.calledOnce, 'focus method was called after closing the dialog');
     });
 
-    test("show background dialog", function(assert) {
-        this.options.items = ["background"];
+    test('show background dialog', function(assert) {
+        this.options.items = ['background'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $form = $(`.${FORM_CLASS}`);
         const $colorView = $form.find(`.${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.equal($form.length, 1, "Form shown");
-        assert.equal($colorView.length, 1, "Form contains ColorView");
-        assert.equal($hexValueInput.val(), "000000", "Base value");
+        assert.equal($form.length, 1, 'Form shown');
+        assert.equal($colorView.length, 1, 'Form contains ColorView');
+        assert.equal($hexValueInput.val(), '000000', 'Base value');
     });
 
-    test("show background dialog when formatted text selected", function(assert) {
-        this.options.items = ["background"];
-        this.quillMock.getFormat = () => { return { background: "#fafafa" }; };
+    test('show background dialog when formatted text selected', function(assert) {
+        this.options.items = ['background'];
+        this.quillMock.getFormat = () => { return { background: '#fafafa' }; };
 
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $colorView = $(`.${FORM_CLASS} .${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.equal($hexValueInput.val(), "fafafa", "Selected background color");
+        assert.equal($hexValueInput.val(), 'fafafa', 'Selected background color');
     });
 
-    test("change background", function(assert) {
-        this.options.items = ["background"];
+    test('change background', function(assert) {
+        this.options.items = ['background'];
 
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $colorView = $(`.${FORM_CLASS} .${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        $hexValueInput.val("");
+        $hexValueInput.val('');
         keyboardMock($hexValueInput)
-            .type("fafafa")
+            .type('fafafa')
             .change();
 
         $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .first()
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.deepEqual(this.log, [{ format: "background", value: "#fafafa" }], "format method with the right arguments");
+        assert.deepEqual(this.log, [{ format: 'background', value: '#fafafa' }], 'format method with the right arguments');
     });
 
-    test("show image dialog", function(assert) {
-        this.options.items = ["image"];
+    test('show image dialog', function(assert) {
+        this.options.items = ['image'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
 
-        assert.equal($fields.length, 4, "Form with 4 fields shown");
-        assert.equal(fieldsText, "URL:Width (px):Height (px):Alternate text:", "Check labels");
+        assert.equal($fields.length, 4, 'Form with 4 fields shown');
+        assert.equal(fieldsText, 'URL:Width (px):Height (px):Alternate text:', 'Check labels');
 
     });
 
-    test("show image dialog when an image selected", function(assert) {
+    test('show image dialog when an image selected', function(assert) {
         this.quillMock.getFormat = () => {
             return {
-                src: "http://test.com/test.jpg",
+                src: 'http://test.com/test.jpg',
                 width: 100,
                 height: 100
             };
         };
-        this.options.items = ["image"];
+        this.options.items = ['image'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.equal($fieldInputs.eq(0).val(), "http://test.com/test.jpg", "URL");
-        assert.equal($fieldInputs.eq(1).val(), "100", "Width");
-        assert.equal($fieldInputs.eq(2).val(), "100", "Height");
+        assert.equal($fieldInputs.eq(0).val(), 'http://test.com/test.jpg', 'URL');
+        assert.equal($fieldInputs.eq(1).val(), '100', 'Width');
+        assert.equal($fieldInputs.eq(2).val(), '100', 'Height');
     });
 
-    test("decline link dialog", function(assert) {
-        this.options.items = ["link"];
+    test('decline link dialog', function(assert) {
+        this.options.items = ['link'];
 
         new Toolbar(this.quillMock, this.options);
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.ok(this.focusStub.calledOnce, "focus method was called on link adding");
+        assert.ok(this.focusStub.calledOnce, 'focus method was called on link adding');
 
         $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .last()
-            .trigger("dxclick");
+            .trigger('dxclick');
 
-        assert.ok(this.focusStub.calledTwice, "focus method was called after closing the dialog");
+        assert.ok(this.focusStub.calledTwice, 'focus method was called after closing the dialog');
     });
 
-    test("change an image formatting", function(assert) {
-        this.options.items = ["image"];
+    test('change an image formatting', function(assert) {
+        this.options.items = ['image'];
         this.quillMock.getSelection = () => { return { index: 1, length: 0 }; };
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($fieldInputs.eq(0))
-            .type("http://test.com/test.jpg")
+            .type('http://test.com/test.jpg')
             .change();
 
         keyboardMock($fieldInputs.eq(1))
-            .type("100")
+            .type('100')
             .change();
 
         keyboardMock($fieldInputs.eq(2))
-            .type("100")
+            .type('100')
             .change();
 
         keyboardMock($fieldInputs.eq(3))
-            .type("Alternate")
+            .type('Alternate')
             .change()
-            .press("enter");
+            .press('enter');
 
         assert.deepEqual(this.log[0], {
             index: 1,
-            type: "extendedImage",
+            type: 'extendedImage',
             value: {
-                alt: "Alternate",
-                height: "100",
-                src: "http://test.com/test.jpg",
-                width: "100"
+                alt: 'Alternate',
+                height: '100',
+                src: 'http://test.com/test.jpg',
+                width: '100'
             }
-        }, "expected insert new image config");
+        }, 'expected insert new image config');
 
         assert.deepEqual(this.log[1], {
             setSelection: [2, 0]
-        }, "caret position has been updated");
+        }, 'caret position has been updated');
     });
 
-    test("caret position after update an image with selection", function(assert) {
-        this.options.items = ["image"];
+    test('caret position after update an image with selection', function(assert) {
+        this.options.items = ['image'];
         this.quillMock.getSelection = () => { return { index: 4, length: 2 }; };
-        this.quillMock.getFormat = () => { return { extendedImage: "oldImage" }; };
+        this.quillMock.getFormat = () => { return { extendedImage: 'oldImage' }; };
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $src = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).first();
 
         keyboardMock($src)
-            .type("http://test.com/test.jpg")
+            .type('http://test.com/test.jpg')
             .change()
-            .press("enter");
+            .press('enter');
 
         assert.deepEqual(this.log[1], {
             setSelection: [5, 0]
-        }, "caret position has been correctly updated");
+        }, 'caret position has been correctly updated');
     });
 
-    test("show link dialog", function(assert) {
-        this.options.items = ["link"];
+    test('show link dialog', function(assert) {
+        this.options.items = ['link'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}, .${CHECKBOX_TEXT_CLASS}`).text();
 
-        assert.equal($fields.length, 3, "Form with 3 fields shown");
-        assert.equal(fieldsText, "URL:Text:Open link in new window", "Check labels");
+        assert.equal($fields.length, 3, 'Form with 3 fields shown');
+        assert.equal(fieldsText, 'URL:Text:Open link in new window', 'Check labels');
     });
 
-    test("show link dialog when a link selected", function(assert) {
+    test('show link dialog when a link selected', function(assert) {
         this.quillMock.getFormat = () => {
             return {
-                link: "http://test.com",
+                link: 'http://test.com',
                 target: true,
-                text: "Test"
+                text: 'Test'
             };
         };
         this.quillMock.getSelection = () => true;
-        this.quillMock.getText = () => "Test";
+        this.quillMock.getText = () => 'Test';
 
-        this.options.items = ["link"];
+        this.options.items = ['link'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
         const $targetField = $(`.${DIALOG_TARGET_ITEM_CLASS}`);
 
-        assert.equal($fieldInputs.eq(0).val(), "http://test.com", "URL");
-        assert.equal($fieldInputs.eq(1).val(), "Test", "Text");
-        assert.equal($targetField.length, 1, "There is target field");
-        assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 1, "It is contains a checked CheckBox");
+        assert.equal($fieldInputs.eq(0).val(), 'http://test.com', 'URL');
+        assert.equal($fieldInputs.eq(1).val(), 'Test', 'Text');
+        assert.equal($targetField.length, 1, 'There is target field');
+        assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 1, 'It is contains a checked CheckBox');
     });
 
-    test("show link dialog when a link selected and didn't contain a target attribute", function(assert) {
+    test('show link dialog when a link selected and didn\'t contain a target attribute', function(assert) {
         this.quillMock.getFormat = () => {
             return {
-                link: "http://test.com",
+                link: 'http://test.com',
                 target: undefined,
-                text: "Test"
+                text: 'Test'
             };
         };
         this.quillMock.getSelection = () => true;
-        this.quillMock.getText = () => "Test";
+        this.quillMock.getText = () => 'Test';
 
-        this.options.items = ["link"];
+        this.options.items = ['link'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
         const $targetField = $(`.${DIALOG_TARGET_ITEM_CLASS}`);
 
-        assert.equal($fieldInputs.eq(0).val(), "http://test.com", "URL");
-        assert.equal($fieldInputs.eq(1).val(), "Test", "Text");
-        assert.equal($targetField.length, 1, "There is target field");
-        assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 0, "It isn't contains an checked CheckBox");
+        assert.equal($fieldInputs.eq(0).val(), 'http://test.com', 'URL');
+        assert.equal($fieldInputs.eq(1).val(), 'Test', 'Text');
+        assert.equal($targetField.length, 1, 'There is target field');
+        assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 0, 'It isn\'t contains an checked CheckBox');
     });
 
-    test("change an link formatting", function(assert) {
-        this.options.items = ["link"];
+    test('change an link formatting', function(assert) {
+        this.options.items = ['link'];
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($fieldInputs.eq(0))
-            .type("http://test.com")
+            .type('http://test.com')
             .change();
 
         keyboardMock($fieldInputs.eq(1))
-            .type("Test")
+            .type('Test')
             .change()
-            .press("enter");
+            .press('enter');
 
         assert.deepEqual(this.log, [{
-            format: "link",
+            format: 'link',
             value: {
-                href: "http://test.com",
+                href: 'http://test.com',
                 target: true,
-                text: "Test"
+                text: 'Test'
             }
-        }], "expected format config");
+        }], 'expected format config');
     });
 
-    test("'Text' field should be hidden when formatting embed config with the 'link' dialog", function(assert) {
-        this.options.items = ["link"];
+    test('\'Text\' field should be hidden when formatting embed config with the \'link\' dialog', function(assert) {
+        this.options.items = ['link'];
         this.quillMock.getSelection = () => { return { index: 0, length: 10 }; };
-        this.quillMock.getText = () => "Test";
+        this.quillMock.getText = () => 'Test';
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger("dxclick");
+            .trigger('dxclick');
 
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $fields.find(`.${FIELD_ITEM_LABEL_CLASS}, .${CHECKBOX_TEXT_CLASS}`).text();
 
-        assert.equal($fields.length, 2, "Form with 2 fields shown");
-        assert.equal(fieldsText, "URL:Open link in new window", "Check labels");
+        assert.equal($fields.length, 2, 'Form with 2 fields shown');
+        assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
     });
 });

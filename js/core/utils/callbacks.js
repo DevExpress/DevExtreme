@@ -26,7 +26,7 @@ Callback.prototype._fireCore = function(context, args) {
 
 
 Callback.prototype.add = function(fn) {
-    if(typeof fn === "function" && (!this._options.unique || !this.has(fn))) {
+    if(typeof fn === 'function' && (!this._options.unique || !this.has(fn))) {
         this._list.push(fn);
     }
     return this;

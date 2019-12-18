@@ -1,11 +1,11 @@
-import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
-import AdaptivePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.adaptive";
-import { extend } from "../../../core/utils/extend";
-import errors from "../../widget/ui.errors";
-import dateUtils from "../../../core/utils/date";
-import { isNumeric } from "../../../core/utils/type";
-import typeUtils from "../../../core/utils/type";
-import themes from "../../themes";
+import BasePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.base';
+import AdaptivePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.adaptive';
+import { extend } from '../../../core/utils/extend';
+import errors from '../../widget/ui.errors';
+import dateUtils from '../../../core/utils/date';
+import { isNumeric } from '../../../core/utils/type';
+import typeUtils from '../../../core/utils/type';
+import themes from '../../themes';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -24,7 +24,7 @@ class BaseRenderingStrategy {
     }
 
     _isAdaptive() {
-        return this.instance.fire("isAdaptive");
+        return this.instance.fire('isAdaptive');
     }
 
     _correctCompactAppointmentCoordinatesInAdaptive(coordinates, isAllDay) {
@@ -60,7 +60,7 @@ class BaseRenderingStrategy {
     }
 
     getDirection() {
-        return "horizontal";
+        return 'horizontal';
     }
 
     createTaskPositionMap(items) {
@@ -90,7 +90,7 @@ class BaseRenderingStrategy {
     }
 
     _getDeltaWidth(args, initialSize) {
-        var intervalWidth = this.instance.fire("getResizableStep") || this.getAppointmentMinSize(),
+        var intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize(),
             initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);
@@ -116,8 +116,8 @@ class BaseRenderingStrategy {
         var position = this._getAppointmentCoordinates(item),
             allDay = this.isAllDay(item),
             result = [],
-            startDate = new Date(this.instance.fire("getField", "startDate", item)),
-            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
+            startDate = new Date(this.instance.fire('getField', 'startDate', item)),
+            isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j], isRecurring),
@@ -136,7 +136,7 @@ class BaseRenderingStrategy {
                     width: width
                 })) {
 
-                    appointmentReduced = "head";
+                    appointmentReduced = 'head';
 
                     initialRowIndex = position[j].rowIndex;
                     initialCellIndex = position[j].cellIndex;
@@ -190,7 +190,7 @@ class BaseRenderingStrategy {
             top: 0,
             left: 0
         }];
-        this.instance.fire("needCoordinates", {
+        this.instance.fire('needCoordinates', {
             startDate: this.startDate(itemData),
             originalStartDate: this.startDate(itemData, true),
             appointmentData: itemData,
@@ -203,7 +203,7 @@ class BaseRenderingStrategy {
     }
 
     _isRtl() {
-        return this.instance.option("rtlEnabled");
+        return this.instance.option('rtlEnabled');
     }
 
     _getAppointmentParts() {
@@ -248,7 +248,7 @@ class BaseRenderingStrategy {
     }
 
     cropAppointmentWidth(width, cellWidth) {
-        if(this.instance.fire("isGroupedByDate")) {
+        if(this.instance.fire('isGroupedByDate')) {
             width = cellWidth;
         }
 
@@ -376,7 +376,7 @@ class BaseRenderingStrategy {
                     intersectPositionCount = indexes.length;
                 }
             } else {
-                var removeIndex = this._findIndexByKey(stack, "i", "j", current.i, current.j),
+                var removeIndex = this._findIndexByKey(stack, 'i', 'j', current.i, current.j),
                     resultItem = stack[removeIndex];
 
                 stack.splice(removeIndex, 1);
@@ -406,7 +406,7 @@ class BaseRenderingStrategy {
     }
 
     _skipSortedIndex(index) {
-        return this.instance.fire("getMaxAppointmentsPerCell") && index > this._getMaxAppointmentCountPerCell() - 1;
+        return this.instance.fire('getMaxAppointmentsPerCell') && index > this._getMaxAppointmentCountPerCell() - 1;
     }
 
     _findIndexByKey(arr, iKey, jKey, iValue, jValue) {
@@ -461,14 +461,14 @@ class BaseRenderingStrategy {
     startDate(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
             rangeStartDate = this.instance._getStartDate(appointment, skipNormalize),
-            text = this.instance.fire("getField", "text", appointment);
+            text = this.instance.fire('getField', 'text', appointment);
 
         if((startDate && rangeStartDate > startDate) || !startDate) {
             startDate = rangeStartDate;
         }
 
         if(isNaN(startDate.getTime())) {
-            throw errors.Error("E1032", text);
+            throw errors.Error('E1032', text);
         }
 
         return startDate;
@@ -483,7 +483,7 @@ class BaseRenderingStrategy {
             var recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
                 recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate,
                 fullDuration = viewStartDate.getTime() > endDate.getTime() ?
-                    this.instance.fire("getField", "endDate", appointment).getTime() - this.instance.fire("getField", "startDate", appointment).getTime() :
+                    this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
                     endDate.getTime() - realStartDate.getTime();
 
             fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
@@ -504,7 +504,7 @@ class BaseRenderingStrategy {
         }
 
         if(!this.isAllDay(appointment)) {
-            var viewEndDate = dateUtils.roundToHour(this.instance.fire("getEndViewDate"));
+            var viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
@@ -515,7 +515,7 @@ class BaseRenderingStrategy {
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-        var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
+        var daylightDiff = this.instance.fire('getDaylightOffset', startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
     }
 
@@ -524,12 +524,12 @@ class BaseRenderingStrategy {
     }
 
     _calculateDurationByDaylightDiff(duration, diff) {
-        return duration + diff * toMs("minute");
+        return duration + diff * toMs('minute');
     }
 
     _getAppointmentDurationInMs(startDate, endDate, allDay) {
         var result;
-        this.instance.fire("getAppointmentDurationInMs", {
+        this.instance.fire('getAppointmentDurationInMs', {
             startDate: startDate,
             endDate: endDate,
             allDay: allDay,
@@ -542,7 +542,7 @@ class BaseRenderingStrategy {
     }
 
     _getMaxNeighborAppointmentCount() {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
         if(!overlappingMode) {
             var outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
             return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
@@ -557,7 +557,9 @@ class BaseRenderingStrategy {
             coordinates.virtual = {
                 top: coordinates.top,
                 left: coordinates.left,
-                index: coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex,
+                index: coordinates.appointmentReduced === 'tail' ?
+                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
+                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
                 isAllDay: isAllDay
             };
         }
@@ -651,7 +653,7 @@ class BaseRenderingStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell'),
             offsets = this._getOffsets(),
             appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
@@ -665,7 +667,7 @@ class BaseRenderingStrategy {
         }
 
         var topOffset = (1 - ratio) * maxHeight;
-        if(overlappingMode === "auto" || isNumeric(overlappingMode)) {
+        if(overlappingMode === 'auto' || isNumeric(overlappingMode)) {
             ratio = 1;
             maxHeight = maxHeight - appointmentDefaultOffset;
             topOffset = appointmentDefaultOffset;
@@ -695,12 +697,12 @@ class BaseRenderingStrategy {
     }
 
     needSeparateAppointment(allDay) {
-        return this.instance.fire("isGroupedByDate") && allDay;
+        return this.instance.fire('isGroupedByDate') && allDay;
     }
 
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
-            var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell'),
                 appointmentCountPerCell;
 
             if(!overlappingMode) {
@@ -709,10 +711,10 @@ class BaseRenderingStrategy {
             if(isNumeric(overlappingMode)) {
                 appointmentCountPerCell = overlappingMode;
             }
-            if(overlappingMode === "auto") {
+            if(overlappingMode === 'auto') {
                 appointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
             }
-            if(overlappingMode === "unlimited") {
+            if(overlappingMode === 'unlimited') {
                 appointmentCountPerCell = undefined;
             }
 
@@ -731,7 +733,7 @@ class BaseRenderingStrategy {
     }
 
     _isCompactTheme() {
-        return (themes.current() || "").split(".").pop() === "compact";
+        return (themes.current() || '').split('.').pop() === 'compact';
     }
 
     _getAppointmentDefaultOffset() {

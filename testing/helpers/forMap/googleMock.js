@@ -5,52 +5,52 @@ var google = window.google = {
         event: {
             trigger: function(_, name) {
                 switch(name) {
-                    case "resize":
+                    case 'resize':
                         google.mapResized = true;
                         break;
-                    case "bounds_changed":
+                    case 'bounds_changed':
                         google.boundsChangedCallback();
                         break;
-                    case "click":
+                    case 'click':
                         google.clickActionCallback();
                         break;
                 }
             },
             addListener: function(_, name, callback) {
                 switch(name) {
-                    case "idle":
+                    case 'idle':
                         google.mapInitialized = true;
                         setTimeout(callback);
-                        return "idleHandler";
-                    case "click":
+                        return 'idleHandler';
+                    case 'click':
                         google.clickActionCallback = callback;
-                        return "clickHandler";
-                    case "bounds_changed":
+                        return 'clickHandler';
+                    case 'bounds_changed':
                         google.boundsChangedCallback = callback;
-                        return "bounds_changedHandler";
+                        return 'bounds_changedHandler';
                 }
             },
             removeListener: function(listener) {
                 switch(listener) {
-                    case "idleHandler":
+                    case 'idleHandler':
                         google.idleHandlerRemoved = true;
                         break;
-                    case "clickHandler":
+                    case 'clickHandler':
                         google.clickHandlerRemoved = true;
                         break;
-                    case "bounds_changedHandler":
+                    case 'bounds_changedHandler':
                         google.boundsChangedHandlerRemoved = true;
                         break;
-                    case "domClick":
+                    case 'domClick':
                         google.domClickHandlerRemoved = true;
                         break;
                 }
             },
             addDomListener: function(_, name, callback) {
                 switch(name) {
-                    case "click":
+                    case 'click':
                         google.domClickActionCallback = callback;
-                        return "domClick";
+                        return 'domClick';
                 }
             }
         },
@@ -161,7 +161,7 @@ var google = window.google = {
                     geometry: {
                         location: new google.maps.LatLng(-1.12345, -1.12345)
                     }
-                }], response.address !== "" ? google.maps.GeocoderStatus.OK : google.maps.GeocoderStatus.ERROR);
+                }], response.address !== '' ? google.maps.GeocoderStatus.OK : google.maps.GeocoderStatus.ERROR);
             };
         },
         DirectionsService: function() {
@@ -293,7 +293,7 @@ var google = window.google = {
                     this.onRemove();
                 } else {
                     google.overlayInstance = (google.overlayInstance || 0) + 1;
-                    google.overlayMouseTarget = document.createElement("div");
+                    google.overlayMouseTarget = document.createElement('div');
 
                     this.onAdd();
                 }

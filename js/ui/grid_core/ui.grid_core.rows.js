@@ -1,34 +1,34 @@
-import $ from "../../core/renderer";
-import { getWindow, hasWindow } from "../../core/utils/window";
-import eventsEngine from "../../events/core/events_engine";
-import { deferRender, deferUpdate } from "../../core/utils/common";
-import styleUtils from "../../core/utils/style";
-import { isDefined, isNumeric, isString } from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { isEmpty } from "../../core/utils/string";
-import { getDefaultAlignment } from "../../core/utils/position";
-import { compileGetter } from "../../core/utils/data";
-import { setEmptyText, getGroupRowSummaryText, getDisplayValue, formatValue, renderLoadPanel, renderNoDataText } from "./ui.grid_core.utils";
-import columnsView from "./ui.grid_core.columns_view";
-import Scrollable from "../scroll_view/ui.scrollable";
-import removeEvent from "../../core/remove_event";
-import messageLocalization from "../../localization/message";
-import browser from "../../core/utils/browser";
+import $ from '../../core/renderer';
+import { getWindow, hasWindow } from '../../core/utils/window';
+import eventsEngine from '../../events/core/events_engine';
+import { deferRender, deferUpdate } from '../../core/utils/common';
+import styleUtils from '../../core/utils/style';
+import { isDefined, isNumeric, isString } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { isEmpty } from '../../core/utils/string';
+import { getDefaultAlignment } from '../../core/utils/position';
+import { compileGetter } from '../../core/utils/data';
+import { setEmptyText, getGroupRowSummaryText, getDisplayValue, formatValue, renderLoadPanel, renderNoDataText } from './ui.grid_core.utils';
+import columnsView from './ui.grid_core.columns_view';
+import Scrollable from '../scroll_view/ui.scrollable';
+import removeEvent from '../../core/remove_event';
+import messageLocalization from '../../localization/message';
+import browser from '../../core/utils/browser';
 
-var ROWS_VIEW_CLASS = "rowsview",
-    CONTENT_CLASS = "content",
-    NOWRAP_CLASS = "nowrap",
-    GROUP_ROW_CLASS = "dx-group-row",
-    GROUP_CELL_CLASS = "dx-group-cell",
-    DATA_ROW_CLASS = "dx-data-row",
-    FREE_SPACE_CLASS = "dx-freespace-row",
-    ROW_LINES_CLASS = "dx-row-lines",
-    COLUMN_LINES_CLASS = "dx-column-lines",
-    ROW_ALTERNATION_CLASS = "dx-row-alt",
-    LAST_ROW_BORDER = "dx-last-row-border",
-    EMPTY_CLASS = "dx-empty",
-    ROW_INSERTED_ANIMATION_CLASS = "row-inserted-animation",
+var ROWS_VIEW_CLASS = 'rowsview',
+    CONTENT_CLASS = 'content',
+    NOWRAP_CLASS = 'nowrap',
+    GROUP_ROW_CLASS = 'dx-group-row',
+    GROUP_CELL_CLASS = 'dx-group-cell',
+    DATA_ROW_CLASS = 'dx-data-row',
+    FREE_SPACE_CLASS = 'dx-freespace-row',
+    ROW_LINES_CLASS = 'dx-row-lines',
+    COLUMN_LINES_CLASS = 'dx-column-lines',
+    ROW_ALTERNATION_CLASS = 'dx-row-alt',
+    LAST_ROW_BORDER = 'dx-last-row-border',
+    EMPTY_CLASS = 'dx-empty',
+    ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation',
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -92,7 +92,7 @@ module.exports = {
                  * @name GridBaseOptions.scrolling.useNative
                  * @type boolean
                  */
-                useNative: "auto"
+                useNative: 'auto'
                 /**
                 * @name GridBaseOptions.scrolling.showScrollbar
                 * @type Enums.ShowScrollbarMode
@@ -119,13 +119,13 @@ module.exports = {
                  * @name GridBaseOptions.loadPanel.enabled
                  * @type boolean
                  */
-                enabled: "auto",
+                enabled: 'auto',
                 /**
                  * @name GridBaseOptions.loadPanel.text
                  * @type string
                  * @default "Loading..."
                  */
-                text: messageLocalization.format("Loading"),
+                text: messageLocalization.format('Loading'),
                 /**
                  * @name GridBaseOptions.loadPanel.width
                  * @type number
@@ -150,7 +150,7 @@ module.exports = {
                 * @type string
                 * @default ""
                 */
-                indicatorSrc: "",
+                indicatorSrc: '',
 
                 /**
                 * @name GridBaseOptions.loadPanel.showPane
@@ -347,7 +347,7 @@ module.exports = {
              * @type string
              * @default "No data"
              */
-            noDataText: messageLocalization.format("dxDataGrid-noDataText"),
+            noDataText: messageLocalization.format('dxDataGrid-noDataText'),
             /**
              * @name GridBaseOptions.wordWrapEnabled
              * @type boolean
@@ -467,7 +467,7 @@ module.exports = {
     views: {
         rowsView: columnsView.ColumnsView.inherit((function() {
             var defaultCellTemplate = function($container, options) {
-                var isDataTextEmpty = isEmpty(options.text) && options.rowType === "data",
+                var isDataTextEmpty = isEmpty(options.text) && options.rowType === 'data',
                     text = options.text,
                     container = $container.get(0);
 
@@ -482,15 +482,15 @@ module.exports = {
 
             var getScrollableBottomPadding = function(that) {
                 var scrollable = that.getScrollable();
-                return scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0;
+                return scrollable ? Math.ceil(parseFloat(scrollable.$content().css('paddingBottom'))) : 0;
             };
 
             return {
                 _getDefaultTemplate: function(column) {
                     switch(column.command) {
-                        case "empty":
+                        case 'empty':
                             return function(container) {
-                                container.html("&nbsp;");
+                                container.html('&nbsp;');
                             };
                         default:
                             return defaultCellTemplate;
@@ -499,24 +499,24 @@ module.exports = {
 
                 _getDefaultGroupTemplate: function(column) {
                     var that = this,
-                        summaryTexts = that.option("summary.texts");
+                        summaryTexts = that.option('summary.texts');
 
                     return function($container, options) {
                         var data = options.data,
-                            text = options.column.caption + ": " + options.text,
+                            text = options.column.caption + ': ' + options.text,
                             container = $container.get(0);
 
                         if(options.summaryItems && options.summaryItems.length) {
-                            text += " " + getGroupRowSummaryText(options.summaryItems, summaryTexts);
+                            text += ' ' + getGroupRowSummaryText(options.summaryItems, summaryTexts);
                         }
 
                         if(data) {
                             if(options.groupContinuedMessage && options.groupContinuesMessage) {
-                                text += " (" + options.groupContinuedMessage + ". " + options.groupContinuesMessage + ")";
+                                text += ' (' + options.groupContinuedMessage + '. ' + options.groupContinuesMessage + ')';
                             } else if(options.groupContinuesMessage) {
-                                text += " (" + options.groupContinuesMessage + ")";
+                                text += ' (' + options.groupContinuesMessage + ')';
                             } else if(options.groupContinuedMessage) {
-                                text += " (" + options.groupContinuedMessage + ")";
+                                text += ' (' + options.groupContinuedMessage + ')';
                             }
                         }
 
@@ -537,9 +537,9 @@ module.exports = {
                         column = options.column,
                         template;
 
-                    if(options.rowType === "group" && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
+                    if(options.rowType === 'group' && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
                         template = column.groupCellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultGroupTemplate(column) };
-                    } else if((options.rowType === "data" || column.command) && column.cellTemplate) {
+                    } else if((options.rowType === 'data' || column.command) && column.cellTemplate) {
                         template = column.cellTemplate;
                     } else {
                         template = { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
@@ -555,13 +555,13 @@ module.exports = {
                         isRowExpanded;
 
                     if(row) {
-                        isGroup = row.rowType === "group";
-                        isDataRow = row.rowType === "data";
+                        isGroup = row.rowType === 'group';
+                        isDataRow = row.rowType === 'data';
 
                         isDataRow && $row.addClass(DATA_ROW_CLASS);
-                        isDataRow && this.option("showRowLines") && $row.addClass(ROW_LINES_CLASS);
+                        isDataRow && this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
 
-                        this.option("showColumnLines") && $row.addClass(COLUMN_LINES_CLASS);
+                        this.option('showColumnLines') && $row.addClass(COLUMN_LINES_CLASS);
 
                         if(row.visible === false) {
                             $row.hide();
@@ -570,8 +570,8 @@ module.exports = {
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;
-                            this.setAria("role", "row", $row);
-                            this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
+                            this.setAria('role', 'row', $row);
+                            this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
                     }
 
@@ -579,8 +579,8 @@ module.exports = {
                 },
 
                 _rowPrepared: function($row, rowOptions, row) {
-                    if(rowOptions.rowType === "data") {
-                        if(this.option("rowAlternationEnabled")) {
+                    if(rowOptions.rowType === 'data') {
+                        if(this.option('rowAlternationEnabled')) {
                             var getRowAlt = () => {
                                 return row.dataIndex % 2 === 1;
                             };
@@ -599,7 +599,7 @@ module.exports = {
 
                 _setAriaRowIndex: function(row, $row) {
                     var component = this.component,
-                        isPagerMode = component.option("scrolling.mode") === "standard" && component.option("scrolling.rowRenderingMode") !== "virtual",
+                        isPagerMode = component.option('scrolling.mode') === 'standard' && component.option('scrolling.rowRenderingMode') !== 'virtual',
                         rowIndex = row.rowIndex + 1;
 
                     if(isPagerMode) {
@@ -607,23 +607,23 @@ module.exports = {
                     } else {
                         rowIndex += this._dataController.getRowIndexOffset();
                     }
-                    this.setAria("rowindex", rowIndex, $row);
+                    this.setAria('rowindex', rowIndex, $row);
                 },
 
                 _afterRowPrepared: function(e) {
                     var arg = e.args[0],
                         dataController = this._dataController,
                         row = dataController.getVisibleRows()[arg.rowIndex],
-                        watch = this.option("integrationOptions.watchMethod");
+                        watch = this.option('integrationOptions.watchMethod');
 
-                    if(!arg.data || arg.rowType !== "data" || arg.isNewRow || !this.option("twoWayBindingEnabled") || !watch || !row) return;
+                    if(!arg.data || arg.rowType !== 'data' || arg.isNewRow || !this.option('twoWayBindingEnabled') || !watch || !row) return;
 
                     var dispose = watch(
                         () => {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
                         () => {
-                            dataController.repaintRows([row.rowIndex], this.option("repaintChangesOnly"));
+                            dataController.repaintRows([row.rowIndex], this.option('repaintChangesOnly'));
                         },
                         {
                             deep: true,
@@ -639,7 +639,7 @@ module.exports = {
                         $element = that.element();
 
                     if(!$element.children().length) {
-                        $element.append("<div>");
+                        $element.append('<div>');
                     }
                     if((force || !that._loadPanel)) {
                         that._renderLoadPanel($element, $element.parent(), that._dataController.isLocalStore());
@@ -656,7 +656,7 @@ module.exports = {
                             }
                         }
 
-                        if(that.option("columnAutoWidth") || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
+                        if(that.option('columnAutoWidth') || that._hasHeight || allColumnsHasWidth || that._columnsController._isColumnFixing()) {
                             that._renderScrollableCore($element);
                         }
                     }
@@ -686,7 +686,7 @@ module.exports = {
                 _renderLoadPanel: renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
-                    contentElement.replaceWith($("<div>")
+                    contentElement.replaceWith($('<div>')
                         .addClass(this.addWidgetPrefix(CONTENT_CLASS))
                         .append(tableElement));
 
@@ -699,11 +699,11 @@ module.exports = {
                         contentElement = that._findContentElement(),
                         changeType = change && change.changeType,
                         executors = [],
-                        highlightChanges = this.option("highlightChanges"),
+                        highlightChanges = this.option('highlightChanges'),
                         rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
 
                     switch(changeType) {
-                        case "update":
+                        case 'update':
                             each(change.rowIndices, function(index, rowIndex) {
                                 var $newRowElement = that._getRowElements(newTableElement).eq(index),
                                     changeType = change.changeTypes && change.changeTypes[index],
@@ -714,10 +714,10 @@ module.exports = {
                                         $rowElement = $rowsElement.eq(rowIndex);
 
                                     switch(changeType) {
-                                        case "update":
+                                        case 'update':
                                             if(item) {
                                                 var columnIndices = change.columnIndices && change.columnIndices[index];
-                                                if(isDefined(item.visible) && item.visible !== $rowElement.is(":visible")) {
+                                                if(isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
                                                     $rowElement.toggle(item.visible);
                                                 } else if(columnIndices) {
                                                     that._updateCells($rowElement, $newRowElement, columnIndices);
@@ -726,9 +726,9 @@ module.exports = {
                                                 }
                                             }
                                             break;
-                                        case "insert":
+                                        case 'insert':
                                             if(!$rowsElement.length) {
-                                                $newRowElement.prependTo(tableElement.children("tbody"));
+                                                $newRowElement.prependTo(tableElement.children('tbody'));
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
@@ -738,7 +738,7 @@ module.exports = {
                                                 $newRowElement.addClass(rowInsertedClass);
                                             }
                                             break;
-                                        case "remove":
+                                        case 'remove':
                                             $rowElement.remove();
                                             break;
                                     }
@@ -767,25 +767,25 @@ module.exports = {
 
                     $row
                         .addClass(className)
-                        .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
+                        .toggleClass(COLUMN_LINES_CLASS, that.option('showColumnLines'));
 
                     for(i = 0; i < columns.length; i++) {
-                        $cell = that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns });
-                        isNumeric(height) && $cell.css("height", height);
+                        $cell = that._createCell({ column: columns[i], rowType: 'freeSpace', columnIndex: i, columns: columns });
+                        isNumeric(height) && $cell.css('height', height);
 
                         $row.append($cell);
                     }
 
-                    that.setAria("role", "presentation", $row);
+                    that.setAria('role', 'presentation', $row);
 
                     return $row;
                 },
 
                 _appendEmptyRow: function($table, $emptyRow, location) {
                     var $tBodies = this._getBodies($table),
-                        $container = $tBodies.length && !$emptyRow.is("tbody") ? $tBodies : $table;
+                        $container = $tBodies.length && !$emptyRow.is('tbody') ? $tBodies : $table;
 
-                    if(location === "top") {
+                    if(location === 'top') {
                         $container.first().prepend($emptyRow);
                     } else {
                         $container.last().append($emptyRow);
@@ -806,8 +806,8 @@ module.exports = {
                         keyExpr = that._dataController.store() && that._dataController.store().key();
 
                     keyExpr && rows.some(function(row) {
-                        if(row.rowType === "data" && row.key === undefined) {
-                            that._dataController.fireError("E1046", keyExpr);
+                        if(row.rowType === 'data' && row.key === undefined) {
+                            that._dataController.fireError('E1046', keyExpr);
                             return true;
                         }
                     });
@@ -818,7 +818,7 @@ module.exports = {
                 },
 
                 _getRowsHeight: function($tableElement) {
-                    var $rowElements = $tableElement.children("tbody").children().not(".dx-virtual-row").not("." + FREE_SPACE_CLASS);
+                    var $rowElements = $tableElement.children('tbody').children().not('.dx-virtual-row').not('.' + FREE_SPACE_CLASS);
 
                     return $rowElements.toArray().reduce(function(sum, row) {
                         return sum + row.getBoundingClientRect().height;
@@ -852,22 +852,22 @@ module.exports = {
                 _getRowElements: function(tableElement) {
                     var $rows = this.callBase(tableElement);
 
-                    return $rows && $rows.not("." + FREE_SPACE_CLASS);
+                    return $rows && $rows.not('.' + FREE_SPACE_CLASS);
                 },
 
                 _getFreeSpaceRowElements: function($table) {
                     var tableElements = $table || this.getTableElements();
 
-                    return tableElements && tableElements.children("tbody").children("." + FREE_SPACE_CLASS);
+                    return tableElements && tableElements.children('tbody').children('.' + FREE_SPACE_CLASS);
                 },
 
                 _getNoDataText: function() {
-                    return this.option("noDataText");
+                    return this.option('noDataText');
                 },
 
                 _rowClick: function(e) {
                     var item = this._dataController.items()[e.rowIndex] || {};
-                    this.executeAction("onRowClick", extend({
+                    this.executeAction('onRowClick', extend({
                         evaluate: function(expr) {
                             var getter = compileGetter(expr);
                             return getter(item.data);
@@ -876,12 +876,12 @@ module.exports = {
 
                 _rowDblClick: function(e) {
                     var item = this._dataController.items()[e.rowIndex] || {};
-                    this.executeAction("onRowDblClick", extend({}, e, item));
+                    this.executeAction('onRowDblClick', extend({}, e, item));
                 },
 
                 _getColumnsCountBeforeGroups: function(columns) {
                     for(var i = 0; i < columns.length; i++) {
-                        if(columns[i].type === "groupExpand") {
+                        if(columns[i].type === 'groupExpand') {
                             return i;
                         }
                     }
@@ -900,7 +900,7 @@ module.exports = {
                 },
 
                 _renderCells: function($row, options) {
-                    if(options.row.rowType === "group") {
+                    if(options.row.rowType === 'group') {
                         this._renderGroupedCells($row, options);
                     } else if(options.row.values) {
                         this.callBase($row, options);
@@ -919,13 +919,13 @@ module.exports = {
                         groupCellOptions = this._getGroupCellOptions(options);
 
                     for(i = 0; i <= groupCellOptions.columnIndex; i++) {
-                        if(i === groupCellOptions.columnIndex && columns[i].allowCollapsing && options.scrollingMode !== "infinite") {
+                        if(i === groupCellOptions.columnIndex && columns[i].allowCollapsing && options.scrollingMode !== 'infinite') {
                             isExpanded = !!row.isExpanded;
                             expandColumn = columns[i];
                         } else {
                             isExpanded = null;
                             expandColumn = {
-                                command: "expand",
+                                command: 'expand',
                                 cssClass: columns[i].cssClass
                             };
                         }
@@ -939,7 +939,7 @@ module.exports = {
                         });
                     }
 
-                    groupColumnAlignment = getDefaultAlignment(this.option("rtlEnabled"));
+                    groupColumnAlignment = getDefaultAlignment(this.option('rtlEnabled'));
 
                     groupColumn = extend(
                         {},
@@ -968,7 +968,7 @@ module.exports = {
 
                 _renderRows: function($table, options) {
                     var that = this,
-                        scrollingMode = that.option("scrolling.mode");
+                        scrollingMode = that.option('scrolling.mode');
 
                     that.callBase($table, extend({
                         scrollingMode: scrollingMode
@@ -985,9 +985,9 @@ module.exports = {
                 _renderRow: function($table, options) {
                     var that = this,
                         row = options.row,
-                        rowTemplate = that.option("rowTemplate");
+                        rowTemplate = that.option('rowTemplate');
 
-                    if((row.rowType === "data" || row.rowType === "group") && !isDefined(row.groupIndex) && rowTemplate) {
+                    if((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
                         that.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
                     } else {
                         that.callBase($table, options);
@@ -1019,7 +1019,7 @@ module.exports = {
                 _createTable: function() {
                     var $table = this.callBase.apply(this, arguments);
 
-                    if(this.option("rowTemplate")) {
+                    if(this.option('rowTemplate')) {
                         $table.appendTo(this.component.$element());
                     }
 
@@ -1031,10 +1031,10 @@ module.exports = {
                         $table,
                         $element = that.element();
 
-                    $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"));
+                    $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'));
                     $element.toggleClass(EMPTY_CLASS, that._dataController.items().length === 0);
 
-                    that.setAria("role", "presentation", $element);
+                    that.setAria('role', 'presentation', $element);
 
                     $table = that._renderTable({ change: change });
                     that._updateContent($table, change);
@@ -1069,15 +1069,15 @@ module.exports = {
                     parameters.data = data;
                     parameters.rowType = row.rowType;
                     parameters.values = row.values;
-                    parameters.text = !column.command ? formatValue(displayValue, column) : "";
+                    parameters.text = !column.command ? formatValue(displayValue, column) : '';
                     parameters.rowIndex = row.rowIndex;
                     parameters.summaryItems = summaryCells && summaryCells[options.columnIndex];
                     parameters.resized = column.resizedCallbacks;
 
                     if(isDefined(column.groupIndex) && !column.command) {
-                        groupingTextsOptions = that.option("grouping.texts");
-                        scrollingMode = that.option("scrolling.mode");
-                        if(scrollingMode !== "virtual" && scrollingMode !== "infinite") {
+                        groupingTextsOptions = that.option('grouping.texts');
+                        scrollingMode = that.option('scrolling.mode');
+                        if(scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
                             parameters.groupContinuesMessage = data && data.isContinuationOnNextPage && groupingTextsOptions && groupingTextsOptions.groupContinuesMessage;
                             parameters.groupContinuedMessage = data && data.isContinuation && groupingTextsOptions && groupingTextsOptions.groupContinuedMessage;
                         }
@@ -1161,9 +1161,9 @@ module.exports = {
                         if(itemCount > 0) {
                             if(!that._hasHeight) {
                                 freeSpaceRowCount = dataController.pageSize() - itemCount;
-                                scrollingMode = that.option("scrolling.mode");
+                                scrollingMode = that.option('scrolling.mode');
 
-                                if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
+                                if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
                                     styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
@@ -1183,13 +1183,13 @@ module.exports = {
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
                                         $tableElement = $table || that.getTableElements(),
-                                        borderTopWidth = Math.ceil(parseFloat($tableElement.css("borderTopWidth"))),
+                                        borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth'))),
                                         heightCorrection = browser.webkit && that._getDevicePixelRatio() >= 2 ? 1 : 0, // T606935
                                         resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
                                         deferRender(function() {
-                                            freeSpaceRowElements.css("height", resultHeight);
+                                            freeSpaceRowElements.css('height', resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
@@ -1200,7 +1200,7 @@ module.exports = {
                                 });
                             }
                         } else {
-                            freeSpaceRowElements.css("height", 0);
+                            freeSpaceRowElements.css('height', 0);
                             freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }
@@ -1229,10 +1229,10 @@ module.exports = {
 
                 init: function() {
                     var that = this,
-                        dataController = that.getController("data");
+                        dataController = that.getController('data');
 
                     that.callBase();
-                    that._editorFactoryController = that.getController("editorFactory");
+                    that._editorFactoryController = that.getController('editorFactory');
                     that._rowHeight = 0;
                     that._scrollTop = 0;
                     that._scrollLeft = -1;
@@ -1252,10 +1252,10 @@ module.exports = {
                     var that = this;
 
                     switch(change.changeType) {
-                        case "refresh":
-                        case "prepend":
-                        case "append":
-                        case "update":
+                        case 'refresh':
+                        case 'prepend':
+                        case 'append':
+                        case 'update':
                             that.render(null, change);
                             break;
                         default:
@@ -1265,7 +1265,7 @@ module.exports = {
                 },
 
                 publicMethods: function() {
-                    return ["isScrollbarVisible", "getTopVisibleRowData", "getScrollbarWidth", "getCellElement", "getRowElement", "getScrollable"];
+                    return ['isScrollbarVisible', 'getTopVisibleRowData', 'getScrollbarWidth', 'getCellElement', 'getRowElement', 'getScrollable'];
                 },
 
                 contentWidth: function() {
@@ -1306,7 +1306,7 @@ module.exports = {
                 },
 
                 _updateLastRowBorder: function(isFreeSpaceRowVisible) {
-                    if(this.option("showBorders") && this.option("showRowLines") && !isFreeSpaceRowVisible) {
+                    if(this.option('showBorders') && this.option('showRowLines') && !isFreeSpaceRowVisible) {
                         this.element().addClass(LAST_ROW_BORDER);
                     } else {
                         this.element().removeClass(LAST_ROW_BORDER);
@@ -1363,7 +1363,7 @@ module.exports = {
                         return $element ? $element.outerHeight(true) : 0;
                     }
 
-                    that._hasHeight = hasHeight === undefined ? height !== "auto" : hasHeight;
+                    that._hasHeight = hasHeight === undefined ? height !== 'auto' : hasHeight;
 
                     if(isDefined(height) && $element) {
                         styleUtils.setHeight($element, height);
@@ -1374,7 +1374,7 @@ module.exports = {
                     var that = this,
                         loadPanel = that._loadPanel,
                         dataController = that._dataController,
-                        loadPanelOptions = that.option("loadPanel") || {},
+                        loadPanelOptions = that.option('loadPanel') || {},
                         animation = dataController.isLoaded() ? loadPanelOptions.animation : null,
                         $element = that.element(),
                         visibilityOptions;
@@ -1383,7 +1383,7 @@ module.exports = {
                         return;
                     }
 
-                    if(!loadPanel && messageText !== undefined && dataController.isLocalStore() && loadPanelOptions.enabled === "auto" && $element) {
+                    if(!loadPanel && messageText !== undefined && dataController.isLocalStore() && loadPanelOptions.enabled === 'auto' && $element) {
                         that._renderLoadPanel($element, $element.parent());
                         loadPanel = that._loadPanel;
                     }
@@ -1394,7 +1394,7 @@ module.exports = {
                             visible: isLoading
                         };
                         clearTimeout(that._hideLoadingTimeoutID);
-                        if(loadPanel.option("visible") && !isLoading) {
+                        if(loadPanel.option('visible') && !isLoading) {
                             that._hideLoadingTimeoutID = setTimeout(function() {
                                 loadPanel.option(visibilityOptions);
                             }, LOADPANEL_HIDE_TIMEOUT);
@@ -1405,7 +1405,7 @@ module.exports = {
                 },
 
                 setRowsOpacity: function(columnIndex, value) {
-                    var $rows = this._getRowElements().not("." + GROUP_ROW_CLASS) || [];
+                    var $rows = this._getRowElements().not('.' + GROUP_ROW_CLASS) || [];
                     this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
                 },
 
@@ -1414,7 +1414,7 @@ module.exports = {
                         groupCellIndex;
 
                     if($cells) {
-                        groupCellIndex = $cells.filter("." + GROUP_CELL_CLASS).index();
+                        groupCellIndex = $cells.filter('.' + GROUP_CELL_CLASS).index();
                         if(groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
                             return $cells.slice(0, groupCellIndex + 1);
                         }
@@ -1436,7 +1436,7 @@ module.exports = {
                         tableElement = that._getTableElement();
 
                     if(items.length && tableElement) {
-                        rowElements = that._getRowElements(tableElement).filter(":visible");
+                        rowElements = that._getRowElements(tableElement).filter(':visible');
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffsetTop = offsetTop;
@@ -1470,36 +1470,41 @@ module.exports = {
                     }
                 },
 
+                _scrollToElement: function($element, offset) {
+                    const scrollable = this.getScrollable();
+                    scrollable && scrollable.scrollToElement($element, offset);
+                },
+
                 optionChanged: function(args) {
                     var that = this;
 
                     that.callBase(args);
 
                     switch(args.name) {
-                        case "wordWrapEnabled":
-                        case "showColumnLines":
-                        case "showRowLines":
-                        case "rowAlternationEnabled":
-                        case "rowTemplate":
-                        case "twoWayBindingEnabled":
+                        case 'wordWrapEnabled':
+                        case 'showColumnLines':
+                        case 'showRowLines':
+                        case 'rowAlternationEnabled':
+                        case 'rowTemplate':
+                        case 'twoWayBindingEnabled':
                             that._invalidate(true, true);
                             args.handled = true;
                             break;
-                        case "scrolling":
+                        case 'scrolling':
                             that._rowHeight = null;
                             that._tableElement = null;
                             args.handled = true;
                             break;
-                        case "rtlEnabled":
+                        case 'rtlEnabled':
                             that._rowHeight = null;
                             that._tableElement = null;
                             break;
-                        case "loadPanel":
+                        case 'loadPanel':
                             that._tableElement = null;
-                            that._invalidate(true, args.fullName !== "loadPanel.enabled");
+                            that._invalidate(true, args.fullName !== 'loadPanel.enabled');
                             args.handled = true;
                             break;
-                        case "noDataText":
+                        case 'noDataText':
                             that.renderNoDataText();
                             args.handled = true;
                             break;

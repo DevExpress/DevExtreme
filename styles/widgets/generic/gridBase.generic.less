@@ -434,6 +434,10 @@
                     &.dx-@{widgetName}-group-space {
                         border-right-color: ~"@{@{widgetName}-hover-bg}";
                     }
+
+                    &.dx-command-select {
+                        overflow: inherit;
+                    }
                 }
 
                 & > .dx-@{widgetName}-readonly .dx-texteditor {
@@ -640,7 +644,7 @@
         }
 
         .dx-icon-export-excel-button {
-            .dx-icon-exportxlsx;
+            .dx-icon-xlsxfile;
             .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
         }
     }

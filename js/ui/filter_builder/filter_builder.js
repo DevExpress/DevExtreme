@@ -1,66 +1,66 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import Class from "../../core/class";
-import eventsEngine from "../../events/core/events_engine";
-import Widget from "../widget/ui.widget";
-import registerComponent from "../../core/component_registrator";
-import { extend } from "../../core/utils/extend";
-import messageLocalization from "../../localization/message";
-import utils from "./utils";
-import deferredUtils from "../../core/utils/deferred";
-import { isDefined } from "../../core/utils/type";
-import TreeView from "../tree_view";
-import Popup from "../popup";
-import { getElementMaxHeightByWindow } from "../overlay/utils";
-import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
-import { normalizeKeyName } from "../../events/utils";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import Class from '../../core/class';
+import eventsEngine from '../../events/core/events_engine';
+import Widget from '../widget/ui.widget';
+import registerComponent from '../../core/component_registrator';
+import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
+import utils from './utils';
+import deferredUtils from '../../core/utils/deferred';
+import { isDefined } from '../../core/utils/type';
+import TreeView from '../tree_view';
+import Popup from '../popup';
+import { getElementMaxHeightByWindow } from '../overlay/utils';
+import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
+import { normalizeKeyName } from '../../events/utils';
 
-const FILTER_BUILDER_CLASS = "dx-filterbuilder",
-    FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
-    FILTER_BUILDER_GROUP_ITEM_CLASS = FILTER_BUILDER_GROUP_CLASS + "-item",
-    FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_GROUP_CLASS + "-content",
-    FILTER_BUILDER_GROUP_OPERATIONS_CLASS = FILTER_BUILDER_GROUP_CLASS + "-operations",
-    FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_GROUP_CLASS + "-operation",
-    FILTER_BUILDER_ACTION_CLASS = FILTER_BUILDER_CLASS + "-action",
-    FILTER_BUILDER_IMAGE_CLASS = FILTER_BUILDER_ACTION_CLASS + "-icon",
-    FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
-    FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
-    FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + "-text",
-    FILTER_BUILDER_ITEM_TEXT_PART_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + "-part",
-    FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + "-separator",
-    FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS + "-empty",
-    FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
-    FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
-    FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + "-item-value-text",
-    FILTER_BUILDER_OVERLAY_CLASS = FILTER_BUILDER_CLASS + "-overlay",
-    FILTER_BUILDER_FILTER_OPERATIONS_CLASS = FILTER_BUILDER_CLASS + "-operations",
-    FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + "-fields",
-    FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + "-add-condition",
-    ACTIVE_CLASS = "dx-state-active",
-    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
-    SOURCE = "filterBuilder",
-    DISABLED_STATE_CLASS = "dx-state-disabled",
+const FILTER_BUILDER_CLASS = 'dx-filterbuilder',
+    FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + '-group',
+    FILTER_BUILDER_GROUP_ITEM_CLASS = FILTER_BUILDER_GROUP_CLASS + '-item',
+    FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_GROUP_CLASS + '-content',
+    FILTER_BUILDER_GROUP_OPERATIONS_CLASS = FILTER_BUILDER_GROUP_CLASS + '-operations',
+    FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_GROUP_CLASS + '-operation',
+    FILTER_BUILDER_ACTION_CLASS = FILTER_BUILDER_CLASS + '-action',
+    FILTER_BUILDER_IMAGE_CLASS = FILTER_BUILDER_ACTION_CLASS + '-icon',
+    FILTER_BUILDER_IMAGE_ADD_CLASS = 'dx-icon-plus',
+    FILTER_BUILDER_IMAGE_REMOVE_CLASS = 'dx-icon-remove',
+    FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + '-text',
+    FILTER_BUILDER_ITEM_TEXT_PART_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-part',
+    FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-separator',
+    FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS + '-empty',
+    FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + '-item-field',
+    FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + '-item-operation',
+    FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + '-item-value',
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + '-item-value-text',
+    FILTER_BUILDER_OVERLAY_CLASS = FILTER_BUILDER_CLASS + '-overlay',
+    FILTER_BUILDER_FILTER_OPERATIONS_CLASS = FILTER_BUILDER_CLASS + '-operations',
+    FILTER_BUILDER_FIELDS_CLASS = FILTER_BUILDER_CLASS + '-fields',
+    FILTER_BUILDER_ADD_CONDITION_CLASS = FILTER_BUILDER_CLASS + '-add-condition',
+    ACTIVE_CLASS = 'dx-state-active',
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + '-menu-custom-operation',
+    SOURCE = 'filterBuilder',
+    DISABLED_STATE_CLASS = 'dx-state-disabled',
 
-    TAB_KEY = "tab",
-    ENTER_KEY = "enter",
-    ESCAPE_KEY = "escape";
+    TAB_KEY = 'tab',
+    ENTER_KEY = 'enter',
+    ESCAPE_KEY = 'escape';
 
 var ACTIONS = [{
-        name: "onEditorPreparing",
-        config: { excludeValidators: ["disabled", "readOnly"], category: "rendering" }
+        name: 'onEditorPreparing',
+        config: { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' }
     }, {
-        name: "onEditorPrepared",
-        config: { excludeValidators: ["disabled", "readOnly"], category: "rendering" }
+        name: 'onEditorPrepared',
+        config: { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' }
     }, {
-        name: "onValueChanged",
-        config: { excludeValidators: ["disabled", "readOnly"] }
+        name: 'onValueChanged',
+        config: { excludeValidators: ['disabled', 'readOnly'] }
     }],
     OPERATORS = {
-        and: "and",
-        or: "or",
-        notAnd: "!and",
-        notOr: "!or"
+        and: 'and',
+        or: 'or',
+        notAnd: '!and',
+        notOr: '!or'
     };
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
@@ -70,21 +70,21 @@ var renderValueText = function($container, value, customOperation) {
         let lastItemIndex = value.length - 1;
         $container.empty();
         value.forEach((t, i) => {
-            $("<span>")
+            $('<span>')
                 .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
                 .text(t)
                 .appendTo($container);
             if(i !== lastItemIndex) {
-                $("<span>")
+                $('<span>')
                     .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS)
-                    .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : "|")
+                    .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : '|')
                     .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS).appendTo($container);
             }
         });
     } else if(value) {
         $container.text(value);
     } else {
-        $container.text(messageLocalization.format("dxFilterBuilder-enterValueText"));
+        $container.text(messageLocalization.format('dxFilterBuilder-enterValueText'));
     }
 };
 
@@ -283,14 +283,14 @@ var FilterBuilder = Widget.inherit({
             * @default "and"
             * @hidden
             */
-            defaultGroupOperation: "and",
+            defaultGroupOperation: 'and',
 
             /**
              * @name dxFilterBuilderOptions.groupOperations
              * @type Array<Enums.FilterBuilderGroupOperations>
              * @default ['and', 'or', 'notAnd', 'notOr']
              */
-            groupOperations: ["and", "or", "notAnd", "notOr"],
+            groupOperations: ['and', 'or', 'notAnd', 'notOr'],
 
             /**
              * @name dxFilterBuilderOptions.maxGroupLevel
@@ -324,25 +324,25 @@ var FilterBuilder = Widget.inherit({
                  * @type string
                  * @default "And"
                  */
-                and: messageLocalization.format("dxFilterBuilder-and"),
+                and: messageLocalization.format('dxFilterBuilder-and'),
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.or
                  * @type string
                  * @default "Or"
                  */
-                or: messageLocalization.format("dxFilterBuilder-or"),
+                or: messageLocalization.format('dxFilterBuilder-or'),
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.notAnd
                  * @type string
                  * @default "Not And"
                  */
-                notAnd: messageLocalization.format("dxFilterBuilder-notAnd"),
+                notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.notOr
                  * @type string
                  * @default "Not Or"
                  */
-                notOr: messageLocalization.format("dxFilterBuilder-notOr"),
+                notOr: messageLocalization.format('dxFilterBuilder-notOr'),
             },
 
             /**
@@ -428,106 +428,106 @@ var FilterBuilder = Widget.inherit({
                  * @type string
                  * @default "Between"
                  */
-                between: messageLocalization.format("dxFilterBuilder-filterOperationBetween"),
+                between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.equal
                  * @type string
                  * @default "Equals"
                  */
-                equal: messageLocalization.format("dxFilterBuilder-filterOperationEquals"),
+                equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.notEqual
                  * @type string
                  * @default "Does not equal"
                  */
-                notEqual: messageLocalization.format("dxFilterBuilder-filterOperationNotEquals"),
+                notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThan
                  * @type string
                  * @default "Less than"
                  */
-                lessThan: messageLocalization.format("dxFilterBuilder-filterOperationLess"),
+                lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThanOrEqual
                  * @type string
                  * @default "Less than or equal to"
                  */
-                lessThanOrEqual: messageLocalization.format("dxFilterBuilder-filterOperationLessOrEquals"),
+                lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThan
                  * @type string
                  * @default "Greater than"
                  */
-                greaterThan: messageLocalization.format("dxFilterBuilder-filterOperationGreater"),
+                greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThanOrEqual
                  * @type string
                  * @default "Greater than or equal to"
                  */
-                greaterThanOrEqual: messageLocalization.format("dxFilterBuilder-filterOperationGreaterOrEquals"),
+                greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.startsWith
                  * @type string
                  * @default "Starts with"
                  */
-                startsWith: messageLocalization.format("dxFilterBuilder-filterOperationStartsWith"),
+                startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.contains
                  * @type string
                  * @default "Contains"
                  */
-                contains: messageLocalization.format("dxFilterBuilder-filterOperationContains"),
+                contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.notContains
                  * @type string
                  * @default "Does not contain"
                  */
-                notContains: messageLocalization.format("dxFilterBuilder-filterOperationNotContains"),
+                notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.endsWith
                  * @type string
                  * @default "Ends with"
                  */
-                endsWith: messageLocalization.format("dxFilterBuilder-filterOperationEndsWith"),
+                endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.isBlank
                  * @type string
                  * @default "Is blank"
                  */
-                isBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsBlank"),
+                isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.isNotBlank
                  * @type string
                  * @default "Is not blank"
                  */
-                isNotBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsNotBlank")
+                isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank')
             }
         });
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "closePopupOnTargetScroll":
+            case 'closePopupOnTargetScroll':
                 break;
-            case "onEditorPreparing":
-            case "onEditorPrepared":
-            case "onValueChanged":
+            case 'onEditorPreparing':
+            case 'onEditorPrepared':
+            case 'onValueChanged':
                 this._initActions();
                 break;
-            case "customOperations":
+            case 'customOperations':
                 this._initCustomOperations();
                 this._invalidate();
                 break;
-            case "fields":
-            case "defaultGroupOperation":
-            case "maxGroupLevel":
-            case "groupOperations":
-            case "allowHierarchicalFields":
-            case "groupOperationDescriptions":
-            case "filterOperationDescriptions":
+            case 'fields':
+            case 'defaultGroupOperation':
+            case 'maxGroupLevel':
+            case 'groupOperations':
+            case 'allowHierarchicalFields':
+            case 'groupOperationDescriptions':
+            case 'filterOperationDescriptions':
                 this._invalidate();
                 break;
-            case "value":
+            case 'value':
                 if(args.value !== args.previousValue) {
                     var disableInvalidateForValue = this._disableInvalidateForValue;
                     if(!disableInvalidateForValue) {
@@ -535,7 +535,7 @@ var FilterBuilder = Widget.inherit({
                         this._invalidate();
                     }
                     this._disableInvalidateForValue = false;
-                    this.executeAction("onValueChanged", {
+                    this.executeAction('onValueChanged', {
                         value: args.value,
                         previousValue: args.previousValue
                     });
@@ -559,16 +559,16 @@ var FilterBuilder = Widget.inherit({
     },
 
     _getNormalizedFields: function() {
-        return utils.getNormalizedFields(this.option("fields"));
+        return utils.getNormalizedFields(this.option('fields'));
     },
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
         var value = extend(true, [], this._model),
             normalizedValue = utils.getNormalizedFilter(value),
-            oldValue = utils.getNormalizedFilter(this._getModel(this.option("value")));
+            oldValue = utils.getNormalizedFilter(this._getModel(this.option('value')));
         if(JSON.stringify(oldValue) !== JSON.stringify(normalizedValue)) {
-            this.option("value", normalizedValue);
+            this.option('value', normalizedValue);
         }
         this._disableInvalidateForValue = false;
         this._fireContentReadyAction();
@@ -587,7 +587,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _initCustomOperations: function() {
-        this._customOperations = utils.getMergedOperations(this.option("customOperations"), this.option("filterOperationDescriptions.between"));
+        this._customOperations = utils.getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
     },
 
     _getModel: function(value) {
@@ -595,7 +595,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _initModel: function() {
-        this._model = this._getModel(this.option("value"));
+        this._model = this._getModel(this.option('value'));
     },
 
     _initActions: function() {
@@ -622,14 +622,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createConditionElement: function(condition, parent) {
-        return $("<div>")
+        return $('<div>')
             .addClass(FILTER_BUILDER_GROUP_CLASS)
             .append(this._createConditionItem(condition, parent));
     },
 
     _createGroupElementByCriteria: function(criteria, parent, groupLevel = 0) {
         var $group = this._createGroupElement(criteria, parent, groupLevel),
-            $groupContent = $group.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS),
+            $groupContent = $group.find('.' + FILTER_BUILDER_GROUP_CONTENT_CLASS),
             groupCriteria = utils.getGroupCriteria(criteria);
 
         for(var i = 0; i < groupCriteria.length; i++) {
@@ -646,9 +646,9 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createGroupElement: function(criteria, parent, groupLevel) {
-        var $groupItem = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
-            $groupContent = $("<div>").addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS),
-            $group = $("<div>").addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
+        var $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+            $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS),
+            $group = $('<div>').addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
 
         if(parent != null) {
             this._createRemoveButton(() => {
@@ -661,12 +661,12 @@ var FilterBuilder = Widget.inherit({
         this._createGroupOperationButton(criteria).appendTo($groupItem);
 
         this._createAddButton(() => {
-            var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
+            var newGroup = utils.createEmptyGroup(this.option('defaultGroupOperation'));
             utils.addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
             this._updateFilter();
         }, () => {
-            var field = this.option("fields")[0],
+            var field = this.option('fields')[0],
                 newCondition = utils.createCondition(field, this._customOperations);
             utils.addItem(newCondition, criteria);
             this._createConditionElement(newCondition, criteria).appendTo($groupContent);
@@ -677,7 +677,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createButton: function(caption) {
-        return $("<div>").text(caption);
+        return $('<div>').text(caption);
     },
 
     _createGroupOperationButton: function(criteria) {
@@ -690,8 +690,8 @@ var FilterBuilder = Widget.inherit({
                     caption: caption,
                     menu: {
                         items: groupOperations,
-                        displayExpr: "text",
-                        keyExpr: "value",
+                        displayExpr: 'text',
+                        keyExpr: 'value',
                         onItemClick: (e) => {
                             if(groupMenuItem !== e.itemData) {
                                 utils.setGroupValue(criteria, e.itemData.value);
@@ -708,60 +708,60 @@ var FilterBuilder = Widget.inherit({
                 });
         return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
-            .attr("tabindex", 0);
+            .attr('tabindex', 0);
     },
 
     _createButtonWithMenu: function(options) {
         var that = this,
             removeMenu = function() {
-                that.$element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-                that.$element().find(".dx-overlay .dx-treeview").remove();
-                that.$element().find(".dx-overlay").remove();
+                that.$element().find('.' + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
+                that.$element().find('.dx-overlay .dx-treeview').remove();
+                that.$element().find('.dx-overlay').remove();
             },
-            rtlEnabled = this.option("rtlEnabled"),
+            rtlEnabled = this.option('rtlEnabled'),
             menuOnItemClickWrapper = function(handler) {
                 return function(e) {
                     handler(e);
-                    if(e.event.type === "dxclick") {
+                    if(e.event.type === 'dxclick') {
                         removeMenu();
                     }
                 };
             },
-            position = rtlEnabled ? "right" : "left",
+            position = rtlEnabled ? 'right' : 'left',
             $button = this._createButton(options.caption);
 
         extend(options.menu, {
             focusStateEnabled: true,
-            selectionMode: "single",
+            selectionMode: 'single',
             onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
             onHiding: function(e) {
                 $button.removeClass(ACTIVE_CLASS);
             },
-            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button, collision: "flip" },
+            position: { my: position + ' top', at: position + ' bottom', offset: '0 1', of: $button, collision: 'flip' },
             animation: null,
             onHidden: function() {
                 removeMenu();
             },
-            cssClass: FILTER_BUILDER_OVERLAY_CLASS + " " + options.menu.cssClass,
+            cssClass: FILTER_BUILDER_OVERLAY_CLASS + ' ' + options.menu.cssClass,
             rtlEnabled: rtlEnabled
         });
 
         options.popup = {
             onShown: function(info) {
-                var treeViewElement = $(info.component.content()).find(".dx-treeview"),
-                    treeView = treeViewElement.dxTreeView("instance");
-                eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
+                var treeViewElement = $(info.component.content()).find('.dx-treeview'),
+                    treeView = treeViewElement.dxTreeView('instance');
+                eventsEngine.on(treeViewElement, 'keyup keydown', function(e) {
                     const keyName = normalizeKeyName(e);
 
-                    if((e.type === "keydown" && keyName === TAB_KEY)
-                            || (e.type === "keyup" && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
+                    if((e.type === 'keydown' && keyName === TAB_KEY)
+                            || (e.type === 'keyup' && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
                         info.component.hide();
-                        eventsEngine.trigger(options.menu.position.of, "focus");
+                        eventsEngine.trigger(options.menu.position.of, 'focus');
                     }
                 });
 
                 treeView.focus();
-                treeView.option("focusedElement", null);
+                treeView.option('focusedElement', null);
             }
         };
 
@@ -782,13 +782,13 @@ var FilterBuilder = Widget.inherit({
 
     _createOperationButtonWithMenu: function(condition, field) {
         var that = this,
-            availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions"), this._customOperations),
+            availableOperations = utils.getAvailableOperations(field, this.option('filterOperationDescriptions'), this._customOperations),
             currentOperation = utils.getOperationFromAvailable(utils.getOperationValue(condition), availableOperations),
             $operationButton = this._createButtonWithMenu({
                 caption: currentOperation.text,
                 menu: {
                     items: availableOperations,
-                    displayExpr: "text",
+                    displayExpr: 'text',
                     onItemRendered: function(e) {
                         e.itemData.isCustom && $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
                     },
@@ -799,7 +799,7 @@ var FilterBuilder = Widget.inherit({
                         if(currentOperation !== e.itemData) {
                             currentOperation = e.itemData;
                             utils.updateConditionByOperation(condition, currentOperation.value, that._customOperations);
-                            var $valueButton = $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+                            var $valueButton = $operationButton.siblings().filter('.' + FILTER_BUILDER_ITEM_VALUE_CLASS);
                             if(that._hasValueButton(condition)) {
                                 if($valueButton.length !== 0) {
                                     $valueButton.remove();
@@ -816,7 +816,7 @@ var FilterBuilder = Widget.inherit({
                 }
             }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
                 .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
-                .attr("tabindex", 0);
+                .attr('tabindex', 0);
 
         return $operationButton;
     },
@@ -833,7 +833,7 @@ var FilterBuilder = Widget.inherit({
 
     _createFieldButtonWithMenu: function(fields, condition, field) {
         var that = this,
-            allowHierarchicalFields = this.option("allowHierarchicalFields"),
+            allowHierarchicalFields = this.option('allowHierarchicalFields'),
             items = utils.getItems(fields, allowHierarchicalFields),
             item = utils.getField(field.name || field.dataField, items),
             getFullCaption = function(item, items) {
@@ -844,20 +844,20 @@ var FilterBuilder = Widget.inherit({
             caption: getFullCaption(item, items),
             menu: {
                 items: items,
-                dataStructure: "plain",
-                keyExpr: "id",
-                parentId: "parentId",
-                displayExpr: "caption",
+                dataStructure: 'plain',
+                keyExpr: 'id',
+                parentId: 'parentId',
+                displayExpr: 'caption',
                 onItemClick: (e) => {
                     if(item !== e.itemData) {
                         item = e.itemData;
                         condition[0] = item.name || item.dataField;
-                        condition[2] = item.dataType === "object" ? null : "";
+                        condition[2] = item.dataType === 'object' ? null : '';
                         utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
-                        $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
+                        $fieldButton.siblings().filter('.' + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
-                        var caption = getFullCaption(item, e.component.option("items"));
+                        var caption = getFullCaption(item, e.component.option('items'));
                         $fieldButton.html(caption);
                         this._updateFilter();
                     }
@@ -869,13 +869,13 @@ var FilterBuilder = Widget.inherit({
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
-            .attr("tabindex", 0);
+            .attr('tabindex', 0);
 
         return $fieldButton;
     },
 
     _createConditionItem: function(condition, parent) {
-        var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+        var $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             fields = this._getNormalizedFields(),
             field = utils.getField(condition[0], fields);
 
@@ -890,11 +890,11 @@ var FilterBuilder = Widget.inherit({
     },
 
     _getGroupOperations: function(criteria) {
-        let groupOperations = this.option("groupOperations"),
-            groupOperationDescriptions = this.option("groupOperationDescriptions");
+        let groupOperations = this.option('groupOperations'),
+            groupOperationDescriptions = this.option('groupOperationDescriptions');
 
         if(!groupOperations || !groupOperations.length) {
-            groupOperations = [utils.getGroupValue(criteria).replace("!", "not")];
+            groupOperations = [utils.getGroupValue(criteria).replace('!', 'not')];
         }
 
         return groupOperations.map(operation => ({
@@ -904,18 +904,18 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createRemoveButton: function(handler) {
-        var $removeButton = $("<div>")
+        var $removeButton = $('<div>')
             .addClass(FILTER_BUILDER_IMAGE_CLASS)
             .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
             .addClass(FILTER_BUILDER_ACTION_CLASS)
-            .attr("tabindex", 0);
+            .attr('tabindex', 0);
         this._subscribeOnClickAndEnterKey($removeButton, handler);
         return $removeButton;
     },
 
     _createAddButton: function(addGroupHandler, addConditionHandler, groupLevel) {
         let $button,
-            maxGroupLevel = this.option("maxGroupLevel");
+            maxGroupLevel = this.option('maxGroupLevel');
         if(isDefined(maxGroupLevel) && groupLevel >= maxGroupLevel) {
             $button = this._createButton();
             this._subscribeOnClickAndEnterKey($button, addConditionHandler);
@@ -923,13 +923,13 @@ var FilterBuilder = Widget.inherit({
             $button = this._createButtonWithMenu({
                 menu: {
                     items: [{
-                        caption: messageLocalization.format("dxFilterBuilder-addCondition"),
+                        caption: messageLocalization.format('dxFilterBuilder-addCondition'),
                         click: addConditionHandler
                     }, {
-                        caption: messageLocalization.format("dxFilterBuilder-addGroup"),
+                        caption: messageLocalization.format('dxFilterBuilder-addGroup'),
                         click: addGroupHandler
                     }],
-                    displayExpr: "caption",
+                    displayExpr: 'caption',
                     onItemClick: function(e) {
                         e.itemData.click();
                     },
@@ -940,15 +940,15 @@ var FilterBuilder = Widget.inherit({
         return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
             .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
             .addClass(FILTER_BUILDER_ACTION_CLASS)
-            .attr("tabindex", 0);
+            .attr('tabindex', 0);
     },
 
     _createValueText: function(item, field, $container) {
         var that = this,
-            $text = $("<div>")
-                .html("&nbsp;")
+            $text = $('<div>')
+                .html('&nbsp;')
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
-                .attr("tabindex", 0)
+                .attr('tabindex', 0)
                 .appendTo($container),
             value = item[2];
 
@@ -964,7 +964,7 @@ var FilterBuilder = Widget.inherit({
         }
 
         that._subscribeOnClickAndEnterKey($text, function(e) {
-            if(e.type === "keyup") {
+            if(e.type === 'keyup') {
                 e.stopPropagation();
             }
             that._createValueEditorWithEvents(item, field, $container);
@@ -992,17 +992,17 @@ var FilterBuilder = Widget.inherit({
             }
             handler(e);
         };
-        eventsEngine.on(document, "keyup", documentKeyUpHandler);
+        eventsEngine.on(document, 'keyup', documentKeyUpHandler);
 
         var isComposing = false; // IME Composing going on
         var hasCompositionJustEnded = false; // Used to swallow keyup event related to compositionend
 
-        var input = $editor.find("input");
-        eventsEngine.on(input, "compositionstart", () => {
+        var input = $editor.find('input');
+        eventsEngine.on(input, 'compositionstart', () => {
             isComposing = true;
         });
 
-        eventsEngine.on(input, "compositionend", () => {
+        eventsEngine.on(input, 'compositionend', () => {
             isComposing = false;
             // some browsers (IE, Firefox, Safari) send a keyup event after
             // compositionend, some (Chrome, Edge) don't. This is to swallow
@@ -1011,7 +1011,7 @@ var FilterBuilder = Widget.inherit({
         });
 
         // Safari on OS X may send a keydown of 229 after compositionend
-        eventsEngine.on(input, "keydown", (event) => {
+        eventsEngine.on(input, 'keydown', (event) => {
             if(event.which !== 229) {
                 hasCompositionJustEnded = false;
             }
@@ -1024,11 +1024,11 @@ var FilterBuilder = Widget.inherit({
         var document = domAdapter.getDocument();
         var documentClickHandler = (e) => {
             if(!this._isFocusOnEditorParts($editor, e.target)) {
-                eventsEngine.trigger($editor.find("input"), "change");
+                eventsEngine.trigger($editor.find('input'), 'change');
                 closeEditorFunc();
             }
         };
-        eventsEngine.on(document, "dxpointerdown", documentClickHandler);
+        eventsEngine.on(document, 'dxpointerdown', documentClickHandler);
 
         this._documentClickHandler = documentClickHandler;
     },
@@ -1036,13 +1036,13 @@ var FilterBuilder = Widget.inherit({
     _isFocusOnEditorParts: function($editor, target) {
         var activeElement = target || domAdapter.getActiveElement();
         return $(activeElement).closest($editor.children()).length
-            || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
+            || $(activeElement).closest('.dx-dropdowneditor-overlay').length;
     },
 
     _removeEvents: function() {
         const document = domAdapter.getDocument();
-        isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
-        isDefined(this._documentClickHandler) && eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
+        isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, 'keyup', this._documentKeyUpHandler);
+        isDefined(this._documentClickHandler) && eventsEngine.off(document, 'dxpointerdown', this._documentClickHandler);
     },
 
     _dispose: function() {
@@ -1064,10 +1064,10 @@ var FilterBuilder = Widget.inherit({
             };
 
         var options = {
-            value: value === "" ? null : value,
+            value: value === '' ? null : value,
             filterOperation: utils.getOperationValue(item),
             setValue: function(data) {
-                value = data === null ? "" : data;
+                value = data === null ? '' : data;
             },
             closeEditor: closeEditor,
             text: $container.text()
@@ -1076,7 +1076,7 @@ var FilterBuilder = Widget.inherit({
         $container.empty();
 
         var $editor = this._createValueEditor($container, field, options);
-        eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
+        eventsEngine.trigger($editor.find('input').not(':hidden').eq(0), 'focus');
 
         this._removeEvents();
 
@@ -1091,16 +1091,16 @@ var FilterBuilder = Widget.inherit({
                 this._updateConditionValue(item, value, function() {
                     createValueText();
                     if(e.shiftKey) {
-                        eventsEngine.trigger($container.prev(), "focus");
+                        eventsEngine.trigger($container.prev(), 'focus');
                     }
                 });
             }
             if(keyName === ESCAPE_KEY) {
-                eventsEngine.trigger(createValueText(), "focus");
+                eventsEngine.trigger(createValueText(), 'focus');
             }
             if(keyName === ENTER_KEY) {
                 this._updateConditionValue(item, value, function() {
-                    eventsEngine.trigger(createValueText(), "focus");
+                    eventsEngine.trigger(createValueText(), 'focus');
                 });
             }
         });
@@ -1108,7 +1108,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueButton: function(item, field) {
-        var $valueButton = $("<div>")
+        var $valueButton = $('<div>')
             .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
 
@@ -1117,7 +1117,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueEditor: function($container, field, options) {
-        var $editor = $("<div>").attr("tabindex", 0).appendTo($container),
+        var $editor = $('<div>').attr('tabindex', 0).appendTo($container),
             customOperation = utils.getCustomOperation(this._customOperations, options.filterOperation),
             editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
 
@@ -1138,7 +1138,7 @@ var FilterBuilder = Widget.inherit({
 
     _createPopupWithTreeView: function(options, $container) {
         var that = this,
-            $popup = $("<div>")
+            $popup = $('<div>')
                 .addClass(options.menu.cssClass).appendTo($container);
         this._createComponent($popup, Popup, {
             onHiding: options.menu.onHiding,
@@ -1147,7 +1147,7 @@ var FilterBuilder = Widget.inherit({
             position: options.menu.position,
             animation: options.menu.animation,
             contentTemplate: function(contentElement) {
-                var $menuContainer = $("<div>");
+                var $menuContainer = $('<div>');
                 that._createComponent($menuContainer, TreeView, options.menu);
                 return $menuContainer;
             },
@@ -1156,19 +1156,19 @@ var FilterBuilder = Widget.inherit({
             },
             visible: true,
             focusStateEnabled: false,
-            closeOnTargetScroll: this.option("closePopupOnTargetScroll"),
+            closeOnTargetScroll: this.option('closePopupOnTargetScroll'),
             closeOnOutsideClick: true,
             onShown: options.popup.onShown,
             shading: false,
-            width: "auto",
-            height: "auto",
+            width: 'auto',
+            height: 'auto',
             showTitle: false
         });
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler) {
-        eventsEngine.on($button, "dxclick", handler);
-        eventsEngine.on($button, "keyup", function(e) {
+        eventsEngine.on($button, 'dxclick', handler);
+        eventsEngine.on($button, 'keyup', function(e) {
             if(normalizeKeyName(e) === ENTER_KEY) {
                 handler(e);
             }
@@ -1176,7 +1176,7 @@ var FilterBuilder = Widget.inherit({
     }
 });
 
-registerComponent("dxFilterBuilder", FilterBuilder);
+registerComponent('dxFilterBuilder', FilterBuilder);
 
 module.exports = FilterBuilder;
 module.exports.renderValueText = renderValueText;

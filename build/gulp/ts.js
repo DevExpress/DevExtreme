@@ -24,13 +24,13 @@ exports.generateJQueryAugmentation = function(globalWidgetPath) {
     var widgetName = widgetNameByPath(globalWidgetPath);
     if(!widgetName) return '';
 
-    return `interface JQuery {\n` +
+    return 'interface JQuery {\n' +
            `    ${widgetName}(): JQuery;\n` +
            `    ${widgetName}(options: "instance"): DevExpress.${globalWidgetPath};\n` +
            `    ${widgetName}(options: string): any;\n` +
            `    ${widgetName}(options: string, ...params: any[]): any;\n` +
            `    ${widgetName}(options: DevExpress.${getWidgetOptionsPath(globalWidgetPath)}): JQuery;\n` +
-           `}\n`;
+           '}\n';
 };
 
 gulp.task('ts-vendor', function() {
@@ -40,7 +40,7 @@ gulp.task('ts-vendor', function() {
 
 gulp.task('ts-sources', function() {
     return gulp.src([TS_PATH, './ts/aliases.d.ts'])
-        .pipe(concat("dx.all.d.ts"))
+        .pipe(concat('dx.all.d.ts'))
         .pipe(headerPipes.bangLicense())
         .pipe(gulp.dest(OUTPUT_DIR));
 });

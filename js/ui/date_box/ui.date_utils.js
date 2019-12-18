@@ -1,13 +1,13 @@
-var $ = require("../../core/renderer"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    isDate = require("../../core/utils/type").isDate,
-    each = require("../../core/utils/iterator").each,
-    dateLocalization = require("../../localization/date");
+var $ = require('../../core/renderer'),
+    dateSerialization = require('../../core/utils/date_serialization'),
+    isDate = require('../../core/utils/type').isDate,
+    each = require('../../core/utils/iterator').each,
+    dateLocalization = require('../../localization/date');
 
 // TODO: move to dx.utils
 
 var dateComponents = function() {
-    return ["year", "day", "month", "day"];
+    return ['year', 'day', 'month', 'day'];
 };
 
 var ONE_MINUTE = 1000 * 60;
@@ -17,11 +17,11 @@ var ONE_YEAR = ONE_DAY * 365;
 var getStringFormat = function(format) {
     var formatType = typeof format;
 
-    if(formatType === "string") {
-        return "format";
+    if(formatType === 'string') {
+        return 'format';
     }
 
-    if(formatType === "object" && format.type !== undefined) {
+    if(formatType === 'object' && format.type !== undefined) {
         return format.type;
     }
 
@@ -30,14 +30,14 @@ var getStringFormat = function(format) {
 
 var dateUtils = {
 
-    SUPPORTED_FORMATS: ["date", "time", "datetime"],
+    SUPPORTED_FORMATS: ['date', 'time', 'datetime'],
 
     // TODO: move to dateView
     DATE_COMPONENT_TEXT_FORMATTER: function(value, name) {
-        var $container = $("<div>").addClass("dx-dateview-formatter-container");
+        var $container = $('<div>').addClass('dx-dateview-formatter-container');
 
-        $("<span>").text(value).addClass("dx-dateview-value-formatter").appendTo($container);
-        $("<span>").text(name).addClass("dx-dateview-name-formatter").appendTo($container);
+        $('<span>').text(value).addClass('dx-dateview-value-formatter').appendTo($container);
+        $('<span>').text(name).addClass('dx-dateview-name-formatter').appendTo($container);
 
         return $container;
     },
@@ -53,27 +53,27 @@ var dateUtils = {
     }(),
 
     FORMATS_INFO: {
-        "date": {
+        'date': {
             getStandardPattern: function() {
-                return "yyyy-MM-dd";
+                return 'yyyy-MM-dd';
             },
             components: dateComponents()
         },
-        "time": {
+        'time': {
             getStandardPattern: function() {
-                return "HH:mm";
+                return 'HH:mm';
             },
-            components: ["hours", "minutes", "seconds", "milliseconds"]
+            components: ['hours', 'minutes', 'seconds', 'milliseconds']
         },
-        "datetime": {
+        'datetime': {
             getStandardPattern: function() {
                 var standardPattern;
 
                 (function androidFormatDetection() {
-                    var androidFormatPattern = "yyyy-MM-ddTHH:mmZ",
-                        testDateString = "2000-01-01T01:01Z";
+                    var androidFormatPattern = 'yyyy-MM-ddTHH:mmZ',
+                        testDateString = '2000-01-01T01:01Z';
 
-                    var $input = $("<input>").attr("type", "datetime");
+                    var $input = $('<input>').attr('type', 'datetime');
                     $input.val(testDateString);
 
                     if($input.val()) {
@@ -82,35 +82,35 @@ var dateUtils = {
                 })();
 
                 if(!standardPattern) {
-                    standardPattern = "yyyy-MM-ddTHH:mm:ssZ";
+                    standardPattern = 'yyyy-MM-ddTHH:mm:ssZ';
                 }
 
-                dateUtils.FORMATS_INFO["datetime"].getStandardPattern = function() {
+                dateUtils.FORMATS_INFO['datetime'].getStandardPattern = function() {
                     return standardPattern;
                 };
 
                 return standardPattern;
             },
-            components: dateComponents().concat(["hours", "minutes", "seconds", "milliseconds"])
+            components: dateComponents().concat(['hours', 'minutes', 'seconds', 'milliseconds'])
         },
-        "datetime-local": {
+        'datetime-local': {
             getStandardPattern: function() {
-                return "yyyy-MM-ddTHH:mm:ss";
+                return 'yyyy-MM-ddTHH:mm:ss';
             },
-            components: dateComponents().concat(["hours", "minutes", "seconds"])
+            components: dateComponents().concat(['hours', 'minutes', 'seconds'])
         }
     },
 
     FORMATS_MAP: {
-        "date": "shortdate",
-        "time": "shorttime",
-        "datetime": "shortdateshorttime"
+        'date': 'shortdate',
+        'time': 'shorttime',
+        'datetime': 'shortdateshorttime'
     },
 
     SUBMIT_FORMATS_MAP: {
-        "date": "date",
-        "time": "time",
-        "datetime": "datetime-local"
+        'date': 'date',
+        'time': 'time',
+        'datetime': 'datetime-local'
     },
 
     toStandardDateFormat: function(date, type) {
@@ -195,33 +195,33 @@ var dateUtils = {
 
 
 dateUtils.DATE_COMPONENTS_INFO = {
-    "year": {
-        getter: "getFullYear",
-        setter: "setFullYear",
+    'year': {
+        getter: 'getFullYear',
+        setter: 'setFullYear',
         formatter: function(value, date) {
             var formatDate = new Date(date.getTime());
             formatDate.setFullYear(value);
-            return dateLocalization.format(formatDate, "yyyy");
+            return dateLocalization.format(formatDate, 'yyyy');
         },
         startValue: undefined,
         endValue: undefined
     },
 
-    "day": {
-        getter: "getDate",
-        setter: "setDate",
+    'day': {
+        getter: 'getDate',
+        setter: 'setDate',
         formatter: function(value, date) {
             var formatDate = new Date(date.getTime());
             formatDate.setDate(value);
-            return dateLocalization.format(formatDate, "d");
+            return dateLocalization.format(formatDate, 'd');
         },
         startValue: 1,
         endValue: undefined
     },
 
-    "month": {
-        getter: "getMonth",
-        setter: "setMonth",
+    'month': {
+        getter: 'getMonth',
+        setter: 'setMonth',
         formatter: function(value) {
             return dateLocalization.getMonthNames()[value];
         },
@@ -229,41 +229,41 @@ dateUtils.DATE_COMPONENTS_INFO = {
         endValue: 11
     },
 
-    "hours": {
-        getter: "getHours",
-        setter: "setHours",
+    'hours': {
+        getter: 'getHours',
+        setter: 'setHours',
         formatter: function(value) {
-            return dateLocalization.format(new Date(0, 0, 0, value), "hour");
+            return dateLocalization.format(new Date(0, 0, 0, value), 'hour');
         },
         startValue: 0,
         endValue: 23
     },
 
-    "minutes": {
-        getter: "getMinutes",
-        setter: "setMinutes",
+    'minutes': {
+        getter: 'getMinutes',
+        setter: 'setMinutes',
         formatter: function(value) {
-            return dateLocalization.format(new Date(0, 0, 0, 0, value), "minute");
+            return dateLocalization.format(new Date(0, 0, 0, 0, value), 'minute');
         },
         startValue: 0,
         endValue: 59
     },
 
-    "seconds": {
-        getter: "getSeconds",
-        setter: "setSeconds",
+    'seconds': {
+        getter: 'getSeconds',
+        setter: 'setSeconds',
         formatter: function(value) {
-            return dateLocalization.format(new Date(0, 0, 0, 0, 0, value), "second");
+            return dateLocalization.format(new Date(0, 0, 0, 0, 0, value), 'second');
         },
         startValue: 0,
         endValue: 59
     },
 
-    "milliseconds": {
-        getter: "getMilliseconds",
-        setter: "setMilliseconds",
+    'milliseconds': {
+        getter: 'getMilliseconds',
+        setter: 'setMilliseconds',
         formatter: function(value) {
-            return dateLocalization.format(new Date(0, 0, 0, 0, 0, 0, value), "millisecond");
+            return dateLocalization.format(new Date(0, 0, 0, 0, 0, 0, value), 'millisecond');
         },
         startValue: 0,
         endValue: 999

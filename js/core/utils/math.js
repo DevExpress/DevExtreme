@@ -1,4 +1,4 @@
-var isExponential = require("./type").isExponential;
+var isExponential = require('./type').isExponential;
 
 var sign = function(value) {
     if(value === 0) {
@@ -23,20 +23,20 @@ var inRange = function(value, minValue, maxValue) {
 };
 
 function getExponent(value) {
-    return Math.abs(parseInt(value.toExponential().split("e")[1]));
+    return Math.abs(parseInt(value.toExponential().split('e')[1]));
 }
 
 // T570217
 function _isEdgeBug() {
     var value = 0.0003,
-        correctValue = "0.000300",
+        correctValue = '0.000300',
         precisionValue = 3;
     return correctValue !== value.toPrecision(precisionValue);
 }
 
 function adjust(value, interval) {
     var precision = getPrecision(interval || 0) + 2,
-        separatedValue = value.toString().split("."),
+        separatedValue = value.toString().split('.'),
         sourceValue = value,
         absValue = Math.abs(value),
         separatedAdjustedValue,
@@ -58,9 +58,9 @@ function adjust(value, interval) {
     precision = ((_isEdgeBug() && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
 
     if(!isExponentValue) {
-        separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split(".");
+        separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
         if(separatedAdjustedValue[0] === integerPart.toString()) {
-            return parseFloat(separatedValue[0] + "." + separatedAdjustedValue[1]);
+            return parseFloat(separatedValue[0] + '.' + separatedAdjustedValue[1]);
         }
     }
     return parseFloat(sourceValue.toPrecision(precision));
@@ -71,11 +71,11 @@ function getPrecision(value) {
         mantissa,
         positionOfDelimiter;
 
-    if(str.indexOf(".") < 0) {
+    if(str.indexOf('.') < 0) {
         return 0;
     }
-    mantissa = str.split(".");
-    positionOfDelimiter = mantissa[1].indexOf("e");
+    mantissa = str.split('.');
+    positionOfDelimiter = mantissa[1].indexOf('e');
 
     return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
 }

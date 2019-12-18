@@ -1,49 +1,49 @@
-import $ from "../core/renderer";
-import eventsEngine from "../events/core/events_engine";
-import registerComponent from "../core/component_registrator";
-import { extend } from "../core/utils/extend";
-import { noop } from "../core/utils/common";
-import windowUtils from "../core/utils/window";
-import inflector from "../core/utils/inflector";
-import { isDefined } from "../core/utils/type";
-import styleUtils from "../core/utils/style";
-import { each } from "../core/utils/iterator";
-import browser from "../core/utils/browser";
-import CollectionWidgetItem from "./collection/item";
-import CollectionWidget from "./collection/ui.collection_widget.edit";
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import { noop } from '../core/utils/common';
+import windowUtils from '../core/utils/window';
+import inflector from '../core/utils/inflector';
+import { isDefined } from '../core/utils/type';
+import styleUtils from '../core/utils/style';
+import { each } from '../core/utils/iterator';
+import browser from '../core/utils/browser';
+import CollectionWidgetItem from './collection/item';
+import CollectionWidget from './collection/ui.collection_widget.edit';
 
-const BOX_CLASS = "dx-box";
-const BOX_SELECTOR = ".dx-box";
-const BOX_ITEM_CLASS = "dx-box-item";
-const BOX_ITEM_DATA_KEY = "dxBoxItemData";
+const BOX_CLASS = 'dx-box';
+const BOX_SELECTOR = '.dx-box';
+const BOX_ITEM_CLASS = 'dx-box-item';
+const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
 const MINSIZE_MAP = {
-    "row": "minWidth",
-    "col": "minHeight"
+    'row': 'minWidth',
+    'col': 'minHeight'
 };
 const MAXSIZE_MAP = {
-    "row": "maxWidth",
-    "col": "maxHeight"
+    'row': 'maxWidth',
+    'col': 'maxHeight'
 };
 const SHRINK = 1;
 
 // NEW FLEXBOX STRATEGY
 const FLEX_JUSTIFY_CONTENT_MAP = {
-    "start": "flex-start",
-    "end": "flex-end",
-    "center": "center",
-    "space-between": "space-between",
-    "space-around": "space-around"
+    'start': 'flex-start',
+    'end': 'flex-end',
+    'center': 'center',
+    'space-between': 'space-between',
+    'space-around': 'space-around'
 };
 const FLEX_ALIGN_ITEMS_MAP = {
-    "start": "flex-start",
-    "end": "flex-end",
-    "center": "center",
-    "stretch": "stretch"
+    'start': 'flex-start',
+    'end': 'flex-end',
+    'center': 'center',
+    'stretch': 'stretch'
 };
 const FLEX_DIRECTION_MAP = {
-    "row": "row",
-    "col": "column"
+    'row': 'row',
+    'col': 'column'
 };
 
 // FALLBACK STRATEGY FOR IE
@@ -54,55 +54,55 @@ const setFlexProp = (element, prop, value) => {
 
     // NOTE: workaround for Domino issue https://github.com/fgnass/domino/issues/119
     if(!windowUtils.hasWindow()) {
-        if(value === "" || !isDefined(value)) {
+        if(value === '' || !isDefined(value)) {
             return;
         }
 
         const cssName = inflector.dasherize(prop);
-        const styleExpr = cssName + ": " + value + ";";
+        const styleExpr = cssName + ': ' + value + ';';
 
         if(!element.attributes.style) {
-            element.setAttribute("style", styleExpr);
+            element.setAttribute('style', styleExpr);
         } else if(element.attributes.style.value.indexOf(styleExpr) < 0) {
-            element.attributes.style.value += " " + styleExpr;
+            element.attributes.style.value += ' ' + styleExpr;
         }
     }
 };
-const BOX_EVENTNAMESPACE = "dxBox";
-const UPDATE_EVENT = "dxupdate." + BOX_EVENTNAMESPACE;
+const BOX_EVENTNAMESPACE = 'dxBox';
+const UPDATE_EVENT = 'dxupdate.' + BOX_EVENTNAMESPACE;
 
-const FALLBACK_BOX_ITEM = "dx-box-fallback-item";
+const FALLBACK_BOX_ITEM = 'dx-box-fallback-item';
 const FALLBACK_WRAP_MAP = {
-    "row": "nowrap",
-    "col": "normal"
+    'row': 'nowrap',
+    'col': 'normal'
 };
 const FALLBACK_MAIN_SIZE_MAP = {
-    "row": "width",
-    "col": "height"
+    'row': 'width',
+    'col': 'height'
 };
 const FALLBACK_CROSS_SIZE_MAP = {
-    "row": "height",
-    "col": "width"
+    'row': 'height',
+    'col': 'width'
 };
 const FALLBACK_PRE_MARGIN_MAP = {
-    "row": "marginLeft",
-    "col": "marginTop"
+    'row': 'marginLeft',
+    'col': 'marginTop'
 };
 const FALLBACK_POST_MARGIN_MAP = {
-    "row": "marginRight",
-    "col": "marginBottom"
+    'row': 'marginRight',
+    'col': 'marginBottom'
 };
 const FALLBACK_CROSS_PRE_MARGIN_MAP = {
-    "row": "marginTop",
-    "col": "marginLeft"
+    'row': 'marginTop',
+    'col': 'marginLeft'
 };
 const FALLBACK_CROSS_POST_MARGIN_MAP = {
-    "row": "marginBottom",
-    "col": "marginRight"
+    'row': 'marginBottom',
+    'col': 'marginRight'
 };
 const MARGINS_RTL_FLIP_MAP = {
-    "marginLeft": "marginRight",
-    "marginRight": "marginLeft"
+    'marginLeft': 'marginRight',
+    'marginRight': 'marginLeft'
 };
 
 class BoxItem extends CollectionWidgetItem {
@@ -110,7 +110,7 @@ class BoxItem extends CollectionWidgetItem {
         super._renderVisible(value);
         if(isDefined(oldValue)) {
             this._options.fireItemStateChangedAction({
-                name: "visible",
+                name: 'visible',
                 state: value,
                 oldState: oldValue
             });
@@ -128,9 +128,9 @@ class FlexLayoutStrategy {
 
     renderBox() {
         this._$element.css({
-            display: styleUtils.stylePropPrefix("flexDirection") + "flex"
+            display: styleUtils.stylePropPrefix('flexDirection') + 'flex'
         });
-        setFlexProp(this._$element.get(0), "flexDirection", FLEX_DIRECTION_MAP[this._option("direction")]);
+        setFlexProp(this._$element.get(0), 'flexDirection', FLEX_DIRECTION_MAP[this._option('direction')]);
     }
 
     renderAlign() {
@@ -140,7 +140,7 @@ class FlexLayoutStrategy {
     }
 
     _normalizedAlign() {
-        const align = this._option("align");
+        const align = this._option('align');
         return (align in FLEX_JUSTIFY_CONTENT_MAP) ? FLEX_JUSTIFY_CONTENT_MAP[align] : align;
     }
 
@@ -151,36 +151,36 @@ class FlexLayoutStrategy {
     }
 
     _normalizedCrossAlign() {
-        const crossAlign = this._option("crossAlign");
+        const crossAlign = this._option('crossAlign');
         return (crossAlign in FLEX_ALIGN_ITEMS_MAP) ? FLEX_ALIGN_ITEMS_MAP[crossAlign] : crossAlign;
     }
 
     renderItems($items) {
-        const flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
-        const direction = this._option("direction");
+        const flexPropPrefix = styleUtils.stylePropPrefix('flexDirection');
+        const direction = this._option('direction');
 
         each($items, function() {
             const $item = $(this);
             const item = $item.data(BOX_ITEM_DATA_KEY);
 
-            $item.css({ display: flexPropPrefix + "flex" })
-                .css(MAXSIZE_MAP[direction], item.maxSize || "none")
-                .css(MINSIZE_MAP[direction], item.minSize || "0");
+            $item.css({ display: flexPropPrefix + 'flex' })
+                .css(MAXSIZE_MAP[direction], item.maxSize || 'none')
+                .css(MINSIZE_MAP[direction], item.minSize || '0');
 
-            setFlexProp($item.get(0), "flexBasis", item.baseSize || 0);
-            setFlexProp($item.get(0), "flexGrow", item.ratio);
-            setFlexProp($item.get(0), "flexShrink", isDefined(item.shrink) ? item.shrink : SHRINK);
+            setFlexProp($item.get(0), 'flexBasis', item.baseSize || 0);
+            setFlexProp($item.get(0), 'flexGrow', item.ratio);
+            setFlexProp($item.get(0), 'flexShrink', isDefined(item.shrink) ? item.shrink : SHRINK);
 
             $item.children().each((_, itemContent) => {
                 $(itemContent).css({
-                    width: "auto",
-                    height: "auto",
-                    display: styleUtils.stylePropPrefix("flexDirection") + "flex",
+                    width: 'auto',
+                    height: 'auto',
+                    display: styleUtils.stylePropPrefix('flexDirection') + 'flex',
                     flexBasis: 0
                 });
 
-                setFlexProp(itemContent, "flexGrow", 1);
-                setFlexProp(itemContent, "flexDirection", $(itemContent)[0].style.flexDirection || "column");
+                setFlexProp(itemContent, 'flexGrow', 1);
+                setFlexProp(itemContent, 'flexDirection', $(itemContent)[0].style.flexDirection || 'column');
             });
         });
     }
@@ -196,8 +196,8 @@ class FallbackLayoutStrategy {
     renderBox() {
         this._$element.css({
             fontSize: 0,
-            whiteSpace: FALLBACK_WRAP_MAP[this._option("direction")],
-            verticalAlign: "top"
+            whiteSpace: FALLBACK_WRAP_MAP[this._option('direction')],
+            verticalAlign: 'top'
         });
 
         eventsEngine.off(this._$element, UPDATE_EVENT);
@@ -211,9 +211,9 @@ class FallbackLayoutStrategy {
             return;
         }
 
-        const align = this._option("align");
+        const align = this._option('align');
         const totalItemSize = this.totalItemSize;
-        const direction = this._option("direction");
+        const direction = this._option('direction');
         const boxSize = this._$element[FALLBACK_MAIN_SIZE_MAP[direction]]();
         const freeSpace = boxSize - totalItemSize;
 
@@ -223,24 +223,24 @@ class FallbackLayoutStrategy {
         this._setItemsMargins($items, direction, 0);
 
         switch(align) {
-            case "start":
+            case 'start':
                 break;
-            case "end":
+            case 'end':
                 shift = freeSpace;
                 $items.first().css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), shift);
                 break;
-            case "center":
+            case 'center':
                 shift = 0.5 * freeSpace;
                 $items.first().css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), shift);
                 $items.last().css(this._chooseMarginSide(FALLBACK_POST_MARGIN_MAP[direction]), shift);
                 break;
-            case "space-between":
+            case 'space-between':
                 shift = 0.5 * freeSpace / ($items.length - 1);
                 this._setItemsMargins($items, direction, shift);
                 $items.first().css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), 0);
                 $items.last().css(this._chooseMarginSide(FALLBACK_POST_MARGIN_MAP[direction]), 0);
                 break;
-            case "space-around":
+            case 'space-around':
                 shift = 0.5 * freeSpace / $items.length;
                 this._setItemsMargins($items, direction, shift);
                 break;
@@ -260,16 +260,16 @@ class FallbackLayoutStrategy {
             return;
         }
 
-        const crossAlign = this._option("crossAlign");
-        const direction = this._option("direction");
+        const crossAlign = this._option('crossAlign');
+        const direction = this._option('direction');
         const size = this._$element[FALLBACK_CROSS_SIZE_MAP[direction]]();
 
         const that = this;
 
         switch(crossAlign) {
-            case "start":
+            case 'start':
                 break;
-            case "end":
+            case 'end':
                 each($items, function() {
                     const $item = $(this),
                         itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]](),
@@ -277,7 +277,7 @@ class FallbackLayoutStrategy {
                     $item.css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift);
                 });
                 break;
-            case "center":
+            case 'center':
                 each($items, function() {
                     const $item = $(this),
                         itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]](),
@@ -287,17 +287,17 @@ class FallbackLayoutStrategy {
                         .css(that._chooseMarginSide(FALLBACK_CROSS_POST_MARGIN_MAP[direction]), shift);
                 });
                 break;
-            case "stretch":
+            case 'stretch':
                 $items
                     .css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), 0)
                     .css(that._chooseMarginSide(FALLBACK_CROSS_POST_MARGIN_MAP[direction]), 0)
-                    .css(FALLBACK_CROSS_SIZE_MAP[direction], "100%");
+                    .css(FALLBACK_CROSS_SIZE_MAP[direction], '100%');
                 break;
         }
     }
 
     _chooseMarginSide(value) {
-        if(!this._option("rtlEnabled")) {
+        if(!this._option('rtlEnabled')) {
             return value;
         }
 
@@ -307,7 +307,7 @@ class FallbackLayoutStrategy {
     renderItems($items) {
         this._$items = $items;
 
-        const direction = this._option("direction");
+        const direction = this._option('direction');
 
         let totalRatio = 0;
         let totalWeightedShrink = 0;
@@ -317,11 +317,11 @@ class FallbackLayoutStrategy {
             const $item = $(item);
 
             $item.css({
-                display: "inline-block",
-                verticalAlign: "top"
+                display: 'inline-block',
+                verticalAlign: 'top'
             });
 
-            $item[FALLBACK_MAIN_SIZE_MAP[direction]]("auto");
+            $item[FALLBACK_MAIN_SIZE_MAP[direction]]('auto');
 
             $item.removeClass(FALLBACK_BOX_ITEM);
 
@@ -355,8 +355,8 @@ class FallbackLayoutStrategy {
             totalItemSize += size;
 
             $item
-                .css(MAXSIZE_MAP[direction], itemData.maxSize || "none")
-                .css(MINSIZE_MAP[direction], itemData.minSize || "0")
+                .css(MAXSIZE_MAP[direction], itemData.maxSize || 'none')
+                .css(MINSIZE_MAP[direction], itemData.minSize || '0')
                 .css(FALLBACK_MAIN_SIZE_MAP[direction], size);
 
             $item.addClass(FALLBACK_BOX_ITEM);
@@ -367,11 +367,11 @@ class FallbackLayoutStrategy {
 
     _baseSize(item) {
         const itemData = $(item).data(BOX_ITEM_DATA_KEY);
-        return itemData.baseSize == null ? 0 : (itemData.baseSize === "auto" ? this._contentSize(item) : this._parseSize(itemData.baseSize));
+        return itemData.baseSize == null ? 0 : (itemData.baseSize === 'auto' ? this._contentSize(item) : this._parseSize(itemData.baseSize));
     }
 
     _contentSize(item) {
-        return $(item)[FALLBACK_MAIN_SIZE_MAP[this._option("direction")]]();
+        return $(item)[FALLBACK_MAIN_SIZE_MAP[this._option('direction')]]();
     }
 
     _parseSize(size) {
@@ -397,11 +397,11 @@ class FallbackLayoutStrategy {
     }
 
     initSize() {
-        this._boxSize(this._$element[FALLBACK_MAIN_SIZE_MAP[this._option("direction")]]());
+        this._boxSize(this._$element[FALLBACK_MAIN_SIZE_MAP[this._option('direction')]]());
     }
 
     update() {
-        if(!this._$items || this._$element.is(":hidden")) {
+        if(!this._$items || this._$element.is(':hidden')) {
             return;
         }
 
@@ -437,21 +437,21 @@ class Box extends CollectionWidget {
             * @type Enums.BoxDirection
             * @default 'row'
             */
-            direction: "row",
+            direction: 'row',
 
             /**
             * @name dxBoxOptions.align
             * @type Enums.BoxAlign
             * @default 'start'
             */
-            align: "start",
+            align: 'start',
 
             /**
             * @name dxBoxOptions.crossAlign
             * @type Enums.BoxCrossAlign
             * @default 'start'
             */
-            crossAlign: "stretch",
+            crossAlign: 'stretch',
 
             /**
             * @name dxBoxOptions.activeStateEnabled
@@ -467,7 +467,7 @@ class Box extends CollectionWidget {
 
             onItemStateChanged: undefined,
 
-            _layoutStrategy: "flex",
+            _layoutStrategy: 'flex',
 
             _queue: undefined
 
@@ -514,6 +514,12 @@ class Box extends CollectionWidget {
             */
 
             /**
+             * @name dxBoxOptions.dataSource
+             * @type string|Array<string,dxBoxItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+
+            /**
              * @name dxBoxOptions.items
              * @type Array<string, dxBoxItem, object>
              * @fires dxBoxOptions.onOptionChanged
@@ -525,10 +531,10 @@ class Box extends CollectionWidget {
         return super._defaultOptionsRules().concat([
             {
                 device: function() {
-                    return browser["msie"];
+                    return browser['msie'];
                 },
                 options: {
-                    _layoutStrategy: "fallback"
+                    _layoutStrategy: 'fallback'
                 }
             }
         ]);
@@ -548,23 +554,23 @@ class Box extends CollectionWidget {
 
     _init() {
         super._init();
-        this.$element().addClass(`${BOX_CLASS}-${this.option("_layoutStrategy")}`);
+        this.$element().addClass(`${BOX_CLASS}-${this.option('_layoutStrategy')}`);
         this._initLayout();
         this._initBoxQueue();
     }
 
     _initLayout() {
-        this._layout = (this.option("_layoutStrategy") === "fallback") ?
+        this._layout = (this.option('_layoutStrategy') === 'fallback') ?
             new FallbackLayoutStrategy(this.$element(), this.option.bind(this)) :
             new FlexLayoutStrategy(this.$element(), this.option.bind(this));
     }
 
     _initBoxQueue() {
-        this._queue = this.option("_queue") || [];
+        this._queue = this.option('_queue') || [];
     }
 
     _queueIsNotEmpty() {
-        return this.option("_queue") ? false : !!this._queue.length;
+        return this.option('_queue') ? false : !!this._queue.length;
     }
 
     _pushItemToQueue($item, config) {
@@ -584,7 +590,7 @@ class Box extends CollectionWidget {
     }
 
     _renderActions() {
-        this._onItemStateChanged = this._createActionByOption("onItemStateChanged");
+        this._onItemStateChanged = this._createActionByOption('onItemStateChanged');
     }
 
     _renderAlign() {
@@ -599,13 +605,13 @@ class Box extends CollectionWidget {
         while(this._queueIsNotEmpty()) {
             const item = this._shiftItemFromQueue();
             this._createComponent(item.$item, Box, extend({
-                _layoutStrategy: this.option("_layoutStrategy"),
-                itemTemplate: this.option("itemTemplate"),
-                itemHoldTimeout: this.option("itemHoldTimeout"),
-                onItemHold: this.option("onItemHold"),
-                onItemClick: this.option("onItemClick"),
-                onItemContextMenu: this.option("onItemContextMenu"),
-                onItemRendered: this.option("onItemRendered"),
+                _layoutStrategy: this.option('_layoutStrategy'),
+                itemTemplate: this.option('itemTemplate'),
+                itemHoldTimeout: this.option('itemHoldTimeout'),
+                onItemHold: this.option('onItemHold'),
+                onItemClick: this.option('onItemClick'),
+                onItemContextMenu: this.option('onItemContextMenu'),
+                onItemRendered: this.option('onItemRendered'),
                 _queue: this._queue
             }, item.config));
         }
@@ -669,7 +675,7 @@ class Box extends CollectionWidget {
     }
 
     _itemOptionChanged(item, property, value, oldValue) {
-        if(property === "visible") {
+        if(property === 'visible') {
             this._onItemStateChanged({
                 name: property,
                 state: value,
@@ -681,15 +687,15 @@ class Box extends CollectionWidget {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "_layoutStrategy":
-            case "_queue":
-            case "direction":
+            case '_layoutStrategy':
+            case '_queue':
+            case 'direction':
                 this._invalidate();
                 break;
-            case "align":
+            case 'align':
                 this._layout.renderAlign();
                 break;
-            case "crossAlign":
+            case 'crossAlign':
                 this._layout.renderCrossAlign();
                 break;
             default:
@@ -752,6 +758,6 @@ class Box extends CollectionWidget {
 
 Box.ItemClass = BoxItem;
 
-registerComponent("dxBox", Box);
+registerComponent('dxBox', Box);
 
 module.exports = Box;

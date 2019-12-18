@@ -30,7 +30,11 @@ const CLASS = {
     tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
 
     dialog: 'dx-dialog.dx-popup',
-    dialogButton: `dx-dialog-button`
+    dialogButton: `dx-dialog-button`,
+    navigator: `dx-scheduler-navigator`,
+    navigatorButtonNext: `dx-scheduler-navigator-next`,
+    navigatorButtonPrev: `dx-scheduler-navigator-previous`,
+    navigatorButtonCaption: `dx-scheduler-navigator-caption`
 };
 
 class Appointment {
@@ -112,6 +116,9 @@ class AppointmentPopup {
 
     subjectElement: Selector;
     descriptionElement: Selector;
+    startDateElement: Selector;
+    endDateElement: Selector;
+    allDayElement: Selector;
 
     doneButton: Selector;
     cancelButton: Selector;
@@ -122,7 +129,10 @@ class AppointmentPopup {
         this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 
         this.subjectElement = this.wrapper.find(".dx-texteditor-input").nth(0);
+        this.startDateElement = this.wrapper.find(".dx-texteditor-input").nth(1);
+        this.endDateElement = this.wrapper.find(".dx-texteditor-input").nth(2);
         this.descriptionElement = this.wrapper.find(".dx-texteditor-input").nth(3);
+        this.allDayElement = this.wrapper.find(".dx-switch").nth(0);
 
         this.doneButton = this.wrapper.find(".dx-popup-done.dx-button");
         this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
@@ -160,6 +170,20 @@ class AppointmentTooltip {
         return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
             dependencies: { element, invisibleStateClass }
         })();
+    }
+}
+
+class SchedulerNavigator {
+    element: Selector;
+    nextDuration: Selector;
+    prevDuration: Selector;
+    caption: Selector;
+
+    constructor(scheduler: Selector) {
+        this.element = scheduler.find(`.${CLASS.navigator}`);
+        this.nextDuration = Selector(`.${CLASS.navigatorButtonNext}`);
+        this.prevDuration = Selector(`.${CLASS.navigatorButtonPrev}`);
+        this.caption = Selector(`.${CLASS.navigatorButtonCaption}`);
     }
 }
 
@@ -230,5 +254,9 @@ export default class Scheduler extends Widget {
 
     getAppointmentCollectorCount() {
         return this.element.find(`.${CLASS.appointmentCollector}`).count;
+    }
+
+    getNavigator(): SchedulerNavigator {
+        return new SchedulerNavigator(this.element);
     }
 };

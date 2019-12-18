@@ -1,20 +1,20 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    commonUtils = require("../core/utils/common"),
-    typeUtils = require("../core/utils/type"),
-    errors = require("./widget/ui.errors"),
-    windowUtils = require("../core/utils/window"),
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    commonUtils = require('../core/utils/common'),
+    typeUtils = require('../core/utils/type'),
+    errors = require('./widget/ui.errors'),
+    windowUtils = require('../core/utils/window'),
     window = windowUtils.getWindow(),
-    iteratorUtils = require("../core/utils/iterator"),
-    extend = require("../core/utils/extend").extend,
-    registerComponent = require("../core/component_registrator"),
-    Box = require("./box"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit");
+    iteratorUtils = require('../core/utils/iterator'),
+    extend = require('../core/utils/extend').extend,
+    registerComponent = require('../core/component_registrator'),
+    Box = require('./box'),
+    CollectionWidget = require('./collection/ui.collection_widget.edit');
 
-var RESPONSIVE_BOX_CLASS = "dx-responsivebox",
-    SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + "-screen-",
-    BOX_ITEM_CLASS = "dx-box-item",
-    BOX_ITEM_DATA_KEY = "dxBoxItemData",
+var RESPONSIVE_BOX_CLASS = 'dx-responsivebox',
+    SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-',
+    BOX_ITEM_CLASS = 'dx-box-item',
+    BOX_ITEM_DATA_KEY = 'dxBoxItemData',
 
     HD_SCREEN_WIDTH = 1920;
 
@@ -93,19 +93,19 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @type string
             * @default ""
             */
-            singleColumnScreen: "",
+            singleColumnScreen: '',
 
             /**
             * @name dxResponsiveBoxOptions.height
             * @default '100%'
             */
-            height: "100%",
+            height: '100%',
 
             /**
             * @name dxResponsiveBoxOptions.width
             * @default '100%'
             */
-            width: "100%",
+            width: '100%',
 
             /**
             * @name dxResponsiveBoxOptions.activeStateEnabled
@@ -164,6 +164,11 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @hidden
             */
             /**
+             * @name dxResponsiveBoxOptions.dataSource
+             * @type string|Array<string,dxResponsiveBoxItem,object>|DataSource|DataSourceOptions
+             * @default null
+             */
+            /**
              * @name dxResponsiveBoxOptions.items
              * @type Array<string, dxResponsiveBoxItem, object>
              * @fires dxResponsiveBoxOptions.onOptionChanged
@@ -176,8 +181,8 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _init: function() {
-        if(!this.option("screenByWidth")) {
-            this._options.screenByWidth = windowUtils.defaultScreenFactorFunc;
+        if(!this.option('screenByWidth')) {
+            this._options.silent('screenByWidth', windowUtils.defaultScreenFactorFunc);
         }
 
         this.callBase();
@@ -185,8 +190,8 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _initLayoutChangedAction: function() {
-        this._layoutChangedAction = this._createActionByOption("onLayoutChanged", {
-            excludeValidators: ["disabled", "readonly"]
+        this._layoutChangedAction = this._createActionByOption('onLayoutChanged', {
+            excludeValidators: ['disabled', 'readonly']
         });
     },
 
@@ -211,7 +216,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
         this._updateTimer = setTimeout((function() {
             if(this._$root) {
-                eventsEngine.triggerHandler(this._$root, "dxupdate");
+                eventsEngine.triggerHandler(this._$root, 'dxupdate');
             }
         }).bind(this));
     },
@@ -244,11 +249,11 @@ var ResponsiveBox = CollectionWidget.inherit({
         this._removeScreenSizeClass();
 
         this.$element().addClass(SCREEN_SIZE_CLASS_PREFIX + currentScreen);
-        this.option("currentScreenFactor", currentScreen);
+        this.option('currentScreenFactor', currentScreen);
     },
 
     _removeScreenSizeClass: function() {
-        var currentScreenFactor = this.option("currentScreenFactor");
+        var currentScreenFactor = this.option('currentScreenFactor');
 
         currentScreenFactor && this.$element().removeClass(SCREEN_SIZE_CLASS_PREFIX + currentScreenFactor);
     },
@@ -269,7 +274,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     getSingleColumnRows: function() {
-        var rows = this.option("rows"),
+        var rows = this.option('rows'),
             screenItemsLength = this._screenItems.length;
 
         if(rows.length) {
@@ -295,14 +300,14 @@ var ResponsiveBox = CollectionWidget.inherit({
             this._rows = this.getSingleColumnRows();
             this._cols = this._defaultSizeConfig(1);
         } else {
-            this._rows = this._sizesByScreen(this.option("rows"));
-            this._cols = this._sizesByScreen(this.option("cols"));
+            this._rows = this._sizesByScreen(this.option('rows'));
+            this._cols = this._sizesByScreen(this.option('cols'));
         }
     },
 
     _isSingleColumnScreen: function() {
-        return this._screenRegExp().test(this.option("singleColumnScreen"))
-            || !this.option("rows").length || !this.option("cols").length;
+        return this._screenRegExp().test(this.option('singleColumnScreen'))
+            || !this.option('rows').length || !this.option('cols').length;
     },
 
     _prepareSingleColumnScreenItems: function() {
@@ -348,12 +353,12 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _screenRegExp: function() {
         var screen = this._getCurrentScreen();
-        return new RegExp("(^|\\s)" + screen + "($|\\s)", "i");
+        return new RegExp('(^|\\s)' + screen + '($|\\s)', 'i');
     },
 
     _getCurrentScreen: function() {
         var width = this._screenWidth();
-        return this.option("screenByWidth")(width);
+        return this.option('screenByWidth')(width);
     },
 
     _screenWidth: function() {
@@ -380,7 +385,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemsByScreen: function() {
-        return this.option("items").reduce((result, item) => {
+        return this.option('items').reduce((result, item) => {
             let locations = item.location || {};
             locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
 
@@ -461,44 +466,44 @@ var ResponsiveBox = CollectionWidget.inherit({
         }
 
         var result = this._layoutBlock({
-            direction: "col",
+            direction: 'col',
             row: { start: 0, end: rowsCount - 1 },
             col: { start: 0, end: colsCount - 1 }
         });
 
-        var rootBox = this._prepareBoxConfig(result.box || { direction: "row", items: [extend(result, { ratio: 1 })] });
+        var rootBox = this._prepareBoxConfig(result.box || { direction: 'row', items: [extend(result, { ratio: 1 })] });
         extend(rootBox, this._rootBoxConfig(rootBox.items));
 
-        this._$root = $("<div>").appendTo(this._itemContainer());
+        this._$root = $('<div>').appendTo(this._itemContainer());
         this._createComponent(this._$root, Box, rootBox);
     },
 
     _rootBoxConfig: function(items) {
         var rootItems = iteratorUtils.each(items, (function(index, item) {
-            this._needApplyAutoBaseSize(item) && extend(item, { baseSize: "auto" });
+            this._needApplyAutoBaseSize(item) && extend(item, { baseSize: 'auto' });
         }).bind(this));
 
         return extend({
-            width: "100%",
-            height: "100%",
+            width: '100%',
+            height: '100%',
             items: rootItems,
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
-            itemHoldTimeout: this.option("itemHoldTimeout"),
-            onItemHold: this._createActionByOption("onItemHold"),
-            onItemClick: this._createActionByOption("onItemClick"),
-            onItemContextMenu: this._createActionByOption("onItemContextMenu"),
-            onItemRendered: this._createActionByOption("onItemRendered")
-        }, { _layoutStrategy: this.option("_layoutStrategy") });
+            itemTemplate: this._getTemplateByOption('itemTemplate'),
+            itemHoldTimeout: this.option('itemHoldTimeout'),
+            onItemHold: this._createActionByOption('onItemHold'),
+            onItemClick: this._createActionByOption('onItemClick'),
+            onItemContextMenu: this._createActionByOption('onItemContextMenu'),
+            onItemRendered: this._createActionByOption('onItemRendered')
+        }, { _layoutStrategy: this.option('_layoutStrategy') });
     },
 
     _needApplyAutoBaseSize: function(item) {
-        return !item.baseSize && (!item.minSize || item.minSize === "auto") && (!item.maxSize || item.maxSize === "auto");
+        return !item.baseSize && (!item.minSize || item.minSize === 'auto') && (!item.maxSize || item.maxSize === 'auto');
     },
 
     _prepareBoxConfig: function(config) {
         return extend(config || {}, {
-            crossAlign: "stretch",
-            onItemStateChanged: this.option("onItemStateChanged")
+            crossAlign: 'stretch',
+            onItemStateChanged: this.option('onItemStateChanged')
         });
     },
 
@@ -532,7 +537,7 @@ var ResponsiveBox = CollectionWidget.inherit({
         while((block = this._nextBlock(options))) {
 
             if(this._isBlockIndivisible(options.prevBlockOptions, block)) {
-                throw errors.Error("E1025");
+                throw errors.Error('E1025');
             }
 
             var item = this._layoutBlock({
@@ -564,7 +569,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _crossDirection: function(direction) {
-        return direction === "col" ? "row" : "col";
+        return direction === 'col' ? 'row' : 'col';
     },
 
     _nextBlock: function(options) {
@@ -584,7 +589,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             var lineCrossSpan = 1;
             for(var index = startIndex; index <= endIndex; index++) {
                 var cell = this._cellByDirection(direction, index, crossIndex);
-                lineCrossSpan = Math.max(lineCrossSpan, cell.location[crossDirection + "span"]);
+                lineCrossSpan = Math.max(lineCrossSpan, cell.location[crossDirection + 'span']);
             }
 
             var lineCrossEndIndex = crossIndex + lineCrossSpan;
@@ -601,13 +606,13 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _cellByDirection: function(direction, index, crossIndex) {
-        return direction === "col"
+        return direction === 'col'
             ? this._grid[crossIndex][index]
             : this._grid[index][crossIndex];
     },
 
     _blockSize: function(block, direction) {
-        var sizeConfigs = (direction === "row") ? this._rows : this._cols,
+        var sizeConfigs = (direction === 'row') ? this._rows : this._cols,
             result = extend(this._createDefaultSizeConfig(), { ratio: 0 });
 
         for(var index = block[direction].start; index <= block[direction].end; index++) {
@@ -622,8 +627,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             }
         }
 
-        result.minSize = result.minSize ? result.minSize : "auto";
-        result.maxSize = result.maxSize ? result.maxSize : "auto";
+        result.minSize = result.minSize ? result.minSize : 'auto';
+        result.maxSize = result.maxSize ? result.maxSize : 'auto';
 
         this._isSingleColumnScreen() && (result.baseSize = 'auto');
 
@@ -662,7 +667,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _clearItemNodeTemplates: function() {
-        iteratorUtils.each(this.option("items"), function() {
+        iteratorUtils.each(this.option('items'), function() {
             delete this.node;
         });
     },
@@ -678,27 +683,27 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "rows":
-            case "cols":
-            case "screenByWidth":
-            case "_layoutStrategy":
-            case "singleColumnScreen":
+            case 'rows':
+            case 'cols':
+            case 'screenByWidth':
+            case '_layoutStrategy':
+            case 'singleColumnScreen':
                 this._clearItemNodeTemplates();
                 this._invalidate();
                 break;
-            case "width":
-            case "height":
+            case 'width':
+            case 'height':
                 this.callBase(args);
                 this._update();
                 break;
-            case "onLayoutChanged":
+            case 'onLayoutChanged':
                 this._initLayoutChangedAction();
                 break;
-            case "itemTemplate":
+            case 'itemTemplate':
                 this._clearItemNodeTemplates();
                 this.callBase(args);
                 break;
-            case "currentScreenFactor":
+            case 'currentScreenFactor':
                 break;
             default:
                 this.callBase(args);
@@ -706,7 +711,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this._getCurrentScreen() !== this.option("currentScreenFactor")) {
+        if(this._getCurrentScreen() !== this.option('currentScreenFactor')) {
             this._update();
         }
     },
@@ -760,6 +765,6 @@ var ResponsiveBox = CollectionWidget.inherit({
 * @default undefined
 */
 
-registerComponent("dxResponsiveBox", ResponsiveBox);
+registerComponent('dxResponsiveBox', ResponsiveBox);
 
 module.exports = ResponsiveBox;

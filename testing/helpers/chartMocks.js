@@ -1,21 +1,21 @@
 /* global currentAssert */
-import $ from "jquery";
-import Class from "core/class";
-import commonUtils from "core/utils/common";
-import typeUtils from "core/utils/type";
-import loadingIndicatorModule from "viz/core/loading_indicator";
-import axisModule from "viz/axes/base_axis";
-import pointModule from "viz/series/points/base_point";
-import translator2DModule from "viz/translators/translator2d";
-import seriesFamilyModule from "viz/core/series_family";
-import seriesModule from "viz/series/base_series";
-import vizMocks from "./vizMocks.js";
-import { isDefined } from "../../js/core/utils/type.js";
+import $ from 'jquery';
+import Class from 'core/class';
+import commonUtils from 'core/utils/common';
+import typeUtils from 'core/utils/type';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import axisModule from 'viz/axes/base_axis';
+import pointModule from 'viz/series/points/base_point';
+import translator2DModule from 'viz/translators/translator2d';
+import seriesFamilyModule from 'viz/core/series_family';
+import seriesModule from 'viz/series/base_series';
+import vizMocks from './vizMocks.js';
+import { isDefined } from '../../js/core/utils/type.js';
 
-const firstCategory = "First";
-const secondCategory = "Second";
-const thirdCategory = "Third";
-const fourthCategory = "Fourth";
+const firstCategory = 'First';
+const secondCategory = 'Second';
+const thirdCategory = 'Third';
+const fourthCategory = 'Fourth';
 const sourceItemsToMocking = {};
 
 export const categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
@@ -39,20 +39,20 @@ export const verticalStart = 0;
 export const verticalDelta = 85;
 export const verticalEnd = verticalStart + verticalDelta * 5;
 export const horizontalContinuousXData = {
-    "0": horizontalStart,
-    "20": horizontalStart + horizontalDelta,
-    "40": horizontalStart + horizontalDelta * 2,
-    "60": horizontalStart + horizontalDelta * 3,
-    "80": horizontalStart + horizontalDelta * 4,
+    '0': horizontalStart,
+    '20': horizontalStart + horizontalDelta,
+    '40': horizontalStart + horizontalDelta * 2,
+    '60': horizontalStart + horizontalDelta * 3,
+    '80': horizontalStart + horizontalDelta * 4,
     '100': horizontalStart + horizontalDelta * 5
 };
 export const horizontalContinuousXDataFrom = {
-    "70": 0,
-    "170": 20,
-    "270": 40,
-    "370": 60,
-    "470": 80,
-    "570": 100,
+    '70': 0,
+    '170': 20,
+    '270': 40,
+    '370': 60,
+    '470': 80,
+    '570': 100,
 };
 export const horizontalContinuousXDataSpecialCases = {
     'canvas_position_start': horizontalStart,
@@ -157,11 +157,11 @@ var defaultAxisXOptions = $.extend(true, {}, {
     axisDivisionFactor: 50,
     visible: true,
     label: {
-        alignment: "center",
+        alignment: 'center',
         indentFromAxis: 10,
         // TODO: make sure we really need it
         precision: 0,
-        format: "",
+        format: '',
         customizeText: undefined
 
     },
@@ -173,8 +173,8 @@ var defaultAxisXOptions = $.extend(true, {}, {
     },
     title: {
         font: {
-            color: "#000000",
-            family: "Helvetica",
+            color: '#000000',
+            family: 'Helvetica',
             size: 20
         },
         margin: 10
@@ -183,21 +183,21 @@ var defaultAxisXOptions = $.extend(true, {}, {
     },
     constantLineStyle: {
     },
-    drawingType: "normal"
+    drawingType: 'normal'
 });
 
 var defaultAxisYOptions = $.extend(true, {}, {
     isHorizontal: false,
     valueMarginsEnabled: true,
-    position: "left",
+    position: 'left',
     axisDivisionFactor: 30,
     visible: true,
     label: {
-        alignment: "right",
+        alignment: 'right',
         indentFromAxis: 10,
         // TODO: make sure we really need it
         precision: 0,
-        format: "",
+        format: '',
         customizeText: undefined
     },
     tick: {
@@ -208,8 +208,8 @@ var defaultAxisYOptions = $.extend(true, {}, {
     },
     title: {
         font: {
-            color: "#000000",
-            family: "Helvetica",
+            color: '#000000',
+            family: 'Helvetica',
             size: 20
         },
         margin: 10
@@ -218,7 +218,7 @@ var defaultAxisYOptions = $.extend(true, {}, {
     },
     constantLineStyle: {
     },
-    drawingType: "normal"
+    drawingType: 'normal'
 });
 
 export const createHorizontalAxis = function createHorizontalAxis(translatorData, orthogonalTranslatorData, allOptions) {
@@ -258,8 +258,8 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
         constantLinesGroup: allOptions.constantLinesGroup,
         axesContainerGroup: allOptions.axesContainerGroup,
         gridGroup: allOptions.gridGroup,
-        axisType: "xyAxes",
-        drawingType: "linear",
+        axisType: 'xyAxes',
+        drawingType: 'linear',
         isHorizontal: isHorizontal,
         incidentOccurred: allOptions.incidentOccurred
     });
@@ -274,7 +274,7 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
 
 function mockItem(itemKey, moduleName, mock) {
     if(sourceItemsToMocking[itemKey]) {
-        throw "Item " + itemKey + " already mocked";
+        throw 'Item ' + itemKey + ' already mocked';
     }
     sourceItemsToMocking[itemKey] = moduleName[itemKey];
     moduleName[itemKey] = mock;
@@ -292,13 +292,13 @@ export const insertMockFactory = function insertMockFactory() {
         currentSeries: 0
     };
 
-    mockItem("Point", pointModule, function(series, data, options) {
+    mockItem('Point', pointModule, function(series, data, options) {
         var opt = $.extend(true, {}, data, options);
         opt.series = series;
         return new MockPoint(opt);
     });
 
-    mockItem("Series", seriesModule, function(renderSettings, options) {
+    mockItem('Series', seriesModule, function(renderSettings, options) {
         seriesMockData.args.push(arguments);
         if(seriesMockData.series.length > seriesMockData.currentSeries) {
             var series = seriesMockData.series[seriesMockData.currentSeries++];
@@ -321,15 +321,15 @@ export const insertMockFactory = function insertMockFactory() {
             series.renderSettings = renderSettings;
             return series;
         }
-        currentAssert().ok(false, "Unexpected series request (request #" + seriesMockData.currentSeries + ")");
-        throw "Unexpected series request";
+        currentAssert().ok(false, 'Unexpected series request (request #' + seriesMockData.currentSeries + ')');
+        throw 'Unexpected series request';
     });
 
-    mockItem("LoadingIndicator", loadingIndicatorModule, function(parameters) {
+    mockItem('LoadingIndicator', loadingIndicatorModule, function(parameters) {
         return new vizMocks.LoadingIndicator(parameters);
     });
 
-    axisModule && mockItem("Axis", axisModule, function(parameters) {
+    axisModule && mockItem('Axis', axisModule, function(parameters) {
         var axis = new MockAxis(parameters);
         axis.draw = sinon.spy(axis.draw);
         return axis;
@@ -337,10 +337,10 @@ export const insertMockFactory = function insertMockFactory() {
 };
 
 export const restoreMockFactory = function() {
-    restoreItem("Point", pointModule);
-    restoreItem("Series", seriesModule);
-    restoreItem("LoadingIndicator", loadingIndicatorModule);
-    axisModule && restoreItem("Axis", axisModule);
+    restoreItem('Point', pointModule);
+    restoreItem('Series', seriesModule);
+    restoreItem('LoadingIndicator', loadingIndicatorModule);
+    axisModule && restoreItem('Axis', axisModule);
 };
 
 export const resetMockFactory = function resetMockFactory() {
@@ -362,7 +362,7 @@ export const MockTranslator = function(data) {
             currentAssert().ok(index !== null, 'Verification of value that was passed to Translator (translate)');
             index = index === undefined ? 0 : index;
             var result = innerData.translate[index.toString()];
-            if(typeof index === "number" && failOnWrongData && result === undefined) {
+            if(typeof index === 'number' && failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'translate(' + index + ') = undefined');
             }
             return result;
@@ -370,7 +370,7 @@ export const MockTranslator = function(data) {
         from: function(index) {
             currentAssert().ok(index !== undefined && index !== null, 'Verification of value that was passed to Translator (from)');
             var result = innerData.from[index.toString()];
-            if(typeof index === "number" && failOnWrongData && result === undefined) {
+            if(typeof index === 'number' && failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'from(' + index + ') = undefined');
             }
             return result;
@@ -393,7 +393,7 @@ export const MockTranslator = function(data) {
         getCanvasVisibleArea: function() {
             var result = innerData.getCanvasVisibleArea;
             if(failOnWrongData && result === undefined) {
-                currentAssert().ok(false, "getCanvasVisibleArea = undefined");
+                currentAssert().ok(false, 'getCanvasVisibleArea = undefined');
             }
             return result || {};
         },
@@ -445,7 +445,7 @@ export const MockSeries = function MockSeries(options) {
 
             this.disposed = true;
         },
-        type: options.type || "mockType",
+        type: options.type || 'mockType',
         wasDrawn: false,
         dataReinitialized: false,
         reinitializedData: [],
@@ -472,7 +472,7 @@ export const MockSeries = function MockSeries(options) {
             return pointsByArgument;
         })(),
         styles: {
-            themeColor: "seriesThemeColor", point: {}, pointStyles: []
+            themeColor: 'seriesThemeColor', point: {}, pointStyles: []
         },
         getValueAxis: function() {
             return this._valueAxis;
@@ -543,13 +543,13 @@ export const MockSeries = function MockSeries(options) {
             return options.barOverlapGroup;
         },
         isFullStackedSeries: function() {
-            return this.type && this.type.indexOf("fullstacked") !== -1;
+            return this.type && this.type.indexOf('fullstacked') !== -1;
         },
         isStackedSeries: function() {
-            return this.type.indexOf("stacked") === 0;
+            return this.type.indexOf('stacked') === 0;
         },
         isFinancialSeries: function() {
-            return this.type === "stock" || this.type === "candlestick";
+            return this.type === 'stock' || this.type === 'candlestick';
         },
 
         select: function() {
@@ -596,7 +596,7 @@ export const MockSeries = function MockSeries(options) {
             return this._options;
         },
         getColor: function() {
-            return "seriesColor";
+            return 'seriesColor';
         },
         getLegendStyles: function() {
             return {
@@ -609,7 +609,7 @@ export const MockSeries = function MockSeries(options) {
             return this._visible !== undefined ? this._visible : true;
         },
         setClippingParams: function(baseId, wideId, force) {
-            this["clip-path"] = baseId,
+            this['clip-path'] = baseId,
             this.wideId = wideId,
             this.forceClipping = force;
         },
@@ -658,7 +658,7 @@ export const MockPoint = Class.inherit(
                 this.value = options.reductionValue;
             }
             this.labelFormatObject = {};
-            this.series = options.series || { type: "" };
+            this.series = options.series || { type: '' };
 
             this.options = this.mockOptions.options;
             this.pointClassName = options.pointClassName;
@@ -727,7 +727,7 @@ export const MockPoint = Class.inherit(
             if(this.hasValue()) {
                 this.total = total;
                 this.percent = this.value / total;
-                var isFullStackedSeries = this.series.type === "" || this.series.type.indexOf("fullstacked") === 0;
+                var isFullStackedSeries = this.series.type === '' || this.series.type.indexOf('fullstacked') === 0;
                 if(fullStacked && isFullStackedSeries) {
                     this.value = this.value / total;
                     this.minValue = this.minValue / total;
@@ -801,13 +801,13 @@ export const MockPoint = Class.inherit(
             this.selectedStateWasReleased = true;
         },
         applyNormalStyle: function() {
-            this.currentStyle = "normal";
+            this.currentStyle = 'normal';
         },
         applyHoverStyle: function() {
-            this.currentStyle = "hovered";
+            this.currentStyle = 'hovered';
         },
         applySelectionStyle: function() {
-            this.currentStyle = "selected";
+            this.currentStyle = 'selected';
         },
         select: function() {
             this.selected = true;
@@ -837,7 +837,7 @@ export const MockPoint = Class.inherit(
             return this;
         },
         getClassName: function() {
-            return "pointClass";
+            return 'pointClass';
         },
         updateOptions: sinon.spy(function() { }),
         isVisible: function() {
@@ -1089,14 +1089,14 @@ var MockSeriesFamily = Class.inherit({
 
 export const checkTextSpecial = function(i, text, x, y, attr) {
     var assert = currentAssert();
-    assert.strictEqual(renderer.text.getCall(i).args[0], text, "Text for text " + i);
-    assert.equal(renderer.text.getCall(i).args[1], x, "X for text " + i);
-    assert.equal(renderer.text.getCall(i).args[2], y, "Y for text " + i);
+    assert.strictEqual(renderer.text.getCall(i).args[0], text, 'Text for text ' + i);
+    assert.equal(renderer.text.getCall(i).args[1], x, 'X for text ' + i);
+    assert.equal(renderer.text.getCall(i).args[2], y, 'Y for text ' + i);
 
-    assert.ok(renderer.text.getCall(i).returnValue.attr.firstCall.args[0], "attributes were passed for text " + i);
-    assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]["align"], attr.align, "Incorrect label align for text " + i);
+    assert.ok(renderer.text.getCall(i).returnValue.attr.firstCall.args[0], 'attributes were passed for text ' + i);
+    assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]['align'], attr.align, 'Incorrect label align for text ' + i);
     if(attr.rotate) {
-        assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]["rotate"], attr.rotate, "Incorrect label rotation for text " + i);
+        assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]['rotate'], attr.rotate, 'Incorrect label rotation for text ' + i);
     }
 };
 
@@ -1117,9 +1117,9 @@ export const commonMethodsForTests = {
     },
 
     assertRange: function(assert, range, options) {
-        assert.ok(range, "Range is created for pane " + options.pane);
-        assert.equal(range.pane, options.pane, "Pane name set for " + options.pane);
-        assert.strictEqual(range.min, options.min, "Min for " + options.pane);
-        assert.strictEqual(range.max, options.max, "Max for " + options.pane);
+        assert.ok(range, 'Range is created for pane ' + options.pane);
+        assert.equal(range.pane, options.pane, 'Pane name set for ' + options.pane);
+        assert.strictEqual(range.min, options.min, 'Min for ' + options.pane);
+        assert.strictEqual(range.max, options.max, 'Max for ' + options.pane);
     }
 };

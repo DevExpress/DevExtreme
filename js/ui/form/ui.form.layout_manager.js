@@ -1,75 +1,75 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import Guid from "../../core/guid";
-import { default as FormItemsRunTimeInfo } from "./ui.form.items_runtime_info";
-import registerComponent from "../../core/component_registrator";
-import { isDefined, isEmptyObject, isFunction, isObject, type } from "../../core/utils/type";
-import domUtils from "../../core/utils/dom";
-import { isWrapped, isWritableWrapped, unwrap } from "../../core/utils/variable_wrapper";
-import windowUtils from "../../core/utils/window";
-import stringUtils from "../../core/utils/string";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { inArray, normalizeIndexes } from "../../core/utils/array";
-import dataUtils from "../../core/utils/data";
-import removeEvent from "../../core/remove_event";
-import clickEvent from "../../events/click";
-import errors from "../widget/ui.errors";
-import messageLocalization from "../../localization/message";
-import styleUtils from "../../core/utils/style";
-import inflector from "../../core/utils/inflector";
-import Widget from "../widget/ui.widget";
-import Validator from "../validator";
-import ResponsiveBox from "../responsive_box";
-import themes from "../themes";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import Guid from '../../core/guid';
+import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
+import registerComponent from '../../core/component_registrator';
+import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
+import domUtils from '../../core/utils/dom';
+import { isWrapped, isWritableWrapped, unwrap } from '../../core/utils/variable_wrapper';
+import windowUtils from '../../core/utils/window';
+import stringUtils from '../../core/utils/string';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { inArray, normalizeIndexes } from '../../core/utils/array';
+import dataUtils from '../../core/utils/data';
+import removeEvent from '../../core/remove_event';
+import clickEvent from '../../events/click';
+import errors from '../widget/ui.errors';
+import messageLocalization from '../../localization/message';
+import styleUtils from '../../core/utils/style';
+import inflector from '../../core/utils/inflector';
+import Widget from '../widget/ui.widget';
+import Validator from '../validator';
+import ResponsiveBox from '../responsive_box';
+import themes from '../themes';
 
-import "../text_box";
-import "../number_box";
-import "../check_box";
-import "../date_box";
-import "../button";
+import '../text_box';
+import '../number_box';
+import '../check_box';
+import '../date_box';
+import '../button';
 
-const FORM_EDITOR_BY_DEFAULT = "dxTextBox";
-const FIELD_ITEM_CLASS = "dx-field-item";
-const FIELD_EMPTY_ITEM_CLASS = "dx-field-empty-item";
-const FIELD_BUTTON_ITEM_CLASS = "dx-field-button-item";
-const FIELD_ITEM_REQUIRED_CLASS = "dx-field-item-required";
-const FIELD_ITEM_OPTIONAL_CLASS = "dx-field-item-optional";
-const FIELD_ITEM_REQUIRED_MARK_CLASS = "dx-field-item-required-mark";
-const FIELD_ITEM_OPTIONAL_MARK_CLASS = "dx-field-item-optional-mark";
-const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label";
-const FIELD_ITEM_LABEL_ALIGN_CLASS = "dx-field-item-label-align";
-const FIELD_ITEM_LABEL_CONTENT_CLASS = "dx-field-item-label-content";
-const FIELD_ITEM_LABEL_TEXT_CLASS = "dx-field-item-label-text";
-const FIELD_ITEM_LABEL_LOCATION_CLASS = "dx-field-item-label-location-";
-const FIELD_ITEM_CONTENT_CLASS = "dx-field-item-content";
-const FIELD_ITEM_CONTENT_LOCATION_CLASS = "dx-field-item-content-location-";
-const FIELD_ITEM_CONTENT_WRAPPER_CLASS = "dx-field-item-content-wrapper";
-const FIELD_ITEM_HELP_TEXT_CLASS = "dx-field-item-help-text";
-const SINGLE_COLUMN_ITEM_CONTENT = "dx-single-column-item-content";
+const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
+const FIELD_ITEM_CLASS = 'dx-field-item';
+const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
+const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
+const FIELD_ITEM_REQUIRED_CLASS = 'dx-field-item-required';
+const FIELD_ITEM_OPTIONAL_CLASS = 'dx-field-item-optional';
+const FIELD_ITEM_REQUIRED_MARK_CLASS = 'dx-field-item-required-mark';
+const FIELD_ITEM_OPTIONAL_MARK_CLASS = 'dx-field-item-optional-mark';
+const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
+const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
+const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
+const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
+const FIELD_ITEM_LABEL_LOCATION_CLASS = 'dx-field-item-label-location-';
+const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
+const FIELD_ITEM_CONTENT_LOCATION_CLASS = 'dx-field-item-content-location-';
+const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
+const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+const SINGLE_COLUMN_ITEM_CONTENT = 'dx-single-column-item-content';
 
-const LABEL_HORIZONTAL_ALIGNMENT_CLASS = "dx-label-h-align";
-const LABEL_VERTICAL_ALIGNMENT_CLASS = "dx-label-v-align";
+const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
+const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 
-const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
-const LAYOUT_MANAGER_FIRST_ROW_CLASS = "dx-first-row";
-const LAYOUT_MANAGER_FIRST_COL_CLASS = "dx-first-col";
-const LAYOUT_MANAGER_LAST_COL_CLASS = "dx-last-col";
-const LAYOUT_MANAGER_ONE_COLUMN = "dx-layout-manager-one-col";
+const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
+const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
+const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
+const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
 
-const FLEX_LAYOUT_CLASS = "dx-flex-layout";
+const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
 
-const INVALID_CLASS = "dx-invalid";
+const INVALID_CLASS = 'dx-invalid';
 
-const LAYOUT_STRATEGY_FLEX = "flex";
-const LAYOUT_STRATEGY_FALLBACK = "fallback";
+const LAYOUT_STRATEGY_FLEX = 'flex';
+const LAYOUT_STRATEGY_FALLBACK = 'fallback';
 
-const SIMPLE_ITEM_TYPE = "simple";
+const SIMPLE_ITEM_TYPE = 'simple';
 
-const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
-const DATA_OPTIONS = ["dataSource", "items"];
-const EDITORS_WITH_ARRAY_VALUE = ["dxTagBox", "dxRangeSlider"];
+const DATA_OPTIONS = ['dataSource', 'items'];
+const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 const LayoutManager = Widget.inherit({
     _getDefaultOptions: function() {
@@ -78,7 +78,7 @@ const LayoutManager = Widget.inherit({
             readOnly: false,
             colCount: 1,
             colCountByScreen: undefined,
-            labelLocation: "left",
+            labelLocation: 'left',
             onFieldDataChanged: null,
             onEditorEnterKey: null,
             customizeItem: null,
@@ -87,9 +87,9 @@ const LayoutManager = Widget.inherit({
             showRequiredMark: true,
             screenByWidth: null,
             showOptionalMark: false,
-            requiredMark: "*",
-            optionalMark: messageLocalization.format("dxForm-optionalMark"),
-            requiredMessage: messageLocalization.getFormatter("dxForm-requiredMessage")
+            requiredMark: '*',
+            optionalMark: messageLocalization.format('dxForm-optionalMark'),
+            requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage')
         });
     },
 
@@ -103,7 +103,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _init: function() {
-        var layoutData = this.option("layoutData");
+        var layoutData = this.option('layoutData');
 
         this.callBase();
         this._itemWatchers = [];
@@ -124,33 +124,35 @@ const LayoutManager = Widget.inherit({
     },
 
     _syncDataWithItems: function() {
-        var that = this,
-            userItems = that.option("items");
+        const layoutData = this.option('layoutData');
+        const userItems = this.option('items');
 
         if(isDefined(userItems)) {
-            each(userItems, function(index, item) {
-                var value;
-                if(item.dataField && that._getDataByField(item.dataField) === undefined) {
+            userItems.forEach(item => {
+                if(item.dataField && this._getDataByField(item.dataField) === undefined) {
+                    let value;
                     if(item.editorOptions) {
                         value = item.editorOptions.value;
                     }
 
-                    that._updateFieldValue(item.dataField, value);
+                    if(isDefined(value) || item.dataField in layoutData) {
+                        this._updateFieldValue(item.dataField, value);
+                    }
                 }
             });
         }
     },
 
     _getDataByField: function(dataField) {
-        return dataField ? this.option("layoutData." + dataField) : null;
+        return dataField ? this.option('layoutData.' + dataField) : null;
     },
 
     _updateFieldValue: function(dataField, value) {
-        var layoutData = this.option("layoutData"),
+        var layoutData = this.option('layoutData'),
             newValue = value;
 
         if(!isWrapped(layoutData[dataField]) && isDefined(dataField)) {
-            this.option("layoutData." + dataField, newValue);
+            this.option('layoutData.' + dataField, newValue);
         } else if(isWritableWrapped(layoutData[dataField])) {
             newValue = isFunction(newValue) ? newValue() : newValue;
 
@@ -161,14 +163,14 @@ const LayoutManager = Widget.inherit({
     },
 
     _triggerOnFieldDataChanged: function(args) {
-        this._createActionByOption("onFieldDataChanged")(args);
+        this._createActionByOption('onFieldDataChanged')(args);
     },
 
     _updateItems: function(layoutData) {
         var that = this,
-            userItems = this.option("items"),
+            userItems = this.option('items'),
             isUserItemsExist = isDefined(userItems),
-            customizeItem = that.option("customizeItem"),
+            customizeItem = that.option('customizeItem'),
             items,
             processedItems;
 
@@ -218,7 +220,7 @@ const LayoutManager = Widget.inherit({
                             return unwrap(item.visible);
                         },
                         function() {
-                            that._updateItems(that.option("layoutData"));
+                            that._updateItems(that.option('layoutData'));
                             that.repaint();
                         },
                         { skipImmediate: true }
@@ -249,11 +251,11 @@ const LayoutManager = Widget.inherit({
     },
 
     _processItem: function(item) {
-        if(typeof item === "string") {
+        if(typeof item === 'string') {
             item = { dataField: item };
         }
 
-        if(typeof item === "object" && !item.itemType) {
+        if(typeof item === 'object' && !item.itemType) {
             item.itemType = SIMPLE_ITEM_TYPE;
         }
 
@@ -268,19 +270,19 @@ const LayoutManager = Widget.inherit({
 
     _getEditorTypeByDataType: function(dataType) {
         switch(dataType) {
-            case "number":
-                return "dxNumberBox";
-            case "date":
-                return "dxDateBox";
-            case "boolean":
-                return "dxCheckBox";
+            case 'number':
+                return 'dxNumberBox';
+            case 'date':
+                return 'dxDateBox';
+            case 'boolean':
+                return 'dxCheckBox';
             default:
-                return "dxTextBox";
+                return 'dxTextBox';
         }
     },
 
     _sortItems: function() {
-        normalizeIndexes(this._items, "visibleIndex");
+        normalizeIndexes(this._items, 'visibleIndex');
         this._sortIndexes();
     },
 
@@ -320,7 +322,7 @@ const LayoutManager = Widget.inherit({
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
-                $container = $("<div>").appendTo(that.$element()),
+                $container = $('<div>').appendTo(that.$element()),
                 layoutItems;
 
             that._prepareItemsWithMerging(colCount);
@@ -354,10 +356,10 @@ const LayoutManager = Widget.inherit({
 
     _renderTemplate: function($container, item) {
         switch(item.itemType) {
-            case "empty":
+            case 'empty':
                 this._renderEmptyItem($container);
                 break;
-            case "button":
+            case 'button':
                 this._renderButtonItem(item, $container);
                 break;
             default:
@@ -374,14 +376,14 @@ const LayoutManager = Widget.inherit({
 
     _getResponsiveBoxConfig: function(layoutItems, colCount, templatesInfo) {
         var that = this,
-            colCountByScreen = that.option("colCountByScreen"),
+            colCountByScreen = that.option('colCountByScreen'),
             xsColCount = colCountByScreen && colCountByScreen.xs;
 
         return {
             onItemStateChanged: this._itemStateChangedHandler.bind(this),
             _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
-                var onLayoutChanged = that.option("onLayoutChanged"),
+                var onLayoutChanged = that.option('onLayoutChanged'),
                     isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
@@ -393,7 +395,7 @@ const LayoutManager = Widget.inherit({
                 if(windowUtils.hasWindow()) {
                     that._renderTemplates(templatesInfo);
                 }
-                if(that.option("onLayoutChanged")) {
+                if(that.option('onLayoutChanged')) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
             },
@@ -404,7 +406,7 @@ const LayoutManager = Widget.inherit({
                 var $itemElement = $(itemElement),
                     itemRenderedCountInPreviousRows = e.location.row * colCount,
                     item = that._items[e.location.col + itemRenderedCountInPreviousRows],
-                    $fieldItem = $("<div>")
+                    $fieldItem = $('<div>')
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
 
@@ -428,24 +430,24 @@ const LayoutManager = Widget.inherit({
             cols: that._generateRatio(colCount),
             rows: that._generateRatio(that._getRowsCount(), true),
             dataSource: layoutItems,
-            screenByWidth: that.option("screenByWidth"),
-            singleColumnScreen: xsColCount ? false : "xs"
+            screenByWidth: that.option('screenByWidth'),
+            singleColumnScreen: xsColCount ? false : 'xs'
         };
     },
 
     _getColCount: function() {
-        var colCount = this.option("colCount"),
-            colCountByScreen = this.option("colCountByScreen");
+        var colCount = this.option('colCount'),
+            colCountByScreen = this.option('colCountByScreen');
 
         if(colCountByScreen) {
-            var screenFactor = this.option("form").getTargetScreenFactor();
+            var screenFactor = this.option('form').getTargetScreenFactor();
             if(!screenFactor) {
-                screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
+                screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
             }
             colCount = colCountByScreen[screenFactor] || colCount;
         }
 
-        if(colCount === "auto") {
+        if(colCount === 'auto') {
             if(this._cashedColCount) {
                 return this._cashedColCount;
             }
@@ -461,7 +463,7 @@ const LayoutManager = Widget.inherit({
             return 1;
         }
 
-        var minColWidth = this.option("minColWidth"),
+        var minColWidth = this.option('minColWidth'),
             width = this.$element().width(),
             itemsCount = this._items.length,
             maxColCount = Math.floor(width / minColWidth) || 1;
@@ -485,7 +487,7 @@ const LayoutManager = Widget.inherit({
             item = items[i];
             result.push(item);
 
-            if(this.option("alignItemLabels") || item.alignItemLabels || item.colSpan) {
+            if(this.option('alignItemLabels') || item.alignItemLabels || item.colSpan) {
                 item.col = this._getColByIndex(result.length - 1, colCount);
             }
             if(item.colSpan > 1 && (item.col + item.colSpan <= colCount)) {
@@ -538,7 +540,7 @@ const LayoutManager = Widget.inherit({
     _renderEmptyItem: function($container) {
         return $container
             .addClass(FIELD_EMPTY_ITEM_CLASS)
-            .html("&nbsp;");
+            .html('&nbsp;');
     },
 
     _getButtonHorizontalAlignment: function(item) {
@@ -547,37 +549,37 @@ const LayoutManager = Widget.inherit({
         }
 
         if(isDefined(item.alignment)) {
-            errors.log("W0001", "dxForm", "alignment", "18.1", "Use the 'horizontalAlignment' option in button items instead.");
+            errors.log('W0001', 'dxForm', 'alignment', '18.1', 'Use the \'horizontalAlignment\' option in button items instead.');
             return item.alignment;
         }
 
-        return "right";
+        return 'right';
     },
 
     _getButtonVerticalAlignment: function(item) {
         switch(item.verticalAlignment) {
-            case "center":
-                return "center";
-            case "bottom":
-                return "flex-end";
+            case 'center':
+                return 'center';
+            case 'bottom':
+                return 'flex-end';
             default:
-                return "flex-start";
+                return 'flex-start';
         }
     },
 
     _renderButtonItem: function(item, $container) {
-        var $button = $("<div>").appendTo($container),
+        var $button = $('<div>').appendTo($container),
             defaultOptions = {
-                validationGroup: this.option("validationGroup")
+                validationGroup: this.option('validationGroup')
             };
 
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css("textAlign", this._getButtonHorizontalAlignment(item));
+            .css('textAlign', this._getButtonHorizontalAlignment(item));
 
-        $container.parent().css("justifyContent", this._getButtonVerticalAlignment(item));
+        $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
 
-        var instance = this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
+        var instance = this._createComponent($button, 'dxButton', extend(defaultOptions, item.buttonOptions));
 
         this._itemsRunTimeInfo.add({
             item,
@@ -593,8 +595,8 @@ const LayoutManager = Widget.inherit({
     _addItemClasses: function($item, column) {
         $item
             .addClass(FIELD_ITEM_CLASS)
-            .addClass(this.option("cssItemClass"))
-            .addClass(isDefined(column) ? "dx-col-" + column : "");
+            .addClass(this.option('cssItemClass'))
+            .addClass(isDefined(column) ? 'dx-col-' + column : '');
     },
 
     _renderFieldItem: function(item, $container) {
@@ -603,8 +605,8 @@ const LayoutManager = Widget.inherit({
             id = that.getItemID(name),
             isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
             labelOptions = that._getLabelOptions(item, id, isRequired),
-            $editor = $("<div>"),
-            helpID = item.helpText ? ("dx-" + new Guid()) : null,
+            $editor = $('<div>'),
+            helpID = item.helpText ? ('dx-' + new Guid()) : null,
             $label;
 
         this._addItemClasses($container, item.col);
@@ -615,13 +617,13 @@ const LayoutManager = Widget.inherit({
         }
 
         if(item.itemType === SIMPLE_ITEM_TYPE) {
-            if(that._isLabelNeedBaselineAlign(item) && labelOptions.location !== "top") {
+            if(that._isLabelNeedBaselineAlign(item) && labelOptions.location !== 'top') {
                 $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
             }
             that._hasBrowserFlex() && $container.addClass(FLEX_LAYOUT_CLASS);
         }
 
-        $editor.data("dx-form-item", item);
+        $editor.data('dx-form-item', item);
         that._appendEditorToField({
             $fieldItem: $container,
             $label: $label,
@@ -640,7 +642,7 @@ const LayoutManager = Widget.inherit({
             helpID: helpID,
             labelID: labelOptions.labelID,
             id: id,
-            validationBoundary: that.option("validationBoundary")
+            validationBoundary: that.option('validationBoundary')
         });
 
         this._itemsRunTimeInfo.add({
@@ -653,7 +655,7 @@ const LayoutManager = Widget.inherit({
         const editorElem = $editor.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
 
-        if($validationTarget && $validationTarget.data("dx-validation-target")) {
+        if($validationTarget && $validationTarget.data('dx-validation-target')) {
             that._renderValidator($validationTarget, item);
         }
 
@@ -667,7 +669,7 @@ const LayoutManager = Widget.inherit({
 
         if(rules && rules.length) {
             each(rules, function(index, rule) {
-                if(rule.type === "required") {
+                if(rule.type === 'required') {
                     hasRequiredRule = true;
                     return false;
                 }
@@ -682,20 +684,20 @@ const LayoutManager = Widget.inherit({
     },
 
     _isLabelNeedBaselineAlign: function(item) {
-        const largeEditors = ["dxTextArea", "dxRadioGroup", "dxCalendar", "dxHtmlEditor"];
+        const largeEditors = ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'];
         return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
     },
 
     _isLabelNeedId: function(item) {
-        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch", "dxHtmlEditor"]; // TODO: support "dxCalendar"
+        const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
         return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
     },
 
     _getLabelOptions: function(item, id, isRequired) {
         var labelOptions = extend(
             {
-                showColon: this.option("showColonAfterLabel"),
-                location: this.option("labelLocation"),
+                showColon: this.option('showColonAfterLabel'),
+                location: this.option('labelLocation'),
                 id: id,
                 visible: true,
                 isRequired: isRequired
@@ -712,7 +714,7 @@ const LayoutManager = Widget.inherit({
         }
 
         if(labelOptions.text) {
-            labelOptions.text += labelOptions.showColon ? ":" : "";
+            labelOptions.text += labelOptions.showColon ? ':' : '';
         }
 
         return labelOptions;
@@ -722,23 +724,23 @@ const LayoutManager = Widget.inherit({
         const { text, id, location, alignment, isRequired, labelID = null } = options;
 
         if(isDefined(text) && text.length > 0) {
-            const labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
-            const $label = $("<label>")
+            const labelClasses = FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
+            const $label = $('<label>')
                 .addClass(labelClasses)
-                .attr("for", id)
-                .attr("id", labelID);
+                .attr('for', id)
+                .attr('id', labelID);
 
-            const $labelContent = $("<span>")
+            const $labelContent = $('<span>')
                 .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
                 .appendTo($label);
 
-            $("<span>")
+            $('<span>')
                 .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
                 .text(text)
                 .appendTo($labelContent);
 
             if(alignment) {
-                $label.css("textAlign", alignment);
+                $label.css('textAlign', alignment);
             }
 
             $labelContent.append(this._renderLabelMark(isRequired));
@@ -757,9 +759,9 @@ const LayoutManager = Widget.inherit({
             var markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS,
                 markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
 
-            $mark = $("<span>")
+            $mark = $('<span>')
                 .addClass(markClass)
-                .html("&nbsp" + markText);
+                .html('&nbsp' + markText);
         }
 
         return $mark;
@@ -768,10 +770,10 @@ const LayoutManager = Widget.inherit({
     _getRequiredMarksConfig: function() {
         if(!this._cashedRequiredConfig) {
             this._cashedRequiredConfig = {
-                showRequiredMark: this.option("showRequiredMark"),
-                showOptionalMark: this.option("showOptionalMark"),
-                requiredMark: this.option("requiredMark"),
-                optionalMark: this.option("optionalMark")
+                showRequiredMark: this.option('showRequiredMark'),
+                showOptionalMark: this.option('showOptionalMark'),
+                requiredMark: this.option('requiredMark'),
+                optionalMark: this.option('optionalMark')
             };
         }
 
@@ -788,14 +790,14 @@ const LayoutManager = Widget.inherit({
             defaultEditorOptions.value = defaultEditorOptions.value || [];
         }
 
-        var formInstance = this.option("form");
+        var formInstance = this.option('form');
 
         editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
             inputAttr: {
                 id: options.id
             },
             validationBoundary: options.validationBoundary,
-            stylingMode: formInstance && formInstance.option("stylingMode")
+            stylingMode: formInstance && formInstance.option('stylingMode')
         });
 
         this._replaceDataOptions(options.editorOptions, editorOptions);
@@ -830,7 +832,7 @@ const LayoutManager = Widget.inherit({
         if(Array.isArray(validationRules) && validationRules.length) {
             this._createComponent($editor, Validator, {
                 validationRules: validationRules,
-                validationGroup: this.option("validationGroup"),
+                validationGroup: this.option('validationGroup'),
                 dataGetter: function() {
                     return {
                         formItem: item
@@ -855,9 +857,9 @@ const LayoutManager = Widget.inherit({
             if(userValidationRules) {
                 validationRules = userValidationRules;
             } else {
-                var requiredMessage = stringUtils.format(this.option("requiredMessage"), itemName || "");
+                var requiredMessage = stringUtils.format(this.option('requiredMessage'), itemName || '');
 
-                validationRules = isItemRequired ? [{ type: "required", message: requiredMessage }] : null;
+                validationRules = isItemRequired ? [{ type: 'required', message: requiredMessage }] : null;
             }
         }
 
@@ -865,16 +867,16 @@ const LayoutManager = Widget.inherit({
     },
 
     _addWrapperInvalidClass: function(editorInstance) {
-        var wrapperClass = "." + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+        var wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS,
             toggleInvalidClass = function(e) {
                 $(e.element).parents(wrapperClass)
-                    .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option("isValid") === false);
+                    .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
             };
 
         editorInstance
-            .on("focusIn", toggleInvalidClass)
-            .on("focusOut", toggleInvalidClass)
-            .on("enterKey", toggleInvalidClass);
+            .on('focusIn', toggleInvalidClass)
+            .on('focusOut', toggleInvalidClass)
+            .on('enterKey', toggleInvalidClass);
     },
 
     _createEditor: function($container, renderOptions, editorOptions) {
@@ -902,13 +904,13 @@ const LayoutManager = Widget.inherit({
                 container: domUtils.getPublicElement($container)
             });
         } else {
-            var $editor = $("<div>").appendTo($container);
+            var $editor = $('<div>').appendTo($container);
 
             try {
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
-                editorInstance.setAria("describedby", renderOptions.helpID);
-                editorInstance.setAria("labelledby", renderOptions.labelID);
-                editorInstance.setAria("required", renderOptions.isRequired);
+                editorInstance.setAria('describedby', renderOptions.helpID);
+                editorInstance.setAria('labelledby', renderOptions.labelID);
+                editorInstance.setAria('required', renderOptions.isRequired);
 
                 if(themes.isMaterial()) {
                     that._addWrapperInvalidClass(editorInstance);
@@ -918,7 +920,7 @@ const LayoutManager = Widget.inherit({
                     that._bindDataField(editorInstance, renderOptions, $container);
                 }
             } catch(e) {
-                errors.log("E1035", e.message);
+                errors.log('E1035', e.message);
             }
         }
 
@@ -926,14 +928,14 @@ const LayoutManager = Widget.inherit({
     },
 
     _getComponentOwner: function() {
-        return this.option("form") || this;
+        return this.option('form') || this;
     },
 
     _bindDataField: function(editorInstance, renderOptions, $container) {
         var componentOwner = this._getComponentOwner();
 
-        editorInstance.on("enterKey", function(args) {
-            componentOwner._createActionByOption("onEditorEnterKey")(extend(args, { dataField: renderOptions.dataField }));
+        editorInstance.on('enterKey', function(args) {
+            componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: renderOptions.dataField }));
         });
 
         this._createWatcher(editorInstance, $container, renderOptions);
@@ -953,7 +955,7 @@ const LayoutManager = Widget.inherit({
                 return that._getDataByField(renderOptions.dataField);
             },
             function() {
-                editorInstance.option("value", that._getDataByField(renderOptions.dataField));
+                editorInstance.option('value', that._getDataByField(renderOptions.dataField));
             },
             {
                 deep: true,
@@ -966,9 +968,9 @@ const LayoutManager = Widget.inherit({
 
     _getWatch: function() {
         if(!isDefined(this._watch)) {
-            var formInstance = this.option("form");
+            var formInstance = this.option('form');
 
-            this._watch = formInstance && formInstance.option("integrationOptions.watchMethod");
+            this._watch = formInstance && formInstance.option('integrationOptions.watchMethod');
         }
 
         return this._watch;
@@ -976,15 +978,15 @@ const LayoutManager = Widget.inherit({
 
     _addItemContentClasses: function($itemContent) {
         var locationSpecificClass = this._getItemContentLocationSpecificClass();
-        $itemContent.addClass([FIELD_ITEM_CONTENT_CLASS, locationSpecificClass].join(" "));
+        $itemContent.addClass([FIELD_ITEM_CONTENT_CLASS, locationSpecificClass].join(' '));
     },
 
     _getItemContentLocationSpecificClass: function() {
-        var labelLocation = this.option("labelLocation"),
+        var labelLocation = this.option('labelLocation'),
             oppositeClasses = {
-                right: "left",
-                left: "right",
-                top: "bottom"
+                right: 'left',
+                left: 'right',
+                top: 'bottom'
             };
 
         return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
@@ -992,15 +994,15 @@ const LayoutManager = Widget.inherit({
 
     _createComponent: function($editor, type, editorOptions) {
         var that = this,
-            readOnlyState = this.option("readOnly"),
+            readOnlyState = this.option('readOnly'),
             instance;
 
         instance = that.callBase($editor, type, editorOptions);
 
-        readOnlyState && instance.option("readOnly", readOnlyState);
+        readOnlyState && instance.option('readOnly', readOnlyState);
 
-        that.on("optionChanged", function(args) {
-            if(args.name === "readOnly" && !isDefined(editorOptions.readOnly)) {
+        that.on('optionChanged', function(args) {
+            if(args.name === 'readOnly' && !isDefined(editorOptions.readOnly)) {
                 instance.option(args.name, args.value);
             }
         });
@@ -1016,11 +1018,11 @@ const LayoutManager = Widget.inherit({
         if(params.$label) {
             var location = params.labelOptions.location;
 
-            if(location === "top" || location === "left") {
+            if(location === 'top' || location === 'left') {
                 params.$fieldItem.append(params.$editor);
             }
 
-            if(location === "right") {
+            if(location === 'right') {
                 params.$fieldItem.prepend(params.$editor);
             }
 
@@ -1031,7 +1033,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _addInnerItemAlignmentClass: function($fieldItem, location) {
-        if(location === "top") {
+        if(location === 'top') {
             $fieldItem.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
             $fieldItem.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
@@ -1043,20 +1045,20 @@ const LayoutManager = Widget.inherit({
             isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
 
         if(helpText && isSimpleItem) {
-            var $editorWrapper = $("<div>").addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
+            var $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
 
             $editor.wrap($editorWrapper);
 
-            $("<div>")
+            $('<div>')
                 .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
-                .attr("id", helpID)
+                .attr('id', helpID)
                 .text(helpText)
                 .appendTo($editor.parent());
         }
     },
 
     _attachClickHandler: function($label, $editor, editorType) {
-        var isBooleanEditors = editorType === "dxCheckBox" || editorType === "dxSwitch";
+        var isBooleanEditors = editorType === 'dxCheckBox' || editorType === 'dxSwitch';
 
         if($label && isBooleanEditors) {
             eventsEngine.on($label, clickEvent.name, function() {
@@ -1073,7 +1075,7 @@ const LayoutManager = Widget.inherit({
         for(i = 0; i < count; i++) {
             ratio = { ratio: 1 };
             if(isAutoSize) {
-                ratio.baseSize = "auto";
+                ratio.baseSize = 'auto';
             }
             result.push(ratio);
         }
@@ -1086,7 +1088,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateReferencedOptions: function(newLayoutData) {
-        var layoutData = this.option("layoutData");
+        var layoutData = this.option('layoutData');
 
         if(isObject(layoutData)) {
             Object.getOwnPropertyNames(layoutData)
@@ -1101,27 +1103,27 @@ const LayoutManager = Widget.inherit({
 
     _resetWidget(instance) {
         const defaultOptions = instance._getDefaultOptions();
-        instance._setOptionSilent("value", defaultOptions.value);
-        instance.option("isValid", true);
+        instance._setOptionWithoutOptionChange('value', defaultOptions.value);
+        instance.option('isValid', true);
     },
 
     _optionChanged(args) {
-        if(args.fullName.search("layoutData.") === 0) {
+        if(args.fullName.search('layoutData.') === 0) {
             return;
         }
 
         switch(args.name) {
-            case "showRequiredMark":
-            case "showOptionalMark":
-            case "requiredMark":
-            case "optionalMark":
+            case 'showRequiredMark':
+            case 'showOptionalMark':
+            case 'requiredMark':
+            case 'optionalMark':
                 this._cashedRequiredConfig = null;
                 this._invalidate();
                 break;
-            case "layoutData":
+            case 'layoutData':
                 this._updateReferencedOptions(args.value);
 
-                if(this.option("items")) {
+                if(this.option('items')) {
                     if(!isEmptyObject(args.value)) {
                         this._itemsRunTimeInfo.each((_, itemRunTimeInfo) => {
                             if(isDefined(itemRunTimeInfo.item)) {
@@ -1134,7 +1136,7 @@ const LayoutManager = Widget.inherit({
                                     if(dataValue === undefined) {
                                         this._resetWidget(itemRunTimeInfo.widgetInstance);
                                     } else {
-                                        itemRunTimeInfo.widgetInstance.option("value", dataValue);
+                                        itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     }
                                 }
                             }
@@ -1145,38 +1147,38 @@ const LayoutManager = Widget.inherit({
                     this._invalidate();
                 }
                 break;
-            case "items":
+            case 'items':
                 this._cleanItemWatchers();
                 this._initDataAndItems(args.value);
                 this._invalidate();
                 break;
-            case "alignItemLabels":
-            case "labelLocation":
-            case "requiredMessage":
+            case 'alignItemLabels':
+            case 'labelLocation':
+            case 'requiredMessage':
                 this._invalidate();
                 break;
-            case "customizeItem":
-                this._updateItems(this.option("layoutData"));
+            case 'customizeItem':
+                this._updateItems(this.option('layoutData'));
                 this._invalidate();
                 break;
-            case "colCount":
+            case 'colCount':
                 this._resetColCount();
                 break;
-            case "minColWidth":
-                if(this.option("colCount") === "auto") {
+            case 'minColWidth':
+                if(this.option('colCount') === 'auto') {
                     this._resetColCount();
                 }
                 break;
-            case "readOnly":
+            case 'readOnly':
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
 
-                if(this.option("colCount") === "auto") {
+                if(this.option('colCount') === 'auto') {
                     this._resetColCount();
                 }
                 break;
-            case "onFieldDataChanged":
+            case 'onFieldDataChanged':
                 break;
             default:
                 this.callBase(args);
@@ -1189,12 +1191,12 @@ const LayoutManager = Widget.inherit({
     },
 
     linkEditorToDataField(editorInstance, dataField) {
-        this.on("optionChanged", args => {
+        this.on('optionChanged', args => {
             if(args.fullName === `layoutData.${dataField}`) {
-                editorInstance._setOptionSilent("value", args.value);
+                editorInstance._setOptionWithoutOptionChange('value', args.value);
             }
         });
-        editorInstance.on("valueChanged", args => {
+        editorInstance.on('valueChanged', args => {
             if(!(isObject(args.value) && args.value === args.previousValue)) {
                 this._updateFieldValue(dataField, args.value);
             }
@@ -1202,13 +1204,13 @@ const LayoutManager = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this.option("colCount") === "auto" && this.isCachedColCountObsolete()) {
-            this._eventsStrategy.fireEvent("autoColCountChanged");
+        if(this.option('colCount') === 'auto' && this.isCachedColCountObsolete()) {
+            this._eventsStrategy.fireEvent('autoColCountChanged');
         }
     },
 
     getItemID: function(name) {
-        var formInstance = this.option("form");
+        var formInstance = this.option('form');
         return formInstance && formInstance.getItemID(name);
     },
 
@@ -1219,7 +1221,7 @@ const LayoutManager = Widget.inherit({
             each(data, function(dataField, fieldValue) {
                 that._updateFieldValue(dataField, fieldValue);
             });
-        } else if(typeof data === "string") {
+        } else if(typeof data === 'string') {
             that._updateFieldValue(data, value);
         }
     },
@@ -1231,7 +1233,7 @@ const LayoutManager = Widget.inherit({
     isSingleColumnMode: function(component) {
         var responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
-            return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");
+            return responsiveBox.option('currentScreenFactor') === responsiveBox.option('singleColumnScreen');
         }
     },
 
@@ -1240,7 +1242,7 @@ const LayoutManager = Widget.inherit({
     }
 });
 
-registerComponent("dxLayoutManager", LayoutManager);
+registerComponent('dxLayoutManager', LayoutManager);
 
 module.exports = LayoutManager;
 

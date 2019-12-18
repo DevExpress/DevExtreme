@@ -1,10 +1,10 @@
-var $ = require("../../core/renderer"),
-    Guid = require("../../core/guid"),
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    Popover = require("../popover"),
-    TOOLTIP_CLASS = "dx-tooltip",
-    TOOLTIP_WRAPPER_CLASS = "dx-tooltip-wrapper";
+var $ = require('../../core/renderer'),
+    Guid = require('../../core/guid'),
+    registerComponent = require('../../core/component_registrator'),
+    extend = require('../../core/utils/extend').extend,
+    Popover = require('../popover'),
+    TOOLTIP_CLASS = 'dx-tooltip',
+    TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 
 var Tooltip = Popover.inherit({
     _getDefaultOptions: function() {
@@ -59,24 +59,24 @@ var Tooltip = Popover.inherit({
     _renderContent: function() {
         this.callBase();
 
-        this._contentId = "dx-" + new Guid();
+        this._contentId = 'dx-' + new Guid();
 
         this._$content.attr({
-            "id": this._contentId,
-            "role": "tooltip"
+            'id': this._contentId,
+            'role': 'tooltip'
         });
 
         this._toggleAriaDescription(true);
     },
 
     _toggleAriaDescription: function(showing) {
-        var $target = $(this.option("target")),
+        var $target = $(this.option('target')),
             label = showing ? this._contentId : undefined;
 
-        this.setAria("describedby", label, $target);
+        this.setAria('describedby', label, $target);
     }
 });
 
-registerComponent("dxTooltip", Tooltip);
+registerComponent('dxTooltip', Tooltip);
 
 module.exports = Tooltip;

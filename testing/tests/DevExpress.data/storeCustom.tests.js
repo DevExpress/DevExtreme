@@ -1,16 +1,16 @@
-var $ = require("jquery"),
-    CustomStore = require("data/custom_store"),
-    processRequestResultLock = require("data/utils").processRequestResultLock,
-    config = require("core/config"),
+var $ = require('jquery'),
+    CustomStore = require('data/custom_store'),
+    processRequestResultLock = require('data/utils').processRequestResultLock,
+    config = require('core/config'),
     ERRORS = {
-        INVALID_RETURN: "E4012",
-        MISSING_USER_FUNC: "E4011",
-        MISSING_TOTAL_COUNT: "E4021",
-        QUERY_NOT_SUPPORTED: "E4010",
-        REQUEST_ERROR: "E4013"
+        INVALID_RETURN: 'E4012',
+        MISSING_USER_FUNC: 'E4011',
+        MISSING_TOTAL_COUNT: 'E4021',
+        QUERY_NOT_SUPPORTED: 'E4010',
+        REQUEST_ERROR: 'E4013'
     },
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+    ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js'),
+    ajaxMock = require('../../helpers/ajaxMock.js');
 
 QUnit.testDone(function() {
     ajaxMock.clear();
@@ -21,15 +21,15 @@ function assertErrorCore(error, errorID, assert) {
 }
 
 function mustNotReach() {
-    throw Error("execution must not reach here");
+    throw Error('execution must not reach here');
 }
 
-QUnit.test("custom store does not use default search", function(assert) {
+QUnit.test('custom store does not use default search', function(assert) {
     var store = new CustomStore();
     assert.strictEqual(store._useDefaultSearch, false);
 });
 
-QUnit.test("custom stores do not support createQuery", function(assert) {
+QUnit.test('custom stores do not support createQuery', function(assert) {
     try {
         new CustomStore().createQuery();
         mustNotReach();
@@ -38,7 +38,7 @@ QUnit.test("custom stores do not support createQuery", function(assert) {
     }
 });
 
-QUnit.test("missing required options throw", function(assert) {
+QUnit.test('missing required options throw', function(assert) {
     var store = new CustomStore();
 
     function assertError(error) {
@@ -88,7 +88,7 @@ QUnit.test("missing required options throw", function(assert) {
     }
 });
 
-QUnit.test("load, promise result", function(assert) {
+QUnit.test('load, promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -104,7 +104,7 @@ QUnit.test("load, promise result", function(assert) {
     });
 });
 
-QUnit.test("load, promise result with lock", function(assert) {
+QUnit.test('load, promise result with lock', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -115,14 +115,14 @@ QUnit.test("load, promise result with lock", function(assert) {
     });
 
     var promise = store.load({ test: 123 });
-    assert.equal(promise.state(), "resolved", "resolved when no lock");
+    assert.equal(promise.state(), 'resolved', 'resolved when no lock');
 
     processRequestResultLock.obtain();
     promise = store.load({ test: 123 });
-    assert.equal(promise.state(), "pending", "pending when locked");
+    assert.equal(promise.state(), 'pending', 'pending when locked');
 
     processRequestResultLock.release();
-    assert.equal(promise.state(), "resolved", "resolved when released");
+    assert.equal(promise.state(), 'resolved', 'resolved when released');
 
     promise.done(function(r) {
         assert.deepEqual(r, [1, 2, 3]);
@@ -130,7 +130,7 @@ QUnit.test("load, promise result with lock", function(assert) {
     });
 });
 
-QUnit.test("load, array result", function(assert) {
+QUnit.test('load, array result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -145,7 +145,7 @@ QUnit.test("load, array result", function(assert) {
     });
 });
 
-QUnit.test("B250267 backward compat", function(assert) {
+QUnit.test('B250267 backward compat', function(assert) {
     var done = assert.async();
 
     $.when(
@@ -162,10 +162,10 @@ QUnit.test("B250267 backward compat", function(assert) {
     ).then(done);
 });
 
-QUnit.test("load, invalid result", function(assert) {
+QUnit.test('load, invalid result', function(assert) {
     var store = new CustomStore({
         load: function() {
-            return "nonsense";
+            return 'nonsense';
         }
     });
 
@@ -177,7 +177,7 @@ QUnit.test("load, invalid result", function(assert) {
     }
 });
 
-QUnit.test("load with inline totalCount", function(assert) {
+QUnit.test('load with inline totalCount', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -192,44 +192,44 @@ QUnit.test("load with inline totalCount", function(assert) {
     });
 });
 
-QUnit.test("load, ajax error", function(assert) {
+QUnit.test('load, ajax error', function(assert) {
     var done = assert.async(),
         helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "Internal Server Error");
+        assert.equal(error.message, 'Internal Server Error');
     };
 
     helper.run(function() {
         return new CustomStore({
             load: function(e) {
                 return $.Deferred().reject({
-                    statusText: "Internal Server Error",
+                    statusText: 'Internal Server Error',
                     getResponseHeader: function() {}
-                }, "error").promise();
+                }, 'error').promise();
             },
             errorHandler: helper.optionalHandler
         }).load();
     }, done, assert);
 });
 
-QUnit.test("load, promise result, error as text", function(assert) {
+QUnit.test('load, promise result, error as text', function(assert) {
     var helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "custom error");
+        assert.equal(error.message, 'custom error');
     };
 
     helper.run(function() {
         return new CustomStore({
             load: function() {
-                return $.Deferred().reject("custom error");
+                return $.Deferred().reject('custom error');
             },
             errorHandler: helper.optionalHandler
         }).load();
     }, assert.async(), assert);
 });
 
-QUnit.test("totalCount, promise result", function(assert) {
+QUnit.test('totalCount, promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -244,12 +244,12 @@ QUnit.test("totalCount, promise result", function(assert) {
     });
 });
 
-QUnit.test("totalCount, scalar result", function(assert) {
+QUnit.test('totalCount, scalar result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
         totalCount: function(options) {
-            return "42";
+            return '42';
         }
     });
 
@@ -259,10 +259,10 @@ QUnit.test("totalCount, scalar result", function(assert) {
     });
 });
 
-QUnit.test("totalCount, invalid result", function(assert) {
+QUnit.test('totalCount, invalid result', function(assert) {
     var store = new CustomStore({
         totalCount: function() {
-            return "not a number";
+            return 'not a number';
         }
     });
 
@@ -274,7 +274,7 @@ QUnit.test("totalCount, invalid result", function(assert) {
     }
 });
 
-QUnit.test("totalCount, options are passed to user impl", function(assert) {
+QUnit.test('totalCount, options are passed to user impl', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -288,12 +288,12 @@ QUnit.test("totalCount, options are passed to user impl", function(assert) {
     store.totalCount({ test: 123 });
 });
 
-QUnit.test("totalCount, error handling", function(assert) {
+QUnit.test('totalCount, error handling', function(assert) {
     var done = assert.async(),
         helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "Unknown error");
+        assert.equal(error.message, 'Unknown error');
     };
 
     helper.run(function() {
@@ -306,63 +306,63 @@ QUnit.test("totalCount, error handling", function(assert) {
     }, done, assert);
 });
 
-QUnit.test("byKey, promise result", function(assert) {
+QUnit.test('byKey, promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
         byKey: function(key) {
-            return $.Deferred().resolve("item #" + key);
+            return $.Deferred().resolve('item #' + key);
         }
     });
 
     store.byKey(123).done(function(r) {
-        assert.equal(r, "item #123");
+        assert.equal(r, 'item #123');
         done();
     });
 });
 
-QUnit.test("byKey, promise result with lock", function(assert) {
+QUnit.test('byKey, promise result with lock', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
         byKey: function(key) {
-            return $.Deferred().resolve("item #" + key);
+            return $.Deferred().resolve('item #' + key);
         }
     });
 
     var promise = store.byKey(123);
-    assert.equal(promise.state(), "resolved", "resolved when no lock");
+    assert.equal(promise.state(), 'resolved', 'resolved when no lock');
 
     processRequestResultLock.obtain();
     promise = store.byKey(123);
-    assert.equal(promise.state(), "pending", "pending when locked");
+    assert.equal(promise.state(), 'pending', 'pending when locked');
 
     processRequestResultLock.release();
-    assert.equal(promise.state(), "resolved", "resolved when released");
+    assert.equal(promise.state(), 'resolved', 'resolved when released');
 
     promise.done(function(r) {
-        assert.equal(r, "item #123");
+        assert.equal(r, 'item #123');
         done();
     });
 });
 
 
-QUnit.test("byKey, non-promise result", function(assert) {
+QUnit.test('byKey, non-promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
         byKey: function(key) {
-            return "item #" + key;
+            return 'item #' + key;
         }
     });
 
     store.byKey(123).done(function(r) {
-        assert.equal(r, "item #123");
+        assert.equal(r, 'item #123');
         done();
     });
 });
 
-QUnit.test("byKey, extraOptions", function(assert) {
+QUnit.test('byKey, extraOptions', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -371,36 +371,36 @@ QUnit.test("byKey, extraOptions", function(assert) {
         }
     });
 
-    store.byKey(NaN, { foo: "works" }).done(function(r) {
-        assert.deepEqual(r, "works");
+    store.byKey(NaN, { foo: 'works' }).done(function(r) {
+        assert.deepEqual(r, 'works');
 
         done();
     });
 });
 
-QUnit.test("byKey, error handling", function(assert) {
+QUnit.test('byKey, error handling', function(assert) {
     var done = assert.async();
 
     var helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "test error");
+        assert.equal(error.message, 'test error');
     };
 
     helper.run(function() {
         return new CustomStore({
             byKey: function() {
-                return $.Deferred().reject("test error");
+                return $.Deferred().reject('test error');
             },
             errorHandler: helper.optionalHandler
         }).byKey(123);
     }, done, assert);
 });
 
-QUnit.test("insert, promise result", function(assert) {
+QUnit.test('insert, promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
-        key: "id",
+        key: 'id',
         insert: function(values) {
             return $.Deferred().resolve({ id: 123, a: 1 });
         }
@@ -413,11 +413,11 @@ QUnit.test("insert, promise result", function(assert) {
     });
 });
 
-QUnit.test("insert, non-promise result", function(assert) {
+QUnit.test('insert, non-promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
-        key: "id",
+        key: 'id',
         insert: function(values) {
             return { id: 123, a: 1 };
         }
@@ -430,7 +430,7 @@ QUnit.test("insert, non-promise result", function(assert) {
     });
 });
 
-QUnit.test("insert with useLegacyStoreResult, promise result", function(assert) {
+QUnit.test('insert with useLegacyStoreResult, promise result', function(assert) {
     var done = assert.async();
 
     config({ useLegacyStoreResult: true });
@@ -449,7 +449,7 @@ QUnit.test("insert with useLegacyStoreResult, promise result", function(assert) 
     });
 });
 
-QUnit.test("insert with useLegacyStoreResult, non-promise result", function(assert) {
+QUnit.test('insert with useLegacyStoreResult, non-promise result', function(assert) {
     var done = assert.async();
 
     config({ useLegacyStoreResult: true });
@@ -468,24 +468,24 @@ QUnit.test("insert with useLegacyStoreResult, non-promise result", function(asse
     });
 });
 
-QUnit.test("insert, error handling", function(assert) {
+QUnit.test('insert, error handling', function(assert) {
     var done = assert.async();
     var helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "insert error");
+        assert.equal(error.message, 'insert error');
     };
 
     helper.run(function() {
         return new CustomStore({
             insert: function() {
-                return $.Deferred().reject("insert error");
+                return $.Deferred().reject('insert error');
             },
             errorHandler: helper.optionalHandler
         }).insert({});
     }, done, assert);
 });
 
-QUnit.test("update with useLegacyStoreResult, promise result", function(assert) {
+QUnit.test('update with useLegacyStoreResult, promise result', function(assert) {
     var done = assert.async();
 
     config({ useLegacyStoreResult: true });
@@ -506,7 +506,7 @@ QUnit.test("update with useLegacyStoreResult, promise result", function(assert) 
     });
 });
 
-QUnit.test("update with useLegacyStoreResult, non-promise result", function(assert) {
+QUnit.test('update with useLegacyStoreResult, non-promise result', function(assert) {
     var done = assert.async(),
         updateCalled;
 
@@ -529,11 +529,11 @@ QUnit.test("update with useLegacyStoreResult, non-promise result", function(asse
     });
 });
 
-QUnit.test("update, promise result", function(assert) {
+QUnit.test('update, promise result', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
-        key: "id",
+        key: 'id',
         update: function(key, values) {
             assert.strictEqual(key, 123);
             assert.deepEqual(values, { a: 1 });
@@ -548,7 +548,7 @@ QUnit.test("update, promise result", function(assert) {
     });
 });
 
-QUnit.test("update, promise result as data", function(assert) {
+QUnit.test('update, promise result as data', function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
@@ -566,7 +566,7 @@ QUnit.test("update, promise result as data", function(assert) {
     });
 });
 
-QUnit.test("update, non-promise result", function(assert) {
+QUnit.test('update, non-promise result', function(assert) {
     var done = assert.async(),
         updateCalled;
 
@@ -586,7 +586,7 @@ QUnit.test("update, non-promise result", function(assert) {
     });
 });
 
-QUnit.test("update, non-promise result as data", function(assert) {
+QUnit.test('update, non-promise result as data', function(assert) {
     var done = assert.async(),
         updateCalled;
 
@@ -607,29 +607,29 @@ QUnit.test("update, non-promise result as data", function(assert) {
     });
 });
 
-QUnit.test("update, error handling", function(assert) {
+QUnit.test('update, error handling', function(assert) {
     var done = assert.async();
 
     var helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "Internal Server Error");
+        assert.equal(error.message, 'Internal Server Error');
     };
 
     helper.run(function() {
         return new CustomStore({
             update: function() {
                 return $.Deferred().reject({
-                    statusText: "Internal Server Error",
+                    statusText: 'Internal Server Error',
                     getResponseHeader: function() {}
-                }, "error").promise();
+                }, 'error').promise();
             },
             errorHandler: helper.optionalHandler
         }).update(123, {});
     }, done, assert);
 });
 
-QUnit.test("remove, promise result", function(assert) {
+QUnit.test('remove, promise result', function(assert) {
     var done = assert.async(),
         removedKey;
 
@@ -647,7 +647,7 @@ QUnit.test("remove, promise result", function(assert) {
     });
 });
 
-QUnit.test("remove, non-promise result", function(assert) {
+QUnit.test('remove, non-promise result', function(assert) {
     var done = assert.async(),
         removedKey;
 
@@ -664,25 +664,25 @@ QUnit.test("remove, non-promise result", function(assert) {
     });
 });
 
-QUnit.test("remove, error handling", function(assert) {
+QUnit.test('remove, error handling', function(assert) {
     var done = assert.async(),
         helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
-        assert.equal(error.message, "my error");
+        assert.equal(error.message, 'my error');
     };
 
     helper.run(function() {
         return new CustomStore({
             remove: function() {
-                return $.Deferred().reject("my error");
+                return $.Deferred().reject('my error');
             },
             errorHandler: helper.optionalHandler
         }).remove(123);
     }, done, assert);
 });
 
-QUnit.test("should support Promise/A standard", function(assert) {
+QUnit.test('should support Promise/A standard', function(assert) {
     var done = assert.async();
 
     function createPromiseAPretenderAndResolveIt() {
@@ -708,11 +708,11 @@ QUnit.test("should support Promise/A standard", function(assert) {
     }
 
     function mustReach() {
-        assert.ok(true, "Must reach here");
+        assert.ok(true, 'Must reach here');
     }
 
     function mustNotReach() {
-        assert.ok(false, "Must not reach here");
+        assert.ok(false, 'Must not reach here');
     }
 
     $.when(
@@ -727,10 +727,10 @@ QUnit.test("should support Promise/A standard", function(assert) {
     ).always(done);
 });
 
-QUnit.test("function context is current Store's instance", function(assert) {
+QUnit.test('function context is current Store\'s instance', function(assert) {
     assert.expect(12);
 
-    var key = "key";
+    var key = 'key';
     var store = new CustomStore({
         key: key,
         load: ensureThis,
@@ -757,9 +757,9 @@ QUnit.test("function context is current Store's instance", function(assert) {
     store.totalCount();
 });
 
-QUnit.test("push", function(assert) {
+QUnit.test('push', function(assert) {
     var onPushSpy = sinon.spy(),
-        changes = [{ type: "remove", key: 0 }],
+        changes = [{ type: 'remove', key: 0 }],
         store = new CustomStore({
             onPush: onPushSpy
         });

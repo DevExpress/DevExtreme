@@ -1,34 +1,34 @@
-var $ = require("../core/renderer"),
-    domAdapter = require("../core/dom_adapter"),
-    windowUtils = require("../core/utils/window"),
+var $ = require('../core/renderer'),
+    domAdapter = require('../core/dom_adapter'),
+    windowUtils = require('../core/utils/window'),
     window = windowUtils.getWindow(),
-    eventsEngine = require("../events/core/events_engine"),
-    registerComponent = require("../core/component_registrator"),
-    commonUtils = require("../core/utils/common"),
-    extend = require("../core/utils/extend").extend,
-    each = require("../core/utils/iterator").each,
-    domUtils = require("../core/utils/dom"),
-    TransitionExecutorModule = require("../animation/transition_executor/transition_executor"),
-    Widget = require("./widget/ui.widget"),
-    LoadIndicator = require("./load_indicator"),
-    isPromise = require("../core/utils/type").isPromise,
-    deferredUtils = require("../core/utils/deferred"),
+    eventsEngine = require('../events/core/events_engine'),
+    registerComponent = require('../core/component_registrator'),
+    commonUtils = require('../core/utils/common'),
+    extend = require('../core/utils/extend').extend,
+    each = require('../core/utils/iterator').each,
+    domUtils = require('../core/utils/dom'),
+    TransitionExecutorModule = require('../animation/transition_executor/transition_executor'),
+    Widget = require('./widget/ui.widget'),
+    LoadIndicator = require('./load_indicator'),
+    isPromise = require('../core/utils/type').isPromise,
+    deferredUtils = require('../core/utils/deferred'),
     Deferred = deferredUtils.Deferred;
 
-var WIDGET_CLASS = "dx-widget",
-    DEFER_RENDERING_CLASS = "dx-deferrendering",
-    PENDING_RENDERING_CLASS = "dx-pending-rendering",
-    PENDING_RENDERING_MANUAL_CLASS = "dx-pending-rendering-manual",
-    PENDING_RENDERING_ACTIVE_CLASS = "dx-pending-rendering-active",
-    VISIBLE_WHILE_PENDING_RENDERING_CLASS = "dx-visible-while-pending-rendering",
-    INVISIBLE_WHILE_PENDING_RENDERING_CLASS = "dx-invisible-while-pending-rendering",
-    LOADINDICATOR_CONTAINER_CLASS = "dx-loadindicator-container",
-    DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS = "dx-deferrendering-loadindicator-container",
-    DEFER_DEFER_RENDERING_LOAD_INDICATOR = "dx-deferrendering-load-indicator",
+var WIDGET_CLASS = 'dx-widget',
+    DEFER_RENDERING_CLASS = 'dx-deferrendering',
+    PENDING_RENDERING_CLASS = 'dx-pending-rendering',
+    PENDING_RENDERING_MANUAL_CLASS = 'dx-pending-rendering-manual',
+    PENDING_RENDERING_ACTIVE_CLASS = 'dx-pending-rendering-active',
+    VISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-visible-while-pending-rendering',
+    INVISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-invisible-while-pending-rendering',
+    LOADINDICATOR_CONTAINER_CLASS = 'dx-loadindicator-container',
+    DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS = 'dx-deferrendering-loadindicator-container',
+    DEFER_DEFER_RENDERING_LOAD_INDICATOR = 'dx-deferrendering-load-indicator',
 
-    ANONYMOUS_TEMPLATE_NAME = "content",
+    ANONYMOUS_TEMPLATE_NAME = 'content',
 
-    ACTIONS = ["onRendered", "onShown"];
+    ACTIONS = ['onRendered', 'onShown'];
 
 /**
 * @name dxDeferRendering
@@ -103,7 +103,7 @@ var DeferRendering = Widget.inherit({
     _initRender: function() {
         var that = this,
             $element = this.$element(),
-            renderWhen = this.option("renderWhen");
+            renderWhen = this.option('renderWhen');
 
         var doRender = function() {
             return that._renderDeferredContent();
@@ -112,7 +112,7 @@ var DeferRendering = Widget.inherit({
         if(isPromise(renderWhen)) {
             deferredUtils.fromPromise(renderWhen).done(doRender);
         } else {
-            $element.data("dx-render-delegate", doRender);
+            $element.data('dx-render-delegate', doRender);
             if(renderWhen === undefined) {
                 $element.addClass(PENDING_RENDERING_MANUAL_CLASS);
             }
@@ -181,8 +181,8 @@ var DeferRendering = Widget.inherit({
     _animate: function() {
         var that = this,
             $element = this.$element(),
-            animation = windowUtils.hasWindow() && this.option("animation"),
-            staggerItemSelector = this.option("staggerItemSelector"),
+            animation = windowUtils.hasWindow() && this.option('animation'),
+            staggerItemSelector = this.option('staggerItemSelector'),
             animatePromise;
 
         that.transitionExecutor.stop();
@@ -211,7 +211,7 @@ var DeferRendering = Widget.inherit({
                 element: $element
             };
 
-        var contentTemplate = this._getTemplate(this._getAnonymousTemplateName());
+        var contentTemplate = this._getTemplate(this._templateManager.anonymousTemplateName);
 
         if(contentTemplate) {
             contentTemplate.render({
@@ -221,7 +221,7 @@ var DeferRendering = Widget.inherit({
         }
 
         this._setRenderedState($element);
-        eventsEngine.trigger($element, "dxcontentrendered");
+        eventsEngine.trigger($element, 'dxcontentrendered');
         this._actions.onRendered([renderedArgs]);
         this._isRendered = true;
 
@@ -230,14 +230,14 @@ var DeferRendering = Widget.inherit({
 
     _setLoadingState: function() {
         var $element = this.$element(),
-            hasCustomLoadIndicator = !!$element.find("." + VISIBLE_WHILE_PENDING_RENDERING_CLASS).length;
+            hasCustomLoadIndicator = !!$element.find('.' + VISIBLE_WHILE_PENDING_RENDERING_CLASS).length;
 
         $element.addClass(PENDING_RENDERING_CLASS);
         if(!hasCustomLoadIndicator) {
             $element.children().addClass(INVISIBLE_WHILE_PENDING_RENDERING_CLASS);
         }
 
-        if(this.option("showLoadIndicator")) {
+        if(this.option('showLoadIndicator')) {
             this._showLoadIndicator($element);
         }
     },
@@ -246,7 +246,7 @@ var DeferRendering = Widget.inherit({
         this._$loadIndicator = new LoadIndicator($('<div>'), { visible: true }).$element()
             .addClass(DEFER_DEFER_RENDERING_LOAD_INDICATOR);
 
-        $("<div>")
+        $('<div>')
             .addClass(LOADINDICATOR_CONTAINER_CLASS)
             .addClass(DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS)
             .append(this._$loadIndicator)
@@ -271,7 +271,7 @@ var DeferRendering = Widget.inherit({
             previousValue = args.previousValue;
 
         switch(args.name) {
-            case "renderWhen":
+            case 'renderWhen':
                 if(previousValue === false && value === true) {
                     this._renderOrAnimate();
                 } else if(previousValue === true && value === false) {
@@ -279,9 +279,9 @@ var DeferRendering = Widget.inherit({
                     this._setLoadingState();
                 }
                 break;
-            case "showLoadIndicator":
-            case "onRendered":
-            case "onShown":
+            case 'showLoadIndicator':
+            case 'onRendered':
+            case 'onShown':
                 break;
             default:
                 this.callBase(args);
@@ -322,6 +322,6 @@ var DeferRendering = Widget.inherit({
 
 });
 
-registerComponent("dxDeferRendering", DeferRendering);
+registerComponent('dxDeferRendering', DeferRendering);
 
 module.exports = DeferRendering;

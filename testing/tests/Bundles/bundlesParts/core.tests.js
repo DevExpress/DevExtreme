@@ -1,13 +1,13 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
-QUnit.test("core", function(assert) {
+QUnit.test('core', function(assert) {
 
     $.each([
-        "hideTopOverlay",
-        "devices",
-        "registerComponent"
+        'hideTopOverlay',
+        'devices',
+        'registerComponent'
     ], function(_, namespace) {
-        assert.ok(DevExpress[namespace], "DevExpress." + namespace + " present");
+        assert.ok(DevExpress[namespace], 'DevExpress.' + namespace + ' present');
     });
 
 });

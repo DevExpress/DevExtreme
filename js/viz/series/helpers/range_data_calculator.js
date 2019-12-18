@@ -1,8 +1,8 @@
-import { unique, getAddFunction, getLog } from "../../core/utils";
-import { isDefined } from "../../../core/utils/type";
-import { noop } from "../../../core/utils/common";
-const DISCRETE = "discrete";
-const { abs, floor, ceil } = Math;
+import { unique, getAddFunction, getLog } from '../../core/utils';
+import { isDefined } from '../../../core/utils/type';
+import { noop } from '../../../core/utils/common';
+const DISCRETE = 'discrete';
+const { abs, floor, ceil, min } = Math;
 
 function continuousRangeCalculator(range, minValue, maxValue) {
     range.min = range.min < minValue ? range.min : minValue;
@@ -10,7 +10,7 @@ function continuousRangeCalculator(range, minValue, maxValue) {
 }
 
 function createGetLogFunction(axisType, axis) {
-    if(axisType !== "logarithmic") {
+    if(axisType !== 'logarithmic') {
         return null;
     }
     const base = axis.getOptions().logarithmBase;
@@ -44,8 +44,11 @@ function getRangeCalculator(axisType, axis, getLog) {
 
     if(getLog) {
         return (range, minValue, maxValue) => {
+            const minArgs = [];
             rangeCalculator(range, minValue, maxValue);
-            const linearThreshold = Math.min(getLog(minValue), getLog(maxValue));
+            minValue !== 0 && minArgs.push(getLog(minValue));
+            maxValue !== 0 && minArgs.push(getLog(maxValue));
+            const linearThreshold = min.apply(null, minArgs);
             range.linearThreshold = range.linearThreshold < linearThreshold ? range.linearThreshold : linearThreshold;
         };
     }
@@ -82,7 +85,7 @@ function getValueForArgument(point, extraPoint, x, range) {
             x2 = extraPoint.argument;
 
         const r = ((x - x1) * (y2 - y1)) / (x2 - x1) + y1.valueOf();
-        return range.dataType === "datetime" ? new Date(r) : r;
+        return range.dataType === 'datetime' ? new Date(r) : r;
     } else {
         return point.value;
     }
@@ -94,7 +97,7 @@ function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, b
 }
 
 function isLineSeries(series) {
-    return series.type.toLowerCase().indexOf("line") >= 0 || series.type.toLowerCase().indexOf("area") >= 0;
+    return series.type.toLowerCase().indexOf('line') >= 0 || series.type.toLowerCase().indexOf('area') >= 0;
 }
 
 function getViewportReducer(series) {
@@ -178,7 +181,7 @@ module.exports = {
                 if(data.length > 1) {
                     const i1 = series.getArgumentAxis().calculateInterval(data[0].argument, data[1].argument);
                     const i2 = series.getArgumentAxis().calculateInterval(data[data.length - 1].argument, data[data.length - 2].argument);
-                    interval = Math.min(i1, i2);
+                    interval = min(i1, i2);
                 }
                 range = {
                     min: data[0].argument,

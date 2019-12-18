@@ -1,17 +1,17 @@
 const { test } = QUnit;
 
-import FileItemsController from "ui/file_manager/file_items_controller";
-import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
-import { createUploaderFiles } from "../../../helpers/fileManagerHelpers.js";
-import { isString } from "core/utils/type";
+import FileItemsController from 'ui/file_manager/file_items_controller';
+import { ErrorCode } from 'ui/file_manager/ui.file_manager.common';
+import { createUploaderFiles, createUploadInfo, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import { isString } from 'core/utils/type';
 
 const moduleConfig = {
 
     beforeEach: function() {
         this.data = [
-            { name: "F1", isDirectory: true },
-            { name: "F2", isDirectory: true },
-            { name: "File1" }
+            { name: 'F1', isDirectory: true },
+            { name: 'F2', isDirectory: true },
+            { name: 'File1' }
         ];
         this.controller = new FileItemsController({
             fileProvider: this.data
@@ -26,9 +26,11 @@ const moduleConfig = {
 
 };
 
-QUnit.module("FileItemsController tests", moduleConfig, () => {
+const stubFileReaderInProvider = controller => stubFileReader(controller._fileProvider);
 
-    test("raise current directory change event", function(assert) {
+QUnit.module('FileItemsController tests', moduleConfig, () => {
+
+    test('raise current directory change event', function(assert) {
         let counter = 0;
         const controller = new FileItemsController({
             fileProvider: this.data,
@@ -55,7 +57,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test("get directory contents", function(assert) {
+    test('get directory contents', function(assert) {
         const selectedDir = this.controller.getCurrentDirectory();
 
         const done1 = assert.async();
@@ -63,9 +65,9 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getDirectoryContents(selectedDir)
             .done(items => {
                 assert.equal(items.length, 3);
-                assert.equal(items[0].fileItem.name, "F1");
-                assert.equal(items[1].fileItem.name, "F2");
-                assert.equal(items[2].fileItem.name, "File1");
+                assert.equal(items[0].fileItem.name, 'F1');
+                assert.equal(items[1].fileItem.name, 'F2');
+                assert.equal(items[2].fileItem.name, 'File1');
                 done1();
             });
 
@@ -74,8 +76,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getDirectories(selectedDir)
             .done(directories => {
                 assert.equal(directories.length, 2);
-                assert.equal(directories[0].fileItem.name, "F1");
-                assert.equal(directories[1].fileItem.name, "F2");
+                assert.equal(directories[0].fileItem.name, 'F1');
+                assert.equal(directories[1].fileItem.name, 'F2');
                 done2();
             });
 
@@ -84,14 +86,14 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getFiles(selectedDir)
             .done(files => {
                 assert.equal(files.length, 1);
-                assert.equal(files[0].fileItem.name, "File1");
+                assert.equal(files[0].fileItem.name, 'File1');
                 done3();
             });
 
         this.clock.tick(100);
     });
 
-    test("create new directory", function(assert) {
+    test('create new directory', function(assert) {
         const done = assert.async();
         const selectedDir = this.controller.getCurrentDirectory();
 
@@ -100,7 +102,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .then(() => {
                 assert.ok(selectedDir.itemsLoaded);
                 assert.ok(selectedDir.items.length > 0);
-                return this.controller.createDirectory(selectedDir, "New");
+                return this.controller.createDirectory(selectedDir, 'New');
             })
             .then(() => {
                 assert.notOk(selectedDir.itemsLoaded);
@@ -108,14 +110,14 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 return this.controller.getDirectories(selectedDir);
             })
             .then(directories => {
-                assert.equal(directories[2].fileItem.name, "New");
+                assert.equal(directories[2].fileItem.name, 'New');
                 done();
             });
 
         this.clock.tick(100);
     });
 
-    test("rename file item", function(assert) {
+    test('rename file item', function(assert) {
         const done = assert.async();
         const currentDir = this.controller.getCurrentDirectory();
         let targetDir = null;
@@ -124,7 +126,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getDirectories(currentDir)
             .then(directories => {
                 targetDir = directories[0];
-                return this.controller.renameItem(targetDir, "New");
+                return this.controller.renameItem(targetDir, 'New');
             })
             .then(() => {
                 assert.notOk(currentDir.itemsLoaded);
@@ -132,14 +134,14 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 return this.controller.getDirectories(currentDir);
             })
             .then(directories => {
-                assert.equal(directories[0].fileItem.name, "New");
+                assert.equal(directories[0].fileItem.name, 'New');
                 done();
             });
 
         this.clock.tick(100);
     });
 
-    test("move file items", function(assert) {
+    test('move file items', function(assert) {
         const done = assert.async();
         const rootDir = this.controller.getCurrentDirectory();
         let targetItems = null;
@@ -159,19 +161,19 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             })
             .then(directories => {
                 assert.equal(directories.length, 1);
-                assert.equal(directories[0].fileItem.name, "F2");
+                assert.equal(directories[0].fileItem.name, 'F2');
                 return this.controller.getDirectories(directories[0]);
             })
             .then(directories => {
                 assert.equal(directories.length, 1);
-                assert.equal(directories[0].fileItem.name, "F1");
+                assert.equal(directories[0].fileItem.name, 'F1');
                 done();
             });
 
         this.clock.tick(100);
     });
 
-    test("copy file items", function(assert) {
+    test('copy file items', function(assert) {
         const done = assert.async();
         const rootDir = this.controller.getCurrentDirectory();
         let targetItems = null;
@@ -191,7 +193,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             })
             .then(directories => {
                 assert.equal(directories.length, 1);
-                assert.equal(directories[0].fileItem.name, "F1");
+                assert.equal(directories[0].fileItem.name, 'F1');
                 assert.ok(directories[0].parentDirectory.expanded);
                 done();
             });
@@ -199,7 +201,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test("delete file items", function(assert) {
+    test('delete file items', function(assert) {
         const done = assert.async();
         const currentDir = this.controller.getCurrentDirectory();
         let targetItems = null;
@@ -217,22 +219,22 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             })
             .then(itemInfos => {
                 assert.equal(itemInfos.length, 1);
-                assert.equal(itemInfos[0].fileItem.name, "F1");
+                assert.equal(itemInfos[0].fileItem.name, 'F1');
                 done();
             });
 
         this.clock.tick(100);
     });
 
-    test("get current path", function(assert) {
+    test('get current path', function(assert) {
         const done = assert.async();
         const controller = new FileItemsController({
             fileProvider: [
                 {
-                    name: "F1",
+                    name: 'F1',
                     isDirectory: true,
                     items: [
-                        { name: "F1.1", isDirectory: true }
+                        { name: 'F1.1', isDirectory: true }
                     ]
                 }
             ]
@@ -248,24 +250,24 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             })
             .then(parentDirectory => {
                 controller.setCurrentDirectory(parentDirectory);
-                assert.equal(controller.getCurrentPath(), "F1/F1.1");
+                assert.equal(controller.getCurrentPath(), 'F1/F1.1');
                 done();
             });
 
         this.clock.tick(100);
     });
 
-    test("refresh data and restore state", function(assert) {
+    test('refresh data and restore state', function(assert) {
         const done = assert.async();
         let myData = [
             {
-                name: "D1",
+                name: 'D1',
                 isDirectory: true,
                 items: [
                     {
-                        name: "D1.1",
+                        name: 'D1.1',
                         isDirectory: true,
-                        items: [ { name: "file1" } ]
+                        items: [ { name: 'file1' } ]
                     }
                 ]
             }
@@ -287,21 +289,21 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 return controller.getDirectoryContents(directories[0]);
             })
             .then(itemInfos => {
-                myData[0].items[0].items.push({ name: "file2" });
+                myData[0].items[0].items.push({ name: 'file2' });
 
                 assert.equal(itemInfos.length, 1);
-                assert.equal(itemInfos[0].fileItem.name, "file1");
+                assert.equal(itemInfos[0].fileItem.name, 'file1');
                 return controller.refresh();
             })
             .then(() => {
                 const currentDir = controller.getCurrentDirectory();
-                assert.equal(currentDir.fileItem.name, "D1.1");
+                assert.equal(currentDir.fileItem.name, 'D1.1');
                 return controller.getDirectoryContents(currentDir);
             })
             .then(itemInfos => {
                 assert.equal(itemInfos.length, 2);
-                assert.equal(itemInfos[0].fileItem.name, "file1");
-                assert.equal(itemInfos[1].fileItem.name, "file2");
+                assert.equal(itemInfos[0].fileItem.name, 'file1');
+                assert.equal(itemInfos[1].fileItem.name, 'file2');
                 assert.ok(controller.getCurrentDirectory().expanded);
                 done();
             });
@@ -309,17 +311,17 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test("restore selection after refresh when selected item was removed", function(assert) {
+    test('restore selection after refresh when selected item was removed', function(assert) {
         const done = assert.async();
         let myData = [
             {
-                name: "D1",
+                name: 'D1',
                 isDirectory: true,
                 items: [
                     {
-                        name: "D1.1",
+                        name: 'D1.1',
                         isDirectory: true,
-                        items: [ { name: "file1" } ]
+                        items: [ { name: 'file1' } ]
                     }
                 ]
             }
@@ -344,12 +346,12 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 myData[0].items = [ ];
 
                 assert.equal(itemInfos.length, 1);
-                assert.equal(itemInfos[0].fileItem.name, "file1");
+                assert.equal(itemInfos[0].fileItem.name, 'file1');
                 return controller.refresh();
             })
             .then(() => {
                 const currentDir = controller.getCurrentDirectory();
-                assert.equal(currentDir.fileItem.name, "D1");
+                assert.equal(currentDir.fileItem.name, 'D1');
                 return controller.getDirectoryContents(currentDir);
             })
             .then(itemInfos => {
@@ -360,23 +362,23 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test("set current path", function(assert) {
+    test('set current path', function(assert) {
         const done = assert.async();
         this.data[1].items = [
             {
-                name: "F2.1",
+                name: 'F2.1',
                 isDirectory: true,
-                items: [ { name: "file" } ]
+                items: [ { name: 'file' } ]
             }
         ];
 
-        this.controller.setCurrentPath("F2/F2.1")
+        this.controller.setCurrentPath('F2/F2.1')
             .then(() => {
-                assert.equal(this.controller.getCurrentPath(), "F2/F2.1");
+                assert.equal(this.controller.getCurrentPath(), 'F2/F2.1');
 
                 const currentDir = this.controller.getCurrentDirectory();
-                assert.equal(currentDir.fileItem.key, "F2/F2.1");
-                assert.equal(currentDir.fileItem.name, "F2.1");
+                assert.equal(currentDir.fileItem.key, 'F2/F2.1');
+                assert.equal(currentDir.fileItem.name, 'F2.1');
 
                 assert.notOk(currentDir.expanded);
 
@@ -392,12 +394,14 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test("upload fails when max file size exceeded", function(assert) {
+    test('upload fails when max file size exceeded', function(assert) {
         this.controller = new FileItemsController({
             fileProvider: this.data,
             maxUploadFileSize: 400000
         });
 
+        stubFileReaderInProvider(this.controller);
+
         const files = createUploaderFiles(2);
 
         const done1 = assert.async();
@@ -406,28 +410,30 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
         this.controller
             .getDirectories(currentDir)
-            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => this.controller.uploadFileChunk(files[0], createUploadInfo(files[0]), currentDir.fileItem))
             .then(() => {
                 done1();
-                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
                         return error.errorId === ErrorCode.MaxFileSizeExceeded;
                     },
-                    "max file size exceeded error raised");
+                    'max file size exceeded error raised');
             });
 
         this.clock.tick(100);
     });
 
-    test("upload fails when file has wrong extension", function(assert) {
+    test('upload fails when file has wrong extension', function(assert) {
         this.controller = new FileItemsController({
             fileProvider: this.data,
-            allowedFileExtensions: [ ".tiff" ]
+            allowedFileExtensions: [ '.tiff' ]
         });
 
+        stubFileReaderInProvider(this.controller);
+
         const files = createUploaderFiles(2);
-        files[0].name = "Test file 1.tiff";
+        files[0].name = 'Test file 1.tiff';
 
         const done1 = assert.async();
         const done2 = assert.async();
@@ -435,24 +441,24 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
         this.controller
             .getDirectories(currentDir)
-            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => this.controller.uploadFileChunk(files[0], createUploadInfo(files[0]), currentDir.fileItem))
             .then(() => {
                 done1();
-                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                assert.throws(() => this.controller.uploadFileChunk(files[1], createUploadInfo(files[1]), currentDir.fileItem),
                     error => {
                         done2();
                         return error.errorId === ErrorCode.WrongFileExtension;
                     },
-                    "wrong file extension error raised");
+                    'wrong file extension error raised');
             });
 
         this.clock.tick(100);
     });
 
-    test("files with empty extensions can be allowed or denied", function(assert) {
+    test('files with empty extensions can be allowed or denied', function(assert) {
         this.controller = new FileItemsController({
             fileProvider: this.data,
-            allowedFileExtensions: [ ".txt" ]
+            allowedFileExtensions: [ '.txt' ]
         });
         let selectedDir = this.controller.getCurrentDirectory();
         const done1 = assert.async();
@@ -460,14 +466,14 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getDirectoryContents(selectedDir)
             .done(items => {
                 assert.equal(items.length, 2);
-                assert.equal(items[0].fileItem.name, "F1");
-                assert.equal(items[1].fileItem.name, "F2");
+                assert.equal(items[0].fileItem.name, 'F1');
+                assert.equal(items[1].fileItem.name, 'F2');
                 done1();
             });
 
         this.controller = new FileItemsController({
             fileProvider: this.data,
-            allowedFileExtensions: [ ".txt", "" ]
+            allowedFileExtensions: [ '.txt', '' ]
         });
         selectedDir = this.controller.getCurrentDirectory();
         const done2 = assert.async();
@@ -475,23 +481,23 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getDirectoryContents(selectedDir)
             .done(items => {
                 assert.equal(items.length, 3);
-                assert.equal(items[0].fileItem.name, "F1");
-                assert.equal(items[1].fileItem.name, "F2");
-                assert.equal(items[2].fileItem.name, "File1");
+                assert.equal(items[0].fileItem.name, 'F1');
+                assert.equal(items[1].fileItem.name, 'F2');
+                assert.equal(items[2].fileItem.name, 'File1');
                 done2();
             });
 
         this.clock.tick(100);
     });
 
-    test("root direcotry key is unique", function(assert) {
+    test('root direcotry key is unique', function(assert) {
         const rootDir = this.controller.getCurrentDirectory();
         const rootKey = rootDir.fileItem.key;
 
-        assert.ok(isString(rootKey), "root key has type of string");
-        assert.ok(rootKey.length > 10, "root key contains many characters");
-        assert.ok(rootKey.indexOf("Files") === -1, "root key doesn't contain root directory name");
-        assert.ok(rootKey.indexOf("__dxfmroot_") === 0, "root key starts with internal prefix");
+        assert.ok(isString(rootKey), 'root key has type of string');
+        assert.ok(rootKey.length > 10, 'root key contains many characters');
+        assert.ok(rootKey.indexOf('Files') === -1, 'root key doesn\'t contain root directory name');
+        assert.ok(rootKey.indexOf('__dxfmroot_') === 0, 'root key starts with internal prefix');
     });
 
 });

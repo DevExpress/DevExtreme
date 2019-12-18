@@ -1,16 +1,16 @@
-import "common.css!";
+import 'common.css!';
 
-import "ui/data_grid/ui.data_grid";
+import 'ui/data_grid/ui.data_grid';
 
-import $ from "jquery";
-import { isDefined } from "core/utils/type";
-import { excel as excelCreator } from "exporter";
-import exportTestsHelper from "./exportTestsHelper.js";
+import $ from 'jquery';
+import { isDefined } from 'core/utils/type';
+import { excel as excelCreator } from 'exporter';
+import exportTestsHelper from './exportTestsHelper.js';
 
 const dataGridExportTestsHelper = Object.create(exportTestsHelper);
 
 function assertStrictEqual(assert, value1, value2, message) {
-    if(typeof value1 === "number" && typeof value2 === "number" && isNaN(value1) && isNaN(value2)) {
+    if(typeof value1 === 'number' && typeof value2 === 'number' && isNaN(value1) && isNaN(value2)) {
         assert.ok(true);
     } else if(value1 instanceof Date && value2 instanceof Date) {
         assert.strictEqual(value1.getTime(), value2.getTime(), message);
@@ -47,26 +47,26 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         const zipMock = that.getLastCreatedJSZipInstance();
 
         if(styles !== undefined) {
-            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.STYLE_FILE_NAME).content, styles, "styles");
+            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.STYLE_FILE_NAME).content, styles, 'styles');
         }
         if(worksheet !== undefined) {
-            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).folder(excelCreator.__internals.WORKSHEETS_FOLDER).file(excelCreator.__internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
+            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).folder(excelCreator.__internals.WORKSHEETS_FOLDER).file(excelCreator.__internals.WORKSHEET_FILE_NAME).content, worksheet, 'worksheet');
         }
         if(sharedStrings !== undefined) {
-            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, 'sharedStrings');
         }
 
         if(getExpectedArgs) {
             const expectedArgs = getExpectedArgs(e.component);
-            assert.strictEqual(actualArgs.length, expectedArgs.length, "actualArgs.length");
+            assert.strictEqual(actualArgs.length, expectedArgs.length, 'actualArgs.length');
             for(let i = 0; i < actualArgs.length && i < expectedArgs.length; i++) {
                 const expectedArgsItem = expectedArgs[i];
                 const actualArgsItem = actualArgs[i];
-                const gridCellSkipProperties = ["column", "row"];
+                const gridCellSkipProperties = ['column', 'row'];
 
                 assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
 
-                if(Object.prototype.hasOwnProperty.call(expectedArgsItem, "gridCell")) {
+                if(Object.prototype.hasOwnProperty.call(expectedArgsItem, 'gridCell')) {
                     if(expectedArgsItem.gridCell === undefined) {
                         assert.strictEqual(actualArgsItem.gridCell, undefined, `gridCell, ${i}`);
                     } else if(actualArgsItem.gridCell === undefined) {
@@ -119,17 +119,17 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         options.export.ignoreExcelErrors = false;
     }
 
-    const dataGrid = $("#dataGrid").dxDataGrid(options).dxDataGrid("instance");
+    const dataGrid = $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
 
     if(fixedColumnWidth_100) {
-        const getColumnWidthsHeadersOld = dataGrid.getView("columnHeadersView").getColumnWidths;
-        dataGrid.getView("columnHeadersView").getColumnWidths = function() {
+        const getColumnWidthsHeadersOld = dataGrid.getView('columnHeadersView').getColumnWidths;
+        dataGrid.getView('columnHeadersView').getColumnWidths = function() {
             const columnWidths = getColumnWidthsHeadersOld.apply(this);
             return columnWidths.map(() => 100);
         };
 
-        const getColumnWidthsRowsOld = dataGrid.getView("rowsView").getColumnWidths;
-        dataGrid.getView("rowsView").getColumnWidths = function() {
+        const getColumnWidthsRowsOld = dataGrid.getView('rowsView').getColumnWidths;
+        dataGrid.getView('rowsView').getColumnWidths = function() {
             const columnWidths = getColumnWidthsRowsOld.apply(this);
             return columnWidths.map(() => 100);
         };

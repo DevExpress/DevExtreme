@@ -1,20 +1,20 @@
-var $ = require("../core/renderer"),
-    noop = require("../core/utils/common").noop,
-    messageLocalization = require("../localization/message"),
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    LoadIndicator = require("./load_indicator"),
-    Overlay = require("./overlay"),
-    Deferred = require("../core/utils/deferred").Deferred,
-    themes = require("./themes");
+var $ = require('../core/renderer'),
+    noop = require('../core/utils/common').noop,
+    messageLocalization = require('../localization/message'),
+    registerComponent = require('../core/component_registrator'),
+    extend = require('../core/utils/extend').extend,
+    LoadIndicator = require('./load_indicator'),
+    Overlay = require('./overlay'),
+    Deferred = require('../core/utils/deferred').Deferred,
+    themes = require('./themes');
 
-var LOADPANEL_CLASS = "dx-loadpanel",
-    LOADPANEL_WRAPPER_CLASS = "dx-loadpanel-wrapper",
-    LOADPANEL_INDICATOR_CLASS = "dx-loadpanel-indicator",
-    LOADPANEL_MESSAGE_CLASS = "dx-loadpanel-message",
-    LOADPANEL_CONTENT_CLASS = "dx-loadpanel-content",
-    LOADPANEL_CONTENT_WRAPPER_CLASS = "dx-loadpanel-content-wrapper",
-    LOADPANEL_PANE_HIDDEN_CLASS = "dx-loadpanel-pane-hidden";
+var LOADPANEL_CLASS = 'dx-loadpanel',
+    LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper',
+    LOADPANEL_INDICATOR_CLASS = 'dx-loadpanel-indicator',
+    LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message',
+    LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content',
+    LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper',
+    LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
 
 /**
 * @name dxLoadPanel
@@ -37,7 +37,7 @@ var LoadPanel = Overlay.inherit({
             * @type string
             * @default "Loading ..."
             */
-            message: messageLocalization.format("Loading"),
+            message: messageLocalization.format('Loading'),
 
             /**
             * @name dxLoadPanelOptions.width
@@ -96,7 +96,7 @@ var LoadPanel = Overlay.inherit({
             * @type string
             * @default ""
             */
-            indicatorSrc: "",
+            indicatorSrc: '',
 
             /**
             * @name dxLoadPanelOptions.showPane
@@ -156,9 +156,9 @@ var LoadPanel = Overlay.inherit({
                 * @default 'transparent'
                 * @default '' @for Android|iOS
                 */
-                device: { platform: "generic" },
+                device: { platform: 'generic' },
                 options: {
-                    shadingColor: "transparent"
+                    shadingColor: 'transparent'
                 }
             },
             {
@@ -170,7 +170,7 @@ var LoadPanel = Overlay.inherit({
                     * @name dxLoadPanelOptions.message
                     * @default "" @for Material
                     */
-                    message: "",
+                    message: '',
 
                     /**
                     * @name dxLoadPanelOptions.width
@@ -206,7 +206,7 @@ var LoadPanel = Overlay.inherit({
 
     _initOptions: function() {
         this.callBase.apply(this, arguments);
-        this.option("templatesRenderAsynchronously", false);
+        this.option('templatesRenderAsynchronously', false);
     },
 
     _render: function() {
@@ -221,7 +221,7 @@ var LoadPanel = Overlay.inherit({
 
         this.$content().addClass(LOADPANEL_CONTENT_CLASS);
 
-        this._$contentWrapper = $("<div>").addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
+        this._$contentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
         this._$contentWrapper.appendTo(this._$content);
 
         this._togglePaneVisible();
@@ -232,7 +232,7 @@ var LoadPanel = Overlay.inherit({
     },
 
     _show: function() {
-        var delay = this.option("delay");
+        var delay = this.option('delay');
 
         if(!delay) {
             return this.callBase();
@@ -265,55 +265,55 @@ var LoadPanel = Overlay.inherit({
             return;
         }
 
-        var message = this.option("message");
+        var message = this.option('message');
 
         if(!message) return;
 
-        var $message = $("<div>").addClass(LOADPANEL_MESSAGE_CLASS)
+        var $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
             .text(message);
 
         this._$contentWrapper.append($message);
     },
 
     _renderLoadIndicator: function() {
-        if(!this._$contentWrapper || !this.option("showIndicator")) {
+        if(!this._$contentWrapper || !this.option('showIndicator')) {
             return;
         }
 
-        this._$indicator = $("<div>").addClass(LOADPANEL_INDICATOR_CLASS)
+        this._$indicator = $('<div>').addClass(LOADPANEL_INDICATOR_CLASS)
             .appendTo(this._$contentWrapper);
 
         this._createComponent(this._$indicator, LoadIndicator, {
-            indicatorSrc: this.option("indicatorSrc")
+            indicatorSrc: this.option('indicatorSrc')
         });
     },
 
     _cleanPreviousContent: function() {
-        this.$content().find("." + LOADPANEL_MESSAGE_CLASS).remove();
-        this.$content().find("." + LOADPANEL_INDICATOR_CLASS).remove();
+        this.$content().find('.' + LOADPANEL_MESSAGE_CLASS).remove();
+        this.$content().find('.' + LOADPANEL_INDICATOR_CLASS).remove();
     },
 
     _togglePaneVisible: function() {
-        this.$content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option("showPane"));
+        this.$content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option('showPane'));
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "delay":
+            case 'delay':
                 break;
-            case "message":
-            case "showIndicator":
+            case 'message':
+            case 'showIndicator':
                 this._cleanPreviousContent();
                 this._renderLoadIndicator();
                 this._renderMessage();
                 break;
-            case "showPane":
+            case 'showPane':
                 this._togglePaneVisible();
                 break;
-            case "indicatorSrc":
+            case 'indicatorSrc':
                 if(this._$indicator) {
                     this._createComponent(this._$indicator, LoadIndicator, {
-                        indicatorSrc: this.option("indicatorSrc")
+                        indicatorSrc: this.option('indicatorSrc')
                     });
                 }
                 break;
@@ -340,6 +340,6 @@ var LoadPanel = Overlay.inherit({
     */
 });
 
-registerComponent("dxLoadPanel", LoadPanel);
+registerComponent('dxLoadPanel', LoadPanel);
 
 module.exports = LoadPanel;
