@@ -5268,7 +5268,6 @@ QUnit.module('performance', () => {
 
         clock.tick(1000);
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).text(), 'item 1');
-        clock.restore();
     });
 
     QUnit.test('useSubmitBehavior option', function(assert) {
