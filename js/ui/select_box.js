@@ -600,7 +600,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _isOverlayNestedTarget: function(target) {
-        return !!(this.content() && $(this.content()).parent().find(target).length);
+        return !!$(target).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
     },
 
     _clearTextValue: function() {

@@ -2661,7 +2661,7 @@ QUnit.module('search', moduleSetup, () => {
         keyboardMock($input).type('1');
         $input.trigger('focusout');
 
-        assert.equal($(instance.content()).find('.dx-list-item').length, 3, 'filter was cleared');
+        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
     });
 
     QUnit.testInActiveWindow('widget with fieldTemplate and remote data source should display right value after search and selection (T668290)', function(assert) {

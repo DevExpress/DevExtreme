@@ -4095,6 +4095,8 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             .type('c');
 
         $('.dx-list-select-all-checkbox').trigger('dxclick');
+
+        $($input).trigger($.Event('focusout', { relatedTarget: $('.dx-popup-bottom').get(0) }));
         $('.dx-button.dx-popup-done').trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), ['ac', 'bc'], 'value is applied correctly');
