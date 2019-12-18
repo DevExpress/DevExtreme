@@ -1200,9 +1200,12 @@ class FileUploader extends Editor {
         });
     }
     _updateTotalProgress(totalFilesSize, totalLoadedFilesSize) {
-        const progress = totalFilesSize ? Math.round(totalLoadedFilesSize / totalFilesSize * 100) : 0;
+        const progress = totalFilesSize ? this._getProgressValue(totalLoadedFilesSize / totalFilesSize) : 0;
         this.option('progress', progress);
         this._setLoadedSize(totalLoadedFilesSize);
+    }
+    _getProgressValue(ratio) {
+        return Math.floor(ratio * 100);
     }
 
     _initStatusMessage(file) {
@@ -1232,9 +1235,7 @@ class FileUploader extends Editor {
             value: undefined,
             min: 0,
             max: fileSize,
-            statusFormat(ratio) {
-                return Math.round(ratio * 100) + '%';
-            },
+            statusFormat: ratio => this._getProgressValue(ratio) + '%',
             showStatus: false,
             statusPosition: 'right'
         });
