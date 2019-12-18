@@ -44,7 +44,7 @@ const moduleConfig = {
         };
     },
     afterEach: () => {
-        this.clock.reset();
+        this.clock.restore();
     }
 };
 
