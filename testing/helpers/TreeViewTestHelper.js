@@ -48,18 +48,18 @@ class TreeViewTestWrapper {
     hasSelectedClass($item) { return $item.hasClass(SELECTED_ITEM_CLASS); }
     hasInvisibleClass($item) { return $item.hasClass(INVISIBLE_ITEM_CLASS); }
 
-    checkSelectedNodes(selectedIndexes) {
+    checkSelectedNodes(selectedIndexes, additionalErrorMessage) {
         let $node = this.getNodes();
 
         selectedIndexes.forEach((index) => {
             assert.equal(this.hasSelectedClass($node.eq(index)), true, `item ${index} has selected class`);
-            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).children()), true, `checkbox ${index} has checked class`);
+            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).children()), true, `checkbox ${index} has checked class` + (additionalErrorMessage || ''));
         });
 
         $node.each((index) => {
             if(selectedIndexes.indexOf(index) === -1) {
                 assert.equal(this.hasSelectedClass($node.eq(index)), false, `item ${index} has no selected class`);
-                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).children()), false, `checkbox ${index} has not checked class`);
+                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).children()), false, `checkbox ${index} has not checked class` + (additionalErrorMessage || ''));
             }
         });
     }
