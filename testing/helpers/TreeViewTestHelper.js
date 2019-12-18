@@ -86,11 +86,11 @@ class TreeViewTestWrapper {
         assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method' + (additionalErrorMessage || ''));
     }
 
-    checkCallbacks(expectedCallbacksNames, additionalErrorMessage) {
-        assert.deepEqual(this.calledCallbacksNames, expectedCallbacksNames, 'called events' + (additionalErrorMessage || ''));
+    checkEventLog(expectedEventsNames, additionalErrorMessage) {
+        assert.deepEqual(this.calledCallbacksNames, expectedEventsNames, 'called events' + (additionalErrorMessage || ''));
     }
 
-    clearCallbacksCalls() {
+    clearEventLog() {
         this.calledCallbacksNames = [];
     }
 

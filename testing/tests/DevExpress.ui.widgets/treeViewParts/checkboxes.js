@@ -284,7 +284,7 @@ configs.forEach(config => {
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
             wrapper.checkSelectedKeys([]);
             wrapper.checkSelectedNodes([]);
-            wrapper.checkCallbacks([]);
+            wrapper.checkEventLog([]);
         });
 
         QUnit.test('all.selected: false -> selectAll -> expandAll', function(assert) {
@@ -310,8 +310,8 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after selectAll');
-            wrapper.checkCallbacks(['selectionChanged'], ' after selectAll');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             expectedKeys = [0, 1];
@@ -329,7 +329,7 @@ configs.forEach(config => {
 
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('all.selected: false -> selectItem(0) -> expandAll', function(assert) {
@@ -356,8 +356,8 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after selectItem(0)');
             wrapper.checkSelectedNodes(expectedNodes, ' after selectItem(0)');
-            wrapper.checkCallbacks(['itemSelectionChanged', 'selectionChanged'], ' after selectItem(0)');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], ' after selectItem(0)');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             expectedNodes = [0];
@@ -374,7 +374,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('all.selected: false -> selectItem(1) -> expandAll', function(assert) {
@@ -407,8 +407,8 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after selectItem(1)');
             wrapper.checkSelectedNodes(expectedNodes, ' after selectItem(1)');
-            wrapper.checkCallbacks(expectedCallbacks, ' after selectItem(1)');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(expectedCallbacks, ' after selectItem(1)');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             expectedNodes = [1];
@@ -423,7 +423,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('all.selected: true', function(assert) {
@@ -448,7 +448,7 @@ configs.forEach(config => {
 
             wrapper.checkSelectedKeys(expectedKeys);
             wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([]);
+            wrapper.checkEventLog([]);
         });
 
         QUnit.test('all.selected: true -> expandAll', function(assert) {
@@ -465,7 +465,7 @@ configs.forEach(config => {
 
             wrapper.checkSelectedKeys([0, 1], ' after expandAll');
             wrapper.checkSelectedNodes([0, 1], ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('all.selected: true -> unselectAll -> expandAll', function(assert) {
@@ -484,8 +484,8 @@ configs.forEach(config => {
             let expectedNodes = [];
             wrapper.checkSelectedKeys(expectedKeys, ' after unselectAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after unselectAll');
-            wrapper.checkCallbacks(['selectionChanged'], ' after unselectAll');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after unselectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -499,7 +499,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('all.selected: true -> unselectItem(0) -> expandAll', function(assert) {
@@ -529,8 +529,8 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after unselectItem(0)');
             wrapper.checkSelectedNodes(expectedNodes, ' after unselectItem(0)');
-            wrapper.checkCallbacks(['itemSelectionChanged', 'selectionChanged'], ' after unselectItem(0)');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], ' after unselectItem(0)');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -544,7 +544,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('all.selected: true -> unselectItem(1) -> expandAll', function(assert) {
@@ -574,8 +574,8 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after unselectItem(1)');
             wrapper.checkSelectedNodes(expectedNodes, ' after unselectItem(1)');
-            wrapper.checkCallbacks(expectedCallbacks, ' after unselectItem(1)');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(expectedCallbacks, ' after unselectItem(1)');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -585,7 +585,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1.selected: true', function() {
@@ -612,7 +612,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
             wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([], ' - check via dataSource items');
+            wrapper.checkEventLog([], ' - check via dataSource items');
         });
 
         QUnit.test('item1.selected: true -> expandAll', function() {
@@ -639,7 +639,7 @@ configs.forEach(config => {
 
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1.selected: true -> selectAll -> expandAll', function(assert) {
@@ -667,8 +667,8 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after selectAll');
-            wrapper.checkCallbacks(['selectionChanged'], ' after selectAll');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded) {
@@ -686,7 +686,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             wrapper.checkSelectedNodes(expectedNodes, ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1.selected: true -> unselectAll -> expandAll', function(assert) {
@@ -699,13 +699,13 @@ configs.forEach(config => {
 
             wrapper.checkSelectedKeys([], ' after unselectAll');
             wrapper.checkSelectedNodes([], ' after unselectAll');
-            wrapper.checkCallbacks(['selectionChanged'], ' after unselectAll');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after unselectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             wrapper.checkSelectedKeys([], ' after expandAll');
             wrapper.checkSelectedNodes([], ' after expandAll');
-            wrapper.checkCallbacks([], ' after expandAll');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
 
@@ -729,7 +729,7 @@ configs.forEach(config => {
             }
             wrapper.checkSelectedKeys(expectedKeys);
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([]);
+            wrapper.checkEventLog([]);
         });
 
 
@@ -755,9 +755,9 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([], ' - check via dataSource items');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1_1.selected: true -> selectAll -> expandAll', function(assert) {
@@ -777,10 +777,10 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks(['selectionChanged'], ' - check via  dataSource items');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
 
@@ -788,9 +788,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0, 1];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([], ' - check via  dataSource items');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1_1.selected: true -> unselectAll -> expandAll', function(assert) {
@@ -802,10 +802,10 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after unselectAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after unselectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -815,9 +815,9 @@ configs.forEach(config => {
                     expectedKeys = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([]);
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1_1_1.selected: true', function() {
@@ -836,10 +836,10 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys);
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([], ' - check via dataSource items');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog([]);
+            wrapper.clearEventLog();
         });
 
         QUnit.test('item1_1_1.selected: true -> expandAll', function() {
@@ -860,9 +860,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks([], ' - check via dataSource items');
+            wrapper.checkEventLog([], ' after expandAll');
         });
 
         QUnit.test('item1_1_1.selected: true -> selectAll -> expandAll', function(assert) {
@@ -882,10 +882,10 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys, ' after selectAll');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkCallbacks(['selectionChanged'], ' - check via dataSource items');
-            wrapper.clearCallbacksCalls();
+            wrapper.checkEventLog(['selectionChanged'], ' after selectAll');
+            wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -896,8 +896,9 @@ configs.forEach(config => {
                     expectedKeys = [0];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
-            wrapper.checkCallbacks([]);
+            wrapper.checkSelectedKeys(expectedKeys, ' after expandAll');
+            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+            wrapper.checkEventLog([], ' after expandAll');
         });
     });
 });
