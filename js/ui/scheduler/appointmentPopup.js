@@ -41,7 +41,7 @@ export default class AppointmentPopup {
 
     show(data, showButtons, processTimeZone) {
         this.state.appointment = {
-            data: data,
+            data: data || {},
             processTimeZone: processTimeZone
         };
 
