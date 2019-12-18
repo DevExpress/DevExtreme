@@ -2,6 +2,7 @@ import fx from 'animation/fx';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import browser from 'core/utils/browser';
 import {
     createWrapper,
     initTestMarkup,
@@ -34,7 +35,7 @@ const zoomModuleConfig = {
 };
 
 module('Browser zoom', zoomModuleConfig, () => {
-    if(!isDesktopEnvironment()) {
+    if(!isDesktopEnvironment() || !browser.webkit) {
         return;
     }
 
