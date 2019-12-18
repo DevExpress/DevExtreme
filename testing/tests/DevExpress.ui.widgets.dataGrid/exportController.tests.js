@@ -2925,6 +2925,9 @@ QUnit.test("Export to Excel button call`s exportTo when the button text is local
 QUnit.module("Real dataGrid ExportController tests", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 });
 
