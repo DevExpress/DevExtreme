@@ -1,23 +1,23 @@
-import $ from "../core/renderer";
-import fx from "../animation/fx";
-import translator from "../animation/translator";
-import mathUtils from "../core/utils/math";
-import { extend } from "../core/utils/extend";
-import { noop, deferRender } from "../core/utils/common";
-import { triggerResizeEvent, getPublicElement } from "../core/utils/dom";
-import { isDefined } from "../core/utils/type";
-import devices from "../core/devices";
-import registerComponent from "../core/component_registrator";
-import CollectionWidget from "./collection/ui.collection_widget.live_update";
-import Swipeable from "../events/gesture/swipeable";
-import { Deferred } from "../core/utils/deferred";
+import $ from '../core/renderer';
+import fx from '../animation/fx';
+import translator from '../animation/translator';
+import mathUtils from '../core/utils/math';
+import { extend } from '../core/utils/extend';
+import { noop, deferRender } from '../core/utils/common';
+import { triggerResizeEvent, getPublicElement } from '../core/utils/dom';
+import { isDefined } from '../core/utils/type';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import CollectionWidget from './collection/ui.collection_widget.live_update';
+import Swipeable from '../events/gesture/swipeable';
+import { Deferred } from '../core/utils/deferred';
 
-const MULTIVIEW_CLASS = "dx-multiview";
-const MULTIVIEW_WRAPPER_CLASS = "dx-multiview-wrapper";
-const MULTIVIEW_ITEM_CONTAINER_CLASS = "dx-multiview-item-container";
-const MULTIVIEW_ITEM_CLASS = "dx-multiview-item";
-const MULTIVIEW_ITEM_HIDDEN_CLASS = "dx-multiview-item-hidden";
-const MULTIVIEW_ITEM_DATA_KEY = "dxMultiViewItemData";
+const MULTIVIEW_CLASS = 'dx-multiview';
+const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
+const MULTIVIEW_ITEM_CONTAINER_CLASS = 'dx-multiview-item-container';
+const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
+const MULTIVIEW_ITEM_HIDDEN_CLASS = 'dx-multiview-item-hidden';
+const MULTIVIEW_ITEM_DATA_KEY = 'dxMultiViewItemData';
 
 const MULTIVIEW_ANIMATION_DURATION = 200;
 
@@ -34,7 +34,7 @@ const _translator = {
 const animation = {
     moveTo($element, position, duration, completeAction) {
         fx.animate($element, {
-            type: "slide",
+            type: 'slide',
             to: { left: position },
             duration: duration,
             complete: completeAction
@@ -54,7 +54,7 @@ const animation = {
 */
 const MultiView = CollectionWidget.inherit({
 
-    _activeStateUnit: "." + MULTIVIEW_ITEM_CLASS,
+    _activeStateUnit: '.' + MULTIVIEW_ITEM_CLASS,
 
     _supportedKeys: function() {
         return extend(this.callBase(), {
@@ -121,10 +121,10 @@ const MultiView = CollectionWidget.inherit({
              * @fires dxMultiViewOptions.onOptionChanged
              */
 
-            _itemAttributes: { role: "tabpanel" },
+            _itemAttributes: { role: 'tabpanel' },
             loopItemFocus: false,
             selectOnFocus: true,
-            selectionMode: "single",
+            selectionMode: 'single',
             selectionRequired: true,
             selectionByClick: false
         });
@@ -134,7 +134,7 @@ const MultiView = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -177,7 +177,7 @@ const MultiView = CollectionWidget.inherit({
     },
 
     _itemsCount: function() {
-        return this.option("items").length;
+        return this.option('items').length;
     },
 
     _normalizeIndex: function(index) {
@@ -194,7 +194,7 @@ const MultiView = CollectionWidget.inherit({
     },
 
     _getRTLSignCorrection: function() {
-        return this.option("rtlEnabled") ? -1 : 1;
+        return this.option('rtlEnabled') ? -1 : 1;
     },
 
     _init: function() {
@@ -204,13 +204,13 @@ const MultiView = CollectionWidget.inherit({
 
         $element.addClass(MULTIVIEW_CLASS);
 
-        this._$wrapper = $("<div>").addClass(MULTIVIEW_WRAPPER_CLASS);
+        this._$wrapper = $('<div>').addClass(MULTIVIEW_WRAPPER_CLASS);
         this._$wrapper.appendTo($element);
 
-        this._$itemContainer = $("<div>").addClass(MULTIVIEW_ITEM_CONTAINER_CLASS);
+        this._$itemContainer = $('<div>').addClass(MULTIVIEW_ITEM_CONTAINER_CLASS);
         this._$itemContainer.appendTo(this._$wrapper);
 
-        this.option("loopItemFocus", this.option("loop"));
+        this.option('loopItemFocus', this.option('loop'));
 
         this._initSwipeable();
     },
@@ -239,7 +239,7 @@ const MultiView = CollectionWidget.inherit({
     },
 
     _executeItemRenderAction: function(index, itemData, itemElement) {
-        index = (this.option("items") || []).indexOf(itemData);
+        index = (this.option('items') || []).indexOf(itemData);
         this.callBase(index, itemData, itemElement);
     },
 
@@ -256,7 +256,7 @@ const MultiView = CollectionWidget.inherit({
         });
 
         this._deferredItems[args.index] = deferred;
-        this.option("deferRendering") || deferred.resolve();
+        this.option('deferRendering') || deferred.resolve();
 
         return renderContentDeferred.promise();
     },
@@ -289,7 +289,7 @@ const MultiView = CollectionWidget.inherit({
 
         _translator.move($selectedItem, 0);
         if(isDefined(newIndex)) {
-            _translator.move($itemElements.eq(newIndex), positionSign * 100 + "%");
+            _translator.move($itemElements.eq(newIndex), positionSign * 100 + '%');
         }
     },
 
@@ -305,7 +305,7 @@ const MultiView = CollectionWidget.inherit({
             }
             $item.toggleClass(MULTIVIEW_ITEM_HIDDEN_CLASS, isHidden);
 
-            this.setAria("hidden", isHidden || undefined, $item);
+            this.setAria('hidden', isHidden || undefined, $item);
         }).bind(this));
     },
 
@@ -322,7 +322,7 @@ const MultiView = CollectionWidget.inherit({
     _refreshItem: function($item, item) {
         this.callBase($item, item);
 
-        this._updateItemsVisibility(this.option("selectedIndex"));
+        this._updateItemsVisibility(this.option('selectedIndex'));
     },
 
     _setAriaSelected: noop,
@@ -347,7 +347,7 @@ const MultiView = CollectionWidget.inherit({
     },
 
     _animateItemContainer: function(position, completeCallback) {
-        var duration = this.option("animationEnabled") ? MULTIVIEW_ANIMATION_DURATION : 0;
+        var duration = this.option('animationEnabled') ? MULTIVIEW_ANIMATION_DURATION : 0;
 
         animation.moveTo(this._$itemContainer, position, duration, completeCallback);
     },
@@ -363,7 +363,7 @@ const MultiView = CollectionWidget.inherit({
     },
 
     _getSwipeDisabledState() {
-        return !this.option("swipeEnabled") || this._itemsCount() <= 1;
+        return !this.option('swipeEnabled') || this._itemsCount() <= 1;
     },
 
     _initSwipeable() {
@@ -380,10 +380,10 @@ const MultiView = CollectionWidget.inherit({
     _swipeStartHandler: function(e) {
         animation.complete(this._$itemContainer);
 
-        var selectedIndex = this.option("selectedIndex"),
-            loop = this.option("loop"),
+        var selectedIndex = this.option('selectedIndex'),
+            loop = this.option('loop'),
             lastIndex = this._itemsCount() - 1,
-            rtl = this.option("rtlEnabled");
+            rtl = this.option('rtlEnabled');
 
         e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > 0 : selectedIndex < lastIndex));
         e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastIndex : selectedIndex > 0));
@@ -400,7 +400,7 @@ const MultiView = CollectionWidget.inherit({
         if(swipeDirection !== this._swipeDirection) {
             this._swipeDirection = swipeDirection;
 
-            var selectedIndex = this.option("selectedIndex"),
+            var selectedIndex = this.option('selectedIndex'),
                 newIndex = this._normalizeIndex(selectedIndex - swipeDirection);
 
             this._updateItems(selectedIndex, newIndex);
@@ -410,10 +410,10 @@ const MultiView = CollectionWidget.inherit({
     _swipeEndHandler: function(e) {
         var targetOffset = e.targetOffset * this._getRTLSignCorrection();
         if(targetOffset) {
-            this.option("selectedIndex", this._normalizeIndex(this.option("selectedIndex") - targetOffset));
+            this.option('selectedIndex', this._normalizeIndex(this.option('selectedIndex') - targetOffset));
             // TODO: change focusedElement on focusedItem
-            var $selectedElement = this.itemElements().filter(".dx-item-selected");
-            this.option("focusStateEnabled") && this.option("focusedElement", getPublicElement($selectedElement));
+            var $selectedElement = this.itemElements().filter('.dx-item-selected');
+            this.option('focusStateEnabled') && this.option('focusedElement', getPublicElement($selectedElement));
         } else {
             this._animateItemContainer(0, noop);
         }
@@ -457,25 +457,25 @@ const MultiView = CollectionWidget.inherit({
 
     _updateSwipeDisabledState() {
         const disabled = this._getSwipeDisabledState();
-        Swipeable.getInstance(this.$element()).option("disabled", disabled);
+        Swipeable.getInstance(this.$element()).option('disabled', disabled);
     },
 
     _optionChanged: function(args) {
         var value = args.value;
 
         switch(args.name) {
-            case "loop":
-                this.option("loopItemFocus", value);
+            case 'loop':
+                this.option('loopItemFocus', value);
                 break;
-            case "animationEnabled":
+            case 'animationEnabled':
                 break;
-            case "swipeEnabled":
+            case 'swipeEnabled':
                 this._updateSwipeDisabledState();
                 break;
-            case "deferRendering":
+            case 'deferRendering':
                 this._invalidate();
                 break;
-            case "items":
+            case 'items':
                 this._updateSwipeDisabledState();
                 this.callBase(args);
                 break;
@@ -495,7 +495,7 @@ const MultiView = CollectionWidget.inherit({
 * @hidden
 */
 
-registerComponent("dxMultiView", MultiView);
+registerComponent('dxMultiView', MultiView);
 
 module.exports = MultiView;
 ///#DEBUG

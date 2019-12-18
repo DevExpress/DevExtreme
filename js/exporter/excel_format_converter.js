@@ -1,22 +1,22 @@
-import stringUtils from "../core/utils/string";
-import numberFormatter from "../localization/number";
-import dateLocalization from "../localization/date";
-import { isDefined, isString } from "../core/utils/type";
-import { getFormat } from "../localization/ldml/date.format";
-import { getLanguageId } from "../localization/language_codes";
-import "../localization/currency";
+import stringUtils from '../core/utils/string';
+import numberFormatter from '../localization/number';
+import dateLocalization from '../localization/date';
+import { isDefined, isString } from '../core/utils/type';
+import { getFormat } from '../localization/ldml/date.format';
+import { getLanguageId } from '../localization/language_codes';
+import '../localization/currency';
 
 const ARABIC_ZERO_CODE = 1632;
 const DEFINED_NUMBER_FORMTATS = {
-    thousands: "#,##0{0},&quot;K&quot;",
-    millions: "#,##0{0},,&quot;M&quot;",
-    billions: "#,##0{0},,,&quot;B&quot;",
-    trillions: "#,##0{0},,,,&quot;T&quot;",
-    percent: "0{0}%",
-    decimal: "#{0}",
-    "fixedpoint": "#,##0{0}",
-    exponential: "0{0}E+00",
-    currency: " "
+    thousands: '#,##0{0},&quot;K&quot;',
+    millions: '#,##0{0},,&quot;M&quot;',
+    billions: '#,##0{0},,,&quot;B&quot;',
+    trillions: '#,##0{0},,,,&quot;T&quot;',
+    percent: '0{0}%',
+    decimal: '#{0}',
+    'fixedpoint': '#,##0{0}',
+    exponential: '0{0}E+00',
+    currency: ' '
 };
 const PERIOD_REGEXP = /a+/g;
 const DAY_REGEXP = /E/g;
@@ -34,14 +34,14 @@ var excelFormatConverter = module.exports = {
             i;
 
         if(precision > 0) {
-            result = format !== "decimal" ? "." : "";
+            result = format !== 'decimal' ? '.' : '';
             for(i = 0; i < precision; i++) {
-                result = result + "0";
+                result = result + '0';
             }
 
             return result;
         }
-        return "";
+        return '';
     },
 
     _hasArabicDigits: function(text) {
@@ -57,25 +57,25 @@ var excelFormatConverter = module.exports = {
     },
 
     _convertDateFormatToOpenXml: function(format) {
-        return format.replace(SLASH_REGEXP, "\\/").split("'").map(function(datePart, index) {
+        return format.replace(SLASH_REGEXP, '\\/').split('\'').map(function(datePart, index) {
             if(index % 2 === 0) {
                 return datePart
-                    .replace(PERIOD_REGEXP, "AM/PM")
-                    .replace(DO_REGEXP, "d")
-                    .replace(DAY_REGEXP, "d")
-                    .replace(STANDALONE_MONTH_REGEXP, "M")
-                    .replace(HOUR_REGEXP, "H")
-                    .replace(SQUARE_OPEN_BRACKET_REGEXP, "\\[")
-                    .replace(SQUARE_CLOSE_BRACKET_REGEXP, "\\]");
+                    .replace(PERIOD_REGEXP, 'AM/PM')
+                    .replace(DO_REGEXP, 'd')
+                    .replace(DAY_REGEXP, 'd')
+                    .replace(STANDALONE_MONTH_REGEXP, 'M')
+                    .replace(HOUR_REGEXP, 'H')
+                    .replace(SQUARE_OPEN_BRACKET_REGEXP, '\\[')
+                    .replace(SQUARE_CLOSE_BRACKET_REGEXP, '\\]');
             } if(datePart) {
-                return datePart.replace(ANY_REGEXP, "\\$&");
+                return datePart.replace(ANY_REGEXP, '\\$&');
             }
-            return "'";
-        }).join("");
+            return '\'';
+        }).join('');
     },
 
     _convertDateFormat: function(format) {
-        const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString();
+        const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || '').toString();
         let result = getFormat(value => dateLocalization.format(value, format));
 
         if(result) {
@@ -88,16 +88,16 @@ var excelFormatConverter = module.exports = {
 
     _getLanguageInfo: function(defaultPattern) {
         var languageID = getLanguageId(),
-            languageIDStr = languageID ? languageID.toString(16) : "",
-            languageInfo = "";
+            languageIDStr = languageID ? languageID.toString(16) : '',
+            languageInfo = '';
 
         if(this._hasArabicDigits(defaultPattern)) {
             while(languageIDStr.length < 3) {
-                languageIDStr = "0" + languageIDStr;
+                languageIDStr = '0' + languageIDStr;
             }
-            languageInfo = "[$-2010" + languageIDStr + "]";
+            languageInfo = '[$-2010' + languageIDStr + ']';
         } else if(languageIDStr) {
-            languageInfo = "[$-" + languageIDStr + "]";
+            languageInfo = '[$-' + languageIDStr + ']';
         }
 
         return languageInfo;
@@ -107,7 +107,7 @@ var excelFormatConverter = module.exports = {
         let result,
             excelFormat;
 
-        if(format === "currency") {
+        if(format === 'currency') {
             excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency);
         } else {
             excelFormat = DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
@@ -122,7 +122,7 @@ var excelFormatConverter = module.exports = {
 
     convertFormat: function(format, precision, type, currency) {
         if(isDefined(format)) {
-            if(type === "date") {
+            if(type === 'date') {
                 return excelFormatConverter._convertDateFormat(format);
             } else {
                 if(isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {

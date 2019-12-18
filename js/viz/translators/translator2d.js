@@ -1,21 +1,21 @@
-var extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    Range = require("./range").Range,
-    categoryTranslator = require("./category_translator"),
-    intervalTranslator = require("./interval_translator"),
-    datetimeTranslator = require("./datetime_translator"),
-    logarithmicTranslator = require("./logarithmic_translator"),
-    vizUtils = require("../core/utils"),
-    typeUtils = require("../../core/utils/type"),
+var extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    Range = require('./range').Range,
+    categoryTranslator = require('./category_translator'),
+    intervalTranslator = require('./interval_translator'),
+    datetimeTranslator = require('./datetime_translator'),
+    logarithmicTranslator = require('./logarithmic_translator'),
+    vizUtils = require('../core/utils'),
+    typeUtils = require('../../core/utils/type'),
     getLog = vizUtils.getLog,
     getPower = vizUtils.getPower,
     isDefined = typeUtils.isDefined,
-    adjust = require("../../core/utils/math").adjust,
+    adjust = require('../../core/utils/math').adjust,
     _abs = Math.abs,
-    CANVAS_PROP = ["width", "height", "left", "top", "bottom", "right"],
+    CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'],
     _Translator2d,
 
-    addInterval = require("../../core/utils/date").addInterval;
+    addInterval = require('../../core/utils/date').addInterval;
 
 const dummyTranslator = {
     to(value) {
@@ -50,8 +50,8 @@ var validateBusinessRange = function(businessRange) {
             businessRange[valueSelector] = businessRange[baseValueSelector];
         }
     }
-    validate("minVisible", "min");
-    validate("maxVisible", "max");
+    validate('minVisible', 'min');
+    validate('maxVisible', 'max');
     return businessRange;
 };
 
@@ -160,14 +160,14 @@ _Translator2d.prototype = {
             script = dummyTranslator;
         } else {
             switch(range.axisType) {
-                case "logarithmic":
+                case 'logarithmic':
                     script = logarithmicTranslator;
                     break;
-                case "semidiscrete":
+                case 'semidiscrete':
                     script = intervalTranslator;
                     canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
                     break;
-                case "discrete":
+                case 'discrete':
                     script = categoryTranslator;
                     that._categories = categories;
                     canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
@@ -178,7 +178,7 @@ _Translator2d.prototype = {
                     }
                     break;
                 default:
-                    if(range.dataType === "datetime") {
+                    if(range.dataType === 'datetime') {
                         script = datetimeTranslator;
                     }
             }
@@ -353,15 +353,15 @@ _Translator2d.prototype = {
         }
 
         that.sc = {
-            "canvas_position_default": canvas_position_default,
-            "canvas_position_left": startPoint,
-            "canvas_position_top": startPoint,
-            "canvas_position_center": canvas_position_center_middle,
-            "canvas_position_middle": canvas_position_center_middle,
-            "canvas_position_right": endPoint,
-            "canvas_position_bottom": endPoint,
-            "canvas_position_start": canvasOptions.invert ? endPoint : startPoint,
-            "canvas_position_end": canvasOptions.invert ? startPoint : endPoint
+            'canvas_position_default': canvas_position_default,
+            'canvas_position_left': startPoint,
+            'canvas_position_top': startPoint,
+            'canvas_position_center': canvas_position_center_middle,
+            'canvas_position_middle': canvas_position_center_middle,
+            'canvas_position_right': endPoint,
+            'canvas_position_bottom': endPoint,
+            'canvas_position_start': canvasOptions.invert ? endPoint : startPoint,
+            'canvas_position_end': canvasOptions.invert ? startPoint : endPoint
         };
     },
 
@@ -526,7 +526,7 @@ _Translator2d.prototype = {
         value = that._fromValue(value);
 
         if(that._breaks) {
-            prop = that._checkValueAboutBreaks(breaks, value, "trFrom", "trTo", that._checkingMethodsAboutBreaks[0]);
+            prop = that._checkValueAboutBreaks(breaks, value, 'trFrom', 'trTo', that._checkingMethodsAboutBreaks[0]);
             if(prop.inBreak === true) {
                 return that._toValue(direction > 0 ? prop.break.trTo : prop.break.trFrom);
             }
@@ -543,7 +543,7 @@ _Translator2d.prototype = {
             if(!isDefined(bp) || range.maxVisible.valueOf() !== bp.valueOf()) {
                 return null;
             }
-            return this.translateSpecialCase(bp === 0 && this._options.shiftZeroValue ? "canvas_position_default" : "canvas_position_middle");
+            return this.translateSpecialCase(bp === 0 && this._options.shiftZeroValue ? 'canvas_position_default' : 'canvas_position_middle');
         }
 
         bp = this._fromValue(bp);
@@ -554,7 +554,7 @@ _Translator2d.prototype = {
             commonBreakSize = 0;
 
         if(breaks !== undefined) {
-            prop = that._checkValueAboutBreaks(breaks, bp, "trFrom", "trTo", that._checkingMethodsAboutBreaks[0]);
+            prop = that._checkValueAboutBreaks(breaks, bp, 'trFrom', 'trTo', that._checkingMethodsAboutBreaks[0]);
             commonBreakSize = isDefined(prop.breaksSize) ? prop.breaksSize : 0;
         }
         if(prop.inBreak === true) {
@@ -579,7 +579,7 @@ _Translator2d.prototype = {
             commonBreakSize = 0;
 
         if(breaks !== undefined) {
-            prop = that._checkValueAboutBreaks(breaks, pos, "start", "end", that._checkingMethodsAboutBreaks[1]);
+            prop = that._checkValueAboutBreaks(breaks, pos, 'start', 'end', that._checkingMethodsAboutBreaks[1]);
             commonBreakSize = isDefined(prop.breaksSize) ? prop.breaksSize : 0;
         }
 

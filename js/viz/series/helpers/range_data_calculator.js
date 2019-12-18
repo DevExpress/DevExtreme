@@ -1,7 +1,7 @@
-const { unique, getAddFunction } = require("../../core/utils"),
-    _isDefined = require("../../../core/utils/type").isDefined,
-    noop = require("../../../core/utils/common").noop,
-    DISCRETE = "discrete";
+const { unique, getAddFunction } = require('../../core/utils'),
+    _isDefined = require('../../../core/utils/type').isDefined,
+    noop = require('../../../core/utils/common').noop,
+    DISCRETE = 'discrete';
 
 function continuousRangeCalculator(range, minValue, maxValue) {
     range.min = range.min < minValue ? range.min : minValue;
@@ -59,7 +59,7 @@ function getValueForArgument(point, extraPoint, x, range) {
             x2 = extraPoint.argument;
 
         const r = ((x - x1) * (y2 - y1)) / (x2 - x1) + y1.valueOf();
-        return range.dataType === "datetime" ? new Date(r) : r;
+        return range.dataType === 'datetime' ? new Date(r) : r;
     } else {
         return point.value;
     }
@@ -71,7 +71,7 @@ function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, b
 }
 
 function isLineSeries(series) {
-    return series.type.toLowerCase().indexOf("line") >= 0 || series.type.toLowerCase().indexOf("area") >= 0;
+    return series.type.toLowerCase().indexOf('line') >= 0 || series.type.toLowerCase().indexOf('area') >= 0;
 }
 
 function getViewportReducer(series) {

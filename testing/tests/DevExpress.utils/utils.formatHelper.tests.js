@@ -1,4 +1,4 @@
-var formatHelper = require("format_helper"),
+var formatHelper = require('format_helper'),
     getDateFormatByTickInterval = formatHelper.getDateFormatByTickInterval;
 
 function checkDateWithFormat(date, format, expected, assert) {

@@ -1,6 +1,6 @@
-var registerComponent = require("../../core/component_registrator"),
-    NumberBoxMask = require("./number_box.mask");
+var registerComponent = require('../../core/component_registrator'),
+    NumberBoxMask = require('./number_box.mask');
 
-registerComponent("dxNumberBox", NumberBoxMask);
+registerComponent('dxNumberBox', NumberBoxMask);
 
 module.exports = NumberBoxMask;

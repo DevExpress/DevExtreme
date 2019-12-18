@@ -1,5 +1,5 @@
-var TemplateBase = require("./ui.template_base"),
-    domUtils = require("../../core/utils/dom");
+var TemplateBase = require('./ui.template_base'),
+    domUtils = require('../../core/utils/dom');
 
 var FunctionTemplate = TemplateBase.inherit({
 

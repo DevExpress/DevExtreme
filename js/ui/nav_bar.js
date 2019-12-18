@@ -1,12 +1,12 @@
-var registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    NavBarItem = require("./nav_bar/item"),
-    Tabs = require("./tabs");
+var registerComponent = require('../core/component_registrator'),
+    extend = require('../core/utils/extend').extend,
+    NavBarItem = require('./nav_bar/item'),
+    Tabs = require('./tabs');
 
-var NAVBAR_CLASS = "dx-navbar",
-    ITEM_CLASS = "dx-item-content",
-    NAVBAR_ITEM_CLASS = "dx-nav-item",
-    NAVBAR_ITEM_CONTENT_CLASS = "dx-nav-item-content";
+var NAVBAR_CLASS = 'dx-navbar',
+    ITEM_CLASS = 'dx-item-content',
+    NAVBAR_ITEM_CLASS = 'dx-nav-item',
+    NAVBAR_ITEM_CONTENT_CLASS = 'dx-nav-item-content';
 
 /**
 * @name dxNavBar
@@ -49,11 +49,11 @@ var NavBar = Tabs.inherit({
             itemData = args.itemData;
 
         $itemElement.addClass(NAVBAR_ITEM_CLASS);
-        $itemElement.find("." + ITEM_CLASS)
+        $itemElement.find('.' + ITEM_CLASS)
             .addClass(NAVBAR_ITEM_CONTENT_CLASS);
 
         if(!itemData.icon) {
-            $itemElement.addClass("dx-navbar-text-item");
+            $itemElement.addClass('dx-navbar-text-item');
         }
     }
 });
@@ -68,6 +68,6 @@ var NavBar = Tabs.inherit({
 */
 NavBar.ItemClass = NavBarItem;
 
-registerComponent("dxNavBar", NavBar);
+registerComponent('dxNavBar', NavBar);
 
 module.exports = NavBar;

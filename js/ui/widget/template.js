@@ -1,15 +1,15 @@
-import $ from "../../core/renderer";
-import TemplateBase from "./ui.template_base";
-import { normalizeTemplateElement } from "../../core/utils/dom";
-import { getCurrentTemplateEngine, setTemplateEngine, registerTemplateEngine } from "./template_engine_registry";
-import "./template_engines";
+import $ from '../../core/renderer';
+import TemplateBase from './ui.template_base';
+import { normalizeTemplateElement } from '../../core/utils/dom';
+import { getCurrentTemplateEngine, setTemplateEngine, registerTemplateEngine } from './template_engine_registry';
+import './template_engines';
 
-registerTemplateEngine("default", {
+registerTemplateEngine('default', {
     compile: (element) => normalizeTemplateElement(element),
     render: (template, model, index) => template.clone()
 });
 
-setTemplateEngine("default");
+setTemplateEngine('default');
 
 const Template = TemplateBase.inherit({
 
@@ -23,7 +23,7 @@ const Template = TemplateBase.inherit({
             this._compiledTemplate = getCurrentTemplateEngine().compile(this._element);
         }
 
-        return $("<div>").append(
+        return $('<div>').append(
             transclude ? this._element : getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index)
         ).contents();
     },

@@ -1,65 +1,65 @@
-import $ from "../../core/renderer";
-import Callbacks from "../../core/utils/callbacks";
-import translator from "../../animation/translator";
-import errors from "../widget/ui.errors";
-import windowUtils from "../../core/utils/window";
-import dialog from "../dialog";
-import recurrenceUtils from "./utils.recurrence";
-import domUtils from "../../core/utils/dom";
-import dateUtils from "../../core/utils/date";
-import objectUtils from "../../core/utils/object";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import { noop } from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-import devices from "../../core/devices";
-import config from "../../core/config";
-import registerComponent from "../../core/component_registrator";
-import messageLocalization from "../../localization/message";
-import dateSerialization from "../../core/utils/date_serialization";
-import dateLocalization from "../../localization/date";
-import Widget from "../widget/ui.widget";
-import subscribes from "./ui.scheduler.subscribes";
-import FunctionTemplate from "../widget/function_template";
+import $ from '../../core/renderer';
+import Callbacks from '../../core/utils/callbacks';
+import translator from '../../animation/translator';
+import errors from '../widget/ui.errors';
+import windowUtils from '../../core/utils/window';
+import dialog from '../dialog';
+import recurrenceUtils from './utils.recurrence';
+import domUtils from '../../core/utils/dom';
+import dateUtils from '../../core/utils/date';
+import objectUtils from '../../core/utils/object';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { noop } from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import devices from '../../core/devices';
+import config from '../../core/config';
+import registerComponent from '../../core/component_registrator';
+import messageLocalization from '../../localization/message';
+import dateSerialization from '../../core/utils/date_serialization';
+import dateLocalization from '../../localization/date';
+import Widget from '../widget/ui.widget';
+import subscribes from './ui.scheduler.subscribes';
+import FunctionTemplate from '../widget/function_template';
 
-import { DesktopTooltipStrategy } from "./tooltip_strategies/desktopTooltipStrategy";
-import { MobileTooltipStrategy } from "./tooltip_strategies/mobileTooltipStrategy";
+import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
+import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
 
-import SchedulerHeader from "./ui.scheduler.header";
-import SchedulerWorkSpaceDay from "./workspaces/ui.scheduler.work_space_day";
-import SchedulerWorkSpaceWeek from "./workspaces/ui.scheduler.work_space_week";
-import SchedulerWorkSpaceWorkWeek from "./workspaces/ui.scheduler.work_space_work_week";
-import SchedulerWorkSpaceMonth from "./workspaces/ui.scheduler.work_space_month";
-import SchedulerTimelineDay from "./workspaces/ui.scheduler.timeline_day";
-import SchedulerTimelineWeek from "./workspaces/ui.scheduler.timeline_week";
-import SchedulerTimelineWorkWeek from "./workspaces/ui.scheduler.timeline_work_week";
-import SchedulerTimelineMonth from "./workspaces/ui.scheduler.timeline_month";
-import SchedulerAgenda from "./workspaces/ui.scheduler.agenda";
-import SchedulerResourceManager from "./ui.scheduler.resource_manager";
-import SchedulerAppointmentModel from "./ui.scheduler.appointment_model";
-import SchedulerAppointments from "./ui.scheduler.appointments";
-import SchedulerLayoutManager from "./ui.scheduler.appointments.layout_manager";
-import { CompactAppointmentsHelper } from "./compactAppointmentsHelper";
-import SchedulerTimezones from "./timezones/ui.scheduler.timezones";
-import AsyncTemplateMixin from "../shared/async_template_mixin";
-import DataHelperMixin from "../../data_helper";
-import loading from "./ui.loading";
-import AppointmentForm from "./ui.scheduler.appointment_form";
-import Popup from "../popup";
-import deferredUtils from "../../core/utils/deferred";
-import EmptyTemplate from "../widget/empty_template";
-import BindableTemplate from "../widget/bindable_template";
-import themes from "../themes";
-import browser from "../../core/utils/browser";
-import { touch } from "../../core/utils/support";
+import SchedulerHeader from './ui.scheduler.header';
+import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
+import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
+import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
+import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
+import SchedulerTimelineDay from './workspaces/ui.scheduler.timeline_day';
+import SchedulerTimelineWeek from './workspaces/ui.scheduler.timeline_week';
+import SchedulerTimelineWorkWeek from './workspaces/ui.scheduler.timeline_work_week';
+import SchedulerTimelineMonth from './workspaces/ui.scheduler.timeline_month';
+import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
+import SchedulerResourceManager from './ui.scheduler.resource_manager';
+import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
+import SchedulerAppointments from './ui.scheduler.appointments';
+import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
+import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
+import SchedulerTimezones from './timezones/ui.scheduler.timezones';
+import AsyncTemplateMixin from '../shared/async_template_mixin';
+import DataHelperMixin from '../../data_helper';
+import loading from './ui.loading';
+import AppointmentForm from './ui.scheduler.appointment_form';
+import Popup from '../popup';
+import deferredUtils from '../../core/utils/deferred';
+import EmptyTemplate from '../widget/empty_template';
+import BindableTemplate from '../widget/bindable_template';
+import themes from '../themes';
+import browser from '../../core/utils/browser';
+import { touch } from '../../core/utils/support';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const WIDGET_CLASS = "dx-scheduler";
+const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_WIN_NO_TOUCH_CLASS = `${WIDGET_CLASS}-win-no-touch`;
@@ -71,48 +71,48 @@ const WIDGET_SMALL_WIDTH = 400;
 const APPOINTMENT_POPUP_WIDTH = 610;
 const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
 
-const TOOLBAR_ITEM_AFTER_LOCATION = "after";
-const TOOLBAR_ITEM_BEFORE_LOCATION = "before";
+const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
+const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
 
-var FULL_DATE_FORMAT = "yyyyMMddTHHmmss",
-    UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + "Z";
+var FULL_DATE_FORMAT = 'yyyyMMddTHHmmss',
+    UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 var VIEWS_CONFIG = {
     day: {
         workSpace: SchedulerWorkSpaceDay,
-        renderingStrategy: "vertical"
+        renderingStrategy: 'vertical'
     },
     week: {
         workSpace: SchedulerWorkSpaceWeek,
-        renderingStrategy: "vertical"
+        renderingStrategy: 'vertical'
     },
     workWeek: {
         workSpace: SchedulerWorkSpaceWorkWeek,
-        renderingStrategy: "vertical"
+        renderingStrategy: 'vertical'
     },
     month: {
         workSpace: SchedulerWorkSpaceMonth,
-        renderingStrategy: "horizontalMonth"
+        renderingStrategy: 'horizontalMonth'
     },
     timelineDay: {
         workSpace: SchedulerTimelineDay,
-        renderingStrategy: "horizontal"
+        renderingStrategy: 'horizontal'
     },
     timelineWeek: {
         workSpace: SchedulerTimelineWeek,
-        renderingStrategy: "horizontal"
+        renderingStrategy: 'horizontal'
     },
     timelineWorkWeek: {
         workSpace: SchedulerTimelineWorkWeek,
-        renderingStrategy: "horizontal"
+        renderingStrategy: 'horizontal'
     },
     timelineMonth: {
         workSpace: SchedulerTimelineMonth,
-        renderingStrategy: "horizontalMonthLine"
+        renderingStrategy: 'horizontalMonthLine'
     },
     agenda: {
         workSpace: SchedulerAgenda,
-        renderingStrategy: "agenda"
+        renderingStrategy: 'agenda'
     }
 };
 
@@ -227,7 +227,7 @@ const Scheduler = Widget.inherit({
                 * @default ['day', 'week']
                 * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
-            views: ["day", "week"],
+            views: ['day', 'week'],
 
             /**
                 * @name dxSchedulerOptions.views.type
@@ -349,7 +349,7 @@ const Scheduler = Widget.inherit({
                 * @default "day"
                 * @fires dxSchedulerOptions.onOptionChanged
                 */
-            currentView: "day", // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
+            currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
             /**
                 * @name dxSchedulerOptions.currentDate
                 * @type Date|number|string
@@ -466,21 +466,21 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions.appointmentTemplate
                 * @extends AppointmentTemplate
                 */
-            appointmentTemplate: "item",
+            appointmentTemplate: 'item',
 
             /**
                 * @name dxSchedulerOptions.dropDownAppointmentTemplate
                 * @default "dropDownAppointment"
                 * @extends AppointmentTemplate
                 */
-            dropDownAppointmentTemplate: "dropDownAppointment",
+            dropDownAppointmentTemplate: 'dropDownAppointment',
 
             /**
                 * @name dxSchedulerOptions.appointmentCollectorTemplate
                 * @default "appointmentCollector"
                 * @extends AppointmentCollectorTemplate
                 */
-            appointmentCollectorTemplate: "appointmentCollector",
+            appointmentCollectorTemplate: 'appointmentCollector',
 
             /**
                 * @name dxSchedulerOptions.dataCellTemplate
@@ -598,7 +598,7 @@ const Scheduler = Widget.inherit({
                 * @type Enums.SchedulerRecurrenceEditMode
                 * @default "dialog"
                 */
-            recurrenceEditMode: "dialog",
+            recurrenceEditMode: 'dialog',
 
             /**
                 * @name dxSchedulerOptions.cellDuration
@@ -611,7 +611,7 @@ const Scheduler = Widget.inherit({
                 * @type number|Enums.MaxAppointmentsPerCell
                 * @default "auto"
                 */
-            maxAppointmentsPerCell: "auto",
+            maxAppointmentsPerCell: 'auto',
 
             /**
                 * @name dxSchedulerOptions.selectedCellData
@@ -793,7 +793,7 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions.appointmentTooltipTemplate
                 * @extends AppointmentTooltipTemplate
                 */
-            appointmentTooltipTemplate: "appointmentTooltip",
+            appointmentTooltipTemplate: 'appointmentTooltip',
 
             /**
                 * @hidden
@@ -804,7 +804,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param2 contentElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
-            appointmentPopupTemplate: "appointmentPopup",
+            appointmentPopupTemplate: 'appointmentPopup',
 
             /**
                 * @name dxSchedulerOptions.crossScrollingEnabled
@@ -825,49 +825,49 @@ const Scheduler = Widget.inherit({
                 * @type string
                 * @default 'startDate'
                 */
-            startDateExpr: "startDate",
+            startDateExpr: 'startDate',
 
             /**
                 * @name dxSchedulerOptions.endDateExpr
                 * @type string
                 * @default 'endDate'
                 */
-            endDateExpr: "endDate",
+            endDateExpr: 'endDate',
 
             /**
                 * @name dxSchedulerOptions.textExpr
                 * @type string
                 * @default 'text'
                 */
-            textExpr: "text",
+            textExpr: 'text',
 
             /**
                 * @name dxSchedulerOptions.descriptionExpr
                 * @type string
                 * @default 'description'
                 */
-            descriptionExpr: "description",
+            descriptionExpr: 'description',
 
             /**
                 * @name dxSchedulerOptions.allDayExpr
                 * @type string
                 * @default 'allDay'
                 */
-            allDayExpr: "allDay",
+            allDayExpr: 'allDay',
 
             /**
                 * @name dxSchedulerOptions.recurrenceRuleExpr
                 * @type string
                 * @default 'recurrenceRule'
                 */
-            recurrenceRuleExpr: "recurrenceRule",
+            recurrenceRuleExpr: 'recurrenceRule',
 
             /**
                 * @name dxSchedulerOptions.recurrenceExceptionExpr
                 * @type string
                 * @default 'recurrenceException'
                 */
-            recurrenceExceptionExpr: "recurrenceException",
+            recurrenceExceptionExpr: 'recurrenceException',
 
             /**
                 * @name dxSchedulerOptions.remoteFiltering
@@ -881,28 +881,28 @@ const Scheduler = Widget.inherit({
                 * @type string
                 * @default ""
                 */
-            timeZone: "",
+            timeZone: '',
 
             /**
                 * @name dxSchedulerOptions.startDateTimeZoneExpr
                 * @type string
                 * @default 'startDateTimeZone'
                 */
-            startDateTimeZoneExpr: "startDateTimeZone",
+            startDateTimeZoneExpr: 'startDateTimeZone',
 
             /**
                 * @name dxSchedulerOptions.endDateTimeZoneExpr
                 * @type string
                 * @default 'endDateTimeZone'
                 */
-            endDateTimeZoneExpr: "endDateTimeZone",
+            endDateTimeZoneExpr: 'endDateTimeZone',
 
             /**
                 * @name dxSchedulerOptions.noDataText
                 * @type string
                 * @default "No data to display"
                 */
-            noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
+            noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
             /**
             * @name dxSchedulerOptions.adaptivityEnabled
@@ -914,9 +914,9 @@ const Scheduler = Widget.inherit({
             allowMultipleCellSelection: true,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
-            _appointmentTooltipButtonsPosition: "bottom",
-            _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
-            _dropDownButtonIcon: "overflow",
+            _appointmentTooltipButtonsPosition: 'bottom',
+            _appointmentTooltipOpenButtonText: messageLocalization.format('dxScheduler-openAppointment'),
+            _dropDownButtonIcon: 'overflow',
             _appointmentCountPerCell: 2,
             _collectorOffset: 0,
             _appointmentOffset: 26
@@ -1036,7 +1036,7 @@ const Scheduler = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -1086,20 +1086,20 @@ const Scheduler = Widget.inherit({
                     dateCellTemplate: function(data, index, element) {
                         var text = data.text;
 
-                        text.split(" ").forEach(function(text, index) {
-                            var span = $("<span>")
+                        text.split(' ').forEach(function(text, index) {
+                            var span = $('<span>')
                                 .text(text)
-                                .addClass("dx-scheduler-header-panel-cell-date");
+                                .addClass('dx-scheduler-header-panel-cell-date');
 
                             $(element).append(span);
-                            if(!index) $(element).append(" ");
+                            if(!index) $(element).append(' ');
                         });
                     },
 
                     _appointmentTooltipOffset: { x: 0, y: 11 },
-                    _appointmentTooltipButtonsPosition: "top",
+                    _appointmentTooltipButtonsPosition: 'top',
                     _appointmentTooltipOpenButtonText: null,
-                    _dropDownButtonIcon: "chevrondown",
+                    _dropDownButtonIcon: 'chevrondown',
                     _appointmentCountPerCell: 1,
                     _collectorOffset: 20,
                     _appointmentOffset: 30
@@ -1122,16 +1122,16 @@ const Scheduler = Widget.inherit({
              * @action
              * @deprecated dxSchedulerOptions.onAppointmentFormOpening
              */
-            onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
+            onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
         });
     },
 
     _postponeDataSourceLoading: function(promise) {
-        this.postponedOperations.add("_reloadDataSource", this._reloadDataSource.bind(this), promise);
+        this.postponedOperations.add('_reloadDataSource', this._reloadDataSource.bind(this), promise);
     },
 
     _postponeResourceLoading: function() {
-        var whenLoaded = this.postponedOperations.add("_loadResources", () => {
+        var whenLoaded = this.postponedOperations.add('_loadResources', () => {
                 return this._loadResources();
             }),
             resolveCallbacks = new Deferred();
@@ -1149,42 +1149,42 @@ const Scheduler = Widget.inherit({
             name = args.name;
 
         switch(args.name) {
-            case "customizeDateNavigatorText":
-                this._updateOption("header", name, value);
+            case 'customizeDateNavigatorText':
+                this._updateOption('header', name, value);
                 break;
-            case "firstDayOfWeek":
-                this._updateOption("workSpace", name, value);
-                this._updateOption("header", name, value);
+            case 'firstDayOfWeek':
+                this._updateOption('workSpace', name, value);
+                this._updateOption('header', name, value);
                 break;
-            case "currentDate":
+            case 'currentDate':
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
-                this.option("selectedCellData", []);
+                this.option('selectedCellData', []);
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
-                this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
-                this._appointments.option("items", []);
+                this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+                this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
 
                 this._postponeDataSourceLoading();
                 break;
-            case "dataSource":
+            case 'dataSource':
                 this._initDataSource();
                 this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
 
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
-                    this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
+                    this._updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
                 });
                 break;
-            case "min":
-            case "max":
+            case 'min':
+            case 'max':
                 value = this._dateOption(name);
-                this._updateOption("header", name, new Date(value));
-                this._updateOption("workSpace", name, new Date(value));
+                this._updateOption('header', name, new Date(value));
+                this._updateOption('workSpace', name, new Date(value));
                 break;
-            case "views":
+            case 'views':
                 this._processCurrentView();
                 if(this._getCurrentViewOptions()) {
                     this.repaint();
@@ -1192,16 +1192,16 @@ const Scheduler = Widget.inherit({
                     this._header.option(name, value);
                 }
                 break;
-            case "useDropDownViewSwitcher":
+            case 'useDropDownViewSwitcher':
                 this._header.option(name, value);
                 break;
-            case "currentView":
+            case 'currentView':
                 this._processCurrentView();
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
                     allowResize: this._allowResizing(),
-                    itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
+                    itemTemplate: this._getAppointmentTemplate('appointmentTemplate')
                 });
 
                 this._postponeResourceLoading().done((resources) => {
@@ -1209,112 +1209,112 @@ const Scheduler = Widget.inherit({
                     this._refreshWorkSpace(resources);
                     this._updateHeader();
                     this._filterAppointmentsByDate();
-                    this._appointments.option("allowAllDayResize", value !== "day");
+                    this._appointments.option('allowAllDayResize', value !== 'day');
                 });
                 break;
-            case "appointmentTemplate":
-                this._appointments.option("itemTemplate", value);
+            case 'appointmentTemplate':
+                this._appointments.option('itemTemplate', value);
                 break;
-            case "dateCellTemplate":
-            case "resourceCellTemplate":
-            case "dataCellTemplate":
-            case "timeCellTemplate":
-                this._updateOption("workSpace", name, value);
+            case 'dateCellTemplate':
+            case 'resourceCellTemplate':
+            case 'dataCellTemplate':
+            case 'timeCellTemplate':
+                this._updateOption('workSpace', name, value);
                 this.repaint();
                 break;
-            case "groups":
+            case 'groups':
                 this._postponeResourceLoading().done((resources) => {
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                 });
                 break;
-            case "resources":
-                this._resourcesManager.setResources(this.option("resources"));
+            case 'resources':
+                this._resourcesManager.setResources(this.option('resources'));
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
                 this._postponeResourceLoading().done((resources) => {
-                    this._appointments.option("items", []);
+                    this._appointments.option('items', []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                 });
                 break;
-            case "startDayHour":
-            case "endDayHour":
-                this._appointments.option("items", []);
-                this._updateOption("workSpace", name, value);
+            case 'startDayHour':
+            case 'endDayHour':
+                this._appointments.option('items', []);
+                this._updateOption('workSpace', name, value);
                 this._appointments.repaint();
                 this._filterAppointmentsByDate();
 
                 this._postponeDataSourceLoading();
                 break;
-            case "onAppointmentAdding":
-            case "onAppointmentAdded":
-            case "onAppointmentUpdating":
-            case "onAppointmentUpdated":
-            case "onAppointmentDeleting":
-            case "onAppointmentDeleted":
-            case "onAppointmentFormOpening":
+            case 'onAppointmentAdding':
+            case 'onAppointmentAdded':
+            case 'onAppointmentUpdating':
+            case 'onAppointmentUpdated':
+            case 'onAppointmentDeleting':
+            case 'onAppointmentDeleted':
+            case 'onAppointmentFormOpening':
                 this._actions[name] = this._createActionByOption(name);
                 break;
-            case "onAppointmentRendered":
-                this._appointments.option("onItemRendered", this._getAppointmentRenderedAction());
+            case 'onAppointmentRendered':
+                this._appointments.option('onItemRendered', this._getAppointmentRenderedAction());
                 break;
-            case "onAppointmentClick":
-                this._appointments.option("onItemClick", this._createActionByOption(name));
+            case 'onAppointmentClick':
+                this._appointments.option('onItemClick', this._createActionByOption(name));
                 break;
-            case "onAppointmentDblClick":
+            case 'onAppointmentDblClick':
                 this._appointments.option(name, this._createActionByOption(name));
                 break;
-            case "onAppointmentContextMenu":
-                this._appointments.option("onItemContextMenu", this._createActionByOption(name));
+            case 'onAppointmentContextMenu':
+                this._appointments.option('onItemContextMenu', this._createActionByOption(name));
                 break;
-            case "noDataText":
-            case "allowMultipleCellSelection":
-            case "selectedCellData":
-            case "accessKey":
-            case "onCellClick":
+            case 'noDataText':
+            case 'allowMultipleCellSelection':
+            case 'selectedCellData':
+            case 'accessKey':
+            case 'onCellClick':
                 this._workSpace.option(name, value);
                 break;
-            case "onCellContextMenu":
+            case 'onCellContextMenu':
                 this._workSpace.option(name, value);
                 break;
-            case "crossScrollingEnabled":
+            case 'crossScrollingEnabled':
                 this._postponeResourceLoading().done((resources) => {
-                    this._appointments.option("items", []);
+                    this._appointments.option('items', []);
                     this._refreshWorkSpace(resources);
                     if(this._readyToRenderAppointments) {
-                        this._appointments.option("items", this._getAppointmentsToRepaint());
+                        this._appointments.option('items', this._getAppointmentsToRepaint());
                     }
                 });
                 break;
-            case "cellDuration":
-                this._appointments.option("items", []);
+            case 'cellDuration':
+                this._appointments.option('items', []);
                 if(this._readyToRenderAppointments) {
-                    this._updateOption("workSpace", "hoursInterval", value / 60);
-                    this._appointments.option("items", this._getAppointmentsToRepaint());
+                    this._updateOption('workSpace', 'hoursInterval', value / 60);
+                    this._appointments.option('items', this._getAppointmentsToRepaint());
                 }
                 break;
-            case "tabIndex":
-            case "focusStateEnabled":
-                this._updateOption("header", name, value);
-                this._updateOption("workSpace", name, value);
+            case 'tabIndex':
+            case 'focusStateEnabled':
+                this._updateOption('header', name, value);
+                this._updateOption('workSpace', name, value);
                 this._appointments.option(name, value);
                 this.callBase(args);
                 break;
-            case "width":
+            case 'width':
                 // TODO: replace with css
-                this._updateOption("header", name, value);
-                if(this.option("crossScrollingEnabled")) {
-                    this._updateOption("workSpace", "width", value);
+                this._updateOption('header', name, value);
+                if(this.option('crossScrollingEnabled')) {
+                    this._updateOption('workSpace', 'width', value);
                 }
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
-            case "height":
+            case 'height':
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
-            case "editing":
+            case 'editing':
                 this._initEditing();
                 var editing = this._editing;
 
@@ -1323,57 +1323,57 @@ const Scheduler = Widget.inherit({
                 this.hideAppointmentTooltip();
                 this._cleanPopup();
                 break;
-            case "showAllDayPanel":
+            case 'showAllDayPanel':
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
-                    this._updateOption("workSpace", "allDayExpanded", value);
-                    this._updateOption("workSpace", name, value);
+                    this._updateOption('workSpace', 'allDayExpanded', value);
+                    this._updateOption('workSpace', name, value);
                 });
                 break;
-            case "showCurrentTimeIndicator":
-            case "indicatorTime":
-            case "indicatorUpdateInterval":
-            case "shadeUntilCurrentTime":
-            case "groupByDate":
-                this._updateOption("workSpace", name, value);
+            case 'showCurrentTimeIndicator':
+            case 'indicatorTime':
+            case 'indicatorUpdateInterval':
+            case 'shadeUntilCurrentTime':
+            case 'groupByDate':
+                this._updateOption('workSpace', name, value);
                 this.repaint();
                 break;
-            case "appointmentTooltipTemplate":
-            case "appointmentPopupTemplate":
-            case "recurrenceEditMode":
-            case "remoteFiltering":
-            case "timeZone":
-            case "dropDownAppointmentTemplate":
-            case "appointmentCollectorTemplate":
-            case "_appointmentTooltipOffset":
-            case "_appointmentTooltipButtonsPosition":
-            case "_appointmentTooltipOpenButtonText":
-            case "_dropDownButtonIcon":
-            case "_appointmentCountPerCell":
-            case "_collectorOffset":
-            case "_appointmentOffset":
+            case 'appointmentTooltipTemplate':
+            case 'appointmentPopupTemplate':
+            case 'recurrenceEditMode':
+            case 'remoteFiltering':
+            case 'timeZone':
+            case 'dropDownAppointmentTemplate':
+            case 'appointmentCollectorTemplate':
+            case '_appointmentTooltipOffset':
+            case '_appointmentTooltipButtonsPosition':
+            case '_appointmentTooltipOpenButtonText':
+            case '_dropDownButtonIcon':
+            case '_appointmentCountPerCell':
+            case '_collectorOffset':
+            case '_appointmentOffset':
                 this.repaint();
                 break;
-            case "dateSerializationFormat":
+            case 'dateSerializationFormat':
                 break;
-            case "maxAppointmentsPerCell":
+            case 'maxAppointmentsPerCell':
                 break;
-            case "startDateExpr":
-            case "endDateExpr":
-            case "startDateTimeZoneExpr":
-            case "endDateTimeZoneExpr":
-            case "textExpr":
-            case "descriptionExpr":
-            case "allDayExpr":
-            case "recurrenceRuleExpr":
-            case "recurrenceExceptionExpr":
+            case 'startDateExpr':
+            case 'endDateExpr':
+            case 'startDateTimeZoneExpr':
+            case 'endDateTimeZoneExpr':
+            case 'textExpr':
+            case 'descriptionExpr':
+            case 'allDayExpr':
+            case 'recurrenceRuleExpr':
+            case 'recurrenceExceptionExpr':
                 this._updateExpression(name, value);
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
                 this._initAppointmentTemplate();
                 this.repaint();
                 break;
-            case "adaptivityEnabled":
+            case 'adaptivityEnabled':
                 this._toggleAdaptiveClass();
                 this.repaint();
                 break;
@@ -1384,13 +1384,13 @@ const Scheduler = Widget.inherit({
 
     _updateHeader: function() {
         var viewCountConfig = this._getViewCountConfig();
-        this._header.option("intervalCount", viewCountConfig.intervalCount);
-        this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
-        this._header.option("min", this._dateOption("min"));
-        this._header.option("max", this._dateOption("max"));
-        this._header.option("currentDate", this._dateOption("currentDate"));
-        this._header.option("firstDayOfWeek", this._getCurrentViewOption("firstDayOfWeek"));
-        this._header.option("currentView", this._currentView);
+        this._header.option('intervalCount', viewCountConfig.intervalCount);
+        this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+        this._header.option('min', this._dateOption('min'));
+        this._header.option('max', this._dateOption('max'));
+        this._header.option('currentDate', this._dateOption('currentDate'));
+        this._header.option('firstDayOfWeek', this._getCurrentViewOption('firstDayOfWeek'));
+        this._header.option('currentView', this._currentView);
     },
 
     _dateOption: function(optionName) {
@@ -1402,8 +1402,8 @@ const Scheduler = Widget.inherit({
     _getSerializationFormat: function(optionName) {
         var value = this._getCurrentViewOption(optionName);
 
-        if(typeof value === "number") {
-            return "number";
+        if(typeof value === 'number') {
+            return 'number';
         }
 
         if(!typeUtils.isString(value)) {
@@ -1428,7 +1428,7 @@ const Scheduler = Widget.inherit({
     },
 
     _isAgenda: function() {
-        return this._getAppointmentsRenderingStrategy() === "agenda";
+        return this._getAppointmentsRenderingStrategy() === 'agenda';
     },
 
     _allowDragging: function() {
@@ -1444,21 +1444,21 @@ const Scheduler = Widget.inherit({
     },
 
     _supportAllDayResizing: function() {
-        return this._getCurrentViewType() !== "day" || this._currentView.intervalCount > 1;
+        return this._getCurrentViewType() !== 'day' || this._currentView.intervalCount > 1;
     },
 
     _isAllDayExpanded: function(items) {
-        return this.option("showAllDayPanel") && this._appointmentModel.hasAllDayAppointments(items, this._getCurrentViewOption("startDayHour"), this._getCurrentViewOption("endDayHour"));
+        return this.option('showAllDayPanel') && this._appointmentModel.hasAllDayAppointments(items, this._getCurrentViewOption('startDayHour'), this._getCurrentViewOption('endDayHour'));
     },
 
     _getTimezoneOffsetByOption: function(date) {
-        return this._calculateTimezoneByValue(this.option("timeZone"), date);
+        return this._calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
     _calculateTimezoneByValue: function(timezone, date) {
         var result = timezone;
 
-        if(typeof timezone === "string") {
+        if(typeof timezone === 'string') {
             date = date || new Date();
             let dateUtc = Date.UTC(
                 date.getUTCFullYear(),
@@ -1474,11 +1474,11 @@ const Scheduler = Widget.inherit({
 
     _filterAppointmentsByDate: function() {
         var dateRange = this._workSpace.getDateRange();
-        this._appointmentModel.filterByDate(dateRange[0], dateRange[1], this.option("remoteFiltering"), this.option("dateSerializationFormat"));
+        this._appointmentModel.filterByDate(dateRange[0], dateRange[1], this.option('remoteFiltering'), this.option('dateSerializationFormat'));
     },
 
     _loadResources: function() {
-        var groups = this._getCurrentViewOption("groups"),
+        var groups = this._getCurrentViewOption('groups'),
             result = new Deferred();
 
         this._resourcesManager.loadResources(groups).done((function(resources) {
@@ -1530,12 +1530,12 @@ const Scheduler = Widget.inherit({
 
         if(!this._isAgenda() && filteredItems && this._isVisible()) {
             this._workSpace._cleanAllowedPositions();
-            this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
+            this._workSpace.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             this._workSpace._dimensionChanged();
 
             var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
 
-            this._appointments.option("items", appointments);
+            this._appointments.option('items', appointments);
         }
 
         this.hideAppointmentTooltip();
@@ -1554,7 +1554,7 @@ const Scheduler = Widget.inherit({
     },
 
     _toggleAdaptiveClass: function() {
-        this.$element().toggleClass(WIDGET_ADAPTIVE_CLASS, this.option("adaptivityEnabled"));
+        this.$element().toggleClass(WIDGET_ADAPTIVE_CLASS, this.option('adaptivityEnabled'));
     },
 
     _visibilityChanged: function(visible) {
@@ -1567,15 +1567,15 @@ const Scheduler = Widget.inherit({
 
     _init: function() {
         this._initExpressions({
-            startDate: this.option("startDateExpr"),
-            endDate: this.option("endDateExpr"),
-            startDateTimeZone: this.option("startDateTimeZoneExpr"),
-            endDateTimeZone: this.option("endDateTimeZoneExpr"),
-            allDay: this.option("allDayExpr"),
-            text: this.option("textExpr"),
-            description: this.option("descriptionExpr"),
-            recurrenceRule: this.option("recurrenceRuleExpr"),
-            recurrenceException: this.option("recurrenceExceptionExpr")
+            startDate: this.option('startDateExpr'),
+            endDate: this.option('endDateExpr'),
+            startDateTimeZone: this.option('startDateTimeZoneExpr'),
+            endDateTimeZone: this.option('endDateTimeZoneExpr'),
+            allDay: this.option('allDayExpr'),
+            text: this.option('textExpr'),
+            description: this.option('descriptionExpr'),
+            recurrenceRule: this.option('recurrenceRuleExpr'),
+            recurrenceException: this.option('recurrenceExceptionExpr')
         });
 
         this.callBase();
@@ -1593,7 +1593,7 @@ const Scheduler = Widget.inherit({
 
         this._initEditing();
 
-        this._resourcesManager = new SchedulerResourceManager(this.option("resources"));
+        this._resourcesManager = new SchedulerResourceManager(this.option('resources'));
 
         var combinedDataAccessors = this._combineDataAccessors();
 
@@ -1610,28 +1610,28 @@ const Scheduler = Widget.inherit({
         this.callBase();
         this._initAppointmentTemplate();
 
-        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate(this);
-        this._defaultTemplates["appointmentPopup"] = new EmptyTemplate(this);
-        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate(this);
+        this._defaultTemplates['appointmentTooltip'] = new EmptyTemplate(this);
+        this._defaultTemplates['appointmentPopup'] = new EmptyTemplate(this);
+        this._defaultTemplates['dropDownAppointment'] = new EmptyTemplate(this);
     },
 
     _initAppointmentTemplate: function() {
         var that = this;
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data, model) {
+        this._defaultTemplates['item'] = new BindableTemplate(function($container, data, model) {
             var appointmentsInst = that.getAppointmentsInstance();
             appointmentsInst._renderAppointmentTemplate.call(appointmentsInst, $container, data, model);
         }, [
-            "html",
-            "text", "startDate", "endDate", "allDay", "description", "recurrenceRule", "recurrenceException", "startDateTimeZone", "endDateTimeZone"
-        ], this.option("integrationOptions.watchMethod"), {
-            "text": this._dataAccessors.getter["text"],
-            "startDate": this._dataAccessors.getter["startDate"],
-            "endDate": this._dataAccessors.getter["endDate"],
-            "startDateTimeZone": this._dataAccessors.getter["startDateTimeZone"],
-            "endDateTimeZone": this._dataAccessors.getter["endDateTimeZone"],
-            "allDay": this._dataAccessors.getter["allDay"],
-            "recurrenceRule": this._dataAccessors.getter["recurrenceRule"]
+            'html',
+            'text', 'startDate', 'endDate', 'allDay', 'description', 'recurrenceRule', 'recurrenceException', 'startDateTimeZone', 'endDateTimeZone'
+        ], this.option('integrationOptions.watchMethod'), {
+            'text': this._dataAccessors.getter['text'],
+            'startDate': this._dataAccessors.getter['startDate'],
+            'endDate': this._dataAccessors.getter['endDate'],
+            'startDateTimeZone': this._dataAccessors.getter['startDateTimeZone'],
+            'endDateTimeZone': this._dataAccessors.getter['endDateTimeZone'],
+            'allDay': this._dataAccessors.getter['allDay'],
+            'recurrenceRule': this._dataAccessors.getter['recurrenceRule']
         });
     },
 
@@ -1653,19 +1653,19 @@ const Scheduler = Widget.inherit({
     _dataSourceChangedHandler: function(result) {
         if(this._readyToRenderAppointments) {
             this._workSpaceRecalculation.done((function() {
-                this._filteredItems = this.fire("prerenderFilter");
-                this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
+                this._filteredItems = this.fire('prerenderFilter');
+                this._workSpace.option('allDayExpanded', this._isAllDayExpanded(this._filteredItems));
 
                 if(this._isAgenda()) {
-                    this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
+                    this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option('currentDate'), true);
                 }
 
                 if(this._filteredItems.length && this._isVisible()) {
-                    this._appointments.option("items", this._getAppointmentsToRepaint());
+                    this._appointments.option('items', this._getAppointmentsToRepaint());
 
                     this._appointmentModel.cleanModelState();
                 } else {
-                    this._appointments.option("items", []);
+                    this._appointments.option('items', []);
                 }
                 if(this._isAgenda()) {
                     this._workSpace._renderView();
@@ -1678,13 +1678,13 @@ const Scheduler = Widget.inherit({
 
     _getAppointmentsToRepaint: function() {
         var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
-        return this._layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
+        return this._layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
     },
 
     _initExpressions: function(fields) {
-        var dataCoreUtils = require("../../core/utils/data"),
+        var dataCoreUtils = require('../../core/utils/data'),
             isDateField = function(field) {
-                return field === "startDate" || field === "endDate";
+                return field === 'startDate' || field === 'endDate';
             };
 
         if(!this._dataAccessors) {
@@ -1709,10 +1709,10 @@ const Scheduler = Widget.inherit({
                     dateGetter = function() {
                         var value = getter.apply(this, arguments);
                         if(config().forceIsoDateParsing) {
-                            if(!that.option("dateSerializationFormat")) {
+                            if(!that.option('dateSerializationFormat')) {
                                 var format = dateSerialization.getDateSerializationFormat(value);
                                 if(format) {
-                                    that.option("dateSerializationFormat", format);
+                                    that.option('dateSerializationFormat', format);
                                 }
                             }
                             value = dateSerialization.deserializeDate(value);
@@ -1720,8 +1720,8 @@ const Scheduler = Widget.inherit({
                         return value;
                     };
                     dateSetter = function(object, value) {
-                        if(config().forceIsoDateParsing || that.option("dateSerializationFormat")) {
-                            value = dateSerialization.serializeDate(value, that.option("dateSerializationFormat"));
+                        if(config().forceIsoDateParsing || that.option('dateSerializationFormat')) {
+                            value = dateSerialization.serializeDate(value, that.option('dateSerializationFormat'));
                         }
                         setter.call(this, object, value);
                     };
@@ -1729,23 +1729,23 @@ const Scheduler = Widget.inherit({
 
                 this._dataAccessors.getter[name] = dateGetter || getter;
                 this._dataAccessors.setter[name] = dateSetter || setter;
-                this._dataAccessors.expr[name + "Expr"] = expr;
+                this._dataAccessors.expr[name + 'Expr'] = expr;
             } else {
                 delete this._dataAccessors.getter[name];
                 delete this._dataAccessors.setter[name];
-                delete this._dataAccessors.expr[name + "Expr"];
+                delete this._dataAccessors.expr[name + 'Expr'];
             }
         }).bind(this));
     },
 
     _updateExpression: function(name, value) {
         var exprObj = {};
-        exprObj[name.replace("Expr", "")] = value;
+        exprObj[name.replace('Expr', '')] = value;
         this._initExpressions(exprObj);
     },
 
     _initEditing: function() {
-        var editing = this.option("editing");
+        var editing = this.option('editing');
 
         this._editing = {
             allowAdding: !!editing,
@@ -1779,7 +1779,7 @@ const Scheduler = Widget.inherit({
     },
 
     _customizeStoreLoadOptions: function() {
-        this._dataSource && this._dataSource.on("customizeStoreLoadOptions", this._proxiedCustomizeStoreLoadOptionsHandler);
+        this._dataSource && this._dataSource.on('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
     },
 
     _dispose: function() {
@@ -1789,7 +1789,7 @@ const Scheduler = Widget.inherit({
 
         this._cleanAsyncTemplatesTimer();
 
-        this._dataSource && this._dataSource.off("customizeStoreLoadOptions", this._proxiedCustomizeStoreLoadOptionsHandler);
+        this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
         this.callBase();
     },
 
@@ -1798,25 +1798,25 @@ const Scheduler = Widget.inherit({
         options.storeLoadOptions.dxScheduler = {
             startDate: this.getStartViewDate(),
             endDate: this.getEndViewDate(),
-            resources: this.option("resources")
+            resources: this.option('resources')
         };
     },
 
     _initActions: function() {
         this._actions = {
-            "onAppointmentAdding": this._createActionByOption("onAppointmentAdding"),
-            "onAppointmentAdded": this._createActionByOption("onAppointmentAdded"),
-            "onAppointmentUpdating": this._createActionByOption("onAppointmentUpdating"),
-            "onAppointmentUpdated": this._createActionByOption("onAppointmentUpdated"),
-            "onAppointmentDeleting": this._createActionByOption("onAppointmentDeleting"),
-            "onAppointmentDeleted": this._createActionByOption("onAppointmentDeleted"),
-            "onAppointmentFormOpening": this._createActionByOption("onAppointmentFormOpening")
+            'onAppointmentAdding': this._createActionByOption('onAppointmentAdding'),
+            'onAppointmentAdded': this._createActionByOption('onAppointmentAdded'),
+            'onAppointmentUpdating': this._createActionByOption('onAppointmentUpdating'),
+            'onAppointmentUpdated': this._createActionByOption('onAppointmentUpdated'),
+            'onAppointmentDeleting': this._createActionByOption('onAppointmentDeleting'),
+            'onAppointmentDeleted': this._createActionByOption('onAppointmentDeleted'),
+            'onAppointmentFormOpening': this._createActionByOption('onAppointmentFormOpening')
         };
     },
 
     _getAppointmentRenderedAction: function() {
-        return this._createActionByOption("onAppointmentRendered", {
-            excludeValidators: ["disabled", "readOnly"]
+        return this._createActionByOption('onAppointmentRendered', {
+            excludeValidators: ['disabled', 'readOnly']
         });
     },
 
@@ -1830,10 +1830,10 @@ const Scheduler = Widget.inherit({
 
         this._layoutManager = new SchedulerLayoutManager(this, this._getAppointmentsRenderingStrategy());
 
-        this._appointments = this._createComponent("<div>", SchedulerAppointments, this._appointmentsConfig());
-        this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
+        this._appointments = this._createComponent('<div>', SchedulerAppointments, this._appointmentsConfig());
+        this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
 
-        this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
+        this._appointmentTooltip = this.option('adaptivityEnabled') ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
 
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
@@ -1885,7 +1885,7 @@ const Scheduler = Widget.inherit({
     },
 
     _renderHeader: function() {
-        var $header = $("<div>").appendTo(this.$element());
+        var $header = $('<div>').appendTo(this.$element());
         this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
     },
 
@@ -1895,23 +1895,23 @@ const Scheduler = Widget.inherit({
             countConfig = this._getViewCountConfig();
 
         result = extend({
-            firstDayOfWeek: this.option("firstDayOfWeek"),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
             currentView: this._currentView,
-            tabIndex: this.option("tabIndex"),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            width: this.option("width"),
-            rtlEnabled: this.option("rtlEnabled"),
-            useDropDownViewSwitcher: this.option("useDropDownViewSwitcher"),
-            _dropDownButtonIcon: this.option("_dropDownButtonIcon"),
-            customizeDateNavigatorText: this.option("customizeDateNavigatorText")
+            tabIndex: this.option('tabIndex'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            width: this.option('width'),
+            rtlEnabled: this.option('rtlEnabled'),
+            useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
+            _dropDownButtonIcon: this.option('_dropDownButtonIcon'),
+            customizeDateNavigatorText: this.option('customizeDateNavigatorText')
         }, currentViewOptions);
 
         result.observer = this;
         result.intervalCount = countConfig.intervalCount;
-        result.views = this.option("views");
-        result.min = new Date(this._dateOption("min"));
-        result.max = new Date(this._dateOption("max"));
-        result.currentDate = dateUtils.trimTime(new Date(this._dateOption("currentDate")));
+        result.views = this.option('views');
+        result.min = new Date(this._dateOption('min'));
+        result.max = new Date(this._dateOption('max'));
+        result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
 
         return result;
     },
@@ -1922,18 +1922,18 @@ const Scheduler = Widget.inherit({
         var config = {
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
-            onItemClick: this._createActionByOption("onAppointmentClick"),
-            onItemContextMenu: this._createActionByOption("onAppointmentContextMenu"),
-            onAppointmentDblClick: this._createActionByOption("onAppointmentDblClick"),
-            tabIndex: this.option("tabIndex"),
-            focusStateEnabled: this.option("focusStateEnabled"),
+            onItemClick: this._createActionByOption('onAppointmentClick'),
+            onItemContextMenu: this._createActionByOption('onAppointmentContextMenu'),
+            onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
+            tabIndex: this.option('tabIndex'),
+            focusStateEnabled: this.option('focusStateEnabled'),
             allowDrag: this._allowDragging(),
             allowDelete: this._editing.allowUpdating && this._editing.allowDeleting,
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
-            rtlEnabled: this.option("rtlEnabled"),
+            rtlEnabled: this.option('rtlEnabled'),
             onContentReady: function() {
-                that._workSpace && that._workSpace.option("allDayExpanded", that._isAllDayExpanded(that.getFilteredItems()));
+                that._workSpace && that._workSpace.option('allDayExpanded', that._isAllDayExpanded(that.getFilteredItems()));
             }
         };
 
@@ -1941,20 +1941,20 @@ const Scheduler = Widget.inherit({
     },
 
     getCollectorOffset: function() {
-        if(this._workSpace.needApplyCollectorOffset() && !this.option("adaptivityEnabled")) {
-            return this.option("_collectorOffset");
+        if(this._workSpace.needApplyCollectorOffset() && !this.option('adaptivityEnabled')) {
+            return this.option('_collectorOffset');
         } else {
             return 0;
         }
     },
 
     getAppointmentDurationInMinutes: function() {
-        return this._getCurrentViewOption("cellDuration");
+        return this._getCurrentViewOption('cellDuration');
     },
 
     _processCurrentView: function() {
-        var views = this.option("views"),
-            currentView = this.option("currentView"),
+        var views = this.option('views'),
+            currentView = this.option('currentView'),
             that = this;
 
         this._currentView = currentView;
@@ -1981,20 +1981,20 @@ const Scheduler = Widget.inherit({
 
     _renderWorkSpace: function(groups) {
         this._readyToRenderAppointments && this._toggleSmallClass();
-        var $workSpace = $("<div>").appendTo(this.$element());
+        var $workSpace = $('<div>').appendTo(this.$element());
 
         var countConfig = this._getViewCountConfig();
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this._getCurrentViewType()].workSpace, this._workSpaceConfig(groups, countConfig));
         this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();
-        countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace._getHeaderDate());
+        countConfig.startDate && this._header && this._header.option('currentDate', this._workSpace._getHeaderDate());
 
-        this._appointments.option("_collectorOffset", this.getCollectorOffset());
+        this._appointments.option('_collectorOffset', this.getCollectorOffset());
     },
 
     _getViewCountConfig: function() {
-        var currentView = this.option("currentView");
+        var currentView = this.option('currentView');
 
         var view = this._getViewByName(currentView),
             viewCount = view && view.intervalCount || 1,
@@ -2007,7 +2007,7 @@ const Scheduler = Widget.inherit({
     },
 
     _getViewByName: function(name) {
-        var views = this.option("views");
+        var views = this.option('views');
 
         for(var i = 0; i < views.length; i++) {
             if(views[i].name === name || views[i].type === name || views[i] === name) return views[i];
@@ -2027,42 +2027,42 @@ const Scheduler = Widget.inherit({
             currentViewOptions = this._getCurrentViewOptions();
 
         result = extend({
-            noDataText: this.option("noDataText"),
-            firstDayOfWeek: this.option("firstDayOfWeek"),
-            startDayHour: this.option("startDayHour"),
-            endDayHour: this.option("endDayHour"),
-            tabIndex: this.option("tabIndex"),
-            accessKey: this.option("accessKey"),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            cellDuration: this.option("cellDuration"),
-            showAllDayPanel: this.option("showAllDayPanel"),
-            showCurrentTimeIndicator: this.option("showCurrentTimeIndicator"),
-            indicatorTime: this.option("indicatorTime"),
-            indicatorUpdateInterval: this.option("indicatorUpdateInterval"),
-            shadeUntilCurrentTime: this.option("shadeUntilCurrentTime"),
-            allDayExpanded: this._appointments.option("items"),
-            crossScrollingEnabled: this.option("crossScrollingEnabled"),
-            dataCellTemplate: this.option("dataCellTemplate"),
-            timeCellTemplate: this.option("timeCellTemplate"),
-            resourceCellTemplate: this.option("resourceCellTemplate"),
-            dateCellTemplate: this.option("dateCellTemplate"),
-            allowMultipleCellSelection: this.option("allowMultipleCellSelection"),
-            selectedCellData: this.option("selectedCellData"),
+            noDataText: this.option('noDataText'),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
+            startDayHour: this.option('startDayHour'),
+            endDayHour: this.option('endDayHour'),
+            tabIndex: this.option('tabIndex'),
+            accessKey: this.option('accessKey'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            cellDuration: this.option('cellDuration'),
+            showAllDayPanel: this.option('showAllDayPanel'),
+            showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
+            indicatorTime: this.option('indicatorTime'),
+            indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
+            shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
+            allDayExpanded: this._appointments.option('items'),
+            crossScrollingEnabled: this.option('crossScrollingEnabled'),
+            dataCellTemplate: this.option('dataCellTemplate'),
+            timeCellTemplate: this.option('timeCellTemplate'),
+            resourceCellTemplate: this.option('resourceCellTemplate'),
+            dateCellTemplate: this.option('dateCellTemplate'),
+            allowMultipleCellSelection: this.option('allowMultipleCellSelection'),
+            selectedCellData: this.option('selectedCellData'),
             onSelectionChanged: (args) => {
-                this.option("selectedCellData", args.selectedCellData);
+                this.option('selectedCellData', args.selectedCellData);
             },
-            groupByDate: this._getCurrentViewOption("groupByDate")
+            groupByDate: this._getCurrentViewOption('groupByDate')
         }, currentViewOptions);
 
         result.observer = this;
         result.intervalCount = countConfig.intervalCount;
         result.startDate = countConfig.startDate;
         result.groups = groups;
-        result.onCellClick = this._createActionByOption("onCellClick");
-        result.onCellContextMenu = this._createActionByOption("onCellContextMenu");
-        result.min = new Date(this._dateOption("min"));
-        result.max = new Date(this._dateOption("max"));
-        result.currentDate = dateUtils.trimTime(new Date(this._dateOption("currentDate")));
+        result.onCellClick = this._createActionByOption('onCellClick');
+        result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
+        result.min = new Date(this._dateOption('min'));
+        result.max = new Date(this._dateOption('max'));
+        result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.hoursInterval = result.cellDuration / 60;
         result.allDayExpanded = this._isAllDayExpanded(this.getFilteredItems());
         result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;
@@ -2101,7 +2101,7 @@ const Scheduler = Widget.inherit({
         var currentViewOptions = this._getCurrentViewOptions();
 
         if(!currentViewOptions || !typeUtils.isDefined(currentViewOptions[optionName])) {
-            this["_" + viewName].option(optionName, value);
+            this['_' + viewName].option(optionName, value);
         }
     },
 
@@ -2128,7 +2128,7 @@ const Scheduler = Widget.inherit({
         this._workSpace._dispose();
         this._workSpace.$element().remove();
 
-        this.option("selectedCellData", []);
+        this.option('selectedCellData', []);
     },
 
     getWorkSpaceScrollable: function() {
@@ -2160,7 +2160,7 @@ const Scheduler = Widget.inherit({
     },
 
     getWorkSpaceDateTableOffset: function() {
-        return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getWorkSpaceLeftOffset() : 0;
+        return !this.option('crossScrollingEnabled') || this.option('rtlEnabled') ? this._workSpace.getWorkSpaceLeftOffset() : 0;
     },
 
     getWorkSpace: function() {
@@ -2176,11 +2176,11 @@ const Scheduler = Widget.inherit({
     },
 
     getMaxAppointmentsPerCell: function() {
-        return this._getCurrentViewOption("maxAppointmentsPerCell");
+        return this._getCurrentViewOption('maxAppointmentsPerCell');
     },
 
     _createPopup: function(appointmentData, processTimeZone) {
-        this._$popup = $("<div>")
+        this._$popup = $('<div>')
             .addClass(APPOINTMENT_POPUP_CLASS)
             .appendTo(this.$element());
 
@@ -2191,15 +2191,15 @@ const Scheduler = Widget.inherit({
 
     _popupContent(appointmentData, processTimeZone) {
         const $popupContent = this._popup.$content();
-        const $form = $("<div>").appendTo($popupContent);
+        const $form = $('<div>').appendTo($popupContent);
         this._createOrUpdateForm(appointmentData, processTimeZone, $form);
 
         return $popupContent;
     },
 
     _createAppointmentForm: function(formData, $content) {
-        var allDay = this.fire("getField", "allDay", formData),
-            resources = this.option("resources");
+        var allDay = this.fire('getField', 'allDay', formData),
+            resources = this.option('resources');
 
         AppointmentForm.prepareAppointmentFormEditors(allDay, {
             textExpr: this._dataAccessors.expr.textExpr,
@@ -2213,7 +2213,7 @@ const Scheduler = Widget.inherit({
         }, this);
 
         if(resources && resources.length) {
-            this._resourcesManager.setResources(this.option("resources"));
+            this._resourcesManager.setResources(this.option('resources'));
             AppointmentForm.concatResources(this._resourcesManager.getEditors());
         }
 
@@ -2226,9 +2226,9 @@ const Scheduler = Widget.inherit({
     },
 
     _createOrUpdateForm: function(appointmentData, processTimeZone, $content) {
-        var allDay = this.fire("getField", "allDay", appointmentData),
-            startDate = this.fire("getField", "startDate", appointmentData),
-            endDate = this.fire("getField", "endDate", appointmentData);
+        var allDay = this.fire('getField', 'allDay', appointmentData),
+            startDate = this.fire('getField', 'startDate', appointmentData),
+            endDate = this.fire('getField', 'endDate', appointmentData);
 
         each(this._resourcesManager.getResourcesFromItem(appointmentData, true) || {}, function(resourceName, resourceValue) {
             appointmentData[resourceName] = resourceValue;
@@ -2237,11 +2237,11 @@ const Scheduler = Widget.inherit({
         var formData = extend(true, {}, appointmentData);
 
         if(processTimeZone) {
-            startDate = this.fire("convertDateByTimezone", startDate);
-            endDate = this.fire("convertDateByTimezone", endDate);
+            startDate = this.fire('convertDateByTimezone', startDate);
+            endDate = this.fire('convertDateByTimezone', endDate);
 
-            this.fire("setField", "startDate", formData, startDate);
-            this.fire("setField", "endDate", formData, endDate);
+            this.fire('setField', 'startDate', formData, startDate);
+            this.fire('setField', 'endDate', formData, endDate);
         }
 
         if(this._appointmentForm) {
@@ -2250,7 +2250,7 @@ const Scheduler = Widget.inherit({
 
             formData.recurrenceRule = formData.recurrenceRule || null;
             AppointmentForm.updateFormData(this._appointmentForm, formData);
-            this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
+            this._appointmentForm.option('readOnly', this._editAppointmentData ? !this._editing.allowUpdating : false);
 
             AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
         } else {
@@ -2263,10 +2263,10 @@ const Scheduler = Widget.inherit({
         if(recurrentEditorItem) {
             var options = recurrentEditorItem.editorOptions || {};
             options.startDate = startDate;
-            this._appointmentForm.itemOption(recurrenceRuleExpr, "editorOptions", options);
+            this._appointmentForm.itemOption(recurrenceRuleExpr, 'editorOptions', options);
         }
 
-        this._actions["onAppointmentFormOpening"]({
+        this._actions['onAppointmentFormOpening']({
             form: this._appointmentForm,
             appointmentData: appointmentData
         });
@@ -2275,7 +2275,7 @@ const Scheduler = Widget.inherit({
     _initDynamicPopupTemplate: function(appointmentData, processTimeZone) {
         var that = this;
 
-        this._defaultTemplates["appointmentPopup"] = new FunctionTemplate(function(options) {
+        this._defaultTemplates['appointmentPopup'] = new FunctionTemplate(function(options) {
             var $popupContent = that._popupContent(appointmentData, processTimeZone);
             $(options.container).append($popupContent);
 
@@ -2292,20 +2292,20 @@ const Scheduler = Widget.inherit({
     },
 
     _updatePopupFullScreenMode() {
-        if(this._popup && this._popup.option("visible")) {
+        if(this._popup && this._popup.option('visible')) {
             const isFullScreen = this._isPopupFullScreenNeeded();
             this._popup.option({
-                maxWidth: isFullScreen ? "100%" : APPOINTMENT_POPUP_WIDTH,
+                maxWidth: isFullScreen ? '100%' : APPOINTMENT_POPUP_WIDTH,
                 fullScreen: isFullScreen
             });
         }
     },
 
     _popupConfig(appointmentData) {
-        const template = this._getTemplateByOption("appointmentPopupTemplate");
+        const template = this._getTemplateByOption('appointmentPopupTemplate');
         return {
-            height: "auto",
-            maxHeight: "100%",
+            height: 'auto',
+            maxHeight: '100%',
             onHiding: () => this.focus(),
             contentTemplate: new FunctionTemplate(options =>
                 template.render({
@@ -2326,15 +2326,15 @@ const Scheduler = Widget.inherit({
     },
 
     _getPopupToolbarItems: function() {
-        const isIOs = devices.current().platform === "ios";
+        const isIOs = devices.current().platform === 'ios';
         return [
             {
-                shortcut: "done",
+                shortcut: 'done',
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: this._doneButtonClickHandler.bind(this)
             },
             {
-                shortcut: "cancel",
+                shortcut: 'cancel',
                 location: isIOs ? TOOLBAR_ITEM_BEFORE_LOCATION : TOOLBAR_ITEM_AFTER_LOCATION
             }
         ];
@@ -2355,7 +2355,7 @@ const Scheduler = Widget.inherit({
         this._saveChanges(true);
 
         if(this._lastEditData) {
-            var startDate = this.fire("getField", "startDate", this._lastEditData);
+            var startDate = this.fire('getField', 'startDate', this._lastEditData);
             this._workSpace.updateScrollPosition(startDate);
             delete this._lastEditData;
         }
@@ -2375,8 +2375,8 @@ const Scheduler = Widget.inherit({
             recData = this._updatedRecAppointment;
 
         function convert(obj, dateFieldName) {
-            var date = new Date(this.fire("getField", dateFieldName, obj));
-            var tzDiff = this._getTimezoneOffsetByOption() * toMs("hour") + this.fire("getClientTimezoneOffset", date);
+            var date = new Date(this.fire('getField', dateFieldName, obj));
+            var tzDiff = this._getTimezoneOffsetByOption() * toMs('hour') + this.fire('getClientTimezoneOffset', date);
 
             return new Date(date.getTime() + tzDiff);
         }
@@ -2393,9 +2393,9 @@ const Scheduler = Widget.inherit({
                 this.updateAppointment(oldData, recData);
                 delete this._updatedRecAppointment;
 
-                if(typeof this._getTimezoneOffsetByOption() === "number") {
-                    this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
-                    this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
+                if(typeof this._getTimezoneOffsetByOption() === 'number') {
+                    this.fire('setField', 'startDate', formData, convert.call(this, formData, 'startDate'));
+                    this.fire('setField', 'endDate', formData, convert.call(this, formData, 'endDate'));
                 }
             }
 
@@ -2408,12 +2408,12 @@ const Scheduler = Widget.inherit({
     },
 
     _getFormData: function() {
-        var formData = this._appointmentForm.option("formData"),
-            startDate = this.fire("getField", "startDate", formData),
-            endDate = this.fire("getField", "endDate", formData);
+        var formData = this._appointmentForm.option('formData'),
+            startDate = this.fire('getField', 'startDate', formData),
+            endDate = this.fire('getField', 'endDate', formData);
 
-        this.fire("setField", "startDate", formData, startDate);
-        this.fire("setField", "endDate", formData, endDate);
+        this.fire('setField', 'startDate', formData, startDate);
+        this.fire('setField', 'endDate', formData, endDate);
 
         return formData;
     },
@@ -2422,49 +2422,49 @@ const Scheduler = Widget.inherit({
         targetAppointmentData = targetAppointmentData || sourceAppointmentData;
 
         var processedStartDate = this.fire(
-            "convertDateByTimezoneBack",
-            this.fire("getField", "startDate", sourceAppointmentData),
-            applyAppointmentTimezone && this.fire("getField", "startDateTimeZone", sourceAppointmentData)
+            'convertDateByTimezoneBack',
+            this.fire('getField', 'startDate', sourceAppointmentData),
+            applyAppointmentTimezone && this.fire('getField', 'startDateTimeZone', sourceAppointmentData)
         );
 
         var processedEndDate = this.fire(
-            "convertDateByTimezoneBack",
-            this.fire("getField", "endDate", sourceAppointmentData),
-            applyAppointmentTimezone && this.fire("getField", "endDateTimeZone", sourceAppointmentData)
+            'convertDateByTimezoneBack',
+            this.fire('getField', 'endDate', sourceAppointmentData),
+            applyAppointmentTimezone && this.fire('getField', 'endDateTimeZone', sourceAppointmentData)
         );
 
-        this.fire("setField", "startDate", targetAppointmentData, processedStartDate);
-        this.fire("setField", "endDate", targetAppointmentData, processedEndDate);
+        this.fire('setField', 'startDate', targetAppointmentData, processedStartDate);
+        this.fire('setField', 'endDate', targetAppointmentData, processedEndDate);
     },
 
     _disableDoneButton: function() {
-        var toolbarItems = this._popup.option("toolbarItems");
+        var toolbarItems = this._popup.option('toolbarItems');
         toolbarItems[0].options = extend(toolbarItems[0].options, { disabled: true });
-        this._popup.option("toolbarItems", toolbarItems);
+        this._popup.option('toolbarItems', toolbarItems);
     },
 
     _enableDoneButton: function() {
-        var toolbarItems = this._popup.option("toolbarItems");
+        var toolbarItems = this._popup.option('toolbarItems');
         toolbarItems[0].options = extend(toolbarItems[0].options, { disabled: false });
-        this._popup.option("toolbarItems", toolbarItems);
+        this._popup.option('toolbarItems', toolbarItems);
     },
 
     _checkRecurringAppointment: function(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing) {
         delete this._updatedRecAppointment;
 
-        var recurrenceRule = this.fire("getField", "recurrenceRule", targetAppointment);
+        var recurrenceRule = this.fire('getField', 'recurrenceRule', targetAppointment);
 
         if(!recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
             return;
         }
 
-        var editMode = this.option("recurrenceEditMode");
+        var editMode = this.option('recurrenceEditMode');
         switch(editMode) {
-            case "series":
+            case 'series':
                 callback();
                 break;
-            case "occurrence":
+            case 'occurrence':
                 this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing);
                 break;
             default:
@@ -2483,36 +2483,36 @@ const Scheduler = Widget.inherit({
         exceptionDate = new Date(exceptionDate);
 
         function processAppointmentDates(appointment, commonTimezoneOffset) {
-            var startDate = this.fire("getField", "startDate", appointment);
+            var startDate = this.fire('getField', 'startDate', appointment);
             var processedStartDate = this.fire(
-                "convertDateByTimezoneBack",
+                'convertDateByTimezoneBack',
                 startDate,
-                this.fire("getField", "startDateTimeZone", appointment)
+                this.fire('getField', 'startDateTimeZone', appointment)
             );
 
-            var endDate = this.fire("getField", "endDate", appointment);
+            var endDate = this.fire('getField', 'endDate', appointment);
             var processedEndDate = this.fire(
-                "convertDateByTimezoneBack",
+                'convertDateByTimezoneBack',
                 endDate,
-                this.fire("getField", "endDateTimeZone", appointment)
+                this.fire('getField', 'endDateTimeZone', appointment)
             );
 
-            if(typeof commonTimezoneOffset === "number" && !isNaN(commonTimezoneOffset)) {
-                var startDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](startDate) / toMs("hour"));
-                var endDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](endDate) / toMs("hour"));
-                var processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * toMs("hour"),
-                    processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * toMs("hour");
+            if(typeof commonTimezoneOffset === 'number' && !isNaN(commonTimezoneOffset)) {
+                var startDateClientTzOffset = -(this._subscribes['getClientTimezoneOffset'](startDate) / toMs('hour'));
+                var endDateClientTzOffset = -(this._subscribes['getClientTimezoneOffset'](endDate) / toMs('hour'));
+                var processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * toMs('hour'),
+                    processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * toMs('hour');
 
-                processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * toMs("hour"));
-                processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * toMs("hour"));
+                processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * toMs('hour'));
+                processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * toMs('hour'));
             }
 
-            this.fire("setField", "startDate", appointment, processedStartDate);
-            this.fire("setField", "endDate", appointment, processedEndDate);
+            this.fire('setField', 'startDate', appointment, processedStartDate);
+            this.fire('setField', 'endDate', appointment, processedEndDate);
         }
 
-        this.fire("setField", "recurrenceRule", singleAppointment, "");
-        this.fire("setField", "recurrenceException", singleAppointment, "");
+        this.fire('setField', 'recurrenceRule', singleAppointment, '');
+        this.fire('setField', 'recurrenceException', singleAppointment, '');
 
         if(!isDeleted && !isPopupEditing) {
 
@@ -2524,7 +2524,7 @@ const Scheduler = Widget.inherit({
         var recurrenceException = this._makeDateAsRecurrenceException(exceptionDate, targetAppointment),
             updatedAppointment = extend({}, targetAppointment);
 
-        this.fire("setField", "recurrenceException", updatedAppointment, recurrenceException);
+        this.fire('setField', 'recurrenceException', updatedAppointment, recurrenceException);
 
         if(isPopupEditing) {
             this._updatedRecAppointment = updatedAppointment;
@@ -2543,16 +2543,16 @@ const Scheduler = Widget.inherit({
 
     _makeDateAsRecurrenceException: function(exceptionDate, targetAppointment) {
         var startDate = this._getStartDate(targetAppointment, true),
-            startDateTimeZone = this.fire("getField", "startDateTimeZone", targetAppointment),
+            startDateTimeZone = this.fire('getField', 'startDateTimeZone', targetAppointment),
             exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate, startDateTimeZone),
-            recurrenceException = this.fire("getField", "recurrenceException", targetAppointment);
+            recurrenceException = this.fire('getField', 'recurrenceException', targetAppointment);
 
-        return recurrenceException ? recurrenceException + "," + exceptionByDate : exceptionByDate;
+        return recurrenceException ? recurrenceException + ',' + exceptionByDate : exceptionByDate;
     },
 
     _getRecurrenceExceptionDate: function(exceptionStartDate, targetStartDate, startDateTimeZone) {
-        exceptionStartDate = this.fire("convertDateByTimezoneBack", exceptionStartDate, startDateTimeZone);
-        var appointmentStartDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
+        exceptionStartDate = this.fire('convertDateByTimezoneBack', exceptionStartDate, startDateTimeZone);
+        var appointmentStartDate = this.fire('convertDateByTimezoneBack', targetStartDate, startDateTimeZone);
 
         exceptionStartDate.setHours(appointmentStartDate.getHours(),
             appointmentStartDate.getMinutes(),
@@ -2560,15 +2560,15 @@ const Scheduler = Widget.inherit({
             appointmentStartDate.getMilliseconds());
 
         var timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionStartDate.getTimezoneOffset();
-        exceptionStartDate = new Date(exceptionStartDate.getTime() - timezoneDiff * toMs("minute"));
+        exceptionStartDate = new Date(exceptionStartDate.getTime() - timezoneDiff * toMs('minute'));
 
         return dateSerialization.serializeDate(exceptionStartDate, UTC_FULL_DATE_FORMAT);
     },
 
     _showRecurrenceChangeConfirm: function(isDeleted) {
-        var message = messageLocalization.format(isDeleted ? "dxScheduler-confirmRecurrenceDeleteMessage" : "dxScheduler-confirmRecurrenceEditMessage"),
-            seriesText = messageLocalization.format(isDeleted ? "dxScheduler-confirmRecurrenceDeleteSeries" : "dxScheduler-confirmRecurrenceEditSeries"),
-            occurrenceText = messageLocalization.format(isDeleted ? "dxScheduler-confirmRecurrenceDeleteOccurrence" : "dxScheduler-confirmRecurrenceEditOccurrence");
+        var message = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage'),
+            seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries'),
+            occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
         return dialog.custom({
             messageHtml: message,
@@ -2584,9 +2584,9 @@ const Scheduler = Widget.inherit({
     _getUpdatedData: function(options) {
         var target = options.data || options,
             cellData = this.getTargetCellData(),
-            targetAllDay = this.fire("getField", "allDay", target),
-            targetStartDate = new Date(this.fire("getField", "startDate", target)),
-            targetEndDate = new Date(this.fire("getField", "endDate", target)),
+            targetAllDay = this.fire('getField', 'allDay', target),
+            targetStartDate = new Date(this.fire('getField', 'startDate', target)),
+            targetEndDate = new Date(this.fire('getField', 'endDate', target)),
             date = cellData.date || targetStartDate,
             duration = targetEndDate.getTime() - targetStartDate.getTime();
 
@@ -2598,8 +2598,8 @@ const Scheduler = Widget.inherit({
         var updatedData = {},
             allDay = cellData.allDay;
 
-        this.fire("setField", "allDay", updatedData, allDay);
-        this.fire("setField", "startDate", updatedData, date);
+        this.fire('setField', 'allDay', updatedData, allDay);
+        this.fire('setField', 'startDate', updatedData, date);
 
         var endDate = new Date(date.getTime() + duration);
 
@@ -2614,11 +2614,11 @@ const Scheduler = Widget.inherit({
             endDate = new Date(dateCopy.getTime() + duration);
 
             if(endDate.getHours() !== 0) {
-                endDate.setHours(this._getCurrentViewOption("endDayHour"));
+                endDate.setHours(this._getCurrentViewOption('endDayHour'));
             }
         }
 
-        this.fire("setField", "endDate", updatedData, endDate);
+        this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
 
         return updatedData;
@@ -2639,7 +2639,7 @@ const Scheduler = Widget.inherit({
     },
 
     _isAppointmentRecurrence: function(appointmentData) {
-        var recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData);
+        var recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData);
 
         return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
     },
@@ -2650,10 +2650,10 @@ const Scheduler = Widget.inherit({
         var $appointment = options.$appointment,
             updatedData = options.skipDateCalculation ? {} : this._getUpdatedData(options),
             resultAppointmentData = extend({}, appointmentData, updatedData),
-            allDay = this.fire("getField", "allDay", appointmentData),
+            allDay = this.fire('getField', 'allDay', appointmentData),
             isAllDay = this._workSpace.supportAllDayRow() && allDay,
-            startDate = new Date(this.fire("getField", "startDate", resultAppointmentData)),
-            endDate = new Date(this.fire("getField", "endDate", resultAppointmentData)),
+            startDate = new Date(this.fire('getField', 'startDate', resultAppointmentData)),
+            endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData)),
             appointmentDuration = endDate.getTime() - startDate.getTime(),
             updatedStartDate,
             appointmentStartDate;
@@ -2667,15 +2667,15 @@ const Scheduler = Widget.inherit({
                 var coordinates = translator.locate($appointment);
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 
-                if($appointment.hasClass("dx-scheduler-appointment-reduced")) {
-                    appointmentStartDate = $appointment.data("dxAppointmentStartDate");
+                if($appointment.hasClass('dx-scheduler-appointment-reduced')) {
+                    appointmentStartDate = $appointment.data('dxAppointmentStartDate');
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
                     }
                 }
 
                 if(this._isAppointmentRecurrence(appointmentData)) {
-                    appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
+                    appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
                     }
@@ -2683,9 +2683,9 @@ const Scheduler = Widget.inherit({
 
                 if(!options.skipHoursProcessing) {
                     this.fire(
-                        "convertDateByTimezoneBack",
+                        'convertDateByTimezoneBack',
                         updatedStartDate,
-                        this.fire("getField", "startDateTimeZone", appointmentData)
+                        this.fire('getField', 'startDateTimeZone', appointmentData)
                     );
 
                 }
@@ -2697,23 +2697,23 @@ const Scheduler = Widget.inherit({
         }
 
         if(updatedStartDate) {
-            this.fire("setField", "startDate", resultAppointmentData, updatedStartDate);
-            this.fire("setField", "endDate", resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
+            this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
+            this.fire('setField', 'endDate', resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
         }
 
         return resultAppointmentData;
     },
 
     _needUpdateAppointmentData: function($appointment) {
-        return $appointment.hasClass("dx-scheduler-appointment-compact") || $appointment.hasClass("dx-scheduler-appointment-recurrence");
+        return $appointment.hasClass('dx-scheduler-appointment-compact') || $appointment.hasClass('dx-scheduler-appointment-recurrence');
     },
 
     _getNormalizedTemplateArgs: function(options) {
         var args = this.callBase(options);
-        if("targetedAppointmentData" in options) {
+        if('targetedAppointmentData' in options) {
             args.push(options.targetedAppointmentData);
         }
-        if("currentIndex" in options) {
+        if('currentIndex' in options) {
             args.push(options.currentIndex);
         }
         return args;
@@ -2728,7 +2728,7 @@ const Scheduler = Widget.inherit({
             args = Array.prototype.slice.call(arguments);
 
         if(!typeUtils.isFunction(callback)) {
-            throw errors.Error("E1031", subject);
+            throw errors.Error('E1031', subject);
         }
 
         return callback.apply(this, args.slice(1));
@@ -2750,12 +2750,12 @@ const Scheduler = Widget.inherit({
                 onUpdatePrevented.call(this);
             }
 
-            if(err && err.name === "Error") {
+            if(err && err.name === 'Error') {
                 throw err;
             }
         }.bind(this);
 
-        this._actions["onAppointmentUpdating"](updatingOptions);
+        this._actions['onAppointmentUpdating'](updatingOptions);
 
         this._processActionResult(updatingOptions, function(canceled) {
             if(!canceled) {
@@ -2765,7 +2765,7 @@ const Scheduler = Widget.inherit({
                     this._appointmentModel
                         .update(target, appointment)
                         .always((function(e) {
-                            this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentUpdated"], appointment, e);
+                            this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentUpdated'], appointment, e);
                         }).bind(this))
                         .fail(function() {
                             performFailAction();
@@ -2783,7 +2783,7 @@ const Scheduler = Widget.inherit({
         if(typeUtils.isPromise(actionOptions.cancel)) {
             when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
                 if(!typeUtils.isDefined(cancel)) {
-                    cancel = actionOptions.cancel.state() === "rejected";
+                    cancel = actionOptions.cancel.state() === 'rejected';
                 }
 
                 callback.call(this, cancel);
@@ -2795,18 +2795,18 @@ const Scheduler = Widget.inherit({
 
     _expandAllDayPanel: function(appointment) {
         if(!this._isAllDayExpanded(this.getFilteredItems()) && this.appointmentTakesAllDay(appointment)) {
-            this._workSpace.option("allDayExpanded", true);
+            this._workSpace.option('allDayExpanded', true);
         }
     },
 
     _executeActionWhenOperationIsCompleted: function(action, appointment, e) {
         var options = { appointmentData: appointment },
-            isError = e && e.name === "Error";
+            isError = e && e.name === 'Error';
 
         if(isError) {
             options.error = e;
         } else {
-            if(this._popup && this._popup.option("visible")) {
+            if(this._popup && this._popup.option('visible')) {
                 this._popup.hide();
             }
         }
@@ -2824,7 +2824,7 @@ const Scheduler = Widget.inherit({
 
         if(!typeUtils.isDefined(showButtons) || showButtons) {
             toolbarItems = this._getPopupToolbarItems();
-            showCloseButton = this._popup.initialOption("showCloseButton");
+            showCloseButton = this._popup.initialOption('showCloseButton');
         }
 
         this._popup.option({
@@ -2883,18 +2883,18 @@ const Scheduler = Widget.inherit({
     },
 
     appointmentTakesAllDay: function(appointment) {
-        return this._appointmentModel.appointmentTakesAllDay(appointment, this._getCurrentViewOption("startDayHour"), this._getCurrentViewOption("endDayHour"));
+        return this._appointmentModel.appointmentTakesAllDay(appointment, this._getCurrentViewOption('startDayHour'), this._getCurrentViewOption('endDayHour'));
     },
 
     _getStartDate: function(appointment, skipNormalize) {
-        var startDate = this.fire("getField", "startDate", appointment),
-            startDateTimeZone = this.fire("getField", "startDateTimeZone", appointment);
+        var startDate = this.fire('getField', 'startDate', appointment),
+            startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
 
         startDate = dateUtils.makeDate(startDate);
 
-        startDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
+        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
 
-        !skipNormalize && this.fire("updateAppointmentStartDate", {
+        !skipNormalize && this.fire('updateAppointmentStartDate', {
             startDate: startDate,
             appointment: appointment,
             callback: function(result) {
@@ -2906,17 +2906,17 @@ const Scheduler = Widget.inherit({
     },
 
     _getEndDate: function(appointment, skipNormalize) {
-        var endDate = this.fire("getField", "endDate", appointment);
+        var endDate = this.fire('getField', 'endDate', appointment);
 
         if(endDate) {
 
-            var endDateTimeZone = this.fire("getField", "endDateTimeZone", appointment);
+            var endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
 
             endDate = dateUtils.makeDate(endDate);
 
-            endDate = this.fire("convertDateByTimezone", endDate, endDateTimeZone);
+            endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
 
-            !skipNormalize && this.fire("updateAppointmentEndDate", {
+            !skipNormalize && this.fire('updateAppointmentEndDate', {
                 endDate: endDate,
                 callback: function(result) {
                     endDate = result;
@@ -2927,13 +2927,13 @@ const Scheduler = Widget.inherit({
     },
 
     _getRecurrenceException: function(appointmentData) {
-        var recurrenceException = this.fire("getField", "recurrenceException", appointmentData);
+        var recurrenceException = this.fire('getField', 'recurrenceException', appointmentData);
 
         if(recurrenceException) {
-            var startDate = this.fire("getField", "startDate", appointmentData),
-                exceptions = recurrenceException.split(","),
-                startDateTimeZone = this.fire("getField", "startDateTimeZone", appointmentData),
-                exceptionByStartDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
+            var startDate = this.fire('getField', 'startDate', appointmentData),
+                exceptions = recurrenceException.split(','),
+                startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData),
+                exceptionByStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
 
             for(var i = 0; i < exceptions.length; i++) {
                 exceptions[i] = this._convertRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
@@ -2946,9 +2946,9 @@ const Scheduler = Widget.inherit({
     },
 
     _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
-        exception = exception.replace(/\s/g, "");
+        exception = exception.replace(/\s/g, '');
         exception = dateSerialization.deserializeDate(exception);
-        exception = this.fire("convertDateByTimezone", exception, startDateTimeZone);
+        exception = this.fire('convertDateByTimezone', exception, startDateTimeZone);
         exception.setHours(exceptionByStartDate.getHours());
         exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
         return exception;
@@ -2957,7 +2957,7 @@ const Scheduler = Widget.inherit({
     recurrenceEditorVisibilityChanged: function(visible) {
         if(this._appointmentForm) {
             this._appointmentForm.$element()
-                .find("." + RECURRENCE_EDITOR_ITEM_CLASS)
+                .find('.' + RECURRENCE_EDITOR_ITEM_CLASS)
                 .toggleClass(RECURRENCE_EDITOR_OPENED_ITEM_CLASS, visible);
         }
     },
@@ -2969,13 +2969,13 @@ const Scheduler = Widget.inherit({
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
-        var startDate = new Date(this.fire("getField", "startDate", appointment)),
-            endDate = new Date(this.fire("getField", "endDate", appointment)),
-            startDateTimeZone = this.fire("getField", "startDateTimeZone", appointment),
-            endDateTimeZone = this.fire("getField", "endDateTimeZone", appointment);
+        var startDate = new Date(this.fire('getField', 'startDate', appointment)),
+            endDate = new Date(this.fire('getField', 'endDate', appointment)),
+            startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment),
+            endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
 
-        startDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
-        endDate = this.fire("convertDateByTimezone", endDate, endDateTimeZone);
+        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
+        endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
 
         if(day.getTime() === endDate.getTime()) {
             return startDate.getTime() === endDate.getTime();
@@ -2998,7 +2998,7 @@ const Scheduler = Widget.inherit({
     },
 
     setTargetedAppointmentResources: function(targetedAppointment, appointmentElement, appointmentIndex) {
-        var groups = this._getCurrentViewOption("groups");
+        var groups = this._getCurrentViewOption('groups');
 
         if(groups && groups.length) {
             var resourcesSetter = this._resourcesManager._dataAccessors.setter,
@@ -3017,7 +3017,7 @@ const Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    var setting = $(appointmentElement).data("dxAppointmentSettings") || {}; // TODO: in the future, necessary refactor the engine of determining groups
+                    var setting = $(appointmentElement).data('dxAppointmentSettings') || {}; // TODO: in the future, necessary refactor the engine of determining groups
                     return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
                 };
 
@@ -3057,7 +3057,7 @@ const Scheduler = Widget.inherit({
         */
     showAppointmentPopup: function(appointmentData, createNewAppointment, currentAppointmentData) {
         var singleAppointment = currentAppointmentData || this._getSingleAppointmentData(appointmentData, { skipDateCalculation: true });
-        var startDate = this.fire("getField", "startDate", currentAppointmentData || appointmentData);
+        var startDate = this.fire('getField', 'startDate', currentAppointmentData || appointmentData);
 
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
             if(createNewAppointment || typeUtils.isEmptyObject(appointmentData)) {
@@ -3076,7 +3076,7 @@ const Scheduler = Widget.inherit({
         * @param1 saveChanges:Boolean|undefined
         */
     hideAppointmentPopup: function(saveChanges) {
-        if(!this._popup || !this._popup.option("visible")) {
+        if(!this._popup || !this._popup.option('visible')) {
             return;
         }
 
@@ -3133,10 +3133,10 @@ const Scheduler = Widget.inherit({
         * @param1 appointment:Object
         */
     addAppointment: function(appointment) {
-        var text = this.fire("getField", "text", appointment);
+        var text = this.fire('getField', 'text', appointment);
 
         if(!text) {
-            this.fire("setField", "text", appointment, "");
+            this.fire('setField', 'text', appointment, '');
         }
 
         this._convertDatesByTimezoneBack(true, appointment);
@@ -3146,16 +3146,16 @@ const Scheduler = Widget.inherit({
             cancel: false
         };
 
-        this._actions["onAppointmentAdding"](addingOptions);
+        this._actions['onAppointmentAdding'](addingOptions);
 
         this._processActionResult(addingOptions, function(canceled) {
             if(!canceled) {
                 this._expandAllDayPanel(appointment);
                 this._appointmentModel.add(appointment, {
                     value: this._getTimezoneOffsetByOption(),
-                    clientOffset: this.fire("getClientTimezoneOffset")
+                    clientOffset: this.fire('getClientTimezoneOffset')
                 }).always((function(e) {
-                    this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentAdded"], appointment, e);
+                    this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], appointment, e);
                 }).bind(this));
             }
         });
@@ -3182,12 +3182,12 @@ const Scheduler = Widget.inherit({
             cancel: false
         };
 
-        this._actions["onAppointmentDeleting"](deletingOptions);
+        this._actions['onAppointmentDeleting'](deletingOptions);
 
         this._processActionResult(deletingOptions, function(canceled) {
             if(!canceled) {
                 this._appointmentModel.remove(appointment).always((function(e) {
-                    this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentDeleted"], appointment, e);
+                    this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentDeleted'], appointment, e);
                 }).bind(this));
             }
         });
@@ -3202,7 +3202,7 @@ const Scheduler = Widget.inherit({
     },
 
     getFirstDayOfWeek: function() {
-        return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
+        return typeUtils.isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
     }
 
     /**
@@ -3213,6 +3213,6 @@ const Scheduler = Widget.inherit({
 
 }).include(AsyncTemplateMixin, DataHelperMixin);
 
-registerComponent("dxScheduler", Scheduler);
+registerComponent('dxScheduler', Scheduler);
 
 module.exports = Scheduler;

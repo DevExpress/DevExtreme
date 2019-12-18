@@ -1,23 +1,23 @@
-import $ from "jquery";
+import $ from 'jquery';
 import helper from '../../helpers/dataGridExportTestsHelper.js';
-import { isDefined } from "../../../js/core/utils/type.js";
+import { isDefined } from '../../../js/core/utils/type.js';
 
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("DataGrid customizeExcelCell tests", {
+QUnit.module('DataGrid customizeExcelCell tests', {
     beforeEach: helper.beforeEachTest,
     afterEach: helper.afterEachTest,
 });
 
-QUnit.test("Check e.component", function(assert) {
+QUnit.test('Check e.component', function(assert) {
     let onCellPreparedComponent;
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: 'string' }],
+            columns: [{ dataField: 'field1', dataType: 'string' }],
             dataSource: [{ field1: 'str1' }],
             showColumnHeaders: false,
             onCellPrepared: e => onCellPreparedComponent = e.component,
@@ -31,7 +31,7 @@ QUnit.test("Check e.component", function(assert) {
     );
 });
 
-QUnit.test("Change alignment", function(assert) {
+QUnit.test('Change alignment', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -54,7 +54,7 @@ QUnit.test("Change alignment", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: [{ dataField: 'field1' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -72,7 +72,7 @@ QUnit.test("Change alignment", function(assert) {
     );
 });
 
-QUnit.test("Set alignment to null", function(assert) {
+QUnit.test('Set alignment to null', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -95,7 +95,7 @@ QUnit.test("Set alignment to null", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: [{ dataField: 'field1' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -112,11 +112,11 @@ QUnit.test("Set alignment to null", function(assert) {
     );
 });
 
-QUnit.test("Check default alignment by column.alignment", function(assert) {
+QUnit.test('Check default alignment by column.alignment', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", alignment: 'center' }],
+            columns: [{ dataField: 'field1', alignment: 'center' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: true,
             export: {
@@ -129,11 +129,11 @@ QUnit.test("Check default alignment by column.alignment", function(assert) {
     );
 });
 
-QUnit.test("Check default wrapTextEnabled by DataGrid.wordWrapEnabled if there is no export.excelWrapTextEnabled value", function(assert) {
+QUnit.test('Check default wrapTextEnabled by DataGrid.wordWrapEnabled if there is no export.excelWrapTextEnabled value', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [ "field1" ],
+            columns: [ 'field1' ],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: true,
             wordWrapEnabled: true,
@@ -146,11 +146,11 @@ QUnit.test("Check default wrapTextEnabled by DataGrid.wordWrapEnabled if there i
     );
 });
 
-QUnit.test("Check default wrapTextEnabled from export.excelWrapTextEnabled value (it overrides wordWrapEnabled value)", function(assert) {
+QUnit.test('Check default wrapTextEnabled from export.excelWrapTextEnabled value (it overrides wordWrapEnabled value)', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [ "field1" ],
+            columns: [ 'field1' ],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: true,
             wordWrapEnabled: false,
@@ -164,7 +164,7 @@ QUnit.test("Check default wrapTextEnabled from export.excelWrapTextEnabled value
     );
 });
 
-QUnit.test("Change fill", function(assert) {
+QUnit.test('Change fill', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
@@ -208,7 +208,7 @@ QUnit.test("Change fill", function(assert) {
     );
 });
 
-QUnit.test("Set fill to null", function(assert) {
+QUnit.test('Set fill to null', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -244,7 +244,7 @@ QUnit.test("Set fill to null", function(assert) {
     );
 });
 
-QUnit.test("Check default fill", function(assert) {
+QUnit.test('Check default fill', function(assert) {
     helper.runGeneralTest(
         assert,
         {
@@ -262,7 +262,7 @@ QUnit.test("Check default fill", function(assert) {
     );
 });
 
-QUnit.test("Change font", function(assert) {
+QUnit.test('Change font', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -292,7 +292,7 @@ QUnit.test("Change font", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "f1" }],
+            columns: [{ dataField: 'f1' }],
             dataSource: [{ f1: 42 }, { f1: 43 }],
             showColumnHeaders: false,
             export: {
@@ -313,7 +313,7 @@ QUnit.test("Change font", function(assert) {
     );
 });
 
-QUnit.test("Change font: create new font", function(assert) {
+QUnit.test('Change font: create new font', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -341,7 +341,7 @@ QUnit.test("Change font: create new font", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: [{ dataField: 'field1' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -366,7 +366,7 @@ QUnit.test("Change font: create new font", function(assert) {
     );
 });
 
-QUnit.test("Set font to null", function(assert) {
+QUnit.test('Set font to null', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<fonts count="2">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -393,7 +393,7 @@ QUnit.test("Set font to null", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: [{ dataField: 'field1' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -406,11 +406,11 @@ QUnit.test("Set font to null", function(assert) {
     );
 });
 
-QUnit.test("Check default font", function(assert) {
+QUnit.test('Check default font', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: [{ dataField: 'field1' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -429,11 +429,11 @@ QUnit.test("Check default font", function(assert) {
     );
 });
 
-QUnit.test("Check default header font", function(assert) {
+QUnit.test('Check default header font', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: [{ dataField: 'field1' }],
             dataSource: [],
             showColumnHeaders: true,
             export: {
@@ -452,7 +452,7 @@ QUnit.test("Check default header font", function(assert) {
     );
 });
 
-QUnit.test("Change number format", function(assert) {
+QUnit.test('Change number format', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="3">' +
         '<numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" />' +
@@ -523,7 +523,7 @@ QUnit.test("Change number format", function(assert) {
     );
 });
 
-QUnit.test("Set number format to null", function(assert) {
+QUnit.test('Set number format to null', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -560,7 +560,7 @@ QUnit.test("Set number format to null", function(assert) {
     );
 });
 
-QUnit.test("Set number format for Number column to '0000', '0.00', '0.00E+00'", function(assert) {
+QUnit.test('Set number format for Number column to \'0000\', \'0.00\', \'0.00E+00\'', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="3">' +
         '<numFmt numFmtId="165" formatCode="0000" />' +
@@ -611,7 +611,7 @@ QUnit.test("Set number format for Number column to '0000', '0.00', '0.00E+00'", 
     );
 });
 
-QUnit.test("Set number format for Number column when column.format is function", function(assert) {
+QUnit.test('Set number format for Number column when column.format is function', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1">' +
         '<numFmt numFmtId="165" formatCode="#,##0" />' +
@@ -653,7 +653,7 @@ QUnit.test("Set number format for Number column when column.format is function",
     );
 });
 
-QUnit.test("Set number format for Number column when column.format is 'decimal'", function(assert) {
+QUnit.test('Set number format for Number column when column.format is \'decimal\'', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="2">' +
         '<numFmt numFmtId="165" formatCode="#" />' +
@@ -679,7 +679,7 @@ QUnit.test("Set number format for Number column when column.format is 'decimal'"
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "f1", dataType: "number", format: "decimal" }],
+            columns: [{ dataField: 'f1', dataType: 'number', format: 'decimal' }],
             dataSource: [{ f1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -694,7 +694,7 @@ QUnit.test("Set number format for Number column when column.format is 'decimal'"
     );
 });
 
-QUnit.test("Set number format for Date column cell when column.format is function", function(assert) {
+QUnit.test('Set number format for Date column cell when column.format is function', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1">' +
         '<numFmt numFmtId="165" formatCode="dd/mmm/yyyy hh:mm" />' +
@@ -736,11 +736,11 @@ QUnit.test("Set number format for Date column cell when column.format is functio
     );
 });
 
-QUnit.test("Check default number format for String column", function(assert) {
+QUnit.test('Check default number format for String column', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: 'string' }],
+            columns: [{ dataField: 'field1', dataType: 'string' }],
             dataSource: [{ field1: 'str1' }],
             showColumnHeaders: false,
             export: {
@@ -752,11 +752,11 @@ QUnit.test("Check default number format for String column", function(assert) {
     );
 });
 
-QUnit.test("Check default number format for Number column", function(assert) {
+QUnit.test('Check default number format for Number column', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: 'number' }],
+            columns: [{ dataField: 'field1', dataType: 'number' }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
@@ -768,11 +768,11 @@ QUnit.test("Check default number format for Number column", function(assert) {
     );
 });
 
-QUnit.test("Check default number format for Date column", function(assert) {
+QUnit.test('Check default number format for Date column', function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: 'date' }],
+            columns: [{ dataField: 'field1', dataType: 'date' }],
             dataSource: [{ field1: new Date(2019, 0, 18) }],
             showColumnHeaders: false,
             export: {
@@ -784,7 +784,7 @@ QUnit.test("Check default number format for Date column", function(assert) {
     );
 });
 
-QUnit.test("Check default number format for [Number|Number|Date] columns", function(assert) {
+QUnit.test('Check default number format for [Number|Number|Date] columns', function(assert) {
     helper.runGeneralTest(
         assert,
         {
@@ -808,44 +808,44 @@ QUnit.test("Check default number format for [Number|Number|Date] columns", funct
     );
 });
 
-QUnit.test("Check arguments for data cells", function(assert) {
+QUnit.test('Check arguments for data cells', function(assert) {
     const configurations = [
         {
-            dataType: "number",
+            dataType: 'number',
             gridCellValues: [undefined, null, 0, 1, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
-            callbackValues: [undefined, null, 0, 1, "NaN", "Infinity", "-Infinity"]
+            callbackValues: [undefined, null, 0, 1, 'NaN', 'Infinity', '-Infinity']
         },
         {
-            dataType: "string",
-            gridCellValues: [undefined, null, "", "s"],
-            callbackValues: [undefined, undefined, undefined, "s"],
+            dataType: 'string',
+            gridCellValues: [undefined, null, '', 's'],
+            callbackValues: [undefined, undefined, undefined, 's'],
         },
         {
-            dataType: "date",
+            dataType: 'date',
             gridCellValues: [undefined, null, new Date(2018, 11, 1)],
             callbackValues: [undefined, undefined, new Date(2018, 11, 1)],
         },
         {
-            dataType: "datetime",
+            dataType: 'datetime',
             gridCellValues: [undefined, null, new Date(2018, 11, 1, 16, 10)],
             callbackValues: [undefined, undefined, new Date(2018, 11, 1, 16, 10)]
         },
         {
-            dataType: "boolean",
+            dataType: 'boolean',
             gridCellValues: [undefined, null, false, true],
-            callbackValues: [undefined, undefined, "false", "true"]
+            callbackValues: [undefined, undefined, 'false', 'true']
         },
         {
-            dataType: "lookup",
+            dataType: 'lookup',
             gridCellValues: [undefined, null, 1],
-            callbackValues: [undefined, undefined, "name1"],
+            callbackValues: [undefined, undefined, 'name1'],
             lookup: {
                 dataSource: {
-                    store: { type: "array", data: [{ id: 1, name: "name1" }] },
-                    key: "id"
+                    store: { type: 'array', data: [{ id: 1, name: 'name1' }] },
+                    key: 'id'
                 },
-                valueExpr: "id",
-                displayExpr: "name"
+                valueExpr: 'id',
+                displayExpr: 'name'
             }
         }
     ];
@@ -880,10 +880,10 @@ QUnit.test("Check arguments for data cells", function(assert) {
     });
 });
 
-QUnit.test("Check arguments for header", function(assert) {
+QUnit.test('Check arguments for header', function(assert) {
     helper.runGeneralTest(assert,
         {
-            columns: [{ dataField: "f1", dataType: "number" }],
+            columns: [{ dataField: 'f1', dataType: 'number' }],
             dataSource: [],
         },
         {
@@ -894,17 +894,17 @@ QUnit.test("Check arguments for header", function(assert) {
     );
 });
 
-QUnit.test("Check arguments for bands", function(assert) {
+QUnit.test('Check arguments for bands', function(assert) {
     const ds = [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number" },
+                { dataField: 'f1', dataType: 'number' },
                 {
                     caption: 'Band1',
                     columns: [
-                        { dataField: "f2", dataType: "number" },
-                        { dataField: "f3", dataType: "number" },
+                        { dataField: 'f2', dataType: 'number' },
+                        { dataField: 'f3', dataType: 'number' },
                     ]
                 }
             ],
@@ -912,12 +912,12 @@ QUnit.test("Check arguments for bands", function(assert) {
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F1", gridCell: { rowType: 'header', column: grid.columnOption(0) } },
-                { value: "Band1", gridCell: { rowType: 'header', column: grid.columnOption(1) } },
+                { value: 'F1', gridCell: { rowType: 'header', column: grid.columnOption(0) } },
+                { value: 'Band1', gridCell: { rowType: 'header', column: grid.columnOption(1) } },
                 { value: undefined, gridCell: { rowType: 'header', column: grid.columnOption(1) } },
                 { value: undefined, gridCell: { rowType: 'header', column: grid.columnOption(0) } },
-                { value: "F2", gridCell: { rowType: 'header', column: grid.columnOption(2) } },
-                { value: "F3", gridCell: { rowType: 'header', column: grid.columnOption(3) } },
+                { value: 'F2', gridCell: { rowType: 'header', column: grid.columnOption(2) } },
+                { value: 'F3', gridCell: { rowType: 'header', column: grid.columnOption(3) } },
                 { value: 1001, gridCell: { rowType: 'data', column: grid.columnOption(0), data: ds[0], value: ds[0].f1 } },
                 { value: 1002, gridCell: { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f2 } },
                 { value: 1003, gridCell: { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f3 } }
@@ -926,186 +926,186 @@ QUnit.test("Check arguments for bands", function(assert) {
     );
 });
 
-QUnit.test("Check arguments for groupping", function(assert) {
+QUnit.test('Check arguments for groupping', function(assert) {
     const ds = [{ f1: 1001, f2: 1002, f3: 1003 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" },
-                { dataField: "f3", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' }
             ],
             dataSource: ds,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F2", gridCell: { rowType: "header", column: grid.columnOption(1) } },
-                { value: "F3", gridCell: { rowType: "header", column: grid.columnOption(2) } },
-                { value: "F1: " + ds[0].f1, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(2), value: undefined } },
-                { value: ds[0].f2, gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } },
-                { value: ds[0].f3, gridCell: { rowType: "data", column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } }
+                { value: 'F2', gridCell: { rowType: 'header', column: grid.columnOption(1) } },
+                { value: 'F3', gridCell: { rowType: 'header', column: grid.columnOption(2) } },
+                { value: 'F1: ' + ds[0].f1, gridCell: { rowType: 'group', groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { rowType: 'group', groupIndex: 0, column: grid.columnOption(2), value: undefined } },
+                { value: ds[0].f2, gridCell: { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } },
+                { value: ds[0].f3, gridCell: { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for groupping with null", function(assert) {
+QUnit.test('Check arguments for groupping with null', function(assert) {
     const ds = [{ f1: null, f2: 1002, f3: 1003 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" },
-                { dataField: "f3", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' }
             ],
             dataSource: ds,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F2" }, { value: "F3" },
-                { value: "F1: ", gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(2) } },
+                { value: 'F2' }, { value: 'F3' },
+                { value: 'F1: ', gridCell: { groupIndex: 0, rowType: 'group', column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { groupIndex: 0, rowType: 'group', column: grid.columnOption(2) } },
                 { value: ds[0].f2 }, { value: ds[0].f3 }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for groupping 2 level", function(assert) {
+QUnit.test('Check arguments for groupping 2 level', function(assert) {
     const ds = [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number", groupIndex: 1 },
-                { dataField: "f3", dataType: "number" },
-                { dataField: "f4", dataType: "number" },
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number', groupIndex: 1 },
+                { dataField: 'f3', dataType: 'number' },
+                { dataField: 'f4', dataType: 'number' },
             ],
             dataSource: ds,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F3", gridCell: { rowType: "header", column: grid.columnOption(2) } },
-                { value: "F4", gridCell: { rowType: "header", column: grid.columnOption(3) } },
-                { value: "F1: " + ds[0].f1, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(3), value: undefined } },
-                { value: "F2: " + ds[0].f2, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(1), value: ds[0].f2 } },
-                { value: undefined, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(3), value: undefined } },
-                { value: ds[0].f3, gridCell: { rowType: "data", column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } },
-                { value: ds[0].f4, gridCell: { rowType: "data", column: grid.columnOption(3), data: ds[0], value: ds[0].f4 } }
+                { value: 'F3', gridCell: { rowType: 'header', column: grid.columnOption(2) } },
+                { value: 'F4', gridCell: { rowType: 'header', column: grid.columnOption(3) } },
+                { value: 'F1: ' + ds[0].f1, gridCell: { groupIndex: 0, rowType: 'group', column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { groupIndex: 0, rowType: 'group', column: grid.columnOption(3), value: undefined } },
+                { value: 'F2: ' + ds[0].f2, gridCell: { groupIndex: 1, rowType: 'group', column: grid.columnOption(1), value: ds[0].f2 } },
+                { value: undefined, gridCell: { groupIndex: 1, rowType: 'group', column: grid.columnOption(3), value: undefined } },
+                { value: ds[0].f3, gridCell: { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } },
+                { value: ds[0].f4, gridCell: { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f4 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for groupping 3 level & 2 column", function(assert) {
+QUnit.test('Check arguments for groupping 3 level & 2 column', function(assert) {
     const ds = [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004, f5: 1005 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number", groupIndex: 1 },
-                { dataField: "f3", dataType: "number", groupIndex: 2 },
-                { dataField: "f4", dataType: "number" },
-                { dataField: "f5", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number', groupIndex: 1 },
+                { dataField: 'f3', dataType: 'number', groupIndex: 2 },
+                { dataField: 'f4', dataType: 'number' },
+                { dataField: 'f5', dataType: 'number' }
             ],
             dataSource: ds
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F4", gridCell: { rowType: "header", column: grid.columnOption(3) } },
-                { value: "F5", gridCell: { rowType: "header", column: grid.columnOption(4) } },
-                { value: "F1: " + ds[0].f1, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(4), value: undefined } },
-                { value: "F2: " + ds[0].f2, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(1), value: ds[0].f2 } },
-                { value: undefined, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(4), value: undefined } },
-                { value: "F3: " + ds[0].f3, gridCell: { groupIndex: 2, rowType: "group", column: grid.columnOption(2), value: ds[0].f3 } },
-                { value: undefined, gridCell: { groupIndex: 2, rowType: "group", column: grid.columnOption(4), value: undefined } },
-                { value: ds[0].f4, gridCell: { rowType: "data", column: grid.columnOption(3), data: ds[0], value: ds[0].f4 } },
-                { value: ds[0].f5, gridCell: { rowType: "data", column: grid.columnOption(4), data: ds[0], value: ds[0].f5 } }
+                { value: 'F4', gridCell: { rowType: 'header', column: grid.columnOption(3) } },
+                { value: 'F5', gridCell: { rowType: 'header', column: grid.columnOption(4) } },
+                { value: 'F1: ' + ds[0].f1, gridCell: { groupIndex: 0, rowType: 'group', column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { groupIndex: 0, rowType: 'group', column: grid.columnOption(4), value: undefined } },
+                { value: 'F2: ' + ds[0].f2, gridCell: { groupIndex: 1, rowType: 'group', column: grid.columnOption(1), value: ds[0].f2 } },
+                { value: undefined, gridCell: { groupIndex: 1, rowType: 'group', column: grid.columnOption(4), value: undefined } },
+                { value: 'F3: ' + ds[0].f3, gridCell: { groupIndex: 2, rowType: 'group', column: grid.columnOption(2), value: ds[0].f3 } },
+                { value: undefined, gridCell: { groupIndex: 2, rowType: 'group', column: grid.columnOption(4), value: undefined } },
+                { value: ds[0].f4, gridCell: { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f4 } },
+                { value: ds[0].f5, gridCell: { rowType: 'data', column: grid.columnOption(4), data: ds[0], value: ds[0].f5 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for group summary", function(assert) {
+QUnit.test('Check arguments for group summary', function(assert) {
     const ds = [{ f1: 1001, f2: 1002 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ name: 1, column: "f2", summaryType: "max" }]
+                groupItems: [{ name: 1, column: 'f2', summaryType: 'max' }]
             },
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F2", gridCell: { rowType: "header", column: grid.columnOption(1) } },
-                { value: `F1: ${ds[0].f1 } (Max of F2 is ${ds[0].f2})`, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
-                { value: ds[0].f2, gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } }
+                { value: 'F2', gridCell: { rowType: 'header', column: grid.columnOption(1) } },
+                { value: `F1: ${ds[0].f1 } (Max of F2 is ${ds[0].f2})`, gridCell: { rowType: 'group', groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
+                { value: ds[0].f2, gridCell: { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for group summary with null", function(assert) {
+QUnit.test('Check arguments for group summary with null', function(assert) {
     const ds = [{ f1: 1001, f2: null }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ name: 1, column: "f2", summaryType: "max", skipEmptyValues: false }]
+                groupItems: [{ name: 1, column: 'f2', summaryType: 'max', skipEmptyValues: false }]
             },
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F2" },
-                { value: `F1: ${ds[0].f1 } (Max of F2 is )`, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
+                { value: 'F2' },
+                { value: `F1: ${ds[0].f1 } (Max of F2 is )`, gridCell: { rowType: 'group', groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
                 { value: ds[0].f2 }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for group summary with alignByColumn", function(assert) {
+QUnit.test('Check arguments for group summary with alignByColumn', function(assert) {
     const ds = [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" },
-                { dataField: "f3", dataType: "number" },
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' },
             ],
             dataSource: ds,
             summary: {
                 groupItems: [
-                    { name: 1, column: "f3", summaryType: "max", alignByColumn: true },
-                    { name: 2, column: "f3", summaryType: "count", alignByColumn: true }
+                    { name: 1, column: 'f3', summaryType: 'max', alignByColumn: true },
+                    { name: 2, column: 'f3', summaryType: 'count', alignByColumn: true }
                 ]
             },
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F2", gridCell: { column: grid.columnOption(1), rowType: "header" } },
-                { value: "F3", gridCell: { column: grid.columnOption(2), rowType: "header" } },
-                { value: `F1: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "group", groupIndex: 0, value: ds[0].f1 } },
-                { value: `Max: ${ds[0].f3} \n Count: 1`, gridCell: { column: grid.columnOption(2), rowType: "group", groupIndex: 0, groupSummaryItems: [{ name: 1, value: ds[0].f3 }, { name: 2, value: 1 }] } },
-                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
-                { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } }
+                { value: 'F2', gridCell: { column: grid.columnOption(1), rowType: 'header' } },
+                { value: 'F3', gridCell: { column: grid.columnOption(2), rowType: 'header' } },
+                { value: `F1: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: 'group', groupIndex: 0, value: ds[0].f1 } },
+                { value: `Max: ${ds[0].f3} \n Count: 1`, gridCell: { column: grid.columnOption(2), rowType: 'group', groupIndex: 0, groupSummaryItems: [{ name: 1, value: ds[0].f3 }, { name: 2, value: 1 }] } },
+                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 } },
+                { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for group summary with showInGroupFooter", function(assert) {
+QUnit.test('Check arguments for group summary with showInGroupFooter', function(assert) {
     const ds = [
         { f1: 1001, f2: 1002, f3: 1003, f4: 1004 },
         { f1: 2001, f2: 2002, f3: 2003, f4: 2004 },
@@ -1113,140 +1113,140 @@ QUnit.test("Check arguments for group summary with showInGroupFooter", function(
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" },
-                { dataField: "f3", dataType: "number" },
-                { dataField: "f4", dataType: "number" },
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' },
+                { dataField: 'f4', dataType: 'number' },
             ],
             dataSource: ds,
             summary: {
                 groupItems: [
-                    { column: "f3", summaryType: "max", showInGroupFooter: true },
-                    { column: "f4", summaryType: "max", showInGroupFooter: true }
+                    { column: 'f3', summaryType: 'max', showInGroupFooter: true },
+                    { column: 'f4', summaryType: 'max', showInGroupFooter: true }
                 ]
             },
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "F2", gridCell: { column: grid.columnOption(1), rowType: "header" } },
-                { value: "F3", gridCell: { column: grid.columnOption(2), rowType: "header" } },
-                { value: "F4", gridCell: { column: grid.columnOption(3), rowType: "header" } },
-                { value: "F1: " + ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "group", groupIndex: 0, value: ds[0].f1 } },
-                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "group", groupIndex: 0, value: undefined } },
-                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "group", groupIndex: 0, value: undefined } },
-                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
-                { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } },
-                { value: ds[0].f4, gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[0], value: ds[0].f4 } },
-                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: "groupFooter", groupIndex: undefined, value: undefined } },
-                { value: "Max: " + ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "groupFooter", value: ds[0].f3 } },
-                { value: "Max: " + ds[0].f4, gridCell: { column: grid.columnOption(3), rowType: "groupFooter", value: ds[0].f4 } },
-                { value: "F1: " + ds[1].f1, gridCell: { column: grid.columnOption(0), rowType: "group", groupIndex: 0, value: ds[1].f1 } },
-                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "group", groupIndex: 0, value: undefined } },
-                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "group", groupIndex: 0, value: undefined } },
-                { value: ds[1].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[1], value: ds[1].f2 } },
-                { value: ds[1].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[1], value: ds[1].f3 } },
-                { value: ds[1].f4, gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[1], value: ds[1].f4 } },
-                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: "groupFooter", groupIndex: undefined, value: undefined } },
-                { value: "Max: " + ds[1].f3, gridCell: { column: grid.columnOption(2), rowType: "groupFooter", value: ds[1].f3 } },
-                { value: "Max: " + ds[1].f4, gridCell: { column: grid.columnOption(3), rowType: "groupFooter", value: ds[1].f4 } },
+                { value: 'F2', gridCell: { column: grid.columnOption(1), rowType: 'header' } },
+                { value: 'F3', gridCell: { column: grid.columnOption(2), rowType: 'header' } },
+                { value: 'F4', gridCell: { column: grid.columnOption(3), rowType: 'header' } },
+                { value: 'F1: ' + ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: 'group', groupIndex: 0, value: ds[0].f1 } },
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: 'group', groupIndex: 0, value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: 'group', groupIndex: 0, value: undefined } },
+                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 } },
+                { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 } },
+                { value: ds[0].f4, gridCell: { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 } },
+                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: 'groupFooter', groupIndex: undefined, value: undefined } },
+                { value: 'Max: ' + ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: 'groupFooter', value: ds[0].f3 } },
+                { value: 'Max: ' + ds[0].f4, gridCell: { column: grid.columnOption(3), rowType: 'groupFooter', value: ds[0].f4 } },
+                { value: 'F1: ' + ds[1].f1, gridCell: { column: grid.columnOption(0), rowType: 'group', groupIndex: 0, value: ds[1].f1 } },
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: 'group', groupIndex: 0, value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: 'group', groupIndex: 0, value: undefined } },
+                { value: ds[1].f2, gridCell: { column: grid.columnOption(1), rowType: 'data', data: ds[1], value: ds[1].f2 } },
+                { value: ds[1].f3, gridCell: { column: grid.columnOption(2), rowType: 'data', data: ds[1], value: ds[1].f3 } },
+                { value: ds[1].f4, gridCell: { column: grid.columnOption(3), rowType: 'data', data: ds[1], value: ds[1].f4 } },
+                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: 'groupFooter', groupIndex: undefined, value: undefined } },
+                { value: 'Max: ' + ds[1].f3, gridCell: { column: grid.columnOption(2), rowType: 'groupFooter', value: ds[1].f3 } },
+                { value: 'Max: ' + ds[1].f4, gridCell: { column: grid.columnOption(3), rowType: 'groupFooter', value: ds[1].f4 } },
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for total summary", function(assert) {
+QUnit.test('Check arguments for total summary', function(assert) {
     const ds = [{ f1: 1001, f2: 1002 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number" },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: ds,
             summary: {
-                totalItems: [{ name: 1, column: "f1", summaryType: "max" }]
+                totalItems: [{ name: 1, column: 'f1', summaryType: 'max' }]
             },
             showColumnHeaders: false,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
-                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
-                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
-                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: undefined, totalSummaryItemName: undefined } }
+                { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: ds[0].f1 } },
+                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 } },
+                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: 'totalFooter', value: ds[0].f1, totalSummaryItemName: 1 } },
+                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: 'totalFooter', value: undefined, totalSummaryItemName: undefined } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for total summary (2 totals for 1 column)", function(assert) {
+QUnit.test('Check arguments for total summary (2 totals for 1 column)', function(assert) {
     const ds = [{ f1: 1001 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number" },
+                { dataField: 'f1', dataType: 'number' },
             ],
             dataSource: ds,
             summary: {
                 totalItems: [
-                    { name: 1, column: "f1", summaryType: "max" },
-                    { name: 2, column: "f1", summaryType: "count" }
+                    { name: 1, column: 'f1', summaryType: 'max' },
+                    { name: 2, column: 'f1', summaryType: 'count' }
                 ]
             },
             showColumnHeaders: false,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
-                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
-                { value: `Count: 1`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: 1, totalSummaryItemName: 2 } }
+                { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: ds[0].f1 } },
+                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: 'totalFooter', value: ds[0].f1, totalSummaryItemName: 1 } },
+                { value: 'Count: 1', gridCell: { column: grid.columnOption(0), rowType: 'totalFooter', value: 1, totalSummaryItemName: 2 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for total summary with showInColumn", function(assert) {
+QUnit.test('Check arguments for total summary with showInColumn', function(assert) {
     const ds = [{ f1: 1001, f2: 1002 }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number" },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: ds,
             summary: {
-                totalItems: [{ column: "f1", summaryType: "max", showInColumn: "f2" }]
+                totalItems: [{ column: 'f1', summaryType: 'max', showInColumn: 'f2' }]
             },
             showColumnHeaders: false,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
-                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
-                { value: undefined, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: undefined } },
-                { value: `Max of F1 is ${ds[0].f1}`, gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f1 } }
+                { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: ds[0].f1 } },
+                { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 } },
+                { value: undefined, gridCell: { column: grid.columnOption(0), rowType: 'totalFooter', value: undefined } },
+                { value: `Max of F1 is ${ds[0].f1}`, gridCell: { column: grid.columnOption(1), rowType: 'totalFooter', value: ds[0].f1 } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for total summary with null/undefined", function(assert) {
+QUnit.test('Check arguments for total summary with null/undefined', function(assert) {
     const ds = [{ f1: null, f2: undefined, f3: null, f4: undefined }];
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number" },
-                { dataField: "f2", dataType: "number" },
-                { dataField: "f3", dataType: "number" },
-                { dataField: "f4", dataType: "number" },
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' },
+                { dataField: 'f4', dataType: 'number' },
             ],
             dataSource: ds,
             summary: {
                 totalItems: [
-                    { name: 1, column: "f1", summaryType: "max", skipEmptyValues: false },
-                    { name: 2, column: "f2", summaryType: "max", skipEmptyValues: false },
-                    { name: 3, column: "f3", summaryType: "max", skipEmptyValues: true },
-                    { name: 4, column: "f4", summaryType: "max", skipEmptyValues: true }
+                    { name: 1, column: 'f1', summaryType: 'max', skipEmptyValues: false },
+                    { name: 2, column: 'f2', summaryType: 'max', skipEmptyValues: false },
+                    { name: 3, column: 'f3', summaryType: 'max', skipEmptyValues: true },
+                    { name: 4, column: 'f4', summaryType: 'max', skipEmptyValues: true }
                 ]
             },
             showColumnHeaders: false,
@@ -1254,35 +1254,35 @@ QUnit.test("Check arguments for total summary with null/undefined", function(ass
         {
             getExpectedArgs: (grid) => [
                 { value: null }, { value: undefined }, { value: null }, { value: undefined },
-                { value: "Max: ", gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
-                { value: "Max: ", gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f2, totalSummaryItemName: 2 } },
-                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "totalFooter", value: undefined } },
-                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "totalFooter", value: undefined } }
+                { value: 'Max: ', gridCell: { column: grid.columnOption(0), rowType: 'totalFooter', value: ds[0].f1, totalSummaryItemName: 1 } },
+                { value: 'Max: ', gridCell: { column: grid.columnOption(1), rowType: 'totalFooter', value: ds[0].f2, totalSummaryItemName: 2 } },
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: 'totalFooter', value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: 'totalFooter', value: undefined } }
             ]
         }
     );
 });
 
-QUnit.test("Check arguments for changes from customizeExportData", function(assert) {
-    const ds = [{ f1: "f1" }];
+QUnit.test('Check arguments for changes from customizeExportData', function(assert) {
+    const ds = [{ f1: 'f1' }];
     helper.runGeneralTest(assert,
         {
-            columns: [{ dataField: "f1", dataType: "string" }],
+            columns: [{ dataField: 'f1', dataType: 'string' }],
             dataSource: ds,
             customizeExportData: (columns, rows) => {
-                rows[0].values[0] += "+";
+                rows[0].values[0] += '+';
             },
             showColumnHeaders: false,
         },
         {
             getExpectedArgs: (grid) => [
-                { value: "f1+", gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: "f1+" } }
+                { value: 'f1+', gridCell: { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: 'f1+' } }
             ]
         }
     );
 });
 
-QUnit.test("Check customizeExcelCell(args): change horizontalAlignment depending on data row values", function(assert) {
+QUnit.test('Check customizeExcelCell(args): change horizontalAlignment depending on data row values', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -1325,7 +1325,7 @@ QUnit.test("Check customizeExcelCell(args): change horizontalAlignment depending
     );
 });
 
-QUnit.test("Change string undefined to string", function(assert) {
+QUnit.test('Change string undefined to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1355,7 +1355,7 @@ QUnit.test("Change string undefined to string", function(assert) {
     );
 });
 
-QUnit.test("Change string undefined to number", function(assert) {
+QUnit.test('Change string undefined to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1383,7 +1383,7 @@ QUnit.test("Change string undefined to number", function(assert) {
     );
 });
 
-QUnit.test("Change string null to string", function(assert) {
+QUnit.test('Change string null to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1413,7 +1413,7 @@ QUnit.test("Change string null to string", function(assert) {
     );
 });
 
-QUnit.test("Change string null to number", function(assert) {
+QUnit.test('Change string null to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1441,7 +1441,7 @@ QUnit.test("Change string null to number", function(assert) {
     );
 });
 
-QUnit.test("Change string value to undefined", function(assert) {
+QUnit.test('Change string value to undefined', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1471,7 +1471,7 @@ QUnit.test("Change string value to undefined", function(assert) {
     );
 });
 
-QUnit.test("Change string value to null", function(assert) {
+QUnit.test('Change string value to null', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1501,7 +1501,7 @@ QUnit.test("Change string value to null", function(assert) {
     );
 });
 
-QUnit.test("Change string value to string", function(assert) {
+QUnit.test('Change string value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1532,7 +1532,7 @@ QUnit.test("Change string value to string", function(assert) {
     );
 });
 
-QUnit.test("Change string value to number", function(assert) {
+QUnit.test('Change string value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1562,7 +1562,7 @@ QUnit.test("Change string value to number", function(assert) {
     );
 });
 
-QUnit.test("Change string value to Number.NaN", function(assert) {
+QUnit.test('Change string value to Number.NaN', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1593,7 +1593,7 @@ QUnit.test("Change string value to Number.NaN", function(assert) {
     );
 });
 
-QUnit.test("Change string value to Number.POSITIVE_INFINITY", function(assert) {
+QUnit.test('Change string value to Number.POSITIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1624,7 +1624,7 @@ QUnit.test("Change string value to Number.POSITIVE_INFINITY", function(assert) {
     );
 });
 
-QUnit.test("Change string value to Number.NEGATIVE_INFINITY", function(assert) {
+QUnit.test('Change string value to Number.NEGATIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1655,7 +1655,7 @@ QUnit.test("Change string value to Number.NEGATIVE_INFINITY", function(assert) {
     );
 });
 
-QUnit.test("Change string value to date", function(assert) {
+QUnit.test('Change string value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1685,7 +1685,7 @@ QUnit.test("Change string value to date", function(assert) {
     );
 });
 
-QUnit.test("Change string value to boolean", function(assert) {
+QUnit.test('Change string value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1715,7 +1715,7 @@ QUnit.test("Change string value to boolean", function(assert) {
     );
 });
 
-QUnit.test("Change number undefined to number", function(assert) {
+QUnit.test('Change number undefined to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1743,7 +1743,7 @@ QUnit.test("Change number undefined to number", function(assert) {
     );
 });
 
-QUnit.test("Change number null to number", function(assert) {
+QUnit.test('Change number null to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1771,7 +1771,7 @@ QUnit.test("Change number null to number", function(assert) {
     );
 });
 
-QUnit.test("Change number value to undefined", function(assert) {
+QUnit.test('Change number value to undefined', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1799,7 +1799,7 @@ QUnit.test("Change number value to undefined", function(assert) {
     );
 });
 
-QUnit.test("Change number value to null", function(assert) {
+QUnit.test('Change number value to null', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1827,7 +1827,7 @@ QUnit.test("Change number value to null", function(assert) {
     );
 });
 
-QUnit.test("Change number value to string", function(assert) {
+QUnit.test('Change number value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1857,7 +1857,7 @@ QUnit.test("Change number value to string", function(assert) {
     );
 });
 
-QUnit.test("Change number value to number", function(assert) {
+QUnit.test('Change number value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1885,7 +1885,7 @@ QUnit.test("Change number value to number", function(assert) {
     );
 });
 
-QUnit.test("Change number value to number.NaN", function(assert) {
+QUnit.test('Change number value to number.NaN', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1915,7 +1915,7 @@ QUnit.test("Change number value to number.NaN", function(assert) {
     );
 });
 
-QUnit.test("Change number value to number.POSITIVE_INFINITY", function(assert) {
+QUnit.test('Change number value to number.POSITIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1945,7 +1945,7 @@ QUnit.test("Change number value to number.POSITIVE_INFINITY", function(assert) {
     );
 });
 
-QUnit.test("Change number value to number.NEGATIVE_INFINITY", function(assert) {
+QUnit.test('Change number value to number.NEGATIVE_INFINITY', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1975,7 +1975,7 @@ QUnit.test("Change number value to number.NEGATIVE_INFINITY", function(assert) {
     );
 });
 
-QUnit.test("Change number value to date", function(assert) {
+QUnit.test('Change number value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2003,7 +2003,7 @@ QUnit.test("Change number value to date", function(assert) {
     );
 });
 
-QUnit.test("Change number value to boolean", function(assert) {
+QUnit.test('Change number value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2031,7 +2031,7 @@ QUnit.test("Change number value to boolean", function(assert) {
     );
 });
 
-QUnit.test("Change date undefined to date", function(assert) {
+QUnit.test('Change date undefined to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2061,7 +2061,7 @@ QUnit.test("Change date undefined to date", function(assert) {
     );
 });
 
-QUnit.test("Change date null to date", function(assert) {
+QUnit.test('Change date null to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2091,7 +2091,7 @@ QUnit.test("Change date null to date", function(assert) {
     );
 });
 
-QUnit.test("Change date value to string", function(assert) {
+QUnit.test('Change date value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2123,7 +2123,7 @@ QUnit.test("Change date value to string", function(assert) {
     );
 });
 
-QUnit.test("Change date value to undefined", function(assert) {
+QUnit.test('Change date value to undefined', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2153,7 +2153,7 @@ QUnit.test("Change date value to undefined", function(assert) {
     );
 });
 
-QUnit.test("Change date value to null", function(assert) {
+QUnit.test('Change date value to null', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2183,7 +2183,7 @@ QUnit.test("Change date value to null", function(assert) {
     );
 });
 
-QUnit.test("Change date value to number", function(assert) {
+QUnit.test('Change date value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2213,7 +2213,7 @@ QUnit.test("Change date value to number", function(assert) {
     );
 });
 
-QUnit.test("Change date value to date", function(assert) {
+QUnit.test('Change date value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2251,7 +2251,7 @@ QUnit.test("Change date value to date", function(assert) {
     );
 });
 
-QUnit.test("Change date value to boolean", function(assert) {
+QUnit.test('Change date value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2281,7 +2281,7 @@ QUnit.test("Change date value to boolean", function(assert) {
     );
 });
 
-QUnit.test("Change boolean value to string", function(assert) {
+QUnit.test('Change boolean value to string', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2313,7 +2313,7 @@ QUnit.test("Change boolean value to string", function(assert) {
     );
 });
 
-QUnit.test("Change boolean value to number", function(assert) {
+QUnit.test('Change boolean value to number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2344,7 +2344,7 @@ QUnit.test("Change boolean value to number", function(assert) {
     );
 });
 
-QUnit.test("Change boolean value to date", function(assert) {
+QUnit.test('Change boolean value to date', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2375,7 +2375,7 @@ QUnit.test("Change boolean value to date", function(assert) {
     );
 });
 
-QUnit.test("Change boolean value to boolean", function(assert) {
+QUnit.test('Change boolean value to boolean', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -2412,7 +2412,7 @@ QUnit.test("Change boolean value to boolean", function(assert) {
     );
 });
 
-QUnit.test("Change group cell value", function(assert) {
+QUnit.test('Change group cell value', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2437,8 +2437,8 @@ QUnit.test("Change group cell value", function(assert) {
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: [{ f1: 1001, f2: 1002 }],
             showColumnHeaders: false,
@@ -2446,7 +2446,7 @@ QUnit.test("Change group cell value", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    if(e.gridCell !== undefined && e.gridCell.rowType === "group" && e.gridCell.column.dataField === "f1") {
+                    if(e.gridCell !== undefined && e.gridCell.rowType === 'group' && e.gridCell.column.dataField === 'f1') {
                         e.value = e.gridCell.value + 10;
                     }
                 },
@@ -2456,7 +2456,7 @@ QUnit.test("Change group cell value", function(assert) {
     );
 });
 
-QUnit.test("Change group summary cell value with alignByColumn", function(assert) {
+QUnit.test('Change group summary cell value with alignByColumn', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2484,9 +2484,9 @@ QUnit.test("Change group summary cell value with alignByColumn", function(assert
         assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" },
-                { dataField: "f3", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' }
             ],
             dataSource: [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004 }],
             summary: {
@@ -2500,7 +2500,7 @@ QUnit.test("Change group summary cell value with alignByColumn", function(assert
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    if(e.gridCell !== undefined && e.gridCell.rowType === "group" && e.gridCell.column.dataField === "f3") {
+                    if(e.gridCell !== undefined && e.gridCell.rowType === 'group' && e.gridCell.column.dataField === 'f3') {
                         e.value = e.gridCell.groupSummaryItems.map(item => `${item.name}: ${item.value}`).join('\n');
                     }
                 },
@@ -2510,7 +2510,7 @@ QUnit.test("Change group summary cell value with alignByColumn", function(assert
     );
 });
 
-QUnit.test("Change group cell with group summary items value", function(assert) {
+QUnit.test('Change group cell with group summary items value', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2536,8 +2536,8 @@ QUnit.test("Change group cell with group summary items value", function(assert) 
     helper.runGeneralTest(assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number", groupIndex: 0 },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number', groupIndex: 0 },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004 }],
             summary: {
@@ -2551,9 +2551,9 @@ QUnit.test("Change group cell with group summary items value", function(assert) 
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    if(e.gridCell !== undefined && e.gridCell.rowType === "group" && e.gridCell.column.dataField === "f1") {
+                    if(e.gridCell !== undefined && e.gridCell.rowType === 'group' && e.gridCell.column.dataField === 'f1') {
                         const groupSummaryText = e.gridCell.groupSummaryItems.map(item => `${item.name}: ${item.value}`).join(', ');
-                        e.value = "Total: " + e.gridCell.value + " (" + groupSummaryText + ")";
+                        e.value = 'Total: ' + e.gridCell.value + ' (' + groupSummaryText + ')';
                     }
                 },
             }
@@ -2562,7 +2562,7 @@ QUnit.test("Change group cell with group summary items value", function(assert) 
     );
 });
 
-QUnit.test("Change total summary cell value", function(assert) {
+QUnit.test('Change total summary cell value', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -2593,14 +2593,14 @@ QUnit.test("Change total summary cell value", function(assert) {
         assert,
         {
             columns: [
-                { dataField: "f1", dataType: "number" },
-                { dataField: "f2", dataType: "number" }
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' }
             ],
             dataSource: [{ f1: 1001, f2: 1002 }],
             summary: {
                 totalItems: [
-                    { name: 'total1', column: "f2", summaryType: "max" },
-                    { name: 'total2', column: "f2", summaryType: "count" }
+                    { name: 'total1', column: 'f2', summaryType: 'max' },
+                    { name: 'total2', column: 'f2', summaryType: 'count' }
                 ]
             },
             showColumnHeaders: false,
@@ -2608,8 +2608,8 @@ QUnit.test("Change total summary cell value", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    if(e.gridCell !== undefined && e.gridCell.rowType === "totalFooter" && e.gridCell.column.dataField === "f2") {
-                        e.value = e.gridCell.totalSummaryItemName + ": " + e.gridCell.value;
+                    if(e.gridCell !== undefined && e.gridCell.rowType === 'totalFooter' && e.gridCell.column.dataField === 'f2') {
+                        e.value = e.gridCell.totalSummaryItemName + ': ' + e.gridCell.value;
                     }
                 }
             }

@@ -1,8 +1,8 @@
-import Class from "../../core/class";
-import { compileGetter } from "../../core/utils/data";
-import { isFunction } from "../../core/utils/type";
-import { errors } from "../../data/errors";
-import { aggregators } from "../../data/utils";
+import Class from '../../core/class';
+import { compileGetter } from '../../core/utils/data';
+import { isFunction } from '../../core/utils/type';
+import { errors } from '../../data/errors';
+import { aggregators } from '../../data/utils';
 
 function depthFirstSearch(i, depth, root, callback) {
     var j = 0;
@@ -21,7 +21,7 @@ function depthFirstSearch(i, depth, root, callback) {
 function map(array, callback) {
     var i, result;
 
-    if("map" in array) {
+    if('map' in array) {
         return array.map(callback);
     }
 
@@ -34,7 +34,7 @@ function map(array, callback) {
 }
 
 function isEmpty(x) {
-    return (x !== x) || (x === "") || (x === null) || (x === undefined);
+    return (x !== x) || (x === '') || (x === null) || (x === undefined);
 }
 
 function isCount(aggregator) {
@@ -43,16 +43,16 @@ function isCount(aggregator) {
 
 function normalizeAggregate(aggregate) {
     var selector = compileGetter(aggregate.selector),
-        skipEmptyValues = ("skipEmptyValues" in aggregate)
+        skipEmptyValues = ('skipEmptyValues' in aggregate)
             ? aggregate.skipEmptyValues
             : true,
         aggregator = aggregate.aggregator;
 
 
-    if(typeof aggregator === "string") {
+    if(typeof aggregator === 'string') {
         aggregator = aggregators[aggregator];
         if(!aggregator) {
-            throw errors.Error("E4001", aggregate.aggregator);
+            throw errors.Error('E4001', aggregate.aggregator);
         }
     }
 
@@ -151,7 +151,7 @@ module.exports = Class.inherit({
     _seed: function(aggregates, groupIndex) {
         return map(aggregates, function(aggregate) {
             var aggregator = aggregate.aggregator,
-                seed = "seed" in aggregator
+                seed = 'seed' in aggregator
                     ? (isFunction(aggregator.seed) ? aggregator.seed(groupIndex) : aggregator.seed)
                     : NaN;
 

@@ -1,3 +1,3 @@
-var MemorizedCallbacks = require("../../core/memorized_callbacks");
+var MemorizedCallbacks = require('../../core/memorized_callbacks');
 
 module.exports = new MemorizedCallbacks();

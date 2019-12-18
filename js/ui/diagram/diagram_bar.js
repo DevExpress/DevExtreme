@@ -1,4 +1,4 @@
-import { getDiagram } from "./diagram_importer";
+import { getDiagram } from './diagram_importer';
 
 class DiagramBar {
     constructor(owner) {
@@ -7,11 +7,11 @@ class DiagramBar {
         this._owner = owner;
     }
     raiseBarCommandExecuted(key, parameter) {
-        this.onChanged.raise("NotifyBarCommandExecuted", parseInt(key), parameter);
+        this.onChanged.raise('NotifyBarCommandExecuted', parseInt(key), parameter);
     }
 
     getCommandKeys() { // IBar.getCommandKeys(): DiagramCommand[]
-        throw "Not Implemented";
+        throw 'Not Implemented';
     }
     setItemValue(key, value) { // IBar.setItemValue(key: DiagramCommand, value: any)
     }

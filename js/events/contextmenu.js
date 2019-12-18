@@ -1,18 +1,18 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    support = require("../core/utils/support"),
-    devices = require("../core/devices"),
-    Class = require("../core/class"),
-    registerEvent = require("./core/event_registrator"),
-    eventUtils = require("./utils"),
-    holdEvent = require("./hold");
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    support = require('../core/utils/support'),
+    devices = require('../core/devices'),
+    Class = require('../core/class'),
+    registerEvent = require('./core/event_registrator'),
+    eventUtils = require('./utils'),
+    holdEvent = require('./hold');
 
-var CONTEXTMENU_NAMESPACE = "dxContexMenu",
+var CONTEXTMENU_NAMESPACE = 'dxContexMenu',
 
-    CONTEXTMENU_NAMESPACED_EVENT_NAME = eventUtils.addNamespace("contextmenu", CONTEXTMENU_NAMESPACE),
+    CONTEXTMENU_NAMESPACED_EVENT_NAME = eventUtils.addNamespace('contextmenu', CONTEXTMENU_NAMESPACE),
     HOLD_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(holdEvent.name, CONTEXTMENU_NAMESPACE),
 
-    CONTEXTMENU_EVENT_NAME = "dxcontextmenu";
+    CONTEXTMENU_EVENT_NAME = 'dxcontextmenu';
 
 
 var ContextMenu = Class.inherit({
@@ -47,7 +47,7 @@ var ContextMenu = Class.inherit({
     },
 
     teardown: function(element) {
-        eventsEngine.off(element, "." + CONTEXTMENU_NAMESPACE);
+        eventsEngine.off(element, '.' + CONTEXTMENU_NAMESPACE);
     }
 
 });

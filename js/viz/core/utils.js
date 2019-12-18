@@ -1,9 +1,9 @@
-var noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    adjust = require("../../core/utils/math").adjust,
-    dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
+var noop = require('../../core/utils/common').noop,
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    adjust = require('../../core/utils/math').adjust,
+    dateToMilliseconds = require('../../core/utils/date').dateToMilliseconds,
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
     isExponential = typeUtils.isExponential,
@@ -126,7 +126,7 @@ var roundValue = function(value, precision) {
 };
 
 var getPower = function(value) {
-    return value.toExponential().split("e")[1];
+    return value.toExponential().split('e')[1];
 };
 
 function map(array, callback) {
@@ -252,10 +252,10 @@ extend(exports, {
         each(options || {}, function(key, value) {
             if(/^(cursor|opacity)$/i.test(key)) {
                 // TODO check other properties, add tests
-            } else if(key === "color") {
-                key = "fill";
+            } else if(key === 'color') {
+                key = 'fill';
             } else {
-                key = "font-" + key;
+                key = 'font-' + key;
             }
             fontOptions[key] = value;
         });
@@ -354,8 +354,8 @@ extend(exports, {
             padding = panes.padding || 10,
             paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom,
             oneWeight = (paneSpace - padding * (panes.length - 1)) / weightSum,
-            startName = rotated ? "left" : "top",
-            endName = rotated ? "right" : "bottom";
+            startName = rotated ? 'left' : 'top',
+            endName = rotated ? 'right' : 'bottom';
         each(panes, function(_, pane) {
             var calcLength = _round(pane.weight * oneWeight);
             pane.canvas = pane.canvas || {};
@@ -420,13 +420,13 @@ function convertVisualRangeObject(visualRange, convertToVisualRange) {
 
 function getAddFunction(range, correctZeroLevel) {
     // T170398
-    if(range.dataType === "datetime") {
+    if(range.dataType === 'datetime') {
         return function(rangeValue, marginValue, sign = 1) {
             return new Date(rangeValue.getTime() + sign * marginValue);
         };
     }
 
-    if(range.axisType === "logarithmic") {
+    if(range.axisType === 'logarithmic') {
         return function(rangeValue, marginValue, sign = 1) {
             var log = getLog(rangeValue, range.base) + sign * marginValue;
             return raiseTo(log, range.base);
@@ -442,7 +442,7 @@ function getAddFunction(range, correctZeroLevel) {
 function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     const minDefined = typeUtils.isDefined(visualRange.startValue);
     const maxDefined = typeUtils.isDefined(visualRange.endValue);
-    const nonDiscrete = options.axisType !== "discrete";
+    const nonDiscrete = options.axisType !== 'discrete';
 
     dataRange = dataRange || wholeRange;
 
@@ -462,7 +462,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
 
     if(isDefined(rangeLength)) {
         if(nonDiscrete) {
-            if(options.dataType === "datetime" && !isNumber(rangeLength)) {
+            if(options.dataType === 'datetime' && !isNumber(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
             }
 

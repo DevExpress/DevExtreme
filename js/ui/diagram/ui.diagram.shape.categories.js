@@ -1,4 +1,4 @@
-import { getDiagram } from "./diagram_importer";
+import { getDiagram } from './diagram_importer';
 
 const ShapeCategories = {
     load: function(showCustomShapes) {

@@ -1,31 +1,31 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
-import DiagramPanel from "./diagram.panel";
-import Accordion from "../accordion";
-import ScrollView from "../scroll_view";
-import ShapeCategories from "./ui.diagram.shape.categories";
-import { Deferred } from "../../core/utils/deferred";
+import DiagramPanel from './diagram.panel';
+import Accordion from '../accordion';
+import ScrollView from '../scroll_view';
+import ShapeCategories from './ui.diagram.shape.categories';
+import { Deferred } from '../../core/utils/deferred';
 
-const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
+const DIAGRAM_LEFT_PANEL_CLASS = 'dx-diagram-left-panel';
 
 class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._dataSources = this.option("dataSources") || {};
-        this._customShapes = this.option("customShapes") || [];
-        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
-        this._onDataToolboxRenderedAction = this._createActionByOption("onDataToolboxRendered");
+        this._dataSources = this.option('dataSources') || {};
+        this._customShapes = this.option('customShapes') || [];
+        this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered');
+        this._onDataToolboxRenderedAction = this._createActionByOption('onDataToolboxRendered');
     }
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_LEFT_PANEL_CLASS);
-        const $scrollViewWrapper = $("<div>")
+        const $scrollViewWrapper = $('<div>')
             .appendTo(this.$element());
 
         this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
 
-        const $accordion = $("<div>")
+        const $accordion = $('<div>')
             .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
@@ -61,7 +61,7 @@ class DiagramLeftPanel extends DiagramPanel {
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
-            displayExpr: "title",
+            displayExpr: 'title',
             dataSource: data,
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element, data),
             onContentReady: (e) => {
@@ -85,11 +85,11 @@ class DiagramLeftPanel extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "customShapes":
+            case 'customShapes':
                 this._customShapes = args.value || [];
                 this._invalidate();
                 break;
-            case "dataSources":
+            case 'dataSources':
                 this._dataSources = args.value || {};
                 this._invalidate();
                 break;

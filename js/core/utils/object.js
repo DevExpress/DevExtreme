@@ -1,5 +1,5 @@
-var typeUtils = require("./type"),
-    variableWrapper = require("./variable_wrapper");
+var typeUtils = require('./type'),
+    variableWrapper = require('./variable_wrapper');
 
 var clone = (function() {
     function Clone() { }
@@ -55,7 +55,7 @@ var deepExtendArraySafe = function(target, changes, extendComplexObject, assignB
         prevValue = target[name];
         newValue = changes[name];
 
-        if(name === "__proto__" || target === newValue) {
+        if(name === '__proto__' || target === newValue) {
             continue;
         }
 

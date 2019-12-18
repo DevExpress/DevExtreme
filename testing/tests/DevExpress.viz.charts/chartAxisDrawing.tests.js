@@ -1,23 +1,23 @@
 /* global createTestContainer */
 
-import $ from "jquery";
-import vizMocks from "../../helpers/vizMocks.js";
-import dxChart from "viz/chart";
-import axisModule from "viz/axes/base_axis";
-import scrollBarModule from "viz/chart_components/scroll_bar";
-import legendModule from "viz/components/legend";
-import titleModule from "viz/core/title";
-import rendererModule from "viz/core/renderers/renderer";
-import multiAxesSynchronizer from "viz/chart_components/multi_axes_synchronizer";
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import dxChart from 'viz/chart';
+import axisModule from 'viz/axes/base_axis';
+import scrollBarModule from 'viz/chart_components/scroll_bar';
+import legendModule from 'viz/components/legend';
+import titleModule from 'viz/core/title';
+import rendererModule from 'viz/core/renderers/renderer';
+import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
 
-$('<div id="test-container">').appendTo("#qunit-fixture");
+$('<div id="test-container">').appendTo('#qunit-fixture');
 
 rendererModule.Renderer = sinon.stub();
 
 var environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
-        this.container = createTestContainer("#test-container", { width: 800, height: 600 });
+        this.container = createTestContainer('#test-container', { width: 800, height: 600 });
         rendererModule.Renderer.onCall(0).returns(this.renderer);
         rendererModule.Renderer.onCall(1).returns(new vizMocks.Renderer());
         rendererModule.Renderer.onCall(2).returns(new vizMocks.Renderer());
@@ -28,7 +28,7 @@ var environment = {
                 getMargins: sinon.stub()
             };
 
-        this.scrollBarStub = sinon.stub(scrollBarModule, "ScrollBar", function(renderer, group) {
+        this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar', function(renderer, group) {
             var scrollBar = new originalScrollBar(renderer, group),
                 originalUpdateSize = scrollBar.updateSize;
 
@@ -44,7 +44,7 @@ var environment = {
         var axisIndex = 0,
             originalAxis = axisModule.Axis;
 
-        this.axisStub = sinon.stub(axisModule, "Axis", function(renderingSettings) {
+        this.axisStub = sinon.stub(axisModule, 'Axis', function(renderingSettings) {
             var axis = new originalAxis(renderingSettings);
 
             for(var stubName in axesStubs[axisIndex]) {
@@ -57,11 +57,11 @@ var environment = {
         this.title = new vizMocks.Title();
         this.legend = new vizMocks.Legend();
 
-        this.legendStub = sinon.stub(legendModule, "Legend", () =>{
+        this.legendStub = sinon.stub(legendModule, 'Legend', () =>{
             return this.legend;
         });
 
-        this.titleStub = sinon.stub(titleModule, "Title", () => {
+        this.titleStub = sinon.stub(titleModule, 'Title', () => {
             return this.title;
         });
     },
@@ -102,9 +102,9 @@ function createAxisStubs() {
     return axisFakes;
 }
 
-QUnit.module("Canvas processing", environment);
+QUnit.module('Canvas processing', environment);
 
-QUnit.test("Pass canvas to axis' estimateMargins", function(assert) {
+QUnit.test('Pass canvas to axis\' estimateMargins', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -131,7 +131,7 @@ QUnit.test("Pass canvas to axis' estimateMargins", function(assert) {
     });
 });
 
-QUnit.test("Take into account max margin on each side of pane", function(assert) {
+QUnit.test('Take into account max margin on each side of pane', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -166,9 +166,9 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, "draw valAxis");
+    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis');
 
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
@@ -182,7 +182,7 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     // 4. update horizontal axes size
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
@@ -196,7 +196,7 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis canvas");
+    }, 'updateSize argAxis canvas');
 
     // 5. update vertical axes size
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
@@ -210,10 +210,10 @@ QUnit.test("Take into account max margin on each side of pane", function(assert)
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis canvas");
+    }, 'updateSize valAxis canvas');
 });
 
-QUnit.test("Multiple value axes - margins are accumulated on left and right", function(assert) {
+QUnit.test('Multiple value axes - margins are accumulated on left and right', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs();
@@ -234,12 +234,12 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
 
     new dxChart(this.container, {
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -260,9 +260,9 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_inner canvas");
+    }, 'createTicks valAxis_inner canvas');
 
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, "draw valAxis_inner");
+    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis_inner');
 
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
@@ -276,9 +276,9 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_outer canvas");
+    }, 'createTicks valAxis_outer canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_outer canvas");
+    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_outer canvas');
 
     // 3. draw horizontal axes
     // argAxis
@@ -293,7 +293,7 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     // 4. update horizontal axes size
     // argAxis
@@ -308,7 +308,7 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis canvas");
+    }, 'updateSize argAxis canvas');
 
     // 5. update vertical axes size
     // valAxis_inner
@@ -323,7 +323,7 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_inner canvas");
+    }, 'updateSize valAxis_inner canvas');
 
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
@@ -337,10 +337,10 @@ QUnit.test("Multiple value axes - margins are accumulated on left and right", fu
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_outer canvas");
+    }, 'updateSize valAxis_outer canvas');
 });
 
-QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bottom", function(assert) {
+QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bottom', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs();
@@ -366,12 +366,12 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
     new dxChart(this.container, {
         rotated: true,
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -392,7 +392,7 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     // 3. draw horizontal axes
     // valAxis_inner
@@ -407,9 +407,9 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_inner canvas");
+    }, 'createTicks valAxis_inner canvas');
 
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, "draw valAxis_inner");
+    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis_inner');
 
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
@@ -423,9 +423,9 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_outer canvas");
+    }, 'createTicks valAxis_outer canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_outer");
+    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_outer');
 
     // 4. update horizontal axes size
     // valAxis_inner
@@ -440,7 +440,7 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_inner canvas");
+    }, 'updateSize valAxis_inner canvas');
 
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
@@ -454,7 +454,7 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_outer canvas");
+    }, 'updateSize valAxis_outer canvas');
 
     // 5. update vertical axes size
     // argAxis
@@ -469,10 +469,10 @@ QUnit.test("Rotated. Multiple value axes - margins are accumulated on top and bo
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis canvas");
+    }, 'updateSize argAxis canvas');
 });
 
-QUnit.test("Multiple panes - individual margins on top and bottom, common margins on left and right", function(assert) {
+QUnit.test('Multiple panes - individual margins on top and bottom, common margins on left and right', function(assert) {
     var argAxis_topPane = createAxisStubs(),
         argAxis_bottomPane = createAxisStubs(),
         valAxis_bottomPane_right_inner = createAxisStubs(),
@@ -509,20 +509,20 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
 
     new dxChart(this.container, {
         panes: [
-            { name: "top" },
-            { name: "bottom" }
+            { name: 'top' },
+            { name: 'bottom' }
         ],
         valueAxis: [
-            { name: "valAxis_bottomPane_right_inner", position: "right" },
-            { name: "valAxis_bottomPane_right_outer", position: "right" },
-            { name: "valAxis_topPane_left_inner" },
-            { name: "valAxis_topPane_left_outer" }
+            { name: 'valAxis_bottomPane_right_inner', position: 'right' },
+            { name: 'valAxis_bottomPane_right_outer', position: 'right' },
+            { name: 'valAxis_topPane_left_inner' },
+            { name: 'valAxis_topPane_left_outer' }
         ],
         series: [
-            { pane: "bottom", axis: "valAxis_bottomPane_right_inner" },
-            { pane: "bottom", axis: "valAxis_bottomPane_right_outer" },
-            { pane: "top", axis: "valAxis_topPane_left_inner" },
-            { pane: "top", axis: "valAxis_topPane_left_outer" }
+            { pane: 'bottom', axis: 'valAxis_bottomPane_right_inner' },
+            { pane: 'bottom', axis: 'valAxis_bottomPane_right_outer' },
+            { pane: 'top', axis: 'valAxis_topPane_left_inner' },
+            { pane: 'top', axis: 'valAxis_topPane_left_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -543,9 +543,9 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_bottomPane_right_inner canvas");
+    }, 'createTicks valAxis_bottomPane_right_inner canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_bottomPane_right_inner canvas");
+    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_bottomPane_right_inner canvas');
 
     // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
@@ -559,9 +559,9 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_bottomPane_right_outer canvas");
+    }, 'createTicks valAxis_bottomPane_right_outer canvas');
 
-    assert.equal(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], false, "draw valAxis_bottomPane_right_outer canvas");
+    assert.equal(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], false, 'draw valAxis_bottomPane_right_outer canvas');
 
     // valAxis_topPane_left_inner
     assert.deepEqual(this.axisStub.getCall(4).returnValue.createTicks_test_arg, {
@@ -575,9 +575,9 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "createTicks valAxis_topPane_left_inner canvas");
+    }, 'createTicks valAxis_topPane_left_inner canvas');
 
-    assert.equal(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], false, "draw valAxis_topPane_left_inner canvas");
+    assert.equal(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], false, 'draw valAxis_topPane_left_inner canvas');
 
     // valAxis_topPane_left_outer
     assert.deepEqual(this.axisStub.getCall(5).returnValue.createTicks_test_arg, {
@@ -591,9 +591,9 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "createTicks valAxis_topPane_left_outer canvas");
+    }, 'createTicks valAxis_topPane_left_outer canvas');
 
-    assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, "draw valAxis_topPane_left_outer canvas");
+    assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, 'draw valAxis_topPane_left_outer canvas');
 
     // 3. draw horizontal axes
     // argAxis_topPane
@@ -608,7 +608,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "draw argAxis_topPane canvas");
+    }, 'draw argAxis_topPane canvas');
 
     // argAxis_bottomPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.draw_test_arg, {
@@ -622,7 +622,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis_bottomPane canvas");
+    }, 'draw argAxis_bottomPane canvas');
 
     // 4. update horizontal axes size
     // argAxis_topPane
@@ -637,7 +637,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "updateSize argAxis_topPane canvas");
+    }, 'updateSize argAxis_topPane canvas');
 
     // argAxis_bottomPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
@@ -651,7 +651,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis_bottomPane canvas");
+    }, 'updateSize argAxis_bottomPane canvas');
 
     // 5. update vertical axes size
     // valAxis_bottomPane_right_inner
@@ -666,7 +666,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_bottomPane_right_inner canvas");
+    }, 'updateSize valAxis_bottomPane_right_inner canvas');
 
     // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.updateSize_test_arg, {
@@ -680,7 +680,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_bottomPane_right_outer canvas");
+    }, 'updateSize valAxis_bottomPane_right_outer canvas');
 
     // valAxis_topPane_left_inner
     assert.deepEqual(this.axisStub.getCall(4).returnValue.updateSize_test_arg, {
@@ -694,7 +694,7 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "updateSize valAxis_topPane_left_inner canvas");
+    }, 'updateSize valAxis_topPane_left_inner canvas');
 
     // valAxis_topPane_left_outer
     assert.deepEqual(this.axisStub.getCall(5).returnValue.updateSize_test_arg, {
@@ -708,10 +708,10 @@ QUnit.test("Multiple panes - individual margins on top and bottom, common margin
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "updateSize valAxis_topPane_left_outer canvas");
+    }, 'updateSize valAxis_topPane_left_outer canvas');
 });
 
-QUnit.test("Rotated. Multiple panes - individual margins on left and right, common margins on top and bottom. Rotated", function(assert) {
+QUnit.test('Rotated. Multiple panes - individual margins on left and right, common margins on top and bottom. Rotated', function(assert) {
     var argAxis_rightPane = createAxisStubs(),
         argAxis_leftPane = createAxisStubs(),
         valAxis_leftPane_top_inner = createAxisStubs(),
@@ -753,20 +753,20 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
     new dxChart(this.container, {
         rotated: true,
         panes: [
-            { name: "right" },
-            { name: "left" }
+            { name: 'right' },
+            { name: 'left' }
         ],
         valueAxis: [
-            { name: "valAxis_leftPane_top_inner", position: "top" },
-            { name: "valAxis_leftPane_top_outer", position: "top" },
-            { name: "valAxis_rightPane_bottom_inner" },
-            { name: "valAxis_rightPane_bottom_outer" }
+            { name: 'valAxis_leftPane_top_inner', position: 'top' },
+            { name: 'valAxis_leftPane_top_outer', position: 'top' },
+            { name: 'valAxis_rightPane_bottom_inner' },
+            { name: 'valAxis_rightPane_bottom_outer' }
         ],
         series: [
-            { pane: "left", axis: "valAxis_leftPane_top_inner" },
-            { pane: "left", axis: "valAxis_leftPane_top_outer" },
-            { pane: "right", axis: "valAxis_rightPane_bottom_inner" },
-            { pane: "right", axis: "valAxis_rightPane_bottom_outer" }
+            { pane: 'left', axis: 'valAxis_leftPane_top_inner' },
+            { pane: 'left', axis: 'valAxis_leftPane_top_outer' },
+            { pane: 'right', axis: 'valAxis_rightPane_bottom_inner' },
+            { pane: 'right', axis: 'valAxis_rightPane_bottom_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -787,7 +787,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis_leftPane canvas");
+    }, 'draw argAxis_leftPane canvas');
 
     // argAxis_rightPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.draw_test_arg, {
@@ -801,7 +801,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis_rightPane canvas");
+    }, 'draw argAxis_rightPane canvas');
 
     // 3. draw horizontal axes
     // valAxis_leftPane_top_inner
@@ -816,9 +816,9 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_leftPane_top_inner canvas");
+    }, 'createTicks valAxis_leftPane_top_inner canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, "draw valAxis_leftPane_top_inner canvas");
+    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_leftPane_top_inner canvas');
 
     // valAxis_leftPane_top_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
@@ -832,9 +832,9 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_leftPane_top_outer canvas");
+    }, 'createTicks valAxis_leftPane_top_outer canvas');
 
-    assert.equal(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], false, "draw valAxis_leftPane_top_outer canvas");
+    assert.equal(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], false, 'draw valAxis_leftPane_top_outer canvas');
 
     // valAxis_rightPane_bottom_inner
     assert.deepEqual(this.axisStub.getCall(4).returnValue.createTicks_test_arg, {
@@ -848,9 +848,9 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_rightPane_bottom_inner canvas");
+    }, 'createTicks valAxis_rightPane_bottom_inner canvas');
 
-    assert.equal(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], false, "draw valAxis_rightPane_bottom_inner canvas");
+    assert.equal(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], false, 'draw valAxis_rightPane_bottom_inner canvas');
 
     // valAxis_rightPane_bottom_outer
     assert.deepEqual(this.axisStub.getCall(5).returnValue.createTicks_test_arg, {
@@ -864,9 +864,9 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis_rightPane_bottom_outer canvas");
+    }, 'createTicks valAxis_rightPane_bottom_outer canvas');
 
-    assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, "draw valAxis_rightPane_bottom_outer canvas");
+    assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, 'draw valAxis_rightPane_bottom_outer canvas');
 
     // 4. update horizontal axes size
     // argAxis_rightPane
@@ -881,7 +881,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis_rightPane canvas");
+    }, 'updateSize argAxis_rightPane canvas');
 
     // argAxis_leftPane
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
@@ -895,7 +895,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis_leftPane canvas");
+    }, 'updateSize argAxis_leftPane canvas');
 
     // 5. update vertical axes size
     // valAxis_leftPane_top_inner
@@ -910,7 +910,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_leftPane_top_inner canvas");
+    }, 'updateSize valAxis_leftPane_top_inner canvas');
 
     // valAxis_leftPane_top_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.updateSize_test_arg, {
@@ -924,7 +924,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_leftPane_top_outer canvas");
+    }, 'updateSize valAxis_leftPane_top_outer canvas');
 
     // valAxis_rightPane_bottom_inner
     assert.deepEqual(this.axisStub.getCall(4).returnValue.updateSize_test_arg, {
@@ -938,7 +938,7 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_rightPane_bottom_inner canvas");
+    }, 'updateSize valAxis_rightPane_bottom_inner canvas');
 
     // valAxis_rightPane_bottom_outer
     assert.deepEqual(this.axisStub.getCall(5).returnValue.updateSize_test_arg, {
@@ -952,10 +952,10 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis_rightPane_bottom_outer canvas");
+    }, 'updateSize valAxis_rightPane_bottom_outer canvas');
 });
 
-QUnit.test("check call 'setInitRange'", function(assert) {
+QUnit.test('check call \'setInitRange\'', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -965,10 +965,10 @@ QUnit.test("check call 'setInitRange'", function(assert) {
 
     new dxChart(this.container, {
         valueAxis: [
-            { name: "valAxis" }
+            { name: 'valAxis' }
         ],
         series: [
-            { axis: "valAxis" }
+            { axis: 'valAxis' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -979,7 +979,7 @@ QUnit.test("check call 'setInitRange'", function(assert) {
     assert.equal(valAxis1.setInitRange.callCount, 1);
 });
 
-QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
+QUnit.test('check call \'setInitRange\'. Rotated', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -990,10 +990,10 @@ QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
     new dxChart(this.container, {
         rotated: true,
         valueAxis: [
-            { name: "valAxis" }
+            { name: 'valAxis' }
         ],
         series: [
-            { axis: "valAxis" }
+            { axis: 'valAxis' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1004,9 +1004,9 @@ QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
     assert.equal(valAxis1.setInitRange.callCount, 1);
 });
 
-QUnit.module("Shift axes", environment);
+QUnit.module('Shift axes', environment);
 
-QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is not passed directly to axis shift method", function(assert) {
+QUnit.test('Multiple axes - shift only to the right/left, multipleAxesSpacing is not passed directly to axis shift method', function(assert) {
     // NOTE
     // it is important to test 3 axes
     var argAxis = createAxisStubs(),
@@ -1033,16 +1033,16 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
 
     new dxChart(this.container, {
         valueAxis: [
-            { name: "valAxis_left_1", multipleAxesSpacing: 5 },
-            { name: "valAxis_left_2", multipleAxesSpacing: 6 },
-            { name: "valAxis_left_3", multipleAxesSpacing: 7 },
-            { name: "valAxis_right", multipleAxesSpacing: 8, position: "right" }
+            { name: 'valAxis_left_1', multipleAxesSpacing: 5 },
+            { name: 'valAxis_left_2', multipleAxesSpacing: 6 },
+            { name: 'valAxis_left_3', multipleAxesSpacing: 7 },
+            { name: 'valAxis_right', multipleAxesSpacing: 8, position: 'right' }
         ],
         series: [
-            { axis: "valAxis_left_1" },
-            { axis: "valAxis_left_2" },
-            { axis: "valAxis_left_3" },
-            { axis: "valAxis_right" }
+            { axis: 'valAxis_left_1' },
+            { axis: 'valAxis_left_2' },
+            { axis: 'valAxis_left_3' },
+            { axis: 'valAxis_right' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1056,7 +1056,7 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift argAxis");
+    }, 'shift argAxis');
 
     // 7. shift vertical axes
     // valAxis_left_1
@@ -1065,7 +1065,7 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift valAxis_left_1");
+    }, 'shift valAxis_left_1');
 
     // valAxis_left_2
     assert.deepEqual(this.axisStub.getCall(2).returnValue.shift_test_arg, {
@@ -1073,7 +1073,7 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         bottom: 0,
         left: 6,
         right: 7
-    }, "shift valAxis_left_2");
+    }, 'shift valAxis_left_2');
 
     // valAxis_left_3
     assert.deepEqual(this.axisStub.getCall(3).returnValue.shift_test_arg, {
@@ -1081,7 +1081,7 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         bottom: 0,
         left: 20,
         right: 22
-    }, "shift valAxis_left_3");
+    }, 'shift valAxis_left_3');
 
     // valAxis_right
     assert.deepEqual(this.axisStub.getCall(4).returnValue.shift_test_arg, {
@@ -1089,10 +1089,10 @@ QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is
         bottom: 0,
         left: 37,
         right: 40
-    }, "shift valAxis_right");
+    }, 'shift valAxis_right');
 });
 
-QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesSpacing is not passed directly to axis shift method", function(assert) {
+QUnit.test('Rotated. Multiple axes - shift only to the top/bottom, multipleAxesSpacing is not passed directly to axis shift method', function(assert) {
     // NOTE
     // it is important to test 3 axes
     var argAxis = createAxisStubs(),
@@ -1120,16 +1120,16 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
     new dxChart(this.container, {
         rotated: true,
         valueAxis: [
-            { name: "valAxis_bottom_1", multipleAxesSpacing: 5 },
-            { name: "valAxis_bottom_2", multipleAxesSpacing: 6 },
-            { name: "valAxis_bottom_3", multipleAxesSpacing: 7 },
-            { name: "valAxis_top", multipleAxesSpacing: 8, position: "top" }
+            { name: 'valAxis_bottom_1', multipleAxesSpacing: 5 },
+            { name: 'valAxis_bottom_2', multipleAxesSpacing: 6 },
+            { name: 'valAxis_bottom_3', multipleAxesSpacing: 7 },
+            { name: 'valAxis_top', multipleAxesSpacing: 8, position: 'top' }
         ],
         series: [
-            { axis: "valAxis_bottom_1" },
-            { axis: "valAxis_bottom_2" },
-            { axis: "valAxis_bottom_3" },
-            { axis: "valAxis_top" }
+            { axis: 'valAxis_bottom_1' },
+            { axis: 'valAxis_bottom_2' },
+            { axis: 'valAxis_bottom_3' },
+            { axis: 'valAxis_top' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1143,7 +1143,7 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift argAxis");
+    }, 'shift argAxis');
 
     // 7. shift vertical axes
     // valAxis_bottom_1
@@ -1152,7 +1152,7 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift valAxis_bottom_1");
+    }, 'shift valAxis_bottom_1');
 
     // valAxis_bottom_2
     assert.deepEqual(this.axisStub.getCall(2).returnValue.shift_test_arg, {
@@ -1160,7 +1160,7 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         bottom: 6,
         left: 0,
         right: 0
-    }, "shift valAxis_bottom_2");
+    }, 'shift valAxis_bottom_2');
 
     // valAxis_bottom_3
     assert.deepEqual(this.axisStub.getCall(3).returnValue.shift_test_arg, {
@@ -1168,7 +1168,7 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         bottom: 20,
         left: 0,
         right: 0
-    }, "shift valAxis_bottom_3");
+    }, 'shift valAxis_bottom_3');
 
     // valAxis_top
     assert.deepEqual(this.axisStub.getCall(4).returnValue.shift_test_arg, {
@@ -1176,10 +1176,10 @@ QUnit.test("Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         bottom: 37,
         left: 0,
         right: 0
-    }, "shift valAxis_top");
+    }, 'shift valAxis_top');
 });
 
-QUnit.test("Multiple panes - shift axes by panes", function(assert) {
+QUnit.test('Multiple panes - shift axes by panes', function(assert) {
     var argAxis_topPane = createAxisStubs(),
         argAxis_bottomPane = createAxisStubs(),
         valAxis_bottomPane_left = createAxisStubs(),
@@ -1214,24 +1214,24 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
 
     new dxChart(this.container, {
         panes: [
-            { name: "top" },
-            { name: "bottom" }
+            { name: 'top' },
+            { name: 'bottom' }
         ],
         valueAxis: [
-            { name: "valAxis_bottomPane_left" },
-            { name: "valAxis_bottomPane_right_inner", position: "right" },
-            { name: "valAxis_bottomPane_right_outer", position: "right" },
-            { name: "valAxis_topPane_left_inner" },
-            { name: "valAxis_topPane_left_outer" },
-            { name: "valAxis_topPane_right", position: "right" }
+            { name: 'valAxis_bottomPane_left' },
+            { name: 'valAxis_bottomPane_right_inner', position: 'right' },
+            { name: 'valAxis_bottomPane_right_outer', position: 'right' },
+            { name: 'valAxis_topPane_left_inner' },
+            { name: 'valAxis_topPane_left_outer' },
+            { name: 'valAxis_topPane_right', position: 'right' }
         ],
         series: [
-            { pane: "bottom", axis: "valAxis_bottomPane_left" },
-            { pane: "bottom", axis: "valAxis_bottomPane_right_inner" },
-            { pane: "bottom", axis: "valAxis_bottomPane_right_outer" },
-            { pane: "top", axis: "valAxis_topPane_left_inner" },
-            { pane: "top", axis: "valAxis_topPane_left_outer" },
-            { pane: "top", axis: "valAxis_topPane_right" }
+            { pane: 'bottom', axis: 'valAxis_bottomPane_left' },
+            { pane: 'bottom', axis: 'valAxis_bottomPane_right_inner' },
+            { pane: 'bottom', axis: 'valAxis_bottomPane_right_outer' },
+            { pane: 'top', axis: 'valAxis_topPane_left_inner' },
+            { pane: 'top', axis: 'valAxis_topPane_left_outer' },
+            { pane: 'top', axis: 'valAxis_topPane_right' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1244,7 +1244,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift argAxis_topPane");
+    }, 'shift argAxis_topPane');
 
     // argAxis_bottomPane
     assert.deepEqual(this.axisStub.getCall(1).returnValue.shift_test_arg, {
@@ -1252,7 +1252,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift argAxis_bottomPane");
+    }, 'shift argAxis_bottomPane');
 
     // 7. shift vertical axes
     // valAxis_bottomPane_left
@@ -1261,7 +1261,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift valAxis_bottomPane_left");
+    }, 'shift valAxis_bottomPane_left');
 
     // valAxis_bottomPane_right_inner
     assert.deepEqual(this.axisStub.getCall(3).returnValue.shift_test_arg, {
@@ -1269,7 +1269,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 6,
         right: 7
-    }, "shift valAxis_bottomPane_right_inner");
+    }, 'shift valAxis_bottomPane_right_inner');
 
     // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(4).returnValue.shift_test_arg, {
@@ -1277,7 +1277,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 20,
         right: 20
-    }, "shift valAxis_bottomPane_right_outer");
+    }, 'shift valAxis_bottomPane_right_outer');
 
     // valAxis_topPane_left_inner
     assert.deepEqual(this.axisStub.getCall(5).returnValue.shift_test_arg, {
@@ -1285,7 +1285,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift valAxis_topPane_left_inner");
+    }, 'shift valAxis_topPane_left_inner');
 
     // valAxis_topPane_left_outer
     assert.deepEqual(this.axisStub.getCall(6).returnValue.shift_test_arg, {
@@ -1293,7 +1293,7 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 20,
         right: 21
-    }, "shift valAxis_topPane_left_outer");
+    }, 'shift valAxis_topPane_left_outer');
 
     // valAxis_topPane_right
     assert.deepEqual(this.axisStub.getCall(7).returnValue.shift_test_arg, {
@@ -1301,12 +1301,12 @@ QUnit.test("Multiple panes - shift axes by panes", function(assert) {
         bottom: 0,
         left: 47,
         right: 49
-    }, "shift valAxis_topPane_right");
+    }, 'shift valAxis_topPane_right');
 });
 
-QUnit.module("Misc", environment);
+QUnit.module('Misc', environment);
 
-QUnit.test("Draw - pass correct pane borders", function(assert) {
+QUnit.test('Draw - pass correct pane borders', function(assert) {
     var argAxis_topPane = createAxisStubs(),
         argAxis_bottomPane = createAxisStubs(),
         valAxis_bottomPane = createAxisStubs(),
@@ -1319,32 +1319,32 @@ QUnit.test("Draw - pass correct pane borders", function(assert) {
 
     new dxChart(this.container, {
         panes: [
-            { name: "top", border: { visible: true, color: "red" } },
-            { name: "bottom", border: { visible: true, color: "blue" } }
+            { name: 'top', border: { visible: true, color: 'red' } },
+            { name: 'bottom', border: { visible: true, color: 'blue' } }
         ],
         valueAxis: [
-            { name: "valAxis_bottomPane" },
-            { name: "valAxis_topPane" }
+            { name: 'valAxis_bottomPane' },
+            { name: 'valAxis_topPane' }
         ],
         series: [
-            { pane: "bottom", axis: "valAxis_bottomPane" },
-            { pane: "top", axis: "valAxis_topPane" }
+            { pane: 'bottom', axis: 'valAxis_bottomPane' },
+            { pane: 'top', axis: 'valAxis_topPane' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
 
     // assert
-    assert.strictEqual(argAxis_topPane.draw.lastCall.args[1].color, "red");
+    assert.strictEqual(argAxis_topPane.draw.lastCall.args[1].color, 'red');
 
-    assert.strictEqual(argAxis_bottomPane.draw.lastCall.args[1].color, "blue");
+    assert.strictEqual(argAxis_bottomPane.draw.lastCall.args[1].color, 'blue');
 
-    assert.strictEqual(valAxis_bottomPane.draw.lastCall.args[1].color, "blue");
+    assert.strictEqual(valAxis_bottomPane.draw.lastCall.args[1].color, 'blue');
 
-    assert.strictEqual(valAxis_topPane.draw.lastCall.args[1].color, "red");
+    assert.strictEqual(valAxis_topPane.draw.lastCall.args[1].color, 'red');
 });
 
-QUnit.test("Update panes canvases", function(assert) {
+QUnit.test('Update panes canvases', function(assert) {
     var argAxis_topPane = createAxisStubs(),
         argAxis_bottomPane = createAxisStubs(),
         valAxis_bottomPane = createAxisStubs(),
@@ -1369,16 +1369,16 @@ QUnit.test("Update panes canvases", function(assert) {
 
     var chart = new dxChart(this.container, {
         panes: [
-            { name: "top" },
-            { name: "bottom" }
+            { name: 'top' },
+            { name: 'bottom' }
         ],
         valueAxis: [
-            { name: "valAxis_bottomPane", position: "right" },
-            { name: "valAxis_topPane" }
+            { name: 'valAxis_bottomPane', position: 'right' },
+            { name: 'valAxis_topPane' }
         ],
         series: [
-            { pane: "bottom", axis: "valAxis_bottomPane" },
-            { pane: "top", axis: "valAxis_topPane" }
+            { pane: 'bottom', axis: 'valAxis_bottomPane' },
+            { pane: 'top', axis: 'valAxis_topPane' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1412,7 +1412,7 @@ QUnit.test("Update panes canvases", function(assert) {
     });
 });
 
-QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas", function(assert) {
+QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();
@@ -1472,9 +1472,9 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, "draw valAxis");
+    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 18,
@@ -1487,7 +1487,7 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     assert.equal(argAxisStub.updateSize.called, false);
     assert.equal(valAxisStub.updateSize.called, false);
@@ -1496,15 +1496,15 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
     assert.equal(argAxisStub.shift.called, false);
     assert.equal(valAxisStub.shift.called, false);
 
-    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
-    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+    assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
+    assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
 
     assert.ok(valAxisStub.prepareAnimation.called);
     assert.ok(argAxisStub.prepareAnimation.called);
 });
 
 // T690411
-QUnit.test("Recalculate canvas on zooming - draw axes in new canvas", function(assert) {
+QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();
@@ -1565,9 +1565,9 @@ QUnit.test("Recalculate canvas on zooming - draw axes in new canvas", function(a
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, "draw valAxis");
+    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 18,
@@ -1580,7 +1580,7 @@ QUnit.test("Recalculate canvas on zooming - draw axes in new canvas", function(a
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     assert.equal(argAxisStub.updateSize.called, true);
     assert.equal(valAxisStub.updateSize.called, true);
@@ -1589,14 +1589,14 @@ QUnit.test("Recalculate canvas on zooming - draw axes in new canvas", function(a
     assert.equal(argAxisStub.shift.called, true);
     assert.equal(valAxisStub.shift.called, true);
 
-    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
-    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+    assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
+    assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
 
     assert.ok(!valAxisStub.prepareAnimation.called);
     assert.ok(!argAxisStub.prepareAnimation.called);
 });
 
-QUnit.test("Draw scale breaks", function(assert) {
+QUnit.test('Draw scale breaks', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();
@@ -1622,13 +1622,13 @@ QUnit.test("Draw scale breaks", function(assert) {
     var argAxisStub = this.axisStub.getCall(0).returnValue,
         valAxisStub = this.axisStub.getCall(1).returnValue;
 
-    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
-    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+    assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
+    assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
 });
 
-QUnit.module("Axes synchronization", environment);
+QUnit.module('Axes synchronization', environment);
 
-QUnit.test("synchronizeMultiAxes true - only value axes are synchronized", function(assert) {
+QUnit.test('synchronizeMultiAxes true - only value axes are synchronized', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs(),
@@ -1643,12 +1643,12 @@ QUnit.test("synchronizeMultiAxes true - only value axes are synchronized", funct
     new dxChart(this.container, {
         synchronizeMultiAxes: true,
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1671,7 +1671,7 @@ QUnit.test("synchronizeMultiAxes true - only value axes are synchronized", funct
     assert.ok(valAxis2.draw.lastCall.calledAfter(synchronize.lastCall));
 });
 
-QUnit.test("synchronizeMultiAxes true - only value axes are synchronized. Rotated", function(assert) {
+QUnit.test('synchronizeMultiAxes true - only value axes are synchronized. Rotated', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs(),
@@ -1687,12 +1687,12 @@ QUnit.test("synchronizeMultiAxes true - only value axes are synchronized. Rotate
         rotated: true,
         synchronizeMultiAxes: true,
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1715,7 +1715,7 @@ QUnit.test("synchronizeMultiAxes true - only value axes are synchronized. Rotate
     assert.ok(valAxis2.draw.lastCall.calledAfter(synchronize.lastCall));
 });
 
-QUnit.test("synchronizeMultiAxes false - do not synchronize", function(assert) {
+QUnit.test('synchronizeMultiAxes false - do not synchronize', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs(),
@@ -1730,12 +1730,12 @@ QUnit.test("synchronizeMultiAxes false - do not synchronize", function(assert) {
     new dxChart(this.container, {
         synchronizeMultiAxes: false,
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1745,7 +1745,7 @@ QUnit.test("synchronizeMultiAxes false - do not synchronize", function(assert) {
     assert.equal(synchronize.callCount, 0);
 });
 
-QUnit.test("synchronizeMultiAxes false - do not synchronize. Rotated", function(assert) {
+QUnit.test('synchronizeMultiAxes false - do not synchronize. Rotated', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs(),
@@ -1761,12 +1761,12 @@ QUnit.test("synchronizeMultiAxes false - do not synchronize. Rotated", function(
         rotated: true,
         synchronizeMultiAxes: false,
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -1776,9 +1776,9 @@ QUnit.test("synchronizeMultiAxes false - do not synchronize. Rotated", function(
     assert.equal(synchronize.callCount, 0);
 });
 
-QUnit.module("ScrollBar", environment);
+QUnit.module('ScrollBar', environment);
 
-QUnit.test("ScrollBar margins accumulated with argument axis margins", function(assert) {
+QUnit.test('ScrollBar margins accumulated with argument axis margins', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();
@@ -1814,7 +1814,7 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
@@ -1828,7 +1828,7 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     // 4. update horizontal axes size
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
@@ -1842,7 +1842,7 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize argAxis canvas");
+    }, 'updateSize argAxis canvas');
 
     // 5. update vertical axes size
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
@@ -1856,10 +1856,10 @@ QUnit.test("ScrollBar margins accumulated with argument axis margins", function(
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "updateSize valAxis canvas");
+    }, 'updateSize valAxis canvas');
 });
 
-QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane", function(assert) {
+QUnit.test('Multiple panes. ScrollBar on top. ScrollBar placed in correct pane', function(assert) {
     var argAxis1 = createAxisStubs(),
         argAxis2 = createAxisStubs(),
         valAxis1 = createAxisStubs(),
@@ -1881,10 +1881,10 @@ QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane",
     this.setupAxes([argAxis1, argAxis2, valAxis1, valAxis2]);
 
     new dxChart(this.container, {
-        scrollBar: { visible: true, position: "top" },
-        panes: [{ name: "pane1" }, { name: "pane2" }],
-        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        scrollBar: { visible: true, position: 'top' },
+        panes: [{ name: 'pane1' }, { name: 'pane2' }],
+        valueAxis: [{ name: 'axis1' }, { name: 'axis2' }],
+        series: [{ axis: 'axis1', pane: 'pane1' }, { axis: 'axis2', pane: 'pane2' }],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
@@ -1903,7 +1903,7 @@ QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane",
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 0,
@@ -1916,10 +1916,10 @@ QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane",
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 });
 
-QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pane", function(assert) {
+QUnit.test('Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pane', function(assert) {
     var argAxis1 = createAxisStubs(),
         argAxis2 = createAxisStubs(),
         valAxis1 = createAxisStubs(),
@@ -1941,10 +1941,10 @@ QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
     this.setupAxes([argAxis1, argAxis2, valAxis1, valAxis2]);
 
     new dxChart(this.container, {
-        scrollBar: { visible: true, position: "bottom" },
-        panes: [{ name: "pane1" }, { name: "pane2" }],
-        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        scrollBar: { visible: true, position: 'bottom' },
+        panes: [{ name: 'pane1' }, { name: 'pane2' }],
+        valueAxis: [{ name: 'axis1' }, { name: 'axis2' }],
+        series: [{ axis: 'axis1', pane: 'pane1' }, { axis: 'axis2', pane: 'pane2' }],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
@@ -1963,7 +1963,7 @@ QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
         originalBottom: 305,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 0,
@@ -1976,10 +1976,10 @@ QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 });
 
-QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in correct pane", function(assert) {
+QUnit.test('Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in correct pane', function(assert) {
     var argAxis1 = createAxisStubs(),
         argAxis2 = createAxisStubs(),
         valAxis1 = createAxisStubs(),
@@ -1998,10 +1998,10 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
 
     new dxChart(this.container, {
         rotated: true,
-        scrollBar: { visible: true, position: "left" },
-        panes: [{ name: "pane1" }, { name: "pane2" }],
-        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        scrollBar: { visible: true, position: 'left' },
+        panes: [{ name: 'pane1' }, { name: 'pane2' }],
+        valueAxis: [{ name: 'axis1' }, { name: 'axis2' }],
+        series: [{ axis: 'axis1', pane: 'pane1' }, { axis: 'axis2', pane: 'pane2' }],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
@@ -2019,7 +2019,7 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 405,
@@ -2032,10 +2032,10 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks valAxis canvas");
+    }, 'createTicks valAxis canvas');
 });
 
-QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in correct pane", function(assert) {
+QUnit.test('Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in correct pane', function(assert) {
     var argAxis1 = createAxisStubs(),
         argAxis2 = createAxisStubs(),
         valAxis1 = createAxisStubs(),
@@ -2054,10 +2054,10 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
 
     new dxChart(this.container, {
         rotated: true,
-        scrollBar: { visible: true, position: "right" },
-        panes: [{ name: "pane1" }, { name: "pane2" }],
-        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        scrollBar: { visible: true, position: 'right' },
+        panes: [{ name: 'pane1' }, { name: 'pane2' }],
+        valueAxis: [{ name: 'axis1' }, { name: 'axis2' }],
+        series: [{ axis: 'axis1', pane: 'pane1' }, { axis: 'axis2', pane: 'pane2' }],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
@@ -2075,7 +2075,7 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks argAxis canvas");
+    }, 'createTicks argAxis canvas');
 
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
         left: 405,
@@ -2088,10 +2088,10 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
         originalBottom: 0,
         width: 800,
         height: 600
-    }, "createTicks argAxis canvas");
+    }, 'createTicks argAxis canvas');
 });
 
-QUnit.test("ScrollBar on top. Shift argument axis by ScrollBar margin", function(assert) {
+QUnit.test('ScrollBar on top. Shift argument axis by ScrollBar margin', function(assert) {
     var scrollBar = this.setupScrollBar();
 
     scrollBar
@@ -2100,7 +2100,7 @@ QUnit.test("ScrollBar on top. Shift argument axis by ScrollBar margin", function
     this.setupAxes([createAxisStubs(), createAxisStubs()]);
 
     new dxChart(this.container, {
-        scrollBar: { visible: true, position: "top" },
+        scrollBar: { visible: true, position: 'top' },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2114,10 +2114,10 @@ QUnit.test("ScrollBar on top. Shift argument axis by ScrollBar margin", function
         bottom: 0,
         left: 0,
         right: 0
-    }, "shift argAxis");
+    }, 'shift argAxis');
 });
 
-QUnit.test("ScrollBar on bottom. Shift argument axis by ScrollBar margin", function(assert) {
+QUnit.test('ScrollBar on bottom. Shift argument axis by ScrollBar margin', function(assert) {
     var scrollBar = this.setupScrollBar();
 
     scrollBar
@@ -2126,7 +2126,7 @@ QUnit.test("ScrollBar on bottom. Shift argument axis by ScrollBar margin", funct
     this.setupAxes([createAxisStubs(), createAxisStubs()]);
 
     new dxChart(this.container, {
-        scrollBar: { visible: true, position: "bottom" },
+        scrollBar: { visible: true, position: 'bottom' },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2140,10 +2140,10 @@ QUnit.test("ScrollBar on bottom. Shift argument axis by ScrollBar margin", funct
         bottom: 15,
         left: 0,
         right: 0
-    }, "shift argAxis");
+    }, 'shift argAxis');
 });
 
-QUnit.test("Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin", function(assert) {
+QUnit.test('Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin', function(assert) {
     var scrollBar = this.setupScrollBar();
 
     scrollBar
@@ -2153,7 +2153,7 @@ QUnit.test("Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin
 
     new dxChart(this.container, {
         rotated: true,
-        scrollBar: { visible: true, position: "right" },
+        scrollBar: { visible: true, position: 'right' },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2167,10 +2167,10 @@ QUnit.test("Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin
         bottom: 0,
         left: 0,
         right: 15
-    }, "shift argAxis");
+    }, 'shift argAxis');
 });
 
-QUnit.test("Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin", function(assert) {
+QUnit.test('Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin', function(assert) {
     var scrollBar = this.setupScrollBar();
 
     scrollBar
@@ -2180,7 +2180,7 @@ QUnit.test("Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin"
 
     new dxChart(this.container, {
         rotated: true,
-        scrollBar: { visible: true, position: "left" },
+        scrollBar: { visible: true, position: 'left' },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2194,10 +2194,10 @@ QUnit.test("Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin"
         bottom: 0,
         left: 15,
         right: 0
-    }, "shift argAxis");
+    }, 'shift argAxis');
 });
 
-QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
+QUnit.test('UpdateSize - scrollBar gets canvas', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();
@@ -2234,9 +2234,9 @@ QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
     }, true, undefined]);
 });
 
-QUnit.module("Adaptive layout rendering", environment);
+QUnit.module('Adaptive layout rendering', environment);
 
-QUnit.test("Multiple axes, vertical axes without titles are fit, horizontal axis without labels is fit - hide title for vertical axes, and all for horizontal", function(assert) {
+QUnit.test('Multiple axes, vertical axes without titles are fit, horizontal axis without labels is fit - hide title for vertical axes, and all for horizontal', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs();
@@ -2270,12 +2270,12 @@ QUnit.test("Multiple axes, vertical axes without titles are fit, horizontal axis
         size: { width: 220, height: 110 },
         adaptiveLayout: { width: 200, height: 100 },
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2295,7 +2295,7 @@ QUnit.test("Multiple axes, vertical axes without titles are fit, horizontal axis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 1);
 });
 
-QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis without labels is fit - hide title for horizontal axes, and all for vertical", function(assert) {
+QUnit.test('Multiple axes, horizontal axes without titles are fit, vertical axis without labels is fit - hide title for horizontal axes, and all for vertical', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs();
@@ -2329,12 +2329,12 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
         size: { width: 220, height: 110 },
         adaptiveLayout: { width: 200, height: 100 },
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2354,7 +2354,7 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 0);
 });
 
-QUnit.test("Update axes size and shift with new margins (there is also scrollBar)", function(assert) {
+QUnit.test('Update axes size and shift with new margins (there is also scrollBar)', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
         valAxis_outer = createAxisStubs(),
@@ -2393,12 +2393,12 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         adaptiveLayout: { width: 200, height: 100 },
         scrollBar: { visible: true },
         valueAxis: [
-            { name: "valAxis_inner" },
-            { name: "valAxis_outer" }
+            { name: 'valAxis_inner' },
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_inner" },
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_inner' },
+            { axis: 'valAxis_outer' }
         ],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
@@ -2518,7 +2518,7 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
     }); // T587219
 });
 
-QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T624446)", function(assert) {
+QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T624446)', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();
@@ -2569,7 +2569,7 @@ QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T62444
     chart.zoomArgument(2, 9);
 
     // assert
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, "draw valAxis");
+    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 18,
@@ -2582,7 +2582,7 @@ QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T62444
         originalBottom: 0,
         width: 220,
         height: 110
-    }, "draw argAxis canvas");
+    }, 'draw argAxis canvas');
 
     assert.equal(argAxisStub.updateSize.called, false);
     assert.equal(valAxisStub.updateSize.called, false);
@@ -2591,11 +2591,11 @@ QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T62444
     assert.equal(argAxisStub.shift.called, false);
     assert.equal(valAxisStub.shift.called, false);
 
-    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
-    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+    assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
+    assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
 });
 
-QUnit.test("Hide legend and title - free space is enought for axis - no hide elements", function(assert) {
+QUnit.test('Hide legend and title - free space is enought for axis - no hide elements', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_outer = createAxisStubs();
 
@@ -2616,31 +2616,31 @@ QUnit.test("Hide legend and title - free space is enought for axis - no hide ele
     this.setupAxes([argAxis,
         valAxis_outer]);
 
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "center",
-        verticalAlignment: "top"
+    this.title.stub('layoutOptions').returns({
+        horizontalAlignment: 'center',
+        verticalAlignment: 'top'
     });
 
-    this.title.stub("measure").returns([100, 50]);
+    this.title.stub('measure').returns([100, 50]);
 
-    this.legend.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
-        side: "horizontal"
+    this.legend.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top',
+        side: 'horizontal'
     });
 
-    this.legend.stub("measure").returns([50, 50]);
+    this.legend.stub('measure').returns([50, 50]);
 
     new dxChart(this.container, {
         size: { width: 220, height: 110 },
         adaptiveLayout: { width: 220 - 51, height: 110 - 51 },
         valueAxis: [
-            { name: "valAxis_outer" }
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_outer' }
         ],
-        title: "text",
+        title: 'text',
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
@@ -2658,7 +2658,7 @@ QUnit.test("Hide legend and title - free space is enought for axis - no hide ele
     assert.ok(this.legend.freeSpace.called);
 });
 
-QUnit.test("Hide legend and title - free space is enought for axis - hide elements", function(assert) {
+QUnit.test('Hide legend and title - free space is enought for axis - hide elements', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_outer = createAxisStubs();
 
@@ -2679,31 +2679,31 @@ QUnit.test("Hide legend and title - free space is enought for axis - hide elemen
     this.setupAxes([argAxis,
         valAxis_outer]);
 
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "center",
-        verticalAlignment: "top"
+    this.title.stub('layoutOptions').returns({
+        horizontalAlignment: 'center',
+        verticalAlignment: 'top'
     });
 
-    this.title.stub("measure").returns([100, 50]);
+    this.title.stub('measure').returns([100, 50]);
 
-    this.legend.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
-        side: "horizontal"
+    this.legend.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top',
+        side: 'horizontal'
     });
 
-    this.legend.stub("measure").returns([50, 50]);
+    this.legend.stub('measure').returns([50, 50]);
 
     new dxChart(this.container, {
         size: { width: 220, height: 110 },
         adaptiveLayout: { width: 220 - 55, height: 110 - 55 },
         valueAxis: [
-            { name: "valAxis_outer" }
+            { name: 'valAxis_outer' }
         ],
         series: [
-            { axis: "valAxis_outer" }
+            { axis: 'valAxis_outer' }
         ],
-        title: "text",
+        title: 'text',
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
@@ -2719,9 +2719,9 @@ QUnit.test("Hide legend and title - free space is enought for axis - hide elemen
     assert.ok(this.legend.freeSpace.called);
 });
 
-QUnit.module("Animation", environment);
+QUnit.module('Animation', environment);
 
-QUnit.test("Pass animate true flag to the updateSize method", function(assert) {
+QUnit.test('Pass animate true flag to the updateSize method', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2737,7 +2737,7 @@ QUnit.test("Pass animate true flag to the updateSize method", function(assert) {
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
 });
 
-QUnit.test("Pass animate false flag to the updateSize method if animation is disabled", function(assert) {
+QUnit.test('Pass animate false flag to the updateSize method if animation is disabled', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2756,7 +2756,7 @@ QUnit.test("Pass animate false flag to the updateSize method if animation is dis
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], false);
 });
 
-QUnit.test("Pass animate false flag to the updateSize method if points limit is exceeded", function(assert) {
+QUnit.test('Pass animate false flag to the updateSize method if points limit is exceeded', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2782,7 +2782,7 @@ QUnit.test("Pass animate false flag to the updateSize method if points limit is 
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], false);
 });
 
-QUnit.test("Pass animate false flag to the updateSize method if points limit is not exceeded", function(assert) {
+QUnit.test('Pass animate false flag to the updateSize method if points limit is not exceeded', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2799,7 +2799,7 @@ QUnit.test("Pass animate false flag to the updateSize method if points limit is 
             enabled: true,
             maxPointCountSupported: 10
         },
-        series: [{}, { valueField: "val2" }],
+        series: [{}, { valueField: 'val2' }],
         dataSource: dataSource
     });
 
@@ -2808,7 +2808,7 @@ QUnit.test("Pass animate false flag to the updateSize method if points limit is 
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
 });
 
-QUnit.test("Do not stop all current animations if no adaptive layout", function(assert) {
+QUnit.test('Do not stop all current animations if no adaptive layout', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2831,7 +2831,7 @@ QUnit.test("Do not stop all current animations if no adaptive layout", function(
     assert.ok(this.renderer.stopAllAnimations.lastCall.calledBefore(valAxisStub.updateSize.lastCall));
 });
 
-QUnit.test("Stop all current animations on adaptive layout", function(assert) {
+QUnit.test('Stop all current animations on adaptive layout', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2857,9 +2857,9 @@ QUnit.test("Stop all current animations on adaptive layout", function(assert) {
     assert.strictEqual(valAxisStub.updateSize.getCall(1).args[1], false);
 });
 
-QUnit.module("Wrap axis title", environment);
+QUnit.module('Wrap axis title', environment);
 
-QUnit.test("With a pane; Position is right", function(assert) {
+QUnit.test('With a pane; Position is right', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2876,7 +2876,7 @@ QUnit.test("With a pane; Position is right", function(assert) {
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false },
         valueAxis: {
-            position: "right"
+            position: 'right'
         }
     });
 
@@ -2887,7 +2887,7 @@ QUnit.test("With a pane; Position is right", function(assert) {
     assert.equal(axis.updateSizeArgs[1].right, 14);
 });
 
-QUnit.test("With a pane", function(assert) {
+QUnit.test('With a pane', function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
@@ -2918,7 +2918,7 @@ QUnit.test("With a pane", function(assert) {
     assert.equal(axis.getTitle.callCount, 3);
 });
 
-QUnit.test("With two panes", function(assert) {
+QUnit.test('With two panes', function(assert) {
     var argAxis1 = createAxisStubs(),
         argAxis2 = createAxisStubs(),
         valAxis1 = createAxisStubs(),
@@ -2939,9 +2939,9 @@ QUnit.test("With two panes", function(assert) {
     this.setupAxes([argAxis1, argAxis2, valAxis1, valAxis2]);
 
     new dxChart(this.container, {
-        panes: [{ name: "pane1" }, { name: "pane2" }],
-        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        panes: [{ name: 'pane1' }, { name: 'pane2' }],
+        valueAxis: [{ name: 'axis1' }, { name: 'axis2' }],
+        series: [{ axis: 'axis1', pane: 'pane1' }, { axis: 'axis2', pane: 'pane2' }],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: true }
     });

@@ -5,4 +5,4 @@
 * @export default
 */
 
-module.exports = require("./presets/presets").presets;
+module.exports = require('./presets/presets').presets;

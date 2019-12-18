@@ -1,33 +1,33 @@
-var merge = require("./array").merge,
-    domAdapter = require("../dom_adapter");
+var merge = require('./array').merge,
+    domAdapter = require('../dom_adapter');
 
 var isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
 
 var tagWrappers = {
     default: {
         tagsCount: 0,
-        startTags: "",
-        endTags: ""
+        startTags: '',
+        endTags: ''
     },
     thead: {
         tagsCount: 1,
-        startTags: "<table>",
-        endTags: "</table>"
+        startTags: '<table>',
+        endTags: '</table>'
     },
     td: {
         tagsCount: 3,
-        startTags: "<table><tbody><tr>",
-        endTags: "</tr></tbody></table>"
+        startTags: '<table><tbody><tr>',
+        endTags: '</tr></tbody></table>'
     },
     col: {
         tagsCount: 2,
-        startTags: "<table><colgroup>",
-        endTags: "</colgroup></table>"
+        startTags: '<table><colgroup>',
+        endTags: '</colgroup></table>'
     },
     tr: {
         tagsCount: 2,
-        startTags: "<table><tbody>",
-        endTags: "</tbody></table>"
+        startTags: '<table><tbody>',
+        endTags: '</tbody></table>'
     },
 };
 
@@ -35,12 +35,12 @@ tagWrappers.tbody = tagWrappers.colgroup = tagWrappers.caption = tagWrappers.tfo
 tagWrappers.th = tagWrappers.td;
 
 var parseHTML = function(html) {
-    if(typeof html !== "string") {
+    if(typeof html !== 'string') {
         return null;
     }
 
     var fragment = domAdapter.createDocumentFragment();
-    var container = fragment.appendChild(domAdapter.createElement("div"));
+    var container = fragment.appendChild(domAdapter.createElement('div'));
     var tags = isTagName.exec(html);
     var firstRootTag = tags && tags[1].toLowerCase();
     var tagWrapper = tagWrappers[firstRootTag] || tagWrappers.default;

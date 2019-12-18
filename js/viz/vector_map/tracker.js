@@ -1,10 +1,10 @@
-import eventsEngine from "../../events/core/events_engine";
-import windowUtils from "../../core/utils/window";
-import domAdapter from "../../core/dom_adapter";
-import eventEmitterModule from "./event_emitter";
-import eventUtils from "../../events/utils";
-import { name as wheelEventName } from "../../events/core/wheel";
-import { parseScalar } from "../core/utils";
+import eventsEngine from '../../events/core/events_engine';
+import windowUtils from '../../core/utils/window';
+import domAdapter from '../../core/dom_adapter';
+import eventEmitterModule from './event_emitter';
+import eventUtils from '../../events/utils';
+import { name as wheelEventName } from '../../events/core/wheel';
+import { parseScalar } from '../core/utils';
 
 const navigator = windowUtils.getNavigator();
 const _math = Math;
@@ -14,17 +14,17 @@ const _round = _math.round;
 const _addNamespace = eventUtils.addNamespace;
 const _now = Date.now;
 
-const _NAME = "dxVectorMap";
-const EVENT_START = "start";
-const EVENT_MOVE = "move";
-const EVENT_END = "end";
-const EVENT_ZOOM = "zoom";
-const EVENT_HOVER_ON = "hover-on";
-const EVENT_HOVER_OFF = "hover-off";
-const EVENT_CLICK = "click";
-const EVENT_FOCUS_ON = "focus-on";
-const EVENT_FOCUS_MOVE = "focus-move";
-const EVENT_FOCUS_OFF = "focus-off";
+const _NAME = 'dxVectorMap';
+const EVENT_START = 'start';
+const EVENT_MOVE = 'move';
+const EVENT_END = 'end';
+const EVENT_ZOOM = 'zoom';
+const EVENT_HOVER_ON = 'hover-on';
+const EVENT_HOVER_OFF = 'hover-off';
+const EVENT_CLICK = 'click';
+const EVENT_FOCUS_ON = 'focus-on';
+const EVENT_FOCUS_MOVE = 'focus-move';
+const EVENT_FOCUS_OFF = 'focus-off';
 
 const CLICK_TIME_THRESHOLD = 500;
 const CLICK_COORD_THRESHOLD_MOUSE = 5;
@@ -348,13 +348,13 @@ Tracker.prototype = {
         // Now to avoid not so necessary complication of renderer text-span issue is handled on the side of the tracker.
         function getData(event) {
             var target = event.target;
-            return (target.tagName === "tspan" ? target.parentNode : target)[DATA_KEY];
+            return (target.tagName === 'tspan' ? target.parentNode : target)[DATA_KEY];
         }
     },
 
     _createProjectionHandlers: function(projection) {
         var that = this;
-        projection.on({ "center": handler, "zoom": handler }); // T247841
+        projection.on({ 'center': handler, 'zoom': handler }); // T247841
         function handler() {
             // `_cancelHover` probably should also be called here but for now let it not be so
             that._cancelFocus();
@@ -381,9 +381,9 @@ Tracker.prototype = {
     _detachHandlers: function() {
         var that = this;
         if(that._isTouchEnabled) {
-            that._root.css({ "touch-action": "", "-webkit-user-select": "" }).
-                off(_addNamespace("MSHoldVisual", _NAME)).
-                off(_addNamespace("contextmenu", _NAME));
+            that._root.css({ 'touch-action': '', '-webkit-user-select': '' }).
+                off(_addNamespace('MSHoldVisual', _NAME)).
+                off(_addNamespace('contextmenu', _NAME));
         }
         eventsEngine.off(domAdapter.getDocument(), that._docHandlers);
         that._root.off(that._rootHandlers);
@@ -392,11 +392,11 @@ Tracker.prototype = {
     _attachHandlers: function() {
         var that = this;
         if(that._isTouchEnabled) {
-            that._root.css({ "touch-action": "none", "-webkit-user-select": "none" }).
-                on(_addNamespace("MSHoldVisual", _NAME), function(event) {
+            that._root.css({ 'touch-action': 'none', '-webkit-user-select': 'none' }).
+                on(_addNamespace('MSHoldVisual', _NAME), function(event) {
                     event.preventDefault();
                 }).
-                on(_addNamespace("contextmenu", _NAME), function(event) {
+                on(_addNamespace('contextmenu', _NAME), function(event) {
                     isTouchEvent(event) && event.preventDefault();
                 });
         }
@@ -489,7 +489,7 @@ function getDistance(x1, y1, x2, y2) {
 function isTouchEvent(event) {
     var type = event.originalEvent.type,
         pointerType = event.originalEvent.pointerType;
-    return /^touch/.test(type) || (/^MSPointer/.test(type) && pointerType !== 4) || (/^pointer/.test(type) && pointerType !== "mouse");
+    return /^touch/.test(type) || (/^MSPointer/.test(type) && pointerType !== 4) || (/^pointer/.test(type) && pointerType !== 'mouse');
 }
 
 function selectItem(flags, items) {
@@ -506,20 +506,20 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    var flags = [navigator.pointerEnabled, navigator.msPointerEnabled, windowUtils.hasProperty("ontouchstart")];
+    var flags = [navigator.pointerEnabled, navigator.msPointerEnabled, windowUtils.hasProperty('ontouchstart')];
     ///#DEBUG
     if(arguments.length) {
         flags = [
-            arguments[0] === "pointer",
-            arguments[0] === "MSPointer",
-            arguments[0] === "touch"
+            arguments[0] === 'pointer',
+            arguments[0] === 'MSPointer',
+            arguments[0] === 'touch'
         ];
     }
     ///#ENDDEBUG
     EVENTS = {
-        start: selectItem(flags, ["pointerdown", "MSPointerDown", "touchstart mousedown", "mousedown"]),
-        move: selectItem(flags, ["pointermove", "MSPointerMove", "touchmove mousemove", "mousemove"]),
-        end: selectItem(flags, ["pointerup", "MSPointerUp", "touchend mouseup", "mouseup"]),
+        start: selectItem(flags, ['pointerdown', 'MSPointerDown', 'touchstart mousedown', 'mousedown']),
+        move: selectItem(flags, ['pointermove', 'MSPointerMove', 'touchmove mousemove', 'mousemove']),
+        end: selectItem(flags, ['pointerup', 'MSPointerUp', 'touchend mouseup', 'mouseup']),
         wheel: _addNamespace(wheelEventName, _NAME)
     };
 }

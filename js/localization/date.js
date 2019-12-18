@@ -1,48 +1,48 @@
-var dependencyInjector = require("../core/utils/dependency_injector"),
-    isString = require("../core/utils/type").isString,
-    iteratorUtils = require("../core/utils/iterator"),
-    inArray = require("../core/utils/array").inArray,
-    getLDMLDateFormatter = require("./ldml/date.formatter").getFormatter,
-    getLDMLDateFormat = require("./ldml/date.format").getFormat,
-    getLDMLDateParser = require("./ldml/date.parser").getParser,
-    defaultDateNames = require("./default_date_names"),
-    numberLocalization = require("./number"),
-    errors = require("../core/errors");
+var dependencyInjector = require('../core/utils/dependency_injector'),
+    isString = require('../core/utils/type').isString,
+    iteratorUtils = require('../core/utils/iterator'),
+    inArray = require('../core/utils/array').inArray,
+    getLDMLDateFormatter = require('./ldml/date.formatter').getFormatter,
+    getLDMLDateFormat = require('./ldml/date.format').getFormat,
+    getLDMLDateParser = require('./ldml/date.parser').getParser,
+    defaultDateNames = require('./default_date_names'),
+    numberLocalization = require('./number'),
+    errors = require('../core/errors');
 
-require("./core");
+require('./core');
 
 var FORMATS_TO_PATTERN_MAP = {
-    "shortdate": "M/d/y",
-    "shorttime": "h:mm a",
-    "longdate": "EEEE, MMMM d, y",
-    "longtime": "h:mm:ss a",
-    "monthandday": "MMMM d",
-    "monthandyear": "MMMM y",
-    "quarterandyear": "QQQ y",
-    "day": "d",
-    "year": "y",
-    "shortdateshorttime": "M/d/y, h:mm a",
-    "mediumdatemediumtime": "MMMM d, h:mm a",
-    "longdatelongtime": "EEEE, MMMM d, y, h:mm:ss a",
-    "month": "LLLL",
-    "shortyear": "yy",
-    "dayofweek": "EEEE",
-    "quarter": "QQQ",
-    "hour": "HH",
-    "minute": "mm",
-    "second": "ss",
-    "millisecond": "SSS",
-    "datetime-local": "yyyy-MM-ddTHH':'mm':'ss"
+    'shortdate': 'M/d/y',
+    'shorttime': 'h:mm a',
+    'longdate': 'EEEE, MMMM d, y',
+    'longtime': 'h:mm:ss a',
+    'monthandday': 'MMMM d',
+    'monthandyear': 'MMMM y',
+    'quarterandyear': 'QQQ y',
+    'day': 'd',
+    'year': 'y',
+    'shortdateshorttime': 'M/d/y, h:mm a',
+    'mediumdatemediumtime': 'MMMM d, h:mm a',
+    'longdatelongtime': 'EEEE, MMMM d, y, h:mm:ss a',
+    'month': 'LLLL',
+    'shortyear': 'yy',
+    'dayofweek': 'EEEE',
+    'quarter': 'QQQ',
+    'hour': 'HH',
+    'minute': 'mm',
+    'second': 'ss',
+    'millisecond': 'SSS',
+    'datetime-local': 'yyyy-MM-ddTHH\':\'mm\':\'ss'
 };
 
 var possiblePartPatterns = {
-    year: ["y", "yy", "yyyy"],
-    day: ["d", "dd"],
-    month: ["M", "MM", "MMM", "MMMM"],
-    hours: ["H", "HH", "h", "hh", "ah"],
-    minutes: ["m", "mm"],
-    seconds: ["s", "ss"],
-    milliseconds: ["S", "SS", "SSS"]
+    year: ['y', 'yy', 'yyyy'],
+    day: ['d', 'dd'],
+    month: ['M', 'MM', 'MMM', 'MMMM'],
+    hours: ['H', 'HH', 'h', 'hh', 'ah'],
+    minutes: ['m', 'mm'],
+    seconds: ['s', 'ss'],
+    milliseconds: ['S', 'SS', 'SSS']
 };
 
 var dateLocalization = dependencyInjector({
@@ -53,11 +53,11 @@ var dateLocalization = dependencyInjector({
         return this._getPatternByFormat(pattern) || pattern;
     },
     formatUsesMonthName: function(format) {
-        return this._expandPattern(format).indexOf("MMMM") !== -1;
+        return this._expandPattern(format).indexOf('MMMM') !== -1;
     },
 
     formatUsesDayName: function(format) {
-        return this._expandPattern(format).indexOf("EEEE") !== -1;
+        return this._expandPattern(format).indexOf('EEEE') !== -1;
     },
     getFormatParts: function(format) {
         var pattern = this._getPatternByFormat(format) || format,
@@ -86,7 +86,7 @@ var dateLocalization = dependencyInjector({
         return defaultDateNames.getPeriodNames(format);
     },
     getTimeSeparator: function() {
-        return ":";
+        return ':';
     },
 
     is24HourFormat: function(format) {
@@ -113,7 +113,7 @@ var dateLocalization = dependencyInjector({
 
         var formatter;
 
-        if(typeof (format) === "function") {
+        if(typeof (format) === 'function') {
             formatter = format;
         } else if(format.formatter) {
             formatter = format.formatter;
@@ -144,14 +144,14 @@ var dateLocalization = dependencyInjector({
         }
 
         if(!format) {
-            return this.parse(text, "shortdate");
+            return this.parse(text, 'shortdate');
         }
 
         if(format.parser) {
             return format.parser(text);
         }
 
-        if(typeof format === "string" && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
+        if(typeof format === 'string' && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
             ldmlFormat = format;
         } else {
             formatter = function(value) {
@@ -168,7 +168,7 @@ var dateLocalization = dependencyInjector({
             return getLDMLDateParser(ldmlFormat, this)(text);
         }
 
-        errors.log("W0012");
+        errors.log('W0012');
         result = new Date(text);
 
         if(!result || isNaN(result.getTime())) {

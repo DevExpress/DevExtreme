@@ -1,10 +1,10 @@
-import { isFunction, isDefined, isObject } from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import { findField, foreachTree, setFieldProperty } from "./ui.pivot_grid.utils";
+import { isFunction, isDefined, isObject } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { findField, foreachTree, setFieldProperty } from './ui.pivot_grid.utils';
 
-var COLUMN = "column",
-    ROW = "row",
+var COLUMN = 'column',
+    ROW = 'row',
     NULL = null,
 
     calculatePercentValue = function(value, totalValue) {
@@ -130,10 +130,10 @@ function getFieldPos(descriptions, field, cache) {
     }
 
     if(field) {
-        var area = field.area || "data";
+        var area = field.area || 'data';
         fieldParams = cache.positions[field.index] = cache.positions[field.index] || {
             area: area,
-            index: inArray(field, descriptions[area === "data" ? "values" : area + "s"])
+            index: inArray(field, descriptions[area === 'data' ? 'values' : area + 's'])
         };
     }
 
@@ -141,7 +141,7 @@ function getFieldPos(descriptions, field, cache) {
 }
 
 function getPathFieldName(dimension) {
-    return dimension === ROW ? "_rowPath" : "_columnPath";
+    return dimension === ROW ? '_rowPath' : '_columnPath';
 }
 
 var SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, fieldsCache) {
@@ -172,7 +172,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     _getDimension: function(dimension) {
-        dimension = dimension === ROW ? "rows" : "columns";
+        dimension = dimension === ROW ? 'rows' : 'columns';
         return this._descriptions[dimension];
     },
 
@@ -348,7 +348,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     */
 
     field: function(area) {
-        if(area === "data") {
+        if(area === 'data') {
             return this._descriptions.values[this._fieldIndex];
         }
         var path = this._getPath(area),
@@ -467,7 +467,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
             var fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
             fieldIndex = fieldPos.index;
 
-            if(fieldPos.area !== "data") {
+            if(fieldPos.area !== 'data') {
                 path = this._getPath(fieldPos.area);
                 level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
 
@@ -491,16 +491,16 @@ function getExpression(field) {
     if(isFunction(field.calculateSummaryValue)) {
         expression = field.calculateSummaryValue;
     } else if(summaryDisplayMode) {
-        if(summaryDisplayMode === "absoluteVariation") {
+        if(summaryDisplayMode === 'absoluteVariation') {
             expression = createAbsoluteVariationExp(crossGroupCalculation);
-        } else if(summaryDisplayMode === "percentVariation") {
+        } else if(summaryDisplayMode === 'percentVariation') {
             expression = createPercentVariationExp(crossGroupCalculation);
         } else {
             expression = summaryDictionary[summaryDisplayMode];
         }
 
-        if(expression && !field.format && summaryDisplayMode.indexOf("percent") !== -1) {
-            setFieldProperty(field, "format", "percent");
+        if(expression && !field.format && summaryDisplayMode.indexOf('percent') !== -1) {
+            setFieldProperty(field, 'format', 'percent');
         }
     }
     return expression;

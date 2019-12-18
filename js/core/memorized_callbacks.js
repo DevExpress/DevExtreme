@@ -1,5 +1,5 @@
-var each = require("../core/utils/iterator").each,
-    Callbacks = require("./utils/callbacks");
+var each = require('../core/utils/iterator').each,
+    Callbacks = require('./utils/callbacks');
 
 var MemorizedCallbacks = function() {
 

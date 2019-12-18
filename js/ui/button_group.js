@@ -1,19 +1,19 @@
-import $ from "../core/renderer";
-import Widget from "./widget/ui.widget";
-import Button from "./button";
-import CollectionWidget from "./collection/ui.collection_widget.edit";
-import registerComponent from "../core/component_registrator";
-import { extend } from "../core/utils/extend";
-import { isDefined } from "../core/utils/type";
-import BindableTemplate from "./widget/bindable_template";
+import $ from '../core/renderer';
+import Widget from './widget/ui.widget';
+import Button from './button';
+import CollectionWidget from './collection/ui.collection_widget.edit';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import { isDefined } from '../core/utils/type';
+import BindableTemplate from './widget/bindable_template';
 
-const BUTTON_GROUP_CLASS = "dx-buttongroup",
-    BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
-    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
-    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
-    BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width",
-    SHAPE_STANDARD_CLASS = "dx-shape-standard";
+const BUTTON_GROUP_CLASS = 'dx-buttongroup',
+    BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper',
+    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item',
+    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item',
+    BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item',
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width',
+    SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
 const ButtonCollection = CollectionWidget.inherit({
     _renderItemContent(options) {
@@ -39,7 +39,7 @@ const ButtonCollection = CollectionWidget.inherit({
     },
 
     _itemSelectHandler: function(e) {
-        if(this.option("selectionMode") === "single" && this.isItemSelected(e.currentTarget)) {
+        if(this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
             return;
         }
 
@@ -75,7 +75,7 @@ const ButtonGroup = Widget.inherit({
             * @type Enums.ButtonGroupSelectionMode
             * @default 'single'
             */
-            selectionMode: "single",
+            selectionMode: 'single',
 
             /**
              * @name dxButtonGroupOptions.selectedItems
@@ -96,14 +96,14 @@ const ButtonGroup = Widget.inherit({
              * @type Enums.ButtonStylingMode
              * @default 'contained'
              */
-            stylingMode: "contained",
+            stylingMode: 'contained',
 
             /**
              * @name dxButtonGroupOptions.keyExpr
              * @type string|function
              * @default 'text'
              */
-            keyExpr: "text",
+            keyExpr: 'text',
 
             /**
              * @name dxButtonGroupOptions.items
@@ -120,7 +120,7 @@ const ButtonGroup = Widget.inherit({
              * @type_function_param3 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
-            itemTemplate: "item",
+            itemTemplate: 'item',
 
             /**
              * @name dxButtonGroupOptions.onSelectionChanged
@@ -149,10 +149,10 @@ const ButtonGroup = Widget.inherit({
     },
 
     _prepareItemStyles($item) {
-        const itemIndex = $item.data("dxItemIndex");
+        const itemIndex = $item.data('dxItemIndex');
         itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
 
-        const items = this.option("items");
+        const items = this.option('items');
         items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
 
         $item.addClass(SHAPE_STANDARD_CLASS);
@@ -183,10 +183,10 @@ const ButtonGroup = Widget.inherit({
          * @name dxButtonGroupItem.html
          * @hidden
          */
-        this._defaultTemplates["item"] = new BindableTemplate((($container, data, model) => {
+        this._defaultTemplates['item'] = new BindableTemplate((($container, data, model) => {
             this._prepareItemStyles($container);
             this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions()));
-        }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
+        }), ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod'));
     },
 
     _init() {
@@ -195,11 +195,11 @@ const ButtonGroup = Widget.inherit({
     },
 
     _createItemClickAction() {
-        this._itemClickAction = this._createActionByOption("onItemClick");
+        this._itemClickAction = this._createActionByOption('onItemClick');
     },
 
     _initMarkup() {
-        this.setAria("role", "group");
+        this.setAria('role', 'group');
         this.$element().addClass(BUTTON_GROUP_CLASS);
         this._renderButtons();
         this._syncSelectionOptions();
@@ -207,42 +207,42 @@ const ButtonGroup = Widget.inherit({
     },
 
     _fireSelectionChangeEvent: function(addedItems, removedItems) {
-        this._createActionByOption("onSelectionChanged", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._createActionByOption('onSelectionChanged', {
+            excludeValidators: ['disabled', 'readOnly']
         })({ addedItems: addedItems, removedItems: removedItems });
     },
 
     _getBasicButtonOptions() {
         return {
             focusStateEnabled: false,
-            stylingMode: this.option("stylingMode"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
-            activeStateEnabled: this.option("activeStateEnabled"),
+            stylingMode: this.option('stylingMode'),
+            hoverStateEnabled: this.option('hoverStateEnabled'),
+            activeStateEnabled: this.option('activeStateEnabled'),
             onClick: null
         };
     },
 
     _renderButtons() {
-        const $buttons = $("<div>")
+        const $buttons = $('<div>')
             .addClass(BUTTON_GROUP_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        const selectedItems = this.option("selectedItems");
+        const selectedItems = this.option('selectedItems');
 
         const options = {
-            selectionMode: this.option("selectionMode"),
-            items: this.option("items"),
-            keyExpr: this.option("keyExpr"),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            selectionMode: this.option('selectionMode'),
+            items: this.option('items'),
+            keyExpr: this.option('keyExpr'),
+            itemTemplate: this._getTemplateByOption('itemTemplate'),
             scrollingEnabled: false,
-            selectedItemKeys: this.option("selectedItemKeys"),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            accessKey: this.option("accessKey"),
-            tabIndex: this.option("tabIndex"),
-            noDataText: "",
+            selectedItemKeys: this.option('selectedItemKeys'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            accessKey: this.option('accessKey'),
+            tabIndex: this.option('tabIndex'),
+            noDataText: '',
             selectionRequired: false,
             onItemRendered: e => {
-                const width = this.option("width");
+                const width = this.option('width');
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
             },
             onSelectionChanged: e => {
@@ -261,33 +261,33 @@ const ButtonGroup = Widget.inherit({
     },
 
     _syncSelectionOptions() {
-        this._setOptionSilent("selectedItems", this._buttonsCollection.option("selectedItems"));
-        this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
+        this._setOptionSilent('selectedItems', this._buttonsCollection.option('selectedItems'));
+        this._setOptionSilent('selectedItemKeys', this._buttonsCollection.option('selectedItemKeys'));
     },
 
     _optionChanged(args) {
         switch(args.name) {
-            case "stylingMode":
-            case "selectionMode":
-            case "keyExpr":
-            case "itemTemplate":
-            case "items":
-            case "activeStateEnabled":
-            case "focusStateEnabled":
-            case "hoverStateEnabled":
-            case "tabIndex":
+            case 'stylingMode':
+            case 'selectionMode':
+            case 'keyExpr':
+            case 'itemTemplate':
+            case 'items':
+            case 'activeStateEnabled':
+            case 'focusStateEnabled':
+            case 'hoverStateEnabled':
+            case 'tabIndex':
                 this._invalidate();
                 break;
-            case "selectedItemKeys":
-            case "selectedItems":
+            case 'selectedItemKeys':
+            case 'selectedItems':
                 this._buttonsCollection.option(args.name, args.value);
                 break;
-            case "onItemClick":
+            case 'onItemClick':
                 this._createItemClickAction();
                 break;
-            case "onSelectionChanged":
+            case 'onSelectionChanged':
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this
                     ._buttonsCollection
@@ -300,6 +300,6 @@ const ButtonGroup = Widget.inherit({
     }
 });
 
-registerComponent("dxButtonGroup", ButtonGroup);
+registerComponent('dxButtonGroup', ButtonGroup);
 
 module.exports = ButtonGroup;

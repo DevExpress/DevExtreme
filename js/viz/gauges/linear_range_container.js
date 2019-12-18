@@ -1,8 +1,8 @@
-var BaseRangeContainer = require("./base_range_container"),
+var BaseRangeContainer = require('./base_range_container'),
 
     _Number = Number,
     _max = Math.max,
-    _normalizeEnum = require("../core/utils").normalizeEnum;
+    _normalizeEnum = require('../core/utils').normalizeEnum;
 
 var LinearRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {
@@ -67,7 +67,7 @@ var LinearRangeContainer = BaseRangeContainer.inherit({
                 endPosition, y + endWidth * outer
             ];
         }
-        return that._renderer.path(points, "area");
+        return that._renderer.path(points, 'area');
     },
 
     measure: function(layout) {

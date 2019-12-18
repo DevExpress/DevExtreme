@@ -1,58 +1,58 @@
-var $ = require("../../core/renderer"),
-    Guid = require("../../core/guid"),
-    registerComponent = require("../../core/component_registrator"),
-    noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    inRange = require("../../core/utils/math").inRange,
-    extend = require("../../core/utils/extend").extend,
-    Button = require("../button"),
-    Editor = require("../editor/editor"),
-    Swipeable = require("../../events/gesture/swipeable"),
-    Navigator = require("./ui.calendar.navigator"),
-    Views = require("./ui.calendar.views"),
-    translator = require("../../animation/translator"),
-    browser = require("../../core/utils/browser"),
-    dateUtils = require("../../core/utils/date"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    devices = require("../../core/devices"),
-    fx = require("../../animation/fx"),
-    windowUtils = require("../../core/utils/window"),
-    messageLocalization = require("../../localization/message"),
-    FunctionTemplate = require("../widget/function_template");
+var $ = require('../../core/renderer'),
+    Guid = require('../../core/guid'),
+    registerComponent = require('../../core/component_registrator'),
+    noop = require('../../core/utils/common').noop,
+    typeUtils = require('../../core/utils/type'),
+    inRange = require('../../core/utils/math').inRange,
+    extend = require('../../core/utils/extend').extend,
+    Button = require('../button'),
+    Editor = require('../editor/editor'),
+    Swipeable = require('../../events/gesture/swipeable'),
+    Navigator = require('./ui.calendar.navigator'),
+    Views = require('./ui.calendar.views'),
+    translator = require('../../animation/translator'),
+    browser = require('../../core/utils/browser'),
+    dateUtils = require('../../core/utils/date'),
+    dateSerialization = require('../../core/utils/date_serialization'),
+    devices = require('../../core/devices'),
+    fx = require('../../animation/fx'),
+    windowUtils = require('../../core/utils/window'),
+    messageLocalization = require('../../localization/message'),
+    FunctionTemplate = require('../widget/function_template');
 
-var CALENDAR_CLASS = "dx-calendar",
-    CALENDAR_BODY_CLASS = "dx-calendar-body",
-    CALENDAR_CELL_CLASS = "dx-calendar-cell",
-    CALENDAR_FOOTER_CLASS = "dx-calendar-footer",
-    CALENDAR_TODAY_BUTTON_CLASS = "dx-calendar-today-button",
-    CALENDAR_HAS_FOOTER_CLASS = "dx-calendar-with-footer",
-    CALENDAR_VIEWS_WRAPPER_CLASS = "dx-calendar-views-wrapper",
-    CALENDAR_VIEW_CLASS = "dx-calendar-view",
-    FOCUSED_STATE_CLASS = "dx-state-focused",
+var CALENDAR_CLASS = 'dx-calendar',
+    CALENDAR_BODY_CLASS = 'dx-calendar-body',
+    CALENDAR_CELL_CLASS = 'dx-calendar-cell',
+    CALENDAR_FOOTER_CLASS = 'dx-calendar-footer',
+    CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button',
+    CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer',
+    CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper',
+    CALENDAR_VIEW_CLASS = 'dx-calendar-view',
+    FOCUSED_STATE_CLASS = 'dx-state-focused',
 
     ANIMATION_DURATION_SHOW_VIEW = 250,
     POP_ANIMATION_FROM = 0.6,
     POP_ANIMATION_TO = 1,
 
-    CALENDAR_INPUT_STANDARD_PATTERN = "yyyy-MM-dd",
-    CALENDAR_DATE_VALUE_KEY = "dxDateValueKey",
+    CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd',
+    CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey',
 
     LEVEL_COMPARE_MAP = {
-        "month": 3,
-        "year": 2,
-        "decade": 1,
-        "century": 0
+        'month': 3,
+        'year': 2,
+        'decade': 1,
+        'century': 0
     };
 
 var ZOOM_LEVEL = {
-    MONTH: "month",
-    YEAR: "year",
-    DECADE: "decade",
-    CENTURY: "century"
+    MONTH: 'month',
+    YEAR: 'year',
+    DECADE: 'decade',
+    CENTURY: 'century'
 };
 
 var Calendar = Editor.inherit({
-    _activeStateUnit: "." + CALENDAR_CELL_CLASS,
+    _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -155,7 +155,7 @@ var Calendar = Editor.inherit({
             * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            cellTemplate: "cell",
+            cellTemplate: 'cell',
 
             /**
              * @name dxCalendarOptions.disabledDates
@@ -211,7 +211,7 @@ var Calendar = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -251,7 +251,7 @@ var Calendar = Editor.inherit({
                     if(fx.isAnimating(this._view.$element())) {
                         return;
                     }
-                    this._moveCurrentDate(-1 * this._view.option("colCount"));
+                    this._moveCurrentDate(-1 * this._view.option('colCount'));
                 }
             },
             downArrow: function(e) {
@@ -262,15 +262,15 @@ var Calendar = Editor.inherit({
                     if(fx.isAnimating(this._view.$element())) {
                         return;
                     }
-                    this._moveCurrentDate(1 * this._view.option("colCount"));
+                    this._moveCurrentDate(1 * this._view.option('colCount'));
                 }
             },
             home: function(e) {
                 e.preventDefault();
 
-                var zoomLevel = this.option("zoomLevel");
-                var currentDate = this.option("currentDate");
-                var min = this._dateOption("min");
+                var zoomLevel = this.option('zoomLevel');
+                var currentDate = this.option('currentDate');
+                var min = this._dateOption('min');
 
                 var date = dateUtils.sameView(zoomLevel, currentDate, min)
                     ? min
@@ -281,9 +281,9 @@ var Calendar = Editor.inherit({
             end: function(e) {
                 e.preventDefault();
 
-                var zoomLevel = this.option("zoomLevel");
-                var currentDate = this.option("currentDate");
-                var max = this._dateOption("max");
+                var zoomLevel = this.option('zoomLevel');
+                var currentDate = this.option('currentDate');
+                var max = this._dateOption('max');
 
                 var date = dateUtils.sameView(zoomLevel, currentDate, max)
                     ? max
@@ -304,7 +304,7 @@ var Calendar = Editor.inherit({
                 if(!this._isMaxZoomLevel()) {
                     this._navigateDown();
                 } else {
-                    var value = this._updateTimeComponent(this.option("currentDate"));
+                    var value = this._updateTimeComponent(this.option('currentDate'));
                     this._dateValue(value, e);
                 }
             }
@@ -312,14 +312,14 @@ var Calendar = Editor.inherit({
     },
 
     _getSerializationFormat: function(optionName) {
-        var value = this.option(optionName || "value");
+        var value = this.option(optionName || 'value');
 
-        if(this.option("dateSerializationFormat")) {
-            return this.option("dateSerializationFormat");
+        if(this.option('dateSerializationFormat')) {
+            return this.option('dateSerializationFormat');
         }
 
         if(typeUtils.isNumeric(value)) {
-            return "number";
+            return 'number';
         }
 
         if(!typeUtils.isString(value)) {
@@ -335,7 +335,7 @@ var Calendar = Editor.inherit({
 
     _dateValue: function(value, dxEvent) {
         if(dxEvent) this._saveValueChangeEvent(dxEvent);
-        this._dateOption("value", value);
+        this._dateOption('value', value);
     },
 
     _dateOption: function(optionName, optionValue) {
@@ -348,10 +348,10 @@ var Calendar = Editor.inherit({
     },
 
     _moveCurrentDate: function(offset, baseDate) {
-        var currentDate = baseDate || new Date(this.option("currentDate")),
+        var currentDate = baseDate || new Date(this.option('currentDate')),
             maxDate = this._getMaxDate(),
             minDate = this._getMinDate(),
-            zoomLevel = this.option("zoomLevel"),
+            zoomLevel = this.option('zoomLevel'),
             currentDateInRange = inRange(currentDate, minDate, maxDate),
             dateForward = new Date(currentDate),
             dateBackward = new Date(currentDate),
@@ -394,14 +394,14 @@ var Calendar = Editor.inherit({
             dateForwardInRange = inRange(dateForward, minDate, maxDate);
         }
 
-        this.option("currentDate", currentDate);
+        this.option('currentDate', currentDate);
     },
 
     _moveToClosestAvailableDate: function(baseDate, offset) {
         if(this._view.isDateDisabled(baseDate)) {
             this._moveCurrentDate(offset, baseDate);
         } else {
-            this.option("currentDate", baseDate);
+            this.option('currentDate', baseDate);
         }
     },
 
@@ -413,24 +413,24 @@ var Calendar = Editor.inherit({
     },
 
     _correctZoomLevel: function() {
-        var minZoomLevel = this.option("minZoomLevel"),
-            maxZoomLevel = this.option("maxZoomLevel"),
-            zoomLevel = this.option("zoomLevel");
+        var minZoomLevel = this.option('minZoomLevel'),
+            maxZoomLevel = this.option('maxZoomLevel'),
+            zoomLevel = this.option('zoomLevel');
 
         if(LEVEL_COMPARE_MAP[maxZoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
             return;
         }
 
         if(LEVEL_COMPARE_MAP[zoomLevel] > LEVEL_COMPARE_MAP[maxZoomLevel]) {
-            this.option("zoomLevel", maxZoomLevel);
+            this.option('zoomLevel', maxZoomLevel);
         } else if(LEVEL_COMPARE_MAP[zoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
-            this.option("zoomLevel", minZoomLevel);
+            this.option('zoomLevel', minZoomLevel);
         }
     },
 
     _initCurrentDate: function() {
-        var currentDate = this._getNormalizedDate(this._dateOption("value")) || this._getNormalizedDate(this.option("currentDate"));
-        this.option("currentDate", currentDate);
+        var currentDate = this._getNormalizedDate(this._dateOption('value')) || this._getNormalizedDate(this.option('currentDate'));
+        this.option('currentDate', currentDate);
     },
 
     _getNormalizedDate: function(date) {
@@ -439,16 +439,16 @@ var Calendar = Editor.inherit({
     },
 
     _initActions: function() {
-        this._cellClickAction = this._createActionByOption("onCellClick");
-        this._onContouredChanged = this._createActionByOption("onContouredChanged");
+        this._cellClickAction = this._createActionByOption('onCellClick');
+        this._onContouredChanged = this._createActionByOption('onContouredChanged');
     },
 
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["cell"] = new FunctionTemplate(function(options) {
+        this._defaultTemplates['cell'] = new FunctionTemplate(function(options) {
             var data = options.model;
-            $(options.container).append($("<span>").text(data && data.text || String(data)));
+            $(options.container).append($('<span>').text(data && data.text || String(data)));
         }, this);
     },
 
@@ -461,18 +461,18 @@ var Calendar = Editor.inherit({
             max = this._getMaxDate();
 
         if(min > max) {
-            this.option("currentDate", new Date());
+            this.option('currentDate', new Date());
             return;
         }
 
         var normalizedDate = this._getNormalizedDate(date);
 
         if(date.getTime() !== normalizedDate.getTime()) {
-            this.option("currentDate", new Date(normalizedDate));
+            this.option('currentDate', new Date(normalizedDate));
             return;
         }
 
-        var offset = this._getViewsOffset(this._view.option("date"), normalizedDate);
+        var offset = this._getViewsOffset(this._view.option('date'), normalizedDate);
 
         if(offset !== 0 && !this._isMaxZoomLevel() && this._isOtherViewCellClicked) { offset = 0; }
 
@@ -486,8 +486,8 @@ var Calendar = Editor.inherit({
     },
 
     _setViewContoured: function(date) {
-        if(this.option("hasFocus")(this._focusTarget())) {
-            this._view.option("contouredDate", date);
+        if(this.option('hasFocus')(this._focusTarget())) {
+            this._view.option('contouredDate', date);
         }
     },
 
@@ -496,7 +496,7 @@ var Calendar = Editor.inherit({
             return this.min;
         }
 
-        this.min = this._dateOption("min") || new Date(1000, 0);
+        this.min = this._dateOption('min') || new Date(1000, 0);
         return this.min;
     },
 
@@ -505,12 +505,12 @@ var Calendar = Editor.inherit({
             return this.max;
         }
 
-        this.max = this._dateOption("max") || new Date(3000, 0);
+        this.max = this._dateOption('max') || new Date(3000, 0);
         return this.max;
     },
 
     _getViewsOffset: function(startDate, endDate) {
-        var zoomLevel = this.option("zoomLevel");
+        var zoomLevel = this.option('zoomLevel');
 
         if(zoomLevel === ZOOM_LEVEL.MONTH) {
             return this._getMonthsOffset(startDate, endDate);
@@ -557,14 +557,14 @@ var Calendar = Editor.inherit({
     },
 
     _getRtlCorrection: function() {
-        return this.option("rtlEnabled") ? -1 : 1;
+        return this.option('rtlEnabled') ? -1 : 1;
     },
 
     _getDateByOffset: function(offset, date) {
-        date = new Date(date || this.option("currentDate"));
+        date = new Date(date || this.option('currentDate'));
 
         var currentDay = date.getDate();
-        var difference = dateUtils.getDifferenceInMonth(this.option("zoomLevel")) * offset;
+        var difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
 
         date.setDate(1);
         date.setMonth(date.getMonth() + difference);
@@ -599,13 +599,13 @@ var Calendar = Editor.inherit({
         this._renderFooter();
 
         this.setAria({
-            "role": "listbox",
-            "label": messageLocalization.format("dxCalendar-ariaWidgetName")
+            'role': 'listbox',
+            'label': messageLocalization.format('dxCalendar-ariaWidgetName')
         });
         this._updateAriaSelected();
         this._updateAriaId();
 
-        if(this._view.isDateDisabled(this.option("currentDate"))) {
+        if(this._view.isDateDisabled(this.option('currentDate'))) {
             this._moveCurrentDate(0);
         }
 
@@ -614,24 +614,24 @@ var Calendar = Editor.inherit({
     _render: function() {
         this.callBase();
 
-        this._setViewContoured(this.option("currentDate"));
+        this._setViewContoured(this.option('currentDate'));
     },
 
     _renderBody: function() {
         if(!this._$viewsWrapper) {
-            this.$body = $("<div>").addClass(CALENDAR_BODY_CLASS);
-            this._$viewsWrapper = $("<div>").addClass(CALENDAR_VIEWS_WRAPPER_CLASS);
+            this.$body = $('<div>').addClass(CALENDAR_BODY_CLASS);
+            this._$viewsWrapper = $('<div>').addClass(CALENDAR_VIEWS_WRAPPER_CLASS);
             this.$body.append(this._$viewsWrapper);
         }
     },
 
     _renderViews: function() {
-        this.$element().addClass(CALENDAR_VIEW_CLASS + "-" + this.option("zoomLevel"));
+        this.$element().addClass(CALENDAR_VIEW_CLASS + '-' + this.option('zoomLevel'));
 
-        var currentDate = this.option("currentDate");
+        var currentDate = this.option('currentDate');
 
         this._view = this._renderSpecificView(currentDate);
-        this._view.option("_keyboardProcessor", this._viewKeyboardProcessor);
+        this._view.option('_keyboardProcessor', this._viewKeyboardProcessor);
 
         if(windowUtils.hasWindow()) {
             var beforeDate = this._getDateByOffset(-1, currentDate);
@@ -647,31 +647,31 @@ var Calendar = Editor.inherit({
     },
 
     _renderSpecificView: function(date) {
-        var specificView = Views[this.option("zoomLevel")],
-            $view = $("<div>").appendTo(this._$viewsWrapper),
+        var specificView = Views[this.option('zoomLevel')],
+            $view = $('<div>').appendTo(this._$viewsWrapper),
             config = this._viewConfig(date);
 
         return new specificView($view, config);
     },
 
     _viewConfig: function(date) {
-        var disabledDates = this.option("disabledDates");
+        var disabledDates = this.option('disabledDates');
 
         disabledDates = typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
         return {
             date: date,
             min: this._getMinDate(),
             max: this._getMaxDate(),
-            firstDayOfWeek: this.option("firstDayOfWeek"),
-            value: this._dateOption("value"),
-            rtl: this.option("rtlEnabled"),
-            disabled: this.option("disabled"),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
+            value: this._dateOption('value'),
+            rtl: this.option('rtlEnabled'),
+            disabled: this.option('disabled'),
             tabIndex: undefined,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            hoverStateEnabled: this.option('hoverStateEnabled'),
             disabledDates: disabledDates,
             onCellClick: this._cellClickHandler.bind(this),
-            cellTemplate: this._getTemplateByOption("cellTemplate"),
+            cellTemplate: this._getTemplateByOption('cellTemplate'),
             allowValueSelection: this._isMaxZoomLevel()
         };
     },
@@ -685,7 +685,7 @@ var Calendar = Editor.inherit({
     },
 
     _isViewAvailable: function(date) {
-        var zoomLevel = this.option("zoomLevel");
+        var zoomLevel = this.option('zoomLevel');
         var min = dateUtils.getViewMinBoundaryDate(zoomLevel, this._getMinDate());
         var max = dateUtils.getViewMaxBoundaryDate(zoomLevel, this._getMaxDate());
 
@@ -707,12 +707,12 @@ var Calendar = Editor.inherit({
     },
 
     _getViewPosition: function(coefficient) {
-        var rtlCorrection = this.option("rtlEnabled") && !browser.msie ? -1 : 1;
-        return (coefficient * 100 * rtlCorrection) + "%";
+        var rtlCorrection = this.option('rtlEnabled') && !browser.msie ? -1 : 1;
+        return (coefficient * 100 * rtlCorrection) + '%';
     },
 
     _cellClickHandler: function(e) {
-        var zoomLevel = this.option("zoomLevel"),
+        var zoomLevel = this.option('zoomLevel'),
             nextView = dateUtils.getViewDown(zoomLevel);
 
         var isMaxZoomLevel = this._isMaxZoomLevel();
@@ -728,7 +728,7 @@ var Calendar = Editor.inherit({
 
     _updateTimeComponent: function(date) {
         var result = new Date(date);
-        var currentValue = this._dateOption("value");
+        var currentValue = this._dateOption('value');
 
         if(currentValue) {
             result.setHours(currentValue.getHours());
@@ -741,11 +741,11 @@ var Calendar = Editor.inherit({
     },
 
     _isMaxZoomLevel: function() {
-        return this.option("zoomLevel") === this.option("maxZoomLevel");
+        return this.option('zoomLevel') === this.option('maxZoomLevel');
     },
 
     _navigateDown: function(cell) {
-        var zoomLevel = this.option("zoomLevel");
+        var zoomLevel = this.option('zoomLevel');
 
         if(this._isMaxZoomLevel()) {
             return;
@@ -757,7 +757,7 @@ var Calendar = Editor.inherit({
             return;
         }
 
-        var newCurrentDate = this._view.option("contouredDate") || this._view.option("date");
+        var newCurrentDate = this._view.option('contouredDate') || this._view.option('date');
 
         if(cell) {
             newCurrentDate = $(cell).data(CALENDAR_DATE_VALUE_KEY);
@@ -765,8 +765,8 @@ var Calendar = Editor.inherit({
 
         this._isOtherViewCellClicked = true;
 
-        this.option("currentDate", newCurrentDate);
-        this.option("zoomLevel", nextView);
+        this.option('currentDate', newCurrentDate);
+        this.option('zoomLevel', nextView);
 
         this._isOtherViewCellClicked = false;
 
@@ -778,10 +778,10 @@ var Calendar = Editor.inherit({
 
     _renderNavigator: function() {
         if(!this._navigator) {
-            this._navigator = new Navigator($("<div>"), this._navigatorConfig());
+            this._navigator = new Navigator($('<div>'), this._navigatorConfig());
         }
 
-        this._navigator.option("text", this._view.getNavigatorCaption());
+        this._navigator.option('text', this._view.getNavigatorCaption());
         this._updateButtonsVisibility();
     },
 
@@ -790,29 +790,29 @@ var Calendar = Editor.inherit({
             text: this._view.getNavigatorCaption(),
             onClick: this._navigatorClickHandler.bind(this),
             onCaptionClick: this._navigateUp.bind(this),
-            rtlEnabled: this.option("rtlEnabled")
+            rtlEnabled: this.option('rtlEnabled')
         };
     },
 
     _navigatorClickHandler: function(e) {
-        var currentDate = this._getDateByOffset(e.direction, this.option("currentDate"));
+        var currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
 
         this._moveToClosestAvailableDate(currentDate, 1 * e.direction);
         this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
     },
 
     _navigateUp: function() {
-        var zoomLevel = this.option("zoomLevel"),
+        var zoomLevel = this.option('zoomLevel'),
             nextView = dateUtils.getViewUp(zoomLevel);
 
         if(!nextView || this._isMinZoomLevel(zoomLevel)) {
             return;
         }
 
-        var contouredDate = this._view.option("contouredDate");
+        var contouredDate = this._view.option('contouredDate');
 
-        this.option("zoomLevel", nextView);
-        this.option("currentDate", contouredDate || this._view.option("date"));
+        this.option('zoomLevel', nextView);
+        this.option('currentDate', contouredDate || this._view.option('date'));
 
         this._renderNavigator();
 
@@ -825,12 +825,12 @@ var Calendar = Editor.inherit({
         var min = this._getMinDate(),
             max = this._getMaxDate();
 
-        return dateUtils.sameView(zoomLevel, min, max) || this.option("minZoomLevel") === zoomLevel;
+        return dateUtils.sameView(zoomLevel, min, max) || this.option('minZoomLevel') === zoomLevel;
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton("next", !typeUtils.isDefined(this._getRequiredView("next")));
-        this._navigator.toggleButton("prev", !typeUtils.isDefined(this._getRequiredView("prev")));
+        this._navigator.toggleButton('next', !typeUtils.isDefined(this._getRequiredView('next')));
+        this._navigator.toggleButton('prev', !typeUtils.isDefined(this._getRequiredView('prev')));
     },
 
     _renderSwipeable: function() {
@@ -847,17 +847,17 @@ var Calendar = Editor.inherit({
     _swipeStartHandler: function(e) {
         fx.stop(this._$viewsWrapper, true);
 
-        e.event.maxLeftOffset = this._getRequiredView("next") ? 1 : 0;
-        e.event.maxRightOffset = this._getRequiredView("prev") ? 1 : 0;
+        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 : 0;
+        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 : 0;
     },
 
     _getRequiredView: function(name) {
         var view;
-        var isRtl = this.option("rtlEnabled");
+        var isRtl = this.option('rtlEnabled');
 
-        if(name === "next") {
+        if(name === 'next') {
             view = isRtl ? this._beforeView : this._afterView;
-        } else if(name === "prev") {
+        } else if(name === 'prev') {
             view = isRtl ? this._afterView : this._beforeView;
         }
 
@@ -890,7 +890,7 @@ var Calendar = Editor.inherit({
             }
         }
 
-        this.option("currentDate", date);
+        this.option('currentDate', date);
     },
 
     _viewWidth: function() {
@@ -912,7 +912,7 @@ var Calendar = Editor.inherit({
             view = this._afterView;
         }
 
-        this._navigator.option("text", view.getNavigatorCaption());
+        this._navigator.option('text', view.getNavigatorCaption());
     },
 
     _isDateInInvalidRange: function(date) {
@@ -928,13 +928,13 @@ var Calendar = Editor.inherit({
     },
 
     _renderFooter: function() {
-        var showTodayButton = this.option("showTodayButton");
+        var showTodayButton = this.option('showTodayButton');
 
         if(showTodayButton) {
-            var $todayButton = this._createComponent($("<a>"),
+            var $todayButton = this._createComponent($('<a>'),
                 Button, {
                     focusStateEnabled: false,
-                    text: messageLocalization.format("dxCalendar-todayButtonText"),
+                    text: messageLocalization.format('dxCalendar-todayButtonText'),
                     onClick: (function() {
                         this._toTodayView();
                     }).bind(this),
@@ -942,7 +942,7 @@ var Calendar = Editor.inherit({
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);
 
-            this._$footer = $("<div>")
+            this._$footer = $('<div>')
                 .addClass(CALENDAR_FOOTER_CLASS)
                 .append($todayButton);
 
@@ -953,10 +953,10 @@ var Calendar = Editor.inherit({
     },
 
     _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
+        this._$submitElement = $('<input>')
+            .attr('type', 'hidden')
             .appendTo(this.$element());
-        this._setSubmitValue(this.option("value"));
+        this._setSubmitValue(this.option('value'));
     },
 
     _setSubmitValue: function(value) {
@@ -975,7 +975,7 @@ var Calendar = Editor.inherit({
 
     _popAnimationView: function(view, from, to, duration) {
         return fx.animate(view.$element(), {
-            type: "pop",
+            type: 'pop',
             from: {
                 scale: from,
                 opacity: from
@@ -1021,7 +1021,7 @@ var Calendar = Editor.inherit({
 
     _animateWrapper: function(to, duration) {
         return fx.animate(this._$viewsWrapper, {
-            type: "slide",
+            type: 'slide',
             from: { left: this._$viewsWrapper.position().left },
             to: { left: to },
             duration: duration
@@ -1032,14 +1032,14 @@ var Calendar = Editor.inherit({
         var today = new Date();
 
         if(this._isMaxZoomLevel()) {
-            this._dateOption("value", today);
+            this._dateOption('value', today);
             return;
         }
 
         this._preventViewChangeAnimation = true;
 
-        this.option("zoomLevel", this.option("maxZoomLevel"));
-        this._dateOption("value", today);
+        this.option('zoomLevel', this.option('maxZoomLevel'));
+        this._dateOption('value', today);
 
         this._animateShowView();
 
@@ -1066,19 +1066,19 @@ var Calendar = Editor.inherit({
 
         if(offset < 0) {
             viewOffset = 1;
-            viewToCreateKey = "_beforeView";
-            viewToRemoveKey = "_afterView";
+            viewToCreateKey = '_beforeView';
+            viewToRemoveKey = '_afterView';
         } else {
             viewOffset = -1;
-            viewToCreateKey = "_afterView";
-            viewToRemoveKey = "_beforeView";
+            viewToCreateKey = '_afterView';
+            viewToRemoveKey = '_beforeView';
         }
 
         if(!this[viewToCreateKey]) {
             return;
         }
 
-        var destinationDate = this[viewToCreateKey].option("date");
+        var destinationDate = this[viewToCreateKey].option('date');
 
         if(this[viewToRemoveKey]) {
             this[viewToRemoveKey].$element().remove();
@@ -1134,44 +1134,44 @@ var Calendar = Editor.inherit({
 
     _focusInHandler: function() {
         this.callBase.apply(this, arguments);
-        this._view.option("contouredDate", this.option("currentDate"));
+        this._view.option('contouredDate', this.option('currentDate'));
     },
 
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
-        this._view.option("contouredDate", null);
+        this._view.option('contouredDate', null);
     },
 
     _updateViewsValue: function(value) {
         var newValue = value ? new Date(value) : null;
 
-        this._view.option("value", newValue);
-        this._beforeView && this._beforeView.option("value", newValue);
-        this._afterView && this._afterView.option("value", newValue);
+        this._view.option('value', newValue);
+        this._beforeView && this._beforeView.option('value', newValue);
+        this._afterView && this._afterView.option('value', newValue);
     },
 
     _updateAriaSelected: function(value, previousValue) {
-        value = value || this._dateOption("value");
+        value = value || this._dateOption('value');
 
         var $prevSelectedCell = this._view._getCellByDate(previousValue);
         var $selectedCell = this._view._getCellByDate(value);
 
-        this.setAria("selected", undefined, $prevSelectedCell);
-        this.setAria("selected", true, $selectedCell);
+        this.setAria('selected', undefined, $prevSelectedCell);
+        this.setAria('selected', true, $selectedCell);
 
-        if(value && this.option("currentDate").getTime() === value.getTime()) {
+        if(value && this.option('currentDate').getTime() === value.getTime()) {
             this._updateAriaId(value);
         }
     },
 
     _updateAriaId: function(value) {
-        value = value || this.option("currentDate");
+        value = value || this.option('currentDate');
 
-        var ariaId = "dx-" + new Guid();
+        var ariaId = 'dx-' + new Guid();
         var $newCell = this._view._getCellByDate(value);
 
-        this.setAria("id", ariaId, $newCell);
-        this.setAria("activedescendant", ariaId);
+        this.setAria('id', ariaId, $newCell);
+        this.setAria('activedescendant', ariaId);
 
         this._onContouredChanged(ariaId);
     },
@@ -1187,64 +1187,64 @@ var Calendar = Editor.inherit({
         var previousValue = args.previousValue;
 
         switch(args.name) {
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._clearViewWidthCache();
                 break;
-            case "min":
-            case "max":
+            case 'min':
+            case 'max':
                 this.min = undefined;
                 this.max = undefined;
-                this._suppressingNavigation(this._updateCurrentDate, [this.option("currentDate")]);
+                this._suppressingNavigation(this._updateCurrentDate, [this.option('currentDate')]);
                 this._refreshViews();
                 this._renderNavigator();
                 break;
-            case "firstDayOfWeek":
+            case 'firstDayOfWeek':
                 this._refreshViews();
                 this._updateButtonsVisibility();
                 break;
-            case "currentDate":
-                this.setAria("id", undefined, this._view._getCellByDate(previousValue));
+            case 'currentDate':
+                this.setAria('id', undefined, this._view._getCellByDate(previousValue));
                 this._updateCurrentDate(value);
                 break;
-            case "zoomLevel":
-                this.$element().removeClass(CALENDAR_VIEW_CLASS + "-" + previousValue);
+            case 'zoomLevel':
+                this.$element().removeClass(CALENDAR_VIEW_CLASS + '-' + previousValue);
                 this._correctZoomLevel();
                 this._refreshViews();
                 this._renderNavigator();
                 this._updateAriaId();
                 break;
-            case "minZoomLevel":
-            case "maxZoomLevel":
+            case 'minZoomLevel':
+            case 'maxZoomLevel':
                 this._correctZoomLevel();
                 this._updateButtonsVisibility();
                 break;
-            case "value":
+            case 'value':
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option("currentDate", typeUtils.isDefined(value) ? new Date(value) : new Date());
+                this.option('currentDate', typeUtils.isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
                 this.callBase(args);
                 break;
-            case "disabled":
-                this._view.option("disabled", value);
+            case 'disabled':
+                this._view.option('disabled', value);
                 this.callBase(args);
                 break;
-            case "onCellClick":
-                this._view.option("onCellClick", value);
+            case 'onCellClick':
+                this._view.option('onCellClick', value);
                 break;
-            case "onContouredChanged":
-                this._onContouredChanged = this._createActionByOption("onContouredChanged");
+            case 'onContouredChanged':
+                this._onContouredChanged = this._createActionByOption('onContouredChanged');
                 break;
-            case "disabledDates":
-            case "dateSerializationFormat":
-            case "cellTemplate":
-            case "showTodayButton":
+            case 'disabledDates':
+            case 'dateSerializationFormat':
+            case 'cellTemplate':
+            case 'showTodayButton':
                 this._invalidate();
                 break;
-            case "hasFocus":
+            case 'hasFocus':
                 break;
             default:
                 this.callBase(args);
@@ -1252,6 +1252,6 @@ var Calendar = Editor.inherit({
     }
 });
 
-registerComponent("dxCalendar", Calendar);
+registerComponent('dxCalendar', Calendar);
 
 module.exports = Calendar;

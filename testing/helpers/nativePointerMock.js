@@ -2,7 +2,7 @@
     /* global jQuery */
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.nativePointerMock = module.exports = factory(require("jquery"));
+            root.nativePointerMock = module.exports = factory(require('jquery'));
         });
     } else {
         root.nativePointerMock = factory(jQuery);
@@ -41,33 +41,33 @@
 
     var simulateEvent = (function() {
 
-        var isString = function(val) { return typeof val === "string"; },
-            isBoolean = function(val) { return typeof val === "boolean"; },
-            isObject = function(val) { return typeof val === "object"; },
+        var isString = function(val) { return typeof val === 'string'; },
+            isBoolean = function(val) { return typeof val === 'boolean'; },
+            isObject = function(val) { return typeof val === 'object'; },
 
             MOUSE_EVENTS = {
-                "click": 1,
-                "dblclick": 1,
-                "mouseover": 1,
-                "mouseout": 1,
-                "mousedown": 1,
-                "mouseup": 1,
-                "mousemove": 1,
-                "contextmenu": 1
+                'click': 1,
+                'dblclick': 1,
+                'mouseover': 1,
+                'mouseout': 1,
+                'mousedown': 1,
+                'mouseup': 1,
+                'mousemove': 1,
+                'contextmenu': 1
             },
 
             POINTER_EVENTS = {
-                "pointerover": 1,
-                "pointerout": 1,
-                "pointerdown": 1,
-                "pointerup": 1,
-                "pointermove": 1
+                'pointerover': 1,
+                'pointerout': 1,
+                'pointerdown': 1,
+                'pointerup': 1,
+                'pointermove': 1
             },
 
             KEY_EVENTS = {
-                "keydown": 1,
-                "keyup": 1,
-                "keypress": 1
+                'keydown': 1,
+                'keyup': 1,
+                'keypress': 1
             },
 
             UI_EVENTS = {
@@ -81,16 +81,16 @@
             },
 
             TOUCH_EVENTS = {
-                "touchstart": 1,
-                "touchmove": 1,
-                "touchend": 1,
-                "touchcancel": 1
+                'touchstart': 1,
+                'touchmove': 1,
+                'touchend': 1,
+                'touchcancel': 1
             },
 
             GESTURE_EVENTS = {
-                "gesturestart": 1,
-                "gesturechange": 1,
-                "gestureend": 1
+                'gesturestart': 1,
+                'gesturechange': 1,
+                'gestureend': 1
             },
 
             BUBBLE_EVENTS = $.extend({
@@ -107,24 +107,24 @@
 
         var simulateKeyEvent = function(target, type, bubbles, cancelable, view, ctrlKey, altKey, shiftKey, metaKey, keyCode, charCode) {
             if(!target) {
-                throw Error("Invalid target");
+                throw Error('Invalid target');
             }
 
             if(isString(type)) {
                 type = type.toLowerCase();
                 switch(type) {
-                    case "textevent":
-                        type = "keypress";
+                    case 'textevent':
+                        type = 'keypress';
                         break;
-                    case "keyup":
-                    case "keydown":
-                    case "keypress":
+                    case 'keyup':
+                    case 'keydown':
+                    case 'keypress':
                         break;
                     default:
-                        throw Error("Event type '" + type + "' not supported.");
+                        throw Error('Event type \'' + type + '\' not supported.');
                 }
             } else {
-                throw Error("Event type must be a string.");
+                throw Error('Event type must be a string.');
             }
 
             if(!isBoolean(bubbles)) {
@@ -166,7 +166,7 @@
             var customEvent = null;
 
             try {
-                customEvent = document.createEvent("KeyEvents");
+                customEvent = document.createEvent('KeyEvents');
 
                 customEvent.initKeyEvent(type, bubbles, cancelable, view, ctrlKey,
                     altKey, shiftKey, metaKey, keyCode, charCode);
@@ -175,11 +175,11 @@
 
                 try {
 
-                    customEvent = document.createEvent("Events");
+                    customEvent = document.createEvent('Events');
 
                 } catch(uiError) {
 
-                    customEvent = document.createEvent("UIEvents");
+                    customEvent = document.createEvent('UIEvents');
 
                 } finally {
 
@@ -201,16 +201,16 @@
 
         var simulateMouseEvent = function(target, type, bubbles, cancelable, view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget) {
             if(!target) {
-                throw Error("Invalid target.");
+                throw Error('Invalid target.');
             }
 
 
             if(isString(type)) {
                 if(!MOUSE_EVENTS[type.toLowerCase()] && !POINTER_EVENTS[type]) {
-                    throw Error("Event type '" + type + "' not supported.");
+                    throw Error('Event type \'' + type + '\' not supported.');
                 }
             } else {
-                throw Error("Event type must be a string.");
+                throw Error('Event type must be a string.');
             }
 
             if(!isBoolean(bubbles)) {
@@ -218,7 +218,7 @@
             }
 
             if(!isBoolean(cancelable)) {
-                cancelable = (type !== "mousemove");
+                cancelable = (type !== 'mousemove');
             }
 
             if(!isObject(view)) {
@@ -267,7 +267,7 @@
 
             relatedTarget = relatedTarget || null;
 
-            var customEvent = document.createEvent("MouseEvents");
+            var customEvent = document.createEvent('MouseEvents');
 
             if(customEvent.initMouseEvent) {
                 customEvent.initMouseEvent(type, bubbles, cancelable, view, detail,
@@ -275,7 +275,7 @@
                     ctrlKey, altKey, shiftKey, metaKey,
                     button, relatedTarget);
             } else {
-                customEvent = document.createEvent("UIEvents");
+                customEvent = document.createEvent('UIEvents');
                 customEvent.initEvent(type, bubbles, cancelable);
                 customEvent.view = view;
                 customEvent.detail = detail;
@@ -292,9 +292,9 @@
             }
 
             if(relatedTarget && !customEvent.relatedTarget) {
-                if(type === "mouseout") {
+                if(type === 'mouseout') {
                     customEvent.toElement = relatedTarget;
-                } else if(type === "mouseover") {
+                } else if(type === 'mouseover') {
                     customEvent.fromElement = relatedTarget;
                 }
             }
@@ -304,17 +304,17 @@
 
         var simulateUIEvent = function(target, type, bubbles, cancelable, view, detail) {
             if(!target) {
-                throw Error("Invalid target.");
+                throw Error('Invalid target.');
             }
 
             if(isString(type)) {
                 type = type.toLowerCase();
 
                 if(!UI_EVENTS[type]) {
-                    throw Error("Event type '" + type + "' not supported.");
+                    throw Error('Event type \'' + type + '\' not supported.');
                 }
             } else {
-                throw Error("Event type must be a string.");
+                throw Error('Event type must be a string.');
             }
 
             var customEvent = null;
@@ -323,7 +323,7 @@
                 bubbles = (type in BUBBLE_EVENTS);
 
                 if(!isBoolean(cancelable)) {
-                    cancelable = (type === "submit");
+                    cancelable = (type === 'submit');
 
                     if(!isObject(view)) {
                         view = window;
@@ -333,13 +333,13 @@
 
                             if($.isFunction(document.createEvent)) {
 
-                                customEvent = document.createEvent("UIEvents");
+                                customEvent = document.createEvent('UIEvents');
                                 customEvent.initUIEvent(type, bubbles, cancelable, view, detail);
 
                                 target.dispatchEvent(customEvent);
 
                             } else {
-                                throw Error("No event simulation framework present.");
+                                throw Error('No event simulation framework present.');
                             }
                         }
                     }
@@ -351,21 +351,21 @@
             var customEvent;
 
             if(!UA.ios || UA.ios < 2.0) {
-                throw Error("Native gesture DOM eventframe is not available in this platform.");
+                throw Error('Native gesture DOM eventframe is not available in this platform.');
             }
 
             if(!target) {
-                throw Error("Invalid target.");
+                throw Error('Invalid target.');
             }
 
             if(isString(type)) {
                 type = type.toLowerCase();
 
                 if(!GESTURE_EVENTS[type]) {
-                    throw Error("Event type '" + type + "' not supported.");
+                    throw Error('Event type \'' + type + '\' not supported.');
                 }
             } else {
-                throw Error("Event type must be a string.");
+                throw Error('Event type must be a string.');
             }
 
             if(!isBoolean(bubbles)) { bubbles = true; }
@@ -384,7 +384,7 @@
             if(!$.isNumeric(scale)) { scale = 1.0; }
             if(!$.isNumeric(rotation)) { rotation = 0.0; }
 
-            customEvent = document.createEvent("GestureEvent");
+            customEvent = document.createEvent('GestureEvent');
 
             customEvent.initGestureEvent(type, bubbles, cancelable, view, detail,
                 screenX, screenY, clientX, clientY,
@@ -398,17 +398,17 @@
             var customEvent;
 
             if(!target) {
-                throw Error("Invalid target.");
+                throw Error('Invalid target.');
             }
 
             if(isString(type)) {
                 type = type.toLowerCase();
 
                 if(!TOUCH_EVENTS[type]) {
-                    throw Error("Event type '" + type + "' not supported.");
+                    throw Error('Event type \'' + type + '\' not supported.');
                 }
             } else {
-                throw Error("Event type must be a string.");
+                throw Error('Event type must be a string.');
             }
 
             if(type === 'touchstart' || type === 'touchmove') {
@@ -423,7 +423,7 @@
 
             if(!isBoolean(bubbles)) { bubbles = true; }
             if(!isBoolean(cancelable)) {
-                cancelable = (type !== "touchcancel");
+                cancelable = (type !== 'touchcancel');
             }
             if(!isObject(view)) { view = window; }
             if(!$.isNumeric(detail)) { detail = 1; }
@@ -439,7 +439,7 @@
             if(!$.isNumeric(rotation)) { rotation = 0.0; }
 
             if(UA.android && !UA.chrome) {
-                customEvent = document.createEvent("MouseEvents");
+                customEvent = document.createEvent('MouseEvents');
                 customEvent.initMouseEvent(type, bubbles, cancelable, view, detail,
                     screenX, screenY, clientX, clientY,
                     ctrlKey, altKey, shiftKey, metaKey,
@@ -450,7 +450,7 @@
                 customEvent.changedTouches = changedTouches || [];
             } else if(UA.ios) {
                 if(UA.ios >= 2.0) {
-                    customEvent = document.createEvent("TouchEvent");
+                    customEvent = document.createEvent('TouchEvent');
 
                     var createTouchByOptions = function(options) {
                         return new window.Touch({
@@ -527,7 +527,7 @@
                 simulateUIEvent(target, type, options.bubbles,
                     options.cancelable, options.view, options.detail);
             } else if(TOUCH_EVENTS[type]) {
-                if((window && ("ontouchstart" in window)) && !(UA.chrome && UA.chrome < 6)) {
+                if((window && ('ontouchstart' in window)) && !(UA.chrome && UA.chrome < 6)) {
                     simulateTouchEvent(target, type,
                         options.bubbles, options.cancelable, options.view, options.detail,
                         options.screenX, options.screenY, options.clientX, options.clientY,
@@ -535,7 +535,7 @@
                         options.touches, options.targetTouches, options.changedTouches,
                         options.scale, options.rotation);
                 } else {
-                    throw Error("Event '" + type + "' can't be simulated. Use gesture-simulate module instead.");
+                    throw Error('Event \'' + type + '\' can\'t be simulated. Use gesture-simulate module instead.');
                 }
 
             } else if(UA.ios && UA.ios >= 2.0 && GESTURE_EVENTS[type]) {
@@ -546,7 +546,7 @@
                     options.scale, options.rotation);
 
             } else {
-                throw Error("Event '" + type + "' can't be simulated.");
+                throw Error('Event \'' + type + '\' can\'t be simulated.');
             }
         };
     })();
@@ -554,15 +554,15 @@
     var pointerEventsSupport = !!window.PointerEvent && UA.msie;
 
     var createEvent = function(type, options) {
-        if(typeof window.PointerEvent === "function") {
+        if(typeof window.PointerEvent === 'function') {
             return new PointerEvent(type, options);
         }
 
-        var event = document.createEvent("pointerEvent");
+        var event = document.createEvent('pointerEvent');
         var args = [];
-        $.each(["type", "bubbles", "cancelable", "view", "detail", "screenX", "screenY", "clientX", "clientY", "ctrlKey", "altKey",
-            "shiftKey", "metaKey", "button", "relatedTarget", "offsetX", "offsetY", "width", "height", "pressure", "rotation", "tiltX",
-            "tiltY", "pointerId", "pointerType", "hwTimestamp", "isPrimary"], function(i, name) {
+        $.each(['type', 'bubbles', 'cancelable', 'view', 'detail', 'screenX', 'screenY', 'clientX', 'clientY', 'ctrlKey', 'altKey',
+            'shiftKey', 'metaKey', 'button', 'relatedTarget', 'offsetX', 'offsetY', 'width', 'height', 'pressure', 'rotation', 'tiltX',
+            'tiltY', 'pointerId', 'pointerType', 'hwTimestamp', 'isPrimary'], function(i, name) {
             if(name in options) {
                 args.push(options[name]);
             } else {
@@ -648,7 +648,7 @@
 
         var createTouchEventMock = function(options) {
             options = $.extend({
-                type: "",
+                type: '',
 
                 // values: window
                 view: window, // The window in which the touch occurred
@@ -760,19 +760,19 @@
                 type: type
             }, options);
 
-            if(type.indexOf("touch") > -1) {
+            if(type.indexOf('touch') > -1) {
                 var touch = createTouchMock(options);
 
                 options = $.extend({
-                    touches: type === "touchend" ? [] : [touch],
+                    touches: type === 'touchend' ? [] : [touch],
                     changedTouches: [touch],
-                    targetTouches: type === "touchend" ? [] : [touch]
+                    targetTouches: type === 'touchend' ? [] : [touch]
                 }, options);
             }
 
-            if(type.indexOf("pointer") > -1) {
+            if(type.indexOf('pointer') > -1) {
                 options = $.extend({
-                    pointerType: "mouse"
+                    pointerType: 'mouse'
                 }, options);
             }
 
@@ -816,104 +816,104 @@
             },
 
             touchStart: function() {
-                triggerEvent("touchstart");
+                triggerEvent('touchstart');
                 return this;
             },
 
             touchMove: function(deltaX, deltaY) {
                 _x += deltaX || 0;
                 _y += deltaY || 0;
-                triggerEvent("touchmove");
+                triggerEvent('touchmove');
                 return this;
             },
 
             touchEnd: function() {
-                triggerEvent("touchend");
+                triggerEvent('touchend');
                 return this;
             },
 
             touchCancel: function() {
-                triggerEvent("touchcancel");
+                triggerEvent('touchcancel');
                 return this;
             },
 
             pointerDown: function() {
-                var eventName = "pointerdown";
+                var eventName = 'pointerdown';
                 try {
-                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
+                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: 'mouse', pointerId: 1 });
                 } catch(e) {
-                    triggerEvent(eventName, { pointerType: "mouse" });
+                    triggerEvent(eventName, { pointerType: 'mouse' });
                 }
                 return this;
             },
 
             pointerMove: function(deltaX, deltaY) {
-                var eventName = "pointermove";
+                var eventName = 'pointermove';
 
                 _x += deltaX || 0;
                 _y += deltaY || 0;
                 try {
-                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
+                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: 'mouse', pointerId: 1 });
                 } catch(e) {
-                    triggerEvent(eventName, { pointerType: "mouse" });
+                    triggerEvent(eventName, { pointerType: 'mouse' });
                 }
                 return this;
             },
 
             pointerUp: function() {
-                var eventName = "pointerup";
+                var eventName = 'pointerup';
                 try {
-                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
+                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: 'mouse', pointerId: 1 });
                 } catch(e) {
-                    triggerEvent(eventName, { pointerType: "mouse" });
+                    triggerEvent(eventName, { pointerType: 'mouse' });
                 }
                 return this;
             },
 
             pointerCancel: function() {
-                var eventName = "pointercancel";
+                var eventName = 'pointercancel';
                 try {
-                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
+                    simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: 'mouse', pointerId: 1 });
                 } catch(e) {
-                    triggerEvent(eventName, { pointerType: "mouse" });
+                    triggerEvent(eventName, { pointerType: 'mouse' });
                 }
                 return this;
             },
 
             mouseDown: function() {
-                triggerEvent("mousedown");
+                triggerEvent('mousedown');
                 return this;
             },
 
             mouseMove: function(deltaX, deltaY) {
                 _x += deltaX || 0;
                 _y += deltaY || 0;
-                triggerEvent("mousemove");
+                triggerEvent('mousemove');
                 return this;
             },
 
             mouseUp: function() {
-                triggerEvent("mouseup");
+                triggerEvent('mouseup');
                 return this;
             },
 
             mouseOver: function() {
-                triggerEvent("mouseover");
+                triggerEvent('mouseover');
                 return this;
             },
 
             mouseOut: function() {
-                triggerEvent("mouseout");
+                triggerEvent('mouseout');
                 return this;
             },
 
             mouseEnter: function() {
-                triggerEvent("mouseenter");
+                triggerEvent('mouseenter');
                 return this;
             },
 
             mouseLeave: function() {
-                triggerEvent("mouseleave");
+                triggerEvent('mouseleave');
                 return this;
             },
 
@@ -957,25 +957,25 @@
                     this.down();
                     this.up();
                 } else {
-                    triggerEvent("click");
+                    triggerEvent('click');
                 }
                 return this;
             },
 
             wheel: function(d, shiftKey) {
-                if(document["onwheel"] !== undefined) {
-                    triggerEvent("wheel", {
+                if(document['onwheel'] !== undefined) {
+                    triggerEvent('wheel', {
                         deltaY: -d / 30,
                         shiftKey: shiftKey
                     });
                 } else {
-                    triggerEvent("mousewheel", {
+                    triggerEvent('mousewheel', {
                         wheelDelta: d,
                         shiftKey: shiftKey
                     });
                 }
 
-                triggerEvent("scroll");
+                triggerEvent('scroll');
                 return this;
             },
 

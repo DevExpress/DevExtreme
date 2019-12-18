@@ -1,27 +1,27 @@
-require("../DevExpress.core/domComponent.markup.tests.js");
+require('../DevExpress.core/domComponent.markup.tests.js');
 
-var DOMComponent = require("core/dom_component");
+var DOMComponent = require('core/dom_component');
 var Proxy = window.Proxy;
 
-QUnit.module("SSR specific for DOM Component", {
+QUnit.module('SSR specific for DOM Component', {
     beforeEach: function(module) {
         this.TestComponent = DOMComponent.inherit({});
     }
 });
 
-QUnit.test("safe attributes removing on dispose", function(assert) {
+QUnit.test('safe attributes removing on dispose', function(assert) {
     assert.expect(0);
 
     if(!Proxy) {
         return;
     }
 
-    var element = document.createElement("div");
+    var element = document.createElement('div');
     var serverSideElementAttributesMock = [ undefined ];
 
     element = new Proxy(element, {
         get: function(target, name) {
-            if(name === "attributes") {
+            if(name === 'attributes') {
                 return serverSideElementAttributesMock;
             }
 

@@ -1,55 +1,55 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
-    WHITE = "#ffffff",
-    BLACK = "#000000",
-    SOME_GREY = "#2b2b2b",
-    RANGE_COLOR = "#b5b5b5",
-    GREY_GREEN = "#303030",
-    AREA_LAYER_COLOR = "#686868",
-    LINE_COLOR = "#c7c7c7",
-    TARGET_COLOR = "#8e8e8e",
-    POSITIVE_COLOR = "#b8b8b8",
-    BORDER_COLOR = "#494949";
+    WHITE = '#ffffff',
+    BLACK = '#000000',
+    SOME_GREY = '#2b2b2b',
+    RANGE_COLOR = '#b5b5b5',
+    GREY_GREEN = '#303030',
+    AREA_LAYER_COLOR = '#686868',
+    LINE_COLOR = '#c7c7c7',
+    TARGET_COLOR = '#8e8e8e',
+    POSITIVE_COLOR = '#b8b8b8',
+    BORDER_COLOR = '#494949';
 
 registerTheme({
-    name: "generic.dark",
+    name: 'generic.dark',
     font: {
-        color: "#808080"
+        color: '#808080'
     },
-    backgroundColor: "#2a2a2a",
-    primaryTitleColor: "#dedede",
-    secondaryTitleColor: "#a3a3a3",
-    gridColor: "#555555",
-    axisColor: "#a3a3a3",
-    "export": {
-        backgroundColor: "#2a2a2a",
+    backgroundColor: '#2a2a2a',
+    primaryTitleColor: '#dedede',
+    secondaryTitleColor: '#a3a3a3',
+    gridColor: '#555555',
+    axisColor: '#a3a3a3',
+    'export': {
+        backgroundColor: '#2a2a2a',
         font: {
-            color: "#dbdbdb"
+            color: '#dbdbdb'
         },
         button: {
-            "default": {
-                color: "#dedede",
-                borderColor: "#4d4d4d",
-                backgroundColor: "#2e2e2e"
+            'default': {
+                color: '#dedede',
+                borderColor: '#4d4d4d',
+                backgroundColor: '#2e2e2e'
             },
             hover: {
-                color: "#dedede",
-                borderColor: "#6c6c6c",
-                backgroundColor: "#444"
+                color: '#dedede',
+                borderColor: '#6c6c6c',
+                backgroundColor: '#444'
             },
             focus: {
-                color: "#dedede",
-                borderColor: "#8d8d8d",
-                backgroundColor: "#444444"
+                color: '#dedede',
+                borderColor: '#8d8d8d',
+                backgroundColor: '#444444'
             },
             active: {
-                color: "#dedede",
-                borderColor: "#8d8d8d",
-                backgroundColor: "#555555"
+                color: '#dedede',
+                borderColor: '#8d8d8d',
+                backgroundColor: '#555555'
             }
         },
-        shadowColor: "#292929"
+        shadowColor: '#292929'
     },
     tooltip: {
         color: SOME_GREY,
@@ -57,10 +57,10 @@ registerTheme({
             color: BORDER_COLOR
         },
         font: {
-            color: "#929292"
+            color: '#929292'
         }
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -72,7 +72,7 @@ registerTheme({
             }
         }
     },
-    "chart:common:axis": {
+    'chart:common:axis': {
         constantLineStyle: {
             color: WHITE
         }
@@ -85,7 +85,7 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: {
-                color: "#818181"
+                color: '#818181'
             }
         },
         zoomAndPan: {
@@ -95,7 +95,7 @@ registerTheme({
         },
         commonAnnotationSettings: {
             font: {
-                color: "#929292"
+                color: '#929292'
             },
             border: {
                 color: BORDER_COLOR
@@ -116,22 +116,22 @@ registerTheme({
             _default: {
                 color: RANGE_COLOR
             },
-            "rangebar": {
-                color: "#84788b"
+            'rangebar': {
+                color: '#84788b'
             },
-            "twocolorneedle": {
-                secondColor: "#ba544d"
+            'twocolorneedle': {
+                secondColor: '#ba544d'
             },
-            "trianglemarker": {
-                color: "#b7918f"
+            'trianglemarker': {
+                color: '#b7918f'
             },
-            "textcloud": {
-                color: "#ba544d"
+            'textcloud': {
+                color: '#ba544d'
             }
         }
     },
     barGauge: {
-        backgroundColor: "#3c3c3c"
+        backgroundColor: '#3c3c3c'
     },
     rangeSelector: {
         scale: {
@@ -144,7 +144,7 @@ registerTheme({
                 opacity: 0.1
             },
             breakStyle: {
-                color: "#818181"
+                color: '#818181'
             }
         },
         selectedRangeColor: RANGE_COLOR,
@@ -165,7 +165,7 @@ registerTheme({
     },
     map: {
         background: {
-            borderColor: "#3f3f3f"
+            borderColor: '#3f3f3f'
         },
         layer: {
             label: {
@@ -175,28 +175,28 @@ registerTheme({
                 }
             }
         },
-        "layer:area": {
+        'layer:area': {
             borderColor: GREY_GREEN,
             color: AREA_LAYER_COLOR,
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
-        "layer:line": {
-            color: "#c77244",
-            hoveredColor: "#ff5d04",
-            selectedColor: "#ff784f"
+        'layer:line': {
+            color: '#c77244',
+            hoveredColor: '#ff5d04',
+            selectedColor: '#ff784f'
         },
-        "layer:marker:bubble": {
+        'layer:marker:bubble': {
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
-        "layer:marker:pie": {
+        'layer:marker:pie': {
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
         legend: {
             border: {
-                color: "#3f3f3f"
+                color: '#3f3f3f'
             },
             font: {
                 color: WHITE
@@ -209,10 +209,10 @@ registerTheme({
     },
     treeMap: {
         group: {
-            color: "#4c4c4c",
+            color: '#4c4c4c',
             label: {
                 font: {
-                    color: "#a3a3a3"
+                    color: '#a3a3a3'
                 }
             }
         }
@@ -232,7 +232,7 @@ registerTheme({
     funnel: {
         item: {
             border: {
-                color: "#2a2a2a"
+                color: '#2a2a2a'
             }
         }
     },
@@ -247,19 +247,19 @@ registerTheme({
         },
         node: {
             border: {
-                color: "#2a2a2a"
+                color: '#2a2a2a'
             }
         },
         link: {
-            color: "#888888",
+            color: '#888888',
             border: {
-                color: "#2a2a2a"
+                color: '#2a2a2a'
             },
             hoverStyle: {
-                color: "#bbbbbb"
+                color: '#bbbbbb'
             }
         }
     }
-}, "generic.light");
+}, 'generic.light');
 
-registerThemeAlias("generic.dark.compact", "generic.dark");
+registerThemeAlias('generic.dark.compact', 'generic.dark');

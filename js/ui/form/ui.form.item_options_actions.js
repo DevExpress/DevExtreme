@@ -1,6 +1,6 @@
-import ItemOptionAction from "./ui.form.item_option_action";
-import { data } from "../../core/element_data";
-import { extend } from "../../core/utils/extend";
+import ItemOptionAction from './ui.form.item_option_action';
+import { data } from '../../core/element_data';
+import { extend } from '../../core/utils/extend';
 
 class WidgetOptionItemOptionAction extends ItemOptionAction {
     tryExecute() {
@@ -33,13 +33,13 @@ class ValidationRulesItemOptionAction extends ItemOptionAction {
     tryExecute() {
         const { item } = this._options;
         const instance = this.findInstance();
-        const validator = instance && data(instance.$element()[0], "dxValidator");
+        const validator = instance && data(instance.$element()[0], 'dxValidator');
         if(validator && item) {
-            const filterRequired = item => item.type === "required";
-            const oldContainsRequired = (validator.option("validationRules") || []).some(filterRequired);
+            const filterRequired = item => item.type === 'required';
+            const oldContainsRequired = (validator.option('validationRules') || []).some(filterRequired);
             const newContainsRequired = (item.validationRules || []).some(filterRequired);
             if(!oldContainsRequired && !newContainsRequired || oldContainsRequired && newContainsRequired) {
-                validator.option("validationRules", item.validationRules);
+                validator.option('validationRules', item.validationRules);
                 return true;
             }
         }
@@ -61,19 +61,19 @@ class CssClassItemOptionAction extends ItemOptionAction {
 
 const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
     switch(optionName) {
-        case "editorOptions":
-        case "buttonOptions":
+        case 'editorOptions':
+        case 'buttonOptions':
             return new WidgetOptionItemOptionAction(itemActionOptions);
-        case "validationRules":
+        case 'validationRules':
             return new ValidationRulesItemOptionAction(itemActionOptions);
-        case "cssClass":
+        case 'cssClass':
             return new CssClassItemOptionAction(itemActionOptions);
-        case "badge":
-        case "disabled":
-        case "icon":
-        case "template":
-        case "tabTemplate":
-        case "title":
+        case 'badge':
+        case 'disabled':
+        case 'icon':
+        case 'template':
+        case 'tabTemplate':
+        case 'title':
             return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
         default:
             return null;

@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 import colorHelper from './excel.color_helper';
 
@@ -96,7 +96,7 @@ const fontHelper = {
 
         // §18.8.22, 'font (Font)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return tagHelper.toXml(
-            "font",
+            'font',
             {},
             content
         );

@@ -1,24 +1,24 @@
-var $ = require("../core/renderer"),
-    ajax = require("../core/utils/ajax"),
-    window = require("../core/utils/window").getWindow(),
-    isFunction = require("../core/utils/type").isFunction,
-    each = require("../core/utils/iterator").each,
-    svgUtils = require("../core/utils/svg"),
-    deferredUtils = require("../core/utils/deferred"),
+var $ = require('../core/renderer'),
+    ajax = require('../core/utils/ajax'),
+    window = require('../core/utils/window').getWindow(),
+    isFunction = require('../core/utils/type').isFunction,
+    each = require('../core/utils/iterator').each,
+    svgUtils = require('../core/utils/svg'),
+    deferredUtils = require('../core/utils/deferred'),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
 
 
 exports.svgCreator = {
-    _markup: "",
+    _markup: '',
     _imageArray: {},
     _imageDeferreds: [],
 
     _getBinaryFile: function(src, callback) {
         ajax.sendRequest({
             url: src,
-            method: "GET",
-            responseType: "arraybuffer"
+            method: 'GET',
+            responseType: 'arraybuffer'
         }).done(callback).fail(function() {
             callback(false);
         });
@@ -46,7 +46,7 @@ exports.svgCreator = {
                 for(i = 0; i < length; i++) {
                     binary += String.fromCharCode(bytes[i]);
                 }
-                that._imageArray[src] = "data:image/png;base64," + window.btoa(binary);
+                that._imageArray[src] = 'data:image/png;base64,' + window.btoa(binary);
                 deferred.resolve();
             });
         });
@@ -56,10 +56,10 @@ exports.svgCreator = {
         var href,
             that = this;
 
-        if(element.tagName === "image") {
-            href = $(element).attr("href") || $(element).attr("xlink:href");
+        if(element.tagName === 'image') {
+            href = $(element).attr('href') || $(element).attr('xlink:href');
             if(!that._imageArray[href]) {
-                that._imageArray[href] = "";
+                that._imageArray[href] = '';
             }
         }
 
@@ -88,7 +88,7 @@ exports.svgCreator = {
         that._prepareImages(svgElem).done(function() {
             each(that._imageArray, function(href, dataURI) {
                 const regexpString = `href=['|"]${href}['|"]`;
-                markup = markup.replace(new RegExp(regexpString, "gi"), `href="${dataURI}"`);
+                markup = markup.replace(new RegExp(regexpString, 'gi'), `href="${dataURI}"`);
             });
 
             blob.resolve(isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup));
@@ -98,7 +98,7 @@ exports.svgCreator = {
     },
 
     _getBlob: function(markup) {
-        return new window.Blob([markup], { type: "image/svg+xml" });
+        return new window.Blob([markup], { type: 'image/svg+xml' });
     },
 
     _getBase64: function(markup) {

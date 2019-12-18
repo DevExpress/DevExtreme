@@ -1,15 +1,15 @@
-const MetadataLoader = require("./metadata-loader.js");
-const MetadataRepository = require("./metadata-repository.js");
-const LessTemplateLoader = require("./less-template-loader.js");
-const themes = require("./themes.js");
-const normalize = require("./config-normalizer");
+const MetadataLoader = require('./metadata-loader.js');
+const MetadataRepository = require('./metadata-repository.js');
+const LessTemplateLoader = require('./less-template-loader.js');
+const themes = require('./themes.js');
+const normalize = require('./config-normalizer');
 
 const processTheme = (config, metadata, version) => {
     let lessTemplateLoader = new LessTemplateLoader(config, version);
     if(config.isBootstrap) {
         let bootstrapMetadata = config.bootstrapVersion === 3 ?
-            require("../data/bootstrap-metadata/bootstrap-metadata.js") :
-            require("../data/bootstrap-metadata/bootstrap4-metadata.js");
+            require('../data/bootstrap-metadata/bootstrap-metadata.js') :
+            require('../data/bootstrap-metadata/bootstrap4-metadata.js');
 
         return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, config.data, config.bootstrapVersion);
     } else {
