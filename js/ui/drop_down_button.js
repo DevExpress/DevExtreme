@@ -1,4 +1,3 @@
-
 import $ from '../core/renderer';
 import Widget from './widget/ui.widget';
 import { FunctionTemplate } from '../core/templates/function_template';
