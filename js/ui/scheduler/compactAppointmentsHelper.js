@@ -53,7 +53,16 @@ export class CompactAppointmentsHelper {
 
     _onButtonClick(e) {
         const $button = $(e.element);
-        this.instance.showAppointmentTooltipCore($button, $button.data('items'));
+        this.instance.showAppointmentTooltipCore(
+            $button,
+            $button.data('items'),
+            {
+                clickEvent: this.instance.raiseClickEvent.bind(this.instance),
+                dragBehavior: this.instance.createTooltipDragBehavior.bind(this.instance),
+                dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // deprecated option
+                isButtonClick: true,
+            }
+        );
     }
 
     _getCollectorOffset(width) {
