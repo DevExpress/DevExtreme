@@ -5141,7 +5141,7 @@ QUnit.module('performance', () => {
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
         // assert
-        assert.equal(keyGetterCounter, 613, 'key getter call count');
+        assert.equal(keyGetterCounter, 513, 'key getter call count');
         assert.equal(isValueEqualsSpy.callCount, 0, '_isValueEquals is not called');
     });
 
