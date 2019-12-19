@@ -954,7 +954,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         };
 
         that.setupTreeList = function() {
-            setupTreeListModules(that, ['data', 'columns', 'rows', 'editing', 'search'], {
+            setupTreeListModules(that, ['data', 'columns', 'rows', 'editing', 'editorFactory', 'search'], {
                 initViews: true
             });
         };
