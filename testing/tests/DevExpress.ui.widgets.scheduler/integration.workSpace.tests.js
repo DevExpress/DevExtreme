@@ -896,7 +896,7 @@ QUnit.test('resourceCellTemplate should take cellElement with correct geometry i
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                var $cell = $(cellElement).parent();
+                var $cell = $(cellElement);
                 assert.equal($cell.outerWidth(), 99, 'Resource cell width is OK');
                 assert.roughEqual($cell.outerHeight(), 276, 1.001, 'Resource cell height is OK');
             }
@@ -1037,7 +1037,7 @@ QUnit.test('resourceCellTemplate should work correct in timeline view', function
         }
     });
 
-    var $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0).find('div').eq(0),
+    var $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0),
         $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
 
     assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
@@ -1954,5 +1954,54 @@ QUnit.test('Workspace view has correct viewEndDate with empty groups and groupBy
         height: 700
     });
 
-    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), 'Appointment tail has most top coordinate');
+    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), 'View has corrent endViewDate');
+});
+
+QUnit.test('Workspace view group header cells have same height as table cells (T837711)', function(assert) {
+    var priorityData = [
+        {
+            text: 'Low Priority',
+            id: 1
+        }, {
+            text: 'High Priority',
+            id: 2
+        }, {
+            text: 'High Priority',
+            id: 3,
+        }, {
+            text: 'HigHigh PriorityHigh PriorityHigh Priorityh Priority',
+            id: 4,
+        }, {
+            text: 'High PriorityHigh PriorityHigh PriorityHigh PriorityHigh Priority Priority',
+            id: 5
+        }, {
+            text: 'High PriorityHighPriorityHighPriorityHighPriorityHighPriorityHigh Priority',
+            id: 6
+        }
+    ];
+
+    this.createInstance({
+        dataSource: [],
+        views: ['timelineMonth'],
+        currentView: 'timelineMonth',
+        currentDate: new Date(2018, 4, 21),
+        crossScrollingEnabled: true,
+        groups: ['priority'],
+        resources: [{
+            fieldExpr: 'priority',
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: 'Priority'
+        }],
+        height: 700
+    });
+
+    let headerCells = this.scheduler.workSpace.groups.getGroupHeaders();
+
+    let firstHeaderCell = headerCells.eq(0),
+        fifthHeaderCell = headerCells.eq(4),
+        dateTableCell = this.scheduler.workSpace.getCells().eq(0);
+
+    assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
+    assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');
 });
