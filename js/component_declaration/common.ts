@@ -11,21 +11,17 @@ export function Component(args: {
     return function ComponentDecorator(constructor: Function) { }
 }
 
-export function Prop() {
-    return function PropDecorator(target: any, propertyKey: string) { }
-}
+const propertyDecorator = function(target: any, propertyKey: string) { };
 
-export function Event() {
-    return function EnventDecorator(target: any, propertyKey: string) { }
-}
-
-export function InternalState() {
-    return function EnventDecorator(target: any, propertyKey: string) { }
-}
-
-export function Listen(eventName?: string, parameters?: { target?: Document | Window | string }) {
-    return function EnventDecorator(target: any, propertyKey: string) { }
-}
+export const Prop = () => propertyDecorator;
+export const Template = () => propertyDecorator;
+export const Slot = () => propertyDecorator;
+export const Method = () => propertyDecorator;
+export const Event = () => propertyDecorator;
+export const State = () => propertyDecorator;
+export const InternalState = () => propertyDecorator;
+export const Listen = (eventName?: string, parameters?: { target?: Document | Window | string }) => propertyDecorator;
+export const Ref = () => propertyDecorator;
 
 export declare namespace JSX {
     interface Element { }

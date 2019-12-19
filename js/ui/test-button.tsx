@@ -1,5 +1,6 @@
-import { Component, Prop, Event, InternalState, Listen, React } from "../component_declaration/common";
-import { getDocument } from "../core/dom_adapter";
+import { Component, Prop, Event, InternalState, Listen, React, Template } from "../component_declaration/common";
+import { getDocument } from '../core/dom_adapter';
+import { getImageSourceType } from '../core/utils/icon';
 const document = getDocument();
 
 @Component({
@@ -13,11 +14,15 @@ export default class Button {
     @Prop() classNames?: string[]
     @Prop() height?: string;
     @Prop() hint?: string;
+    @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
     @Prop() text?: string;
     @Prop() type?: string;
     @Prop() width?: string;
+
+    // @Template() contentRender?: any;
+    @Prop() contentRender?: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
 
@@ -41,7 +46,7 @@ export default class Button {
 
     @Listen('pointerup', { target: document })
     onPointerUp() {
-        //this._active = false;
+        this._active = false;
     }
 
     @Listen("click")
@@ -51,7 +56,7 @@ export default class Button {
 }
 
 function getCssClasses(model: any) {
-    const classNames = ['dx-button'];
+    const classNames = ['dx-widget', 'dx-button'];
 
     if (model.stylingMode === 'outlined') {
         classNames.push('dx-button-mode-outlined');
@@ -74,6 +79,9 @@ function getCssClasses(model: any) {
     if (model.text) {
         classNames.push('dx-button-has-text');
     }
+    if(model.icon) {
+        classNames.push("dx-button-has-icon");
+    }
 
     if (model._hovered) {
         classNames.push("dx-state-hover");
@@ -89,13 +97,19 @@ function viewModelFunction(model: Button) {
     return {
         cssClasses: getCssClasses(model),
         style: {
-            width: model.width
+            width: model.width,
+            height: model.height
         },
         ...model
     };
 }
 
 function viewFunction(viewModel: Button & { cssClasses: string, style: { width?: string } }) {
+    let icon;
+    if(viewModel.icon) {
+        icon = getImageContainerJSX(viewModel.icon);
+    }
+
     return (
         <div
             className={viewModel.cssClasses}
@@ -105,10 +119,34 @@ function viewFunction(viewModel: Button & { cssClasses: string, style: { width?:
             onPointerOut={viewModel.onPointerOut}
             onPointerDown={viewModel.onPointerDown}
             onClick={viewModel.onClickHandler}>
-            <div className="dx-button-content">
-                <span className="dx-button-text">{viewModel.text}</span>
-            </div>
+            {viewModel.contentRender && (
+                <div className="dx-button-content">
+                    <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />
+                </div>
+            ) || (
+                <div className="dx-button-content">
+                    {icon}
+                    {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
+                </div>
+            )}
+
         </div>
     );
 }
 
+// from core/utils/icon
+
+const ICON_CLASS = 'dx-icon';
+const SVG_ICON_CLASS = 'dx-svg-icon';
+
+function getImageContainerJSX(source: string) {
+    const type = getImageSourceType(source);
+    if(type === 'image')
+        return (<img src={source} className={ICON_CLASS}></img>);
+    if(type === 'fontIcon')
+        return (<i className={ICON_CLASS + ' ' + source}></i>);
+    if(type === 'dxIcon')
+        return (<i className={ICON_CLASS + ' ' + ICON_CLASS + '-' + source}></i>);
+    if(type === 'svg')
+        return (<i className={ICON_CLASS + ' ' + SVG_ICON_CLASS}>{source}></i>);
+}
