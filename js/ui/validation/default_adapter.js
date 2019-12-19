@@ -1,5 +1,5 @@
-import Callbacks from "../../core/utils/callbacks";
-import Class from "../../core/class";
+import Callbacks from '../../core/utils/callbacks';
+import Class from '../../core/class';
 
 const DefaultAdapter = Class.inherit({
     ctor(editor, validator) {
@@ -10,21 +10,21 @@ const DefaultAdapter = Class.inherit({
             this.validationRequestsCallbacks.fire(args);
         };
         editor.validationRequest.add(handler);
-        editor.on("disposing", function() {
+        editor.on('disposing', function() {
             editor.validationRequest.remove(handler);
         });
     },
 
     getValue() {
-        return this.editor.option("value");
+        return this.editor.option('value');
     },
 
     getCurrentValidationError() {
-        return this.editor.option("validationError");
+        return this.editor.option('validationError');
     },
 
     bypass() {
-        return this.editor.option("disabled");
+        return this.editor.option('disabled');
     },
 
     applyValidationResults(params) {

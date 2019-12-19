@@ -1,19 +1,19 @@
-var Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    errors = require("../../ui/widget/ui.errors"),
-    getOperationBySearchMode = require("../../ui/widget/ui.search_box_mixin").getOperationBySearchMode,
-    inArray = require("../../core/utils/array").inArray,
-    query = require("../../data/query"),
-    storeHelper = require("../../data/store_helper"),
-    HierarchicalDataConverter = require("./ui.data_converter");
+var Class = require('../../core/class'),
+    commonUtils = require('../../core/utils/common'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    each = require('../../core/utils/iterator').each,
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    errors = require('../../ui/widget/ui.errors'),
+    getOperationBySearchMode = require('../../ui/widget/ui.search_box_mixin').getOperationBySearchMode,
+    inArray = require('../../core/utils/array').inArray,
+    query = require('../../data/query'),
+    storeHelper = require('../../data/store_helper'),
+    HierarchicalDataConverter = require('./ui.data_converter');
 
-var EXPANDED = "expanded",
-    SELECTED = "selected",
-    DISABLED = "disabled";
+var EXPANDED = 'expanded',
+    SELECTED = 'selected',
+    DISABLED = 'disabled';
 
 var DataAdapter = Class.inherit({
 
@@ -33,7 +33,7 @@ var DataAdapter = Class.inherit({
     setOption: function(name, value) {
         this.options[name] = value;
 
-        if(name === "recursiveSelection") {
+        if(name === 'recursiveSelection') {
             this._updateSelection();
         }
     },
@@ -46,9 +46,9 @@ var DataAdapter = Class.inherit({
             recursiveSelection: false,
             recursiveExpansion: false,
             rootValue: 0,
-            searchValue: "",
-            dataType: "tree",
-            searchMode: "contains",
+            searchValue: '',
+            dataType: 'tree',
+            searchMode: 'contains',
             dataConverter: new HierarchicalDataConverter(),
             onNodeChanged: commonUtils.noop,
             sort: null
@@ -368,7 +368,7 @@ var DataAdapter = Class.inherit({
     },
 
     getChildrenNodes: function(parentKey) {
-        return query(this._dataStructure).filter(["internalFields.parentKey", parentKey]).toArray();
+        return query(this._dataStructure).filter(['internalFields.parentKey', parentKey]).toArray();
     },
 
     getIndexByKey: function(key) {
@@ -458,7 +458,7 @@ var DataAdapter = Class.inherit({
             return [selector, operation, value];
         }
         iteratorUtils.each(selector, function(i, item) {
-            searchFilter.push([item, operation, value], "or");
+            searchFilter.push([item, operation, value], 'or');
         });
 
         searchFilter.pop();
@@ -495,7 +495,7 @@ var DataAdapter = Class.inherit({
                 var parent = dataConverter.getParentNode(node);
 
                 if(!parent) {
-                    errors.log("W1007", node.internalFields.parentKey, node.internalFields.key);
+                    errors.log('W1007', node.internalFields.parentKey, node.internalFields.key);
                     index++;
                     continue;
                 }

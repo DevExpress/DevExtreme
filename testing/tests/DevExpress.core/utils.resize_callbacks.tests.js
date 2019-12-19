@@ -1,24 +1,28 @@
-import $ from "jquery";
-import resizeCallbacks from "core/utils/resize_callbacks";
-import domAdapter from "core/dom_adapter";
-import windowUtils from "core/utils/window";
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
-        var test = this;
+        const test = this;
         test.__originalWindowElementGetter = windowUtils.getWindow;
         test.width = 400;
         test.height = 300;
 
         windowUtils.getWindow = function() {
-            return $.extend(test.__originalWindowElementGetter(), { innerHeight: test.height, innerWidth: test.width });
+            const fakeWindow = {};
+            fakeWindow.window = fakeWindow;
+            fakeWindow.innerHeight = test.height;
+            fakeWindow.innerWidth = test.width;
+
+            return fakeWindow;
         };
 
         test.__originalListener = domAdapter.listen;
 
-        var resizeHandlers = [];
+        const resizeHandlers = [];
         domAdapter.listen = function(element, event, handler) {
-            if(element.window === element && event === "resize") {
+            if(element.window === element && event === 'resize') {
                 resizeHandlers.push(handler);
             }
         };
@@ -91,7 +95,7 @@ QUnit.test('Callback is called if window innerHeight is changed (T834502)', func
     this.callbacks.add(spy);
 
     try {
-        sinon.stub(windowUtils, "getWindow").returns({ innerHeight: 100, innerWidth: 200 });
+        sinon.stub(windowUtils, 'getWindow').returns({ innerHeight: 100, innerWidth: 200 });
 
         this.triggerResize(false);
 

@@ -1,5 +1,5 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter");
+var $ = require('../../core/renderer'),
+    domAdapter = require('../../core/dom_adapter');
 
 var focusable = function(element, tabIndex) {
     if(!visible(element)) {
@@ -9,7 +9,7 @@ var focusable = function(element, tabIndex) {
         isTabIndexNotNaN = !isNaN(tabIndex),
         isDisabled = element.disabled,
         isDefaultFocus = /^(input|select|textarea|button|object|iframe)$/.test(nodeName),
-        isHyperlink = nodeName === "a",
+        isHyperlink = nodeName === 'a',
         isFocusable = true,
         isContentEditable = element.isContentEditable;
 
@@ -28,15 +28,15 @@ var focusable = function(element, tabIndex) {
 
 var visible = function(element) {
     var $element = $(element);
-    return $element.is(":visible") && $element.css("visibility") !== "hidden" && $element.parents().css("visibility") !== "hidden";
+    return $element.is(':visible') && $element.css('visibility') !== 'hidden' && $element.parents().css('visibility') !== 'hidden';
 };
 
 module.exports = {
     focusable: function(index, element) {
-        return focusable(element, $(element).attr("tabIndex"));
+        return focusable(element, $(element).attr('tabIndex'));
     },
     tabbable: function(index, element) {
-        var tabIndex = $(element).attr("tabIndex");
+        var tabIndex = $(element).attr('tabIndex');
         return (isNaN(tabIndex) || tabIndex >= 0) && focusable(element, tabIndex);
     },
     // note: use this method instead of is(":focus")

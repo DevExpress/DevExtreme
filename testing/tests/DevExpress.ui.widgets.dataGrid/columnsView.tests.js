@@ -1,18 +1,18 @@
-import $ from "jquery";
-import dataUtils from "core/element_data";
+import $ from 'jquery';
+import dataUtils from 'core/element_data';
 
 QUnit.testStart(function() {
     var markup = '<div><div id="container" class="dx-datagrid"></div></div>';
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-import "common.css!";
-import "ui/data_grid/ui.data_grid";
+import 'common.css!';
+import 'ui/data_grid/ui.data_grid';
 
-import browser from "core/utils/browser";
-import columnsView from "ui/grid_core/ui.grid_core.columns_view";
-import fx from "animation/fx";
-import dataGridMocks from "../../helpers/dataGridMocks.js";
+import browser from 'core/utils/browser';
+import columnsView from 'ui/grid_core/ui.grid_core.columns_view';
+import fx from 'animation/fx';
+import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 var MockColumnsController = dataGridMocks.MockColumnsController,
     setupDataGridModules = dataGridMocks.setupDataGridModules;
@@ -39,12 +39,12 @@ QUnit.module('API methods', {
             }
         });
 
-        that.columnsView._tableElement = $('<table />').addClass("dx-datagrid-table").addClass("dx-datagrid-table-fixed")
+        that.columnsView._tableElement = $('<table />').addClass('dx-datagrid-table').addClass('dx-datagrid-table-fixed')
             .append(that.columnsView._createColGroup(that.columns), [
                 $('<tbody><tr><td><div><table><row><td></td></row></table></div></td><td></td><td></td><td></td><td></td></tr></tbody>')
             ]);
 
-        that.columnsView._$element = $('<div/>').addClass("dx-datagrid-content").append(that.columnsView._tableElement);
+        that.columnsView._$element = $('<div/>').addClass('dx-datagrid-content').append(that.columnsView._tableElement);
         that.columnsView._$element.appendTo($('#container').width('600'));
     }
 });
@@ -55,7 +55,7 @@ QUnit.test('Apply options', function(assert) {
     this.options.showColumnHeaders = true;
 
     // assert
-    assert.ok(this.columnsView.option("showColumnHeaders"));
+    assert.ok(this.columnsView.option('showColumnHeaders'));
 });
 
 QUnit.test('Get column widths', function(assert) {
@@ -111,33 +111,33 @@ QUnit.test('Set column widths', function(assert) {
     assert.deepEqual(that.columnsView.getColumnWidths(), newWidths);
 });
 
-QUnit.test("Create table by default", function(assert) {
+QUnit.test('Create table by default', function(assert) {
     // act
     var $table = this.columnsView._createTable();
 
     // assert
-    assert.ok($table.hasClass("dx-datagrid-table-fixed"), "is contains data grid table class");
+    assert.ok($table.hasClass('dx-datagrid-table-fixed'), 'is contains data grid table class');
 });
 
 // T198380, T809552
-QUnit.test("Create table with thead in safari", function(assert) {
+QUnit.test('Create table with thead in safari', function(assert) {
     // arrange
     var oldSafari = browser.safari;
     try {
         browser.safari = true;
         // act
         var $table = this.columnsView._createTable(this.columns),
-            $thead = $table.children("thead");
+            $thead = $table.children('thead');
 
         // assert
-        assert.ok($thead.length, "table contains thead element");
-        assert.equal($thead.html().toLowerCase(), "<tr></tr>", "thead contains empty tr");
+        assert.ok($thead.length, 'table contains thead element');
+        assert.equal($thead.html().toLowerCase(), '<tr></tr>', 'thead contains empty tr');
     } finally {
         browser.safari = oldSafari;
     }
 });
 
-QUnit.test("Create table by columnWidth auto", function(assert) {
+QUnit.test('Create table by columnWidth auto', function(assert) {
     // arrange
     this.options.columnAutoWidth = true;
 
@@ -145,11 +145,11 @@ QUnit.test("Create table by columnWidth auto", function(assert) {
     var $table = this.columnsView._createTable();
 
     // assert
-    assert.ok($table.hasClass("dx-datagrid-table-fixed"), "is contains data grid table class");
+    assert.ok($table.hasClass('dx-datagrid-table-fixed'), 'is contains data grid table class');
 });
 
 // S173138
-QUnit.test("Set title attribute when cell text is trimmed", function(assert) {
+QUnit.test('Set title attribute when cell text is trimmed', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -157,31 +157,31 @@ QUnit.test("Set title attribute when cell text is trimmed", function(assert) {
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", true);
+    that.option('cellHintEnabled', true);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     // act
-    firstCellElement = $table.find("td").first();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('td').first();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), undefined, "not has attribute title in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
     // act
-    lastCellElement = $table.find("td").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('td').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), "Test Test Test Test Test", "has attribute title in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in last cell');
 });
 
 // S173138
-QUnit.test("Not set title attribute when cell text is trimmed with cellHintEnabled false", function(assert) {
+QUnit.test('Not set title attribute when cell text is trimmed with cellHintEnabled false', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -189,31 +189,31 @@ QUnit.test("Not set title attribute when cell text is trimmed with cellHintEnabl
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", false);
+    that.option('cellHintEnabled', false);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     // act
-    firstCellElement = $table.find("td").first();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('td').first();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), undefined, "not has attribute title in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
     // act
-    lastCellElement = $table.find("td").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('td').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), undefined, "not has attribute title in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
 });
 
 // T180556
-QUnit.test("Not set title attribute when cell text is trimmed and cellTemplate defined", function(assert) {
+QUnit.test('Not set title attribute when cell text is trimmed and cellTemplate defined', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -221,31 +221,31 @@ QUnit.test("Not set title attribute when cell text is trimmed and cellTemplate d
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", true);
+    that.option('cellHintEnabled', true);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100, cellTemplate: function() { } });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     // act
-    firstCellElement = $table.find("td").first();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('td').first();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), "Test Test Test Test Test", "has attribute title in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first cell');
 
     // act
-    lastCellElement = $table.find("td").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('td').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), undefined, "not has attribute title in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
 });
 
 // T356806
-QUnit.test("Not set title attribute when group cell text is trimmed and groupCellTemplate defined", function(assert) {
+QUnit.test('Not set title attribute when group cell text is trimmed and groupCellTemplate defined', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(100),
@@ -253,39 +253,39 @@ QUnit.test("Not set title attribute when group cell text is trimmed and groupCel
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", true);
+    that.option('cellHintEnabled', true);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 50, groupIndex: 0 });
     that.columns.push({ caption: 'Column 2', width: 50, groupIndex: 1, groupCellTemplate: function() { } });
     that.columns.push({ caption: 'Column 3', width: 50 });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns),
+    $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns),
         $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td colspan="2">Test Test Test Test Test</td></tr>'),
         $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td class="dx-datagrid-group-space"></td><td>Test Test Test Test Test</td></tr>')
     )));
 
-    dataUtils.data($table.find("tr").get(0), "options", { cells: [{}, { column: that.columns[0] }] });
-    dataUtils.data($table.find("tr").get(1), "options", { cells: [{}, {}, { column: that.columns[1] }] });
+    dataUtils.data($table.find('tr').get(0), 'options', { cells: [{}, { column: that.columns[0] }] });
+    dataUtils.data($table.find('tr').get(1), 'options', { cells: [{}, {}, { column: that.columns[1] }] });
 
     // act
-    firstCellElement = $table.find("tr").eq(0).find("td").last();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('tr').eq(0).find('td').last();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), "Test Test Test Test Test", "has attribute title in first group cell");
+    assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first group cell');
 
     // act
-    lastCellElement = $table.find("tr").eq(1).find("td").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('tr').eq(1).find('td').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), undefined, "not has attribute title in last group cell");
+    assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last group cell');
 });
 
 
 // T268245
-QUnit.test("Not set title attribute when cell text is trimmed and headerCellTemplate defined", function(assert) {
+QUnit.test('Not set title attribute when cell text is trimmed and headerCellTemplate defined', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -293,31 +293,31 @@ QUnit.test("Not set title attribute when cell text is trimmed and headerCellTemp
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", true);
+    that.option('cellHintEnabled', true);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100, headerCellTemplate: function() { } });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-headers dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-header-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-header-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     // act
-    firstCellElement = $table.find("td").first();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('td').first();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), "Test Test Test Test Test", "has attribute title in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first cell');
 
     // act
-    lastCellElement = $table.find("td").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('td').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), undefined, "not has attribute title in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
 });
 
 // T222924
-QUnit.test("Not set title attribute when cell text is trimmed and user title defined", function(assert) {
+QUnit.test('Not set title attribute when cell text is trimmed and user title defined', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -325,33 +325,33 @@ QUnit.test("Not set title attribute when cell text is trimmed and user title def
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", true);
+    that.option('cellHintEnabled', true);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td><div title="User Title">Test Test Test Test Test</div></td><td><div>Test Test Test Test Test</div></td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td><div title="User Title">Test Test Test Test Test</div></td><td><div>Test Test Test Test Test</div></td></tr>'))));
 
     // act
-    firstCellElement = $table.find("td").first();
-    firstCellElement.children().trigger("mousemove");
+    firstCellElement = $table.find('td').first();
+    firstCellElement.children().trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), undefined, "not has attribute title in first cell");
-    assert.strictEqual(firstCellElement.children().attr("title"), "User Title", "user title on div in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
+    assert.strictEqual(firstCellElement.children().attr('title'), 'User Title', 'user title on div in first cell');
 
     // act
-    lastCellElement = $table.find("td").last();
-    lastCellElement.children().trigger("mousemove");
+    lastCellElement = $table.find('td').last();
+    lastCellElement.children().trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), undefined, "not has attribute title in last cell");
-    assert.strictEqual(lastCellElement.children().attr("title"), "Test Test Test Test Test", "has attribute title on div in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
+    assert.strictEqual(lastCellElement.children().attr('title'), 'Test Test Test Test Test', 'has attribute title on div in last cell');
 });
 
 // S173138
-QUnit.test("Set title attribute when cell text is trimmed in dx-datagrid-text-content container", function(assert) {
+QUnit.test('Set title attribute when cell text is trimmed in dx-datagrid-text-content container', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -359,31 +359,31 @@ QUnit.test("Set title attribute when cell text is trimmed in dx-datagrid-text-co
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", true);
+    that.option('cellHintEnabled', true);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-headers dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
 
     // act
-    firstCellElement = $table.find("div").first();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('div').first();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), undefined, "not has attribute title in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
     // act
-    lastCellElement = $table.find("div").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('div').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), "Test Test Test Test Test", "has attribute title in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in last cell');
 });
 
 // S173138
-QUnit.test("Not set title attribute when cell text is trimmed in dx-datagrid-text-content container with cellHintEnabled false", function(assert) {
+QUnit.test('Not set title attribute when cell text is trimmed in dx-datagrid-text-content container with cellHintEnabled false', function(assert) {
     // arrange
     var that = this,
         $container = $('#container').width(200),
@@ -391,30 +391,30 @@ QUnit.test("Not set title attribute when cell text is trimmed in dx-datagrid-tex
         firstCellElement,
         lastCellElement;
 
-    that.option("cellHintEnabled", false);
+    that.option('cellHintEnabled', false);
     that.columns.length = 0;
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
     $table = $(that.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-headers dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
+    $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
 
     // act
-    firstCellElement = $table.find("div").first();
-    firstCellElement.trigger("mousemove");
+    firstCellElement = $table.find('div').first();
+    firstCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(firstCellElement.attr("title"), undefined, "not has attribute title in first cell");
+    assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in first cell');
 
     // act
-    lastCellElement = $table.find("div").last();
-    lastCellElement.trigger("mousemove");
+    lastCellElement = $table.find('div').last();
+    lastCellElement.trigger('mousemove');
 
     // assert
-    assert.strictEqual(lastCellElement.attr("title"), undefined, "not has attribute title in last cell");
+    assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
 });
 
-QUnit.test("Invalidate instead of render for options", function(assert) {
+QUnit.test('Invalidate instead of render for options', function(assert) {
     // arrange
     var renderCounter = 0;
     this.columnsView.render($('#container'));
@@ -427,17 +427,17 @@ QUnit.test("Invalidate instead of render for options", function(assert) {
         return true;
     };
     this.columnsView.beginUpdate();
-    this.columnsView.optionChanged({ name: "cellHintEnabled" });
-    this.columnsView.optionChanged({ name: "onCellPrepared" });
-    this.columnsView.optionChanged({ name: "onRowPrepared" });
-    this.columnsView.optionChanged({ name: "onCellHoverChanged" });
+    this.columnsView.optionChanged({ name: 'cellHintEnabled' });
+    this.columnsView.optionChanged({ name: 'onCellPrepared' });
+    this.columnsView.optionChanged({ name: 'onRowPrepared' });
+    this.columnsView.optionChanged({ name: 'onCellHoverChanged' });
     this.columnsView.endUpdate();
 
     // assert
-    assert.equal(renderCounter, 1, "count of rendering");
+    assert.equal(renderCounter, 1, 'count of rendering');
 });
 
-QUnit.test("Invalidate when data is loading", function(assert) {
+QUnit.test('Invalidate when data is loading', function(assert) {
     // arrange
     var renderCounter = 0;
     this.columnsView.render($('#container'));
@@ -450,17 +450,17 @@ QUnit.test("Invalidate when data is loading", function(assert) {
         return false;
     };
     this.columnsView.beginUpdate();
-    this.columnsView.optionChanged({ name: "cellHintEnabled" });
-    this.columnsView.optionChanged({ name: "onCellPrepared" });
-    this.columnsView.optionChanged({ name: "onRowPrepared" });
-    this.columnsView.optionChanged({ name: "onCellHoverChanged" });
+    this.columnsView.optionChanged({ name: 'cellHintEnabled' });
+    this.columnsView.optionChanged({ name: 'onCellPrepared' });
+    this.columnsView.optionChanged({ name: 'onRowPrepared' });
+    this.columnsView.optionChanged({ name: 'onCellHoverChanged' });
     this.columnsView.endUpdate();
 
     // assert
-    assert.equal(renderCounter, 0, "count of rendering");
+    assert.equal(renderCounter, 0, 'count of rendering');
 });
 
-QUnit.test("Require resize of render for options", function(assert) {
+QUnit.test('Require resize of render for options', function(assert) {
     // arrange
     this.columnsView.render($('#container'));
 
@@ -469,17 +469,17 @@ QUnit.test("Require resize of render for options", function(assert) {
         return true;
     };
     this.columnsView.beginUpdate();
-    this.columnsView.optionChanged({ name: "cellHintEnabled" });
-    this.columnsView.optionChanged({ name: "onCellPrepared" });
-    this.columnsView.optionChanged({ name: "onRowPrepared" });
-    this.columnsView.optionChanged({ name: "onCellHoverChanged" });
+    this.columnsView.optionChanged({ name: 'cellHintEnabled' });
+    this.columnsView.optionChanged({ name: 'onCellPrepared' });
+    this.columnsView.optionChanged({ name: 'onRowPrepared' });
+    this.columnsView.optionChanged({ name: 'onCellHoverChanged' });
     this.columnsView.endUpdate();
 
     // assert
     assert.ok(this.columnsView.component._requireResize);
 });
 
-QUnit.test("Options of template have the 'component'", function(assert) {
+QUnit.test('Options of template have the \'component\'', function(assert) {
     // arrange
     var that = this,
         callRenderTemplate,
@@ -489,7 +489,7 @@ QUnit.test("Options of template have the 'component'", function(assert) {
                 callRenderTemplate = true;
 
                 // assert
-                assert.deepEqual(options.component, that, "component");
+                assert.deepEqual(options.component, that, 'component');
             }
         };
 
@@ -497,22 +497,22 @@ QUnit.test("Options of template have the 'component'", function(assert) {
     that.columnsView.renderTemplate($('#container'), template, {});
 
     // assert
-    assert.ok(callRenderTemplate, "call render of template");
+    assert.ok(callRenderTemplate, 'call render of template');
 });
 
 // T616759
-QUnit.test("The title attribute should not be set for content inside detail row", function(assert) {
+QUnit.test('The title attribute should not be set for content inside detail row', function(assert) {
     // arrange
     var $table,
         $container = $('#container').width(200);
 
-    this.option("cellHintEnabled", true);
+    this.option('cellHintEnabled', true);
     $table = $(this.columnsView._createTable());
-    $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
+    $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
 
     // act
-    $("#content").trigger("mousemove");
+    $('#content').trigger('mousemove');
 
     // assert
-    assert.strictEqual($("#content").attr("title"), undefined, "not has attribute title");
+    assert.strictEqual($('#content').attr('title'), undefined, 'not has attribute title');
 });

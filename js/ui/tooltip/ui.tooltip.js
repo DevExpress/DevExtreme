@@ -1,19 +1,19 @@
-var $ = require("../../core/renderer"),
-    Tooltip = require("./tooltip"),
-    extend = require("../../core/utils/extend").extend,
-    Deferred = require("../../core/utils/deferred").Deferred,
-    viewPortUtils = require("../../core/utils/view_port");
+var $ = require('../../core/renderer'),
+    Tooltip = require('./tooltip'),
+    extend = require('../../core/utils/extend').extend,
+    Deferred = require('../../core/utils/deferred').Deferred,
+    viewPortUtils = require('../../core/utils/view_port');
 
 var tooltip = null;
 var removeTooltipElement = null;
 
 var createTooltip = function(options) {
-    options = extend({ position: "top" }, options);
+    options = extend({ position: 'top' }, options);
 
     var content = options.content;
     delete options.content;
 
-    var $tooltip = $("<div>")
+    var $tooltip = $('<div>')
         .html(content)
         .appendTo(viewPortUtils.value());
 

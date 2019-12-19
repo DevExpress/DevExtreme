@@ -1,14 +1,14 @@
-import { isDefined } from "../../core/utils/type";
-import modules from "./ui.grid_core.modules";
-import utils from "../filter_builder/utils";
-import errors from "../widget/ui.errors";
-import gridCoreUtils from "./ui.grid_core.utils";
-import filterUtils from "../shared/filtering";
-import customOperations from "./ui.grid_core.filter_custom_operations";
+import { isDefined } from '../../core/utils/type';
+import modules from './ui.grid_core.modules';
+import utils from '../filter_builder/utils';
+import errors from '../widget/ui.errors';
+import gridCoreUtils from './ui.grid_core.utils';
+import filterUtils from '../shared/filtering';
+import customOperations from './ui.grid_core.filter_custom_operations';
 
-var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
-    FILTER_TYPES_INCLUDE = "include",
-    FILTER_TYPES_EXCLUDE = "exclude";
+var FILTER_ROW_OPERATIONS = ['=', '<>', '<', '<=', '>', '>=', 'notcontains', 'contains', 'startswith', 'endswith', 'between'],
+    FILTER_TYPES_INCLUDE = 'include',
+    FILTER_TYPES_EXCLUDE = 'exclude';
 
 function getColumnIdentifier(column) {
     return column.dataField || column.name;
@@ -17,7 +17,7 @@ function getColumnIdentifier(column) {
 function checkForErrors(columns) {
     columns.forEach(column => {
         let identifier = getColumnIdentifier(column);
-        if(!isDefined(identifier) && column.allowFiltering) throw new errors.Error("E1049", column.caption);
+        if(!isDefined(identifier) && column.allowFiltering) throw new errors.Error('E1049', column.caption);
     });
 }
 
@@ -50,12 +50,12 @@ var FilterSyncController = modules.Controller.inherit((function() {
         }
 
         switch(selectedFilterOperation) {
-            case "anyof":
-            case "=":
+            case 'anyof':
+            case '=':
                 filterType = FILTER_TYPES_INCLUDE;
                 break;
-            case "noneof":
-            case "<>":
+            case 'noneof':
+            case '<>':
                 filterType = FILTER_TYPES_EXCLUDE;
                 break;
             default: return getEmptyFilterValues();
@@ -86,10 +86,10 @@ var FilterSyncController = modules.Controller.inherit((function() {
         if(!filterValues) return null;
 
         if(canSyncHeaderFilterWithFilterRow(column) && column.filterValues.length === 1 && !Array.isArray(filterValues[0])) {
-            column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = "<>" : selectedOperation = "=";
+            column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = '<>' : selectedOperation = '=';
             value = filterValues[0];
         } else {
-            column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = "noneof" : selectedOperation = "anyof";
+            column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = 'noneof' : selectedOperation = 'anyof';
             value = filterValues;
         }
         return [getColumnIdentifier(column), selectedOperation, value];
@@ -126,12 +126,12 @@ var FilterSyncController = modules.Controller.inherit((function() {
     return {
         syncFilterValue: function() {
             var that = this,
-                columnsController = that.getController("columns"),
+                columnsController = that.getController('columns'),
                 columns = columnsController.getFilteringColumns();
 
             this._skipSyncColumnOptions = true;
             columns.forEach(function(column) {
-                var filterConditions = utils.getMatchedConditions(that.option("filterValue"), getColumnIdentifier(column));
+                var filterConditions = utils.getMatchedConditions(that.option('filterValue'), getColumnIdentifier(column));
                 if(filterConditions.length === 1) {
                     var filterCondition = filterConditions[0];
                     updateHeaderFilterCondition(columnsController, column, filterCondition);
@@ -145,15 +145,15 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         _initSync: function() {
-            let columns = this.getController("columns").getColumns(),
-                dataController = this.getController("data"),
+            let columns = this.getController('columns').getColumns(),
+                dataController = this.getController('data'),
                 pageIndex = dataController.pageIndex();
 
             checkForErrors(columns);
-            if(!this.option("filterValue")) {
-                let filteringColumns = this.getController("columns").getFilteringColumns(),
+            if(!this.option('filterValue')) {
+                let filteringColumns = this.getController('columns').getFilteringColumns(),
                     filterValue = this.getFilterValueFromColumns(filteringColumns);
-                this.option("filterValue", filterValue);
+                this.option('filterValue', filterValue);
             }
             this.syncFilterValue();
 
@@ -161,9 +161,9 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         init: function() {
-            let dataController = this.getController("data");
+            let dataController = this.getController('data');
             if(dataController.isFilterSyncActive()) {
-                if(this.getController("columns").isAllDataTypesDefined()) {
+                if(this.getController('columns').isAllDataTypesDefined()) {
                     this._initSync();
                 } else {
                     dataController.dataSourceChanged.add(() => this._initSync());
@@ -190,11 +190,11 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         getFilterValueFromColumns: function(columns) {
-            if(!this.getController("data").isFilterSyncActive()) {
+            if(!this.getController('data').isFilterSyncActive()) {
                 return null;
             }
 
-            var filterValue = ["and"];
+            var filterValue = ['and'];
 
             columns && columns.forEach(column => {
                 let headerFilter = getConditionFromHeaderFilter(column),
@@ -207,20 +207,20 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         syncFilterRow: function(column, value) {
-            this.option("filterValue", this._getSyncFilterRow(this.option("filterValue"), column));
+            this.option('filterValue', this._getSyncFilterRow(this.option('filterValue'), column));
         },
 
         syncHeaderFilter: function(column) {
-            this.option("filterValue", this._getSyncHeaderFilter(this.option("filterValue"), column));
+            this.option('filterValue', this._getSyncHeaderFilter(this.option('filterValue'), column));
         },
 
         getCustomFilterOperations: function() {
-            var filterBuilderCustomOperations = this.option("filterBuilder.customOperations") || [];
+            var filterBuilderCustomOperations = this.option('filterBuilder.customOperations') || [];
             return [customOperations.anyOf(this.component), customOperations.noneOf(this.component)].concat(filterBuilderCustomOperations);
         },
 
         publicMethods: function() {
-            return ["getCustomFilterOperations"];
+            return ['getCustomFilterOperations'];
         }
     };
 })());
@@ -228,33 +228,33 @@ var FilterSyncController = modules.Controller.inherit((function() {
 var DataControllerFilterSyncExtender = {
 
     isFilterSyncActive: function() {
-        var filterSyncEnabledValue = this.option("filterSyncEnabled");
-        return filterSyncEnabledValue === "auto" ? this.option("filterPanel.visible") : filterSyncEnabledValue;
+        var filterSyncEnabledValue = this.option('filterSyncEnabled');
+        return filterSyncEnabledValue === 'auto' ? this.option('filterPanel.visible') : filterSyncEnabledValue;
     },
 
     skipCalculateColumnFilters: function() {
-        return isDefined(this.option("filterValue")) && this.isFilterSyncActive();
+        return isDefined(this.option('filterValue')) && this.isFilterSyncActive();
     },
 
     _calculateAdditionalFilter: function() {
         var that = this;
 
-        if(that.option("filterPanel.filterEnabled") === false) {
+        if(that.option('filterPanel.filterEnabled') === false) {
             return that.callBase();
         }
 
         var filters = [that.callBase()],
-            columns = that.getController("columns").getFilteringColumns(),
-            filterValue = that.option("filterValue");
+            columns = that.getController('columns').getFilteringColumns(),
+            filterValue = that.option('filterValue');
 
         if(that.isFilterSyncActive()) {
-            var currentColumn = that.getController("headerFilter").getCurrentColumn();
+            var currentColumn = that.getController('headerFilter').getCurrentColumn();
             if(currentColumn && filterValue) {
                 filterValue = utils.removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(currentColumn));
             }
         }
-        var customOperations = that.getController("filterSync").getCustomFilterOperations(),
-            calculatedFilterValue = utils.getFilterExpression(filterValue, columns, customOperations, "filterBuilder");
+        var customOperations = that.getController('filterSync').getCustomFilterOperations(),
+            calculatedFilterValue = utils.getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
         if(calculatedFilterValue) {
             filters.push(calculatedFilterValue);
         }
@@ -270,12 +270,12 @@ var DataControllerFilterSyncExtender = {
     clearFilter: function(filterName) {
         this.component.beginUpdate();
         if(arguments.length > 0) {
-            if(filterName === "filterValue") {
-                this.option("filterValue", null);
+            if(filterName === 'filterValue') {
+                this.option('filterValue', null);
             }
             this.callBase(filterName);
         } else {
-            this.option("filterValue", null);
+            this.option('filterValue', null);
             this.callBase();
         }
         this.component.endUpdate();
@@ -283,28 +283,28 @@ var DataControllerFilterSyncExtender = {
 
     optionChanged: function(args) {
         switch(args.name) {
-            case "filterValue":
+            case 'filterValue':
                 this._applyFilter();
-                this.isFilterSyncActive() && this.getController("filterSync").syncFilterValue();
+                this.isFilterSyncActive() && this.getController('filterSync').syncFilterValue();
                 args.handled = true;
                 break;
-            case "filterSyncEnabled":
+            case 'filterSyncEnabled':
                 args.handled = true;
                 break;
-            case "columns":
+            case 'columns':
                 if(this.isFilterSyncActive()) {
-                    let column = this.getController("columns").getColumnByPath(args.fullName),
-                        filterSyncController = this.getController("filterSync");
+                    let column = this.getController('columns').getColumnByPath(args.fullName),
+                        filterSyncController = this.getController('filterSync');
                     if(column && !filterSyncController._skipSyncColumnOptions) {
                         let propertyName = this._parseColumnPropertyName(args.fullName);
                         filterSyncController._skipSyncColumnOptions = true;
-                        if("filterType" === propertyName) {
+                        if('filterType' === propertyName) {
                             if(FILTER_TYPES_EXCLUDE === args.value || FILTER_TYPES_EXCLUDE === args.previousValue) {
                                 filterSyncController.syncHeaderFilter(column);
                             }
-                        } else if("filterValues" === propertyName) {
+                        } else if('filterValues' === propertyName) {
                             filterSyncController.syncHeaderFilter(column);
-                        } else if(["filterValue", "selectedFilterOperation"].indexOf(propertyName) > -1) {
+                        } else if(['filterValue', 'selectedFilterOperation'].indexOf(propertyName) > -1) {
                             filterSyncController.syncFilterRow(column, column.filterValue);
                         }
                         filterSyncController._skipSyncColumnOptions = false;
@@ -320,19 +320,19 @@ var DataControllerFilterSyncExtender = {
 
 var ColumnHeadersViewFilterSyncExtender = {
     _isHeaderFilterEmpty: function(column) {
-        if(this.getController("data").isFilterSyncActive()) {
-            return !utils.filterHasField(this.option("filterValue"), getColumnIdentifier(column));
+        if(this.getController('data').isFilterSyncActive()) {
+            return !utils.filterHasField(this.option('filterValue'), getColumnIdentifier(column));
         }
 
         return this.callBase(column);
     },
 
     _needUpdateFilterIndicators: function() {
-        return !this.getController("data").isFilterSyncActive();
+        return !this.getController('data').isFilterSyncActive();
     },
 
     optionChanged: function(args) {
-        if(args.name === "filterValue") {
+        if(args.name === 'filterValue') {
             this._updateHeaderFilterIndicators();
         } else {
             this.callBase(args);
@@ -355,7 +355,7 @@ module.exports = {
              * @name GridBaseOptions.filterSyncEnabled
              * @type boolean
              */
-            filterSyncEnabled: "auto"
+            filterSyncEnabled: 'auto'
         };
     },
     controllers: {

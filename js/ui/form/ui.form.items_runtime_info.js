@@ -1,6 +1,7 @@
-import Guid from "../../core/guid";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
+import Guid from '../../core/guid';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { isString } from '../../core/utils/type';
 
 export default class FormItemsRunTimeInfo {
     constructor() {
@@ -25,7 +26,7 @@ export default class FormItemsRunTimeInfo {
         let result;
         each(this._map, function(key, value) {
             if(callback(value)) {
-                result = valueExpr === "guid" ? key : value[valueExpr];
+                result = valueExpr === 'guid' ? key : value[valueExpr];
                 return false;
             }
         });
@@ -37,9 +38,11 @@ export default class FormItemsRunTimeInfo {
     }
 
     removeItemsByItems(itemsRunTimeInfo) {
-        each(itemsRunTimeInfo.getItems(), guid => {
-            delete this._map[guid];
-        });
+        each(itemsRunTimeInfo.getItems(), guid => this.removeItemByKey(guid));
+    }
+
+    removeItemByKey(key) {
+        delete this._map[key];
     }
 
     add(options) {
@@ -51,7 +54,9 @@ export default class FormItemsRunTimeInfo {
     addItemsOrExtendFrom(itemsRunTimeInfo) {
         itemsRunTimeInfo.each((key, itemRunTimeInfo) => {
             if(this._map[key]) {
-                this._map[key].widgetInstance = itemRunTimeInfo.widgetInstance;
+                if(itemRunTimeInfo.widgetInstance) {
+                    this._map[key].widgetInstance = itemRunTimeInfo.widgetInstance;
+                }
                 this._map[key].$itemContainer = itemRunTimeInfo.$itemContainer;
             } else {
                 this.add({
@@ -65,7 +70,9 @@ export default class FormItemsRunTimeInfo {
     }
 
     extendRunTimeItemInfoByKey(key, options) {
-        this._map[key] = extend(this._map[key], options);
+        if(this._map[key]) {
+            this._map[key] = extend(this._map[key], options);
+        }
     }
 
     findWidgetInstanceByItem(item) {
@@ -73,15 +80,15 @@ export default class FormItemsRunTimeInfo {
     }
 
     getGroupOrTabLayoutManagerByPath(targetPath) {
-        return this._findFieldByCondition(({ path }) => path === targetPath, "layoutManager");
+        return this._findFieldByCondition(({ path }) => path === targetPath, 'layoutManager');
     }
 
     getKeyByPath(targetPath) {
-        return this._findFieldByCondition(({ path }) => path === targetPath, "guid");
+        return this._findFieldByCondition(({ path }) => path === targetPath, 'guid');
     }
 
     getPathFromItem(targetItem) {
-        return this._findFieldByCondition(({ item }) => item === targetItem, "path");
+        return this._findFieldByCondition(({ item }) => item === targetItem, 'path');
     }
 
     findWidgetInstanceByName(name) {
@@ -89,7 +96,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     findWidgetInstanceByDataField(dataField) {
-        return this._findWidgetInstance(item => dataField === item.dataField);
+        return this._findWidgetInstance(item => dataField === (isString(item) ? item : item.dataField));
     }
 
     findItemContainerByItem(item) {
@@ -102,7 +109,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     findItemIndexByItem(targetItem) {
-        return this._findFieldByCondition(({ item }) => item === targetItem, "itemIndex");
+        return this._findFieldByCondition(({ item }) => item === targetItem, 'itemIndex');
     }
 
     getItems() {
@@ -113,5 +120,11 @@ export default class FormItemsRunTimeInfo {
         each(this._map, function(key, itemRunTimeInfo) {
             handler(key, itemRunTimeInfo);
         });
+    }
+
+    removeItemsByPathStartWith(path) {
+        const keys = Object.keys(this._map);
+        const filteredKeys = keys.filter(key => this._map[key].path.indexOf(path, 0) > -1);
+        filteredKeys.forEach(key => this.removeItemByKey(key));
     }
 }

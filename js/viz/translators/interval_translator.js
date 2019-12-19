@@ -1,18 +1,18 @@
-var typeUtils = require("../../core/utils/type"),
+var typeUtils = require('../../core/utils/type'),
     isNumber = typeUtils.isNumeric,
     isDefined = typeUtils.isDefined,
-    dateUtils = require("../../core/utils/date"),
+    dateUtils = require('../../core/utils/date'),
     addInterval = dateUtils.addInterval,
     dateToMilliseconds = dateUtils.dateToMilliseconds,
     floor = Math.floor,
-    adjust = require("../../core/utils/math").adjust;
+    adjust = require('../../core/utils/math').adjust;
 
 module.exports = {
     _intervalize: function(value, interval) {
         if(!isDefined(value)) {
             return undefined;
         }
-        if(this._businessRange.dataType === "datetime") {
+        if(this._businessRange.dataType === 'datetime') {
             if(isNumber(value)) {
                 value = new Date(value);
             } else {
@@ -53,7 +53,7 @@ module.exports = {
     getScale: function() { },
 
     _parse: function(value) {
-        return this._businessRange.dataType === "datetime" ? new Date(value) : Number(value);
+        return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
     },
 
     _fromValue: function(value) {
@@ -75,7 +75,7 @@ module.exports = {
             return false;
         }
 
-        value = that._businessRange.dataType === "datetime" && isNumber(value) ? new Date(value) : value;
+        value = that._businessRange.dataType === 'datetime' && isNumber(value) ? new Date(value) : value;
 
         if(interval !== that._options.interval) {
             rangeMin = that._intervalize(rangeMin, interval);
@@ -130,7 +130,7 @@ module.exports = {
             rMax = co.rangeMaxVisible,
             value;
 
-        if(that._businessRange.dataType === "datetime") {
+        if(that._businessRange.dataType === 'datetime') {
             interval = dateToMilliseconds(origInterval);
         }
 

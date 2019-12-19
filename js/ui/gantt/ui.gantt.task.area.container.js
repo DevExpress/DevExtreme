@@ -1,4 +1,4 @@
-import dxScrollView from "../scroll_view";
+import dxScrollView from '../scroll_view';
 
 export class TaskAreaContainer {
     constructor(element, ganttViewWidget) {
@@ -7,8 +7,8 @@ export class TaskAreaContainer {
         this._scrollView = ganttViewWidget._createComponent(this._element, dxScrollView, {
             scrollByContent: false,
             scrollByThumb: true,
-            showScrollbar: "onHover",
-            direction: "both",
+            showScrollbar: 'onHover',
+            direction: 'both',
             onScroll: () => { ganttViewWidget.updateView(); }
         });
     }

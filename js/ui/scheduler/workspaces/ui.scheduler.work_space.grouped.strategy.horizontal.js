@@ -1,6 +1,6 @@
-var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
+var GroupedStrategy = require('./ui.scheduler.work_space.grouped.strategy');
 
-var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
+var HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
 
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDay) {
@@ -61,15 +61,15 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     _addLastGroupCellClass: function(cellClass, index) {
-        var groupByDay = this._workSpace.option("groupByDate");
+        var groupByDay = this._workSpace.option('groupByDate');
 
         if(groupByDay) {
             if(index % this._workSpace._getGroupCount() === 0) {
-                return cellClass + " " + this.getLastGroupCellClass();
+                return cellClass + ' ' + this.getLastGroupCellClass();
             }
         } else {
             if(index % this._workSpace._getCellCount() === 0) {
-                return cellClass + " " + this.getLastGroupCellClass();
+                return cellClass + ' ' + this.getLastGroupCellClass();
             }
         }
 
@@ -78,7 +78,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     _addFirstGroupCellClass: function(cellClass, index) {
         if((index - 1) % this._workSpace._getCellCount() === 0) {
-            return cellClass + " " + this.getFirstGroupCellClass();
+            return cellClass + ' ' + this.getFirstGroupCellClass();
         }
 
         return cellClass;
@@ -152,13 +152,13 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1, 0) * i + this._workSpace.getIndicatorOffset(i) + i,
             horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
 
-        $indicator.css("left", horizontalOffset);
-        $indicator.css("top", height);
+        $indicator.css('left', horizontalOffset);
+        $indicator.css('top', height);
     },
 
     getShaderOffset: function(i, width) {
         var offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
-        return this._workSpace.option("rtlEnabled") ? this._workSpace._dateTableScrollable.$content().get(0).getBoundingClientRect().width - offset - this._workSpace.getTimePanelWidth() - width : offset;
+        return this._workSpace.option('rtlEnabled') ? this._workSpace._dateTableScrollable.$content().get(0).getBoundingClientRect().width - offset - this._workSpace.getTimePanelWidth() - width : offset;
     },
 
     getShaderTopOffset: function(i) {

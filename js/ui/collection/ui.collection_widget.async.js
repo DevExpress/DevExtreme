@@ -1,6 +1,6 @@
-import CollectionWidgetEdit from "./ui.collection_widget.edit";
-import { Deferred, when } from "../../core/utils/deferred";
-import { noop } from "../../core/utils/common";
+import CollectionWidgetEdit from './ui.collection_widget.edit';
+import { Deferred, when } from '../../core/utils/deferred';
+import { noop } from '../../core/utils/common';
 
 let AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     _initMarkup() {

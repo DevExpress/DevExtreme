@@ -1,5 +1,5 @@
-var extend = require("../../../core/utils/extend").extend,
-    symbolPoint = require("./symbol_point"),
+var extend = require('../../../core/utils/extend').extend,
+    symbolPoint = require('./symbol_point'),
 
     _extend = extend,
     _round = Math.round,
@@ -7,12 +7,12 @@ var extend = require("../../../core/utils/extend").extend,
     _acos = Math.acos,
     DEG = 180 / Math.PI,
     _abs = Math.abs,
-    vizUtils = require("../../core/utils"),
+    vizUtils = require('../../core/utils'),
     _normalizeAngle = vizUtils.normalizeAngle,
     _getCosAndSin = vizUtils.getCosAndSin,
-    _isDefined = require("../../../core/utils/type").isDefined,
+    _isDefined = require('../../../core/utils/type').isDefined,
     getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords,
-    RADIAL_LABEL_INDENT = require("../../components/consts").radialLabelIndent;
+    RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent;
 
 module.exports = _extend({}, symbolPoint, {
     _updateData: function(data, argumentChanged) {
@@ -62,7 +62,7 @@ module.exports = _extend({}, symbolPoint, {
         that.value = (base || that.normalInitialValue) + correction;
         that.minValue = correction;
         that.percent = percent;
-        that._label.setDataField("percent", percent);
+        that._label.setDataField('percent', percent);
     },
 
     _updateLabelData: function() {
@@ -133,14 +133,14 @@ module.exports = _extend({}, symbolPoint, {
             connectorOffset = options.connectorOffset,
             x = coord.x;
 
-        if(options.position === "columns") {
+        if(options.position === 'columns') {
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
                 x = rightBorderX;
             } else {
                 x = leftBorderX;
             }
             coord.x = x;
-        } else if(options.position !== "inside" && moveLabelsFromCenter) {
+        } else if(options.position !== 'inside' && moveLabelsFromCenter) {
             if(angleOfPoint <= 90 || angleOfPoint >= 270) {
                 if((x - connectorOffset) < centerX) {
                     x = centerX + connectorOffset;
@@ -209,9 +209,9 @@ module.exports = _extend({}, symbolPoint, {
             width = box.width,
             rowCountChanged = false;
 
-        if(position === "columns" && that.series.index > 0) {
+        if(position === 'columns' && that.series.index > 0) {
             width = visibleArea.maxX - that.centerX - that.radiusLabels;
-        } else if(position === "inside") {
+        } else if(position === 'inside') {
             if(width > (visibleArea.maxX - visibleArea.minX)) {
                 width = visibleArea.maxX - visibleArea.minX;
             }
@@ -243,7 +243,7 @@ module.exports = _extend({}, symbolPoint, {
         var that = this,
             rad = that.radiusOuter,
             seriesStyle = that._options.styles.normal,
-            strokeWidthBy2 = seriesStyle["stroke-width"] / 2,
+            strokeWidthBy2 = seriesStyle['stroke-width'] / 2,
             borderWidth = that.series.getOptions().containerBackgroundColor === seriesStyle.stroke ? _round(strokeWidthBy2) : _round(-strokeWidthBy2),
             angleFunctions = _getCosAndSin(_round(that.middleAngle));
 
@@ -268,9 +268,9 @@ module.exports = _extend({}, symbolPoint, {
             }
         }
         that.graphic = renderer.arc(that.centerX, that.centerY, radiusInner, radiusOuter, toAngle, fromAngle)
-            .attr({ "stroke-linejoin": "round" })
+            .attr({ 'stroke-linejoin': 'round' })
             .smartAttr(that._getStyle())
-            .data({ "chart-data-point": that })
+            .data({ 'chart-data-point': that })
             .sharp()
             .append(group);
     },
@@ -363,7 +363,7 @@ module.exports = _extend({}, symbolPoint, {
             percent = this.percent;
 
         formatObject.percent = percent;
-        formatObject.percentText = tooltip.formatValue(percent, "percent");
+        formatObject.percentText = tooltip.formatValue(percent, 'percent');
 
         return formatObject;
     },

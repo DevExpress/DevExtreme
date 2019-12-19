@@ -1,17 +1,17 @@
 define(function(require) {
-    var WeakMap = require("core/polyfills/weak_map");
+    var WeakMap = require('core/polyfills/weak_map');
 
     if(window.WeakMap) {
         return;
     }
 
-    QUnit.module("weakMap");
+    QUnit.module('weakMap');
 
-    QUnit.test("set/get", function(assert) {
+    QUnit.test('set/get', function(assert) {
         var testWeakMap = new WeakMap();
-        var key = document.createElement("div");
-        var anotherKey = document.createElement("div");
-        var value = "test value";
+        var key = document.createElement('div');
+        var anotherKey = document.createElement('div');
+        var value = 'test value';
 
         testWeakMap.set(key, value);
 
@@ -20,11 +20,11 @@ define(function(require) {
         assert.strictEqual(testWeakMap.get(anotherKey), undefined);
     });
 
-    QUnit.test("has", function(assert) {
+    QUnit.test('has', function(assert) {
         var testWeakMap = new WeakMap();
-        var key = document.createElement("div");
-        var anotherKey = document.createElement("div");
-        var value = "test value";
+        var key = document.createElement('div');
+        var anotherKey = document.createElement('div');
+        var value = 'test value';
 
         testWeakMap.set(key, value);
 
@@ -32,10 +32,10 @@ define(function(require) {
         assert.notOk(testWeakMap.has(anotherKey));
     });
 
-    QUnit.test("delete", function(assert) {
+    QUnit.test('delete', function(assert) {
         var testWeakMap = new WeakMap();
-        var key = document.createElement("div");
-        var value = "test value";
+        var key = document.createElement('div');
+        var value = 'test value';
 
         testWeakMap.set(key, value);
         testWeakMap.delete(key, value);

@@ -11,7 +11,7 @@ const tagHelper = {
             }
         }
 
-        if(isDefined(content) && content !== "") {
+        if(isDefined(content) && content !== '') {
             result.push('>', content, '</', tagName, '>');
         } else {
             result.push(' />');

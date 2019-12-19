@@ -1,9 +1,9 @@
-var _eventData = require("../../events/utils").eventData,
-    domAdapter = require("../../core/dom_adapter"),
-    clickEventName = require("../../events/click").name,
-    downPointerEventName = require("../../events/pointer").down,
-    movePointerEventName = require("../../events/pointer").move,
-    eventsEngine = require("../../events/core/events_engine");
+var _eventData = require('../../events/utils').eventData,
+    domAdapter = require('../../core/dom_adapter'),
+    clickEventName = require('../../events/click').name,
+    downPointerEventName = require('../../events/pointer').down,
+    movePointerEventName = require('../../events/pointer').move,
+    eventsEngine = require('../../events/core/events_engine');
 
 function Tracker(parameters) {
     this._initHandlers(parameters);
@@ -58,7 +58,7 @@ Tracker.prototype = {
 
         function moveHandler(e) {
             processHover(e, parameters);
-            parameters.widget._getOption("tooltip").enabled && processTooltip(e, parameters);
+            parameters.widget._getOption('tooltip').enabled && processTooltip(e, parameters);
         }
     },
 

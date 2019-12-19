@@ -2375,7 +2375,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.itemsExpr */
         itemsExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.keyExpr */
-        keyExpr?: string | ((item: any) => string);
+        keyExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.selectedExpr */
         selectedExpr?: string | Function;
     }
@@ -3972,11 +3972,22 @@ declare module DevExpress.ui {
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
+        /** @name dxGantt.Options.timeMarkers */
+        timeMarkers?: Array<dxGanttTimeMarker>;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
         constructor(element: Element, options?: dxGanttOptions)
         constructor(element: JQuery, options?: dxGanttOptions)
+    }
+    /** @name dxGanttTimeMarker */
+    export interface dxGanttTimeMarker {
+        /** @name dxGanttTimeMarker.cssClass */
+        cssClass?: string;
+        /** @name dxGanttTimeMarker.dateTime */
+        dateTime?: Date | number | string | (() => Date | number | string);
+        /** @name dxGanttTimeMarker.title */
+        title?: string;
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {

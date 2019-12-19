@@ -1,27 +1,27 @@
-var $ = require("jquery"),
-    translator = require("animation/translator"),
-    styleUtils = require("core/utils/style"),
-    transformStyle = styleUtils.styleProp("transform");
+var $ = require('jquery'),
+    translator = require('animation/translator'),
+    styleUtils = require('core/utils/style'),
+    transformStyle = styleUtils.styleProp('transform');
 
-QUnit.module("translator", {
+QUnit.module('translator', {
     beforeEach: function() {
-        this.$container = $("<div>").css({ position: 'relative', height: '100px' }).appendTo("#qunit-fixture");
-        this.$element = $("<div>").css({ position: 'absolute', height: '100px' }).appendTo(this.$container);
+        this.$container = $('<div>').css({ position: 'relative', height: '100px' }).appendTo('#qunit-fixture');
+        this.$element = $('<div>').css({ position: 'absolute', height: '100px' }).appendTo(this.$container);
     },
     afterEach: function() {
         this.$element.remove();
     }
 });
 
-QUnit.test("translator.getTranslateCss", function(assert) {
+QUnit.test('translator.getTranslateCss', function(assert) {
     var translateCss = translator.getTranslateCss({ x: 100, y: -100 });
-    assert.equal(translateCss, "translate(100px, -100px)");
+    assert.equal(translateCss, 'translate(100px, -100px)');
 
     translateCss = translator.getTranslateCss({ x: 100 });
-    assert.equal(translateCss, "translate(100px, 0px)");
+    assert.equal(translateCss, 'translate(100px, 0px)');
 });
 
-QUnit.test("translator.getTranslate", function(assert) {
+QUnit.test('translator.getTranslate', function(assert) {
     this.$element.css(transformStyle, translator.getTranslateCss({ x: 100, y: -100 }));
     assert.deepEqual(translator.getTranslate(this.$element), {
         x: 100,
@@ -38,7 +38,7 @@ QUnit.test("translator.getTranslate", function(assert) {
     });
 });
 
-QUnit.test("translator.move", function(assert) {
+QUnit.test('translator.move', function(assert) {
     translator.move(this.$element, { left: 100, top: -100 });
     assert.deepEqual(translator.getTranslate(this.$element), {
         x: 100,
@@ -61,7 +61,7 @@ QUnit.test("translator.move", function(assert) {
     });
 });
 
-QUnit.test("translator.locate", function(assert) {
+QUnit.test('translator.locate', function(assert) {
     translator.move(this.$element, { left: 100, top: -100 });
 
     var position = translator.locate(this.$element);
@@ -71,12 +71,12 @@ QUnit.test("translator.locate", function(assert) {
     });
 });
 
-QUnit.test("set up position in percent", function(assert) {
-    translator.move(this.$element, { left: "100%", top: "-100%" });
+QUnit.test('set up position in percent', function(assert) {
+    translator.move(this.$element, { left: '100%', top: '-100%' });
 
     var position = translator.locate(this.$element);
     assert.deepEqual(position, {
         left: this.$element.width(),
         top: -this.$element.height()
-    }, "correct position");
+    }, 'correct position');
 });

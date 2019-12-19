@@ -1,57 +1,57 @@
-import $ from "../../core/renderer";
-import registerComponent from "../../core/component_registrator";
-import commonUtils from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { logger } from "../../core/utils/console";
-import browser from "../../core/utils/browser";
-import Widget from "../widget/ui.widget";
-import gridCore, { callModuleItemsMethod } from "./ui.data_grid.core";
-import themes from "../themes";
+import $ from '../../core/renderer';
+import registerComponent from '../../core/component_registrator';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { logger } from '../../core/utils/console';
+import browser from '../../core/utils/browser';
+import Widget from '../widget/ui.widget';
+import gridCore, { callModuleItemsMethod } from './ui.data_grid.core';
+import themes from '../themes';
 
-var DATAGRID_ROW_SELECTOR = ".dx-row",
-    DATAGRID_DEPRECATED_TEMPLATE_WARNING = "Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.";
+var DATAGRID_ROW_SELECTOR = '.dx-row',
+    DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
 
-import "./ui.data_grid.column_headers";
-import "./ui.data_grid.columns_controller";
-import "./ui.data_grid.data_controller";
-import "./ui.data_grid.sorting";
-import "./ui.data_grid.rows";
-import "./ui.data_grid.context_menu";
-import "./ui.data_grid.error_handling";
-import "./ui.data_grid.grid_view";
-import "./ui.data_grid.header_panel";
+import './ui.data_grid.column_headers';
+import './ui.data_grid.columns_controller';
+import './ui.data_grid.data_controller';
+import './ui.data_grid.sorting';
+import './ui.data_grid.rows';
+import './ui.data_grid.context_menu';
+import './ui.data_grid.error_handling';
+import './ui.data_grid.grid_view';
+import './ui.data_grid.header_panel';
 
 gridCore.registerModulesOrder([
-    "stateStoring",
-    "columns",
-    "selection",
-    "editorFactory",
-    "columnChooser",
-    "grouping",
-    "editing",
-    "masterDetail",
-    "validating",
-    "adaptivity",
-    "data",
-    "virtualScrolling",
-    "columnHeaders",
-    "filterRow",
-    "headerPanel",
-    "headerFilter",
-    "sorting",
-    "search",
-    "rows",
-    "pager",
-    "columnsResizingReordering",
-    "contextMenu",
-    "keyboardNavigation",
-    "errorHandling",
-    "summary",
-    "columnFixing",
-    "export",
-    "gridView"]);
+    'stateStoring',
+    'columns',
+    'selection',
+    'editorFactory',
+    'columnChooser',
+    'grouping',
+    'editing',
+    'masterDetail',
+    'validating',
+    'adaptivity',
+    'data',
+    'virtualScrolling',
+    'columnHeaders',
+    'filterRow',
+    'headerPanel',
+    'headerFilter',
+    'sorting',
+    'search',
+    'rows',
+    'pager',
+    'columnsResizingReordering',
+    'contextMenu',
+    'keyboardNavigation',
+    'errorHandling',
+    'summary',
+    'columnFixing',
+    'export',
+    'gridView']);
 
 var DataGrid = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
@@ -72,14 +72,14 @@ var DataGrid = Widget.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            "useKeyboard": { since: "19.2", alias: "keyboardNavigation.enabled" }
+            'useKeyboard': { since: '19.2', alias: 'keyboardNavigation.enabled' }
         });
     },
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: "ios" },
+                device: { platform: 'ios' },
                 options: {
                     /**
                     * @name GridBaseOptions.showRowLines
@@ -133,7 +133,7 @@ var DataGrid = Widget.inherit({
                     loadPanel: {
                         animation: {
                             show: {
-                                easing: "cubic-bezier(1, 0, 1, 0)",
+                                easing: 'cubic-bezier(1, 0, 1, 0)',
                                 duration: 500,
                                 from: { opacity: 0 },
                                 to: { opacity: 1 }
@@ -144,7 +144,7 @@ var DataGrid = Widget.inherit({
             },
             {
                 device: function(device) {
-                    return device.deviceType !== "desktop";
+                    return device.deviceType !== 'desktop';
                 },
                 options: {
                     grouping: {
@@ -152,7 +152,7 @@ var DataGrid = Widget.inherit({
                          * @name dxDataGridOptions.grouping.expandMode
                          * @default 'rowClick' @for mobile_devices
                          */
-                        expandMode: "rowClick"
+                        expandMode: 'rowClick'
                     }
                 }
             }
@@ -166,7 +166,7 @@ var DataGrid = Widget.inherit({
 
         gridCore.processModules(that, gridCore);
 
-        callModuleItemsMethod(that, "init");
+        callModuleItemsMethod(that, 'init');
     },
 
     _clean: commonUtils.noop,
@@ -174,7 +174,7 @@ var DataGrid = Widget.inherit({
     _optionChanged: function(args) {
         var that = this;
 
-        callModuleItemsMethod(that, "optionChanged", [args]);
+        callModuleItemsMethod(that, 'optionChanged', [args]);
         if(!args.handled) {
             that.callBase(args);
         }
@@ -192,11 +192,11 @@ var DataGrid = Widget.inherit({
 
     _initMarkup: function() {
         this.callBase.apply(this, arguments);
-        this.getView("gridView").render(this.$element());
+        this.getView('gridView').render(this.$element());
     },
 
     _renderContentImpl: function() {
-        this.getView("gridView").update();
+        this.getView('gridView').update();
     },
 
     _renderContent: function() {
@@ -210,7 +210,7 @@ var DataGrid = Widget.inherit({
     _getTemplate: function(templateName) {
         var template = templateName;
 
-        if(typeUtils.isString(template) && template[0] === "#") {
+        if(typeUtils.isString(template) && template[0] === '#') {
             template = $(templateName);
             logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
         }
@@ -222,24 +222,24 @@ var DataGrid = Widget.inherit({
         var that = this;
         that.callBase();
 
-        callModuleItemsMethod(that, "dispose");
+        callModuleItemsMethod(that, 'dispose');
     },
 
     isReady: function() {
-        return this.getController("data").isReady();
+        return this.getController('data').isReady();
     },
 
     beginUpdate: function() {
         var that = this;
 
         that.callBase();
-        callModuleItemsMethod(that, "beginUpdate");
+        callModuleItemsMethod(that, 'beginUpdate');
     },
 
     endUpdate: function() {
         var that = this;
 
-        callModuleItemsMethod(that, "endUpdate");
+        callModuleItemsMethod(that, 'endUpdate');
         that.callBase();
     },
 
@@ -252,12 +252,12 @@ var DataGrid = Widget.inherit({
     },
 
     focus: function(element) {
-        this.getController("keyboardNavigation").focus(element);
+        this.getController('keyboardNavigation').focus(element);
     }
 });
 
 DataGrid.registerModule = gridCore.registerModule.bind(gridCore);
 
-registerComponent("dxDataGrid", DataGrid);
+registerComponent('dxDataGrid', DataGrid);
 
 module.exports = DataGrid;

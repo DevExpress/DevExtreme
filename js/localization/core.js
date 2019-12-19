@@ -1,8 +1,8 @@
-import dependencyInjector from "../core/utils/dependency_injector";
-import parentLocales from "./cldr-data/parent_locales";
-import getParentLocale from "./parentLocale";
+import dependencyInjector from '../core/utils/dependency_injector';
+import parentLocales from './cldr-data/parent_locales';
+import getParentLocale from './parentLocale';
 
-const DEFAULT_LOCALE = "en";
+const DEFAULT_LOCALE = 'en';
 
 module.exports = dependencyInjector({
     locale: (() => {

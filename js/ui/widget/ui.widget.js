@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Action from '../../core/action';
-import DOMComponentWithTemplate from '../../core/dom_component_with_template';
+import DOMComponent from '../../core/dom_component';
 import { active, dxClick, focus, hover, keyboard } from '../../events/short';
 import { deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
@@ -40,7 +40,7 @@ function setAttribute(name, value, target) {
 * @export default
 * @hidden
 */
-const Widget = DOMComponentWithTemplate.inherit({
+const Widget = DOMComponent.inherit({
     _feedbackHideTimeout: 400,
     _feedbackShowTimeout: 30,
 
@@ -179,21 +179,8 @@ const Widget = DOMComponentWithTemplate.inherit({
         this._initContentReadyAction();
     },
 
-    _getOptionsFromContainer: function({ name, fullName, value }) {
-        var options = {};
-
-        if(name === fullName) {
-            options = value;
-        } else {
-            var option = fullName.split(".").pop();
-            options[option] = value;
-        }
-
-        return options;
-    },
-
     _innerWidgetOptionChanged: function(innerWidget, args) {
-        var options = this._getOptionsFromContainer(args);
+        const options = Widget.getOptionsFromContainer(args);
         innerWidget && innerWidget.option(options);
         this._options.cache(args.name, options);
     },

@@ -1,5 +1,5 @@
-var inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
+var inArray = require('../../core/utils/array').inArray,
+    each = require('../../core/utils/iterator').each,
     _round = Math.round,
     _min = Math.min,
     _max = Math.max,
@@ -7,14 +7,14 @@ var inArray = require("../../core/utils/array").inArray,
     _inArray = inArray,
 
     horizontalAlignmentMap = {
-        "left": 0,
-        "center": 1,
-        "right": 2
+        'left': 0,
+        'center': 1,
+        'right': 2
     },
 
     verticalAlignmentMap = {
-        "top": 0,
-        "bottom": 1
+        'top': 0,
+        'bottom': 1
     };
 
 function getCellIndex(options) {

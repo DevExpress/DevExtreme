@@ -1,9 +1,9 @@
-var BaseVizWidget = require("viz/core/base_widget");
+var BaseVizWidget = require('viz/core/base_widget');
 
-QUnit.module("Viz", {
+QUnit.module('Viz', {
     beforeEach: function() {
-        var fixture = document.getElementById("qunit-fixture");
-        this.element = document.createElement("div");
+        var fixture = document.getElementById('qunit-fixture');
+        this.element = document.createElement('div');
         fixture.appendChild(this.element);
     },
     afterEach: function() {
@@ -11,7 +11,7 @@ QUnit.module("Viz", {
     }
 });
 
-QUnit.test("Sized element when sizes are defined", function(assert) {
+QUnit.test('Sized element when sizes are defined', function(assert) {
     var TestVizBaseVizWidget = BaseVizWidget.inherit();
 
     this.instance = new TestVizBaseVizWidget(this.element, {
@@ -19,11 +19,11 @@ QUnit.test("Sized element when sizes are defined", function(assert) {
         height: 500
     });
 
-    assert.equal(this.element.childNodes[0].style.width, "500px");
-    assert.equal(this.element.childNodes[0].style.height, "500px");
+    assert.equal(this.element.childNodes[0].style.width, '500px');
+    assert.equal(this.element.childNodes[0].style.height, '500px');
 });
 
-QUnit.test("Sized element when sizes are not defined", function(assert) {
+QUnit.test('Sized element when sizes are not defined', function(assert) {
     var TestVizBaseVizWidget = BaseVizWidget.inherit({
         _getDefaultSize: function() {
             return { width: 200, height: 200 };
@@ -32,11 +32,11 @@ QUnit.test("Sized element when sizes are not defined", function(assert) {
 
     this.instance = new TestVizBaseVizWidget(this.element);
 
-    assert.equal(this.element.childNodes[0].style.width, "100%");
-    assert.equal(this.element.childNodes[0].style.height, "200px");
+    assert.equal(this.element.childNodes[0].style.width, '100%');
+    assert.equal(this.element.childNodes[0].style.height, '200px');
 });
 
-QUnit.test("element method should return correct value", function(assert) {
+QUnit.test('element method should return correct value', function(assert) {
     var TestVizBaseVizWidget = BaseVizWidget.inherit({
         _getDefaultSize: function() {
             return { width: 200, height: 200 };

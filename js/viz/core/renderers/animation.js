@@ -1,4 +1,4 @@
-var animationFrame = require("../../../animation/frame"),
+var animationFrame = require('../../../animation/frame'),
     noop = function() { },
     easingFunctions = {
         easeOutCubic: function(pos, start, end) { return (pos === 1) ? end : ((1 - Math.pow((1 - pos), 3)) * (end - start) + (+start)); },
@@ -103,7 +103,7 @@ function Animation(element, params, options) {
     that.duration = options.partitionDuration ? options.duration * options.partitionDuration : options.duration;
     that.delay = options.delay && options.duration * options.delay || 0;
     that._animateStep = options.animateStep || animationSvgStep;
-    that._easing = easingFunctions[options.easing] || easingFunctions["easeOutCubic"];
+    that._easing = easingFunctions[options.easing] || easingFunctions['easeOutCubic'];
     that._currentParams = {};
     that.tick = start;
 }

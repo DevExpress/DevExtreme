@@ -1,7 +1,7 @@
 /* global Debug*/
-var errors = require("../core/errors"),
-    window = require("../core/utils/window").getWindow(),
-    proxyUrlFormatter = require("./proxy_url_formatter");
+var errors = require('../core/errors'),
+    window = require('../core/utils/window').getWindow(),
+    proxyUrlFormatter = require('./proxy_url_formatter');
 
 var IS_WINJS_ORIGIN,
     IS_LOCAL_ORIGIN;
@@ -25,7 +25,7 @@ function isLocalHostName(url) {
 */
 var EndpointSelector = function(config) {
     this.config = config;
-    IS_WINJS_ORIGIN = window.location.protocol === "ms-appx:";
+    IS_WINJS_ORIGIN = window.location.protocol === 'ms-appx:';
     IS_LOCAL_ORIGIN = isLocalHostName(window.location.hostname);
 };
 
@@ -40,7 +40,7 @@ EndpointSelector.prototype = {
     urlFor: function(key) {
         var bag = this.config[key];
         if(!bag) {
-            throw errors.Error("E0006");
+            throw errors.Error('E0006');
         }
 
         if(proxyUrlFormatter.isProxyUsed()) {

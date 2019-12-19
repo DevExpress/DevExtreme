@@ -1,8 +1,8 @@
-var commonModule = require("./common"),
+var commonModule = require('./common'),
     animationSettings = commonModule.utils.animationSettings,
     formatValue = commonModule.formatValue,
-    SliderMarker = require("./slider_marker"),
-    support = require("../../core/utils/support"),
+    SliderMarker = require('./slider_marker'),
+    support = require('../../core/utils/support'),
 
     SPLITTER_WIDTH = 8,
     TOUCH_SPLITTER_WIDTH = 20;
@@ -14,10 +14,10 @@ function getSliderTrackerWidth(sliderHandleWidth) {
 function Slider(params, index) {
     var that = this;
     that._translator = params.translator;
-    that._sliderGroup = params.renderer.g().attr({ "class": "slider" }).append(params.root);
-    that._line = params.renderer.path(null, "line").append(that._sliderGroup);
+    that._sliderGroup = params.renderer.g().attr({ 'class': 'slider' }).append(params.root);
+    that._line = params.renderer.path(null, 'line').append(that._sliderGroup);
     that._marker = new SliderMarker(params.renderer, that._sliderGroup, index === 1);
-    that._tracker = params.renderer.rect().attr({ "class": "slider-tracker", fill: "#000000", opacity: 0.0001 }).css({ cursor: "w-resize" }).append(params.trackersGroup);
+    that._tracker = params.renderer.rect().attr({ 'class': 'slider-tracker', fill: '#000000', opacity: 0.0001 }).css({ cursor: 'w-resize' }).append(params.trackersGroup);
 }
 
 Slider.prototype = {
@@ -60,7 +60,7 @@ Slider.prototype = {
         that._colors = [sliderMarkerOptions.invalidRangeColor, sliderHandleOptions.color];
         that._sliderGroup.attr({ translateY: verticalRange[0] });
         that._line.attr({
-            "stroke-width": sliderHandleOptions.width, stroke: sliderHandleOptions.color, "stroke-opacity": sliderHandleOptions.opacity, sharp: "h",
+            'stroke-width': sliderHandleOptions.width, stroke: sliderHandleOptions.color, 'stroke-opacity': sliderHandleOptions.opacity, sharp: 'h',
             points: [0, 0, 0, verticalRange[1] - verticalRange[0]]
         });
         var trackerWidth = getSliderTrackerWidth(sliderHandleOptions.width);
