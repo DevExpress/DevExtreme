@@ -1,17 +1,25 @@
-import 'common.css!';
-import 'generic_light.css!';
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
 
-import 'ui/data_grid/ui.data_grid';
+    $('#qunit-fixture').html(markup);
+});
 
 import $ from 'jquery';
-import { setupDataGridModules } from '../../../helpers/dataGridMocks.js';
+
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/data_grid/ui.data_grid';
+import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
     testInDesktop,
     triggerKeyDown,
     fireKeyDown,
     focusCell,
-    dataGridWrapper } from '../../../helpers/grid/keyboardNavigationHelper.js';
+    dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 import fx from 'animation/fx';
 

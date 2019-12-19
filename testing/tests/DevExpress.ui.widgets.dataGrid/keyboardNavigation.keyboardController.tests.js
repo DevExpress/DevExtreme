@@ -1,9 +1,19 @@
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
+
+import $ from 'jquery';
+
 import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
-import $ from 'jquery';
 import keyboardNavigationModule from 'ui/grid_core/ui.grid_core.keyboard_navigation';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -11,12 +21,12 @@ import publicComponentUtils from 'core/utils/public_component';
 import * as eventUtils from 'events/utils';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
-import { MockDataController, MockColumnsController, MockEditingController } from '../../../helpers/dataGridMocks.js';
-import { CLICK_EVENT, callViewsRenderCompleted } from '../../../helpers/grid/keyboardNavigationHelper.js';
+import { MockDataController, MockColumnsController, MockEditingController } from '../../helpers/dataGridMocks.js';
+import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
 
-QUnit.module('Keyboard navigation', {
+QUnit.module('Keyboard controller', {
     beforeEach: function() {
         const on = this.originalEventsEngineOn = eventsEngine.on,
             off = this.originalEventsEngineOff = eventsEngine.off;
