@@ -2892,7 +2892,7 @@ QUnit.test('get isSelected rows after Select All when dataSource has no key', fu
 });
 
 // T843852
-QUnit.skip('SelectAll should not select all rows if filter by search is applied and filter length is larger than maxFilterLengthInRequest', function(assert) {
+QUnit.test('SelectAll should not select all rows if filter by search is applied and filter length is larger than maxFilterLengthInRequest', function(assert) {
     // arrange
     var data = [{
             'id': '0', 'field1': '0', 'field2': '0'
