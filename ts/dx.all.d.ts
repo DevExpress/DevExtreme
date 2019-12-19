@@ -2382,7 +2382,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.itemsExpr */
         itemsExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.keyExpr */
-        keyExpr?: string | ((item: any) => string);
+        keyExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.selectedExpr */
         selectedExpr?: string | Function;
     }
