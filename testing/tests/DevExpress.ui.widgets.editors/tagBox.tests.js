@@ -4094,6 +4094,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         });
 
         const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $doneButton = $('.dx-button.dx-popup-done');
 
         keyboardMock($input)
             .focus()
@@ -4101,8 +4102,8 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
-        $($input).trigger($.Event('focusout', { relatedTarget: $('.dx-popup-bottom').get(0) }));
-        $('.dx-button.dx-popup-done').trigger('dxclick');
+        $($input).trigger($.Event('focusout', { relatedTarget: $doneButton.get(0) }));
+        $doneButton.trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), ['ac', 'bc'], 'value is applied correctly');
     });
