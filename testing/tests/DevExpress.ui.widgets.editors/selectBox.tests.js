@@ -2646,6 +2646,24 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(selectBox.option('opened'), 'selectBox should be opened');
     });
 
+    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input).type('1');
+        $input.trigger('focusout');
+
+        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+    });
+
     QUnit.testInActiveWindow('widget with fieldTemplate and remote data source should display right value after search and selection (T668290)', (assert) => {
         const $selectBox = $('#selectBox').dxSelectBox({
                 dataSource: {
