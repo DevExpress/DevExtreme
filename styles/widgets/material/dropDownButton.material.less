@@ -2,13 +2,25 @@
 @import (once) "./popup.material.less";
 @import (once) "./list.material.less";
 
-.dx-dropdownbutton-toggle {
-    &.dx-button {
-        min-width: auto;
+.dx-size-default() {
+    @MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 24px;
+}
+.dx-size-compact() {
+    @MATERIAL_TOGGLE_BUTTON_FLEX: 0 0 20px;
+}
 
+.dx-dropdownbutton-toggle {
+    display: flex;
+    flex: 0 0 auto;
+
+    &.dx-button {
         .dx-rtl & {
             border-right-width: 0;
         }
+    }
+
+    .dx-button-content {
+        flex: @MATERIAL_TOGGLE_BUTTON_FLEX;
     }
 }
 

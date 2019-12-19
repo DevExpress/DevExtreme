@@ -2,7 +2,6 @@
     @MATERIAL_BUTTON_HORIZONTAL_PADDING: 16px;
     @MATERIAL_BUTTON_VERTICAL_PADDING: 6px;
     @MATERIAL_BUTTON_HEIGHT: 36px;
-    @MATERIAL_BUTTON_MIN_WIDTH: 64px;
     @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
     @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
 }
@@ -10,7 +9,6 @@
     @MATERIAL_BUTTON_HORIZONTAL_PADDING: 16px;
     @MATERIAL_BUTTON_VERTICAL_PADDING: 5px;
     @MATERIAL_BUTTON_HEIGHT: 28px;
-    @MATERIAL_BUTTON_MIN_WIDTH: 48px;
     @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
     @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
 }
@@ -50,7 +48,6 @@
 }
 
 .dx-button-onlyicon-sizing() {
-    min-width: @MATERIAL_BUTTON_HEIGHT;
     .dx-button-sizing(@MATERIAL_BUTTON_ICONONLY_PADDING, @MATERIAL_BUTTON_ICON_SIZE, 0);
 }
 
@@ -59,7 +56,7 @@
 }
 
 .dx-button-text-and-icon-sizing() {
-    .dx-button-sizing(@MATERIAL_BUTTON_PADDING, @MATERIAL_BUTTON_ICON_SIZE - 6, 8px);
+    .dx-button-sizing(@MATERIAL_BUTTON_PADDING, @MATERIAL_BUTTON_ICON_SIZE, 8px);
 }
 
 .dx-button {
@@ -71,7 +68,6 @@
 }
 
 .dx-button-has-text {
-    min-width: @MATERIAL_BUTTON_MIN_WIDTH;
     .dx-button-withtext-sizing();
 }
 
@@ -199,7 +195,6 @@
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
-    height: @MATERIAL_BUTTON_HEIGHT;
     position: relative;
     overflow: hidden;
 
