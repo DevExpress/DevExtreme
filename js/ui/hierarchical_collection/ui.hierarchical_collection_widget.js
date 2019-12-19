@@ -26,10 +26,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name HierarchicalCollectionWidgetOptions.keyExpr
-             * @type string|function(item)
+            * @type string|function
             * @default 'id'
-             * @type_function_param1 item:object
-             * @type_function_return string
             */
             keyExpr: 'id',
 
